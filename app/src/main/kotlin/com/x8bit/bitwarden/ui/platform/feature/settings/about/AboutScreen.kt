@@ -19,7 +19,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -28,27 +27,27 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.model.TooltipData
+import com.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
+import com.bitwarden.ui.platform.components.row.BitwardenPushRow
+import com.bitwarden.ui.platform.components.row.BitwardenTextRow
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
-import com.x8bit.bitwarden.ui.platform.components.row.BitwardenPushRow
-import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
-import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 
 /**
  * Displays the about screen.
@@ -96,46 +95,36 @@ fun AboutScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.about),
+                title = stringResource(id = BitwardenString.about),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                navigationIconContentDescription = stringResource(id = R.string.back),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(AboutAction.BackClick) }
-                },
+                navigationIconContentDescription = stringResource(id = BitwardenString.back),
+                onNavigationIconClick = { viewModel.trySendAction(AboutAction.BackClick) },
             )
         },
     ) {
         AboutScreenContent(
             state = state,
             modifier = Modifier.fillMaxSize(),
-            onHelpCenterClick = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.HelpCenterClick) }
+            onHelpCenterClick = { viewModel.trySendAction(AboutAction.HelpCenterClick) },
+            onPrivacyPolicyClick = { viewModel.trySendAction(AboutAction.PrivacyPolicyClick) },
+            onLearnAboutOrgsClick = {
+                viewModel.trySendAction(AboutAction.LearnAboutOrganizationsClick)
             },
-            onPrivacyPolicyClick = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.PrivacyPolicyClick) }
+            onSubmitCrashLogsCheckedChange = {
+                viewModel.trySendAction(AboutAction.SubmitCrashLogsClick(it))
             },
-            onLearnAboutOrgsClick = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.LearnAboutOrganizationsClick) }
+            onFlightRecorderCheckedChange = {
+                viewModel.trySendAction(AboutAction.FlightRecorderCheckedChange(it))
             },
-            onSubmitCrashLogsCheckedChange = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.SubmitCrashLogsClick(it)) }
+            onFlightRecorderTooltipClick = {
+                viewModel.trySendAction(AboutAction.FlightRecorderTooltipClick)
             },
-            onFlightRecorderCheckedChange = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.FlightRecorderCheckedChange(it)) }
+            onViewRecordedLogsClick = {
+                viewModel.trySendAction(AboutAction.ViewRecordedLogsClick)
             },
-            onFlightRecorderTooltipClick = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.FlightRecorderTooltipClick) }
-            },
-            onViewRecordedLogsClick = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.ViewRecordedLogsClick) }
-            },
-            onVersionClick = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.VersionClick) }
-            },
-            onWebVaultClick = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.WebVaultClick) }
-            },
+            onVersionClick = { viewModel.trySendAction(AboutAction.VersionClick) },
+            onWebVaultClick = { viewModel.trySendAction(AboutAction.WebVaultClick) },
         )
     }
 }
@@ -166,7 +155,6 @@ private fun AboutScreenContent(
             onSubmitCrashLogsCheckedChange = onSubmitCrashLogsCheckedChange,
         )
         FlightRecorderCard(
-            isVisible = state.shouldShowFlightRecorder,
             isFlightRecorderEnabled = state.isFlightRecorderEnabled,
             logExpiration = state.flightRecorderSubtext,
             onFlightRecorderCheckedChange = onFlightRecorderCheckedChange,
@@ -174,11 +162,11 @@ private fun AboutScreenContent(
             onViewRecordedLogsClick = onViewRecordedLogsClick,
         )
         BitwardenExternalLinkRow(
-            text = stringResource(id = R.string.bitwarden_help_center),
+            text = stringResource(id = BitwardenString.bitwarden_help_center),
             onConfirmClick = onHelpCenterClick,
-            dialogTitle = stringResource(id = R.string.continue_to_help_center),
+            dialogTitle = stringResource(id = BitwardenString.continue_to_help_center),
             dialogMessage = stringResource(
-                id = R.string.learn_more_about_how_to_use_bitwarden_on_the_help_center,
+                id = BitwardenString.learn_more_about_how_to_use_bitwarden_on_the_help_center,
             ),
             withDivider = false,
             cardStyle = CardStyle.Top(),
@@ -188,11 +176,11 @@ private fun AboutScreenContent(
                 .testTag(tag = "BitwardenHelpCenterRow"),
         )
         BitwardenExternalLinkRow(
-            text = stringResource(id = R.string.privacy_policy),
+            text = stringResource(id = BitwardenString.privacy_policy),
             onConfirmClick = onPrivacyPolicyClick,
-            dialogTitle = stringResource(id = R.string.continue_to_privacy_policy),
+            dialogTitle = stringResource(id = BitwardenString.continue_to_privacy_policy),
             dialogMessage = stringResource(
-                id = R.string.privacy_policy_description_long,
+                id = BitwardenString.privacy_policy_description_long,
             ),
             withDivider = false,
             cardStyle = CardStyle.Middle(),
@@ -202,11 +190,11 @@ private fun AboutScreenContent(
                 .testTag(tag = "PrivacyPolicyRow"),
         )
         BitwardenExternalLinkRow(
-            text = stringResource(id = R.string.web_vault),
+            text = stringResource(id = BitwardenString.web_vault),
             onConfirmClick = onWebVaultClick,
-            dialogTitle = stringResource(id = R.string.continue_to_web_app),
+            dialogTitle = stringResource(id = BitwardenString.continue_to_web_app),
             dialogMessage = stringResource(
-                id = R.string.explore_more_features_of_your_bitwarden_account_on_the_web_app,
+                id = BitwardenString.explore_more_features_of_your_bitwarden_account_on_the_web_app,
             ),
             withDivider = false,
             cardStyle = CardStyle.Middle(),
@@ -216,11 +204,11 @@ private fun AboutScreenContent(
                 .testTag(tag = "BitwardenWebVaultRow"),
         )
         BitwardenExternalLinkRow(
-            text = stringResource(id = R.string.learn_org),
+            text = stringResource(id = BitwardenString.learn_org),
             onConfirmClick = onLearnAboutOrgsClick,
-            dialogTitle = stringResource(id = R.string.continue_to_x, "bitwarden.com"),
+            dialogTitle = stringResource(id = BitwardenString.continue_to_x, "bitwarden.com"),
             dialogMessage = stringResource(
-                id = R.string.learn_about_organizations_description_long,
+                id = BitwardenString.learn_about_organizations_description_long,
             ),
             withDivider = false,
             cardStyle = CardStyle.Middle(),
@@ -264,8 +252,8 @@ private fun ColumnScope.CrashLogsCard(
 ) {
     if (!isVisible) return
     BitwardenSwitch(
-        label = stringResource(id = R.string.submit_crash_logs),
-        contentDescription = stringResource(id = R.string.submit_crash_logs),
+        label = stringResource(id = BitwardenString.submit_crash_logs),
+        contentDescription = stringResource(id = BitwardenString.submit_crash_logs),
         isChecked = isEnabled,
         onCheckedChange = onSubmitCrashLogsCheckedChange,
         cardStyle = CardStyle.Full,
@@ -279,21 +267,20 @@ private fun ColumnScope.CrashLogsCard(
 
 @Composable
 private fun ColumnScope.FlightRecorderCard(
-    isVisible: Boolean,
     isFlightRecorderEnabled: Boolean,
     logExpiration: Text?,
     onFlightRecorderCheckedChange: (Boolean) -> Unit,
     onFlightRecorderTooltipClick: () -> Unit,
     onViewRecordedLogsClick: () -> Unit,
 ) {
-    if (!isVisible) return
     BitwardenSwitch(
-        label = stringResource(id = R.string.flight_recorder),
+        label = stringResource(id = BitwardenString.flight_recorder),
         isChecked = isFlightRecorderEnabled,
         onCheckedChange = onFlightRecorderCheckedChange,
-        tooltip = TooltipData(
-            contentDescription = stringResource(id = R.string.flight_recorder_help),
+        helpData = BitwardenHelpButtonData(
+            contentDescription = stringResource(id = BitwardenString.flight_recorder_help),
             onClick = onFlightRecorderTooltipClick,
+            isExternalLink = true,
         ),
         subtext = logExpiration?.invoke(),
         cardStyle = CardStyle.Top(),
@@ -303,7 +290,7 @@ private fun ColumnScope.FlightRecorderCard(
             .standardHorizontalMargin(),
     )
     BitwardenPushRow(
-        text = stringResource(id = R.string.view_recorded_logs),
+        text = stringResource(id = BitwardenString.view_recorded_logs),
         onClick = onViewRecordedLogsClick,
         cardStyle = CardStyle.Bottom,
         modifier = Modifier
@@ -329,7 +316,7 @@ private fun CopyRow(
     ) {
         Icon(
             painter = rememberVectorPainter(id = BitwardenDrawable.ic_copy),
-            contentDescription = null,
+            contentDescription = stringResource(id = BitwardenString.copy),
             tint = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier.mirrorIfRtl(),
         )
@@ -343,13 +330,14 @@ private fun AboutScreenContent_preview() {
         AboutScreenContent(
             state = AboutState(
                 version = "Version: 1.0.0 (1)".asText(),
+                sdkVersion = "\uD83E\uDD80 SDK: 1.0.0-20250708.105256-238".asText(),
+                serverData = "\uD83C\uDF29 Server: 2025.7.1 @ US".asText(),
                 deviceData = "device_data".asText(),
                 ciData = "ci_data".asText(),
                 isSubmitCrashLogsEnabled = false,
                 copyrightInfo = "".asText(),
                 shouldShowCrashLogsButton = true,
                 isFlightRecorderEnabled = true,
-                shouldShowFlightRecorder = true,
                 flightRecorderSubtext = "Expires 3/21/25 at 3:20 PM".asText(),
             ),
             onHelpCenterClick = {},

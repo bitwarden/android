@@ -2,7 +2,8 @@ package com.x8bit.bitwarden.ui.vault.util
 
 import android.content.Intent
 import android.net.Uri
-import com.x8bit.bitwarden.ui.vault.model.TotpData
+import com.bitwarden.ui.platform.model.TotpData
+import com.bitwarden.ui.platform.util.getTotpDataOrNull
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic

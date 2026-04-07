@@ -14,14 +14,16 @@ import com.bitwarden.network.model.OrganizationType
  * @property keyConnectorUrl The key connector domain (if applicable).
  * @property userIsClaimedByOrganization Indicates that the user is claimed by the organization.
  * @property limitItemDeletion Indicates that the organization limits item deletion.
+ * @property shouldUseEvents Indicates if the organization uses tracking events.
  */
 data class Organization(
     val id: String,
-    val name: String?,
+    val name: String,
     val shouldManageResetPassword: Boolean,
     val shouldUseKeyConnector: Boolean,
     val role: OrganizationType,
     val keyConnectorUrl: String?,
     val userIsClaimedByOrganization: Boolean,
-    val limitItemDeletion: Boolean = false,
+    val limitItemDeletion: Boolean,
+    val shouldUseEvents: Boolean,
 )

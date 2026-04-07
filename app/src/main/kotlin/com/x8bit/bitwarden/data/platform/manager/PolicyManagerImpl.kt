@@ -54,6 +54,25 @@ class PolicyManagerImpl(
             }
             ?: emptyList()
 
+    override fun getUserPolicies(
+        userId: String,
+        type: PolicyTypeJson,
+    ): List<SyncResponseJson.Policy> =
+        this
+            .filterPolicies(
+                userId = userId,
+                type = type,
+                policies = authDiskSource.getPolicies(userId = userId),
+            )
+            .orEmpty()
+
+    override fun getPersonalOwnershipPolicyOrganizationId(): String? =
+        this
+            .getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            .sortedBy { it.revisionDate }
+            .firstOrNull()
+            ?.organizationId
+
     /**
      * A helper method to filter policies.
      */
@@ -99,6 +118,7 @@ class PolicyManagerImpl(
 
             PolicyTypeJson.PASSWORD_GENERATOR,
             PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
+            PolicyTypeJson.RESTRICT_ITEM_TYPES,
                 -> {
                 false
             }

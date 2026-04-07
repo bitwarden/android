@@ -19,3 +19,10 @@ val Intent.isPasswordGeneratorShortcut: Boolean
  */
 val Intent.isAccountSecurityShortcut: Boolean
     get() = dataString?.equals("bitwarden://settings/account_security") == true
+
+/**
+ * Returns `true` if the [Intent] is a deep link callback from a Premium
+ * checkout session, `false` otherwise.
+ */
+val Intent.isPremiumCheckoutCallback: Boolean
+    get() = dataString?.equals("bitwarden://premium-upgrade-callback") == true

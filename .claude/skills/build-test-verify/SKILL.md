@@ -1,0 +1,163 @@
+---
+name: build-test-verify
+version: 0.1.0
+description: Build, test, lint, and deploy commands for the Bitwarden Android project. Use when running tests, building APKs/AABs, running lint/detekt, deploying, using fastlane, or discovering codebase structure. Triggered by "run tests", "build", "gradle", "lint", "detekt", "deploy", "fastlane", "assemble", "verify", "coverage".
+---
+
+# Build, Test & Verify
+
+## Environment Setup
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `GITHUB_TOKEN` | Yes (CI) | GitHub Packages auth for SDK (`read:packages` scope) |
+| Build flavors | - | `standard` (Play Store), `fdroid` (no Google services) |
+| Build types | - | `debug`, `beta`, `release` |
+
+If builds fail resolving the Bitwarden SDK, verify `GITHUB_TOKEN` in `user.properties` or environment and check connectivity to `maven.pkg.github.com`.
+
+---
+
+## Building
+
+```bash
+# Debug builds
+./gradlew app:assembleDebug
+./gradlew authenticator:assembleDebug
+
+# Release builds (requires signing keys)
+./gradlew app:assembleStandardRelease
+./gradlew app:bundleStandardRelease
+
+# F-Droid builds
+./gradlew app:assembleFdroidRelease
+```
+
+---
+
+## Running Tests
+
+**IMPORTANT**: The app module uses the `standard` flavor. Always use `testStandardDebugUnitTest`, NOT `testDebugUnitTest`.
+
+**IMPORTANT**: Always pipe test output through a filter that captures failures on the first run. Gradle suppresses detailed failure output by default, so use `2>&1 | grep -E "FAILED|BUILD|expected:|actual:|AssertionError|failures" | head -30` to see pass/fail results and assertion details without needing a second run.
+
+```bash
+# App module tests (correct flavor!)
+./gradlew app:testStandardDebugUnitTest 2>&1 | grep -E "FAILED|BUILD|expected:|actual:|AssertionError|failures" | head -30
+
+# Run specific test classes
+./gradlew app:testStandardDebugUnitTest --tests "com.x8bit.bitwarden.SomeTest" 2>&1 | grep -E "FAILED|BUILD|expected:|actual:|AssertionError|failures" | head -30
+
+# Run all unit tests across all modules
+./gradlew test
+
+# Individual shared modules (no flavor needed)
+./gradlew :core:test
+./gradlew :data:test
+./gradlew :network:test
+./gradlew :ui:test
+
+# Authenticator module
+./gradlew authenticator:testStandardDebugUnitTest
+```
+
+### Reading Test Reports
+
+If you need full failure details beyond what grep captures, check the HTML test report:
+
+```bash
+# After a test run, open the report at:
+# app/build/reports/tests/testStandardDebugUnitTest/index.html
+# Or read individual failure XML:
+find app/build/test-results -name "*.xml" -exec grep -l "failure" {} \;
+```
+
+### Test Structure
+
+```
+app/src/test/                    # App unit tests
+app/src/testFixtures/            # App test utilities
+core/src/testFixtures/           # Core test utilities (FakeDispatcherManager)
+data/src/testFixtures/           # Data test utilities (FakeSharedPreferences)
+network/src/testFixtures/        # Network test utilities (BaseServiceTest)
+ui/src/testFixtures/             # UI test utilities (BaseViewModelTest, BaseComposeTest)
+```
+
+### Test Quick Reference
+
+- **Dispatcher Control**: `FakeDispatcherManager` from `:core:testFixtures`
+- **MockK**: `mockk<T> { every { } returns }`, `coEvery { }` for suspend
+- **Flow Testing**: Turbine with `stateEventFlow()` helper from `BaseViewModelTest`
+- **Time Control**: Inject `Clock` for deterministic time testing
+
+---
+
+## Lint & Static Analysis
+
+**IMPORTANT**: Prefer running detekt on modified files only — a full project scan is slow and unnecessary during development. The project supports a `-Pprecommit=true` flag that limits detekt to staged files.
+
+**IMPORTANT**: Always pipe detekt output through a filter to capture errors on the first run. Detekt prints violation details to stderr/stdout but Gradle can obscure them. Use the grep pattern below to see violations immediately.
+
+```bash
+# Detekt on staged files only (preferred during development)
+git add -u && ./gradlew -Pprecommit=true detekt 2>&1 | grep -E "FAILED|BUILD|Line |Rule |Signature|detekt" | head -40
+
+# Detekt on all files (full scan, use sparingly)
+./gradlew detekt 2>&1 | grep -E "FAILED|BUILD|Line |Rule |Signature|detekt" | head -40
+
+# Android Lint
+./gradlew lint
+
+# Full validation suite (detekt + lint + tests + coverage)
+./fastlane check
+```
+
+### How `-Pprecommit=true` Works
+
+The root `build.gradle.kts` configures detekt tasks to use `git diff --name-only --cached` when this property is set, limiting analysis to staged files only. This is the same mechanism used by the project's pre-commit hook. Stage your changes with `git add` before running.
+
+---
+
+## Codebase Discovery
+
+```bash
+# Find existing Bitwarden UI components
+find ui/src/main/kotlin/com/bitwarden/ui/platform/components/ -name "Bitwarden*.kt" | sort
+
+# Find all ViewModels
+grep -rl "BaseViewModel<" app/src/main/kotlin/ --include="*.kt"
+
+# Find all Navigation files with @Serializable routes
+find app/src/main/kotlin/ -name "*Navigation.kt" | sort
+
+# Find all Hilt modules
+find app/src/main/kotlin/ -name "*Module.kt" -path "*/di/*" | sort
+
+# Find all repository interfaces
+find app/src/main/kotlin/ -name "*Repository.kt" -not -name "*Impl.kt" -path "*/repository/*" | sort
+
+# Find encrypted disk source examples
+grep -rl "EncryptedPreferences" app/src/main/kotlin/ --include="*.kt"
+
+# Find Clock injection usage
+grep -rl "private val clock: Clock" app/src/main/kotlin/ --include="*.kt"
+
+# Search existing strings before adding new ones
+grep -n "search_term" ui/src/main/res/values/strings.xml
+```
+
+---
+
+## Deployment & Versioning
+
+**Version location**: `gradle/libs.versions.toml`
+```toml
+appVersionCode = "1"
+appVersionName = "2025.11.1"
+```
+Pattern: `YEAR.MONTH.PATCH`
+
+**Publishing channels**:
+- **Play Store**: GitHub Actions workflow with signed AAB
+- **F-Droid**: Dedicated workflow with F-Droid signing keys
+- **Firebase App Distribution**: Beta testing

@@ -46,15 +46,25 @@ class AuthenticatorNavBarViewModel @Inject constructor(
  * Models events for the [AuthenticatorNavBarViewModel].
  */
 sealed class AuthenticatorNavBarEvent {
+
+    /**
+     * The [AuthenticatorNavBarTab] to be associated with the event.
+     */
+    abstract val tab: AuthenticatorNavBarTab
+
     /**
      * Navigate to the verification codes screen.
      */
-    data object NavigateToVerificationCodes : AuthenticatorNavBarEvent()
+    data object NavigateToVerificationCodes : AuthenticatorNavBarEvent() {
+        override val tab: AuthenticatorNavBarTab = AuthenticatorNavBarTab.VerificationCodes
+    }
 
     /**
      * Navigate to the settings screen.
      */
-    data object NavigateToSettings : AuthenticatorNavBarEvent()
+    data object NavigateToSettings : AuthenticatorNavBarEvent() {
+        override val tab: AuthenticatorNavBarTab = AuthenticatorNavBarTab.Settings
+    }
 }
 
 /**

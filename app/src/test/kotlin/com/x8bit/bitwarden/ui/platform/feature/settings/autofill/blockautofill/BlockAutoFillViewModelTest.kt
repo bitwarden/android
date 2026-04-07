@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -16,7 +18,6 @@ class BlockAutoFillViewModelTest : BaseViewModelTest() {
         every { blockedAutofillUris } returns listOf("blockedUri")
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `initial state with blocked URIs updates state to ViewState Content`() =
         runTest {
@@ -30,7 +31,6 @@ class BlockAutoFillViewModelTest : BaseViewModelTest() {
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `initial state with empty blocked URIs maintains state as ViewState Empty`() =
         runTest {
@@ -166,6 +166,94 @@ class BlockAutoFillViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(BlockAutoFillAction.BackClick)
             assertEquals(BlockAutoFillEvent.NavigateBack, awaitItem())
         }
+    }
+
+    @Test
+    fun `on SaveUri action with originalUri should replace the original URI`() = runTest {
+        val blockedUris = mutableListOf("http://old.com", "http://other.com")
+
+        every { settingsRepository.blockedAutofillUris } answers { blockedUris.toList() }
+        every { settingsRepository.blockedAutofillUris = any() } answers {
+            blockedUris.clear()
+            blockedUris.addAll(firstArg())
+        }
+
+        val viewModel = createViewModel()
+        viewModel.trySendAction(
+            BlockAutoFillAction.SaveUri(
+                newUri = "http://new.com",
+                originalUri = "http://old.com",
+            ),
+        )
+
+        val expectedState = BlockAutoFillState(
+            dialog = null,
+            viewState = BlockAutoFillState.ViewState.Content(
+                blockedUris = listOf("http://other.com", "http://new.com"),
+            ),
+        )
+
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `on SaveUri action editing to same value should succeed`() = runTest {
+        val blockedUris = mutableListOf("http://same.com", "http://other.com")
+
+        every { settingsRepository.blockedAutofillUris } answers { blockedUris.toList() }
+        every { settingsRepository.blockedAutofillUris = any() } answers {
+            blockedUris.clear()
+            blockedUris.addAll(firstArg())
+        }
+
+        val viewModel = createViewModel()
+        viewModel.trySendAction(
+            BlockAutoFillAction.SaveUri(
+                newUri = "http://same.com",
+                originalUri = "http://same.com",
+            ),
+        )
+
+        val expectedState = BlockAutoFillState(
+            dialog = null,
+            viewState = BlockAutoFillState.ViewState.Content(
+                blockedUris = listOf("http://other.com", "http://same.com"),
+            ),
+        )
+
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `on SaveUri action editing to existing URI should show duplicate error`() = runTest {
+        val blockedUris = mutableListOf("http://a.com", "http://b.com")
+
+        every { settingsRepository.blockedAutofillUris } answers { blockedUris.toList() }
+        every { settingsRepository.blockedAutofillUris = any() } answers {
+            blockedUris.clear()
+            blockedUris.addAll(firstArg())
+        }
+
+        val viewModel = createViewModel()
+        viewModel.trySendAction(
+            BlockAutoFillAction.SaveUri(
+                newUri = "http://b.com",
+                originalUri = "http://a.com",
+            ),
+        )
+
+        val expectedState = BlockAutoFillState(
+            dialog = BlockAutoFillState.DialogState.AddEdit(
+                uri = "http://b.com",
+                originalUri = "http://a.com",
+                errorMessage = BitwardenString.the_urix_is_already_blocked.asText("http://b.com"),
+            ),
+            viewState = BlockAutoFillState.ViewState.Content(
+                blockedUris = listOf("http://a.com", "http://b.com"),
+            ),
+        )
+
+        assertEquals(expectedState, viewModel.stateFlow.value)
     }
 
     private fun createViewModel(

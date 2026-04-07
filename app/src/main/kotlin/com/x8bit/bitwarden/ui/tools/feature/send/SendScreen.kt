@@ -15,34 +15,36 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
+import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
+import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
+import com.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.scaffold.model.rememberBitwardenPullToRefreshState
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.manager.util.RegisterScreenDataOnLifecycleEffect
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
-import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
-import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
-import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
@@ -71,9 +73,7 @@ fun SendScreen(
     val pullToRefreshState = rememberBitwardenPullToRefreshState(
         isEnabled = state.isPullToRefreshEnabled,
         isRefreshing = state.isRefreshing,
-        onRefresh = remember(viewModel) {
-            { viewModel.trySendAction(SendAction.RefreshPull) }
-        },
+        onRefresh = { viewModel.trySendAction(SendAction.RefreshPull) },
     )
 
     RegisterScreenDataOnLifecycleEffect(
@@ -122,12 +122,8 @@ fun SendScreen(
 
     SendDialogs(
         dialogState = state.dialogState,
-        onAddSendSelected = remember(viewModel) {
-            { viewModel.trySendAction(SendAction.AddSendSelected(it)) }
-        },
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(SendAction.DismissDialog) }
-        },
+        onAddSendSelected = { viewModel.trySendAction(SendAction.AddSendSelected(it)) },
+        onDismissRequest = { viewModel.trySendAction(SendAction.DismissDialog) },
     )
 
     val sendHandlers = remember(viewModel) { SendHandlers.create(viewModel) }
@@ -138,35 +134,27 @@ fun SendScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenMediumTopAppBar(
-                title = stringResource(id = R.string.send),
+                title = stringResource(id = BitwardenString.send),
                 scrollBehavior = scrollBehavior,
                 actions = {
                     BitwardenSearchActionItem(
-                        contentDescription = stringResource(id = R.string.search_sends),
-                        onClick = remember(viewModel) {
-                            { viewModel.trySendAction(SendAction.SearchClick) }
-                        },
+                        contentDescription = stringResource(id = BitwardenString.search_sends),
+                        onClick = { viewModel.trySendAction(SendAction.SearchClick) },
                     )
                     BitwardenOverflowActionItem(
-                        contentDescription = stringResource(R.string.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
-                                text = stringResource(id = R.string.sync),
-                                onClick = remember(viewModel) {
-                                    { viewModel.trySendAction(SendAction.SyncClick) }
-                                },
+                                text = stringResource(id = BitwardenString.sync),
+                                onClick = { viewModel.trySendAction(SendAction.SyncClick) },
                             ),
                             OverflowMenuItemData(
-                                text = stringResource(id = R.string.lock),
-                                onClick = remember(viewModel) {
-                                    { viewModel.trySendAction(SendAction.LockClick) }
-                                },
+                                text = stringResource(id = BitwardenString.lock),
+                                onClick = { viewModel.trySendAction(SendAction.LockClick) },
                             ),
                             OverflowMenuItemData(
-                                text = stringResource(id = R.string.about_send),
-                                onClick = remember(viewModel) {
-                                    { viewModel.trySendAction(SendAction.AboutSendClick) }
-                                },
+                                text = stringResource(id = BitwardenString.about_send),
+                                onClick = { viewModel.trySendAction(SendAction.AboutSendClick) },
+                                isExternalLink = true,
                             ),
                         ),
                     )
@@ -180,11 +168,9 @@ fun SendScreen(
                 exit = scaleOut(),
             ) {
                 BitwardenFloatingActionButton(
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(SendAction.AddSendClick) }
-                    },
+                    onClick = { viewModel.trySendAction(SendAction.AddSendClick) },
                     painter = rememberVectorPainter(id = BitwardenDrawable.ic_plus_large),
-                    contentDescription = stringResource(id = R.string.add_item),
+                    contentDescription = stringResource(id = BitwardenString.add_item),
                     modifier = Modifier.testTag(tag = "AddItemButton"),
                 )
             }
@@ -204,17 +190,16 @@ fun SendScreen(
 
             SendState.ViewState.Empty -> SendEmpty(
                 policyDisablesSend = state.policyDisablesSend,
-                onAddItemClick = remember(viewModel) {
-                    { viewModel.trySendAction(SendAction.AddSendClick) }
-                },
+                onAddItemClick = { viewModel.trySendAction(SendAction.AddSendClick) },
                 modifier = modifier,
             )
 
             is SendState.ViewState.Error -> BitwardenErrorContent(
                 message = viewState.message(),
-                onTryAgainClick = remember(viewModel) {
-                    { viewModel.trySendAction(SendAction.RefreshClick) }
-                },
+                buttonData = BitwardenButtonData(
+                    label = BitwardenString.try_again.asText(),
+                    onClick = { viewModel.trySendAction(SendAction.RefreshClick) },
+                ),
                 modifier = modifier,
             )
 
@@ -242,7 +227,7 @@ private fun SendDialogs(
         )
 
         SendState.DialogState.SelectSendAddType -> BitwardenSelectionDialog(
-            title = stringResource(id = R.string.type),
+            title = stringResource(id = BitwardenString.type),
             onDismissRequest = onDismissRequest,
         ) {
             SendItemType.entries.forEach {

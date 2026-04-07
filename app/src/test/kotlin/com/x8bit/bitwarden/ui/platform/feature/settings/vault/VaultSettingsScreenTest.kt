@@ -1,20 +1,15 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
-import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
-import androidx.compose.ui.test.hasAnyAncestor
-import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -22,7 +17,6 @@ import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -30,20 +24,12 @@ import org.junit.Test
 class VaultSettingsScreenTest : BitwardenComposeTest() {
 
     private var onNavigateToImportLoginsCalled = false
+    private var onNavigateToImportItemsCalled = false
     private var onNavigateBackCalled = false
     private var onNavigateToExportVaultCalled = false
     private var onNavigateToFoldersCalled = false
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultSettingsEvent>()
-    private val mutableStateFlow = MutableStateFlow(
-        VaultSettingsState(
-            importUrl = "testUrl/#/tools/import",
-            isNewImportLoginsFlowEnabled = false,
-            showImportActionCard = false,
-        ),
-    )
-    private val intentManager: IntentManager = mockk(relaxed = true) {
-        every { launchUri(any()) } just runs
-    }
+    private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
 
     val viewModel = mockk<VaultSettingsViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
@@ -52,15 +38,14 @@ class VaultSettingsScreenTest : BitwardenComposeTest() {
 
     @Before
     fun setup() {
-        setContent(
-            intentManager = intentManager,
-        ) {
+        setContent {
             VaultSettingsScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToExportVault = { onNavigateToExportVaultCalled = true },
                 onNavigateToFolders = { onNavigateToFoldersCalled = true },
                 onNavigateToImportLogins = { onNavigateToImportLoginsCalled = true },
+                onNavigateToImportItems = { onNavigateToImportItemsCalled = true },
             )
         }
     }
@@ -78,42 +63,6 @@ class VaultSettingsScreenTest : BitwardenComposeTest() {
         verify {
             viewModel.trySendAction(VaultSettingsAction.ExportVaultClick)
         }
-    }
-
-    @Test
-    fun `import items click should display dialog and confirming should send ImportItemsClick`() {
-        composeTestRule.onNodeWithText("Import items").performClick()
-        composeTestRule
-            .onNodeWithText("Continue")
-            .assert(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
-        }
-    }
-
-    @Test
-    fun `import items click should display dialog & canceling should not send ImportItemsClick`() {
-        composeTestRule.onNodeWithText("Import items").performClick()
-        composeTestRule
-            .onNodeWithText("Cancel")
-            .assert(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-            .performClick()
-
-        verify(exactly = 0) {
-            viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
-        }
-    }
-
-    @Test
-    fun `import items click should display dialog with importUrl`() {
-        composeTestRule.onNodeWithText("Import items").performClick()
-        composeTestRule
-            .onNodeWithText(mutableStateFlow.value.importUrl, substring = true)
-            .assertIsDisplayed()
     }
 
     @Test
@@ -135,43 +84,20 @@ class VaultSettingsScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `on NavigateToImportVault should invoke IntentManager not lambda`() {
-        val testUrl = "testUrl"
-        mutableEventFlow.tryEmit(VaultSettingsEvent.NavigateToImportVault(testUrl))
-        verify {
-            intentManager.launchUri(testUrl.toUri())
-        }
-        assertFalse(onNavigateToImportLoginsCalled)
-    }
-
-    @Test
-    fun `when new logins feature flag is enabled send action right when import items is clicked`() {
-        mutableStateFlow.update {
-            it.copy(isNewImportLoginsFlowEnabled = true)
-        }
+    fun `send action right when import items is clicked`() {
         composeTestRule.onNodeWithText("Import items").performClick()
         verify { viewModel.trySendAction(VaultSettingsAction.ImportItemsClick) }
     }
 
     @Test
-    fun `when new logins feature flag is enabled NavigateToImportVault should invoke lambda`() {
-        mutableStateFlow.update {
-            it.copy(isNewImportLoginsFlowEnabled = true)
-        }
-        val testUrl = "testUrl"
-        mutableEventFlow.tryEmit(VaultSettingsEvent.NavigateToImportVault(testUrl))
+    fun `NavigateToImportVault should invoke lambda`() {
+        mutableEventFlow.tryEmit(VaultSettingsEvent.NavigateToImportVault)
         assertTrue(onNavigateToImportLoginsCalled)
-        verify(exactly = 0) { intentManager.launchUri(testUrl.toUri()) }
     }
 
     @Test
     fun `when new show action card is true the import logins card should show`() {
-        mutableStateFlow.update {
-            it.copy(
-                showImportActionCard = true,
-                isNewImportLoginsFlowEnabled = true,
-            )
-        }
+        mutableStateFlow.update { it.copy(showImportActionCard = true) }
         composeTestRule
             .onNodeWithText("Import saved logins")
             .performScrollTo()
@@ -186,12 +112,7 @@ class VaultSettingsScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `when action card is visible clicking the close icon should send correct action`() {
-        mutableStateFlow.update {
-            it.copy(
-                showImportActionCard = true,
-                isNewImportLoginsFlowEnabled = true,
-            )
-        }
+        mutableStateFlow.update { it.copy(showImportActionCard = true) }
         composeTestRule
             .onNodeWithContentDescription("Close")
             .performScrollTo()
@@ -203,12 +124,7 @@ class VaultSettingsScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `when action card is visible get started button should send correct action`() {
-        mutableStateFlow.update {
-            it.copy(
-                showImportActionCard = true,
-                isNewImportLoginsFlowEnabled = true,
-            )
-        }
+        mutableStateFlow.update { it.copy(showImportActionCard = true) }
         composeTestRule
             .onNodeWithText("Get started")
             .performScrollTo()
@@ -238,3 +154,8 @@ class VaultSettingsScreenTest : BitwardenComposeTest() {
             .assertIsNotDisplayed()
     }
 }
+
+private val DEFAULT_STATE: VaultSettingsState = VaultSettingsState(
+    showImportActionCard = false,
+    showImportItemsChevron = true,
+)

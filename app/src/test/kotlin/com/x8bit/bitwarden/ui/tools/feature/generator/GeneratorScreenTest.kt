@@ -5,7 +5,6 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher.Companion.expectValue
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextEquals
@@ -26,17 +25,18 @@ import androidx.compose.ui.test.onSiblings
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.text.AnnotatedString
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.isCoachMarkToolTip
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
-import com.x8bit.bitwarden.ui.util.isCoachMarkToolTip
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -88,7 +88,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText(text = "Save")
+            .onNodeWithText(text = "Apply")
             .assertIsDisplayed()
     }
 
@@ -105,7 +105,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText(text = "Save")
+            .onNodeWithText(text = "Apply")
             .assertIsDisplayed()
     }
 
@@ -127,7 +127,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `on save click should send SaveClick`() {
+    fun `on Apply click should send SaveClick`() {
         updateState(
             DEFAULT_STATE.copy(
                 generatorMode = GeneratorMode.Modal.Username(website = null),
@@ -135,7 +135,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithText(text = "Save")
+            .onNodeWithText(text = "Apply")
             .performClick()
 
         verify {
@@ -148,7 +148,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         updateState(DEFAULT_STATE.copy(generatorMode = GeneratorMode.Default))
 
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .assertIsDisplayed()
     }
 
@@ -230,7 +230,6 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .assertDoesNotExist()
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `clicking a UsernameOption should send UsernameTypeOption action`() {
         updateState(
@@ -243,9 +242,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
 
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescription(
-                label = "Plus addressed email. Username type. Use your email provider's subaddress capabilities",
-            )
+            .onNodeWithContentDescription(label = "Plus addressed email. Username type")
             .performClick()
 
         // Choose the option from the menu
@@ -977,7 +974,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText("Word separator")
             .performScrollTo()
-            .performTextInput("a")
+            .performTextReplacement("a")
 
         verify {
             viewModel.trySendAction(
@@ -1163,43 +1160,6 @@ class GeneratorScreenTest : BitwardenComposeTest() {
                     ),
             )
         }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `in Username_ForwardedEmailAlias_AddyIo state, self host server url field should show based on state`() {
-        updateState(
-            DEFAULT_STATE.copy(
-                shouldShowAnonAddySelfHostServerUrlField = true,
-                selectedType = GeneratorState.MainType.Username(
-                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
-                        selectedServiceType = GeneratorState
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .ServiceType
-                            .AddyIo(),
-                    ),
-                ),
-            ),
-        )
-
-        composeTestRule
-            .onNodeWithText("Self-host server URL")
-            .performScrollTo()
-            .assertIsDisplayed()
-
-        // Simulate Disabling the feature flag
-        updateState(
-            DEFAULT_STATE.copy(
-                shouldShowAnonAddySelfHostServerUrlField = false,
-            ),
-        )
-
-        composeTestRule
-            .onNodeWithText("Self-host server URL")
-            .assertIsNotDisplayed()
     }
 
     //endregion Addy.Io Service Type Tests
@@ -1403,54 +1363,6 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `in Username_ForwardedEmailAlias_SimpleLogin state, should display self host server url field based on state`() {
-        updateState(
-            DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Username(
-                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
-                        selectedServiceType = GeneratorState
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .ServiceType
-                            .SimpleLogin(),
-                    ),
-                ),
-                shouldShowSimpleLoginSelfHostServerField = true,
-            ),
-        )
-
-        composeTestRule
-            .onNodeWithText("Self-host server URL")
-            .performScrollTo()
-            .assertIsDisplayed()
-
-        // Simulate disabling the feature flag.
-        updateState(
-            DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Username(
-                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
-                        selectedServiceType = GeneratorState
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .ServiceType
-                            .SimpleLogin(),
-                    ),
-                ),
-                shouldShowSimpleLoginSelfHostServerField = false,
-            ),
-        )
-
-        composeTestRule
-            .onNodeWithText("Self-host server URL")
-            .assertDoesNotExist()
-    }
-
     //endregion SimpleLogin Service Type Tests
 
     //region ForwardEmail Service Type Tests
@@ -1545,18 +1457,14 @@ class GeneratorScreenTest : BitwardenComposeTest() {
     fun `in Username state, clicking the tooltip icon should send the TooltipClick action`() {
         updateState(DEFAULT_STATE.copy(selectedType = GeneratorState.MainType.Username()))
 
-        @Suppress("MaxLineLength")
         composeTestRule
-            .onNodeWithContentDescription(
-                label = "Plus addressed email. Username type. Use your email provider's subaddress capabilities",
-                useUnmergedTree = true,
-            )
+            .onNodeWithContentDescription(label = "Plus addressed email. Username type")
             // Find the button
             .onChildren()
             .filterToOne(hasClickAction())
             // Find the content description
             .onChildren()
-            .filterToOne(hasContentDescription("Learn more"))
+            .filterToOne(hasContentDescription("Learn more, External link"))
             .assertIsDisplayed()
             .performClick()
 
@@ -1938,6 +1846,4 @@ private val DEFAULT_STATE = GeneratorState(
     selectedType = GeneratorState.MainType.Password(),
     currentEmailAddress = "currentEmail",
     shouldShowCoachMarkTour = false,
-    shouldShowAnonAddySelfHostServerUrlField = true,
-    shouldShowSimpleLoginSelfHostServerField = true,
 )

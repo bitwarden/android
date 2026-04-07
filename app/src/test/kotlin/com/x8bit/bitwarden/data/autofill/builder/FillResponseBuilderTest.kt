@@ -7,6 +7,7 @@ import android.service.autofill.FillResponse
 import android.service.autofill.SaveInfo
 import android.view.View
 import android.view.autofill.AutofillId
+import com.bitwarden.core.data.util.mockBuilder
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
@@ -15,8 +16,7 @@ import com.x8bit.bitwarden.data.autofill.model.FilledData
 import com.x8bit.bitwarden.data.autofill.model.FilledPartition
 import com.x8bit.bitwarden.data.autofill.util.buildDataset
 import com.x8bit.bitwarden.data.autofill.util.buildVaultItemDataset
-import com.x8bit.bitwarden.data.autofill.util.createTotpCopyIntentSender
-import com.x8bit.bitwarden.data.util.mockBuilder
+import com.x8bit.bitwarden.data.autofill.util.createAutofillCallbackIntentSender
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
@@ -65,12 +65,12 @@ class FillResponseBuilderTest {
     @BeforeEach
     fun setup() {
         mockkConstructor(FillResponse.Builder::class)
-        mockkStatic(::createTotpCopyIntentSender)
+        mockkStatic(::createAutofillCallbackIntentSender)
         mockkStatic(FilledData::buildVaultItemDataset)
         mockkStatic(FilledPartition::buildDataset)
         every { anyConstructed<FillResponse.Builder>().build() } returns fillResponse
         every {
-            createTotpCopyIntentSender(
+            createAutofillCallbackIntentSender(
                 cipherId = CIPHER_ID,
                 context = context,
             )
@@ -82,7 +82,7 @@ class FillResponseBuilderTest {
     @AfterEach
     fun teardown() {
         unmockkConstructor(FillResponse.Builder::class)
-        unmockkStatic(::createTotpCopyIntentSender)
+        unmockkStatic(::createAutofillCallbackIntentSender)
         unmockkStatic(FilledData::buildVaultItemDataset)
         unmockkStatic(FilledPartition::buildDataset)
     }
@@ -145,6 +145,7 @@ class FillResponseBuilderTest {
                             isFocused = true,
                             textValue = null,
                             hasPasswordTerms = false,
+                            website = null,
                         ),
                     ),
                 ),
@@ -246,6 +247,7 @@ class FillResponseBuilderTest {
                             isFocused = true,
                             textValue = null,
                             hasPasswordTerms = false,
+                            website = null,
                         ),
                     ),
                 ),

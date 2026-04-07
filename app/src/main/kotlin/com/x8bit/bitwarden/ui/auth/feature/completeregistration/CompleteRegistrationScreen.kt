@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -26,38 +25,40 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.bitwarden.ui.platform.components.card.BitwardenActionCardSmall
+import com.bitwarden.ui.platform.components.card.color.bitwardenCardColors
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
+import com.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.model.WindowSize
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.util.rememberWindowSize
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.handlers.CompleteRegistrationHandler
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.handlers.rememberCompleteRegistrationHandler
-import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCardSmall
-import com.x8bit.bitwarden.ui.platform.components.card.color.bitwardenCardColors
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 
 /**
  * Top level composable for the complete registration screen.
@@ -69,21 +70,20 @@ fun CompleteRegistrationScreen(
     onNavigateBack: () -> Unit,
     onNavigateToPasswordGuidance: () -> Unit,
     onNavigateToPreventAccountLockout: () -> Unit,
-    onNavigateToLogin: (email: String, token: String?) -> Unit,
+    onNavigateToLogin: (email: String) -> Unit,
     viewModel: CompleteRegistrationViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val handler = rememberCompleteRegistrationHandler(viewModel = viewModel)
-    val context = LocalContext.current
-
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     // route OS back actions through the VM to clear the special circumstance
     BackHandler(onBack = handler.onBackClick)
 
     EventsEffect(viewModel) { event ->
         when (event) {
             is CompleteRegistrationEvent.NavigateBack -> onNavigateBack.invoke()
-            is CompleteRegistrationEvent.ShowToast -> {
-                Toast.makeText(context, event.message(context.resources), Toast.LENGTH_SHORT).show()
+            is CompleteRegistrationEvent.ShowSnackbar -> {
+                snackbarHostState.showSnackbar(BitwardenSnackbarData(message = event.message))
             }
 
             CompleteRegistrationEvent.NavigateToMakePasswordStrong -> onNavigateToPasswordGuidance()
@@ -94,7 +94,6 @@ fun CompleteRegistrationScreen(
             is CompleteRegistrationEvent.NavigateToLogin -> {
                 onNavigateToLogin(
                     event.email,
-                    event.captchaToken,
                 )
             }
         }
@@ -115,8 +114,8 @@ fun CompleteRegistrationScreen(
             BitwardenTwoButtonDialog(
                 title = dialog.title(),
                 message = dialog.message(),
-                confirmButtonText = stringResource(id = R.string.yes),
-                dismissButtonText = stringResource(id = R.string.no),
+                confirmButtonText = stringResource(id = BitwardenString.yes),
+                dismissButtonText = stringResource(id = BitwardenString.no),
                 onConfirmClick = handler.onContinueWithBreachedPasswordClick,
                 onDismissClick = handler.onDismissErrorDialog,
                 onDismissRequest = handler.onDismissErrorDialog,
@@ -124,7 +123,7 @@ fun CompleteRegistrationScreen(
         }
 
         CompleteRegistrationDialog.Loading -> {
-            BitwardenLoadingDialog(text = stringResource(id = R.string.create_account))
+            BitwardenLoadingDialog(text = stringResource(id = BitwardenString.create_account))
         }
 
         null -> Unit
@@ -137,13 +136,14 @@ fun CompleteRegistrationScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.create_account),
+                title = stringResource(id = BitwardenString.create_account),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                navigationIconContentDescription = stringResource(id = R.string.back),
+                navigationIconContentDescription = stringResource(id = BitwardenString.back),
                 onNavigationIconClick = handler.onBackClick,
             )
         },
+        snackbarHost = { BitwardenSnackbarHost(bitwardenHostState = snackbarHostState) },
     ) {
         Column(
             modifier = Modifier
@@ -159,7 +159,7 @@ fun CompleteRegistrationScreen(
                 isCheckDataBreachesToggled = state.isCheckDataBreachesToggled,
                 handler = handler,
                 nextButtonEnabled = state.validSubmissionReady,
-                callToActionText = stringResource(R.string.next),
+                callToActionText = stringResource(BitwardenString.next),
                 minimumPasswordLength = state.minimumPasswordLength,
             )
             Spacer(modifier = Modifier.height(height = 16.dp))
@@ -194,8 +194,8 @@ private fun CompleteRegistrationContent(
         Spacer(modifier = Modifier.height(24.dp))
         BitwardenActionCardSmall(
             actionIcon = rememberVectorPainter(id = BitwardenDrawable.ic_question_circle),
-            actionText = stringResource(id = R.string.what_makes_a_password_strong),
-            callToActionText = stringResource(id = R.string.learn_more),
+            actionText = stringResource(id = BitwardenString.what_makes_a_password_strong),
+            callToActionText = stringResource(id = BitwardenString.learn_more),
             callToActionTextColor = BitwardenTheme.colorScheme.text.interaction,
             colors = bitwardenCardColors(
                 containerColor = BitwardenTheme.colorScheme.background.primary,
@@ -209,7 +209,7 @@ private fun CompleteRegistrationContent(
 
         var showPassword by rememberSaveable { mutableStateOf(false) }
         BitwardenPasswordField(
-            label = stringResource(id = R.string.master_password_required),
+            label = stringResource(id = BitwardenString.master_password_required),
             showPassword = showPassword,
             showPasswordChange = { showPassword = it },
             value = passwordInput,
@@ -231,7 +231,7 @@ private fun CompleteRegistrationContent(
                 .standardHorizontalMargin(),
         )
         BitwardenPasswordField(
-            label = stringResource(id = R.string.retype_master_password_required),
+            label = stringResource(id = BitwardenString.retype_master_password_required),
             value = confirmPasswordInput,
             showPassword = showPassword,
             showPasswordChange = { showPassword = it },
@@ -245,14 +245,15 @@ private fun CompleteRegistrationContent(
         )
         BitwardenTextField(
             label = stringResource(
-                id = R.string.master_password_hint_not_specified,
+                id = BitwardenString.master_password_hint_not_specified,
             ),
             value = passwordHintInput,
             onValueChange = handler.onPasswordHintChange,
             supportingContent = {
                 Text(
                     text = stringResource(
-                        id = R.string.bitwarden_cannot_recover_a_lost_or_forgotten_master_password,
+                        id = BitwardenString
+                            .bitwarden_cannot_recover_a_lost_or_forgotten_master_password,
                     ),
                     style = BitwardenTheme.typography.bodySmall,
                     color = BitwardenTheme.colorScheme.text.secondary,
@@ -260,7 +261,7 @@ private fun CompleteRegistrationContent(
                 )
                 BitwardenClickableText(
                     label = stringResource(
-                        id = R.string.learn_about_other_ways_to_prevent_account_lockout,
+                        id = BitwardenString.learn_about_other_ways_to_prevent_account_lockout,
                     ),
                     onClick = handler.onLearnToPreventLockout,
                     style = BitwardenTheme.typography.labelMedium,
@@ -275,7 +276,9 @@ private fun CompleteRegistrationContent(
         )
         Spacer(modifier = Modifier.height(height = 8.dp))
         BitwardenSwitch(
-            label = stringResource(id = R.string.check_known_data_breaches_for_this_password),
+            label = stringResource(
+                id = BitwardenString.check_known_data_breaches_for_this_password,
+            ),
             isChecked = isCheckDataBreachesToggled,
             onCheckedChange = handler.onCheckDataBreachesToggle,
             cardStyle = CardStyle.Full,
@@ -327,7 +330,7 @@ private fun CompleteRegistrationContentHeader(
 @Composable
 private fun OrderedHeaderContent() {
     Image(
-        painter = rememberVectorPainter(id = BitwardenDrawable.lock),
+        painter = rememberVectorPainter(id = BitwardenDrawable.ill_lock),
         contentDescription = null,
         modifier = Modifier.size(100.dp),
     )
@@ -336,7 +339,7 @@ private fun OrderedHeaderContent() {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = stringResource(R.string.choose_your_master_password),
+            text = stringResource(BitwardenString.choose_your_master_password),
             style = BitwardenTheme.typography.titleMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
@@ -344,7 +347,7 @@ private fun OrderedHeaderContent() {
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = stringResource(
-                R.string.choose_a_unique_and_strong_password_to_keep_your_information_safe,
+                BitwardenString.choose_a_unique_and_strong_password_to_keep_your_information_safe,
             ),
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,

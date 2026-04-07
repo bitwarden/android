@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.attachments
 
 import androidx.compose.ui.test.assert
-import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
@@ -11,7 +10,10 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
+import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.isProgressBar
@@ -19,12 +21,12 @@ import com.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.bitwarden.ui.util.onNodeWithTextAfterScroll
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertTrue
@@ -33,6 +35,7 @@ import org.junit.Test
 
 class AttachmentsScreenTest : BitwardenComposeTest() {
     private var onNavigateBackCalled = false
+    private var onNavigateToPreviewCalled = false
 
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val mutableEventFlow = bufferedMutableSharedFlow<AttachmentsEvent>()
@@ -51,6 +54,7 @@ class AttachmentsScreenTest : BitwardenComposeTest() {
             AttachmentsScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToPreview = { onNavigateToPreviewCalled = true },
             )
         }
     }
@@ -59,6 +63,29 @@ class AttachmentsScreenTest : BitwardenComposeTest() {
     fun `NavigateBack should call onNavigateBack`() {
         mutableEventFlow.tryEmit(AttachmentsEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `NavigateToUri should call launchUri`() {
+        val uriString = "https://www.bitwarden.com"
+        mutableEventFlow.tryEmit(AttachmentsEvent.NavigateToUri(uri = uriString))
+        verify(exactly = 1) {
+            intentManager.launchUri(uriString.toUri())
+        }
+    }
+
+    @Test
+    fun `NavigateToPreview should call onNavigateToPreview`() {
+        mutableEventFlow.tryEmit(
+            AttachmentsEvent.NavigateToPreview(
+                cipherId = "cipherId",
+                attachmentId = "attachmentId",
+                fileName = "file.png",
+                displaySize = "10 MB",
+                isLargeFile = true,
+            ),
+        )
+        assertTrue(onNavigateToPreviewCalled)
     }
 
     @Test
@@ -90,22 +117,42 @@ class AttachmentsScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `on edit file name should send FileNameChange`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_WITHOUT_ATTACHMENTS.copy(
+                    newAttachment = AttachmentsState.NewAttachment(
+                        extension = "png",
+                        displayName = "cool_file",
+                        uri = mockk(),
+                        sizeBytes = 100L,
+                    ),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText("cool_file")
+            .performTextInput("5")
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AttachmentsAction.FileNameChange(fileName = "cool_file5"))
+        }
+    }
+
+    @Test
     fun `progressbar should be displayed according to state`() {
         mutableStateFlow.update { it.copy(viewState = AttachmentsState.ViewState.Loading) }
-        // There are 2 because of the pull-to-refresh
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
 
         mutableStateFlow.update {
             it.copy(viewState = AttachmentsState.ViewState.Error("Fail".asText()))
         }
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(viewState = DEFAULT_CONTENT_WITHOUT_ATTACHMENTS)
         }
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
     }
 
     @Test
@@ -206,6 +253,31 @@ class AttachmentsScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `requires Premium dialog should be displayed according to state`() {
+        val requiresPremiumMessage = "Attachments unavailable"
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(requiresPremiumMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(dialogState = AttachmentsState.DialogState.RequiresPremium)
+        }
+
+        composeTestRule
+            .onNodeWithText(requiresPremiumMessage)
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Upgrade to Premium")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AttachmentsAction.UpgradeToPremiumClick)
+        }
+    }
+
+    @Test
     fun `error dialog should be displayed according to state`() {
         val errorMessage = "Fail"
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
@@ -249,23 +321,25 @@ private val DEFAULT_STATE: AttachmentsState = AttachmentsState(
     viewState = AttachmentsState.ViewState.Loading,
     dialogState = null,
     isPremiumUser = false,
+    isAttachmentUpdatesEnabled = true,
 )
 
 private val DEFAULT_CONTENT_WITHOUT_ATTACHMENTS: AttachmentsState.ViewState.Content =
     AttachmentsState.ViewState.Content(
         originalCipher = createMockCipherView(number = 1),
-        attachments = emptyList(),
+        attachments = persistentListOf(),
         newAttachment = null,
     )
 
 private val DEFAULT_CONTENT_WITH_ATTACHMENTS: AttachmentsState.ViewState.Content =
     AttachmentsState.ViewState.Content(
         originalCipher = createMockCipherView(number = 1),
-        attachments = listOf(
+        attachments = persistentListOf(
             AttachmentsState.AttachmentItem(
                 id = "cipherId-1234",
                 title = "cool_file.png",
                 displaySize = "10 MB",
+                isLargeFile = true,
             ),
         ),
         newAttachment = null,

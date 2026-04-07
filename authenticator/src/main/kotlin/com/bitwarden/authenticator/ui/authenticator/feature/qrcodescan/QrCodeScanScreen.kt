@@ -1,74 +1,48 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan
 
-import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.CustomAccessibilityAction
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.util.QrCodeAnalyzer
-import com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.util.QrCodeAnalyzerImpl
-import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorTopAppBar
-import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
-import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
-import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
-import com.bitwarden.authenticator.ui.platform.theme.LocalNonMaterialColors
 import com.bitwarden.authenticator.ui.platform.util.isPortrait
 import com.bitwarden.ui.platform.base.util.EventsEffect
-import com.bitwarden.ui.platform.base.util.annotatedStringResource
-import com.bitwarden.ui.platform.base.util.spanStyleOf
+import com.bitwarden.ui.platform.base.util.StatusBarsAppearanceAffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.camera.CameraPreview
+import com.bitwarden.ui.platform.components.camera.QrCodeSquare
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
+import com.bitwarden.ui.platform.composition.LocalQrCodeAnalyzer
+import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzer
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.bitwarden.ui.util.asText
-import java.util.concurrent.Executors
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.platform.theme.LocalBitwardenColorScheme
+import com.bitwarden.ui.platform.theme.color.darkBitwardenColorScheme
 
 /**
  * The screen to scan QR codes for the application.
@@ -79,14 +53,14 @@ import kotlin.coroutines.suspendCoroutine
 fun QrCodeScanScreen(
     onNavigateBack: () -> Unit,
     viewModel: QrCodeScanViewModel = hiltViewModel(),
-    qrCodeAnalyzer: QrCodeAnalyzer = QrCodeAnalyzerImpl(),
+    qrCodeAnalyzer: QrCodeAnalyzer = LocalQrCodeAnalyzer.current,
     onNavigateToManualCodeEntryScreen: () -> Unit,
 ) {
-    qrCodeAnalyzer.onQrCodeScanned = remember(viewModel) {
-        { viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(it)) }
+    qrCodeAnalyzer.onQrCodeScanned = {
+        viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(it))
     }
-    val onEnterCodeManuallyClick = remember(viewModel) {
-        { viewModel.trySendAction(QrCodeScanAction.ManualEntryTextClick) }
+    val onEnterCodeManuallyClick = {
+        viewModel.trySendAction(QrCodeScanAction.ManualEntryTextClick)
     }
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     EventsEffect(viewModel = viewModel) { event ->
@@ -101,51 +75,51 @@ fun QrCodeScanScreen(
         }
     }
 
-    QrCodeScanDialogs(
-        dialogState = state.dialog,
-        onSaveHereClick = remember(viewModel) {
-            { viewModel.trySendAction(QrCodeScanAction.SaveLocallyClick(it)) }
-        },
-        onTakeMeToBitwardenClick = remember(viewModel) {
-            { viewModel.trySendAction(QrCodeScanAction.SaveToBitwardenClick(it)) }
-        },
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(QrCodeScanAction.SaveToBitwardenErrorDismiss) }
-        },
-    )
-
-    BitwardenScaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            AuthenticatorTopAppBar(
-                title = stringResource(id = R.string.scan_qr_code),
-                navigationIcon = painterResource(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(QrCodeScanAction.CloseClick) }
-                },
-                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
-            )
-        },
-    ) { innerPadding ->
-        CameraPreview(
-            cameraErrorReceive = remember(viewModel) {
-                { viewModel.trySendAction(QrCodeScanAction.CameraSetupErrorReceive) }
+    // This screen should always look like it's in dark mode
+    CompositionLocalProvider(LocalBitwardenColorScheme provides darkBitwardenColorScheme) {
+        StatusBarsAppearanceAffect()
+        QrCodeScanDialogs(
+            dialogState = state.dialog,
+            onSaveHereClick = { viewModel.trySendAction(QrCodeScanAction.SaveLocallyClick(it)) },
+            onTakeMeToBitwardenClick = {
+                viewModel.trySendAction(QrCodeScanAction.SaveToBitwardenClick(it))
             },
-            qrCodeAnalyzer = qrCodeAnalyzer,
-            modifier = Modifier.padding(innerPadding),
+            onDismissRequest = {
+                viewModel.trySendAction(QrCodeScanAction.SaveToBitwardenErrorDismiss)
+            },
         )
 
-        if (LocalConfiguration.current.isPortrait) {
-            PortraitQRCodeContent(
-                onEnterCodeManuallyClick = onEnterCodeManuallyClick,
-                modifier = Modifier.padding(paddingValues = innerPadding),
+        BitwardenScaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                BitwardenTopAppBar(
+                    title = stringResource(id = BitwardenString.scan_qr_code),
+                    navigationIcon = painterResource(id = BitwardenDrawable.ic_close),
+                    navigationIconContentDescription = stringResource(id = BitwardenString.close),
+                    onNavigationIconClick = {
+                        viewModel.trySendAction(QrCodeScanAction.CloseClick)
+                    },
+                    scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+                )
+            },
+        ) {
+            CameraPreview(
+                cameraErrorReceive = {
+                    viewModel.trySendAction(QrCodeScanAction.CameraSetupErrorReceive)
+                },
+                analyzer = qrCodeAnalyzer,
+                modifier = Modifier.fillMaxSize(),
             )
-        } else {
-            LandscapeQRCodeContent(
-                onEnterCodeManuallyClick = onEnterCodeManuallyClick,
-                modifier = Modifier.padding(paddingValues = innerPadding),
-            )
+
+            if (LocalConfiguration.current.isPortrait) {
+                PortraitQRCodeContent(
+                    onEnterCodeManuallyClick = onEnterCodeManuallyClick,
+                )
+            } else {
+                LandscapeQRCodeContent(
+                    onEnterCodeManuallyClick = onEnterCodeManuallyClick,
+                )
+            }
         }
     }
 }
@@ -167,10 +141,8 @@ private fun QrCodeScanDialogs(
 
         QrCodeScanState.DialogState.SaveToBitwardenError -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = R.string.something_went_wrong.asText(),
-                    message = R.string.please_try_again.asText(),
-                ),
+                title = stringResource(id = BitwardenString.something_went_wrong),
+                message = stringResource(id = BitwardenString.please_try_again),
                 onDismissRequest = onDismissRequest,
             )
         }
@@ -204,10 +176,10 @@ private fun PortraitQRCodeContent(
                 .verticalScroll(rememberScrollState()),
         ) {
             Text(
-                text = stringResource(id = R.string.point_your_camera_at_the_qr_code),
+                text = stringResource(id = BitwardenString.point_your_camera_at_the_qr_code),
                 textAlign = TextAlign.Center,
-                color = Color.White,
-                style = MaterialTheme.typography.bodyMedium,
+                color = BitwardenTheme.colorScheme.text.primary,
+                style = BitwardenTheme.typography.bodyMedium,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
 
@@ -245,10 +217,10 @@ private fun LandscapeQRCodeContent(
                 .verticalScroll(rememberScrollState()),
         ) {
             Text(
-                text = stringResource(id = R.string.point_your_camera_at_the_qr_code),
+                text = stringResource(id = BitwardenString.point_your_camera_at_the_qr_code),
                 textAlign = TextAlign.Center,
-                color = Color.White,
-                style = MaterialTheme.typography.bodySmall,
+                color = BitwardenTheme.colorScheme.text.primary,
+                style = BitwardenTheme.typography.bodySmall,
             )
 
             BottomClickableText(
@@ -259,211 +231,18 @@ private fun LandscapeQRCodeContent(
     }
 }
 
-@Suppress("LongMethod", "TooGenericExceptionCaught")
-@Composable
-private fun CameraPreview(
-    cameraErrorReceive: () -> Unit,
-    qrCodeAnalyzer: QrCodeAnalyzer,
-    modifier: Modifier = Modifier,
-) {
-    val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
-    var cameraProvider: ProcessCameraProvider? by remember { mutableStateOf(null) }
-
-    val previewView = remember {
-        PreviewView(context).apply {
-            scaleType = PreviewView.ScaleType.FILL_CENTER
-            layoutParams = ViewGroup.LayoutParams(
-                MATCH_PARENT,
-                MATCH_PARENT,
-            )
-            implementationMode = PreviewView.ImplementationMode.COMPATIBLE
-        }
-    }
-
-    val imageAnalyzer = remember(qrCodeAnalyzer) {
-        ImageAnalysis.Builder()
-            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-            .build()
-            .apply {
-                setAnalyzer(
-                    Executors.newSingleThreadExecutor(),
-                    qrCodeAnalyzer,
-                )
-            }
-    }
-
-    val preview = Preview.Builder()
-        .build()
-        .apply { surfaceProvider = previewView.surfaceProvider }
-
-    // Unbind from the camera provider when we leave the screen.
-    DisposableEffect(Unit) {
-        onDispose {
-            cameraProvider?.unbindAll()
-        }
-    }
-
-    // Set up the camera provider on a background thread. This is necessary because
-    // ProcessCameraProvider.getInstance returns a ListenableFuture. For an example see
-    // https://github.com/JetBrains/compose-multiplatform/blob/1c7154b975b79901f40f28278895183e476ed36d/examples/imageviewer/shared/src/androidMain/kotlin/example/imageviewer/view/CameraView.android.kt#L85
-    LaunchedEffect(imageAnalyzer) {
-        try {
-            cameraProvider = suspendCoroutine { continuation ->
-                ProcessCameraProvider.getInstance(context).also { future ->
-                    future.addListener(
-                        { continuation.resume(future.get()) },
-                        Executors.newSingleThreadExecutor(),
-                    )
-                }
-            }
-
-            cameraProvider?.unbindAll()
-            cameraProvider?.bindToLifecycle(
-                lifecycleOwner,
-                CameraSelector.DEFAULT_BACK_CAMERA,
-                preview,
-                imageAnalyzer,
-            )
-        } catch (_: Exception) {
-            cameraErrorReceive()
-        }
-    }
-
-    AndroidView(
-        factory = { previewView },
-        modifier = modifier,
-    )
-}
-
-/**
- * UI for the blue QR code square that is drawn onto the screen.
- */
-@Suppress("MagicNumber", "LongMethod")
-@Composable
-private fun QrCodeSquare(
-    modifier: Modifier = Modifier,
-    squareOutlineSize: Dp,
-) {
-    val color = MaterialTheme.colorScheme.primary
-
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier,
-    ) {
-        Canvas(
-            modifier = Modifier
-                .size(squareOutlineSize)
-                .padding(8.dp),
-        ) {
-            val strokeWidth = 3.dp.toPx()
-
-            val squareSize = size.width
-            val strokeOffset = strokeWidth / 2
-            val sideLength = (1f / 6) * squareSize
-
-            drawIntoCanvas { canvas ->
-                canvas.nativeCanvas.apply {
-                    // Draw upper top left.
-                    drawLine(
-                        color = color,
-                        start = Offset(0f, strokeOffset),
-                        end = Offset(sideLength, strokeOffset),
-                        strokeWidth = strokeWidth,
-                    )
-
-                    // Draw lower top left.
-                    drawLine(
-                        color = color,
-                        start = Offset(strokeOffset, strokeOffset),
-                        end = Offset(strokeOffset, sideLength),
-                        strokeWidth = strokeWidth,
-                    )
-
-                    // Draw upper top right.
-                    drawLine(
-                        color = color,
-                        start = Offset(squareSize - sideLength, strokeOffset),
-                        end = Offset(squareSize - strokeOffset, strokeOffset),
-                        strokeWidth = strokeWidth,
-                    )
-
-                    // Draw lower top right.
-                    drawLine(
-                        color = color,
-                        start = Offset(squareSize - strokeOffset, 0f),
-                        end = Offset(squareSize - strokeOffset, sideLength),
-                        strokeWidth = strokeWidth,
-                    )
-
-                    // Draw upper bottom right.
-                    drawLine(
-                        color = color,
-                        start = Offset(squareSize - strokeOffset, squareSize),
-                        end = Offset(squareSize - strokeOffset, squareSize - sideLength),
-                        strokeWidth = strokeWidth,
-                    )
-
-                    // Draw lower bottom right.
-                    drawLine(
-                        color = color,
-                        start = Offset(squareSize - strokeOffset, squareSize - strokeOffset),
-                        end = Offset(squareSize - sideLength, squareSize - strokeOffset),
-                        strokeWidth = strokeWidth,
-                    )
-
-                    // Draw upper bottom left.
-                    drawLine(
-                        color = color,
-                        start = Offset(strokeOffset, squareSize),
-                        end = Offset(strokeOffset, squareSize - sideLength),
-                        strokeWidth = strokeWidth,
-                    )
-
-                    // Draw lower bottom left.
-                    drawLine(
-                        color = color,
-                        start = Offset(0f, squareSize - strokeOffset),
-                        end = Offset(sideLength, squareSize - strokeOffset),
-                        strokeWidth = strokeWidth,
-                    )
-                }
-            }
-        }
-    }
-}
-
 @Composable
 private fun BottomClickableText(
     onEnterCodeManuallyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val enterKeyText = stringResource(id = R.string.enter_key_manually)
-    Text(
-        text = annotatedStringResource(
-            id = R.string.cannot_scan_qr_code_enter_key_manually,
-            linkHighlightStyle = spanStyleOf(
-                color = LocalNonMaterialColors.current.qrCodeClickableText,
-                textStyle = MaterialTheme.typography.bodyMedium,
-            ),
-            style = spanStyleOf(
-                color = Color.White,
-                textStyle = MaterialTheme.typography.bodyMedium,
-            ),
-            onAnnotationClick = {
-                when (it) {
-                    "enterKeyManually" -> onEnterCodeManuallyClick()
-                }
-            },
-        ),
-        modifier = modifier.semantics {
-            CustomAccessibilityAction(
-                label = enterKeyText,
-                action = {
-                    onEnterCodeManuallyClick()
-                    true
-                },
-            )
-        },
+    BitwardenHyperTextLink(
+        annotatedResId = BitwardenString.cannot_scan_qr_code_enter_key_manually,
+        annotationKey = "enterKeyManually",
+        accessibilityString = stringResource(BitwardenString.enter_key_manually),
+        onClick = onEnterCodeManuallyClick,
+        style = BitwardenTheme.typography.bodySmall,
+        color = BitwardenTheme.colorScheme.text.primary,
+        modifier = modifier,
     )
 }

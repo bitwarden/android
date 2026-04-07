@@ -15,7 +15,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -23,15 +22,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 
 /**
  * Top level composable for the setup complete screen.
@@ -41,10 +40,8 @@ import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 fun SetupCompleteScreen(
     viewModel: SetupCompleteViewModel = hiltViewModel(),
 ) {
-    val setupCompleteAction: () -> Unit = remember(viewModel) {
-        {
-            viewModel.trySendAction(SetupCompleteAction.CompleteSetup)
-        }
+    val setupCompleteAction: () -> Unit = {
+        viewModel.trySendAction(SetupCompleteAction.CompleteSetup)
     }
 
     // Handle system back action to complete the setup.
@@ -55,7 +52,7 @@ fun SetupCompleteScreen(
         topBar = {
             BitwardenTopAppBar(
                 scrollBehavior = scrollBehavior,
-                title = stringResource(R.string.account_setup),
+                title = stringResource(BitwardenString.account_setup),
                 navigationIcon = null,
             )
         },
@@ -80,7 +77,7 @@ private fun SetupCompleteContent(
     ) {
         Spacer(Modifier.height(32.dp))
         Image(
-            painter = rememberVectorPainter(BitwardenDrawable.img_setup_complete),
+            painter = rememberVectorPainter(BitwardenDrawable.ill_setup_complete),
             contentDescription = null,
             modifier = Modifier
                 .align(CenterHorizontally)
@@ -89,7 +86,7 @@ private fun SetupCompleteContent(
         )
         Spacer(Modifier.height(24.dp))
         Text(
-            text = stringResource(R.string.youre_all_set),
+            text = stringResource(BitwardenString.youre_all_set),
             style = BitwardenTheme.typography.titleMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
@@ -99,7 +96,7 @@ private fun SetupCompleteContent(
         )
         Spacer(Modifier.height(8.dp))
         Text(
-            text = stringResource(R.string.what_bitwarden_has_to_offer),
+            text = stringResource(BitwardenString.what_bitwarden_has_to_offer),
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
@@ -109,7 +106,7 @@ private fun SetupCompleteContent(
         )
         Spacer(Modifier.height(24.dp))
         BitwardenFilledButton(
-            label = stringResource(R.string.continue_text),
+            label = stringResource(BitwardenString.continue_text),
             onClick = onContinue,
             modifier = Modifier
                 .fillMaxWidth()

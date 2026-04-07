@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import app.cash.turbine.test
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.SyncResponseJson
@@ -11,10 +11,12 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
+import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutoFillData
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.model.CoachMarkTourType
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import io.mockk.every
 import io.mockk.mockk
@@ -26,40 +28,37 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import java.time.ZonedDateTime
+import java.time.Instant
 
 class FirstTimeActionManagerTest {
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeSettingsDiskSource = FakeSettingsDiskSource()
     private val mutableCiphersListFlow = MutableStateFlow(emptyList<SyncResponseJson.Cipher>())
     private val vaultDiskSource = mockk<VaultDiskSource> {
-        every { getCiphers(any()) } returns mutableCiphersListFlow
+        every { getCiphersFlow(any()) } returns mutableCiphersListFlow
     }
-
-    private val mutableImportLoginsFlow = MutableStateFlow(false)
-    private val mutableOnboardingFeatureFlow = MutableStateFlow(false)
-    private val featureFlagManager = mockk<FeatureFlagManager> {
-        every { getFeatureFlagFlow(FlagKey.ImportLoginsFlow) } returns mutableImportLoginsFlow
-    }
-
     private val mutableAutofillEnabledFlow = MutableStateFlow(false)
     private val autofillEnabledManager = mockk<AutofillEnabledManager> {
         every { isAutofillEnabledStateFlow } returns mutableAutofillEnabledFlow
         every { isAutofillEnabled } returns false
+    }
+    private val mutableThirdPartyAutofillStatusFlow = MutableStateFlow(DEFAULT_AUTOFILL_STATUS)
+    private val thirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager = mockk {
+        every { browserThirdPartyAutofillStatusFlow } returns mutableThirdPartyAutofillStatusFlow
     }
 
     private val firstTimeActionManager = FirstTimeActionManagerImpl(
         authDiskSource = fakeAuthDiskSource,
         settingsDiskSource = fakeSettingsDiskSource,
         vaultDiskSource = vaultDiskSource,
-        featureFlagManager = featureFlagManager,
         dispatcherManager = FakeDispatcherManager(),
         autofillEnabledManager = autofillEnabledManager,
+        thirdPartyAutofillEnabledManager = thirdPartyAutofillEnabledManager,
     )
 
     @Suppress("MaxLineLength")
     @Test
-    fun `allAutoFillSettingsBadgeCountFlow should emit the value of flags set to true and update when saved value is changed or autofill enabled state changes`() =
+    fun `allAutofillSettingsBadgeCountFlow should update when saved value is changed or autofill enabled state changes`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             firstTimeActionManager.allAutofillSettingsBadgeCountFlow.test {
@@ -84,81 +83,66 @@ class FirstTimeActionManagerTest {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `allSecuritySettingsBadgeCountFlow should emit the value of flags set to true and update when changed`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            firstTimeActionManager.allSecuritySettingsBadgeCountFlow.test {
-                assertEquals(0, awaitItem())
-                fakeSettingsDiskSource.storeShowUnlockSettingBadge(
-                    userId = USER_ID,
-                    showBadge = true,
-                )
-                assertEquals(1, awaitItem())
-                fakeSettingsDiskSource.storeShowUnlockSettingBadge(
-                    userId = USER_ID,
-                    showBadge = false,
-                )
-                assertEquals(0, awaitItem())
-            }
+    fun `allSecuritySettingsBadgeCountFlow should update when changed`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        firstTimeActionManager.allSecuritySettingsBadgeCountFlow.test {
+            assertEquals(0, awaitItem())
+            fakeSettingsDiskSource.storeShowUnlockSettingBadge(
+                userId = USER_ID,
+                showBadge = true,
+            )
+            assertEquals(1, awaitItem())
+            fakeSettingsDiskSource.storeShowUnlockSettingBadge(
+                userId = USER_ID,
+                showBadge = false,
+            )
+            assertEquals(0, awaitItem())
         }
+    }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `allSettingsBadgeCountFlow should emit the value of all flags set to true and update when changed`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            firstTimeActionManager.allSettingsBadgeCountFlow.test {
-                assertEquals(0, awaitItem())
-                fakeSettingsDiskSource.storeShowAutoFillSettingBadge(
-                    userId = USER_ID,
-                    showBadge = true,
-                )
-                assertEquals(1, awaitItem())
-                fakeSettingsDiskSource.storeShowUnlockSettingBadge(
-                    userId = USER_ID,
-                    showBadge = true,
-                )
-                assertEquals(2, awaitItem())
-                fakeSettingsDiskSource.storeShowAutoFillSettingBadge(
-                    userId = USER_ID,
-                    showBadge = false,
-                )
-                assertEquals(1, awaitItem())
-                // for the import logins count it is dependent on the feature flag state and
-                // cipher list being empty
-                mutableImportLoginsFlow.update { true }
-                fakeSettingsDiskSource.storeShowImportLoginsSettingBadge(USER_ID, true)
-                assertEquals(2, awaitItem())
-            }
+    fun `allSettingsBadgeCountFlow should update when changed`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        firstTimeActionManager.allSettingsBadgeCountFlow.test {
+            assertEquals(0, awaitItem())
+            fakeSettingsDiskSource.storeShowAutoFillSettingBadge(
+                userId = USER_ID,
+                showBadge = true,
+            )
+            assertEquals(1, awaitItem())
+            fakeSettingsDiskSource.storeShowUnlockSettingBadge(
+                userId = USER_ID,
+                showBadge = true,
+            )
+            assertEquals(2, awaitItem())
+            fakeSettingsDiskSource.storeShowAutoFillSettingBadge(
+                userId = USER_ID,
+                showBadge = false,
+            )
+            assertEquals(1, awaitItem())
+            // for the import logins count it is dependent on the cipher list being empty
+            fakeSettingsDiskSource.storeShowImportLoginsSettingBadge(USER_ID, true)
+            assertEquals(2, awaitItem())
         }
+    }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `allVaultSettingsBadgeCountFlow should emit the value of all flags set to true and update when dependent states are changed changed`() =
+    fun `allVaultSettingsBadgeCountFlow should update when dependent states are changed changed`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val mockCipher = mockk<SyncResponseJson.Cipher>(relaxed = true)
-            // For the import logins count to register, the feature flag for ImportLoginsFlow must
-            // be enabled, the cipher list must not be empty, and the value saved to disk should be
-            // true.
+            // For the import logins count to register, the cipher list must not be empty, and the
+            // value saved to disk should be true.
             firstTimeActionManager.allVaultSettingsBadgeCountFlow.test {
                 assertEquals(0, awaitItem())
-                mutableImportLoginsFlow.update { true }
                 fakeSettingsDiskSource.storeShowImportLoginsSettingBadge(USER_ID, true)
-                assertEquals(1, awaitItem())
-                mutableImportLoginsFlow.update { false }
-                assertEquals(0, awaitItem())
-                mutableImportLoginsFlow.update { true }
                 assertEquals(1, awaitItem())
                 fakeSettingsDiskSource.storeShowImportLoginsSettingBadge(USER_ID, false)
                 assertEquals(0, awaitItem())
                 fakeSettingsDiskSource.storeShowImportLoginsSettingBadge(USER_ID, true)
                 assertEquals(1, awaitItem())
-                mutableCiphersListFlow.update {
-                    listOf(mockCipher)
-                }
+                mutableCiphersListFlow.update { listOf(mockCipher) }
                 assertEquals(0, awaitItem())
             }
         }
@@ -167,8 +151,7 @@ class FirstTimeActionManagerTest {
     fun `firstTimeStateFlow should emit changes when items in the first time state change`() =
         runTest {
             firstTimeActionManager.firstTimeStateFlow.test {
-                fakeAuthDiskSource.userState =
-                    MOCK_USER_STATE
+                fakeAuthDiskSource.userState = MOCK_USER_STATE
                 assertEquals(
                     FirstTimeState(
                         showImportLoginsCard = true,
@@ -208,40 +191,49 @@ class FirstTimeActionManagerTest {
 
     @Test
     fun `storeShowAutoFillSettingBadge should store value of false to disk`() {
-        fakeAuthDiskSource.userState =
-            MOCK_USER_STATE
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
         firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = false)
         assertFalse(fakeSettingsDiskSource.getShowAutoFillSettingBadge(userId = USER_ID)!!)
     }
 
     @Test
     fun `storeShowAutoFillSettingBadge should store value of true to disk`() {
-        fakeAuthDiskSource.userState =
-            MOCK_USER_STATE
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
         firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = true)
         assertTrue(fakeSettingsDiskSource.getShowAutoFillSettingBadge(userId = USER_ID)!!)
     }
 
     @Test
+    fun `storeShowBrowserAutofillSettingBadge should store value of false to disk`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = false)
+        assertFalse(fakeSettingsDiskSource.getShowBrowserAutofillSettingBadge(userId = USER_ID)!!)
+    }
+
+    @Test
+    fun `storeShowBrowserAutofillSettingBadge should store value of true to disk`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = true)
+        assertTrue(fakeSettingsDiskSource.getShowBrowserAutofillSettingBadge(userId = USER_ID)!!)
+    }
+
+    @Test
     fun `getShowAutoFillSettingBadge should return the value saved to disk`() {
-        fakeAuthDiskSource.userState =
-            MOCK_USER_STATE
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
         firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = true)
         assertTrue(fakeSettingsDiskSource.getShowAutoFillSettingBadge(userId = USER_ID)!!)
     }
 
     @Test
     fun `storeShowUnlockSettingBadge should store value of false to disk`() {
-        fakeAuthDiskSource.userState =
-            MOCK_USER_STATE
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
         firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
         assertFalse(fakeSettingsDiskSource.getShowUnlockSettingBadge(userId = USER_ID)!!)
     }
 
     @Test
     fun `storeShowUnlockSettingBadge should store value of true to disk`() {
-        fakeAuthDiskSource.userState =
-            MOCK_USER_STATE
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
         firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = true)
         assertTrue(fakeSettingsDiskSource.getShowUnlockSettingBadge(userId = USER_ID)!!)
     }
@@ -303,8 +295,6 @@ class FirstTimeActionManagerTest {
     @Test
     fun `shouldShowAddLoginCoachMarkFlow updates when disk source updates`() = runTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
-        // Enable the feature for this test.
-        mutableOnboardingFeatureFlow.update { true }
         firstTimeActionManager.shouldShowAddLoginCoachMarkFlow.test {
             assertTrue(awaitItem())
             fakeSettingsDiskSource.storeShouldShowAddLoginCoachMark(shouldShow = false)
@@ -325,8 +315,6 @@ class FirstTimeActionManagerTest {
                 every { organizationId } returns null
             }
             fakeAuthDiskSource.userState = MOCK_USER_STATE
-            // Enable feature flag so flow emits updates from disk.
-            mutableOnboardingFeatureFlow.update { true }
             mutableCiphersListFlow.update {
                 listOf(
                     mockJsonWithNoLogin,
@@ -356,8 +344,6 @@ class FirstTimeActionManagerTest {
     @Test
     fun `shouldShowGeneratorCoachMarkFlow updates when disk source updates`() = runTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
-        // Enable feature flag so flow emits updates from disk.
-        mutableOnboardingFeatureFlow.update { true }
         firstTimeActionManager.shouldShowGeneratorCoachMarkFlow.test {
             assertTrue(awaitItem())
             fakeSettingsDiskSource.storeShouldShowGeneratorCoachMark(shouldShow = false)
@@ -378,8 +364,6 @@ class FirstTimeActionManagerTest {
                 every { organizationId } returns null
             }
             fakeAuthDiskSource.userState = MOCK_USER_STATE
-            // Enable feature flag so flow emits updates from disk.
-            mutableOnboardingFeatureFlow.update { true }
             mutableCiphersListFlow.update {
                 listOf(
                     mockJsonWithNoLogin,
@@ -406,8 +390,6 @@ class FirstTimeActionManagerTest {
                 every { organizationId } returns "1234"
             }
             fakeAuthDiskSource.userState = MOCK_USER_STATE
-            // Enable feature flag so flow emits updates from disk.
-            mutableOnboardingFeatureFlow.update { true }
             mutableCiphersListFlow.update {
                 listOf(mockJsonWithLoginAndWithOrganizationId)
             }
@@ -439,6 +421,7 @@ private val MOCK_USER_DECRYPTION_OPTIONS: UserDecryptionOptionsJson = UserDecryp
     hasMasterPassword = false,
     trustedDeviceUserDecryptionOptions = MOCK_TRUSTED_DEVICE_USER_DECRYPTION_OPTIONS,
     keyConnectorUserDecryptionOptions = null,
+    masterPasswordUnlock = null,
 )
 
 private val MOCK_PROFILE = AccountJson.Profile(
@@ -457,7 +440,7 @@ private val MOCK_PROFILE = AccountJson.Profile(
     kdfParallelism = 4,
     userDecryptionOptions = MOCK_USER_DECRYPTION_OPTIONS,
     isTwoFactorEnabled = false,
-    creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+    creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
 )
 
 private val MOCK_ACCOUNT = AccountJson(
@@ -472,4 +455,17 @@ private val MOCK_USER_STATE = UserStateJson(
     accounts = mapOf(
         USER_ID to MOCK_ACCOUNT,
     ),
+)
+
+private val DEFAULT_BROWSER_AUTOFILL_DATA = BrowserThirdPartyAutoFillData(
+    isAvailable = false,
+    isThirdPartyEnabled = false,
+)
+
+private val DEFAULT_AUTOFILL_STATUS = BrowserThirdPartyAutofillStatus(
+    braveStableStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
+    chromeStableStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
+    chromeBetaChannelStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
+    vivaldiStableChannelStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
+    defaultBrowserPackageName = null,
 )

@@ -23,7 +23,7 @@ interface DomainsDao {
      * Retrieves domains from the database for a given [userId].
      */
     @Query("SELECT * FROM domains WHERE user_id = :userId")
-    fun getDomains(
+    fun getDomainsFlow(
         userId: String,
     ): Flow<DomainsEntity?>
 

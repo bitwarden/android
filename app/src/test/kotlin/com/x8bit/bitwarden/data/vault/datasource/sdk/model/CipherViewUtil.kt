@@ -20,10 +20,9 @@ import com.bitwarden.vault.UriMatchType
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 /**
- * Default date time used for [ZonedDateTime] properties of mock objects.
+ * Default date time used for [Instant] properties of mock objects.
  */
 private const val DEFAULT_TIMESTAMP = "2023-10-27T12:00:00Z"
 private val FIXED_CLOCK: Clock = Clock.fixed(
@@ -35,7 +34,7 @@ private val FIXED_CLOCK: Clock = Clock.fixed(
  * Create a mock [CipherView].
  *
  * @param number the number to create the cipher with.
- * @param isDeleted whether or not the cipher has been deleted.
+ * @param isDeleted whether the cipher has been deleted.
  * @param cipherType the type of cipher to create.
  */
 @Suppress("LongParameterList")
@@ -47,16 +46,24 @@ fun createMockCipherView(
     totp: String? = "mockTotp-$number",
     organizationId: String? = "mockOrganizationId-$number",
     folderId: String? = "mockId-$number",
+    notes: String? = "mockNotes-$number",
+    password: String? = "mockPassword-$number",
     clock: Clock = FIXED_CLOCK,
     fido2Credentials: List<Fido2Credential>? = null,
     sshKey: SshKeyView? = createMockSshKeyView(number = number),
     login: LoginView? = createMockLoginView(
         number = number,
+        password = password,
         totp = totp,
         clock = clock,
         fido2Credentials = fido2Credentials,
     ),
+    card: CardView? = createMockCardView(number = number).takeIf { cipherType == CipherType.CARD },
     attachments: List<AttachmentView> = listOf(createMockAttachmentView(number = number)),
+    isArchived: Boolean = false,
+    passwordHistory: List<PasswordHistoryView> = listOf(
+        createMockPasswordHistoryView(number = number, clock),
+    ),
 ): CipherView =
     CipherView(
         id = "mockId-$number",
@@ -65,25 +72,30 @@ fun createMockCipherView(
         collectionIds = listOf("mockId-$number"),
         key = "mockKey-$number",
         name = "mockName-$number",
-        notes = "mockNotes-$number",
+        notes = notes,
         type = cipherType,
         login = login.takeIf { cipherType == CipherType.LOGIN },
         creationDate = clock.instant(),
+        revisionDate = clock.instant(),
         deletedDate = if (isDeleted) {
             clock.instant()
         } else {
             null
         },
-        revisionDate = clock.instant(),
+        archivedDate = if (isArchived) {
+            clock.instant()
+        } else {
+            null
+        },
         attachments = attachments,
-        card = createMockCardView(number = number).takeIf { cipherType == CipherType.CARD },
+        card = card,
         fields = listOf(createMockFieldView(number = number)),
         identity = createMockIdentityView(number = number).takeIf {
             cipherType == CipherType.IDENTITY
         },
         sshKey = sshKey.takeIf { cipherType == CipherType.SSH_KEY },
         favorite = false,
-        passwordHistory = listOf(createMockPasswordHistoryView(number = number, clock)),
+        passwordHistory = passwordHistory,
         permissions = createMockSdkCipherPermissions(),
         reprompt = repromptType,
         secureNote = createMockSecureNoteView().takeIf { cipherType == CipherType.SECURE_NOTE },
@@ -91,6 +103,7 @@ fun createMockCipherView(
         organizationUseTotp = false,
         viewPassword = true,
         localData = null,
+        attachmentDecryptionFailures = null,
     )
 
 /**
@@ -104,10 +117,12 @@ fun createMockLoginView(
     hasUris: Boolean = true,
     uris: List<LoginUriView>? = listOf(createMockUriView(number = number)),
     fido2Credentials: List<Fido2Credential>? = createMockSdkFido2CredentialList(number, clock),
+    username: String? = "mockUsername-$number",
+    password: String? = "mockPassword-$number",
 ): LoginView =
     LoginView(
-        username = "mockUsername-$number",
-        password = "mockPassword-$number",
+        username = username,
+        password = password,
         passwordRevisionDate = clock.instant(),
         autofillOnPageLoad = false,
         uris = uris.takeIf { hasUris },
@@ -160,6 +175,7 @@ fun createMockFido2CredentialAutofillView(
         rpId = rpId,
         userNameForUi = "mockUserNameForUi-$number",
         userHandle = "mockUserHandle-$number".encodeToByteArray(),
+        hasCounter = false,
     )
 
 /**
@@ -188,13 +204,22 @@ fun createMockAttachmentView(number: Int, key: String? = "mockKey-$number"): Att
 /**
  * Create a mock [CardView] with a given [number].
  */
-fun createMockCardView(number: Int, brand: String = "mockBrand-$number"): CardView =
+@Suppress("LongParameterList")
+fun createMockCardView(
+    number: Int,
+    brand: String = "mockBrand-$number",
+    cardNumber: String? = "mockNumber-$number",
+    expMonth: String? = "mockExpMonth-$number",
+    code: String? = "mockCode-$number",
+    expYear: String? = "mockExpirationYear-$number",
+    cardholderName: String? = "mockCardholderName-$number",
+): CardView =
     CardView(
-        number = "mockNumber-$number",
-        expMonth = "mockExpMonth-$number",
-        code = "mockCode-$number",
-        expYear = "mockExpirationYear-$number",
-        cardholderName = "mockCardholderName-$number",
+        number = cardNumber,
+        expMonth = expMonth,
+        code = code,
+        expYear = expYear,
+        cardholderName = cardholderName,
         brand = brand,
     )
 

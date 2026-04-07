@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager
 
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import kotlinx.coroutines.CoroutineScope

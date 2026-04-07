@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricSupportStatus
 
 /**
@@ -28,21 +28,18 @@ fun BitwardenUnlockWithBiometricsSwitch(
 ) {
     val biometricsDescription: String = when (biometricSupportStatus) {
         BiometricSupportStatus.CLASS_3_SUPPORTED -> {
-            stringResource(R.string.class_3_biometrics_description)
+            stringResource(BitwardenString.class_3_biometrics_description)
         }
 
         BiometricSupportStatus.CLASS_2_SUPPORTED -> {
-            stringResource(R.string.class_2_biometrics_description)
+            stringResource(BitwardenString.class_2_biometrics_description)
         }
 
         BiometricSupportStatus.NOT_SUPPORTED -> return
     }
     BitwardenSwitch(
         modifier = modifier,
-        label = stringResource(
-            id = R.string.unlock_with,
-            stringResource(id = R.string.biometrics),
-        ),
+        label = stringResource(BitwardenString.unlock_with_biometrics),
         isChecked = isChecked,
         onCheckedChange = { toggled ->
             if (toggled) {

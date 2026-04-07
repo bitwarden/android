@@ -1,14 +1,15 @@
 package com.x8bit.bitwarden.data.platform.repository
 
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
+import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.getFlagValueOrDefault
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onSubscription
 
@@ -20,6 +21,7 @@ class DebugMenuRepositoryImpl(
     private val serverConfigRepository: ServerConfigRepository,
     private val settingsDiskSource: SettingsDiskSource,
     private val authDiskSource: AuthDiskSource,
+    private val cookieDiskSource: CookieDiskSource,
 ) : DebugMenuRepository {
 
     private val mutableOverridesUpdatedFlow = bufferedMutableSharedFlow<Unit>(replay = 1)
@@ -41,7 +43,7 @@ class DebugMenuRepositoryImpl(
 
     override fun resetFeatureFlagOverrides() {
         val currentServerConfig = serverConfigRepository.serverConfigStateFlow.value
-        FlagKey.activeFlags.forEach { flagKey ->
+        FlagKey.activePasswordManagerFlags.forEach { flagKey ->
             updateFeatureFlag(
                 flagKey,
                 currentServerConfig.getFlagValueOrDefault(flagKey),
@@ -67,5 +69,17 @@ class DebugMenuRepositoryImpl(
     ) {
         settingsDiskSource.hasUserLoggedInOrCreatedAccount = false
         userStateUpdateTrigger.invoke()
+    }
+
+    override fun clearSsoCookies() {
+        cookieDiskSource.clearCookies()
+    }
+
+    override fun resetPremiumUpgradeBannerDismiss() {
+        val currentUserId = authDiskSource.userState?.activeUserId ?: return
+        settingsDiskSource.storePremiumUpgradeBannerDismissed(
+            userId = currentUserId,
+            isDismissed = null,
+        )
     }
 }

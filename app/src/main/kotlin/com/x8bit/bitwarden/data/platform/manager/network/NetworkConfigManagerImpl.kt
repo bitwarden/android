@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager.network
 
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.network.BitwardenServiceClient
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository

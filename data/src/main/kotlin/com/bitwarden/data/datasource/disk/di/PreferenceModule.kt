@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.bitwarden.data.datasource.disk.di
 
 import android.app.Application
@@ -37,13 +39,12 @@ object PreferenceModule {
     fun provideEncryptedSharedPreferences(
         application: Application,
     ): SharedPreferences =
-        @Suppress("TooGenericExceptionCaught")
         try {
             getEncryptedSharedPreferences(application = application)
-        } catch (e: GeneralSecurityException) {
+        } catch (_: GeneralSecurityException) {
             // Handle when a bad master key or key-set has been attempted
             destroyEncryptedSharedPreferencesAndRebuild(application = application)
-        } catch (e: RuntimeException) {
+        } catch (@Suppress("TooGenericExceptionCaught") _: RuntimeException) {
             // Handle KeystoreExceptions that get wrapped up in a RuntimeException
             destroyEncryptedSharedPreferencesAndRebuild(application = application)
         }

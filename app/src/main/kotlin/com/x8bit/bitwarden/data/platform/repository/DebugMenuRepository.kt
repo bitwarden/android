@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.repository
 
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
+import com.bitwarden.core.data.manager.model.FlagKey
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -49,4 +49,14 @@ interface DebugMenuRepository {
      * @param userStateUpdateTrigger A passable lambda to trigger a user state update.
      */
     fun modifyStateToShowOnboardingCarousel(userStateUpdateTrigger: () -> Unit)
+
+    /**
+     * Clears all stored SSO cookie configurations.
+     */
+    fun clearSsoCookies()
+
+    /**
+     * Resets the Premium upgrade banner dismiss status for the current user.
+     */
+    fun resetPremiumUpgradeBannerDismiss()
 }

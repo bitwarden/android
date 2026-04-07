@@ -3,10 +3,13 @@ package com.bitwarden.network.service
 import androidx.core.net.toUri
 import com.bitwarden.network.api.AzureApi
 import com.bitwarden.network.api.CiphersApi
+import com.bitwarden.network.model.ArchiveCipherResponseJson
 import com.bitwarden.network.model.AttachmentInfo
 import com.bitwarden.network.model.AttachmentJsonRequest
 import com.bitwarden.network.model.AttachmentJsonResponse
+import com.bitwarden.network.model.BulkShareCiphersJsonRequest
 import com.bitwarden.network.model.CipherJsonRequest
+import com.bitwarden.network.model.CipherMiniResponseJson
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.CreateCipherResponseJson
 import com.bitwarden.network.model.FileUploadType
@@ -14,6 +17,7 @@ import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.ImportCiphersResponseJson
 import com.bitwarden.network.model.ShareCipherJsonRequest
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.UnarchiveCipherResponseJson
 import com.bitwarden.network.model.UpdateCipherCollectionsJsonRequest
 import com.bitwarden.network.model.UpdateCipherResponseJson
 import com.bitwarden.network.model.toBitwardenError
@@ -27,7 +31,6 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.time.Clock
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 @Suppress("TooManyFunctions")
@@ -37,6 +40,40 @@ internal class CiphersServiceImpl(
     private val json: Json,
     private val clock: Clock,
 ) : CiphersService {
+    override suspend fun archiveCipher(
+        cipherId: String,
+    ): Result<ArchiveCipherResponseJson> =
+        ciphersApi
+            .archiveCipher(cipherId = cipherId)
+            .toResult()
+            .map { ArchiveCipherResponseJson.Success(cipher = it) }
+            .recoverCatching { throwable ->
+                throwable
+                    .toBitwardenError()
+                    .parseErrorBodyOrNull<ArchiveCipherResponseJson.Invalid>(
+                        code = NetworkErrorCode.BAD_REQUEST,
+                        json = json,
+                    )
+                    ?: throw throwable
+            }
+
+    override suspend fun unarchiveCipher(
+        cipherId: String,
+    ): Result<UnarchiveCipherResponseJson> =
+        ciphersApi
+            .unarchiveCipher(cipherId = cipherId)
+            .toResult()
+            .map { UnarchiveCipherResponseJson.Success(cipher = it) }
+            .recoverCatching { throwable ->
+                throwable
+                    .toBitwardenError()
+                    .parseErrorBodyOrNull<UnarchiveCipherResponseJson.Invalid>(
+                        code = NetworkErrorCode.BAD_REQUEST,
+                        json = json,
+                    )
+                    ?: throw throwable
+            }
+
     override suspend fun createCipher(
         body: CipherJsonRequest,
     ): Result<CreateCipherResponseJson> =
@@ -116,7 +153,8 @@ internal class CiphersServiceImpl(
                     url = attachment.url,
                     date = DateTimeFormatter
                         .RFC_1123_DATE_TIME
-                        .format(ZonedDateTime.ofInstant(clock.instant(), ZoneOffset.UTC)),
+                        .withZone(ZoneOffset.UTC)
+                        .format(clock.instant()),
                     version = attachment.url.toUri().getQueryParameter("sv"),
                     body = encryptedFile.asRequestBody(),
                 )
@@ -183,6 +221,13 @@ internal class CiphersServiceImpl(
                 cipherId = cipherId,
                 body = body,
             )
+            .toResult()
+
+    override suspend fun bulkShareCiphers(
+        body: BulkShareCiphersJsonRequest,
+    ): Result<CipherMiniResponseJson> =
+        ciphersApi
+            .bulkShareCiphers(body = body)
             .toResult()
 
     override suspend fun updateCipherCollections(

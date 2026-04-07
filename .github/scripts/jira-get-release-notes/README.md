@@ -40,7 +40,7 @@ Single line of release notes text
 
 ```json
 ...
-"customfield_10335": {
+"customfield_9999": {
     "type": "doc",
     "version": 1,
     "content": [
@@ -62,7 +62,7 @@ Single line of release notes text
 
 ```json
 ...
-"customfield_10335": {
+"customfield_9999": {
     "type": "doc",
     "version": 1,
     "content": [

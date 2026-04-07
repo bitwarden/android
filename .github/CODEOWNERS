@@ -10,6 +10,11 @@
 # Actions and workflow changes.
 .github/ @bitwarden/dept-development-mobile
 
+# Claude related files
+.claude/ @bitwarden/team-ai-sme
+.github/workflows/respond.yml @bitwarden/team-ai-sme
+.github/workflows/review-code.yml @bitwarden/team-ai-sme
+
 # Auth
 # app/src/main/java/com/x8bit/bitwarden/data/auth @bitwarden/team-auth-dev
 # app/src/main/java/com/x8bit/bitwarden/ui/auth @bitwarden/team-auth-dev
@@ -48,3 +53,9 @@
 # app/src/main/java/com/x8bit/bitwarden/ui/vault  @bitwarden/team-vault-dev
 # app/src/test/java/com/x8bit/bitwarden/data/vault @bitwarden/team-vault-dev
 # app/src/test/java/com/x8bit/bitwarden/ui/vault  @bitwarden/team-vault-dev
+
+# Docker-related files
+**/Dockerfile @bitwarden/team-appsec @bitwarden/dept-bre
+**/*.dockerignore @bitwarden/team-appsec @bitwarden/dept-bre
+**/entrypoint.sh @bitwarden/team-appsec @bitwarden/dept-bre
+**/docker-compose.yml @bitwarden/team-appsec @bitwarden/dept-bre

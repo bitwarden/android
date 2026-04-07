@@ -1,14 +1,19 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
-import com.bitwarden.core.DateTime
+import com.bitwarden.collections.Collection
+import com.bitwarden.collections.CollectionId
+import com.bitwarden.collections.CollectionView
+import com.bitwarden.core.DeriveKeyConnectorException
 import com.bitwarden.core.DeriveKeyConnectorRequest
-import com.bitwarden.core.DerivePinKeyResponse
+import com.bitwarden.core.EnrollPinResponse
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.UpdatePasswordResponse
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.TrustDeviceResponse
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.exporters.Account
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
@@ -23,8 +28,7 @@ import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
-import com.bitwarden.vault.Collection
-import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.EncryptionContext
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
@@ -47,6 +51,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.time.Instant
 
 /**
  * Primary implementation of [VaultSdkSource] that serves as a convenience wrapper around a
@@ -91,45 +96,53 @@ class VaultSdkSourceImpl(
                         ),
                     )
                 DeriveKeyConnectorResult.Success(key)
-            } catch (exception: BitwardenException) {
-                when {
-                    exception.message == "Wrong password" -> {
+            } catch (ex: BitwardenException.DeriveKeyConnector) {
+                when (ex.v1) {
+                    is DeriveKeyConnectorException.WrongPassword -> {
                         DeriveKeyConnectorResult.WrongPasswordError
                     }
-                    else -> DeriveKeyConnectorResult.Error(exception)
+
+                    is DeriveKeyConnectorException.Crypto -> {
+                        DeriveKeyConnectorResult.Error(error = ex)
+                    }
                 }
+            } catch (exception: BitwardenException) {
+                DeriveKeyConnectorResult.Error(error = exception)
             }
         }
 
-    override suspend fun derivePinKey(
+    override suspend fun enrollPin(
         userId: String,
         pin: String,
-    ): Result<DerivePinKeyResponse> =
+    ): Result<EnrollPinResponse> =
         runCatchingWithLogs {
             getClient(userId = userId)
                 .crypto()
-                .derivePinKey(pin = pin)
+                .enrollPin(pin = pin)
         }
 
-    override suspend fun derivePinProtectedUserKey(
+    override suspend fun enrollPinWithEncryptedPin(
         userId: String,
         encryptedPin: String,
-    ): Result<String> =
+    ): Result<EnrollPinResponse> =
         runCatchingWithLogs {
             getClient(userId = userId)
                 .crypto()
-                .derivePinUserKey(encryptedPin = encryptedPin)
+                .enrollPinWithEncryptedPin(encryptedPin = encryptedPin)
         }
 
-    override suspend fun validatePin(
+    override suspend fun validatePinUserKey(
         userId: String,
         pin: String,
-        pinProtectedUserKey: String,
+        pinProtectedUserKeyEnvelope: String,
     ): Result<Boolean> =
         runCatchingWithLogs {
             getClient(userId = userId)
                 .auth()
-                .validatePin(pin = pin, pinProtectedUserKey = pinProtectedUserKey)
+                .validatePinProtectedUserKeyEnvelope(
+                    pin = pin,
+                    pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
+                )
         }
 
     override suspend fun getAuthRequestKey(
@@ -289,26 +302,15 @@ class VaultSdkSourceImpl(
                 .decrypt(cipher = cipher)
         }
 
-    override suspend fun decryptCipherListCollection(
+    override suspend fun decryptCipherListWithFailures(
         userId: String,
         cipherList: List<Cipher>,
-    ): Result<List<CipherListView>> =
+    ): Result<DecryptCipherListResult> =
         runCatchingWithLogs {
             getClient(userId = userId)
                 .vault()
                 .ciphers()
-                .decryptList(ciphers = cipherList)
-        }
-
-    override suspend fun decryptCipherList(
-        userId: String,
-        cipherList: List<Cipher>,
-    ): Result<List<CipherView>> =
-        runCatchingWithLogs {
-            val ciphers = getClient(userId = userId).vault().ciphers()
-            withContext(context = dispatcherManager.default) {
-                cipherList.map { async { ciphers.decrypt(cipher = it) } }.awaitAll()
-            }
+                .decryptListWithFailures(cipherList)
         }
 
     override suspend fun decryptCollection(
@@ -426,15 +428,15 @@ class VaultSdkSourceImpl(
             .decryptList(list = passwordHistoryList)
     }
 
-    override suspend fun generateTotp(
+    override suspend fun generateTotpForCipherListView(
         userId: String,
-        totp: String,
-        time: DateTime,
+        cipherListView: CipherListView,
+        time: Instant?,
     ): Result<TotpResponse> = runCatchingWithLogs {
         getClient(userId = userId)
             .vault()
-            .generateTotp(
-                key = totp,
+            .generateTotpCipherView(
+                view = cipherListView,
                 time = time,
             )
     }
@@ -448,6 +450,22 @@ class VaultSdkSourceImpl(
             .vault()
             .ciphers()
             .moveToOrganization(cipher = cipherView, organizationId = organizationId)
+    }
+
+    override suspend fun bulkMoveToOrganization(
+        userId: String,
+        organizationId: String,
+        cipherViews: List<CipherView>,
+        collectionIds: List<CollectionId>,
+    ): Result<List<EncryptionContext>> = runCatchingWithLogs {
+        getClient(userId = userId)
+            .vault()
+            .ciphers()
+            .prepareCiphersForBulkShare(
+                organizationId = organizationId,
+                ciphers = cipherViews,
+                collectionIds = collectionIds,
+            )
     }
 
     override suspend fun validatePassword(
@@ -482,7 +500,7 @@ class VaultSdkSourceImpl(
     ): Result<UpdatePasswordResponse> = runCatchingWithLogs {
         getClient(userId = userId)
             .crypto()
-            .updatePassword(newPassword = newPassword)
+            .makeUpdatePassword(newPassword = newPassword)
     }
 
     override suspend fun exportVaultDataToString(
@@ -498,6 +516,28 @@ class VaultSdkSourceImpl(
                 ciphers = ciphers,
                 format = format,
             )
+    }
+
+    override suspend fun exportVaultDataToCxf(
+        userId: String,
+        account: Account,
+        ciphers: List<Cipher>,
+    ): Result<String> = runCatchingWithLogs {
+        getClient(userId = userId)
+            .exporters()
+            .exportCxf(
+                account = account,
+                ciphers = ciphers,
+            )
+    }
+
+    override suspend fun importCxf(
+        userId: String,
+        payload: String,
+    ): Result<List<Cipher>> = runCatchingWithLogs {
+        getClient(userId = userId)
+            .exporters()
+            .importCxf(payload = payload)
     }
 
     override suspend fun registerFido2Credential(
@@ -580,6 +620,7 @@ class VaultSdkSourceImpl(
         userId: String,
         fido2CredentialStore: Fido2CredentialStore,
         relyingPartyId: String,
+        userHandle: String?,
     ): Result<List<Fido2CredentialAutofillView>> = runCatchingWithLogs {
         getClient(userId)
             .platform()
@@ -588,6 +629,16 @@ class VaultSdkSourceImpl(
                 userInterface = Fido2CredentialSearchUserInterfaceImpl(),
                 credentialStore = fido2CredentialStore,
             )
-            .silentlyDiscoverCredentials(relyingPartyId)
+            .silentlyDiscoverCredentials(relyingPartyId, userHandle?.toByteArray())
+    }
+
+    override suspend fun makeUpdateKdf(
+        userId: String,
+        password: String,
+        kdf: Kdf,
+    ): Result<UpdateKdfResponse> = runCatchingWithLogs {
+        getClient(userId = userId)
+            .crypto()
+            .makeUpdateKdf(password = password, kdf = kdf)
     }
 }

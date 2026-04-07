@@ -1,17 +1,20 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.GmsManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
-import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -26,21 +29,30 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class VaultSettingsViewModelTest : BaseViewModelTest() {
-    private val environmentRepository = FakeEnvironmentRepository()
-    private val mutableImportLoginsFlagFlow = MutableStateFlow(false)
-    private val featureFlagManager = mockk<FeatureFlagManager> {
-        every { getFeatureFlagFlow(FlagKey.ImportLoginsFlow) } returns mutableImportLoginsFlagFlow
-        every { getFeatureFlag(FlagKey.ImportLoginsFlow) } returns false
-    }
     private val mutableFirstTimeStateFlow = MutableStateFlow(DEFAULT_FIRST_TIME_STATE)
     private val firstTimeActionManager = mockk<FirstTimeActionManager> {
         every { currentOrDefaultUserFirstTimeState } returns DEFAULT_FIRST_TIME_STATE
         every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
         every { storeShowImportLoginsSettingsBadge(any()) } just runs
     }
+    private val mutableFeatureFlagFlow = bufferedMutableSharedFlow<Boolean>()
+    private val featureFlagManager = mockk<FeatureFlagManager> {
+        every { getFeatureFlag(FlagKey.CredentialExchangeProtocolImport) } returns true
+        every {
+            getFeatureFlagFlow(FlagKey.CredentialExchangeProtocolImport)
+        } returns mutableFeatureFlagFlow
+    }
+    private val gmsManager = mockk<GmsManager> {
+        every { isVersionAtLeast(any()) } returns true
+    }
+    private val mutablePoliciesFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Policy>>()
+    private val policyManager = mockk<PolicyManager> {
+        every { getActivePolicies(any()) } returns emptyList()
+        every { getActivePoliciesFlow(any()) } returns mutablePoliciesFlow
+    }
 
     private val mutableSnackbarSharedFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
-    private val snackbarRelayManager = mockk<SnackbarRelayManager> {
+    private val snackbarRelayManager = mockk<SnackbarRelayManager<SnackbarRelay>> {
         every {
             getSnackbarDataFlow(SnackbarRelay.LOGINS_IMPORTED)
         } returns mutableSnackbarSharedFlow
@@ -67,45 +79,67 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `ImportItemsClick should emit send NavigateToImportVault with correct url`() = runTest {
+    fun `ImportItemsClick should emit NavigateToImportVault when CredentialExchangeProtocolImport is disabled`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                every {
+                    featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport)
+                } returns false
+                viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
+                assertEquals(
+                    VaultSettingsEvent.NavigateToImportVault,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `ImportItemsClick should emit NavigateToImportVault when policy is not empty`() = runTest {
+        every {
+            featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport)
+        } returns true
+        every {
+            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+        } returns listOf(mockk())
+
         val viewModel = createViewModel()
-        val expected = "https://vault.bitwarden.com/#/tools/import"
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
             assertEquals(
-                VaultSettingsEvent.NavigateToImportVault(expected),
+                VaultSettingsEvent.NavigateToImportVault,
                 awaitItem(),
             )
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `ImportLoginsFeatureFlagChanged should update state`() {
-        val viewModel = createViewModel()
-        assertFalse(
-            viewModel.stateFlow.value.isNewImportLoginsFlowEnabled,
-        )
-        mutableImportLoginsFlagFlow.update { true }
-        assertTrue(viewModel.stateFlow.value.isNewImportLoginsFlowEnabled)
-    }
+    fun `ImportItemsClick should emit NavigateToImportItems when CredentialExchangeProtocolImport is enabled`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                every {
+                    featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport)
+                } returns true
+                viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
+                assertEquals(
+                    VaultSettingsEvent.NavigateToImportItems,
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `shouldShowImportCard should update when first time state changes`() = runTest {
-        mutableImportLoginsFlagFlow.update { true }
         val viewModel = createViewModel()
-        assertTrue(viewModel.stateFlow.value.shouldShowImportCard)
+        assertTrue(viewModel.stateFlow.value.showImportActionCard)
         mutableFirstTimeStateFlow.update {
             it.copy(showImportLoginsCardInSettings = false)
         }
-        assertFalse(viewModel.stateFlow.value.shouldShowImportCard)
-    }
-
-    @Test
-    fun `shouldShowImportCard should be false when feature flag not enabled`() = runTest {
-        val viewModel = createViewModel()
-        mutableImportLoginsFlagFlow.update { false }
-        assertFalse(viewModel.stateFlow.value.shouldShowImportCard)
+        assertFalse(viewModel.stateFlow.value.showImportActionCard)
     }
 
     @Suppress("MaxLineLength")
@@ -113,12 +147,10 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
     fun `ImportLoginsCardCtaClick action should set repository value to false and send navigation event`() =
         runTest {
             val viewModel = createViewModel()
-            val expected = "https://vault.bitwarden.com/#/tools/import"
-            mutableImportLoginsFlagFlow.update { true }
             viewModel.eventFlow.test {
                 viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardCtaClick)
                 assertEquals(
-                    VaultSettingsEvent.NavigateToImportVault(url = expected),
+                    VaultSettingsEvent.NavigateToImportVault,
                     awaitItem(),
                 )
             }
@@ -129,7 +161,6 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `ImportLoginsCardDismissClick action should set repository value to false `() = runTest {
-        mutableImportLoginsFlagFlow.update { true }
         val viewModel = createViewModel()
         viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardDismissClick)
         verify(exactly = 1) {
@@ -141,6 +172,7 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
     @Test
     fun `ImportLoginsCardDismissClick action should not set repository value to false if already false`() =
         runTest {
+            mutableFirstTimeStateFlow.update { it.copy(showImportLoginsCardInSettings = false) }
             val viewModel = createViewModel()
             viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardDismissClick)
             verify(exactly = 0) {
@@ -158,11 +190,82 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `showImportItemsChevron should display based on feature flag and policies`() {
+        val viewModel = createViewModel()
+        // Verify chevron is shown when feature flag is enabled and no policies (default state)
+        assertEquals(
+            viewModel.stateFlow.value,
+            VaultSettingsState(showImportActionCard = true, showImportItemsChevron = true),
+        )
+
+        // Verify chevron is hidden when feature flag is disabled and no policies
+        mutableFeatureFlagFlow.tryEmit(false)
+        mutablePoliciesFlow.tryEmit(emptyList())
+        assertEquals(
+            viewModel.stateFlow.value,
+            VaultSettingsState(showImportActionCard = true, showImportItemsChevron = false),
+        )
+
+        // Verify chevron is hidden when feature flag is enabled and policies exist
+        mutableFeatureFlagFlow.tryEmit(true)
+        mutablePoliciesFlow.tryEmit(listOf(mockk()))
+        assertEquals(
+            viewModel.stateFlow.value,
+            VaultSettingsState(showImportActionCard = true, showImportItemsChevron = false),
+        )
+
+        // Verify chevron is hidden when feature flag is disabled and no policies
+        mutableFeatureFlagFlow.tryEmit(false)
+        mutablePoliciesFlow.tryEmit(emptyList())
+        assertEquals(
+            viewModel.stateFlow.value,
+            VaultSettingsState(showImportActionCard = true, showImportItemsChevron = false),
+        )
+    }
+
+    @Test
+    fun `showImportItemsChevron should be false when GMS version is insufficient`() {
+        every { gmsManager.isVersionAtLeast(any()) } returns false
+        val viewModel = createViewModel()
+        assertEquals(
+            VaultSettingsState(showImportActionCard = true, showImportItemsChevron = false),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `ImportItemsClick should emit NavigateToImportVault when GMS version is insufficient`() =
+        runTest {
+            every { gmsManager.isVersionAtLeast(any()) } returns false
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
+                assertEquals(
+                    VaultSettingsEvent.NavigateToImportVault,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `showImportItemsChevron should be false when feature flag and GMS sufficient but policy exists`() {
+        val viewModel = createViewModel()
+        mutableFeatureFlagFlow.tryEmit(true)
+        mutablePoliciesFlow.tryEmit(listOf(mockk()))
+        assertEquals(
+            VaultSettingsState(showImportActionCard = true, showImportItemsChevron = false),
+            viewModel.stateFlow.value,
+        )
+    }
+
     private fun createViewModel(): VaultSettingsViewModel = VaultSettingsViewModel(
-        environmentRepository = environmentRepository,
-        featureFlagManager = featureFlagManager,
         firstTimeActionManager = firstTimeActionManager,
         snackbarRelayManager = snackbarRelayManager,
+        featureFlagManager = featureFlagManager,
+        gmsManager = gmsManager,
+        policyManager = policyManager,
     )
 }
 

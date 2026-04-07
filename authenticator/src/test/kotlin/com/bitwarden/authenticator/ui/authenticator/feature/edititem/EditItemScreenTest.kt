@@ -7,9 +7,9 @@ import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onSiblings
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
@@ -152,12 +152,12 @@ class EditItemScreenTest : AuthenticatorComposeTest() {
 
         mutableStateFlow.update { it.copy(viewState = DEFAULT_CONTENT) }
 
-        composeTestRule.onNodeWithTextAfterScroll(text = "Information").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll(text = "INFORMATION").assertIsDisplayed()
         composeTestRule.onNodeWithTextAfterScroll(text = "Name").assertIsDisplayed()
         composeTestRule.onNodeWithTextAfterScroll(text = "Key").assertIsDisplayed()
         composeTestRule.onNodeWithTextAfterScroll(text = "Username").assertIsDisplayed()
         composeTestRule.onNodeWithTextAfterScroll(text = "Favorite").assertIsDisplayed()
-        composeTestRule.onNodeWithTextAfterScroll(text = "Advanced").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll(text = "Additional options").assertIsDisplayed()
     }
 
     @Test
@@ -211,7 +211,7 @@ class EditItemScreenTest : AuthenticatorComposeTest() {
     fun `advanced click should send ExpandAdvancedOptionsClick`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_CONTENT) }
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "Advanced")
+            .onNodeWithTextAfterScroll(text = "Additional options")
             .performClick()
         verify(exactly = 1) {
             viewModel.trySendAction(EditItemAction.ExpandAdvancedOptionsClick)
@@ -356,7 +356,7 @@ class EditItemScreenTest : AuthenticatorComposeTest() {
         }
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Number of digits")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("+"))
             .performClick()
 
@@ -372,7 +372,7 @@ class EditItemScreenTest : AuthenticatorComposeTest() {
         }
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Number of digits")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performClick()
 

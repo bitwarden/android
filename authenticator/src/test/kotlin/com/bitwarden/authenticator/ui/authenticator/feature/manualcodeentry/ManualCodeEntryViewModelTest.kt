@@ -2,7 +2,6 @@ package com.bitwarden.authenticator.ui.authenticator.feature.manualcodeentry
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
@@ -10,14 +9,20 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.CreateIte
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
+import com.bitwarden.authenticator.ui.platform.model.SnackbarRelay
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,6 +43,9 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
         every { defaultSaveOption } returns DefaultSaveOption.NONE
     }
     private val mockAuthenticatorBridgeManager = mockk<AuthenticatorBridgeManager>()
+    private val snackbarRelayManager = mockk<SnackbarRelayManager<SnackbarRelay>> {
+        every { sendSnackbarData(data = any(), relay = SnackbarRelay.ITEM_ADDED) } just runs
+    }
 
     @BeforeEach
     fun setUp() {
@@ -161,7 +169,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
                         id = "mockUUID",
                         key = "ABCD",
                         issuer = "mockIssuer",
-                        accountName = "",
+                        accountName = null,
                         userId = null,
                         favorite = false,
                         type = AuthenticatorItemType.TOTP,
@@ -182,7 +190,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
                         id = "mockUUID",
                         key = "ABCD",
                         issuer = "mockIssuer",
-                        accountName = "",
+                        accountName = null,
                         userId = null,
                         favorite = false,
                         type = AuthenticatorItemType.TOTP,
@@ -191,12 +199,14 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
             }
             viewModel.eventFlow.test {
                 assertEquals(
-                    ManualCodeEntryEvent.ShowToast(R.string.verification_code_added.asText()),
-                    awaitItem(),
-                )
-                assertEquals(
                     ManualCodeEntryEvent.NavigateBack,
                     awaitItem(),
+                )
+            }
+            verify(exactly = 1) {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.verification_code_added.asText()),
+                    relay = SnackbarRelay.ITEM_ADDED,
                 )
             }
         }
@@ -243,8 +253,8 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
                 code = "ABCD",
                 issuer = "mockIssuer",
                 dialog = ManualCodeEntryState.DialogState.Error(
-                    title = R.string.something_went_wrong.asText(),
-                    message = R.string.please_try_again.asText(),
+                    title = BitwardenString.something_went_wrong.asText(),
+                    message = BitwardenString.please_try_again.asText(),
                 ),
             )
             assertEquals(expectedState, viewModel.stateFlow.value)
@@ -258,7 +268,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
                     id = "mockUUID",
                     key = "ABCD",
                     issuer = "mockIssuer",
-                    accountName = "",
+                    accountName = null,
                     userId = null,
                     favorite = false,
                     type = AuthenticatorItemType.TOTP,
@@ -281,7 +291,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
                     id = "mockUUID",
                     key = "ABCD",
                     issuer = "mockIssuer",
-                    accountName = "",
+                    accountName = null,
                     userId = null,
                     favorite = false,
                     type = AuthenticatorItemType.TOTP,
@@ -302,7 +312,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             ManualCodeEntryState.DialogState.Error(
-                message = R.string.key_is_required.asText(),
+                message = BitwardenString.key_is_required.asText(),
             ),
             viewModel.stateFlow.value.dialog,
         )
@@ -320,7 +330,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             ManualCodeEntryState.DialogState.Error(
-                message = R.string.key_is_invalid.asText(),
+                message = BitwardenString.key_is_invalid.asText(),
             ),
             viewModel.stateFlow.value.dialog,
         )
@@ -339,7 +349,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             ManualCodeEntryState.DialogState.Error(
-                message = R.string.name_is_required.asText(),
+                message = BitwardenString.name_is_required.asText(),
             ),
             viewModel.stateFlow.value.dialog,
         )
@@ -354,7 +364,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
                     id = "mockUUID",
                     key = "ABCD",
                     issuer = "mockIssuer",
-                    accountName = "",
+                    accountName = null,
                     userId = null,
                     favorite = false,
                     type = AuthenticatorItemType.STEAM,
@@ -377,7 +387,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
                     id = "mockUUID",
                     key = "ABCD",
                     issuer = "mockIssuer",
-                    accountName = "",
+                    accountName = null,
                     userId = null,
                     favorite = false,
                     type = AuthenticatorItemType.STEAM,
@@ -415,7 +425,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel(
             initialState = DEFAULT_STATE.copy(
                 dialog = ManualCodeEntryState.DialogState.Error(
-                    message = R.string.key_is_required.asText(),
+                    message = BitwardenString.key_is_required.asText(),
                 ),
             ),
         )
@@ -434,6 +444,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
             authenticatorRepository = mockAuthenticatorRepository,
             authenticatorBridgeManager = mockAuthenticatorBridgeManager,
             settingsRepository = mockSettingRepository,
+            snackbarRelayManager = snackbarRelayManager,
         )
 }
 

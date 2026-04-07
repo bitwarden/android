@@ -1,26 +1,22 @@
 package com.x8bit.bitwarden.ui.auth.feature.login
 
-import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
-import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -41,14 +37,11 @@ import org.junit.jupiter.api.Test
 @Suppress("LargeClass")
 class LoginViewModelTest : BaseViewModelTest() {
 
-    private val mutableCaptchaTokenResultFlow =
-        bufferedMutableSharedFlow<CaptchaCallbackTokenResult>()
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val authRepository: AuthRepository = mockk(relaxed = true) {
         coEvery {
             getIsKnownDevice(EMAIL)
         } returns KnownDeviceResult.Success(false)
-        every { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
         every { userStateFlow } returns mutableUserStateFlow
         every { logout(any()) } just runs
     }
@@ -60,7 +53,6 @@ class LoginViewModelTest : BaseViewModelTest() {
     @BeforeEach
     fun setUp() {
         mockkStatic(
-            ::generateUriForCaptcha,
             SavedStateHandle::toLoginArgs,
         )
     }
@@ -68,7 +60,6 @@ class LoginViewModelTest : BaseViewModelTest() {
     @AfterEach
     fun tearDown() {
         unmockkStatic(
-            ::generateUriForCaptcha,
             SavedStateHandle::toLoginArgs,
         )
     }
@@ -141,6 +132,8 @@ class LoginViewModelTest : BaseViewModelTest() {
                     isUsingKeyConnector = false,
                     onboardingStatus = OnboardingStatus.COMPLETE,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    isExportable = true,
+                    creationDate = null,
                 ),
             ),
         )
@@ -265,7 +258,6 @@ class LoginViewModelTest : BaseViewModelTest() {
             authRepository.login(
                 email = EMAIL,
                 password = "",
-                captchaToken = null,
             )
         } returns LoginResult.Error(errorMessage = "mock_error", error = error)
         val viewModel = createViewModel()
@@ -275,7 +267,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = LoginState.DialogState.Loading(
-                        message = R.string.logging_in.asText(),
+                        message = BitwardenString.logging_in.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -283,7 +275,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = LoginState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
                         message = "mock_error".asText(),
                         error = error,
                     ),
@@ -292,7 +284,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             )
         }
         coVerify {
-            authRepository.login(email = EMAIL, password = "", captchaToken = null)
+            authRepository.login(email = EMAIL, password = "")
         }
     }
 
@@ -304,7 +296,6 @@ class LoginViewModelTest : BaseViewModelTest() {
                 authRepository.login(
                     email = EMAIL,
                     password = "",
-                    captchaToken = null,
                 )
             } returns LoginResult.UnofficialServerError
             val viewModel = createViewModel()
@@ -314,7 +305,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = LoginState.DialogState.Loading(
-                            message = R.string.logging_in.asText(),
+                            message = BitwardenString.logging_in.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -322,15 +313,15 @@ class LoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = LoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server.asText(),
                         ),
                     ),
                     awaitItem(),
                 )
             }
             coVerify {
-                authRepository.login(email = EMAIL, password = "", captchaToken = null)
+                authRepository.login(email = EMAIL, password = "")
             }
         }
 
@@ -342,7 +333,6 @@ class LoginViewModelTest : BaseViewModelTest() {
                 authRepository.login(
                     email = EMAIL,
                     password = "",
-                    captchaToken = null,
                 )
             } returns LoginResult.EncryptionKeyMigrationRequired
             fakeEnvironmentRepository.environment = Environment.SelfHosted(
@@ -360,7 +350,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                     defaultSelfHostedState.copy(
                         environmentLabel = "",
                         dialogState = LoginState.DialogState.Loading(
-                            message = R.string.logging_in.asText(),
+                            message = BitwardenString.logging_in.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -369,8 +359,8 @@ class LoginViewModelTest : BaseViewModelTest() {
                     defaultSelfHostedState.copy(
                         environmentLabel = "",
                         dialogState = LoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
                                 .asText("vault.bitwarden.com"),
                         ),
                     ),
@@ -378,7 +368,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                 )
             }
             coVerify {
-                authRepository.login(email = EMAIL, password = "", captchaToken = null)
+                authRepository.login(email = EMAIL, password = "")
             }
         }
 
@@ -390,7 +380,6 @@ class LoginViewModelTest : BaseViewModelTest() {
                 authRepository.login(
                     email = EMAIL,
                     password = "",
-                    captchaToken = null,
                 )
             } returns LoginResult.EncryptionKeyMigrationRequired
             fakeEnvironmentRepository.environment = Environment.SelfHosted(
@@ -407,7 +396,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     defaultSelfHostedState.copy(
                         dialogState = LoginState.DialogState.Loading(
-                            message = R.string.logging_in.asText(),
+                            message = BitwardenString.logging_in.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -415,8 +404,8 @@ class LoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     defaultSelfHostedState.copy(
                         dialogState = LoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
                                 .asText("base.bitwarden.com"),
                         ),
                     ),
@@ -424,7 +413,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                 )
             }
             coVerify {
-                authRepository.login(email = EMAIL, password = "", captchaToken = null)
+                authRepository.login(email = EMAIL, password = "")
             }
         }
 
@@ -436,7 +425,6 @@ class LoginViewModelTest : BaseViewModelTest() {
                 authRepository.login(
                     email = EMAIL,
                     password = "",
-                    captchaToken = null,
                 )
             } returns LoginResult.EncryptionKeyMigrationRequired
             fakeEnvironmentRepository.environment = Environment.SelfHosted(
@@ -453,7 +441,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     defaultSelfHostedState.copy(
                         dialogState = LoginState.DialogState.Loading(
-                            message = R.string.logging_in.asText(),
+                            message = BitwardenString.logging_in.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -461,8 +449,8 @@ class LoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     defaultSelfHostedState.copy(
                         dialogState = LoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
                                 .asText("vault.bitwarden.com"),
                         ),
                     ),
@@ -470,7 +458,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                 )
             }
             coVerify {
-                authRepository.login(email = EMAIL, password = "", captchaToken = null)
+                authRepository.login(email = EMAIL, password = "")
             }
         }
 
@@ -482,7 +470,6 @@ class LoginViewModelTest : BaseViewModelTest() {
                 authRepository.login(
                     email = EMAIL,
                     password = "",
-                    captchaToken = null,
                 )
             } returns LoginResult.CertificateError
             val viewModel = createViewModel()
@@ -492,7 +479,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = LoginState.DialogState.Loading(
-                            message = R.string.logging_in.asText(),
+                            message = BitwardenString.logging_in.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -500,15 +487,15 @@ class LoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = LoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.we_couldnt_verify_the_servers_certificate.asText(),
                         ),
                     ),
                     awaitItem(),
                 )
             }
             coVerify {
-                authRepository.login(email = EMAIL, password = "", captchaToken = null)
+                authRepository.login(email = EMAIL, password = "")
             }
         }
 
@@ -518,7 +505,6 @@ class LoginViewModelTest : BaseViewModelTest() {
             authRepository.login(
                 email = EMAIL,
                 password = "",
-                captchaToken = null,
             )
         } returns LoginResult.Success
         val viewModel = createViewModel()
@@ -528,7 +514,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = LoginState.DialogState.Loading(
-                        message = R.string.logging_in.asText(),
+                        message = BitwardenString.logging_in.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -539,34 +525,9 @@ class LoginViewModelTest : BaseViewModelTest() {
             )
         }
         coVerify {
-            authRepository.login(email = EMAIL, password = "", captchaToken = null)
+            authRepository.login(email = EMAIL, password = "")
         }
     }
-
-    @Test
-    fun `LoginButtonClick login returns CaptchaRequired should emit NavigateToCaptcha`() =
-        runTest {
-            val mockkUri = mockk<Uri>()
-            every {
-                generateUriForCaptcha(captchaId = "mock_captcha_id")
-            } returns mockkUri
-            coEvery {
-                authRepository.login(
-                    email = EMAIL,
-                    password = "",
-                    captchaToken = null,
-                )
-            } returns LoginResult.CaptchaRequired(captchaId = "mock_captcha_id")
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(LoginAction.LoginButtonClick)
-                assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-                assertEquals(LoginEvent.NavigateToCaptcha(uri = mockkUri), awaitItem())
-            }
-            coVerify {
-                authRepository.login(email = EMAIL, password = "", captchaToken = null)
-            }
-        }
 
     @Suppress("MaxLineLength")
     @Test
@@ -577,7 +538,6 @@ class LoginViewModelTest : BaseViewModelTest() {
                 authRepository.login(
                     email = EMAIL,
                     password = password,
-                    captchaToken = null,
                 )
             } returns LoginResult.TwoFactorRequired
 
@@ -604,7 +564,6 @@ class LoginViewModelTest : BaseViewModelTest() {
                 authRepository.login(
                     email = EMAIL,
                     password = password,
-                    captchaToken = null,
                 )
             }
         }
@@ -618,7 +577,6 @@ class LoginViewModelTest : BaseViewModelTest() {
                 authRepository.login(
                     email = EMAIL,
                     password = password,
-                    captchaToken = null,
                 )
             } returns LoginResult.NewDeviceVerification(errorMessage = "new device verification needed")
 
@@ -643,7 +601,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                 )
             }
             coVerify {
-                authRepository.login(email = EMAIL, password = password, captchaToken = null)
+                authRepository.login(email = EMAIL, password = password)
             }
         }
 
@@ -743,22 +701,6 @@ class LoginViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Test
-    fun `captchaTokenFlow success update should trigger a login`() = runTest {
-        coEvery {
-            authRepository.login(
-                email = EMAIL,
-                password = "",
-                captchaToken = "token",
-            )
-        } returns LoginResult.Success
-        createViewModel()
-        mutableCaptchaTokenResultFlow.tryEmit(CaptchaCallbackTokenResult.Success("token"))
-        coVerify {
-            authRepository.login(email = EMAIL, password = "", captchaToken = "token")
-        }
-    }
-
     private fun createViewModel(state: LoginState? = null): LoginViewModel =
         LoginViewModel(
             authRepository = authRepository,
@@ -766,7 +708,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             vaultRepository = vaultRepository,
             savedStateHandle = SavedStateHandle().apply {
                 set(key = "state", value = state)
-                every { toLoginArgs() } returns LoginArgs(emailAddress = EMAIL, captchaToken = null)
+                every { toLoginArgs() } returns LoginArgs(emailAddress = EMAIL)
             },
         )
 
@@ -778,7 +720,6 @@ class LoginViewModelTest : BaseViewModelTest() {
             isLoginButtonEnabled = false,
             environmentLabel = Environment.Us.label,
             dialogState = null,
-            captchaToken = null,
             accountSummaries = emptyList(),
             shouldShowLoginWithDevice = false,
         )

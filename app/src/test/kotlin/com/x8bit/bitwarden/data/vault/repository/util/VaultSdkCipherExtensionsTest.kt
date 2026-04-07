@@ -9,6 +9,7 @@ import com.bitwarden.network.model.createMockAttachmentJsonRequest
 import com.bitwarden.network.model.createMockCard
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCipherJsonRequest
+import com.bitwarden.network.model.createMockCipherMiniResponse
 import com.bitwarden.network.model.createMockField
 import com.bitwarden.network.model.createMockIdentity
 import com.bitwarden.network.model.createMockLogin
@@ -16,8 +17,10 @@ import com.bitwarden.network.model.createMockPasswordHistory
 import com.bitwarden.network.model.createMockSecureNote
 import com.bitwarden.network.model.createMockSshKey
 import com.bitwarden.network.model.createMockUri
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CopyableCipherFields
 import com.bitwarden.vault.FieldType
 import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
@@ -33,14 +36,16 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSecureNo
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSshKey
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkUri
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.junit.jupiter.api.assertNull
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 /**
- * Default date time used for [ZonedDateTime] properties of mock objects.
+ * Default date time used for [Instant] properties of mock objects.
  */
 private const val DEFAULT_TIMESTAMP = "2023-10-27T12:00:00Z"
 private val FIXED_CLOCK: Clock = Clock.fixed(
@@ -77,6 +82,7 @@ class VaultSdkCipherExtensionsTest {
             createMockCipherJsonRequest(
                 number = 1,
                 login = createMockLogin(number = 1, uri = null),
+                archivedDate = FIXED_CLOCK.instant(),
             ),
             syncCipher,
         )
@@ -357,6 +363,7 @@ class VaultSdkCipherExtensionsTest {
             createMockCipherJsonRequest(
                 number = 1,
                 login = createMockLogin(number = 1, uri = null),
+                archivedDate = FIXED_CLOCK.instant(),
             ),
             encryptionContext.toEncryptedNetworkCipher(),
         )
@@ -372,6 +379,114 @@ class VaultSdkCipherExtensionsTest {
                 login = createMockLogin(number = 1, uri = null),
             ),
             encryptionContext.toEncryptedNetworkCipherResponse(),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toFailureCipherListView should convert Login Cipher to CipherListView with empty LoginListView`() {
+        val cipher = createMockSdkCipher(number = 1)
+
+        val result = cipher.toFailureCipherListView()
+
+        assertEquals("mockId-1", result.id)
+        assertEquals("mockOrganizationId-1", result.organizationId)
+        assertEquals("mockFolderId-1", result.folderId)
+        assertEquals(listOf("mockCollectionId-1"), result.collectionIds)
+        assertEquals("mockKey-1", result.key)
+        assertEquals("mockName-1", result.name)
+        assertEquals("", result.subtitle)
+        assertEquals(0.toUInt(), result.attachments)
+        assertEquals(false, result.hasOldAttachments)
+        assertEquals(null, result.localData)
+        assertEquals(emptyList<CopyableCipherFields>(), result.copyableFields)
+
+        assertTrue(result.type is CipherListViewType.Login)
+
+        val loginType = result.type as CipherListViewType.Login
+        assertNull(loginType.v1.fido2Credentials)
+        assertFalse(loginType.v1.hasFido2)
+        assertNull(loginType.v1.username)
+        assertNull(loginType.v1.totp)
+        assertNull(loginType.v1.uris)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toFailureCipherListView should convert Card Cipher to CipherListView with empty CardListView`() {
+        val cipher = createMockSdkCipher(number = 1)
+            .copy(
+                card = createMockSdkCard(number = 1),
+                type = CipherType.CARD,
+            )
+
+        val result = cipher.toFailureCipherListView()
+
+        assertEquals("mockId-1", result.id)
+        assertEquals("mockOrganizationId-1", result.organizationId)
+        assertEquals("mockFolderId-1", result.folderId)
+        assertEquals(listOf("mockCollectionId-1"), result.collectionIds)
+        assertEquals("mockKey-1", result.key)
+        assertEquals("mockName-1", result.name)
+        assertEquals("", result.subtitle)
+        assertEquals(0.toUInt(), result.attachments)
+        assertEquals(false, result.hasOldAttachments)
+        assertEquals(null, result.localData)
+        assertEquals(emptyList<CopyableCipherFields>(), result.copyableFields)
+
+        assertTrue(result.type is CipherListViewType.Card)
+
+        val loginType = result.type as CipherListViewType.Card
+        assertNull(loginType.v1.brand)
+    }
+
+    @Test
+    fun `updateFromMiniResponse should update cipher with mini response data`() {
+        val originalCipher = createMockCipher(
+            number = 1,
+            organizationId = null,
+            collectionIds = emptyList(),
+        )
+
+        val miniResponse = createMockCipherMiniResponse(number = 2)
+
+        val result = originalCipher.updateFromMiniResponse(
+            miniResponse = miniResponse,
+            collectionIds = listOf("collection-1"),
+        )
+
+        assertEquals(miniResponse.organizationId, result.organizationId)
+        assertEquals(listOf("collection-1"), result.collectionIds)
+        assertEquals(miniResponse.revisionDate, result.revisionDate)
+        assertEquals(miniResponse.key, result.key)
+        assertEquals(miniResponse.attachments, result.attachments)
+        assertEquals(miniResponse.archivedDate, result.archivedDate)
+        assertEquals(miniResponse.deletedDate, result.deletedDate)
+        assertEquals(miniResponse.reprompt, result.reprompt)
+        assertEquals(miniResponse.shouldOrganizationUseTotp, result.shouldOrganizationUseTotp)
+        // Verify unchanged fields remain the same
+        assertEquals(originalCipher.name, result.name)
+        assertEquals(originalCipher.notes, result.notes)
+        assertEquals(originalCipher.id, result.id)
+    }
+
+    @Test
+    fun `updateFromMiniResponse should preserve existing collectionIds when not provided`() {
+        val originalCipher = createMockCipher(
+            number = 1,
+            collectionIds = listOf("original-collection-1", "original-collection-2"),
+        )
+
+        val miniResponse = createMockCipherMiniResponse(number = 2)
+
+        val result = originalCipher.updateFromMiniResponse(
+            miniResponse = miniResponse,
+            collectionIds = null,
+        )
+
+        assertEquals(
+            listOf("original-collection-1", "original-collection-2"),
+            result.collectionIds,
         )
     }
 }

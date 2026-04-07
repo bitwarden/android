@@ -2,23 +2,27 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.FolderView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddEditType
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +31,9 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.Clock
 import java.time.Instant
+import java.time.ZoneOffset
 
 @Suppress("LargeClass")
 class FolderAddEditViewModelTest : BaseViewModelTest() {
@@ -37,6 +43,9 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
 
     private val vaultRepository: VaultRepository = mockk {
         every { getVaultFolderStateFlow(DEFAULT_EDIT_ITEM_ID) } returns mutableFoldersStateFlow
+    }
+    private val relayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
+        every { sendSnackbarData(data = any(), relay = any()) } just runs
     }
 
     @BeforeEach
@@ -112,9 +121,9 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             mutableFoldersStateFlow.value =
                 DataState.Loaded(
                     FolderView(
-                        DEFAULT_EDIT_ITEM_ID,
-                        DEFAULT_FOLDER_NAME,
-                        DateTime.now(),
+                        id = DEFAULT_EDIT_ITEM_ID,
+                        name = DEFAULT_FOLDER_NAME,
+                        revisionDate = FIXED_CLOCK.instant(),
                     ),
                 )
 
@@ -126,12 +135,14 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    FolderAddEditEvent.ShowToast(R.string.folder_deleted.asText()),
-                    awaitItem(),
-                )
-                assertEquals(
                     FolderAddEditEvent.NavigateBack,
                     awaitItem(),
+                )
+            }
+            verify(exactly = 1) {
+                relayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.folder_deleted.asText()),
+                    relay = SnackbarRelay.FOLDER_DELETED,
                 )
             }
         }
@@ -143,7 +154,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             val stateWithDialog = FolderAddEditState(
                 folderAddEditType = FolderAddEditType.EditItem((DEFAULT_EDIT_ITEM_ID)),
                 dialog = FolderAddEditState.DialogState.Loading(
-                    R.string.deleting.asText(),
+                    BitwardenString.deleting.asText(),
                 ),
                 viewState = FolderAddEditState.ViewState.Content(
                     folderName = DEFAULT_FOLDER_NAME,
@@ -164,9 +175,9 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             mutableFoldersStateFlow.value =
                 DataState.Loaded(
                     FolderView(
-                        DEFAULT_EDIT_ITEM_ID,
-                        DEFAULT_FOLDER_NAME,
-                        DateTime.now(),
+                        id = DEFAULT_EDIT_ITEM_ID,
+                        name = DEFAULT_FOLDER_NAME,
+                        revisionDate = FIXED_CLOCK.instant(),
                     ),
                 )
 
@@ -180,6 +191,12 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithDialog, awaitItem())
                 assertEquals(stateWithoutDialog, awaitItem())
             }
+            verify(exactly = 1) {
+                relayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.folder_deleted.asText()),
+                    relay = SnackbarRelay.FOLDER_DELETED,
+                )
+            }
         }
 
     @Suppress("MaxLineLength")
@@ -190,7 +207,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 folderAddEditType = FolderAddEditType.AddItem,
                 dialog = null,
                 viewState = FolderAddEditState.ViewState.Error(
-                    R.string.generic_error_message.asText(),
+                    BitwardenString.generic_error_message.asText(),
                 ),
                 parentFolderName = null,
             )
@@ -215,7 +232,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             val stateWithDialog = FolderAddEditState(
                 folderAddEditType = FolderAddEditType.EditItem((DEFAULT_EDIT_ITEM_ID)),
                 dialog = FolderAddEditState.DialogState.Error(
-                    R.string.generic_error_message.asText(),
+                    BitwardenString.generic_error_message.asText(),
                     throwable = error,
                 ),
                 viewState = FolderAddEditState.ViewState.Content(
@@ -237,9 +254,9 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             mutableFoldersStateFlow.value =
                 DataState.Loaded(
                     FolderView(
-                        DEFAULT_EDIT_ITEM_ID,
-                        DEFAULT_FOLDER_NAME,
-                        DateTime.now(),
+                        id = DEFAULT_EDIT_ITEM_ID,
+                        name = DEFAULT_FOLDER_NAME,
+                        revisionDate = FIXED_CLOCK.instant(),
                     ),
                 )
 
@@ -251,6 +268,56 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 stateWithDialog,
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `DeleteClick with DeleteFolderResult Failure with errorMessage should show error dialog with that message`() =
+        runTest {
+            val errorMessage = "User-friendly error message"
+            val error = Throwable("Oops")
+            val stateWithoutDialog = FolderAddEditState(
+                folderAddEditType = FolderAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+                dialog = null,
+                viewState = FolderAddEditState.ViewState.Content(
+                    folderName = DEFAULT_FOLDER_NAME,
+                ),
+                parentFolderName = null,
+            )
+
+            val viewModel = createViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = stateWithoutDialog,
+                ),
+            )
+
+            mutableFoldersStateFlow.value =
+                DataState.Loaded(
+                    FolderView(
+                        id = DEFAULT_EDIT_ITEM_ID,
+                        name = DEFAULT_FOLDER_NAME,
+                        revisionDate = FIXED_CLOCK.instant(),
+                    ),
+                )
+
+            coEvery {
+                vaultRepository.deleteFolder(folderId = DEFAULT_EDIT_ITEM_ID)
+            } returns DeleteFolderResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+
+            viewModel.trySendAction(FolderAddEditAction.DeleteClick)
+
+            assertEquals(
+                stateWithoutDialog.copy(
+                    dialog = FolderAddEditState.DialogState.Error(
+                        message = errorMessage.asText(),
+                        throwable = error,
+                    ),
+                ),
                 viewModel.stateFlow.value,
             )
         }
@@ -269,8 +336,8 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
 
             val stateWithDialog = stateWithoutName.copy(
                 dialog = FolderAddEditState.DialogState.Error(
-                    R.string.validation_field_required
-                        .asText(R.string.name.asText()),
+                    BitwardenString.validation_field_required
+                        .asText(BitwardenString.name.asText()),
                 ),
             )
 
@@ -294,7 +361,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             val stateWithDialog = FolderAddEditState(
                 folderAddEditType = FolderAddEditType.AddItem,
                 dialog = FolderAddEditState.DialogState.Loading(
-                    R.string.saving.asText(),
+                    BitwardenString.saving.asText(),
                 ),
                 viewState = FolderAddEditState.ViewState.Content(
                     folderName = DEFAULT_FOLDER_NAME,
@@ -322,14 +389,18 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithDialog, awaitItem())
                 assertEquals(stateWithoutDialog, awaitItem())
             }
+            verify(exactly = 1) {
+                relayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.folder_created.asText()),
+                    relay = SnackbarRelay.FOLDER_CREATED,
+                )
+            }
         }
 
     @Suppress("MaxLineLength")
     @Test
     fun `in add mode, SaveClick createFolder with no parentFolderNamePresent should just create folder with entered name`() =
         runTest {
-            mockkStatic(DateTime::class)
-            every { DateTime.now() } returns Instant.MIN
             val viewModel =
                 createViewModel(
                     createSavedStateHandleWithState(
@@ -348,26 +419,27 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 vaultRepository.createFolder(any())
             } returns CreateFolderResult.Success(mockk())
             viewModel.trySendAction(FolderAddEditAction.SaveClick)
-            coVerify(
-                exactly = 1,
-            ) {
+            coVerify(exactly = 1) {
                 vaultRepository.createFolder(
                     folderView = FolderView(
                         name = DEFAULT_FOLDER_NAME,
                         id = null,
-                        revisionDate = Instant.MIN,
+                        revisionDate = FIXED_CLOCK.instant(),
                     ),
                 )
             }
-            unmockkStatic(DateTime::class)
+            verify(exactly = 1) {
+                relayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.folder_created.asText()),
+                    relay = SnackbarRelay.FOLDER_CREATED,
+                )
+            }
         }
 
     @Suppress("MaxLineLength")
     @Test
     fun `in add mode, SaveClick createFolder with a parentFolderNamePresent should prepend the parent folder to the entered name`() =
         runTest {
-            mockkStatic(DateTime::class)
-            every { DateTime.now() } returns Instant.MIN
             val parentFolderName = "parent/folder"
             val viewModel =
                 createViewModel(
@@ -387,18 +459,21 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 vaultRepository.createFolder(any())
             } returns CreateFolderResult.Success(mockk())
             viewModel.trySendAction(FolderAddEditAction.SaveClick)
-            coVerify(
-                exactly = 1,
-            ) {
+            coVerify(exactly = 1) {
                 vaultRepository.createFolder(
                     folderView = FolderView(
                         name = "$parentFolderName/$DEFAULT_FOLDER_NAME",
                         id = null,
-                        revisionDate = Instant.MIN,
+                        revisionDate = FIXED_CLOCK.instant(),
                     ),
                 )
             }
-            unmockkStatic(DateTime::class)
+            verify(exactly = 1) {
+                relayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.folder_created.asText()),
+                    relay = SnackbarRelay.FOLDER_CREATED,
+                )
+            }
         }
 
     @Test
@@ -428,7 +503,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
         assertEquals(
             state.copy(
                 dialog = FolderAddEditState.DialogState.Error(
-                    R.string.generic_error_message.asText(),
+                    BitwardenString.generic_error_message.asText(),
                     throwable = error,
                 ),
             ),
@@ -436,13 +511,54 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in add mode, SaveClick createFolder error with errorMessage should show error dialog with that message`() =
+        runTest {
+            val errorMessage = "User-friendly error message"
+            val state = FolderAddEditState(
+                folderAddEditType = FolderAddEditType.AddItem,
+                dialog = null,
+                viewState = FolderAddEditState.ViewState.Content(
+                    folderName = DEFAULT_FOLDER_NAME,
+                ),
+                parentFolderName = null,
+            )
+
+            val viewModel = createViewModel(
+                createSavedStateHandleWithState(
+                    state = state,
+                ),
+            )
+
+            val error = Throwable("Oops")
+            coEvery {
+                vaultRepository.createFolder(any())
+            } returns CreateFolderResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+
+            viewModel.trySendAction(FolderAddEditAction.SaveClick)
+
+            assertEquals(
+                state.copy(
+                    dialog = FolderAddEditState.DialogState.Error(
+                        message = errorMessage.asText(),
+                        throwable = error,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
     @Test
     fun `in edit mode, SaveClick should show dialog, and remove it once an item is saved`() =
         runTest {
             val stateWithDialog = FolderAddEditState(
                 folderAddEditType = FolderAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
                 dialog = FolderAddEditState.DialogState.Loading(
-                    R.string.saving.asText(),
+                    BitwardenString.saving.asText(),
                 ),
                 viewState = FolderAddEditState.ViewState.Content(
                     folderName = DEFAULT_FOLDER_NAME,
@@ -467,9 +583,9 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             mutableFoldersStateFlow.value =
                 DataState.Loaded(
                     FolderView(
-                        DEFAULT_EDIT_ITEM_ID,
-                        DEFAULT_FOLDER_NAME,
-                        DateTime.now(),
+                        id = DEFAULT_EDIT_ITEM_ID,
+                        name = DEFAULT_FOLDER_NAME,
+                        revisionDate = FIXED_CLOCK.instant(),
                     ),
                 )
 
@@ -482,6 +598,12 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithoutDialog, awaitItem())
                 assertEquals(stateWithDialog, awaitItem())
                 assertEquals(stateWithoutDialog, awaitItem())
+            }
+            verify(exactly = 1) {
+                relayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.folder_updated.asText()),
+                    relay = SnackbarRelay.FOLDER_UPDATED,
+                )
             }
         }
 
@@ -506,9 +628,9 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
         mutableFoldersStateFlow.value =
             DataState.Loaded(
                 FolderView(
-                    DEFAULT_EDIT_ITEM_ID,
-                    DEFAULT_FOLDER_NAME,
-                    DateTime.now(),
+                    id = DEFAULT_EDIT_ITEM_ID,
+                    name = DEFAULT_FOLDER_NAME,
+                    revisionDate = FIXED_CLOCK.instant(),
                 ),
             )
 
@@ -521,13 +643,63 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
         assertEquals(
             state.copy(
                 dialog = FolderAddEditState.DialogState.Error(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                     throwable = error,
                 ),
             ),
             viewModel.stateFlow.value,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in edit mode, SaveClick updateFolder error with errorMessage should show error dialog with that message`() =
+        runTest {
+            val errorMessage = "User-friendly error message"
+            val state = FolderAddEditState(
+                folderAddEditType = FolderAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+                dialog = null,
+                viewState = FolderAddEditState.ViewState.Content(
+                    folderName = DEFAULT_FOLDER_NAME,
+                ),
+                parentFolderName = null,
+            )
+
+            val viewModel = createViewModel(
+                createSavedStateHandleWithState(
+                    state = state,
+                ),
+            )
+            val error = Throwable("Oops")
+
+            mutableFoldersStateFlow.value =
+                DataState.Loaded(
+                    FolderView(
+                        id = DEFAULT_EDIT_ITEM_ID,
+                        name = DEFAULT_FOLDER_NAME,
+                        revisionDate = FIXED_CLOCK.instant(),
+                    ),
+                )
+
+            coEvery {
+                vaultRepository.updateFolder(any(), any())
+            } returns UpdateFolderResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+
+            viewModel.trySendAction(FolderAddEditAction.SaveClick)
+
+            assertEquals(
+                state.copy(
+                    dialog = FolderAddEditState.DialogState.Error(
+                        message = errorMessage.asText(),
+                        throwable = error,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Test
     fun `DismissDialog should emit update dialog state to null`() = runTest {
@@ -584,7 +756,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(
                 folderAddEditType = FolderAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
                 viewState = FolderAddEditState.ViewState.Error(
-                    R.string.generic_error_message.asText(),
+                    BitwardenString.generic_error_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -604,9 +776,9 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
         mutableFoldersStateFlow.tryEmit(
             DataState.Loaded(
                 FolderView(
-                    DEFAULT_EDIT_ITEM_ID,
-                    DEFAULT_FOLDER_NAME,
-                    revisionDate = DateTime.now(),
+                    id = DEFAULT_EDIT_ITEM_ID,
+                    name = DEFAULT_FOLDER_NAME,
+                    revisionDate = FIXED_CLOCK.instant(),
                 ),
             ),
         )
@@ -636,7 +808,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(
                 folderAddEditType = FolderAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
                 viewState = FolderAddEditState.ViewState.Error(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -677,11 +849,11 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(
                 folderAddEditType = FolderAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
                 viewState = FolderAddEditState.ViewState.Error(
-                    R.string.internet_connection_required_title
+                    BitwardenString.internet_connection_required_title
                         .asText()
                         .concat(
                             " ".asText(),
-                            R.string.internet_connection_required_message.asText(),
+                            BitwardenString.internet_connection_required_message.asText(),
                         ),
                 ),
             ),
@@ -702,9 +874,9 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
         mutableFoldersStateFlow.tryEmit(
             value = DataState.Pending(
                 FolderView(
-                    DEFAULT_EDIT_ITEM_ID,
-                    DEFAULT_FOLDER_NAME,
-                    revisionDate = DateTime.now(),
+                    id = DEFAULT_EDIT_ITEM_ID,
+                    name = DEFAULT_FOLDER_NAME,
+                    revisionDate = FIXED_CLOCK.instant(),
                 ),
             ),
         )
@@ -735,7 +907,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(
                 folderAddEditType = FolderAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
                 viewState = FolderAddEditState.ViewState.Error(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -757,7 +929,9 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
         savedStateHandle: SavedStateHandle = createSavedStateHandleWithState(),
     ): FolderAddEditViewModel = FolderAddEditViewModel(
         savedStateHandle = savedStateHandle,
+        clock = FIXED_CLOCK,
         vaultRepository = vaultRepository,
+        relayManager = relayManager,
     )
 }
 
@@ -766,6 +940,11 @@ private val DEFAULT_STATE = FolderAddEditState(
     dialog = FolderAddEditState.DialogState.Loading("Loading".asText()),
     folderAddEditType = FolderAddEditType.AddItem,
     parentFolderName = null,
+)
+
+private val FIXED_CLOCK = Clock.fixed(
+    Instant.parse("2025-04-11T10:15:30.00Z"),
+    ZoneOffset.UTC,
 )
 
 private const val DEFAULT_EDIT_ITEM_ID = "edit_id"

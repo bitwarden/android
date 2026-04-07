@@ -1,15 +1,19 @@
 package com.bitwarden.network.service
 
+import com.bitwarden.network.model.ArchiveCipherResponseJson
 import com.bitwarden.network.model.AttachmentInfo
 import com.bitwarden.network.model.AttachmentJsonRequest
 import com.bitwarden.network.model.AttachmentJsonResponse
+import com.bitwarden.network.model.BulkShareCiphersJsonRequest
 import com.bitwarden.network.model.CipherJsonRequest
+import com.bitwarden.network.model.CipherMiniResponseJson
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.CreateCipherResponseJson
 import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.ImportCiphersResponseJson
 import com.bitwarden.network.model.ShareCipherJsonRequest
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.UnarchiveCipherResponseJson
 import com.bitwarden.network.model.UpdateCipherCollectionsJsonRequest
 import com.bitwarden.network.model.UpdateCipherResponseJson
 import java.io.File
@@ -19,6 +23,16 @@ import java.io.File
  */
 @Suppress("TooManyFunctions")
 interface CiphersService {
+    /**
+     * Attempt to archive a cipher.
+     */
+    suspend fun archiveCipher(cipherId: String): Result<ArchiveCipherResponseJson>
+
+    /**
+     * Attempt to unarchive a cipher.
+     */
+    suspend fun unarchiveCipher(cipherId: String): Result<UnarchiveCipherResponseJson>
+
     /**
      * Attempt to create a cipher.
      */
@@ -62,6 +76,13 @@ interface CiphersService {
         cipherId: String,
         body: ShareCipherJsonRequest,
     ): Result<SyncResponseJson.Cipher>
+
+    /**
+     * Attempt to share multiple ciphers in bulk.
+     */
+    suspend fun bulkShareCiphers(
+        body: BulkShareCiphersJsonRequest,
+    ): Result<CipherMiniResponseJson>
 
     /**
      * Attempt to share an attachment.

@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util
 
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 
 /**
@@ -10,12 +10,12 @@ import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
  */
 val UriMatchType.displayLabel: Text
     get() = when (this) {
-        UriMatchType.DOMAIN -> R.string.base_domain
-        UriMatchType.HOST -> R.string.host
-        UriMatchType.STARTS_WITH -> R.string.starts_with
-        UriMatchType.REGULAR_EXPRESSION -> R.string.reg_ex
-        UriMatchType.EXACT -> R.string.exact
-        UriMatchType.NEVER -> R.string.never
+        UriMatchType.DOMAIN -> BitwardenString.base_domain
+        UriMatchType.HOST -> BitwardenString.host
+        UriMatchType.STARTS_WITH -> BitwardenString.starts_with
+        UriMatchType.REGULAR_EXPRESSION -> BitwardenString.reg_ex
+        UriMatchType.EXACT -> BitwardenString.exact
+        UriMatchType.NEVER -> BitwardenString.never
     }
         .asText()
 
@@ -30,4 +30,16 @@ fun UriMatchType.toSdkUriMatchType(): com.bitwarden.vault.UriMatchType =
         UriMatchType.NEVER -> com.bitwarden.vault.UriMatchType.NEVER
         UriMatchType.REGULAR_EXPRESSION -> com.bitwarden.vault.UriMatchType.REGULAR_EXPRESSION
         UriMatchType.STARTS_WITH -> com.bitwarden.vault.UriMatchType.STARTS_WITH
+    }
+
+/**
+ * Checks if the [UriMatchType] is considered an advanced matching strategy.
+ */
+fun UriMatchType.isAdvancedMatching(): Boolean =
+    when (this) {
+        UriMatchType.REGULAR_EXPRESSION,
+        UriMatchType.STARTS_WITH,
+            -> true
+
+        else -> false
     }

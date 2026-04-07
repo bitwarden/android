@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.other
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
@@ -157,7 +157,7 @@ class OtherViewModelTest : BaseViewModelTest() {
             mutableVaultLastSyncStateFlow.tryEmit(newSyncTime)
             assertEquals(
                 DEFAULT_STATE.copy(
-                    lastSyncTime = "Oct 27, 2023, 12:00 PM",
+                    lastSyncTime = "Oct 27, 2023, 12:00\u202FPM",
                     dialogState = null,
                 ),
                 awaitItem(),
@@ -175,7 +175,7 @@ class OtherViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = OtherState.DialogState.Loading(
-                        message = R.string.syncing.asText(),
+                        message = BitwardenString.syncing.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -185,13 +185,13 @@ class OtherViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ManualVaultSyncReceive should emit ShowToast`() = runTest {
+    fun `ManualVaultSyncReceive should emit ShowSnackbar`() = runTest {
         val newSyncTime = Instant.parse("2023-10-27T12:00:00Z")
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             mutableVaultLastSyncStateFlow.tryEmit(newSyncTime)
             assertEquals(
-                OtherEvent.ShowToast(R.string.syncing_complete.asText()),
+                OtherEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
                 awaitItem(),
             )
         }
@@ -207,8 +207,8 @@ class OtherViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = OtherState.DialogState.Error(
-                        title = R.string.internet_connection_required_title.asText(),
-                        message = R.string.internet_connection_required_message.asText(),
+                        title = BitwardenString.internet_connection_required_title.asText(),
+                        message = BitwardenString.internet_connection_required_message.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -236,6 +236,6 @@ private val DEFAULT_STATE = OtherState(
     allowScreenCapture = false,
     allowSyncOnRefresh = false,
     clearClipboardFrequency = ClearClipboardFrequency.NEVER,
-    lastSyncTime = "Oct 26, 2023, 12:00 PM",
+    lastSyncTime = "Oct 26, 2023, 12:00\u202FPM",
     dialogState = null,
 )

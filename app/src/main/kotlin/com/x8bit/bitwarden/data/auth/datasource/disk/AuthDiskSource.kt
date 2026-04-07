@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk
 
+import com.bitwarden.network.model.AccountKeysJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.provider.AppIdProvider
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -124,14 +125,45 @@ interface AuthDiskSource : AppIdProvider {
     fun storeUserKey(userId: String, userKey: String?)
 
     /**
+     * Retrieves the local user data key for the given [userId].
+     */
+    fun getLocalUserDataKey(userId: String): String?
+
+    /**
+     * Stores the local user data key for a given [userId].
+     */
+    fun storeLocalUserDataKey(userId: String, wrappedKey: String?)
+
+    /**
      * Retrieves a private key using a [userId].
      */
+    @Deprecated(
+        message = "Use getAccountKeys instead.",
+        replaceWith = ReplaceWith("getAccountKeys"),
+    )
     fun getPrivateKey(userId: String): String?
 
     /**
      * Stores a private key using a [userId].
      */
+    @Deprecated(
+        message = "Use storeAccountKeys instead.",
+        replaceWith = ReplaceWith("storeAccountKeys"),
+    )
     fun storePrivateKey(userId: String, privateKey: String?)
+
+    /**
+     * Returns the profile account keys for the given [userId].
+     */
+    fun getAccountKeys(userId: String): AccountKeysJson?
+
+    /**
+     * Stores the profile account keys for the given [userId].
+     */
+    fun storeAccountKeys(
+        userId: String,
+        accountKeys: AccountKeysJson?,
+    )
 
     /**
      * Retrieves a user auto-unlock key for the given [userId].
@@ -189,12 +221,21 @@ interface AuthDiskSource : AppIdProvider {
     /**
      * Gets the flow for the biometrics key for the given [userId].
      */
-    fun getUserBiometicUnlockKeyFlow(userId: String): Flow<String?>
+    fun getUserBiometricUnlockKeyFlow(userId: String): Flow<String?>
 
     /**
      * Retrieves a pin-protected user key for the given [userId].
      */
+    @Deprecated(
+        message = "Use getPinProtectedUserKeyEnvelope instead.",
+        replaceWith = ReplaceWith("getPinProtectedUserKeyEnvelope"),
+    )
     fun getPinProtectedUserKey(userId: String): String?
+
+    /**
+     * Retrieves a pin-protected user key envelope for the given [userId].
+     */
+    fun getPinProtectedUserKeyEnvelope(userId: String): String?
 
     /**
      * Stores a pin-protected user key for the given [userId].
@@ -202,6 +243,10 @@ interface AuthDiskSource : AppIdProvider {
      * When [inMemoryOnly] is `true`, the value will only be available via a call to
      * [getPinProtectedUserKey] during the current app session.
      */
+    @Deprecated(
+        message = "Use storePinProtectedUserKeyEnvelope instead.",
+        replaceWith = ReplaceWith("storePinProtectedUserKeyEnvelope"),
+    )
     fun storePinProtectedUserKey(
         userId: String,
         pinProtectedUserKey: String?,
@@ -209,9 +254,30 @@ interface AuthDiskSource : AppIdProvider {
     )
 
     /**
+     * Stores a pin-protected user key envelope for the given [userId].
+     *
+     * When [inMemoryOnly] is `true`, the value will only be available via a call to
+     * [getPinProtectedUserKeyEnvelope] during the current app session.
+     */
+    fun storePinProtectedUserKeyEnvelope(
+        userId: String,
+        pinProtectedUserKeyEnvelope: String?,
+        inMemoryOnly: Boolean = false,
+    )
+
+    /**
      * Retrieves a flow for the pin-protected user key for the given [userId].
      */
+    @Deprecated(
+        message = "Use getPinProtectedUserKeyEnvelopeFlow instead.",
+        replaceWith = ReplaceWith("getPinProtectedUserKeyEnvelopeFlow"),
+    )
     fun getPinProtectedUserKeyFlow(userId: String): Flow<String?>
+
+    /**
+     * Retrieves a flow for the pin-protected user key envelope for the given [userId].
+     */
+    fun getPinProtectedUserKeyEnvelopeFlow(userId: String): Flow<String?>
 
     /**
      * Gets a two-factor auth token using a user's [email].

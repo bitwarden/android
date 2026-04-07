@@ -31,19 +31,26 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
-import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
+import com.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
+import com.bitwarden.ui.platform.components.account.dialog.BitwardenLogoutConfirmationDialog
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.support.BitwardenSupportingContent
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.inputFieldVisibilityToggleTestTag
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenInputLabel
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenInputTestTag
@@ -53,13 +60,6 @@ import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenTitle
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
-import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
-import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLogoutConfirmationDialog
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalCredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
@@ -97,11 +97,11 @@ fun VaultUnlockScreen(
         }
     }
 
-    val onBiometricsUnlockSuccess: (cipher: Cipher) -> Unit = remember(viewModel) {
-        { viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(it)) }
+    val onBiometricsUnlockSuccess: (cipher: Cipher) -> Unit = {
+        viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(it))
     }
-    val onBiometricsLockOut: () -> Unit = remember(viewModel) {
-        { viewModel.trySendAction(VaultUnlockAction.BiometricsLockOut) }
+    val onBiometricsLockOut: () -> Unit = {
+        viewModel.trySendAction(VaultUnlockAction.BiometricsLockOut)
     }
 
     EventsEffect(viewModel = viewModel) { event ->
@@ -126,7 +126,7 @@ fun VaultUnlockScreen(
                 )
             }
 
-            is VaultUnlockEvent.Fido2GetCredentialsError -> {
+            is VaultUnlockEvent.GetCredentialsError -> {
                 credentialProviderCompletionManager.completeProviderGetCredentialsRequest(
                     result = GetCredentialsResult.Error(message = event.message),
                 )
@@ -145,20 +145,18 @@ fun VaultUnlockScreen(
         is VaultUnlockState.VaultUnlockDialog.Error -> BitwardenBasicDialog(
             title = dialog.title(),
             message = dialog.message(),
-            onDismissRequest = remember(viewModel) {
-                { viewModel.trySendAction(VaultUnlockAction.DismissDialog) }
-            },
+            onDismissRequest = { viewModel.trySendAction(VaultUnlockAction.DismissDialog) },
             throwable = dialog.throwable,
         )
 
         VaultUnlockState.VaultUnlockDialog.Loading -> BitwardenLoadingDialog(
-            text = stringResource(id = R.string.loading),
+            text = stringResource(id = BitwardenString.loading),
         )
 
         VaultUnlockState.VaultUnlockDialog.BiometricsNoLongerSupported -> {
             BitwardenBasicDialog(
-                title = stringResource(id = R.string.biometrics_no_longer_supported_title),
-                message = stringResource(id = R.string.biometrics_no_longer_supported),
+                title = stringResource(id = BitwardenString.biometrics_no_longer_supported_title),
+                message = stringResource(id = BitwardenString.biometrics_no_longer_supported),
                 onDismissRequest = remember {
                     {
                         viewModel.trySendAction(
@@ -177,13 +175,9 @@ fun VaultUnlockScreen(
     if (showLogoutConfirmationDialog) {
         BitwardenLogoutConfirmationDialog(
             onDismissRequest = { showLogoutConfirmationDialog = false },
-            onConfirmClick = remember(viewModel) {
-                {
-                    showLogoutConfirmationDialog = false
-                    viewModel.trySendAction(
-                        VaultUnlockAction.ConfirmLogoutClick,
-                    )
-                }
+            onConfirmClick = {
+                showLogoutConfirmationDialog = false
+                viewModel.trySendAction(VaultUnlockAction.ConfirmLogoutClick)
             },
         )
     }
@@ -215,10 +209,9 @@ fun VaultUnlockScreen(
                         )
                     }
                     BitwardenOverflowActionItem(
-                        contentDescription = stringResource(R.string.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
-                                text = stringResource(id = R.string.log_out),
+                                text = stringResource(id = BitwardenString.log_out),
                                 onClick = { showLogoutConfirmationDialog = true },
                             ),
                         ),
@@ -230,18 +223,16 @@ fun VaultUnlockScreen(
             BitwardenAccountSwitcher(
                 isVisible = accountMenuVisible,
                 accountSummaries = state.accountSummaries.toImmutableList(),
-                onSwitchAccountClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultUnlockAction.SwitchAccountClick(it)) }
+                onSwitchAccountClick = {
+                    viewModel.trySendAction(VaultUnlockAction.SwitchAccountClick(it))
                 },
-                onLockAccountClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultUnlockAction.LockAccountClick(it)) }
+                onLockAccountClick = {
+                    viewModel.trySendAction(VaultUnlockAction.LockAccountClick(it))
                 },
-                onLogoutAccountClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultUnlockAction.LogoutAccountClick(it)) }
+                onLogoutAccountClick = {
+                    viewModel.trySendAction(VaultUnlockAction.LogoutAccountClick(it))
                 },
-                onAddAccountClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultUnlockAction.AddAccountClick) }
-                },
+                onAddAccountClick = { viewModel.trySendAction(VaultUnlockAction.AddAccountClick) },
                 onDismissRequest = { accountMenuVisible = false },
                 topAppBarScrollBehavior = scrollBehavior,
                 modifier = Modifier.fillMaxSize(),
@@ -270,9 +261,7 @@ fun VaultUnlockScreen(
                 BitwardenPasswordField(
                     label = state.vaultUnlockType.unlockScreenInputLabel(),
                     value = state.input,
-                    onValueChange = remember(viewModel) {
-                        { viewModel.trySendAction(VaultUnlockAction.InputChanged(it)) }
-                    },
+                    onValueChange = { viewModel.trySendAction(VaultUnlockAction.InputChanged(it)) },
                     keyboardType = state.vaultUnlockType.unlockScreenKeyboardType,
                     showPasswordTestTag = state
                         .vaultUnlockType
@@ -280,44 +269,47 @@ fun VaultUnlockScreen(
                     autoFocus = state.showKeyboard && autoFocusDelayCompleted,
                     imeAction = ImeAction.Done,
                     keyboardActions = KeyboardActions(
-                        onDone = remember(viewModel) {
-                            { viewModel.trySendAction(VaultUnlockAction.UnlockClick) }
-                        },
+                        onDone = { viewModel.trySendAction(VaultUnlockAction.UnlockClick) },
                     ),
-                    supportingText = state.vaultUnlockType.unlockScreenMessage(),
                     passwordFieldTestTag = state.vaultUnlockType.unlockScreenInputTestTag,
-                    cardStyle = CardStyle.Top(hasDivider = false),
+                    cardStyle = CardStyle.Top(),
                     modifier = Modifier
                         .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
             }
-            Text(
-                text = stringResource(
-                    id = R.string.logged_in_as_on,
-                    state.email,
-                    state.environmentUrl,
-                ),
-                style = BitwardenTheme.typography.bodySmall,
-                color = BitwardenTheme.colorScheme.text.secondary,
+            BitwardenSupportingContent(
+                cardStyle = if (state.hideInput) CardStyle.Full else CardStyle.Bottom,
                 modifier = Modifier
-                    .testTag("UserAndEnvironmentDataLabel")
                     .standardHorizontalMargin()
-                    .cardStyle(
-                        cardStyle = if (state.hideInput) CardStyle.Full else CardStyle.Bottom,
-                        paddingStart = 16.dp,
-                        paddingEnd = 16.dp,
-                        paddingTop = 0.dp,
-                    )
                     .fillMaxWidth(),
-            )
+            ) {
+                if (!state.hideInput) {
+                    Text(
+                        text = state.vaultUnlockType.unlockScreenMessage(),
+                        style = BitwardenTheme.typography.bodySmall,
+                        color = BitwardenTheme.colorScheme.text.secondary,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    Spacer(modifier = Modifier.height(height = 16.dp))
+                }
+                Text(
+                    text = stringResource(
+                        id = BitwardenString.logged_in_as_on,
+                        formatArgs = arrayOf(state.email, state.environmentUrl),
+                    ),
+                    style = BitwardenTheme.typography.bodySmall,
+                    color = BitwardenTheme.colorScheme.text.secondary,
+                    modifier = Modifier
+                        .testTag(tag = "UserAndEnvironmentDataLabel")
+                        .fillMaxWidth(),
+                )
+            }
             Spacer(modifier = Modifier.height(24.dp))
             if (state.showBiometricLogin && biometricsManager.isBiometricsSupported) {
                 BitwardenOutlinedButton(
-                    label = stringResource(id = R.string.use_biometrics_to_unlock),
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick) }
-                    },
+                    label = stringResource(id = BitwardenString.use_biometrics_to_unlock),
+                    onClick = { viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick) },
                     modifier = Modifier
                         .standardHorizontalMargin()
                         .fillMaxWidth(),
@@ -325,7 +317,7 @@ fun VaultUnlockScreen(
                 Spacer(modifier = Modifier.height(12.dp))
             } else if (state.showBiometricInvalidatedMessage) {
                 Text(
-                    text = stringResource(R.string.account_biometric_invalidated),
+                    text = stringResource(BitwardenString.account_biometric_invalidated),
                     textAlign = TextAlign.Start,
                     style = BitwardenTheme.typography.bodyMedium,
                     color = BitwardenTheme.colorScheme.status.error,
@@ -335,10 +327,8 @@ fun VaultUnlockScreen(
             }
             if (!state.hideInput) {
                 BitwardenFilledButton(
-                    label = stringResource(id = R.string.unlock),
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(VaultUnlockAction.UnlockClick) }
-                    },
+                    label = stringResource(id = BitwardenString.unlock),
+                    onClick = { viewModel.trySendAction(VaultUnlockAction.UnlockClick) },
                     isEnabled = state.input.isNotEmpty(),
                     modifier = Modifier
                         .testTag("UnlockVaultButton")

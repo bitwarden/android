@@ -8,8 +8,9 @@ import org.junit.jupiter.api.assertNull
 
 class StringExtensionsTest {
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `isValidEmail should return appropriate value for possible email addresses`() {
+    fun `isValidEmail should return appropriate value for possible email addresses when using strict validation`() {
         val invalidEmails = listOf(
             "" to false,
             " " to false,
@@ -28,9 +29,37 @@ class StringExtensionsTest {
             "test.test@test.test.com" to true,
             "test/test@test.test.com" to true,
             "test.test@test/test.com" to false,
+            "test*test@test.com" to true,
         )
         invalidEmails.forEach {
             assertEquals(it.first.isValidEmail(), it.second)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isValidEmail should return appropriate value for possible email addresses when not using strict validation`() {
+        val invalidEmails = listOf(
+            "" to false,
+            " " to false,
+            "test.com" to false,
+            "@" to true,
+            "@." to true,
+            "@.aa" to true,
+            "a@.aa" to true,
+            "test@test.com" to true,
+            " test@test " to true,
+            "test@test.c" to true,
+            "a@a.aa" to true,
+            "test@test.com" to true,
+            "test@test.test.com" to true,
+            "test/test@test.test.com" to true,
+            "test.test@test/test.com" to true,
+            "test*test@test.com" to true,
+            "test.test@test.test.com" to true,
+        )
+        invalidEmails.forEach {
+            assertEquals(it.first.isValidEmail(useStrictValidation = false), it.second, "Failed for $it")
         }
     }
 

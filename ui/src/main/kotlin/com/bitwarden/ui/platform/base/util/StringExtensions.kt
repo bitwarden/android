@@ -41,18 +41,27 @@ private const val ANDROID_APP_URI_SCHEME: String = "androidapp://"
 fun String?.orZeroWidthSpace(): String = this.orNullIfBlank() ?: ZERO_WIDTH_CHARACTER
 
 /**
- * Whether or not string is a valid email address.
+ * Whether the string is a valid email address.
  *
- * This validates that the email is valid by asserting that:
+ * By default, this function will [useStrictValidation] by asserting that:
  * * The string starts with a string of characters including periods, underscores, percent symbols,
- * plus's, minus's, forward slash's, and alphanumeric characters.
+ * plus's, minus's, forward slash's, asterisks, and alphanumeric characters.
  * * Followed by an '@' symbol.
  * * Followed by a string of characters including periods, minus's, and alphanumeric characters.
  * * Followed by a period.
  * * Followed by at least 2 more alphanumeric characters.
+ *
+ * When [useStrictValidation] is `false`, this function will only assert that the string contains an
+ * '@' symbol.
+ *
+ * @param useStrictValidation Whether to use strict validation. Defaults to `true`.
  */
-fun String.isValidEmail(): Boolean =
-    this.matches(regex = "^[A-Za-z0-9._%+-/]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$".toRegex())
+fun String.isValidEmail(useStrictValidation: Boolean = true): Boolean =
+    if (useStrictValidation) {
+        this.matches(regex = "^[A-Za-z0-9._%+-/*]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$".toRegex())
+    } else {
+        this.contains("@")
+    }
 
 /**
  * Returns `true` if the given [String] is a non-blank, valid URI and `false` otherwise.
@@ -74,7 +83,7 @@ fun String.isValidUri(): Boolean =
 fun String.toHostOrPathOrNull(): String? {
     val uri = try {
         URI(this)
-    } catch (e: URISyntaxException) {
+    } catch (_: URISyntaxException) {
         return null
     }
     return uri.host ?: uri.path
@@ -172,7 +181,6 @@ fun String.hexToColor(): Color = if (startsWith("#")) {
  * This can be applied to any [String] in order to provide some deterministic color value based on
  * arbitrary [String] properties.
  */
-@OptIn(ExperimentalStdlibApi::class)
 @Suppress("MagicNumber")
 fun String.toHexColorRepresentation(): String {
     // Produces a string with exactly two hexadecimal digits.
@@ -233,7 +241,4 @@ fun String.prefixHttpsIfNecessary(): String =
 /**
  * Checks if a string is using base32 digits.
  */
-fun String.isBase32(): Boolean {
-    val regex = ("^[A-Z2-7]+=*$").toRegex()
-    return regex.matches(this)
-}
+fun String.isBase32(): Boolean = "^[A-Za-z2-7]+=*$".toRegex().matches(this)

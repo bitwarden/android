@@ -7,7 +7,7 @@ import android.text.SpannedString
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
@@ -51,7 +51,7 @@ fun @receiver:StringRes Int.toAnnotatedString(
     style: SpanStyle = bitwardenDefaultSpanStyle,
     emphasisHighlightStyle: SpanStyle = bitwardenBoldSpanStyle,
     linkHighlightStyle: SpanStyle = bitwardenClickableTextSpanStyle,
-    resources: Resources = LocalContext.current.resources,
+    resources: Resources = LocalResources.current,
     onAnnotationClick: ((annotationKey: String) -> Unit)? = null,
 ): AnnotatedString = remember(
     this,

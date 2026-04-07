@@ -5,12 +5,12 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.util.startDefaultEmailApplication
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
-import io.mockk.runs
+import io.mockk.mockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Assert.assertTrue
@@ -18,9 +18,7 @@ import org.junit.Before
 import org.junit.Test
 
 class CheckEmailScreenTest : BitwardenComposeTest() {
-    private val intentManager = mockk<IntentManager>(relaxed = true) {
-        every { startDefaultEmailApplication() } just runs
-    }
+    private val intentManager = mockk<IntentManager>(relaxed = true)
     private var onNavigateBackCalled = false
 
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -72,9 +70,12 @@ class CheckEmailScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `NavigateToEmailApp should call openEmailApp`() {
-        mutableEventFlow.tryEmit(CheckEmailEvent.NavigateToEmailApp)
-        verify {
-            intentManager.startDefaultEmailApplication()
+        mockkStatic(IntentManager::startDefaultEmailApplication) {
+            every { intentManager.startDefaultEmailApplication() } returns true
+            mutableEventFlow.tryEmit(CheckEmailEvent.NavigateToEmailApp)
+            verify {
+                intentManager.startDefaultEmailApplication()
+            }
         }
     }
 

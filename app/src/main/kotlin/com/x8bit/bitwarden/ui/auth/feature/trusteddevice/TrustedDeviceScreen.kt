@@ -24,7 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -32,17 +32,17 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.trusteddevice.handlers.TrustedDeviceHandlers
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 
 /**
  * The top level composable for the Reset Password screen.
@@ -98,11 +98,11 @@ private fun TrustedDeviceScaffold(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.log_in_initiated),
+                title = stringResource(id = BitwardenString.log_in_initiated),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                    navigationIconContentDescription = stringResource(id = R.string.close),
+                    navigationIconContentDescription = stringResource(id = BitwardenString.close),
                     onNavigationIconClick = handlers.onBackClick,
                 ),
             )
@@ -115,8 +115,8 @@ private fun TrustedDeviceScaffold(
         ) {
             Spacer(modifier = Modifier.height(height = 12.dp))
             BitwardenSwitch(
-                label = stringResource(id = R.string.remember_this_device),
-                supportingText = stringResource(id = R.string.turn_off_using_public_device),
+                label = stringResource(id = BitwardenString.remember_this_device),
+                supportingText = stringResource(id = BitwardenString.turn_off_using_public_device),
                 isChecked = state.isRemembered,
                 onCheckedChange = handlers.onRememberToggle,
                 cardStyle = CardStyle.Full,
@@ -129,7 +129,7 @@ private fun TrustedDeviceScaffold(
 
             if (state.showContinueButton) {
                 BitwardenFilledButton(
-                    label = stringResource(id = R.string.continue_text),
+                    label = stringResource(id = BitwardenString.continue_text),
                     onClick = handlers.onContinueClick,
                     modifier = Modifier
                         .standardHorizontalMargin()
@@ -140,7 +140,7 @@ private fun TrustedDeviceScaffold(
 
             if (state.showOtherDeviceButton) {
                 BitwardenFilledButton(
-                    label = stringResource(id = R.string.approve_with_my_other_device),
+                    label = stringResource(id = BitwardenString.approve_with_my_other_device),
                     onClick = handlers.onApproveWithDeviceClick,
                     modifier = Modifier
                         .testTag("ApproveWithOtherDeviceButton")
@@ -152,7 +152,7 @@ private fun TrustedDeviceScaffold(
 
             if (state.showRequestAdminButton) {
                 BitwardenOutlinedButton(
-                    label = stringResource(id = R.string.request_admin_approval),
+                    label = stringResource(id = BitwardenString.request_admin_approval),
                     onClick = handlers.onApproveWithAdminClick,
                     modifier = Modifier
                         .standardHorizontalMargin()
@@ -164,7 +164,7 @@ private fun TrustedDeviceScaffold(
 
             if (state.showMasterPasswordButton) {
                 BitwardenOutlinedButton(
-                    label = stringResource(id = R.string.approve_with_master_password),
+                    label = stringResource(id = BitwardenString.approve_with_master_password),
                     onClick = handlers.onApproveWithPasswordClick,
                     modifier = Modifier
                         .testTag("ApproveWithMasterPasswordButton")
@@ -177,7 +177,7 @@ private fun TrustedDeviceScaffold(
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = stringResource(
-                    id = R.string.logging_in_as_x_on_y,
+                    id = BitwardenString.logging_in_as_x_on_y,
                     state.emailAddress,
                     state.environmentLabel,
                 ),
@@ -191,7 +191,7 @@ private fun TrustedDeviceScaffold(
             )
 
             BitwardenClickableText(
-                label = stringResource(id = R.string.not_you),
+                label = stringResource(id = BitwardenString.not_you),
                 onClick = handlers.onNotYouButtonClick,
                 style = BitwardenTheme.typography.labelLarge,
                 innerPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),

@@ -40,26 +40,28 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.util.advanceTimeByAndRunCurrent
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.exit.ExitManager
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.assertScrollableNodeDoesNotExist
+import com.bitwarden.ui.util.isBottomSheet
+import com.bitwarden.ui.util.isCoachMarkToolTip
 import com.bitwarden.ui.util.isProgressBar
 import com.bitwarden.ui.util.onAllNodesWithContentDescriptionAfterScroll
 import com.bitwarden.ui.util.onAllNodesWithTextAfterScroll
 import com.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.bitwarden.ui.util.onNodeWithTextAfterScroll
 import com.bitwarden.vault.UriMatchType
-import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
-import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
-import com.x8bit.bitwarden.ui.util.isCoachMarkToolTip
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
@@ -82,6 +84,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType as UriMatchTypeModel
 
 @Suppress("LargeClass")
 class VaultAddEditScreenTest : BitwardenComposeTest() {
@@ -109,7 +112,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         every { launchUri(any()) } just runs
     }
     private val credentialProviderCompletionManager: CredentialProviderCompletionManager = mockk {
-        every { completeFido2Registration(any()) } just runs
+        every { completeCredentialRegistration(any()) } just runs
     }
     private val biometricsManager: BiometricsManager = mockk {
         every { isUserVerificationSupported } returns true
@@ -136,6 +139,15 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                 viewModel = viewModel,
             )
         }
+    }
+
+    @Test
+    fun `on ShowSnackbar should display snackbar content`() {
+        val message = "message"
+        val data = BitwardenSnackbarData(message = message.asText())
+        composeTestRule.onNodeWithText(text = message).assertDoesNotExist()
+        mutableEventFlow.tryEmit(VaultAddEditEvent.ShowSnackbar(data = data))
+        composeTestRule.onNodeWithText(text = message).assertIsDisplayed()
     }
 
     @Test
@@ -221,24 +233,55 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `on CompleteFido2Create event should invoke Fido2CompletionManager`() {
-        val result = RegisterFido2CredentialResult.Success(
+    fun `on CompleteCredentialCreate event should invoke CredentialProviderCompletionManager`() {
+        val result = CreateCredentialResult.Success.Fido2CredentialRegistered(
             responseJson = "mockRegistrationResponse",
         )
-        mutableEventFlow.tryEmit(VaultAddEditEvent.CompleteFido2Registration(result = result))
-        verify { credentialProviderCompletionManager.completeFido2Registration(result) }
+        mutableEventFlow.tryEmit(VaultAddEditEvent.CompleteCredentialRegistration(result = result))
+        verify { credentialProviderCompletionManager.completeCredentialRegistration(result) }
     }
 
     @Test
-    fun `Fido2Error dialog should display based on state`() {
+    fun `CredentialError dialog should display based on state`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
-            dialog = VaultAddEditState.DialogState.Fido2Error("mockMessage".asText()),
+            dialog = VaultAddEditState.DialogState.CredentialError("mockMessage".asText()),
         )
 
         composeTestRule
             .onAllNodesWithText("mockMessage")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun `ArchiveRequiresPremium dialog should display based on state`() {
+        composeTestRule.assertNoDialogExists()
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
+            dialog = VaultAddEditState.DialogState.ArchiveRequiresPremium,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Archive unavailable")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ArchiveRequiresPremium dialog on upgrade to Premium click should emit UpgradeToPremiumClick`() {
+        composeTestRule.assertNoDialogExists()
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
+            dialog = VaultAddEditState.DialogState.ArchiveRequiresPremium,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Upgrade to Premium")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultAddEditAction.Common.UpgradeToPremiumClick)
+        }
     }
 
     @Test
@@ -452,7 +495,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     @Test
     fun `clicking dismiss dialog on Fido2Error dialog should send Fido2ErrorDialogDismissed action`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
-            dialog = VaultAddEditState.DialogState.Fido2Error("mockMessage".asText()),
+            dialog = VaultAddEditState.DialogState.CredentialError("mockMessage".asText()),
         )
 
         composeTestRule
@@ -462,7 +505,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddEditAction.Common.Fido2ErrorDialogDismissed("mockMessage".asText()),
+                VaultAddEditAction.Common.CredentialErrorDialogDismissed("mockMessage".asText()),
             )
         }
     }
@@ -606,14 +649,12 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(viewState = VaultAddEditState.ViewState.Loading)
         }
-        // There are 2 because of the pull-to-refresh
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
 
         mutableStateFlow.update {
             it.copy(viewState = VaultAddEditState.ViewState.Error("Fail".asText()))
         }
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(
@@ -624,8 +665,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                 ),
             )
         }
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
     }
 
     @Test
@@ -1228,7 +1268,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     @Test
     fun `Clicking the Authenticator key tooltip sends AuthenticatorHelpToolTipClick action`() {
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Authenticator key help")
+            .onNodeWithContentDescriptionAfterScroll(
+                label = "Authenticator key help, External link",
+            )
             .performClick()
 
         verify {
@@ -1257,7 +1299,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         verify {
             viewModel.trySendAction(
                 VaultAddEditAction.ItemType.LoginType.UriValueChange(
-                    UriItem(id = "TestId", uri = "TestURI", match = null, checksum = null),
+                    UriItem(id = "TestId", uri = "URITest", match = null, checksum = null),
                 ),
             )
         }
@@ -1289,7 +1331,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1316,7 +1358,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1341,7 +1383,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1355,7 +1397,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText("Default")
+            .onNodeWithText("Default (Exact)")
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
@@ -1376,6 +1418,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithText("Regular expression")
+            .performScrollTo()
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
@@ -1401,7 +1444,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1446,7 +1489,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1465,6 +1508,186 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on match detection when an Advanced option is selected should display warning dialog when Regular Expression`() {
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "More options"))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Match detection")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Regular expression")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(
+                "“Regular expression” is an advanced option with " +
+                    "increased risk of exposing credentials if used incorrectly.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on match detection when an Advanced option is selected should display warning dialog when Starts With`() {
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "More options"))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Match detection")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Starts with")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(
+                "“Starts with” is an advanced option with " +
+                    "increased risk of exposing credentials.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on advanced match detection warning dialog click on cancel should not change the default URI match type`() {
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "More options"))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Match detection")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Starts with")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 0) {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.UriValueChange(
+                    UriItem(
+                        id = "TestId",
+                        uri = null,
+                        match = UriMatchType.REGULAR_EXPRESSION,
+                        checksum = null,
+                    ),
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `on Advanced matching warning dialog confirm should display learn more dialog`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) {
+                copy(
+                    uriList = listOf(
+                        UriItem(id = "TestId", uri = null, match = null, checksum = null),
+                    ),
+                )
+            }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "More options"))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Match detection")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Starts with")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Keep your credentials secure")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on Advanced matching warning dialog click on more about match detection should call launchUri`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) {
+                copy(
+                    uriList = listOf(
+                        UriItem(id = "TestId", uri = null, match = null, checksum = null),
+                    ),
+                )
+            }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "More options"))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Match detection")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Starts with")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Learn more")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.LearnMoreClick,
+            )
+        }
     }
 
     @Test
@@ -2416,9 +2639,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onAllNodesWithContentDescription("Close")
-            .filterToOne(hasAnySibling(hasText("Owner")))
+            .filterToOne(hasAnyAncestor(isBottomSheet))
             .assertIsDisplayed()
-            .performSemanticsAction(SemanticsActions.OnClick)
+            .performClick()
 
         dispatcher.advanceTimeByAndRunCurrent(1000L)
 
@@ -2452,9 +2675,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onAllNodesWithText("Save")
-            .filterToOne(hasAnySibling(hasText("Owner")))
+            .filterToOne(hasAnyAncestor(isBottomSheet))
             .assertIsDisplayed()
-            .performSemanticsAction(SemanticsActions.OnClick)
+            .performClick()
 
         verify {
             viewModel.trySendAction(VaultAddEditAction.Common.OwnershipChange(ownerId = ownerId))
@@ -2494,6 +2717,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                         id = "mockCollectionId-2",
                         name = "mockCollectionName-2",
                         isSelected = false,
+                        isDefaultUserCollection = false,
                     ),
                 ),
             )
@@ -2635,9 +2859,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onAllNodesWithContentDescription("Close")
-            .filterToOne(hasAnySibling(hasText("Folders")))
+            .filterToOne(hasAnyAncestor(isBottomSheet))
             .assertIsDisplayed()
-            .performSemanticsAction(SemanticsActions.OnClick)
+            .performClick()
 
         dispatcher.advanceTimeByAndRunCurrent(1000L)
 
@@ -2694,9 +2918,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onAllNodesWithText("Save")
-            .filterToOne(hasAnySibling(hasText("Folders")))
+            .filterToOne(hasAnyAncestor(isBottomSheet))
             .assertIsDisplayed()
-            .performSemanticsAction(SemanticsActions.OnClick)
+            .performClick()
 
         verify {
             viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(newFolderName))
@@ -2727,9 +2951,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onAllNodesWithText("Save")
-            .filterToOne(hasAnySibling(hasText("Folders")))
+            .filterToOne(hasAnyAncestor(isBottomSheet))
             .assertIsDisplayed()
-            .performSemanticsAction(SemanticsActions.OnClick)
+            .performClick()
 
         verify {
             viewModel.trySendAction(VaultAddEditAction.Common.FolderChange(folderId = folderId))
@@ -2849,7 +3073,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Master password re-prompt help")
+            .onNodeWithContentDescriptionAfterScroll(
+                label = "Master password re-prompt help, External link",
+            )
             .performClick()
 
         verify {
@@ -3326,7 +3552,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -3372,7 +3598,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         // Open the overflow menu
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         // Confirm Collections option is present
@@ -3411,6 +3637,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                         originalCipher = createMockCipherView(1).copy(
                             collectionIds = emptyList(),
                         ),
+                        hasOrganizations = true,
                     ),
                     type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
                     isIndividualVaultDisabled = false,
@@ -3418,7 +3645,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -3502,7 +3729,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -3550,7 +3777,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -3950,6 +4177,22 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
     }
 
+    @Test
+    fun `on NavigateToLearnMore should call launchUri`() {
+        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToLearnMore)
+        verify(exactly = 1) {
+            intentManager.launchUri(uri = "https://bitwarden.com/help/uri-match-detection/".toUri())
+        }
+    }
+
+    @Test
+    fun `on NavigateToPremium should call launchUri`() {
+        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToPremium(uri = "uri"))
+        verify(exactly = 1) {
+            intentManager.launchUri(uri = "uri".toUri())
+        }
+    }
+
     //region Helper functions
 
     private fun updateLoginType(
@@ -4062,6 +4305,184 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
     }
 
+    @Test
+    fun `Move to organization option menu should not be visible if user has no organizations`() {
+        mutableStateFlow.update {
+            it.copy(
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "mockId-1"),
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(
+                        originalCipher = createMockCipherView(1).copy(
+                            collectionIds = emptyList(),
+                        ),
+                        hasOrganizations = false,
+                    ),
+                    type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                    isIndividualVaultDisabled = false,
+                ),
+            )
+        }
+
+        // Confirm dropdown version of item is absent
+        composeTestRule
+            .onAllNodesWithText("Move to Organization")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+        // Open the overflow menu
+        composeTestRule
+            .onNodeWithContentDescription("More options")
+            .performClick()
+
+        // Confirm it does not exist
+        composeTestRule
+            .onAllNodesWithText("Move to Organization")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsNotDisplayed()
+    }
+
+    @Test
+    fun `Move to organization option menu should be visible if user has organizations`() {
+        mutableStateFlow.update {
+            it.copy(
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "mockId-1"),
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(
+                        originalCipher = createMockCipherView(1).copy(
+                            collectionIds = emptyList(),
+                        ),
+                        hasOrganizations = true,
+                    ),
+                    type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                    isIndividualVaultDisabled = false,
+                ),
+            )
+        }
+
+        // Confirm dropdown version of item is absent
+        composeTestRule
+            .onAllNodesWithText("Move to Organization")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+
+        composeTestRule
+            .onNodeWithContentDescription("More options")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Move to Organization")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `archive callout should be displayed according to state`() {
+        mutableStateFlow.update {
+            it.copy(
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "mockId-1"),
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(
+                        archiveCalloutText = null,
+                    ),
+                    type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                    isIndividualVaultDisabled = false,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "This item is archived.")
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "mockId-1"),
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(
+                        archiveCalloutText = "This item is archived.".asText(),
+                    ),
+                    type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                    isIndividualVaultDisabled = false,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "This item is archived.")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `Archive option menu should be visible if cipher in edit mode with un-archived cipher`() {
+        mutableStateFlow.update {
+            it.copy(
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "mockId-1"),
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(
+                        originalCipher = createMockCipherView(number = 1, isArchived = false),
+                    ),
+                    type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                    isIndividualVaultDisabled = false,
+                ),
+            )
+        }
+
+        // Confirm dropdown version of item is absent
+        composeTestRule
+            .onAllNodesWithText(text = "Archive")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "More options")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Archive")
+            .assert(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultAddEditAction.Common.ArchiveClick)
+        }
+    }
+
+    @Test
+    fun `Unarchive option menu should be visible if cipher in edit mode with archived cipher`() {
+        mutableStateFlow.update {
+            it.copy(
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "mockId-1"),
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(
+                        originalCipher = createMockCipherView(number = 1, isArchived = true),
+                    ),
+                    type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                    isIndividualVaultDisabled = false,
+                ),
+            )
+        }
+
+        // Confirm dropdown version of item is absent
+        composeTestRule
+            .onAllNodesWithText(text = "Unarchive")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "More options")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Unarchive")
+            .assert(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultAddEditAction.Common.UnarchiveClick)
+        }
+    }
+
     //endregion Helper functions
 
     companion object {
@@ -4076,6 +4497,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             bottomSheetState = null,
             vaultAddEditType = VaultAddEditType.AddItem,
             shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isArchiveEnabled = true,
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddEditState(
@@ -4089,6 +4513,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             dialog = null,
             bottomSheetState = null,
             shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isArchiveEnabled = true,
         )
 
         private val DEFAULT_STATE_IDENTITY = VaultAddEditState(
@@ -4102,6 +4529,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             dialog = null,
             bottomSheetState = null,
             shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isArchiveEnabled = true,
         )
 
         private val DEFAULT_STATE_CARD = VaultAddEditState(
@@ -4115,6 +4545,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             dialog = null,
             bottomSheetState = null,
             shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isArchiveEnabled = true,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS = VaultAddEditState(
@@ -4138,6 +4571,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             vaultAddEditType = VaultAddEditType.AddItem,
             cipherType = VaultItemCipherType.SECURE_NOTE,
             shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isArchiveEnabled = true,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddEditState(
@@ -4151,6 +4587,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             dialog = null,
             bottomSheetState = null,
             shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isArchiveEnabled = true,
         )
 
         private val DEFAULT_STATE_SSH_KEYS = VaultAddEditState(
@@ -4164,6 +4603,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             dialog = null,
             bottomSheetState = null,
             shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isArchiveEnabled = true,
         )
 
         private val ALTERED_COLLECTIONS = listOf(
@@ -4171,6 +4613,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                 id = "mockCollectionId-new",
                 name = "mockCollectionName-new",
                 isSelected = true,
+                isDefaultUserCollection = false,
             ),
         )
 
@@ -4197,6 +4640,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                 id = "mockCollectionId-2",
                 name = "mockCollectionName-2",
                 isSelected = false,
+                isDefaultUserCollection = false,
             ),
         )
 

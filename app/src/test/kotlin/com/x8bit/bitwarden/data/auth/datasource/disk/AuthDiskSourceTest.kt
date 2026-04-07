@@ -10,7 +10,8 @@ import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorUserDecryptionOptionsJson
 import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.bitwarden.network.model.UserDecryptionOptionsJson
-import com.bitwarden.network.model.createMockOrganization
+import com.bitwarden.network.model.createMockAccountKeysJson
+import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.bitwarden.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -32,7 +33,6 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.Instant
-import java.time.ZonedDateTime
 
 @Suppress("LargeClass")
 class AuthDiskSourceTest {
@@ -266,9 +266,14 @@ class AuthDiskSourceTest {
             userId = userId,
             biometricsKey = "1234-9876-0192",
         )
+        authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = "encryptedPin")
         authDiskSource.storePinProtectedUserKey(
             userId = userId,
             pinProtectedUserKey = "pinProtectedUserKey",
+        )
+        authDiskSource.storePinProtectedUserKeyEnvelope(
+            userId = userId,
+            pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope",
         )
         authDiskSource.storeInvalidUnlockAttempts(
             userId = userId,
@@ -280,13 +285,17 @@ class AuthDiskSourceTest {
             userAutoUnlockKey = "userAutoUnlockKey",
         )
         authDiskSource.storePrivateKey(userId = userId, privateKey = "privateKey")
+        authDiskSource.storeAccountKeys(
+            userId = userId,
+            accountKeys = createMockAccountKeysJson(number = 1),
+        )
         authDiskSource.storeOrganizationKeys(
             userId = userId,
             organizationKeys = mapOf("organizationId" to "key"),
         )
         authDiskSource.storeOrganizations(
             userId = userId,
-            organizations = listOf(createMockOrganization(1)),
+            organizations = listOf(createMockOrganizationNetwork(number = 1)),
         )
         authDiskSource.storePolicies(
             userId = userId,
@@ -299,7 +308,6 @@ class AuthDiskSourceTest {
                 refreshToken = "refreshToken",
             ),
         )
-        authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = "encryptedPin")
         authDiskSource.storeMasterPasswordHash(userId = userId, passwordHash = "passwordHash")
         authDiskSource.storeAuthenticatorSyncUnlockKey(
             userId = userId,
@@ -325,21 +333,23 @@ class AuthDiskSourceTest {
         // These should be cleared
         assertNull(authDiskSource.getUserBiometricInitVector(userId = userId))
         assertNull(authDiskSource.getUserBiometricUnlockKey(userId = userId))
-        assertNull(authDiskSource.getPinProtectedUserKey(userId = userId))
         assertNull(authDiskSource.getInvalidUnlockAttempts(userId = userId))
         assertNull(authDiskSource.getUserKey(userId = userId))
         assertNull(authDiskSource.getUserAutoUnlockKey(userId = userId))
         assertNull(authDiskSource.getPrivateKey(userId = userId))
+        assertNull(authDiskSource.getAccountKeys(userId = userId))
         assertNull(authDiskSource.getOrganizationKeys(userId = userId))
         assertNull(authDiskSource.getOrganizations(userId = userId))
         assertNull(authDiskSource.getPolicies(userId = userId))
         assertNull(authDiskSource.getAccountTokens(userId = userId))
-        assertNull(authDiskSource.getEncryptedPin(userId = userId))
         assertNull(authDiskSource.getMasterPasswordHash(userId = userId))
         assertNull(authDiskSource.getShouldUseKeyConnector(userId = userId))
         assertNull(authDiskSource.getIsTdeLoginComplete(userId = userId))
         assertNull(authDiskSource.getAuthenticatorSyncUnlockKey(userId = userId))
         assertNull(authDiskSource.getShowImportLogins(userId = userId))
+        assertNull(authDiskSource.getEncryptedPin(userId = userId))
+        assertNull(authDiskSource.getPinProtectedUserKey(userId = userId))
+        assertNull(authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId))
     }
 
     @Test
@@ -439,6 +449,28 @@ class AuthDiskSourceTest {
     }
 
     @Test
+    fun `getLocalUserDataKey should pull from SharedPreferences`() {
+        val userKeyBaseKey = "bwPreferencesStorage:localUserDataKey"
+        val mockUserId = "mockUserId"
+        val mockLocalUserKey = "mockLocalUserDataKey"
+        fakeSharedPreferences.edit {
+            putString("${userKeyBaseKey}_$mockUserId", mockLocalUserKey)
+        }
+        val actual = authDiskSource.getLocalUserDataKey(userId = mockUserId)
+        assertEquals(mockLocalUserKey, actual)
+    }
+
+    @Test
+    fun `storeLocalUserDataKey should update SharedPreferences`() {
+        val userKeyBaseKey = "bwPreferencesStorage:localUserDataKey"
+        val mockUserId = "mockUserId"
+        val mockLocalUserKey = "mockLocalUserDataKey"
+        authDiskSource.storeLocalUserDataKey(userId = mockUserId, wrappedKey = mockLocalUserKey)
+        val actual = fakeSharedPreferences.getString("${userKeyBaseKey}_$mockUserId", null)
+        assertEquals(mockLocalUserKey, actual)
+    }
+
+    @Test
     fun `getPrivateKey should pull from SharedPreferences`() {
         val privateKeyBaseKey = "bwPreferencesStorage:encPrivateKey"
         val mockUserId = "mockUserId"
@@ -473,6 +505,43 @@ class AuthDiskSourceTest {
         assertEquals(
             mockPrivateKey,
             actual,
+        )
+    }
+
+    @Test
+    fun `getAccountKeys should pull from SharedPreferences`() {
+        val accountKeysBaseKey = "bwSecureStorage:profileAccountKeys"
+        val mockUserId = "mockUserId"
+        val mockAccountKeys = createMockAccountKeysJson(number = 1)
+        fakeEncryptedSharedPreferences.edit {
+            putString(
+                "${accountKeysBaseKey}_$mockUserId",
+                json.encodeToString(mockAccountKeys),
+            )
+        }
+        val actual = authDiskSource.getAccountKeys(userId = mockUserId)
+        assertEquals(
+            mockAccountKeys,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storeAccountKeys should update sharedPreferences`() {
+        val accountKeysBaseKey = "bwSecureStorage:profileAccountKeys"
+        val mockUserId = "mockUserId"
+        val mockAccountKeys = createMockAccountKeysJson(number = 1)
+        authDiskSource.storeAccountKeys(
+            userId = mockUserId,
+            accountKeys = mockAccountKeys,
+        )
+        val actual = fakeEncryptedSharedPreferences.getString(
+            "${accountKeysBaseKey}_$mockUserId",
+            null,
+        )
+        assertEquals(
+            json.encodeToJsonElement(mockAccountKeys),
+            json.parseToJsonElement(requireNotNull(actual)),
         )
     }
 
@@ -668,6 +737,25 @@ class AuthDiskSourceTest {
     }
 
     @Test
+    fun `getUserBiometricUnlockKeyFlow should react to changes in getUserBiometricUnlockKey`() =
+        runTest {
+            val mockUserId = "mockUserId"
+            val biometricsKey = "1234"
+            authDiskSource.getUserBiometricUnlockKeyFlow(userId = mockUserId).test {
+                // The initial values of the Flow and the property are in sync
+                assertNull(authDiskSource.getUserBiometricUnlockKey(userId = mockUserId))
+                assertNull(awaitItem())
+
+                // Updating the disk source updates shared preferences
+                authDiskSource.storeUserBiometricUnlockKey(
+                    userId = mockUserId,
+                    biometricsKey = biometricsKey,
+                )
+                assertEquals(biometricsKey, awaitItem())
+            }
+        }
+
+    @Test
     fun `storeUserBiometricInitVector for non-null values should update SharedPreferences`() {
         val biometricsInitVectorBaseKey = "bwSecureStorage:biometricInitializationVector"
         val mockUserId = "mockUserId"
@@ -729,11 +817,11 @@ class AuthDiskSourceTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `storeUserBiometricUnlockKey should update the resulting flow from getUserBiometicUnlockKeyFlow`() =
+    fun `storeUserBiometricUnlockKey should update the resulting flow from getUserBiometricUnlockKeyFlow`() =
         runTest {
             val topSecretKey = "topsecret"
             val mockUserId = "mockUserId"
-            authDiskSource.getUserBiometicUnlockKeyFlow(mockUserId).test {
+            authDiskSource.getUserBiometricUnlockKeyFlow(mockUserId).test {
                 assertNull(awaitItem())
                 authDiskSource.storeUserBiometricUnlockKey(
                     userId = mockUserId,
@@ -778,6 +866,88 @@ class AuthDiskSourceTest {
             )
         assertEquals(
             mockPinProtectedUserKey,
+            actual,
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `storePinProtectedUserKeyEnvelope should update result flow from getPinProtectedUserKeyEnvelopeFlow`() =
+        runTest {
+            val topSecretKey = "topsecret"
+            val mockUserId = "mockUserId"
+            authDiskSource.getPinProtectedUserKeyEnvelopeFlow(mockUserId).test {
+                assertNull(awaitItem())
+                authDiskSource.storePinProtectedUserKeyEnvelope(
+                    userId = mockUserId,
+                    pinProtectedUserKeyEnvelope = topSecretKey,
+                )
+                assertEquals(topSecretKey, awaitItem())
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `storePinProtectedUserKeyEnvelope with inMemoryOnly true emits flow and stores only in memory`() =
+        runTest {
+            val userId = "mockUserId"
+            val envelope = "topSecretEnvelope"
+
+            authDiskSource.getPinProtectedUserKeyEnvelopeFlow(userId).test {
+                assertNull(awaitItem())
+                authDiskSource.storePinProtectedUserKeyEnvelope(
+                    userId = userId,
+                    pinProtectedUserKeyEnvelope = envelope,
+                    inMemoryOnly = true,
+                )
+                assertEquals(envelope, awaitItem())
+                assertEquals(envelope, authDiskSource.getPinProtectedUserKeyEnvelope(userId))
+                assertNull(
+                    fakeSharedPreferences.getString(
+                        "pinKeyEncryptedUserKeyEnvelope_$userId",
+                        null,
+                    ),
+                )
+            }
+        }
+
+    @Test
+    fun `getPinProtectedUserKeyEnvelope should pull from SharedPreferences`() {
+        val pinProtectedUserKeyEnvelopeBaseKey =
+            "bwPreferencesStorage:pinKeyEncryptedUserKeyEnvelope"
+        val mockUserId = "mockUserId"
+        val mockPinProtectedUserKeyEnvelope = "mockPinProtectedUserKeyEnvelope"
+        fakeSharedPreferences
+            .edit {
+                putString(
+                    "${pinProtectedUserKeyEnvelopeBaseKey}_$mockUserId",
+                    mockPinProtectedUserKeyEnvelope,
+                )
+            }
+        val actual = authDiskSource.getPinProtectedUserKeyEnvelope(userId = mockUserId)
+        assertEquals(
+            mockPinProtectedUserKeyEnvelope,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storePinProtectedUserKeyEnvelope should pull from SharedPreferences`() {
+        val pinProtectedUserKeyEnvelopeBaseKey =
+            "bwPreferencesStorage:pinKeyEncryptedUserKeyEnvelope"
+        val mockUserId = "mockUserId"
+        val mockPinProtectedUserKeyEnvelope = "mockPinProtectedUserKeyEnvelope"
+        authDiskSource.storePinProtectedUserKeyEnvelope(
+            userId = mockUserId,
+            pinProtectedUserKeyEnvelope = mockPinProtectedUserKeyEnvelope,
+        )
+        val actual = fakeSharedPreferences
+            .getString(
+                "${pinProtectedUserKeyEnvelopeBaseKey}_$mockUserId",
+                null,
+            )
+        assertEquals(
+            mockPinProtectedUserKeyEnvelope,
             actual,
         )
     }
@@ -899,8 +1069,8 @@ class AuthDiskSourceTest {
         val organizationsBaseKey = "bwPreferencesStorage:organizations"
         val mockUserId = "mockUserId"
         val mockOrganizations = listOf(
-            createMockOrganization(0),
-            createMockOrganization(1),
+            createMockOrganizationNetwork(number = 0),
+            createMockOrganizationNetwork(number = 1),
         )
         val mockOrganizationsMap = mockOrganizations.associateBy { it.id }
         fakeSharedPreferences
@@ -921,8 +1091,8 @@ class AuthDiskSourceTest {
     fun `getOrganizationsFlow should react to changes in getOrganizations`() = runTest {
         val mockUserId = "mockUserId"
         val mockOrganizations = listOf(
-            createMockOrganization(0),
-            createMockOrganization(1),
+            createMockOrganizationNetwork(number = 0),
+            createMockOrganizationNetwork(number = 1),
         )
         authDiskSource.getOrganizationsFlow(userId = mockUserId).test {
             // The initial values of the Flow and the property are in sync
@@ -943,8 +1113,8 @@ class AuthDiskSourceTest {
         val organizationsBaseKey = "bwPreferencesStorage:organizations"
         val mockUserId = "mockUserId"
         val mockOrganizations = listOf(
-            createMockOrganization(0),
-            createMockOrganization(1),
+            createMockOrganizationNetwork(number = 0),
+            createMockOrganizationNetwork(number = 1),
         )
         val mockOrganizationsMap = mockOrganizations.associateBy { it.id }
         authDiskSource.storeOrganizations(
@@ -1407,7 +1577,7 @@ private val USER_STATE = UserStateJson(
                 kdfMemory = 16,
                 kdfParallelism = 4,
                 isTwoFactorEnabled = false,
-                creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+                creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
                 userDecryptionOptions = UserDecryptionOptionsJson(
                     hasMasterPassword = true,
                     trustedDeviceUserDecryptionOptions = TrustedDeviceUserDecryptionOptionsJson(
@@ -1420,6 +1590,7 @@ private val USER_STATE = UserStateJson(
                     keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
                         keyConnectorUrl = "keyConnectorUrl",
                     ),
+                    masterPasswordUnlock = null,
                 ),
             ),
             tokens = AccountTokensJson(

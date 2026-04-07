@@ -35,7 +35,6 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 @Suppress("LargeClass")
 class AuthRequestManagerTest {
@@ -107,7 +106,7 @@ class AuthRequestManagerTest {
                 ipAddress = "192.168.0.1",
                 key = "public",
                 masterPasswordHash = "verySecureHash",
-                creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+                creationDate = Instant.parse("2024-09-13T00:00:00Z"),
                 responseDate = null,
                 requestApproved = false,
                 originUrl = "www.bitwarden.com",
@@ -185,7 +184,7 @@ class AuthRequestManagerTest {
                 ipAddress = "192.168.0.1",
                 key = "public",
                 masterPasswordHash = "verySecureHash",
-                creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+                creationDate = Instant.parse("2024-09-13T00:00:00Z"),
                 responseDate = null,
                 requestApproved = false,
                 originUrl = "www.bitwarden.com",
@@ -266,13 +265,13 @@ class AuthRequestManagerTest {
                 ipAddress = "192.168.0.1",
                 key = "public",
                 masterPasswordHash = "verySecureHash",
-                creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+                creationDate = Instant.parse("2024-09-13T00:00:00Z"),
                 responseDate = null,
                 requestApproved = false,
                 originUrl = "www.bitwarden.com",
             )
             val updatedAuthRequestResponseJson = authRequestResponseJson.copy(
-                responseDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+                responseDate = Instant.parse("2024-09-13T00:00:00Z"),
             )
             val authRequest = AuthRequest(
                 id = authRequestResponseJson.id,
@@ -334,13 +333,13 @@ class AuthRequestManagerTest {
                 ipAddress = "192.168.0.1",
                 key = "public",
                 masterPasswordHash = "verySecureHash",
-                creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+                creationDate = Instant.parse("2024-09-13T00:00:00Z"),
                 responseDate = null,
                 requestApproved = false,
                 originUrl = "www.bitwarden.com",
             )
             val updatedAuthRequestResponseJson = authRequestResponseJson.copy(
-                creationDate = ZonedDateTime.parse("2023-09-13T00:00Z"),
+                creationDate = Instant.parse("2023-09-13T00:00:00Z"),
             )
             val authRequest = AuthRequest(
                 id = authRequestResponseJson.id,
@@ -564,7 +563,7 @@ class AuthRequestManagerTest {
                 ZoneOffset.UTC,
             )
             val authRequestsResponse = AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE.copy(
-                creationDate = ZonedDateTime.ofInstant(fixedClock.instant(), ZoneOffset.UTC),
+                creationDate = fixedClock.instant(),
                 requestApproved = false,
             )
             val expectedOne = AuthRequestUpdatesResult.Update(authRequest = AUTH_REQUEST)
@@ -771,7 +770,7 @@ class AuthRequestManagerTest {
             )
             val authRequestResponseOne = AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE.asSuccess()
             val authRequestResponseJson = AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE.copy(
-                creationDate = ZonedDateTime.ofInstant(fixedClock.instant(), ZoneOffset.UTC),
+                creationDate = fixedClock.instant(),
                 requestApproved = false,
             )
             val authRequestResponseTwo = authRequestResponseJson.asSuccess()
@@ -961,7 +960,7 @@ class AuthRequestManagerTest {
                     ipAddress = "192.168.0.1",
                     key = "public",
                     masterPasswordHash = "verySecureHash",
-                    creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+                    creationDate = Instant.parse("2024-09-13T00:00:00Z"),
                     responseDate = null,
                     requestApproved = true,
                     originUrl = "www.bitwarden.com",
@@ -977,7 +976,7 @@ class AuthRequestManagerTest {
                     ipAddress = "192.168.0.1",
                     key = "public",
                     masterPasswordHash = "verySecureHash",
-                    creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+                    creationDate = Instant.parse("2024-09-13T00:00:00Z"),
                     responseDate = null,
                     requestApproved = true,
                     originUrl = "www.bitwarden.com",
@@ -1011,7 +1010,7 @@ class AuthRequestManagerTest {
                     ipAddress = "192.168.0.1",
                     key = "public",
                     masterPasswordHash = "verySecureHash",
-                    creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+                    creationDate = Instant.parse("2024-09-13T00:00:00Z"),
                     responseDate = null,
                     requestApproved = true,
                     originUrl = "www.bitwarden.com",
@@ -1095,7 +1094,7 @@ class AuthRequestManagerTest {
             ipAddress = "192.168.0.1",
             key = "key",
             masterPasswordHash = passwordHash,
-            creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+            creationDate = Instant.parse("2024-09-13T00:00:00Z"),
             responseDate = null,
             requestApproved = true,
             originUrl = "www.bitwarden.com",
@@ -1108,7 +1107,7 @@ class AuthRequestManagerTest {
                 ipAddress = "192.168.0.1",
                 key = "key",
                 masterPasswordHash = passwordHash,
-                creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+                creationDate = Instant.parse("2024-09-13T00:00:00Z"),
                 responseDate = null,
                 requestApproved = true,
                 originUrl = "www.bitwarden.com",
@@ -1177,7 +1176,7 @@ private val ACCOUNT: AccountJson = AccountJson(
         kdfParallelism = 4,
         userDecryptionOptions = null,
         isTwoFactorEnabled = false,
-        creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+        creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
     ),
     tokens = AccountTokensJson(
         accessToken = ACCESS_TOKEN,
@@ -1203,7 +1202,7 @@ private val AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE: AuthRequestsResponseJson.
         ipAddress = "192.168.0.1",
         key = "public",
         masterPasswordHash = "verySecureHash",
-        creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+        creationDate = Instant.parse("2024-09-13T00:00:00Z"),
         responseDate = null,
         requestApproved = true,
         originUrl = "www.bitwarden.com",
@@ -1216,7 +1215,7 @@ private val AUTH_REQUEST: AuthRequest = AuthRequest(
     ipAddress = "192.168.0.1",
     key = "public",
     masterPasswordHash = "verySecureHash",
-    creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+    creationDate = Instant.parse("2024-09-13T00:00:00Z"),
     responseDate = null,
     requestApproved = true,
     originUrl = "www.bitwarden.com",

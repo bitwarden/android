@@ -4,12 +4,12 @@ import androidx.annotation.DrawableRes
 import androidx.compose.material3.Text
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -170,7 +170,7 @@ sealed class SettingsEvent {
     /**
      * Navigate to the account security screen.
      */
-    data object NavigateAccountSecurityShortcut : SettingsEvent(), BackgroundEvent
+    data object NavigateAccountSecurityShortcut : SettingsEvent(), DeferredBackgroundEvent
 
     /**
      * Navigate to the appearance screen.
@@ -232,36 +232,36 @@ sealed class SettingsAction {
  */
 enum class Settings(
     val text: Text,
-    @DrawableRes val vectorIconRes: Int,
+    @field:DrawableRes val vectorIconRes: Int,
     val testTag: String,
 ) {
     ACCOUNT_SECURITY(
-        text = R.string.account_security.asText(),
+        text = BitwardenString.account_security.asText(),
         vectorIconRes = BitwardenDrawable.ic_locked,
         testTag = "AccountSecuritySettingsButton",
     ),
     AUTO_FILL(
-        text = R.string.autofill.asText(),
+        text = BitwardenString.autofill_noun.asText(),
         vectorIconRes = BitwardenDrawable.ic_check_mark,
         testTag = "AutofillSettingsButton",
     ),
     VAULT(
-        text = R.string.vault.asText(),
+        text = BitwardenString.vault.asText(),
         vectorIconRes = BitwardenDrawable.ic_vault_thin,
         testTag = "VaultSettingsButton",
     ),
     APPEARANCE(
-        text = R.string.appearance.asText(),
+        text = BitwardenString.appearance.asText(),
         vectorIconRes = BitwardenDrawable.ic_paintbrush,
         testTag = "AppearanceSettingsButton",
     ),
     OTHER(
-        text = R.string.other.asText(),
+        text = BitwardenString.other.asText(),
         vectorIconRes = BitwardenDrawable.ic_filter,
         testTag = "OtherSettingsButton",
     ),
     ABOUT(
-        text = R.string.about.asText(),
+        text = BitwardenString.about.asText(),
         vectorIconRes = BitwardenDrawable.ic_info_circle,
         testTag = "AboutSettingsButton",
     ),

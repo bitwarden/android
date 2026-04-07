@@ -3,9 +3,9 @@ package com.x8bit.bitwarden.ui.vault.feature.manualcodeentry
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -57,8 +57,8 @@ class ManualCodeEntryViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = ManualCodeEntryState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.authenticator_key_read_error.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.authenticator_key_read_error.asText(),
                     ),
                 )
             }

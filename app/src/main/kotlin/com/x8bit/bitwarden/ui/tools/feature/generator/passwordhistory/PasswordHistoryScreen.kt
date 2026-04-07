@@ -16,14 +16,13 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -31,12 +30,12 @@ import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
+import com.bitwarden.ui.platform.components.indicator.BitwardenCircularProgressIndicator
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.indicator.BitwardenCircularProgressIndicator
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import kotlinx.collections.immutable.persistentListOf
 
 /**
@@ -63,31 +62,27 @@ fun PasswordHistoryScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.password_history),
+                title = stringResource(id = BitwardenString.password_history),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                navigationIconContentDescription = stringResource(id = R.string.back),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(PasswordHistoryAction.CloseClick) }
+                navigationIconContentDescription = stringResource(id = BitwardenString.back),
+                onNavigationIconClick = {
+                    viewModel.trySendAction(PasswordHistoryAction.CloseClick)
                 },
                 actions = {
-                    if (state.menuEnabled) {
-                        BitwardenOverflowActionItem(
-                            contentDescription = stringResource(R.string.more),
-                            menuItemDataList = persistentListOf(
-                                OverflowMenuItemData(
-                                    text = stringResource(id = R.string.clear),
-                                    onClick = remember(viewModel) {
-                                        {
-                                            viewModel.trySendAction(
-                                                PasswordHistoryAction.PasswordClearClick,
-                                            )
-                                        }
-                                    },
-                                ),
+                    BitwardenOverflowActionItem(
+                        isVisible = state.menuEnabled,
+                        menuItemDataList = persistentListOf(
+                            OverflowMenuItemData(
+                                text = stringResource(id = BitwardenString.clear),
+                                onClick = {
+                                    viewModel.trySendAction(
+                                        PasswordHistoryAction.PasswordClearClick,
+                                    )
+                                },
                             ),
-                        )
-                    }
+                        ),
+                    )
                 },
             )
         },
@@ -195,7 +190,7 @@ private fun PasswordHistoryEmpty(modifier: Modifier = Modifier) {
     ) {
         Text(
             modifier = Modifier.testTag("NoPasswordsDisplayedLabel"),
-            text = stringResource(id = R.string.no_passwords_to_list),
+            text = stringResource(id = BitwardenString.no_passwords_to_list),
             style = BitwardenTheme.typography.bodyMedium,
         )
         Spacer(modifier = Modifier.navigationBarsPadding())

@@ -9,7 +9,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import java.time.ZonedDateTime
+import java.time.Instant
 
 class TrustDeviceResponseExtensionsTest {
     @Test
@@ -55,12 +55,14 @@ private val DEFAULT_USER_DECRYPTION_OPTIONS: UserDecryptionOptionsJson = UserDec
     hasMasterPassword = false,
     trustedDeviceUserDecryptionOptions = DEFAULT_TRUSTED_DEVICE_USER_DECRYPTION_OPTIONS,
     keyConnectorUserDecryptionOptions = null,
+    masterPasswordUnlock = null,
 )
 
 private val UPDATED_USER_DECRYPTION_OPTIONS: UserDecryptionOptionsJson = UserDecryptionOptionsJson(
     hasMasterPassword = false,
     trustedDeviceUserDecryptionOptions = UPDATED_TRUSTED_DEVICE_USER_DECRYPTION_OPTIONS,
     keyConnectorUserDecryptionOptions = null,
+    masterPasswordUnlock = null,
 )
 
 private val DEFAULT_ACCOUNT = AccountJson(
@@ -80,7 +82,7 @@ private val DEFAULT_ACCOUNT = AccountJson(
         kdfParallelism = 4,
         userDecryptionOptions = DEFAULT_USER_DECRYPTION_OPTIONS,
         isTwoFactorEnabled = false,
-        creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+        creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
     ),
     settings = AccountJson.Settings(
         environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
@@ -104,7 +106,7 @@ private val UPDATED_ACCOUNT = AccountJson(
         kdfParallelism = 4,
         userDecryptionOptions = UPDATED_USER_DECRYPTION_OPTIONS,
         isTwoFactorEnabled = false,
-        creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+        creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
     ),
     settings = AccountJson.Settings(
         environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,

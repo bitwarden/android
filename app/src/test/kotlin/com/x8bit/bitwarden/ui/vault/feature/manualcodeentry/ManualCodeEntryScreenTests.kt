@@ -1,8 +1,5 @@
 package com.x8bit.bitwarden.ui.vault.feature.manualcodeentry
 
-import android.app.Application
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertTextEquals
@@ -14,20 +11,19 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import androidx.test.core.app.ApplicationProvider
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.util.startAppSettingsActivity
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.performCustomAccessibilityAction
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.slot
+import io.mockk.mockkStatic
 import io.mockk.verify
-import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -40,7 +36,7 @@ class ManualCodeEntryScreenTests : BitwardenComposeTest() {
     private var onNavigateToScanQrCodeCalled = false
 
     private val mutableEventFlow = bufferedMutableSharedFlow<ManualCodeEntryEvent>()
-    private val mutableStateFlow = MutableStateFlow<ManualCodeEntryState>(DEFAULT_STATE)
+    private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
 
     private val fakePermissionManager: FakePermissionManager = FakePermissionManager()
     private val intentManager = mockk<IntentManager>(relaxed = true)
@@ -78,22 +74,11 @@ class ManualCodeEntryScreenTests : BitwardenComposeTest() {
 
     @Test
     fun `on NavigateToAppSettings event should invoke intent handler`() {
-        mutableEventFlow.tryEmit(ManualCodeEntryEvent.NavigateToAppSettings)
-
-        val uri = Uri.parse(
-            "package:" +
-                ApplicationProvider
-                    .getApplicationContext<Application>()
-                    .packageName,
-        )
-
-        val intentSlot = slot<Intent>()
-        verify { intentManager.startActivity(capture(intentSlot)) }
-
-        assertEquals(
-            uri,
-            intentSlot.captured.data,
-        )
+        mockkStatic(IntentManager::startAppSettingsActivity) {
+            every { intentManager.startAppSettingsActivity() } returns true
+            mutableEventFlow.tryEmit(ManualCodeEntryEvent.NavigateToAppSettings)
+            verify(exactly = 1) { intentManager.startAppSettingsActivity() }
+        }
     }
 
     @Suppress("MaxLineLength")
@@ -103,7 +88,7 @@ class ManualCodeEntryScreenTests : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithText(text = "Cannot add authenticator key? Scan QR Code")
-            .performCustomAccessibilityAction(label = "Scan QR Code")
+            .performCustomAccessibilityAction(label = "Scan QR code")
 
         verify {
             viewModel.trySendAction(ManualCodeEntryAction.ScanQrCodeTextClick)
@@ -116,7 +101,7 @@ class ManualCodeEntryScreenTests : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithText(text = "Cannot add authenticator key? Scan QR Code")
-            .performCustomAccessibilityAction(label = "Scan QR Code")
+            .performCustomAccessibilityAction(label = "Scan QR code")
 
         composeTestRule
             .onAllNodesWithText("Enable camera permission to use the scanner")
@@ -140,8 +125,8 @@ class ManualCodeEntryScreenTests : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 dialog = ManualCodeEntryState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.authenticator_key_read_error.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.authenticator_key_read_error.asText(),
                 ),
             )
         }
@@ -169,8 +154,8 @@ class ManualCodeEntryScreenTests : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 dialog = ManualCodeEntryState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.authenticator_key_read_error.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.authenticator_key_read_error.asText(),
                 ),
             )
         }
@@ -192,7 +177,7 @@ class ManualCodeEntryScreenTests : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithText(text = "Cannot add authenticator key? Scan QR Code")
-            .performCustomAccessibilityAction(label = "Scan QR Code")
+            .performCustomAccessibilityAction(label = "Scan QR code")
 
         composeTestRule
             .onAllNodesWithText("Enable camera permission to use the scanner")

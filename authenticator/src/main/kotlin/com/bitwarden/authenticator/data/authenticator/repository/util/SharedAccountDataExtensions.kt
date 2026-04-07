@@ -1,6 +1,6 @@
 package com.bitwarden.authenticator.data.authenticator.repository.util
 
-import android.net.Uri
+import androidx.core.net.toUri
 import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
 import com.bitwarden.authenticatorbridge.model.SharedAccountData
@@ -10,22 +10,33 @@ import com.bitwarden.authenticatorbridge.model.SharedAccountData
  */
 fun List<SharedAccountData.Account>.toAuthenticatorItems(): List<AuthenticatorItem> =
     flatMap { sharedAccount ->
-        sharedAccount.totpUris.mapNotNull { totpUriString ->
+        sharedAccount.cipherData.mapNotNull { cipherData ->
             runCatching {
-                val uri = Uri.parse(totpUriString)
-                val issuer = uri.getQueryParameter(TotpCodeManager.ISSUER_PARAM)
-                val label = uri.pathSegments
+                val uri = cipherData.uri.toUri()
+                val issuer = uri
+                    .getQueryParameter(TotpCodeManager.ISSUER_PARAM)
+                    ?.takeUnless { it.isBlank() }
+                    ?: cipherData.name.takeUnless {
+                        // TODO: PM-34085 The cipher name will never be blank once we
+                        // TODO: remove the legacy support.
+                        it.isBlank()
+                    }
+                val label = uri
+                    .pathSegments
                     .firstOrNull()
                     ?.removePrefix("$issuer:")
+                    ?.takeUnless { it.isBlank() }
+                    ?: cipherData.username
 
                 AuthenticatorItem(
+                    cipherId = cipherData.id,
                     source = AuthenticatorItem.Source.Shared(
                         userId = sharedAccount.userId,
                         nameOfUser = sharedAccount.name,
                         email = sharedAccount.email,
                         environmentLabel = sharedAccount.environmentLabel,
                     ),
-                    otpUri = totpUriString,
+                    otpUri = cipherData.uri,
                     issuer = issuer,
                     label = label,
                 )

@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.data.platform.manager.di
 
 import android.content.Context
+import com.bitwarden.authenticator.data.auth.datasource.disk.AuthDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.AuthenticatorDiskSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
 import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
@@ -18,10 +19,19 @@ import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClip
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManagerImpl
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManagerImpl
+import com.bitwarden.authenticator.data.platform.manager.lock.AppLockManager
+import com.bitwarden.authenticator.data.platform.manager.lock.AppLockManagerImpl
 import com.bitwarden.authenticator.data.platform.repository.DebugMenuRepository
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
-import com.bitwarden.data.manager.DispatcherManager
-import com.bitwarden.data.manager.DispatcherManagerImpl
+import com.bitwarden.core.data.manager.UuidManager
+import com.bitwarden.core.data.manager.UuidManagerImpl
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManagerImpl
+import com.bitwarden.core.data.manager.realtime.RealtimeManager
+import com.bitwarden.core.data.manager.realtime.RealtimeManagerImpl
+import com.bitwarden.core.data.manager.toast.ToastManager
+import com.bitwarden.core.data.manager.toast.ToastManagerImpl
+import com.bitwarden.data.manager.appstate.AppStateManager
 import com.bitwarden.data.repository.ServerConfigRepository
 import dagger.Module
 import dagger.Provides
@@ -39,9 +49,45 @@ object PlatformManagerModule {
 
     @Provides
     @Singleton
+    fun provideAppLockManager(
+        appStateManager: AppStateManager,
+        realtimeManager: RealtimeManager,
+        settingsRepository: SettingsRepository,
+        authDiskSource: AuthDiskSource,
+        settingsDiskSource: SettingsDiskSource,
+        dispatcherManager: DispatcherManager,
+        @ApplicationContext context: Context,
+    ): AppLockManager = AppLockManagerImpl(
+        appStateManager = appStateManager,
+        realtimeManager = realtimeManager,
+        settingsRepository = settingsRepository,
+        authDiskSource = authDiskSource,
+        settingsDiskSource = settingsDiskSource,
+        dispatcherManager = dispatcherManager,
+        context = context,
+    )
+
+    @Provides
+    @Singleton
     fun provideBitwardenClipboardManager(
         @ApplicationContext context: Context,
-    ): BitwardenClipboardManager = BitwardenClipboardManagerImpl(context)
+        toastManager: ToastManager,
+    ): BitwardenClipboardManager = BitwardenClipboardManagerImpl(
+        context = context,
+        toastManager = toastManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideRealtimeManager(): RealtimeManager = RealtimeManagerImpl()
+
+    @Provides
+    @Singleton
+    fun provideToastManager(
+        @ApplicationContext context: Context,
+    ): ToastManager = ToastManagerImpl(
+        context = context,
+    )
 
     @Provides
     @Singleton
@@ -54,8 +100,12 @@ object PlatformManagerModule {
     @Provides
     @Singleton
     fun provideBiometricsEncryptionManager(
+        authDiskSource: AuthDiskSource,
         settingsDiskSource: SettingsDiskSource,
-    ): BiometricsEncryptionManager = BiometricsEncryptionManagerImpl(settingsDiskSource)
+    ): BiometricsEncryptionManager = BiometricsEncryptionManagerImpl(
+        authDiskSource = authDiskSource,
+        settingsDiskSource = settingsDiskSource,
+    )
 
     @Provides
     @Singleton
@@ -68,11 +118,19 @@ object PlatformManagerModule {
     @Singleton
     fun provideImportManager(
         authenticatorDiskSource: AuthenticatorDiskSource,
-    ): ImportManager = ImportManagerImpl(authenticatorDiskSource)
+        uuidManager: UuidManager,
+    ): ImportManager = ImportManagerImpl(
+        authenticatorDiskSource = authenticatorDiskSource,
+        uuidManager = uuidManager,
+    )
 
     @Provides
     @Singleton
     fun provideEncodingManager(): BitwardenEncodingManager = BitwardenEncodingManagerImpl()
+
+    @Provides
+    @Singleton
+    fun provideUuidManager(): UuidManager = UuidManagerImpl()
 
     @Provides
     @Singleton

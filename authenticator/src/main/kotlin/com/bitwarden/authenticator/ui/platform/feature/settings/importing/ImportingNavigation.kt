@@ -3,7 +3,7 @@ package com.bitwarden.authenticator.ui.platform.feature.settings.importing
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
 import kotlinx.serialization.Serializable
 
 /**
@@ -18,7 +18,7 @@ data object ImportRoute
 fun NavGraphBuilder.importingDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions<ImportRoute> {
+    composableWithPushTransitions<ImportRoute> {
         ImportingScreen(
             onNavigateBack = onNavigateBack,
         )

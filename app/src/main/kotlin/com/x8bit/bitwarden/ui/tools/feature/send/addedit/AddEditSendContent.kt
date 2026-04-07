@@ -37,20 +37,22 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.animation.AnimateNullableContentVisibility
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedErrorButton
+import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
+import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.stepper.BitwardenStepper
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
-import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.components.AddEditSendAuthTypeChooser
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.components.AddEditSendCustomDateChooser
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.components.AddEditSendDeletionDateChooser
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.handlers.AddEditSendHandlers
@@ -76,7 +78,7 @@ fun AddEditSendContent(
         Spacer(modifier = Modifier.height(height = 12.dp))
         if (policyDisablesSend) {
             BitwardenInfoCalloutCard(
-                text = stringResource(id = R.string.send_disabled_warning),
+                text = stringResource(id = BitwardenString.send_disabled_warning),
                 modifier = Modifier
                     .standardHorizontalMargin()
                     .fillMaxWidth()
@@ -87,7 +89,7 @@ fun AddEditSendContent(
 
         if (policySendOptionsInEffect) {
             BitwardenInfoCalloutCard(
-                text = stringResource(id = R.string.send_options_policy_in_effect),
+                text = stringResource(id = BitwardenString.send_options_policy_in_effect),
                 modifier = Modifier
                     .testTag(tag = "SendPolicyInEffectLabel")
                     .standardHorizontalMargin()
@@ -97,7 +99,7 @@ fun AddEditSendContent(
         }
 
         BitwardenListHeaderText(
-            label = stringResource(id = R.string.send_details),
+            label = stringResource(id = BitwardenString.send_details),
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin()
@@ -108,7 +110,7 @@ fun AddEditSendContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
-            label = stringResource(id = R.string.send_name_required),
+            label = stringResource(id = BitwardenString.send_name_required),
             readOnly = policyDisablesSend,
             value = state.common.name,
             onValueChange = addSendHandlers.onNameChange,
@@ -159,9 +161,30 @@ fun AddEditSendContent(
             )
         }
 
+        if (state.common.isSendEmailVerificationEnabled) {
+            Spacer(modifier = Modifier.height(height = 8.dp))
+            AddEditSendAuthTypeChooser(
+                sendAuth = state.common.sendAuth,
+                onAuthTypeSelect = addSendHandlers.onAuthTypeSelect,
+                onPasswordChange = addSendHandlers.onAuthPasswordChange,
+                onEmailValueChange = addSendHandlers.onEmailValueChange,
+                onRemoveEmailClick = addSendHandlers.onEmailsRemoveClick,
+                onAddNewEmailClick = addSendHandlers.onAddNewEmailClick,
+                onOpenPasswordGeneratorClick = addSendHandlers.onOpenPasswordGeneratorClick,
+                onPasswordCopyClick = addSendHandlers.onPasswordCopyClick,
+                password = state.common.passwordInput,
+                isEnabled = !policyDisablesSend,
+                isSendsRestrictedByPolicy = policyDisablesSend,
+                modifier = Modifier
+                    .testTag("SendAuthTypeChooser")
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+        }
+
         AddEditSendOptions(
             state = state,
-            sendRestrictionPolicy = policyDisablesSend,
+            isSendsRestrictedByPolicy = policyDisablesSend,
             isAddMode = isAddMode,
             addSendHandlers = addSendHandlers,
         )
@@ -188,10 +211,10 @@ private fun DeleteButton(
     var shouldShowDeleteConfirmationDialog by rememberSaveable { mutableStateOf(value = false) }
     if (shouldShowDeleteConfirmationDialog) {
         BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.delete),
-            message = stringResource(id = R.string.are_you_sure_delete_send),
-            confirmButtonText = stringResource(id = R.string.yes),
-            dismissButtonText = stringResource(id = R.string.cancel),
+            title = stringResource(id = BitwardenString.delete),
+            message = stringResource(id = BitwardenString.are_you_sure_delete_send),
+            confirmButtonText = stringResource(id = BitwardenString.yes),
+            dismissButtonText = stringResource(id = BitwardenString.cancel),
             onConfirmClick = {
                 onDeleteClick()
                 shouldShowDeleteConfirmationDialog = false
@@ -201,7 +224,7 @@ private fun DeleteButton(
         )
     }
     BitwardenOutlinedErrorButton(
-        label = stringResource(id = R.string.delete_send),
+        label = stringResource(id = BitwardenString.delete_send),
         onClick = { shouldShowDeleteConfirmationDialog = true },
         icon = rememberVectorPainter(id = BitwardenDrawable.ic_trash_small),
         modifier = modifier,
@@ -216,7 +239,7 @@ private fun ColumnScope.TextTypeContent(
 ) {
     Spacer(modifier = Modifier.height(height = 8.dp))
     BitwardenTextField(
-        label = stringResource(id = R.string.text_to_share),
+        label = stringResource(id = BitwardenString.text_to_share),
         readOnly = policyDisablesSend,
         value = textType.input,
         singleLine = false,
@@ -229,7 +252,7 @@ private fun ColumnScope.TextTypeContent(
     )
     Spacer(modifier = Modifier.height(height = 8.dp))
     BitwardenSwitch(
-        label = stringResource(id = R.string.hide_text_by_default),
+        label = stringResource(id = BitwardenString.hide_text_by_default),
         isChecked = textType.isHideByDefaultChecked,
         onCheckedChange = addSendHandlers.onIsHideByDefaultToggle,
         readOnly = policyDisablesSend,
@@ -266,7 +289,7 @@ private fun ColumnScope.FileTypeContent(
         )
         Spacer(modifier = Modifier.height(height = 8.dp))
         Text(
-            text = stringResource(id = R.string.required_max_file_size),
+            text = stringResource(id = BitwardenString.required_max_file_size),
             color = BitwardenTheme.colorScheme.text.secondary,
             style = BitwardenTheme.typography.bodySmall,
             modifier = Modifier
@@ -298,7 +321,7 @@ private fun ColumnScope.FileTypeContent(
             Spacer(modifier = Modifier.height(height = 8.dp))
         }
         BitwardenOutlinedButton(
-            label = stringResource(id = R.string.choose_file),
+            label = stringResource(id = BitwardenString.choose_file),
             onClick = {
                 if (permissionsManager.checkPermission(permission = Manifest.permission.CAMERA)) {
                     addSendHandlers.onChooseFileClick(true)
@@ -306,6 +329,7 @@ private fun ColumnScope.FileTypeContent(
                     chooseFileCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
                 }
             },
+            isExternalLink = true,
             modifier = Modifier
                 .testTag(tag = "SendChooseFileButton")
                 .fillMaxWidth()
@@ -313,7 +337,7 @@ private fun ColumnScope.FileTypeContent(
         )
         Spacer(modifier = Modifier.height(height = 8.dp))
         Text(
-            text = stringResource(id = R.string.required_max_file_size),
+            text = stringResource(id = BitwardenString.required_max_file_size),
             color = BitwardenTheme.colorScheme.text.secondary,
             style = BitwardenTheme.typography.bodySmall,
             modifier = Modifier
@@ -352,7 +376,7 @@ private fun ColumnScope.FileTypeContent(
  * Displays a collapsable set of new send options.
  *
  * @param state The content state.
- * @param sendRestrictionPolicy When `true`, indicates that there's a policy preventing the user
+ * @param isSendsRestrictedByPolicy When `true`, indicates that there's a policy preventing the user
  * from editing or creating sends.
  * @param isAddMode When `true`, indicates that we are creating a new send and `false` when editing
  * an existing send.
@@ -362,11 +386,12 @@ private fun ColumnScope.FileTypeContent(
 @Composable
 private fun AddEditSendOptions(
     state: AddEditSendState.ViewState.Content,
-    sendRestrictionPolicy: Boolean,
+    isSendsRestrictedByPolicy: Boolean,
     isAddMode: Boolean,
     addSendHandlers: AddEditSendHandlers,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
+    var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
     BitwardenExpandingHeader(
         isExpanded = isExpanded,
         onClick = { isExpanded = !isExpanded },
@@ -383,10 +408,10 @@ private fun AddEditSendOptions(
     ) {
         Column {
             BitwardenStepper(
-                label = stringResource(id = R.string.maximum_access_count),
+                label = stringResource(id = BitwardenString.maximum_access_count),
                 supportingContent = {
                     Text(
-                        text = stringResource(id = R.string.maximum_access_count_info),
+                        text = stringResource(id = BitwardenString.maximum_access_count_info),
                         style = BitwardenTheme.typography.bodySmall,
                         color = BitwardenTheme.colorScheme.text.secondary,
                         modifier = Modifier.fillMaxWidth(),
@@ -403,7 +428,7 @@ private fun AddEditSendOptions(
                             Spacer(modifier = Modifier.height(16.dp))
                             Text(
                                 text = stringResource(
-                                    id = R.string.current_access_count,
+                                    id = BitwardenString.current_access_count,
                                     formatArgs = arrayOf(it),
                                 ),
                                 style = BitwardenTheme.typography.bodySmall,
@@ -415,46 +440,90 @@ private fun AddEditSendOptions(
                 },
                 value = state.common.maxAccessCount,
                 onValueChange = addSendHandlers.onMaxAccessCountChange,
-                isDecrementEnabled = state.common.maxAccessCount != null && !sendRestrictionPolicy,
-                isIncrementEnabled = !sendRestrictionPolicy,
+                isDecrementEnabled = state.common.maxAccessCount != null &&
+                    !isSendsRestrictedByPolicy,
+                isIncrementEnabled = !isSendsRestrictedByPolicy,
                 range = 0..Int.MAX_VALUE,
-                textFieldReadOnly = sendRestrictionPolicy,
+                textFieldReadOnly = isSendsRestrictedByPolicy,
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .testTag("SendMaxAccessCountEntry")
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            BitwardenPasswordField(
-                label = stringResource(id = R.string.new_password),
-                supportingText = stringResource(id = R.string.password_info),
-                readOnly = sendRestrictionPolicy,
-                value = state.common.passwordInput,
-                onValueChange = addSendHandlers.onPasswordChange,
-                passwordFieldTestTag = "SendNewPasswordEntry",
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin(),
-            )
+
+            if (!state.common.isSendEmailVerificationEnabled) {
+                Spacer(modifier = Modifier.height(8.dp))
+                BitwardenPasswordField(
+                    label = stringResource(id = BitwardenString.new_password),
+                    supportingText = stringResource(id = BitwardenString.password_info),
+                    readOnly = isSendsRestrictedByPolicy,
+                    value = state.common.passwordInput,
+                    onValueChange = addSendHandlers.onPasswordChange,
+                    passwordFieldTestTag = "SendNewPasswordEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin(),
+                ) {
+                    BitwardenStandardIconButton(
+                        vectorIconRes = BitwardenDrawable.ic_generate,
+                        contentDescription = stringResource(id = BitwardenString.generate_password),
+                        onClick = {
+                            if (state.common.passwordInput.isEmpty()) {
+                                addSendHandlers.onOpenPasswordGeneratorClick()
+                            } else {
+                                shouldShowDialog = true
+                            }
+                        },
+                        modifier = Modifier.testTag(tag = "RegeneratePasswordButton"),
+                    )
+                    BitwardenStandardIconButton(
+                        vectorIconRes = BitwardenDrawable.ic_copy,
+                        contentDescription = stringResource(id = BitwardenString.copy_password),
+                        isEnabled = state.common.passwordInput.isNotEmpty(),
+                        onClick = {
+                            addSendHandlers.onPasswordCopyClick(state.common.passwordInput)
+                        },
+                        modifier = Modifier.testTag(tag = "CopyPasswordButton"),
+                    )
+                }
+            }
+            if (shouldShowDialog) {
+                BitwardenTwoButtonDialog(
+                    title = stringResource(id = BitwardenString.password),
+                    message = stringResource(id = BitwardenString.password_override_alert),
+                    confirmButtonText = stringResource(id = BitwardenString.yes),
+                    dismissButtonText = stringResource(id = BitwardenString.no),
+                    onConfirmClick = {
+                        shouldShowDialog = false
+                        addSendHandlers.onOpenPasswordGeneratorClick()
+                    },
+                    onDismissClick = {
+                        shouldShowDialog = false
+                    },
+                    onDismissRequest = {
+                        shouldShowDialog = false
+                    },
+                )
+            }
             Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenSwitch(
                 modifier = Modifier
                     .testTag("SendHideEmailSwitch")
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
-                label = stringResource(id = R.string.hide_email),
+                label = stringResource(id = BitwardenString.hide_email),
                 isChecked = state.common.isHideEmailChecked,
                 onCheckedChange = addSendHandlers.onHideEmailToggle,
-                readOnly = sendRestrictionPolicy,
+                readOnly = isSendsRestrictedByPolicy,
                 enabled = state.common.isHideEmailChecked || state.common.isHideEmailAddressEnabled,
                 cardStyle = CardStyle.Full,
             )
             Spacer(modifier = Modifier.height(8.dp))
             BitwardenTextField(
-                label = stringResource(id = R.string.private_notes),
-                readOnly = sendRestrictionPolicy,
+                label = stringResource(id = BitwardenString.private_notes),
+                readOnly = isSendsRestrictedByPolicy,
                 value = state.common.noteInput,
                 singleLine = false,
                 onValueChange = addSendHandlers.onNoteChange,

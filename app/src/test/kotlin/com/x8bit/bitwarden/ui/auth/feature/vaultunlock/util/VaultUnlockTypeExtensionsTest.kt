@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util
 
 import androidx.compose.ui.text.input.KeyboardType
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -11,8 +11,8 @@ class VaultUnlockTypeExtensionsTest {
     @Test
     fun `unlockScreenTitle should return the correct title for each type`() {
         mapOf(
-            VaultUnlockType.MASTER_PASSWORD to R.string.verify_master_password.asText(),
-            VaultUnlockType.PIN to R.string.verify_pin.asText(),
+            VaultUnlockType.MASTER_PASSWORD to BitwardenString.verify_master_password.asText(),
+            VaultUnlockType.PIN to BitwardenString.verify_pin.asText(),
         )
             .forEach { (type, expected) ->
                 assertEquals(
@@ -25,8 +25,9 @@ class VaultUnlockTypeExtensionsTest {
     @Test
     fun `unlockScreenMessage should return the correct title for each type`() {
         mapOf(
-            VaultUnlockType.MASTER_PASSWORD to R.string.vault_locked_master_password.asText(),
-            VaultUnlockType.PIN to R.string.vault_locked_pin.asText(),
+            VaultUnlockType.MASTER_PASSWORD to
+                BitwardenString.vault_locked_master_password.asText(),
+            VaultUnlockType.PIN to BitwardenString.vault_locked_pin.asText(),
         )
             .forEach { (type, expected) ->
                 assertEquals(
@@ -39,8 +40,8 @@ class VaultUnlockTypeExtensionsTest {
     @Test
     fun `unlockScreenInputLabel should return the correct title for each type`() {
         mapOf(
-            VaultUnlockType.MASTER_PASSWORD to R.string.master_password.asText(),
-            VaultUnlockType.PIN to R.string.pin.asText(),
+            VaultUnlockType.MASTER_PASSWORD to BitwardenString.master_password.asText(),
+            VaultUnlockType.PIN to BitwardenString.pin.asText(),
         )
             .forEach { (type, expected) ->
                 assertEquals(
@@ -53,8 +54,8 @@ class VaultUnlockTypeExtensionsTest {
     @Test
     fun `unlockScreenErrorMessage should return the correct title for each type`() {
         mapOf(
-            VaultUnlockType.MASTER_PASSWORD to R.string.invalid_master_password.asText(),
-            VaultUnlockType.PIN to R.string.invalid_pin.asText(),
+            VaultUnlockType.MASTER_PASSWORD to BitwardenString.invalid_master_password.asText(),
+            VaultUnlockType.PIN to BitwardenString.invalid_pin.asText(),
         )
             .forEach { (type, expected) ->
                 assertEquals(
@@ -81,10 +82,11 @@ class VaultUnlockTypeExtensionsTest {
     @Test
     fun `emptyInputDialogMessage should return the correct title for each type`() {
         mapOf(
-            VaultUnlockType.MASTER_PASSWORD to R.string.validation_field_required.asText(
-                R.string.master_password.asText(),
+            VaultUnlockType.MASTER_PASSWORD to BitwardenString.validation_field_required.asText(
+                BitwardenString.master_password.asText(),
             ),
-            VaultUnlockType.PIN to R.string.validation_field_required.asText(R.string.pin.asText()),
+            VaultUnlockType.PIN to
+                BitwardenString.validation_field_required.asText(BitwardenString.pin.asText()),
         )
             .forEach { (type, expected) ->
                 assertEquals(

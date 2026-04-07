@@ -113,7 +113,7 @@ class PasswordHistoryScreenTest : BitwardenComposeTest() {
     @Test
     fun `clicking the Clear button in the overflow menu should send PasswordClearClick action`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .performClick()
 
         composeTestRule
@@ -128,7 +128,7 @@ class PasswordHistoryScreenTest : BitwardenComposeTest() {
     @Test
     fun `Clear button should depend on state`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .performClick()
 
         composeTestRule
@@ -142,7 +142,7 @@ class PasswordHistoryScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .assertIsNotDisplayed()
 
         composeTestRule

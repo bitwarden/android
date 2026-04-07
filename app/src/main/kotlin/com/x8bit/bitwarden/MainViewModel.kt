@@ -2,33 +2,39 @@ package com.x8bit.bitwarden
 
 import android.content.Intent
 import android.os.Parcelable
+import androidx.browser.auth.AuthTabIntent
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.toast.ToastManager
+import com.bitwarden.cxf.model.ImportCredentialsRequestData
+import com.bitwarden.cxf.util.getProviderImportCredentialsRequest
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
-import com.bitwarden.ui.util.Text
-import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.platform.manager.share.ShareManager
+import com.bitwarden.ui.platform.model.TotpData
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.getCookieCallbackResult
+import com.x8bit.bitwarden.data.auth.repository.util.getDuoCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.getSsoCallbackResult
+import com.x8bit.bitwarden.data.auth.repository.util.getWebAuthResult
 import com.x8bit.bitwarden.data.auth.util.getCompleteRegistrationDataIntentOrNull
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
-import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
-import com.x8bit.bitwarden.data.credentials.util.getCreateCredentialRequestOrNull
-import com.x8bit.bitwarden.data.credentials.util.getFido2AssertionRequestOrNull
-import com.x8bit.bitwarden.data.credentials.util.getGetCredentialsRequestOrNull
+import com.x8bit.bitwarden.data.credentials.manager.CredentialProviderRequestManager
+import com.x8bit.bitwarden.data.credentials.manager.model.CredentialProviderRequest
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -36,20 +42,23 @@ import com.x8bit.bitwarden.data.platform.util.isAddTotpLoginItemFromAuthenticato
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import com.x8bit.bitwarden.ui.platform.util.isAccountSecurityShortcut
 import com.x8bit.bitwarden.ui.platform.util.isMyVaultShortcut
 import com.x8bit.bitwarden.ui.platform.util.isPasswordGeneratorShortcut
-import com.x8bit.bitwarden.ui.vault.model.TotpData
+import com.x8bit.bitwarden.ui.platform.util.isPremiumCheckoutCallback
 import com.x8bit.bitwarden.ui.vault.util.getTotpDataOrNull
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -58,22 +67,23 @@ import java.time.Clock
 import javax.inject.Inject
 
 private const val SPECIAL_CIRCUMSTANCE_KEY = "special-circumstance"
-private const val ANIMATION_REFRESH_DELAY = 500L
+private const val ANIMATION_DEBOUNCE_DELAY_MS = 500L
 
 /**
  * A view model that helps launch actions for the [MainActivity].
  */
+@OptIn(FlowPreview::class)
 @Suppress("LongParameterList", "TooManyFunctions")
 @HiltViewModel
 class MainViewModel @Inject constructor(
     accessibilitySelectionManager: AccessibilitySelectionManager,
     autofillSelectionManager: AutofillSelectionManager,
-    featureFlagManager: FeatureFlagManager,
+    cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
     private val addTotpItemFromAuthenticatorManager: AddTotpItemFromAuthenticatorManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val garbageCollectionManager: GarbageCollectionManager,
-    private val bitwardenCredentialManager: BitwardenCredentialManager,
-    private val intentManager: IntentManager,
+    private val credentialProviderRequestManager: CredentialProviderRequestManager,
+    private val shareManager: ShareManager,
     private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
     private val authRepository: AuthRepository,
@@ -81,13 +91,11 @@ class MainViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val appResumeManager: AppResumeManager,
     private val clock: Clock,
+    private val toastManager: ToastManager,
 ) : BaseViewModel<MainState, MainEvent, MainAction>(
     initialState = MainState(
         theme = settingsRepository.appTheme,
         isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
-        isErrorReportingDialogEnabled = featureFlagManager.getFeatureFlag(
-            key = FlagKey.MobileErrorReporting,
-        ),
         isDynamicColorsEnabled = settingsRepository.isDynamicColorsEnabled,
     ),
 ) {
@@ -104,12 +112,6 @@ class MainViewModel @Inject constructor(
         specialCircumstanceManager
             .specialCircumstanceStateFlow
             .onEach { specialCircumstance = it }
-            .launchIn(viewModelScope)
-
-        featureFlagManager
-            .getFeatureFlagFlow(key = FlagKey.MobileErrorReporting)
-            .map { MainAction.Internal.OnMobileErrorReportingReceive(it) }
-            .onEach(::sendAction)
             .launchIn(viewModelScope)
 
         accessibilitySelectionManager
@@ -145,36 +147,30 @@ class MainViewModel @Inject constructor(
             .onEach(::trySendAction)
             .launchIn(viewModelScope)
 
-        authRepository
-            .userStateFlow
-            .drop(count = 1)
-            // Trigger an action whenever the current user changes or we go into/out of a pending
-            // account state (which acts like switching to a temporary user).
-            .map { it?.activeUserId to it?.hasPendingAccountAddition }
-            .distinctUntilChanged()
-            .onEach {
-                // Switching between account states often involves some kind of animation (ex:
-                // account switcher) that we might want to give time to finish before triggering
-                // a refresh.
-                delay(ANIMATION_REFRESH_DELAY)
-                trySendAction(MainAction.Internal.CurrentUserStateChange)
-            }
+        merge(
+            authRepository
+                .userStateFlow
+                .drop(count = 1)
+                // Trigger an action whenever the current user changes or we go into/out of a
+                // pending account state (which acts like switching to a temporary user).
+                .map { it?.activeUserId to it?.hasPendingAccountAddition }
+                .distinctUntilChanged(),
+            vaultRepository
+                .vaultStateEventFlow
+                .filter { it is VaultStateEvent.Locked },
+        )
+            // This debounce ensure we do not emit multiple times rapidly and also acts as a short
+            // delay to give animations time to finish (ex: account switcher).
+            .debounce(timeoutMillis = ANIMATION_DEBOUNCE_DELAY_MS)
+            .map { MainAction.Internal.CurrentUserOrVaultStateChange }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        vaultRepository
-            .vaultStateEventFlow
-            .onEach {
-                when (it) {
-                    is VaultStateEvent.Locked -> {
-                        // Similar to account switching, triggering this action too soon can
-                        // interfere with animations or navigation logic, so we will delay slightly.
-                        delay(ANIMATION_REFRESH_DELAY)
-                        trySendAction(MainAction.Internal.VaultUnlockStateChange)
-                    }
-
-                    is VaultStateEvent.Unlocked -> Unit
-                }
-            }
+        cookieAcquisitionRequestManager
+            .cookieAcquisitionRequestFlow
+            .filterNotNull()
+            .map { MainAction.Internal.CookieAcquisitionReady }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
 
         // On app launch, mark all active users as having previously logged in.
@@ -198,6 +194,11 @@ class MainViewModel @Inject constructor(
             MainAction.OpenDebugMenu -> handleOpenDebugMenu()
             is MainAction.ResumeScreenDataReceived -> handleAppResumeDataUpdated(action)
             is MainAction.AppSpecificLanguageUpdate -> handleAppSpecificLanguageUpdate(action)
+            is MainAction.DuoResult -> handleDuoResult(action)
+            is MainAction.SsoResult -> handleSsoResult(action)
+            is MainAction.WebAuthnResult -> handleWebAuthnResult(action)
+            is MainAction.CookieAcquisitionResult -> handleCookieAcquisitionResult(action)
+            is MainAction.PremiumCheckoutResult -> handlePremiumCheckoutResult()
             is MainAction.Internal -> handleInternalAction(action)
         }
     }
@@ -212,27 +213,44 @@ class MainViewModel @Inject constructor(
                 handleAutofillSelectionReceive(action)
             }
 
-            is MainAction.Internal.CurrentUserStateChange -> handleCurrentUserStateChange()
+            is MainAction.Internal.CurrentUserOrVaultStateChange -> {
+                handleCurrentUserOrVaultStateChange()
+            }
+
             is MainAction.Internal.ScreenCaptureUpdate -> handleScreenCaptureUpdate(action)
             is MainAction.Internal.ThemeUpdate -> handleAppThemeUpdated(action)
-            is MainAction.Internal.VaultUnlockStateChange -> handleVaultUnlockStateChange()
             is MainAction.Internal.DynamicColorsUpdate -> handleDynamicColorsUpdate(action)
-            is MainAction.Internal.OnMobileErrorReportingReceive -> {
-                handleOnMobileErrorReportingReceive(action)
-            }
-        }
-    }
-
-    private fun handleOnMobileErrorReportingReceive(
-        action: MainAction.Internal.OnMobileErrorReportingReceive,
-    ) {
-        mutableStateFlow.update {
-            it.copy(isErrorReportingDialogEnabled = action.isErrorReportingEnabled)
+            is MainAction.Internal.CookieAcquisitionReady -> handleCookieAcquisitionReady()
         }
     }
 
     private fun handleAppSpecificLanguageUpdate(action: MainAction.AppSpecificLanguageUpdate) {
         settingsRepository.appLanguage = action.appLanguage
+    }
+
+    private fun handleDuoResult(action: MainAction.DuoResult) {
+        authRepository.setDuoCallbackTokenResult(
+            tokenResult = action.authResult.getDuoCallbackTokenResult(),
+        )
+    }
+
+    private fun handleSsoResult(action: MainAction.SsoResult) {
+        authRepository.setSsoCallbackResult(result = action.authResult.getSsoCallbackResult())
+    }
+
+    private fun handleWebAuthnResult(action: MainAction.WebAuthnResult) {
+        authRepository.setWebAuthResult(webAuthResult = action.authResult.getWebAuthResult())
+    }
+
+    private fun handleCookieAcquisitionResult(action: MainAction.CookieAcquisitionResult) {
+        authRepository.setCookieCallbackResult(
+            result = action.cookieCallbackResult.getCookieCallbackResult(),
+        )
+    }
+
+    private fun handlePremiumCheckoutResult() {
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.PremiumCheckoutResult
     }
 
     private fun handleAppResumeDataUpdated(action: MainAction.ResumeScreenDataReceived) {
@@ -260,8 +278,9 @@ class MainViewModel @Inject constructor(
         sendEvent(MainEvent.CompleteAutofill(cipherView = action.cipherView))
     }
 
-    private fun handleCurrentUserStateChange() {
-        recreateUiAndGarbageCollect()
+    private fun handleCurrentUserOrVaultStateChange() {
+        sendEvent(MainEvent.Recreate)
+        garbageCollectionManager.tryCollect()
     }
 
     private fun handleScreenCaptureUpdate(action: MainAction.Internal.ScreenCaptureUpdate) {
@@ -273,12 +292,12 @@ class MainViewModel @Inject constructor(
         sendEvent(MainEvent.UpdateAppTheme(osTheme = action.theme.osValue))
     }
 
-    private fun handleVaultUnlockStateChange() {
-        recreateUiAndGarbageCollect()
-    }
-
     private fun handleDynamicColorsUpdate(action: MainAction.Internal.DynamicColorsUpdate) {
         mutableStateFlow.update { it.copy(isDynamicColorsEnabled = action.isDynamicColorsEnabled) }
+    }
+
+    private fun handleCookieAcquisitionReady() {
+        sendEvent(MainEvent.NavigateToCookieAcquisition)
     }
 
     private fun handleFirstIntentReceived(action: MainAction.ReceiveFirstIntent) {
@@ -303,7 +322,7 @@ class MainViewModel @Inject constructor(
         val passwordlessRequestData = intent.getPasswordlessRequestDataIntentOrNull()
         val autofillSaveItem = intent.getAutofillSaveItemOrNull()
         val autofillSelectionData = intent.getAutofillSelectionDataOrNull()
-        val shareData = intentManager.getShareDataFromIntent(intent)
+        val shareData = shareManager.getShareDataOrNull(intent = intent)
         val totpData: TotpData? =
             // First grab TOTP URI directly from the intent data:
             intent.getTotpDataOrNull()
@@ -321,10 +340,11 @@ class MainViewModel @Inject constructor(
         val hasGeneratorShortcut = intent.isPasswordGeneratorShortcut
         val hasVaultShortcut = intent.isMyVaultShortcut
         val hasAccountSecurityShortcut = intent.isAccountSecurityShortcut
+        val hasPremiumCheckoutCallback = intent.isPremiumCheckoutCallback
         val completeRegistrationData = intent.getCompleteRegistrationDataIntentOrNull()
-        val createCredentialRequest = intent.getCreateCredentialRequestOrNull()
-        val getCredentialsRequest = intent.getGetCredentialsRequestOrNull()
-        val fido2AssertCredentialRequest = intent.getFido2AssertionRequestOrNull()
+        val importCredentialsRequest = intent.getProviderImportCredentialsRequest()
+        val credentialProviderRequest =
+            credentialProviderRequestManager.getPendingCredentialRequest()
         when {
             passwordlessRequestData != null -> {
                 authRepository.activeUserId?.let {
@@ -382,44 +402,9 @@ class MainViewModel @Inject constructor(
                     )
             }
 
-            createCredentialRequest != null -> {
-                // Set the user's verification status when a new FIDO 2 request is received to force
-                // explicit verification if the user's vault is unlocked when the request is
-                // received.
-                bitwardenCredentialManager.isUserVerified =
-                    createCredentialRequest.isUserPreVerified
-
+            hasPremiumCheckoutCallback -> {
                 specialCircumstanceManager.specialCircumstance =
-                    SpecialCircumstance.ProviderCreateCredential(
-                        createCredentialRequest = createCredentialRequest,
-                    )
-
-                // Switch accounts if the selected user is not the active user.
-                if (authRepository.activeUserId != null &&
-                    authRepository.activeUserId != createCredentialRequest.userId
-                ) {
-                    authRepository.switchAccount(createCredentialRequest.userId)
-                }
-            }
-
-            fido2AssertCredentialRequest != null -> {
-                // Set the user's verification status when a new FIDO 2 request is received to force
-                // explicit verification if the user's vault is unlocked when the request is
-                // received.
-                bitwardenCredentialManager.isUserVerified =
-                    fido2AssertCredentialRequest.isUserPreVerified
-
-                specialCircumstanceManager.specialCircumstance =
-                    SpecialCircumstance.Fido2Assertion(
-                        fido2AssertionRequest = fido2AssertCredentialRequest,
-                    )
-            }
-
-            getCredentialsRequest != null -> {
-                specialCircumstanceManager.specialCircumstance =
-                    SpecialCircumstance.ProviderGetCredentials(
-                        getCredentialsRequest = getCredentialsRequest,
-                    )
+                    SpecialCircumstance.PremiumCheckoutResult
             }
 
             hasGeneratorShortcut -> {
@@ -435,12 +420,59 @@ class MainViewModel @Inject constructor(
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.AccountSecurityShortcut
             }
+
+            importCredentialsRequest != null -> {
+                specialCircumstanceManager.specialCircumstance =
+                    SpecialCircumstance.CredentialExchangeExport(
+                        data = ImportCredentialsRequestData(
+                            uri = importCredentialsRequest.uri,
+                            credentialTypes = importCredentialsRequest.request.credentialTypes,
+                            knownExtensions = importCredentialsRequest.request.knownExtensions,
+                        ),
+                    )
+            }
+
+            credentialProviderRequest != null -> {
+                handleCredentialRequest(credentialProviderRequest)
+            }
         }
     }
 
-    private fun recreateUiAndGarbageCollect() {
-        sendEvent(MainEvent.Recreate)
-        garbageCollectionManager.tryCollect()
+    /**
+     * Handles a credential request relayed from [CredentialProviderActivity] via
+     * [CredentialProviderRequestManager].
+     *
+     * This method converts the [CredentialProviderRequest] into the appropriate
+     * [SpecialCircumstance] for routing by [RootNavViewModel]. The credential data is trusted
+     * because it was set by our own [CredentialProviderActivity] through the internal manager,
+     * not parsed from intent extras.
+     */
+    private fun handleCredentialRequest(request: CredentialProviderRequest) {
+        specialCircumstanceManager.specialCircumstance = when (request) {
+            is CredentialProviderRequest.CreateCredential -> {
+                SpecialCircumstance.ProviderCreateCredential(
+                    createCredentialRequest = request.request,
+                )
+            }
+
+            is CredentialProviderRequest.Fido2Assertion -> {
+                SpecialCircumstance.Fido2Assertion(
+                    fido2AssertionRequest = request.request,
+                )
+            }
+
+            is CredentialProviderRequest.GetPassword -> {
+                SpecialCircumstance.ProviderGetPasswordRequest(
+                    passwordGetRequest = request.request,
+                )
+            }
+
+            is CredentialProviderRequest.GetCredentials -> {
+                SpecialCircumstance.ProviderGetCredentials(
+                    getCredentialsRequest = request.request,
+                )
+            }
+        }
     }
 
     private fun handleCompleteRegistrationData(data: CompleteRegistrationData) {
@@ -455,15 +487,15 @@ class MainViewModel @Inject constructor(
             )
             when (emailTokenResult) {
                 is EmailTokenResult.Error -> {
-                    sendEvent(
-                        MainEvent.ShowToast(
-                            message = emailTokenResult
-                                .message
-                                ?.asText()
-                                ?: R.string.there_was_an_issue_validating_the_registration_token
-                                    .asText(),
-                        ),
-                    )
+                    emailTokenResult
+                        .message
+                        ?.let { toastManager.show(message = it) }
+                        ?: run {
+                            toastManager.show(
+                                messageId = BitwardenString
+                                    .there_was_an_issue_validating_the_registration_token,
+                            )
+                        }
                 }
 
                 EmailTokenResult.Expired -> {
@@ -495,21 +527,47 @@ data class MainState(
     val theme: AppTheme,
     val isScreenCaptureAllowed: Boolean,
     val isDynamicColorsEnabled: Boolean,
-    private val isErrorReportingDialogEnabled: Boolean,
 ) : Parcelable {
     /**
      * Contains all feature flags that are available to the UI.
      */
     val featureFlagsState: FeatureFlagsState
-        get() = FeatureFlagsState(
-            isErrorReportingDialogEnabled = isErrorReportingDialogEnabled,
-        )
+        get() = FeatureFlagsState
 }
 
 /**
  * Models actions for the [MainActivity].
  */
 sealed class MainAction {
+    /**
+     * Receive the result from the Duo login flow.
+     */
+    data class DuoResult(val authResult: AuthTabIntent.AuthResult) : MainAction()
+
+    /**
+     * Receive the result from the SSO login flow.
+     */
+    data class SsoResult(val authResult: AuthTabIntent.AuthResult) : MainAction()
+
+    /**
+     * Receive the result from the WebAuthn login flow.
+     */
+    data class WebAuthnResult(val authResult: AuthTabIntent.AuthResult) : MainAction()
+
+    /**
+     * Receive the result from the cookie acquisition flow.
+     */
+    data class CookieAcquisitionResult(
+        val cookieCallbackResult: AuthTabIntent.AuthResult,
+    ) : MainAction()
+
+    /**
+     * Receive the result from the premium checkout flow.
+     */
+    data class PremiumCheckoutResult(
+        val authResult: AuthTabIntent.AuthResult,
+    ) : MainAction()
+
     /**
      * Receive first Intent by the application.
      */
@@ -549,13 +607,6 @@ sealed class MainAction {
         ) : Internal()
 
         /**
-         * Indicates the Mobile Error Reporting feature flag has been updated.
-         */
-        data class OnMobileErrorReportingReceive(
-            val isErrorReportingEnabled: Boolean,
-        ) : Internal()
-
-        /**
          * Indicates the user has manually selected the given [cipherView] for autofill.
          */
         data class AutofillSelectionReceive(
@@ -563,9 +614,9 @@ sealed class MainAction {
         ) : Internal()
 
         /**
-         * Indicates a relevant change in the current user state.
+         * Indicates a relevant change in the current user state or vault locked state.
          */
-        data object CurrentUserStateChange : Internal()
+        data object CurrentUserOrVaultStateChange : Internal()
 
         /**
          * Indicates that the screen capture state has changed.
@@ -582,16 +633,17 @@ sealed class MainAction {
         ) : Internal()
 
         /**
-         * Indicates a relevant change in the current vault lock state.
-         */
-        data object VaultUnlockStateChange : Internal()
-
-        /**
          * Indicates that the dynamic colors state has changed.
          */
         data class DynamicColorsUpdate(
             val isDynamicColorsEnabled: Boolean,
         ) : Internal()
+
+        /**
+         * Indicates that the cookie acquisition conditions are met and navigation
+         * should proceed.
+         */
+        data object CookieAcquisitionReady : Internal()
     }
 }
 
@@ -622,9 +674,9 @@ sealed class MainEvent {
     data object NavigateToDebugMenu : MainEvent()
 
     /**
-     * Show a toast with the given [message].
+     * Navigate to the cookie acquisition screen.
      */
-    data class ShowToast(val message: Text) : MainEvent()
+    data object NavigateToCookieAcquisition : MainEvent()
 
     /**
      * Indicates that the app language has been updated.

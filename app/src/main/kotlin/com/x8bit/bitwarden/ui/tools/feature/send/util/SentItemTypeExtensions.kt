@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.util
 
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 
 /**
@@ -10,6 +10,6 @@ import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
  */
 val SendItemType.selectionText: Text
     get() = when (this) {
-        SendItemType.FILE -> R.string.file.asText()
-        SendItemType.TEXT -> R.string.text.asText()
+        SendItemType.FILE -> BitwardenString.file.asText()
+        SendItemType.TEXT -> BitwardenString.text.asText()
     }

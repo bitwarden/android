@@ -4,9 +4,9 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
@@ -84,8 +84,8 @@ class TrustedDeviceViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = TrustedDeviceState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             error = result.error,
                         ),
                     )
@@ -114,7 +114,9 @@ class TrustedDeviceViewModel @Inject constructor(
     private fun handleContinueClick() {
         mutableStateFlow.update {
             it.copy(
-                dialogState = TrustedDeviceState.DialogState.Loading(R.string.loading.asText()),
+                dialogState = TrustedDeviceState.DialogState.Loading(
+                    BitwardenString.loading.asText(),
+                ),
             )
         }
         authRepository.shouldTrustDevice = state.isRemembered

@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.vault.util
 
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.SELECT_TEXT
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 
@@ -21,7 +21,7 @@ val VaultCardBrand.longName: Text
         VaultCardBrand.MAESTRO -> "Maestro".asText()
         VaultCardBrand.UNIONPAY -> "UnionPay".asText()
         VaultCardBrand.RUPAY -> "RuPay".asText()
-        VaultCardBrand.OTHER -> R.string.other.asText()
+        VaultCardBrand.OTHER -> BitwardenString.other.asText()
     }
 
 /**
@@ -39,7 +39,7 @@ val VaultCardBrand.shortName: Text
         VaultCardBrand.MAESTRO -> "Maestro".asText()
         VaultCardBrand.UNIONPAY -> "UnionPay".asText()
         VaultCardBrand.RUPAY -> "RuPay".asText()
-        VaultCardBrand.OTHER -> R.string.other.asText()
+        VaultCardBrand.OTHER -> BitwardenString.other.asText()
     }
 
 /**

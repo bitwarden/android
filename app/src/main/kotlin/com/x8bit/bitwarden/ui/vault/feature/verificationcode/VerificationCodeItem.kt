@@ -19,11 +19,11 @@ import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
 
 /**
  * The verification code item displayed to the user.
@@ -106,7 +106,9 @@ fun VaultVerificationCodeItem(
 
         if (!hideAuthCode) {
             Text(
-                text = authCode.chunked(3).joinToString(" "),
+                text = authCode
+                    .chunked(size = 3) { it.padEnd(length = 3, padChar = ' ') }
+                    .joinToString(separator = " "),
                 style = BitwardenTheme.typography.sensitiveInfoSmall,
                 color = BitwardenTheme.colorScheme.text.primary,
             )
@@ -115,7 +117,7 @@ fun VaultVerificationCodeItem(
 
             BitwardenStandardIconButton(
                 vectorIconRes = BitwardenDrawable.ic_copy,
-                contentDescription = stringResource(id = R.string.copy),
+                contentDescription = stringResource(id = BitwardenString.copy),
                 onClick = onCopyClick,
                 contentColor = BitwardenTheme.colorScheme.icon.primary,
             )

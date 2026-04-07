@@ -20,7 +20,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param contentDescription The content description for this icon button.
  * @param onClick Callback for when the icon button is clicked.
  * @param modifier A [Modifier] for the composable.
- * @param isEnabled Whether or not the button should be enabled.
+ * @param isEnabled Whether the button should be enabled.
  */
 @Composable
 fun BitwardenFilledIconButton(
@@ -40,7 +40,7 @@ fun BitwardenFilledIconButton(
     ) {
         Icon(
             painter = rememberVectorPainter(id = vectorIconRes),
-            contentDescription = contentDescription,
+            contentDescription = null,
         )
     }
 }

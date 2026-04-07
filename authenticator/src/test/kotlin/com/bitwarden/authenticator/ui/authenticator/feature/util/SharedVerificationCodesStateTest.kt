@@ -1,12 +1,13 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.util
 
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
-import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
-import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedCodesDisplayState
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -15,7 +16,7 @@ class SharedVerificationCodesStateTest {
     @Test
     fun `toSharedCodesDisplayState on empty list should return empty list`() {
         val state = SharedVerificationCodesState.Success(emptyList())
-        val expected = SharedCodesDisplayState.Codes(emptyList())
+        val expected = SharedCodesDisplayState.Codes(persistentListOf())
         assertEquals(
             expected,
             state.toSharedCodesDisplayState(ALERT_THRESHOLD),
@@ -59,38 +60,15 @@ class SharedVerificationCodesStateTest {
             ),
         )
         val expected = SharedCodesDisplayState.Codes(
-            sections = listOf(
+            sections = persistentListOf(
                 SharedCodesDisplayState.SharedCodesAccountSection(
                     id = "user1",
-                    label = R.string.shared_accounts_header.asText(
-                        "John@test.com",
-                        "bitwarden.com",
-                        1,
-                    ),
-                    codes = listOf(
-                        VerificationCodeDisplayItem(
-                            authCode = "123456",
-                            periodSeconds = 30,
-                            timeLeftSeconds = 10,
-                            id = "123",
-                            title = "--",
-                            subtitle = null,
-                            favorite = false,
-                            allowLongPressActions = false,
-                            alertThresholdSeconds = ALERT_THRESHOLD,
-                            showMoveToBitwarden = false,
-                        ),
-                    ),
-                    isExpanded = true,
-                ),
-                SharedCodesDisplayState.SharedCodesAccountSection(
-                    id = "user1",
-                    label = R.string.shared_accounts_header.asText(
+                    label = BitwardenString.shared_accounts_header.asText(
                         "Jane@test.com",
                         "bitwarden.eu",
                         1,
                     ),
-                    codes = listOf(
+                    codes = persistentListOf(
                         VerificationCodeDisplayItem(
                             authCode = "987654",
                             periodSeconds = 30,
@@ -99,12 +77,37 @@ class SharedVerificationCodesStateTest {
                             title = "issuer",
                             subtitle = "accountName",
                             favorite = false,
-                            allowLongPressActions = false,
+                            showOverflow = false,
                             alertThresholdSeconds = ALERT_THRESHOLD,
                             showMoveToBitwarden = false,
                         ),
                     ),
                     isExpanded = true,
+                    sortKey = "Jane@test.com",
+                ),
+                SharedCodesDisplayState.SharedCodesAccountSection(
+                    id = "user1",
+                    label = BitwardenString.shared_accounts_header.asText(
+                        "John@test.com",
+                        "bitwarden.com",
+                        1,
+                    ),
+                    codes = persistentListOf(
+                        VerificationCodeDisplayItem(
+                            authCode = "123456",
+                            periodSeconds = 30,
+                            timeLeftSeconds = 10,
+                            id = "123",
+                            title = "--",
+                            subtitle = null,
+                            favorite = false,
+                            showOverflow = false,
+                            alertThresholdSeconds = ALERT_THRESHOLD,
+                            showMoveToBitwarden = false,
+                        ),
+                    ),
+                    isExpanded = true,
+                    sortKey = "John@test.com",
                 ),
             ),
         )
@@ -151,38 +154,15 @@ class SharedVerificationCodesStateTest {
             ),
         )
         val expected = SharedCodesDisplayState.Codes(
-            sections = listOf(
+            sections = persistentListOf(
                 SharedCodesDisplayState.SharedCodesAccountSection(
                     id = "user1",
-                    label = R.string.shared_accounts_header.asText(
-                        "John@test.com",
-                        "bitwarden.com",
-                        1,
-                    ),
-                    codes = listOf(
-                        VerificationCodeDisplayItem(
-                            authCode = "123456",
-                            periodSeconds = 30,
-                            timeLeftSeconds = 10,
-                            id = "123",
-                            title = "--",
-                            subtitle = null,
-                            favorite = false,
-                            allowLongPressActions = false,
-                            alertThresholdSeconds = ALERT_THRESHOLD,
-                            showMoveToBitwarden = false,
-                        ),
-                    ),
-                    isExpanded = false,
-                ),
-                SharedCodesDisplayState.SharedCodesAccountSection(
-                    id = "user1",
-                    label = R.string.shared_accounts_header.asText(
+                    label = BitwardenString.shared_accounts_header.asText(
                         "Jane@test.com",
                         "bitwarden.eu",
                         1,
                     ),
-                    codes = listOf(
+                    codes = persistentListOf(
                         VerificationCodeDisplayItem(
                             authCode = "987654",
                             periodSeconds = 30,
@@ -191,12 +171,37 @@ class SharedVerificationCodesStateTest {
                             title = "issuer",
                             subtitle = "accountName",
                             favorite = false,
-                            allowLongPressActions = false,
+                            showOverflow = false,
                             alertThresholdSeconds = ALERT_THRESHOLD,
                             showMoveToBitwarden = false,
                         ),
                     ),
                     isExpanded = false,
+                    sortKey = "Jane@test.com",
+                ),
+                SharedCodesDisplayState.SharedCodesAccountSection(
+                    id = "user1",
+                    label = BitwardenString.shared_accounts_header.asText(
+                        "John@test.com",
+                        "bitwarden.com",
+                        1,
+                    ),
+                    codes = persistentListOf(
+                        VerificationCodeDisplayItem(
+                            authCode = "123456",
+                            periodSeconds = 30,
+                            timeLeftSeconds = 10,
+                            id = "123",
+                            title = "--",
+                            subtitle = null,
+                            favorite = false,
+                            showOverflow = false,
+                            alertThresholdSeconds = ALERT_THRESHOLD,
+                            showMoveToBitwarden = false,
+                        ),
+                    ),
+                    isExpanded = false,
+                    sortKey = "John@test.com",
                 ),
             ),
         )

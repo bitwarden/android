@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.autofill.util
 
 import android.content.Context
 import androidx.core.content.ContextCompat
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import io.mockk.every
@@ -21,13 +21,13 @@ class AutofillUtilsTest {
     fun setup() {
         mockkStatic(ContextCompat::getString)
         every {
-            ContextCompat.getString(context, R.string.autofill_suggestion)
+            ContextCompat.getString(context, BitwardenString.autofill_suggestion)
         } returns "Autofill suggestion"
         every {
-            ContextCompat.getString(context, R.string.type_card)
+            ContextCompat.getString(context, BitwardenString.type_card)
         } returns "Card"
         every {
-            ContextCompat.getString(context, R.string.type_login)
+            ContextCompat.getString(context, BitwardenString.type_login)
         } returns "Login"
     }
 
@@ -51,6 +51,7 @@ class AutofillUtilsTest {
                     name = "Cipher One",
                     number = "number",
                     subtitle = "Subtitle",
+                    brand = "Visa",
                 ),
                 second = AutofillAppInfo(
                     context = context,
@@ -69,6 +70,7 @@ class AutofillUtilsTest {
                     name = "Capital One",
                     number = "number",
                     subtitle = "JohnCardName",
+                    brand = "Visa",
                 ),
                 second = AutofillAppInfo(
                     context = context,
@@ -85,6 +87,7 @@ class AutofillUtilsTest {
                     password = "password",
                     username = "username",
                     subtitle = "Subtitle",
+                    website = "website",
                 ),
                 second = AutofillAppInfo(
                     context = context,
@@ -101,6 +104,7 @@ class AutofillUtilsTest {
                     password = "password",
                     username = "username",
                     subtitle = "AmazonSubtitle",
+                    website = "website",
                 ),
                 second = AutofillAppInfo(
                     context = context,

@@ -2,21 +2,23 @@ package com.x8bit.bitwarden.ui.auth.feature.landing
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummary
 import io.mockk.every
@@ -39,10 +41,11 @@ class LandingViewModelTest : BaseViewModelTest() {
         every { lockVault(any(), any()) } just runs
     }
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
-
-    private val featureFlagManager: FeatureFlagManager = mockk(relaxed = true) {
-        every { getFeatureFlag(FlagKey.EmailVerification) } returns false
-        every { getFeatureFlag(FlagKey.PreAuthSettings) } returns false
+    private val mutableSnackbarSharedFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
+    private val snackbarRelayManager = mockk<SnackbarRelayManager<SnackbarRelay>> {
+        every {
+            getSnackbarDataFlow(SnackbarRelay.ENVIRONMENT_SAVED)
+        } returns mutableSnackbarSharedFlow
     }
 
     @Test
@@ -92,6 +95,8 @@ class LandingViewModelTest : BaseViewModelTest() {
                     isUsingKeyConnector = false,
                     onboardingStatus = OnboardingStatus.COMPLETE,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    isExportable = true,
+                    creationDate = null,
                 ),
             ),
         )
@@ -205,7 +210,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialog = LandingState.DialogState.Error(
-                        message = R.string.invalid_email.asText(),
+                        message = BitwardenString.invalid_email.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -219,20 +224,6 @@ class LandingViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(LandingAction.AppSettingsClick)
             assertEquals(LandingEvent.NavigateToSettings, awaitItem())
-        }
-    }
-
-    @Test
-    fun `PreAuthSettingFlagReceive should update the state accordingly`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.stateFlow.test {
-            assertEquals(DEFAULT_STATE, awaitItem())
-
-            viewModel.trySendAction(LandingAction.Internal.PreAuthSettingFlagReceive(true))
-            assertEquals(DEFAULT_STATE.copy(showSettingsButton = true), awaitItem())
-
-            viewModel.trySendAction(LandingAction.Internal.PreAuthSettingFlagReceive(false))
-            assertEquals(DEFAULT_STATE.copy(showSettingsButton = false), awaitItem())
         }
     }
 
@@ -258,6 +249,8 @@ class LandingViewModelTest : BaseViewModelTest() {
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
+            isExportable = true,
+            creationDate = null,
         )
         val userState = UserState(
             activeUserId = "activeUserId",
@@ -315,6 +308,8 @@ class LandingViewModelTest : BaseViewModelTest() {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                isExportable = true,
+                creationDate = null,
             )
             val userState = UserState(
                 activeUserId = "activeUserId",
@@ -376,6 +371,8 @@ class LandingViewModelTest : BaseViewModelTest() {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                isExportable = true,
+                creationDate = null,
             )
             val userState = UserState(
                 activeUserId = "activeUserId",
@@ -411,30 +408,16 @@ class LandingViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `CreateAccountClick should emit NavigateToCreateAccount`() = runTest {
+    fun `CreateAccountClick should emit NavigateToStartRegistration`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(LandingAction.CreateAccountClick)
             assertEquals(
-                LandingEvent.NavigateToCreateAccount,
+                LandingEvent.NavigateToStartRegistration,
                 awaitItem(),
             )
         }
     }
-
-    @Test
-    fun `When feature is enabled CreateAccountClick should emit NavigateToStartRegistration`() =
-        runTest {
-            every { featureFlagManager.getFeatureFlag(FlagKey.EmailVerification) } returns true
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(LandingAction.CreateAccountClick)
-                assertEquals(
-                    LandingEvent.NavigateToStartRegistration,
-                    awaitItem(),
-                )
-            }
-        }
 
     @Test
     fun `DialogDismiss should clear the active dialog`() {
@@ -553,6 +536,8 @@ class LandingViewModelTest : BaseViewModelTest() {
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
+            isExportable = true,
+            creationDate = null,
         )
 
         val userState = UserState(
@@ -589,6 +574,8 @@ class LandingViewModelTest : BaseViewModelTest() {
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
+            isExportable = true,
+            creationDate = null,
         )
 
         val userState = UserState(
@@ -601,6 +588,16 @@ class LandingViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel(userState = userState)
 
         assertTrue(viewModel.stateFlow.value.emailInput.isEmpty())
+    }
+
+    @Test
+    fun `SnackbarDataReceive should update emit ShowSnackbar`() = runTest {
+        val viewModel = createViewModel()
+        val snackbarData = BitwardenSnackbarData(message = "Test".asText())
+        viewModel.eventFlow.test {
+            mutableSnackbarSharedFlow.tryEmit(snackbarData)
+            assertEquals(LandingEvent.ShowSnackbar(data = snackbarData), awaitItem())
+        }
     }
 
     //region Helper methods
@@ -619,7 +616,7 @@ class LandingViewModelTest : BaseViewModelTest() {
         },
         vaultRepository = vaultRepository,
         environmentRepository = fakeEnvironmentRepository,
-        featureFlagManager = featureFlagManager,
+        snackbarRelayManager = snackbarRelayManager,
         savedStateHandle = savedStateHandle,
     )
 
@@ -634,5 +631,4 @@ private val DEFAULT_STATE = LandingState(
     selectedEnvironmentLabel = Environment.Us.label,
     dialog = null,
     accountSummaries = emptyList(),
-    showSettingsButton = false,
 )

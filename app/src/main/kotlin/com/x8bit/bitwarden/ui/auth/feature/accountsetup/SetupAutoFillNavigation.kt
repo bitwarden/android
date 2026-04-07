@@ -87,9 +87,18 @@ fun NavController.navigateToSetupAutoFillAsRootScreen(navOptions: NavOptions? = 
 /**
  * Add the setup autofill screen to the nav graph.
  */
-fun NavGraphBuilder.setupAutoFillDestination(onNavigateBack: () -> Unit) {
+fun NavGraphBuilder.setupAutoFillDestination(
+    onNavigateBack: () -> Unit,
+    onNavigateToBrowserAutofill: () -> Unit,
+) {
     composableWithSlideTransitions<SetupAutofillRoute.Standard> {
-        SetupAutoFillScreen(onNavigateBack = onNavigateBack)
+        SetupAutoFillScreen(
+            onNavigateBack = onNavigateBack,
+            onNavigateToBrowserAutofill = {
+                onNavigateBack()
+                onNavigateToBrowserAutofill()
+            },
+        )
     }
 }
 
@@ -100,6 +109,9 @@ fun NavGraphBuilder.setupAutoFillDestinationAsRoot() {
     composableWithPushTransitions<SetupAutofillRoute.AsRoot> {
         SetupAutoFillScreen(
             onNavigateBack = {
+                // No-Op
+            },
+            onNavigateToBrowserAutofill = {
                 // No-Op
             },
         )

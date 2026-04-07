@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.layout.requiredWidthIn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,11 +23,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
-import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenWideSwitch
-import com.bitwarden.authenticator.ui.platform.components.util.maxDialogHeight
-import com.bitwarden.authenticator.ui.platform.components.util.maxDialogWidth
+import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.dialog.util.maxDialogHeight
+import com.bitwarden.ui.platform.components.dialog.util.maxDialogWidth
+import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Displays a dialog asking the user where they would like to save a new QR code.
@@ -60,8 +61,8 @@ fun ChooseSaveLocationDialog(
                     max = configuration.maxDialogWidth,
                 )
                 .background(
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                    shape = RoundedCornerShape(28.dp),
+                    color = BitwardenTheme.colorScheme.background.primary,
+                    shape = BitwardenTheme.shapes.dialog,
                 ),
             horizontalAlignment = Alignment.End,
         ) {
@@ -70,9 +71,9 @@ fun ChooseSaveLocationDialog(
                 modifier = Modifier
                     .padding(horizontal = 24.dp)
                     .fillMaxWidth(),
-                text = stringResource(R.string.verification_code_created),
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.headlineSmall,
+                text = stringResource(BitwardenString.verification_code_created),
+                color = BitwardenTheme.colorScheme.text.primary,
+                style = BitwardenTheme.typography.headlineSmall,
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
@@ -80,34 +81,36 @@ fun ChooseSaveLocationDialog(
                     .weight(1f, fill = false)
                     .padding(horizontal = 24.dp)
                     .fillMaxWidth(),
-                text = stringResource(R.string.choose_save_location_message),
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                style = MaterialTheme.typography.bodyMedium,
+                text = stringResource(BitwardenString.choose_save_location_message),
+                color = BitwardenTheme.colorScheme.text.primary,
+                style = BitwardenTheme.typography.bodyMedium,
             )
             Spacer(Modifier.height(16.dp))
-            BitwardenWideSwitch(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                label = stringResource(R.string.save_option_as_default),
+            BitwardenSwitch(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+                label = stringResource(BitwardenString.save_option_as_default),
                 isChecked = isSaveAsDefaultChecked,
                 onCheckedChange = { isSaveAsDefaultChecked = !isSaveAsDefaultChecked },
+                cardStyle = CardStyle.Full,
             )
             Spacer(Modifier.height(16.dp))
             FlowRow(
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier.padding(horizontal = 8.dp),
             ) {
-                AuthenticatorTextButton(
+                BitwardenTextButton(
                     modifier = Modifier
                         .padding(horizontal = 4.dp),
-                    label = stringResource(R.string.save_here),
-                    labelTextColor = MaterialTheme.colorScheme.primary,
+                    label = stringResource(BitwardenString.save_here),
                     onClick = { onSaveHereClick.invoke(isSaveAsDefaultChecked) },
                 )
-                AuthenticatorTextButton(
+                BitwardenTextButton(
                     modifier = Modifier
                         .padding(horizontal = 4.dp),
-                    label = stringResource(R.string.save_to_bitwarden),
-                    labelTextColor = MaterialTheme.colorScheme.primary,
+                    label = stringResource(BitwardenString.save_to_bitwarden),
+                    isExternalLink = true,
                     onClick = { onTakeMeToBitwardenClick.invoke(isSaveAsDefaultChecked) },
                 )
             }

@@ -1,12 +1,10 @@
 package com.bitwarden.ui.platform.util
 
-import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.Base64
+import androidx.core.os.ParcelCompat
 import com.bitwarden.annotation.OmitFromCoverage
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
@@ -85,7 +83,6 @@ import kotlin.reflect.KClass
  * The latter is useful in cases where the same `ViewModel` is used to handle these routes.
  */
 @OmitFromCoverage
-@OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
 open class ParcelableRouteSerializer<T : Parcelable>(
     private val kClass: KClass<T>,
 ) : KSerializer<T> {
@@ -105,7 +102,7 @@ open class ParcelableRouteSerializer<T : Parcelable>(
                 }
             }
             encodedString
-                ?.toParcelable<T>()
+                ?.toParcelable()
                 ?: throw IllegalStateException("Invalid decoding for ${kClass.qualifiedName}.")
         }
 
@@ -137,15 +134,11 @@ open class ParcelableRouteSerializer<T : Parcelable>(
         }
         val value = try {
             @Suppress("UNCHECKED_CAST")
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                parcel.readParcelable(
-                    ParcelableRouteSerializer::class.java.classLoader,
-                    kClass.java,
-                )
-            } else {
-                @Suppress("DEPRECATION")
-                parcel.readParcelable(ParcelableRouteSerializer::class.java.classLoader)
-            } as T?
+            ParcelCompat.readParcelable(
+                parcel,
+                ParcelableRouteSerializer::class.java.classLoader,
+                kClass.java,
+            ) as T?
         } catch (_: IllegalArgumentException) {
             null
         } catch (_: IllegalStateException) {

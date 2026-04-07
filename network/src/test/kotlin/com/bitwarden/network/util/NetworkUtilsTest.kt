@@ -3,6 +3,7 @@ package com.bitwarden.network.util
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNull
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.security.cert.CertPathValidatorException
 import javax.net.ssl.SSLHandshakeException
@@ -57,6 +58,31 @@ class NetworkUtilsTest {
         assertEquals(
             false,
             IllegalStateException().isNoConnectionError(),
+        )
+    }
+
+    @Test
+    fun `isTimeoutError should return return true for SocketTimeoutException`() {
+        assertEquals(
+            true,
+            SocketTimeoutException().isTimeoutError(),
+        )
+    }
+
+    @Test
+    fun `isTimeoutError should return return false for not SocketTimeoutException`() {
+        assertEquals(
+            false,
+            IllegalStateException().isTimeoutError(),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isTimeoutError should return return true if exceptions cause is SocketTimeoutException`() {
+        assertEquals(
+            true,
+            Exception(SocketTimeoutException()).isTimeoutError(),
         )
     }
 

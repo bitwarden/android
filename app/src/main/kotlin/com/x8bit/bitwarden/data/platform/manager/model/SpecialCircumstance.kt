@@ -2,13 +2,15 @@ package com.x8bit.bitwarden.data.platform.manager.model
 
 import android.os.Parcelable
 import androidx.credentials.CredentialManager
+import com.bitwarden.cxf.model.ImportCredentialsRequestData
+import com.bitwarden.ui.platform.manager.share.model.ShareData
+import com.bitwarden.ui.platform.model.TotpData
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.vault.model.TotpData
+import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -29,7 +31,7 @@ sealed class SpecialCircumstance : Parcelable {
      */
     @Parcelize
     data class ShareNewSend(
-        val data: IntentManager.ShareData,
+        val data: ShareData,
         val shouldFinishWhenComplete: Boolean,
     ) : SpecialCircumstance()
 
@@ -70,12 +72,21 @@ sealed class SpecialCircumstance : Parcelable {
     ) : SpecialCircumstance()
 
     /**
-     * The app was launched via the [CredentialManager] framework in order to authenticate a
+     * The app was launched via the [CredentialManager] framework in order to authenticate a FIDO 2
      * credential saved to the user's vault.
      */
     @Parcelize
     data class Fido2Assertion(
         val fido2AssertionRequest: Fido2CredentialAssertionRequest,
+    ) : SpecialCircumstance()
+
+    /**
+     * The app was launched via the [CredentialManager] framework in order to retrieve a Password
+     * credential saved to the user's vault.
+     */
+    @Parcelize
+    data class ProviderGetPasswordRequest(
+        val passwordGetRequest: ProviderGetPasswordCredentialRequest,
     ) : SpecialCircumstance()
 
     /**
@@ -122,6 +133,21 @@ sealed class SpecialCircumstance : Parcelable {
      */
     @Parcelize
     data object VerificationCodeShortcut : SpecialCircumstance()
+
+    /**
+     * The app was launched via a Premium checkout callback deep link,
+     * indicating the user is returning from a Stripe checkout session.
+     */
+    @Parcelize
+    data object PremiumCheckoutResult : SpecialCircumstance()
+
+    /**
+     * The app was launched to select an account to export credentials from.
+     */
+    @Parcelize
+    data class CredentialExchangeExport(
+        val data: ImportCredentialsRequestData,
+    ) : SpecialCircumstance()
 
     /**
      * A subset of [SpecialCircumstance] that are only relevant in a pre-login state and should be

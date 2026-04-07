@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.manager
 
-import com.x8bit.bitwarden.ui.vault.model.TotpData
+import com.bitwarden.ui.platform.model.TotpData
 
 /**
  * Default in memory implementation for [AddTotpItemFromAuthenticatorManager].

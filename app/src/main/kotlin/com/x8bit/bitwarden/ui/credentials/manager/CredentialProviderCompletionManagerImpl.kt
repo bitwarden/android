@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.credentials.CreatePasswordResponse
 import androidx.credentials.CreatePublicKeyCredentialResponse
 import androidx.credentials.GetCredentialResponse
+import androidx.credentials.PasswordCredential
 import androidx.credentials.PublicKeyCredential
 import androidx.credentials.exceptions.CreateCredentialCancellationException
 import androidx.credentials.exceptions.CreateCredentialUnknownException
@@ -14,8 +16,9 @@ import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.PendingIntentHandler
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 
 /**
  * Primary implementation of [CredentialProviderCompletionManager] when the build version is
@@ -26,11 +29,11 @@ class CredentialProviderCompletionManagerImpl(
     private val activity: Activity,
 ) : CredentialProviderCompletionManager {
 
-    override fun completeFido2Registration(result: RegisterFido2CredentialResult) {
+    override fun completeCredentialRegistration(result: CreateCredentialResult) {
         activity.also {
             val intent = Intent()
             when (result) {
-                is RegisterFido2CredentialResult.Error -> {
+                is CreateCredentialResult.Error -> {
                     PendingIntentHandler
                         .setCreateCredentialException(
                             intent = intent,
@@ -40,7 +43,7 @@ class CredentialProviderCompletionManagerImpl(
                         )
                 }
 
-                is RegisterFido2CredentialResult.Success -> {
+                is CreateCredentialResult.Success.Fido2CredentialRegistered -> {
                     PendingIntentHandler
                         .setCreateCredentialResponse(
                             intent = intent,
@@ -50,7 +53,15 @@ class CredentialProviderCompletionManagerImpl(
                         )
                 }
 
-                is RegisterFido2CredentialResult.Cancelled -> {
+                is CreateCredentialResult.Success.PasswordCreated -> {
+                    PendingIntentHandler
+                        .setCreateCredentialResponse(
+                            intent = intent,
+                            response = CreatePasswordResponse(),
+                        )
+                }
+
+                is CreateCredentialResult.Cancelled -> {
                     PendingIntentHandler
                         .setCreateCredentialException(
                             intent = intent,
@@ -88,6 +99,46 @@ class CredentialProviderCompletionManagerImpl(
                 }
 
                 is AssertFido2CredentialResult.Cancelled -> {
+                    PendingIntentHandler
+                        .setGetCredentialException(
+                            intent = intent,
+                            exception = GetCredentialCancellationException(),
+                        )
+                }
+            }
+            it.setResult(Activity.RESULT_OK, intent)
+            it.finish()
+        }
+    }
+
+    override fun completePasswordGet(result: GetPasswordCredentialResult) {
+        activity.also {
+            val intent = Intent()
+            when (result) {
+                is GetPasswordCredentialResult.Error -> {
+                    PendingIntentHandler
+                        .setGetCredentialException(
+                            intent = intent,
+                            exception = GetCredentialUnknownException(
+                                errorMessage = result.message.invoke(it.resources),
+                            ),
+                        )
+                }
+
+                is GetPasswordCredentialResult.Success -> {
+                    PendingIntentHandler
+                        .setGetCredentialResponse(
+                            intent = intent,
+                            response = GetCredentialResponse(
+                                credential = PasswordCredential(
+                                    id = result.username.orEmpty(),
+                                    password = result.password,
+                                ),
+                            ),
+                        )
+                }
+
+                is GetPasswordCredentialResult.Cancelled -> {
                     PendingIntentHandler
                         .setGetCredentialException(
                             intent = intent,

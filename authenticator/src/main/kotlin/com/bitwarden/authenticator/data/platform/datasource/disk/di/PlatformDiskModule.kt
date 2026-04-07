@@ -5,6 +5,7 @@ import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagOver
 import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagOverrideDiskSourceImpl
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSourceImpl
+import com.bitwarden.data.datasource.disk.FlightRecorderDiskSource
 import com.bitwarden.data.datasource.disk.di.UnencryptedPreferences
 import dagger.Module
 import dagger.Provides
@@ -23,8 +24,12 @@ object PlatformDiskModule {
     @Singleton
     fun provideSettingsDiskSource(
         @UnencryptedPreferences sharedPreferences: SharedPreferences,
+        flightRecorderDiskSource: FlightRecorderDiskSource,
     ): SettingsDiskSource =
-        SettingsDiskSourceImpl(sharedPreferences = sharedPreferences)
+        SettingsDiskSourceImpl(
+            sharedPreferences = sharedPreferences,
+            flightRecorderDiskSource = flightRecorderDiskSource,
+        )
 
     @Provides
     @Singleton

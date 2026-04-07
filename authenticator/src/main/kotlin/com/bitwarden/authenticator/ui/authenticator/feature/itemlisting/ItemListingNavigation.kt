@@ -1,7 +1,7 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 
 import androidx.navigation.NavGraphBuilder
-import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
+import com.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
 import kotlinx.serialization.Serializable
 
 /**
@@ -20,7 +20,7 @@ fun NavGraphBuilder.itemListingDestination(
     onNavigateToManualKeyEntry: () -> Unit = { },
     onNavigateToEditItemScreen: (id: String) -> Unit = { },
 ) {
-    composableWithPushTransitions<ItemListingRoute> {
+    composableWithRootPushTransitions<ItemListingRoute> {
         ItemListingScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToSearch = onNavigateToSearch,

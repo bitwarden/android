@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.util
 
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -26,7 +26,7 @@ class EnvironmentExtensionsTest {
     @Test
     fun `displayLabel for SELF_HOSTED type should return the correct value`() {
         assertEquals(
-            R.string.self_hosted.asText(),
+            BitwardenString.self_hosted.asText(),
             Environment.Type.SELF_HOSTED.displayLabel,
         )
     }

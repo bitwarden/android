@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.autofill.util
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -38,6 +39,7 @@ class CipherViewExtensionsTest {
                         subtitle = "mockUsername-1",
                         password = "mockPassword-1",
                         username = "mockUsername-1",
+                        website = "uri",
                     ),
                 ),
                 autofillCipherProvider.getLoginAutofillCiphers(uri = "uri"),
@@ -70,6 +72,7 @@ class CipherViewExtensionsTest {
                         subtitle = "mockUsername-1",
                         password = "mockPassword-1",
                         username = "mockUsername-1",
+                        website = "uri",
                     ),
                 ),
                 autofillCipherProvider.getLoginAutofillCiphers(uri = "uri"),
@@ -103,6 +106,7 @@ class CipherViewExtensionsTest {
                         expirationMonth = "mockExpMonth-1",
                         expirationYear = "mockExpirationYear-1",
                         number = "mockNumber-1",
+                        brand = "mockBrand-1",
                     ),
                 ),
                 autofillCipherProvider.getCardAutofillCiphers(),
@@ -138,13 +142,20 @@ class CipherViewExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `isActiveWithFido2Credentials should return true when type is login, deleted date is null, and fido2 credentials are not null`() {
+    fun `isActiveWithFido2Credentials should return true when type is login, deleted and archived date is null, and fido2 credentials are not null`() {
         assertTrue(
             createMockCipherView(
                 number = 1,
                 fido2Credentials = createMockSdkFido2CredentialList(number = 1),
             )
                 .isActiveWithFido2Credentials,
+        )
+    }
+
+    @Test
+    fun `isActiveWithFido2Credentials should return false when archive date is not null`() {
+        assertFalse(
+            createMockCipherView(number = 1, isArchived = true).isActiveWithFido2Credentials,
         )
     }
 
@@ -178,6 +189,58 @@ class CipherViewExtensionsTest {
         assertFalse(
             createMockCipherView(number = 1, fido2Credentials = null)
                 .isActiveWithFido2Credentials,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isActiveWithPasswordCredentials should return true when type is login, deleted and archived date is null, and password credentials are not empty`() {
+        assertTrue(
+            createMockCipherView(
+                number = 1,
+                login = createMockLoginView(number = 1),
+            )
+                .isActiveWithPasswordCredentials,
+        )
+    }
+
+    @Test
+    fun `isActiveWithPasswordCredentials should return false when archive date is not null`() {
+        assertFalse(
+            createMockCipherView(number = 1, isArchived = true).isActiveWithPasswordCredentials,
+        )
+    }
+
+    @Test
+    fun `isActiveWithPasswordCredentials should return false when deleted date is not null`() {
+        assertFalse(
+            createMockCipherView(number = 1, isDeleted = true)
+                .isActiveWithPasswordCredentials,
+        )
+    }
+
+    @Test
+    fun `isActiveWithPasswordCredentials should return false when type is not login`() {
+        assertFalse(
+            createMockCipherView(number = 1, cipherType = CipherType.CARD)
+                .isActiveWithPasswordCredentials,
+        )
+    }
+
+    @Test
+    fun `isActiveWithPasswordCredentials should return false when login is null`() {
+        assertFalse(
+            createMockCipherView(number = 1)
+                .copy(login = null)
+                .isActiveWithPasswordCredentials,
+        )
+    }
+
+    @Test
+    fun `isActiveWithPasswordCredentials should return false when password is empty`() {
+        assertFalse(
+            createMockCipherView(number = 1, password = "")
+                .isActiveWithPasswordCredentials,
         )
     }
 }

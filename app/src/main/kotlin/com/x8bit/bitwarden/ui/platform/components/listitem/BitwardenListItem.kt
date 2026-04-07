@@ -18,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,14 +27,14 @@ import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
+import com.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -143,7 +145,7 @@ fun BitwardenListItem(
         if (selectionDataList.isNotEmpty()) {
             BitwardenStandardIconButton(
                 vectorIconRes = BitwardenDrawable.ic_ellipsis_horizontal,
-                contentDescription = stringResource(id = R.string.options),
+                contentDescription = stringResource(id = BitwardenString.more_options),
                 onClick = { shouldShowDialog = true },
                 modifier = Modifier.nullableTestTag(tag = optionsTestTag),
             )
@@ -157,7 +159,9 @@ fun BitwardenListItem(
             selectionItems = {
                 selectionDataList.forEach { itemData ->
                     BitwardenBasicDialogRow(
-                        modifier = Modifier.testTag("AlertSelectionOption"),
+                        modifier = Modifier
+                            .semantics { contentDescription = itemData.contentDescription }
+                            .testTag(tag = "AlertSelectionOption"),
                         text = itemData.text,
                         onClick = {
                             shouldShowDialog = false
@@ -171,11 +175,12 @@ fun BitwardenListItem(
 }
 
 /**
- * Wrapper for the an individual selection item's data.
+ * Wrapper for an individual selection item's data.
  */
 data class SelectionItemData(
     val text: String,
     val onClick: () -> Unit,
+    val contentDescription: String = text,
     val testTag: String? = null,
 )
 

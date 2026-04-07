@@ -2,23 +2,24 @@
 
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
+import com.bitwarden.collections.CollectionType
+import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
+import com.bitwarden.ui.platform.model.TotpData
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
-import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.Fido2Credential
 import com.bitwarden.vault.FieldType
 import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.LoginUriView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
-import com.x8bit.bitwarden.ui.vault.model.TotpData
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
@@ -36,6 +37,7 @@ import java.util.UUID
 @Suppress("LongMethod", "LongParameterList")
 fun CipherView.toViewState(
     isClone: Boolean,
+    isPremium: Boolean,
     isIndividualVaultDisabled: Boolean,
     totpData: TotpData?,
     resourceManager: ResourceManager,
@@ -86,6 +88,7 @@ fun CipherView.toViewState(
                 address2 = identity?.address2.orEmpty(),
                 address3 = identity?.address3.orEmpty(),
                 city = identity?.city.orEmpty(),
+                state = identity?.state.orEmpty(),
                 zip = identity?.postalCode.orEmpty(),
                 country = identity?.country.orEmpty(),
             )
@@ -110,6 +113,15 @@ fun CipherView.toViewState(
             customFieldData = this.fields.orEmpty().map { it.toCustomField() },
             canDelete = canDelete,
             canAssignToCollections = canAssignToCollections,
+            archiveCalloutText = if (this.archivedDate != null && isPremium) {
+                BitwardenString.this_item_is_archived.asText()
+            } else if (this.archivedDate != null) {
+                BitwardenString
+                    .this_item_is_archived_saving_changes_will_restore_it_to_your_vault
+                    .asText()
+            } else {
+                null
+            },
         ),
         isIndividualVaultDisabled = isIndividualVaultDisabled,
     )
@@ -138,12 +150,22 @@ fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
                     .toSelectedOwnerId(cipherView = currentContentState.common.originalCipher)
                     ?: collectionViewList
                         .firstOrNull { it.id == currentContentState.common.selectedCollectionId }
+                        ?.organizationId
+                    ?: collectionViewList
+                        .getDefaultCollectionViewOrNull(
+                            isIndividualVaultDisabled = isIndividualVaultDisabled,
+                        )
                         ?.organizationId,
                 availableOwners = activeAccount.toAvailableOwners(
                     collectionViewList = collectionViewList,
                     cipherView = currentContentState.common.originalCipher,
                     isIndividualVaultDisabled = isIndividualVaultDisabled,
-                    selectedCollectionId = currentContentState.common.selectedCollectionId,
+                    selectedCollectionId = currentContentState.common.selectedCollectionId
+                        ?: collectionViewList
+                            .getDefaultCollectionViewOrNull(
+                                isIndividualVaultDisabled = isIndividualVaultDisabled,
+                            )
+                            ?.id,
                 ),
                 isUnlockWithPasswordEnabled = activeAccount.hasMasterPassword,
                 hasOrganizations = activeAccount.organizations.isNotEmpty(),
@@ -151,6 +173,29 @@ fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
         )
     } ?: this
 }
+
+/**
+ * Retrieves the default user collection from a list of [CollectionView]s, but only if the
+ * individual vault is disabled.
+ *
+ * This is used to pre-select the default collection for a new item when the user is part of an
+ * organization and the "Individual Vault" policy is enabled, which prevents them from creating
+ * items in their personal vault.
+ *
+ * @param isIndividualVaultDisabled A boolean indicating if the policy disabling the individual
+ * vault is active.
+ *
+ * @return The [CollectionView] corresponding to the default user collection if the individual vault
+ * is disabled, otherwise `null`.
+ */
+fun List<CollectionView>.getDefaultCollectionViewOrNull(
+    isIndividualVaultDisabled: Boolean,
+): CollectionView? =
+    if (isIndividualVaultDisabled) {
+        firstOrNull { it.type == CollectionType.DEFAULT_USER_COLLECTION }
+    } else {
+        null
+    }
 
 /**
  * Validates a [CipherView] otherwise returning a [VaultAddEditState.ViewState.Error].
@@ -166,7 +211,7 @@ fun CipherView?.validateCipherOrReturnErrorState(
     if (currentAccount == null ||
         (vaultAddEditType is VaultAddEditType.EditItem && this == null)
     ) {
-        VaultAddEditState.ViewState.Error(R.string.generic_error_message.asText())
+        VaultAddEditState.ViewState.Error(BitwardenString.generic_error_message.asText())
     } else {
         lambda(currentAccount, this)
     }
@@ -186,7 +231,7 @@ fun List<FolderView>.toAvailableFolders(
     listOf(
         VaultAddEditState.Folder(
             id = null,
-            name = resourceManager.getString(R.string.folder_none),
+            name = resourceManager.getString(BitwardenString.folder_none),
         ),
     )
         .plus(
@@ -231,6 +276,8 @@ private fun UserState.Account.toAvailableOwners(
                                     ?.contains(collection.id))
                                     ?: (selectedCollectionId != null &&
                                         collection.id == selectedCollectionId),
+                                isDefaultUserCollection =
+                                    collection.type == CollectionType.DEFAULT_USER_COLLECTION,
                             )
                         },
                 )
@@ -287,7 +334,7 @@ private fun String.appendCloneTextIfRequired(
     resourceManager: ResourceManager,
 ): String =
     if (isClone) {
-        plus(" - ${resourceManager.getString(R.string.clone)}")
+        plus(" - ${resourceManager.getString(BitwardenString.clone)}")
     } else {
         this
     }
@@ -329,7 +376,7 @@ private fun List<Fido2Credential>?.getPrimaryFido2CredentialOrNull(
  * Return the creation date and time of the primary FIDO2 credential, formatted as
  * "MMM d, yyyy, hh:mm a".
  */
-private fun Fido2Credential.getCreationDateTime(clock: Clock) = R.string.created_x.asText(
+private fun Fido2Credential.getCreationDateTime(clock: Clock) = BitwardenString.created_x.asText(
     creationDate.toFormattedDateTimeStyle(
         dateStyle = FormatStyle.MEDIUM,
         timeStyle = FormatStyle.SHORT,

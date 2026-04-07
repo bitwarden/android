@@ -1,8 +1,8 @@
 package com.bitwarden.authenticator.data.platform.manager.imports.parsers
 
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.MissingFieldException
@@ -36,18 +36,17 @@ abstract class ExportParser {
      * @param byteArray The input data to be parsed as a [ByteArray].
      * @return [ExportParseResult] indicating success or a specific error result.
      */
-    @OptIn(ExperimentalSerializationApi::class)
     fun parseForResult(byteArray: ByteArray): ExportParseResult = try {
         parse(byteArray = byteArray)
-    } catch (error: MissingFieldException) {
+    } catch (@OptIn(ExperimentalSerializationApi::class) _: MissingFieldException) {
         ExportParseResult.Error(
-            title = R.string.required_information_missing.asText(),
-            message = R.string.required_information_missing_message.asText(),
+            title = BitwardenString.required_information_missing.asText(),
+            message = BitwardenString.required_information_missing_message.asText(),
         )
-    } catch (error: SerializationException) {
+    } catch (_: SerializationException) {
         ExportParseResult.Error(
-            title = R.string.file_could_not_be_processed.asText(),
-            message = R.string.file_could_not_be_processed_message.asText(),
+            title = BitwardenString.file_could_not_be_processed.asText(),
+            message = BitwardenString.file_could_not_be_processed_message.asText(),
         )
     } catch (error: IllegalArgumentException) {
         ExportParseResult.Error(message = error.message?.asText())

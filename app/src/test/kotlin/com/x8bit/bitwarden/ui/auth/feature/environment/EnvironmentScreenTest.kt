@@ -13,10 +13,12 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.model.FileData
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.auth.feature.environment.EnvironmentState.DialogState
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.KeyChainManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
 import io.mockk.coEvery
@@ -62,6 +64,15 @@ class EnvironmentScreenTest : BitwardenComposeTest() {
     fun `NavigateBack event should invoke onNavigateBack`() {
         mutableEventFlow.tryEmit(EnvironmentEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `on ShowSnackbar should display snackbar content`() {
+        val message = "message"
+        val data = BitwardenSnackbarData(message = message.asText())
+        composeTestRule.onNodeWithText(text = message).assertDoesNotExist()
+        mutableEventFlow.tryEmit(EnvironmentEvent.ShowSnackbar(data = data))
+        composeTestRule.onNodeWithText(text = message).assertIsDisplayed()
     }
 
     @Test
@@ -356,7 +367,7 @@ class EnvironmentScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `ConfirmOverwriteCertificate dialog Replace certificate click should send ConfirmOverwriteCertificate action`() {
-        val mockFileData = mockk<IntentManager.FileData>()
+        val mockFileData = mockk<FileData>()
         mutableStateFlow.update {
             it.copy(
                 dialog = DialogState.ConfirmOverwriteAlias(
@@ -427,7 +438,6 @@ class EnvironmentScreenTest : BitwardenComposeTest() {
             iconsServerUrl = "",
             keyHost = null,
             dialog = null,
-            showMutualTlsOptions = true,
         )
     }
 }

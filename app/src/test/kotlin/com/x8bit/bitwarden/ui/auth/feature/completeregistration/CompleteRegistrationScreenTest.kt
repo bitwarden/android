@@ -61,14 +61,21 @@ class CompleteRegistrationScreenTest : BitwardenComposeTest() {
                 onNavigateToPreventAccountLockout = {
                     onNavigateToPreventAccountLockoutCalled = true
                 },
-                onNavigateToLogin = { email, captchaToken ->
+                onNavigateToLogin = { email ->
                     onNavigateToLoginCalled = true
                     assertTrue(email == EMAIL)
-                    assertTrue(captchaToken == TOKEN)
                 },
                 viewModel = viewModel,
             )
         }
+    }
+
+    @Test
+    fun `on ShowSnackbar should display snackbar content`() {
+        val message = "message"
+        composeTestRule.onNodeWithText(text = message).assertDoesNotExist()
+        mutableEventFlow.tryEmit(CompleteRegistrationEvent.ShowSnackbar(message = message.asText()))
+        composeTestRule.onNodeWithText(text = message).assertIsDisplayed()
     }
 
     @Test
@@ -261,7 +268,6 @@ class CompleteRegistrationScreenTest : BitwardenComposeTest() {
         mutableEventFlow.tryEmit(
             CompleteRegistrationEvent.NavigateToLogin(
                 email = EMAIL,
-                captchaToken = TOKEN,
             ),
         )
 

@@ -32,7 +32,6 @@ interface BiometricsEncryptionManager {
      */
     fun isBiometricIntegrityValid(
         userId: String,
-        cipher: Cipher?,
     ): Boolean
 
     /**

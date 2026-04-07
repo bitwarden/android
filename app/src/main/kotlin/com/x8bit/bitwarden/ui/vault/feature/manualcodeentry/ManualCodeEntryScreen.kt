@@ -1,9 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.manualcodeentry
 
 import android.Manifest
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,35 +16,34 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.util.startAppSettingsActivity
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
-import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalPermissionsManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 
 /**
@@ -74,15 +70,10 @@ fun ManualCodeEntryScreen(
         }
     }
 
-    val context = LocalContext.current
-
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is ManualCodeEntryEvent.NavigateToAppSettings -> {
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                intent.data = Uri.parse("package:" + context.packageName)
-
-                intentManager.startActivity(intent = intent)
+                intentManager.startAppSettingsActivity()
             }
 
             is ManualCodeEntryEvent.NavigateToQrCodeScreen -> {
@@ -97,12 +88,12 @@ fun ManualCodeEntryScreen(
 
     if (shouldShowPermissionDialog) {
         BitwardenTwoButtonDialog(
-            message = stringResource(id = R.string.enable_camer_permission_to_use_the_scanner),
-            confirmButtonText = stringResource(id = R.string.settings),
-            dismissButtonText = stringResource(id = R.string.no_thanks),
-            onConfirmClick = remember(viewModel) {
-                { viewModel.trySendAction(ManualCodeEntryAction.SettingsClick) }
-            },
+            message = stringResource(
+                id = BitwardenString.enable_camer_permission_to_use_the_scanner,
+            ),
+            confirmButtonText = stringResource(id = BitwardenString.settings),
+            dismissButtonText = stringResource(id = BitwardenString.no_thanks),
+            onConfirmClick = { viewModel.trySendAction(ManualCodeEntryAction.SettingsClick) },
             onDismissClick = { shouldShowPermissionDialog = false },
             onDismissRequest = { shouldShowPermissionDialog = false },
             title = null,
@@ -111,9 +102,7 @@ fun ManualCodeEntryScreen(
 
     ManualCodeEntryDialogs(
         state = state.dialog,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(ManualCodeEntryAction.DialogDismiss) }
-        },
+        onDismissRequest = { viewModel.trySendAction(ManualCodeEntryAction.DialogDismiss) },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -123,11 +112,11 @@ fun ManualCodeEntryScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.authenticator_key_scanner),
+                title = stringResource(id = BitwardenString.authenticator_key_scanner),
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(ManualCodeEntryAction.CloseClick) }
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
+                onNavigationIconClick = {
+                    viewModel.trySendAction(ManualCodeEntryAction.CloseClick)
                 },
                 scrollBehavior = scrollBehavior,
             )
@@ -140,7 +129,7 @@ fun ManualCodeEntryScreen(
         ) {
             Spacer(modifier = Modifier.height(height = 24.dp))
             Text(
-                text = stringResource(id = R.string.enter_key_manually),
+                text = stringResource(id = BitwardenString.enter_key_manually),
                 style = BitwardenTheme.typography.titleMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -151,7 +140,7 @@ fun ManualCodeEntryScreen(
 
             Spacer(modifier = Modifier.height(height = 12.dp))
             Text(
-                text = stringResource(id = R.string.once_the_key_is_successfully_entered),
+                text = stringResource(id = BitwardenString.once_the_key_is_successfully_entered),
                 style = BitwardenTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -162,10 +151,10 @@ fun ManualCodeEntryScreen(
             Spacer(modifier = Modifier.height(height = 24.dp))
             BitwardenTextField(
                 singleLine = false,
-                label = stringResource(id = R.string.authenticator_key_scanner),
+                label = stringResource(id = BitwardenString.authenticator_key_scanner),
                 value = state.code,
-                onValueChange = remember(viewModel) {
-                    { viewModel.trySendAction(ManualCodeEntryAction.CodeTextChange(it)) }
+                onValueChange = {
+                    viewModel.trySendAction(ManualCodeEntryAction.CodeTextChange(it))
                 },
                 textFieldTestTag = "AddManualTOTPField",
                 cardStyle = CardStyle.Full,
@@ -176,10 +165,8 @@ fun ManualCodeEntryScreen(
 
             Spacer(modifier = Modifier.height(height = 24.dp))
             BitwardenFilledButton(
-                label = stringResource(id = R.string.add_totp),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(ManualCodeEntryAction.CodeSubmit) }
-                },
+                label = stringResource(id = BitwardenString.add_totp),
+                onClick = { viewModel.trySendAction(ManualCodeEntryAction.CodeSubmit) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
@@ -188,16 +175,14 @@ fun ManualCodeEntryScreen(
 
             Spacer(modifier = Modifier.height(height = 24.dp))
             BitwardenHyperTextLink(
-                annotatedResId = R.string.cannot_add_authenticator_key_scan_qr_code,
+                annotatedResId = BitwardenString.cannot_add_authenticator_key_scan_qr_code,
                 annotationKey = "scanQrCode",
-                accessibilityString = stringResource(id = R.string.scan_qr_code),
-                onClick = remember(viewModel) {
-                    {
-                        if (permissionsManager.checkPermission(Manifest.permission.CAMERA)) {
-                            viewModel.trySendAction(ManualCodeEntryAction.ScanQrCodeTextClick)
-                        } else {
-                            launcher.launch(Manifest.permission.CAMERA)
-                        }
+                accessibilityString = stringResource(id = BitwardenString.scan_qr_code),
+                onClick = {
+                    if (permissionsManager.checkPermission(Manifest.permission.CAMERA)) {
+                        viewModel.trySendAction(ManualCodeEntryAction.ScanQrCodeTextClick)
+                    } else {
+                        launcher.launch(Manifest.permission.CAMERA)
                     }
                 },
                 modifier = Modifier

@@ -34,7 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -45,45 +45,45 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
+import com.bitwarden.ui.platform.components.appbar.model.TopAppBarDividerStyle
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
+import com.bitwarden.ui.platform.components.card.BitwardenActionCard
+import com.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
+import com.bitwarden.ui.platform.components.coachmark.CoachMarkActionText
+import com.bitwarden.ui.platform.components.coachmark.CoachMarkContainer
+import com.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
+import com.bitwarden.ui.platform.components.coachmark.model.rememberLazyListCoachMarkState
+import com.bitwarden.ui.platform.components.coachmark.scope.CoachMarkScope
+import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
+import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.bitwarden.ui.platform.components.field.model.TextToolbarType
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.model.TooltipData
-import com.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.segment.BitwardenSegmentedButton
+import com.bitwarden.ui.platform.components.segment.SegmentedButtonOptionContent
+import com.bitwarden.ui.platform.components.segment.SegmentedButtonState
+import com.bitwarden.ui.platform.components.slider.BitwardenSlider
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
+import com.bitwarden.ui.platform.components.stepper.BitwardenStepper
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
+import com.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.manager.util.RegisterScreenDataOnLifecycleEffect
-import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
-import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
-import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkActionText
-import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkContainer
-import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkScope
-import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
-import com.x8bit.bitwarden.ui.platform.components.coachmark.rememberLazyListCoachMarkState
-import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.model.TextToolbarType
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.segment.BitwardenSegmentedButton
-import com.x8bit.bitwarden.ui.platform.components.segment.SegmentedButtonOptionContent
-import com.x8bit.bitwarden.ui.platform.components.segment.SegmentedButtonState
-import com.x8bit.bitwarden.ui.platform.components.slider.BitwardenSlider
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
-import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
-import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
-import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
-import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passphrase.Companion.PASSPHRASE_MAX_NUMBER_OF_WORDS
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passphrase.Companion.PASSPHRASE_MIN_NUMBER_OF_WORDS
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
@@ -176,26 +176,17 @@ fun GeneratorScreen(
             }
         }
     }
-    val onRegenerateClick: () -> Unit = remember(viewModel) {
-        { viewModel.trySendAction(GeneratorAction.RegenerateClick) }
+    val onRegenerateClick: () -> Unit = { viewModel.trySendAction(GeneratorAction.RegenerateClick) }
+
+    val onCopyClick: () -> Unit = { viewModel.trySendAction(GeneratorAction.CopyClick) }
+
+    val onMainStateOptionClicked: (GeneratorState.MainTypeOption) -> Unit = {
+        viewModel.trySendAction(GeneratorAction.MainTypeOptionSelect(it))
     }
 
-    val onCopyClick: () -> Unit = remember(viewModel) {
-        { viewModel.trySendAction(GeneratorAction.CopyClick) }
+    val onUsernameOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit = {
+        viewModel.trySendAction(GeneratorAction.MainType.Username.UsernameTypeOptionSelect(it))
     }
-
-    val onMainStateOptionClicked: (GeneratorState.MainTypeOption) -> Unit = remember(viewModel) {
-        { viewModel.trySendAction(GeneratorAction.MainTypeOptionSelect(it)) }
-    }
-
-    val onUsernameOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit =
-        remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    GeneratorAction.MainType.Username.UsernameTypeOptionSelect(it),
-                )
-            }
-        }
 
     val onShowNextCoachMark: () -> Unit = remember {
         { scope.launch { coachMarkState.showNextCoachMark() } }
@@ -227,20 +218,16 @@ fun GeneratorScreen(
                         ModalAppBar(
                             generatorMode = generatorMode,
                             scrollBehavior = scrollBehavior,
-                            onCloseClick = remember(viewModel) {
-                                { viewModel.trySendAction(GeneratorAction.CloseClick) }
-                            },
-                            onSaveClick = remember(viewModel) {
-                                { viewModel.trySendAction(GeneratorAction.SaveClick) }
-                            },
+                            onCloseClick = { viewModel.trySendAction(GeneratorAction.CloseClick) },
+                            onSaveClick = { viewModel.trySendAction(GeneratorAction.SaveClick) },
                         )
                     }
 
                     GeneratorMode.Default -> {
                         DefaultAppBar(
                             scrollBehavior = scrollBehavior,
-                            onPasswordHistoryClick = remember(viewModel) {
-                                { viewModel.trySendAction(GeneratorAction.PasswordHistoryClick) }
+                            onPasswordHistoryClick = {
+                                viewModel.trySendAction(GeneratorAction.PasswordHistoryClick)
                             },
                         )
                     }
@@ -306,15 +293,14 @@ private fun DefaultAppBar(
     modifier: Modifier = Modifier,
 ) {
     BitwardenMediumTopAppBar(
-        title = stringResource(id = R.string.generator),
+        title = stringResource(id = BitwardenString.generator),
         scrollBehavior = scrollBehavior,
         dividerStyle = TopAppBarDividerStyle.NONE,
         actions = {
             BitwardenOverflowActionItem(
-                contentDescription = stringResource(R.string.more),
                 menuItemDataList = persistentListOf(
                     OverflowMenuItemData(
-                        text = stringResource(id = R.string.password_history),
+                        text = stringResource(id = BitwardenString.password_history),
                         onClick = onPasswordHistoryClick,
                     ),
                 ),
@@ -334,9 +320,9 @@ private fun ModalAppBar(
     modifier: Modifier = Modifier,
 ) {
     BitwardenTopAppBar(
-        title = stringResource(id = R.string.generator),
+        title = stringResource(id = BitwardenString.generator),
         navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-        navigationIconContentDescription = stringResource(id = R.string.close),
+        navigationIconContentDescription = stringResource(id = BitwardenString.close),
         onNavigationIconClick = onCloseClick,
         scrollBehavior = scrollBehavior,
         dividerStyle = when (generatorMode) {
@@ -345,7 +331,7 @@ private fun ModalAppBar(
         },
         actions = {
             BitwardenTextButton(
-                label = stringResource(id = R.string.save),
+                label = stringResource(id = BitwardenString.apply),
                 onClick = onSaveClick,
                 modifier = Modifier.testTag("SaveButton"),
             )
@@ -392,7 +378,7 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
         if (state.isUnderPolicy) {
             item {
                 BitwardenInfoCalloutCard(
-                    text = stringResource(id = R.string.password_generator_policy_in_effect),
+                    text = stringResource(id = BitwardenString.password_generator_policy_in_effect),
                     modifier = Modifier
                         .testTag("PasswordGeneratorPolicyInEffectLabel")
                         .standardHorizontalMargin()
@@ -407,11 +393,11 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
             item {
                 @Suppress("MaxLineLength")
                 BitwardenActionCard(
-                    cardTitle = stringResource(R.string.explore_the_generator),
+                    cardTitle = stringResource(BitwardenString.explore_the_generator),
                     cardSubtitle = stringResource(
-                        R.string.learn_more_about_generating_secure_login_credentials_with_guided_tour,
+                        BitwardenString.learn_more_about_generating_secure_login_credentials_with_guided_tour,
                     ),
-                    actionText = stringResource(R.string.get_started),
+                    actionText = stringResource(BitwardenString.get_started),
                     onActionClick = passwordHandlers.onGeneratorActionCardClicked,
                     onDismissClick = passwordHandlers.onGeneratorActionCardDismissed,
                     modifier = Modifier
@@ -440,29 +426,28 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
         @Suppress("MaxLineLength")
         coachMarkHighlightItem(
             key = ExploreGeneratorCoachMark.COPY_PASSWORD_BUTTON,
-            title = R.string.coachmark_6_of_6.asText(),
-            description = R
-                .string
+            title = BitwardenString.coachmark_6_of_6.asText(),
+            description = BitwardenString
                 .after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website
                 .asText(),
             shape = CoachMarkHighlightShape.RoundedRectangle(radius = 50f),
             onDismiss = onDismissCoachMark,
             leftAction = {
                 CoachMarkActionText(
-                    actionLabel = stringResource(R.string.back),
+                    actionLabel = stringResource(BitwardenString.back),
                     onActionClick = onShowPreviousCoachMark,
                 )
             },
             rightAction = {
                 CoachMarkActionText(
-                    actionLabel = stringResource(R.string.done_text),
+                    actionLabel = stringResource(BitwardenString.done_text),
                     onActionClick = onCoachMarkComplete,
                 )
             },
             modifier = Modifier.standardHorizontalMargin(windowAdaptiveInfo = windowAdaptiveInfo),
         ) {
             BitwardenFilledButton(
-                label = stringResource(id = R.string.copy),
+                label = stringResource(id = BitwardenString.copy),
                 onClick = onCopyClick,
                 modifier = Modifier
                     .testTag(tag = "CopyValueButton")
@@ -487,21 +472,20 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
             is GeneratorState.MainType.Password -> {
                 coachMarkHighlightItem(
                     key = ExploreGeneratorCoachMark.PASSWORD_OPTIONS,
-                    title = R.string.coachmark_4_of_6.asText(),
-                    description = R
-                        .string
+                    title = BitwardenString.coachmark_4_of_6.asText(),
+                    description = BitwardenString
                         .use_these_options_to_adjust_your_password_to_your_account_requirements
                         .asText(),
                     onDismiss = onDismissCoachMark,
                     leftAction = {
                         CoachMarkActionText(
-                            actionLabel = stringResource(R.string.back),
+                            actionLabel = stringResource(BitwardenString.back),
                             onActionClick = onShowPreviousCoachMark,
                         )
                     },
                     rightAction = {
                         CoachMarkActionText(
-                            actionLabel = stringResource(R.string.next),
+                            actionLabel = stringResource(BitwardenString.next),
                             onActionClick = onShowNextCoachMark,
                         )
                     },
@@ -525,10 +509,6 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
                         plusAddressedEmailHandlers = plusAddressedEmailHandlers,
                         catchAllEmailHandlers = catchAllEmailHandlers,
                         randomWordHandlers = randomWordHandlers,
-                        shouldShowSelfHostServerUrlField =
-                            state.shouldShowAnonAddySelfHostServerUrlField,
-                        shouldShowSimpleLoginSelfHostServerUrlField =
-                            state.shouldShowSimpleLoginSelfHostServerField,
                     )
                 }
             }
@@ -558,28 +538,28 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.GeneratedStringItem(
         actions = {
             CoachMarkHighlight(
                 key = ExploreGeneratorCoachMark.GENERATE_BUTTON,
-                title = stringResource(R.string.coachmark_5_of_6),
+                title = stringResource(BitwardenString.coachmark_5_of_6),
                 description = stringResource(
-                    R.string.use_this_button_to_generate_a_new_unique_password,
+                    BitwardenString.use_this_button_to_generate_a_new_unique_password,
                 ),
                 shape = CoachMarkHighlightShape.Oval,
                 onDismiss = onDismissCoachMark,
                 leftAction = {
                     CoachMarkActionText(
-                        actionLabel = stringResource(R.string.back),
+                        actionLabel = stringResource(BitwardenString.back),
                         onActionClick = onShowPreviousCoachMark,
                     )
                 },
                 rightAction = {
                     CoachMarkActionText(
-                        actionLabel = stringResource(R.string.next),
+                        actionLabel = stringResource(BitwardenString.next),
                         onActionClick = onShowNextCoachMark,
                     )
                 },
             ) {
                 BitwardenStandardIconButton(
                     vectorIconRes = BitwardenDrawable.ic_generate,
-                    contentDescription = stringResource(id = R.string.generate_password),
+                    contentDescription = stringResource(id = BitwardenString.generate_password),
                     onClick = onRegenerateClick,
                     modifier = Modifier.testTag("RegenerateValueButton"),
                 )
@@ -646,14 +626,14 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.MainStateOptionsItem(
             0 -> {
                 CoachMarkHighlight(
                     key = ExploreGeneratorCoachMark.PASSWORD_MODE,
-                    title = stringResource(R.string.coachmark_1_of_6),
+                    title = stringResource(BitwardenString.coachmark_1_of_6),
                     description = stringResource(
-                        R.string.use_the_generator_to_create_secure_passwords_passphrases_and_usernames,
+                        BitwardenString.use_the_generator_to_create_secure_passwords_passphrases_and_usernames,
                     ),
                     onDismiss = onDismissCoachMark,
                     rightAction = {
                         CoachMarkActionText(
-                            actionLabel = stringResource(R.string.next),
+                            actionLabel = stringResource(BitwardenString.next),
                             onActionClick = onShowNextCoachMark,
                         )
                     },
@@ -672,20 +652,20 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.MainStateOptionsItem(
             1 -> {
                 CoachMarkHighlight(
                     key = ExploreGeneratorCoachMark.PASSPHRASE_MODE,
-                    title = stringResource(R.string.coachmark_2_of_6),
+                    title = stringResource(BitwardenString.coachmark_2_of_6),
                     description = stringResource(
-                        R.string.passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords,
+                        BitwardenString.passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords,
                     ),
                     onDismiss = onDismissCoachMark,
                     rightAction = {
                         CoachMarkActionText(
-                            actionLabel = stringResource(R.string.next),
+                            actionLabel = stringResource(BitwardenString.next),
                             onActionClick = onShowNextCoachMark,
                         )
                     },
                     leftAction = {
                         CoachMarkActionText(
-                            actionLabel = stringResource(R.string.back),
+                            actionLabel = stringResource(BitwardenString.back),
                             onActionClick = onShowPreviousCoachMark,
                         )
                     },
@@ -703,20 +683,20 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.MainStateOptionsItem(
             2 -> {
                 CoachMarkHighlight(
                     key = ExploreGeneratorCoachMark.USERNAME_MODE,
-                    title = stringResource(R.string.coachmark_3_of_6),
+                    title = stringResource(BitwardenString.coachmark_3_of_6),
                     description = stringResource(
-                        R.string.unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts,
+                        BitwardenString.unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts,
                     ),
                     onDismiss = onDismissCoachMark,
                     rightAction = {
                         CoachMarkActionText(
-                            actionLabel = stringResource(R.string.next),
+                            actionLabel = stringResource(BitwardenString.next),
                             onActionClick = onShowNextCoachMark,
                         )
                     },
                     leftAction = {
                         CoachMarkActionText(
-                            actionLabel = stringResource(R.string.back),
+                            actionLabel = stringResource(BitwardenString.back),
                             onActionClick = onShowPreviousCoachMark,
                         )
                     },
@@ -850,7 +830,7 @@ private fun PasswordCapitalLettersToggleItem(
 ) {
     BitwardenSwitch(
         label = "A—Z",
-        contentDescription = stringResource(id = R.string.uppercase_ato_z),
+        contentDescription = stringResource(id = BitwardenString.uppercase_ato_z),
         isChecked = useCapitals,
         onCheckedChange = onPasswordToggleCapitalLettersChange,
         enabled = enabled,
@@ -868,7 +848,7 @@ private fun PasswordLowercaseLettersToggleItem(
 ) {
     BitwardenSwitch(
         label = "a—z",
-        contentDescription = stringResource(id = R.string.lowercase_ato_z),
+        contentDescription = stringResource(id = BitwardenString.lowercase_ato_z),
         isChecked = useLowercase,
         onCheckedChange = onPasswordToggleLowercaseLettersChange,
         enabled = enabled,
@@ -886,7 +866,7 @@ private fun PasswordNumbersToggleItem(
 ) {
     BitwardenSwitch(
         label = "0-9",
-        contentDescription = stringResource(id = R.string.numbers_zero_to_nine),
+        contentDescription = stringResource(id = BitwardenString.numbers_zero_to_nine),
         isChecked = useNumbers,
         onCheckedChange = onPasswordToggleNumbersChange,
         enabled = enabled,
@@ -904,7 +884,7 @@ private fun PasswordSpecialCharactersToggleItem(
 ) {
     BitwardenSwitch(
         label = "!@#$%^&*",
-        contentDescription = stringResource(id = R.string.special_characters),
+        contentDescription = stringResource(id = BitwardenString.special_characters),
         isChecked = useSpecialChars,
         onCheckedChange = onPasswordToggleSpecialCharactersChange,
         enabled = enabled,
@@ -922,7 +902,7 @@ private fun PasswordMinNumbersCounterItem(
     modifier: Modifier = Modifier,
 ) {
     BitwardenStepper(
-        label = stringResource(id = R.string.min_numbers),
+        label = stringResource(id = BitwardenString.min_numbers),
         value = minNumbers.coerceIn(minValue, maxValue),
         range = minValue..maxValue,
         onValueChange = onPasswordMinNumbersCounterChange,
@@ -940,7 +920,7 @@ private fun PasswordMinSpecialCharactersCounterItem(
     modifier: Modifier = Modifier,
 ) {
     BitwardenStepper(
-        label = stringResource(id = R.string.min_special),
+        label = stringResource(id = BitwardenString.min_special),
         value = minSpecial.coerceIn(minValue, maxValue),
         range = minValue..maxValue,
         onValueChange = onPasswordMinSpecialCharactersChange,
@@ -957,7 +937,7 @@ private fun PasswordAvoidAmbiguousCharsToggleItem(
     enabled: Boolean = true,
 ) {
     BitwardenSwitch(
-        label = stringResource(id = R.string.avoid_ambiguous_characters),
+        label = stringResource(id = BitwardenString.avoid_ambiguous_characters),
         isChecked = avoidAmbiguousChars,
         enabled = enabled,
         onCheckedChange = onPasswordToggleAvoidAmbiguousCharsChange,
@@ -1030,7 +1010,7 @@ private fun PassphraseNumWordsCounterItem(
     maxValue: Int = PASSPHRASE_MAX_NUMBER_OF_WORDS,
 ) {
     BitwardenStepper(
-        label = stringResource(id = R.string.number_of_words),
+        label = stringResource(id = BitwardenString.number_of_words),
         value = numWords.coerceIn(minimumValue = minValue, maximumValue = maxValue),
         range = minValue..maxValue,
         onValueChange = onPassphraseNumWordsCounterChange,
@@ -1046,7 +1026,7 @@ private fun PassphraseWordSeparatorInputItem(
     modifier: Modifier = Modifier,
 ) {
     BitwardenTextField(
-        label = stringResource(id = R.string.word_separator),
+        label = stringResource(id = BitwardenString.word_separator),
         value = wordSeparator?.toString().orEmpty(),
         onValueChange = {
             // When onValueChange triggers and we don't update the value for whatever reason,
@@ -1071,7 +1051,7 @@ private fun PassphraseCapitalizeToggleItem(
     enabled: Boolean = true,
 ) {
     BitwardenSwitch(
-        label = stringResource(id = R.string.capitalize),
+        label = stringResource(id = BitwardenString.capitalize),
         isChecked = capitalize,
         onCheckedChange = onPassphraseCapitalizeToggleChange,
         enabled = enabled,
@@ -1088,7 +1068,7 @@ private fun PassphraseIncludeNumberToggleItem(
     modifier: Modifier = Modifier,
 ) {
     BitwardenSwitch(
-        label = stringResource(id = R.string.include_number),
+        label = stringResource(id = BitwardenString.include_number),
         isChecked = includeNumber,
         enabled = enabled,
         onCheckedChange = onPassphraseIncludeNumberToggleChange,
@@ -1110,8 +1090,6 @@ private fun UsernameTypeItems(
     plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
     catchAllEmailHandlers: CatchAllEmailHandlers,
     randomWordHandlers: RandomWordHandlers,
-    shouldShowSelfHostServerUrlField: Boolean,
-    shouldShowSimpleLoginSelfHostServerUrlField: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -1136,9 +1114,6 @@ private fun UsernameTypeItems(
                 ForwardedEmailAliasTypeContent(
                     usernameTypeState = selectedType,
                     forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
-                    shouldShowSelfHostServerUrlField = shouldShowSelfHostServerUrlField,
-                    shouldShowSimpleLoginSelfHostServerUrlField =
-                        shouldShowSimpleLoginSelfHostServerUrlField,
                 )
             }
 
@@ -1170,7 +1145,7 @@ private fun UsernameOptionsItem(
     val optionsWithStrings = possibleSubStates.associateWith { stringResource(id = it.labelRes) }
 
     BitwardenMultiSelectButton(
-        label = stringResource(id = R.string.username_type),
+        label = stringResource(id = BitwardenString.username_type),
         options = optionsWithStrings.values.toImmutableList(),
         selectedOption = stringResource(id = currentSubState.selectedType.displayStringResId),
         onOptionSelected = { selectedOption ->
@@ -1181,9 +1156,10 @@ private fun UsernameOptionsItem(
         supportingText = currentSubState.selectedType.supportingStringResId?.let {
             stringResource(id = it)
         },
-        tooltip = TooltipData(
+        helpData = BitwardenHelpButtonData(
             onClick = usernameTypeHandlers.onUsernameTooltipClicked,
-            contentDescription = stringResource(id = R.string.learn_more),
+            contentDescription = stringResource(id = BitwardenString.learn_more),
+            isExternalLink = true,
         ),
         cardStyle = CardStyle.Full,
         modifier = modifier.testTag(tag = "UsernameTypePicker"),
@@ -1199,8 +1175,6 @@ private fun UsernameOptionsItem(
 private fun ForwardedEmailAliasTypeContent(
     usernameTypeState: GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias,
     forwardedEmailAliasHandlers: ForwardedEmailAliasHandlers,
-    shouldShowSelfHostServerUrlField: Boolean,
-    shouldShowSimpleLoginSelfHostServerUrlField: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -1219,7 +1193,9 @@ private fun ForwardedEmailAliasTypeContent(
         when (usernameTypeState.selectedServiceType) {
             is ServiceType.AddyIo -> {
                 BitwardenPasswordField(
-                    label = stringResource(id = R.string.api_access_token_required_parenthesis),
+                    label = stringResource(
+                        id = BitwardenString.api_access_token_required_parenthesis,
+                    ),
                     value = usernameTypeState.selectedServiceType.apiAccessToken,
                     onValueChange = forwardedEmailAliasHandlers.onAddyIoAccessTokenTextChange,
                     showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
@@ -1233,7 +1209,7 @@ private fun ForwardedEmailAliasTypeContent(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 BitwardenTextField(
-                    label = stringResource(id = R.string.domain_name_required_parenthesis),
+                    label = stringResource(id = BitwardenString.domain_name_required_parenthesis),
                     value = usernameTypeState.selectedServiceType.domainName,
                     onValueChange = forwardedEmailAliasHandlers.onAddyIoDomainNameTextChange,
                     textFieldTestTag = "AnonAddyDomainNameEntry",
@@ -1243,25 +1219,23 @@ private fun ForwardedEmailAliasTypeContent(
                         .fillMaxWidth(),
                 )
 
-                if (shouldShowSelfHostServerUrlField) {
-                    Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-                    BitwardenTextField(
-                        label = stringResource(id = R.string.self_host_server_url),
-                        value = usernameTypeState.selectedServiceType.selfHostServerUrl,
-                        onValueChange = forwardedEmailAliasHandlers.onAddyIoSelfHostServerUrlChange,
-                        textFieldTestTag = "AnonAddySelfHostUrlEntry",
-                        cardStyle = CardStyle.Full,
-                        modifier = Modifier
-                            .standardHorizontalMargin()
-                            .fillMaxWidth(),
-                    )
-                }
+                BitwardenTextField(
+                    label = stringResource(id = BitwardenString.self_host_server_url),
+                    value = usernameTypeState.selectedServiceType.selfHostServerUrl,
+                    onValueChange = forwardedEmailAliasHandlers.onAddyIoSelfHostServerUrlChange,
+                    textFieldTestTag = "AnonAddySelfHostUrlEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
             }
 
             is ServiceType.DuckDuckGo -> {
                 BitwardenPasswordField(
-                    label = stringResource(id = R.string.api_key_required_parenthesis),
+                    label = stringResource(id = BitwardenString.api_key_required_parenthesis),
                     value = usernameTypeState.selectedServiceType.apiKey,
                     onValueChange = forwardedEmailAliasHandlers.onDuckDuckGoApiKeyTextChange,
                     showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
@@ -1275,7 +1249,7 @@ private fun ForwardedEmailAliasTypeContent(
 
             is ServiceType.FastMail -> {
                 BitwardenPasswordField(
-                    label = stringResource(id = R.string.api_key_required_parenthesis),
+                    label = stringResource(id = BitwardenString.api_key_required_parenthesis),
                     value = usernameTypeState.selectedServiceType.apiKey,
                     onValueChange = forwardedEmailAliasHandlers.onFastMailApiKeyTextChange,
                     showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
@@ -1289,7 +1263,9 @@ private fun ForwardedEmailAliasTypeContent(
 
             is ServiceType.FirefoxRelay -> {
                 BitwardenPasswordField(
-                    label = stringResource(id = R.string.api_access_token_required_parenthesis),
+                    label = stringResource(
+                        id = BitwardenString.api_access_token_required_parenthesis,
+                    ),
                     value = usernameTypeState.selectedServiceType.apiAccessToken,
                     onValueChange = forwardedEmailAliasHandlers.onFirefoxRelayAccessTokenTextChange,
                     showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
@@ -1303,7 +1279,7 @@ private fun ForwardedEmailAliasTypeContent(
 
             is ServiceType.ForwardEmail -> {
                 BitwardenPasswordField(
-                    label = stringResource(id = R.string.api_key_required_parenthesis),
+                    label = stringResource(id = BitwardenString.api_key_required_parenthesis),
                     value = usernameTypeState.selectedServiceType.apiKey,
                     onValueChange = forwardedEmailAliasHandlers.onForwardEmailApiKeyTextChange,
                     showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
@@ -1317,7 +1293,7 @@ private fun ForwardedEmailAliasTypeContent(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 BitwardenTextField(
-                    label = stringResource(id = R.string.domain_name_required_parenthesis),
+                    label = stringResource(id = BitwardenString.domain_name_required_parenthesis),
                     value = usernameTypeState.selectedServiceType.domainName,
                     onValueChange = forwardedEmailAliasHandlers.onForwardEmailDomainNameTextChange,
                     textFieldTestTag = "ForwardedEmailDomainNameEntry",
@@ -1330,7 +1306,7 @@ private fun ForwardedEmailAliasTypeContent(
 
             is ServiceType.SimpleLogin -> {
                 BitwardenPasswordField(
-                    label = stringResource(id = R.string.api_key_required_parenthesis),
+                    label = stringResource(id = BitwardenString.api_key_required_parenthesis),
                     value = usernameTypeState.selectedServiceType.apiKey,
                     onValueChange = forwardedEmailAliasHandlers.onSimpleLoginApiKeyTextChange,
                     showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
@@ -1341,21 +1317,19 @@ private fun ForwardedEmailAliasTypeContent(
                         .fillMaxWidth(),
                 )
 
-                if (shouldShowSimpleLoginSelfHostServerUrlField) {
-                    Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-                    BitwardenTextField(
-                        label = stringResource(id = R.string.self_host_server_url),
-                        value = usernameTypeState.selectedServiceType.selfHostServerUrl,
-                        onValueChange =
-                            forwardedEmailAliasHandlers.onSimpleLoginSelfHostServerUrlChange,
-                        textFieldTestTag = "SimpleLoginSelfHostServerUrlEntry",
-                        cardStyle = CardStyle.Full,
-                        modifier = Modifier
-                            .standardHorizontalMargin()
-                            .fillMaxWidth(),
-                    )
-                }
+                BitwardenTextField(
+                    label = stringResource(id = BitwardenString.self_host_server_url),
+                    value = usernameTypeState.selectedServiceType.selfHostServerUrl,
+                    onValueChange = forwardedEmailAliasHandlers
+                        .onSimpleLoginSelfHostServerUrlChange,
+                    textFieldTestTag = "SimpleLoginSelfHostServerUrlEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
             }
 
             null -> {
@@ -1386,7 +1360,7 @@ private fun ServiceTypeOptionsItem(
     val optionsWithStrings = possibleSubStates.associateWith { stringResource(id = it.labelRes) }
 
     BitwardenMultiSelectButton(
-        label = stringResource(id = R.string.service),
+        label = stringResource(id = BitwardenString.service),
         options = optionsWithStrings.values.toImmutableList(),
         selectedOption = (currentSubState.selectedServiceType?.displayStringResId)?.let {
             stringResource(id = it)
@@ -1429,7 +1403,7 @@ private fun PlusAddressedEmailTextInputItem(
     modifier: Modifier = Modifier,
 ) {
     BitwardenTextField(
-        label = stringResource(id = R.string.email_required_parenthesis),
+        label = stringResource(id = BitwardenString.email_required_parenthesis),
         value = email,
         onValueChange = onPlusAddressedEmailTextChange,
         textFieldTestTag = "PlusAddressedEmailEntry",
@@ -1468,7 +1442,7 @@ private fun CatchAllEmailTextInputItem(
     modifier: Modifier = Modifier,
 ) {
     BitwardenTextField(
-        label = stringResource(id = R.string.domain_name_required_parenthesis),
+        label = stringResource(id = BitwardenString.domain_name_required_parenthesis),
         value = domain,
         onValueChange = onDomainTextChange,
         textFieldTestTag = "CatchAllEmailDomainEntry",
@@ -1515,7 +1489,7 @@ private fun RandomWordCapitalizeToggleItem(
     modifier: Modifier = Modifier,
 ) {
     BitwardenSwitch(
-        label = stringResource(id = R.string.capitalize),
+        label = stringResource(id = BitwardenString.capitalize),
         isChecked = capitalize,
         onCheckedChange = onRandomWordCapitalizeToggleChange,
         cardStyle = CardStyle.Top(),
@@ -1530,7 +1504,7 @@ private fun RandomWordIncludeNumberToggleItem(
     modifier: Modifier = Modifier,
 ) {
     BitwardenSwitch(
-        label = stringResource(id = R.string.include_number),
+        label = stringResource(id = BitwardenString.include_number),
         isChecked = includeNumber,
         onCheckedChange = onRandomWordIncludeNumberToggleChange,
         cardStyle = CardStyle.Bottom,

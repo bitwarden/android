@@ -9,6 +9,7 @@ import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
 import android.widget.inline.InlinePresentationSpec
 import androidx.annotation.RequiresApi
+import com.bitwarden.core.util.toPendingIntentMutabilityFlag
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData

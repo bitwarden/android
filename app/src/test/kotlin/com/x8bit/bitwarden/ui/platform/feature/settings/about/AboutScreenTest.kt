@@ -14,9 +14,9 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -73,7 +73,7 @@ class AboutScreenTest : BitwardenComposeTest() {
     @Test
     fun `on flight recorder tooltip click should emit FlightRecorderTooltipClick`() {
         composeTestRule
-            .onNodeWithContentDescription("Flight recorder help")
+            .onNodeWithContentDescription("Flight recorder help, External link")
             .performScrollTo()
             .performClick()
         verify {
@@ -324,12 +324,13 @@ class AboutScreenTest : BitwardenComposeTest() {
 
 private val DEFAULT_STATE = AboutState(
     version = "Version: 1.0.0 (1)".asText(),
+    sdkVersion = "\uD83E\uDD80 SDK: 1.0.0-20250708.105256-238".asText(),
+    serverData = "\uD83C\uDF29 Server: 2025.7.1 @ US".asText(),
     deviceData = "device_data".asText(),
     ciData = "ci_data".asText(),
     isSubmitCrashLogsEnabled = false,
     shouldShowCrashLogsButton = true,
     isFlightRecorderEnabled = false,
-    shouldShowFlightRecorder = true,
     flightRecorderSubtext = null,
     copyrightInfo = "".asText(),
 )

@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.autofill.util
 
 import androidx.core.content.ContextCompat
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 
@@ -15,7 +15,7 @@ fun getAutofillSuggestionContentDescription(
 ): String =
     String.format(
         "%s, %s, %s, %s",
-        ContextCompat.getString(autofillAppInfo.context, R.string.autofill_suggestion),
+        ContextCompat.getString(autofillAppInfo.context, BitwardenString.autofill_suggestion),
         getAutofillSuggestionCipherType(
             autofillCipher = autofillCipher,
             autofillAppInfo = autofillAppInfo,
@@ -31,11 +31,11 @@ private fun getAutofillSuggestionCipherType(
     when (autofillCipher) {
         is AutofillCipher.Card -> ContextCompat.getString(
             autofillAppInfo.context,
-            R.string.type_card,
+            BitwardenString.type_card,
         )
 
         is AutofillCipher.Login -> ContextCompat.getString(
             autofillAppInfo.context,
-            R.string.type_login,
+            BitwardenString.type_login,
         )
     }

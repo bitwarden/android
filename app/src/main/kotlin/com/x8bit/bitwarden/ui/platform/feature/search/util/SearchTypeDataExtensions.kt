@@ -3,6 +3,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.search.util
 
 import androidx.annotation.DrawableRes
+import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.send.SendType
@@ -10,15 +11,15 @@ import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.util.removeDiacritics
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
+import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
-import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
-import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
-import com.x8bit.bitwarden.data.platform.util.subtitle
+import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
@@ -27,6 +28,10 @@ import com.x8bit.bitwarden.ui.tools.feature.send.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.util.toLabelIcons
 import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
+import com.x8bit.bitwarden.ui.vault.util.toSdkCipherType
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import java.time.Clock
 import java.time.format.FormatStyle
 
@@ -56,6 +61,7 @@ fun SearchTypeData.updateWithAdditionalDataIfNecessary(
         SearchTypeData.Sends.Files -> this
         SearchTypeData.Sends.Texts -> this
         SearchTypeData.Vault.All -> this
+        SearchTypeData.Vault.Archive -> this
         SearchTypeData.Vault.Cards -> this
         SearchTypeData.Vault.Identities -> this
         SearchTypeData.Vault.Logins -> this
@@ -79,10 +85,10 @@ val SearchTypeData.searchItemTestTag: String
  * Filters out any [CipherView]s that do not adhere to the [searchTypeData] and [searchTerm] and
  * sorts the remaining items.
  */
-fun List<CipherView>.filterAndOrganize(
+fun List<CipherListView>.filterAndOrganize(
     searchTypeData: SearchTypeData.Vault,
     searchTerm: String,
-): List<CipherView> =
+): List<CipherListView> =
     if (searchTerm.isBlank()) {
         emptyList()
     } else {
@@ -101,23 +107,50 @@ fun List<CipherView>.filterAndOrganize(
 /**
  * Determines a predicate to filter a list of [SendView] based on the [SearchTypeData.Sends].
  */
-private fun CipherView.filterBySearchType(
+private fun CipherListView.filterBySearchType(
     searchTypeData: SearchTypeData.Vault,
 ): Boolean =
     when (searchTypeData) {
-        SearchTypeData.Vault.All -> deletedDate == null
-        is SearchTypeData.Vault.Cards -> type == CipherType.CARD && deletedDate == null
-        is SearchTypeData.Vault.Collection -> {
-            searchTypeData.collectionId in this.collectionIds && deletedDate == null
+        SearchTypeData.Vault.All -> deletedDate == null && archivedDate == null
+        SearchTypeData.Vault.Archive -> archivedDate != null && deletedDate == null
+        is SearchTypeData.Vault.Cards -> {
+            type is CipherListViewType.Card && deletedDate == null && archivedDate == null
         }
 
-        is SearchTypeData.Vault.Folder -> folderId == searchTypeData.folderId && deletedDate == null
-        SearchTypeData.Vault.NoFolder -> folderId == null && deletedDate == null
-        is SearchTypeData.Vault.Identities -> type == CipherType.IDENTITY && deletedDate == null
-        is SearchTypeData.Vault.Logins -> type == CipherType.LOGIN && deletedDate == null
-        is SearchTypeData.Vault.SecureNotes -> type == CipherType.SECURE_NOTE && deletedDate == null
-        is SearchTypeData.Vault.SshKeys -> type == CipherType.SSH_KEY && deletedDate == null
-        is SearchTypeData.Vault.VerificationCodes -> login?.totp != null && deletedDate == null
+        is SearchTypeData.Vault.Collection -> {
+            searchTypeData.collectionId in this.collectionIds &&
+                deletedDate == null &&
+                archivedDate == null
+        }
+
+        is SearchTypeData.Vault.Folder -> {
+            folderId == searchTypeData.folderId && deletedDate == null && archivedDate == null
+        }
+
+        SearchTypeData.Vault.NoFolder -> {
+            folderId == null && deletedDate == null && archivedDate == null
+        }
+
+        is SearchTypeData.Vault.Identities -> {
+            type is CipherListViewType.Identity && deletedDate == null && archivedDate == null
+        }
+
+        is SearchTypeData.Vault.Logins -> {
+            type is CipherListViewType.Login && deletedDate == null && archivedDate == null
+        }
+
+        is SearchTypeData.Vault.SecureNotes -> {
+            type is CipherListViewType.SecureNote && deletedDate == null && archivedDate == null
+        }
+
+        is SearchTypeData.Vault.SshKeys -> {
+            type is CipherListViewType.SshKey && deletedDate == null && archivedDate == null
+        }
+
+        is SearchTypeData.Vault.VerificationCodes -> {
+            login?.totp != null && deletedDate == null && archivedDate == null
+        }
+
         is SearchTypeData.Vault.Trash -> deletedDate != null
     }
 
@@ -126,12 +159,16 @@ private fun CipherView.filterBySearchType(
  * this item should be removed from the list.
  */
 @Suppress("MagicNumber")
-private fun CipherView.matchedSearch(searchTerm: String): SortPriority? {
+private fun CipherListView.matchedSearch(searchTerm: String): SortPriority? {
     val term = searchTerm.removeDiacritics()
     val cipherName = name.removeDiacritics()
     val cipherId = id?.takeIf { term.length > 8 }.orEmpty().removeDiacritics()
-    val cipherSubtitle = subtitle.orEmpty().removeDiacritics()
-    val cipherUris = login?.uris.orEmpty().map { it.uri.orEmpty().removeDiacritics() }
+    val cipherSubtitle = subtitle.removeDiacritics()
+    val cipherUris = (this.type as? CipherListViewType.Login)
+        ?.v1
+        ?.uris
+        .orEmpty()
+        .map { it.uri.orEmpty().removeDiacritics() }
     return when {
         cipherName.contains(other = term, ignoreCase = true) -> SortPriority.HIGH
         cipherId.contains(other = term, ignoreCase = true) -> SortPriority.LOW
@@ -145,13 +182,14 @@ private fun CipherView.matchedSearch(searchTerm: String): SortPriority? {
  * Transforms a list of [CipherView] into [SearchState.ViewState].
  */
 @Suppress("LongParameterList")
-fun List<CipherView>.toViewState(
+fun List<CipherListView>.toViewState(
     searchTerm: String,
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isPremiumUser: Boolean,
+    isArchiveEnabled: Boolean,
 ): SearchState.ViewState =
     when {
         searchTerm.isEmpty() -> SearchState.ViewState.Empty(message = null)
@@ -163,41 +201,49 @@ fun List<CipherView>.toViewState(
                     isIconLoadingDisabled = isIconLoadingDisabled,
                     isAutofill = isAutofill,
                     isPremiumUser = isPremiumUser,
-                )
-                    .sortAlphabetically(),
+                    isArchiveEnabled = isArchiveEnabled,
+                ),
             )
         }
 
         else -> {
             SearchState.ViewState.Empty(
-                message = R.string.there_are_no_items_that_match_the_search.asText(),
+                message = BitwardenString.there_are_no_items_that_match_the_search.asText(),
             )
         }
     }
 
-private fun List<CipherView>.toDisplayItemList(
+@Suppress("LongParameterList")
+private fun List<CipherListView>.toDisplayItemList(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isPremiumUser: Boolean,
-): List<SearchState.DisplayItem> =
-    this.map {
-        it.toDisplayItem(
-            baseIconUrl = baseIconUrl,
-            hasMasterPassword = hasMasterPassword,
-            isIconLoadingDisabled = isIconLoadingDisabled,
-            isAutofill = isAutofill,
-            isPremiumUser = isPremiumUser,
-        )
-    }
+    isArchiveEnabled: Boolean,
+): ImmutableList<SearchState.DisplayItem> =
+    this
+        .map {
+            it.toDisplayItem(
+                baseIconUrl = baseIconUrl,
+                hasMasterPassword = hasMasterPassword,
+                isIconLoadingDisabled = isIconLoadingDisabled,
+                isAutofill = isAutofill,
+                isPremiumUser = isPremiumUser,
+                isArchiveEnabled = isArchiveEnabled,
+            )
+        }
+        .sortAlphabetically()
+        .toImmutableList()
 
-private fun CipherView.toDisplayItem(
+@Suppress("LongParameterList")
+private fun CipherListView.toDisplayItem(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isPremiumUser: Boolean,
+    isArchiveEnabled: Boolean,
 ): SearchState.DisplayItem =
     SearchState.DisplayItem(
         id = id.orEmpty(),
@@ -213,6 +259,7 @@ private fun CipherView.toDisplayItem(
         overflowOptions = toOverflowActions(
             hasMasterPassword = hasMasterPassword,
             isPremiumUser = isPremiumUser,
+            isArchiveEnabled = isArchiveEnabled,
         ),
         overflowTestTag = "CipherOptionsButton",
         totpCode = login?.totp,
@@ -221,21 +268,20 @@ private fun CipherView.toDisplayItem(
             // Only valid for autofill
             .filter { isAutofill }
             // Only Login types get the save option
-            .filter {
-                this.login != null || (it != AutofillSelectionOption.AUTOFILL_AND_SAVE)
-            },
+            .filter { this.login != null || (it != AutofillSelectionOption.AUTOFILL_AND_SAVE) }
+            .toImmutableList(),
         shouldDisplayMasterPasswordReprompt = hasMasterPassword &&
             reprompt == CipherRepromptType.PASSWORD,
-        itemType = SearchState.DisplayItem.ItemType.Vault(type = this.type),
+        itemType = SearchState.DisplayItem.ItemType.Vault(type = this.type.toSdkCipherType()),
     )
 
-private fun CipherView.toIconData(
+private fun CipherListView.toIconData(
     baseIconUrl: String,
     isIconLoadingDisabled: Boolean,
 ): IconData =
-    when (this.type) {
-        CipherType.LOGIN -> {
-            login?.uris.toLoginIconData(
+    when (val cipherType = this.type) {
+        is CipherListViewType.Login -> {
+            cipherType.v1.uris.toLoginIconData(
                 baseIconUrl = baseIconUrl,
                 isIconLoadingDisabled = isIconLoadingDisabled,
                 usePasskeyDefaultIcon = this.isActiveWithFido2Credentials,
@@ -246,13 +292,13 @@ private fun CipherView.toIconData(
     }
 
 @get:DrawableRes
-private val CipherType.iconRes: Int
+private val CipherListViewType.iconRes: Int
     get() = when (this) {
-        CipherType.LOGIN -> BitwardenDrawable.ic_globe
-        CipherType.SECURE_NOTE -> BitwardenDrawable.ic_note
-        CipherType.CARD -> BitwardenDrawable.ic_payment_card
-        CipherType.IDENTITY -> BitwardenDrawable.ic_id_card
-        CipherType.SSH_KEY -> BitwardenDrawable.ic_ssh_key
+        is CipherListViewType.Login -> BitwardenDrawable.ic_globe
+        CipherListViewType.SecureNote -> BitwardenDrawable.ic_note
+        is CipherListViewType.Card -> BitwardenDrawable.ic_payment_card
+        CipherListViewType.Identity -> BitwardenDrawable.ic_id_card
+        CipherListViewType.SshKey -> BitwardenDrawable.ic_ssh_key
     }
 
 /**
@@ -322,14 +368,13 @@ fun List<SendView>.toViewState(
                 displayItems = toDisplayItemList(
                     baseWebSendUrl = baseWebSendUrl,
                     clock = clock,
-                )
-                    .sortAlphabetically(),
+                ),
             )
         }
 
         else -> {
             SearchState.ViewState.Empty(
-                message = R.string.there_are_no_items_that_match_the_search.asText(),
+                message = BitwardenString.there_are_no_items_that_match_the_search.asText(),
             )
         }
     }
@@ -337,13 +382,16 @@ fun List<SendView>.toViewState(
 private fun List<SendView>.toDisplayItemList(
     baseWebSendUrl: String,
     clock: Clock,
-): List<SearchState.DisplayItem> =
-    this.map {
-        it.toDisplayItem(
-            baseWebSendUrl = baseWebSendUrl,
-            clock = clock,
-        )
-    }
+): ImmutableList<SearchState.DisplayItem> =
+    this
+        .map {
+            it.toDisplayItem(
+                baseWebSendUrl = baseWebSendUrl,
+                clock = clock,
+            )
+        }
+        .sortAlphabetically()
+        .toImmutableList()
 
 private fun SendView.toDisplayItem(
     baseWebSendUrl: String,
@@ -369,7 +417,7 @@ private fun SendView.toDisplayItem(
         overflowOptions = toOverflowActions(baseWebSendUrl = baseWebSendUrl),
         overflowTestTag = "SendOptionsButton",
         totpCode = null,
-        autofillSelectionOptions = emptyList(),
+        autofillSelectionOptions = persistentListOf(),
         shouldDisplayMasterPasswordReprompt = false,
         itemType = SearchState.DisplayItem.ItemType.Sends(type = this.type),
     )

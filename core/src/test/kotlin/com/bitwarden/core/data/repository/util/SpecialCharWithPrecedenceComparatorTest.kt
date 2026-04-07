@@ -1,9 +1,24 @@
 package com.bitwarden.core.data.repository.util
 
-import org.junit.Test
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import java.util.Locale
 
 class SpecialCharWithPrecedenceComparatorTest {
+
+    private lateinit var defaultLocale: Locale
+
+    @BeforeEach
+    fun setup() {
+        defaultLocale = Locale.getDefault()
+    }
+
+    @AfterEach
+    fun tearDown() {
+        Locale.setDefault(defaultLocale)
+    }
 
     @Test
     fun `Sorting with comparator should return expected result of sorted string`() {
@@ -40,5 +55,23 @@ class SpecialCharWithPrecedenceComparatorTest {
             expectedSortedList,
             unsortedList.sortedWith(SpecialCharWithPrecedenceComparator),
         )
+    }
+
+    @Test
+    fun `comparator should return consistent values across locales`() {
+        val unsortedList = listOf("i", "z", "j")
+        val sortedList = listOf("i", "j", "z")
+        val locales = listOf(
+            Locale.forLanguageTag("tr-TR"),
+            Locale.US,
+        )
+
+        locales.forEach { locale ->
+            Locale.setDefault(locale)
+            assertEquals(
+                sortedList,
+                unsortedList.sortedWith(SpecialCharWithPrecedenceComparator),
+            )
+        }
     }
 }

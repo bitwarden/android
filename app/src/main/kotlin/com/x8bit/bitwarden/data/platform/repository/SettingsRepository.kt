@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.platform.repository
 
+import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
-import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderManager
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
@@ -121,7 +121,7 @@ interface SettingsRepository : FlightRecorderManager {
     var defaultUriMatchType: UriMatchType
 
     /**
-     * Whether or not biometric unlocking is enabled for the current user.
+     * Whether biometric unlocking is enabled for the current user.
      */
     val isUnlockWithBiometricsEnabled: Boolean
 
@@ -131,7 +131,7 @@ interface SettingsRepository : FlightRecorderManager {
     val isUnlockWithBiometricsEnabledFlow: Flow<Boolean>
 
     /**
-     * Whether or not PIN unlocking is enabled for the current user.
+     * Whether PIN unlocking is enabled for the current user.
      */
     val isUnlockWithPinEnabled: Boolean
 
@@ -141,17 +141,17 @@ interface SettingsRepository : FlightRecorderManager {
     val isUnlockWithPinEnabledFlow: Flow<Boolean>
 
     /**
-     * Whether or not inline autofill is enabled for the current user.
+     * Whether inline autofill is enabled for the current user.
      */
     var isInlineAutofillEnabled: Boolean
 
     /**
-     * Whether or not the auto copying totp when autofilling is disabled for the current user.
+     * Whether the auto copying totp when autofilling is disabled for the current user.
      */
     var isAutoCopyTotpDisabled: Boolean
 
     /**
-     * Whether or not the autofill save prompt is disabled for the current user.
+     * Whether the autofill save prompt is disabled for the current user.
      */
     var isAutofillSavePromptDisabled: Boolean
 
@@ -178,12 +178,12 @@ interface SettingsRepository : FlightRecorderManager {
     val isAutofillEnabledStateFlow: StateFlow<Boolean>
 
     /**
-     * Sets whether or not screen capture is allowed for the current user.
+     * Sets whether screen capture is allowed for the current user.
      */
     var isScreenCaptureAllowed: Boolean
 
     /**
-     * Whether or not screen capture is allowed for the current user.
+     * Whether screen capture is allowed for the current user.
      */
     val isScreenCaptureAllowedStateFlow: StateFlow<Boolean>
 
@@ -243,6 +243,26 @@ interface SettingsRepository : FlightRecorderManager {
     fun storePullToRefreshEnabled(isPullToRefreshEnabled: Boolean)
 
     /**
+     * Gets updates for whether the introducing archive action card is dismissed.
+     */
+    fun getIntroducingArchiveActionCardDismissedFlow(): StateFlow<Boolean>
+
+    /**
+     * Stores that the introducing archive action card has been dismissed for the active user.
+     */
+    fun dismissIntroducingArchiveActionCard()
+
+    /**
+     * Gets updates for whether the Premium upgrade banner is dismissed.
+     */
+    fun getPremiumUpgradeBannerDismissedFlow(): StateFlow<Boolean>
+
+    /**
+     * Stores that the Premium upgrade banner has been dismissed for the active user.
+     */
+    fun dismissPremiumUpgradeBanner()
+
+    /**
      * Stores the encrypted user key for biometrics, allowing it to be used to unlock the current
      * user's vault.
      */
@@ -278,19 +298,19 @@ interface SettingsRepository : FlightRecorderManager {
     fun storeUserHasLoggedInValue(userId: String)
 
     /**
-     * Returns true if the given [userId] has previously registered for export via the credential
+     * Returns true if the application has previously registered for export via the credential
      * exchange protocol.
      */
-    fun isVaultRegisteredForExport(userId: String): Boolean
+    fun isAppRegisteredForExport(): Boolean
 
     /**
-     * Stores that the given [userId] has previously registered for export via the credential
+     * Stores that the application has previously registered for export via the credential
      * exchange protocol.
      */
-    fun storeVaultRegisteredForExport(userId: String, isRegistered: Boolean)
+    fun storeAppRegisteredForExport(isRegistered: Boolean)
 
     /**
-     * Gets updates for the [isVaultRegisteredForExport] value for the given [userId].
+     * Gets updates for the [isAppRegisteredForExport] value for the given [userId].
      */
-    fun getVaultRegisteredForExportFlow(userId: String): StateFlow<Boolean>
+    fun getAppRegisteredForExportFlow(userId: String): StateFlow<Boolean>
 }

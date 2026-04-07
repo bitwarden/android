@@ -5,30 +5,22 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.model.Environment.Type
+import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isValidEmail
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ContinueClick
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EnvironmentTypeSelect
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ErrorDialogDismiss
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.Internal.ReceiveSendVerificationEmailResult
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.Internal.UpdatedEnvironmentReceive
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.NameInputChange
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.PrivacyPolicyClick
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ReceiveMarketingEmailsToggle
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ServerGeologyHelpClick
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.TermsClick
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.UnsubscribeMarketingEmailsClick
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -44,6 +36,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class StartRegistrationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
 ) : BaseViewModel<StartRegistrationState, StartRegistrationEvent, StartRegistrationAction>(
@@ -67,38 +60,52 @@ class StartRegistrationViewModel @Inject constructor(
         // Listen for changes in environment triggered both by this VM and externally.
         environmentRepository
             .environmentStateFlow
-            .onEach { environment ->
-                sendAction(
-                    UpdatedEnvironmentReceive(environment = environment),
-                )
-            }
+            .map { StartRegistrationAction.Internal.UpdatedEnvironmentReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+        snackbarRelayManager
+            .getSnackbarDataFlow(SnackbarRelay.ENVIRONMENT_SAVED)
+            .map { StartRegistrationAction.Internal.SnackbarDataReceived(it) }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: StartRegistrationAction) {
         when (action) {
-            is ContinueClick -> handleContinueClick()
-            is EmailInputChange -> handleEmailInputChanged(action)
-            is NameInputChange -> handleNameInputChanged(action)
-            is CloseClick -> handleCloseClick()
-            is ErrorDialogDismiss -> handleDialogDismiss()
-            is ReceiveMarketingEmailsToggle -> handleReceiveMarketingEmailsToggle(
-                action,
-            )
+            is StartRegistrationAction.ContinueClick -> handleContinueClick()
+            is StartRegistrationAction.EmailInputChange -> handleEmailInputChanged(action)
+            is StartRegistrationAction.NameInputChange -> handleNameInputChanged(action)
+            is StartRegistrationAction.CloseClick -> handleCloseClick()
+            is StartRegistrationAction.ErrorDialogDismiss -> handleDialogDismiss()
+            is StartRegistrationAction.ReceiveMarketingEmailsToggle -> {
+                handleReceiveMarketingEmailsToggle(action)
+            }
 
-            is PrivacyPolicyClick -> handlePrivacyPolicyClick()
-            is TermsClick -> handleTermsClick()
-            is UnsubscribeMarketingEmailsClick -> handleUnsubscribeMarketingEmailsClick()
-            is ReceiveSendVerificationEmailResult -> {
+            is StartRegistrationAction.PrivacyPolicyClick -> handlePrivacyPolicyClick()
+            is StartRegistrationAction.TermsClick -> handleTermsClick()
+            is StartRegistrationAction.UnsubscribeMarketingEmailsClick -> {
+                handleUnsubscribeMarketingEmailsClick()
+            }
+
+            is StartRegistrationAction.EnvironmentTypeSelect -> handleEnvironmentTypeSelect(action)
+            StartRegistrationAction.ServerGeologyHelpClick -> handleServerGeologyHelpClick()
+            is StartRegistrationAction.Internal -> handleInternalAction(action)
+        }
+    }
+
+    private fun handleInternalAction(action: StartRegistrationAction.Internal) {
+        when (action) {
+            is StartRegistrationAction.Internal.ReceiveSendVerificationEmailResult -> {
                 handleReceiveSendVerificationEmailResult(action)
             }
 
-            is EnvironmentTypeSelect -> handleEnvironmentTypeSelect(action)
-            is UpdatedEnvironmentReceive -> {
-                handleUpdatedEnvironmentReceive(action)
+            is StartRegistrationAction.Internal.SnackbarDataReceived -> {
+                handleSnackbarDataReceived(action)
             }
 
-            ServerGeologyHelpClick -> handleServerGeologyHelpClick()
+            is StartRegistrationAction.Internal.UpdatedEnvironmentReceive -> {
+                handleUpdatedEnvironmentReceive(action)
+            }
         }
     }
 
@@ -106,7 +113,7 @@ class StartRegistrationViewModel @Inject constructor(
         sendEvent(StartRegistrationEvent.NavigateToServerSelectionInfo)
     }
 
-    private fun handleEnvironmentTypeSelect(action: EnvironmentTypeSelect) {
+    private fun handleEnvironmentTypeSelect(action: StartRegistrationAction.EnvironmentTypeSelect) {
         val environment = when (action.environmentType) {
             Type.US -> Environment.Us
             Type.EU -> Environment.Eu
@@ -122,8 +129,14 @@ class StartRegistrationViewModel @Inject constructor(
         environmentRepository.environment = environment
     }
 
+    private fun handleSnackbarDataReceived(
+        action: StartRegistrationAction.Internal.SnackbarDataReceived,
+    ) {
+        sendEvent(StartRegistrationEvent.ShowSnackbar(action.data))
+    }
+
     private fun handleUpdatedEnvironmentReceive(
-        action: UpdatedEnvironmentReceive,
+        action: StartRegistrationAction.Internal.UpdatedEnvironmentReceive,
     ) {
         mutableStateFlow.update {
             it.copy(
@@ -140,7 +153,9 @@ class StartRegistrationViewModel @Inject constructor(
     private fun handleUnsubscribeMarketingEmailsClick() =
         sendEvent(StartRegistrationEvent.NavigateToUnsubscribe)
 
-    private fun handleReceiveMarketingEmailsToggle(action: ReceiveMarketingEmailsToggle) {
+    private fun handleReceiveMarketingEmailsToggle(
+        action: StartRegistrationAction.ReceiveMarketingEmailsToggle,
+    ) {
         mutableStateFlow.update {
             it.copy(isReceiveMarketingEmailsToggled = action.newState)
         }
@@ -156,7 +171,7 @@ class StartRegistrationViewModel @Inject constructor(
         sendEvent(StartRegistrationEvent.NavigateBack)
     }
 
-    private fun handleEmailInputChanged(action: EmailInputChange) {
+    private fun handleEmailInputChanged(action: StartRegistrationAction.EmailInputChange) {
         mutableStateFlow.update {
             it.copy(
                 emailInput = action.input,
@@ -165,7 +180,7 @@ class StartRegistrationViewModel @Inject constructor(
         }
     }
 
-    private fun handleNameInputChanged(action: NameInputChange) {
+    private fun handleNameInputChanged(action: StartRegistrationAction.NameInputChange) {
         mutableStateFlow.update {
             it.copy(
                 nameInput = action.input,
@@ -179,9 +194,9 @@ class StartRegistrationViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = StartRegistrationDialog.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.validation_field_required
-                            .asText(R.string.email_address.asText()),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.validation_field_required
+                            .asText(BitwardenString.email_address.asText()),
                     ),
                 )
             }
@@ -191,8 +206,8 @@ class StartRegistrationViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = StartRegistrationDialog.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.invalid_email.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.invalid_email.asText(),
                     ),
                 )
             }
@@ -214,7 +229,7 @@ class StartRegistrationViewModel @Inject constructor(
                 receiveMarketingEmails = state.isReceiveMarketingEmailsToggled,
             )
             sendAction(
-                ReceiveSendVerificationEmailResult(
+                StartRegistrationAction.Internal.ReceiveSendVerificationEmailResult(
                     sendVerificationEmailResult = result,
                 ),
             )
@@ -222,18 +237,18 @@ class StartRegistrationViewModel @Inject constructor(
     }
 
     private fun handleReceiveSendVerificationEmailResult(
-        result: ReceiveSendVerificationEmailResult,
+        result: StartRegistrationAction.Internal.ReceiveSendVerificationEmailResult,
     ) {
         when (val sendVerificationEmailResult = result.sendVerificationEmailResult) {
             is SendVerificationEmailResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = StartRegistrationDialog.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = sendVerificationEmailResult
                                 .errorMessage
                                 ?.asText()
-                                ?: R.string.generic_error_message.asText(),
+                                ?: BitwardenString.generic_error_message.asText(),
                             error = sendVerificationEmailResult.error,
                         ),
                     )
@@ -345,6 +360,13 @@ sealed class StartRegistrationEvent {
      * Navigates to the server selection info.
      */
     data object NavigateToServerSelectionInfo : StartRegistrationEvent()
+
+    /**
+     * Show a snackbar with the given [data].
+     */
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : StartRegistrationEvent(), BackgroundEvent
 }
 
 /**
@@ -417,6 +439,13 @@ sealed class StartRegistrationAction {
          */
         data class ReceiveSendVerificationEmailResult(
             val sendVerificationEmailResult: SendVerificationEmailResult,
+        ) : Internal()
+
+        /**
+         * Indicates that snackbar data has been received.
+         */
+        data class SnackbarDataReceived(
+            val data: BitwardenSnackbarData,
         ) : Internal()
 
         /**

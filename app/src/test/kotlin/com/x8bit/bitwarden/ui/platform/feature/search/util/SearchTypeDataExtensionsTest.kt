@@ -1,17 +1,21 @@
 package com.x8bit.bitwarden.ui.platform.feature.search.util
 
 import android.net.Uri
+import com.bitwarden.collections.CollectionView
+import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
+import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
-import com.bitwarden.vault.CipherView
-import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.CopyableCipherFields
 import com.bitwarden.vault.FolderView
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
@@ -20,11 +24,16 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
+import java.time.format.FormatStyle
+import java.time.temporal.TemporalAccessor
+
+private const val DEFAULT_FORMATTED_DATE_TIME = "Oct 27, 2023, 12:00 PM"
 
 class SearchTypeDataExtensionsTest {
 
@@ -142,6 +151,19 @@ class SearchTypeDataExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `updateWithAdditionalDataIfNecessary should return the searchTypeData unchanged for Vault Archive`() {
+        val searchTypeData = SearchTypeData.Vault.Archive
+        assertEquals(
+            searchTypeData,
+            searchTypeData.updateWithAdditionalDataIfNecessary(
+                folderList = listOf(),
+                collectionList = emptyList(),
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `updateWithAdditionalDataIfNecessary should return the searchTypeData unchanged for Vault Cards`() {
         val searchTypeData = SearchTypeData.Vault.Cards
         assertEquals(
@@ -245,36 +267,50 @@ class SearchTypeDataExtensionsTest {
     }
 
     @Test
+    fun `CipherViews filterAndOrganize should exclude archived items from non-archive searches`() {
+        val match1 = createMockCipherListView(number = 1, isArchived = true, name = "match1")
+        val match2 = createMockCipherListView(number = 2, name = "match2")
+        val match3 = createMockCipherListView(number = 3, isArchived = true, name = "match3")
+        val ciphers = listOf(match1, match2, match3)
+
+        val result = ciphers.filterAndOrganize(
+            searchTypeData = SearchTypeData.Vault.Logins,
+            searchTerm = "match",
+        )
+        assertEquals(listOf(match2), result)
+    }
+
+    @Test
     fun `CipherViews filterAndOrganize should return empty list when search term is blank`() {
-        val ciphers = listOf(createMockCipherView(number = 1))
+        val ciphers = listOf(createMockCipherListView(number = 1))
         val result = ciphers.filterAndOrganize(
             searchTypeData = SearchTypeData.Vault.Logins,
             searchTerm = "",
         )
-        assertEquals(emptyList<CipherView>(), result)
+        assertEquals(emptyList<CipherListView>(), result)
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `CipherViews filterAndOrganize should return filtered list when search term is not blank`() {
         val ciphers = listOf(
-            createMockCipherView(number = 1),
-            createMockCipherView(number = 2),
+            createMockCipherListView(number = 1),
+            createMockCipherListView(number = 2),
         )
         val result = ciphers.filterAndOrganize(
             searchTypeData = SearchTypeData.Vault.Logins,
             searchTerm = "1",
         )
-        assertEquals(listOf(createMockCipherView(number = 1)), result)
+        assertEquals(listOf(createMockCipherListView(number = 1)), result)
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `CipherViews filterAndOrganize should return list organized by priority when search term is not blank`() {
-        val match1 = createMockCipherView(number = 1).copy(name = "match1")
-        val match2 = createMockCipherView(number = 2).copy(name = "match2")
+        val match1 = createMockCipherListView(number = 1, name = "match1")
+        val match2 = createMockCipherListView(number = 2, name = "match2")
         val ciphers = listOf(
-            createMockCipherView(number = 0),
+            createMockCipherListView(number = 0),
             match2,
             match1,
         )
@@ -287,9 +323,9 @@ class SearchTypeDataExtensionsTest {
 
     @Test
     fun `CipherViews filterAndOrganize should return list without deleted items`() {
-        val match1 = createMockCipherView(number = 1, isDeleted = true).copy(name = "match1")
-        val match2 = createMockCipherView(number = 2).copy(name = "match2")
-        val match3 = createMockCipherView(number = 3, isDeleted = true).copy(name = "match3")
+        val match1 = createMockCipherListView(number = 1, isDeleted = true, name = "match1")
+        val match2 = createMockCipherListView(number = 2, name = "match2")
+        val match3 = createMockCipherListView(number = 3, isDeleted = true, name = "match3")
         val ciphers = listOf(match1, match2, match3)
         val result = ciphers.filterAndOrganize(
             searchTypeData = SearchTypeData.Vault.Logins,
@@ -299,10 +335,23 @@ class SearchTypeDataExtensionsTest {
     }
 
     @Test
+    fun `CipherViews filterAndOrganize should return list with only archived items`() {
+        val match1 = createMockCipherListView(number = 1, isArchived = true, name = "match1")
+        val match2 = createMockCipherListView(number = 2, name = "match2")
+        val match3 = createMockCipherListView(number = 3, isArchived = true, name = "match3")
+        val ciphers = listOf(match1, match2, match3)
+        val result = ciphers.filterAndOrganize(
+            searchTypeData = SearchTypeData.Vault.Archive,
+            searchTerm = "match",
+        )
+        assertEquals(listOf(match1, match3), result)
+    }
+
+    @Test
     fun `CipherViews filterAndOrganize should return list with only deleted items`() {
-        val match1 = createMockCipherView(number = 1, isDeleted = true).copy(name = "match1")
-        val match2 = createMockCipherView(number = 2).copy(name = "match2")
-        val match3 = createMockCipherView(number = 3, isDeleted = true).copy(name = "match3")
+        val match1 = createMockCipherListView(number = 1, isDeleted = true, name = "match1")
+        val match2 = createMockCipherListView(number = 2, name = "match2")
+        val match3 = createMockCipherListView(number = 3, isDeleted = true, name = "match3")
         val ciphers = listOf(match1, match2, match3)
         val result = ciphers.filterAndOrganize(
             searchTypeData = SearchTypeData.Vault.Trash,
@@ -315,9 +364,9 @@ class SearchTypeDataExtensionsTest {
     @Test
     fun `CipherViews toViewState should return empty state with no message when search term is blank`() {
         val ciphers = listOf(
-            createMockCipherView(number = 0),
-            createMockCipherView(number = 1),
-            createMockCipherView(number = 2),
+            createMockCipherListView(number = 0),
+            createMockCipherListView(number = 1),
+            createMockCipherListView(number = 2),
         )
 
         val result = ciphers.toViewState(
@@ -327,6 +376,7 @@ class SearchTypeDataExtensionsTest {
             isAutofill = false,
             hasMasterPassword = true,
             isPremiumUser = true,
+            isArchiveEnabled = true,
         )
 
         assertEquals(SearchState.ViewState.Empty(message = null), result)
@@ -340,9 +390,9 @@ class SearchTypeDataExtensionsTest {
             every { host } returns "www.mockuri.com"
         }
         val sends = listOf(
-            createMockCipherView(number = 0),
-            createMockCipherView(number = 1),
-            createMockCipherView(number = 2),
+            createMockCipherListView(number = 0),
+            createMockCipherListView(number = 1),
+            createMockCipherListView(number = 2),
         )
 
         val result = sends.toViewState(
@@ -352,11 +402,12 @@ class SearchTypeDataExtensionsTest {
             isAutofill = false,
             hasMasterPassword = true,
             isPremiumUser = true,
+            isArchiveEnabled = true,
         )
 
         assertEquals(
             SearchState.ViewState.Content(
-                displayItems = listOf(
+                displayItems = persistentListOf(
                     createMockDisplayItemForCipher(number = 0),
                     createMockDisplayItemForCipher(number = 1),
                     createMockDisplayItemForCipher(number = 2),
@@ -374,15 +425,17 @@ class SearchTypeDataExtensionsTest {
             every { host } returns "www.mockuri.com"
         }
         val sends = listOf(
-            createMockCipherView(
+            createMockCipherListView(
                 number = 0,
-                cipherType = CipherType.CARD,
-            )
-                .copy(
-                    reprompt = CipherRepromptType.PASSWORD,
+                type = CipherListViewType.Card(createMockCardListView(number = 0)),
+                reprompt = CipherRepromptType.PASSWORD,
+                copyableFields = listOf(
+                    CopyableCipherFields.CARD_NUMBER,
+                    CopyableCipherFields.CARD_SECURITY_CODE,
                 ),
-            createMockCipherView(number = 1),
-            createMockCipherView(number = 2),
+            ),
+            createMockCipherListView(number = 1),
+            createMockCipherListView(number = 2),
         )
 
         val result = sends.toViewState(
@@ -392,17 +445,18 @@ class SearchTypeDataExtensionsTest {
             isAutofill = true,
             hasMasterPassword = true,
             isPremiumUser = true,
+            isArchiveEnabled = true,
         )
 
         assertEquals(
             SearchState.ViewState.Content(
-                displayItems = listOf(
+                displayItems = persistentListOf(
                     createMockDisplayItemForCipher(
                         number = 0,
                         cipherType = CipherType.CARD,
                     )
                         .copy(
-                            autofillSelectionOptions = listOf(
+                            autofillSelectionOptions = persistentListOf(
                                 AutofillSelectionOption.AUTOFILL,
                                 AutofillSelectionOption.VIEW,
                             ),
@@ -410,7 +464,7 @@ class SearchTypeDataExtensionsTest {
                         ),
                     createMockDisplayItemForCipher(number = 1)
                         .copy(
-                            autofillSelectionOptions = listOf(
+                            autofillSelectionOptions = persistentListOf(
                                 AutofillSelectionOption.AUTOFILL,
                                 AutofillSelectionOption.AUTOFILL_AND_SAVE,
                                 AutofillSelectionOption.VIEW,
@@ -419,7 +473,7 @@ class SearchTypeDataExtensionsTest {
                         ),
                     createMockDisplayItemForCipher(number = 2)
                         .copy(
-                            autofillSelectionOptions = listOf(
+                            autofillSelectionOptions = persistentListOf(
                                 AutofillSelectionOption.AUTOFILL,
                                 AutofillSelectionOption.AUTOFILL_AND_SAVE,
                                 AutofillSelectionOption.VIEW,
@@ -435,18 +489,19 @@ class SearchTypeDataExtensionsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `CipherViews toViewState should return empty state with message when search term is not blank and ciphers is empty`() {
-        val result = emptyList<CipherView>().toViewState(
+        val result = emptyList<CipherListView>().toViewState(
             searchTerm = "a",
             baseIconUrl = "www.test.com",
             isIconLoadingDisabled = false,
             isAutofill = false,
             hasMasterPassword = true,
             isPremiumUser = true,
+            isArchiveEnabled = true,
         )
 
         assertEquals(
             SearchState.ViewState.Empty(
-                message = R.string.there_are_no_items_that_match_the_search.asText(),
+                message = BitwardenString.there_are_no_items_that_match_the_search.asText(),
             ),
             result,
         )
@@ -459,11 +514,16 @@ class SearchTypeDataExtensionsTest {
             every { host } returns "www.mockuri.com"
         }
         val result = listOf(
-            createMockCipherView(
+            createMockCipherListView(
                 number = 1,
-                fido2Credentials = createMockSdkFido2CredentialList(number = 1),
+                type = CipherListViewType.Login(
+                    createMockLoginListView(
+                        number = 1,
+                        hasFido2 = true,
+                    ),
+                ),
             ),
-            createMockCipherView(number = 2),
+            createMockCipherListView(number = 2),
         ).toViewState(
             searchTerm = "mock",
             baseIconUrl = "https://vault.bitwarden.com/icons",
@@ -471,13 +531,15 @@ class SearchTypeDataExtensionsTest {
             hasMasterPassword = true,
             isAutofill = false,
             isPremiumUser = true,
+            isArchiveEnabled = true,
         )
 
         assertEquals(
             SearchState.ViewState.Content(
-                displayItems = listOf(
+                displayItems = persistentListOf(
                     createMockDisplayItemForCipher(
                         number = 1,
+                        cipherType = CipherType.LOGIN,
                         fallbackIconRes = BitwardenDrawable.ic_bw_passkey,
                     ),
                     createMockDisplayItemForCipher(number = 2),
@@ -516,8 +578,8 @@ class SearchTypeDataExtensionsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `SendViews filterAndOrganize should return list organized by priority when search term is not blank`() {
-        val match1 = createMockSendView(number = 1).copy(name = "match1")
-        val match2 = createMockSendView(number = 2).copy(name = "match2")
+        val match1 = createMockSendView(number = 1, name = "match1")
+        val match2 = createMockSendView(number = 2, name = "match2")
         val ciphers = listOf(
             createMockSendView(number = 0),
             match2,
@@ -551,28 +613,37 @@ class SearchTypeDataExtensionsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `SendViews toViewState should return content state when search term is not blank and sends is not empty`() {
-        val sends = listOf(
-            createMockSendView(number = 0),
-            createMockSendView(number = 1),
-            createMockSendView(number = 2),
-        )
+        mockkStatic(TemporalAccessor::toFormattedDateTimeStyle) {
+            every {
+                any<TemporalAccessor>().toFormattedDateTimeStyle(
+                    dateStyle = FormatStyle.MEDIUM,
+                    timeStyle = FormatStyle.SHORT,
+                    clock = clock,
+                )
+            } returns DEFAULT_FORMATTED_DATE_TIME
+            val sends = listOf(
+                createMockSendView(number = 0),
+                createMockSendView(number = 1),
+                createMockSendView(number = 2),
+            )
 
-        val result = sends.toViewState(
-            searchTerm = "mock",
-            baseWebSendUrl = "https://vault.bitwarden.com/#/send/",
-            clock = clock,
-        )
+            val result = sends.toViewState(
+                searchTerm = "mock",
+                baseWebSendUrl = "https://vault.bitwarden.com/#/send/",
+                clock = clock,
+            )
 
-        assertEquals(
-            SearchState.ViewState.Content(
-                displayItems = listOf(
-                    createMockDisplayItemForSend(number = 0),
-                    createMockDisplayItemForSend(number = 1),
-                    createMockDisplayItemForSend(number = 2),
+            assertEquals(
+                SearchState.ViewState.Content(
+                    displayItems = persistentListOf(
+                        createMockDisplayItemForSend(number = 0),
+                        createMockDisplayItemForSend(number = 1),
+                        createMockDisplayItemForSend(number = 2),
+                    ),
                 ),
-            ),
-            result,
-        )
+                result,
+            )
+        }
     }
 
     @Suppress("MaxLineLength")
@@ -586,7 +657,7 @@ class SearchTypeDataExtensionsTest {
 
         assertEquals(
             SearchState.ViewState.Empty(
-                message = R.string.there_are_no_items_that_match_the_search.asText(),
+                message = BitwardenString.there_are_no_items_that_match_the_search.asText(),
             ),
             result,
         )

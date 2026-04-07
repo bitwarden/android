@@ -8,9 +8,13 @@ import androidx.navigation.NavOptions
 import androidx.navigation.navigation
 import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupAutoFillScreen
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupBrowserAutofillScreen
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupUnlockScreen
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupAutoFillDestination
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupBrowserAutofillDestination
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupUnlockDestination
+import com.x8bit.bitwarden.ui.platform.feature.premium.plan.navigateToPlanModal
+import com.x8bit.bitwarden.ui.platform.feature.premium.plan.planModalDestination
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchRoute
 import com.x8bit.bitwarden.ui.platform.feature.search.navigateToSearch
 import com.x8bit.bitwarden.ui.platform.feature.search.searchDestination
@@ -50,6 +54,8 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.addedit.vaultAddEditDestination
 import com.x8bit.bitwarden.ui.vault.feature.attachments.attachmentDestination
 import com.x8bit.bitwarden.ui.vault.feature.attachments.navigateToAttachment
+import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.navigateToPreviewAttachment
+import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.previewAttachmentDestination
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.importLoginsScreenDestination
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.navigateToImportLoginsScreen
 import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
@@ -118,6 +124,9 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             },
             onNavigateToSetupUnlockScreen = { navController.navigateToSetupUnlockScreen() },
             onNavigateToSetupAutoFillScreen = { navController.navigateToSetupAutoFillScreen() },
+            onNavigateToSetupBrowserAutofill = {
+                navController.navigateToSetupBrowserAutofillScreen()
+            },
             onNavigateToImportLogins = { navController.navigateToImportLoginsScreen() },
             onNavigateToAddFolderScreen = {
                 navController.navigateToFolderAddEdit(
@@ -132,6 +141,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateToAboutPrivilegedApps = {
                 navController.navigateToAboutPrivilegedAppsScreen()
             },
+            onNavigateToPlan = { navController.navigateToPlanModal() },
         )
         flightRecorderDestination(
             isPreAuth = false,
@@ -193,6 +203,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                     passwordHistoryMode = GeneratorPasswordHistoryMode.Item(itemId = it),
                 )
             },
+            onNavigateToPreviewAttachment = { navController.navigateToPreviewAttachment(it) },
         )
         vaultQrCodeScanDestination(
             onNavigateToManualCodeEntryScreen = {
@@ -212,6 +223,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         addEditSendDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateUpToSearchOrRoot = { navController.navigateUpToSearchOrVaultUnlockedRoot() },
+            onNavigateToGeneratorModal = { navController.navigateToGeneratorModal(mode = it) },
         )
         viewSendDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -242,6 +254,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
         attachmentDestination(
             onNavigateBack = { navController.popBackStack() },
+            onNavigateToPreviewAttachment = { navController.navigateToPreviewAttachment(it) },
         )
         setupUnlockDestination(
             onNavigateBack = {
@@ -249,11 +262,19 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             },
         )
         setupAutoFillDestination(
-            onNavigateBack = {
-                navController.popBackStack()
-            },
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToBrowserAutofill = { navController.navigateToSetupBrowserAutofillScreen() },
+        )
+        setupBrowserAutofillDestination(
+            onNavigateBack = { navController.popBackStack() },
         )
         importLoginsScreenDestination(
+            onNavigateBack = { navController.popBackStack() },
+        )
+        previewAttachmentDestination(
+            onNavigateBack = { navController.popBackStack() },
+        )
+        planModalDestination(
             onNavigateBack = { navController.popBackStack() },
         )
     }

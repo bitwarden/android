@@ -4,6 +4,7 @@ import androidx.core.content.edit
 import app.cash.turbine.test
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -15,8 +16,9 @@ class SettingDiskSourceTest {
 
     private val sharedPreferences: FakeSharedPreferences = FakeSharedPreferences()
 
-    private val settingDiskSource = SettingsDiskSourceImpl(
-        sharedPreferences,
+    private val settingDiskSource: SettingsDiskSource = SettingsDiskSourceImpl(
+        sharedPreferences = sharedPreferences,
+        flightRecorderDiskSource = mockk(),
     )
 
     @Test
@@ -127,5 +129,20 @@ class SettingDiskSourceTest {
             setOf("1", "2"),
             settingDiskSource.previouslySyncedBitwardenAccountIds,
         )
+    }
+
+    @Test
+    fun `appTimeoutInMinutes should read and write from shared preferences`() {
+        val sharedPrefsKey = "bwPreferencesStorage:appTimeoutInMinutes"
+
+        // Shared preferences and the disk source start with the same value:
+        assertNull(settingDiskSource.appTimeoutInMinutes)
+
+        // Updating the disk source updates shared preferences:
+        settingDiskSource.appTimeoutInMinutes = 60
+        assertEquals(sharedPreferences.getInt(sharedPrefsKey, 0), 60)
+
+        sharedPreferences.edit { putInt(sharedPrefsKey, 240) }
+        assertEquals(settingDiskSource.appTimeoutInMinutes, 240)
     }
 }

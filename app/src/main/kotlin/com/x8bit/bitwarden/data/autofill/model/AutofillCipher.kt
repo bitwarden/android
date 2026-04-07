@@ -14,7 +14,7 @@ sealed class AutofillCipher {
     abstract val iconRes: Int
 
     /**
-     * Whether or not TOTP is enabled for this cipher.
+     * Whether TOTP is enabled for this cipher.
      */
     abstract val isTotpEnabled: Boolean
 
@@ -46,6 +46,7 @@ sealed class AutofillCipher {
         val expirationMonth: String,
         val expirationYear: String,
         val number: String,
+        val brand: String,
     ) : AutofillCipher() {
         override val iconRes: Int
             @DrawableRes get() = BitwardenDrawable.ic_payment_card
@@ -65,6 +66,7 @@ sealed class AutofillCipher {
         override val subtitle: String,
         val password: String,
         val username: String,
+        val website: String,
     ) : AutofillCipher() {
         override val iconRes: Int
             @DrawableRes get() = BitwardenDrawable.ic_globe

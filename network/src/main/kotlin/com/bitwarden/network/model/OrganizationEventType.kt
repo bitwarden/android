@@ -126,6 +126,9 @@ enum class OrganizationEventType {
 
     @SerialName("1601")
     ORGANIZATION_PURGED_VAULT,
+
+    @SerialName("1618")
+    ORGANIZATION_ITEM_ORGANIZATION_ACCEPTED,
 }
 
 @Keep

@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.ui.vault.model
 
 import androidx.annotation.StringRes
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.SELECT_TEXT
 
 /**
@@ -19,51 +19,51 @@ enum class VaultCardExpirationMonth(
         number = "0",
     ),
     JANUARY(
-        value = R.string.january.dateText("01 - "),
+        value = BitwardenString.january.dateText("01 - "),
         number = "1",
     ),
     FEBRUARY(
-        value = R.string.february.dateText("02 - "),
+        value = BitwardenString.february.dateText("02 - "),
         number = "2",
     ),
     MARCH(
-        value = R.string.march.dateText("03 - "),
+        value = BitwardenString.march.dateText("03 - "),
         number = "3",
     ),
     APRIL(
-        value = R.string.april.dateText("04 - "),
+        value = BitwardenString.april.dateText("04 - "),
         number = "4",
     ),
     MAY(
-        value = R.string.may.dateText("05 - "),
+        value = BitwardenString.may.dateText("05 - "),
         number = "5",
     ),
     JUNE(
-        value = R.string.june.dateText("06 - "),
+        value = BitwardenString.june.dateText("06 - "),
         number = "6",
     ),
     JULY(
-        value = R.string.july.dateText("07 - "),
+        value = BitwardenString.july.dateText("07 - "),
         number = "7",
     ),
     AUGUST(
-        value = R.string.august.dateText("08 - "),
+        value = BitwardenString.august.dateText("08 - "),
         number = "8",
     ),
     SEPTEMBER(
-        value = R.string.september.dateText("09 - "),
+        value = BitwardenString.september.dateText("09 - "),
         number = "9",
     ),
     OCTOBER(
-        value = R.string.october.dateText("10 - "),
+        value = BitwardenString.october.dateText("10 - "),
         number = "10",
     ),
     NOVEMBER(
-        value = R.string.november.dateText("11 - "),
+        value = BitwardenString.november.dateText("11 - "),
         number = "11",
     ),
     DECEMBER(
-        value = R.string.december.dateText("12 - "),
+        value = BitwardenString.december.dateText("12 - "),
         number = "12",
     ),
 }

@@ -13,7 +13,7 @@ import com.bitwarden.ui.platform.components.content.BitwardenContentBlock
 data class ContentBlockData(
     val headerText: AnnotatedString,
     val subtitleText: AnnotatedString? = null,
-    @DrawableRes val iconVectorResource: Int? = null,
+    @field:DrawableRes val iconVectorResource: Int? = null,
 ) {
     /**
      * Overloaded constructor for [ContentBlockData] that takes a [String] for the

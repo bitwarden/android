@@ -4,9 +4,12 @@ package com.bitwarden.network
 
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.network.model.BitwardenServiceClientConfig
+import com.bitwarden.network.provider.CookieProvider
 import com.bitwarden.network.provider.RefreshTokenProvider
+import com.bitwarden.network.provider.TokenProvider
 import com.bitwarden.network.service.AccountsService
 import com.bitwarden.network.service.AuthRequestsService
+import com.bitwarden.network.service.BillingService
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.service.ConfigService
 import com.bitwarden.network.service.DevicesService
@@ -48,6 +51,15 @@ import com.bitwarden.network.service.SyncService
  * ```
  */
 interface BitwardenServiceClient {
+    /**
+     * Provides access to the token provider.
+     */
+    val tokenProvider: TokenProvider
+
+    /**
+     * Provides access to the cookie provider.
+     */
+    val cookieProvider: CookieProvider
 
     /**
      * Provides access to the Accounts service.
@@ -58,6 +70,11 @@ interface BitwardenServiceClient {
      * Provides access to the Authentication Requests service.
      */
     val authRequestsService: AuthRequestsService
+
+    /**
+     * Provides access to the Billing service.
+     */
+    val billingService: BillingService
 
     /**
      * Provides access to the Ciphers service.

@@ -1,31 +1,28 @@
 package com.x8bit.bitwarden.ui.vault.feature.movetoorganization
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
+import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 
 /**
@@ -37,32 +34,21 @@ fun VaultMoveToOrganizationScreen(
     onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val resources = context.resources
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is VaultMoveToOrganizationEvent.NavigateBack -> onNavigateBack()
-            is VaultMoveToOrganizationEvent.ShowToast -> {
-                Toast.makeText(context, event.text(resources), Toast.LENGTH_SHORT).show()
-            }
         }
     }
     VaultMoveToOrganizationScaffold(
         state = state,
-        closeClick = remember(viewModel) {
-            { viewModel.trySendAction(VaultMoveToOrganizationAction.BackClick) }
+        closeClick = { viewModel.trySendAction(VaultMoveToOrganizationAction.BackClick) },
+        moveClick = { viewModel.trySendAction(VaultMoveToOrganizationAction.MoveClick) },
+        dismissClick = { viewModel.trySendAction(VaultMoveToOrganizationAction.DismissClick) },
+        organizationSelect = {
+            viewModel.trySendAction(VaultMoveToOrganizationAction.OrganizationSelect(it))
         },
-        moveClick = remember(viewModel) {
-            { viewModel.trySendAction(VaultMoveToOrganizationAction.MoveClick) }
-        },
-        dismissClick = remember(viewModel) {
-            { viewModel.trySendAction(VaultMoveToOrganizationAction.DismissClick) }
-        },
-        organizationSelect = remember(viewModel) {
-            { viewModel.trySendAction(VaultMoveToOrganizationAction.OrganizationSelect(it)) }
-        },
-        collectionSelect = remember(viewModel) {
-            { viewModel.trySendAction(VaultMoveToOrganizationAction.CollectionSelect(it)) }
+        collectionSelect = {
+            viewModel.trySendAction(VaultMoveToOrganizationAction.CollectionSelect(it))
         },
     )
 }
@@ -82,7 +68,7 @@ private fun VaultMoveToOrganizationScaffold(
     when (val dialog = state.dialogState) {
         is VaultMoveToOrganizationState.DialogState.Error -> {
             BitwardenBasicDialog(
-                title = stringResource(id = R.string.an_error_has_occurred),
+                title = stringResource(id = BitwardenString.an_error_has_occurred),
                 message = dialog.message(),
                 onDismissRequest = dismissClick,
                 throwable = dialog.throwable,
@@ -104,7 +90,7 @@ private fun VaultMoveToOrganizationScaffold(
                 title = state.appBarText(),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = closeClick,
                 actions = {
                     BitwardenTextButton(

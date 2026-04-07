@@ -2,12 +2,11 @@ package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.repository.model.Environment
-import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -76,14 +75,11 @@ class UserStateExtensionsTest {
                         isBiometricsEnabled = false,
                         needsMasterPassword = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -91,6 +87,8 @@ class UserStateExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
+                        creationDate = null,
                     ),
                     UserState.Account(
                         userId = "lockedUserId",
@@ -105,14 +103,11 @@ class UserStateExtensionsTest {
                         isBiometricsEnabled = false,
                         needsMasterPassword = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -120,6 +115,8 @@ class UserStateExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
+                        creationDate = null,
                     ),
                     UserState.Account(
                         userId = "unlockedUserId",
@@ -138,14 +135,11 @@ class UserStateExtensionsTest {
                         isBiometricsEnabled = false,
                         needsMasterPassword = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -153,6 +147,8 @@ class UserStateExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
+                        creationDate = null,
                     ),
                     UserState.Account(
                         userId = "loggedOutUserId",
@@ -171,14 +167,11 @@ class UserStateExtensionsTest {
                         isBiometricsEnabled = false,
                         needsMasterPassword = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -186,6 +179,8 @@ class UserStateExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
+                        creationDate = null,
                     ),
                 ),
             )
@@ -219,14 +214,11 @@ class UserStateExtensionsTest {
                 isBiometricsEnabled = false,
                 needsMasterPassword = false,
                 organizations = listOf(
-                    Organization(
+                    createMockOrganization(
+                        number = 1,
                         id = "organizationId",
                         name = "organizationName",
-                        shouldManageResetPassword = false,
-                        shouldUseKeyConnector = false,
-                        role = OrganizationType.ADMIN,
                         keyConnectorUrl = null,
-                        userIsClaimedByOrganization = false,
                     ),
                 ),
                 trustedDevice = null,
@@ -234,6 +226,8 @@ class UserStateExtensionsTest {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                isExportable = true,
+                creationDate = null,
             )
                 .toAccountSummary(isActive = true),
         )
@@ -265,14 +259,11 @@ class UserStateExtensionsTest {
                 isBiometricsEnabled = false,
                 needsMasterPassword = false,
                 organizations = listOf(
-                    Organization(
+                    createMockOrganization(
+                        number = 1,
                         id = "organizationId",
                         name = "organizationName",
-                        shouldManageResetPassword = false,
-                        shouldUseKeyConnector = false,
-                        role = OrganizationType.ADMIN,
                         keyConnectorUrl = null,
-                        userIsClaimedByOrganization = false,
                     ),
                 ),
                 trustedDevice = null,
@@ -280,6 +271,8 @@ class UserStateExtensionsTest {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                isExportable = true,
+                creationDate = null,
             )
                 .toAccountSummary(isActive = false),
         )
@@ -315,14 +308,11 @@ class UserStateExtensionsTest {
                         isBiometricsEnabled = false,
                         needsMasterPassword = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "organizationName",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -330,6 +320,8 @@ class UserStateExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
+                        creationDate = null,
                     ),
                 ),
             )
@@ -358,6 +350,8 @@ class UserStateExtensionsTest {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                isExportable = true,
+                creationDate = null,
             )
                 .toVaultFilterData(isIndividualVaultDisabled = false),
         )
@@ -395,23 +389,17 @@ class UserStateExtensionsTest {
                 isBiometricsEnabled = false,
                 needsMasterPassword = false,
                 organizations = listOf(
-                    Organization(
+                    createMockOrganization(
+                        number = 1,
                         id = "organizationId-B",
                         name = "Organization B",
-                        shouldUseKeyConnector = false,
-                        shouldManageResetPassword = false,
-                        role = OrganizationType.ADMIN,
                         keyConnectorUrl = null,
-                        userIsClaimedByOrganization = false,
                     ),
-                    Organization(
+                    createMockOrganization(
+                        number = 1,
                         id = "organizationId-A",
                         name = "Organization A",
-                        shouldManageResetPassword = false,
-                        shouldUseKeyConnector = false,
-                        role = OrganizationType.ADMIN,
                         keyConnectorUrl = null,
-                        userIsClaimedByOrganization = false,
                     ),
                 ),
                 trustedDevice = null,
@@ -419,6 +407,8 @@ class UserStateExtensionsTest {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                isExportable = true,
+                creationDate = null,
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = false,
@@ -457,23 +447,17 @@ class UserStateExtensionsTest {
                 isBiometricsEnabled = false,
                 needsMasterPassword = false,
                 organizations = listOf(
-                    Organization(
+                    createMockOrganization(
+                        number = 1,
                         id = "organizationId-B",
                         name = "Organization B",
-                        shouldManageResetPassword = false,
-                        shouldUseKeyConnector = false,
-                        role = OrganizationType.ADMIN,
                         keyConnectorUrl = null,
-                        userIsClaimedByOrganization = false,
                     ),
-                    Organization(
+                    createMockOrganization(
+                        number = 1,
                         id = "organizationId-A",
                         name = "Organization A",
-                        shouldManageResetPassword = false,
-                        shouldUseKeyConnector = false,
-                        role = OrganizationType.ADMIN,
                         keyConnectorUrl = null,
-                        userIsClaimedByOrganization = false,
                     ),
                 ),
                 trustedDevice = null,
@@ -481,6 +465,8 @@ class UserStateExtensionsTest {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                isExportable = true,
+                creationDate = null,
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = true,

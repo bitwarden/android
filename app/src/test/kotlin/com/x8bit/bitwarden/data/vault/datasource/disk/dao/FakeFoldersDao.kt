@@ -11,7 +11,9 @@ class FakeFoldersDao : FoldersDao {
 
     var deleteFolderCalled: Boolean = false
     var deleteFoldersCalled: Boolean = false
+    var deleteSelectedFoldersCalled: Boolean = false
     var insertFolderCalled: Boolean = false
+    var insertFoldersCalled: Boolean = false
 
     private val foldersFlow = bufferedMutableSharedFlow<List<FolderEntity>>(replay = 1)
 
@@ -33,12 +35,33 @@ class FakeFoldersDao : FoldersDao {
         foldersFlow.tryEmit(storedFolders.toList())
     }
 
-    override fun getAllFolders(userId: String): Flow<List<FolderEntity>> =
+    override suspend fun deleteSelectedFolders(
+        userId: String,
+        folderIds: List<String>,
+    ): Int {
+        deleteSelectedFoldersCalled = true
+        val count = storedFolders.count { it.userId == userId && it.id in folderIds }
+        storedFolders.removeAll { it.userId == userId && it.id in folderIds }
+        foldersFlow.tryEmit(storedFolders.toList())
+        return count
+    }
+
+    override fun getAllFoldersFlow(userId: String): Flow<List<FolderEntity>> =
         foldersFlow.map { ciphers -> ciphers.filter { it.userId == userId } }
+
+    override suspend fun getFolder(
+        userId: String,
+        folderId: String,
+    ): FolderEntity? = storedFolders.find { it.userId == userId && it.id == folderId }
+
+    override fun getAllFolders(
+        userId: String,
+    ): List<FolderEntity> = storedFolders.filter { it.userId == userId }
 
     override suspend fun insertFolders(folders: List<FolderEntity>) {
         storedFolders.addAll(folders)
         foldersFlow.tryEmit(storedFolders.toList())
+        insertFoldersCalled = true
     }
 
     override suspend fun insertFolder(folder: FolderEntity) {

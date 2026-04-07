@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.model
 
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import java.util.UUID
@@ -11,10 +11,10 @@ import java.util.UUID
  * The Enum representing the Custom Field type that is being added by the user.
  */
 enum class CustomFieldType(val typeText: Text) {
-    LINKED(R.string.field_type_linked.asText()),
-    HIDDEN(R.string.field_type_hidden.asText()),
-    BOOLEAN(R.string.field_type_boolean.asText()),
-    TEXT(R.string.field_type_text.asText()),
+    LINKED(BitwardenString.field_type_linked.asText()),
+    HIDDEN(BitwardenString.field_type_hidden.asText()),
+    BOOLEAN(BitwardenString.field_type_boolean.asText()),
+    TEXT(BitwardenString.field_type_text.asText()),
 }
 
 /**

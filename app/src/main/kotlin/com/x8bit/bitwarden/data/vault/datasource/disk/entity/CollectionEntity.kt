@@ -33,4 +33,10 @@ data class CollectionEntity(
 
     @ColumnInfo(name = "manage")
     val canManage: Boolean?,
+
+    @ColumnInfo(name = "default_user_collection_email")
+    val defaultUserCollectionEmail: String?,
+
+    @ColumnInfo(name = "type", defaultValue = "0")
+    val type: String,
 )

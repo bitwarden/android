@@ -7,20 +7,19 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.data.repository.util.baseIdentityUrl
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
-import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
-import com.x8bit.bitwarden.data.auth.repository.util.SSO_URI
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
-import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForSso
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.util.ssoAuthTabData
 import com.x8bit.bitwarden.data.platform.util.toUriOrNull
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.utils.generateRandomString
@@ -53,7 +52,6 @@ class EnterpriseSignOnViewModel @Inject constructor(
         ?: EnterpriseSignOnState(
             dialogState = null,
             orgIdentifierInput = "",
-            captchaToken = null,
         ),
 ) {
 
@@ -77,16 +75,6 @@ class EnterpriseSignOnViewModel @Inject constructor(
             .ssoCallbackResultFlow
             .onEach {
                 sendAction(EnterpriseSignOnAction.Internal.OnSsoCallbackResult(it))
-            }
-            .launchIn(viewModelScope)
-
-        // Automatically attempt to login again if a captcha token is received.
-        authRepository
-            .captchaTokenResultFlow
-            .onEach {
-                sendAction(
-                    EnterpriseSignOnAction.Internal.OnReceiveCaptchaToken(it),
-                )
             }
             .launchIn(viewModelScope)
 
@@ -118,10 +106,6 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 handleOnLoginResult(action)
             }
 
-            is EnterpriseSignOnAction.Internal.OnReceiveCaptchaToken -> {
-                handleOnReceiveCaptchaToken(action)
-            }
-
             is EnterpriseSignOnAction.Internal.OnVerifiedOrganizationDomainSsoDetailsReceive -> {
                 handleOnVerifiedOrganizationDomainSsoDetailsReceive(action)
             }
@@ -151,19 +135,10 @@ class EnterpriseSignOnViewModel @Inject constructor(
     @Suppress("LongMethod")
     private fun handleOnLoginResult(action: EnterpriseSignOnAction.Internal.OnLoginResult) {
         when (val loginResult = action.loginResult) {
-            is LoginResult.CaptchaRequired -> {
-                mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(
-                    event = EnterpriseSignOnEvent.NavigateToCaptcha(
-                        uri = generateUriForCaptcha(captchaId = loginResult.captchaId),
-                    ),
-                )
-            }
-
             is LoginResult.Error -> {
                 showError(
                     message = loginResult.errorMessage?.asText()
-                        ?: R.string.login_sso_error.asText(),
+                        ?: BitwardenString.login_sso_error.asText(),
                     error = loginResult.error,
                 )
             }
@@ -171,7 +146,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
             is LoginResult.UnofficialServerError -> {
                 @Suppress("MaxLineLength")
                 showError(
-                    message = R.string
+                    message = BitwardenString
                         .this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server
                         .asText(),
                 )
@@ -200,20 +175,22 @@ class EnterpriseSignOnViewModel @Inject constructor(
                         .baseWebVaultUrlOrDefault
 
                 showError(
-                    message = R.string
+                    message = BitwardenString
                         .this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
                         .asText(vaultUrl.toUriOrNull()?.host ?: vaultUrl),
                 )
             }
 
             LoginResult.CertificateError -> {
-                showError(message = R.string.we_couldnt_verify_the_servers_certificate.asText())
+                showError(
+                    message = BitwardenString.we_couldnt_verify_the_servers_certificate.asText(),
+                )
             }
 
             is LoginResult.NewDeviceVerification -> {
                 showError(
                     message = loginResult.errorMessage?.asText()
-                        ?: R.string.login_sso_error.asText(),
+                        ?: BitwardenString.login_sso_error.asText(),
                 )
             }
 
@@ -229,14 +206,19 @@ class EnterpriseSignOnViewModel @Inject constructor(
         action: EnterpriseSignOnAction.Internal.OnGenerateUriForSsoResult,
     ) {
         mutableStateFlow.update { it.copy(dialogState = null) }
-        sendEvent(EnterpriseSignOnEvent.NavigateToSsoLogin(action.uri))
+        sendEvent(
+            EnterpriseSignOnEvent.NavigateToSsoLogin(
+                uri = action.uri,
+                authTabData = action.authTabData,
+            ),
+        )
     }
 
     private fun handleOnSsoPrevalidationFailure(
         action: EnterpriseSignOnAction.Internal.OnSsoPrevalidationFailure,
     ) {
         showError(
-            message = action.message?.asText() ?: R.string.login_sso_error.asText(),
+            message = action.message?.asText() ?: BitwardenString.login_sso_error.asText(),
             error = action.error,
         )
     }
@@ -302,37 +284,13 @@ class EnterpriseSignOnViewModel @Inject constructor(
         attemptLogin()
     }
 
-    private fun handleOnReceiveCaptchaToken(
-        action: EnterpriseSignOnAction.Internal.OnReceiveCaptchaToken,
-    ) {
-        when (val tokenResult = action.tokenResult) {
-            CaptchaCallbackTokenResult.MissingToken -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialogState = EnterpriseSignOnState.DialogState.Error(
-                            title = R.string.log_in_denied.asText(),
-                            message = R.string.captcha_failed.asText(),
-                        ),
-                    )
-                }
-            }
-
-            is CaptchaCallbackTokenResult.Success -> {
-                mutableStateFlow.update {
-                    it.copy(captchaToken = tokenResult.token)
-                }
-                attemptLogin()
-            }
-        }
-    }
-
     private fun prevalidateSso() {
         if (!networkConnectionManager.isNetworkConnected) {
             mutableStateFlow.update {
                 it.copy(
                     dialogState = EnterpriseSignOnState.DialogState.Error(
-                        title = R.string.internet_connection_required_title.asText(),
-                        message = R.string.internet_connection_required_message.asText(),
+                        title = BitwardenString.internet_connection_required_title.asText(),
+                        message = BitwardenString.internet_connection_required_message.asText(),
                     ),
                 )
             }
@@ -342,8 +300,8 @@ class EnterpriseSignOnViewModel @Inject constructor(
         val organizationIdentifier = state.orgIdentifierInput
         if (organizationIdentifier.isBlank()) {
             showError(
-                message = R.string.validation_field_required.asText(
-                    R.string.org_identifier.asText(),
+                message = BitwardenString.validation_field_required.asText(
+                    BitwardenString.org_identifier.asText(),
                 ),
             )
             return
@@ -385,15 +343,13 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 if (ssoCallbackResult.state == ssoData.state) {
                     showLoading()
                     viewModelScope.launch {
-                        val result = authRepository
-                            .login(
-                                email = savedStateHandle.toEnterpriseSignOnArgs().emailAddress,
-                                ssoCode = ssoCallbackResult.code,
-                                ssoCodeVerifier = ssoData.codeVerifier,
-                                ssoRedirectUri = SSO_URI,
-                                captchaToken = state.captchaToken,
-                                organizationIdentifier = state.orgIdentifierInput,
-                            )
+                        val result = authRepository.login(
+                            email = savedStateHandle.toEnterpriseSignOnArgs().emailAddress,
+                            ssoCode = ssoCallbackResult.code,
+                            ssoCodeVerifier = ssoData.codeVerifier,
+                            ssoRedirectUri = ssoData.redirectUri,
+                            organizationIdentifier = state.orgIdentifierInput,
+                        )
                         sendAction(EnterpriseSignOnAction.Internal.OnLoginResult(result))
                     }
                 } else {
@@ -406,7 +362,9 @@ class EnterpriseSignOnViewModel @Inject constructor(
     private fun checkOrganizationDomainSsoDetails() {
         mutableStateFlow.update {
             it.copy(
-                dialogState = EnterpriseSignOnState.DialogState.Loading(R.string.loading.asText()),
+                dialogState = EnterpriseSignOnState.DialogState.Loading(
+                    BitwardenString.loading.asText(),
+                ),
             )
         }
         viewModelScope.launch {
@@ -427,18 +385,22 @@ class EnterpriseSignOnViewModel @Inject constructor(
     ) {
         val codeVerifier = generatorRepository.generateRandomString(RANDOM_STRING_LENGTH)
 
+        val environmentData = environmentRepository.environment.environmentUrlData
+        val authTabData = environmentData.ssoAuthTabData
         // Save this for later so that we can validate the SSO callback response
         val generatedSsoState = generatorRepository
             .generateRandomString(RANDOM_STRING_LENGTH)
             .also {
                 ssoResponseData = SsoResponseData(
+                    redirectUri = authTabData.callbackUrl,
                     codeVerifier = codeVerifier,
                     state = it,
                 )
             }
 
         val uri = generateUriForSso(
-            identityBaseUrl = environmentRepository.environment.environmentUrlData.baseIdentityUrl,
+            identityBaseUrl = environmentData.baseIdentityUrl,
+            redirectUrl = authTabData.callbackUrl,
             organizationIdentifier = organizationIdentifier,
             token = prevalidateSsoResult.token,
             state = generatedSsoState,
@@ -447,12 +409,17 @@ class EnterpriseSignOnViewModel @Inject constructor(
 
         // Hide any dialog since we're about to launch a custom tab and could return without getting
         // a result due to user intervention
-        sendAction(EnterpriseSignOnAction.Internal.OnGenerateUriForSsoResult(Uri.parse(uri)))
+        sendAction(
+            EnterpriseSignOnAction.Internal.OnGenerateUriForSsoResult(
+                uri = uri,
+                authTabData = authTabData,
+            ),
+        )
     }
 
     private fun showError(
-        title: Text = R.string.an_error_has_occurred.asText(),
-        message: Text = R.string.login_sso_error.asText(),
+        title: Text = BitwardenString.an_error_has_occurred.asText(),
+        message: Text = BitwardenString.login_sso_error.asText(),
         error: Throwable? = null,
     ) {
         mutableStateFlow.update {
@@ -470,7 +437,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = EnterpriseSignOnState.DialogState.Loading(
-                    R.string.logging_in.asText(),
+                    BitwardenString.logging_in.asText(),
                 ),
             )
         }
@@ -507,7 +474,6 @@ class EnterpriseSignOnViewModel @Inject constructor(
 data class EnterpriseSignOnState(
     val dialogState: DialogState?,
     val orgIdentifierInput: String,
-    val captchaToken: String?,
 ) : Parcelable {
     /**
      * Represents the current state of any dialogs on the screen.
@@ -554,12 +520,10 @@ sealed class EnterpriseSignOnEvent {
     /**
      * Navigates to a custom tab for SSO login using [uri].
      */
-    data class NavigateToSsoLogin(val uri: Uri) : EnterpriseSignOnEvent()
-
-    /**
-     * Navigates to the captcha verification screen.
-     */
-    data class NavigateToCaptcha(val uri: Uri) : EnterpriseSignOnEvent()
+    data class NavigateToSsoLogin(
+        val uri: Uri,
+        val authTabData: AuthTabData,
+    ) : EnterpriseSignOnEvent()
 
     /**
      * Navigates to the set master password screen.
@@ -620,7 +584,10 @@ sealed class EnterpriseSignOnAction {
         /**
          * A [uri] has been generated to request an SSO result.
          */
-        data class OnGenerateUriForSsoResult(val uri: Uri) : Internal()
+        data class OnGenerateUriForSsoResult(
+            val uri: Uri,
+            val authTabData: AuthTabData,
+        ) : Internal()
 
         /**
          * A login result has been received.
@@ -641,11 +608,6 @@ sealed class EnterpriseSignOnAction {
         ) : Internal()
 
         /**
-         * A captcha callback result has been received
-         */
-        data class OnReceiveCaptchaToken(val tokenResult: CaptchaCallbackTokenResult) : Internal()
-
-        /**
          * A result was received when requesting an [VerifiedOrganizationDomainSsoDetailsResult].
          */
         data class OnVerifiedOrganizationDomainSsoDetailsReceive(
@@ -657,6 +619,7 @@ sealed class EnterpriseSignOnAction {
 /**
  * Data needed by the SSO flow to verify and continue the process after receiving a response.
  *
+ * @property redirectUri The redirect URI used in the SSO request.
  * @property state A "state" maintained throughout the SSO process to verify that the response from
  * the server is valid and matches what was originally sent in the request.
  * @property codeVerifier A random string used to generate the code challenge for the initial SSO
@@ -664,6 +627,7 @@ sealed class EnterpriseSignOnAction {
  */
 @Parcelize
 data class SsoResponseData(
+    val redirectUri: String,
     val state: String,
     val codeVerifier: String,
 ) : Parcelable

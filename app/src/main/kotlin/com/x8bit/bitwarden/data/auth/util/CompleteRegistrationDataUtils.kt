@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.auth.util
 
 import android.content.Intent
-import android.net.Uri
+import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 
 /**
@@ -14,7 +14,7 @@ fun Intent.getCompleteRegistrationDataIntentOrNull(): CompleteRegistrationData? 
         newValue = "/",
         ignoreCase = true,
     )
-    val uri = runCatching { Uri.parse(sanitizedUriString) }.getOrNull() ?: return null
+    val uri = runCatching { sanitizedUriString.toUri() }.getOrNull() ?: return null
     uri.host ?: return null
     if (uri.path != "/finish-signup") return null
     val email = uri.getQueryParameter("email") ?: return null

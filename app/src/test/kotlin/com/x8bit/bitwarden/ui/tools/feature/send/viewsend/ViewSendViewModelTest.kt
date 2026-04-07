@@ -7,17 +7,17 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.util.toViewSendViewStateContent
 import io.mockk.coEvery
@@ -53,7 +53,7 @@ class ViewSendViewModelTest : BaseViewModelTest() {
     }
     private val mutableSnackbarDataFlow: MutableSharedFlow<BitwardenSnackbarData> =
         bufferedMutableSharedFlow()
-    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
         every { sendSnackbarData(data = any(), relay = any()) } just runs
         every {
             getSnackbarDataFlow(relay = any(), relays = anyVararg())
@@ -143,7 +143,7 @@ class ViewSendViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = ViewSendState.DialogState.Loading(
-                        message = R.string.deleting.asText(),
+                        message = BitwardenString.deleting.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -151,8 +151,48 @@ class ViewSendViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = ViewSendState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
+                        throwable = throwable,
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `on DeleteClick with error message should display error message`() = runTest {
+        val initialState = DEFAULT_STATE.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
+        val sendView = createMockSendView(number = 1)
+        every {
+            sendView.toViewSendViewStateContent(baseWebSendUrl = any(), clock = FIXED_CLOCK)
+        } returns DEFAULT_CONTENT_VIEW_STATE
+        val errorMessage = "User-friendly error"
+        val throwable = Throwable("Fail!")
+        coEvery {
+            vaultRepository.deleteSend(sendId = "send_id")
+        } returns DeleteSendResult.Error(errorMessage = errorMessage, error = throwable)
+        mutableSendStateFlow.value = DataState.Loaded(data = sendView)
+
+        val viewModel = createViewModel(state = initialState)
+
+        viewModel.stateFlow.test {
+            assertEquals(initialState, awaitItem())
+            viewModel.trySendAction(ViewSendAction.DeleteClick)
+            assertEquals(
+                initialState.copy(
+                    dialogState = ViewSendState.DialogState.Loading(
+                        message = BitwardenString.deleting.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
+            assertEquals(
+                initialState.copy(
+                    dialogState = ViewSendState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = errorMessage.asText(),
                         throwable = throwable,
                     ),
                 ),
@@ -179,7 +219,7 @@ class ViewSendViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = ViewSendState.DialogState.Loading(
-                        message = R.string.deleting.asText(),
+                        message = BitwardenString.deleting.asText(),
                     ),
                 ),
                 stateFlow.awaitItem(),
@@ -195,7 +235,7 @@ class ViewSendViewModelTest : BaseViewModelTest() {
         }
         verify(exactly = 1) {
             snackbarRelayManager.sendSnackbarData(
-                data = BitwardenSnackbarData(message = R.string.send_deleted.asText()),
+                data = BitwardenSnackbarData(message = BitwardenString.send_deleted.asText()),
                 relay = SnackbarRelay.SEND_DELETED,
             )
         }
@@ -270,7 +310,7 @@ class ViewSendViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     viewState = ViewSendState.ViewState.Error(
-                        message = R.string.generic_error_message.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -307,11 +347,11 @@ class ViewSendViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     viewState = ViewSendState.ViewState.Error(
-                        message = R.string.internet_connection_required_title
+                        message = BitwardenString.internet_connection_required_title
                             .asText()
                             .concat(
                                 " ".asText(),
-                                R.string.internet_connection_required_message.asText(),
+                                BitwardenString.internet_connection_required_message.asText(),
                             ),
                     ),
                 ),
@@ -346,7 +386,7 @@ class ViewSendViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     viewState = ViewSendState.ViewState.Error(
-                        message = R.string.generic_error_message.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -380,7 +420,7 @@ class ViewSendViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     viewState = ViewSendState.ViewState.Error(
-                        message = R.string.missing_send_resync_your_vault.asText(),
+                        message = BitwardenString.missing_send_resync_your_vault.asText(),
                     ),
                 ),
                 awaitItem(),

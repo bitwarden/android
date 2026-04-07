@@ -4,13 +4,12 @@
 
 - [Compatibility](#compatibility)
 - [Setup](#setup)
-- [Theme](#theme)
 - [Dependencies](#dependencies)
 
 ## Compatibility
 
-- **Minimum SDK**: 29
-- **Target SDK**: 35
+- **Minimum SDK**: 29 (Android 10)
+- **Target SDK**: 36 (Android 16)
 - **Device Types Supported**: Phone and Tablet
 - **Orientations Supported**: Portrait and Landscape
 
@@ -52,34 +51,46 @@
 
     Please avoid mixing formatting and logical changes in the same commit/PR. When possible, fix any large formatting issues in a separate PR before opening one to make logical changes to the same code. This helps others focus on the meaningful code changes when reviewing the code.
 
-4. Setup JDK `Version` `17`:
+4. Setup JDK `Version` `21`:
 
     - Navigate to `Preferences > Build, Execution, Deployment > Build Tools > Gradle`.
     - Hit the selected Gradle JDK next to `Gradle JDK:`.
-    - Select a `17.x` version or hit `Download JDK...` if not present.
-    - Select `Version` `17`.
+    - Select a `21.x` version or hit `Download JDK...` if not present.
+    - Select `Version` `21`.
     - Select your preferred `Vendor`.
     - Hit `Download`.
     - Hit `Apply`.
 
-## Theme
+5. Setup `detekt` pre-commit hook (optional):
 
-### Icons & Illustrations
+Run the following script from the root of the repository to install the hook. This will overwrite any existing pre-commit hook if present.
 
-The app supports light mode, dark mode and dynamic colors. Most icons in the app will display correctly using tinting but multi-tonal icons and illustrations require extra processing in order to be displayed properly with dynamic colors.
+```shell
+echo "Writing detekt pre-commit hook..."
+cat << 'EOL' > .git/hooks/pre-commit
+#!/usr/bin/env bash
 
-All illustrations and multi-tonal icons require the svg paths to be tagged with the `name` attribute in order for each individual path to be tinted the appropriate color. Any untagged path will not be tinted and the resulting image will be incorrect.
+echo "Running detekt check..."
+OUTPUT="/tmp/detekt-$(date +%s)"
+./gradlew -Pprecommit=true detekt > $OUTPUT
+EXIT_CODE=$?
+if [ $EXIT_CODE -ne 0 ]; then
+  cat $OUTPUT
+  rm $OUTPUT
+  echo "***********************************************"
+  echo "                 detekt failed                 "
+  echo " Please fix the above issues before committing "
+  echo "***********************************************"
+  exit $EXIT_CODE
+fi
+rm $OUTPUT
+EOL
+echo "detekt pre-commit hook written to .git/hooks/pre-commit"
+echo "Making the hook executable"
+chmod +x .git/hooks/pre-commit
 
-The supported tags are as follows:
-
-* outline
-* primary
-* secondary
-* tertiary
-* accent
-* logo
-* navigation
-* navigationActiveAccent
+echo "detekt pre-commit hook installed successfully to .git/hooks/pre-commit"
+```
 
 ## Dependencies
 

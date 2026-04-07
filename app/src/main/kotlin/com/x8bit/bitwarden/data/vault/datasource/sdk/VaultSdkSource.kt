@@ -1,13 +1,17 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
-import com.bitwarden.core.DateTime
-import com.bitwarden.core.DerivePinKeyResponse
+import com.bitwarden.collections.Collection
+import com.bitwarden.collections.CollectionId
+import com.bitwarden.collections.CollectionView
+import com.bitwarden.core.EnrollPinResponse
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.TrustDeviceResponse
+import com.bitwarden.exporters.Account
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
@@ -21,8 +25,7 @@ import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
-import com.bitwarden.vault.Collection
-import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.EncryptionContext
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
@@ -34,6 +37,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.DeriveKeyConnectorRes
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
 import java.io.File
+import java.time.Instant
 
 /**
  * Source of vault information and functionality from the Bitwarden SDK.
@@ -72,38 +76,35 @@ interface VaultSdkSource {
     ): Result<DeriveKeyConnectorResult>
 
     /**
-     * Derives a "pin key" from the given [pin] for the given [userId]. This can be used to later
-     * unlock their vault via a call to [initializeCrypto] with [InitUserCryptoMethod.Pin].
+     * Protects the current user key with the provided PIN. This can be used to later unlock
+     * their vault via a call to [initializeCrypto] with [InitUserCryptoMethod.PinEnvelope].
      *
      * This should only be called after a successful call to [initializeCrypto] for the associated
      * user.
      */
-    suspend fun derivePinKey(
+    suspend fun enrollPin(
         userId: String,
         pin: String,
-    ): Result<DerivePinKeyResponse>
+    ): Result<EnrollPinResponse>
 
     /**
-     * Derives a pin-protected user key from the given [encryptedPin] for the given [userId]. This
-     * value must be derived from a previous call to [derivePinKey] with a plaintext PIN. This can
-     * be used to later unlock their vault via a call to [initializeCrypto] with
-     * [InitUserCryptoMethod.Pin].
-     *
-     * This should only be called after a successful call to [initializeCrypto] for the associated
-     * user.
+     * Protects the current user key with the provided PIN. The result can be stored and later
+     * used to initialize another client instance by using the PIN and the PIN key with
+     * [initializeCrypto]. The provided pin is encrypted with the user key.
      */
-    suspend fun derivePinProtectedUserKey(
+    suspend fun enrollPinWithEncryptedPin(
         userId: String,
         encryptedPin: String,
-    ): Result<String>
+    ): Result<EnrollPinResponse>
 
     /**
-     * Validate the user pin using the [pinProtectedUserKey].
+     * Validates that the given PIN with the encrypted user key and returns `true` if the PIN is
+     * correct, otherwise `false`.
      */
-    suspend fun validatePin(
+    suspend fun validatePinUserKey(
         userId: String,
         pin: String,
-        pinProtectedUserKey: String,
+        pinProtectedUserKeyEnvelope: String,
     ): Result<Boolean>
 
     /**
@@ -204,28 +205,15 @@ interface VaultSdkSource {
     ): Result<CipherView>
 
     /**
-     * Decrypts a list of [Cipher]s for the user with the given [userId], returning a list of
-     * [CipherListView] wrapped in a [Result].
+     * Decrypts a list of [Cipher]s for the user with the given [userId].
      *
-     * This should only be called after a successful call to [initializeCrypto] for the associated
-     * user.
+     * @return A [DecryptCipherListResult] containing the decrypted [CipherListView]s and references
+     * to [Cipher]s that cannot be decrypted.
      */
-    suspend fun decryptCipherListCollection(
+    suspend fun decryptCipherListWithFailures(
         userId: String,
         cipherList: List<Cipher>,
-    ): Result<List<CipherListView>>
-
-    /**
-     * Decrypts a list of [Cipher]s  for the user with the given [userId], returning a list of
-     * [CipherView] wrapped in a [Result].
-     *
-     * This should only be called after a successful call to [initializeCrypto] for the associated
-     * user.
-     */
-    suspend fun decryptCipherList(
-        userId: String,
-        cipherList: List<Cipher>,
-    ): Result<List<CipherView>>
+    ): Result<DecryptCipherListResult>
 
     /**
      * Decrypts a [Collection] for the user with the given [userId], returning a [CollectionView]
@@ -385,12 +373,12 @@ interface VaultSdkSource {
     ): Result<List<PasswordHistoryView>>
 
     /**
-     * Generate a verification code and the period using the totp code.
+     * Generate a verification code for the given [cipherListView] and [time].
      */
-    suspend fun generateTotp(
+    suspend fun generateTotpForCipherListView(
         userId: String,
-        totp: String,
-        time: DateTime,
+        cipherListView: CipherListView,
+        time: Instant?,
     ): Result<TotpResponse>
 
     /**
@@ -401,6 +389,16 @@ interface VaultSdkSource {
         organizationId: String,
         cipherView: CipherView,
     ): Result<CipherView>
+
+    /**
+     * Re-encrypts the [cipherViews] with the organizations encryption key into the respective [collectionIds]
+     */
+    suspend fun bulkMoveToOrganization(
+        userId: String,
+        organizationId: String,
+        cipherViews: List<CipherView>,
+        collectionIds: List<CollectionId>,
+    ): Result<List<EncryptionContext>>
 
     /**
      * Validates that the given password matches the password hash.
@@ -439,6 +437,23 @@ interface VaultSdkSource {
         ciphers: List<Cipher>,
         format: ExportFormat,
     ): Result<String>
+
+    /**
+     * Exports the users vault data to a CXF formatted string.
+     */
+    suspend fun exportVaultDataToCxf(
+        userId: String,
+        account: Account,
+        ciphers: List<Cipher>,
+    ): Result<String>
+
+    /**
+     * Imports the given CXF formatted [payload] into the users vault.
+     *
+     * @return Result of the import. If successful, a list of [Cipher]s deciphered from the CXF
+     * payload.
+     */
+    suspend fun importCxf(userId: String, payload: String): Result<List<Cipher>>
 
     /**
      * Register a new FIDO 2 credential to a cipher.
@@ -484,5 +499,15 @@ interface VaultSdkSource {
         userId: String,
         fido2CredentialStore: Fido2CredentialStore,
         relyingPartyId: String,
+        userHandle: String?,
     ): Result<List<Fido2CredentialAutofillView>>
+
+    /**
+     * Updates the KDF settings for the user with the given [userId].
+     */
+    suspend fun makeUpdateKdf(
+        userId: String,
+        password: String,
+        kdf: Kdf,
+    ): Result<UpdateKdfResponse>
 }

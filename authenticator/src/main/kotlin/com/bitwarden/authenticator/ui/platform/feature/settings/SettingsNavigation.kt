@@ -6,7 +6,6 @@ import androidx.navigation.NavOptions
 import androidx.navigation.navigation
 import com.bitwarden.authenticator.ui.platform.feature.settings.export.exportDestination
 import com.bitwarden.authenticator.ui.platform.feature.settings.importing.importingDestination
-import com.bitwarden.authenticator.ui.platform.feature.tutorial.tutorialSettingsDestination
 import com.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
 import kotlinx.serialization.Serializable
 
@@ -23,32 +22,44 @@ data object SettingsGraphRoute
 data object SettingsRoute
 
 /**
- * Add settings graph to the nav graph.
+ * Add settings destination to the nav graph.
  */
-fun NavGraphBuilder.settingsGraph(
-    navController: NavController,
+fun NavGraphBuilder.settingsDestination(
     onNavigateToExport: () -> Unit,
     onNavigateToImport: () -> Unit,
     onNavigateToTutorial: () -> Unit,
 ) {
+    composableWithRootPushTransitions<SettingsRoute> {
+        SettingsScreen(
+            onNavigateToTutorial = onNavigateToTutorial,
+            onNavigateToExport = onNavigateToExport,
+            onNavigateToImport = onNavigateToImport,
+        )
+    }
+}
+
+/**
+ * Add settings graph to the nav graph.
+ */
+fun NavGraphBuilder.settingsGraph(
+    onNavigateBack: () -> Unit,
+    onNavigateToTutorial: () -> Unit,
+    onNavigateToExport: () -> Unit,
+    onNavigateToImport: () -> Unit,
+) {
     navigation<SettingsGraphRoute>(
         startDestination = SettingsRoute,
     ) {
-        composableWithRootPushTransitions<SettingsRoute> {
-            SettingsScreen(
-                onNavigateToTutorial = onNavigateToTutorial,
-                onNavigateToExport = onNavigateToExport,
-                onNavigateToImport = onNavigateToImport,
-            )
-        }
-        tutorialSettingsDestination(
-            onTutorialFinished = { navController.popBackStack() },
+        settingsDestination(
+            onNavigateToTutorial = onNavigateToTutorial,
+            onNavigateToExport = onNavigateToExport,
+            onNavigateToImport = onNavigateToImport,
         )
         exportDestination(
-            onNavigateBack = { navController.popBackStack() },
+            onNavigateBack = onNavigateBack,
         )
         importingDestination(
-            onNavigateBack = { navController.popBackStack() },
+            onNavigateBack = onNavigateBack,
         )
     }
 }

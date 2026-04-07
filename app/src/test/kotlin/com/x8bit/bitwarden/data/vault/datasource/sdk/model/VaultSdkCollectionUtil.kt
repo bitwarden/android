@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
-import com.bitwarden.vault.Collection
+import com.bitwarden.collections.Collection
+import com.bitwarden.collections.CollectionType
 
 /**
  * Create a mock [Collection] with a given [number].
@@ -14,4 +15,6 @@ fun createMockSdkCollection(number: Int): Collection =
         externalId = "mockExternalId-$number",
         readOnly = false,
         manage = true,
+        defaultUserCollectionEmail = "mockOffboardedUserEmail-$number",
+        type = CollectionType.SHARED_COLLECTION,
     )

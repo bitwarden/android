@@ -5,14 +5,14 @@ import app.cash.turbine.test
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.RemovePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -39,9 +39,9 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = RemovePasswordState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.validation_field_required
-                        .asText(R.string.master_password.asText()),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.validation_field_required
+                        .asText(BitwardenString.master_password.asText()),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -64,7 +64,7 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = RemovePasswordState.DialogState.Loading(
-                        title = R.string.deleting.asText(),
+                        title = BitwardenString.deleting.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -72,8 +72,8 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = RemovePasswordState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                         error = error,
                     ),
                 ),
@@ -84,36 +84,37 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `ContinueClick with input and remove password wrong password error with should show error dialog with message`() = runTest {
-        val password = "123"
-        val initialState = DEFAULT_STATE.copy(input = password)
-        val viewModel = createViewModel(state = initialState)
-        coEvery {
-            authRepository.removePassword(masterPassword = password)
-        } returns RemovePasswordResult.WrongPasswordError
+    fun `ContinueClick with input and remove password wrong password error with should show error dialog with message`() =
+        runTest {
+            val password = "123"
+            val initialState = DEFAULT_STATE.copy(input = password)
+            val viewModel = createViewModel(state = initialState)
+            coEvery {
+                authRepository.removePassword(masterPassword = password)
+            } returns RemovePasswordResult.WrongPasswordError
 
-        viewModel.stateFlow.test {
-            assertEquals(initialState, awaitItem())
-            viewModel.trySendAction(RemovePasswordAction.ContinueClick)
-            assertEquals(
-                initialState.copy(
-                    dialogState = RemovePasswordState.DialogState.Loading(
-                        title = R.string.deleting.asText(),
+            viewModel.stateFlow.test {
+                assertEquals(initialState, awaitItem())
+                viewModel.trySendAction(RemovePasswordAction.ContinueClick)
+                assertEquals(
+                    initialState.copy(
+                        dialogState = RemovePasswordState.DialogState.Loading(
+                            title = BitwardenString.deleting.asText(),
+                        ),
                     ),
-                ),
-                awaitItem(),
-            )
-            assertEquals(
-                initialState.copy(
-                    dialogState = RemovePasswordState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.invalid_master_password.asText(),
+                    awaitItem(),
+                )
+                assertEquals(
+                    initialState.copy(
+                        dialogState = RemovePasswordState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.invalid_master_password.asText(),
+                        ),
                     ),
-                ),
-                awaitItem(),
-            )
+                    awaitItem(),
+                )
+            }
         }
-    }
 
     @Test
     fun `ContinueClick with input and remove password success should dismiss dialog`() = runTest {
@@ -130,7 +131,7 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = RemovePasswordState.DialogState.Loading(
-                        title = R.string.deleting.asText(),
+                        title = BitwardenString.deleting.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -154,7 +155,7 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = RemovePasswordState.DialogState.LeaveConfirmationPrompt(
-                        R.string.leave_organization_name.asText("My org".asText()),
+                        BitwardenString.leave_organization_name.asText("My org".asText()),
                     ),
                 ),
                 awaitItem(),
@@ -210,7 +211,7 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = RemovePasswordState.DialogState.Loading(
-                            title = R.string.loading.asText(),
+                            title = BitwardenString.loading.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -218,8 +219,8 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = RemovePasswordState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -266,11 +267,11 @@ private const val KEY_CONNECTOR_URL: String = "bitwarden.com"
 private val DEFAULT_STATE = RemovePasswordState(
     input = "",
     dialogState = null,
-    description = R.string
+    description = BitwardenString
         .password_no_longer_required_confirm_domain.asText(),
-    labelOrg = R.string.key_connector_organization.asText(),
+    labelOrg = BitwardenString.key_connector_organization.asText(),
     orgName = ORGANIZATION_NAME.asText(),
-    labelDomain = R.string.key_connector_domain.asText(),
+    labelDomain = BitwardenString.key_connector_domain.asText(),
     domainName = KEY_CONNECTOR_URL.asText(),
     organizationId = "mockId-1",
 )
@@ -288,14 +289,12 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     needsPasswordReset = false,
     isBiometricsEnabled = false,
     organizations = listOf(
-        Organization(
-            id = "mockId-1",
+        createMockOrganization(
+            number = 1,
             name = ORGANIZATION_NAME,
-            shouldManageResetPassword = false,
             shouldUseKeyConnector = true,
             role = OrganizationType.USER,
             keyConnectorUrl = KEY_CONNECTOR_URL,
-            userIsClaimedByOrganization = false,
         ),
     ),
     needsMasterPassword = false,
@@ -304,6 +303,8 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     isUsingKeyConnector = false,
     onboardingStatus = OnboardingStatus.COMPLETE,
     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+    isExportable = true,
+    creationDate = null,
 )
 
 private val DEFAULT_USER_STATE = UserState(

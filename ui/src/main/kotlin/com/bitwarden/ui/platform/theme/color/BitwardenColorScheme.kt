@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.Color
  */
 @Immutable
 data class BitwardenColorScheme(
+    val isDarkTheme: Boolean,
     val text: TextColors,
     val background: BackgroundColors,
     val stroke: StrokeColors,

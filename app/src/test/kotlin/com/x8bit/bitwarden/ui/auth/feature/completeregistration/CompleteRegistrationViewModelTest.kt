@@ -2,11 +2,14 @@ package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenPlurals
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_0
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_1
@@ -18,7 +21,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance.RegistrationEvent
@@ -37,6 +39,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,7 +48,6 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -59,29 +61,21 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val mockAuthRepository = mockk<AuthRepository> {
         every { userStateFlow } returns mutableUserStateFlow
-        coEvery {
-            login(
-                email = any(),
-                password = any(),
-                captchaToken = any(),
-            )
-        } returns LoginResult.Success
-
+        coEvery { login(email = any(), password = any()) } returns LoginResult.Success
         coEvery {
             register(
                 email = any(),
                 masterPassword = any(),
                 masterPasswordHint = any(),
                 emailVerificationToken = any(),
-                captchaToken = any(),
                 shouldCheckDataBreaches = any(),
                 isMasterPasswordStrong = any(),
             )
-        } returns RegisterResult.Success(captchaToken = CAPTCHA_BYPASS_TOKEN)
-
-        coEvery {
-            setOnboardingStatus(OnboardingStatus.NOT_STARTED)
-        } just Runs
+        } returns RegisterResult.Success
+        coEvery { setOnboardingStatus(OnboardingStatus.NOT_STARTED) } just Runs
+    }
+    private val toastManager: ToastManager = mockk {
+        every { show(messageId = any(), duration = any()) } just runs
     }
 
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
@@ -103,7 +97,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         specialCircumstanceManager.specialCircumstance = mockCompleteRegistrationCircumstance
         mockkStatic(
             SavedStateHandle::toCompleteRegistrationArgs,
-            ::generateUriForCaptcha,
         )
     }
 
@@ -111,7 +104,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     fun tearDown() {
         unmockkStatic(
             SavedStateHandle::toCompleteRegistrationArgs,
-            ::generateUriForCaptcha,
         )
     }
 
@@ -153,25 +145,23 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                     masterPassword = PASSWORD,
                     masterPasswordHint = null,
                     emailVerificationToken = TOKEN,
-                    captchaToken = null,
                     shouldCheckDataBreaches = false,
                     isMasterPasswordStrong = true,
                 )
-            } returns RegisterResult.Success(captchaToken = CAPTCHA_BYPASS_TOKEN)
+            } returns RegisterResult.Success
             val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE)
-            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
-                assertEquals(VALID_INPUT_STATE, stateFlow.awaitItem())
+            viewModel.stateFlow.test {
+                assertEquals(VALID_INPUT_STATE, awaitItem())
                 viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
                 assertEquals(
                     VALID_INPUT_STATE.copy(dialog = CompleteRegistrationDialog.Loading),
-                    stateFlow.awaitItem(),
-                )
-                assertEquals(
-                    CompleteRegistrationEvent.ShowToast(R.string.account_created_success.asText()),
-                    eventFlow.awaitItem(),
+                    awaitItem(),
                 )
                 // Make sure loading dialog is hidden:
-                assertEquals(VALID_INPUT_STATE, stateFlow.awaitItem())
+                assertEquals(VALID_INPUT_STATE, awaitItem())
+            }
+            verify(exactly = 1) {
+                toastManager.show(messageId = BitwardenString.account_created_success)
             }
         }
 
@@ -184,7 +174,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 masterPassword = PASSWORD,
                 masterPasswordHint = null,
                 emailVerificationToken = TOKEN,
-                captchaToken = null,
                 shouldCheckDataBreaches = false,
                 isMasterPasswordStrong = true,
             )
@@ -200,7 +189,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VALID_INPUT_STATE.copy(
                     dialog = CompleteRegistrationDialog.Error(
-                        title = R.string.an_error_has_occurred.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
                         message = "mock_error".asText(),
                         error = error,
                     ),
@@ -218,7 +207,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             mockAuthRepository.login(
                 email = EMAIL,
                 password = PASSWORD,
-                captchaToken = CAPTCHA_BYPASS_TOKEN,
             )
         }
     }
@@ -228,7 +216,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE)
         viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
         viewModel.eventFlow.test {
-            assertTrue(awaitItem() is CompleteRegistrationEvent.ShowToast)
             expectNoEvents()
         }
         verify(exactly = 1) {
@@ -244,16 +231,14 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 mockAuthRepository.login(
                     email = EMAIL,
                     password = PASSWORD,
-                    captchaToken = CAPTCHA_BYPASS_TOKEN,
                 )
             } returns LoginResult.TwoFactorRequired
 
             val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE)
             viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
             viewModel.eventFlow.test {
-                assertTrue(awaitItem() is CompleteRegistrationEvent.ShowToast)
                 assertEquals(
-                    CompleteRegistrationEvent.NavigateToLogin(EMAIL, CAPTCHA_BYPASS_TOKEN),
+                    CompleteRegistrationEvent.NavigateToLogin(EMAIL),
                     awaitItem(),
                 )
             }
@@ -270,7 +255,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 masterPassword = PASSWORD,
                 masterPasswordHint = null,
                 emailVerificationToken = TOKEN,
-                captchaToken = null,
                 shouldCheckDataBreaches = false,
                 isMasterPasswordStrong = true,
             )
@@ -283,7 +267,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 masterPassword = PASSWORD,
                 masterPasswordHint = null,
                 emailVerificationToken = TOKEN,
-                captchaToken = null,
                 shouldCheckDataBreaches = false,
                 isMasterPasswordStrong = true,
             )
@@ -300,7 +283,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                         masterPassword = PASSWORD,
                         masterPasswordHint = null,
                         emailVerificationToken = TOKEN,
-                        captchaToken = null,
                         shouldCheckDataBreaches = true,
                         isMasterPasswordStrong = true,
                     )
@@ -317,8 +299,9 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     initialState.copy(
                         dialog = createHaveIBeenPwned(
-                            title = R.string.exposed_master_password.asText(),
-                            message = R.string.password_found_in_a_data_breach_alert_description
+                            title = BitwardenString.exposed_master_password.asText(),
+                            message = BitwardenString
+                                .password_found_in_a_data_breach_alert_description
                                 .asText(),
                         ),
                     ),
@@ -338,7 +321,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                         masterPassword = PASSWORD,
                         masterPasswordHint = null,
                         emailVerificationToken = TOKEN,
-                        captchaToken = null,
                         shouldCheckDataBreaches = true,
                         isMasterPasswordStrong = false,
                     )
@@ -371,7 +353,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                         masterPassword = PASSWORD,
                         masterPasswordHint = null,
                         emailVerificationToken = TOKEN,
-                        captchaToken = null,
                         shouldCheckDataBreaches = true,
                         isMasterPasswordStrong = false,
                     )
@@ -388,8 +369,8 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     initialState.copy(
                         dialog = createHaveIBeenPwned(
-                            title = R.string.weak_master_password.asText(),
-                            message = R.string.weak_password_identified_use_a_strong_password_to_protect_your_account.asText(),
+                            title = BitwardenString.weak_master_password.asText(),
+                            message = BitwardenString.weak_password_identified_use_a_strong_password_to_protect_your_account.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -413,13 +394,13 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `On init should show toast if from email is true`() = runTest {
+    fun `On init should show snackbar if from email is true`() = runTest {
         val viewModel = createCompleteRegistrationViewModel(
             DEFAULT_STATE.copy(fromEmail = true),
         )
         viewModel.eventFlow.test {
             assertEquals(
-                CompleteRegistrationEvent.ShowToast(R.string.email_verified.asText()),
+                CompleteRegistrationEvent.ShowSnackbar(BitwardenString.email_verified.asText()),
                 awaitItem(),
             )
         }
@@ -600,8 +581,11 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             val expectedState = DEFAULT_STATE.copy(
                 passwordInput = input,
                 dialog = CompleteRegistrationDialog.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.master_password_length_val_message_x.asText(12),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenPlurals.master_password_length_val_message_x.asPluralsText(
+                        quantity = 12,
+                        args = arrayOf(12),
+                    ),
                 ),
             )
             viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
@@ -622,8 +606,8 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 userEmail = EMAIL,
                 passwordInput = PASSWORD,
                 dialog = CompleteRegistrationDialog.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.master_password_confirmation_val_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.master_password_confirmation_val_message.asText(),
                 ),
             )
             viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
@@ -645,9 +629,9 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             userEmail = "",
             passwordInput = PASSWORD,
             dialog = CompleteRegistrationDialog.Error(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.validation_field_required.asText(
-                    R.string.email_address.asText(),
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString.validation_field_required.asText(
+                    BitwardenString.email_address.asText(),
                 ),
             ),
         )
@@ -672,13 +656,13 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         environmentRepository = fakeEnvironmentRepository,
         specialCircumstanceManager = specialCircumstanceManager,
         generatorRepository = generatorRepository,
+        toastManager = toastManager,
     )
 
     companion object {
         private const val PASSWORD = "longenoughtpassword"
         private const val EMAIL = "test@test.com"
         private const val TOKEN = "token"
-        private const val CAPTCHA_BYPASS_TOKEN = "captcha_bypass"
         private val DEFAULT_STATE = CompleteRegistrationState(
             userEmail = EMAIL,
             emailVerificationToken = TOKEN,

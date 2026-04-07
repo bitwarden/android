@@ -5,7 +5,8 @@ import android.os.PowerManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.Toast
-import com.x8bit.bitwarden.R
+import com.bitwarden.core.data.manager.toast.ToastManager
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAutofillManager
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.LauncherPackageNameManager
 import com.x8bit.bitwarden.data.autofill.accessibility.model.AccessibilityAction
@@ -26,6 +27,7 @@ class BitwardenAccessibilityProcessorImpl(
     private val accessibilityAutofillManager: AccessibilityAutofillManager,
     private val launcherPackageNameManager: LauncherPackageNameManager,
     private val powerManager: PowerManager,
+    private val toastManager: ToastManager,
 ) : BitwardenAccessibilityProcessor {
     override fun processAccessibilityEvent(
         event: AccessibilityEvent,
@@ -110,13 +112,10 @@ class BitwardenAccessibilityProcessorImpl(
                 )
             }
             ?: run {
-                Toast
-                    .makeText(
-                        context,
-                        R.string.autofill_tile_uri_not_found,
-                        Toast.LENGTH_LONG,
-                    )
-                    .show()
+                toastManager.show(
+                    messageId = BitwardenString.autofill_tile_uri_not_found,
+                    duration = Toast.LENGTH_LONG,
+                )
             }
     }
 

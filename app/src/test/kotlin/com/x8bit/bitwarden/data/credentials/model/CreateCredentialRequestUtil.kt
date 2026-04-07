@@ -11,7 +11,7 @@ fun createMockCreateCredentialRequest(
     isUserPreVerified: Boolean = false,
     requestData: Bundle = bundleOf(),
 ): CreateCredentialRequest = CreateCredentialRequest(
-    userId = "mockUserId-$number",
+    userId = "mockUserIdx-$number",
     isUserPreVerified = isUserPreVerified,
     requestData = requestData,
 )

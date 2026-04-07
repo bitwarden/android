@@ -8,9 +8,11 @@ import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -24,8 +26,7 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toViewState
 import io.mockk.coEvery
@@ -78,7 +79,7 @@ class SendViewModelTest : BaseViewModelTest() {
     }
     private val mutableSnackbarDataFlow: MutableSharedFlow<BitwardenSnackbarData> =
         bufferedMutableSharedFlow()
-    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
         every {
             getSnackbarDataFlow(relay = any(), relays = anyVararg())
         } returns mutableSnackbarDataFlow
@@ -138,7 +139,7 @@ class SendViewModelTest : BaseViewModelTest() {
             state.copy(
                 dialogState = SendState.DialogState.Error(
                     title = null,
-                    message = R.string.send_disabled_warning.asText(),
+                    message = BitwardenString.send_disabled_warning.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -146,15 +147,15 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `AddSendSelected with file type and non premium user should display dialog`() {
+    fun `AddSendSelected with file type and non Premium user should display dialog`() {
         val state = DEFAULT_STATE.copy(isPremiumUser = false, policyDisablesSend = false)
         val viewModel = createViewModel(state = state)
         viewModel.trySendAction(SendAction.AddSendSelected(sendType = SendItemType.FILE))
         assertEquals(
             state.copy(
                 dialogState = SendState.DialogState.Error(
-                    title = R.string.send.asText(),
-                    message = R.string.send_file_premium_required.asText(),
+                    title = BitwardenString.send.asText(),
+                    message = BitwardenString.send_file_premium_required.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -221,15 +222,15 @@ class SendViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(SendAction.DeleteSendClick(sendItem))
             assertEquals(
                 DEFAULT_STATE.copy(
-                    dialogState = SendState.DialogState.Loading(R.string.deleting.asText()),
+                    dialogState = SendState.DialogState.Loading(BitwardenString.deleting.asText()),
                 ),
                 awaitItem(),
             )
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = SendState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                         throwable = error,
                     ),
                 ),
@@ -237,6 +238,44 @@ class SendViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Test
+    fun `DeleteSendClick with deleteSend error with message should display error message`() =
+        runTest {
+            val sendId = "sendId1234"
+            val sendItem = mockk<SendState.ViewState.Content.SendItem> {
+                every { id } returns sendId
+            }
+            val errorMessage = "User-friendly error"
+            val error = Throwable("Oops")
+            coEvery {
+                vaultRepo.deleteSend(sendId)
+            } returns DeleteSendResult.Error(errorMessage = errorMessage, error = error)
+
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                viewModel.trySendAction(SendAction.DeleteSendClick(sendItem))
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = SendState.DialogState.Loading(
+                            BitwardenString.deleting.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = SendState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = errorMessage.asText(),
+                            throwable = error,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `DeleteSendClick with deleteSend success should emit ShowSnackbar`() = runTest {
@@ -249,7 +288,7 @@ class SendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SendAction.DeleteSendClick(sendItem))
-            assertEquals(SendEvent.ShowSnackbar(R.string.send_deleted.asText()), awaitItem())
+            assertEquals(SendEvent.ShowSnackbar(BitwardenString.send_deleted.asText()), awaitItem())
         }
     }
 
@@ -271,7 +310,7 @@ class SendViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = SendState.DialogState.Loading(
-                            message = R.string.removing_send_password.asText(),
+                            message = BitwardenString.removing_send_password.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -279,8 +318,8 @@ class SendViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = SendState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -301,7 +340,12 @@ class SendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SendAction.RemovePasswordClick(sendItem))
-            assertEquals(SendEvent.ShowSnackbar(R.string.password_removed.asText()), awaitItem())
+            assertEquals(
+                SendEvent.ShowSnackbar(
+                    BitwardenString.password_removed.asText(),
+                ),
+                awaitItem(),
+            )
         }
     }
 
@@ -314,7 +358,7 @@ class SendViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             DEFAULT_STATE.copy(
-                dialogState = SendState.DialogState.Loading(R.string.syncing.asText()),
+                dialogState = SendState.DialogState.Loading(BitwardenString.syncing.asText()),
             ),
             viewModel.stateFlow.value,
         )
@@ -333,8 +377,8 @@ class SendViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = SendState.DialogState.Error(
-                    R.string.internet_connection_required_title.asText(),
-                    R.string.internet_connection_required_message.asText(),
+                    BitwardenString.internet_connection_required_title.asText(),
+                    BitwardenString.internet_connection_required_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -355,7 +399,7 @@ class SendViewModelTest : BaseViewModelTest() {
         verify(exactly = 1) {
             clipboardManager.setText(
                 text = testUrl,
-                toastDescriptorOverride = R.string.send_link.asText(),
+                toastDescriptorOverride = BitwardenString.send_link.asText(),
             )
         }
     }
@@ -479,7 +523,7 @@ class SendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `VaultRepository SendData Error should update view state to Error`() = runTest {
-        val dialogState = SendState.DialogState.Loading(R.string.syncing.asText())
+        val dialogState = SendState.DialogState.Loading(BitwardenString.syncing.asText())
         val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
 
         viewModel.eventFlow.test {
@@ -489,7 +533,7 @@ class SendViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = SendState.ViewState.Error(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                 ),
                 dialogState = null,
                 isRefreshing = false,
@@ -500,7 +544,7 @@ class SendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `VaultRepository SendData Loaded should update view state`() = runTest {
-        val dialogState = SendState.DialogState.Loading(R.string.syncing.asText())
+        val dialogState = SendState.DialogState.Loading(BitwardenString.syncing.asText())
         val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
         val viewState = mockk<SendState.ViewState.Content>()
         val sendData = mockk<SendData> {
@@ -525,7 +569,7 @@ class SendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `VaultRepository SendData Loading should update view state to Loading`() {
-        val dialogState = SendState.DialogState.Loading(R.string.syncing.asText())
+        val dialogState = SendState.DialogState.Loading(BitwardenString.syncing.asText())
         val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
 
         mutableSendDataFlow.value = DataState.Loading
@@ -540,7 +584,7 @@ class SendViewModelTest : BaseViewModelTest() {
     @Test
     fun `VaultRepository SendData NoNetwork should update view state to Empty when there is no data`() =
         runTest {
-            val dialogState = SendState.DialogState.Loading(R.string.syncing.asText())
+            val dialogState = SendState.DialogState.Loading(BitwardenString.syncing.asText())
             val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
 
             viewModel.eventFlow.test {
@@ -559,7 +603,7 @@ class SendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `VaultRepository SendData Pending should update view state`() {
-        val dialogState = SendState.DialogState.Loading(R.string.syncing.asText())
+        val dialogState = SendState.DialogState.Loading(BitwardenString.syncing.asText())
         val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
         val viewState = mockk<SendState.ViewState.Content>()
         val sendData = mockk<SendData> {
@@ -603,8 +647,8 @@ class SendViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(
                 isRefreshing = false,
                 dialogState = SendState.DialogState.Error(
-                    R.string.internet_connection_required_title.asText(),
-                    R.string.internet_connection_required_message.asText(),
+                    BitwardenString.internet_connection_required_title.asText(),
+                    BitwardenString.internet_connection_required_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -701,6 +745,8 @@ private val DEFAULT_USER_ACCOUNT_STATE = UserState.Account(
     isUsingKeyConnector = false,
     onboardingStatus = OnboardingStatus.COMPLETE,
     firstTimeState = FirstTimeState(showImportLoginsCard = true),
+    isExportable = true,
+    creationDate = null,
 )
 
 private val DEFAULT_USER_STATE = UserState(

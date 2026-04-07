@@ -29,6 +29,7 @@ fun createMockOrganization(
                 id = "mockId-$number",
                 name = "mockName-$number",
                 isSelected = isCollectionSelected,
+                isDefaultUserCollection = false,
             ),
         ),
     )

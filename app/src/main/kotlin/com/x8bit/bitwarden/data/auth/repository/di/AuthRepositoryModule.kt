@@ -1,7 +1,8 @@
 package com.x8bit.bitwarden.data.auth.repository.di
 
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.service.AccountsService
 import com.bitwarden.network.service.DevicesService
 import com.bitwarden.network.service.HaveIBeenPwnedService
@@ -10,11 +11,16 @@ import com.bitwarden.network.service.OrganizationService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
+import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
+import com.x8bit.bitwarden.data.auth.manager.UserStateManager
+import com.x8bit.bitwarden.data.auth.manager.UserStateManagerImpl
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.AuthRepositoryImpl
+import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -22,11 +28,13 @@ import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -39,6 +47,7 @@ object AuthRepositoryModule {
     @Provides
     @Singleton
     fun providesAuthRepository(
+        clock: Clock,
         accountsService: AccountsService,
         devicesService: DevicesService,
         identityService: IdentityService,
@@ -47,20 +56,25 @@ object AuthRepositoryModule {
         authSdkSource: AuthSdkSource,
         vaultSdkSource: VaultSdkSource,
         authDiskSource: AuthDiskSource,
+        settingsDiskSource: SettingsDiskSource,
         configDiskSource: ConfigDiskSource,
         dispatcherManager: DispatcherManager,
         environmentRepository: EnvironmentRepository,
         settingsRepository: SettingsRepository,
         vaultRepository: VaultRepository,
+        biometricsEncryptionManager: BiometricsEncryptionManager,
         keyConnectorManager: KeyConnectorManager,
         authRequestManager: AuthRequestManager,
         trustedDeviceManager: TrustedDeviceManager,
         userLogoutManager: UserLogoutManager,
         pushManager: PushManager,
         policyManager: PolicyManager,
-        firstTimeActionManager: FirstTimeActionManager,
         logsManager: LogsManager,
+        userStateManager: UserStateManager,
+        kdfManager: KdfManager,
+        toastManager: ToastManager,
     ): AuthRepository = AuthRepositoryImpl(
+        clock = clock,
         accountsService = accountsService,
         devicesService = devicesService,
         identityService = identityService,
@@ -68,19 +82,39 @@ object AuthRepositoryModule {
         authSdkSource = authSdkSource,
         vaultSdkSource = vaultSdkSource,
         authDiskSource = authDiskSource,
+        settingsDiskSource = settingsDiskSource,
         configDiskSource = configDiskSource,
         haveIBeenPwnedService = haveIBeenPwnedService,
         dispatcherManager = dispatcherManager,
         environmentRepository = environmentRepository,
         settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
+        biometricsEncryptionManager = biometricsEncryptionManager,
         keyConnectorManager = keyConnectorManager,
         authRequestManager = authRequestManager,
         trustedDeviceManager = trustedDeviceManager,
         userLogoutManager = userLogoutManager,
         pushManager = pushManager,
         policyManager = policyManager,
-        firstTimeActionManager = firstTimeActionManager,
         logsManager = logsManager,
+        userStateManager = userStateManager,
+        kdfManager = kdfManager,
+        toastManager = toastManager,
+    )
+
+    @Provides
+    @Singleton
+    fun providesUserStateManager(
+        authDiskSource: AuthDiskSource,
+        firstTimeActionManager: FirstTimeActionManager,
+        vaultLockManager: VaultLockManager,
+        policyManager: PolicyManager,
+        dispatcherManager: DispatcherManager,
+    ): UserStateManager = UserStateManagerImpl(
+        authDiskSource = authDiskSource,
+        firstTimeActionManager = firstTimeActionManager,
+        vaultLockManager = vaultLockManager,
+        policyManager = policyManager,
+        dispatcherManager = dispatcherManager,
     )
 }

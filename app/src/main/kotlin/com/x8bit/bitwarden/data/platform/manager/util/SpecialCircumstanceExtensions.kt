@@ -1,12 +1,14 @@
 package com.x8bit.bitwarden.data.platform.manager.util
 
+import com.bitwarden.cxf.model.ImportCredentialsRequestData
+import com.bitwarden.ui.platform.model.TotpData
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
+import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.ui.vault.model.TotpData
 
 /**
  * Returns [AutofillSaveItem] when contained in the given [SpecialCircumstance].
@@ -45,6 +47,15 @@ fun SpecialCircumstance.toFido2AssertionRequestOrNull(): Fido2CredentialAssertio
     }
 
 /**
+ * Returns [ProviderGetPasswordCredentialRequest] when contained in the given [SpecialCircumstance].
+ */
+fun SpecialCircumstance.toPasswordGetRequestOrNull(): ProviderGetPasswordCredentialRequest? =
+    when (this) {
+        is SpecialCircumstance.ProviderGetPasswordRequest -> this.passwordGetRequest
+        else -> null
+    }
+
+/**
  * Returns [GetCredentialsRequest] when contained in the given [SpecialCircumstance].
  */
 fun SpecialCircumstance.toGetCredentialsRequestOrNull(): GetCredentialsRequest? =
@@ -59,5 +70,14 @@ fun SpecialCircumstance.toGetCredentialsRequestOrNull(): GetCredentialsRequest? 
 fun SpecialCircumstance.toTotpDataOrNull(): TotpData? =
     when (this) {
         is SpecialCircumstance.AddTotpLoginItem -> this.data
+        else -> null
+    }
+
+/**
+ * Returns [ImportCredentialsRequestData] when contained in the given [SpecialCircumstance].
+ */
+fun SpecialCircumstance.toImportCredentialsRequestDataOrNull(): ImportCredentialsRequestData? =
+    when (this) {
+        is SpecialCircumstance.CredentialExchangeExport -> this.data
         else -> null
     }

@@ -122,6 +122,42 @@ sealed class PolicyInformation {
         val minutes: Int?,
 
         @SerialName("action")
-        val action: String?,
-    ) : PolicyInformation()
+        val action: Action?,
+
+        @SerialName("type")
+        val type: Type?,
+    ) : PolicyInformation() {
+        /**
+         * The action to take when the vault timeout is reached.
+         */
+        @Serializable
+        enum class Action {
+            @SerialName("lock")
+            LOCK,
+
+            @SerialName("logOut")
+            LOGOUT,
+        }
+
+        /**
+         * The type of vault timeout.
+         */
+        @Serializable
+        enum class Type {
+            @SerialName("never")
+            NEVER,
+
+            @SerialName("onAppRestart")
+            ON_APP_RESTART,
+
+            @SerialName("onSystemLock")
+            ON_SYSTEM_LOCK,
+
+            @SerialName("immediately")
+            IMMEDIATELY,
+
+            @SerialName("custom")
+            CUSTOM,
+        }
+    }
 }

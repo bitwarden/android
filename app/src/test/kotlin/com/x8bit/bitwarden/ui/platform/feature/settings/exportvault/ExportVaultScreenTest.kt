@@ -6,7 +6,6 @@ import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -15,12 +14,13 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -63,6 +63,15 @@ class ExportVaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `on ShowSnackbar should display snackbar content`() {
+        val message = "message"
+        val data = BitwardenSnackbarData(message = message.asText())
+        composeTestRule.onNodeWithText(text = message).assertDoesNotExist()
+        mutableEventFlow.tryEmit(ExportVaultEvent.ShowSnackbar(data = data))
+        composeTestRule.onNodeWithText(text = message).assertIsDisplayed()
+    }
+
+    @Test
     fun `basicDialog should update according to state`() {
         composeTestRule.onNodeWithText("Error message").assertDoesNotExist()
 
@@ -75,7 +84,7 @@ class ExportVaultScreenTest : BitwardenComposeTest() {
             )
         }
 
-        composeTestRule.onNodeWithText("Error message").isDisplayed()
+        composeTestRule.onNodeWithText("Error message").assertIsDisplayed()
     }
 
     @Test
@@ -209,7 +218,7 @@ class ExportVaultScreenTest : BitwardenComposeTest() {
             )
         }
 
-        composeTestRule.onNodeWithText("Loading...").isDisplayed()
+        composeTestRule.onNodeWithText("Loading...").assertIsDisplayed()
     }
 
     @Test

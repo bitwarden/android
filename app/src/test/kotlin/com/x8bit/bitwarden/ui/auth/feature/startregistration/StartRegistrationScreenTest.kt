@@ -14,12 +14,11 @@ import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.performCustomAccessibilityAction
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -40,7 +39,7 @@ class StartRegistrationScreenTest : BitwardenComposeTest() {
 
     private val intentManager = mockk<IntentManager>(relaxed = true) {
         every { startCustomTabsActivity(any()) } just runs
-        every { startActivity(any()) } just runs
+        every { startActivity(any()) } returns true
         every { launchUri(any()) } just runs
     }
 
@@ -72,7 +71,16 @@ class StartRegistrationScreenTest : BitwardenComposeTest() {
     @Test
     fun `close click should send CloseClick action`() {
         composeTestRule.onNodeWithContentDescription("Close").performClick()
-        verify { viewModel.trySendAction(CloseClick) }
+        verify { viewModel.trySendAction(StartRegistrationAction.CloseClick) }
+    }
+
+    @Test
+    fun `on ShowSnackbar should display snackbar content`() {
+        val message = "message"
+        val data = BitwardenSnackbarData(message = message.asText())
+        composeTestRule.onNodeWithText(text = message).assertDoesNotExist()
+        mutableEventFlow.tryEmit(StartRegistrationEvent.ShowSnackbar(data = data))
+        composeTestRule.onNodeWithText(text = message).assertIsDisplayed()
     }
 
     @Test
@@ -135,7 +143,7 @@ class StartRegistrationScreenTest : BitwardenComposeTest() {
     @Test
     fun `email input change should send EmailInputChange action`() {
         composeTestRule.onNodeWithText("Email address (required)").performTextInput(TEST_INPUT)
-        verify { viewModel.trySendAction(EmailInputChange(TEST_INPUT)) }
+        verify { viewModel.trySendAction(StartRegistrationAction.EmailInputChange(TEST_INPUT)) }
     }
 
     @Test
@@ -177,7 +185,7 @@ class StartRegistrationScreenTest : BitwardenComposeTest() {
     @Test
     fun `clicking the server tool tip should send ServerGeologyHelpClickAction`() {
         composeTestRule
-            .onNodeWithContentDescription("Help with server geolocations.")
+            .onNodeWithContentDescription("Help with server geolocations, External link")
             .performScrollTo()
             .performClick()
 
@@ -240,9 +248,11 @@ class StartRegistrationScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `when unsubscribe custom action invoked should send UnsubscribeMarketingEmailsClick`() {
-        @Suppress("MaxLineLength")
         composeTestRule
-            .onNodeWithText("Get emails from Bitwarden for announcements, advice, and research opportunities. Unsubscribe at any time.")
+            .onNodeWithText(
+                text = "Get emails from Bitwarden for announcements, advice, and " +
+                    "research opportunities. Unsubscribe at any time.",
+            )
             .performCustomAccessibilityAction("Unsubscribe")
 
         verify { viewModel.trySendAction(StartRegistrationAction.UnsubscribeMarketingEmailsClick) }
@@ -252,7 +262,7 @@ class StartRegistrationScreenTest : BitwardenComposeTest() {
     fun `when terms and conditions custom action invoked should send TermsClick`() {
         composeTestRule
             .onNodeWithText("By continuing, you agree to the Terms of Service and Privacy Policy")
-            .performCustomAccessibilityAction("Terms of Service")
+            .performCustomAccessibilityAction("Terms of Service, External link")
 
         verify { viewModel.trySendAction(StartRegistrationAction.TermsClick) }
     }
@@ -261,20 +271,18 @@ class StartRegistrationScreenTest : BitwardenComposeTest() {
     fun `when privacy policy custom action invoked should send TermsClick`() {
         composeTestRule
             .onNodeWithText("By continuing, you agree to the Terms of Service and Privacy Policy")
-            .performCustomAccessibilityAction("Privacy Policy")
+            .performCustomAccessibilityAction("Privacy Policy, External link")
 
         verify { viewModel.trySendAction(StartRegistrationAction.PrivacyPolicyClick) }
     }
-
-    companion object {
-        private const val TEST_INPUT = "input"
-        private val DEFAULT_STATE = StartRegistrationState(
-            emailInput = "",
-            nameInput = "",
-            isReceiveMarketingEmailsToggled = false,
-            isContinueButtonEnabled = false,
-            selectedEnvironmentType = Environment.Type.US,
-            dialog = null,
-        )
-    }
 }
+
+private const val TEST_INPUT: String = "input"
+private val DEFAULT_STATE: StartRegistrationState = StartRegistrationState(
+    emailInput = "",
+    nameInput = "",
+    isReceiveMarketingEmailsToggled = false,
+    isContinueButtonEnabled = false,
+    selectedEnvironmentType = Environment.Type.US,
+    dialog = null,
+)

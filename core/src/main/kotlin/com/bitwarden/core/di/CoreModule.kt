@@ -1,6 +1,6 @@
 package com.bitwarden.core.di
 
-import com.bitwarden.core.data.serializer.ZonedDateTimeSerializer
+import com.bitwarden.core.data.serializer.InstantSerializer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,11 +30,14 @@ object CoreModule {
         // We allow for nullable values to have keys missing in the JSON response.
         explicitNulls = false
         serializersModule = SerializersModule {
-            contextual(ZonedDateTimeSerializer())
+            contextual(InstantSerializer())
         }
 
         // Respect model default property values.
         coerceInputValues = true
+
+        // Allow trailing commas in JSON objects and arrays.
+        allowTrailingComma = true
     }
 
     @Provides

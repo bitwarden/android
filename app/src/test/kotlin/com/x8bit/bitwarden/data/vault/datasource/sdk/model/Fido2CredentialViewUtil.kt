@@ -20,7 +20,7 @@ fun createMockFido2CredentialView(number: Int): Fido2CredentialView = Fido2Crede
     rpName = "mockRpName-$number",
     userDisplayName = "mockUserDisplayName-$number",
     discoverable = "mockDiscoverable-$number",
-    creationDate = Instant.now(),
+    creationDate = Instant.parse("2023-10-27T12:00:00Z"),
 )
 
 /**
@@ -34,4 +34,5 @@ fun createMockFido2CredentialAutofillView(
     rpId = "mockRelyingPartyId-$number",
     userNameForUi = "mockUserNameForUi-$number",
     userHandle = "mockUserHandle-$number".toByteArray(),
+    hasCounter = false,
 )

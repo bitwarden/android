@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Primary access point for push notification information.
@@ -25,7 +25,7 @@ interface PushDiskSource {
     /**
      * Retrieves the last time a push token was registered for a user.
      */
-    fun getLastPushTokenRegistrationDate(userId: String): ZonedDateTime?
+    fun getLastPushTokenRegistrationDate(userId: String): Instant?
 
     /**
      * Sets the current token for a user.
@@ -35,5 +35,5 @@ interface PushDiskSource {
     /**
      * Sets the last push token registration date for a user.
      */
-    fun storeLastPushTokenRegistrationDate(userId: String, registrationDate: ZonedDateTime?)
+    fun storeLastPushTokenRegistrationDate(userId: String, registrationDate: Instant?)
 }

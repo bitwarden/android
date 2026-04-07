@@ -1,15 +1,15 @@
 package com.x8bit.bitwarden.data.vault.datasource.disk
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.util.assertJsonEquals
 import com.bitwarden.core.di.CoreModule
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCollection
 import com.bitwarden.network.model.createMockDomains
 import com.bitwarden.network.model.createMockFolder
 import com.bitwarden.network.model.createMockSend
-import com.x8bit.bitwarden.data.util.assertJsonEquals
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeCiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeCollectionsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeDomainsDao
@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.time.ZonedDateTime
+import java.time.Instant
 
 class VaultDiskSourceTest {
 
@@ -80,17 +80,71 @@ class VaultDiskSourceTest {
     }
 
     @Test
-    fun `getCiphers should emit all CiphersDao updates`() = runTest {
+    fun `getCiphersFlow should emit all CiphersDao updates`() = runTest {
         val cipherEntities = listOf(CIPHER_ENTITY)
         val ciphers = listOf(CIPHER_1)
 
         vaultDiskSource
-            .getCiphers(USER_ID)
+            .getCiphersFlow(USER_ID)
             .test {
                 assertEquals(emptyList<SyncResponseJson.Cipher>(), awaitItem())
                 ciphersDao.insertCiphers(cipherEntities)
                 assertEquals(ciphers, awaitItem())
             }
+    }
+
+    @Test
+    fun `getCiphers should return all CiphersDao ciphers`() = runTest {
+        val cipherEntities = listOf(CIPHER_ENTITY)
+        val ciphers = listOf(CIPHER_1)
+
+        val result1 = vaultDiskSource.getCiphers(USER_ID)
+        assertEquals(emptyList<SyncResponseJson.Cipher>(), result1)
+        ciphersDao.insertCiphers(cipherEntities)
+        val result2 = vaultDiskSource.getCiphers(USER_ID)
+        assertEquals(ciphers, result2)
+    }
+
+    @Test
+    fun `getSelectedCiphers should return selected CiphersDao ciphers`() = runTest {
+        val cipherEntities = listOf(
+            CIPHER_ENTITY,
+            CIPHER_ENTITY.copy(id = "otherCipherId"),
+        )
+        val ciphers = listOf(CIPHER_1)
+        val cipherIds = listOf("mockId-1")
+
+        val result1 = vaultDiskSource.getSelectedCiphers(USER_ID, cipherIds)
+        assertEquals(emptyList<SyncResponseJson.Cipher>(), result1)
+        ciphersDao.insertCiphers(cipherEntities)
+        val result2 = vaultDiskSource.getSelectedCiphers(USER_ID, cipherIds)
+        assertEquals(ciphers, result2)
+    }
+
+    @Test
+    fun `getTotpCiphers should return all CiphersDao totp ciphers`() = runTest {
+        val cipherEntities = listOf(
+            CIPHER_ENTITY,
+            CIPHER_ENTITY.copy(id = "otherCipherId", hasTotp = false),
+        )
+        val ciphers = listOf(CIPHER_1)
+
+        val result1 = vaultDiskSource.getTotpCiphers(USER_ID)
+        assertEquals(emptyList<SyncResponseJson.Cipher>(), result1)
+        ciphersDao.insertCiphers(cipherEntities)
+        val result2 = vaultDiskSource.getTotpCiphers(USER_ID)
+        assertEquals(ciphers, result2)
+    }
+
+    @Test
+    fun `getCipher should return CiphersDao cipher`() = runTest {
+        val cipherEntities = listOf(CIPHER_ENTITY)
+
+        val result1 = vaultDiskSource.getCipher(userId = USER_ID, cipherId = CIPHER_ENTITY.id)
+        assertNull(result1)
+        ciphersDao.insertCiphers(cipherEntities)
+        val result2 = vaultDiskSource.getCipher(userId = USER_ID, cipherId = CIPHER_ENTITY.id)
+        assertEquals(CIPHER_1, result2)
     }
 
     @Test
@@ -106,6 +160,44 @@ class VaultDiskSourceTest {
     }
 
     @Test
+    fun `saveCiphers should call insertCiphers`() = runTest {
+        assertFalse(ciphersDao.insertCiphersCalled)
+        assertEquals(0, ciphersDao.storedCiphers.size)
+
+        vaultDiskSource.saveCiphers(USER_ID, listOf(CIPHER_1))
+
+        assertTrue(ciphersDao.insertCiphersCalled)
+        assertEquals(1, ciphersDao.storedCiphers.size)
+        val storedCipherEntity = ciphersDao.storedCiphers.first()
+        assertEquals(CIPHER_ENTITY.copy(cipherJson = ""), storedCipherEntity.copy(cipherJson = ""))
+        assertJsonEquals(CIPHER_ENTITY.cipherJson, storedCipherEntity.cipherJson)
+    }
+
+    @Test
+    fun `deleteSelectedCiphers should call deleteSelectedCiphers`() = runTest {
+        assertFalse(ciphersDao.deleteSelectedCiphersCalled)
+        ciphersDao.storedCiphers.add(CIPHER_ENTITY)
+        assertEquals(1, ciphersDao.storedCiphers.size)
+
+        vaultDiskSource.deleteSelectedCiphers(USER_ID, listOf(CIPHER_1.id))
+
+        assertTrue(ciphersDao.deleteSelectedCiphersCalled)
+        assertEquals(emptyList<CipherEntity>(), ciphersDao.storedCiphers)
+    }
+
+    @Test
+    fun `deleteAllCiphers should call deleteAllCiphers`() = runTest {
+        assertFalse(ciphersDao.deleteCiphersCalled)
+        ciphersDao.storedCiphers.add(CIPHER_ENTITY)
+        assertEquals(1, ciphersDao.storedCiphers.size)
+
+        vaultDiskSource.deleteAllCiphers(USER_ID)
+
+        assertTrue(ciphersDao.deleteCiphersCalled)
+        assertEquals(emptyList<CipherEntity>(), ciphersDao.storedCiphers)
+    }
+
+    @Test
     fun `saveCollection should call insertCollection`() = runTest {
         assertFalse(collectionsDao.insertCollectionCalled)
         assertEquals(0, collectionsDao.storedCollections.size)
@@ -117,12 +209,12 @@ class VaultDiskSourceTest {
     }
 
     @Test
-    fun `getCollections should emit all CollectionsDao updates`() = runTest {
+    fun `getCollectionsFlow should emit all CollectionsDao updates`() = runTest {
         val collectionEntities = listOf(COLLECTION_ENTITY)
         val collection = listOf(COLLECTION_1)
 
         vaultDiskSource
-            .getCollections(USER_ID)
+            .getCollectionsFlow(USER_ID)
             .test {
                 assertEquals(emptyList<SyncResponseJson.Collection>(), awaitItem())
                 collectionsDao.insertCollections(collectionEntities)
@@ -131,9 +223,9 @@ class VaultDiskSourceTest {
     }
 
     @Test
-    fun `getDomains should emit DomainsDao updates`() = runTest {
+    fun `getDomainsFlow should emit DomainsDao updates`() = runTest {
         vaultDiskSource
-            .getDomains(USER_ID)
+            .getDomainsFlow(USER_ID)
             .test {
                 expectNoEvents()
                 domainsDao.insertDomains(DOMAINS_ENTITY)
@@ -154,6 +246,30 @@ class VaultDiskSourceTest {
     }
 
     @Test
+    fun `deleteSelectedFolders should call deleteSelectedFolders`() = runTest {
+        assertFalse(foldersDao.deleteSelectedFoldersCalled)
+        foldersDao.storedFolders.add(FOLDER_ENTITY)
+        assertEquals(1, foldersDao.storedFolders.size)
+
+        vaultDiskSource.deleteSelectedFolders(USER_ID, listOf(FOLDER_1.id))
+
+        assertTrue(foldersDao.deleteSelectedFoldersCalled)
+        assertEquals(emptyList<FolderEntity>(), foldersDao.storedFolders)
+    }
+
+    @Test
+    fun `deleteAllFolders should call deleteAllFolders`() = runTest {
+        assertFalse(foldersDao.deleteFoldersCalled)
+        foldersDao.storedFolders.add(FOLDER_ENTITY)
+        assertEquals(1, foldersDao.storedFolders.size)
+
+        vaultDiskSource.deleteAllFolders(USER_ID)
+
+        assertTrue(foldersDao.deleteFoldersCalled)
+        assertEquals(emptyList<FolderEntity>(), foldersDao.storedFolders)
+    }
+
+    @Test
     fun `saveFolder should call insertFolder`() = runTest {
         assertFalse(foldersDao.insertFolderCalled)
         assertEquals(0, foldersDao.storedFolders.size)
@@ -165,12 +281,37 @@ class VaultDiskSourceTest {
     }
 
     @Test
-    fun `getFolders should emit all FoldersDao updates`() = runTest {
+    fun `saveFolders should call insertFolders`() = runTest {
+        assertFalse(foldersDao.insertFoldersCalled)
+        assertEquals(0, foldersDao.storedFolders.size)
+
+        vaultDiskSource.saveFolders(USER_ID, listOf(FOLDER_1))
+
+        assertTrue(foldersDao.insertFoldersCalled)
+        assertEquals(1, foldersDao.storedFolders.size)
+        val storedFolderEntity = foldersDao.storedFolders.first()
+        assertEquals(FOLDER_ENTITY, storedFolderEntity)
+    }
+
+    @Test
+    fun `getFolders should return all FoldersDao folders`() = runTest {
+        val folderEntities = listOf(FOLDER_ENTITY)
+        val folders = listOf(FOLDER_1)
+
+        val result1 = vaultDiskSource.getFolders(USER_ID)
+        assertEquals(emptyList<SyncResponseJson.Folder>(), result1)
+        foldersDao.insertFolders(folderEntities)
+        val result2 = vaultDiskSource.getFolders(USER_ID)
+        assertEquals(folders, result2)
+    }
+
+    @Test
+    fun `getFoldersFlow should emit all FoldersDao updates`() = runTest {
         val folderEntities = listOf(FOLDER_ENTITY)
         val folders = listOf(FOLDER_1)
 
         vaultDiskSource
-            .getFolders(USER_ID)
+            .getFoldersFlow(USER_ID)
             .test {
                 assertEquals(emptyList<SyncResponseJson.Folder>(), awaitItem())
                 foldersDao.insertFolders(folderEntities)
@@ -208,12 +349,12 @@ class VaultDiskSourceTest {
     }
 
     @Test
-    fun `getSends should emit all SendsDao updates`() = runTest {
+    fun `getSendsFlow should emit all SendsDao updates`() = runTest {
         val sendEntities = listOf(SEND_ENTITY)
         val sends = listOf(SEND_1)
 
         vaultDiskSource
-            .getSends(USER_ID)
+            .getSendsFlow(USER_ID)
             .test {
                 assertEquals(emptyList<SyncResponseJson.Send>(), awaitItem())
                 sendsDao.insertSends(sendEntities)
@@ -282,6 +423,32 @@ class VaultDiskSourceTest {
         assertTrue(foldersDao.deleteFoldersCalled)
         assertTrue(sendsDao.deleteSendsCalled)
     }
+
+    @Test
+    fun `hasPersonalCiphersFlow should emit true when personal ciphers exist`() = runTest {
+        val personalCipher = CIPHER_ENTITY.copy(organizationId = null)
+
+        vaultDiskSource
+            .hasPersonalCiphersFlow(USER_ID)
+            .test {
+                assertEquals(false, awaitItem())
+                ciphersDao.insertCiphers(listOf(personalCipher))
+                assertEquals(true, awaitItem())
+            }
+    }
+
+    @Test
+    fun `hasPersonalCiphersFlow should emit false when only org ciphers exist`() = runTest {
+        val orgCipher = CIPHER_ENTITY.copy(id = "orgCipherId", organizationId = "org-123")
+
+        vaultDiskSource
+            .hasPersonalCiphersFlow(USER_ID)
+            .test {
+                assertEquals(false, awaitItem())
+                ciphersDao.insertCiphers(listOf(orgCipher))
+                assertEquals(false, awaitItem())
+            }
+    }
 }
 
 private const val USER_ID: String = "test_user_id"
@@ -302,6 +469,7 @@ private val VAULT_DATA: SyncResponseJson = SyncResponseJson(
     policies = null,
     domains = DOMAINS_1,
     sends = listOf(SEND_1),
+    userDecryption = null,
 )
 
 private const val CIPHER_JSON = """
@@ -371,6 +539,7 @@ private const val CIPHER_JSON = """
   "folderId": "mockFolderId-1",
   "organizationId": "mockOrganizationId-1",
   "deletedDate": "2023-10-27T12:00:00.000Z",
+  "archivedDate": "2023-10-27T12:00:00.000Z",
   "identity": {
     "passportNumber": "mockPassportNumber-1",
     "lastName": "mockLastName-1",
@@ -427,8 +596,10 @@ private const val CIPHER_JSON = """
 private val CIPHER_ENTITY = CipherEntity(
     id = "mockId-1",
     userId = USER_ID,
+    hasTotp = true,
     cipherType = "1",
     cipherJson = CIPHER_JSON,
+    organizationId = "mockOrganizationId-1",
 )
 
 private val COLLECTION_ENTITY = CollectionEntity(
@@ -440,6 +611,8 @@ private val COLLECTION_ENTITY = CollectionEntity(
     externalId = "mockExternalId-3",
     isReadOnly = false,
     canManage = true,
+    defaultUserCollectionEmail = "mockOffboardedUserEmail-3",
+    type = "0",
 )
 
 private const val DOMAINS_JSON = """
@@ -470,7 +643,7 @@ private val FOLDER_ENTITY = FolderEntity(
     id = "mockId-2",
     userId = USER_ID,
     name = "mockName-2",
-    revisionDate = ZonedDateTime.parse("2023-10-27T12:00Z"),
+    revisionDate = Instant.parse("2023-10-27T12:00:00Z"),
 )
 
 private const val SEND_JSON = """
@@ -498,7 +671,8 @@ private const val SEND_JSON = """
     "text": "mockText-1"
   },
   "key": "mockKey-1",
-  "expirationDate": "2023-10-27T12:00:00.000Z"
+  "expirationDate": "2023-10-27T12:00:00.000Z",
+  "authType": 1
 }
 """
 

@@ -65,7 +65,7 @@ fun NavGraphBuilder.completeRegistrationDestination(
     onNavigateBack: () -> Unit,
     onNavigateToPasswordGuidance: () -> Unit,
     onNavigateToPreventAccountLockout: () -> Unit,
-    onNavigateToLogin: (email: String, token: String?) -> Unit,
+    onNavigateToLogin: (email: String) -> Unit,
 ) {
     composableWithSlideTransitions<CompleteRegistrationRoute> {
         CompleteRegistrationScreen(
@@ -81,5 +81,5 @@ fun NavGraphBuilder.completeRegistrationDestination(
  * Pop up to the complete registration screen.
  */
 fun NavController.popUpToCompleteRegistration() {
-    this.popBackStack(route = CompleteRegistrationRoute, inclusive = false)
+    this.popBackStack(route = CompleteRegistrationRoute::class, inclusive = false)
 }

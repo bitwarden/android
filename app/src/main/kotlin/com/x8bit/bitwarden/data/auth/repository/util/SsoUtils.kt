@@ -1,32 +1,41 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Parcelable
+import androidx.browser.auth.AuthTabIntent
+import androidx.core.net.toUri
+import com.bitwarden.annotation.OmitFromCoverage
 import kotlinx.parcelize.Parcelize
 import java.net.URLEncoder
 import java.security.MessageDigest
 import java.util.Base64
 
-private const val SSO_HOST: String = "sso-callback"
-const val SSO_URI: String = "bitwarden://$SSO_HOST"
+private val BITWARDEN_HOSTS: List<String> = listOf("bitwarden.com", "bitwarden.eu", "bitwarden.pw")
+private const val APP_LINK_SCHEME: String = "https"
+private const val DEEPLINK_SCHEME: String = "bitwarden"
+private const val CALLBACK: String = "sso-callback"
 
 /**
  * Generates a URI for the SSO custom tab.
  *
  * @param identityBaseUrl The base URl for the identity service.
+ * @param redirectUrl The redirect URI used in the SSO request.
  * @param organizationIdentifier The SSO organization identifier.
  * @param token The prevalidated SSO token.
  * @param state Random state used to verify the validity of the response.
  * @param codeVerifier A random string used to generate the code challenge.
  */
+@Suppress("LongParameterList")
 fun generateUriForSso(
     identityBaseUrl: String,
+    redirectUrl: String,
     organizationIdentifier: String,
     token: String,
     state: String,
     codeVerifier: String,
-): String {
-    val redirectUri = URLEncoder.encode(SSO_URI, "UTF-8")
+): Uri {
+    val redirectUri = URLEncoder.encode(redirectUrl, "UTF-8")
     val encodedOrganizationIdentifier = URLEncoder.encode(organizationIdentifier, "UTF-8")
     val encodedToken = URLEncoder.encode(token, "UTF-8")
 
@@ -36,7 +45,7 @@ fun generateUriForSso(
             .digest(codeVerifier.toByteArray()),
     )
 
-    return "$identityBaseUrl/connect/authorize" +
+    val uri = "$identityBaseUrl/connect/authorize" +
         "?client_id=mobile" +
         "&redirect_uri=$redirectUri" +
         "&response_type=code" +
@@ -47,6 +56,7 @@ fun generateUriForSso(
         "&response_mode=query" +
         "&domain_hint=$encodedOrganizationIdentifier" +
         "&ssoToken=$encodedToken"
+    return uri.toUri()
 }
 
 /**
@@ -59,20 +69,54 @@ fun generateUriForSso(
  * - [SsoCallbackResult.Success]: Intent is the SSO callback with required data.
  */
 fun Intent.getSsoCallbackResult(): SsoCallbackResult? {
-    val localData = data
-    return if (action == Intent.ACTION_VIEW && localData?.host == SSO_HOST) {
-        val state = localData.getQueryParameter("state")
-        val code = localData.getQueryParameter("code")
-        if (code != null) {
-            SsoCallbackResult.Success(
-                state = state,
-                code = code,
-            )
-        } else {
-            SsoCallbackResult.MissingCode
+    if (action != Intent.ACTION_VIEW) return null
+    val localData = data ?: return null
+    return when (localData.scheme) {
+        DEEPLINK_SCHEME -> {
+            if (localData.host == CALLBACK) {
+                localData.getSsoCallbackResult()
+            } else {
+                null
+            }
         }
+
+        APP_LINK_SCHEME -> {
+            if (localData.host in BITWARDEN_HOSTS && localData.path == "/$CALLBACK") {
+                localData.getSsoCallbackResult()
+            } else {
+                null
+            }
+        }
+
+        else -> null
+    }
+}
+
+/**
+ * Retrieves an [SsoCallbackResult] from an [AuthTabIntent.AuthResult]. There are two possible
+ * cases.
+ *
+ * - [SsoCallbackResult.MissingCode]: The code is missing.
+ * - [SsoCallbackResult.Success]: The relevant data is present.
+ */
+@OmitFromCoverage
+fun AuthTabIntent.AuthResult.getSsoCallbackResult(): SsoCallbackResult =
+    when (this.resultCode) {
+        AuthTabIntent.RESULT_OK -> this.resultUri.getSsoCallbackResult()
+        AuthTabIntent.RESULT_CANCELED -> SsoCallbackResult.MissingCode
+        AuthTabIntent.RESULT_UNKNOWN_CODE -> SsoCallbackResult.MissingCode
+        AuthTabIntent.RESULT_VERIFICATION_FAILED -> SsoCallbackResult.MissingCode
+        AuthTabIntent.RESULT_VERIFICATION_TIMED_OUT -> SsoCallbackResult.MissingCode
+        else -> SsoCallbackResult.MissingCode
+    }
+
+private fun Uri?.getSsoCallbackResult(): SsoCallbackResult {
+    val state = this?.getQueryParameter("state")
+    val code = this?.getQueryParameter("code")
+    return if (code != null) {
+        SsoCallbackResult.Success(state = state, code = code)
     } else {
-        null
+        SsoCallbackResult.MissingCode
     }
 }
 

@@ -4,12 +4,12 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
@@ -32,17 +32,13 @@ class SetupUnlockViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val authRepository: AuthRepository,
     private val settingsRepository: SettingsRepository,
-    private val biometricsEncryptionManager: BiometricsEncryptionManager,
     private val firstTimeActionManager: FirstTimeActionManager,
+    private val browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
 ) : BaseViewModel<SetupUnlockState, SetupUnlockEvent, SetupUnlockAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val userId = requireNotNull(authRepository.userStateFlow.value).activeUserId
-        val isBiometricsValid = biometricsEncryptionManager.isBiometricIntegrityValid(
-            userId = userId,
-            cipher = biometricsEncryptionManager.getOrCreateCipher(userId = userId),
-        )
-        // whether or not the user has completed the initial setup prior to this.
+        // whether the user has completed the initial setup prior to this.
         val isInitialSetup = savedStateHandle.toSetupUnlockArgs().isInitialSetup
         SetupUnlockState(
             userId = userId,
@@ -53,7 +49,7 @@ class SetupUnlockViewModel @Inject constructor(
                 ?.hasMasterPassword != false,
             isUnlockWithPinEnabled = settingsRepository.isUnlockWithPinEnabled,
             isUnlockWithBiometricsEnabled = settingsRepository.isUnlockWithBiometricsEnabled &&
-                isBiometricsValid,
+                authRepository.isBiometricIntegrityValid(userId = userId),
             dialogState = null,
             isInitialSetup = isInitialSetup,
         )
@@ -98,7 +94,7 @@ class SetupUnlockViewModel @Inject constructor(
     }
 
     private fun handleEnableBiometricsClick() {
-        biometricsEncryptionManager
+        authRepository
             .createCipherOrNull(userId = state.userId)
             ?.let {
                 sendEvent(
@@ -112,8 +108,8 @@ class SetupUnlockViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = SetupUnlockState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -132,7 +128,7 @@ class SetupUnlockViewModel @Inject constructor(
     }
 
     private fun handleUnlockWithBiometricToggleDisabled() {
-        biometricsEncryptionManager.clearBiometrics(userId = state.userId)
+        authRepository.clearBiometrics(userId = state.userId)
         mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = false) }
     }
 
@@ -141,7 +137,7 @@ class SetupUnlockViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(
-                dialogState = SetupUnlockState.DialogState.Loading(R.string.saving.asText()),
+                dialogState = SetupUnlockState.DialogState.Loading(BitwardenString.saving.asText()),
                 isUnlockWithBiometricsEnabled = true,
             )
         }
@@ -203,10 +199,14 @@ class SetupUnlockViewModel @Inject constructor(
     }
 
     private fun updateOnboardingStatusToNextStep() {
-        val nextStep = if (settingsRepository.isAutofillEnabledStateFlow.value) {
-            OnboardingStatus.FINAL_STEP
-        } else {
-            OnboardingStatus.AUTOFILL_SETUP
+        val isAutofillEnabled = settingsRepository.isAutofillEnabledStateFlow.value
+        val isBrowserAutofillUnconfigured = browserThirdPartyAutofillEnabledManager
+            .browserThirdPartyAutofillStatus
+            .isAnyIsAvailableAndDisabled
+        val nextStep = when {
+            !isAutofillEnabled -> OnboardingStatus.AUTOFILL_SETUP
+            isBrowserAutofillUnconfigured -> OnboardingStatus.BROWSER_AUTOFILL_SETUP
+            else -> OnboardingStatus.FINAL_STEP
         }
         authRepository.setOnboardingStatus(nextStep)
     }

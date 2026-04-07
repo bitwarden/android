@@ -1,6 +1,6 @@
 package com.bitwarden.network.model
 
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Create a mock [CreateFileSendResponseJson] with a given data.
@@ -26,19 +26,21 @@ fun createMockSend(
     accessCount: Int = 1,
     maxAccessCount: Int? = 1,
     notes: String? = "mockNotes-$number",
-    revisionDate: ZonedDateTime = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+    revisionDate: Instant = Instant.parse("2023-10-27T12:00:00Z"),
     shouldHideEmail: Boolean = false,
     type: SendTypeJson = SendTypeJson.FILE,
     accessId: String? = "mockAccessId-$number",
     password: String? = "mockPassword-$number",
     file: SyncResponseJson.Send.File? = createMockFile(number = number),
-    deletionDate: ZonedDateTime = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+    deletionDate: Instant = Instant.parse("2023-10-27T12:00:00Z"),
     name: String? = "mockName-$number",
     isDisabled: Boolean = false,
     id: String = "mockId-$number",
     text: SyncResponseJson.Send.Text? = createMockText(number = number),
     key: String? = "mockKey-$number",
-    expirationDate: ZonedDateTime? = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+    expirationDate: Instant? = Instant.parse("2023-10-27T12:00:00Z"),
+    authTypeJson: SendAuthTypeJson = SendAuthTypeJson.PASSWORD,
+    emails: String? = null,
 ): SyncResponseJson.Send =
     SyncResponseJson.Send(
         accessCount = accessCount,
@@ -57,6 +59,8 @@ fun createMockSend(
         text = text,
         key = key,
         expirationDate = expirationDate,
+        authType = authTypeJson,
+        emails = emails,
     )
 
 /**

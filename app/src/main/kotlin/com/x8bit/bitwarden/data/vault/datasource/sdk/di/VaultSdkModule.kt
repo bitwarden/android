@@ -1,9 +1,14 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.di
 
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
+import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
+import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
+import com.x8bit.bitwarden.data.vault.datasource.sdk.ScopedVaultSdkSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.ScopedVaultSdkSourceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSourceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialStoreImpl
@@ -33,14 +38,28 @@ object VaultSdkModule {
         )
 
     @Provides
+    fun providesScopedVaultSdkSource(
+        dispatcherManager: DispatcherManager,
+        featureFlagManager: FeatureFlagManager,
+        sdkRepositoryFactory: SdkRepositoryFactory,
+        sdkPlatformApiFactory: SdkPlatformApiFactory,
+    ): ScopedVaultSdkSource =
+        ScopedVaultSdkSourceImpl(
+            dispatcherManager = dispatcherManager,
+            featureFlagManager = featureFlagManager,
+            sdkRepositoryFactory = sdkRepositoryFactory,
+            sdkPlatformApiFactory = sdkPlatformApiFactory,
+        )
+
+    @Provides
     @Singleton
     fun providesFido2CredentialStore(
-        vaultSdkSource: VaultSdkSource,
         authRepository: AuthRepository,
+        vaultSdkSource: VaultSdkSource,
         vaultRepository: VaultRepository,
     ): Fido2CredentialStore = Fido2CredentialStoreImpl(
-        vaultSdkSource = vaultSdkSource,
         authRepository = authRepository,
+        vaultSdkSource = vaultSdkSource,
         vaultRepository = vaultRepository,
     )
 }

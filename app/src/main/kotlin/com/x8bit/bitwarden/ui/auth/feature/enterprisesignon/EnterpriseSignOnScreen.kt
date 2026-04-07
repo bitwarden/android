@@ -14,7 +14,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -22,24 +21,27 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.composition.LocalAuthTabLaunchers
+import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 
 /**
  * The top level composable for the Enterprise Single Sign On screen.
@@ -51,6 +53,7 @@ fun EnterpriseSignOnScreen(
     onNavigateBack: () -> Unit,
     onNavigateToSetPassword: () -> Unit,
     onNavigateToTwoFactorLogin: (email: String, orgIdentifier: String) -> Unit,
+    authTabLaunchers: AuthTabLaunchers = LocalAuthTabLaunchers.current,
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: EnterpriseSignOnViewModel = hiltViewModel(),
 ) {
@@ -60,11 +63,11 @@ fun EnterpriseSignOnScreen(
             EnterpriseSignOnEvent.NavigateBack -> onNavigateBack()
 
             is EnterpriseSignOnEvent.NavigateToSsoLogin -> {
-                intentManager.startCustomTabsActivity(event.uri)
-            }
-
-            is EnterpriseSignOnEvent.NavigateToCaptcha -> {
-                intentManager.startCustomTabsActivity(event.uri)
+                intentManager.startAuthTab(
+                    uri = event.uri,
+                    authTabData = event.authTabData,
+                    launcher = authTabLaunchers.sso,
+                )
             }
 
             is EnterpriseSignOnEvent.NavigateToSetPassword -> {
@@ -79,15 +82,13 @@ fun EnterpriseSignOnScreen(
 
     EnterpriseSignOnDialogs(
         dialogState = state.dialogState,
-        onConfirmKeyConnectorDomain = remember(viewModel) {
-            { viewModel.trySendAction(EnterpriseSignOnAction.ConfirmKeyConnectorDomainClick) }
+        onConfirmKeyConnectorDomain = {
+            viewModel.trySendAction(EnterpriseSignOnAction.ConfirmKeyConnectorDomainClick)
         },
-        onDismissKeyConnectorDomain = remember(viewModel) {
-            { viewModel.trySendAction(EnterpriseSignOnAction.CancelKeyConnectorDomainClick) }
+        onDismissKeyConnectorDomain = {
+            viewModel.trySendAction(EnterpriseSignOnAction.CancelKeyConnectorDomainClick)
         },
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(EnterpriseSignOnAction.DialogDismiss) }
-        },
+        onDismissRequest = { viewModel.trySendAction(EnterpriseSignOnAction.DialogDismiss) },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -100,16 +101,14 @@ fun EnterpriseSignOnScreen(
                 title = stringResource(id = R.string.app_name),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(EnterpriseSignOnAction.CloseButtonClick) }
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
+                onNavigationIconClick = {
+                    viewModel.trySendAction(EnterpriseSignOnAction.CloseButtonClick)
                 },
                 actions = {
                     BitwardenTextButton(
-                        label = stringResource(id = R.string.log_in_verb),
-                        onClick = remember(viewModel) {
-                            { viewModel.trySendAction(EnterpriseSignOnAction.LogInClick) }
-                        },
+                        label = stringResource(id = BitwardenString.log_in_verb),
+                        onClick = { viewModel.trySendAction(EnterpriseSignOnAction.LogInClick) },
                         modifier = Modifier.testTag("LoginButton"),
                     )
                 },
@@ -118,8 +117,8 @@ fun EnterpriseSignOnScreen(
     ) {
         EnterpriseSignOnScreenContent(
             state = state,
-            onOrgIdentifierInputChange = remember(viewModel) {
-                { viewModel.trySendAction(EnterpriseSignOnAction.OrgIdentifierInputChange(it)) }
+            onOrgIdentifierInputChange = {
+                viewModel.trySendAction(EnterpriseSignOnAction.OrgIdentifierInputChange(it))
             },
             modifier = Modifier.fillMaxSize(),
         )
@@ -140,7 +139,7 @@ private fun EnterpriseSignOnScreenContent(
     ) {
         Spacer(modifier = Modifier.height(height = 12.dp))
         Text(
-            text = stringResource(id = R.string.log_in_sso_summary),
+            text = stringResource(id = BitwardenString.log_in_sso_summary),
             textAlign = TextAlign.Start,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
@@ -157,7 +156,7 @@ private fun EnterpriseSignOnScreenContent(
                 .fillMaxWidth(),
             value = state.orgIdentifierInput,
             onValueChange = onOrgIdentifierInputChange,
-            label = stringResource(id = R.string.org_identifier),
+            label = stringResource(id = BitwardenString.org_identifier),
             textFieldTestTag = "OrgSSOIdentifierEntry",
             cardStyle = CardStyle.Full,
         )
@@ -190,13 +189,13 @@ private fun EnterpriseSignOnDialogs(
 
         is EnterpriseSignOnState.DialogState.KeyConnectorDomain -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(R.string.confirm_key_connector_domain),
+                title = stringResource(BitwardenString.confirm_key_connector_domain),
                 message = stringResource(
-                    R.string.please_confirm_domain_with_admin,
+                    BitwardenString.please_confirm_domain_with_admin,
                     dialogState.keyConnectorDomain,
                 ),
-                confirmButtonText = stringResource(R.string.confirm),
-                dismissButtonText = stringResource(R.string.cancel),
+                confirmButtonText = stringResource(BitwardenString.confirm),
+                dismissButtonText = stringResource(BitwardenString.cancel),
                 onConfirmClick = onConfirmKeyConnectorDomain,
                 onDismissRequest = onDismissKeyConnectorDomain,
                 onDismissClick = onDismissKeyConnectorDomain,

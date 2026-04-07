@@ -25,7 +25,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.time.ZonedDateTime
+import java.time.Instant
 
 class TrustedDeviceManagerTests {
     private val fakeAuthDiskSource = FakeAuthDiskSource()
@@ -154,7 +154,7 @@ class TrustedDeviceManagerTests {
             name = "name",
             identifier = "identifier",
             type = 0,
-            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
         )
         fakeAuthDiskSource.userState = DEFAULT_USER_STATE
         fakeAuthDiskSource.storeShouldTrustDevice(userId = USER_ID, shouldTrustDevice = true)
@@ -211,7 +211,7 @@ class TrustedDeviceManagerTests {
             name = "name",
             identifier = "identifier",
             type = 0,
-            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
         )
         fakeAuthDiskSource.userState = DEFAULT_USER_STATE
         fakeAuthDiskSource.storeShouldTrustDevice(userId = USER_ID, shouldTrustDevice = true)
@@ -273,12 +273,14 @@ private val DEFAULT_USER_DECRYPTION_OPTIONS: UserDecryptionOptionsJson = UserDec
     hasMasterPassword = false,
     trustedDeviceUserDecryptionOptions = DEFAULT_TRUSTED_DEVICE_USER_DECRYPTION_OPTIONS,
     keyConnectorUserDecryptionOptions = null,
+    masterPasswordUnlock = null,
 )
 
 private val UPDATED_USER_DECRYPTION_OPTIONS: UserDecryptionOptionsJson = UserDecryptionOptionsJson(
     hasMasterPassword = false,
     trustedDeviceUserDecryptionOptions = UPDATED_TRUSTED_DEVICE_USER_DECRYPTION_OPTIONS,
     keyConnectorUserDecryptionOptions = null,
+    masterPasswordUnlock = null,
 )
 
 private val DEFAULT_ACCOUNT = AccountJson(
@@ -298,7 +300,7 @@ private val DEFAULT_ACCOUNT = AccountJson(
         kdfParallelism = 4,
         userDecryptionOptions = DEFAULT_USER_DECRYPTION_OPTIONS,
         isTwoFactorEnabled = false,
-        creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+        creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
     ),
     settings = AccountJson.Settings(
         environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
@@ -322,7 +324,7 @@ private val UPDATED_ACCOUNT = AccountJson(
         kdfParallelism = 4,
         userDecryptionOptions = UPDATED_USER_DECRYPTION_OPTIONS,
         isTwoFactorEnabled = false,
-        creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+        creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
     ),
     settings = AccountJson.Settings(
         environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,

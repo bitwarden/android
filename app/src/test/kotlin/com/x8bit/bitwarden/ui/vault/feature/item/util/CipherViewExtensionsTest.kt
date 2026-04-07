@@ -39,7 +39,7 @@ class CipherViewExtensionsTest {
     }
 
     @Test
-    fun `toViewState should transform full CipherView into ViewState Login Content with premium`() {
+    fun `toViewState should transform full CipherView into ViewState Login Content with Premium`() {
         val cipherView = createCipherView(type = CipherType.LOGIN, isEmpty = false)
         val viewState = cipherView.toViewState(
             previousState = null,
@@ -48,7 +48,6 @@ class CipherViewExtensionsTest {
                 periodSeconds = 30,
                 timeLeftSeconds = 15,
                 verificationCode = "123456",
-                totpCode = "testCode",
             ),
             clock = fixedClock,
             canDelete = true,
@@ -58,6 +57,7 @@ class CipherViewExtensionsTest {
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
+            hasOrganizations = true,
         )
 
         assertEquals(
@@ -72,7 +72,7 @@ class CipherViewExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toViewState should transform full CipherView into ViewState Login Content without premium`() {
+    fun `toViewState should transform full CipherView into ViewState Login Content without Premium`() {
         val isPremiumUser = false
         val cipherView = createCipherView(type = CipherType.LOGIN, isEmpty = false)
         val viewState = cipherView.toViewState(
@@ -82,7 +82,6 @@ class CipherViewExtensionsTest {
                 periodSeconds = 30,
                 timeLeftSeconds = 15,
                 verificationCode = "123456",
-                totpCode = "testCode",
             ),
             clock = fixedClock,
             canDelete = true,
@@ -92,6 +91,7 @@ class CipherViewExtensionsTest {
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
+            hasOrganizations = true,
         )
 
         assertEquals(
@@ -109,7 +109,7 @@ class CipherViewExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toViewState should transform full CipherView into ViewState Login Content without premium but with org totp access`() {
+    fun `toViewState should transform full CipherView into ViewState Login Content without Premium but with org totp access`() {
         val isPremiumUser = false
         val cipherView = createCipherView(
             type = CipherType.LOGIN,
@@ -122,7 +122,6 @@ class CipherViewExtensionsTest {
                 periodSeconds = 30,
                 timeLeftSeconds = 15,
                 verificationCode = "123456",
-                totpCode = "testCode",
             ),
             clock = fixedClock,
             canDelete = true,
@@ -132,6 +131,7 @@ class CipherViewExtensionsTest {
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
+            hasOrganizations = true,
         )
 
         assertEquals(
@@ -162,6 +162,7 @@ class CipherViewExtensionsTest {
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
+            hasOrganizations = true,
         )
 
         assertEquals(
@@ -190,6 +191,7 @@ class CipherViewExtensionsTest {
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
+            hasOrganizations = true,
         )
 
         assertEquals(
@@ -221,6 +223,7 @@ class CipherViewExtensionsTest {
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
+            hasOrganizations = true,
         )
 
         assertEquals(
@@ -262,6 +265,7 @@ class CipherViewExtensionsTest {
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
+            hasOrganizations = true,
         )
 
         assertEquals(
@@ -308,6 +312,7 @@ class CipherViewExtensionsTest {
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
+            hasOrganizations = true,
         )
 
         assertEquals(
@@ -356,6 +361,7 @@ class CipherViewExtensionsTest {
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
+            hasOrganizations = true,
         )
 
         assertEquals(
@@ -388,6 +394,7 @@ class CipherViewExtensionsTest {
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
+            hasOrganizations = true,
         )
 
         val expectedState = VaultItemState.ViewState.Content(
@@ -418,6 +425,7 @@ class CipherViewExtensionsTest {
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
+            hasOrganizations = true,
         )
         assertEquals(
             VaultItemState.ViewState.Content(
@@ -444,7 +452,7 @@ class CipherViewExtensionsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `toViewState should transform full CipherView into ViewState with iconData based on cipher type`() {
-        mapOf<CipherType, Int>(
+        mapOf(
             CipherType.LOGIN to BitwardenDrawable.ic_globe,
             CipherType.IDENTITY to BitwardenDrawable.ic_id_card,
             CipherType.CARD to BitwardenDrawable.ic_payment_card,
@@ -465,6 +473,7 @@ class CipherViewExtensionsTest {
                     baseIconUrl = "https://example.com/",
                     isIconLoadingDisabled = true,
                     relatedLocations = persistentListOf(),
+                    hasOrganizations = true,
                 )
                 assertEquals(
                     it.value,
@@ -492,6 +501,7 @@ class CipherViewExtensionsTest {
                     baseIconUrl = "https://example.com/",
                     isIconLoadingDisabled = true,
                     relatedLocations = persistentListOf(),
+                    hasOrganizations = true,
                 )
                 assertEquals(
                     IconData.Local(it.value),

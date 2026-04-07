@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.platform.manager.event
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.network.model.OrganizationEventJson
 import com.bitwarden.network.service.EventService
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.time.Clock
-import java.time.ZonedDateTime
 
 /**
  * The amount of time to delay before attempting the first upload events after the app is
@@ -78,7 +77,8 @@ class OrganizationEventManagerImpl(
                 event = OrganizationEventJson(
                     type = event.type,
                     cipherId = event.cipherId,
-                    date = ZonedDateTime.now(clock),
+                    date = clock.instant(),
+                    organizationId = event.organizationId,
                 ),
             )
         }

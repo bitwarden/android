@@ -6,10 +6,12 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.isDialog
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isPopup
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -21,44 +23,45 @@ import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.util.toHostOrPathOrNull
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.exit.ExitManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
+import com.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
 import com.bitwarden.ui.util.assertMasterPasswordDialogDisplayed
 import com.bitwarden.ui.util.assertNoDialogExists
+import com.bitwarden.ui.util.assertRemovalConfirmationDialogIsDisplayed
+import com.bitwarden.ui.util.assertSwitcherIsDisplayed
+import com.bitwarden.ui.util.assertSwitcherIsNotDisplayed
 import com.bitwarden.ui.util.isProgressBar
 import com.bitwarden.ui.util.onNodeWithTextAfterScroll
+import com.bitwarden.ui.util.performAccountClick
+import com.bitwarden.ui.util.performAccountIconClick
+import com.bitwarden.ui.util.performAccountLongClick
+import com.bitwarden.ui.util.performLockAccountClick
+import com.bitwarden.ui.util.performLogoutAccountClick
+import com.bitwarden.ui.util.performRemoveAccountClick
+import com.bitwarden.ui.util.performYesDialogButtonClick
 import com.bitwarden.vault.CipherType
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
-import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
-import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
-import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
-import com.x8bit.bitwarden.ui.util.assertRemovalConfirmationDialogIsDisplayed
-import com.x8bit.bitwarden.ui.util.assertSwitcherIsDisplayed
-import com.x8bit.bitwarden.ui.util.assertSwitcherIsNotDisplayed
-import com.x8bit.bitwarden.ui.util.performAccountClick
-import com.x8bit.bitwarden.ui.util.performAccountIconClick
-import com.x8bit.bitwarden.ui.util.performAccountLongClick
-import com.x8bit.bitwarden.ui.util.performLockAccountClick
-import com.x8bit.bitwarden.ui.util.performLogoutAccountClick
-import com.x8bit.bitwarden.ui.util.performRemoveAccountClick
-import com.x8bit.bitwarden.ui.util.performYesDialogButtonClick
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
@@ -106,8 +109,9 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         every { launchUri(any()) } just runs
     }
     private val credentialProviderCompletionManager: CredentialProviderCompletionManager = mockk {
-        every { completeFido2Registration(any()) } just runs
+        every { completeCredentialRegistration(any()) } just runs
         every { completeFido2Assertion(any()) } just runs
+        every { completePasswordGet(any()) } just runs
         every { completeProviderGetCredentialsRequest(any()) } just runs
     }
     private val biometricsManager: BiometricsManager = mockk()
@@ -186,14 +190,61 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     @Test
     fun `overflow menu should update according to state`() {
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
 
         mutableStateFlow.value = STATE_FOR_AUTOFILL
 
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .assertDoesNotExist()
+    }
+
+    @Test
+    fun `action cards should be displayed according to state`() {
+        composeTestRule
+            .onNodeWithText(text = "Your Premium subscription ended")
+            .assertDoesNotExist()
+
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isPremium = false,
+            itemListingType = VaultItemListingState.ItemListingType.Vault.Archive,
+            viewState = VaultItemListingState.ViewState.Content(
+                displayItemList = listOf(createDisplayItem(number = 1)),
+                displayFolderList = emptyList(),
+                displayCollectionList = emptyList(),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Your Premium subscription ended")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `Premium action card restart Premium button click should send UpgradeToPremiumClick`() {
+        composeTestRule
+            .onNodeWithText(text = "Your Premium subscription ended")
+            .assertDoesNotExist()
+
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isPremium = false,
+            itemListingType = VaultItemListingState.ItemListingType.Vault.Archive,
+            viewState = VaultItemListingState.ViewState.Content(
+                displayItemList = listOf(createDisplayItem(number = 1)),
+                displayFolderList = emptyList(),
+                displayCollectionList = emptyList(),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Restart Premium")
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemListingsAction.UpgradeToPremiumClick)
+        }
     }
 
     @Test
@@ -578,9 +629,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     @Test
     fun `progressbar should be displayed according to state`() {
         mutableStateFlow.update { DEFAULT_STATE }
-
-        // There are 2 because of the pull-to-refresh
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
 
         mutableStateFlow.update {
             it.copy(
@@ -592,9 +641,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
                 ),
             )
         }
-
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
     }
 
     @Test
@@ -1308,23 +1355,23 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     @Test
     fun `on overflow item click should display menu`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .performClick()
 
         composeTestRule
             .onAllNodesWithText(text = "Sync")
             .filterToOne(hasAnyAncestor(isPopup()))
-            .isDisplayed()
+            .assertIsDisplayed()
         composeTestRule
             .onAllNodesWithText(text = "Lock")
             .filterToOne(hasAnyAncestor(isPopup()))
-            .isDisplayed()
+            .assertIsDisplayed()
     }
 
     @Test
     fun `on sync click should send SyncClick`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .performClick()
 
         composeTestRule
@@ -1340,7 +1387,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     @Test
     fun `on lock click should send LockClick`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .performClick()
 
         composeTestRule
@@ -1369,7 +1416,9 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithText("mockTitle-1")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -1412,7 +1461,9 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithText("mockTitle-1")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -1438,8 +1489,8 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithContentDescription("Options")
-            .assertIsDisplayed()
+            .onAllNodesWithContentDescription("More options")
+            .assertCountEquals(2)
 
         mutableStateFlow.update {
             it.copy(
@@ -1448,8 +1499,8 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
-            .assertDoesNotExist()
+            .onAllNodesWithContentDescription("More options")
+            .assertCountEquals(1)
     }
 
     @Test
@@ -1467,7 +1518,9 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithText("mockTitle-$number")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
 
@@ -1493,7 +1546,9 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription(label = "Options")
+            .onNodeWithText("mockTitle-$number")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -1512,7 +1567,9 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithText("mockTitle-$number")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -1531,7 +1588,9 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithText("mockTitle-$number")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -1549,7 +1608,9 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithText("mockTitle-$number")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -1567,7 +1628,9 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithText("mockTitle-$number")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -1603,7 +1666,9 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText(message).assertDoesNotExist()
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithText("mockTitle-1")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -1947,7 +2012,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 dialogState = VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    title = R.string.an_error_has_occurred.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
                     message = dialogMessage.asText(),
                 ),
             )
@@ -1969,11 +2034,11 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `CompleteFido2Registration event should call CredentialProviderCompletionManager with result`() {
-        val result = RegisterFido2CredentialResult.Success("mockResponse")
-        mutableEventFlow.tryEmit(VaultItemListingEvent.CompleteFido2Registration(result))
+    fun `CompleteCredentialRegistration event should call CredentialProviderCompletionManager with result`() {
+        val result = CreateCredentialResult.Success.Fido2CredentialRegistered("mockResponse")
+        mutableEventFlow.tryEmit(VaultItemListingEvent.CompleteCredentialRegistration(result))
         verify {
-            credentialProviderCompletionManager.completeFido2Registration(result)
+            credentialProviderCompletionManager.completeCredentialRegistration(result)
         }
     }
 
@@ -1984,6 +2049,21 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         mutableEventFlow.tryEmit(VaultItemListingEvent.CompleteFido2Assertion(result))
         verify {
             credentialProviderCompletionManager.completeFido2Assertion(result)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `GetPasswordCredentialResult event should call CredentialProviderCompletionManager with result`() {
+        val result = GetPasswordCredentialResult.Success(
+            username = "mockUsername-1",
+            password = "mockPassword-1",
+        )
+        mutableEventFlow.tryEmit(
+            VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(result),
+        )
+        verify {
+            credentialProviderCompletionManager.completePasswordGet(result)
         }
     }
 
@@ -2327,10 +2407,121 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         verify(exactly = 1) {
             viewModel.trySendAction(
                 VaultItemListingsAction.DismissCredentialManagerErrorDialogClick(
-                    message = R.string.passkey_operation_failed_because_the_browser_is_not_trusted
+                    message = BitwardenString.passkey_operation_failed_because_the_browser_is_not_trusted
                         .asText(),
                 ),
             )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `cipher decryption error dialog should be shown or hidden according to the state`() {
+        val errorTitle = "Decryption error"
+        val errorMessage =
+            "Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss."
+        composeTestRule.assertNoDialogExists()
+        composeTestRule
+            .onNodeWithText(errorTitle)
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(errorMessage)
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.CipherDecryptionError(
+                    title = errorTitle.asText(),
+                    message = errorMessage.asText(),
+                    selectedCipherId = "1",
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(errorTitle)
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(errorMessage)
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `share and copy button click on the CipherDecryptionError screen should send ShareCipherDecryptionErrorClick`() {
+        val errorTitle = "Decryption error"
+        val errorMessage =
+            "Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss."
+        val shareAndCopyText = "Copy error report"
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.CipherDecryptionError(
+                    title = errorTitle.asText(),
+                    message = errorMessage.asText(),
+                    selectedCipherId = "1",
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(shareAndCopyText)
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.ShareCipherDecryptionErrorClick("1"),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `close button click on the CipherDecryptionError screen should send DialogDismiss`() {
+        val errorTitle = "Decryption error"
+        val errorMessage =
+            "Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss."
+        val closeText = "Close"
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.CipherDecryptionError(
+                    title = errorTitle.asText(),
+                    message = errorMessage.asText(),
+                    selectedCipherId = "1",
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(closeText)
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.DismissDialogClick,
+            )
+        }
+    }
+
+    @Test
+    fun `ArchiveRequiresPremium dialog should display based on state`() {
+        composeTestRule.assertNoDialogExists()
+        mutableStateFlow.update {
+            it.copy(dialogState = VaultItemListingState.DialogState.ArchiveRequiresPremium)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Archive unavailable")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Upgrade to Premium")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemListingsAction.UpgradeToPremiumClick)
         }
     }
 }
@@ -2385,6 +2576,7 @@ private val DEFAULT_STATE = VaultItemListingState(
     isPremium = false,
     isRefreshing = false,
     restrictItemTypesPolicyOrgIds = persistentListOf(),
+    isArchiveEnabled = true,
 )
 
 private val STATE_FOR_AUTOFILL = DEFAULT_STATE.copy(
@@ -2394,7 +2586,7 @@ private val STATE_FOR_AUTOFILL = DEFAULT_STATE.copy(
 private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = "mockId-$number",
-        title = "mockTitle-$number",
+        title = "mockTitle-$number".asText(),
         titleTestTag = "SendNameLabel",
         secondSubtitle = null,
         secondSubtitleTestTag = null,
@@ -2404,23 +2596,23 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
         extraIconList = persistentListOf(
             IconData.Local(
                 iconRes = BitwardenDrawable.ic_send_disabled,
-                contentDescription = R.string.disabled.asText(),
+                contentDescription = BitwardenString.disabled.asText(),
             ),
             IconData.Local(
                 iconRes = BitwardenDrawable.ic_key,
-                contentDescription = R.string.password.asText(),
+                contentDescription = BitwardenString.password.asText(),
             ),
             IconData.Local(
                 iconRes = BitwardenDrawable.ic_send_max_access_count_reached,
-                contentDescription = R.string.maximum_access_count_reached.asText(),
+                contentDescription = BitwardenString.maximum_access_count_reached.asText(),
             ),
             IconData.Local(
                 iconRes = BitwardenDrawable.ic_send_expired,
-                contentDescription = R.string.expired.asText(),
+                contentDescription = BitwardenString.expired.asText(),
             ),
             IconData.Local(
                 iconRes = BitwardenDrawable.ic_send_pending_delete,
-                contentDescription = R.string.pending_delete.asText(),
+                contentDescription = BitwardenString.pending_delete.asText(),
             ),
         ),
         overflowOptions = listOf(
@@ -2445,10 +2637,12 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
         itemType = VaultItemListingState.DisplayItem.ItemType.Sends(type = SendType.TEXT),
     )
 
-private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayItem =
+private fun createCipherDisplayItem(
+    @Suppress("SameParameterValue") number: Int,
+): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = "mockId-$number",
-        title = "mockTitle-$number",
+        title = "mockTitle-$number".asText(),
         titleTestTag = "CipherNameLabel",
         secondSubtitle = null,
         secondSubtitleTestTag = null,
@@ -2468,5 +2662,7 @@ private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayI
         isCredentialCreation = false,
         shouldShowMasterPasswordReprompt = false,
         iconTestTag = null,
-        itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = CipherType.LOGIN),
+        itemType = VaultItemListingState.DisplayItem.ItemType.Vault(
+            type = CipherType.LOGIN,
+        ),
     )

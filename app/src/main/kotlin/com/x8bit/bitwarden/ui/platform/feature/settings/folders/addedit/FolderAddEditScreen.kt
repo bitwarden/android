@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,16 +12,14 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -30,18 +27,18 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
+import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import kotlinx.collections.immutable.persistentListOf
 
 /**
@@ -55,32 +52,24 @@ fun FolderAddEditScreen(
     viewModel: FolderAddEditViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-
     var shouldShowConfirmationDialog by rememberSaveable { mutableStateOf(false) }
-
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is FolderAddEditEvent.NavigateBack -> onNavigateBack.invoke()
-            is FolderAddEditEvent.ShowToast -> {
-                Toast.makeText(context, event.message(context.resources), Toast.LENGTH_SHORT).show()
-            }
         }
     }
 
     FolderAddEditItemDialogs(
         dialogState = state.dialog,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(FolderAddEditAction.DismissDialog) }
-        },
+        onDismissRequest = { viewModel.trySendAction(FolderAddEditAction.DismissDialog) },
     )
 
     if (shouldShowConfirmationDialog) {
         BitwardenTwoButtonDialog(
             title = null,
-            message = stringResource(id = R.string.do_you_really_want_to_delete),
-            dismissButtonText = stringResource(id = R.string.cancel),
-            confirmButtonText = stringResource(id = R.string.delete),
+            message = stringResource(id = BitwardenString.do_you_really_want_to_delete),
+            dismissButtonText = stringResource(id = BitwardenString.cancel),
+            confirmButtonText = stringResource(id = BitwardenString.delete),
             onDismissClick = { shouldShowConfirmationDialog = false },
             onConfirmClick = {
                 shouldShowConfirmationDialog = false
@@ -101,29 +90,23 @@ fun FolderAddEditScreen(
                 title = state.screenDisplayName.invoke(),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(FolderAddEditAction.CloseClick) }
-                },
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
+                onNavigationIconClick = { viewModel.trySendAction(FolderAddEditAction.CloseClick) },
                 actions = {
                     BitwardenTextButton(
-                        label = stringResource(id = R.string.save),
-                        onClick = remember(viewModel) {
-                            { viewModel.trySendAction(FolderAddEditAction.SaveClick) }
-                        },
+                        label = stringResource(id = BitwardenString.save),
+                        onClick = { viewModel.trySendAction(FolderAddEditAction.SaveClick) },
                         modifier = Modifier.testTag("SaveButton"),
                     )
-                    if (state.shouldShowOverflowMenu) {
-                        BitwardenOverflowActionItem(
-                            contentDescription = stringResource(R.string.more),
-                            menuItemDataList = persistentListOf(
-                                OverflowMenuItemData(
-                                    text = stringResource(id = R.string.delete),
-                                    onClick = { shouldShowConfirmationDialog = true },
-                                ),
+                    BitwardenOverflowActionItem(
+                        isVisible = state.shouldShowOverflowMenu,
+                        menuItemDataList = persistentListOf(
+                            OverflowMenuItemData(
+                                text = stringResource(id = BitwardenString.delete),
+                                onClick = { shouldShowConfirmationDialog = true },
                             ),
-                        )
-                    }
+                        ),
+                    )
                 },
             )
         },
@@ -135,10 +118,10 @@ fun FolderAddEditScreen(
                 ) {
                     Spacer(modifier = Modifier.height(height = 12.dp))
                     BitwardenTextField(
-                        label = stringResource(id = R.string.name),
+                        label = stringResource(id = BitwardenString.name),
                         value = viewState.folderName,
-                        onValueChange = remember(viewModel) {
-                            { viewModel.trySendAction(FolderAddEditAction.NameTextChange(it)) }
+                        onValueChange = {
+                            viewModel.trySendAction(FolderAddEditAction.NameTextChange(it))
                         },
                         textFieldTestTag = "FolderNameField",
                         cardStyle = CardStyle.Full,
@@ -177,7 +160,7 @@ private fun FolderAddEditItemDialogs(
         }
 
         is FolderAddEditState.DialogState.Error -> BitwardenBasicDialog(
-            title = stringResource(id = R.string.an_error_has_occurred),
+            title = stringResource(id = BitwardenString.an_error_has_occurred),
             message = dialogState.message(),
             onDismissRequest = onDismissRequest,
             throwable = dialogState.throwable,

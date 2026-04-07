@@ -226,7 +226,8 @@ private const val CREATE_UPDATE_SEND_SUCCESS_JSON = """
   "revisionDate": "2023-10-27T12:00:00.00Z",
   "expirationDate": "2023-10-27T12:00:00.00Z",
   "deletionDate": "2023-10-27T12:00:00.00Z",
-  "hideEmail": false
+  "hideEmail": false,
+  "authType": 1,
 }
 """
 
@@ -258,7 +259,8 @@ private const val CREATE_FILE_SEND_SUCCESS_JSON = """
     "revisionDate": "2023-10-27T12:00:00.00Z",
     "expirationDate": "2023-10-27T12:00:00.00Z",
     "deletionDate": "2023-10-27T12:00:00.00Z",
-    "hideEmail": false
+    "hideEmail": false,
+    "authType": 1
   }
 }
 """

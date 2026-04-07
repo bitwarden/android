@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.tools.generator.repository
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.generators.AppendType
 import com.bitwarden.generators.ForwarderServiceType
@@ -54,7 +54,6 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 @Suppress("LargeClass")
 class GeneratorRepositoryTest {
@@ -804,9 +803,10 @@ private val USER_STATE = UserStateJson(
                     keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
                         keyConnectorUrl = "keyConnectorUrl",
                     ),
+                    masterPasswordUnlock = null,
                 ),
                 isTwoFactorEnabled = false,
-                creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+                creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
             ),
             tokens = AccountTokensJson(
                 accessToken = "accessToken",

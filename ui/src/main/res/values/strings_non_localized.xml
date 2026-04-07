@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bitwarden_authenticator">Bitwarden Authenticator</string>
+    <string name="csv_extension" translatable="false">.csv</string>
+    <string name="duo_title" translatable="false">Duo</string>
+    <string name="duo_org_title" translatable="false">Duo (%1$s)</string>
+    <string name="json_extension" translatable="false">.json</string>
+    <string name="json_extension_formatted" translatable="false">.json (%1$s)</string>
+    <string name="bitwarden" translatable="false">Bitwarden</string>
+    <string name="fido2_title" translatable="false">FIDO2 WebAuthn</string>
+    <string name="addy_io" translatable="false">addy.io</string>
+    <string name="firefox_relay" translatable="false">Firefox Relay</string>
+    <string name="simple_login" translatable="false">SimpleLogin</string>
+    <string name="duck_duck_go" translatable="false">DuckDuckGo</string>
+    <string name="fastmail" translatable="false">Fastmail</string>
+    <string name="forward_email" translatable="false">ForwardEmail</string>
+    <string name="x_ellipses" translatable="false">%s…</string>
+    <string name="shared_accounts_header" translatable="false">%1$s | %2$s (%3$d)</string>
+
+    <!-- region Debug Menu -->
+    <string name="feature_flags">Feature Flags:</string>
+    <string name="debug_menu">Debug Menu</string>
+    <string name="reset_values">Reset values</string>
+    <string name="onboarding_override">Onboarding Status Override</string>
+    <string name="restart_onboarding_cta">Restart Onboarding</string>
+    <string name="restart_onboarding_details">This will reset the onboarding status for the current user, if available. After clicking the button you will immediately be redirected to the onboarding flow. Onboarding flag must be enabled.</string>
+    <string name="restart_onboarding_carousel">Show Onboarding Carousel</string>
+    <string name="restart_onboarding_carousel_details">This will force the change to app state which will cause the first time carousel to show. The carousel will continue to show for any \"new\" account until a login is completed. May need to exit debug menu manually.</string>
+    <string name="reset_coach_mark_tour_status">Reset all coach mark tours</string>
+    <string name="generate_crash">Generate crash</string>
+    <string name="generate_error_report">Generate error report</string>
+    <string name="error_reports">Error reports</string>
+    <string name="cookies">Cookies</string>
+    <string name="premium">Premium</string>
+    <string name="reset_premium_upgrade_banner">Reset Premium upgrade banner</string>
+    <string name="bitwarden_authentication_enabled">Bitwarden authentication enabled</string>
+    <string name="import_format_label_bitwarden_json">Bitwarden (.json)</string>
+    <string name="import_format_label_2fas_json">2FAS (no password)</string>
+    <string name="import_format_label_lastpass_json">LastPass (.json)</string>
+    <string name="import_format_label_aegis_json">Aegis (.json)</string>
+    <string name="force_update_kdf_settings">Force update KDF settings</string>
+    <string name="avoid_logout_on_kdf_change">Avoid logout on KDF change</string>
+    <string name="migrate_my_vault_to_my_items">Migrate My Vault to My Items</string>
+    <string name="archive_items">Archive Items</string>
+    <string name="send_email_verification">Send Email Verification</string>
+    <string name="trigger_cookie_acquisition">Trigger cookie acquisition</string>
+    <string name="clear_sso_cookies">Clear SSO cookies</string>
+    <string name="mobile_premium_upgrade">Mobile Premium Upgrade</string>
+    <string name="attachment_updates">Attachment Updates</string>
+
+    <!-- endregion Debug Menu -->
+</resources>

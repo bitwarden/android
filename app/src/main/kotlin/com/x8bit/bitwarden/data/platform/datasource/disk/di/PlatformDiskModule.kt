@@ -4,9 +4,12 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.data.datasource.disk.FlightRecorderDiskSource
 import com.bitwarden.data.datasource.disk.di.EncryptedPreferences
 import com.bitwarden.data.datasource.disk.di.UnencryptedPreferences
-import com.bitwarden.data.manager.DispatcherManager
+import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSourceImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSourceImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
@@ -28,7 +31,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStor
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.disk.callback.DatabaseSchemeCallback
-import com.x8bit.bitwarden.data.vault.datasource.disk.convertor.ZonedDateTimeTypeConverter
+import com.x8bit.bitwarden.data.vault.datasource.disk.convertor.InstantTypeConverter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -68,7 +71,7 @@ object PlatformDiskModule {
                 name = "platform_database",
             )
             .fallbackToDestructiveMigration(dropAllTables = false)
-            .addTypeConverter(ZonedDateTimeTypeConverter())
+            .addTypeConverter(InstantTypeConverter())
             .addCallback(DatabaseSchemeCallback(databaseSchemeManager = databaseSchemeManager))
             .build()
 
@@ -139,10 +142,12 @@ object PlatformDiskModule {
     fun provideSettingsDiskSource(
         @UnencryptedPreferences sharedPreferences: SharedPreferences,
         json: Json,
+        flightRecorderDiskSource: FlightRecorderDiskSource,
     ): SettingsDiskSource =
         SettingsDiskSourceImpl(
             sharedPreferences = sharedPreferences,
             json = json,
+            flightRecorderDiskSource = flightRecorderDiskSource,
         )
 
     @Provides
@@ -151,5 +156,17 @@ object PlatformDiskModule {
         @UnencryptedPreferences sharedPreferences: SharedPreferences,
     ): FeatureFlagOverrideDiskSource = FeatureFlagOverrideDiskSourceImpl(
         sharedPreferences = sharedPreferences,
+    )
+
+    @Provides
+    @Singleton
+    fun provideCookieDiskSource(
+        @UnencryptedPreferences sharedPreferences: SharedPreferences,
+        @EncryptedPreferences encryptedSharedPreferences: SharedPreferences,
+        json: Json,
+    ): CookieDiskSource = CookieDiskSourceImpl(
+        sharedPreferences = sharedPreferences,
+        encryptedSharedPreferences = encryptedSharedPreferences,
+        json = json,
     )
 }

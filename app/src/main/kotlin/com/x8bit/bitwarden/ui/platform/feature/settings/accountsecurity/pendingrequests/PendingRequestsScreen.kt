@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pending
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,30 +36,30 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.LifecycleEventEffect
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
+import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.scaffold.model.rememberBitwardenPullToRefreshState
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.util.isFdroid
-import com.x8bit.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.composition.LocalPermissionsManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 
@@ -80,16 +79,17 @@ fun PendingRequestsScreen(
     val pullToRefreshState = rememberBitwardenPullToRefreshState(
         isEnabled = state.isPullToRefreshEnabled,
         isRefreshing = state.isRefreshing,
-        onRefresh = remember(viewModel) {
-            { viewModel.trySendAction(PendingRequestsAction.RefreshPull) }
-        },
+        onRefresh = { viewModel.trySendAction(PendingRequestsAction.RefreshPull) },
     )
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             PendingRequestsEvent.NavigateBack -> onNavigateBack()
             is PendingRequestsEvent.NavigateToLoginApproval -> {
                 onNavigateToLoginApproval(event.fingerprint)
             }
+
+            is PendingRequestsEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }
     }
 
@@ -104,18 +104,14 @@ fun PendingRequestsScreen(
     }
 
     val hideBottomSheet = state.hideBottomSheet ||
-        isFdroid ||
-        !isBuildVersionAtLeast(Build.VERSION_CODES.TIRAMISU) ||
         permissionsManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS) ||
         permissionsManager.shouldShowRequestPermissionRationale(
             permission = Manifest.permission.POST_NOTIFICATIONS,
         )
     BitwardenModalBottomSheet(
         showBottomSheet = !hideBottomSheet,
-        sheetTitle = stringResource(R.string.enable_notifications),
-        onDismiss = remember(viewModel) {
-            { viewModel.trySendAction(PendingRequestsAction.HideBottomSheet) }
-        },
+        sheetTitle = stringResource(BitwardenString.enable_notifications),
+        onDismiss = { viewModel.trySendAction(PendingRequestsAction.HideBottomSheet) },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         modifier = Modifier.statusBarsPadding(),
     ) { animatedOnDismiss ->
@@ -132,35 +128,30 @@ fun PendingRequestsScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.pending_log_in_requests),
+                title = stringResource(id = BitwardenString.pending_log_in_requests),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(PendingRequestsAction.CloseClick) }
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
+                onNavigationIconClick = {
+                    viewModel.trySendAction(PendingRequestsAction.CloseClick)
                 },
             )
         },
         pullToRefreshState = pullToRefreshState,
+        snackbarHost = {
+            BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
+        },
     ) {
         when (val viewState = state.viewState) {
             is PendingRequestsState.ViewState.Content -> {
                 PendingRequestsContent(
                     modifier = Modifier.fillMaxSize(),
                     state = viewState,
-                    onDeclineAllRequestsConfirm = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(
-                                PendingRequestsAction.DeclineAllRequestsConfirm,
-                            )
-                        }
+                    onDeclineAllRequestsConfirm = {
+                        viewModel.trySendAction(PendingRequestsAction.DeclineAllRequestsConfirm)
                     },
-                    onNavigateToLoginApproval = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(
-                                PendingRequestsAction.PendingRequestRowClick(it),
-                            )
-                        }
+                    onNavigateToLoginApproval = {
+                        viewModel.trySendAction(PendingRequestsAction.PendingRequestRowClick(it))
                     },
                 )
             }
@@ -170,7 +161,7 @@ fun PendingRequestsScreen(
             )
 
             PendingRequestsState.ViewState.Error -> BitwardenErrorContent(
-                message = stringResource(R.string.generic_error_message),
+                message = stringResource(BitwardenString.generic_error_message),
                 modifier = Modifier.fillMaxSize(),
             )
 
@@ -198,12 +189,13 @@ private fun PendingRequestsContent(
 
         if (shouldShowDeclineAllRequestsConfirm) {
             BitwardenTwoButtonDialog(
-                title = stringResource(R.string.decline_all_requests),
+                title = stringResource(BitwardenString.decline_all_requests),
                 message = stringResource(
-                    id = R.string.are_you_sure_you_want_to_decline_all_pending_log_in_requests,
+                    id = BitwardenString
+                        .are_you_sure_you_want_to_decline_all_pending_log_in_requests,
                 ),
-                confirmButtonText = stringResource(R.string.yes),
-                dismissButtonText = stringResource(id = R.string.cancel),
+                confirmButtonText = stringResource(BitwardenString.yes),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
                 onConfirmClick = {
                     onDeclineAllRequestsConfirm()
                     shouldShowDeclineAllRequestsConfirm = false
@@ -239,7 +231,7 @@ private fun PendingRequestsContent(
         Spacer(modifier = Modifier.height(height = 24.dp))
 
         BitwardenOutlinedButton(
-            label = stringResource(id = R.string.decline_all_requests),
+            label = stringResource(id = BitwardenString.decline_all_requests),
             icon = rememberVectorPainter(id = BitwardenDrawable.ic_trash),
             onClick = { shouldShowDeclineAllRequestsConfirm = true },
             modifier = Modifier
@@ -276,7 +268,7 @@ private fun PendingRequestItem(
         horizontalAlignment = Alignment.Start,
     ) {
         Text(
-            text = stringResource(id = R.string.fingerprint_phrase),
+            text = stringResource(id = BitwardenString.fingerprint_phrase),
             style = BitwardenTheme.typography.labelMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Start,
@@ -333,7 +325,7 @@ private fun PendingRequestsEmpty(
         Spacer(modifier = Modifier.height(16.dp))
         Spacer(modifier = Modifier.weight(1f))
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.pending_requests),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ill_pending_requests),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()
@@ -344,7 +336,7 @@ private fun PendingRequestsEmpty(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = stringResource(id = R.string.no_pending_requests),
+            text = stringResource(id = BitwardenString.no_pending_requests),
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
@@ -371,7 +363,7 @@ private fun PendingRequestsBottomSheetContent(
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         Spacer(modifier = Modifier.height(height = 24.dp))
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.img_2fa),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ill_2fa),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()
@@ -380,7 +372,7 @@ private fun PendingRequestsBottomSheetContent(
         )
         Spacer(modifier = Modifier.height(height = 24.dp))
         Text(
-            text = stringResource(id = R.string.log_in_quickly_and_easily_across_devices),
+            text = stringResource(id = BitwardenString.log_in_quickly_and_easily_across_devices),
             style = BitwardenTheme.typography.titleMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
@@ -392,7 +384,7 @@ private fun PendingRequestsBottomSheetContent(
         @Suppress("MaxLineLength")
         Text(
             text = stringResource(
-                id = R.string.bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device,
+                id = BitwardenString.bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device,
             ),
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
@@ -403,7 +395,7 @@ private fun PendingRequestsBottomSheetContent(
         )
         Spacer(modifier = Modifier.height(height = 24.dp))
         BitwardenFilledButton(
-            label = stringResource(id = R.string.enable_notifications),
+            label = stringResource(id = BitwardenString.enable_notifications),
             onClick = {
                 @SuppressLint("InlinedApi")
                 notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
@@ -414,7 +406,7 @@ private fun PendingRequestsBottomSheetContent(
         )
         Spacer(modifier = Modifier.height(height = 12.dp))
         BitwardenOutlinedButton(
-            label = stringResource(id = R.string.skip_for_now),
+            label = stringResource(id = BitwardenString.skip_for_now),
             onClick = onDismiss,
             modifier = Modifier
                 .fillMaxWidth()

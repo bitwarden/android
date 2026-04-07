@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
@@ -20,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bitwarden.ui.R
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * The default [BitwardenTypography] for the app.
@@ -193,6 +193,18 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
+    labelLargeRegular = TextStyle(
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        fontFamily = FontFamily(Font(R.font.dm_sans_regular)),
+        fontWeight = FontWeight.W400,
+        letterSpacing = 0.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
+    ),
     labelMedium = TextStyle(
         fontSize = 12.sp,
         lineHeight = 16.sp,
@@ -279,7 +291,7 @@ fun BitwardenTypography.toMaterialTypography(): Typography = Typography(
 @Preview(showBackground = true)
 @Composable
 private fun BitwardenTypography_preview() {
-    MaterialTheme {
+    BitwardenTheme {
         Column(
             modifier = Modifier
                 .padding(8.dp)

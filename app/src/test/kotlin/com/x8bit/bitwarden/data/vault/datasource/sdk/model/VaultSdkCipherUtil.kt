@@ -19,10 +19,9 @@ import com.bitwarden.vault.UriMatchType
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 /**
- * Default date time used for [ZonedDateTime] properties of mock objects.
+ * Default date time used for [Instant] properties of mock objects.
  */
 private const val DEFAULT_TIMESTAMP = "2023-10-27T12:00:00Z"
 private val FIXED_CLOCK: Clock = Clock.fixed(
@@ -47,6 +46,7 @@ fun createMockSdkCipher(number: Int, clock: Clock = FIXED_CLOCK): Cipher =
         creationDate = clock.instant(),
         deletedDate = clock.instant(),
         revisionDate = clock.instant(),
+        archivedDate = clock.instant(),
         attachments = listOf(createMockSdkAttachment(number = number)),
         card = createMockSdkCard(number = number),
         fields = listOf(createMockSdkField(number = number)),
@@ -61,6 +61,7 @@ fun createMockSdkCipher(number: Int, clock: Clock = FIXED_CLOCK): Cipher =
         organizationUseTotp = false,
         viewPassword = false,
         localData = null,
+        data = null,
     )
 
 /**

@@ -1,7 +1,5 @@
 package com.bitwarden.network.provider
 
-import com.bitwarden.network.model.RefreshTokenResponseJson
-
 /**
  * A provider for all the functionality needed to refresh a user's access token.
  */
@@ -12,5 +10,5 @@ interface RefreshTokenProvider {
      * This call is both synchronous and performs a network request. Make sure that you are calling
      * from an appropriate thread.
      */
-    fun refreshAccessTokenSynchronously(userId: String): Result<RefreshTokenResponseJson>
+    fun refreshAccessTokenSynchronously(userId: String): Result<String>
 }

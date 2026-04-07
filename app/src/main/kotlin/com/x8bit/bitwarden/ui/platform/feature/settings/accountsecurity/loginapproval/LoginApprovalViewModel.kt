@@ -3,18 +3,23 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapproval
 
 import android.os.Parcelable
+import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -36,6 +41,8 @@ class LoginApprovalViewModel @Inject constructor(
     private val clock: Clock,
     private val authRepository: AuthRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
+    private val toastManager: ToastManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LoginApprovalState, LoginApprovalEvent, LoginApprovalAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -64,7 +71,7 @@ class LoginApprovalViewModel @Inject constructor(
                     mutableStateFlow.update {
                         it.copy(
                             dialogState = LoginApprovalState.DialogState.ChangeAccount(
-                                message = R.string
+                                message = BitwardenString
                                     .login_attempt_from_x_do_you_want_to_switch_to_this_account
                                     .asText(
                                         authRepository
@@ -182,16 +189,15 @@ class LoginApprovalViewModel @Inject constructor(
     ) {
         when (val result = action.result) {
             is AuthRequestResult.Success -> {
-                sendEvent(LoginApprovalEvent.ShowToast(R.string.login_approved.asText()))
-                sendClosingEvent()
+                sendClosingEvent(messageId = BitwardenString.login_approved)
             }
 
             is AuthRequestResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = LoginApprovalState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             error = result.error,
                         ),
                     )
@@ -246,16 +252,15 @@ class LoginApprovalViewModel @Inject constructor(
     ) {
         when (val result = action.result) {
             is AuthRequestResult.Success -> {
-                sendEvent(LoginApprovalEvent.ShowToast(R.string.log_in_denied.asText()))
-                sendClosingEvent()
+                sendClosingEvent(messageId = BitwardenString.log_in_denied)
             }
 
             is AuthRequestResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = LoginApprovalState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             error = result.error,
                         ),
                     )
@@ -264,14 +269,26 @@ class LoginApprovalViewModel @Inject constructor(
         }
     }
 
-    private fun sendClosingEvent() {
-        val event = if (state.specialCircumstance?.shouldFinishWhenComplete == true) {
-            LoginApprovalEvent.ExitApp
-        } else {
-            LoginApprovalEvent.NavigateBack
+    private fun sendClosingEvent(@StringRes messageId: Int? = null) {
+        val shouldFinishWhenComplete = state.specialCircumstance?.shouldFinishWhenComplete == true
+        messageId?.let {
+            if (shouldFinishWhenComplete) {
+                // We are about to exit the app, so we need to use a Toast here.
+                toastManager.show(messageId = it)
+            } else {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(message = it.asText()),
+                    relay = SnackbarRelay.LOGIN_APPROVAL,
+                )
+            }
         }
-
-        sendEvent(event)
+        sendEvent(
+            event = if (shouldFinishWhenComplete) {
+                LoginApprovalEvent.ExitApp
+            } else {
+                LoginApprovalEvent.NavigateBack
+            },
+        )
     }
 }
 
@@ -358,13 +375,6 @@ sealed class LoginApprovalEvent {
      * Navigates back.
      */
     data object NavigateBack : LoginApprovalEvent()
-
-    /**
-     * Displays the [message] in a toast.
-     */
-    data class ShowToast(
-        val message: Text,
-    ) : LoginApprovalEvent()
 }
 
 /**

@@ -19,7 +19,6 @@ class TwoFactorRequiredExtensionTest {
                 ),
                 TwoFactorAuthMethod.AUTHENTICATOR_APP to JsonObject(mapOf("Email" to JsonNull)),
             ),
-            captchaToken = null,
             ssoToken = null,
             twoFactorProviders = null,
         )
@@ -42,7 +41,6 @@ class TwoFactorRequiredExtensionTest {
                 ),
                 TwoFactorAuthMethod.AUTHENTICATOR_APP to JsonObject(mapOf("AuthUrl" to JsonNull)),
             ),
-            captchaToken = null,
             ssoToken = null,
             twoFactorProviders = null,
         )
@@ -58,7 +56,6 @@ class TwoFactorRequiredExtensionTest {
                 ),
                 TwoFactorAuthMethod.AUTHENTICATOR_APP to JsonObject(mapOf("AuthUrl" to JsonNull)),
             ),
-            captchaToken = null,
             ssoToken = null,
             twoFactorProviders = null,
         )
@@ -71,7 +68,6 @@ class TwoFactorRequiredExtensionTest {
             authMethodsData = mapOf(
                 TwoFactorAuthMethod.AUTHENTICATOR_APP to JsonObject(mapOf("AuthUrl" to JsonNull)),
             ),
-            captchaToken = null,
             ssoToken = null,
             twoFactorProviders = null,
         )
@@ -87,7 +83,6 @@ class TwoFactorRequiredExtensionTest {
                 ),
                 TwoFactorAuthMethod.AUTHENTICATOR_APP to JsonObject(mapOf("Email" to JsonNull)),
             ),
-            captchaToken = null,
             ssoToken = null,
             twoFactorProviders = null,
         )
@@ -100,7 +95,6 @@ class TwoFactorRequiredExtensionTest {
             authMethodsData = mapOf(
                 TwoFactorAuthMethod.AUTHENTICATOR_APP to JsonObject(mapOf("Email" to JsonNull)),
             ),
-            captchaToken = null,
             ssoToken = null,
             twoFactorProviders = null,
         )
@@ -116,7 +110,6 @@ class TwoFactorRequiredExtensionTest {
                 ),
                 TwoFactorAuthMethod.AUTHENTICATOR_APP to JsonObject(mapOf("Email" to JsonNull)),
             ),
-            captchaToken = null,
             ssoToken = null,
             twoFactorProviders = null,
         )
@@ -132,7 +125,6 @@ class TwoFactorRequiredExtensionTest {
                     mapOf("AuthUrl" to JsonPrimitive(authUrl)),
                 ),
             ),
-            captchaToken = null,
             ssoToken = null,
             twoFactorProviders = null,
         )
@@ -148,7 +140,6 @@ class TwoFactorRequiredExtensionTest {
                     mapOf("AuthUrl" to JsonPrimitive(authUrl)),
                 ),
             ),
-            captchaToken = null,
             ssoToken = null,
             twoFactorProviders = null,
         )

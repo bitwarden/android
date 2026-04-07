@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.NavigationRailDefaults
 import androidx.compose.material3.Surface
@@ -55,8 +54,7 @@ fun BitwardenNavigationRail(
                 .fillMaxHeight()
                 .windowInsetsPadding(insets = windowInsets)
                 .widthIn(min = 80.dp)
-                .padding(vertical = 4.dp)
-                .selectableGroup()
+                .padding(all = 4.dp)
                 .verticalScroll(state = rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(
@@ -67,7 +65,6 @@ fun BitwardenNavigationRail(
             navigationItems.forEach { navigationItem ->
                 BitwardenNavigationRailItem(
                     labelRes = navigationItem.labelRes,
-                    contentDescriptionRes = navigationItem.contentDescriptionRes,
                     selectedIconRes = navigationItem.iconResSelected,
                     unselectedIconRes = navigationItem.iconRes,
                     notificationCount = navigationItem.notificationCount,

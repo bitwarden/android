@@ -3,19 +3,22 @@ package com.x8bit.bitwarden.ui.vault.feature.movetoorganization
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.combineDataStates
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
-import com.bitwarden.vault.CollectionView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,8 +40,9 @@ private const val KEY_STATE = "state"
 @Suppress("MaxLineLength", "TooManyFunctions")
 class VaultMoveToOrganizationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val vaultRepository: VaultRepository,
     authRepository: AuthRepository,
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
+    private val vaultRepository: VaultRepository,
 ) : BaseViewModel<VaultMoveToOrganizationState, VaultMoveToOrganizationEvent, VaultMoveToOrganizationAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
@@ -123,7 +127,7 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
                     mutableStateFlow.update {
                         it.copy(
                             dialogState = VaultMoveToOrganizationState.DialogState.Error(
-                                message = R.string.select_one_collection.asText(),
+                                message = BitwardenString.select_one_collection.asText(),
                             ),
                         )
                     }
@@ -157,7 +161,10 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = VaultMoveToOrganizationState.DialogState.Error(
-                            message = R.string.generic_error_message.asText(),
+                            message = result
+                                .errorMessage
+                                ?.asText()
+                                ?: BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -165,8 +172,11 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
             }
 
             is ShareCipherResult.Success -> {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(message = action.message),
+                    relay = SnackbarRelay.CIPHER_MOVED_TO_ORGANIZATION,
+                )
                 sendEvent(VaultMoveToOrganizationEvent.NavigateBack)
-                sendEvent(VaultMoveToOrganizationEvent.ShowToast(action.successToast))
             }
         }
     }
@@ -180,13 +190,13 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
                 it.copy(
                     viewState = data.toViewState(),
                     dialogState = VaultMoveToOrganizationState.DialogState.Error(
-                        message = R.string.generic_error_message.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                     ),
                 )
             } else {
                 it.copy(
                     viewState = VaultMoveToOrganizationState.ViewState.Error(
-                        message = R.string.generic_error_message.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                     ),
                     dialogState = null,
                 )
@@ -223,22 +233,22 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
                 it.copy(
                     viewState = data.toViewState(),
                     dialogState = VaultMoveToOrganizationState.DialogState.Error(
-                        message = R.string.internet_connection_required_title
+                        message = BitwardenString.internet_connection_required_title
                             .asText()
                             .concat(
                                 " ".asText(),
-                                R.string.internet_connection_required_message.asText(),
+                                BitwardenString.internet_connection_required_message.asText(),
                             ),
                     ),
                 )
             } else {
                 it.copy(
                     viewState = VaultMoveToOrganizationState.ViewState.Error(
-                        message = R.string.internet_connection_required_title
+                        message = BitwardenString.internet_connection_required_title
                             .asText()
                             .concat(
                                 " ".asText(),
-                                R.string.internet_connection_required_message.asText(),
+                                BitwardenString.internet_connection_required_message.asText(),
                             ),
                     ),
                     dialogState = null,
@@ -289,7 +299,7 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = VaultMoveToOrganizationState.DialogState.Loading(
-                    message = R.string.saving.asText(),
+                    message = BitwardenString.saving.asText(),
                 ),
             )
         }
@@ -302,7 +312,7 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
                             cipherView = cipherView,
                             collectionIds = collectionIds,
                         ),
-                        successToast = R.string.item_updated.asText(),
+                        message = BitwardenString.item_updated.asText(),
                     )
                 } else {
                     VaultMoveToOrganizationAction.Internal.ShareCipherResultReceive(
@@ -312,7 +322,7 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
                             cipherView = cipherView,
                             collectionIds = collectionIds,
                         ),
-                        successToast = R.string.moved_item_to_org.asText(
+                        message = BitwardenString.moved_item_to_org.asText(
                             requireNotNull(contentState.cipherToMove).name,
                             contentState.selectedOrganization.name,
                         ),
@@ -340,16 +350,16 @@ data class VaultMoveToOrganizationState(
 
     val appBarText: Text
         get() = if (onlyShowCollections) {
-            R.string.collections.asText()
+            BitwardenString.collections.asText()
         } else {
-            R.string.move_to_organization.asText()
+            BitwardenString.move_to_organization.asText()
         }
 
     val appBarButtonText: Text
         get() = if (onlyShowCollections) {
-            R.string.save.asText()
+            BitwardenString.save.asText()
         } else {
-            R.string.move.asText()
+            BitwardenString.move.asText()
         }
 
     /**
@@ -412,6 +422,28 @@ data class VaultMoveToOrganizationState(
             val selectedOrganization: Organization
                 get() = organizations.first { it.id == selectedOrganizationId }
 
+            val selectableCollections: List<VaultCollection>
+                get() {
+                    val collections = organizations
+                        .first { it.id == selectedOrganizationId }
+                        .collections
+                    return collections.filter {
+                        !it.isDefaultUserCollection ||
+                            isDefaultUserCollectionSelected
+                    }
+                }
+
+            private val isDefaultUserCollectionSelected: Boolean
+                get() =
+                    cipherToMove
+                        ?.collectionIds
+                        ?.any { collectionId ->
+                            selectedOrganization.collections.any {
+                                it.id == collectionId && it.isDefaultUserCollection
+                            }
+                        }
+                        ?: false
+
             /**
              * Models an organization.
              *
@@ -444,13 +476,6 @@ sealed class VaultMoveToOrganizationEvent {
      * Navigates back to the previous screen.
      */
     data object NavigateBack : VaultMoveToOrganizationEvent()
-
-    /**
-     * Show a toast with the given message.
-     *
-     * @property text the text to display.
-     */
-    data class ShowToast(val text: Text) : VaultMoveToOrganizationEvent()
 }
 
 /**
@@ -508,7 +533,7 @@ sealed class VaultMoveToOrganizationAction {
          */
         data class ShareCipherResultReceive(
             val shareCipherResult: ShareCipherResult,
-            val successToast: Text,
+            val message: Text,
         ) : Internal()
     }
 }

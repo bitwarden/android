@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -29,13 +28,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -46,38 +44,40 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
+import com.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.coachmark.CoachMarkContainer
+import com.bitwarden.ui.platform.components.coachmark.model.rememberLazyListCoachMarkState
+import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
+import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.radio.BitwardenRadioButton
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
+import com.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalExitManager
+import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.exit.ExitManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
-import com.x8bit.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
-import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkContainer
-import com.x8bit.bitwarden.ui.platform.components.coachmark.rememberLazyListCoachMarkState
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwriteCredentialConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.radio.BitwardenRadioButton
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalCredentialProviderCompletionManager
-import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
-import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalPermissionsManager
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.PinInputDialog
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
-import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
@@ -112,8 +112,6 @@ fun VaultAddEditScreen(
     onNavigateToMoveToOrganization: (cipherId: String, showOnlyCollections: Boolean) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val resources = context.resources
     val userVerificationHandlers = remember(viewModel) {
         VaultAddEditUserVerificationHandlers.create(viewModel = viewModel)
     }
@@ -124,6 +122,7 @@ fun VaultAddEditScreen(
         orderedList = AddEditItemCoachMark.entries,
     )
     val scope = rememberCoroutineScope()
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is VaultAddEditEvent.NavigateToQrCodeScan -> {
@@ -136,10 +135,6 @@ fun VaultAddEditScreen(
 
             is VaultAddEditEvent.NavigateToGeneratorModal -> {
                 onNavigateToGeneratorModal(event.generatorMode)
-            }
-
-            is VaultAddEditEvent.ShowToast -> {
-                Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
             }
 
             is VaultAddEditEvent.NavigateToAttachments -> onNavigateToAttachments(event.cipherId)
@@ -166,8 +161,8 @@ fun VaultAddEditScreen(
                 )
             }
 
-            is VaultAddEditEvent.CompleteFido2Registration -> {
-                credentialProviderCompletionManager.completeFido2Registration(
+            is VaultAddEditEvent.CompleteCredentialRegistration -> {
+                credentialProviderCompletionManager.completeCredentialRegistration(
                     result = event.result,
                 )
             }
@@ -188,6 +183,16 @@ fun VaultAddEditScreen(
                         coachMarkToShow = AddEditItemCoachMark.GENERATE_PASSWORD,
                     )
                 }
+            }
+
+            is VaultAddEditEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
+
+            VaultAddEditEvent.NavigateToLearnMore -> {
+                intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
+            }
+
+            is VaultAddEditEvent.NavigateToPremium -> {
+                intentManager.launchUri(uri = event.uri.toUri())
             }
         }
     }
@@ -212,91 +217,64 @@ fun VaultAddEditScreen(
         VaultAddEditSshKeyTypeHandlers.create(viewModel = viewModel)
     }
 
-    val confirmDeleteClickAction = remember(viewModel) {
-        { viewModel.trySendAction(VaultAddEditAction.Common.ConfirmDeleteClick) }
+    val archiveClickAction = { viewModel.trySendAction(VaultAddEditAction.Common.ArchiveClick) }
+
+    val unarchiveClickAction = { viewModel.trySendAction(VaultAddEditAction.Common.UnarchiveClick) }
+
+    val confirmDeleteClickAction = {
+        viewModel.trySendAction(VaultAddEditAction.Common.ConfirmDeleteClick)
     }
 
     var pendingDeleteCipher by rememberSaveable { mutableStateOf(false) }
 
     VaultAddEditItemDialogs(
         dialogState = state.dialog,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(VaultAddEditAction.Common.DismissDialog) }
+        onDismissRequest = { viewModel.trySendAction(VaultAddEditAction.Common.DismissDialog) },
+        onAutofillDismissRequest = {
+            viewModel.trySendAction(VaultAddEditAction.Common.InitialAutofillDialogDismissed)
         },
-        onAutofillDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(VaultAddEditAction.Common.InitialAutofillDialogDismissed) }
+        onCredentialErrorDismiss = { errorMessage ->
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.CredentialErrorDialogDismissed(message = errorMessage),
+            )
         },
-        onFido2ErrorDismiss = remember(viewModel) {
-            { errorMessage ->
-                viewModel.trySendAction(
-                    VaultAddEditAction.Common.Fido2ErrorDialogDismissed(message = errorMessage),
-                )
-            }
+        onConfirmOverwriteExistingPasskey = {
+            viewModel.trySendAction(VaultAddEditAction.Common.ConfirmOverwriteExistingPasskeyClick)
         },
-        onConfirmOverwriteExistingPasskey = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    action = VaultAddEditAction.Common.ConfirmOverwriteExistingPasskeyClick,
-                )
-            }
+        onSubmitMasterPasswordFido2Verification = {
+            viewModel.trySendAction(
+                action = VaultAddEditAction.Common.MasterPasswordFido2VerificationSubmit(it),
+            )
         },
-        onSubmitMasterPasswordFido2Verification = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    action = VaultAddEditAction.Common.MasterPasswordFido2VerificationSubmit(it),
-                )
-            }
+        onRetryFido2PasswordVerification = {
+            viewModel.trySendAction(VaultAddEditAction.Common.RetryFido2PasswordVerificationClick)
         },
-        onRetryFido2PasswordVerification = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    action = VaultAddEditAction.Common.RetryFido2PasswordVerificationClick,
-                )
-            }
+        onSubmitPinFido2Verification = {
+            viewModel.trySendAction(VaultAddEditAction.Common.PinFido2VerificationSubmit(it))
         },
-        onSubmitPinFido2Verification = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    VaultAddEditAction.Common.PinFido2VerificationSubmit(it),
-                )
-            }
+        onRetryFido2PinVerification = {
+            viewModel.trySendAction(VaultAddEditAction.Common.RetryFido2PinVerificationClick)
         },
-        onRetryFido2PinVerification = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    VaultAddEditAction.Common.RetryFido2PinVerificationClick,
-                )
-            }
+        onSubmitPinSetUpFido2Verification = {
+            viewModel.trySendAction(VaultAddEditAction.Common.PinFido2SetUpSubmit(it))
         },
-        onSubmitPinSetUpFido2Verification = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    VaultAddEditAction.Common.PinFido2SetUpSubmit(it),
-                )
-            }
+        onRetryPinSetUpFido2Verification = {
+            viewModel.trySendAction(VaultAddEditAction.Common.PinFido2SetUpRetryClick)
         },
-        onRetryPinSetUpFido2Verification = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    VaultAddEditAction.Common.PinFido2SetUpRetryClick,
-                )
-            }
+        onDismissFido2Verification = {
+            viewModel.trySendAction(VaultAddEditAction.Common.DismissFido2VerificationDialogClick)
         },
-        onDismissFido2Verification = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    VaultAddEditAction.Common.DismissFido2VerificationDialogClick,
-                )
-            }
+        onUpgradeToPremiumClick = {
+            viewModel.trySendAction(VaultAddEditAction.Common.UpgradeToPremiumClick)
         },
     )
 
     if (pendingDeleteCipher) {
         BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.delete),
-            message = stringResource(id = R.string.do_you_really_want_to_soft_delete_cipher),
-            confirmButtonText = stringResource(id = R.string.okay),
-            dismissButtonText = stringResource(id = R.string.cancel),
+            title = stringResource(id = BitwardenString.delete),
+            message = stringResource(id = BitwardenString.do_you_really_want_to_soft_delete_cipher),
+            confirmButtonText = stringResource(id = BitwardenString.okay),
+            dismissButtonText = stringResource(id = BitwardenString.cancel),
             onConfirmClick = {
                 pendingDeleteCipher = false
                 confirmDeleteClickAction()
@@ -327,56 +305,51 @@ fun VaultAddEditScreen(
                     title = state.screenDisplayName(),
                     navigationIcon = NavigationIcon(
                         navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                        navigationIconContentDescription = stringResource(id = R.string.close),
-                        onNavigationIconClick = remember(viewModel) {
-                            { viewModel.trySendAction(VaultAddEditAction.Common.CloseClick) }
+                        navigationIconContentDescription = stringResource(
+                            id = BitwardenString.close,
+                        ),
+                        onNavigationIconClick = {
+                            viewModel.trySendAction(VaultAddEditAction.Common.CloseClick)
                         },
                     )
                         .takeIf { state.shouldShowCloseButton },
                     scrollBehavior = scrollBehavior,
                     actions = {
                         BitwardenTextButton(
-                            label = stringResource(id = R.string.save),
-                            onClick = remember(viewModel) {
-                                { viewModel.trySendAction(VaultAddEditAction.Common.SaveClick) }
+                            label = stringResource(id = BitwardenString.save),
+                            onClick = {
+                                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
                             },
                             modifier = Modifier.testTag("SaveButton"),
                         )
                         BitwardenOverflowActionItem(
-                            contentDescription = stringResource(R.string.more),
                             menuItemDataList = persistentListOfNotNull(
                                 OverflowMenuItemData(
-                                    text = stringResource(id = R.string.attachments),
-                                    onClick = remember(viewModel) {
-                                        {
-                                            viewModel.trySendAction(
-                                                VaultAddEditAction.Common.AttachmentsClick,
-                                            )
-                                        }
+                                    text = stringResource(id = BitwardenString.attachments),
+                                    onClick = {
+                                        viewModel.trySendAction(
+                                            VaultAddEditAction.Common.AttachmentsClick,
+                                        )
                                     },
                                 )
                                     .takeUnless { state.isAddItemMode },
                                 OverflowMenuItemData(
-                                    text = stringResource(id = R.string.move_to_organization),
-                                    onClick = remember(viewModel) {
-                                        {
-                                            viewModel.trySendAction(
-                                                VaultAddEditAction.Common.MoveToOrganizationClick,
-                                            )
-                                        }
+                                    text = stringResource(
+                                        id = BitwardenString.move_to_organization,
+                                    ),
+                                    onClick = {
+                                        viewModel.trySendAction(
+                                            VaultAddEditAction.Common.MoveToOrganizationClick,
+                                        )
                                     },
                                 )
-                                    .takeUnless {
-                                        state.isAddItemMode || state.isCipherInCollection
-                                    },
+                                    .takeUnless { !state.shouldShowMoveToOrganization },
                                 OverflowMenuItemData(
-                                    text = stringResource(id = R.string.collections),
-                                    onClick = remember(viewModel) {
-                                        {
-                                            viewModel.trySendAction(
-                                                VaultAddEditAction.Common.CollectionsClick,
-                                            )
-                                        }
+                                    text = stringResource(id = BitwardenString.collections),
+                                    onClick = {
+                                        viewModel.trySendAction(
+                                            VaultAddEditAction.Common.CollectionsClick,
+                                        )
                                     },
                                 )
                                     .takeUnless {
@@ -385,7 +358,17 @@ fun VaultAddEditScreen(
                                             !state.canAssociateToCollections
                                     },
                                 OverflowMenuItemData(
-                                    text = stringResource(id = R.string.delete),
+                                    text = stringResource(id = BitwardenString.archive_verb),
+                                    onClick = archiveClickAction,
+                                )
+                                    .takeIf { state.displayArchiveButton },
+                                OverflowMenuItemData(
+                                    text = stringResource(id = BitwardenString.unarchive),
+                                    onClick = unarchiveClickAction,
+                                )
+                                    .takeIf { state.displayUnarchiveButton },
+                                OverflowMenuItemData(
+                                    text = stringResource(id = BitwardenString.delete),
                                     onClick = { pendingDeleteCipher = true },
                                 )
                                     .takeUnless { state.isAddItemMode || !state.canDelete },
@@ -394,12 +377,16 @@ fun VaultAddEditScreen(
                     },
                 )
             },
+            snackbarHost = {
+                BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
+            },
         ) {
             when (val viewState = state.viewState) {
                 is VaultAddEditState.ViewState.Content -> {
                     VaultAddEditContent(
                         state = viewState,
                         isAddItemMode = state.isAddItemMode,
+                        defaultUriMatchType = state.defaultUriMatchType,
                         loginItemTypeHandlers = loginItemTypeHandlers,
                         commonTypeHandlers = commonTypeHandlers,
                         permissionsManager = permissionsManager,
@@ -456,7 +443,7 @@ private fun VaultAddEditItemDialogs(
     dialogState: VaultAddEditState.DialogState?,
     onDismissRequest: () -> Unit,
     onAutofillDismissRequest: () -> Unit,
-    onFido2ErrorDismiss: (Text) -> Unit,
+    onCredentialErrorDismiss: (Text) -> Unit,
     onConfirmOverwriteExistingPasskey: () -> Unit,
     onSubmitMasterPasswordFido2Verification: (password: String) -> Unit,
     onRetryFido2PasswordVerification: () -> Unit,
@@ -465,8 +452,21 @@ private fun VaultAddEditItemDialogs(
     onSubmitPinSetUpFido2Verification: (pin: String) -> Unit,
     onRetryPinSetUpFido2Verification: () -> Unit,
     onDismissFido2Verification: () -> Unit,
+    onUpgradeToPremiumClick: () -> Unit,
 ) {
     when (dialogState) {
+        is VaultAddEditState.DialogState.ArchiveRequiresPremium -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = BitwardenString.archive_unavailable),
+                message = stringResource(id = BitwardenString.archiving_items_is_a_premium_feature),
+                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
+                onConfirmClick = onUpgradeToPremiumClick,
+                onDismissClick = onDismissRequest,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
         is VaultAddEditState.DialogState.Loading -> {
             BitwardenLoadingDialog(text = dialogState.label())
         }
@@ -482,22 +482,28 @@ private fun VaultAddEditItemDialogs(
 
         is VaultAddEditState.DialogState.InitialAutofillPrompt -> {
             BitwardenBasicDialog(
-                title = stringResource(id = R.string.bitwarden_autofill_service),
-                message = stringResource(id = R.string.bitwarden_autofill_service_alert2),
+                title = stringResource(id = BitwardenString.bitwarden_autofill_service),
+                message = stringResource(id = BitwardenString.bitwarden_autofill_service_alert2),
                 onDismissRequest = onAutofillDismissRequest,
             )
         }
 
-        is VaultAddEditState.DialogState.Fido2Error -> {
+        is VaultAddEditState.DialogState.CredentialError -> {
             BitwardenBasicDialog(
-                title = stringResource(id = R.string.an_error_has_occurred),
+                title = stringResource(id = BitwardenString.an_error_has_occurred),
                 message = dialogState.message(),
-                onDismissRequest = { onFido2ErrorDismiss(dialogState.message) },
+                onDismissRequest = { onCredentialErrorDismiss(dialogState.message) },
             )
         }
 
         is VaultAddEditState.DialogState.OverwritePasskeyConfirmationPrompt -> {
-            BitwardenOverwritePasskeyConfirmationDialog(
+            @Suppress("MaxLineLength")
+            BitwardenOverwriteCredentialConfirmationDialog(
+                title = stringResource(id = BitwardenString.overwrite_passkey),
+                message = stringResource(
+                    id = BitwardenString
+                        .this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey,
+                ),
                 onConfirmClick = onConfirmOverwriteExistingPasskey,
                 onDismissRequest = onDismissRequest,
             )
@@ -513,7 +519,7 @@ private fun VaultAddEditItemDialogs(
         is VaultAddEditState.DialogState.Fido2MasterPasswordError -> {
             BitwardenBasicDialog(
                 title = null,
-                message = stringResource(id = R.string.invalid_master_password),
+                message = stringResource(id = BitwardenString.invalid_master_password),
                 onDismissRequest = onRetryFido2PasswordVerification,
             )
         }
@@ -528,7 +534,7 @@ private fun VaultAddEditItemDialogs(
         is VaultAddEditState.DialogState.Fido2PinError -> {
             BitwardenBasicDialog(
                 title = null,
-                message = stringResource(id = R.string.invalid_pin),
+                message = stringResource(id = BitwardenString.invalid_pin),
                 onDismissRequest = onRetryFido2PinVerification,
             )
         }
@@ -545,8 +551,8 @@ private fun VaultAddEditItemDialogs(
             BitwardenBasicDialog(
                 title = null,
                 message = stringResource(
-                    id = R.string.validation_field_required,
-                    stringResource(id = R.string.pin),
+                    id = BitwardenString.validation_field_required,
+                    stringResource(id = BitwardenString.pin),
                 ),
                 onDismissRequest = onRetryPinSetUpFido2Verification,
             )
@@ -595,11 +601,11 @@ private fun FolderSelectionBottomSheet(
         mutableStateOf(state.selectedFolder?.name.orEmpty())
     }
     BitwardenModalBottomSheet(
-        sheetTitle = stringResource(R.string.folders),
+        sheetTitle = stringResource(BitwardenString.folders),
         onDismiss = handlers.onDismissBottomSheet,
         topBarActions = { animatedOnDismiss ->
             BitwardenTextButton(
-                label = stringResource(R.string.save),
+                label = stringResource(BitwardenString.save),
                 onClick = {
                     handlers.onDismissBottomSheet()
                     state
@@ -689,7 +695,7 @@ private fun FolderSelectionBottomSheetContent(
             val cardStyle = if (options.isEmpty()) CardStyle.Full else CardStyle.Bottom
             if (inEditMode) {
                 BitwardenTextField(
-                    label = stringResource(R.string.add_folder),
+                    label = stringResource(BitwardenString.add_folder),
                     value = addFolderText,
                     onValueChange = {
                         addFolderText = it
@@ -710,7 +716,7 @@ private fun FolderSelectionBottomSheetContent(
                 )
             } else {
                 BitwardenClickableText(
-                    label = stringResource(id = R.string.add_folder),
+                    label = stringResource(id = BitwardenString.add_folder),
                     onClick = {
                         onOptionSelected(addFolderText)
                         inEditMode = true
@@ -746,11 +752,11 @@ private fun OwnerSelectionBottomSheet(
         mutableStateOf(state.selectedOwner?.name.orEmpty())
     }
     BitwardenModalBottomSheet(
-        sheetTitle = stringResource(R.string.owner),
+        sheetTitle = stringResource(BitwardenString.owner),
         onDismiss = handlers.onDismissBottomSheet,
         topBarActions = { animatedOnDismiss ->
             BitwardenTextButton(
-                label = stringResource(R.string.save),
+                label = stringResource(BitwardenString.save),
                 onClick = {
                     handlers.onDismissBottomSheet()
                     state
@@ -810,7 +816,9 @@ private fun OwnerSelectionBottomSheetContent(
                     text = option,
                     color = BitwardenTheme.colorScheme.text.primary,
                     style = BitwardenTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .weight(weight = 1f)
+                        .padding(horizontal = 16.dp),
                 )
                 BitwardenRadioButton(
                     isSelected = selectedOption == option,

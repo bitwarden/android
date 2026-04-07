@@ -8,17 +8,17 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.PinInputDialog
 
 /**
  * Displays a switch for enabling or disabling unlock with pin functionality.
  *
- * @param isUnlockWithPasswordEnabled Indicates whether or not the password unlocking is enabled.
- * @param isUnlockWithPinEnabled Indicates whether or not the pin unlocking is enabled.
+ * @param isUnlockWithPasswordEnabled Indicates whether the password unlocking is enabled.
+ * @param isUnlockWithPinEnabled Indicates whether the pin unlocking is enabled.
  * @param onUnlockWithPinToggleAction Callback that is invoked when the current state of the switch
  * changes.
  * @param cardStyle Indicates the type of card style to be applied.
@@ -37,7 +37,7 @@ fun BitwardenUnlockWithPinSwitch(
     var shouldShowPinConfirmationDialog by rememberSaveable { mutableStateOf(value = false) }
     var pin by remember { mutableStateOf(value = "") }
     BitwardenSwitch(
-        label = stringResource(id = R.string.unlock_with_pin),
+        label = stringResource(id = BitwardenString.unlock_with_pin),
         isChecked = isUnlockWithPinEnabled,
         onCheckedChange = { isChecked ->
             if (isChecked) {
@@ -90,10 +90,10 @@ fun BitwardenUnlockWithPinSwitch(
 
         shouldShowPinConfirmationDialog -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(id = R.string.require_master_password_on_app_restart),
-                message = stringResource(id = R.string.pin_require_master_password_restart),
-                confirmButtonText = stringResource(id = R.string.yes),
-                dismissButtonText = stringResource(id = R.string.no),
+                title = stringResource(id = BitwardenString.require_master_password_on_app_restart),
+                message = stringResource(id = BitwardenString.pin_require_master_password_restart),
+                confirmButtonText = stringResource(id = BitwardenString.yes),
+                dismissButtonText = stringResource(id = BitwardenString.no),
                 onConfirmClick = {
                     shouldShowPinConfirmationDialog = false
                     onUnlockWithPinToggleAction(
@@ -136,7 +136,7 @@ fun BitwardenUnlockWithPinSwitch(
  */
 sealed class UnlockWithPinState {
     /**
-     * Whether or not the action represents PIN unlocking being enabled.
+     * Whether the action represents PIN unlocking being enabled.
      */
     abstract val isUnlockWithPinEnabled: Boolean
 

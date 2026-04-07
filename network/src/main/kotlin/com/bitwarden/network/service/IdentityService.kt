@@ -33,18 +33,18 @@ interface IdentityService {
      * Make request to get an access token.
      *
      * @param uniqueAppId applications unique identifier.
+     * @param deeplinkScheme deeplink scheme to use for duo two-factor logins.
      * @param email user's email address.
      * @param authModel information necessary to authenticate with any
      * of the available login methods.
-     * @param captchaToken captcha token to be passed to the API (nullable).
      * @param twoFactorData the two-factor data, if applicable.
      */
     @Suppress("LongParameterList")
     suspend fun getToken(
         uniqueAppId: String,
+        deeplinkScheme: String,
         email: String,
         authModel: IdentityTokenAuthModel,
-        captchaToken: String?,
         twoFactorData: TwoFactorDataModel? = null,
         newDeviceOtp: String? = null,
     ): Result<GetTokenResponseJson>

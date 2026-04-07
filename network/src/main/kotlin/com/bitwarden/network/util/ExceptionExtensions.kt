@@ -6,6 +6,14 @@ import kotlinx.serialization.json.Json
 import retrofit2.HttpException
 
 /**
+ * Returns the [NetworkErrorCode] for the given error if it is available.
+ */
+internal fun BitwardenError.getNetworkErrorCodeOrNull(): NetworkErrorCode? =
+    (this as? BitwardenError.Http)?.let { httpError ->
+        NetworkErrorCode.entries.firstOrNull { httpError.code == it.code }
+    }
+
+/**
  * Attempt to parse the error body to serializable type [T].
  *
  * Useful in service layer for parsing non-200 response bodies.

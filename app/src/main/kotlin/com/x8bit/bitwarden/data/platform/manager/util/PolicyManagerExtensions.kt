@@ -43,3 +43,9 @@ inline fun <reified T : PolicyInformation> getPolicyTypeJson(): PolicyTypeJson =
             )
         }
     }
+/**
+ * Helper method for verifying if user has enabled the restrict item policy.
+ */
+fun PolicyManager.hasRestrictItemTypes(): Boolean =
+    getActivePolicies(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+        .any { it.isEnabled }

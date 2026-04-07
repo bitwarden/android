@@ -2,13 +2,13 @@ package com.bitwarden.authenticator.ui.platform.feature.settings.export
 
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.ExportDataResult
 import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportVaultFormat
 import com.bitwarden.authenticator.ui.platform.util.fileExtension
 import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -120,8 +120,8 @@ class ExportViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = ExportState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.export_vault_failure.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.export_vault_failure.asText(),
                         ),
                     )
                 }
@@ -129,7 +129,7 @@ class ExportViewModel @Inject constructor(
 
             is ExportDataResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(ExportEvent.ShowToast(R.string.export_success.asText()))
+                sendEvent(ExportEvent.ShowSnackBar(BitwardenString.export_success.asText()))
             }
         }
     }
@@ -152,7 +152,7 @@ data class ExportState(
          * Displays a loading dialog with an optional [message].
          */
         data class Loading(
-            val message: Text = R.string.loading.asText(),
+            val message: Text = BitwardenString.loading.asText(),
         ) : DialogState()
 
         /**
@@ -175,9 +175,9 @@ sealed class ExportEvent {
     data object NavigateBack : ExportEvent()
 
     /**
-     * Display a toast with the provided [message].
+     * Display a Snackbar with the provided [message].
      */
-    data class ShowToast(val message: Text) : ExportEvent()
+    data class ShowSnackBar(val message: Text) : ExportEvent()
 
     /**
      * Navigate to the select export destination screen.

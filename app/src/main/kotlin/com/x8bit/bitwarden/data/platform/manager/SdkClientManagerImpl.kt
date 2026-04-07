@@ -2,18 +2,34 @@ package com.x8bit.bitwarden.data.platform.manager
 
 import android.os.Build
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.bitwarden.data.manager.NativeLibraryManager
 import com.bitwarden.sdk.Client
+import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
+import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
 
 /**
  * Primary implementation of [SdkClientManager].
  */
 class SdkClientManagerImpl(
-    private val featureFlagManager: FeatureFlagManager,
     nativeLibraryManager: NativeLibraryManager,
-    private val clientProvider: suspend () -> Client = {
-        Client(settings = null).apply {
-            platform().loadFlags(featureFlagManager.sdkFeatureFlags)
-        }
+    sdkRepoFactory: SdkRepositoryFactory,
+    sdkPlatformApiFactory: SdkPlatformApiFactory,
+    private val featureFlagManager: FeatureFlagManager,
+    private val clientProvider: suspend (userId: String?) -> Client = { userId ->
+        Client(
+            tokenProvider = sdkRepoFactory.getClientManagedTokens(userId = userId),
+            settings = null,
+        )
+            .apply {
+                platform().loadFlags(featureFlagManager.sdkFeatureFlags)
+                platform().serverCommunicationConfig(
+                    repository = sdkRepoFactory.getServerCommunicationConfigRepository(),
+                    platformApi = sdkPlatformApiFactory.getServerCommunicationConfigPlatformApi(),
+                )
+                platform().state().registerClientManagedRepositories(
+                    repositories = sdkRepoFactory.getRepositories(userId = userId),
+                )
+            }
     },
 ) : SdkClientManager {
     private val userIdToClientMap = mutableMapOf<String?, Client>()
@@ -29,7 +45,7 @@ class SdkClientManagerImpl(
 
     override suspend fun getOrCreateClient(
         userId: String?,
-    ): Client = userIdToClientMap.getOrPut(key = userId) { clientProvider() }
+    ): Client = userIdToClientMap.getOrPut(key = userId) { clientProvider(userId) }
 
     override fun destroyClient(
         userId: String?,

@@ -2,9 +2,9 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.data.manager.model.FlightRecorderDuration
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.model.FlightRecorderDuration
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk

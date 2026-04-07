@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk.util
 
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.network.model.AccountKeysJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -44,6 +45,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedShouldTrustDevice = mutableMapOf<String, Boolean?>()
     private val storedInvalidUnlockAttempts = mutableMapOf<String, Int?>()
     private val storedUserKeys = mutableMapOf<String, String?>()
+    private val storedLocalUserDataKeys = mutableMapOf<String, String?>()
     private val storedPrivateKeys = mutableMapOf<String, String?>()
     private val storedTwoFactorTokens = mutableMapOf<String, String?>()
     private val storedUserAutoUnlockKeys = mutableMapOf<String, String?>()
@@ -63,6 +65,10 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedOnboardingStatus = mutableMapOf<String, OnboardingStatus?>()
     private val storedShowImportLogins = mutableMapOf<String, Boolean?>()
     private val storedLastLockTimestampState = mutableMapOf<String, Instant?>()
+    private val storedAccountKeys = mutableMapOf<String, AccountKeysJson?>()
+    private val storedPinProtectedUserKeyEnvelopes = mutableMapOf<String, Pair<String?, Boolean>>()
+    private val mutablePinProtectedUserKeyEnvelopesFlowMap =
+        mutableMapOf<String, MutableSharedFlow<String?>>()
 
     override var userState: UserStateJson? = null
         set(value) {
@@ -76,22 +82,31 @@ class FakeAuthDiskSource : AuthDiskSource {
     override fun clearData(userId: String) {
         storedInvalidUnlockAttempts.remove(userId)
         storedUserKeys.remove(userId)
+        storedLocalUserDataKeys.remove(userId)
         storedPrivateKeys.remove(userId)
         storedTwoFactorTokens.clear()
         storedUserAutoUnlockKeys.remove(userId)
-        storedPinProtectedUserKeys.remove(userId)
-        storedEncryptedPins.remove(userId)
         storedOrganizations.remove(userId)
         storedPolicies.remove(userId)
         storedAccountTokens.remove(userId)
         storedBiometricInitVectors.remove(userId)
         storedBiometricKeys.remove(userId)
         storedOrganizationKeys.remove(userId)
+        storedPinProtectedUserKeyEnvelopes.remove(userId)
+        storedEncryptedPins.remove(userId)
+        storedPinProtectedUserKeys.remove(userId)
 
         mutableShouldUseKeyConnectorFlowMap.remove(userId)
         mutableOrganizationsFlowMap.remove(userId)
         mutablePoliciesFlowMap.remove(userId)
         mutableAccountTokensFlowMap.remove(userId)
+        mutablePinProtectedUserKeyEnvelopesFlowMap.remove(userId)
+    }
+
+    private fun getMutablePinProtectedUserKeyEnvelopeFlow(
+        userId: String,
+    ): MutableSharedFlow<String?> = mutablePinProtectedUserKeyEnvelopesFlowMap.getOrPut(userId) {
+        bufferedMutableSharedFlow(replay = 1)
     }
 
     override fun getShouldUseKeyConnectorFlow(
@@ -137,10 +152,28 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedUserKeys[userId] = userKey
     }
 
+    override fun getLocalUserDataKey(userId: String): String? = storedLocalUserDataKeys[userId]
+
+    override fun storeLocalUserDataKey(userId: String, wrappedKey: String?) {
+        storedLocalUserDataKeys[userId] = wrappedKey
+    }
+
+    @Deprecated("Use getAccountKeys instead.", replaceWith = ReplaceWith("getAccountKeys"))
     override fun getPrivateKey(userId: String): String? = storedPrivateKeys[userId]
 
+    @Deprecated("Use storeAccountKeys instead.", replaceWith = ReplaceWith("storeAccountKeys"))
     override fun storePrivateKey(userId: String, privateKey: String?) {
         storedPrivateKeys[userId] = privateKey
+    }
+
+    override fun getAccountKeys(userId: String): AccountKeysJson? =
+        storedAccountKeys[userId]
+
+    override fun storeAccountKeys(
+        userId: String,
+        accountKeys: AccountKeysJson?,
+    ) {
+        storedAccountKeys[userId] = accountKeys
     }
 
     override fun getTwoFactorToken(email: String): String? = storedTwoFactorTokens[email]
@@ -156,9 +189,17 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedUserAutoUnlockKeys[userId] = userAutoUnlockKey
     }
 
+    @Deprecated(
+        "Use getPinProtectedUserKeyEnvelope instead.",
+        replaceWith = ReplaceWith("getPinProtectedUserKeyEnvelope"),
+    )
     override fun getPinProtectedUserKey(userId: String): String? =
         storedPinProtectedUserKeys[userId]?.first
 
+    @Deprecated(
+        "Use storePinProtectedUserKeyEnvelope instead.",
+        replaceWith = ReplaceWith("storePinProtectedUserKeyEnvelope"),
+    )
     override fun storePinProtectedUserKey(
         userId: String,
         pinProtectedUserKey: String?,
@@ -168,6 +209,10 @@ class FakeAuthDiskSource : AuthDiskSource {
         getMutablePinProtectedUserKeyFlow(userId).tryEmit(pinProtectedUserKey)
     }
 
+    @Deprecated(
+        "Use getPinProtectedUserKeyEnvelopeFlow instead.",
+        replaceWith = ReplaceWith("getPinProtectedUserKeyEnvelopeFlow"),
+    )
     override fun getPinProtectedUserKeyFlow(userId: String): Flow<String?> =
         getMutablePinProtectedUserKeyFlow(userId)
             .onSubscription {
@@ -240,7 +285,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         getMutableBiometricUnlockKeyFlow(userId).tryEmit(biometricsKey)
     }
 
-    override fun getUserBiometicUnlockKeyFlow(userId: String): Flow<String?> =
+    override fun getUserBiometricUnlockKeyFlow(userId: String): Flow<String?> =
         getMutableBiometricUnlockKeyFlow(userId)
             .onSubscription { emit(getUserBiometricUnlockKey(userId)) }
 
@@ -317,6 +362,24 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedLastLockTimestampState[userId] = lastLockTimestamp
     }
 
+    override fun getPinProtectedUserKeyEnvelope(userId: String): String? =
+        storedPinProtectedUserKeyEnvelopes[userId]?.first
+
+    override fun storePinProtectedUserKeyEnvelope(
+        userId: String,
+        pinProtectedUserKeyEnvelope: String?,
+        inMemoryOnly: Boolean,
+    ) {
+        storedPinProtectedUserKeyEnvelopes[userId] = pinProtectedUserKeyEnvelope to inMemoryOnly
+        getMutablePinProtectedUserKeyEnvelopeFlow(userId).tryEmit(pinProtectedUserKeyEnvelope)
+    }
+
+    override fun getPinProtectedUserKeyEnvelopeFlow(userId: String): Flow<String?> =
+        getMutablePinProtectedUserKeyEnvelopeFlow(userId)
+            .onSubscription {
+                emit(getPinProtectedUserKeyEnvelope(userId))
+            }
+
     /**
      * Assert the the [isTdeLoginComplete] was stored successfully using the [userId].
      */
@@ -369,8 +432,16 @@ class FakeAuthDiskSource : AuthDiskSource {
     /**
      * Assert that the [privateKey] was stored successfully using the [userId].
      */
+    @Deprecated("Use assertAccountKeys instead.", replaceWith = ReplaceWith("assertAccountKeys"))
     fun assertPrivateKey(userId: String, privateKey: String?) {
         assertEquals(privateKey, storedPrivateKeys[userId])
+    }
+
+    /**
+     * Assert that the [accountKeys] was stored successfully using the [userId].
+     */
+    fun assertAccountKeys(userId: String, accountKeys: AccountKeysJson?) {
+        assertEquals(accountKeys, storedAccountKeys[userId])
     }
 
     /**
@@ -403,6 +474,20 @@ class FakeAuthDiskSource : AuthDiskSource {
         inMemoryOnly: Boolean = false,
     ) {
         assertEquals(pinProtectedUserKey to inMemoryOnly, storedPinProtectedUserKeys[userId])
+    }
+
+    /**
+     * Assert that the [pinProtectedUserKeyEnvelope] was stored successfully using the [userId].
+     */
+    fun assertPinProtectedUserKeyEnvelope(
+        userId: String,
+        pinProtectedUserKeyEnvelope: String?,
+        inMemoryOnly: Boolean = false,
+    ) {
+        assertEquals(
+            pinProtectedUserKeyEnvelope to inMemoryOnly,
+            storedPinProtectedUserKeyEnvelopes[userId],
+        )
     }
 
     /**

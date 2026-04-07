@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Credential Manager Test Harness</string>
+    <string name="test_categories">Test Categories</string>
+    <string name="autofill">Autofill</string>
+    <string name="credential_manager">Credential Manager</string>
+    <string name="autofill_testing">Autofill Testing</string>
+    <string name="autofill_coming_soon">Autofill testing functionality coming soon</string>
+    <string name="credential_manager_flows">Credential Manager Flows</string>
+    <string name="create_password">Create Password</string>
+    <string name="get_password">Get Password</string>
+    <string name="create_passkey">Create Passkey</string>
+    <string name="get_passkey">Get Passkey</string>
+    <string name="get_password_or_passkey">Get Password or Passkey</string>
+    <string name="create_password_title">Create Password</string>
+    <string name="get_password_title">Get Password</string>
+    <string name="create_passkey_title">Create Passkey</string>
+    <string name="get_passkey_title">Get Passkey</string>
+    <string name="get_password_or_passkey_title">Get Password or Passkey</string>
+
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="origin_optional">Origin (optional)</string>
+    <string name="origin_hint">e.g., https://example.com</string>
+    <string name="relying_party_id">Relying Party ID</string>
+    <string name="rp_id_hint">e.g., example.com</string>
+
+    <!-- Action buttons -->
+    <string name="execute">Execute</string>
+    <string name="clear">Clear</string>
+
+    <!-- Result area -->
+    <string name="result">Result</string>
+    <string name="no_inputs_required">No inputs required. Click Execute to open credential picker.</string>
+</resources>

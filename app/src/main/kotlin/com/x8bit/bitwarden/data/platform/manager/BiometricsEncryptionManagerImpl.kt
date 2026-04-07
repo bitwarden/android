@@ -7,6 +7,7 @@ import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import timber.log.Timber
 import java.security.InvalidAlgorithmParameterException
 import java.security.InvalidKeyException
 import java.security.KeyStore
@@ -45,9 +46,11 @@ class BiometricsEncryptionManagerImpl(
             }
         val cipher = try {
             Cipher.getInstance(CIPHER_TRANSFORMATION)
-        } catch (_: NoSuchAlgorithmException) {
+        } catch (nsae: NoSuchAlgorithmException) {
+            Timber.w(nsae, "createCipherOrNull failed to get cipher instance")
             return null
-        } catch (_: NoSuchPaddingException) {
+        } catch (nspe: NoSuchPaddingException) {
+            Timber.w(nspe, "createCipherOrNull failed to get cipher instance")
             return null
         }
         // Instantiate integrity values.
@@ -87,8 +90,8 @@ class BiometricsEncryptionManagerImpl(
         return cipher?.takeIf { isCipherInitialized }
     }
 
-    override fun isBiometricIntegrityValid(userId: String, cipher: Cipher?): Boolean =
-        isSystemBiometricIntegrityValid(userId, cipher) && isAccountBiometricIntegrityValid(userId)
+    override fun isBiometricIntegrityValid(userId: String): Boolean =
+        isSystemBiometricIntegrityValid(userId) && isAccountBiometricIntegrityValid(userId)
 
     override fun isAccountBiometricIntegrityValid(userId: String): Boolean {
         val systemBioIntegrityState = settingsDiskSource
@@ -124,20 +127,25 @@ class BiometricsEncryptionManagerImpl(
     private fun generateKeyOrNull(userId: String): SecretKey? {
         val keyGen = try {
             KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ENCRYPTION_KEYSTORE_NAME)
-        } catch (_: NoSuchAlgorithmException) {
+        } catch (nsae: NoSuchAlgorithmException) {
+            Timber.w(nsae, "generateKeyOrNull failed to get key generator instance")
             return null
-        } catch (_: NoSuchProviderException) {
+        } catch (nspe: NoSuchProviderException) {
+            Timber.w(nspe, "generateKeyOrNull failed to get key generator instance")
             return null
-        } catch (_: IllegalArgumentException) {
+        } catch (iae: IllegalArgumentException) {
+            Timber.w(iae, "generateKeyOrNull failed to get key generator instance")
             return null
         }
 
         return try {
             keyGen.init(getKeyGenParameterSpec(userId = userId))
             keyGen.generateKey()
-        } catch (_: InvalidAlgorithmParameterException) {
+        } catch (iape: InvalidAlgorithmParameterException) {
+            Timber.w(iape, "generateKeyOrNull failed to initialize and generate key")
             null
-        } catch (_: ProviderException) {
+        } catch (pe: ProviderException) {
+            Timber.w(pe, "generateKeyOrNull failed to initialize and generate key")
             null
         }
     }
@@ -150,14 +158,17 @@ class BiometricsEncryptionManagerImpl(
             keystore
                 .getKey(encryptionKeyName(userId = userId), null)
                 ?.let { it as SecretKey }
-        } catch (_: KeyStoreException) {
+        } catch (kse: KeyStoreException) {
             // keystore was not loaded
+            Timber.w(kse, "getSecretKeyOrNull failed to retrieve secret key")
             null
-        } catch (_: NoSuchAlgorithmException) {
+        } catch (nsae: NoSuchAlgorithmException) {
             // keystore algorithm cannot be found
+            Timber.w(nsae, "getSecretKeyOrNull failed to retrieve secret key")
             null
-        } catch (_: UnrecoverableKeyException) {
+        } catch (uke: UnrecoverableKeyException) {
             // key could not be recovered
+            Timber.w(uke, "getSecretKeyOrNull failed to retrieve secret key")
             null
         }
 
@@ -174,26 +185,31 @@ class BiometricsEncryptionManagerImpl(
                 ?.let { init(Cipher.DECRYPT_MODE, secretKey, IvParameterSpec(it)) }
                 ?: init(Cipher.ENCRYPT_MODE, secretKey)
             true
-        } catch (_: KeyPermanentlyInvalidatedException) {
+        } catch (kpie: KeyPermanentlyInvalidatedException) {
             // Biometric has changed
+            Timber.w(kpie, "initializeCipher failed to initialize cipher")
             destroyBiometrics(userId = userId)
             false
-        } catch (_: UnrecoverableKeyException) {
+        } catch (uke: UnrecoverableKeyException) {
             // Biometric was disabled and re-enabled
+            Timber.w(uke, "initializeCipher failed to initialize cipher")
             destroyBiometrics(userId = userId)
             false
-        } catch (_: InvalidKeyException) {
+        } catch (ike: InvalidKeyException) {
             // User has no key
+            Timber.w(ike, "initializeCipher failed to initialize cipher")
             destroyBiometrics(userId = userId)
             true
         }
 
     /**
-     * Validates the keystore key and decrypts it using the user-provided [cipher].
+     * Validates the keystore key and decrypts it, if decryption is successful `true` is returned,
+     * `false` otherwise.
      */
-    private fun isSystemBiometricIntegrityValid(userId: String, cipher: Cipher?): Boolean {
+    private fun isSystemBiometricIntegrityValid(userId: String): Boolean {
         // Attempt to get the user scoped key. If that fails, we check to see if a legacy key
         // is available.
+        val cipher = getOrCreateCipher(userId = userId)
         val secretKey = getSecretKeyOrNull(userId = userId) ?: getSecretKeyOrNull(userId = null)
         return if (cipher != null && secretKey != null) {
             cipher.initializeCipher(userId = userId, secretKey = secretKey)

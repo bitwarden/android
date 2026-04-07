@@ -2,15 +2,17 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.about
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.BuildInfoManager
+import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
+import com.bitwarden.data.datasource.disk.model.ServerConfig
+import com.bitwarden.data.repository.ServerConfigRepository
+import com.bitwarden.core.data.manager.util.deviceData
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.util.getStopsLoggingStringForActiveLog
@@ -23,7 +25,6 @@ import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -43,14 +44,22 @@ class AboutViewModelTest : BaseViewModelTest() {
         every { isEnabled } returns false
         every { isEnabled = any() } just runs
     }
-    private val featureFlagManager = mockk<FeatureFlagManager> {
-        every { getFeatureFlag(FlagKey.FlightRecorder) } returns true
-        every { getFeatureFlagFlow(FlagKey.FlightRecorder) } returns flowOf(true)
-    }
     private val mutableFlightRecorderFlow = MutableStateFlow(FlightRecorderDataSet(emptySet()))
     private val settingsRepository = mockk<SettingsRepository> {
         every { flightRecorderDataFlow } returns mutableFlightRecorderFlow
         every { flightRecorderData } returns FlightRecorderDataSet(emptySet())
+    }
+    private val mutableServerConfigStateFlow = MutableStateFlow<ServerConfig?>(null)
+    private val serverConfigRepository: ServerConfigRepository = mockk {
+        every { serverConfigStateFlow } returns mutableServerConfigStateFlow
+    }
+    private val buildInfoManager: BuildInfoManager = mockk {
+        every { buildTypeName } returns "mockBuildType"
+        every { versionData } returns "mockVersionData"
+        every { sdkData } returns "mockSdkData"
+        every { deviceData } returns "mockDeviceData"
+        every { ciBuildInfo } returns "mockCiBuildInfo"
+        every { isFdroid } returns false
     }
 
     @AfterEach
@@ -192,6 +201,10 @@ class AboutViewModelTest : BaseViewModelTest() {
             .concat("\n".asText())
             .concat(state.deviceData)
             .concat(state.ciData)
+            .concat("\n".asText())
+            .concat(state.sdkVersion)
+            .concat("\n".asText())
+            .concat(state.serverData)
 
         every { clipboardManager.setText(expectedText, true, null) } just runs
 
@@ -228,8 +241,9 @@ class AboutViewModelTest : BaseViewModelTest() {
         clock = FIXED_CLOCK,
         environmentRepository = environmentRepository,
         logsManager = logsManager,
-        featureFlagManager = featureFlagManager,
         settingsRepository = settingsRepository,
+        serverConfigRepository = serverConfigRepository,
+        buildInfoManager = buildInfoManager,
     )
 }
 
@@ -239,12 +253,13 @@ private val FIXED_CLOCK = Clock.fixed(
 )
 private val DEFAULT_ABOUT_STATE: AboutState = AboutState(
     version = "Version: <version_name> (<version_code>)".asText(),
+    sdkVersion = "\uD83E\uDD80 SDK: 1.0.0-20250708.105256-238".asText(),
+    serverData = "\uD83C\uDF29 Server: 2025.7.1".asText(),
     deviceData = "<device_data>".asText(),
     ciData = "<ci_info>".asText(),
     copyrightInfo = "© Bitwarden Inc. 2015-${Year.now(FIXED_CLOCK).value}".asText(),
     isSubmitCrashLogsEnabled = false,
     shouldShowCrashLogsButton = true,
     isFlightRecorderEnabled = false,
-    shouldShowFlightRecorder = true,
     flightRecorderSubtext = null,
 )

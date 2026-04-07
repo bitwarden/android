@@ -7,6 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.toRoute
 import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmentRoute
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import kotlinx.serialization.Serializable
 
@@ -38,12 +39,14 @@ fun SavedStateHandle.toVaultItemArgs(): VaultItemArgs {
 /**
  * Add the vault item screen to the nav graph.
  */
+@Suppress("LongParameterList")
 fun NavGraphBuilder.vaultItemDestination(
     onNavigateBack: () -> Unit,
     onNavigateToVaultEditItem: (args: VaultAddEditArgs) -> Unit,
     onNavigateToMoveToOrganization: (vaultItemId: String, showOnlyCollections: Boolean) -> Unit,
     onNavigateToAttachments: (vaultItemId: String) -> Unit,
     onNavigateToPasswordHistory: (vaultItemId: String) -> Unit,
+    onNavigateToPreviewAttachment: (route: PreviewAttachmentRoute) -> Unit,
 ) {
     composableWithSlideTransitions<VaultItemRoute> {
         VaultItemScreen(
@@ -52,6 +55,7 @@ fun NavGraphBuilder.vaultItemDestination(
             onNavigateToMoveToOrganization = onNavigateToMoveToOrganization,
             onNavigateToAttachments = onNavigateToAttachments,
             onNavigateToPasswordHistory = onNavigateToPasswordHistory,
+            onNavigateToPreviewAttachment = onNavigateToPreviewAttachment,
         )
     }
 }

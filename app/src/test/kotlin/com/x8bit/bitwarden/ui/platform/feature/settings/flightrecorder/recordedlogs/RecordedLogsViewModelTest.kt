@@ -3,13 +3,13 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recorded
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
+import com.bitwarden.data.manager.file.FileManager
+import com.bitwarden.data.manager.model.ZipFileResult
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.vault.manager.FileManager
-import com.x8bit.bitwarden.data.vault.manager.model.ZipFileResult
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsAction
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsEvent
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsState
@@ -128,8 +128,8 @@ class RecordedLogsViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = RecordedLogsState.DialogState.Error(
-                    title = R.string.unable_to_share.asText(),
-                    message = R.string.please_try_again_or_select_a_different_log.asText(),
+                    title = BitwardenString.unable_to_share.asText(),
+                    message = BitwardenString.please_try_again_or_select_a_different_log.asText(),
                     error = error,
                 ),
             ),
@@ -151,8 +151,8 @@ class RecordedLogsViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = RecordedLogsState.DialogState.Error(
-                    title = R.string.unable_to_share.asText(),
-                    message = R.string.the_log_file_you_are_trying_to_share_has_been_removed
+                    title = BitwardenString.unable_to_share.asText(),
+                    message = BitwardenString.the_log_file_you_are_trying_to_share_has_been_removed
                         .asText(),
                     error = null,
                 ),
@@ -212,8 +212,8 @@ class RecordedLogsViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = RecordedLogsState.DialogState.Error(
-                    title = R.string.unable_to_share.asText(),
-                    message = R.string.please_try_again_or_select_a_different_log.asText(),
+                    title = BitwardenString.unable_to_share.asText(),
+                    message = BitwardenString.please_try_again_or_select_a_different_log.asText(),
                     error = error,
                 ),
             ),
@@ -243,8 +243,8 @@ class RecordedLogsViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = RecordedLogsState.DialogState.Error(
-                    title = R.string.unable_to_share.asText(),
-                    message = R.string.the_log_file_you_are_trying_to_share_has_been_removed
+                    title = BitwardenString.unable_to_share.asText(),
+                    message = BitwardenString.the_log_file_you_are_trying_to_share_has_been_removed
                         .asText(),
                     error = null,
                 ),
@@ -262,7 +262,7 @@ class RecordedLogsViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(RecordedLogsAction.DeleteAllClick)
             assertEquals(
-                RecordedLogsEvent.ShowSnackbar(R.string.all_logs_deleted.asText()),
+                RecordedLogsEvent.ShowSnackbar(BitwardenString.all_logs_deleted.asText()),
                 awaitItem(),
             )
         }
@@ -285,7 +285,7 @@ class RecordedLogsViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(RecordedLogsAction.DeleteClick(item = item))
             assertEquals(
-                RecordedLogsEvent.ShowSnackbar(R.string.log_deleted.asText()),
+                RecordedLogsEvent.ShowSnackbar(BitwardenString.log_deleted.asText()),
                 awaitItem(),
             )
         }

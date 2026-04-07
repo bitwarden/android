@@ -26,7 +26,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,18 +38,18 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.model.WindowSize
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.util.rememberWindowSize
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import kotlinx.coroutines.launch
 
 /**
@@ -63,7 +62,6 @@ private val HORIZONTAL_MARGIN_MEDIUM: Dp = 128.dp
  */
 @Composable
 fun WelcomeScreen(
-    onNavigateToCreateAccount: () -> Unit,
     onNavigateToLogin: () -> Unit,
     onNavigateToStartRegistration: () -> Unit,
     viewModel: WelcomeViewModel = hiltViewModel(),
@@ -78,7 +76,6 @@ fun WelcomeScreen(
                 scope.launch { pagerState.animateScrollToPage(event.index) }
             }
 
-            WelcomeEvent.NavigateToCreateAccount -> onNavigateToCreateAccount()
             WelcomeEvent.NavigateToLogin -> onNavigateToLogin()
             WelcomeEvent.NavigateToStartRegistration -> onNavigateToStartRegistration()
         }
@@ -92,18 +89,10 @@ fun WelcomeScreen(
         WelcomeScreenContent(
             state = state,
             pagerState = pagerState,
-            onPagerSwipe = remember(viewModel) {
-                { viewModel.trySendAction(WelcomeAction.PagerSwipe(it)) }
-            },
-            onDotClick = remember(viewModel) {
-                { viewModel.trySendAction(WelcomeAction.DotClick(it)) }
-            },
-            onCreateAccountClick = remember(viewModel) {
-                { viewModel.trySendAction(WelcomeAction.CreateAccountClick) }
-            },
-            onLoginClick = remember(viewModel) {
-                { viewModel.trySendAction(WelcomeAction.LoginClick) }
-            },
+            onPagerSwipe = { viewModel.trySendAction(WelcomeAction.PagerSwipe(it)) },
+            onDotClick = { viewModel.trySendAction(WelcomeAction.DotClick(it)) },
+            onCreateAccountClick = { viewModel.trySendAction(WelcomeAction.CreateAccountClick) },
+            onLoginClick = { viewModel.trySendAction(WelcomeAction.LoginClick) },
             modifier = Modifier.fillMaxSize(),
         )
     }
@@ -131,7 +120,7 @@ private fun WelcomeScreenContent(
 
         HorizontalPager(state = pagerState) { index ->
             val pageNumberContentDescription =
-                stringResource(R.string.page_number_x_of_y, index + 1, state.pages.size)
+                stringResource(BitwardenString.page_number_x_of_y, index + 1, state.pages.size)
             val pagerSemanticsModifier = Modifier.semantics(mergeDescendants = true) {
                 contentDescription = pageNumberContentDescription
             }
@@ -165,7 +154,7 @@ private fun WelcomeScreenContent(
         )
 
         BitwardenFilledButton(
-            label = stringResource(id = R.string.create_account),
+            label = stringResource(id = BitwardenString.create_account),
             onClick = onCreateAccountClick,
             modifier = Modifier
                 .standardHorizontalMargin(medium = HORIZONTAL_MARGIN_MEDIUM)
@@ -174,7 +163,7 @@ private fun WelcomeScreenContent(
         )
 
         BitwardenOutlinedButton(
-            label = stringResource(id = R.string.log_in_verb),
+            label = stringResource(id = BitwardenString.log_in_verb),
             onClick = onLoginClick,
             modifier = Modifier
                 .standardHorizontalMargin(medium = HORIZONTAL_MARGIN_MEDIUM)

@@ -35,7 +35,7 @@ class FakeSendsDao : SendsDao {
         return count
     }
 
-    override fun getAllSends(userId: String): Flow<List<SendEntity>> =
+    override fun getAllSendsFlow(userId: String): Flow<List<SendEntity>> =
         sendsFlow.map { ciphers -> ciphers.filter { it.userId == userId } }
 
     override suspend fun insertSends(sends: List<SendEntity>) {

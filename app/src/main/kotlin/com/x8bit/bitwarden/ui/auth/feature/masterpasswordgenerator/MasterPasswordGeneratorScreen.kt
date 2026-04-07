@@ -18,31 +18,30 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
+import com.bitwarden.ui.platform.components.text.BitwardenClickableText
+import com.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
-import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
-import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 
 /**
  * Top level composable for the master password generator.
@@ -83,17 +82,11 @@ fun MasterPasswordGeneratorScreen(
         topBar = {
             MasterPasswordGeneratorTopBar(
                 scrollBehavior = scrollBehavior,
-                onBackClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(MasterPasswordGeneratorAction.BackClickAction)
-                    }
+                onBackClick = {
+                    viewModel.trySendAction(MasterPasswordGeneratorAction.BackClickAction)
                 },
-                onSaveClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            MasterPasswordGeneratorAction.SavePasswordClickAction,
-                        )
-                    }
+                onSaveClick = {
+                    viewModel.trySendAction(MasterPasswordGeneratorAction.SavePasswordClickAction)
                 },
             )
         },
@@ -108,19 +101,13 @@ fun MasterPasswordGeneratorScreen(
         ) {
             MasterPasswordGeneratorContent(
                 generatedPassword = state.generatedPassword,
-                onGenerateNewPassword = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            MasterPasswordGeneratorAction.GeneratePasswordClickAction,
-                        )
-                    }
+                onGenerateNewPassword = {
+                    viewModel.trySendAction(
+                        MasterPasswordGeneratorAction.GeneratePasswordClickAction,
+                    )
                 },
-                onLearnToPreventLockout = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            MasterPasswordGeneratorAction.PreventLockoutClickAction,
-                        )
-                    }
+                onLearnToPreventLockout = {
+                    viewModel.trySendAction(MasterPasswordGeneratorAction.PreventLockoutClickAction)
                 },
                 modifier = Modifier.standardHorizontalMargin(),
             )
@@ -155,19 +142,23 @@ private fun MasterPasswordGeneratorContent(
 
         Spacer(modifier = Modifier.height(12.dp))
         BitwardenFilledButton(
-            label = stringResource(R.string.generate_button_label),
+            label = stringResource(BitwardenString.generate_button_label),
             onClick = onGenerateNewPassword,
             icon = rememberVectorPainter(id = BitwardenDrawable.ic_generate),
             modifier = Modifier.fillMaxWidth(),
         )
         Spacer(modifier = Modifier.height(12.dp))
         Text(
-            text = stringResource(R.string.write_this_password_down_and_keep_it_somewhere_safe),
+            text = stringResource(
+                BitwardenString.write_this_password_down_and_keep_it_somewhere_safe,
+            ),
             style = BitwardenTheme.typography.bodySmall,
             color = BitwardenTheme.colorScheme.text.primary,
         )
         BitwardenClickableText(
-            label = stringResource(R.string.learn_about_other_ways_to_prevent_account_lockout),
+            label = stringResource(
+                BitwardenString.learn_about_other_ways_to_prevent_account_lockout,
+            ),
             style = BitwardenTheme.typography.labelMedium,
             onClick = onLearnToPreventLockout,
             innerPadding = PaddingValues(horizontal = 0.dp, vertical = 4.dp),
@@ -183,14 +174,14 @@ private fun MasterPasswordGeneratorTopBar(
     onSaveClick: () -> Unit,
 ) {
     BitwardenTopAppBar(
-        title = stringResource(R.string.generate_master_password),
+        title = stringResource(BitwardenString.generate_master_password),
         scrollBehavior = scrollBehavior,
         navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-        navigationIconContentDescription = stringResource(id = R.string.back),
+        navigationIconContentDescription = stringResource(id = BitwardenString.back),
         onNavigationIconClick = onBackClick,
         actions = {
             BitwardenTextButton(
-                label = stringResource(id = R.string.save),
+                label = stringResource(id = BitwardenString.save),
                 onClick = onSaveClick,
             )
         },

@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.credentials.di
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.network.service.DigitalAssetLinkService
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -12,6 +12,10 @@ import com.x8bit.bitwarden.data.credentials.builder.CredentialEntryBuilderImpl
 import com.x8bit.bitwarden.data.credentials.datasource.disk.PrivilegedAppDiskSource
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManagerImpl
+import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManager
+import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManagerImpl
+import com.x8bit.bitwarden.data.credentials.manager.CredentialProviderRequestManager
+import com.x8bit.bitwarden.data.credentials.manager.CredentialProviderRequestManagerImpl
 import com.x8bit.bitwarden.data.credentials.manager.OriginManager
 import com.x8bit.bitwarden.data.credentials.manager.OriginManagerImpl
 import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
@@ -20,12 +24,12 @@ import com.x8bit.bitwarden.data.credentials.processor.CredentialProviderProcesso
 import com.x8bit.bitwarden.data.credentials.processor.CredentialProviderProcessorImpl
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepositoryImpl
+import com.x8bit.bitwarden.data.credentials.sanitizer.PasskeyAttestationOptionsSanitizer
+import com.x8bit.bitwarden.data.credentials.sanitizer.PasskeyAttestationOptionsSanitizerImpl
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
-import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,20 +54,16 @@ object CredentialProviderModule {
         authRepository: AuthRepository,
         bitwardenCredentialManager: BitwardenCredentialManager,
         dispatcherManager: DispatcherManager,
-        intentManager: IntentManager,
-        biometricsEncryptionManager: BiometricsEncryptionManager,
-        featureFlagManager: FeatureFlagManager,
+        pendingIntentManager: CredentialManagerPendingIntentManager,
         clock: Clock,
     ): CredentialProviderProcessor =
         CredentialProviderProcessorImpl(
-            context,
-            authRepository,
-            bitwardenCredentialManager,
-            intentManager,
-            clock,
-            biometricsEncryptionManager,
-            featureFlagManager,
-            dispatcherManager,
+            context = context,
+            authRepository = authRepository,
+            bitwardenCredentialManager = bitwardenCredentialManager,
+            pendingIntentManager = pendingIntentManager,
+            clock = clock,
+            dispatcherManager = dispatcherManager,
         )
 
     @Provides
@@ -75,14 +75,18 @@ object CredentialProviderModule {
         vaultRepository: VaultRepository,
         dispatcherManager: DispatcherManager,
         credentialEntryBuilder: CredentialEntryBuilder,
+        cipherMatchingManager: CipherMatchingManager,
+        passkeyAttestationOptionsSanitizer: PasskeyAttestationOptionsSanitizer,
     ): BitwardenCredentialManager =
         BitwardenCredentialManagerImpl(
             vaultSdkSource = vaultSdkSource,
             fido2CredentialStore = fido2CredentialStore,
+            credentialEntryBuilder = credentialEntryBuilder,
             json = json,
             vaultRepository = vaultRepository,
+            cipherMatchingManager = cipherMatchingManager,
+            passkeyAttestationOptionsSanitizer = passkeyAttestationOptionsSanitizer,
             dispatcherManager = dispatcherManager,
-            credentialEntryBuilder = credentialEntryBuilder,
         )
 
     @Provides
@@ -91,27 +95,23 @@ object CredentialProviderModule {
         assetManager: AssetManager,
         digitalAssetLinkService: DigitalAssetLinkService,
         privilegedAppRepository: PrivilegedAppRepository,
-        featureFlagManager: FeatureFlagManager,
     ): OriginManager =
         OriginManagerImpl(
             assetManager = assetManager,
             digitalAssetLinkService = digitalAssetLinkService,
             privilegedAppRepository = privilegedAppRepository,
-            featureFlagManager = featureFlagManager,
         )
 
     @Provides
     @Singleton
     fun provideCredentialEntryBuilder(
         @ApplicationContext context: Context,
-        intentManager: IntentManager,
-        featureFlagManager: FeatureFlagManager,
-        biometricsEncryptionManager: BiometricsEncryptionManager,
+        pendingIntentManager: CredentialManagerPendingIntentManager,
+        authRepository: AuthRepository,
     ): CredentialEntryBuilder = CredentialEntryBuilderImpl(
         context = context,
-        intentManager = intentManager,
-        featureFlagManager = featureFlagManager,
-        biometricsEncryptionManager = biometricsEncryptionManager,
+        pendingIntentManager = pendingIntentManager,
+        authRepository = authRepository,
     )
 
     @Provides
@@ -133,4 +133,23 @@ object CredentialProviderModule {
     fun provideRelyingPartyParser(
         json: Json,
     ): RelyingPartyParser = RelyingPartyParserImpl(json)
+
+    @Provides
+    @Singleton
+    fun provideCredentialManagerPendingIntentManager(
+        @ApplicationContext context: Context,
+    ): CredentialManagerPendingIntentManager =
+        CredentialManagerPendingIntentManagerImpl(
+            context = context,
+        )
+
+    @Provides
+    @Singleton
+    fun providePasskeyAttestationOptionsSanitizer(): PasskeyAttestationOptionsSanitizer =
+        PasskeyAttestationOptionsSanitizerImpl
+
+    @Provides
+    @Singleton
+    fun provideCredentialProviderRequestManager(): CredentialProviderRequestManager =
+        CredentialProviderRequestManagerImpl()
 }

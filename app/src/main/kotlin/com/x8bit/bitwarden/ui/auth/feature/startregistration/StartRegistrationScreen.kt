@@ -19,10 +19,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -36,7 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -44,37 +42,35 @@ import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ErrorDialogDismiss
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToPrivacyPolicy
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToTerms
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.handlers.StartRegistrationHandler
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.handlers.rememberStartRegistrationHandler
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.EnvironmentSelector
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 
 /**
  * Top level composable for the start registration screen.
  */
 @OptIn(ExperimentalMaterial3Api::class)
-@Suppress("LongMethod")
 @Composable
 fun StartRegistrationScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToCompleteRegistration: (
-        emailAddress: String,
-        verificationToken: String,
-    ) -> Unit,
+    onNavigateToCompleteRegistration: (emailAddress: String, verificationToken: String) -> Unit,
     onNavigateToCheckEmail: (email: String) -> Unit,
     onNavigateToEnvironment: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
@@ -82,63 +78,37 @@ fun StartRegistrationScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val handler = rememberStartRegistrationHandler(viewModel = viewModel)
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel) { event ->
         when (event) {
             is NavigateToPrivacyPolicy -> {
                 intentManager.launchUri("https://bitwarden.com/privacy/".toUri())
             }
 
-            is NavigateToTerms -> {
-                intentManager.launchUri("https://bitwarden.com/terms/".toUri())
-            }
-
+            is NavigateToTerms -> intentManager.launchUri("https://bitwarden.com/terms/".toUri())
             is StartRegistrationEvent.NavigateToUnsubscribe -> {
                 intentManager.launchUri("https://bitwarden.com/email-preferences/".toUri())
             }
 
             is StartRegistrationEvent.NavigateToServerSelectionInfo -> {
-                intentManager.launchUri(
-                    uri = "https://bitwarden.com/help/server-geographies/".toUri(),
-                )
+                intentManager.launchUri("https://bitwarden.com/help/server-geographies/".toUri())
             }
 
             is StartRegistrationEvent.NavigateBack -> onNavigateBack.invoke()
             is StartRegistrationEvent.NavigateToCompleteRegistration -> {
-                onNavigateToCompleteRegistration(
-                    event.email,
-                    event.verificationToken,
-                )
+                onNavigateToCompleteRegistration(event.email, event.verificationToken)
             }
 
-            is StartRegistrationEvent.NavigateToCheckEmail -> {
-                onNavigateToCheckEmail(
-                    event.email,
-                )
-            }
-
+            is StartRegistrationEvent.NavigateToCheckEmail -> onNavigateToCheckEmail(event.email)
             StartRegistrationEvent.NavigateToEnvironment -> onNavigateToEnvironment()
+            is StartRegistrationEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }
     }
 
-    // Show dialog if needed:
-    when (val dialog = state.dialog) {
-        is StartRegistrationDialog.Error -> {
-            BitwardenBasicDialog(
-                title = dialog.title?.invoke(),
-                message = dialog.message(),
-                throwable = dialog.error,
-                onDismissRequest = remember(viewModel) {
-                    { viewModel.trySendAction(ErrorDialogDismiss) }
-                },
-            )
-        }
-
-        StartRegistrationDialog.Loading -> {
-            BitwardenLoadingDialog(text = stringResource(id = R.string.create_account))
-        }
-
-        null -> Unit
-    }
+    StartRegistrationDialogs(
+        dialog = state.dialog,
+        onDismissRequest = { viewModel.trySendAction(ErrorDialogDismiss) },
+    )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
@@ -147,12 +117,15 @@ fun StartRegistrationScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.create_account),
+                title = stringResource(id = BitwardenString.create_account),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = handler.onCloseClick,
             )
+        },
+        snackbarHost = {
+            BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
         },
     ) {
         StartRegistrationContent(
@@ -163,6 +136,29 @@ fun StartRegistrationScreen(
             isContinueButtonEnabled = state.isContinueButtonEnabled,
             handler = handler,
         )
+    }
+}
+
+@Composable
+private fun StartRegistrationDialogs(
+    dialog: StartRegistrationDialog?,
+    onDismissRequest: () -> Unit,
+) {
+    when (dialog) {
+        is StartRegistrationDialog.Error -> {
+            BitwardenBasicDialog(
+                title = dialog.title?.invoke(),
+                message = dialog.message(),
+                throwable = dialog.error,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        StartRegistrationDialog.Loading -> {
+            BitwardenLoadingDialog(text = stringResource(id = BitwardenString.create_account))
+        }
+
+        null -> Unit
     }
 }
 
@@ -187,8 +183,7 @@ private fun StartRegistrationContent(
 
         Spacer(modifier = Modifier.weight(1f))
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.bitwarden_logo),
-            colorFilter = ColorFilter.tint(BitwardenTheme.colorScheme.icon.secondary),
+            painter = rememberVectorPainter(id = BitwardenDrawable.logo_bitwarden),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()
@@ -199,7 +194,7 @@ private fun StartRegistrationContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         BitwardenTextField(
-            label = stringResource(id = R.string.email_address_required),
+            label = stringResource(id = BitwardenString.email_address_required),
             value = emailInput,
             onValueChange = handler.onEmailInputChange,
             keyboardType = KeyboardType.Email,
@@ -207,8 +202,8 @@ private fun StartRegistrationContent(
             supportingContentPadding = PaddingValues(),
             supportingContent = {
                 EnvironmentSelector(
-                    labelText = stringResource(id = R.string.create_account_on_with_colon),
-                    dialogTitle = stringResource(id = R.string.create_account_on),
+                    labelText = stringResource(id = BitwardenString.create_account_on_with_colon),
+                    dialogTitle = stringResource(id = BitwardenString.create_account_on),
                     selectedOption = selectedEnvironmentType,
                     onOptionSelected = handler.onEnvironmentTypeSelect,
                     onHelpClick = handler.onServerGeologyHelpClick,
@@ -226,7 +221,7 @@ private fun StartRegistrationContent(
         Spacer(modifier = Modifier.height(8.dp))
 
         BitwardenTextField(
-            label = stringResource(id = R.string.name),
+            label = stringResource(id = BitwardenString.name),
             value = nameInput,
             onValueChange = handler.onNameInputChange,
             textFieldTestTag = "NameEntry",
@@ -251,7 +246,7 @@ private fun StartRegistrationContent(
         Spacer(modifier = Modifier.height(24.dp))
 
         BitwardenFilledButton(
-            label = stringResource(id = R.string.continue_text),
+            label = stringResource(id = BitwardenString.continue_text),
             onClick = handler.onContinueClick,
             isEnabled = isContinueButtonEnabled,
             modifier = Modifier
@@ -273,15 +268,20 @@ private fun StartRegistrationContent(
     }
 }
 
-@Suppress("LongMethod", "MaxLineLength")
 @Composable
 private fun TermsAndPrivacyText(
     onTermsClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val strTerms = stringResource(id = R.string.terms_of_service)
-    val strPrivacy = stringResource(id = R.string.privacy_policy)
+    val strTerms = stringResource(
+        id = BitwardenString.external_link_format,
+        formatArgs = arrayOf(stringResource(id = BitwardenString.terms_of_service)),
+    )
+    val strPrivacy = stringResource(
+        id = BitwardenString.external_link_format,
+        formatArgs = arrayOf(stringResource(id = BitwardenString.privacy_policy)),
+    )
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
@@ -310,7 +310,8 @@ private fun TermsAndPrivacyText(
     ) {
         Text(
             text = annotatedStringResource(
-                id = R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy,
+                id = BitwardenString
+                    .by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy,
                 onAnnotationClick = {
                     when (it) {
                         "termsOfService" -> onTermsClick()
@@ -321,6 +322,7 @@ private fun TermsAndPrivacyText(
             style = BitwardenTheme.typography.bodyMedium.copy(
                 textAlign = TextAlign.Center,
             ),
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
@@ -332,7 +334,7 @@ private fun ReceiveMarketingEmailsSwitch(
     onUnsubscribeClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val unsubscribeString = stringResource(id = R.string.unsubscribe)
+    val unsubscribeString = stringResource(id = BitwardenString.unsubscribe)
     @Suppress("MaxLineLength")
     BitwardenSwitch(
         modifier = modifier
@@ -349,7 +351,7 @@ private fun ReceiveMarketingEmailsSwitch(
             }
             .testTag(tag = "ReceiveMarketingEmailsToggle"),
         label = annotatedStringResource(
-            id = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time,
+            id = BitwardenString.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time,
             onAnnotationClick = { onUnsubscribeClick() },
         ),
         isChecked = isChecked,

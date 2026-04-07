@@ -5,8 +5,6 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
-import androidx.compose.ui.test.hasAnySibling
-import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
@@ -17,12 +15,13 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.util.advanceTimeByAndRunCurrent
+import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
+import com.bitwarden.ui.util.isBottomSheet
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -354,7 +353,7 @@ class ImportLoginsScreenTest : BitwardenComposeTest() {
             it.copy(dialogState = ImportLoginsState.DialogState.Syncing)
         }
         composeTestRule
-            .onNodeWithText(text = "Syncing logins...")
+            .onNodeWithText(text = "Syncing logins…")
             .assertIsDisplayed()
             .assert(hasAnyAncestor(isDialog()))
     }
@@ -397,7 +396,7 @@ class ImportLoginsScreenTest : BitwardenComposeTest() {
         mutableImportLoginsStateFlow.tryEmit(
             DEFAULT_STATE.copy(
                 dialogState = ImportLoginsState.DialogState.Error(
-                    message = R.string.no_logins_were_imported.asText(),
+                    message = BitwardenString.no_logins_were_imported.asText(),
                 ),
             ),
         )
@@ -468,9 +467,9 @@ class ImportLoginsScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onAllNodesWithContentDescription("Close")
-            .filterToOne(hasAnySibling(hasText("Bitwarden Tools")))
+            .filterToOne(hasAnyAncestor(isBottomSheet))
             .assertIsDisplayed()
-            .performSemanticsAction(SemanticsActions.OnClick)
+            .performClick()
 
         dispatcher.advanceTimeByAndRunCurrent(1000L)
 

@@ -21,39 +21,39 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
+import com.bitwarden.ui.platform.components.account.BitwardenPlaceholderAccountActionItem
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
-import com.x8bit.bitwarden.ui.platform.components.account.BitwardenPlaceholderAccountActionItem
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.EnvironmentSelector
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -63,7 +63,6 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 @Suppress("LongMethod")
 fun LandingScreen(
-    onNavigateToCreateAccount: () -> Unit,
     onNavigateToLogin: (emailAddress: String) -> Unit,
     onNavigateToEnvironment: () -> Unit,
     onNavigateToStartRegistration: () -> Unit,
@@ -71,53 +70,41 @@ fun LandingScreen(
     viewModel: LandingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            LandingEvent.NavigateToCreateAccount -> onNavigateToCreateAccount()
-            is LandingEvent.NavigateToLogin -> onNavigateToLogin(
-                event.emailAddress,
-            )
-
+            is LandingEvent.NavigateToLogin -> onNavigateToLogin(event.emailAddress)
             LandingEvent.NavigateToEnvironment -> onNavigateToEnvironment()
             LandingEvent.NavigateToStartRegistration -> onNavigateToStartRegistration()
             LandingEvent.NavigateToSettings -> onNavigateToPreAuthSettings()
+            is LandingEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }
     }
 
     when (val dialog = state.dialog) {
         is LandingState.DialogState.AccountAlreadyAdded -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(id = R.string.account_already_added),
+                title = stringResource(id = BitwardenString.account_already_added),
                 message = stringResource(
-                    id = R.string.switch_to_already_added_account_confirmation,
+                    id = BitwardenString.switch_to_already_added_account_confirmation,
                 ),
-                confirmButtonText = stringResource(id = R.string.yes),
-                dismissButtonText = stringResource(id = R.string.cancel),
-                onConfirmClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            LandingAction.ConfirmSwitchToMatchingAccountClick(
-                                accountSummary = dialog.accountSummary,
-                            ),
-                        )
-                    }
+                confirmButtonText = stringResource(id = BitwardenString.yes),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
+                onConfirmClick = {
+                    viewModel.trySendAction(
+                        LandingAction.ConfirmSwitchToMatchingAccountClick(dialog.accountSummary),
+                    )
                 },
-                onDismissClick = remember(viewModel) {
-                    { viewModel.trySendAction(LandingAction.DialogDismiss) }
-                },
-                onDismissRequest = remember(viewModel) {
-                    { viewModel.trySendAction(LandingAction.DialogDismiss) }
-                },
+                onDismissClick = { viewModel.trySendAction(LandingAction.DialogDismiss) },
+                onDismissRequest = { viewModel.trySendAction(LandingAction.DialogDismiss) },
             )
         }
 
         is LandingState.DialogState.Error -> {
             BitwardenBasicDialog(
-                title = stringResource(id = R.string.an_error_has_occurred),
+                title = stringResource(id = BitwardenString.an_error_has_occurred),
                 message = dialog.message(),
-                onDismissRequest = remember(viewModel) {
-                    { viewModel.trySendAction(LandingAction.DialogDismiss) }
-                },
+                onDismissRequest = { viewModel.trySendAction(LandingAction.DialogDismiss) },
             )
         }
 
@@ -152,14 +139,14 @@ fun LandingScreen(
             BitwardenAccountSwitcher(
                 isVisible = isAccountMenuVisible,
                 accountSummaries = state.accountSummaries.toImmutableList(),
-                onSwitchAccountClick = remember(viewModel) {
-                    { viewModel.trySendAction(LandingAction.SwitchAccountClick(it)) }
+                onSwitchAccountClick = {
+                    viewModel.trySendAction(LandingAction.SwitchAccountClick(it))
                 },
-                onLockAccountClick = remember(viewModel) {
-                    { viewModel.trySendAction(LandingAction.LockAccountClick(it)) }
+                onLockAccountClick = {
+                    viewModel.trySendAction(LandingAction.LockAccountClick(it))
                 },
-                onLogoutAccountClick = remember(viewModel) {
-                    { viewModel.trySendAction(LandingAction.LogoutAccountClick(it)) }
+                onLogoutAccountClick = {
+                    viewModel.trySendAction(LandingAction.LogoutAccountClick(it))
                 },
                 onAddAccountClick = {
                     // Not available
@@ -170,27 +157,20 @@ fun LandingScreen(
                 modifier = Modifier.fillMaxSize(),
             )
         },
+        snackbarHost = {
+            BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
+        },
     ) {
         LandingScreenContent(
             state = state,
-            onEmailInputChange = remember(viewModel) {
-                { viewModel.trySendAction(LandingAction.EmailInputChanged(it)) }
+            onEmailInputChange = { viewModel.trySendAction(LandingAction.EmailInputChanged(it)) },
+            onEnvironmentTypeSelect = {
+                viewModel.trySendAction(LandingAction.EnvironmentTypeSelect(it))
             },
-            onEnvironmentTypeSelect = remember(viewModel) {
-                { viewModel.trySendAction(LandingAction.EnvironmentTypeSelect(it)) }
-            },
-            onRememberMeToggle = remember(viewModel) {
-                { viewModel.trySendAction(LandingAction.RememberMeToggle(it)) }
-            },
-            onContinueClick = remember(viewModel) {
-                { viewModel.trySendAction(LandingAction.ContinueButtonClick) }
-            },
-            onCreateAccountClick = remember(viewModel) {
-                { viewModel.trySendAction(LandingAction.CreateAccountClick) }
-            },
-            onAppSettingsClick = remember(viewModel) {
-                { viewModel.trySendAction(LandingAction.AppSettingsClick) }
-            },
+            onRememberMeToggle = { viewModel.trySendAction(LandingAction.RememberMeToggle(it)) },
+            onContinueClick = { viewModel.trySendAction(LandingAction.ContinueButtonClick) },
+            onCreateAccountClick = { viewModel.trySendAction(LandingAction.CreateAccountClick) },
+            onAppSettingsClick = { viewModel.trySendAction(LandingAction.AppSettingsClick) },
         )
     }
 }
@@ -218,8 +198,7 @@ private fun LandingScreenContent(
         Spacer(modifier = Modifier.weight(1f))
 
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.bitwarden_logo),
-            colorFilter = ColorFilter.tint(BitwardenTheme.colorScheme.icon.secondary),
+            painter = rememberVectorPainter(id = BitwardenDrawable.logo_bitwarden),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()
@@ -230,7 +209,7 @@ private fun LandingScreenContent(
         Spacer(modifier = Modifier.height(height = 12.dp))
 
         Text(
-            text = stringResource(id = R.string.login_to_bitwarden),
+            text = stringResource(id = BitwardenString.login_to_bitwarden),
             textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.headlineSmall,
             color = BitwardenTheme.colorScheme.text.primary,
@@ -247,15 +226,15 @@ private fun LandingScreenContent(
                 .fillMaxWidth(),
             value = state.emailInput,
             onValueChange = onEmailInputChange,
-            label = stringResource(id = R.string.email_address),
+            label = stringResource(id = BitwardenString.email_address),
             keyboardType = KeyboardType.Email,
             textFieldTestTag = "EmailAddressEntry",
             cardStyle = CardStyle.Full,
             supportingContentPadding = PaddingValues(),
             supportingContent = {
                 EnvironmentSelector(
-                    labelText = stringResource(id = R.string.logging_in_on_with_colon),
-                    dialogTitle = stringResource(id = R.string.logging_in_on),
+                    labelText = stringResource(id = BitwardenString.logging_in_on_with_colon),
+                    dialogTitle = stringResource(id = BitwardenString.logging_in_on),
                     selectedOption = state.selectedEnvironmentType,
                     onOptionSelected = onEnvironmentTypeSelect,
                     isHelpEnabled = false,
@@ -270,7 +249,7 @@ private fun LandingScreenContent(
         Spacer(modifier = Modifier.height(height = 8.dp))
 
         BitwardenSwitch(
-            label = stringResource(id = R.string.remember_email),
+            label = stringResource(id = BitwardenString.remember_email),
             isChecked = state.isRememberEmailEnabled,
             onCheckedChange = onRememberMeToggle,
             cardStyle = CardStyle.Full,
@@ -283,7 +262,7 @@ private fun LandingScreenContent(
         Spacer(modifier = Modifier.height(height = 24.dp))
 
         BitwardenFilledButton(
-            label = stringResource(id = R.string.continue_text),
+            label = stringResource(id = BitwardenString.continue_text),
             onClick = onContinueClick,
             isEnabled = state.isContinueButtonEnabled,
             modifier = Modifier
@@ -303,29 +282,27 @@ private fun LandingScreenContent(
                 .wrapContentHeight(),
         ) {
             Text(
-                text = stringResource(id = R.string.new_to_bitwarden),
+                text = stringResource(id = BitwardenString.new_to_bitwarden),
                 style = BitwardenTheme.typography.bodyMedium,
                 color = BitwardenTheme.colorScheme.text.secondary,
             )
 
             BitwardenTextButton(
-                label = stringResource(id = R.string.create_an_account),
+                label = stringResource(id = BitwardenString.create_an_account),
                 onClick = onCreateAccountClick,
                 modifier = Modifier
                     .testTag("CreateAccountLabel"),
             )
         }
-        if (state.showSettingsButton) {
-            Spacer(modifier = Modifier.height(height = 8.dp))
-            BitwardenTextButton(
-                label = stringResource(id = R.string.app_settings),
-                onClick = onAppSettingsClick,
-                icon = rememberVectorPainter(id = BitwardenDrawable.ic_cog),
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
-        }
+        Spacer(modifier = Modifier.height(height = 8.dp))
+        BitwardenTextButton(
+            label = stringResource(id = BitwardenString.app_settings),
+            onClick = onAppSettingsClick,
+            icon = rememberVectorPainter(id = BitwardenDrawable.ic_cog),
+            modifier = Modifier
+                .standardHorizontalMargin()
+                .fillMaxWidth(),
+        )
 
         Spacer(modifier = Modifier.height(height = 12.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())

@@ -25,6 +25,7 @@ import com.bitwarden.ui.platform.theme.shape.bitwardenShapes
 import com.bitwarden.ui.platform.theme.type.BitwardenTypography
 import com.bitwarden.ui.platform.theme.type.bitwardenTypography
 import com.bitwarden.ui.platform.theme.type.toMaterialTypography
+import com.bitwarden.ui.platform.util.isDarkMode
 
 /**
  * Static wrapper to make accessing the theme components easier.
@@ -64,12 +65,7 @@ fun BitwardenTheme(
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit,
 ) {
-    val darkTheme = when (theme) {
-        AppTheme.DEFAULT -> isSystemInDarkTheme()
-        AppTheme.DARK -> true
-        AppTheme.LIGHT -> false
-    }
-
+    val darkTheme = theme.isDarkMode(isSystemDarkMode = isSystemInDarkTheme())
     // Get the current scheme
     val materialColorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {

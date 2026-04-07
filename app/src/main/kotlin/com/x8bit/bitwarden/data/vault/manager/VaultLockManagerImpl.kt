@@ -7,27 +7,31 @@ import android.content.IntentFilter
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.WrappedAccountCryptographicState
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.realtime.RealtimeManager
+import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.concurrentMapOf
 import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.data.manager.appstate.AppStateManager
+import com.bitwarden.data.manager.appstate.model.AppCreationState
+import com.bitwarden.data.manager.appstate.model.AppForegroundState
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
+import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
+import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
-import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
-import com.x8bit.bitwarden.data.platform.manager.AppStateManager
-import com.x8bit.bitwarden.data.platform.manager.model.AppCreationState
-import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -36,6 +40,8 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResul
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.util.createWrappedAccountCryptographicState
+import com.x8bit.bitwarden.data.vault.repository.util.logTag
 import com.x8bit.bitwarden.data.vault.repository.util.statusFor
 import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.update
@@ -63,6 +69,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.time.Clock
 import kotlin.time.Duration.Companion.minutes
 
@@ -77,6 +84,7 @@ private const val MAXIMUM_INVALID_UNLOCK_ATTEMPTS = 5
 @Suppress("TooManyFunctions", "LongParameterList")
 class VaultLockManagerImpl(
     private val clock: Clock,
+    private val realtimeManager: RealtimeManager,
     private val authDiskSource: AuthDiskSource,
     private val authSdkSource: AuthSdkSource,
     private val vaultSdkSource: VaultSdkSource,
@@ -84,10 +92,13 @@ class VaultLockManagerImpl(
     private val appStateManager: AppStateManager,
     private val userLogoutManager: UserLogoutManager,
     private val trustedDeviceManager: TrustedDeviceManager,
+    private val kdfManager: KdfManager,
+    private val pinProtectedUserKeyManager: PinProtectedUserKeyManager,
     dispatcherManager: DispatcherManager,
     context: Context,
 ) : VaultLockManager {
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
+    private val ioScope = CoroutineScope(dispatcherManager.io)
 
     /**
      * This [Map] tracks all active timeout [Job]s that are running and their associated data using
@@ -163,10 +174,10 @@ class VaultLockManagerImpl(
 
     @Suppress("LongMethod")
     override suspend fun unlockVault(
+        accountCryptographicState: WrappedAccountCryptographicState,
         userId: String,
         email: String,
         kdf: Kdf,
-        privateKey: String,
         initUserCryptoMethod: InitUserCryptoMethod,
         organizationKeys: Map<String, String>?,
     ): VaultUnlockResult = withContext(context = NonCancellable) {
@@ -177,12 +188,12 @@ class VaultLockManagerImpl(
                     .initializeCrypto(
                         userId = userId,
                         request = InitUserCryptoRequest(
+                            accountCryptographicState = accountCryptographicState,
                             kdfParams = kdf,
                             email = email,
-                            privateKey = privateKey,
                             method = initUserCryptoMethod,
                             userId = userId,
-                            signingKey = null,
+                            upgradeToken = null,
                         ),
                     )
                     .flatMap { result ->
@@ -209,29 +220,24 @@ class VaultLockManagerImpl(
                             initializeCryptoResult
                                 .toVaultUnlockResult()
                                 .also {
-                                    if (initUserCryptoMethod is InitUserCryptoMethod.Password) {
-                                        // Save the master password hash.
-                                        authSdkSource
-                                            .hashPassword(
-                                                email = email,
-                                                password = initUserCryptoMethod.password,
-                                                kdf = kdf,
-                                                purpose = HashPurpose.LOCAL_AUTHORIZATION,
-                                            )
-                                            .onSuccess { passwordHash ->
-                                                authDiskSource.storeMasterPasswordHash(
-                                                    userId = userId,
-                                                    passwordHash = passwordHash,
-                                                )
-                                            }
-                                    }
-                                }
-                                .also {
+                                    hashAndStoreMasterPassword(
+                                        initUserCryptoMethod = initUserCryptoMethod,
+                                        email = email,
+                                        kdf = kdf,
+                                        userId = userId,
+                                    )
                                     if (it is VaultUnlockResult.Success) {
+                                        Timber.d(
+                                            "[Auth] Vault unlocked, method:  %s",
+                                            initUserCryptoMethod.logTag,
+                                        )
                                         clearInvalidUnlockCount(userId = userId)
                                         trustedDeviceManager
                                             .trustThisDeviceIfNecessary(userId = userId)
-                                            .also { setVaultToUnlocked(userId = userId) }
+                                        updateKdfIfNeeded(initUserCryptoMethod)
+                                        pinProtectedUserKeyManager
+                                            .migratePinProtectedUserKeyIfNeeded(userId = userId)
+                                        setVaultToUnlocked(userId = userId)
                                     } else {
                                         incrementInvalidUnlockCount(userId = userId)
                                     }
@@ -242,6 +248,33 @@ class VaultLockManagerImpl(
         }
             .onCompletion { setVaultToNotUnlocking(userId = userId) }
             .first()
+    }
+
+    /**
+     * Hashes a password and stores it as the master password hash for a given user.
+     */
+    private suspend fun hashAndStoreMasterPassword(
+        initUserCryptoMethod: InitUserCryptoMethod,
+        email: String,
+        kdf: Kdf,
+        userId: String,
+    ) {
+        (initUserCryptoMethod as? InitUserCryptoMethod.MasterPasswordUnlock)?.let {
+            // Save the master password hash.
+            authSdkSource
+                .hashPassword(
+                    email = email,
+                    password = initUserCryptoMethod.password,
+                    kdf = kdf,
+                    purpose = HashPurpose.LOCAL_AUTHORIZATION,
+                )
+                .onSuccess {
+                    authDiskSource.storeMasterPasswordHash(
+                        userId = userId,
+                        passwordHash = it,
+                    )
+                }
+        }
     }
 
     override suspend fun waitUntilUnlocked(userId: String) {
@@ -446,7 +479,7 @@ class VaultLockManagerImpl(
                     .map { userId -> vaultTimeoutChangesForUserFlow(userId = userId) }
                     .merge()
             }
-            .launchIn(unconfinedScope)
+            .launchIn(ioScope)
     }
 
     private fun observeUserLogoutResults() {
@@ -612,7 +645,7 @@ class VaultLockManagerImpl(
                 handleTimeoutAction(userId = userId, vaultTimeoutAction = vaultTimeoutAction)
             },
             vaultTimeoutAction = vaultTimeoutAction,
-            startTimeMs = clock.millis(),
+            startTimeMs = realtimeManager.elapsedRealtimeMs,
             durationMs = delayMs,
         )
     }
@@ -642,16 +675,26 @@ class VaultLockManagerImpl(
     ): VaultUnlockResult {
         val account = authDiskSource.userState?.accounts?.get(userId)
             ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
-        val privateKey = authDiskSource.getPrivateKey(userId = userId)
+        val accountKeys = authDiskSource.getAccountKeys(userId = userId)
+        val privateKey = accountKeys?.publicKeyEncryptionKeyPair?.wrappedPrivateKey
+            ?: authDiskSource.getPrivateKey(userId = userId)
             ?: return VaultUnlockResult.InvalidStateError(
                 error = MissingPropertyException("Private key"),
             )
+        val signingKey = accountKeys?.signatureKeyPair?.wrappedSigningKey
+        val securityState = accountKeys?.securityState?.securityState
+        val signedPublicKey = accountKeys?.publicKeyEncryptionKeyPair?.signedPublicKey
         val organizationKeys = authDiskSource.getOrganizationKeys(userId = userId)
         return unlockVault(
+            accountCryptographicState = createWrappedAccountCryptographicState(
+                privateKey = privateKey,
+                securityState = securityState,
+                signingKey = signingKey,
+                signedPublicKey = signedPublicKey,
+            ),
             userId = userId,
             email = account.profile.email,
             kdf = account.profile.toSdkParams(),
-            privateKey = privateKey,
             initUserCryptoMethod = initUserCryptoMethod,
             organizationKeys = organizationKeys,
         )
@@ -660,6 +703,30 @@ class VaultLockManagerImpl(
     private fun isUserLoggedOut(userId: String): Boolean {
         val accounts = authDiskSource.userAccountTokens
         return (accounts.find { it.userId == userId }?.isLoggedIn) == false
+    }
+
+    private suspend fun updateKdfIfNeeded(initUserCryptoMethod: InitUserCryptoMethod) {
+        val password = when (initUserCryptoMethod) {
+            is InitUserCryptoMethod.MasterPasswordUnlock -> initUserCryptoMethod.password
+            is InitUserCryptoMethod.AuthRequest,
+            is InitUserCryptoMethod.DecryptedKey,
+            is InitUserCryptoMethod.DeviceKey,
+            is InitUserCryptoMethod.KeyConnector,
+            is InitUserCryptoMethod.KeyConnectorUrl,
+            is InitUserCryptoMethod.Pin,
+            is InitUserCryptoMethod.PinEnvelope,
+                -> return
+        }
+
+        kdfManager
+            .updateKdfToMinimumsIfNeeded(
+                password = password,
+            )
+            .also { result ->
+                if (result is UpdateKdfMinimumsResult.Error) {
+                    Timber.e(result.error, message = "Failed to silent update KDF settings.")
+                }
+            }
     }
 
     /**
@@ -673,11 +740,12 @@ class VaultLockManagerImpl(
     private inner class ScreenStateBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             userIdTimerJobMap.map { (userId, data) ->
+                val durationSoFarMs = (realtimeManager.elapsedRealtimeMs - data.startTimeMs)
+                    .coerceAtLeast(minimumValue = 0L)
                 handleTimeoutActionWithDelay(
                     userId = userId,
                     vaultTimeoutAction = data.vaultTimeoutAction,
-                    delayMs = data.durationMs - (clock.millis() - data.startTimeMs)
-                        .coerceAtLeast(minimumValue = 0L),
+                    delayMs = data.durationMs - durationSoFarMs,
                 )
             }
         }

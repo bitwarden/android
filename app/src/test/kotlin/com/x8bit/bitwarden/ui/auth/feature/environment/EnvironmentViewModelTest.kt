@@ -5,25 +5,27 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
+import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.bitwarden.ui.platform.model.FileData
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
 import com.x8bit.bitwarden.data.platform.manager.CertificateManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
-import com.x8bit.bitwarden.data.vault.manager.FileManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -32,15 +34,13 @@ import org.junit.jupiter.api.Test
 class EnvironmentViewModelTest : BaseViewModelTest() {
 
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
-    private val mutableMutualTlsFeatureFlagFlow = MutableStateFlow(true)
-    private val mockFeatureFlagManager = mockk<FeatureFlagManager> {
-        every { getFeatureFlag(FlagKey.MutualTls) } returns true
-        every { getFeatureFlagFlow(FlagKey.MutualTls) } returns mutableMutualTlsFeatureFlagFlow
-    }
     private val mockCertificateManager = mockk<CertificateManager> {
         every { getMutualTlsKeyAliases() } returns emptyList()
     }
     private val mockFileManager = mockk<FileManager>()
+    private val snackbarRelayManager = mockk<SnackbarRelayManager<SnackbarRelay>> {
+        every { sendSnackbarData(data = any(), relay = any()) } just runs
+    }
 
     @Suppress("MaxLineLength")
     @Test
@@ -146,7 +146,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialog = EnvironmentState.DialogState.Error(
-                    message = R.string.environment_page_urls_error.asText(),
+                    message = BitwardenString.environment_page_urls_error.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -161,7 +161,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `SaveClick should emit NavigateBack and ShowToast and update the environment when all URLs are valid`() =
+    fun `SaveClick should emit NavigateBack, send a snackbar to the ENVIRONMENT SAVED relay, and update the environment when all URLs are valid`() =
         runTest {
             assertEquals(
                 Environment.Us,
@@ -196,11 +196,6 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 viewModel.trySendAction(EnvironmentAction.SaveClick)
-
-                assertEquals(
-                    EnvironmentEvent.ShowToast(R.string.environment_saved.asText()),
-                    awaitItem(),
-                )
                 assertEquals(
                     EnvironmentEvent.NavigateBack,
                     awaitItem(),
@@ -222,11 +217,17 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                     fakeEnvironmentRepository.environment,
                 )
             }
+            verify(exactly = 1) {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(message = BitwardenString.environment_saved.asText()),
+                    relay = SnackbarRelay.ENVIRONMENT_SAVED,
+                )
+            }
         }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `SaveClick should emit NavigateBack and ShowToast and update the environment when some URLs are valid and others are null`() =
+    fun `SaveClick should emit NavigateBack, send a snackbar to the ENVIRONMENT SAVED relay, and update the environment when some URLs are valid and others are null`() =
         runTest {
             assertEquals(
                 Environment.Us,
@@ -244,11 +245,6 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 viewModel.trySendAction(EnvironmentAction.SaveClick)
-
-                assertEquals(
-                    EnvironmentEvent.ShowToast(R.string.environment_saved.asText()),
-                    awaitItem(),
-                )
                 assertEquals(
                     EnvironmentEvent.NavigateBack,
                     awaitItem(),
@@ -268,6 +264,12 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                         ),
                     ),
                     fakeEnvironmentRepository.environment,
+                )
+            }
+            verify(exactly = 1) {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(message = BitwardenString.environment_saved.asText()),
+                    relay = SnackbarRelay.ENVIRONMENT_SAVED,
                 )
             }
         }
@@ -368,7 +370,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `SystemCertificateSelectionResultReceive should show toast when error`() = runTest {
+    fun `SystemCertificateSelectionResultReceive should show snackbar when error`() = runTest {
         val viewModel = createViewModel()
         viewModel.trySendAction(
             EnvironmentAction.SystemCertificateSelectionResultReceive(
@@ -377,7 +379,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         )
         viewModel.eventFlow.test {
             assertEquals(
-                EnvironmentEvent.ShowToast(R.string.error_loading_certificate.asText()),
+                EnvironmentEvent.ShowSnackbar(BitwardenString.error_loading_certificate.asText()),
                 awaitItem(),
             )
         }
@@ -421,7 +423,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     fun `ImportCertificateFilePickerResultReceive should show SetCertificateData dialog`() =
         runTest {
             val viewModel = createViewModel()
-            val mockFileData = mockk<IntentManager.FileData>()
+            val mockFileData = mockk<FileData>()
             viewModel.trySendAction(
                 EnvironmentAction.ImportCertificateFilePickerResultReceive(
                     certificateFileData = mockFileData,
@@ -448,7 +450,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CertificateInstallationResultReceive should show toast based on result`() = runTest {
+    fun `CertificateInstallationResultReceive should show snackbar based on result`() = runTest {
         val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
@@ -458,7 +460,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                 ),
             )
             assertEquals(
-                EnvironmentEvent.ShowToast(R.string.certificate_installed.asText()),
+                EnvironmentEvent.ShowSnackbar(BitwardenString.certificate_installed.asText()),
                 awaitItem(),
             )
 
@@ -468,7 +470,9 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                 ),
             )
             assertEquals(
-                EnvironmentEvent.ShowToast(R.string.certificate_installation_failed.asText()),
+                EnvironmentEvent.ShowSnackbar(
+                    BitwardenString.certificate_installation_failed.asText(),
+                ),
                 awaitItem(),
             )
         }
@@ -518,7 +522,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ImportKeyResultReceive should show toast with correct message on error`() = runTest {
+    fun `ImportKeyResultReceive should show snackbar with correct message on error`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(
@@ -529,7 +533,9 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                 ),
             )
             assertEquals(
-                EnvironmentEvent.ShowToast(R.string.unsupported_certificate_type.asText()),
+                EnvironmentEvent.ShowSnackbar(
+                    BitwardenString.unsupported_certificate_type.asText(),
+                ),
                 awaitItem(),
             )
 
@@ -541,7 +547,9 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                 ),
             )
             assertEquals(
-                EnvironmentEvent.ShowToast(R.string.certificate_installation_failed.asText()),
+                EnvironmentEvent.ShowSnackbar(
+                    BitwardenString.certificate_installation_failed.asText(),
+                ),
                 awaitItem(),
             )
 
@@ -553,7 +561,9 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                 ),
             )
             assertEquals(
-                EnvironmentEvent.ShowToast(R.string.certificate_password_incorrect.asText()),
+                EnvironmentEvent.ShowSnackbar(
+                    BitwardenString.certificate_password_incorrect.asText(),
+                ),
                 awaitItem(),
             )
 
@@ -565,7 +575,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                 ),
             )
             assertEquals(
-                EnvironmentEvent.ShowToast(R.string.invalid_certificate_chain.asText()),
+                EnvironmentEvent.ShowSnackbar(BitwardenString.invalid_certificate_chain.asText()),
                 awaitItem(),
             )
         }
@@ -577,7 +587,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         runTest {
             val viewModel = createViewModel()
             val mockUri = mockk<Uri>()
-            val mockFileData = IntentManager.FileData(
+            val mockFileData = FileData(
                 fileName = "mockFileName",
                 uri = mockUri,
                 sizeBytes = 0,
@@ -638,8 +648,8 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialog = EnvironmentState.DialogState.ConfirmOverwriteAlias(
-                        title = R.string.replace_existing_certificate.asText(),
-                        message = R.string.a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it
+                        title = BitwardenString.replace_existing_certificate.asText(),
+                        message = BitwardenString.a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it
                             .asText("mockAlias"),
                         triggeringAction = action,
                     ),
@@ -666,8 +676,8 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialog = EnvironmentState.DialogState.Error(
-                    R.string.validation_field_required.asText(
-                        R.string.password.asText(),
+                    BitwardenString.validation_field_required.asText(
+                        BitwardenString.password.asText(),
                     ),
                 ),
             ),
@@ -684,8 +694,8 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialog = EnvironmentState.DialogState.Error(
-                    R.string.validation_field_required.asText(
-                        R.string.alias.asText(),
+                    BitwardenString.validation_field_required.asText(
+                        BitwardenString.alias.asText(),
                     ),
                 ),
             ),
@@ -698,7 +708,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         runTest {
             val viewModel = createViewModel()
             val mockUri = mockk<Uri>()
-            val mockFileData = IntentManager.FileData(
+            val mockFileData = FileData(
                 fileName = "mockFileName",
                 uri = mockUri,
                 sizeBytes = 0,
@@ -718,7 +728,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialog = EnvironmentState.DialogState.Error(
-                        message = R.string.unable_to_read_certificate.asText(),
+                        message = BitwardenString.unable_to_read_certificate.asText(),
                         throwable = exception,
                     ),
                 ),
@@ -730,7 +740,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     fun `ConfirmOverwriteCertificateClick should clear dialog and import certificate`() = runTest {
         val viewModel = createViewModel()
         val mockUri = mockk<Uri>()
-        val mockFileData = IntentManager.FileData(
+        val mockFileData = FileData(
             fileName = "mockFileName",
             uri = mockUri,
             sizeBytes = 0,
@@ -781,7 +791,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         val exception = RuntimeException()
         viewModel.trySendAction(
             EnvironmentAction.Internal.ShowErrorDialog(
-                message = R.string.generic_error_message.asText(),
+                message = BitwardenString.generic_error_message.asText(),
                 throwable = exception,
             ),
         )
@@ -789,7 +799,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialog = EnvironmentState.DialogState.Error(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                     throwable = exception,
                 ),
             ),
@@ -804,9 +814,9 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     ): EnvironmentViewModel =
         EnvironmentViewModel(
             environmentRepository = fakeEnvironmentRepository,
-            featureFlagManager = mockFeatureFlagManager,
             certificateManager = mockCertificateManager,
             fileManager = mockFileManager,
+            snackbarRelayManager = snackbarRelayManager,
             savedStateHandle = savedStateHandle,
         )
 
@@ -822,7 +832,6 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
             iconsServerUrl = "",
             keyHost = null,
             dialog = null,
-            showMutualTlsOptions = true,
         )
     }
 }

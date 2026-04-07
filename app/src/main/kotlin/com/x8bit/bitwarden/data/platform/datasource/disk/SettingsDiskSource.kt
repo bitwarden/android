@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
+import com.bitwarden.data.datasource.disk.FlightRecorderDiskSource
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -13,7 +13,7 @@ import java.time.Instant
  * Primary access point for general settings-related disk information.
  */
 @Suppress("TooManyFunctions")
-interface SettingsDiskSource {
+interface SettingsDiskSource : FlightRecorderDiskSource {
 
     /**
      * The currently persisted app language (or `null` if not set).
@@ -96,19 +96,50 @@ interface SettingsDiskSource {
     val hasUserLoggedInOrCreatedAccountFlow: Flow<Boolean?>
 
     /**
-     * The current status of whether the flight recorder is enabled.
+     * The time at which the browser autofill dialog is allowed to be shown to the user again.
      */
-    var flightRecorderData: FlightRecorderDataSet?
-
-    /**
-     * Emits updates that track [flightRecorderData].
-     */
-    val flightRecorderDataFlow: Flow<FlightRecorderDataSet?>
+    var browserAutofillDialogReshowTime: Instant?
 
     /**
      * Clears all the settings data for the given user.
      */
     fun clearData(userId: String)
+
+    /**
+     * Retrieves the stored value of whether the introducing archive action card has been dismissed.
+     */
+    fun getIntroducingArchiveActionCardDismissed(userId: String): Boolean?
+
+    /**
+     * Stores whether the introducing archive action card has been dismissed.
+     */
+    fun storeIntroducingArchiveActionCardDismissed(
+        userId: String,
+        isDismissed: Boolean?,
+    )
+
+    /**
+     * Emits updates that track [getIntroducingArchiveActionCardDismissed] for the given [userId].
+     */
+    fun getIntroducingArchiveActionCardDismissedFlow(userId: String): Flow<Boolean?>
+
+    /**
+     * Retrieves the stored value of whether the Premium upgrade banner has been dismissed.
+     */
+    fun getPremiumUpgradeBannerDismissed(userId: String): Boolean?
+
+    /**
+     * Stores whether the Premium upgrade banner has been dismissed.
+     */
+    fun storePremiumUpgradeBannerDismissed(
+        userId: String,
+        isDismissed: Boolean?,
+    )
+
+    /**
+     * Emits updates that track [getPremiumUpgradeBannerDismissed] for the given [userId].
+     */
+    fun getPremiumUpgradeBannerDismissedFlow(userId: String): Flow<Boolean?>
 
     /**
      * Retrieves the biometric integrity validity for the given [userId] and
@@ -216,7 +247,7 @@ interface SettingsDiskSource {
     fun storeDefaultUriMatchType(userId: String, uriMatchType: UriMatchType?)
 
     /**
-     * Gets the value for whether or not the autofill save prompt should be disabled for the
+     * Gets the value for whether the autofill save prompt should be disabled for the
      * given [userId].
      */
     fun getAutofillSavePromptDisabled(userId: String): Boolean?
@@ -282,13 +313,30 @@ interface SettingsDiskSource {
     fun getUserHasSignedInPreviously(userId: String): Boolean
 
     /**
-     * Gets whether or not the given [userId] has signalled they want to enable autofill in
+     * Gets whether the given [userId] has signaled they want to enable autofill in
+     * onboarding.
+     */
+    fun getShowBrowserAutofillSettingBadge(userId: String): Boolean?
+
+    /**
+     * Stores the given value for whether the given [userId] has signaled they want to
+     * enable the browser autofill integration in onboarding.
+     */
+    fun storeShowBrowserAutofillSettingBadge(userId: String, showBadge: Boolean?)
+
+    /**
+     * Emits updates that track [getShowAutoFillSettingBadge] for the given [userId].
+     */
+    fun getShowBrowserAutofillSettingBadgeFlow(userId: String): Flow<Boolean?>
+
+    /**
+     * Gets whether the given [userId] has signaled they want to enable autofill in
      * onboarding.
      */
     fun getShowAutoFillSettingBadge(userId: String): Boolean?
 
     /**
-     * Stores the given value for whether or not the given [userId] has signalled they want to
+     * Stores the given value for whether the given [userId] has signaled they want to
      * enable autofill in onboarding.
      */
     fun storeShowAutoFillSettingBadge(userId: String, showBadge: Boolean?)
@@ -299,13 +347,13 @@ interface SettingsDiskSource {
     fun getShowAutoFillSettingBadgeFlow(userId: String): Flow<Boolean?>
 
     /**
-     * Gets whether or not the given [userId] has signalled they want to enable unlock options
+     * Gets whether the given [userId] has signaled they want to enable unlock options
      * later, during onboarding.
      */
     fun getShowUnlockSettingBadge(userId: String): Boolean?
 
     /**
-     * Stores the given value for whether or not the given [userId] has signalled they want to
+     * Stores the given value for whether the given [userId] has signaled they want to
      * set up unlock options later, during onboarding.
      */
     fun storeShowUnlockSettingBadge(userId: String, showBadge: Boolean?)
@@ -316,12 +364,12 @@ interface SettingsDiskSource {
     fun getShowUnlockSettingBadgeFlow(userId: String): Flow<Boolean?>
 
     /**
-     * Gets whether or not the given [userId] has signalled they want to import logins later.
+     * Gets whether the given [userId] has signaled they want to import logins later.
      */
     fun getShowImportLoginsSettingBadge(userId: String): Boolean?
 
     /**
-     * Stores the given value for whether or not the given [userId] has signalled they want to
+     * Stores the given value for whether the given [userId] has signaled they want to
      * set import logins later, during first time usage.
      */
     fun storeShowImportLoginsSettingBadge(userId: String, showBadge: Boolean?)
@@ -332,21 +380,21 @@ interface SettingsDiskSource {
     fun getShowImportLoginsSettingBadgeFlow(userId: String): Flow<Boolean?>
 
     /**
-     * Gets whether or not the given [userId] has registered for export via the credential exchange
+     * Gets whether the application has registered for export via the credential exchange
      * protocol.
      */
-    fun getVaultRegisteredForExport(userId: String): Boolean?
+    fun getAppRegisteredForExport(): Boolean?
 
     /**
-     * Stores the given value for whether or not the given [userId] has registered for export via
+     * Stores the given value for whether the application has registered for export via
      * the credential exchange protocol.
      */
-    fun storeVaultRegisteredForExport(userId: String, isRegistered: Boolean?)
+    fun storeAppRegisteredForExport(isRegistered: Boolean?)
 
     /**
-     * Emits updates that track [getVaultRegisteredForExport] for the given [userId].
+     * Emits updates that track [getAppRegisteredForExport].
      */
-    fun getVaultRegisteredForExportFlow(userId: String): Flow<Boolean?>
+    fun getAppRegisteredForExportFlow(userId: String): Flow<Boolean?>
 
     /**
      * Gets the number of qualifying add cipher actions for the device.

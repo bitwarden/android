@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.model
 
 import android.os.Parcelable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -26,8 +26,8 @@ sealed class VaultFilterType : Parcelable {
      */
     @Parcelize
     data object AllVaults : VaultFilterType() {
-        override val name: Text get() = R.string.all.asText()
-        override val description: Text get() = R.string.all_vaults.asText()
+        override val name: Text get() = BitwardenString.all.asText()
+        override val description: Text get() = BitwardenString.all_vaults.asText()
     }
 
     /**
@@ -35,8 +35,8 @@ sealed class VaultFilterType : Parcelable {
      */
     @Parcelize
     data object MyVault : VaultFilterType() {
-        override val name: Text get() = R.string.my_vault.asText()
-        override val description: Text get() = R.string.my_vault.asText()
+        override val name: Text get() = BitwardenString.my_vault.asText()
+        override val description: Text get() = BitwardenString.my_vault.asText()
     }
 
     /**

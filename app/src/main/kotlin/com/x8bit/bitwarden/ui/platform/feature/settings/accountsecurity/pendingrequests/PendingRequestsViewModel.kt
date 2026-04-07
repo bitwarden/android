@@ -1,15 +1,23 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pendingrequests
 
+import android.os.Build
 import android.os.Parcelable
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.core.util.isOverFiveMinutesOld
+import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -32,7 +40,9 @@ private const val KEY_STATE = "state"
 class PendingRequestsViewModel @Inject constructor(
     private val clock: Clock,
     private val authRepository: AuthRepository,
+    snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     settingsRepository: SettingsRepository,
+    buildInfoManager: BuildInfoManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<PendingRequestsState, PendingRequestsEvent, PendingRequestsAction>(
     initialState = savedStateHandle[KEY_STATE] ?: PendingRequestsState(
@@ -40,7 +50,8 @@ class PendingRequestsViewModel @Inject constructor(
         viewState = PendingRequestsState.ViewState.Loading,
         isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
         isRefreshing = false,
-        hideBottomSheet = false,
+        internalHideBottomSheet = false,
+        isFdroid = buildInfoManager.isFdroid,
     ),
 ) {
     private var authJob: Job = Job().apply { complete() }
@@ -50,6 +61,11 @@ class PendingRequestsViewModel @Inject constructor(
         settingsRepository
             .getPullToRefreshEnabledFlow()
             .map { PendingRequestsAction.Internal.PullToRefreshEnableReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+        snackbarRelayManager
+            .getSnackbarDataFlow(SnackbarRelay.LOGIN_APPROVAL)
+            .map { PendingRequestsAction.Internal.SnackbarDataReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -93,7 +109,7 @@ class PendingRequestsViewModel @Inject constructor(
     }
 
     private fun handleHideBottomSheet() {
-        mutableStateFlow.update { it.copy(hideBottomSheet = true) }
+        mutableStateFlow.update { it.copy(internalHideBottomSheet = true) }
     }
 
     private fun handleOnLifecycleResumed() {
@@ -117,6 +133,10 @@ class PendingRequestsViewModel @Inject constructor(
                 handlePullToRefreshEnableReceive(action)
             }
 
+            is PendingRequestsAction.Internal.SnackbarDataReceive -> {
+                handleSnackbarDataReceive(action)
+            }
+
             is PendingRequestsAction.Internal.AuthRequestsResultReceive -> {
                 handleAuthRequestsResultReceived(action)
             }
@@ -129,6 +149,12 @@ class PendingRequestsViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(isPullToRefreshSettingEnabled = action.isPullToRefreshEnabled)
         }
+    }
+
+    private fun handleSnackbarDataReceive(
+        action: PendingRequestsAction.Internal.SnackbarDataReceive,
+    ) {
+        sendEvent(PendingRequestsEvent.ShowSnackbar(action.data))
     }
 
     private fun handleAuthRequestsResultReceived(
@@ -201,8 +227,19 @@ data class PendingRequestsState(
     val viewState: ViewState,
     private val isPullToRefreshSettingEnabled: Boolean,
     val isRefreshing: Boolean,
-    val hideBottomSheet: Boolean,
+    private val internalHideBottomSheet: Boolean,
+    private val isFdroid: Boolean,
 ) : Parcelable {
+
+    /**
+     * Indicates that the bottom sheet should be hidden.
+     */
+    @get:ChecksSdkIntAtLeast(parameter = Build.VERSION_CODES.TIRAMISU)
+    val hideBottomSheet: Boolean
+        get() = internalHideBottomSheet &&
+            !isFdroid &&
+            isBuildVersionAtLeast(Build.VERSION_CODES.TIRAMISU)
+
     /**
      * Indicates that the pull-to-refresh should be enabled in the UI.
      */
@@ -282,6 +319,13 @@ sealed class PendingRequestsEvent {
     data class NavigateToLoginApproval(
         val fingerprint: String,
     ) : PendingRequestsEvent()
+
+    /**
+     * Show a snackbar to the user.
+     */
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : PendingRequestsEvent(), BackgroundEvent
 }
 
 /**
@@ -330,6 +374,13 @@ sealed class PendingRequestsAction {
          */
         data class PullToRefreshEnableReceive(
             val isPullToRefreshEnabled: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that a snackbar data was received.
+         */
+        data class SnackbarDataReceive(
+            val data: BitwardenSnackbarData,
         ) : Internal()
 
         /**

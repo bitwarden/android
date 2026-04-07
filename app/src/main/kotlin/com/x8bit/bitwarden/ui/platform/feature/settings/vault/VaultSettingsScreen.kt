@@ -8,39 +8,38 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
+import com.bitwarden.ui.platform.components.card.BitwardenActionCard
+import com.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.row.BitwardenTextRow
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
-import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
-import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
-import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
-import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
-import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Displays the vault settings screen.
@@ -53,8 +52,8 @@ fun VaultSettingsScreen(
     onNavigateToExportVault: () -> Unit,
     onNavigateToFolders: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
+    onNavigateToImportItems: () -> Unit,
     viewModel: VaultSettingsViewModel = hiltViewModel(),
-    intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -64,14 +63,8 @@ fun VaultSettingsScreen(
             VaultSettingsEvent.NavigateBack -> onNavigateBack()
             VaultSettingsEvent.NavigateToExportVault -> onNavigateToExportVault()
             VaultSettingsEvent.NavigateToFolders -> onNavigateToFolders()
-            is VaultSettingsEvent.NavigateToImportVault -> {
-                if (state.isNewImportLoginsFlowEnabled) {
-                    onNavigateToImportLogins()
-                } else {
-                    intentManager.launchUri(event.url.toUri())
-                }
-            }
-
+            is VaultSettingsEvent.NavigateToImportVault -> onNavigateToImportLogins()
+            is VaultSettingsEvent.NavigateToImportItems -> onNavigateToImportItems()
             is VaultSettingsEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }
     }
@@ -83,13 +76,11 @@ fun VaultSettingsScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.vault),
+                title = stringResource(id = BitwardenString.vault),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                navigationIconContentDescription = stringResource(id = R.string.back),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultSettingsAction.BackClick) }
-                },
+                navigationIconContentDescription = stringResource(id = BitwardenString.back),
+                onNavigationIconClick = { viewModel.trySendAction(VaultSettingsAction.BackClick) },
             )
         },
         snackbarHost = {
@@ -105,25 +96,19 @@ fun VaultSettingsScreen(
         ) {
             Spacer(modifier = Modifier.height(12.dp))
             AnimatedVisibility(
-                visible = state.shouldShowImportCard,
+                visible = state.showImportActionCard,
                 label = "ImportLoginsActionCard",
                 exit = actionCardExitAnimation(),
             ) {
                 BitwardenActionCard(
-                    cardTitle = stringResource(id = R.string.import_saved_logins),
-                    actionText = stringResource(R.string.get_started),
-                    cardSubtitle = stringResource(R.string.use_a_computer_to_import_logins),
-                    onActionClick = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardCtaClick)
-                        }
+                    cardTitle = stringResource(id = BitwardenString.import_saved_logins),
+                    actionText = stringResource(BitwardenString.get_started),
+                    cardSubtitle = stringResource(BitwardenString.use_a_computer_to_import_logins),
+                    onActionClick = {
+                        viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardCtaClick)
                     },
-                    onDismissClick = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(
-                                VaultSettingsAction.ImportLoginsCardDismissClick,
-                            )
-                        }
+                    onDismissClick = {
+                        viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardDismissClick)
                     },
                     leadingContent = {
                         NotificationBadge(notificationCount = 1)
@@ -134,10 +119,8 @@ fun VaultSettingsScreen(
                 )
             }
             BitwardenTextRow(
-                text = stringResource(R.string.folders),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultSettingsAction.FoldersButtonClick) }
-                },
+                text = stringResource(BitwardenString.folders),
+                onClick = { viewModel.trySendAction(VaultSettingsAction.FoldersButtonClick) },
                 withDivider = false,
                 cardStyle = CardStyle.Top(),
                 modifier = Modifier
@@ -147,10 +130,8 @@ fun VaultSettingsScreen(
             )
 
             BitwardenTextRow(
-                text = stringResource(R.string.export_vault),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultSettingsAction.ExportVaultClick) }
-                },
+                text = stringResource(BitwardenString.export_vault),
+                onClick = { viewModel.trySendAction(VaultSettingsAction.ExportVaultClick) },
                 withDivider = false,
                 cardStyle = CardStyle.Middle(),
                 modifier = Modifier
@@ -159,37 +140,26 @@ fun VaultSettingsScreen(
                     .fillMaxWidth(),
             )
 
-            if (state.isNewImportLoginsFlowEnabled) {
-                BitwardenTextRow(
-                    text = stringResource(R.string.import_items),
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(VaultSettingsAction.ImportItemsClick) }
-                    },
-                    withDivider = false,
-                    cardStyle = CardStyle.Bottom,
-                    modifier = Modifier
-                        .testTag("ImportItemsLinkItemView")
-                        .standardHorizontalMargin()
-                        .fillMaxWidth(),
-                )
-            } else {
-                BitwardenExternalLinkRow(
-                    text = stringResource(R.string.import_items),
-                    onConfirmClick = remember(viewModel) {
-                        { viewModel.trySendAction(VaultSettingsAction.ImportItemsClick) }
-                    },
-                    withDivider = false,
-                    dialogTitle = stringResource(id = R.string.continue_to_web_app),
-                    dialogMessage = stringResource(
-                        id = R.string.you_can_import_data_to_your_vault_on_x,
-                        state.importUrl,
-                    ),
-                    cardStyle = CardStyle.Bottom,
-                    modifier = Modifier
-                        .testTag("ImportItemsLinkItemView")
-                        .standardHorizontalMargin()
-                        .fillMaxWidth(),
-                )
+            BitwardenTextRow(
+                text = stringResource(BitwardenString.import_items),
+                onClick = { viewModel.trySendAction(VaultSettingsAction.ImportItemsClick) },
+                withDivider = false,
+                cardStyle = CardStyle.Bottom,
+                modifier = Modifier
+                    .testTag("ImportItemsLinkItemView")
+                    .standardHorizontalMargin()
+                    .fillMaxWidth(),
+            ) {
+                if (state.showImportItemsChevron) {
+                    Icon(
+                        painter = rememberVectorPainter(id = BitwardenDrawable.ic_chevron_right),
+                        contentDescription = null,
+                        tint = BitwardenTheme.colorScheme.icon.primary,
+                        modifier = Modifier
+                            .mirrorIfRtl()
+                            .size(size = 16.dp),
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())

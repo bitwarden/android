@@ -3,23 +3,19 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.about
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.BuildInfoManager
+import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
+import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
+import com.bitwarden.core.data.manager.util.deviceData
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.util.ciBuildInfo
-import com.x8bit.bitwarden.data.platform.util.deviceData
-import com.x8bit.bitwarden.data.platform.util.isFdroid
-import com.x8bit.bitwarden.data.platform.util.versionData
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.util.getStopsLoggingStringForActiveLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -41,37 +37,44 @@ private const val KEY_STATE = "state"
 class AboutViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val clipboardManager: BitwardenClipboardManager,
-    featureFlagManager: FeatureFlagManager,
     private val clock: Clock,
     private val logsManager: LogsManager,
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
+    buildInfoManager: BuildInfoManager,
+    serverConfigRepository: ServerConfigRepository,
 ) : BaseViewModel<AboutState, AboutEvent, AboutAction>(
-    initialState = savedStateHandle[KEY_STATE]
-        ?: AboutState(
-            version = R.string.version.asText().concat(": $versionData".asText()),
-            deviceData = deviceData.asText(),
-            ciData = ciBuildInfo?.let { "\n$it" }.orEmpty().asText(),
+    initialState = savedStateHandle[KEY_STATE] ?: run {
+        val serverData = serverConfigRepository.serverConfigStateFlow.value?.serverData
+        AboutState(
+            version = "Version: ${buildInfoManager.versionData}".asText(),
+            sdkVersion = "\uD83E\uDD80 SDK: ${buildInfoManager.sdkData}".asText(),
+            serverData = StringBuilder()
+                .append("\uD83C\uDF29 Server:")
+                .apply {
+                    serverData?.server?.name?.let { append(" $it") }
+                    serverData?.version?.let { append(" $it") }
+                    serverData?.environment?.cloudRegion?.let { append(" @ $it") }
+                }
+                .toString()
+                .asText(),
+            deviceData = buildInfoManager.deviceData.asText(),
+            ciData = buildInfoManager.ciBuildInfo?.let { "\n$it" }.orEmpty().asText(),
             isSubmitCrashLogsEnabled = logsManager.isEnabled,
-            shouldShowCrashLogsButton = !isFdroid,
+            shouldShowCrashLogsButton = !buildInfoManager.isFdroid,
             isFlightRecorderEnabled = settingsRepository
                 .flightRecorderData
                 .hasActiveFlightRecorderData,
-            shouldShowFlightRecorder = featureFlagManager.getFeatureFlag(FlagKey.FlightRecorder),
             flightRecorderSubtext = settingsRepository
                 .flightRecorderData
                 .getStopsLoggingStringForActiveLog(clock = clock),
             copyrightInfo = "© Bitwarden Inc. 2015-${Year.now(clock).value}".asText(),
-        ),
+        )
+    },
 ) {
     init {
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
-            .launchIn(viewModelScope)
-        featureFlagManager
-            .getFeatureFlagFlow(FlagKey.FlightRecorder)
-            .map { AboutAction.Internal.FlightRecorderReceive(isEnabled = it) }
-            .onEach(::sendAction)
             .launchIn(viewModelScope)
         settingsRepository
             .flightRecorderDataFlow
@@ -96,15 +99,10 @@ class AboutViewModel @Inject constructor(
 
     private fun handleInternalAction(action: AboutAction.Internal) {
         when (action) {
-            is AboutAction.Internal.FlightRecorderReceive -> handleFlightRecorderReceive(action)
             is AboutAction.Internal.FlightRecorderDataReceive -> {
                 handleFlightRecorderDataReceive(action)
             }
         }
-    }
-
-    private fun handleFlightRecorderReceive(action: AboutAction.Internal.FlightRecorderReceive) {
-        mutableStateFlow.update { it.copy(shouldShowFlightRecorder = action.isEnabled) }
     }
 
     private fun handleFlightRecorderDataReceive(
@@ -150,7 +148,11 @@ class AboutViewModel @Inject constructor(
                 .concat(state.version)
                 .concat("\n".asText())
                 .concat(state.deviceData)
-                .concat(state.ciData),
+                .concat(state.ciData)
+                .concat("\n".asText())
+                .concat(state.sdkVersion)
+                .concat("\n".asText())
+                .concat(state.serverData),
         )
     }
 
@@ -185,12 +187,13 @@ class AboutViewModel @Inject constructor(
 @Parcelize
 data class AboutState(
     val version: Text,
+    val sdkVersion: Text,
+    val serverData: Text,
     val deviceData: Text,
     val ciData: Text,
     val isSubmitCrashLogsEnabled: Boolean,
     val shouldShowCrashLogsButton: Boolean,
     val isFlightRecorderEnabled: Boolean,
-    val shouldShowFlightRecorder: Boolean,
     val flightRecorderSubtext: Text?,
     val copyrightInfo: Text,
 ) : Parcelable
@@ -302,11 +305,6 @@ sealed class AboutAction {
      * Actions for internal use by the ViewModel.
      */
     sealed class Internal : AboutAction() {
-        /**
-         * Indicates that the flight recorder feature has been enabled or disabled.
-         */
-        data class FlightRecorderReceive(val isEnabled: Boolean) : Internal()
-
         /**
          * Indicates that the flight recorder data has changed.
          */

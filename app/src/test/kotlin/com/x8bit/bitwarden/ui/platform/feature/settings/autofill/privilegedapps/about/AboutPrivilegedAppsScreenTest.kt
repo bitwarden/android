@@ -70,7 +70,7 @@ class AboutPrivilegedAppsScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithText(
-                "These are applications Google considers safe and are available in Google's " +
+                "These are applications Google considers safe and are available in Google’s " +
                     "Play Store.",
             )
             .assertIsDisplayed()

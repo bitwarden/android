@@ -3,13 +3,15 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.exportvault
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
+import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -19,8 +21,9 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.vault.manager.FileManager
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
@@ -28,7 +31,9 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.Export
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -49,6 +54,9 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         every {
             getActivePolicies(type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT)
         } returns emptyList()
+        every {
+            getActivePolicies(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+        } returns emptyList()
     }
 
     private val clock: Clock = Clock.fixed(
@@ -57,9 +65,23 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     )
 
     private val vaultRepository: VaultRepository = mockk {
-        coEvery { exportVaultDataToString(any()) } returns ExportVaultDataResult.Success("data")
+        coEvery {
+            exportVaultDataToString(
+                format = any(),
+                restrictedTypes = emptyList(),
+            )
+        } returns ExportVaultDataResult.Success("data")
+        coEvery {
+            exportVaultDataToString(
+                format = any(),
+                restrictedTypes = listOf(CipherType.CARD),
+            )
+        } returns ExportVaultDataResult.Success("data")
     }
     private val fileManager: FileManager = mockk()
+    private val organizationEventManager = mockk<OrganizationEventManager> {
+        every { trackEvent(event = any()) } just runs
+    }
 
     @Test
     fun `initial state should be correct`() = runTest {
@@ -106,7 +128,56 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
 
         coVerify {
-            vaultRepository.exportVaultDataToString(any())
+            vaultRepository.exportVaultDataToString(any(), emptyList())
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ConfirmExportVaultClicked correct password should call exportVaultDataToString with restricted item types when policy`() {
+        val password = "password"
+        coEvery {
+            authRepository.validatePassword(
+                password = password,
+            )
+        } returns ValidatePasswordResult.Success(isValid = true)
+        every {
+            policyManager.getActivePolicies(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+        } returns listOf(createMockPolicy(isEnabled = true))
+
+        val viewModel = createViewModel()
+        viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
+
+        viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
+
+        coVerify {
+            vaultRepository.exportVaultDataToString(
+                format = any(),
+                restrictedTypes = listOf(CipherType.CARD),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ConfirmExportVaultClicked correct password should call exportVaultDataToString without restricted item types when policy is disabled`() {
+        val password = "password"
+        coEvery {
+            authRepository.validatePassword(
+                password = password,
+            )
+        } returns ValidatePasswordResult.Success(isValid = true)
+
+        val viewModel = createViewModel()
+        viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
+
+        viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
+
+        coVerify {
+            vaultRepository.exportVaultDataToString(
+                format = any(),
+                restrictedTypes = listOf(),
+            )
         }
     }
 
@@ -135,7 +206,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         coVerify {
-            vaultRepository.exportVaultDataToString(any())
+            vaultRepository.exportVaultDataToString(any(), emptyList())
         }
     }
 
@@ -160,15 +231,15 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.generic_error_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                     error = error,
                 ),
             ),
             viewModel.stateFlow.value,
         )
         coVerify(exactly = 0) {
-            vaultRepository.exportVaultDataToString(any())
+            vaultRepository.exportVaultDataToString(any(), emptyList())
         }
     }
 
@@ -214,6 +285,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
             authRepository.validatePassword(password)
             vaultRepository.exportVaultDataToString(
                 format = ExportFormat.EncryptedJson(filePassword),
+                restrictedTypes = emptyList(),
             )
         }
     }
@@ -225,9 +297,9 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.validation_field_required.asText(
-                        R.string.master_password.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.validation_field_required.asText(
+                        BitwardenString.master_password.asText(),
                     ),
                 ),
             ),
@@ -254,9 +326,9 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.validation_field_required.asText(
-                        R.string.file_password.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.validation_field_required.asText(
+                        BitwardenString.file_password.asText(),
                     ),
                 ),
                 exportFormat = ExportVaultFormat.JSON_ENCRYPTED,
@@ -296,9 +368,9 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.validation_field_required.asText(
-                        R.string.confirm_file_password.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.validation_field_required.asText(
+                        BitwardenString.confirm_file_password.asText(),
                     ),
                 ),
                 exportFormat = ExportVaultFormat.JSON_ENCRYPTED,
@@ -346,8 +418,8 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.master_password_confirmation_val_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.master_password_confirmation_val_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -370,8 +442,8 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.invalid_master_password.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.invalid_master_password.asText(),
                 ),
                 passwordInput = password,
             ),
@@ -401,8 +473,8 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.generic_error_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                     error = error,
                 ),
                 passwordInput = password,
@@ -491,16 +563,14 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = ExportVaultState.DialogState.Loading(
-                            message = R.string.sending.asText(),
+                            message = BitwardenString.sending.asText(),
                         ),
                     ),
                     stateTurbine.awaitItem(),
                 )
                 assertEquals(DEFAULT_STATE, stateTurbine.awaitItem())
                 assertEquals(
-                    ExportVaultEvent.ShowToast(
-                        message = R.string.code_sent.asText(),
-                    ),
+                    ExportVaultEvent.ShowSnackbar(message = BitwardenString.code_sent.asText()),
                     eventTurbine.awaitItem(),
                 )
             }
@@ -522,15 +592,15 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = ExportVaultState.DialogState.Loading(
-                            message = R.string.sending.asText(),
+                            message = BitwardenString.sending.asText(),
                         ),
                     ),
                     stateTurbine.awaitItem(),
                 )
                 assertEquals(DEFAULT_STATE, stateTurbine.awaitItem())
                 assertEquals(
-                    ExportVaultEvent.ShowToast(
-                        message = R.string.generic_error_message.asText(),
+                    ExportVaultEvent.ShowSnackbar(
+                        message = BitwardenString.generic_error_message.asText(),
                     ),
                     eventTurbine.awaitItem(),
                 )
@@ -551,8 +621,8 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.export_vault_failure.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.export_vault_failure.asText(),
                     error = error,
                 ),
             ),
@@ -675,8 +745,8 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.export_vault_failure.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.export_vault_failure.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -706,8 +776,8 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(
                 exportData = exportData,
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.export_vault_failure.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.export_vault_failure.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -715,27 +785,39 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ExportLocationReceive should emit ShowToast on success`() = runTest {
-        val exportData = "TestExportVaultData"
-        val viewModel = createViewModel(
-            DEFAULT_STATE.copy(
-                exportData = exportData,
-            ),
-        )
-        val uri = mockk<Uri>()
-        coEvery { fileManager.stringToUri(fileUri = any(), dataString = exportData) } returns true
-
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(ExportVaultAction.ExportLocationReceive(uri))
-
-            coVerify { fileManager.stringToUri(fileUri = any(), dataString = exportData) }
-
-            assertEquals(
-                ExportVaultEvent.ShowToast(R.string.export_vault_success.asText()),
-                awaitItem(),
+    fun `ExportLocationReceive should emit ShowSnackbar and UserClientExportedVault on success`() =
+        runTest {
+            val exportData = "TestExportVaultData"
+            val viewModel = createViewModel(
+                DEFAULT_STATE.copy(
+                    exportData = exportData,
+                ),
             )
+            val uri = mockk<Uri>()
+            coEvery {
+                fileManager.stringToUri(
+                    fileUri = any(),
+                    dataString = exportData,
+                )
+            } returns true
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(ExportVaultAction.ExportLocationReceive(uri))
+
+                coVerify { fileManager.stringToUri(fileUri = any(), dataString = exportData) }
+
+                verify(exactly = 1) {
+                    organizationEventManager.trackEvent(
+                        event = OrganizationEvent.UserClientExportedVault,
+                    )
+                }
+
+                assertEquals(
+                    ExportVaultEvent.ShowSnackbar(BitwardenString.export_vault_success.asText()),
+                    awaitItem(),
+                )
+            }
         }
-    }
 
     private fun createViewModel(
         initialState: ExportVaultState? = null,
@@ -748,6 +830,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         fileManager = fileManager,
         vaultRepository = vaultRepository,
         clock = clock,
+        organizationEventManager = organizationEventManager,
     )
 }
 
@@ -772,6 +855,8 @@ private val DEFAULT_USER_STATE = UserState(
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
+            isExportable = true,
+            creationDate = null,
         ),
     ),
 )

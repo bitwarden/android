@@ -21,7 +21,17 @@ fun SyncResponseJson.Folder.toEncryptedSdkFolder(): Folder =
     Folder(
         id = id,
         name = name.orEmpty(),
-        revisionDate = revisionDate.toInstant(),
+        revisionDate = revisionDate,
+    )
+
+/**
+ * Converts a Bitwarden SDK [Folder] object to a corresponding [SyncResponseJson.Folder] object.
+ */
+fun Folder.toEncryptedNetworkFolderResponse(): SyncResponseJson.Folder =
+    SyncResponseJson.Folder(
+        id = id.orEmpty(),
+        name = name,
+        revisionDate = revisionDate,
     )
 
 /**

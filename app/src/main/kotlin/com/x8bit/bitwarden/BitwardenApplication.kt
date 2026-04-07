@@ -6,8 +6,8 @@ import com.x8bit.bitwarden.data.auth.manager.AuthRequestNotificationManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConfigManager
-import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManager
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject
@@ -24,9 +24,6 @@ class BitwardenApplication : Application() {
     lateinit var logsManager: LogsManager
 
     @Inject
-    lateinit var networkConnectionManager: NetworkConnectionManager
-
-    @Inject
     lateinit var networkConfigManager: NetworkConfigManager
 
     @Inject
@@ -37,6 +34,17 @@ class BitwardenApplication : Application() {
 
     @Inject
     lateinit var restrictionManager: RestrictionManager
+
+    @Inject
+    lateinit var environmentRepository: EnvironmentRepository
+
+    override fun onCreate() {
+        super.onCreate()
+        // These must be initialized in order to ensure that the restrictionManager does not
+        // override the environmentRepository values.
+        restrictionManager.initialize()
+        environmentRepository.initialize()
+    }
 
     override fun onLowMemory() {
         super.onLowMemory()

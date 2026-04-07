@@ -18,22 +18,23 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
+import com.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
 import com.bitwarden.ui.util.assertNoDialogExists
+import com.bitwarden.ui.util.assertRemovalConfirmationDialogIsDisplayed
+import com.bitwarden.ui.util.assertSwitcherIsDisplayed
+import com.bitwarden.ui.util.assertSwitcherIsNotDisplayed
+import com.bitwarden.ui.util.performAccountClick
+import com.bitwarden.ui.util.performAccountIconClick
+import com.bitwarden.ui.util.performAccountLongClick
+import com.bitwarden.ui.util.performLockAccountClick
+import com.bitwarden.ui.util.performLogoutAccountClick
+import com.bitwarden.ui.util.performRemoveAccountClick
+import com.bitwarden.ui.util.performYesDialogButtonClick
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
-import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
-import com.x8bit.bitwarden.ui.util.assertRemovalConfirmationDialogIsDisplayed
-import com.x8bit.bitwarden.ui.util.assertSwitcherIsDisplayed
-import com.x8bit.bitwarden.ui.util.assertSwitcherIsNotDisplayed
-import com.x8bit.bitwarden.ui.util.performAccountClick
-import com.x8bit.bitwarden.ui.util.performAccountIconClick
-import com.x8bit.bitwarden.ui.util.performAccountLongClick
-import com.x8bit.bitwarden.ui.util.performLockAccountClick
-import com.x8bit.bitwarden.ui.util.performLogoutAccountClick
-import com.x8bit.bitwarden.ui.util.performRemoveAccountClick
-import com.x8bit.bitwarden.ui.util.performYesDialogButtonClick
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -46,7 +47,6 @@ import org.junit.jupiter.api.Assertions.assertTrue
 
 class LandingScreenTest : BitwardenComposeTest() {
     private var capturedEmail: String? = null
-    private var onNavigateToCreateAccountCalled = false
     private var onNavigateToLoginCalled = false
     private var onNavigateToEnvironmentCalled = false
     private var onNavigateToStartRegistrationCalled = false
@@ -63,7 +63,6 @@ class LandingScreenTest : BitwardenComposeTest() {
     fun setUp() {
         setContent {
             LandingScreen(
-                onNavigateToCreateAccount = { onNavigateToCreateAccountCalled = true },
                 onNavigateToLogin = { capturedEmail ->
                     this.capturedEmail = capturedEmail
                     onNavigateToLoginCalled = true
@@ -230,6 +229,15 @@ class LandingScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `on ShowSnackbar should display snackbar content`() {
+        val message = "message"
+        val data = BitwardenSnackbarData(message = message.asText())
+        composeTestRule.onNodeWithText(text = message).assertDoesNotExist()
+        mutableEventFlow.tryEmit(LandingEvent.ShowSnackbar(data = data))
+        composeTestRule.onNodeWithText(text = message).assertIsDisplayed()
+    }
+
+    @Test
     fun `continue button should be enabled or disabled according to the state`() {
         composeTestRule.onNodeWithText("Continue").assertIsEnabled()
 
@@ -274,20 +282,7 @@ class LandingScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `app settings button should be displayed according to state`() {
-        mutableStateFlow.update { it.copy(showSettingsButton = false) }
-        composeTestRule
-            .onNodeWithText(text = "App settings")
-            .assertDoesNotExist()
-        mutableStateFlow.update { it.copy(showSettingsButton = true) }
-        composeTestRule
-            .onNodeWithText(text = "App settings")
-            .assertExists()
-    }
-
-    @Test
     fun `on app settings click should send AppSettingsClick action`() {
-        mutableStateFlow.update { it.copy(showSettingsButton = true) }
         composeTestRule
             .onNodeWithText(text = "App settings")
             .performScrollTo()
@@ -317,12 +312,6 @@ class LandingScreenTest : BitwardenComposeTest() {
         verify {
             viewModel.trySendAction(LandingAction.EmailInputChanged(input))
         }
-    }
-
-    @Test
-    fun `NavigateToCreateAccount event should call onNavigateToCreateAccount`() {
-        mutableEventFlow.tryEmit(LandingEvent.NavigateToCreateAccount)
-        assertTrue(onNavigateToCreateAccountCalled)
     }
 
     @Test
@@ -517,5 +506,4 @@ private val DEFAULT_STATE = LandingState(
     selectedEnvironmentLabel = Environment.Us.label,
     dialog = null,
     accountSummaries = emptyList(),
-    showSettingsButton = false,
 )

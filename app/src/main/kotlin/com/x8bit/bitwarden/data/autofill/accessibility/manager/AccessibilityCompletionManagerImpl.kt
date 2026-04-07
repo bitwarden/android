@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.accessibility.manager
 
 import android.app.Activity
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.accessibility.model.AccessibilityAction
 import com.x8bit.bitwarden.data.autofill.accessibility.util.toUriOrNull

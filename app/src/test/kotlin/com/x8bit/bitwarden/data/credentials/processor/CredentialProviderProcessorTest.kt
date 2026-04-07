@@ -21,21 +21,18 @@ import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.BeginGetPasswordOption
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.CredentialEntry
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.util.isBuildVersionAtLeast
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.data.repository.model.Environment
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
-import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
@@ -71,13 +68,8 @@ class CredentialProviderProcessorTest {
     private val bitwardenCredentialManager: BitwardenCredentialManager = mockk {
         coEvery { getCredentialEntries(any()) } returns credentialEntries.asSuccess()
     }
-    private val intentManager: IntentManager = mockk()
+    private val pendingIntentManager: CredentialManagerPendingIntentManager = mockk()
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
-    private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk()
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(FlagKey.SingleTapPasskeyCreation) } returns false
-        every { getFeatureFlag(FlagKey.SingleTapPasskeyAuthentication) } returns false
-    }
     private val cancellationSignal: CancellationSignal = mockk()
 
     private val clock = FIXED_CLOCK
@@ -85,14 +77,12 @@ class CredentialProviderProcessorTest {
     @BeforeEach
     fun setUp() {
         credentialProviderProcessor = CredentialProviderProcessorImpl(
-            context,
-            authRepository,
-            bitwardenCredentialManager,
-            intentManager,
-            clock,
-            biometricsEncryptionManager,
-            featureFlagManager,
-            dispatcherManager,
+            context = context,
+            authRepository = authRepository,
+            bitwardenCredentialManager = bitwardenCredentialManager,
+            pendingIntentManager = pendingIntentManager,
+            clock = clock,
+            dispatcherManager = dispatcherManager,
         )
 
         mockkStatic(::isBuildVersionAtLeast)
@@ -132,7 +122,7 @@ class CredentialProviderProcessorTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `processCreateCredentialRequest should invoke callback with error on password create request`() {
+    fun `processCreateCredentialRequest should invoke callback with error on password create request when userState is null`() {
         val request: BeginCreatePasswordCredentialRequest = mockk {
             every { callingAppInfo } returns mockk(relaxed = true)
             every { candidateQueryData } returns Bundle()
@@ -144,9 +134,9 @@ class CredentialProviderProcessorTest {
         every { callback.onError(capture(captureSlot)) } just runs
 
         credentialProviderProcessor.processCreateCredentialRequest(
-            request,
-            cancellationSignal,
-            callback,
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
         )
 
         verify(exactly = 1) { callback.onError(any()) }
@@ -157,68 +147,11 @@ class CredentialProviderProcessorTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `processCreateCredentialRequest should invoke callback with error when json is null or empty`() {
-        val request: BeginCreatePublicKeyCredentialRequest = mockk {
+    fun `processCreateCredentialRequest should invoke callback with result on password create request with valid userState`() {
+        val request: BeginCreatePasswordCredentialRequest = mockk {
             every { callingAppInfo } returns mockk(relaxed = true)
+            every { candidateQueryData } returns Bundle()
         }
-        val candidateQueryData: Bundle = mockk()
-        val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
-            mockk()
-        val captureSlot = slot<CreateCredentialException>()
-        every { cancellationSignal.setOnCancelListener(any()) } just runs
-        every { request.candidateQueryData } returns candidateQueryData
-        every {
-            candidateQueryData.getString("androidx.credentials.BUNDLE_KEY_REQUEST_JSON")
-        } returns null
-        every { callback.onError(capture(captureSlot)) } just runs
-
-        credentialProviderProcessor.processCreateCredentialRequest(
-            request,
-            cancellationSignal,
-            callback,
-        )
-
-        verify(exactly = 1) { callback.onError(any()) }
-        verify(exactly = 0) { callback.onResult(any()) }
-
-        assert(captureSlot.captured is CreateCredentialUnknownException)
-    }
-
-    @Test
-    fun `processCreateCredentialRequest should invoke callback with error when user state null`() {
-        val request: BeginCreatePublicKeyCredentialRequest = mockk {
-            every { callingAppInfo } returns mockk(relaxed = true)
-        }
-        val candidateQueryData: Bundle = mockk()
-        val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
-            mockk()
-        val captureSlot = slot<CreateCredentialException>()
-        every { cancellationSignal.setOnCancelListener(any()) } just runs
-        every { request.candidateQueryData } returns candidateQueryData
-        every {
-            candidateQueryData.getString("androidx.credentials.BUNDLE_KEY_REQUEST_JSON")
-        } returns "{\"mockJsonRequest\":1}"
-        every { callback.onError(capture(captureSlot)) } just runs
-
-        credentialProviderProcessor.processCreateCredentialRequest(
-            request,
-            cancellationSignal,
-            callback,
-        )
-
-        verify(exactly = 1) { callback.onError(any()) }
-        verify(exactly = 0) { callback.onResult(any()) }
-
-        assert(captureSlot.captured is CreateCredentialUnknownException)
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `processCreateCredentialRequest should invoke callback with result when user state is valid`() {
-        val request: BeginCreatePublicKeyCredentialRequest = mockk {
-            every { callingAppInfo } returns mockk(relaxed = true)
-        }
-        val candidateQueryData: Bundle = mockk()
         val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
             mockk()
         val captureSlot = slot<BeginCreateCredentialResponse>()
@@ -227,23 +160,18 @@ class CredentialProviderProcessorTest {
         every { context.packageName } returns "com.x8bit.bitwarden"
         every { context.getString(any(), any()) } returns "mockDescription"
         every {
-            intentManager.createFido2CreationPendingIntent(
-                any(),
-                any(),
-                any(),
+            pendingIntentManager.createPasswordCreationPendingIntent(
+                userId = any(),
             )
         } returns mockIntent
+        every { authRepository.getOrCreateCipher(userId = any()) } returns mockk<Cipher>()
         every { cancellationSignal.setOnCancelListener(any()) } just runs
-        every { request.candidateQueryData } returns candidateQueryData
-        every {
-            candidateQueryData.getString("androidx.credentials.BUNDLE_KEY_REQUEST_JSON")
-        } returns "{\"mockJsonRequest\":1}"
         every { callback.onResult(capture(captureSlot)) } just runs
 
         credentialProviderProcessor.processCreateCredentialRequest(
-            request,
-            cancellationSignal,
-            callback,
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
         )
 
         verify(exactly = 1) { callback.onResult(any()) }
@@ -254,12 +182,13 @@ class CredentialProviderProcessorTest {
         assertEquals(DEFAULT_USER_STATE.accounts[0].email, capturedEntry.accountName)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `processCreateCredentialRequest should generate correct entries based on state`() {
-        val request: BeginCreatePublicKeyCredentialRequest = mockk {
+    fun `processCreateCredentialRequest should generate correct password entries based on state`() {
+        val request: BeginCreatePasswordCredentialRequest = mockk {
             every { callingAppInfo } returns mockk(relaxed = true)
+            every { candidateQueryData } returns Bundle()
         }
-        val candidateQueryData: Bundle = mockk()
         val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
             mockk()
         mutableUserStateFlow.value = DEFAULT_USER_STATE
@@ -268,28 +197,19 @@ class CredentialProviderProcessorTest {
         every { context.packageName } returns "com.x8bit.bitwarden.dev"
         every { context.getString(any(), any()) } returns "mockDescription"
         every { cancellationSignal.setOnCancelListener(any()) } just runs
-        every { request.candidateQueryData } returns candidateQueryData
-        every {
-            candidateQueryData.getString("androidx.credentials.BUNDLE_KEY_REQUEST_JSON")
-        } returns "{\"mockJsonRequest\":1}"
         every { callback.onResult(capture(captureSlot)) } just runs
         every {
-            intentManager.createFido2CreationPendingIntent(
-                any(),
-                any(),
-                any(),
+            pendingIntentManager.createPasswordCreationPendingIntent(
+                userId = any(),
             )
         } returns mockIntent
-        every {
-            biometricsEncryptionManager.getOrCreateCipher(any())
-        } returns mockk<Cipher>()
-        every { featureFlagManager.getFeatureFlag(FlagKey.SingleTapPasskeyCreation) } returns true
+        every { authRepository.getOrCreateCipher(any()) } returns mockk<Cipher>()
         every { isBuildVersionAtLeast(Build.VERSION_CODES.VANILLA_ICE_CREAM) } returns true
 
         credentialProviderProcessor.processCreateCredentialRequest(
-            request,
-            cancellationSignal,
-            callback,
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
         )
 
         verify(exactly = 1) { callback.onResult(any()) }
@@ -322,26 +242,265 @@ class CredentialProviderProcessorTest {
         ) { "Expected all entries to have BIOMETRIC_STRONG authenticators." }
 
         // Verify entries have no biometric prompt data when cipher is null
-        every { biometricsEncryptionManager.getOrCreateCipher(any()) } returns null
+        every { authRepository.getOrCreateCipher(any()) } returns null
         credentialProviderProcessor.processCreateCredentialRequest(
-            request,
-            cancellationSignal,
-            callback,
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
         )
         assertTrue(
             captureSlot.captured.createEntries.all { it.biometricPromptData == null },
         ) { "Expected all entries to have null biometric prompt data." }
+    }
 
-        // Disable single tap feature flag to verify all entries do not have biometric prompt data
-        every { featureFlagManager.getFeatureFlag(FlagKey.SingleTapPasskeyCreation) } returns false
+    @Suppress("MaxLineLength")
+    @Test
+    fun `processCreateCredentialRequest should not add biometric data to password entries on pre-V devices`() {
+        val request: BeginCreatePasswordCredentialRequest = mockk {
+            every { callingAppInfo } returns mockk(relaxed = true)
+            every { candidateQueryData } returns Bundle()
+        }
+        val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
+            mockk()
+        val captureSlot = slot<BeginCreateCredentialResponse>()
+        val mockIntent: PendingIntent = mockk()
+        mutableUserStateFlow.value = DEFAULT_USER_STATE
+        every { context.packageName } returns "com.x8bit.bitwarden"
+        every { context.getString(any(), any()) } returns "mockDescription"
+        every {
+            pendingIntentManager.createPasswordCreationPendingIntent(
+                userId = any(),
+            )
+        } returns mockIntent
+        every { authRepository.getOrCreateCipher(userId = any()) } returns mockk<Cipher>()
+        every { cancellationSignal.setOnCancelListener(any()) } just runs
+        every { callback.onResult(capture(captureSlot)) } just runs
+        every { isBuildVersionAtLeast(Build.VERSION_CODES.VANILLA_ICE_CREAM) } returns false
+
         credentialProviderProcessor.processCreateCredentialRequest(
-            request,
-            cancellationSignal,
-            callback,
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
+        )
+
+        verify(exactly = 1) { callback.onResult(any()) }
+
+        // Verify entries have no biometric prompt data on older devices
+        assertTrue(captureSlot.captured.createEntries.all { it.biometricPromptData == null }) {
+            "Expected all entries to have null biometric prompt data on pre-V devices."
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `processCreateCredentialRequest should not add biometric data to password entries when vault is locked`() {
+        val request: BeginCreatePasswordCredentialRequest = mockk {
+            every { callingAppInfo } returns mockk(relaxed = true)
+            every { candidateQueryData } returns Bundle()
+        }
+        val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
+            mockk()
+        val captureSlot = slot<BeginCreateCredentialResponse>()
+        val mockIntent: PendingIntent = mockk()
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = DEFAULT_USER_STATE.accounts.map { it.copy(isVaultUnlocked = false) },
+        )
+        every { context.packageName } returns "com.x8bit.bitwarden"
+        every { context.getString(any(), any()) } returns "mockDescription"
+        every {
+            pendingIntentManager.createPasswordCreationPendingIntent(
+                userId = any(),
+            )
+        } returns mockIntent
+        every { cancellationSignal.setOnCancelListener(any()) } just runs
+        every { callback.onResult(capture(captureSlot)) } just runs
+        every { isBuildVersionAtLeast(Build.VERSION_CODES.VANILLA_ICE_CREAM) } returns true
+
+        credentialProviderProcessor.processCreateCredentialRequest(
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
+        )
+
+        verify(exactly = 1) { callback.onResult(any()) }
+        verify(exactly = 0) { authRepository.getOrCreateCipher(any()) }
+
+        // Verify entries have no biometric prompt data when vault is locked
+        assertTrue(captureSlot.captured.createEntries.all { it.biometricPromptData == null }) {
+            "Expected all entries to have null biometric prompt data when vault is locked."
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `processCreateCredentialRequest should invoke callback with error when json is null or empty`() {
+        val request: BeginCreatePublicKeyCredentialRequest = mockk {
+            every { callingAppInfo } returns mockk(relaxed = true)
+        }
+        val candidateQueryData: Bundle = mockk()
+        val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
+            mockk()
+        val captureSlot = slot<CreateCredentialException>()
+        every { cancellationSignal.setOnCancelListener(any()) } just runs
+        every { request.candidateQueryData } returns candidateQueryData
+        every {
+            candidateQueryData.getString("androidx.credentials.BUNDLE_KEY_REQUEST_JSON")
+        } returns null
+        every { callback.onError(capture(captureSlot)) } just runs
+
+        credentialProviderProcessor.processCreateCredentialRequest(
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
+        )
+
+        verify(exactly = 1) { callback.onError(any()) }
+        verify(exactly = 0) { callback.onResult(any()) }
+
+        assert(captureSlot.captured is CreateCredentialUnknownException)
+    }
+
+    @Test
+    fun `processCreateCredentialRequest should invoke callback with error when user state null`() {
+        val request: BeginCreatePublicKeyCredentialRequest = mockk {
+            every { callingAppInfo } returns mockk(relaxed = true)
+        }
+        val candidateQueryData: Bundle = mockk()
+        val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
+            mockk()
+        val captureSlot = slot<CreateCredentialException>()
+        every { cancellationSignal.setOnCancelListener(any()) } just runs
+        every { request.candidateQueryData } returns candidateQueryData
+        every {
+            candidateQueryData.getString("androidx.credentials.BUNDLE_KEY_REQUEST_JSON")
+        } returns "{\"mockJsonRequest\":1}"
+        every { callback.onError(capture(captureSlot)) } just runs
+
+        credentialProviderProcessor.processCreateCredentialRequest(
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
+        )
+
+        verify(exactly = 1) { callback.onError(any()) }
+        verify(exactly = 0) { callback.onResult(any()) }
+
+        assert(captureSlot.captured is CreateCredentialUnknownException)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `processCreateCredentialRequest should invoke callback with result when user state is valid`() {
+        val request: BeginCreatePublicKeyCredentialRequest = mockk {
+            every { callingAppInfo } returns mockk(relaxed = true)
+        }
+        val candidateQueryData: Bundle = mockk()
+        val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
+            mockk()
+        val captureSlot = slot<BeginCreateCredentialResponse>()
+        val mockIntent: PendingIntent = mockk()
+        mutableUserStateFlow.value = DEFAULT_USER_STATE
+        every { context.packageName } returns "com.x8bit.bitwarden"
+        every { context.getString(any(), any()) } returns "mockDescription"
+        every {
+            pendingIntentManager.createFido2CreationPendingIntent(
+                userId = any(),
+            )
+        } returns mockIntent
+        every { authRepository.getOrCreateCipher(userId = any()) } returns mockk<Cipher>()
+        every { cancellationSignal.setOnCancelListener(any()) } just runs
+        every { request.candidateQueryData } returns candidateQueryData
+        every {
+            candidateQueryData.getString("androidx.credentials.BUNDLE_KEY_REQUEST_JSON")
+        } returns "{\"mockJsonRequest\":1}"
+        every { callback.onResult(capture(captureSlot)) } just runs
+
+        credentialProviderProcessor.processCreateCredentialRequest(
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
+        )
+
+        verify(exactly = 1) { callback.onResult(any()) }
+        verify(exactly = 0) { callback.onError(any()) }
+
+        assertEquals(DEFAULT_USER_STATE.accounts.size, captureSlot.captured.createEntries.size)
+        val capturedEntry = captureSlot.captured.createEntries[0]
+        assertEquals(DEFAULT_USER_STATE.accounts[0].email, capturedEntry.accountName)
+    }
+
+    @Test
+    fun `processCreateCredentialRequest should generate correct entries based on state`() {
+        val request: BeginCreatePublicKeyCredentialRequest = mockk {
+            every { callingAppInfo } returns mockk(relaxed = true)
+        }
+        val candidateQueryData: Bundle = mockk()
+        val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
+            mockk()
+        mutableUserStateFlow.value = DEFAULT_USER_STATE
+        val captureSlot = slot<BeginCreateCredentialResponse>()
+        val mockIntent: PendingIntent = mockk()
+        every { context.packageName } returns "com.x8bit.bitwarden.dev"
+        every { context.getString(any(), any()) } returns "mockDescription"
+        every { cancellationSignal.setOnCancelListener(any()) } just runs
+        every { request.candidateQueryData } returns candidateQueryData
+        every {
+            candidateQueryData.getString("androidx.credentials.BUNDLE_KEY_REQUEST_JSON")
+        } returns "{\"mockJsonRequest\":1}"
+        every { callback.onResult(capture(captureSlot)) } just runs
+        every {
+            pendingIntentManager.createFido2CreationPendingIntent(
+                userId = any(),
+            )
+        } returns mockIntent
+        every { authRepository.getOrCreateCipher(any()) } returns mockk<Cipher>()
+        every { isBuildVersionAtLeast(Build.VERSION_CODES.VANILLA_ICE_CREAM) } returns true
+
+        credentialProviderProcessor.processCreateCredentialRequest(
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
+        )
+
+        verify(exactly = 1) { callback.onResult(any()) }
+        verify(exactly = 0) { callback.onError(any()) }
+
+        assertEquals(DEFAULT_USER_STATE.accounts.size, captureSlot.captured.createEntries.size)
+
+        // Verify only the active account entry has a lastUsedTime
+        assertEquals(
+            1,
+            captureSlot.captured.createEntries.filter { it.lastUsedTime != null }.size,
+        )
+        DEFAULT_USER_STATE.accounts.forEachIndexed { index, mockAccount ->
+            assertEquals(mockAccount.email, captureSlot.captured.createEntries[index].accountName)
+        }
+
+        // Verify all entries have biometric prompt data when feature flag is enabled
+        assertTrue(captureSlot.captured.createEntries.all { it.biometricPromptData != null }) {
+            "Expected all entries to have biometric prompt data."
+        }
+
+        // Verify entries have the correct authenticators when cipher is not null
+        assertTrue(
+            captureSlot.captured
+                .createEntries
+                .all {
+                    it.biometricPromptData?.allowedAuthenticators ==
+                        BiometricManager.Authenticators.BIOMETRIC_STRONG
+                },
+        ) { "Expected all entries to have BIOMETRIC_STRONG authenticators." }
+
+        // Verify entries have no biometric prompt data when cipher is null
+        every { authRepository.getOrCreateCipher(any()) } returns null
+        credentialProviderProcessor.processCreateCredentialRequest(
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
         )
         assertTrue(
             captureSlot.captured.createEntries.all { it.biometricPromptData == null },
-        ) { "Expected all entries to not have biometric prompt data." }
+        ) { "Expected all entries to have null biometric prompt data." }
     }
 
     @Test
@@ -362,9 +521,9 @@ class CredentialProviderProcessorTest {
         every { callback.onError(capture(captureSlot)) } just runs
 
         credentialProviderProcessor.processGetCredentialRequest(
-            request,
-            cancellationSignal,
-            callback,
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
         )
 
         verify(exactly = 1) { callback.onError(any()) }
@@ -399,10 +558,8 @@ class CredentialProviderProcessorTest {
         every { callback.onResult(capture(captureSlot)) } just runs
         every { context.getString(any()) } returns "mockTitle"
         every {
-            intentManager.createFido2UnlockPendingIntent(
-                action = "com.x8bit.bitwarden.credentials.ACTION_UNLOCK_ACCOUNT",
+            pendingIntentManager.createFido2UnlockPendingIntent(
                 userId = "mockUserId-1",
-                requestCode = any(),
             )
         } returns mockIntent
 
@@ -412,18 +569,16 @@ class CredentialProviderProcessorTest {
         )
 
         credentialProviderProcessor.processGetCredentialRequest(
-            request,
-            cancellationSignal,
-            callback,
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
         )
 
         verify(exactly = 0) { callback.onError(any()) }
         verify(exactly = 1) {
             callback.onResult(any())
-            intentManager.createFido2UnlockPendingIntent(
-                action = "com.x8bit.bitwarden.credentials.ACTION_UNLOCK_ACCOUNT",
+            pendingIntentManager.createFido2UnlockPendingIntent(
                 userId = "mockUserId-1",
-                requestCode = any(),
             )
         }
 
@@ -461,9 +616,9 @@ class CredentialProviderProcessorTest {
             } returns Result.failure(Exception("Error decrypting credentials."))
 
             credentialProviderProcessor.processGetCredentialRequest(
-                request,
-                cancellationSignal,
-                callback,
+                request = request,
+                cancellationSignal = cancellationSignal,
+                callback = callback,
             )
 
             verify(exactly = 1) { callback.onError(any()) }
@@ -503,9 +658,9 @@ class CredentialProviderProcessorTest {
             every { callback.onResult(capture(captureSlot)) } just runs
 
             credentialProviderProcessor.processGetCredentialRequest(
-                request,
-                cancellationSignal,
-                callback,
+                request = request,
+                cancellationSignal = cancellationSignal,
+                callback = callback,
             )
 
             assertEquals(1, captureSlot.captured.credentialEntries.size)
@@ -550,6 +705,8 @@ private fun createMockAccounts(number: Int): List<UserState.Account> {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                isExportable = true,
+                creationDate = null,
             ),
         )
     }

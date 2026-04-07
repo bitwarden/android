@@ -2,11 +2,14 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginap
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestResult
@@ -18,11 +21,14 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,7 +40,6 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 class LoginApprovalViewModelTest : BaseViewModelTest() {
 
@@ -54,6 +59,12 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
         } returns mutableAuthRequestSharedFlow
         coEvery { getAuthRequestByIdFlow(REQUEST_ID) } returns mutableAuthRequestSharedFlow
         every { userStateFlow } returns mutableUserStateFlow
+    }
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
+        every { sendSnackbarData(data = any(), relay = SnackbarRelay.LOGIN_APPROVAL) } just runs
+    }
+    private val toastManager: ToastManager = mockk {
+        every { show(messageId = any()) } just runs
     }
 
     @BeforeEach
@@ -123,7 +134,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
                 requestId = "",
                 viewState = LoginApprovalState.ViewState.Loading,
                 dialogState = LoginApprovalState.DialogState.ChangeAccount(
-                    message = R.string.login_attempt_from_x_do_you_want_to_switch_to_this_account
+                    message = BitwardenString.login_attempt_from_x_do_you_want_to_switch_to_this_account
                         .asText(EMAIL_2),
                 ),
             ),
@@ -147,7 +158,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
             state = DEFAULT_STATE.copy(
                 specialCircumstance = specialCircumstance,
                 dialogState = LoginApprovalState.DialogState.ChangeAccount(
-                    message = R.string.login_attempt_from_x_do_you_want_to_switch_to_this_account
+                    message = BitwardenString.login_attempt_from_x_do_you_want_to_switch_to_this_account
                         .asText(EMAIL_2),
                 ),
             ),
@@ -183,7 +194,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
                 email = EMAIL,
                 fingerprint = AUTH_REQUEST.fingerprint,
                 ipAddress = AUTH_REQUEST.ipAddress,
-                time = "9/13/24, 12:00 AM",
+                time = "9/13/24, 12:00\u202FAM",
             ),
         )
         val viewModel = createViewModel()
@@ -270,13 +281,15 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(LoginApprovalAction.ApproveRequestClick)
-            assertEquals(
-                LoginApprovalEvent.ShowToast(R.string.login_approved.asText()),
-                awaitItem(),
-            )
             assertEquals(LoginApprovalEvent.NavigateBack, awaitItem())
         }
 
+        verify {
+            snackbarRelayManager.sendSnackbarData(
+                data = BitwardenSnackbarData(message = BitwardenString.login_approved.asText()),
+                relay = SnackbarRelay.LOGIN_APPROVAL,
+            )
+        }
         coVerify {
             mockAuthRepository.updateAuthRequest(
                 requestId = REQUEST_ID,
@@ -317,11 +330,10 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 viewModel.trySendAction(LoginApprovalAction.ApproveRequestClick)
-                assertEquals(
-                    LoginApprovalEvent.ShowToast(R.string.login_approved.asText()),
-                    awaitItem(),
-                )
                 assertEquals(LoginApprovalEvent.ExitApp, awaitItem())
+            }
+            verify {
+                toastManager.show(messageId = BitwardenString.login_approved)
             }
         }
 
@@ -339,13 +351,14 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(LoginApprovalAction.DeclineRequestClick)
-            assertEquals(
-                LoginApprovalEvent.ShowToast(R.string.log_in_denied.asText()),
-                awaitItem(),
-            )
             assertEquals(LoginApprovalEvent.NavigateBack, awaitItem())
         }
-
+        verify {
+            snackbarRelayManager.sendSnackbarData(
+                data = BitwardenSnackbarData(message = BitwardenString.log_in_denied.asText()),
+                relay = SnackbarRelay.LOGIN_APPROVAL,
+            )
+        }
         coVerify {
             mockAuthRepository.updateAuthRequest(
                 requestId = REQUEST_ID,
@@ -386,11 +399,10 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 viewModel.trySendAction(LoginApprovalAction.DeclineRequestClick)
-                assertEquals(
-                    LoginApprovalEvent.ShowToast(R.string.log_in_denied.asText()),
-                    awaitItem(),
-                )
                 assertEquals(LoginApprovalEvent.ExitApp, awaitItem())
+            }
+            verify {
+                toastManager.show(messageId = BitwardenString.log_in_denied)
             }
         }
 
@@ -412,8 +424,8 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
             DEFAULT_STATE.copy(
                 dialogState = LoginApprovalState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.generic_error_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                     error = error,
                 ),
             ),
@@ -429,6 +441,8 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
         clock = fixedClock,
         authRepository = mockAuthRepository,
         specialCircumstanceManager = mockSpecialCircumstanceManager,
+        snackbarRelayManager = snackbarRelayManager,
+        toastManager = toastManager,
         savedStateHandle = SavedStateHandle().apply {
             set("state", state)
             every { toLoginApprovalArgs() } returns LoginApprovalArgs(fingerprint = FINGERPRINT)
@@ -481,6 +495,8 @@ private val DEFAULT_USER_STATE = UserState(
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
+            isExportable = true,
+            creationDate = null,
         ),
         UserState.Account(
             userId = USER_ID_2,
@@ -500,6 +516,8 @@ private val DEFAULT_USER_STATE = UserState(
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
+            isExportable = true,
+            creationDate = null,
         ),
     ),
 )
@@ -510,7 +528,7 @@ private val AUTH_REQUEST = AuthRequest(
     ipAddress = "1.0.0.1",
     key = "public",
     masterPasswordHash = PASSWORD_HASH,
-    creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+    creationDate = Instant.parse("2024-09-13T00:00:00Z"),
     responseDate = null,
     requestApproved = true,
     originUrl = "www.bitwarden.com",

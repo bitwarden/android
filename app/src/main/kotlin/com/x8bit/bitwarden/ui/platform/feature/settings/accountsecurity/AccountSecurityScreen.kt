@@ -25,56 +25,54 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.account.dialog.BitwardenLogoutConfirmationDialog
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.card.BitwardenActionCard
+import com.bitwarden.ui.platform.components.card.actionCardExitAnimation
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
+import com.bitwarden.ui.platform.components.dropdown.BitwardenTimePickerButton
+import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
+import com.bitwarden.ui.platform.components.row.BitwardenTextRow
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.support.BitwardenSupportingText
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.util.startAppSettingsActivity
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
-import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
-import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
-import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
-import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLogoutConfirmationDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTimePickerDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
-import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
-import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithBiometricsSwitch
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithPinSwitch
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
-import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricSupportStatus
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.util.minutes
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import java.time.LocalTime
 import javax.crypto.Cipher
-
-private const val MINUTES_PER_HOUR = 60
 
 /**
  * Displays the account security screen.
@@ -93,19 +91,15 @@ fun AccountSecurityScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     var showBiometricsPrompt by rememberSaveable { mutableStateOf(false) }
-    val unlockWithBiometricToggle: (cipher: Cipher) -> Unit = remember(viewModel) {
-        {
-            viewModel.trySendAction(
-                action = AccountSecurityAction.UnlockWithBiometricToggleEnabled(cipher = it),
-            )
-        }
+    val unlockWithBiometricToggle: (cipher: Cipher) -> Unit = {
+        viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggleEnabled(it))
     }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             AccountSecurityEvent.NavigateBack -> onNavigateBack()
 
             AccountSecurityEvent.NavigateToApplicationDataSettings -> {
-                intentManager.startApplicationDetailsSettingsActivity()
+                intentManager.startAppSettingsActivity()
             }
 
             AccountSecurityEvent.NavigateToDeleteAccount -> onNavigateToDeleteAccount()
@@ -144,14 +138,12 @@ fun AccountSecurityScreen(
 
     AccountSecurityDialogs(
         state = state,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(AccountSecurityAction.DismissDialog) }
+        onDismissRequest = { viewModel.trySendAction(AccountSecurityAction.DismissDialog) },
+        onConfirmLogoutClick = {
+            viewModel.trySendAction(AccountSecurityAction.ConfirmLogoutClick)
         },
-        onConfirmLogoutClick = remember(viewModel) {
-            { viewModel.trySendAction(AccountSecurityAction.ConfirmLogoutClick) }
-        },
-        onFingerprintLearnMore = remember(viewModel) {
-            { viewModel.trySendAction(AccountSecurityAction.FingerPrintLearnMoreClick) }
+        onFingerprintLearnMore = {
+            viewModel.trySendAction(AccountSecurityAction.FingerPrintLearnMoreClick)
         },
     )
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -161,12 +153,12 @@ fun AccountSecurityScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.account_security),
+                title = stringResource(id = BitwardenString.account_security),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                navigationIconContentDescription = stringResource(id = R.string.back),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.BackClick) }
+                navigationIconContentDescription = stringResource(id = BitwardenString.back),
+                onNavigationIconClick = {
+                    viewModel.trySendAction(AccountSecurityAction.BackClick)
                 },
             )
         },
@@ -183,17 +175,13 @@ fun AccountSecurityScreen(
                 exit = actionCardExitAnimation(),
             ) {
                 BitwardenActionCard(
-                    cardTitle = stringResource(id = R.string.set_up_unlock),
-                    actionText = stringResource(R.string.get_started),
-                    onActionClick = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(AccountSecurityAction.UnlockActionCardCtaClick)
-                        }
+                    cardTitle = stringResource(id = BitwardenString.set_up_unlock),
+                    actionText = stringResource(BitwardenString.get_started),
+                    onActionClick = {
+                        viewModel.trySendAction(AccountSecurityAction.UnlockActionCardCtaClick)
                     },
-                    onDismissClick = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(AccountSecurityAction.UnlockActionCardDismiss)
-                        }
+                    onDismissClick = {
+                        viewModel.trySendAction(AccountSecurityAction.UnlockActionCardDismiss)
                     },
                     leadingContent = {
                         NotificationBadge(notificationCount = 1)
@@ -205,7 +193,7 @@ fun AccountSecurityScreen(
             }
 
             BitwardenListHeaderText(
-                label = stringResource(id = R.string.approve_login_requests),
+                label = stringResource(id = BitwardenString.approve_login_requests),
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
@@ -213,9 +201,9 @@ fun AccountSecurityScreen(
             )
             Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenTextRow(
-                text = stringResource(id = R.string.pending_log_in_requests),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.PendingLoginRequestsClick) }
+                text = stringResource(id = BitwardenString.pending_log_in_requests),
+                onClick = {
+                    viewModel.trySendAction(AccountSecurityAction.PendingLoginRequestsClick)
                 },
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
@@ -231,7 +219,7 @@ fun AccountSecurityScreen(
             ) {
                 Spacer(Modifier.height(16.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.unlock_options),
+                    label = stringResource(id = BitwardenString.unlock_options),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -242,15 +230,11 @@ fun AccountSecurityScreen(
             BitwardenUnlockWithBiometricsSwitch(
                 biometricSupportStatus = biometricSupportStatus,
                 isChecked = state.isUnlockWithBiometricsEnabled || showBiometricsPrompt,
-                onDisableBiometrics = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            AccountSecurityAction.UnlockWithBiometricToggleDisabled,
-                        )
-                    }
+                onDisableBiometrics = {
+                    viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggleDisabled)
                 },
-                onEnableBiometrics = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.EnableBiometricsClick) }
+                onEnableBiometrics = {
+                    viewModel.trySendAction(AccountSecurityAction.EnableBiometricsClick)
                 },
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
@@ -263,8 +247,8 @@ fun AccountSecurityScreen(
                 BitwardenUnlockWithPinSwitch(
                     isUnlockWithPasswordEnabled = state.isUnlockWithPasswordEnabled,
                     isUnlockWithPinEnabled = state.isUnlockWithPinEnabled,
-                    onUnlockWithPinToggleAction = remember(viewModel) {
-                        { viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle(it)) }
+                    onUnlockWithPinToggleAction = {
+                        viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle(it))
                     },
                     cardStyle = CardStyle.Full,
                     modifier = Modifier
@@ -277,36 +261,25 @@ fun AccountSecurityScreen(
             if (state.shouldShowEnableAuthenticatorSync) {
                 SyncWithAuthenticatorRow(
                     isChecked = state.isAuthenticatorSyncChecked,
-                    onCheckedChange = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(
-                                AccountSecurityAction.AuthenticatorSyncToggle(enabled = it),
-                            )
-                        }
+                    onCheckedChange = {
+                        viewModel.trySendAction(AccountSecurityAction.AuthenticatorSyncToggle(it))
                     },
                 )
                 Spacer(Modifier.height(16.dp))
             }
             BitwardenListHeaderText(
-                label = stringResource(id = R.string.session_timeout),
+                label = stringResource(id = BitwardenString.session_timeout),
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(height = 8.dp))
-            SessionTimeoutPolicyRow(
-                vaultTimeoutPolicyMinutes = state.vaultTimeoutPolicyMinutes,
-                vaultTimeoutPolicyAction = state.vaultTimeoutPolicyAction,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin(),
-            )
             SessionTimeoutRow(
-                vaultTimeoutPolicyMinutes = state.vaultTimeoutPolicyMinutes,
+                vaultTimeoutPolicy = state.vaultTimeoutPolicy,
                 selectedVaultTimeoutType = state.vaultTimeout.type,
-                onVaultTimeoutTypeSelect = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.VaultTimeoutTypeSelect(it)) }
+                onVaultTimeoutTypeSelect = {
+                    viewModel.trySendAction(AccountSecurityAction.VaultTimeoutTypeSelect(it))
                 },
                 modifier = Modifier
                     .testTag("VaultTimeoutChooser")
@@ -315,26 +288,37 @@ fun AccountSecurityScreen(
             )
             (state.vaultTimeout as? VaultTimeout.Custom)?.let { customTimeout ->
                 SessionCustomTimeoutRow(
-                    vaultTimeoutPolicyMinutes = state.vaultTimeoutPolicyMinutes,
+                    vaultTimeoutPolicy = state.vaultTimeoutPolicy,
                     customVaultTimeout = customTimeout,
-                    onCustomVaultTimeoutSelect = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(
-                                AccountSecurityAction.CustomVaultTimeoutSelect(it),
-                            )
-                        }
+                    onCustomVaultTimeoutSelect = {
+                        viewModel.trySendAction(AccountSecurityAction.CustomVaultTimeoutSelect(it))
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin(),
                 )
             }
+            state.sessionTimeoutSupportText?.let { text ->
+                BitwardenSupportingText(
+                    text = text(),
+                    cardStyle = CardStyle.Bottom,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin(),
+                )
+                Spacer(modifier = Modifier.height(height = 8.dp))
+            }
             SessionTimeoutActionRow(
-                isEnabled = state.hasUnlockMechanism,
-                vaultTimeoutPolicyAction = state.vaultTimeoutPolicyAction,
+                isEnabled = state.isSessionTimeoutActionEnabled,
                 selectedVaultTimeoutAction = state.vaultTimeoutAction,
-                onVaultTimeoutActionSelect = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.VaultTimeoutActionSelect(it)) }
+                onVaultTimeoutActionSelect = {
+                    viewModel.trySendAction(AccountSecurityAction.VaultTimeoutActionSelect(it))
+                },
+                supportingText = state.sessionTimeoutActionSupportingText?.invoke(),
+                cardStyle = if (state.sessionTimeoutSupportText == null) {
+                    CardStyle.Bottom
+                } else {
+                    CardStyle.Full
                 },
                 modifier = Modifier
                     .testTag("VaultTimeoutActionChooser")
@@ -344,7 +328,7 @@ fun AccountSecurityScreen(
 
             Spacer(Modifier.height(16.dp))
             BitwardenListHeaderText(
-                label = stringResource(id = R.string.other),
+                label = stringResource(id = BitwardenString.other),
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
@@ -352,9 +336,9 @@ fun AccountSecurityScreen(
             )
             Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenTextRow(
-                text = stringResource(id = R.string.account_fingerprint_phrase),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.AccountFingerprintPhraseClick) }
+                text = stringResource(id = BitwardenString.account_fingerprint_phrase),
+                onClick = {
+                    viewModel.trySendAction(AccountSecurityAction.AccountFingerprintPhraseClick)
                 },
                 cardStyle = CardStyle.Top(),
                 modifier = Modifier
@@ -363,13 +347,15 @@ fun AccountSecurityScreen(
                     .fillMaxWidth(),
             )
             BitwardenExternalLinkRow(
-                text = stringResource(id = R.string.two_step_login),
-                onConfirmClick = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.TwoStepLoginClick) }
+                text = stringResource(id = BitwardenString.two_step_login),
+                onConfirmClick = {
+                    viewModel.trySendAction(AccountSecurityAction.TwoStepLoginClick)
                 },
                 withDivider = false,
-                dialogTitle = stringResource(id = R.string.continue_to_web_app),
-                dialogMessage = stringResource(id = R.string.two_step_login_description_long),
+                dialogTitle = stringResource(id = BitwardenString.continue_to_web_app),
+                dialogMessage = stringResource(
+                    id = BitwardenString.two_step_login_description_long,
+                ),
                 cardStyle = CardStyle.Middle(),
                 modifier = Modifier
                     .testTag("TwoStepLoginLinkItemView")
@@ -378,14 +364,14 @@ fun AccountSecurityScreen(
             )
             if (state.isUnlockWithPasswordEnabled) {
                 BitwardenExternalLinkRow(
-                    text = stringResource(id = R.string.change_master_password),
-                    onConfirmClick = remember(viewModel) {
-                        { viewModel.trySendAction(AccountSecurityAction.ChangeMasterPasswordClick) }
+                    text = stringResource(id = BitwardenString.change_master_password),
+                    onConfirmClick = {
+                        viewModel.trySendAction(AccountSecurityAction.ChangeMasterPasswordClick)
                     },
                     withDivider = false,
-                    dialogTitle = stringResource(id = R.string.continue_to_web_app),
+                    dialogTitle = stringResource(id = BitwardenString.continue_to_web_app),
                     dialogMessage = stringResource(
-                        id = R.string.change_master_password_description_long,
+                        id = BitwardenString.change_master_password_description_long,
                     ),
                     cardStyle = CardStyle.Middle(),
                     modifier = Modifier
@@ -395,10 +381,8 @@ fun AccountSecurityScreen(
             }
             if (state.hasUnlockMechanism) {
                 BitwardenTextRow(
-                    text = stringResource(id = R.string.lock_now),
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(AccountSecurityAction.LockNowClick) }
-                    },
+                    text = stringResource(id = BitwardenString.lock_now),
+                    onClick = { viewModel.trySendAction(AccountSecurityAction.LockNowClick) },
                     cardStyle = CardStyle.Middle(),
                     modifier = Modifier
                         .testTag("LockNowLabel")
@@ -407,10 +391,8 @@ fun AccountSecurityScreen(
                 )
             }
             BitwardenTextRow(
-                text = stringResource(id = R.string.log_out),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.LogoutClick) }
-                },
+                text = stringResource(id = BitwardenString.log_out),
+                onClick = { viewModel.trySendAction(AccountSecurityAction.LogoutClick) },
                 cardStyle = CardStyle.Middle(),
                 modifier = Modifier
                     .testTag("LogOutLabel")
@@ -418,10 +400,8 @@ fun AccountSecurityScreen(
                     .fillMaxWidth(),
             )
             BitwardenTextRow(
-                text = stringResource(id = R.string.delete_account),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.DeleteAccountClick) }
-                },
+                text = stringResource(id = BitwardenString.delete_account),
+                onClick = { viewModel.trySendAction(AccountSecurityAction.DeleteAccountClick) },
                 cardStyle = CardStyle.Bottom,
                 modifier = Modifier
                     .testTag("DeleteAccountLabel")
@@ -468,54 +448,17 @@ private fun AccountSecurityDialogs(
 }
 
 @Composable
-private fun SessionTimeoutPolicyRow(
-    vaultTimeoutPolicyMinutes: Int?,
-    vaultTimeoutPolicyAction: String?,
-    modifier: Modifier = Modifier,
-) {
-    // Show the policy warning if applicable.
-    if (vaultTimeoutPolicyMinutes != null || !vaultTimeoutPolicyAction.isNullOrBlank()) {
-        // Calculate the hours and minutes to show in the policy label.
-        val hours = vaultTimeoutPolicyMinutes?.floorDiv(MINUTES_PER_HOUR)
-        val minutes = vaultTimeoutPolicyMinutes?.mod(MINUTES_PER_HOUR)
-
-        // Get the localized version of the action.
-        val action = if (vaultTimeoutPolicyAction == "lock") {
-            R.string.lock.asText()
-        } else {
-            R.string.log_out.asText()
-        }
-
-        val policyText = if (hours == null || minutes == null) {
-            R.string.vault_timeout_action_policy_in_effect.asText(action)
-        } else if (vaultTimeoutPolicyAction.isNullOrBlank()) {
-            R.string.vault_timeout_policy_in_effect.asText(hours, minutes)
-        } else {
-            R.string.vault_timeout_policy_with_action_in_effect.asText(hours, minutes, action)
-        }
-
-        BitwardenInfoCalloutCard(
-            text = policyText(),
-            modifier = modifier,
-        )
-        Spacer(modifier = Modifier.height(height = 8.dp))
-    }
-}
-
-@Composable
 private fun SessionTimeoutRow(
-    vaultTimeoutPolicyMinutes: Int?,
+    vaultTimeoutPolicy: VaultTimeoutPolicy?,
     selectedVaultTimeoutType: VaultTimeout.Type,
     onVaultTimeoutTypeSelect: (VaultTimeout.Type) -> Unit,
     modifier: Modifier = Modifier,
-    resources: Resources = LocalContext.current.resources,
+    resources: Resources = LocalResources.current,
 ) {
     var shouldShowNeverTimeoutConfirmationDialog by remember { mutableStateOf(false) }
-    val vaultTimeoutOptions = VaultTimeout.Type
-        .entries
-        .filter { it.minutes <= (vaultTimeoutPolicyMinutes ?: Int.MAX_VALUE) }
+    val vaultTimeoutOptions = rememberSessionTimeoutOptions(vaultTimeoutPolicy)
     BitwardenMultiSelectButton(
-        label = stringResource(id = R.string.session_timeout),
+        label = stringResource(id = BitwardenString.session_timeout),
         options = vaultTimeoutOptions.map { it.displayLabel() }.toImmutableList(),
         selectedOption = selectedVaultTimeoutType.displayLabel(),
         onOptionSelected = { selectedType ->
@@ -528,6 +471,7 @@ private fun SessionTimeoutRow(
                 onVaultTimeoutTypeSelect(selectedOption)
             }
         },
+        isEnabled = vaultTimeoutOptions.size > 1,
         textFieldTestTag = "SessionTimeoutStatusLabel",
         cardStyle = CardStyle.Top(),
         modifier = modifier,
@@ -535,10 +479,10 @@ private fun SessionTimeoutRow(
 
     if (shouldShowNeverTimeoutConfirmationDialog) {
         BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.warning),
-            message = stringResource(id = R.string.never_lock_warning),
-            confirmButtonText = stringResource(id = R.string.okay),
-            dismissButtonText = stringResource(id = R.string.cancel),
+            title = stringResource(id = BitwardenString.warning),
+            message = stringResource(id = BitwardenString.never_lock_warning),
+            confirmButtonText = stringResource(id = BitwardenString.okay),
+            dismissButtonText = stringResource(id = BitwardenString.cancel),
             onConfirmClick = {
                 shouldShowNeverTimeoutConfirmationDialog = false
                 onVaultTimeoutTypeSelect(VaultTimeout.Type.NEVER)
@@ -549,70 +493,38 @@ private fun SessionTimeoutRow(
     }
 }
 
-@Suppress("LongMethod")
 @Composable
 private fun SessionCustomTimeoutRow(
-    vaultTimeoutPolicyMinutes: Int?,
+    vaultTimeoutPolicy: VaultTimeoutPolicy?,
     customVaultTimeout: VaultTimeout.Custom,
     onCustomVaultTimeoutSelect: (VaultTimeout.Custom) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var shouldShowTimePickerDialog by rememberSaveable { mutableStateOf(false) }
     var shouldShowViolatesPoliciesDialog by remember { mutableStateOf(false) }
-    val vaultTimeoutInMinutes = customVaultTimeout.vaultTimeoutInMinutes
-    BitwardenTextRow(
-        text = stringResource(id = R.string.custom),
-        onClick = { shouldShowTimePickerDialog = true },
+    BitwardenTimePickerButton(
+        label = stringResource(id = BitwardenString.custom_timeout),
+        totalMinutes = customVaultTimeout.vaultTimeoutInMinutes,
+        onTimeSelect = { minutes ->
+            if (vaultTimeoutPolicy?.minutes != null && minutes > vaultTimeoutPolicy.minutes) {
+                shouldShowViolatesPoliciesDialog = true
+            } else {
+                onCustomVaultTimeoutSelect(VaultTimeout.Custom(minutes))
+            }
+        },
+        is24Hour = true,
+        supportingContent = null,
         cardStyle = CardStyle.Middle(),
         modifier = modifier,
-    ) {
-
-        Text(
-            text = LocalTime
-                .ofSecondOfDay(vaultTimeoutInMinutes * MINUTES_PER_HOUR.toLong())
-                .toFormattedPattern(pattern = "HH:mm"),
-            style = BitwardenTheme.typography.labelSmall,
-            color = BitwardenTheme.colorScheme.text.primary,
-        )
-    }
-
-    if (shouldShowTimePickerDialog) {
-        BitwardenTimePickerDialog(
-            initialHour = vaultTimeoutInMinutes / MINUTES_PER_HOUR,
-            initialMinute = vaultTimeoutInMinutes.mod(MINUTES_PER_HOUR),
-            onTimeSelect = { hour, minute ->
-                shouldShowTimePickerDialog = false
-
-                val totalMinutes = (hour * MINUTES_PER_HOUR) + minute
-                if (vaultTimeoutPolicyMinutes != null &&
-                    totalMinutes > vaultTimeoutPolicyMinutes
-                ) {
-                    shouldShowViolatesPoliciesDialog = true
-                } else {
-                    onCustomVaultTimeoutSelect(
-                        VaultTimeout.Custom(
-                            vaultTimeoutInMinutes = totalMinutes,
-                        ),
-                    )
-                }
-            },
-            onDismissRequest = { shouldShowTimePickerDialog = false },
-            is24Hour = true,
-        )
-    }
+    )
 
     if (shouldShowViolatesPoliciesDialog) {
         BitwardenBasicDialog(
-            title = stringResource(id = R.string.warning),
-            message = stringResource(id = R.string.vault_timeout_to_large),
+            title = stringResource(id = BitwardenString.warning),
+            message = stringResource(id = BitwardenString.vault_timeout_to_large),
             onDismissRequest = {
                 shouldShowViolatesPoliciesDialog = false
-                vaultTimeoutPolicyMinutes?.let {
-                    onCustomVaultTimeoutSelect(
-                        VaultTimeout.Custom(
-                            vaultTimeoutInMinutes = it,
-                        ),
-                    )
+                vaultTimeoutPolicy?.minutes?.let {
+                    onCustomVaultTimeoutSelect(VaultTimeout.Custom(it))
                 }
             },
         )
@@ -622,21 +534,20 @@ private fun SessionCustomTimeoutRow(
 @Composable
 private fun SessionTimeoutActionRow(
     isEnabled: Boolean,
-    vaultTimeoutPolicyAction: String?,
     selectedVaultTimeoutAction: VaultTimeoutAction,
     onVaultTimeoutActionSelect: (VaultTimeoutAction) -> Unit,
+    supportingText: String?,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
-    resources: Resources = LocalContext.current.resources,
+    resources: Resources = LocalResources.current,
 ) {
     var shouldShowLogoutActionConfirmationDialog by rememberSaveable { mutableStateOf(false) }
     BitwardenMultiSelectButton(
         isEnabled = isEnabled,
-        label = stringResource(id = R.string.session_timeout_action),
+        label = stringResource(id = BitwardenString.session_timeout_action),
         options = VaultTimeoutAction.entries.map { it.displayLabel() }.toImmutableList(),
         selectedOption = selectedVaultTimeoutAction.displayLabel(),
         onOptionSelected = { action ->
-            // The option is not selectable if there's a policy in place.
-            if (vaultTimeoutPolicyAction != null) return@BitwardenMultiSelectButton
             val selectedAction = VaultTimeoutAction.entries.first {
                 it.displayLabel.toString(resources) == action
             }
@@ -646,21 +557,20 @@ private fun SessionTimeoutActionRow(
                 onVaultTimeoutActionSelect(selectedAction)
             }
         },
-        supportingText = stringResource(
-            id = R.string.set_up_an_unlock_option_to_change_your_vault_timeout_action,
-        )
-            .takeUnless { isEnabled },
+        supportingText = supportingText,
         textFieldTestTag = "SessionTimeoutActionStatusLabel",
-        cardStyle = CardStyle.Bottom,
+        cardStyle = cardStyle,
         modifier = modifier,
     )
 
     if (shouldShowLogoutActionConfirmationDialog) {
         BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.warning),
-            message = stringResource(id = R.string.vault_timeout_log_out_confirmation),
-            confirmButtonText = stringResource(id = R.string.yes),
-            dismissButtonText = stringResource(id = R.string.cancel),
+            title = stringResource(id = BitwardenString.vault_timeout_log_out_confirmation_title),
+            message = stringResource(
+                id = BitwardenString.vault_timeout_log_out_confirmation_message,
+            ),
+            confirmButtonText = stringResource(id = BitwardenString.yes),
+            dismissButtonText = stringResource(id = BitwardenString.cancel),
             onConfirmClick = {
                 shouldShowLogoutActionConfirmationDialog = false
                 onVaultTimeoutActionSelect(VaultTimeoutAction.LOGOUT)
@@ -681,7 +591,7 @@ private fun ColumnScope.SyncWithAuthenticatorRow(
     onCheckedChange: (Boolean) -> Unit,
 ) {
     BitwardenListHeaderText(
-        label = stringResource(R.string.authenticator_sync),
+        label = stringResource(BitwardenString.authenticator_sync),
         modifier = Modifier
             .fillMaxWidth()
             .standardHorizontalMargin()
@@ -689,7 +599,7 @@ private fun ColumnScope.SyncWithAuthenticatorRow(
     )
     Spacer(modifier = Modifier.height(height = 8.dp))
     BitwardenSwitch(
-        label = stringResource(R.string.allow_bitwarden_authenticator_syncing),
+        label = stringResource(BitwardenString.allow_bitwarden_authenticator_syncing),
         onCheckedChange = onCheckedChange,
         isChecked = isChecked,
         cardStyle = CardStyle.Full,
@@ -709,19 +619,20 @@ private fun FingerPrintPhraseDialog(
         onDismissRequest = onDismissRequest,
         dismissButton = {
             BitwardenTextButton(
-                label = stringResource(id = R.string.close),
+                label = stringResource(id = BitwardenString.close),
                 onClick = onDismissRequest,
             )
         },
         confirmButton = {
             BitwardenTextButton(
-                label = stringResource(id = R.string.learn_more),
+                label = stringResource(id = BitwardenString.learn_more),
+                isExternalLink = true,
                 onClick = onLearnMore,
             )
         },
         title = {
             Text(
-                text = stringResource(id = R.string.fingerprint_phrase),
+                text = stringResource(id = BitwardenString.fingerprint_phrase),
                 color = BitwardenTheme.colorScheme.text.primary,
                 style = BitwardenTheme.typography.headlineSmall,
                 modifier = Modifier.fillMaxWidth(),
@@ -730,7 +641,7 @@ private fun FingerPrintPhraseDialog(
         text = {
             Column {
                 Text(
-                    text = "${stringResource(id = R.string.your_accounts_fingerprint)}:",
+                    text = "${stringResource(id = BitwardenString.your_accounts_fingerprint)}:",
                     color = BitwardenTheme.colorScheme.text.primary,
                     style = BitwardenTheme.typography.bodyMedium,
                     modifier = Modifier.fillMaxWidth(),
@@ -749,4 +660,49 @@ private fun FingerPrintPhraseDialog(
         titleContentColor = BitwardenTheme.colorScheme.text.primary,
         textContentColor = BitwardenTheme.colorScheme.text.primary,
     )
+}
+
+@Composable
+private fun rememberSessionTimeoutOptions(
+    vaultTimeoutPolicy: VaultTimeoutPolicy?,
+): ImmutableList<VaultTimeout.Type> = remember(vaultTimeoutPolicy) {
+    VaultTimeout.Type
+        .entries
+        .filter { timeoutType ->
+            when (vaultTimeoutPolicy?.type) {
+                PolicyInformation.VaultTimeout.Type.NEVER -> {
+                    // We allow everything here.
+                    true
+                }
+
+                PolicyInformation.VaultTimeout.Type.ON_APP_RESTART,
+                PolicyInformation.VaultTimeout.Type.ON_SYSTEM_LOCK,
+                    -> {
+                    // We allow everything but never here.
+                    timeoutType != VaultTimeout.Type.NEVER
+                }
+
+                PolicyInformation.VaultTimeout.Type.IMMEDIATELY -> {
+                    // Only allow immediately, everything else is blocked.
+                    timeoutType == VaultTimeout.Type.IMMEDIATELY
+                }
+
+                PolicyInformation.VaultTimeout.Type.CUSTOM -> {
+                    // Filter out all values above the specified amount. Custom set timeouts
+                    // that exceed the max value will be constrained in the VM.
+                    timeoutType.minutes <= (vaultTimeoutPolicy.minutes ?: Int.MAX_VALUE)
+                }
+
+                null -> {
+                    // If the type is null, there could still be a policy in place from a
+                    // legacy server that is not sending a type. So we still filter as though
+                    // it were a custom type in that scenario, otherwise we allow everything.
+                    vaultTimeoutPolicy
+                        ?.minutes
+                        ?.let { minutes -> timeoutType.minutes <= minutes }
+                        ?: true
+                }
+            }
+        }
+        .toImmutableList()
 }

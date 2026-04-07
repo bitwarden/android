@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.platform.manager
 
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.data.repository.ServerConfigRepository
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.util.isServerVersionAtLeast
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -19,8 +19,7 @@ class FeatureFlagManagerImpl(
 
     override val sdkFeatureFlags: Map<String, Boolean>
         get() = mapOf(
-            CIPHER_KEY_ENCRYPTION_KEY to
-                getCipherKeyEncryptionFlagState(),
+            CIPHER_KEY_ENCRYPTION_KEY to serverConfigRepository.isCipherKeyEncryptionEnabled,
         )
 
     override fun <T : Any> getFeatureFlagFlow(key: FlagKey<T>): Flow<T> =
@@ -43,17 +42,13 @@ class FeatureFlagManagerImpl(
             .serverConfigStateFlow
             .value
             .getFlagValueOrDefault(key = key)
-
-    /**
-     * Get the computed value of the cipher key encryption flag based on server version and
-     * remote flag.
-     */
-    private fun getCipherKeyEncryptionFlagState() =
-        isServerVersionAtLeast(
-            serverConfigRepository.serverConfigStateFlow.value,
-            CIPHER_KEY_ENC_MIN_SERVER_VERSION,
-        ) && getFeatureFlag(FlagKey.CipherKeyEncryption)
 }
+
+/**
+ * Get the computed value of the cipher key encryption flag based on server version.
+ */
+private val ServerConfigRepository.isCipherKeyEncryptionEnabled: Boolean
+    get() = isServerVersionAtLeast(serverConfigStateFlow.value, CIPHER_KEY_ENC_MIN_SERVER_VERSION)
 
 /**
  * Extract the value of a [FlagKey] from the [ServerConfig]. If there is an issue with retrieving

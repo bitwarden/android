@@ -2,10 +2,13 @@ package com.bitwarden.authenticator.ui.platform.feature.debugmenu
 
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
-import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.data.platform.repository.DebugMenuRepository
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -23,14 +26,14 @@ class DebugMenuViewModel @Inject constructor(
     featureFlagManager: FeatureFlagManager,
     private val debugMenuRepository: DebugMenuRepository,
 ) : BaseViewModel<DebugMenuState, DebugMenuEvent, DebugMenuAction>(
-    initialState = DebugMenuState(featureFlags = emptyMap()),
+    initialState = DebugMenuState(featureFlags = persistentMapOf()),
 ) {
 
     private var featureFlagResetJob: Job? = null
 
     init {
         combine(
-            flows = FlagKey.activeFlags.map { flagKey ->
+            flows = FlagKey.activeAuthenticatorFlags.map { flagKey ->
                 featureFlagManager.getFeatureFlagFlow(flagKey).map { flagKey to it }
             },
         ) { DebugMenuAction.Internal.UpdateFeatureFlagMap(it.toMap()) }
@@ -60,7 +63,7 @@ class DebugMenuViewModel @Inject constructor(
 
     private fun handleUpdateFeatureFlagMap(action: DebugMenuAction.Internal.UpdateFeatureFlagMap) {
         mutableStateFlow.update {
-            it.copy(featureFlags = action.newMap)
+            it.copy(featureFlags = action.newMap.toImmutableMap())
         }
     }
 
@@ -73,7 +76,7 @@ class DebugMenuViewModel @Inject constructor(
  * State for the [DebugMenuViewModel]
  */
 data class DebugMenuState(
-    val featureFlags: Map<FlagKey<Any>, Any>,
+    val featureFlags: ImmutableMap<FlagKey<Any>, Any>,
 )
 
 /**

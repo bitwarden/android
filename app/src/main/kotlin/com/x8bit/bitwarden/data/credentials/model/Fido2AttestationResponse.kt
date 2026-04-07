@@ -20,7 +20,7 @@ data class Fido2AttestationResponse(
     @SerialName("response")
     val response: RegistrationResponse,
     @SerialName("clientExtensionResults")
-    val clientExtensionResults: ClientExtensionResults?,
+    val clientExtensionResults: ClientExtensionResults,
     @SerialName("authenticatorAttachment")
     val authenticatorAttachment: String?,
 ) {
@@ -50,7 +50,7 @@ data class Fido2AttestationResponse(
     @Serializable
     data class ClientExtensionResults(
         @SerialName("credProps")
-        val credentialProperties: CredentialProperties,
+        val credentialProperties: CredentialProperties? = null,
     ) {
         /**
          * Represents properties for newly created credential.

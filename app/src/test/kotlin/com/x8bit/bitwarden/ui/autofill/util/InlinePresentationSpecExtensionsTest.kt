@@ -12,6 +12,7 @@ import androidx.autofill.inline.UiVersions
 import androidx.autofill.inline.v1.InlineSuggestionUi
 import androidx.core.content.ContextCompat
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
@@ -146,13 +147,13 @@ class InlinePresentationSpecExtensionsTest {
     fun `createCipherInlinePresentationOrNull should return presentation with login icon when login cipher and compatible`() {
         // Setup
         every {
-            ContextCompat.getString(testContext, R.string.autofill_suggestion)
+            ContextCompat.getString(testContext, BitwardenString.autofill_suggestion)
         } returns AUTOFILL_SUGGESTION
         every {
-            ContextCompat.getString(testContext, R.string.type_card)
+            ContextCompat.getString(testContext, BitwardenString.type_card)
         } returns CARD
         every {
-            ContextCompat.getString(testContext, R.string.type_login)
+            ContextCompat.getString(testContext, BitwardenString.type_login)
         } returns LOGIN
         val icon: Icon = mockk()
         val iconRes = BitwardenDrawable.ic_globe
@@ -210,8 +211,8 @@ class InlinePresentationSpecExtensionsTest {
         } returns emptyList()
 
         every { testContext.getString(R.string.app_name) } returns APP_NAME
-        every { testContext.getString(R.string.vault_is_locked) } returns VAULT_IS_LOCKED
-        every { testContext.getString(R.string.my_vault) } returns MY_VAULT
+        every { testContext.getString(BitwardenString.vault_is_locked) } returns VAULT_IS_LOCKED
+        every { testContext.getString(BitwardenString.my_vault) } returns MY_VAULT
 
         // Test
         val actual = inlinePresentationSpec.createVaultItemInlinePresentationOrNull(
@@ -252,11 +253,11 @@ class InlinePresentationSpecExtensionsTest {
             Icon
                 .createWithResource(
                     testContext,
-                    BitwardenDrawable.icon,
+                    BitwardenDrawable.logo_bitwarden_icon,
                 )
                 .setTintBlendMode(BlendMode.DST)
             testContext.getString(R.string.app_name)
-            testContext.getString(R.string.vault_is_locked)
+            testContext.getString(BitwardenString.vault_is_locked)
             InlineSuggestionUi.newContentBuilder(pendingIntent)
                 .setTitle(APP_NAME)
                 .setSubtitle(VAULT_IS_LOCKED)
@@ -291,11 +292,11 @@ class InlinePresentationSpecExtensionsTest {
             Icon
                 .createWithResource(
                     testContext,
-                    BitwardenDrawable.icon,
+                    BitwardenDrawable.logo_bitwarden_icon,
                 )
                 .setTintBlendMode(BlendMode.DST)
             testContext.getString(R.string.app_name)
-            testContext.getString(R.string.my_vault)
+            testContext.getString(BitwardenString.my_vault)
             InlineSuggestionUi.newContentBuilder(pendingIntent)
                 .setTitle(APP_NAME)
                 .setSubtitle(MY_VAULT)
@@ -313,13 +314,13 @@ class InlinePresentationSpecExtensionsTest {
         cipherType: String = LOGIN,
     ) {
         every {
-            ContextCompat.getString(testContext, R.string.autofill_suggestion)
+            ContextCompat.getString(testContext, BitwardenString.autofill_suggestion)
         } returns AUTOFILL_SUGGESTION
         every {
-            ContextCompat.getString(testContext, R.string.type_card)
+            ContextCompat.getString(testContext, BitwardenString.type_card)
         } returns CARD
         every {
-            ContextCompat.getString(testContext, R.string.type_login)
+            ContextCompat.getString(testContext, BitwardenString.type_login)
         } returns LOGIN
         @Suppress("DEPRECATION")
         val slice: Slice = mockk()
@@ -388,7 +389,7 @@ class InlinePresentationSpecExtensionsTest {
             Icon
                 .createWithResource(
                     testContext,
-                    BitwardenDrawable.icon,
+                    BitwardenDrawable.logo_bitwarden_icon,
                 )
                 .setTintBlendMode(BlendMode.DST)
         } returns icon
@@ -411,13 +412,13 @@ class InlinePresentationSpecExtensionsTest {
                 .slice
         } returns slice
         every { testContext.getString(R.string.app_name) } returns APP_NAME
-        every { testContext.getString(R.string.vault_is_locked) } returns VAULT_IS_LOCKED
-        every { testContext.getString(R.string.my_vault) } returns MY_VAULT
+        every { testContext.getString(BitwardenString.vault_is_locked) } returns VAULT_IS_LOCKED
+        every { testContext.getString(BitwardenString.my_vault) } returns MY_VAULT
     }
 }
 
 private fun createMockContentDescription(cipherType: String): String =
-    "${AUTOFILL_SUGGESTION}, $cipherType, ${AUTOFILL_CIPHER_NAME}, ${AUTOFILL_CIPHER_SUBTITLE}"
+    "$AUTOFILL_SUGGESTION, $cipherType, $AUTOFILL_CIPHER_NAME, $AUTOFILL_CIPHER_SUBTITLE"
 
 private const val AUTOFILL_SUGGESTION = "Autofill suggestion"
 private const val CARD = "Card"

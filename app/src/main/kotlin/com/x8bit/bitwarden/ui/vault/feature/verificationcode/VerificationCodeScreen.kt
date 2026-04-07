@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -29,20 +29,22 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
+import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
+import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.scaffold.model.rememberBitwardenPullToRefreshState
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.manager.util.RegisterScreenDataOnLifecycleEffect
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
-import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.handlers.VerificationCodeHandlers
@@ -72,9 +74,7 @@ fun VerificationCodeScreen(
     val pullToRefreshState = rememberBitwardenPullToRefreshState(
         isEnabled = state.isPullToRefreshEnabled,
         isRefreshing = state.isRefreshing,
-        onRefresh = remember(viewModel) {
-            { viewModel.trySendAction(VerificationCodeAction.RefreshPull) }
-        },
+        onRefresh = { viewModel.trySendAction(VerificationCodeAction.RefreshPull) },
     )
 
     RegisterScreenDataOnLifecycleEffect(
@@ -108,25 +108,24 @@ fun VerificationCodeScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.verification_codes),
+                title = stringResource(id = BitwardenString.verification_codes),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                navigationIconContentDescription = stringResource(id = R.string.back),
+                navigationIconContentDescription = stringResource(id = BitwardenString.back),
                 onNavigationIconClick = verificationCodeHandler.backClick,
                 actions = {
                     BitwardenSearchActionItem(
-                        contentDescription = stringResource(id = R.string.search_vault),
+                        contentDescription = stringResource(id = BitwardenString.search_vault),
                         onClick = verificationCodeHandler.searchIconClick,
                     )
                     BitwardenOverflowActionItem(
-                        contentDescription = stringResource(R.string.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
-                                text = stringResource(id = R.string.sync),
+                                text = stringResource(id = BitwardenString.sync),
                                 onClick = verificationCodeHandler.syncClick,
                             ),
                             OverflowMenuItemData(
-                                text = stringResource(id = R.string.lock),
+                                text = stringResource(id = BitwardenString.lock),
                                 onClick = verificationCodeHandler.lockClick,
                             ),
                         ),
@@ -151,7 +150,10 @@ fun VerificationCodeScreen(
             is VerificationCodeState.ViewState.Error -> {
                 BitwardenErrorContent(
                     message = viewState.message.invoke(),
-                    onTryAgainClick = verificationCodeHandler.refreshClick,
+                    buttonData = BitwardenButtonData(
+                        label = BitwardenString.try_again.asText(),
+                        onClick = verificationCodeHandler.refreshClick,
+                    ),
                     modifier = Modifier.fillMaxSize(),
                 )
             }
@@ -212,7 +214,7 @@ private fun VerificationCodeContent(
         item {
             Spacer(modifier = Modifier.height(height = 12.dp))
             BitwardenListHeaderText(
-                label = stringResource(id = R.string.items),
+                label = stringResource(id = BitwardenString.items),
                 supportingLabel = items.size.toString(),
                 modifier = Modifier
                     .fillMaxWidth()

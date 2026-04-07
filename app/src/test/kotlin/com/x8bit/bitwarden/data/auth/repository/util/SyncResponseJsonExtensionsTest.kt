@@ -2,11 +2,11 @@ package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.createMockOrganization
+import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.bitwarden.network.model.createMockPermissions
 import com.bitwarden.network.model.createMockPolicy
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonObject
@@ -18,16 +18,8 @@ class SyncResponseJsonExtensionsTest {
     @Test
     fun `toOrganization should output the correct organization`() {
         assertEquals(
-            Organization(
-                id = "mockId-1",
-                name = "mockName-1",
-                shouldManageResetPassword = false,
-                shouldUseKeyConnector = false,
-                role = OrganizationType.ADMIN,
-                keyConnectorUrl = "mockKeyConnectorUrl-1",
-                userIsClaimedByOrganization = false,
-            ),
-            createMockOrganization(number = 1).toOrganization(),
+            createMockOrganization(number = 1),
+            createMockOrganizationNetwork(number = 1).toOrganization(),
         )
     }
 
@@ -35,28 +27,19 @@ class SyncResponseJsonExtensionsTest {
     fun `toOrganizations should output the correct list of organizations`() {
         assertEquals(
             listOf(
-                Organization(
-                    id = "mockId-1",
-                    name = "mockName-1",
-                    shouldManageResetPassword = false,
+                createMockOrganization(
+                    number = 1,
                     shouldUseKeyConnector = true,
-                    role = OrganizationType.ADMIN,
-                    keyConnectorUrl = "mockKeyConnectorUrl-1",
-                    userIsClaimedByOrganization = false,
                 ),
-                Organization(
-                    id = "mockId-2",
-                    name = "mockName-2",
+                createMockOrganization(
+                    number = 2,
                     shouldManageResetPassword = true,
-                    shouldUseKeyConnector = false,
                     role = OrganizationType.USER,
-                    keyConnectorUrl = "mockKeyConnectorUrl-2",
-                    userIsClaimedByOrganization = false,
                 ),
             ),
             listOf(
-                createMockOrganization(number = 1, shouldUseKeyConnector = true),
-                createMockOrganization(
+                createMockOrganizationNetwork(number = 1, shouldUseKeyConnector = true),
+                createMockOrganizationNetwork(
                     number = 2,
                     type = OrganizationType.USER,
                     permissions = createMockPermissions(shouldManageResetPassword = true),
@@ -118,7 +101,8 @@ class SyncResponseJsonExtensionsTest {
     fun `policyInformation converts the VaultTimeout Json data to policy information`() {
         val policyInformation = PolicyInformation.VaultTimeout(
             minutes = 10,
-            action = "lock",
+            action = PolicyInformation.VaultTimeout.Action.LOCK,
+            type = PolicyInformation.VaultTimeout.Type.CUSTOM,
         )
         val policy = createMockPolicy(
             type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,

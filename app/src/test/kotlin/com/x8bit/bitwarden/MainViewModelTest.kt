@@ -1,19 +1,27 @@
 package com.x8bit.bitwarden
 
 import android.content.Intent
-import androidx.core.os.bundleOf
+import androidx.browser.auth.AuthTabIntent
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.provider.BiometricPromptResult
 import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
+import androidx.credentials.providerevents.transfer.ImportCredentialsRequest
+import androidx.credentials.providerevents.transfer.ProviderImportCredentialsRequest
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.cxf.model.ImportCredentialsRequestData
+import com.bitwarden.cxf.util.getProviderImportCredentialsRequest
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
-import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.platform.manager.share.ShareManager
+import com.bitwarden.ui.platform.manager.share.model.ShareData
+import com.bitwarden.ui.platform.model.TotpData
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManagerImpl
@@ -21,6 +29,12 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
+import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
+import com.x8bit.bitwarden.data.auth.repository.util.getDuoCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.getSsoCallbackResult
+import com.x8bit.bitwarden.data.auth.repository.util.getWebAuthResult
 import com.x8bit.bitwarden.data.auth.util.getCompleteRegistrationDataIntentOrNull
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
@@ -31,25 +45,21 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
-import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
+import com.x8bit.bitwarden.data.credentials.manager.CredentialProviderRequestManager
+import com.x8bit.bitwarden.data.credentials.manager.model.CredentialProviderRequest
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
-import com.x8bit.bitwarden.data.credentials.model.createMockCreateCredentialRequest
-import com.x8bit.bitwarden.data.credentials.model.createMockFido2CredentialAssertionRequest
-import com.x8bit.bitwarden.data.credentials.model.createMockGetCredentialsRequest
-import com.x8bit.bitwarden.data.credentials.util.getCreateCredentialRequestOrNull
-import com.x8bit.bitwarden.data.credentials.util.getFido2AssertionRequestOrNull
-import com.x8bit.bitwarden.data.credentials.util.getGetCredentialsRequestOrNull
+import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
+import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -58,24 +68,27 @@ import com.x8bit.bitwarden.data.platform.util.isAddTotpLoginItemFromAuthenticato
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.util.isAccountSecurityShortcut
 import com.x8bit.bitwarden.ui.platform.util.isMyVaultShortcut
 import com.x8bit.bitwarden.ui.platform.util.isPasswordGeneratorShortcut
-import com.x8bit.bitwarden.ui.vault.model.TotpData
+import com.x8bit.bitwarden.ui.platform.util.isPremiumCheckoutCallback
 import com.x8bit.bitwarden.ui.vault.util.getTotpDataOrNull
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkConstructor
 import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.json.JSONArray
+import org.json.JSONObject
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
@@ -113,6 +126,9 @@ class MainViewModelTest : BaseViewModelTest() {
         every { userStateFlow } returns mutableUserStateFlow
         every { switchAccount(any()) } returns SwitchAccountResult.NoChange
         coEvery { validateEmailToken(any(), any()) } returns EmailTokenResult.Success
+        every { setWebAuthResult(webAuthResult = any()) } just runs
+        every { setSsoCallbackResult(result = any()) } just runs
+        every { setDuoCallbackTokenResult(tokenResult = any()) } just runs
     }
     private val mutableVaultStateEventFlow = bufferedMutableSharedFlow<VaultStateEvent>()
     private val vaultRepository = mockk<VaultRepository> {
@@ -130,12 +146,8 @@ class MainViewModelTest : BaseViewModelTest() {
     private val environmentRepository = mockk<EnvironmentRepository>(relaxed = true) {
         every { loadEnvironmentForEmail(any()) } returns true
     }
-    private val intentManager: IntentManager = mockk {
-        every { getShareDataFromIntent(any()) } returns null
-    }
-    private val bitwardenCredentialManager = mockk<BitwardenCredentialManager> {
-        every { isUserVerified } returns true
-        every { isUserVerified = any() } just runs
+    private val shareManager: ShareManager = mockk {
+        every { getShareDataOrNull(any()) } returns null
     }
     private val savedStateHandle = SavedStateHandle()
 
@@ -144,13 +156,6 @@ class MainViewModelTest : BaseViewModelTest() {
         every { clearResumeScreen() } just runs
     }
 
-    private val mutableMobileErrorReportingFeatureFlow = MutableStateFlow(false)
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(key = FlagKey.MobileErrorReporting) } returns false
-        every {
-            getFeatureFlagFlow(key = FlagKey.MobileErrorReporting)
-        } returns mutableMobileErrorReportingFeatureFlow
-    }
     private val mockBiometricsPromptResult = mockk<BiometricPromptResult>(relaxed = true) {
         every { isSuccessful } returns true
     }
@@ -165,6 +170,18 @@ class MainViewModelTest : BaseViewModelTest() {
                 mockk<GetPublicKeyCredentialOption>(relaxed = true),
             )
         }
+    private val toastManager: ToastManager = mockk {
+        every { show(message = any(), duration = any()) } just runs
+        every { show(messageId = any(), duration = any()) } just runs
+    }
+    private val mutableCookieAcquisitionRequestFlow =
+        MutableStateFlow<CookieAcquisitionRequest?>(null)
+    private val cookieAcquisitionRequestManager: CookieAcquisitionRequestManager = mockk {
+        every { cookieAcquisitionRequestFlow } returns mutableCookieAcquisitionRequestFlow
+    }
+    private val credentialProviderRequestManager: CredentialProviderRequestManager = mockk {
+        every { getPendingCredentialRequest() } returns null
+    }
 
     @BeforeEach
     fun setup() {
@@ -174,15 +191,17 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getAutofillSaveItemOrNull,
             Intent::getAutofillSelectionDataOrNull,
             Intent::getCompleteRegistrationDataIntentOrNull,
-            Intent::getFido2AssertionRequestOrNull,
-            Intent::getCreateCredentialRequestOrNull,
-            Intent::getGetCredentialsRequestOrNull,
             Intent::isAddTotpLoginItemFromAuthenticator,
+            Intent::getProviderImportCredentialsRequest,
+            AuthTabIntent.AuthResult::getDuoCallbackTokenResult,
+            AuthTabIntent.AuthResult::getSsoCallbackResult,
+            AuthTabIntent.AuthResult::getWebAuthResult,
         )
         mockkStatic(
             Intent::isMyVaultShortcut,
             Intent::isPasswordGeneratorShortcut,
             Intent::isAccountSecurityShortcut,
+            Intent::isPremiumCheckoutCallback,
         )
         mockkObject(
             ProviderCreateCredentialRequest.Companion,
@@ -204,20 +223,23 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getAutofillSaveItemOrNull,
             Intent::getAutofillSelectionDataOrNull,
             Intent::getCompleteRegistrationDataIntentOrNull,
-            Intent::getFido2AssertionRequestOrNull,
-            Intent::getCreateCredentialRequestOrNull,
-            Intent::getGetCredentialsRequestOrNull,
             Intent::isAddTotpLoginItemFromAuthenticator,
+            Intent::getProviderImportCredentialsRequest,
+            AuthTabIntent.AuthResult::getDuoCallbackTokenResult,
+            AuthTabIntent.AuthResult::getSsoCallbackResult,
+            AuthTabIntent.AuthResult::getWebAuthResult,
         )
         unmockkStatic(
             Intent::isMyVaultShortcut,
             Intent::isPasswordGeneratorShortcut,
             Intent::isAccountSecurityShortcut,
+            Intent::isPremiumCheckoutCallback,
         )
         unmockkObject(
             ProviderCreateCredentialRequest.Companion,
             ProviderGetCredentialRequest.Companion,
         )
+        unmockkConstructor(JSONObject::class)
     }
 
     @Suppress("MaxLineLength")
@@ -244,14 +266,14 @@ class MainViewModelTest : BaseViewModelTest() {
 
         viewModel.eventFlow.test {
             // We skip the first 2 events because they are the default appTheme and appLanguage
-            awaitItem()
-            awaitItem()
+            skipItems(2)
 
             mutableUserStateFlow.value = UserState(
                 activeUserId = userId1,
                 accounts = listOf(
                     mockk<UserState.Account> {
                         every { userId } returns userId1
+                        every { isVaultUnlocked } returns false
                     },
                 ),
                 hasPendingAccountAddition = false,
@@ -263,6 +285,7 @@ class MainViewModelTest : BaseViewModelTest() {
                 accounts = listOf(
                     mockk<UserState.Account> {
                         every { userId } returns userId1
+                        every { isVaultUnlocked } returns false
                     },
                 ),
                 hasPendingAccountAddition = true,
@@ -274,9 +297,11 @@ class MainViewModelTest : BaseViewModelTest() {
                 accounts = listOf(
                     mockk<UserState.Account> {
                         every { userId } returns userId1
+                        every { isVaultUnlocked } returns false
                     },
                     mockk<UserState.Account> {
                         every { userId } returns userId2
+                        every { isVaultUnlocked } returns false
                     },
                 ),
                 hasPendingAccountAddition = true,
@@ -452,8 +477,8 @@ class MainViewModelTest : BaseViewModelTest() {
     fun `on ReceiveFirstIntent with share data should set the special circumstance to ShareNewSend`() {
         val viewModel = createViewModel()
         val mockIntent = createMockIntent()
-        val shareData = mockk<IntentManager.ShareData>()
-        every { intentManager.getShareDataFromIntent(mockIntent) } returns shareData
+        val shareData = mockk<ShareData>()
+        every { shareManager.getShareDataOrNull(mockIntent) } returns shareData
 
         viewModel.trySendAction(
             MainAction.ReceiveFirstIntent(
@@ -595,15 +620,11 @@ class MainViewModelTest : BaseViewModelTest() {
                 authRepository.validateEmailToken(email = intentEmail, token = token)
             } returns EmailTokenResult.Error(message = null, error = Throwable("Fail!"))
 
-            viewModel.eventFlow.test {
-                // We skip the first 2 events because they are the default appTheme and appLanguage
-                awaitItem()
-                awaitItem()
+            viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
 
-                viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
-                assertEquals(
-                    MainEvent.ShowToast(R.string.there_was_an_issue_validating_the_registration_token.asText()),
-                    awaitItem(),
+            verify(exactly = 1) {
+                toastManager.show(
+                    BitwardenString.there_was_an_issue_validating_the_registration_token,
                 )
             }
         }
@@ -629,16 +650,10 @@ class MainViewModelTest : BaseViewModelTest() {
                 authRepository.validateEmailToken(email = intentEmail, token = token)
             } returns EmailTokenResult.Error(message = expectedMessage, error = null)
 
-            viewModel.eventFlow.test {
-                // We skip the first 2 events because they are the default appTheme and appLanguage
-                awaitItem()
-                awaitItem()
+            viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
 
-                viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
-                assertEquals(
-                    MainEvent.ShowToast(expectedMessage.asText()),
-                    awaitItem(),
-                )
+            verify(exactly = 1) {
+                toastManager.show(message = expectedMessage)
             }
         }
 
@@ -685,152 +700,11 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveFirstIntent with fido2 create intent data should set the special circumstance to Fido2Save`() {
-        val viewModel = createViewModel()
-        val createCredentialRequest = CreateCredentialRequest(
-            userId = DEFAULT_USER_STATE.activeUserId,
-            isUserPreVerified = false,
-            requestData = bundleOf(),
-        )
-        val fido2Intent = createMockIntent(
-            mockCreateCredentialRequest = createCredentialRequest,
-        )
-
-        viewModel.trySendAction(
-            MainAction.ReceiveFirstIntent(
-                intent = fido2Intent,
-            ),
-        )
-
-        assertEquals(
-            SpecialCircumstance.ProviderCreateCredential(
-                createCredentialRequest = createCredentialRequest,
-            ),
-            specialCircumstanceManager.specialCircumstance,
-        )
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on ReceiveFirstIntent with fido2 create request data should set the user verification based on request`() {
-        val viewModel = createViewModel()
-        val createCredentialRequest = createMockCreateCredentialRequest(
-            number = 1,
-            isUserPreVerified = true,
-        )
-        val fido2Intent = createMockIntent(
-            mockCreateCredentialRequest = createCredentialRequest,
-        )
-
-        viewModel.trySendAction(
-            MainAction.ReceiveFirstIntent(
-                intent = fido2Intent,
-            ),
-        )
-
-        verify {
-            bitwardenCredentialManager.isUserVerified = true
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on ReceiveFirstIntent with fido2 create intent data should switch users if active user is not selected`() =
-        runTest {
-            mutableUserStateFlow.value = DEFAULT_USER_STATE
-            val viewModel = createViewModel()
-            val createCredentialRequest = CreateCredentialRequest(
-                userId = "selectedUserId",
-                isUserPreVerified = false,
-                requestData = bundleOf(),
-            )
-            val mockIntent = createMockIntent(
-                mockCreateCredentialRequest = createCredentialRequest,
-            )
-
-            viewModel.trySendAction(
-                MainAction.ReceiveFirstIntent(
-                    intent = mockIntent,
-                ),
-            )
-
-            verify(exactly = 1) {
-                authRepository.switchAccount(createCredentialRequest.userId)
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on ReceiveFirstIntent with fido2 request data should not switch users if active user is selected`() =
-        runTest {
-            val viewModel = createViewModel()
-            val createCredentialRequest = CreateCredentialRequest(
-                userId = DEFAULT_USER_STATE.activeUserId,
-                isUserPreVerified = false,
-                requestData = bundleOf(),
-            )
-            val mockIntent = createMockIntent(
-                mockCreateCredentialRequest = createCredentialRequest,
-            )
-
-            viewModel.trySendAction(
-                MainAction.ReceiveFirstIntent(
-                    intent = mockIntent,
-                ),
-            )
-
-            verify(exactly = 0) { authRepository.switchAccount(createCredentialRequest.userId) }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on ReceiveFirstIntent with FIDO 2 assertion request data should set the special circumstance to Fido2Assertion`() {
-        val viewModel = createViewModel()
-        val mockAssertionRequest = createMockFido2CredentialAssertionRequest(number = 1)
-        val fido2AssertionIntent = createMockIntent(
-            mockFido2CredentialAssertionRequest = mockAssertionRequest,
-        )
-
-        viewModel.trySendAction(
-            MainAction.ReceiveFirstIntent(
-                intent = fido2AssertionIntent,
-            ),
-        )
-
-        assertEquals(
-            SpecialCircumstance.Fido2Assertion(mockAssertionRequest),
-            specialCircumstanceManager.specialCircumstance,
-        )
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on ReceiveFirstIntent with fido2 get credentials request data should set the special circumstance to Fido2GetCredentials`() {
-        val viewModel = createViewModel()
-        val mockGetCredentialsRequest = createMockGetCredentialsRequest(number = 1)
-        val mockIntent = createMockIntent(
-            mockGetCredentialsRequest = mockGetCredentialsRequest,
-        )
-
-        viewModel.trySendAction(
-            MainAction.ReceiveFirstIntent(
-                intent = mockIntent,
-            ),
-        )
-
-        assertEquals(
-            SpecialCircumstance.ProviderGetCredentials(mockGetCredentialsRequest),
-            specialCircumstanceManager.specialCircumstance,
-        )
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
     fun `on ReceiveNewIntent with share data should set the special circumstance to ShareNewSend`() {
         val viewModel = createViewModel()
         val mockIntent = createMockIntent()
-        val shareData = mockk<IntentManager.ShareData>()
-        every { intentManager.getShareDataFromIntent(mockIntent) } returns shareData
+        val shareData = mockk<ShareData>()
+        every { shareManager.getShareDataOrNull(mockIntent) } returns shareData
 
         viewModel.trySendAction(
             MainAction.ReceiveNewIntent(
@@ -990,6 +864,40 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `on ReceiveFirstIntent with Premium checkout callback should set special circumstance to PremiumCheckoutResult`() {
+        val viewModel = createViewModel()
+        val mockIntent = createMockIntent(
+            mockIsPremiumCheckoutCallback = true,
+        )
+
+        viewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(intent = mockIntent),
+        )
+        assertEquals(
+            SpecialCircumstance.PremiumCheckoutResult,
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveNewIntent with Premium checkout callback should set special circumstance to PremiumCheckoutResult`() {
+        val viewModel = createViewModel()
+        val mockIntent = createMockIntent(
+            mockIsPremiumCheckoutCallback = true,
+        )
+
+        viewModel.trySendAction(
+            MainAction.ReceiveNewIntent(intent = mockIntent),
+        )
+        assertEquals(
+            SpecialCircumstance.PremiumCheckoutResult,
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `on ReceiveNewIntent with a password generator deeplink data should set the special circumstance to GeneratorShortcut`() {
         val viewModel = createViewModel()
         val mockIntent = createMockIntent(mockIsPasswordGeneratorShortcut = true)
@@ -1088,6 +996,125 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `on ReceiveNewIntent with import credentials request data should set the special circumstance to CredentialExchangeExport`() {
+        mockkConstructor(JSONObject::class)
+        every {
+            anyConstructed<JSONObject>().put(any<String>(), any<JSONArray>())
+        } returns mockk()
+        val viewModel = createViewModel()
+        val importCredentialsRequestData = ProviderImportCredentialsRequest(
+            request = ImportCredentialsRequest(
+                setOf("mockCredentialType-1"),
+                setOf(),
+            ),
+            callingAppInfo = mockk(),
+            uri = mockk(),
+            credId = "mockCredId",
+        )
+        val mockIntent = createMockIntent(
+            mockProviderImportCredentialsRequest = importCredentialsRequestData,
+        )
+
+        viewModel.trySendAction(
+            MainAction.ReceiveNewIntent(
+                intent = mockIntent,
+            ),
+        )
+
+        assertEquals(
+            SpecialCircumstance.CredentialExchangeExport(
+                data = ImportCredentialsRequestData(
+                    uri = importCredentialsRequestData.uri,
+                    credentialTypes = setOf("mockCredentialType-1"),
+                    knownExtensions = setOf(),
+                ),
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveFirstIntent with CreateCredential request should set special circumstance to ProviderCreateCredential`() {
+        val createCredentialRequest = mockk<CreateCredentialRequest>()
+        every {
+            credentialProviderRequestManager.getPendingCredentialRequest()
+        } returns CredentialProviderRequest.CreateCredential(createCredentialRequest)
+        val viewModel = createViewModel()
+        val mockIntent = createMockIntent()
+
+        viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
+
+        assertEquals(
+            SpecialCircumstance.ProviderCreateCredential(
+                createCredentialRequest = createCredentialRequest,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveFirstIntent with Fido2Assertion request should set special circumstance to Fido2Assertion`() {
+        val fido2AssertionRequest = mockk<Fido2CredentialAssertionRequest>()
+        every {
+            credentialProviderRequestManager.getPendingCredentialRequest()
+        } returns CredentialProviderRequest.Fido2Assertion(fido2AssertionRequest)
+        val viewModel = createViewModel()
+        val mockIntent = createMockIntent()
+
+        viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
+
+        assertEquals(
+            SpecialCircumstance.Fido2Assertion(
+                fido2AssertionRequest = fido2AssertionRequest,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveFirstIntent with GetPassword request should set special circumstance to ProviderGetPasswordRequest`() {
+        val passwordGetRequest = mockk<ProviderGetPasswordCredentialRequest>()
+        every {
+            credentialProviderRequestManager.getPendingCredentialRequest()
+        } returns CredentialProviderRequest.GetPassword(passwordGetRequest)
+        val viewModel = createViewModel()
+        val mockIntent = createMockIntent()
+
+        viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
+
+        assertEquals(
+            SpecialCircumstance.ProviderGetPasswordRequest(
+                passwordGetRequest = passwordGetRequest,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveFirstIntent with GetCredentials request should set special circumstance to ProviderGetCredentials`() {
+        val getCredentialsRequest = mockk<GetCredentialsRequest>()
+        every {
+            credentialProviderRequestManager.getPendingCredentialRequest()
+        } returns CredentialProviderRequest.GetCredentials(getCredentialsRequest)
+        val viewModel = createViewModel()
+        val mockIntent = createMockIntent()
+
+        viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
+
+        assertEquals(
+            SpecialCircumstance.ProviderGetCredentials(
+                getCredentialsRequest = getCredentialsRequest,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `on ResumeScreenDataReceived with null value, should call AppResumeManager clearResumeScreen`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(
@@ -1117,16 +1144,110 @@ class MainViewModelTest : BaseViewModelTest() {
         verify { settingsRepository.appLanguage = AppLanguage.SPANISH }
     }
 
+    @Test
+    fun `on DuoResult should setDuoCallbackTokenResult with result`() = runTest {
+        val tokenResult = DuoCallbackTokenResult.Success(token = "token")
+        val authResult = mockk<AuthTabIntent.AuthResult> {
+            every { getDuoCallbackTokenResult() } returns tokenResult
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(MainAction.DuoResult(authResult = authResult))
+
+        verify(exactly = 1) {
+            authRepository.setDuoCallbackTokenResult(tokenResult = tokenResult)
+        }
+    }
+
+    @Test
+    fun `on SsoResult should setSsoCallbackResult with result`() = runTest {
+        val result = SsoCallbackResult.Success(state = null, code = "code")
+        val authResult = mockk<AuthTabIntent.AuthResult> {
+            every { getSsoCallbackResult() } returns result
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(MainAction.SsoResult(authResult = authResult))
+
+        verify(exactly = 1) {
+            authRepository.setSsoCallbackResult(result = result)
+        }
+    }
+
+    @Test
+    fun `on WebAuthnResult should setWebAuthResult with result`() = runTest {
+        val webAuthResult = WebAuthResult.Success(token = "token")
+        val authResult = mockk<AuthTabIntent.AuthResult> {
+            every { getWebAuthResult() } returns webAuthResult
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(MainAction.WebAuthnResult(authResult = authResult))
+
+        verify(exactly = 1) {
+            authRepository.setWebAuthResult(webAuthResult = webAuthResult)
+        }
+    }
+
+    @Test
+    fun `on PremiumCheckoutResult should set PremiumCheckoutResult special circumstance`() {
+        val authResult = mockk<AuthTabIntent.AuthResult>()
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            MainAction.PremiumCheckoutResult(authResult = authResult),
+        )
+
+        assertEquals(
+            SpecialCircumstance.PremiumCheckoutResult,
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `cookie acquisition should emit NavigateToCookieAcquisition when vault unlocked with matching hostname`() =
+        runTest {
+            mutableCookieAcquisitionRequestFlow.value = CookieAcquisitionRequest(
+                hostname = DEFAULT_US_WEB_VAULT_URL,
+            )
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                // Skip init events (appLanguage + appTheme)
+                skipItems(2)
+                mutableUserStateFlow.value = DEFAULT_USER_STATE
+                assertEquals(
+                    MainEvent.NavigateToCookieAcquisition,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `cookie acquisition should not emit event when conditions are false`() =
+        runTest {
+            mutableCookieAcquisitionRequestFlow.value = null
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                // Skip init events (appLanguage + appTheme)
+                skipItems(2)
+                mutableUserStateFlow.value = DEFAULT_USER_STATE
+                expectNoEvents()
+            }
+        }
+
     private fun createViewModel(
         initialSpecialCircumstance: SpecialCircumstance? = null,
     ) = MainViewModel(
         accessibilitySelectionManager = accessibilitySelectionManager,
         addTotpItemFromAuthenticatorManager = addTotpItemAuthenticatorManager,
         autofillSelectionManager = autofillSelectionManager,
+        cookieAcquisitionRequestManager = cookieAcquisitionRequestManager,
         specialCircumstanceManager = specialCircumstanceManager,
         garbageCollectionManager = garbageCollectionManager,
-        bitwardenCredentialManager = bitwardenCredentialManager,
-        intentManager = intentManager,
+        credentialProviderRequestManager = credentialProviderRequestManager,
+        shareManager = shareManager,
         settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
         authRepository = authRepository,
@@ -1136,14 +1257,13 @@ class MainViewModelTest : BaseViewModelTest() {
             set(SPECIAL_CIRCUMSTANCE_KEY, initialSpecialCircumstance)
         },
         appResumeManager = appResumeManager,
-        featureFlagManager = featureFlagManager,
+        toastManager = toastManager,
     )
 }
 
 private val DEFAULT_STATE: MainState = MainState(
     theme = AppTheme.DEFAULT,
     isScreenCaptureAllowed = true,
-    isErrorReportingDialogEnabled = false,
     isDynamicColorsEnabled = false,
 )
 
@@ -1153,6 +1273,7 @@ private val DEFAULT_FIRST_TIME_STATE = FirstTimeState(
 
 private const val SPECIAL_CIRCUMSTANCE_KEY: String = "special-circumstance"
 private const val ACTIVE_USER_ID: String = "activeUserId"
+private const val DEFAULT_US_WEB_VAULT_URL: String = "https://vault.bitwarden.com"
 private val DEFAULT_ACCOUNT = UserState.Account(
     userId = ACTIVE_USER_ID,
     name = "Active User",
@@ -1171,6 +1292,8 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     isUsingKeyConnector = false,
     onboardingStatus = OnboardingStatus.COMPLETE,
     firstTimeState = DEFAULT_FIRST_TIME_STATE,
+    isExportable = true,
+    creationDate = null,
 )
 
 private val DEFAULT_USER_STATE = UserState(
@@ -1190,26 +1313,24 @@ private fun createMockIntent(
     mockAutofillSaveItem: AutofillSaveItem? = null,
     mockAutofillSelectionData: AutofillSelectionData? = null,
     mockCompleteRegistrationData: CompleteRegistrationData? = null,
-    mockFido2CredentialAssertionRequest: Fido2CredentialAssertionRequest? = null,
-    mockCreateCredentialRequest: CreateCredentialRequest? = null,
-    mockGetCredentialsRequest: GetCredentialsRequest? = null,
     mockIsMyVaultShortcut: Boolean = false,
     mockIsPasswordGeneratorShortcut: Boolean = false,
     mockIsAccountSecurityShortcut: Boolean = false,
+    mockIsPremiumCheckoutCallback: Boolean = false,
     mockIsAddTotpLoginItemFromAuthenticator: Boolean = false,
+    mockProviderImportCredentialsRequest: ProviderImportCredentialsRequest? = null,
 ): Intent = mockk<Intent> {
     every { getTotpDataOrNull() } returns mockTotpData
     every { getPasswordlessRequestDataIntentOrNull() } returns mockPasswordlessRequestData
     every { getAutofillSaveItemOrNull() } returns mockAutofillSaveItem
     every { getAutofillSelectionDataOrNull() } returns mockAutofillSelectionData
     every { getCompleteRegistrationDataIntentOrNull() } returns mockCompleteRegistrationData
-    every { getFido2AssertionRequestOrNull() } returns mockFido2CredentialAssertionRequest
-    every { getCreateCredentialRequestOrNull() } returns mockCreateCredentialRequest
-    every { getGetCredentialsRequestOrNull() } returns mockGetCredentialsRequest
     every { isMyVaultShortcut } returns mockIsMyVaultShortcut
     every { isPasswordGeneratorShortcut } returns mockIsPasswordGeneratorShortcut
     every { isAccountSecurityShortcut } returns mockIsAccountSecurityShortcut
+    every { isPremiumCheckoutCallback } returns mockIsPremiumCheckoutCallback
     every { isAddTotpLoginItemFromAuthenticator() } returns mockIsAddTotpLoginItemFromAuthenticator
+    every { getProviderImportCredentialsRequest() } returns mockProviderImportCredentialsRequest
 }
 
 private val FIXED_CLOCK: Clock = Clock.fixed(

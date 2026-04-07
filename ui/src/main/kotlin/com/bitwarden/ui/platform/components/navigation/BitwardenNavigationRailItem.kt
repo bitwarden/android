@@ -10,17 +10,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.bitwarden.ui.platform.components.navigation.color.bitwardenNavigationRailItemColors
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenPlurals
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
- * A custom Bitwarden-themed bottom app bar.
+ * A custom Bitwarden-themed navigation rail item.
  *
  * @param labelRes The custom label for the navigation item.
- * @param contentDescriptionRes The custom content description for the navigation item.
  * @param selectedIconRes The icon to be displayed when the navigation item is selected.
  * @param unselectedIconRes The icon to be displayed when the navigation item is not selected.
  * @param isSelected Indicates that the navigation item is selected.
@@ -31,7 +35,6 @@ import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 @Composable
 fun ColumnScope.BitwardenNavigationRailItem(
     @StringRes labelRes: Int,
-    @StringRes contentDescriptionRes: Int,
     @DrawableRes selectedIconRes: Int,
     @DrawableRes unselectedIconRes: Int,
     isSelected: Boolean,
@@ -53,16 +56,36 @@ fun ColumnScope.BitwardenNavigationRailItem(
                     painter = rememberVectorPainter(
                         id = if (isSelected) selectedIconRes else unselectedIconRes,
                     ),
-                    contentDescription = stringResource(id = contentDescriptionRes),
-                    tint = Color.Unspecified,
+                    contentDescription = null,
+                    tint = if (isSelected) {
+                        // This is unspecified because selected icons are multi-tonal.
+                        Color.Unspecified
+                    } else {
+                        BitwardenTheme.colorScheme.icon.primary
+                    },
                 )
             }
         },
         label = {
+            val label = stringResource(id = labelRes)
+            val notifications = pluralStringResource(
+                id = BitwardenPlurals.notifications_content_description,
+                count = notificationCount,
+                formatArgs = arrayOf(notificationCount),
+            )
             Text(
                 text = stringResource(id = labelRes),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.semantics {
+                    // The NavigationRailItem will clear any icon semantics when the label is
+                    // present, so we have to add the notification count manually here.
+                    contentDescription = if (notificationCount > 0) {
+                        "$label, $notifications"
+                    } else {
+                        label
+                    }
+                },
             )
         },
         selected = isSelected,

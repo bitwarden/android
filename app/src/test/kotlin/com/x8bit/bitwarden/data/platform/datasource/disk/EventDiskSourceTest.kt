@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.di.CoreModule
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.network.model.OrganizationEventJson
 import com.bitwarden.network.model.OrganizationEventType
 import com.x8bit.bitwarden.data.platform.datasource.disk.dao.FakeOrganizationEventDao
@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 class EventDiskSourceTest {
     private val fixedClock: Clock = Clock.fixed(
@@ -38,7 +37,8 @@ class EventDiskSourceTest {
         val organizationEvent = OrganizationEventJson(
             type = OrganizationEventType.CIPHER_DELETED,
             cipherId = "cipherId-1",
-            date = ZonedDateTime.now(fixedClock),
+            date = fixedClock.instant(),
+            organizationId = null,
         )
 
         eventDiskSource.addOrganizationEvent(
@@ -53,7 +53,8 @@ class EventDiskSourceTest {
                     userId = userId,
                     organizationEventType = "1102",
                     cipherId = "cipherId-1",
-                    date = ZonedDateTime.now(fixedClock),
+                    date = fixedClock.instant(),
+                    organizationId = null,
                 ),
             ),
             fakeOrganizationEventDao.storedEvents,
@@ -72,14 +73,16 @@ class EventDiskSourceTest {
                     userId = userId,
                     organizationEventType = "1102",
                     cipherId = "cipherId-1",
-                    date = ZonedDateTime.now(fixedClock),
+                    date = fixedClock.instant(),
+                    organizationId = null,
                 ),
                 OrganizationEventEntity(
                     id = 2,
                     userId = "userId-2",
                     organizationEventType = "1102",
                     cipherId = "cipherId-2",
-                    date = ZonedDateTime.now(fixedClock),
+                    date = fixedClock.instant(),
+                    organizationId = null,
                 ),
             ),
         )
@@ -93,7 +96,8 @@ class EventDiskSourceTest {
                     userId = "userId-2",
                     organizationEventType = "1102",
                     cipherId = "cipherId-2",
-                    date = ZonedDateTime.now(fixedClock),
+                    date = fixedClock.instant(),
+                    organizationId = null,
                 ),
             ),
             fakeOrganizationEventDao.storedEvents,
@@ -112,14 +116,16 @@ class EventDiskSourceTest {
                     userId = userId,
                     organizationEventType = "1102",
                     cipherId = "cipherId-1",
-                    date = ZonedDateTime.now(fixedClock),
+                    date = fixedClock.instant(),
+                    organizationId = null,
                 ),
                 OrganizationEventEntity(
                     id = 2,
                     userId = "userId-2",
                     organizationEventType = "1102",
                     cipherId = "cipherId-2",
-                    date = ZonedDateTime.now(fixedClock),
+                    date = fixedClock.instant(),
+                    organizationId = null,
                 ),
             ),
         )
@@ -131,7 +137,8 @@ class EventDiskSourceTest {
                 OrganizationEventJson(
                     type = OrganizationEventType.CIPHER_DELETED,
                     cipherId = "cipherId-1",
-                    date = ZonedDateTime.now(fixedClock),
+                    date = fixedClock.instant(),
+                    organizationId = null,
                 ),
             ),
             result,

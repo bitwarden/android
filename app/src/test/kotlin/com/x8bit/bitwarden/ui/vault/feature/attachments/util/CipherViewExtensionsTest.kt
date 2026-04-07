@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.attachments.util
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockAttachmentView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.vault.feature.attachments.AttachmentsState
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 
@@ -17,11 +18,12 @@ class CipherViewExtensionsTest {
         assertEquals(
             AttachmentsState.ViewState.Content(
                 originalCipher = cipherView,
-                attachments = listOf(
+                attachments = persistentListOf(
                     AttachmentsState.AttachmentItem(
                         id = "mockId-1",
                         title = "mockFileName-1",
                         displaySize = "mockSizeName-1",
+                        isLargeFile = false,
                     ),
                 ),
                 newAttachment = null,
@@ -41,7 +43,7 @@ class CipherViewExtensionsTest {
         assertEquals(
             AttachmentsState.ViewState.Content(
                 originalCipher = cipherView,
-                attachments = emptyList(),
+                attachments = persistentListOf(),
                 newAttachment = null,
             ),
             result,
@@ -63,7 +65,7 @@ class CipherViewExtensionsTest {
         assertEquals(
             AttachmentsState.ViewState.Content(
                 originalCipher = cipherView,
-                attachments = emptyList(),
+                attachments = persistentListOf(),
                 newAttachment = null,
             ),
             result,

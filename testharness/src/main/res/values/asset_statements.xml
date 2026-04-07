@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    Test harness acts as a credential consumer client, not a provider.
+    Digital Asset Links references Bitwarden's assetlinks to satisfy Credential Manager lint requirement.
+    No actual asset verification is performed as testharness doesn't serve as a credential provider.
+    -->
+    <string name="asset_statements" translatable="false">
+        [{
+            \"include\": \"https://bitwarden.com/.well-known/assetlinks.json\"
+        }]
+    </string>
+</resources>

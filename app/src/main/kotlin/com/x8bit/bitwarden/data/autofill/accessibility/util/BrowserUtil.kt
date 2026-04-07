@@ -136,6 +136,11 @@ private val ACCESSIBILITY_SUPPORTED_BROWSERS = listOf(
         // 2nd = Legacy
         possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view", "url_bar_title"),
     ),
+    Browser(
+        packageName = "org.ironfoxoss.ironfox.nightly",
+        // 2nd = Legacy
+        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view", "url_bar_title"),
+    ),
     Browser(packageName = "org.mozilla.fenix", urlFieldId = "mozac_browser_toolbar_url_view"),
     // [DEPRECATED ENTRY]
     Browser(

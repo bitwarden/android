@@ -79,7 +79,7 @@ class FolderAddEditScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
     }
 
@@ -96,7 +96,7 @@ class FolderAddEditScreenTest : BitwardenComposeTest() {
 
         // Open the overflow menu
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
         // Click on the delete item in the dropdown
         composeTestRule
@@ -131,7 +131,7 @@ class FolderAddEditScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule

@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.ui.auth.feature.twofactorlogin
 
+import android.content.Intent
 import android.net.Uri
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotDisplayed
@@ -8,7 +10,6 @@ import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -16,10 +17,13 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.network.model.TwoFactorAuthMethod
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManager
+import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -32,8 +36,11 @@ import org.junit.Before
 import org.junit.Test
 
 class TwoFactorLoginScreenTest : BitwardenComposeTest() {
-    private val intentManager = mockk<IntentManager>(relaxed = true) {
-        every { launchUri(any()) } just runs
+    private val duoLauncher: ActivityResultLauncher<Intent> = mockk()
+    private val webAuthnLauncher: ActivityResultLauncher<Intent> = mockk()
+    private val intentManager = mockk<IntentManager> {
+        every { launchUri(uri = any()) } just runs
+        every { startAuthTab(uri = any(), authTabData = any(), launcher = any()) } just runs
     }
     private val nfcManager: NfcManager = mockk {
         every { start() } just runs
@@ -50,6 +57,13 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
     @Before
     fun setUp() {
         setContent(
+            authTabLaunchers = AuthTabLaunchers(
+                duo = duoLauncher,
+                sso = mockk(),
+                webAuthn = webAuthnLauncher,
+                cookie = mockk(),
+                premiumCheckout = mockk(),
+            ),
             intentManager = intentManager,
             nfcManager = nfcManager,
         ) {
@@ -58,6 +72,15 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
                 viewModel = viewModel,
             )
         }
+    }
+
+    @Test
+    fun `on ShowSnackbar should display snackbar content`() {
+        val message = "message"
+        val data = BitwardenSnackbarData(message = message.asText())
+        composeTestRule.onNodeWithText(text = message).assertDoesNotExist()
+        mutableEventFlow.tryEmit(TwoFactorLoginEvent.ShowSnackbar(data = data))
+        composeTestRule.onNodeWithText(text = message).assertIsDisplayed()
     }
 
     @Test
@@ -73,7 +96,7 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
             )
         }
 
-        composeTestRule.onNodeWithText("Error message").isDisplayed()
+        composeTestRule.onNodeWithText("Error message").assertIsDisplayed()
     }
 
     @Test
@@ -136,7 +159,7 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
         val emailDetails =
             "Enter the 6 digit verification code that was emailed to ex***@email.com."
         val authAppDetails = "Enter the 6 digit verification code from your authenticator app."
-        composeTestRule.onNodeWithText(emailDetails).isDisplayed()
+        composeTestRule.onNodeWithText(emailDetails).assertIsDisplayed()
         composeTestRule.onNodeWithText(authAppDetails).assertDoesNotExist()
 
         mutableStateFlow.update {
@@ -144,7 +167,7 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule.onNodeWithText(emailDetails).assertDoesNotExist()
-        composeTestRule.onNodeWithText(authAppDetails).isDisplayed()
+        composeTestRule.onNodeWithText(authAppDetails).assertIsDisplayed()
     }
 
     @Test
@@ -157,7 +180,7 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
             )
         }
 
-        composeTestRule.onNodeWithText("Loading...").isDisplayed()
+        composeTestRule.onNodeWithText("Loading...").assertIsDisplayed()
     }
 
     @Test
@@ -225,13 +248,13 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `options menu icon click should show the auth method options`() {
-        composeTestRule.onNodeWithContentDescription("More").performClick()
+        composeTestRule.onNodeWithContentDescription("More options").performClick()
         composeTestRule.onNodeWithText("Recovery code").assertIsDisplayed()
     }
 
     @Test
     fun `options menu option click should should send SelectAuthMethod and close the menu`() {
-        composeTestRule.onNodeWithContentDescription("More").performClick()
+        composeTestRule.onNodeWithContentDescription("More options").performClick()
         composeTestRule.onNodeWithText("Recovery code").performClick()
         verify {
             viewModel.trySendAction(
@@ -243,15 +266,15 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `title text should update according to state`() {
-        composeTestRule.onNodeWithText("Email").isDisplayed()
-        composeTestRule.onNodeWithText("Authenticator App").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Email").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Authenticator app").assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(authMethod = TwoFactorAuthMethod.AUTHENTICATOR_APP)
         }
 
         composeTestRule.onNodeWithText("Email").assertDoesNotExist()
-        composeTestRule.onNodeWithText("Authenticator App").isDisplayed()
+        composeTestRule.onNodeWithText("Authenticator app").assertIsDisplayed()
     }
 
     @Test
@@ -261,24 +284,31 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `NavigateToCaptcha should call intentManager startCustomTabsActivity`() {
+    fun `NavigateToDuo should call intentManager startAuthTab`() {
         val mockUri = mockk<Uri>()
-        mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToCaptcha(mockUri))
-        verify { intentManager.startCustomTabsActivity(mockUri) }
+        val authTabData = mockk<AuthTabData>()
+        mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToDuo(mockUri, authTabData))
+        verify(exactly = 1) {
+            intentManager.startAuthTab(
+                uri = mockUri,
+                authTabData = authTabData,
+                launcher = duoLauncher,
+            )
+        }
     }
 
     @Test
-    fun `NavigateToDuo should call intentManager startCustomTabsActivity`() {
+    fun `NavigateToWebAuth should call intentManager startCustomTabsActivity`() {
         val mockUri = mockk<Uri>()
-        mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToDuo(mockUri))
-        verify { intentManager.startCustomTabsActivity(mockUri) }
-    }
-
-    @Test
-    fun `NavigateToDuoNavigateToWebAuth should call intentManager startCustomTabsActivity`() {
-        val mockUri = mockk<Uri>()
-        mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToWebAuth(mockUri))
-        verify { intentManager.startCustomTabsActivity(mockUri) }
+        val authTabData = mockk<AuthTabData>()
+        mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToWebAuth(mockUri, authTabData))
+        verify(exactly = 1) {
+            intentManager.startAuthTab(
+                uri = mockUri,
+                authTabData = authTabData,
+                launcher = webAuthnLauncher,
+            )
+        }
     }
 
     @Test
@@ -306,7 +336,7 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
         }
         composeTestRule.onNode(
             hasText(
-                text = "We don't recognize this device",
+                text = "We don’t recognize this device",
                 substring = true,
                 ignoreCase = true,
             ),
@@ -341,7 +371,6 @@ private val DEFAULT_STATE = TwoFactorLoginState(
     isContinueButtonEnabled = false,
     isRememberEnabled = false,
     isNewDeviceVerification = false,
-    captchaToken = null,
     email = "example@email.com",
     password = "password123",
     orgIdentifier = "orgIdentifier",

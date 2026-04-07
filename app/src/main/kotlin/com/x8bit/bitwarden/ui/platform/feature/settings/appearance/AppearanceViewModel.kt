@@ -1,8 +1,10 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.appearance
 
+import android.os.Build
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -20,6 +22,7 @@ private const val KEY_STATE = "state"
 /**
  * View model for the appearance screen.
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class AppearanceViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
@@ -31,6 +34,7 @@ class AppearanceViewModel @Inject constructor(
             showWebsiteIcons = !settingsRepository.isIconLoadingDisabled,
             theme = settingsRepository.appTheme,
             isDynamicColorsEnabled = settingsRepository.isDynamicColorsEnabled,
+            isDynamicColorsSupported = isBuildVersionAtLeast(Build.VERSION_CODES.S),
             dialogState = null,
         ),
 ) {
@@ -42,17 +46,20 @@ class AppearanceViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        settingsRepository
-            .isDynamicColorsEnabledFlow
-            .map { AppearanceAction.Internal.DynamicColorsStateUpdateReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
+        if (state.isDynamicColorsSupported) {
+            settingsRepository
+                .isDynamicColorsEnabledFlow
+                .map { AppearanceAction.Internal.DynamicColorsStateUpdateReceive(it) }
+                .onEach(::sendAction)
+                .launchIn(viewModelScope)
+        }
     }
 
     override fun handleAction(action: AppearanceAction): Unit = when (action) {
         AppearanceAction.BackClick -> handleBackClicked()
         is AppearanceAction.LanguageChange -> handleLanguageChanged(action)
         is AppearanceAction.ShowWebsiteIconsToggle -> handleShowWebsiteIconsToggled(action)
+        AppearanceAction.ShowWebsiteIconsTooltipClick -> handleShowWebsiteIconsTooltipClick()
         is AppearanceAction.ThemeChange -> handleThemeChanged(action)
         is AppearanceAction.DynamicColorsToggle -> handleDynamicColorsToggled(action)
         AppearanceAction.DismissDialog -> handleDismissDialog()
@@ -63,6 +70,7 @@ class AppearanceViewModel @Inject constructor(
         is AppearanceAction.Internal.AppLanguageStateUpdateReceive -> {
             handleLanguageStateChange(action)
         }
+
         is AppearanceAction.Internal.DynamicColorsStateUpdateReceive -> {
             handleDynamicColorsStateChange(action)
         }
@@ -99,6 +107,10 @@ class AppearanceViewModel @Inject constructor(
 
         // Negate the boolean to properly update the settings repository
         settingsRepository.isIconLoadingDisabled = !action.showWebsiteIcons
+    }
+
+    private fun handleShowWebsiteIconsTooltipClick() {
+        sendEvent(AppearanceEvent.NavigateToWebsiteIconsHelp)
     }
 
     private fun handleThemeChanged(action: AppearanceAction.ThemeChange) {
@@ -139,6 +151,7 @@ data class AppearanceState(
     val language: AppLanguage,
     val showWebsiteIcons: Boolean,
     val theme: AppTheme,
+    val isDynamicColorsSupported: Boolean,
     val isDynamicColorsEnabled: Boolean,
     val dialogState: DialogState?,
 ) : Parcelable {
@@ -164,6 +177,11 @@ sealed class AppearanceEvent {
      * Navigate back.
      */
     data object NavigateBack : AppearanceEvent()
+
+    /**
+     * Navigate to the website icons help URL.
+     */
+    data object NavigateToWebsiteIconsHelp : AppearanceEvent()
 }
 
 /**
@@ -188,6 +206,11 @@ sealed class AppearanceAction {
     data class ShowWebsiteIconsToggle(
         val showWebsiteIcons: Boolean,
     ) : AppearanceAction()
+
+    /**
+     * User clicked the website icons tooltip.
+     */
+    data object ShowWebsiteIconsTooltipClick : AppearanceAction()
 
     /**
      * Indicates that the user selected a new theme.

@@ -101,12 +101,20 @@ class BlockAutoFillViewModel @Inject constructor(
     private fun handleSaveUri(action: BlockAutoFillAction.SaveUri) {
         val uriList = action.newUri.split(",").map { it.trim() }
 
+        // When editing, exclude the original URI from duplicate validation
+        val existingUrisForValidation = action
+            .originalUri
+            ?.let { original ->
+                settingsRepository.blockedAutofillUris.filter { it != original }
+            }
+            ?: settingsRepository.blockedAutofillUris
+
         val errorText = uriList
             .filter { uri ->
-                uri in settingsRepository.blockedAutofillUris || !uri.isValidPattern()
+                uri in existingUrisForValidation || !uri.isValidPattern()
             }
             .firstNotNullOfOrNull { uri ->
-                uri.validateUri(settingsRepository.blockedAutofillUris)
+                uri.validateUri(existingUrisForValidation)
             }
 
         if (errorText != null) {
@@ -114,6 +122,7 @@ class BlockAutoFillViewModel @Inject constructor(
                 currentState.copy(
                     dialog = BlockAutoFillState.DialogState.AddEdit(
                         uri = action.newUri,
+                        originalUri = action.originalUri,
                         errorMessage = errorText,
                     ),
                 )
@@ -122,11 +131,12 @@ class BlockAutoFillViewModel @Inject constructor(
         }
 
         val currentUris = settingsRepository.blockedAutofillUris.toMutableList()
+
+        // Remove the original URI if editing
+        action.originalUri?.let { currentUris.remove(it) }
+
         uriList.forEach { newUri ->
-            val uriIndex = currentUris.indexOf(newUri)
-            if (uriIndex != -1) {
-                currentUris[uriIndex] = newUri
-            } else {
+            if (newUri !in currentUris) {
                 currentUris.add(newUri)
             }
         }
@@ -244,8 +254,14 @@ sealed class BlockAutoFillAction {
 
     /**
      * User click to save or edit a URI.
+     *
+     * @property newUri The new URI to save.
+     * @property originalUri The original URI being edited, or null if adding a new URI.
      */
-    data class SaveUri(val newUri: String) : BlockAutoFillAction()
+    data class SaveUri(
+        val newUri: String,
+        val originalUri: String? = null,
+    ) : BlockAutoFillAction()
 
     /**
      * User click to remove URI.

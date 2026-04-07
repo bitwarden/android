@@ -1,7 +1,6 @@
 package com.bitwarden.authenticator.data.platform.manager.imports.parsers
 
-import android.net.Uri
-import com.bitwarden.authenticator.R
+import androidx.core.net.toUri
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
@@ -9,6 +8,7 @@ import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.manager.model.ExportJsonData
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -24,7 +24,9 @@ class BitwardenExportParser(
     override fun parse(byteArray: ByteArray): ExportParseResult {
         return when (fileFormat) {
             ImportFileFormat.BITWARDEN_JSON -> importJsonFile(byteArray)
-            else -> ExportParseResult.Error(R.string.import_bitwarden_unsupported_format.asText())
+            else -> ExportParseResult.Error(
+                BitwardenString.import_bitwarden_unsupported_format.asText(),
+            )
         }
     }
 
@@ -51,22 +53,16 @@ class BitwardenExportParser(
         it.toAuthenticatorItemEntity()
     }
 
-    @Suppress("MaxLineLength", "CyclomaticComplexMethod", "LongMethod")
+    @Suppress("CyclomaticComplexMethod", "LongMethod")
     private fun ExportJsonData.ExportItem.toAuthenticatorItemEntity(): AuthenticatorItemEntity {
         val otpString = requireNotNull(login?.totp)
 
         val otpUri = when {
-            otpString.startsWith(TotpCodeManager.TOTP_CODE_PREFIX) -> {
-                Uri.parse(otpString)
-            }
-
-            otpString.startsWith(TotpCodeManager.STEAM_CODE_PREFIX) -> {
-                Uri.parse(otpString)
-            }
-
+            otpString.startsWith(TotpCodeManager.TOTP_CODE_PREFIX) -> otpString.toUri()
+            otpString.startsWith(TotpCodeManager.STEAM_CODE_PREFIX) -> otpString.toUri()
             else -> {
-                val uriString = "${TotpCodeManager.TOTP_CODE_PREFIX}/$name?${TotpCodeManager.SECRET_PARAM}=$otpString"
-                Uri.parse(uriString)
+                val prefix = TotpCodeManager.TOTP_CODE_PREFIX
+                "$prefix/$name?${TotpCodeManager.SECRET_PARAM}=$otpString".toUri()
             }
         }
 

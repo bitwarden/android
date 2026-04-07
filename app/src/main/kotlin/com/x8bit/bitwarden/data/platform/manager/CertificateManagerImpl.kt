@@ -7,9 +7,9 @@ import android.security.KeyChainException
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import androidx.core.net.toUri
+import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsCertificate
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
-import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import timber.log.Timber

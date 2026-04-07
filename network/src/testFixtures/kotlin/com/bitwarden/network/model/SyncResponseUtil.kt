@@ -13,6 +13,7 @@ fun createMockSyncResponse(
     policies: List<SyncResponseJson.Policy> = listOf(createMockPolicy(number = number)),
     domains: SyncResponseJson.Domains = createMockDomains(number = number),
     sends: List<SyncResponseJson.Send> = listOf(createMockSend(number = number)),
+    userDecryption: UserDecryptionJson? = null,
 ): SyncResponseJson =
     SyncResponseJson(
         folders = folders,
@@ -22,4 +23,5 @@ fun createMockSyncResponse(
         policies = policies,
         domains = domains,
         sends = sends,
+        userDecryption = userDecryption,
     )

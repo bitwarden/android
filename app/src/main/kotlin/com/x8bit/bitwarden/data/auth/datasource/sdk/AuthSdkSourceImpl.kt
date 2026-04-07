@@ -30,7 +30,7 @@ class AuthSdkSourceImpl(
         getClient()
             .auth()
             .newAuthRequest(
-                email = email,
+                email = email.lowercase(),
             )
     }
 
@@ -42,7 +42,7 @@ class AuthSdkSourceImpl(
             .platform()
             .fingerprint(
                 req = FingerprintRequest(
-                    fingerprintMaterial = email,
+                    fingerprintMaterial = email.lowercase(),
                     publicKey = publicKey,
                 ),
             )

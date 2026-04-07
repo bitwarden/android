@@ -1,21 +1,20 @@
 package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 
-import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.manager.model.CreateAuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
-import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
-import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDeviceType
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.util.toAuthRequestType
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -35,6 +34,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class LoginWithDeviceViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LoginWithDeviceState, LoginWithDeviceEvent, LoginWithDeviceAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -52,12 +52,7 @@ class LoginWithDeviceViewModel @Inject constructor(
     private var authJob: Job = Job().apply { complete() }
 
     init {
-        sendNewAuthRequest(isResend = false)
-        authRepository
-            .captchaTokenResultFlow
-            .map { LoginWithDeviceAction.Internal.ReceiveCaptchaToken(tokenResult = it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
+        sendNewAuthRequest()
     }
 
     override fun handleAction(action: LoginWithDeviceAction) {
@@ -79,7 +74,14 @@ class LoginWithDeviceViewModel @Inject constructor(
     }
 
     private fun handleResendNotificationClicked() {
-        sendNewAuthRequest(isResend = true)
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = LoginWithDeviceState.DialogState.Loading(
+                    message = BitwardenString.resending.asText(),
+                ),
+            )
+        }
+        sendNewAuthRequest()
     }
 
     private fun handleViewAllLogInOptionsClicked() {
@@ -90,10 +92,6 @@ class LoginWithDeviceViewModel @Inject constructor(
         when (action) {
             is LoginWithDeviceAction.Internal.NewAuthRequestResultReceive -> {
                 handleNewAuthRequestResultReceived(action)
-            }
-
-            is LoginWithDeviceAction.Internal.ReceiveCaptchaToken -> {
-                handleReceiveCaptchaToken(action)
             }
 
             is LoginWithDeviceAction.Internal.ReceiveLoginResult -> {
@@ -110,11 +108,6 @@ class LoginWithDeviceViewModel @Inject constructor(
             is CreateAuthRequestResult.Success -> {
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = LoginWithDeviceState.ViewState.Content(
-                            loginWithDeviceType = it.loginWithDeviceType,
-                            fingerprintPhrase = "",
-                            isResendNotificationLoading = false,
-                        ),
                         dialogState = null,
                         loginData = LoginWithDeviceState.LoginData(
                             accessCode = result.accessCode,
@@ -122,7 +115,6 @@ class LoginWithDeviceViewModel @Inject constructor(
                             masterPasswordHash = result.authRequest.masterPasswordHash,
                             asymmetricalKey = requireNotNull(result.authRequest.key),
                             privateKey = result.privateKey,
-                            captchaToken = null,
                         ),
                     )
                 }
@@ -135,7 +127,6 @@ class LoginWithDeviceViewModel @Inject constructor(
                         viewState = LoginWithDeviceState.ViewState.Content(
                             loginWithDeviceType = it.loginWithDeviceType,
                             fingerprintPhrase = result.authRequest.fingerprint,
-                            isResendNotificationLoading = false,
                         ),
                         dialogState = null,
                     )
@@ -145,14 +136,9 @@ class LoginWithDeviceViewModel @Inject constructor(
             is CreateAuthRequestResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = LoginWithDeviceState.ViewState.Content(
-                            loginWithDeviceType = it.loginWithDeviceType,
-                            fingerprintPhrase = "",
-                            isResendNotificationLoading = false,
-                        ),
                         dialogState = LoginWithDeviceState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             error = result.error,
                         ),
                     )
@@ -165,41 +151,12 @@ class LoginWithDeviceViewModel @Inject constructor(
             CreateAuthRequestResult.Expired -> {
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = LoginWithDeviceState.ViewState.Content(
-                            loginWithDeviceType = it.loginWithDeviceType,
-                            fingerprintPhrase = "",
-                            isResendNotificationLoading = false,
-                        ),
                         dialogState = LoginWithDeviceState.DialogState.Error(
                             title = null,
-                            message = R.string.login_request_has_already_expired.asText(),
+                            message = BitwardenString.login_request_has_already_expired.asText(),
                         ),
                     )
                 }
-            }
-        }
-    }
-
-    private fun handleReceiveCaptchaToken(
-        action: LoginWithDeviceAction.Internal.ReceiveCaptchaToken,
-    ) {
-        when (val tokenResult = action.tokenResult) {
-            CaptchaCallbackTokenResult.MissingToken -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialogState = LoginWithDeviceState.DialogState.Error(
-                            title = R.string.log_in_denied.asText(),
-                            message = R.string.captcha_failed.asText(),
-                        ),
-                    )
-                }
-            }
-
-            is CaptchaCallbackTokenResult.Success -> {
-                mutableStateFlow.update {
-                    it.copy(loginData = it.loginData?.copy(captchaToken = tokenResult.token))
-                }
-                attemptLogin()
             }
         }
     }
@@ -209,15 +166,6 @@ class LoginWithDeviceViewModel @Inject constructor(
         action: LoginWithDeviceAction.Internal.ReceiveLoginResult,
     ) {
         when (val loginResult = action.loginResult) {
-            is LoginResult.CaptchaRequired -> {
-                mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(
-                    event = LoginWithDeviceEvent.NavigateToCaptcha(
-                        uri = generateUriForCaptcha(captchaId = loginResult.captchaId),
-                    ),
-                )
-            }
-
             is LoginResult.TwoFactorRequired -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(
@@ -231,11 +179,11 @@ class LoginWithDeviceViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = LoginWithDeviceState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = loginResult
                                 .errorMessage
                                 ?.asText()
-                                ?: R.string.generic_error_message.asText(),
+                                ?: BitwardenString.generic_error_message.asText(),
                             error = loginResult.error,
                         ),
                     )
@@ -246,8 +194,8 @@ class LoginWithDeviceViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = LoginWithDeviceState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server
                                 .asText(),
                         ),
                     )
@@ -255,7 +203,10 @@ class LoginWithDeviceViewModel @Inject constructor(
             }
 
             is LoginResult.Success -> {
-                sendEvent(LoginWithDeviceEvent.ShowToast(R.string.login_approved.asText()))
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(message = BitwardenString.login_approved.asText()),
+                    relay = SnackbarRelay.LOGIN_SUCCESS,
+                )
                 mutableStateFlow.update { it.copy(dialogState = null) }
             }
 
@@ -263,8 +214,8 @@ class LoginWithDeviceViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = LoginWithDeviceState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.we_couldnt_verify_the_servers_certificate.asText(),
                         ),
                     )
                 }
@@ -274,11 +225,11 @@ class LoginWithDeviceViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = LoginWithDeviceState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = loginResult
                                 .errorMessage
                                 ?.asText()
-                                ?: R.string.generic_error_message.asText(),
+                                ?: BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -295,7 +246,7 @@ class LoginWithDeviceViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = LoginWithDeviceState.DialogState.Loading(
-                    message = R.string.logging_in.asText(),
+                    message = BitwardenString.logging_in.asText(),
                 ),
             )
         }
@@ -309,7 +260,6 @@ class LoginWithDeviceViewModel @Inject constructor(
                         asymmetricalKey = loginData.asymmetricalKey,
                         requestPrivateKey = loginData.privateKey,
                         masterPasswordHash = loginData.masterPasswordHash,
-                        captchaToken = loginData.captchaToken,
                     )
                 }
 
@@ -326,8 +276,7 @@ class LoginWithDeviceViewModel @Inject constructor(
         }
     }
 
-    private fun sendNewAuthRequest(isResend: Boolean) {
-        setIsResendNotificationLoading(isResend)
+    private fun sendNewAuthRequest() {
         authJob.cancel()
         authJob = authRepository
             .createAuthRequestWithUpdates(
@@ -337,22 +286,6 @@ class LoginWithDeviceViewModel @Inject constructor(
             .map { LoginWithDeviceAction.Internal.NewAuthRequestResultReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
-    }
-
-    private fun setIsResendNotificationLoading(isResend: Boolean) {
-        updateContent { it.copy(isResendNotificationLoading = isResend) }
-    }
-
-    private inline fun updateContent(
-        crossinline block: (
-            LoginWithDeviceState.ViewState.Content,
-        ) -> LoginWithDeviceState.ViewState.Content?,
-    ) {
-        val currentViewState = state.viewState
-        val updatedContent = (currentViewState as? LoginWithDeviceState.ViewState.Content)
-            ?.let(block)
-            ?: return
-        mutableStateFlow.update { it.copy(viewState = updatedContent) }
     }
 }
 
@@ -375,9 +308,9 @@ data class LoginWithDeviceState(
         get() = when (loginWithDeviceType) {
             LoginWithDeviceType.OTHER_DEVICE,
             LoginWithDeviceType.SSO_OTHER_DEVICE,
-                -> R.string.log_in_with_device.asText()
+                -> BitwardenString.log_in_with_device.asText()
 
-            LoginWithDeviceType.SSO_ADMIN_APPROVAL -> R.string.log_in_initiated.asText()
+            LoginWithDeviceType.SSO_ADMIN_APPROVAL -> BitwardenString.log_in_initiated.asText()
         }
 
     /**
@@ -396,13 +329,10 @@ data class LoginWithDeviceState(
          * Content state for the [LoginWithDeviceScreen] showing the actual content or items.
          *
          * @property fingerprintPhrase The fingerprint phrase to present to the user.
-         * @property isResendNotificationLoading Indicates if the resend loading spinner should be
-         * displayed.
          */
         @Parcelize
         data class Content(
             val fingerprintPhrase: String,
-            val isResendNotificationLoading: Boolean,
             private val loginWithDeviceType: LoginWithDeviceType,
         ) : ViewState() {
             /**
@@ -412,10 +342,10 @@ data class LoginWithDeviceState(
                 get() = when (loginWithDeviceType) {
                     LoginWithDeviceType.OTHER_DEVICE,
                     LoginWithDeviceType.SSO_OTHER_DEVICE,
-                        -> R.string.log_in_initiated.asText()
+                        -> BitwardenString.log_in_initiated.asText()
 
                     LoginWithDeviceType.SSO_ADMIN_APPROVAL,
-                        -> R.string.admin_approval_requested.asText()
+                        -> BitwardenString.admin_approval_requested.asText()
                 }
 
             /**
@@ -425,10 +355,10 @@ data class LoginWithDeviceState(
                 get() = when (loginWithDeviceType) {
                     LoginWithDeviceType.OTHER_DEVICE,
                     LoginWithDeviceType.SSO_OTHER_DEVICE,
-                        -> R.string.a_notification_has_been_sent_to_your_device.asText()
+                        -> BitwardenString.a_notification_has_been_sent_to_your_device.asText()
 
                     LoginWithDeviceType.SSO_ADMIN_APPROVAL,
-                        -> R.string.your_request_has_been_sent_to_your_admin.asText()
+                        -> BitwardenString.your_request_has_been_sent_to_your_admin.asText()
                 }
 
             /**
@@ -439,23 +369,28 @@ data class LoginWithDeviceState(
                 get() = when (loginWithDeviceType) {
                     LoginWithDeviceType.OTHER_DEVICE,
                     LoginWithDeviceType.SSO_OTHER_DEVICE,
-                        -> R.string.please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device.asText()
+                        -> BitwardenString.please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device.asText()
 
                     LoginWithDeviceType.SSO_ADMIN_APPROVAL,
-                        -> R.string.you_will_be_notified_once_approved.asText()
+                        -> BitwardenString.you_will_be_notified_once_approved.asText()
                 }
 
             /**
              * The text to display indicating that there are other option for logging in.
              */
-            @Suppress("MaxLineLength")
             val otherOptions: Text
                 get() = when (loginWithDeviceType) {
                     LoginWithDeviceType.OTHER_DEVICE,
                     LoginWithDeviceType.SSO_OTHER_DEVICE,
-                        -> R.string.log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option.asText()
+                        -> {
+                        BitwardenString
+                            .log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app
+                            .asText()
+                    }
 
-                    LoginWithDeviceType.SSO_ADMIN_APPROVAL -> R.string.trouble_logging_in.asText()
+                    LoginWithDeviceType.SSO_ADMIN_APPROVAL -> {
+                        BitwardenString.trouble_logging_in.asText()
+                    }
                 }
 
             /**
@@ -496,7 +431,6 @@ data class LoginWithDeviceState(
     data class LoginData(
         val accessCode: String,
         val requestId: String,
-        val captchaToken: String?,
         val masterPasswordHash: String?,
         val asymmetricalKey: String,
         val privateKey: String,
@@ -513,23 +447,11 @@ sealed class LoginWithDeviceEvent {
     data object NavigateBack : LoginWithDeviceEvent()
 
     /**
-     * Navigates to the captcha verification screen.
-     */
-    data class NavigateToCaptcha(val uri: Uri) : LoginWithDeviceEvent()
-
-    /**
      * Navigates to the two-factor login screen.
      */
     data class NavigateToTwoFactorLogin(
         val emailAddress: String,
     ) : LoginWithDeviceEvent()
-
-    /**
-     * Shows a toast with the given [message].
-     */
-    data class ShowToast(
-        val message: Text,
-    ) : LoginWithDeviceEvent(), BackgroundEvent
 }
 
 /**
@@ -565,13 +487,6 @@ sealed class LoginWithDeviceAction {
          */
         data class NewAuthRequestResultReceive(
             val result: CreateAuthRequestResult,
-        ) : Internal()
-
-        /**
-         * Indicates a captcha callback token has been received.
-         */
-        data class ReceiveCaptchaToken(
-            val tokenResult: CaptchaCallbackTokenResult,
         ) : Internal()
 
         /**

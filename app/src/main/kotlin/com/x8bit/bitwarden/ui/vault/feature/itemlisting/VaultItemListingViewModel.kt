@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
+import androidx.credentials.CreatePasswordRequest
+import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.CredentialEntry
@@ -9,25 +11,32 @@ import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.map
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
-import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.toAndroidAppUriString
 import com.bitwarden.ui.platform.base.util.toHostOrPathOrNull
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.bitwarden.ui.platform.model.TotpData
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
@@ -43,6 +52,7 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionReques
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
+import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
@@ -54,33 +64,33 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toCreateCredentialRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toGetCredentialsRequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toPasswordGetRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.getSignatureFingerprintAsHexString
+import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.data.vault.repository.model.DecryptFido2CredentialAutofillViewResult
+import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendItemType
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
@@ -98,7 +108,6 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
-import com.x8bit.bitwarden.ui.vault.model.TotpData
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.util.toVaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -106,13 +115,13 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 import java.time.Clock
 import javax.inject.Inject
 
@@ -140,9 +149,10 @@ class VaultItemListingViewModel @Inject constructor(
     private val bitwardenCredentialManager: BitwardenCredentialManager,
     private val organizationEventManager: OrganizationEventManager,
     private val networkConnectionManager: NetworkConnectionManager,
-    private val featureFlagManager: FeatureFlagManager,
     private val relyingPartyParser: RelyingPartyParser,
-    snackbarRelayManager: SnackbarRelayManager,
+    private val toastManager: ToastManager,
+    snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
+    featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -152,6 +162,7 @@ class VaultItemListingViewModel @Inject constructor(
         val providerCreateCredentialRequest = specialCircumstance?.toCreateCredentialRequestOrNull()
         val providerGetCredentialsRequest = specialCircumstance?.toGetCredentialsRequestOrNull()
         val fido2AssertCredentialRequest = specialCircumstance?.toFido2AssertionRequestOrNull()
+        val passwordGetCredentialRequest = specialCircumstance?.toPasswordGetRequestOrNull()
         VaultItemListingState(
             itemListingType = savedStateHandle
                 .toVaultItemListingArgs()
@@ -166,7 +177,10 @@ class VaultItemListingViewModel @Inject constructor(
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
             dialogState = providerCreateCredentialRequest
-                ?.let { VaultItemListingState.DialogState.Loading(R.string.loading.asText()) },
+                ?.createPublicKeyCredentialRequest
+                ?.let {
+                    VaultItemListingState.DialogState.Loading(BitwardenString.loading.asText())
+                },
             policyDisablesSend = policyManager
                 .getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
                 .any(),
@@ -176,9 +190,11 @@ class VaultItemListingViewModel @Inject constructor(
             totpData = specialCircumstance?.toTotpDataOrNull(),
             createCredentialRequest = providerCreateCredentialRequest,
             fido2CredentialAssertionRequest = fido2AssertCredentialRequest,
+            providerGetPasswordCredentialRequest = passwordGetCredentialRequest,
             getCredentialsRequest = providerGetCredentialsRequest,
             isPremium = userState.activeAccount.isPremium,
             isRefreshing = false,
+            isArchiveEnabled = featureFlagManager.getFeatureFlag(FlagKey.ArchiveItems),
         )
     },
 ) {
@@ -203,27 +219,32 @@ class VaultItemListingViewModel @Inject constructor(
 
         policyManager
             .getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
-            .combine(
-                featureFlagManager.getFeatureFlagFlow(FlagKey.RemoveCardPolicy),
-            ) { policies, enabledFlag ->
-                if (enabledFlag) {
-                    policies.map { it.organizationId }
-                } else {
-                    emptyList()
-                }
-            }
+            .map { policies -> policies.map { it.organizationId } }
             .map { VaultItemListingsAction.Internal.RestrictItemTypesPolicyUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
         snackbarRelayManager
             .getSnackbarDataFlow(
+                SnackbarRelay.CIPHER_ARCHIVED,
+                SnackbarRelay.CIPHER_ARCHIVED_VIEW,
+                SnackbarRelay.CIPHER_UNARCHIVED,
+                SnackbarRelay.CIPHER_UNARCHIVED_VIEW,
+                SnackbarRelay.CIPHER_CREATED,
                 SnackbarRelay.CIPHER_DELETED,
+                SnackbarRelay.CIPHER_DELETED_SOFT,
                 SnackbarRelay.CIPHER_RESTORED,
+                SnackbarRelay.CIPHER_UPDATED,
                 SnackbarRelay.SEND_DELETED,
                 SnackbarRelay.SEND_UPDATED,
             )
             .map { VaultItemListingsAction.Internal.SnackbarDataReceived(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.ArchiveItems)
+            .map { VaultItemListingsAction.Internal.ArchiveItemsFlagUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -341,6 +362,12 @@ class VaultItemListingViewModel @Inject constructor(
             }
 
             is VaultItemListingsAction.Internal -> handleInternalAction(action)
+
+            is VaultItemListingsAction.ShareCipherDecryptionErrorClick -> {
+                handleShareCipherDecryptionErrorClick(action)
+            }
+
+            VaultItemListingsAction.UpgradeToPremiumClick -> handleUpgradeToPremiumClick()
         }
     }
 
@@ -389,21 +416,16 @@ class VaultItemListingViewModel @Inject constructor(
         action: VaultItemListingsAction.ConfirmOverwriteExistingPasskeyClick,
     ) {
         clearDialogState()
-        getCipherViewOrNull(action.cipherViewId)
-            ?.let { registerFido2Credential(it) }
-            ?: run {
-                showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
-                        .asText(),
-                )
-                return
-            }
+        viewModelScope.launch {
+            getCipherViewForCredentialOrNull(action.cipherViewId)
+                ?.let { registerFido2Credential(it) }
+        }
     }
 
     private fun handleUserVerificationLockOut() {
         bitwardenCredentialManager.isUserVerified = false
         showCredentialManagerErrorDialog(
-            R.string.passkey_operation_failed_because_user_is_locked_out.asText(),
+            BitwardenString.credential_operation_failed_because_user_is_locked_out.asText(),
         )
     }
 
@@ -417,7 +439,7 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleUserVerificationFail() {
         bitwardenCredentialManager.isUserVerified = false
         showCredentialManagerErrorDialog(
-            R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+            BitwardenString.credential_operation_failed_because_user_could_not_be_verified.asText(),
         )
     }
 
@@ -427,8 +449,8 @@ class VaultItemListingViewModel @Inject constructor(
         state.createCredentialRequest
             ?.let {
                 sendEvent(
-                    VaultItemListingEvent.CompleteFido2Registration(
-                        result = RegisterFido2CredentialResult.Cancelled,
+                    VaultItemListingEvent.CompleteCredentialRegistration(
+                        result = CreateCredentialResult.Cancelled,
                     ),
                 )
             }
@@ -437,6 +459,14 @@ class VaultItemListingViewModel @Inject constructor(
                     sendEvent(
                         VaultItemListingEvent.CompleteFido2Assertion(
                             result = AssertFido2CredentialResult.Cancelled,
+                        ),
+                    )
+                }
+            ?: state.providerGetPasswordCredentialRequest
+                ?.let {
+                    sendEvent(
+                        VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
+                            result = GetPasswordCredentialResult.Cancelled,
                         ),
                     )
                 }
@@ -451,7 +481,8 @@ class VaultItemListingViewModel @Inject constructor(
             .selectedCipherId
             ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    BitwardenString.credential_operation_failed_because_user_could_not_be_verified
+                        .asText(),
                 )
                 return
             }
@@ -462,7 +493,8 @@ class VaultItemListingViewModel @Inject constructor(
             ?.activeAccount
             ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    BitwardenString.credential_operation_failed_because_user_could_not_be_verified
+                        .asText(),
                 )
                 return
             }
@@ -529,7 +561,7 @@ class VaultItemListingViewModel @Inject constructor(
         action: VaultItemListingsAction.PinUserVerificationSubmit,
     ) {
         viewModelScope.launch {
-            val result = authRepository.validatePin(action.pin)
+            val result = authRepository.validatePinUserKey(action.pin)
             sendAction(
                 VaultItemListingsAction.Internal.ValidateUserVerificationPinResultReceive(
                     result = result,
@@ -559,7 +591,8 @@ class VaultItemListingViewModel @Inject constructor(
                 it.copy(
                     dialogState = VaultItemListingState.DialogState.UserVerificationPinSetUpError(
                         title = null,
-                        message = R.string.validation_field_required.asText(R.string.pin.asText()),
+                        message = BitwardenString.validation_field_required
+                            .asText(BitwardenString.pin.asText()),
                         selectedCipherId = action.selectedCipherId,
                     ),
                 )
@@ -567,7 +600,7 @@ class VaultItemListingViewModel @Inject constructor(
             return
         }
 
-        // There's no need to ask the user whether or not they want to use their master password
+        // There's no need to ask the user whether they want to use their master password
         // on login, and shouldRequireMasterPasswordOnRestart is hardcoded to false, because the
         // user can only reach this part of the flow if they have no master password.
         settingsRepository.storeUnlockPin(
@@ -594,14 +627,15 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun handleDismissUserVerificationDialogClick() {
         showCredentialManagerErrorDialog(
-            R.string.passkey_operation_failed_because_user_verification_was_cancelled.asText(),
+            BitwardenString.credential_operation_failed_because_user_verification_was_cancelled
+                .asText(),
         )
     }
 
     private fun handleCopySendUrlClick(action: ListingItemOverflowAction.SendAction.CopyUrlClick) {
         clipboardManager.setText(
             text = action.sendUrl,
-            toastDescriptorOverride = R.string.send_link.asText(),
+            toastDescriptorOverride = BitwardenString.send_link.asText(),
         )
     }
 
@@ -609,7 +643,7 @@ class VaultItemListingViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = VaultItemListingState.DialogState.Loading(
-                    message = R.string.deleting.asText(),
+                    message = BitwardenString.deleting.asText(),
                 ),
             )
         }
@@ -625,13 +659,30 @@ class VaultItemListingViewModel @Inject constructor(
         sendEvent(VaultItemListingEvent.ShowShareSheet(action.sendUrl))
     }
 
+    private fun handleShareCipherDecryptionErrorClick(
+        action: VaultItemListingsAction.ShareCipherDecryptionErrorClick,
+    ) {
+        sendEvent(
+            event = VaultItemListingEvent.ShowShareSheet(
+                content = action.selectedCipherId,
+            ),
+        )
+    }
+
+    private fun handleUpgradeToPremiumClick() {
+        clearDialogState()
+        val baseUrl = environmentRepository.environment.environmentUrlData.baseWebVaultUrlOrDefault
+        val url = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium"
+        sendEvent(VaultItemListingEvent.NavigateToUrl(url = url))
+    }
+
     private fun handleRemoveSendPasswordClick(
         action: ListingItemOverflowAction.SendAction.RemovePasswordClick,
     ) {
         mutableStateFlow.update {
             it.copy(
                 dialogState = VaultItemListingState.DialogState.Loading(
-                    message = R.string.removing_send_password.asText(),
+                    message = BitwardenString.removing_send_password.asText(),
                 ),
             )
         }
@@ -704,7 +755,7 @@ class VaultItemListingViewModel @Inject constructor(
         val signature = request.callingAppInfo.getSignatureFingerprintAsHexString()
             ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_the_request_is_invalid
+                    BitwardenString.passkey_operation_failed_because_the_request_is_invalid
                         .asText(),
                 )
                 return
@@ -723,7 +774,7 @@ class VaultItemListingViewModel @Inject constructor(
         val signature = callingAppInfo?.getSignatureFingerprintAsHexString()
         if (callingAppInfo == null || signature.isNullOrEmpty()) {
             showCredentialManagerErrorDialog(
-                R.string.passkey_operation_failed_because_the_request_is_invalid
+                BitwardenString.passkey_operation_failed_because_the_request_is_invalid
                     .asText(),
             )
             return
@@ -753,29 +804,30 @@ class VaultItemListingViewModel @Inject constructor(
             .getSignatureFingerprintAsHexString()
             ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_the_request_is_invalid
+                    BitwardenString.passkey_operation_failed_because_the_request_is_invalid
                         .asText(),
                 )
                 return
             }
-        val selectedCipherView = selectedCipherId
-            ?.let { getCipherViewOrNull(it) }
+        selectedCipherId
             ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_no_item_was_selected
-                        .asText(),
+                    BitwardenString.passkey_operation_failed_because_no_item_was_selected.asText(),
                 )
                 return
             }
         viewModelScope.launch {
-            trustPrivilegedApp(
-                packageName = request.callingAppInfo.packageName,
-                signature = signature,
-            )
-            authenticateFido2Credential(
-                request = request.providerRequest,
-                cipherView = selectedCipherView,
-            )
+            getCipherViewForCredentialOrNull(selectedCipherId)
+                ?.let { cipherView ->
+                    trustPrivilegedApp(
+                        packageName = request.callingAppInfo.packageName,
+                        signature = signature,
+                    )
+                    authenticateFido2Credential(
+                        request = request.providerRequest,
+                        cipherView = cipherView,
+                    )
+                }
         }
     }
 
@@ -836,11 +888,28 @@ class VaultItemListingViewModel @Inject constructor(
             }
 
             is VaultItemListingState.ItemListingType.Send -> {
-                sendEvent(
-                    VaultItemListingEvent.NavigateToAddSendItem(
-                        sendType = itemListingType.toSendItemType(),
-                    ),
-                )
+                when (val sendType = itemListingType.toSendItemType()) {
+                    SendItemType.FILE -> {
+                        if (state.isPremium) {
+                            sendEvent(VaultItemListingEvent.NavigateToAddSendItem(sendType))
+                        } else {
+                            mutableStateFlow.update {
+                                it.copy(
+                                    dialogState = VaultItemListingState.DialogState.Error(
+                                        title = BitwardenString.send.asText(),
+                                        message = BitwardenString
+                                            .send_file_premium_required
+                                            .asText(),
+                                    ),
+                                )
+                            }
+                        }
+                    }
+
+                    SendItemType.TEXT -> {
+                        sendEvent(VaultItemListingEvent.NavigateToAddSendItem(sendType))
+                    }
+                }
             }
         }
     }
@@ -865,18 +934,10 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun handleItemClick(action: VaultItemListingsAction.ItemClick) {
         state.autofillSelectionData?.let { autofillSelectionData ->
-            val cipherView = getCipherViewOrNull(cipherId = action.id) ?: return
-            when (autofillSelectionData.framework) {
-                AutofillSelectionData.Framework.ACCESSIBILITY -> {
-                    accessibilitySelectionManager.emitAccessibilitySelection(
-                        cipherView = cipherView,
-                    )
-                }
-
-                AutofillSelectionData.Framework.AUTOFILL -> {
-                    autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
-                }
-            }
+            completeAutofillSelection(
+                itemId = action.id,
+                autofillSelectionData = autofillSelectionData,
+            )
             return
         }
         state.totpData?.let {
@@ -909,37 +970,58 @@ class VaultItemListingViewModel @Inject constructor(
                     sendType = itemType.type.toSendItemType(),
                 )
             }
+
+            VaultItemListingState.DisplayItem.ItemType.DecryptionError -> {
+                showCipherDecryptionErrorItemClick(itemId = action.id)
+                return
+            }
         }
+
         sendEvent(event)
+    }
+
+    private fun showCipherDecryptionErrorItemClick(itemId: String) {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.CipherDecryptionError(
+                    title = BitwardenString.decryption_error.asText(),
+                    message = BitwardenString
+                        .bitwarden_could_not_decrypt_this_vault_item_description_long
+                        .asText(),
+                    selectedCipherId = itemId,
+                ),
+            )
+        }
     }
 
     private fun handleItemClickForProviderCreateCredentialRequest(
         action: VaultItemListingsAction.ItemClick,
         createCredentialRequest: CreateCredentialRequest,
     ) {
-        val cipherView = getCipherViewOrNull(action.id)
-            ?: run {
-                showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
-                        .asText(),
-                )
-                return
+        viewModelScope.launch {
+            getCipherViewForCredentialOrNull(action.id)?.let { cipherView ->
+                createCredentialRequest
+                    .providerRequest
+                    .getCreatePasskeyCredentialRequestOrNull()
+                    ?.let {
+                        handleItemClickForCreatePublicKeyCredentialRequest(
+                            cipherId = action.id,
+                            cipherView = cipherView,
+                        )
+                    }
+                    ?: run {
+                        sendAction(
+                            VaultItemListingsAction.Internal.CredentialOperationFailureReceive(
+                                title = BitwardenString.an_error_has_occurred.asText(),
+                                message = BitwardenString
+                                    .credential_operation_failed_because_the_request_is_unsupported
+                                    .asText(),
+                                error = null,
+                            ),
+                        )
+                    }
             }
-
-        createCredentialRequest
-            .providerRequest
-            .getCreatePasskeyCredentialRequestOrNull()
-            ?.let {
-                handleItemClickForCreatePublicKeyCredentialRequest(
-                    cipherId = action.id,
-                    cipherView = cipherView,
-                )
-            }
-            ?: run {
-                showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_the_request_is_unsupported.asText(),
-                )
-            }
+        }
     }
 
     private fun handleItemClickForCreatePublicKeyCredentialRequest(
@@ -965,7 +1047,7 @@ class VaultItemListingViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = VaultItemListingState.DialogState.Loading(
-                    message = R.string.saving.asText(),
+                    message = BitwardenString.saving.asText(),
                 ),
             )
         }
@@ -975,7 +1057,8 @@ class VaultItemListingViewModel @Inject constructor(
             ?.providerRequest
             ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
+                    BitwardenString.passkey_operation_failed_because_the_request_is_invalid
+                        .asText(),
                 )
                 return
             }
@@ -998,7 +1081,8 @@ class VaultItemListingViewModel @Inject constructor(
             ?.let { bitwardenCredentialManager.getUserVerificationRequirement(it) }
             ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_the_request_is_unsupported.asText(),
+                    BitwardenString.passkey_operation_failed_because_the_request_is_unsupported
+                        .asText(),
                 )
                 return
             }
@@ -1031,6 +1115,27 @@ class VaultItemListingViewModel @Inject constructor(
         }
     }
 
+    private fun registerCredentialToCipher(
+        cipherView: CipherView,
+        providerRequest: ProviderCreateCredentialRequest,
+    ) {
+        when (providerRequest.callingRequest) {
+            is CreatePublicKeyCredentialRequest -> {
+                registerFido2CredentialToCipher(
+                    cipherView = cipherView,
+                    providerRequest = providerRequest,
+                )
+            }
+
+            else -> {
+                showCredentialManagerErrorDialog(
+                    BitwardenString.credential_operation_failed_because_the_request_is_invalid
+                        .asText(),
+                )
+            }
+        }
+    }
+
     private fun registerFido2CredentialToCipher(
         cipherView: CipherView,
         providerRequest: ProviderCreateCredentialRequest,
@@ -1038,7 +1143,8 @@ class VaultItemListingViewModel @Inject constructor(
         val activeUserId = authRepository.activeUserId
             ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    BitwardenString.passkey_operation_failed_because_user_could_not_be_verified
+                        .asText(),
                 )
                 return
             }
@@ -1047,7 +1153,8 @@ class VaultItemListingViewModel @Inject constructor(
             .getCreatePasskeyCredentialRequestOrNull()
             ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
+                    BitwardenString.passkey_operation_failed_because_the_request_is_invalid
+                        .asText(),
                 )
                 return
             }
@@ -1074,7 +1181,8 @@ class VaultItemListingViewModel @Inject constructor(
         val activeUserId = authRepository.activeUserId
             ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    BitwardenString.passkey_operation_failed_because_user_could_not_be_verified
+                        .asText(),
                 )
                 return
             }
@@ -1083,14 +1191,16 @@ class VaultItemListingViewModel @Inject constructor(
             .firstOrNull()
             ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
+                    BitwardenString.passkey_operation_failed_because_the_request_is_invalid
+                        .asText(),
                 )
                 return
             }
         val relyingPartyId = relyingPartyParser.parse(option)
             ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_relying_party_cannot_be_identified
+                    BitwardenString
+                        .passkey_operation_failed_because_relying_party_cannot_be_identified
                         .asText(),
                 )
                 return
@@ -1143,50 +1253,70 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleCopyNoteClick(action: ListingItemOverflowAction.VaultAction.CopyNoteClick) {
-        clipboardManager.setText(
-            text = action.notes,
-            toastDescriptorOverride = R.string.notes.asText(),
-        )
+        viewModelScope.launch {
+            getCipherViewOrNull(action.cipherId)?.let {
+                clipboardManager.setText(
+                    text = it.notes.orEmpty(),
+                    toastDescriptorOverride = BitwardenString.notes.asText(),
+                )
+            }
+        }
     }
 
     private fun handleCopyNumberClick(
         action: ListingItemOverflowAction.VaultAction.CopyNumberClick,
     ) {
-        clipboardManager.setText(
-            text = action.number,
-            toastDescriptorOverride = R.string.number.asText(),
-        )
+        viewModelScope.launch {
+            getCipherViewOrNull(action.cipherId)?.let {
+                clipboardManager.setText(
+                    text = it.card?.number.orEmpty(),
+                    toastDescriptorOverride = BitwardenString.number.asText(),
+                )
+            }
+        }
     }
 
     private fun handleCopyPasswordClick(
         action: ListingItemOverflowAction.VaultAction.CopyPasswordClick,
     ) {
-        clipboardManager.setText(
-            text = action.password,
-            toastDescriptorOverride = R.string.password.asText(),
-        )
-        organizationEventManager.trackEvent(
-            event = OrganizationEvent.CipherClientCopiedPassword(cipherId = action.cipherId),
-        )
+        viewModelScope.launch {
+            getCipherViewOrNull(action.cipherId)?.let {
+                clipboardManager.setText(
+                    text = it.login?.password.orEmpty(),
+                    toastDescriptorOverride = BitwardenString.password.asText(),
+                )
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientCopiedPassword(
+                        cipherId = action.cipherId,
+                    ),
+                )
+            }
+        }
     }
 
     private fun handleCopySecurityCodeClick(
         action: ListingItemOverflowAction.VaultAction.CopySecurityCodeClick,
     ) {
-        clipboardManager.setText(
-            text = action.securityCode,
-            toastDescriptorOverride = R.string.security_code.asText(),
-        )
-        organizationEventManager.trackEvent(
-            event = OrganizationEvent.CipherClientCopiedCardCode(cipherId = action.cipherId),
-        )
+        viewModelScope.launch {
+            getCipherViewOrNull(action.cipherId)?.let {
+                clipboardManager.setText(
+                    text = it.card?.code.orEmpty(),
+                    toastDescriptorOverride = BitwardenString.security_code.asText(),
+                )
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientCopiedCardCode(
+                        cipherId = action.cipherId,
+                    ),
+                )
+            }
+        }
     }
 
     private fun handleCopyTotpClick(
         action: ListingItemOverflowAction.VaultAction.CopyTotpClick,
     ) {
         viewModelScope.launch {
-            val result = vaultRepository.generateTotp(action.totpCode, clock.instant())
+            val result = vaultRepository.generateTotp(action.cipherId, clock.instant())
             sendAction(VaultItemListingsAction.Internal.GenerateTotpResultReceive(result))
         }
     }
@@ -1196,7 +1326,7 @@ class VaultItemListingViewModel @Inject constructor(
     ) {
         clipboardManager.setText(
             text = action.username,
-            toastDescriptorOverride = R.string.username.asText(),
+            toastDescriptorOverride = BitwardenString.username.asText(),
         )
     }
 
@@ -1236,6 +1366,58 @@ class VaultItemListingViewModel @Inject constructor(
         )
     }
 
+    private fun handleArchiveClick(action: ListingItemOverflowAction.VaultAction.ArchiveClick) {
+        if (!state.isPremium) {
+            mutableStateFlow.update {
+                it.copy(dialogState = VaultItemListingState.DialogState.ArchiveRequiresPremium)
+            }
+            return
+        }
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Loading(
+                    message = BitwardenString.archiving.asText(),
+                ),
+            )
+        }
+        viewModelScope.launch {
+            getCipherViewOrNull(cipherId = action.cipherId)?.let {
+                sendAction(
+                    VaultItemListingsAction.Internal.ArchiveCipherReceive(
+                        result = vaultRepository.archiveCipher(
+                            cipherId = action.cipherId,
+                            cipherView = it,
+                        ),
+                    ),
+                )
+            }
+        }
+    }
+
+    private fun handleUnarchiveClick(
+        action: ListingItemOverflowAction.VaultAction.UnarchiveClick,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Loading(
+                    message = BitwardenString.unarchiving.asText(),
+                ),
+            )
+        }
+        viewModelScope.launch {
+            getCipherViewOrNull(cipherId = action.cipherId)?.let {
+                sendAction(
+                    VaultItemListingsAction.Internal.UnarchiveCipherReceive(
+                        result = vaultRepository.unarchiveCipher(
+                            cipherId = action.cipherId,
+                            cipherView = it,
+                        ),
+                    ),
+                )
+            }
+        }
+    }
+
     private fun handleDismissDialogClick() {
         clearDialogState()
     }
@@ -1247,8 +1429,8 @@ class VaultItemListingViewModel @Inject constructor(
         when {
             state.createCredentialRequest != null -> {
                 sendEvent(
-                    VaultItemListingEvent.CompleteFido2Registration(
-                        result = RegisterFido2CredentialResult.Error(action.message),
+                    VaultItemListingEvent.CompleteCredentialRegistration(
+                        result = CreateCredentialResult.Error(action.message),
                     ),
                 )
             }
@@ -1257,6 +1439,16 @@ class VaultItemListingViewModel @Inject constructor(
                 sendEvent(
                     VaultItemListingEvent.CompleteFido2Assertion(
                         result = AssertFido2CredentialResult.Error(
+                            message = action.message,
+                        ),
+                    ),
+                )
+            }
+
+            state.providerGetPasswordCredentialRequest != null -> {
+                sendEvent(
+                    VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
+                        result = GetPasswordCredentialResult.Error(
                             message = action.message,
                         ),
                     ),
@@ -1277,7 +1469,7 @@ class VaultItemListingViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = VaultItemListingState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = action.message,
                         ),
                     )
@@ -1305,7 +1497,7 @@ class VaultItemListingViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialogState = VaultItemListingState.DialogState.Loading(
-                        message = R.string.syncing.asText(),
+                        message = BitwardenString.syncing.asText(),
                     ),
                 )
             }
@@ -1314,8 +1506,8 @@ class VaultItemListingViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialogState = VaultItemListingState.DialogState.Error(
-                        R.string.internet_connection_required_title.asText(),
-                        R.string.internet_connection_required_message.asText(),
+                        BitwardenString.internet_connection_required_title.asText(),
+                        BitwardenString.internet_connection_required_message.asText(),
                     ),
                 )
             }
@@ -1397,9 +1589,18 @@ class VaultItemListingViewModel @Inject constructor(
             is ListingItemOverflowAction.VaultAction.ViewClick -> {
                 handleViewCipherClick(overflowAction)
             }
+
+            is ListingItemOverflowAction.VaultAction.ArchiveClick -> {
+                handleArchiveClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.UnarchiveClick -> {
+                handleUnarchiveClick(overflowAction)
+            }
         }
     }
 
+    @Suppress("LongMethod")
     private fun handleInternalAction(action: VaultItemListingsAction.Internal) {
         when (action) {
             is VaultItemListingsAction.Internal.PullToRefreshEnableReceive -> {
@@ -1440,7 +1641,7 @@ class VaultItemListingViewModel @Inject constructor(
             }
 
             is VaultItemListingsAction.Internal.CreateCredentialRequestReceive -> {
-                handleRegisterFido2CredentialRequestReceive(action)
+                handleRegisterCredentialRequestReceive(action)
             }
 
             is VaultItemListingsAction.Internal.Fido2RegisterCredentialResultReceive -> {
@@ -1453,6 +1654,10 @@ class VaultItemListingViewModel @Inject constructor(
 
             is VaultItemListingsAction.Internal.Fido2AssertionResultReceive -> {
                 handleFido2AssertionResultReceive(action)
+            }
+
+            is VaultItemListingsAction.Internal.ProviderGetPasswordCredentialRequestReceive -> {
+                handleProviderGetPasswordCredentialRequestReceive(action)
             }
 
             VaultItemListingsAction.Internal.InternetConnectionErrorReceived -> {
@@ -1470,6 +1675,112 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.Internal.SnackbarDataReceived -> {
                 handleSnackbarDataReceived(action)
             }
+
+            is VaultItemListingsAction.Internal.DecryptCipherErrorReceive -> {
+                handleDecryptCipherErrorReceive(action)
+            }
+
+            is VaultItemListingsAction.Internal.CredentialOperationFailureReceive -> {
+                handleCredentialOperationFailureReceive(action)
+            }
+
+            is VaultItemListingsAction.Internal.ArchiveItemsFlagUpdateReceive -> {
+                handleArchiveItemsFlagUpdateReceive(action)
+            }
+
+            is VaultItemListingsAction.Internal.ArchiveCipherReceive -> {
+                handleArchiveCipherReceive(action)
+            }
+
+            is VaultItemListingsAction.Internal.UnarchiveCipherReceive -> {
+                handleUnarchiveCipherReceive(action)
+            }
+        }
+    }
+
+    private fun handleCredentialOperationFailureReceive(
+        action: VaultItemListingsAction.Internal.CredentialOperationFailureReceive,
+    ) {
+        showCredentialManagerErrorDialog(
+            title = action.title,
+            message = action.message,
+            error = action.error,
+        )
+    }
+
+    private fun handleArchiveItemsFlagUpdateReceive(
+        action: VaultItemListingsAction.Internal.ArchiveItemsFlagUpdateReceive,
+    ) {
+        mutableStateFlow.update { it.copy(isArchiveEnabled = action.isEnabled) }
+    }
+
+    private fun handleArchiveCipherReceive(
+        action: VaultItemListingsAction.Internal.ArchiveCipherReceive,
+    ) {
+        when (val result = action.result) {
+            is ArchiveCipherResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = VaultItemListingState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = result.errorMessage?.asText()
+                                ?: BitwardenString.unable_to_archive_selected_item.asText(),
+                            throwable = result.error,
+                        ),
+                    )
+                }
+            }
+
+            ArchiveCipherResult.Success -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(
+                    VaultItemListingEvent.ShowSnackbar(
+                        message = BitwardenString.item_moved_to_archived.asText(),
+                    ),
+                )
+            }
+        }
+    }
+
+    private fun handleUnarchiveCipherReceive(
+        action: VaultItemListingsAction.Internal.UnarchiveCipherReceive,
+    ) {
+        when (val result = action.result) {
+            is UnarchiveCipherResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = VaultItemListingState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = result.errorMessage?.asText()
+                                ?: BitwardenString.unable_to_unarchive_selected_item.asText(),
+                            throwable = result.error,
+                        ),
+                    )
+                }
+            }
+
+            UnarchiveCipherResult.Success -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(
+                    VaultItemListingEvent.ShowSnackbar(
+                        message = BitwardenString.item_moved_to_vault.asText(),
+                    ),
+                )
+            }
+        }
+    }
+
+    private fun handleDecryptCipherErrorReceive(
+        action: VaultItemListingsAction.Internal.DecryptCipherErrorReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Error(
+                    title = BitwardenString.decryption_error.asText(),
+                    message = BitwardenString.failed_to_decrypt_cipher_contact_support.asText(),
+                    throwable = action.error,
+                ),
+            )
         }
     }
 
@@ -1494,8 +1805,8 @@ class VaultItemListingViewModel @Inject constructor(
             it.copy(
                 isRefreshing = false,
                 dialogState = VaultItemListingState.DialogState.Error(
-                    R.string.internet_connection_required_title.asText(),
-                    R.string.internet_connection_required_message.asText(),
+                    BitwardenString.internet_connection_required_title.asText(),
+                    BitwardenString.internet_connection_required_message.asText(),
                 ),
             )
         }
@@ -1517,8 +1828,8 @@ class VaultItemListingViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = VaultItemListingState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -1527,7 +1838,7 @@ class VaultItemListingViewModel @Inject constructor(
 
             DeleteSendResult.Success -> {
                 clearDialogState()
-                sendEvent(VaultItemListingEvent.ShowSnackbar(R.string.send_deleted.asText()))
+                sendEvent(VaultItemListingEvent.ShowSnackbar(BitwardenString.send_deleted.asText()))
             }
         }
     }
@@ -1540,11 +1851,11 @@ class VaultItemListingViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = VaultItemListingState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = result
                                 .errorMessage
                                 ?.asText()
-                                ?: R.string.generic_error_message.asText(),
+                                ?: BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -1553,7 +1864,11 @@ class VaultItemListingViewModel @Inject constructor(
 
             is RemovePasswordSendResult.Success -> {
                 clearDialogState()
-                sendEvent(VaultItemListingEvent.ShowSnackbar(R.string.password_removed.asText()))
+                sendEvent(
+                    VaultItemListingEvent.ShowSnackbar(
+                        BitwardenString.password_removed.asText(),
+                    ),
+                )
             }
         }
     }
@@ -1566,7 +1881,7 @@ class VaultItemListingViewModel @Inject constructor(
             is GenerateTotpResult.Success -> {
                 clipboardManager.setText(
                     text = result.code,
-                    toastDescriptorOverride = R.string.totp.asText(),
+                    toastDescriptorOverride = BitwardenString.totp.asText(),
                 )
             }
         }
@@ -1613,7 +1928,7 @@ class VaultItemListingViewModel @Inject constructor(
                     it.copy(
                         dialogState = VaultItemListingState.DialogState.Error(
                             title = null,
-                            message = R.string.generic_error_message.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -1626,7 +1941,7 @@ class VaultItemListingViewModel @Inject constructor(
                         it.copy(
                             dialogState = VaultItemListingState.DialogState.Error(
                                 title = null,
-                                message = R.string.invalid_master_password.asText(),
+                                message = BitwardenString.invalid_master_password.asText(),
                             ),
                         )
                     }
@@ -1645,19 +1960,10 @@ class VaultItemListingViewModel @Inject constructor(
         when (data) {
             is MasterPasswordRepromptData.Autofill -> {
                 // Complete the autofill selection flow
-                val autofillSelectionData = state.autofillSelectionData ?: return
-                val cipherView = getCipherViewOrNull(cipherId = data.cipherId) ?: return
-                when (autofillSelectionData.framework) {
-                    AutofillSelectionData.Framework.ACCESSIBILITY -> {
-                        accessibilitySelectionManager.emitAccessibilitySelection(
-                            cipherView = cipherView,
-                        )
-                    }
-
-                    AutofillSelectionData.Framework.AUTOFILL -> {
-                        autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
-                    }
-                }
+                completeAutofillSelection(
+                    itemId = data.cipherId,
+                    autofillSelectionData = state.autofillSelectionData ?: return,
+                )
             }
 
             is MasterPasswordRepromptData.OverflowItem -> {
@@ -1691,7 +1997,7 @@ class VaultItemListingViewModel @Inject constructor(
                             .DialogState
                             .UserVerificationMasterPasswordError(
                                 title = null,
-                                message = R.string.invalid_master_password.asText(),
+                                message = BitwardenString.invalid_master_password.asText(),
                                 selectedCipherId = action.selectedCipherId,
                             ),
                     )
@@ -1719,7 +2025,7 @@ class VaultItemListingViewModel @Inject constructor(
                             .DialogState
                             .UserVerificationPinError(
                                 title = null,
-                                message = R.string.invalid_pin.asText(),
+                                message = BitwardenString.invalid_pin.asText(),
                                 selectedCipherId = action.selectedCipherId,
                             ),
                     )
@@ -1738,7 +2044,8 @@ class VaultItemListingViewModel @Inject constructor(
             }
         } else {
             showCredentialManagerErrorDialog(
-                R.string.passkey_operation_failed_because_user_verification_attempts_exceeded
+                BitwardenString
+                    .credential_operation_failed_because_user_verification_attempts_exceeded
                     .asText(),
             )
         }
@@ -1748,23 +2055,37 @@ class VaultItemListingViewModel @Inject constructor(
         bitwardenCredentialManager.isUserVerified = true
         bitwardenCredentialManager.authenticationAttempts = 0
 
-        val cipherView = getCipherViewOrNull(cipherId = selectedCipherId)
-            ?: run {
-                showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
-                        .asText(),
-                )
-                return
-            }
+        viewModelScope.launch {
+            getCipherViewForCredentialOrNull(selectedCipherId)
+                ?.let { cipherView -> continueCredentialManagerOperation(cipherView) }
+        }
+    }
 
-        continueCredentialManagerOperation(cipherView)
+    private fun completeAutofillSelection(
+        itemId: String,
+        autofillSelectionData: AutofillSelectionData,
+    ) {
+        viewModelScope.launch {
+            val cipherView = getCipherViewOrNull(cipherId = itemId) ?: return@launch
+            when (autofillSelectionData.framework) {
+                AutofillSelectionData.Framework.ACCESSIBILITY -> {
+                    accessibilitySelectionManager.emitAccessibilitySelection(
+                        cipherView = cipherView,
+                    )
+                }
+
+                AutofillSelectionData.Framework.AUTOFILL -> {
+                    autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
+                }
+            }
+        }
     }
 
     private fun continueCredentialManagerOperation(cipherView: CipherView) {
         state.createCredentialRequest
             ?.providerRequest
             ?.let { request ->
-                registerFido2CredentialToCipher(
+                registerCredentialToCipher(
                     cipherView = cipherView,
                     providerRequest = request,
                 )
@@ -1777,9 +2098,17 @@ class VaultItemListingViewModel @Inject constructor(
                         cipherView = cipherView,
                     )
                 }
+            ?: state.providerGetPasswordCredentialRequest
+                ?.providerRequest
+                ?.let {
+                    handlePasswordCredentialResult(
+                        selectedCipher = cipherView,
+                    )
+                }
             ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
+                    BitwardenString.passkey_operation_failed_because_the_request_is_invalid
+                        .asText(),
                 )
             }
     }
@@ -1793,7 +2122,7 @@ class VaultItemListingViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     viewState = VaultItemListingState.ViewState.Error(
-                        message = R.string.generic_error_message.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                     ),
                     dialogState = null,
                 )
@@ -1815,6 +2144,16 @@ class VaultItemListingViewModel @Inject constructor(
                         ),
                     )
                 }
+            ?: state.providerGetPasswordCredentialRequest
+                ?.let { request ->
+                    trySendAction(
+                        VaultItemListingsAction
+                            .Internal
+                            .ProviderGetPasswordCredentialRequestReceive(
+                                data = request,
+                            ),
+                    )
+                }
             ?: mutableStateFlow.update { it.copy(isRefreshing = false) }
     }
 
@@ -1830,11 +2169,11 @@ class VaultItemListingViewModel @Inject constructor(
             mutableStateFlow.update { currentState ->
                 currentState.copy(
                     viewState = VaultItemListingState.ViewState.Error(
-                        message = R.string.internet_connection_required_title
+                        message = BitwardenString.internet_connection_required_title
                             .asText()
                             .concat(
                                 " ".asText(),
-                                R.string.internet_connection_required_message.asText(),
+                                BitwardenString.internet_connection_required_message.asText(),
                             ),
                     ),
                     dialogState = null,
@@ -1858,6 +2197,32 @@ class VaultItemListingViewModel @Inject constructor(
         }
     }
 
+    private fun handleRegisterCredentialRequestReceive(
+        action: VaultItemListingsAction.Internal.CreateCredentialRequestReceive,
+    ) {
+        when (action.request.providerRequest.callingRequest) {
+            is CreatePublicKeyCredentialRequest -> {
+                handleRegisterFido2CredentialRequestReceive(action)
+            }
+
+            is CreatePasswordRequest -> {
+                observeVaultData()
+            }
+
+            else -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState =
+                            VaultItemListingState.DialogState.CredentialManagerOperationFail(
+                                title = BitwardenString.an_error_has_occurred.asText(),
+                                message = BitwardenString.generic_error_message.asText(),
+                            ),
+                    )
+                }
+            }
+        }
+    }
+
     private fun handleRegisterFido2CredentialRequestReceive(
         action: VaultItemListingsAction.Internal.CreateCredentialRequestReceive,
     ) {
@@ -1866,7 +2231,8 @@ class VaultItemListingViewModel @Inject constructor(
             ?.let { relyingPartyParser.parse(it) }
             ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_relying_party_cannot_be_identified
+                    BitwardenString
+                        .passkey_operation_failed_because_relying_party_cannot_be_identified
                         .asText(),
                 )
                 return
@@ -1903,12 +2269,19 @@ class VaultItemListingViewModel @Inject constructor(
             }
 
             is Fido2RegisterCredentialResult.Success -> {
+                // Reset verification state to ensure the next credential operation requires
+                // fresh user verification. Without this reset, the stale isUserVerified = true
+                // from this registration would cause subsequent login attempts to skip
+                // biometric verification.
+                bitwardenCredentialManager.isUserVerified = false
                 // This must be a toast because we are finishing the activity and we want the
                 // user to have time to see the message.
-                sendEvent(VaultItemListingEvent.ShowToast(R.string.item_updated.asText()))
+                toastManager.show(messageId = BitwardenString.item_updated)
                 sendEvent(
-                    VaultItemListingEvent.CompleteFido2Registration(
-                        RegisterFido2CredentialResult.Success(action.result.responseJson),
+                    VaultItemListingEvent.CompleteCredentialRegistration(
+                        CreateCredentialResult.Success.Fido2CredentialRegistered(
+                            responseJson = action.result.responseJson,
+                        ),
                     ),
                 )
             }
@@ -1920,10 +2293,10 @@ class VaultItemListingViewModel @Inject constructor(
     ) {
         // This must be a toast because we are finishing the activity and we want the
         // user to have time to see the message.
-        sendEvent(VaultItemListingEvent.ShowToast(R.string.an_error_has_occurred.asText()))
+        toastManager.show(messageId = BitwardenString.an_error_has_occurred)
         sendEvent(
-            VaultItemListingEvent.CompleteFido2Registration(
-                RegisterFido2CredentialResult.Error(
+            VaultItemListingEvent.CompleteCredentialRegistration(
+                CreateCredentialResult.Error(
                     message = error.messageResourceId.asText(),
                 ),
             ),
@@ -1933,10 +2306,30 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleProviderGetCredentialsRequest(
         request: GetCredentialsRequest,
     ) {
+        if (request.beginGetPublicKeyCredentialOptions.isNotEmpty()) {
+            handleProviderGetPublicKeyCredentialsRequestOriginValidation(request)
+        } else {
+            viewModelScope.launch {
+                sendAction(
+                    VaultItemListingsAction.Internal.GetCredentialEntriesResultReceive(
+                        userId = request.userId,
+                        result = bitwardenCredentialManager.getCredentialEntries(
+                            getCredentialsRequest = request,
+                        ),
+                    ),
+                )
+            }
+        }
+    }
+
+    private fun handleProviderGetPublicKeyCredentialsRequestOriginValidation(
+        request: GetCredentialsRequest,
+    ) {
         val callingAppInfo = request.callingAppInfo
             ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_app_could_not_be_verified.asText(),
+                    BitwardenString.passkey_operation_failed_because_app_could_not_be_verified
+                        .asText(),
                 )
                 return
             }
@@ -1948,7 +2341,8 @@ class VaultItemListingViewModel @Inject constructor(
             .firstOrNull()
             ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_relying_party_cannot_be_identified
+                    BitwardenString
+                        .passkey_operation_failed_because_relying_party_cannot_be_identified
                         .asText(),
                 )
                 return
@@ -1993,7 +2387,7 @@ class VaultItemListingViewModel @Inject constructor(
                 dialogState = when {
                     shouldShowTrustPrompt(error) -> {
                         VaultItemListingState.DialogState.TrustPrivilegedAddPrompt(
-                            message = R.string
+                            message = BitwardenString
                                 .passkey_operation_failed_because_browser_x_is_not_trusted
                                 .asText(callingAppInfo.packageName),
                             selectedCipherId = selectedCipherId,
@@ -2002,7 +2396,7 @@ class VaultItemListingViewModel @Inject constructor(
 
                     else -> {
                         VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = error.messageResourceId.asText(),
                         )
                     }
@@ -2012,8 +2406,7 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun shouldShowTrustPrompt(error: ValidateOriginResult.Error): Boolean =
-        error is ValidateOriginResult.Error.PrivilegedAppNotAllowed &&
-            featureFlagManager.getFeatureFlag(FlagKey.UserManagedPrivilegedApps)
+        error is ValidateOriginResult.Error.PrivilegedAppNotAllowed
 
     private fun handleFido2AssertionDataReceive(
         action: VaultItemListingsAction.Internal.Fido2AssertionDataReceive,
@@ -2021,42 +2414,87 @@ class VaultItemListingViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = VaultItemListingState.DialogState.Loading(
-                    message = R.string.loading.asText(),
+                    message = BitwardenString.loading.asText(),
                 ),
             )
         }
-        val request = action.data
-        val ciphers = vaultRepository
-            .ciphersStateFlow
-            .value
-            .data
-            .orEmpty()
-            .filter { it.isActiveWithFido2Credentials }
-        val selectedCipherId = request.cipherId
-
-        if (selectedCipherId.isEmpty()) {
-            showCredentialManagerErrorDialog(
-                R.string.passkey_operation_failed_because_no_item_was_selected.asText(),
-            )
-        } else {
-            val selectedCipher = ciphers
-                .find { it.id == selectedCipherId }
-                ?: run {
-                    showCredentialManagerErrorDialog(
-                        R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
-                            .asText(),
-                    )
-                    return
+        viewModelScope.launch {
+            val request = action.data
+            getCipherViewForCredentialOrNull(request.cipherId)
+                ?.let { cipherView ->
+                    if (state.hasMasterPassword &&
+                        cipherView.reprompt == CipherRepromptType.PASSWORD
+                    ) {
+                        repromptMasterPasswordForUserVerification(request.cipherId)
+                    } else {
+                        verifyUserAndAuthenticateCredential(
+                            request = request.providerRequest,
+                            selectedCipher = cipherView,
+                        )
+                    }
                 }
-
-            if (state.hasMasterPassword &&
-                selectedCipher.reprompt == CipherRepromptType.PASSWORD
-            ) {
-                repromptMasterPasswordForUserVerification(selectedCipherId)
-            } else {
-                verifyUserAndAuthenticateCredential(request.providerRequest, selectedCipher)
-            }
         }
+    }
+
+    private fun handleProviderGetPasswordCredentialRequestReceive(
+        action: VaultItemListingsAction.Internal.ProviderGetPasswordCredentialRequestReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Loading(
+                    message = BitwardenString.loading.asText(),
+                ),
+            )
+        }
+
+        val cipherListView = vaultRepository.vaultDataStateFlow.value.data
+            ?.decryptCipherListResult
+            ?.successes
+            ?.find { it.id == action.data.cipherId }
+            ?: run {
+                sendCredentialItemNotFoundError()
+                return
+            }
+
+        if (
+            state.hasMasterPassword &&
+            cipherListView.reprompt == CipherRepromptType.PASSWORD
+        ) {
+            repromptMasterPasswordForUserVerification(action.data.cipherId)
+            return
+        }
+
+        viewModelScope.launch {
+            val request = action.data
+            getCipherViewForCredentialOrNull(request.cipherId)
+                ?.let { cipherView ->
+                    handlePasswordCredentialResult(
+                        selectedCipher = cipherView,
+                    )
+                }
+        }
+    }
+
+    private suspend fun sendCredentialDecryptionError(throwable: Throwable?) {
+        sendAction(
+            VaultItemListingsAction.Internal.CredentialOperationFailureReceive(
+                title = BitwardenString.decryption_error.asText(),
+                message = BitwardenString.failed_to_decrypt_cipher_contact_support.asText(),
+                error = throwable,
+            ),
+        )
+    }
+
+    private fun sendCredentialItemNotFoundError() {
+        trySendAction(
+            VaultItemListingsAction.Internal.CredentialOperationFailureReceive(
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString
+                    .credential_operation_failed_because_the_selected_item_does_not_exist
+                    .asText(),
+                error = null,
+            ),
+        )
     }
 
     private fun repromptMasterPasswordForUserVerification(cipherId: String) {
@@ -2077,7 +2515,10 @@ class VaultItemListingViewModel @Inject constructor(
     ) {
 
         if (bitwardenCredentialManager.isUserVerified) {
-            authenticateFido2Credential(request, selectedCipher)
+            authenticateFido2Credential(
+                request = request,
+                cipherView = selectedCipher,
+            )
             return
         }
 
@@ -2098,6 +2539,48 @@ class VaultItemListingViewModel @Inject constructor(
             UserVerificationRequirement.REQUIRED -> {
                 sendUserVerificationEvent(isRequired = true, selectedCipher = selectedCipher)
             }
+        }
+    }
+
+    private fun handlePasswordCredentialResult(
+        selectedCipher: CipherView,
+    ) {
+        viewModelScope.launch {
+            bitwardenCredentialManager.isUserVerified = false
+            clearDialogState()
+
+            val event = selectedCipher
+                .login
+                ?.let { credential ->
+                    credential
+                        .password
+                        ?.takeIf { it.isNotEmpty() }
+                        ?.let { password ->
+                            VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
+                                GetPasswordCredentialResult.Success(
+                                    username = credential.username,
+                                    password = password,
+                                ),
+                            )
+                        }
+                        ?: VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
+                            @Suppress("MaxLineLength")
+                            GetPasswordCredentialResult.Error(
+                                message = BitwardenString
+                                    .password_operation_failed_because_the_selected_item_does_not_have_a_valid_password
+                                    .asText(),
+                            ),
+                        )
+                }
+                ?: VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
+                    GetPasswordCredentialResult.Error(
+                        message = BitwardenString
+                            .password_operation_failed_because_the_selected_item_does_not_exist
+                            .asText(),
+                    ),
+                )
+
+            sendEvent(event)
         }
     }
 
@@ -2135,7 +2618,7 @@ class VaultItemListingViewModel @Inject constructor(
         action.result
             .onFailure {
                 showCredentialManagerErrorDialog(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                 )
             }
             .onSuccess { credentialEntries ->
@@ -2177,11 +2660,10 @@ class VaultItemListingViewModel @Inject constructor(
                             isIconLoadingDisabled = state.isIconLoadingDisabled,
                             autofillSelectionData = state.autofillSelectionData,
                             createCredentialRequestData = state.createCredentialRequest,
-                            fido2CredentialAutofillViews = vaultData
-                                .fido2CredentialAutofillViewList,
                             totpData = state.totpData,
                             isPremiumUser = state.isPremium,
                             restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
+                            isArchiveEnabled = state.isArchiveEnabled,
                         )
                     }
 
@@ -2203,13 +2685,44 @@ class VaultItemListingViewModel @Inject constructor(
         }
     }
 
-    private fun getCipherViewOrNull(cipherId: String) =
-        vaultRepository
-            .vaultDataStateFlow
-            .value
-            .data
-            ?.cipherViewList
-            ?.firstOrNull { it.id == cipherId }
+    /**
+     * Attempts to decrypt a cipher with the given [cipherId], or null.
+     */
+    private suspend fun getCipherViewOrNull(
+        cipherId: String,
+    ) = when (val result = vaultRepository.getCipher(cipherId)) {
+        is GetCipherResult.Success -> result.cipherView
+        is GetCipherResult.Failure -> {
+            Timber.e(result.error, "Failed to decrypt cipher.")
+            sendAction(
+                VaultItemListingsAction.Internal.DecryptCipherErrorReceive(result.error),
+            )
+            null
+        }
+
+        is GetCipherResult.CipherNotFound -> {
+            Timber.e("Cipher not found.")
+            sendAction(
+                VaultItemListingsAction.Internal.DecryptCipherErrorReceive(error = null),
+            )
+            null
+        }
+    }
+
+    private suspend fun getCipherViewForCredentialOrNull(cipherId: String): CipherView? =
+        when (val result = vaultRepository.getCipher(cipherId)) {
+            GetCipherResult.CipherNotFound -> {
+                sendCredentialItemNotFoundError()
+                null
+            }
+
+            is GetCipherResult.Failure -> {
+                sendCredentialDecryptionError(result.error)
+                null
+            }
+
+            is GetCipherResult.Success -> result.cipherView
+        }
 
     private fun sendUserVerificationEvent(isRequired: Boolean, selectedCipher: CipherView) {
         sendEvent(
@@ -2224,18 +2737,37 @@ class VaultItemListingViewModel @Inject constructor(
      * Takes the given vault data and filters it for autofill if necessary.
      */
     private suspend fun DataState<VaultData>.filterForAutofillIfNecessary(): DataState<VaultData> {
-        val matchUri = state
-            .autofillSelectionData
-            ?.uri
-            ?: return this
-        return this.map { vaultData ->
-            vaultData.copy(
-                cipherViewList = cipherMatchingManager.filterCiphersForMatches(
-                    ciphers = vaultData.cipherViewList,
-                    matchUri = matchUri,
-                ),
-                fido2CredentialAutofillViewList = vaultData.toFido2CredentialAutofillViews(),
-            )
+        val autofillSelectionData = state.autofillSelectionData ?: return this
+        return when (autofillSelectionData.type) {
+            AutofillSelectionData.Type.CARD -> {
+                this.map { vaultData ->
+                    vaultData.copy(
+                        decryptCipherListResult = vaultData.decryptCipherListResult.copy(
+                            successes = vaultData.decryptCipherListResult.successes
+                                .filter { it.type is CipherListViewType.Card },
+                            failures = emptyList(),
+                        ),
+                    )
+                }
+            }
+
+            AutofillSelectionData.Type.LOGIN -> {
+                val matchUri = state
+                    .autofillSelectionData
+                    ?.uri
+                    ?: return this
+                this.map { vaultData ->
+                    vaultData.copy(
+                        decryptCipherListResult = vaultData.decryptCipherListResult.copy(
+                            successes = cipherMatchingManager.filterCiphersForMatches(
+                                cipherListViews = vaultData.decryptCipherListResult.successes,
+                                matchUri = matchUri,
+                            ),
+                            failures = emptyList(),
+                        ),
+                    )
+                }
+            }
         }
     }
 
@@ -2250,11 +2782,13 @@ class VaultItemListingViewModel @Inject constructor(
                 ?: request.callingAppInfo.packageName.toAndroidAppUriString()
 
             vaultData.copy(
-                cipherViewList = cipherMatchingManager.filterCiphersForMatches(
-                    ciphers = vaultData.cipherViewList,
-                    matchUri = matchUri,
+                decryptCipherListResult = vaultData.decryptCipherListResult.copy(
+                    successes = cipherMatchingManager.filterCiphersForMatches(
+                        cipherListViews = vaultData.decryptCipherListResult.successes,
+                        matchUri = matchUri,
+                    ),
+                    failures = emptyList(),
                 ),
-                fido2CredentialAutofillViewList = vaultData.toFido2CredentialAutofillViews(),
             )
         }
     }
@@ -2267,41 +2801,40 @@ class VaultItemListingViewModel @Inject constructor(
         val query = totpData.issuer ?: totpData.accountName ?: return this
         return this.map { vaultData ->
             vaultData.copy(
-                cipherViewList = vaultData.cipherViewList.filterAndOrganize(
-                    searchTypeData = SearchTypeData.Vault.Logins,
-                    searchTerm = query,
+                decryptCipherListResult = vaultData.decryptCipherListResult.copy(
+                    successes = vaultData
+                        .decryptCipherListResult
+                        .successes
+                        .filterAndOrganize(
+                            searchTypeData = SearchTypeData.Vault.Logins,
+                            searchTerm = query,
+                        ),
+                    failures = emptyList(),
                 ),
             )
         }
     }
 
-    /**
-     * Decrypt and filter the fido 2 autofill credentials.
-     */
-    @Suppress("MaxLineLength")
-    private suspend fun VaultData.toFido2CredentialAutofillViews(): List<Fido2CredentialAutofillView>? =
-        (vaultRepository
-            .getDecryptedFido2CredentialAutofillViews(
-                cipherViewList = this
-                    .cipherViewList
-                    .filter { it.isActiveWithFido2Credentials },
-            )
-            as? DecryptFido2CredentialAutofillViewResult.Success)
-            ?.fido2CredentialAutofillViews
-
     private fun showUserVerificationErrorDialog() {
         showCredentialManagerErrorDialog(
-            R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+            message = BitwardenString
+                .credential_operation_failed_because_user_could_not_be_verified
+                .asText(),
         )
     }
 
-    private fun showCredentialManagerErrorDialog(message: Text) {
+    private fun showCredentialManagerErrorDialog(
+        message: Text,
+        title: Text = BitwardenString.an_error_has_occurred.asText(),
+        error: Throwable? = null,
+    ) {
         bitwardenCredentialManager.authenticationAttempts = 0
         mutableStateFlow.update {
             it.copy(
                 dialogState = VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    title = R.string.an_error_has_occurred.asText(),
+                    title = title,
                     message = message,
+                    throwable = error,
                 ),
             )
         }
@@ -2333,13 +2866,43 @@ data class VaultItemListingState(
     val autofillSelectionData: AutofillSelectionData? = null,
     val createCredentialRequest: CreateCredentialRequest? = null,
     val fido2CredentialAssertionRequest: Fido2CredentialAssertionRequest? = null,
+    val providerGetPasswordCredentialRequest: ProviderGetPasswordCredentialRequest? = null,
     val getCredentialsRequest: GetCredentialsRequest? = null,
     val hasMasterPassword: Boolean,
     val isPremium: Boolean,
     val isRefreshing: Boolean,
+    val isArchiveEnabled: Boolean,
 ) {
     /**
-     * Whether or not the add FAB should be shown.
+     * Indicates what action card to display.
+     */
+    val actionCard: ActionCardState?
+        get() = when (itemListingType) {
+            ItemListingType.Vault.Archive -> {
+                (viewState as? ViewState.Content)?.let {
+                    if (!isPremium && it.displayItemList.isNotEmpty()) {
+                        ActionCardState.PremiumSubscription
+                    } else {
+                        null
+                    }
+                }
+            }
+
+            ItemListingType.Vault.Card,
+            is ItemListingType.Vault.Collection,
+            is ItemListingType.Vault.Folder,
+            ItemListingType.Vault.Identity,
+            ItemListingType.Vault.Login,
+            ItemListingType.Vault.SecureNote,
+            ItemListingType.Vault.SshKey,
+            ItemListingType.Vault.Trash,
+            ItemListingType.Send.SendFile,
+            ItemListingType.Send.SendText,
+                -> null
+        }
+
+    /**
+     * Whether the add FAB should be shown.
      */
     val hasAddItemFabButton: Boolean
         get() = if (restrictItemTypesPolicyOrgIds.isNotEmpty() &&
@@ -2352,19 +2915,19 @@ data class VaultItemListingState(
         }
 
     /**
-     * Whether or not this represents a listing screen for autofill.
+     * Whether this represents a listing screen for autofill.
      */
     val isAutofill: Boolean
         get() = autofillSelectionData != null
 
     /**
-     * Whether or not this represents a listing screen for CredentialManager creation requests.
+     * Whether this represents a listing screen for CredentialManager creation requests.
      */
     val isCredentialManagerCreation: Boolean
         get() = createCredentialRequest != null
 
     /**
-     * Whether or not this represents a listing screen for totp.
+     * Whether this represents a listing screen for totp.
      */
     val isTotp: Boolean get() = totpData != null
 
@@ -2373,13 +2936,29 @@ data class VaultItemListingState(
      */
     val appBarTitle: Text
         get() = autofillSelectionData
-            ?.uri
-            ?.toHostOrPathOrNull()
-            ?.let { R.string.items_for_uri.asText(it) }
+            ?.let { data ->
+                data.uri
+                    ?.toHostOrPathOrNull()
+                    ?.let {
+                        when (data.type) {
+                            AutofillSelectionData.Type.CARD -> {
+                                BitwardenString.select_a_card_for_x.asText(it)
+                            }
+
+                            AutofillSelectionData.Type.LOGIN -> {
+                                BitwardenString.items_for_uri.asText(it)
+                            }
+                        }
+                    }
+            }
             ?: createCredentialRequest
                 ?.relyingPartyIdOrNull
-                ?.let { R.string.items_for_uri.asText(it) }
-            ?: totpData?.let { R.string.items_for_uri.asText(it.issuer ?: it.accountName ?: "--") }
+                ?.let { BitwardenString.items_for_uri.asText(it) }
+            ?: totpData?.let {
+                BitwardenString.items_for_uri.asText(
+                    it.issuer ?: it.accountName ?: "--",
+                )
+            }
             ?: itemListingType.titleText
 
     /**
@@ -2389,19 +2968,19 @@ data class VaultItemListingState(
         get() = isPullToRefreshSettingEnabled && viewState.isPullToRefreshEnabled
 
     /**
-     * Whether or not the account switcher should be shown.
+     * Whether the account switcher should be shown.
      */
     val shouldShowAccountSwitcher: Boolean
         get() = isAutofill || isCredentialManagerCreation || isTotp
 
     /**
-     * Whether or not the navigation icon should be shown.
+     * Whether the navigation icon should be shown.
      */
     val shouldShowNavigationIcon: Boolean
         get() = !isAutofill && !isCredentialManagerCreation && !isTotp
 
     /**
-     * Whether or not the overflow menu should be shown.
+     * Whether the overflow menu should be shown.
      */
     val shouldShowOverflowMenu: Boolean
         get() = !isAutofill && !isCredentialManagerCreation && !isTotp
@@ -2422,12 +3001,23 @@ data class VaultItemListingState(
         ) : DialogState()
 
         /**
+         * Represents a dialog indicating that a cipher decryption error occurred.
+         */
+        @Parcelize
+        data class CipherDecryptionError(
+            val title: Text,
+            val message: Text,
+            val selectedCipherId: String,
+        ) : DialogState()
+
+        /**
          * Represents a dialog indicating that a CredentialManager operation encountered an error.
          */
         @Parcelize
         data class CredentialManagerOperationFail(
             val title: Text,
             val message: Text,
+            val throwable: Throwable? = null,
         ) : DialogState()
 
         /**
@@ -2520,6 +3110,22 @@ data class VaultItemListingState(
             val message: Text,
             val selectedCipherId: String?,
         ) : DialogState()
+
+        /**
+         * Displays a dialog to the user indicating that archiving requires a Premium account.
+         */
+        @Parcelize
+        data object ArchiveRequiresPremium : DialogState()
+    }
+
+    /**
+     * Represents the specific action cards that can be displayed on the [VaultItemListingScreen].
+     */
+    sealed class ActionCardState {
+        /**
+         * Indicates that your Premium subscription has lapsed.
+         */
+        data object PremiumSubscription : ActionCardState()
     }
 
     /**
@@ -2593,16 +3199,16 @@ data class VaultItemListingState(
      * @property iconTestTag The test tag for the icon (nullable).
      * @property overflowOptions list of options for the item's overflow menu.
      * @property optionsTestTag The test tag associated with the [overflowOptions].
-     * @property isAutofill whether or not this screen is part of an autofill flow.
-     * @property isCredentialCreation whether or not this screen is part of CredentialManager
+     * @property isAutofill whether this screen is part of an autofill flow.
+     * @property isCredentialCreation whether this screen is part of CredentialManager
      * creation flow.
-     * @property shouldShowMasterPasswordReprompt whether or not a master password reprompt is
+     * @property shouldShowMasterPasswordReprompt whether a master password reprompt is
      * required for various secure actions.
      * @property itemType Indicates the type of item this is.
      */
     data class DisplayItem(
         val id: String,
-        val title: String,
+        val title: Text,
         val titleTestTag: String,
         val secondSubtitle: String?,
         val secondSubtitleTestTag: String?,
@@ -2631,6 +3237,11 @@ data class VaultItemListingState(
              * Indicates the item type is a vault item.
              */
             data class Vault(val type: CipherType) : ItemType()
+
+            /**
+             * Indicates the item type is a decryption error.
+             */
+            object DecryptionError : ItemType()
         }
     }
 
@@ -2671,7 +3282,7 @@ data class VaultItemListingState(
         abstract val titleText: Text
 
         /**
-         * Whether or not the screen has a floating action button (FAB).
+         * Whether the screen has a floating action button (FAB).
          */
         abstract val hasFab: Boolean
 
@@ -2684,7 +3295,7 @@ data class VaultItemListingState(
              * A Login item listing.
              */
             data object Login : Vault() {
-                override val titleText: Text get() = R.string.logins.asText()
+                override val titleText: Text get() = BitwardenString.logins.asText()
                 override val hasFab: Boolean get() = true
             }
 
@@ -2692,7 +3303,7 @@ data class VaultItemListingState(
              * A Card item listing.
              */
             data object Card : Vault() {
-                override val titleText: Text get() = R.string.cards.asText()
+                override val titleText: Text get() = BitwardenString.cards.asText()
                 override val hasFab: Boolean get() = true
             }
 
@@ -2700,7 +3311,7 @@ data class VaultItemListingState(
              * An Identity item listing.
              */
             data object Identity : Vault() {
-                override val titleText: Text get() = R.string.identities.asText()
+                override val titleText: Text get() = BitwardenString.identities.asText()
                 override val hasFab: Boolean get() = true
             }
 
@@ -2708,7 +3319,7 @@ data class VaultItemListingState(
              * A Secure Note item listing.
              */
             data object SecureNote : Vault() {
-                override val titleText: Text get() = R.string.secure_notes.asText()
+                override val titleText: Text get() = BitwardenString.secure_notes.asText()
                 override val hasFab: Boolean get() = true
             }
 
@@ -2716,15 +3327,23 @@ data class VaultItemListingState(
              * A SSH key item listing.
              */
             data object SshKey : Vault() {
-                override val titleText: Text get() = R.string.ssh_keys.asText()
+                override val titleText: Text get() = BitwardenString.ssh_keys.asText()
                 override val hasFab: Boolean get() = false
             }
 
             /**
-             * A Secure Trash item listing.
+             * An archive item listing.
+             */
+            data object Archive : Vault() {
+                override val titleText: Text get() = BitwardenString.archive_noun.asText()
+                override val hasFab: Boolean get() = false
+            }
+
+            /**
+             * A Trash item listing.
              */
             data object Trash : Vault() {
-                override val titleText: Text get() = R.string.trash.asText()
+                override val titleText: Text get() = BitwardenString.trash.asText()
                 override val hasFab: Boolean get() = false
             }
 
@@ -2743,7 +3362,7 @@ data class VaultItemListingState(
                 override val titleText: Text
                     get() = folderId
                         ?.let { folderName.asText() }
-                        ?: R.string.folder_none.asText()
+                        ?: BitwardenString.folder_none.asText()
                 override val hasFab: Boolean get() = true
             }
 
@@ -2771,7 +3390,7 @@ data class VaultItemListingState(
              * A Send File item listing.
              */
             data object SendFile : Send() {
-                override val titleText: Text get() = R.string.file.asText()
+                override val titleText: Text get() = BitwardenString.file.asText()
                 override val hasFab: Boolean get() = true
             }
 
@@ -2779,7 +3398,7 @@ data class VaultItemListingState(
              * A Send Text item listing.
              */
             data object SendText : Send() {
-                override val titleText: Text get() = R.string.text.asText()
+                override val titleText: Text get() = BitwardenString.text.asText()
                 override val hasFab: Boolean get() = true
             }
         }
@@ -2889,13 +3508,6 @@ sealed class VaultItemListingEvent {
     data class ShowShareSheet(val content: String) : VaultItemListingEvent()
 
     /**
-     * Show a toast with the given message.
-     *
-     * @property text the text to display.
-     */
-    data class ShowToast(val text: Text) : VaultItemListingEvent()
-
-    /**
      * Show a snackbar to the user.
      */
     data class ShowSnackbar(
@@ -2917,12 +3529,12 @@ sealed class VaultItemListingEvent {
     }
 
     /**
-     * Complete the current FIDO 2 credential registration process.
+     * Complete the current credential registration process.
      *
-     * @property result The result of FIDO 2 credential registration.
+     * @property result The result of the credential registration.
      */
-    data class CompleteFido2Registration(
-        val result: RegisterFido2CredentialResult,
+    data class CompleteCredentialRegistration(
+        val result: CreateCredentialResult,
     ) : BackgroundEvent, VaultItemListingEvent()
 
     /**
@@ -2941,6 +3553,16 @@ sealed class VaultItemListingEvent {
      */
     data class CompleteFido2Assertion(
         val result: AssertFido2CredentialResult,
+    ) : BackgroundEvent, VaultItemListingEvent()
+
+    /**
+     * Password credential assertion result has been received and the process is ready to be
+     * completed.
+     *
+     * @property result The result of the Password credential assertion.
+     */
+    data class CompleteProviderGetPasswordCredentialRequest(
+        val result: GetPasswordCredentialResult,
     ) : BackgroundEvent, VaultItemListingEvent()
 
     /**
@@ -3051,6 +3673,18 @@ sealed class VaultItemListingsAction {
      * Click the lock button.
      */
     data object LockClick : VaultItemListingsAction()
+
+    /**
+     * Click to share cipher decryption error details.
+     */
+    data class ShareCipherDecryptionErrorClick(
+        val selectedCipherId: String,
+    ) : VaultItemListingsAction()
+
+    /**
+     * Click the upgrade to Premium button.
+     */
+    data object UpgradeToPremiumClick : VaultItemListingsAction()
 
     /**
      * Click the refresh button.
@@ -3184,6 +3818,20 @@ sealed class VaultItemListingsAction {
         data class DeleteSendResultReceive(val result: DeleteSendResult) : Internal()
 
         /**
+         * Indicates that the archive cipher result has been received.
+         */
+        data class ArchiveCipherReceive(
+            val result: ArchiveCipherResult,
+        ) : Internal()
+
+        /**
+         * Indicates that the unarchive cipher result has been received.
+         */
+        data class UnarchiveCipherReceive(
+            val result: UnarchiveCipherResult,
+        ) : Internal()
+
+        /**
          * Indicates a result for generating a verification code has been received.
          */
         data class GenerateTotpResultReceive(
@@ -3281,6 +3929,13 @@ sealed class VaultItemListingsAction {
         ) : Internal()
 
         /**
+         * Indicates that Password get request data has been received.
+         */
+        data class ProviderGetPasswordCredentialRequestReceive(
+            val data: ProviderGetPasswordCredentialRequest,
+        ) : Internal()
+
+        /**
          * Indicates that the there is not internet connection.
          */
         data object InternetConnectionErrorReceived : Internal()
@@ -3298,6 +3953,29 @@ sealed class VaultItemListingsAction {
          */
         data class SnackbarDataReceived(
             val data: BitwardenSnackbarData,
+        ) : Internal(), BackgroundEvent
+
+        /**
+         * Indicates that the Archive Items flag has been updated.
+         */
+        data class ArchiveItemsFlagUpdateReceive(
+            val isEnabled: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that an error occurred while decrypting a cipher.
+         */
+        data class DecryptCipherErrorReceive(
+            val error: Throwable?,
+        ) : Internal()
+
+        /**
+         * Indicates that a credential operation failure was received.
+         */
+        data class CredentialOperationFailureReceive(
+            val title: Text,
+            val message: Text,
+            val error: Throwable?,
         ) : Internal()
     }
 }

@@ -13,13 +13,12 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -27,11 +26,11 @@ import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.components.row.BitwardenPushRow
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.row.BitwardenPushRow
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**
  * Displays the settings screen.
@@ -67,14 +66,16 @@ fun SettingsScreen(
     BitwardenScaffold(
         topBar = {
             BitwardenMediumTopAppBar(
-                title = stringResource(id = R.string.settings),
+                title = stringResource(id = BitwardenString.settings),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = if (state.shouldShowCloseButton) {
                     NavigationIcon(
                         navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                        navigationIconContentDescription = stringResource(id = R.string.close),
-                        onNavigationIconClick = remember(viewModel) {
-                            { viewModel.trySendAction(SettingsAction.CloseClick) }
+                        navigationIconContentDescription = stringResource(
+                            id = BitwardenString.close,
+                        ),
+                        onNavigationIconClick = {
+                            viewModel.trySendAction(SettingsAction.CloseClick)
                         },
                     )
                 } else {
@@ -93,8 +94,8 @@ fun SettingsScreen(
             state.settingRows.forEachIndexed { index, settingEntry ->
                 BitwardenPushRow(
                     text = settingEntry.text(),
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(SettingsAction.SettingsClick(settingEntry)) }
+                    onClick = {
+                        viewModel.trySendAction(SettingsAction.SettingsClick(settingEntry))
                     },
                     notificationCount = state.notificationBadgeCountMap.getOrDefault(
                         key = settingEntry,

@@ -5,8 +5,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
 import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.bitwarden.ui.platform.util.ParcelableRouteSerializer
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
@@ -92,7 +92,7 @@ fun NavGraphBuilder.generatorDestination(
     onNavigateToPasswordHistory: () -> Unit,
     onDimNavBarRequest: (Boolean) -> Unit,
 ) {
-    composable<GeneratorRoute.Standard> {
+    composableWithRootPushTransitions<GeneratorRoute.Standard> {
         GeneratorScreen(
             onNavigateToPasswordHistory = onNavigateToPasswordHistory,
             onNavigateBack = {},

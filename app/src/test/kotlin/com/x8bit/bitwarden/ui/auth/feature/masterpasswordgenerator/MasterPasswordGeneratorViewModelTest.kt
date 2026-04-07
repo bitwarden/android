@@ -4,8 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
@@ -97,7 +97,9 @@ class MasterPasswordGeneratorViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(MasterPasswordGeneratorAction.GeneratePasswordClickAction)
             assertEquals(
-                MasterPasswordGeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()),
+                MasterPasswordGeneratorEvent.ShowSnackbar(
+                    BitwardenString.an_error_has_occurred.asText(),
+                ),
                 awaitItem(),
             )
         }

@@ -3,8 +3,16 @@ package com.x8bit.bitwarden.data.platform.manager.di
 import android.app.Application
 import android.content.Context
 import androidx.core.content.getSystemService
-import com.bitwarden.data.manager.DispatcherManager
-import com.bitwarden.data.manager.DispatcherManagerImpl
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManagerImpl
+import com.bitwarden.core.data.manager.realtime.RealtimeManager
+import com.bitwarden.core.data.manager.realtime.RealtimeManagerImpl
+import com.bitwarden.core.data.manager.toast.ToastManager
+import com.bitwarden.core.data.manager.toast.ToastManagerImpl
+import com.bitwarden.cxf.registry.CredentialExchangeRegistry
+import com.bitwarden.cxf.registry.dsl.credentialExchangeRegistry
+import com.bitwarden.data.datasource.disk.ConfigDiskSource
+import com.bitwarden.data.manager.NativeLibraryManager
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.network.BitwardenServiceClient
 import com.bitwarden.network.service.EventService
@@ -14,20 +22,24 @@ import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
+import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
+import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacyAppCenterMigrator
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManagerImpl
-import com.x8bit.bitwarden.data.platform.manager.AppStateManager
-import com.x8bit.bitwarden.data.platform.manager.AppStateManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.AssetManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.CertificateManager
 import com.x8bit.bitwarden.data.platform.manager.CertificateManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
+import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
+import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.DebugMenuFeatureFlagManagerImpl
@@ -35,10 +47,10 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.GmsManager
+import com.x8bit.bitwarden.data.platform.manager.GmsManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManagerImpl
-import com.x8bit.bitwarden.data.platform.manager.NativeLibraryManager
-import com.x8bit.bitwarden.data.platform.manager.NativeLibraryManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -55,18 +67,20 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManagerImpl
-import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderManager
-import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderManagerImpl
-import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderWriter
-import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderWriterImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConfigManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConfigManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManager
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
+import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactoryImpl
+import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
+import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactoryImpl
 import com.x8bit.bitwarden.data.platform.processor.AuthenticatorBridgeProcessor
 import com.x8bit.bitwarden.data.platform.processor.AuthenticatorBridgeProcessorImpl
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepository
@@ -74,7 +88,6 @@ import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
-import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module
@@ -95,52 +108,16 @@ object PlatformManagerModule {
 
     @Provides
     @Singleton
-    fun provideAppStateManager(
-        application: Application,
-    ): AppStateManager = AppStateManagerImpl(application = application)
-
-    @Provides
-    @Singleton
-    fun provideFlightRecorderWriter(
-        clock: Clock,
-        fileManager: FileManager,
-        dispatcherManager: DispatcherManager,
-    ): FlightRecorderWriter = FlightRecorderWriterImpl(
-        clock = clock,
-        fileManager = fileManager,
-        dispatcherManager = dispatcherManager,
-    )
-
-    @Provides
-    @Singleton
-    fun provideFlightRecorderManager(
-        @ApplicationContext context: Context,
-        clock: Clock,
-        dispatcherManager: DispatcherManager,
-        settingsDiskSource: SettingsDiskSource,
-        flightRecorderWriter: FlightRecorderWriter,
-    ): FlightRecorderManager = FlightRecorderManagerImpl(
-        context = context,
-        clock = clock,
-        dispatcherManager = dispatcherManager,
-        settingsDiskSource = settingsDiskSource,
-        flightRecorderWriter = flightRecorderWriter,
-    )
-
-    @Provides
-    @Singleton
     fun provideAuthenticatorBridgeProcessor(
         authenticatorBridgeRepository: AuthenticatorBridgeRepository,
         addTotpItemFromAuthenticatorManager: AddTotpItemFromAuthenticatorManager,
         @ApplicationContext context: Context,
         dispatcherManager: DispatcherManager,
-        featureFlagManager: FeatureFlagManager,
     ): AuthenticatorBridgeProcessor = AuthenticatorBridgeProcessorImpl(
         authenticatorBridgeRepository = authenticatorBridgeRepository,
         addTotpItemFromAuthenticatorManager = addTotpItemFromAuthenticatorManager,
         context = context,
         dispatcherManager = dispatcherManager,
-        featureFlagManager = featureFlagManager,
     )
 
     @Provides
@@ -189,9 +166,23 @@ object PlatformManagerModule {
     fun provideBitwardenClipboardManager(
         @ApplicationContext context: Context,
         settingsRepository: SettingsRepository,
+        toastManager: ToastManager,
     ): BitwardenClipboardManager = BitwardenClipboardManagerImpl(
-        context,
-        settingsRepository,
+        context = context,
+        settingsRepository = settingsRepository,
+        toastManager = toastManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideRealtimeManager(): RealtimeManager = RealtimeManagerImpl()
+
+    @Provides
+    @Singleton
+    fun provideToastManager(
+        @ApplicationContext context: Context,
+    ): ToastManager = ToastManagerImpl(
+        context = context,
     )
 
     @Provides
@@ -226,16 +217,16 @@ object PlatformManagerModule {
 
     @Provides
     @Singleton
-    fun provideNativeLibraryManager(): NativeLibraryManager = NativeLibraryManagerImpl()
-
-    @Provides
-    @Singleton
     fun provideSdkClientManager(
         featureFlagManager: FeatureFlagManager,
         nativeLibraryManager: NativeLibraryManager,
+        sdkRepositoryFactory: SdkRepositoryFactory,
+        sdkPlatformApiFactory: SdkPlatformApiFactory,
     ): SdkClientManager = SdkClientManagerImpl(
         featureFlagManager = featureFlagManager,
         nativeLibraryManager = nativeLibraryManager,
+        sdkRepoFactory = sdkRepositoryFactory,
+        sdkPlatformApiFactory = sdkPlatformApiFactory,
     )
 
     @Provides
@@ -282,6 +273,7 @@ object PlatformManagerModule {
         dispatcherManager: DispatcherManager,
         clock: Clock,
         json: Json,
+        featureFlagManager: FeatureFlagManager,
     ): PushManager = PushManagerImpl(
         authDiskSource = authDiskSource,
         pushDiskSource = pushDiskSource,
@@ -289,6 +281,7 @@ object PlatformManagerModule {
         dispatcherManager = dispatcherManager,
         clock = clock,
         json = json,
+        featureFlagManager = featureFlagManager,
     )
 
     @Provides
@@ -315,13 +308,8 @@ object PlatformManagerModule {
     @Singleton
     fun provideRestrictionManager(
         @ApplicationContext context: Context,
-        appStateManager: AppStateManager,
-        dispatcherManager: DispatcherManager,
         environmentRepository: EnvironmentRepository,
     ): RestrictionManager = RestrictionManagerImpl(
-        appStateManager = appStateManager,
-        dispatcherManager = dispatcherManager,
-        context = context,
         environmentRepository = environmentRepository,
         restrictionsManager = requireNotNull(context.getSystemService()),
     )
@@ -339,16 +327,22 @@ object PlatformManagerModule {
         settingsDiskSource: SettingsDiskSource,
         vaultDiskSource: VaultDiskSource,
         dispatcherManager: DispatcherManager,
-        featureFlagManager: FeatureFlagManager,
         autofillEnabledManager: AutofillEnabledManager,
+        thirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
     ): FirstTimeActionManager = FirstTimeActionManagerImpl(
         authDiskSource = authDiskSource,
         settingsDiskSource = settingsDiskSource,
         vaultDiskSource = vaultDiskSource,
         dispatcherManager = dispatcherManager,
-        featureFlagManager = featureFlagManager,
         autofillEnabledManager = autofillEnabledManager,
+        thirdPartyAutofillEnabledManager = thirdPartyAutofillEnabledManager,
     )
+
+    @Provides
+    @Singleton
+    fun provideGmsManager(
+        @ApplicationContext context: Context,
+    ): GmsManager = GmsManagerImpl(context = context)
 
     @Provides
     @Singleton
@@ -372,6 +366,28 @@ object PlatformManagerModule {
         settingsDiskSource = settingsDiskSource,
         autofillEnabledManager = autofillEnabledManager,
         accessibilityEnabledManager = accessibilityEnabledManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideSdkRepositoryFactory(
+        vaultDiskSource: VaultDiskSource,
+        cookieDiskSource: CookieDiskSource,
+        configDiskSource: ConfigDiskSource,
+        authDiskSource: AuthDiskSource,
+    ): SdkRepositoryFactory = SdkRepositoryFactoryImpl(
+        vaultDiskSource = vaultDiskSource,
+        cookieDiskSource = cookieDiskSource,
+        configDiskSource = configDiskSource,
+        authDiskSource = authDiskSource,
+    )
+
+    @Provides
+    @Singleton
+    fun provideSdkPlatformApiFactory(
+        serverCommConfigManager: CookieAcquisitionRequestManager,
+    ): SdkPlatformApiFactory = SdkPlatformApiFactoryImpl(
+        serverCommConfigManager = serverCommConfigManager,
     )
 
     @Provides
@@ -401,4 +417,39 @@ object PlatformManagerModule {
             clock = clock,
         )
     }
+
+    @Provides
+    @Singleton
+    fun provideCredentialExchangeRegistry(
+        application: Application,
+    ): CredentialExchangeRegistry = credentialExchangeRegistry(
+        application = application,
+    )
+
+    @Provides
+    @Singleton
+    fun provideCredentialExchangeRegistryManager(
+        credentialExchangeRegistry: CredentialExchangeRegistry,
+        settingsDiskSource: SettingsDiskSource,
+    ): CredentialExchangeRegistryManager = CredentialExchangeRegistryManagerImpl(
+        credentialExchangeRegistry = credentialExchangeRegistry,
+        settingsDiskSource = settingsDiskSource,
+    )
+
+    @Provides
+    @Singleton
+    fun provideServerCommunicationConfigManager(): CookieAcquisitionRequestManager =
+        CookieAcquisitionRequestManagerImpl()
+
+    @Provides
+    @Singleton
+    fun provideNetworkCookieManager(
+        configDiskSource: ConfigDiskSource,
+        cookieDiskSource: CookieDiskSource,
+        cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
+    ): NetworkCookieManager = NetworkCookieManagerImpl(
+        configDiskSource = configDiskSource,
+        cookieDiskSource = cookieDiskSource,
+        cookieAcquisitionRequestManager = cookieAcquisitionRequestManager,
+    )
 }

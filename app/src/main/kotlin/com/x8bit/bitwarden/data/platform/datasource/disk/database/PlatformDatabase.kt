@@ -1,11 +1,12 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk.database
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.x8bit.bitwarden.data.platform.datasource.disk.dao.OrganizationEventDao
 import com.x8bit.bitwarden.data.platform.datasource.disk.entity.OrganizationEventEntity
-import com.x8bit.bitwarden.data.vault.datasource.disk.convertor.ZonedDateTimeTypeConverter
+import com.x8bit.bitwarden.data.vault.datasource.disk.convertor.InstantTypeConverter
 
 /**
  * Room database for storing any persisted data for platform data.
@@ -14,10 +15,13 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.convertor.ZonedDateTimeTyp
     entities = [
         OrganizationEventEntity::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = true,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+    ],
 )
-@TypeConverters(ZonedDateTimeTypeConverter::class)
+@TypeConverters(InstantTypeConverter::class)
 abstract class PlatformDatabase : RoomDatabase() {
     /**
      * Provides the DAO for accessing organization event data.

@@ -143,6 +143,6 @@ class ReviewPromptManagerTest {
 }
 
 private const val USER_ID = "user_id"
-private val MOCK_USER_STATE = mockk<UserStateJson>() {
+private val MOCK_USER_STATE = mockk<UserStateJson> {
     every { activeUserId } returns USER_ID
 }

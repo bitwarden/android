@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.item.util
 import androidx.annotation.DrawableRes
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.CipherRepromptType
@@ -15,7 +16,6 @@ import com.bitwarden.vault.LoginUriView
 import com.bitwarden.vault.LoginView
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.SshKeyView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipherPermissions
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
@@ -159,7 +159,9 @@ fun createCipherView(type: CipherType, isEmpty: Boolean): CipherView =
         creationDate = Instant.ofEpochSecond(1_000L),
         deletedDate = null,
         revisionDate = Instant.ofEpochSecond(1_000L),
+        archivedDate = null,
         sshKey = createSshKeyView(isEmpty),
+        attachmentDecryptionFailures = null,
     )
 
 fun createCommonContent(
@@ -170,28 +172,30 @@ fun createCommonContent(
     if (isEmpty) {
         VaultItemState.ViewState.Content.Common(
             name = "mockName",
-            created = R.string.created.asText("Jan 1, 1970, 12:16 AM"),
-            lastUpdated = R.string.last_edited.asText("Jan 1, 1970, 12:16 AM"),
+            created = BitwardenString.created.asText("Jan 1, 1970, 12:16\u202FAM"),
+            lastUpdated = BitwardenString.last_edited.asText("Jan 1, 1970, 12:16\u202FAM"),
             notes = null,
-            customFields = emptyList(),
+            customFields = persistentListOf(),
             requiresCloneConfirmation = false,
-            attachments = emptyList(),
+            attachments = persistentListOf(),
             canDelete = true,
             canRestore = true,
             canAssignToCollections = true,
             canEdit = true,
             favorite = false,
+            archived = false,
             passwordHistoryCount = null,
             relatedLocations = persistentListOf(),
             iconData = IconData.Local(iconResId),
+            hasOrganizations = true,
         )
     } else {
         VaultItemState.ViewState.Content.Common(
             name = "mockName",
-            created = R.string.created.asText("Jan 1, 1970, 12:16 AM"),
-            lastUpdated = R.string.last_edited.asText("Jan 1, 1970, 12:16 AM"),
+            created = BitwardenString.created.asText("Jan 1, 1970, 12:16\u202FAM"),
+            lastUpdated = BitwardenString.last_edited.asText("Jan 1, 1970, 12:16\u202FAM"),
             notes = "Lots of notes",
-            customFields = listOf(
+            customFields = persistentListOf(
                 FieldView(
                     name = "text",
                     value = "value",
@@ -229,7 +233,7 @@ fun createCommonContent(
                     .toCustomField(null),
             ),
             requiresCloneConfirmation = true,
-            attachments = listOf(
+            attachments = persistentListOf(
                 VaultItemState.ViewState.Content.Common.AttachmentItem(
                     id = "attachment-id",
                     displaySize = "11 MB",
@@ -244,9 +248,11 @@ fun createCommonContent(
             canAssignToCollections = true,
             canEdit = true,
             favorite = false,
+            archived = false,
             passwordHistoryCount = 1,
             relatedLocations = persistentListOf(),
             iconData = IconData.Local(iconResId),
+            hasOrganizations = true,
         )
     }
 
@@ -270,19 +276,18 @@ fun createLoginContent(isEmpty: Boolean): VaultItemState.ViewState.Content.ItemT
                 ),
             )
         },
-        passwordRevisionDate = R.string.password_last_updated
-            .asText("Jan 1, 1970, 12:16 AM")
+        passwordRevisionDate = BitwardenString.password_updated
+            .asText("Jan 1, 1970, 12:16\u202FAM")
             .takeUnless { isEmpty },
         isPremiumUser = true,
         totpCodeItemData = TotpCodeItemData(
             periodSeconds = 30,
             timeLeftSeconds = 15,
             verificationCode = "123456",
-            totpCode = "testCode",
         )
             .takeUnless { isEmpty },
-        fido2CredentialCreationDateText = R.string.created_x
-            .asText("Oct 27, 2023, 12:00 PM")
+        fido2CredentialCreationDateText = BitwardenString.created_x
+            .asText("Oct 27, 2023, 12:00\u202FPM")
             .takeUnless { isEmpty },
         canViewTotpCode = true,
     )

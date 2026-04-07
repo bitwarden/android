@@ -1,8 +1,8 @@
 package com.bitwarden.data.repository
 
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.data.datasource.disk.model.ServerConfig
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.service.ConfigService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
@@ -35,11 +35,11 @@ internal class ServerConfigRepositoryImpl(
     override suspend fun getServerConfig(forceRefresh: Boolean): ServerConfig? {
         val localConfig = configDiskSource.serverConfig
         val needsRefresh = localConfig == null ||
-            Instant
-                .ofEpochMilli(localConfig.lastSync)
-                .isAfter(
-                    clock.instant().plusSeconds(MINIMUM_CONFIG_SYNC_INTERVAL_SEC),
-                )
+            clock.instant().isAfter(
+                Instant
+                    .ofEpochMilli(localConfig.lastSync)
+                    .plusSeconds(MINIMUM_CONFIG_SYNC_INTERVAL_SEC),
+            )
 
         if (needsRefresh || forceRefresh) {
             configService

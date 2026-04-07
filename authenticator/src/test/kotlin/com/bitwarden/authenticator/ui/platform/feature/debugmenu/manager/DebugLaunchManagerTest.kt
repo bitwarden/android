@@ -94,9 +94,12 @@ class DebugLaunchManagerTest {
         val eventTimeMillis = 100L
         assertFalse(actionHasBeenCalled)
         debugLaunchManager.actionOnInputEvent(event = mockMotionEvent, action = action)
-        debugLaunchManager.actionOnInputEvent(event = mockMotionEvent.apply {
-            every { eventTime } returns eventTimeMillis
-        }, action = action)
+        debugLaunchManager.actionOnInputEvent(
+            event = mockMotionEvent.apply {
+                every { eventTime } returns eventTimeMillis
+            },
+            action = action,
+        )
         val result = debugLaunchManager.actionOnInputEvent(
             event = mockMotionEvent.apply {
                 every { eventTime } returns eventTimeMillis + 501

@@ -31,6 +31,7 @@ enum class SearchableItemType {
     SENDS_TEXTS,
     SENDS_FILES,
     VAULT_ALL,
+    VAULT_ARCHIVE,
     VAULT_LOGINS,
     VAULT_CARDS,
     VAULT_IDENTITIES,
@@ -62,6 +63,7 @@ fun SavedStateHandle.toSearchArgs(): SearchArgs {
             SearchableItemType.SENDS_TEXTS -> SearchType.Sends.Texts
             SearchableItemType.SENDS_FILES -> SearchType.Sends.Files
             SearchableItemType.VAULT_ALL -> SearchType.Vault.All
+            SearchableItemType.VAULT_ARCHIVE -> SearchType.Vault.Archive
             SearchableItemType.VAULT_LOGINS -> SearchType.Vault.Logins
             SearchableItemType.VAULT_CARDS -> SearchType.Vault.Cards
             SearchableItemType.VAULT_IDENTITIES -> SearchType.Vault.Identities
@@ -134,6 +136,7 @@ private fun SearchType.toSearchableItemType(): SearchableItemType =
         SearchType.Vault.Trash -> SearchableItemType.VAULT_TRASH
         SearchType.Vault.VerificationCodes -> SearchableItemType.VAULT_VERIFICATION_CODES
         SearchType.Vault.SshKeys -> SearchableItemType.VAULT_SSH_KEYS
+        SearchType.Vault.Archive -> SearchableItemType.VAULT_ARCHIVE
     }
 
 private fun SearchType.toIdOrNull(): String? =
@@ -152,4 +155,5 @@ private fun SearchType.toIdOrNull(): String? =
         SearchType.Vault.Trash -> null
         SearchType.Vault.VerificationCodes -> null
         SearchType.Vault.SshKeys -> null
+        SearchType.Vault.Archive -> null
     }

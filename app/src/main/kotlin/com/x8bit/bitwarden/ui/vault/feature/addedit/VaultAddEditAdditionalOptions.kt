@@ -13,13 +13,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
+import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
-import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 
@@ -50,7 +50,7 @@ fun LazyListScope.vaultAddEditAdditionalOptions(
             item(key = "optionalNotes") {
                 BitwardenTextField(
                     singleLine = false,
-                    label = stringResource(id = R.string.notes),
+                    label = stringResource(id = BitwardenString.notes),
                     value = commonState.notes,
                     onValueChange = commonTypeHandlers.onNotesTextChange,
                     textFieldTestTag = "ItemNotesEntry",
@@ -75,14 +75,15 @@ fun LazyListScope.vaultAddEditAdditionalOptions(
                         Spacer(modifier = Modifier.height(height = 8.dp))
                     }
                     BitwardenSwitch(
-                        label = stringResource(id = R.string.password_prompt),
+                        label = stringResource(id = BitwardenString.password_prompt),
                         isChecked = commonState.masterPasswordReprompt,
                         onCheckedChange = commonTypeHandlers.onToggleMasterPasswordReprompt,
-                        tooltip = TooltipData(
+                        helpData = BitwardenHelpButtonData(
                             onClick = commonTypeHandlers.onTooltipClick,
                             contentDescription = stringResource(
-                                id = R.string.master_password_re_prompt_help,
+                                id = BitwardenString.master_password_re_prompt_help,
                             ),
+                            isExternalLink = true,
                         ),
                         cardStyle = CardStyle.Full,
                         modifier = Modifier
@@ -102,7 +103,7 @@ fun LazyListScope.vaultAddEditAdditionalOptions(
             ) {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.custom_fields),
+                    label = stringResource(id = BitwardenString.custom_fields),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),

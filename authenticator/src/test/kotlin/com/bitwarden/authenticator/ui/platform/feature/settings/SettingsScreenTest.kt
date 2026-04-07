@@ -1,25 +1,30 @@
 package com.bitwarden.authenticator.ui.platform.feature.settings
 
 import android.content.Intent
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.core.net.toUri
 import com.bitwarden.authenticator.BuildConfig
-import com.bitwarden.authenticator.R
+import com.bitwarden.authenticator.data.platform.manager.lock.model.AppTimeout
 import com.bitwarden.authenticator.ui.platform.base.AuthenticatorComposeTest
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
-import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.concat
 import io.mockk.every
 import io.mockk.just
@@ -31,13 +36,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
 class SettingsScreenTest : AuthenticatorComposeTest() {
 
     private var onNavigateToTutorialCalled = false
-    private var onNaviateToExportCalled = false
+    private var onNavigateToExportCalled = false
     private var onNavigateToImportCalled = false
 
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -63,10 +69,28 @@ class SettingsScreenTest : AuthenticatorComposeTest() {
             SettingsScreen(
                 viewModel = viewModel,
                 onNavigateToTutorial = { onNavigateToTutorialCalled = true },
-                onNavigateToExport = { onNaviateToExportCalled = true },
+                onNavigateToExport = { onNavigateToExportCalled = true },
                 onNavigateToImport = { onNavigateToImportCalled = true },
             )
         }
+    }
+
+    @Test
+    fun `NavigateToTutorial event should invoke onNavigateToTutorial`() {
+        mutableEventFlow.tryEmit(SettingsEvent.NavigateToTutorial)
+        assertTrue(onNavigateToTutorialCalled)
+    }
+
+    @Test
+    fun `NavigateToExport event should invoke onNavigateToExport`() {
+        mutableEventFlow.tryEmit(SettingsEvent.NavigateToExport)
+        assertTrue(onNavigateToExportCalled)
+    }
+
+    @Test
+    fun `NavigateToImport event should invoke onNavigateToImport`() {
+        mutableEventFlow.tryEmit(SettingsEvent.NavigateToImport)
+        assertTrue(onNavigateToImportCalled)
     }
 
     @Test
@@ -88,7 +112,7 @@ class SettingsScreenTest : AuthenticatorComposeTest() {
 
     @Test
     fun `on NavigateToBitwardenApp receive should launch bitwarden account security deep link`() {
-        every { intentManager.startActivity(any()) } just runs
+        every { intentManager.startActivity(any()) } returns true
         val intentSlot = slot<Intent>()
         val expectedIntent = Intent(
             Intent.ACTION_VIEW,
@@ -143,7 +167,7 @@ class SettingsScreenTest : AuthenticatorComposeTest() {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `Default Save Option dialog should send DefaultSaveOptionUpdated when confirm is clicked`() =
+    fun `Default Save Option dialog should send DefaultSaveOptionUpdated when selection is made`() =
         runTest {
             val expectedSaveOption = DefaultSaveOption.BITWARDEN_APP
             mutableStateFlow.value = DEFAULT_STATE
@@ -164,12 +188,6 @@ class SettingsScreenTest : AuthenticatorComposeTest() {
                 .assertIsDisplayed()
                 .performClick()
 
-            // Click confirm:
-            composeTestRule
-                .onNodeWithText("Confirm")
-                .assertIsDisplayed()
-                .performClick()
-
             verify {
                 viewModel.trySendAction(
                     SettingsAction.DataClick.DefaultSaveOptionUpdated(expectedSaveOption),
@@ -181,6 +199,161 @@ class SettingsScreenTest : AuthenticatorComposeTest() {
                 .onNode(isDialog())
                 .assertDoesNotExist()
         }
+
+    @Test
+    fun `on allow screen capture confirm should send AllowScreenCaptureToggle`() {
+        composeTestRule.onNodeWithText("Allow screen capture").performScrollTo().performClick()
+        composeTestRule.onNodeWithText("Yes").performClick()
+        composeTestRule.assertNoDialogExists()
+
+        verify {
+            viewModel.trySendAction(
+                SettingsAction.SecurityClick.AllowScreenCaptureToggle(true),
+            )
+        }
+    }
+
+    @Test
+    fun `on allow screen capture cancel should dismiss dialog`() {
+        composeTestRule.onNodeWithText("Allow screen capture").performScrollTo().performClick()
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
+    fun `on allow screen capture row click should display confirm enable screen capture dialog`() {
+        composeTestRule.onNodeWithText("Allow screen capture").performScrollTo().performClick()
+        composeTestRule
+            .onAllNodesWithText("Allow screen capture")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on language row click should send display language selector dialog`() {
+        composeTestRule.assertNoDialogExists()
+        composeTestRule
+            .onNodeWithContentDescription(label = "English. Language")
+            .performScrollTo()
+            .performClick()
+        composeTestRule
+            .onAllNodesWithText(text = "Language")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on language selected should emit LanguageChange event`() {
+        composeTestRule.assertNoDialogExists()
+        composeTestRule
+            .onNodeWithContentDescription(label = "English. Language")
+            .performScrollTo()
+            .performClick()
+        composeTestRule
+            .onNodeWithText(text = "English (United Kingdom)")
+            .performScrollTo()
+            .performClick()
+        composeTestRule.assertNoDialogExists()
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                action = SettingsAction.AppearanceChange.LanguageChange(
+                    language = AppLanguage.ENGLISH_BRITISH,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `on use dynamic colors row click should send DynamicColorChange event`() {
+        composeTestRule
+            .onNodeWithText(text = "Use dynamic colors")
+            .performScrollTo()
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(SettingsAction.AppearanceChange.DynamicColorChange(true))
+        }
+    }
+
+    @Test
+    fun `Unlock with biometrics row should be hidden when hasBiometricsSupport is false`() {
+        mutableStateFlow.value = DEFAULT_STATE
+        composeTestRule
+            .onNodeWithText("Use your device’s lock method to unlock the app")
+            .assertExists()
+
+        mutableStateFlow.update {
+            it.copy(
+                hasBiometricsSupport = false,
+            )
+        }
+        composeTestRule
+            .onNodeWithText("Use your device’s lock method to unlock the app")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `Session timeout row should be hidden when hasBiometricsSupport is false`() {
+        mutableStateFlow.value = DEFAULT_STATE
+        composeTestRule
+            .onNodeWithText("Session timeout")
+            .assertExists()
+
+        mutableStateFlow.update { it.copy(hasBiometricsSupport = false) }
+        composeTestRule
+            .onNodeWithText("Session timeout")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `Session timeout row should be disabled when isUnlockWithBiometricsEnabled is false`() {
+        mutableStateFlow.value = DEFAULT_STATE
+        composeTestRule
+            .onNodeWithText("Session timeout")
+            .assertExists()
+
+        mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = false) }
+        composeTestRule
+            .onNodeWithText("Session timeout")
+            .assertIsNotEnabled()
+    }
+
+    @Test
+    fun `Session timeout row should display dialog when clicked`() {
+        mutableStateFlow.value = DEFAULT_STATE
+        composeTestRule
+            .onNodeWithText("Session timeout")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Session timeout")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+    }
+
+    @Test
+    fun `Session timeout dialog should emit action when row clicked`() {
+        mutableStateFlow.value = DEFAULT_STATE
+        composeTestRule
+            .onNodeWithText("Session timeout")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("1 hour")
+            .performScrollTo()
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                SettingsAction.SecurityClick.AppTimeoutChange(AppTimeout.OneHour.type),
+            )
+        }
+    }
 }
 
 private val APP_LANGUAGE = AppLanguage.ENGLISH
@@ -188,8 +361,10 @@ private val APP_THEME = AppTheme.DEFAULT
 private val DEFAULT_SAVE_OPTION = DefaultSaveOption.NONE
 private val DEFAULT_STATE = SettingsState(
     appearance = SettingsState.Appearance(
-        APP_LANGUAGE,
-        APP_THEME,
+        language = APP_LANGUAGE,
+        theme = APP_THEME,
+        isDynamicColorsSupported = true,
+        isDynamicColorsEnabled = false,
     ),
     isSubmitCrashLogsEnabled = true,
     isUnlockWithBiometricsEnabled = true,
@@ -197,7 +372,10 @@ private val DEFAULT_STATE = SettingsState(
     showDefaultSaveOptionRow = true,
     defaultSaveOption = DEFAULT_SAVE_OPTION,
     dialog = null,
-    version = R.string.version.asText()
+    version = BitwardenString.version.asText()
         .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
     copyrightInfo = "© Bitwarden Inc. 2015-2024".asText(),
+    allowScreenCapture = false,
+    hasBiometricsSupport = true,
+    appTimeout = AppTimeout.OnAppRestart,
 )

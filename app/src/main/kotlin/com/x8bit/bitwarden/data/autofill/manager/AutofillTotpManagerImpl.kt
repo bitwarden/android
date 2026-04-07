@@ -1,10 +1,8 @@
 package com.x8bit.bitwarden.data.autofill.manager
 
-import android.content.Context
-import android.widget.Toast
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -16,7 +14,6 @@ import java.time.Clock
  * Default implementation of the [AutofillTotpManager].
  */
 class AutofillTotpManagerImpl(
-    private val context: Context,
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
     private val authRepository: AuthRepository,
@@ -27,25 +24,19 @@ class AutofillTotpManagerImpl(
         if (settingsRepository.isAutoCopyTotpDisabled) return
         val isPremium = authRepository.userStateFlow.value?.activeAccount?.isPremium == true
         if (!isPremium && !cipherView.organizationUseTotp) return
-        val totpCode = cipherView.login?.totp ?: return
+        cipherView.login?.totp ?: return
+        val cipherId = cipherView.id ?: return
 
         val totpResult = vaultRepository.generateTotp(
             time = clock.instant(),
-            totpCode = totpCode,
+            cipherId = cipherId,
         )
 
         if (totpResult is GenerateTotpResult.Success) {
             clipboardManager.setText(
                 text = totpResult.code,
-                toastDescriptorOverride = R.string.verification_code_totp.asText(),
+                toastDescriptorOverride = BitwardenString.verification_code_totp.asText(),
             )
-            Toast
-                .makeText(
-                    context.applicationContext,
-                    R.string.verification_code_totp,
-                    Toast.LENGTH_LONG,
-                )
-                .show()
         }
     }
 }

@@ -1,49 +1,71 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
-import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.network.exception.CookieRedirectException
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherType
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
+import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
+import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
+import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.GmsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.manager.model.RegisterExportResult
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.manager.model.UnregisterExportResult
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
+import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
+import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
@@ -52,7 +74,9 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toSnackbarData
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
+import io.mockk.awaits
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -63,12 +87,14 @@ import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -83,7 +109,10 @@ class VaultViewModelTest : BaseViewModelTest() {
     )
 
     private val mutableSnackbarDataFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
-    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
+        // We return an empty flow here to avoid confusion in the tests.
+        // Everything should be tested via the mutableSnackbarDataFlow.
+        every { getSnackbarDataFlow(SnackbarRelay.LOGIN_SUCCESS) } returns emptyFlow()
         every {
             getSnackbarDataFlow(relay = any(), relays = anyVararg())
         } returns mutableSnackbarDataFlow
@@ -129,10 +158,16 @@ class VaultViewModelTest : BaseViewModelTest() {
             every { hasPendingAccountAddition = any() } just runs
             every { logout(userId = any(), reason = any()) } just runs
             every { switchAccount(any()) } answers { switchAccountResult }
+            every { needsKdfUpdateToMinimums() } returns false
+            coEvery {
+                updateKdfToMinimumsIfNeeded(password = any())
+            } returns UpdateKdfMinimumsResult.Success
         }
+    private val environmentRepository = FakeEnvironmentRepository()
 
     private var mutableFlightRecorderDataFlow =
         MutableStateFlow(FlightRecorderDataSet(data = emptySet()))
+    private var mutableIntroducingArchiveActionCardDismissedFlow = MutableStateFlow(false)
     private val settingsRepository: SettingsRepository = mockk {
         every { getPullToRefreshEnabledFlow() } returns mutablePullToRefreshEnabledFlow
         every { isIconLoadingDisabledFlow } returns mutableIsIconLoadingDisabledFlow
@@ -140,33 +175,29 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { flightRecorderData } returns FlightRecorderDataSet(data = emptySet())
         every { flightRecorderDataFlow } returns mutableFlightRecorderDataFlow
         every { dismissFlightRecorderBanner() } just runs
+        every { isAutofillEnabledStateFlow } returns MutableStateFlow(false)
+        every { dismissIntroducingArchiveActionCard() } just runs
+        every {
+            getIntroducingArchiveActionCardDismissedFlow()
+        } returns mutableIntroducingArchiveActionCardDismissedFlow
     }
 
-    private val vaultRepository: VaultRepository =
-        mockk {
-            every { vaultFilterType = any() } just runs
-            every { vaultDataStateFlow } returns mutableVaultDataStateFlow
-            every { sync(forced = any()) } just runs
-            every { syncIfNecessary() } just runs
-            every { lockVaultForCurrentUser(any()) } just runs
-            every { lockVault(any(), any()) } just runs
-        }
+    private val vaultRepository: VaultRepository = mockk {
+        every { vaultFilterType = any() } just runs
+        every { vaultDataStateFlow } returns mutableVaultDataStateFlow
+        every { sync(forced = any()) } just runs
+        every { syncIfNecessary() } just runs
+        every { lockVaultForCurrentUser(any()) } just runs
+        every { lockVault(any(), any()) } just runs
+        coEvery {
+            getCipher(any())
+        } returns GetCipherResult.Success(createMockCipherView(number = 1))
+    }
 
     private val organizationEventManager = mockk<OrganizationEventManager> {
         every { trackEvent(event = any()) } just runs
     }
 
-    private val mutableImportLoginsFeatureFlow = MutableStateFlow(true)
-    private val mutableRemoveCardPolicyFeatureFlow = MutableStateFlow(false)
-    private val mutableSshKeyVaultItemsEnabledFlow = MutableStateFlow(false)
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every {
-            getFeatureFlagFlow(FlagKey.ImportLoginsFlow)
-        } returns mutableImportLoginsFeatureFlow
-        every {
-            getFeatureFlagFlow(FlagKey.RemoveCardPolicy)
-        } returns mutableRemoveCardPolicyFeatureFlow
-    }
     private val reviewPromptManager: ReviewPromptManager = mockk()
 
     private val specialCircumstanceManager: SpecialCircumstanceManager = mockk {
@@ -176,10 +207,56 @@ class VaultViewModelTest : BaseViewModelTest() {
     private val networkConnectionManager: NetworkConnectionManager = mockk {
         every { isNetworkConnected } returns true
     }
+    private val browserAutofillDialogManager: BrowserAutofillDialogManager = mockk {
+        every { shouldShowDialog } returns false
+        every { browserCount } returns 1
+        every { delayDialog() } just runs
+    }
+
+    private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager = mockk {
+        coEvery { register() } returns RegisterExportResult.Success
+        coEvery { unregister() } returns UnregisterExportResult.Success
+    }
+    private val gmsManager: GmsManager = mockk {
+        every { isVersionAtLeast(any()) } returns true
+    }
+    private val mutableCxpExportFeatureFlagFlow = MutableStateFlow(false)
+    private val mutableArchiveItemsFlagFlow = MutableStateFlow(true)
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every {
+            getFeatureFlagFlow(FlagKey.CredentialExchangeProtocolExport)
+        } returns mutableCxpExportFeatureFlagFlow
+        every { getFeatureFlagFlow(FlagKey.ArchiveItems) } returns mutableArchiveItemsFlagFlow
+        every { getFeatureFlag(FlagKey.ArchiveItems) } returns mutableArchiveItemsFlagFlow.value
+    }
+
+    private val mutablePremiumUpgradeBannerEligibleFlow = MutableStateFlow(false)
+    private val premiumStateManager: PremiumStateManager = mockk {
+        every {
+            isPremiumUpgradeBannerEligibleFlow
+        } returns mutablePremiumUpgradeBannerEligibleFlow
+        every { dismissPremiumUpgradeBanner() } just runs
+    }
 
     @AfterEach
     fun tearDown() {
         unmockkStatic(FlightRecorderDataSet::toSnackbarData)
+    }
+
+    @Test
+    fun `initial state should be correct when UserState is not present`() {
+        mutableUserStateFlow.update { null }
+        val viewModel = createViewModel()
+        assertEquals(
+            DEFAULT_STATE.copy(
+                accountSummaries = emptyList(),
+                avatarColorString = "#ff000000",
+                initials = "",
+                showImportActionCard = false,
+                isPremium = false,
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -190,6 +267,154 @@ class VaultViewModelTest : BaseViewModelTest() {
             vaultRepository.syncIfNecessary()
             policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
         }
+    }
+
+    @Test
+    fun `IntroducingArchiveActionCardDismissedFlow updates should update the state accordingly`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                mutableIntroducingArchiveActionCardDismissedFlow.value = true
+                assertEquals(
+                    DEFAULT_STATE.copy(isIntroducingArchiveActionCardDismissed = true),
+                    awaitItem(),
+                )
+                mutableIntroducingArchiveActionCardDismissedFlow.value = false
+                assertEquals(DEFAULT_STATE, awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ActionCardClick with IntroducingArchive should call dismissIntroducingArchiveActionCard and emit NavigateTo`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultAction.ActionCardClick(VaultState.ActionCardState.IntroducingArchive),
+                )
+                assertEquals(
+                    VaultEvent.NavigateToItemListing(VaultItemListingType.Archive),
+                    awaitItem(),
+                )
+            }
+
+            verify(exactly = 1) {
+                settingsRepository.dismissIntroducingArchiveActionCard()
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `DismissActionCardClick with IntroducingArchive should call dismissIntroducingArchiveActionCard`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                VaultAction.DismissActionCardClick(VaultState.ActionCardState.IntroducingArchive),
+            )
+
+            verify(exactly = 1) {
+                settingsRepository.dismissIntroducingArchiveActionCard()
+            }
+        }
+
+    @Test
+    fun `PremiumUpgradeBannerEligibleFlow updates should update state`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                mutablePremiumUpgradeBannerEligibleFlow.value = true
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        isPremiumUpgradeBannerEligible = true,
+                    ),
+                    awaitItem(),
+                )
+                mutablePremiumUpgradeBannerEligibleFlow.value = false
+                assertEquals(DEFAULT_STATE, awaitItem())
+            }
+        }
+
+    @Test
+    fun `DismissActionCardClick with UpgradePremium should call dismissPremiumUpgradeBanner`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                VaultAction.DismissActionCardClick(
+                    VaultState.ActionCardState.UpgradePremium,
+                ),
+            )
+
+            verify(exactly = 1) {
+                premiumStateManager.dismissPremiumUpgradeBanner()
+            }
+        }
+
+    @Test
+    fun `ActionCardClick with UpgradePremium should emit NavigateToUpgradePremium`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultAction.ActionCardClick(
+                        VaultState.ActionCardState.UpgradePremium,
+                    ),
+                )
+                assertEquals(
+                    VaultEvent.NavigateToUpgradePremium,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `actionCard should return UpgradePremium when eligible and content is showing`() {
+        val contentViewState = DEFAULT_CONTENT_VIEW_STATE
+        val state = createMockVaultState(viewState = contentViewState).copy(
+            isPremiumUpgradeBannerEligible = true,
+        )
+
+        assertEquals(
+            VaultState.ActionCardState.UpgradePremium,
+            state.actionCard,
+        )
+    }
+
+    @Test
+    fun `actionCard should return IntroducingArchive when not eligible for Premium upgrade`() {
+        val contentViewState = DEFAULT_CONTENT_VIEW_STATE
+        val state = createMockVaultState(viewState = contentViewState).copy(
+            isPremiumUpgradeBannerEligible = false,
+            isPremium = true,
+            isArchiveEnabled = true,
+            isIntroducingArchiveActionCardDismissed = false,
+        )
+
+        assertEquals(
+            VaultState.ActionCardState.IntroducingArchive,
+            state.actionCard,
+        )
+    }
+
+    @Test
+    fun `actionCard should return null when not eligible for either card`() {
+        val contentViewState = DEFAULT_CONTENT_VIEW_STATE
+        val state = createMockVaultState(viewState = contentViewState).copy(
+            isPremiumUpgradeBannerEligible = false,
+            isPremium = false,
+            isArchiveEnabled = true,
+            isIntroducingArchiveActionCardDismissed = false,
+        )
+
+        assertNull(state.actionCard)
     }
 
     @Test
@@ -208,7 +433,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `UserState updates with a non-null value when switching accounts should do nothing`() {
         val viewModel = createViewModel()
@@ -262,14 +486,11 @@ class VaultViewModelTest : BaseViewModelTest() {
                         isBiometricsEnabled = false,
                         needsMasterPassword = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organiationId",
                                 name = "Test Organization",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -277,13 +498,15 @@ class VaultViewModelTest : BaseViewModelTest() {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = DEFAULT_FIRST_TIME_STATE,
+                        isExportable = true,
+                        creationDate = null,
                     ),
                 ),
             )
 
         assertEquals(
             DEFAULT_STATE.copy(
-                appBarTitle = R.string.vaults.asText(),
+                appBarTitle = BitwardenString.vaults.asText(),
                 avatarColorString = "#00aaaa",
                 initials = "OU",
                 accountSummaries = listOf(
@@ -320,7 +543,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         every {
             policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
         } returns listOf(
-            SyncResponseJson.Policy(
+            createMockPolicy(
                 organizationId = "Test Organization",
                 id = "testId",
                 type = PolicyTypeJson.PERSONAL_OWNERSHIP,
@@ -350,14 +573,11 @@ class VaultViewModelTest : BaseViewModelTest() {
                         isBiometricsEnabled = false,
                         needsMasterPassword = false,
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "organizationId",
                                 name = "Test Organization",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -365,13 +585,15 @@ class VaultViewModelTest : BaseViewModelTest() {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = DEFAULT_FIRST_TIME_STATE,
+                        isExportable = true,
+                        creationDate = null,
                     ),
                 ),
             )
 
         assertEquals(
             DEFAULT_STATE.copy(
-                appBarTitle = R.string.vaults.asText(),
+                appBarTitle = BitwardenString.vaults.asText(),
                 avatarColorString = "#00aaaa",
                 initials = "OU",
                 accountSummaries = listOf(
@@ -403,10 +625,8 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if RemoveCardPolicy flag is enable`() =
+    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly`() =
         runTest {
-            mutableRemoveCardPolicyFeatureFlow.value = true
-
             val viewModel = createViewModel()
             assertEquals(
                 DEFAULT_STATE,
@@ -414,7 +634,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             )
             mutableActivePoliciesFlow.emit(
                 listOf(
-                    SyncResponseJson.Policy(
+                    createMockPolicy(
                         organizationId = "Test Organization",
                         id = "testId",
                         type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
@@ -426,33 +646,6 @@ class VaultViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 DEFAULT_STATE.copy(restrictItemTypesPolicyOrgIds = listOf("Test Organization")),
-                viewModel.stateFlow.value,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if RemoveCardPolicy flag is disabled`() =
-        runTest {
-            val viewModel = createViewModel()
-            assertEquals(
-                DEFAULT_STATE,
-                viewModel.stateFlow.value,
-            )
-            mutableActivePoliciesFlow.emit(
-                listOf(
-                    SyncResponseJson.Policy(
-                        organizationId = "Test Organization",
-                        id = "testId",
-                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
-                        isEnabled = true,
-                        data = null,
-                    ),
-                ),
-            )
-
-            assertEquals(
-                DEFAULT_STATE.copy(restrictItemTypesPolicyOrgIds = null),
                 viewModel.stateFlow.value,
             )
         }
@@ -490,6 +683,75 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on EnableThirdPartyAutofillClick should send NavigateToAutofillSettings`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultAction.EnableThirdPartyAutofillClick)
+            assertEquals(VaultEvent.NavigateToAutofillSettings, awaitItem())
+        }
+        verify(exactly = 1) {
+            browserAutofillDialogManager.delayDialog()
+        }
+    }
+
+    @Test
+    fun `on DismissThirdPartyAutofillDialogClick should call delay dialog`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(VaultAction.DismissThirdPartyAutofillDialogClick)
+
+        verify(exactly = 1) {
+            browserAutofillDialogManager.delayDialog()
+        }
+    }
+
+    @Test
+    fun `on ShareCipherDecryptionErrorClick should send ShowShareSheet`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                action = VaultAction.ShareCipherDecryptionErrorClick(selectedCipherId = "1"),
+            )
+            assertEquals(VaultEvent.ShowShareSheet("1"), awaitItem())
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `on ShareAllCipherDecryptionErrorsClick should send ShowShareSheet`() = runTest {
+        val viewModel = createViewModel()
+        val vaultData = VaultData(
+            decryptCipherListResult = createMockDecryptCipherListResult(number = 1)
+                .copy(
+                    failures = listOf(
+                        createMockSdkCipher(number = 1),
+                        createMockSdkCipher(number = 2),
+                    ),
+                ),
+            collectionViewList = listOf(createMockCollectionView(number = 1)),
+            folderViewList = listOf(createMockFolderView(number = 1)),
+            sendViewList = listOf(createMockSendView(number = 1)),
+        )
+        viewModel.eventFlow.test {
+            mutableVaultDataStateFlow.tryEmit(
+                value = DataState.Loaded(
+                    data = vaultData,
+                ),
+            )
+            advanceTimeBy(1500)
+            viewModel.trySendAction(
+                action = VaultAction.ShareAllCipherDecryptionErrorsClick,
+            )
+            assertEquals(
+                VaultEvent.ShowShareSheet("mockId-1\nmockId-2"),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
     fun `on FlightRecorderGoToSettingsClick should send NavigateToAbout`() = runTest {
         val viewModel = createViewModel()
 
@@ -498,6 +760,244 @@ class VaultViewModelTest : BaseViewModelTest() {
             assertEquals(VaultEvent.NavigateToAbout, awaitItem())
         }
     }
+
+    @Test
+    fun `UpgradeToPremiumClick should emit NavigateToUrl`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultAction.UpgradeToPremiumClick)
+            assertEquals(
+                VaultEvent.NavigateToUrl(
+                    url = "https://vault.bitwarden.com/#/" +
+                        "settings/subscription/premium" +
+                        "?callToAction=upgradeToPremium",
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `ArchiveClick without Premium should show ArchiveRequiresPremium dialog`() = runTest {
+        mutableUserStateFlow.update { userState ->
+            userState?.copy(
+                accounts = DEFAULT_USER_STATE.accounts.map { it.copy(isPremium = false) },
+            )
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            VaultAction.OverflowOptionClick(
+                overflowAction = ListingItemOverflowAction.VaultAction.ArchiveClick(
+                    cipherId = "mockId-1",
+                ),
+            ),
+        )
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                isPremium = false,
+                dialog = VaultState.DialogState.ArchiveRequiresPremium,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `ArchiveClick with ArchiveCipherResult Success should emit a ShowSnackbar event`() =
+        runTest {
+            val cipherView = createMockCipherView(number = 1, clock = clock)
+
+            val viewModel = createViewModel()
+
+            coEvery {
+                vaultRepository.archiveCipher(cipherId = "mockId-1", cipherView = cipherView)
+            } returns ArchiveCipherResult.Success
+
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    overflowAction = ListingItemOverflowAction.VaultAction.ArchiveClick(
+                        cipherId = "mockId-1",
+                    ),
+                ),
+            )
+
+            viewModel.eventFlow.test {
+                assertEquals(
+                    VaultEvent.ShowSnackbar(BitwardenString.item_moved_to_archived.asText()),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `ArchiveClick with ArchiveCipherResult Failure should show generic error`() = runTest {
+        val cipherView = createMockCipherView(number = 1, clock = clock)
+
+        val viewModel = createViewModel()
+
+        val error = Throwable("Oh dang.")
+        coEvery {
+            vaultRepository.archiveCipher(cipherId = "mockId-1", cipherView = cipherView)
+        } returns ArchiveCipherResult.Error(error = error)
+
+        viewModel.trySendAction(
+            VaultAction.OverflowOptionClick(
+                overflowAction = ListingItemOverflowAction.VaultAction.ArchiveClick(
+                    cipherId = "mockId-1",
+                ),
+            ),
+        )
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = VaultState.DialogState.Error(
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.unable_to_archive_selected_item.asText(),
+                    error = error,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ArchiveClick with ArchiveCipherResult error with errorMessage should display that message`() =
+        runTest {
+            val cipherView = createMockCipherView(number = 1, clock = clock)
+
+            val viewModel = createViewModel()
+
+            val errorMessage = "You do not have permission to edit this."
+            val error = Throwable("Oh dang.")
+            coEvery {
+                vaultRepository.archiveCipher(
+                    cipherId = "mockId-1",
+                    cipherView = cipherView,
+                )
+            } returns ArchiveCipherResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    overflowAction = ListingItemOverflowAction.VaultAction.ArchiveClick(
+                        cipherId = "mockId-1",
+                    ),
+                ),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = errorMessage.asText(),
+                        error = error,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `UnarchiveClick with UnarchiveCipherResult Success should emit a ShowSnackbar event`() =
+        runTest {
+            val cipherView = createMockCipherView(number = 1, clock = clock)
+
+            val viewModel = createViewModel()
+
+            coEvery {
+                vaultRepository.unarchiveCipher(cipherId = "mockId-1", cipherView = cipherView)
+            } returns UnarchiveCipherResult.Success
+
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    overflowAction = ListingItemOverflowAction.VaultAction.UnarchiveClick(
+                        cipherId = "mockId-1",
+                    ),
+                ),
+            )
+
+            viewModel.eventFlow.test {
+                assertEquals(
+                    VaultEvent.ShowSnackbar(BitwardenString.item_moved_to_vault.asText()),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `UnarchiveClick with UnarchiveCipherResult Failure should show generic error`() = runTest {
+        val cipherView = createMockCipherView(number = 1, clock = clock)
+
+        val viewModel = createViewModel()
+
+        val error = Throwable("Oh dang.")
+        coEvery {
+            vaultRepository.unarchiveCipher(cipherId = "mockId-1", cipherView = cipherView)
+        } returns UnarchiveCipherResult.Error(error = error)
+
+        viewModel.trySendAction(
+            VaultAction.OverflowOptionClick(
+                overflowAction = ListingItemOverflowAction.VaultAction.UnarchiveClick(
+                    cipherId = "mockId-1",
+                ),
+            ),
+        )
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = VaultState.DialogState.Error(
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.unable_to_unarchive_selected_item.asText(),
+                    error = error,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `UnarchiveClick with UnarchiveCipherResult error with errorMessage should display that message`() =
+        runTest {
+            val cipherView = createMockCipherView(number = 1, clock = clock)
+
+            val viewModel = createViewModel()
+
+            val errorMessage = "You do not have permission to edit this."
+            val error = Throwable("Oh dang.")
+            coEvery {
+                vaultRepository.unarchiveCipher(
+                    cipherId = "mockId-1",
+                    cipherView = cipherView,
+                )
+            } returns UnarchiveCipherResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    overflowAction = ListingItemOverflowAction.VaultAction.UnarchiveClick(
+                        cipherId = "mockId-1",
+                    ),
+                ),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = errorMessage.asText(),
+                        error = error,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Test
     fun `on LockAccountClick should call lockVault for the given account`() {
@@ -642,8 +1142,8 @@ class VaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialog = VaultState.DialogState.Error(
-                    R.string.internet_connection_required_title.asText(),
-                    R.string.internet_connection_required_message.asText(),
+                    BitwardenString.internet_connection_required_title.asText(),
+                    BitwardenString.internet_connection_required_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -662,21 +1162,12 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Test
-    fun `on ExitConfirmationClick should emit NavigateOutOfApp`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultAction.ExitConfirmationClick)
-            assertEquals(VaultEvent.NavigateOutOfApp, awaitItem())
-        }
-    }
-
     @Suppress("MaxLineLength")
     @Test
     fun `on VaultFilterTypeSelect should update the selected filter type and re-filter any existing data`() {
         // Update to state with filters and content
         val vaultData = VaultData(
-            cipherViewList = listOf(createMockCipherView(number = 1)),
+            decryptCipherListResult = createMockDecryptCipherListResult(number = 1),
             collectionViewList = listOf(createMockCollectionView(number = 1)),
             folderViewList = listOf(createMockFolderView(number = 1)),
             sendViewList = listOf(createMockSendView(number = 1)),
@@ -691,14 +1182,11 @@ class VaultViewModelTest : BaseViewModelTest() {
                 accounts = listOf(
                     DEFAULT_USER_STATE.accounts[0].copy(
                         organizations = listOf(
-                            Organization(
+                            createMockOrganization(
+                                number = 1,
                                 id = "testOrganizationId",
                                 name = "Test Organization",
-                                shouldManageResetPassword = false,
-                                shouldUseKeyConnector = false,
-                                role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
-                                userIsClaimedByOrganization = false,
                             ),
                         ),
                     ),
@@ -713,11 +1201,12 @@ class VaultViewModelTest : BaseViewModelTest() {
                 isIconLoadingDisabled = viewModel.stateFlow.value.isIconLoadingDisabled,
                 baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                 hasMasterPassword = true,
-                restrictItemTypesPolicyOrgIds = null,
+                restrictItemTypesPolicyOrgIds = emptyList(),
+                isArchiveEnabled = true,
             ),
         )
             .copy(
-                appBarTitle = R.string.vaults.asText(),
+                appBarTitle = BitwardenString.vaults.asText(),
                 vaultFilterData = VAULT_FILTER_DATA,
             )
         assertEquals(
@@ -738,7 +1227,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = viewModel.stateFlow.value.isIconLoadingDisabled,
                     baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                     hasMasterPassword = true,
-                    restrictItemTypesPolicyOrgIds = null,
+                    restrictItemTypesPolicyOrgIds = emptyList(),
+                    isArchiveEnabled = true,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -748,16 +1238,37 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `vaultDataStateFlow Loaded with items should update state to Content`() = runTest {
-        mutableSshKeyVaultItemsEnabledFlow.value = true
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.Loaded(
                 data = VaultData(
-                    cipherViewList = listOf(
-                        createMockCipherView(number = 1, cipherType = CipherType.LOGIN),
-                        createMockCipherView(number = 2, cipherType = CipherType.CARD),
-                        createMockCipherView(number = 3, cipherType = CipherType.IDENTITY),
-                        createMockCipherView(number = 4, cipherType = CipherType.SECURE_NOTE),
-                        createMockCipherView(number = 5, cipherType = CipherType.SSH_KEY),
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = listOf(
+                            createMockCipherListView(
+                                number = 1,
+                                type = CipherListViewType.Login(
+                                    createMockLoginListView(number = 1),
+                                ),
+                            ),
+                            createMockCipherListView(
+                                number = 2,
+                                type = CipherListViewType.Card(
+                                    createMockCardListView(number = 2),
+                                ),
+                            ),
+                            createMockCipherListView(
+                                number = 3,
+                                type = CipherListViewType.Identity,
+                            ),
+                            createMockCipherListView(
+                                number = 4,
+                                type = CipherListViewType.SecureNote,
+                            ),
+                            createMockCipherListView(
+                                number = 5,
+                                type = CipherListViewType.SshKey,
+                            ),
+                        ),
                     ),
                     collectionViewList = listOf(
                         createMockCollectionView(number = 1),
@@ -816,7 +1327,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         ),
                         VaultState.ViewState.FolderItem(
                             id = null,
-                            name = R.string.folder_none.asText(),
+                            name = BitwardenString.folder_none.asText(),
                             itemCount = 0,
                         ),
                     ),
@@ -852,6 +1363,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                     totpItemsCount = 1,
                     itemTypesCount = CipherType.entries.size,
                     sshKeyItemsCount = 1,
+                    archivedItemsCount = 0,
+                    archiveEnabled = true,
+                    archiveSubText = null,
+                    archiveEndIcon = null,
                     showCardGroup = true,
                 ),
             ),
@@ -859,6 +1374,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Suppress("MaxLineLength")
     @Test
     fun `vaultDataStateFlow Loaded with items when manually syncing with the sync button should update state to Content, show a success Snackbar, and dismiss pull to refresh`() =
@@ -877,6 +1393,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                     totpItemsCount = 1,
                     itemTypesCount = 5,
                     sshKeyItemsCount = 0,
+                    archivedItemsCount = 0,
+                    archiveEnabled = true,
+                    archiveSubText = null,
+                    archiveEndIcon = null,
                     showCardGroup = true,
                 ),
             )
@@ -887,17 +1407,21 @@ class VaultViewModelTest : BaseViewModelTest() {
                 mutableVaultDataStateFlow.tryEmit(
                     value = DataState.Loaded(
                         data = VaultData(
-                            cipherViewList = listOf(createMockCipherView(number = 1)),
+                            decryptCipherListResult = createMockDecryptCipherListResult(
+                                number = 1,
+                                successes = listOf(createMockCipherListView(number = 1)),
+                            ),
                             collectionViewList = emptyList(),
                             folderViewList = emptyList(),
                             sendViewList = emptyList(),
                         ),
                     ),
                 )
-
+                // Allow time for state to update
+                advanceTimeBy(1500)
                 assertEquals(expectedState, viewModel.stateFlow.value)
                 assertEquals(
-                    VaultEvent.ShowSnackbar(R.string.syncing_complete.asText()),
+                    VaultEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
                     awaitItem(),
                 )
             }
@@ -908,7 +1432,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.Loaded(
                 data = VaultData(
-                    cipherViewList = emptyList(),
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = emptyList(),
+                    ),
                     collectionViewList = emptyList(),
                     folderViewList = emptyList(),
                     sendViewList = emptyList(),
@@ -922,6 +1449,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Suppress("MaxLineLength")
     @Test
     fun `vaultDataStateFlow Loaded with empty items when manually syncing with the sync button should update state to NoItems, show a success Snackbar, and dismiss pull to refresh`() =
@@ -935,16 +1463,20 @@ class VaultViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 mutableVaultDataStateFlow.value = DataState.Loaded(
                     data = VaultData(
-                        cipherViewList = emptyList(),
+                        decryptCipherListResult = createMockDecryptCipherListResult(
+                            number = 1,
+                            successes = emptyList(),
+                        ),
                         collectionViewList = emptyList(),
                         folderViewList = emptyList(),
                         sendViewList = emptyList(),
                     ),
                 )
-
+                // Allow time for state to update
+                advanceTimeBy(1500)
                 assertEquals(expectedState, viewModel.stateFlow.value)
                 assertEquals(
-                    VaultEvent.ShowSnackbar(R.string.syncing_complete.asText()),
+                    VaultEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
                     awaitItem(),
                 )
             }
@@ -955,7 +1487,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.Pending(
                 data = VaultData(
-                    cipherViewList = listOf(createMockCipherView(number = 1)),
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = listOf(createMockCipherListView(number = 1)),
+                    ),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
                     folderViewList = listOf(createMockFolderView(number = 1)),
                     sendViewList = listOf(createMockSendView(number = 1)),
@@ -981,7 +1516,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         ),
                         VaultState.ViewState.FolderItem(
                             id = null,
-                            name = R.string.folder_none.asText(),
+                            name = BitwardenString.folder_none.asText(),
                             itemCount = 0,
                         ),
                     ),
@@ -997,6 +1532,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                     totpItemsCount = 1,
                     itemTypesCount = 5,
                     sshKeyItemsCount = 0,
+                    archivedItemsCount = 0,
+                    archiveEnabled = true,
+                    archiveSubText = null,
+                    archiveEndIcon = null,
                     showCardGroup = true,
                 ),
             ),
@@ -1009,7 +1548,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.Pending(
                 data = VaultData(
-                    cipherViewList = emptyList(),
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = emptyList(),
+                    ),
                     collectionViewList = emptyList(),
                     folderViewList = emptyList(),
                     sendViewList = emptyList(),
@@ -1046,12 +1588,37 @@ class VaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             createMockVaultState(
                 viewState = VaultState.ViewState.Error(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Error with CookieRedirectException should show user-friendly message`() =
+        runTest {
+            mutableVaultDataStateFlow.tryEmit(
+                value = DataState.Error(
+                    error = CookieRedirectException(hostname = "example.com"),
+                ),
+            )
+
+            val viewModel = createViewModel()
+
+            assertEquals(
+                createMockVaultState(
+                    viewState = VaultState.ViewState.Error(
+                        message = (
+                            "Your request was interrupted because the app needed to " +
+                                "re-authenticate. Please try again."
+                            ).asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Suppress("MaxLineLength")
     @Test
@@ -1061,7 +1628,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                 value = DataState.Error(
                     error = IllegalStateException(),
                     data = VaultData(
-                        cipherViewList = listOf(createMockCipherView(number = 1)),
+                        decryptCipherListResult = createMockDecryptCipherListResult(
+                            number = 1,
+                            successes = listOf(createMockCipherListView(number = 1)),
+                        ),
                         collectionViewList = listOf(createMockCollectionView(number = 1)),
                         folderViewList = listOf(createMockFolderView(number = 1)),
                         sendViewList = listOf(createMockSendView(number = 1)),
@@ -1087,7 +1657,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                             ),
                             VaultState.ViewState.FolderItem(
                                 id = null,
-                                name = R.string.folder_none.asText(),
+                                name = BitwardenString.folder_none.asText(),
                                 itemCount = 0,
                             ),
                         ),
@@ -1103,11 +1673,86 @@ class VaultViewModelTest : BaseViewModelTest() {
                         totpItemsCount = 1,
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
+                        archivedItemsCount = 0,
+                        archiveEnabled = true,
+                        archiveSubText = null,
+                        archiveEndIcon = null,
                         showCardGroup = true,
                     ),
                     dialog = VaultState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Error with CookieRedirectException with items should show user-friendly error dialog`() =
+        runTest {
+            mutableVaultDataStateFlow.tryEmit(
+                value = DataState.Error(
+                    error = CookieRedirectException(hostname = "example.com"),
+                    data = VaultData(
+                        decryptCipherListResult = createMockDecryptCipherListResult(
+                            number = 1,
+                            successes = listOf(createMockCipherListView(number = 1)),
+                        ),
+                        collectionViewList = listOf(createMockCollectionView(number = 1)),
+                        folderViewList = listOf(createMockFolderView(number = 1)),
+                        sendViewList = listOf(createMockSendView(number = 1)),
+                    ),
+                ),
+            )
+
+            val viewModel = createViewModel()
+
+            assertEquals(
+                createMockVaultState(
+                    viewState = VaultState.ViewState.Content(
+                        loginItemsCount = 1,
+                        cardItemsCount = 0,
+                        identityItemsCount = 0,
+                        secureNoteItemsCount = 0,
+                        favoriteItems = listOf(),
+                        folderItems = listOf(
+                            VaultState.ViewState.FolderItem(
+                                id = "mockId-1",
+                                name = "mockName-1".asText(),
+                                itemCount = 1,
+                            ),
+                            VaultState.ViewState.FolderItem(
+                                id = null,
+                                name = BitwardenString.folder_none.asText(),
+                                itemCount = 0,
+                            ),
+                        ),
+                        collectionItems = listOf(
+                            VaultState.ViewState.CollectionItem(
+                                id = "mockId-1",
+                                name = "mockName-1",
+                                itemCount = 1,
+                            ),
+                        ),
+                        noFolderItems = listOf(),
+                        trashItemsCount = 0,
+                        totpItemsCount = 1,
+                        itemTypesCount = 5,
+                        sshKeyItemsCount = 0,
+                        archivedItemsCount = 0,
+                        archiveEnabled = true,
+                        archiveSubText = null,
+                        archiveEndIcon = null,
+                        showCardGroup = true,
+                    ),
+                    dialog = VaultState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = (
+                            "Your request was interrupted because the app needed to " +
+                                "re-authenticate. Please try again."
+                            ).asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -1122,7 +1767,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                 value = DataState.Error(
                     error = IllegalStateException(),
                     data = VaultData(
-                        cipherViewList = emptyList(),
+                        decryptCipherListResult = createMockDecryptCipherListResult(
+                            number = 1,
+                            successes = emptyList(),
+                        ),
                         collectionViewList = emptyList(),
                         folderViewList = emptyList(),
                         sendViewList = emptyList(),
@@ -1134,8 +1782,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                 createMockVaultState(
                     viewState = VaultState.ViewState.NoItems,
                     dialog = VaultState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -1158,14 +1806,16 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `vaultDataStateFlow NoNetwork with items should update state to Content`() =
         runTest {
             mutableVaultDataStateFlow.tryEmit(
                 value = DataState.NoNetwork(
                     data = VaultData(
-                        cipherViewList = listOf(createMockCipherView(number = 1)),
+                        decryptCipherListResult = createMockDecryptCipherListResult(
+                            number = 1,
+                            successes = listOf(createMockCipherListView(number = 1)),
+                        ),
                         collectionViewList = listOf(createMockCollectionView(number = 1)),
                         folderViewList = listOf(createMockFolderView(number = 1)),
                         sendViewList = listOf(createMockSendView(number = 1)),
@@ -1191,7 +1841,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                             ),
                             VaultState.ViewState.FolderItem(
                                 id = null,
-                                name = R.string.folder_none.asText(),
+                                name = BitwardenString.folder_none.asText(),
                                 itemCount = 0,
                             ),
                         ),
@@ -1207,6 +1857,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                         totpItemsCount = 1,
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
+                        archivedItemsCount = 0,
+                        archiveEnabled = true,
+                        archiveSubText = null,
+                        archiveEndIcon = null,
                         showCardGroup = true,
                     ),
                     dialog = null,
@@ -1237,7 +1891,10 @@ class VaultViewModelTest : BaseViewModelTest() {
 
         mutableVaultDataStateFlow.value = DataState.Loaded(
             data = VaultData(
-                cipherViewList = emptyList(),
+                decryptCipherListResult = createMockDecryptCipherListResult(
+                    number = 1,
+                    successes = emptyList(),
+                ),
                 collectionViewList = emptyList(),
                 folderViewList = emptyList(),
                 sendViewList = emptyList(),
@@ -1253,13 +1910,18 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `vaultDataStateFlow Loaded should include SSH key vault items`() =
         runTest {
-            mutableSshKeyVaultItemsEnabledFlow.value = true
             mutableVaultDataStateFlow.tryEmit(
                 value = DataState.Loaded(
                     data = VaultData(
-                        cipherViewList = listOf(
-                            createMockCipherView(number = 1),
-                            createMockCipherView(number = 1, cipherType = CipherType.SSH_KEY),
+                        decryptCipherListResult = createMockDecryptCipherListResult(
+                            number = 1,
+                            successes = listOf(
+                                createMockCipherListView(number = 1),
+                                createMockCipherListView(
+                                    number = 1,
+                                    type = CipherListViewType.SshKey,
+                                ),
+                            ),
                         ),
                         collectionViewList = listOf(),
                         folderViewList = listOf(),
@@ -1285,6 +1947,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                         totpItemsCount = 1,
                         itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 1,
+                        archivedItemsCount = 0,
+                        archiveEnabled = true,
+                        archiveSubText = null,
+                        archiveEndIcon = null,
                         showCardGroup = true,
                     ),
                 ),
@@ -1419,6 +2085,116 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `ArchiveClick with Premium should emit NavigateToItemListing event with Archive type`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.ArchiveClick)
+                assertEquals(
+                    VaultEvent.NavigateToItemListing(VaultItemListingType.Archive),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ArchiveClick without Premium and with archived ciphers should emit NavigateToItemListing event with Archive type`() =
+        runTest {
+            mutableUserStateFlow.update {
+                DEFAULT_USER_STATE.copy(
+                    accounts = listOf(
+                        DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = false),
+                        DEFAULT_INACTIVE_ACCOUNT,
+                    ),
+                )
+            }
+            mutableVaultDataStateFlow.update {
+                DataState.Loaded(
+                    VaultData(
+                        decryptCipherListResult = createMockDecryptCipherListResult(
+                            number = 1,
+                            successes = listOf(
+                                createMockCipherListView(number = 1, isArchived = true),
+                            ),
+                            failures = emptyList(),
+                        ),
+                        collectionViewList = emptyList(),
+                        folderViewList = emptyList(),
+                        sendViewList = emptyList(),
+                    ),
+                )
+            }
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.ArchiveClick)
+                assertEquals(
+                    VaultEvent.NavigateToItemListing(VaultItemListingType.Archive),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ArchiveClick without Premium and archived ciphers should display the ArchiveRequiresPremium dialog`() =
+        runTest {
+            mutableUserStateFlow.update {
+                DEFAULT_USER_STATE.copy(
+                    accounts = listOf(
+                        DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = false),
+                        DEFAULT_INACTIVE_ACCOUNT,
+                    ),
+                )
+            }
+            mutableVaultDataStateFlow.update {
+                DataState.Loaded(
+                    VaultData(
+                        decryptCipherListResult = createMockDecryptCipherListResult(
+                            number = 1,
+                            successes = listOf(
+                                createMockCipherListView(number = 1, isArchived = false),
+                            ),
+                            failures = emptyList(),
+                        ),
+                        collectionViewList = emptyList(),
+                        folderViewList = emptyList(),
+                        sendViewList = emptyList(),
+                    ),
+                )
+            }
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(VaultAction.ArchiveClick)
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    isPremium = false,
+                    dialog = VaultState.DialogState.ArchiveRequiresPremium,
+                    viewState = VaultState.ViewState.Content(
+                        loginItemsCount = 1,
+                        cardItemsCount = 0,
+                        identityItemsCount = 0,
+                        secureNoteItemsCount = 0,
+                        favoriteItems = listOf(),
+                        folderItems = listOf(),
+                        collectionItems = listOf(),
+                        noFolderItems = listOf(),
+                        trashItemsCount = 0,
+                        totpItemsCount = 0,
+                        itemTypesCount = 5,
+                        sshKeyItemsCount = 0,
+                        archivedItemsCount = null,
+                        archiveEnabled = true,
+                        archiveSubText = BitwardenString.premium_subscription_required.asText(),
+                        archiveEndIcon = BitwardenDrawable.ic_locked,
+                        showCardGroup = true,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
     fun `TrashClick should emit NavigateToItemListing event with Trash type`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
@@ -1437,6 +2213,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         val item = mockk<VaultState.ViewState.VaultItem> {
             every { id } returns itemId
             every { type } returns VaultItemCipherType.LOGIN
+            every { hasDecryptionError } returns false
         }
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAction.VaultItemClick(item))
@@ -1446,6 +2223,163 @@ class VaultViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Test
+    fun `VaultItemClick should show alert if hasDecryptionError is true`() = runTest {
+        val viewModel = createViewModel()
+        val itemId = "54321"
+        val item = mockk<VaultState.ViewState.VaultItem> {
+            every { id } returns itemId
+            every { type } returns VaultItemCipherType.LOGIN
+            every { hasDecryptionError } returns true
+        }
+
+        viewModel.trySendAction(VaultAction.VaultItemClick(item))
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = VaultState.DialogState.CipherDecryptionError(
+                    title = BitwardenString.decryption_error.asText(),
+                    message = BitwardenString
+                        .bitwarden_could_not_decrypt_this_vault_item_description_long.asText(),
+                    selectedCipherId = itemId,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Loaded with decryption failures should show VaultLoadCipherDecryptionError dialog when hasShownDecryptionFailureAlert is false`() =
+        runTest {
+            mutableVaultDataStateFlow.value = DataState.Loaded(
+                data = VaultData(
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = emptyList(),
+                        failures = listOf(
+                            createMockSdkCipher(number = 1).copy(
+                                deletedDate = null,
+                            ),
+                            createMockSdkCipher(number = 2).copy(
+                                archivedDate = null,
+                                deletedDate = null,
+                            ),
+                        ),
+                    ),
+                    collectionViewList = emptyList(),
+                    folderViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val viewModel = createViewModel()
+
+            assertEquals(
+                createMockVaultState(
+                    viewState = VaultState.ViewState.Content(
+                        loginItemsCount = 1,
+                        cardItemsCount = 0,
+                        identityItemsCount = 0,
+                        secureNoteItemsCount = 0,
+                        favoriteItems = listOf(),
+                        folderItems = listOf(),
+                        collectionItems = listOf(),
+                        noFolderItems = listOf(),
+                        trashItemsCount = 0,
+                        totpItemsCount = 0,
+                        itemTypesCount = 5,
+                        sshKeyItemsCount = 0,
+                        archivedItemsCount = 1,
+                        archiveEnabled = true,
+                        archiveSubText = null,
+                        archiveEndIcon = null,
+                        showCardGroup = true,
+                    ),
+                    dialog = VaultState.DialogState.VaultLoadCipherDecryptionError(
+                        title = BitwardenString.decryption_error.asText(),
+                        cipherCount = 2,
+                    ),
+                ).copy(
+                    hasShownDecryptionFailureAlert = true,
+                    cipherDecryptionFailureIds = persistentListOf(
+                        "mockId-1",
+                        "mockId-2",
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Loaded with decryption failures should not show dialog when hasShownDecryptionFailureAlert is true`() =
+        runTest {
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    decryptCipherListResult = createMockDecryptCipherListResult(number = 1)
+                        .copy(
+                            failures = listOf(
+                                createMockSdkCipher(number = 1).copy(
+                                    archivedDate = null,
+                                    deletedDate = null,
+                                ),
+                                createMockSdkCipher(number = 2).copy(
+                                    archivedDate = null,
+                                    deletedDate = null,
+                                ),
+                            ),
+                        ),
+                    collectionViewList = emptyList(),
+                    folderViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            mutableVaultDataStateFlow.value = dataState
+            val viewModel = createViewModel()
+
+            // Clear the dialog by dismissing it
+            viewModel.trySendAction(VaultAction.DialogDismiss)
+
+            // Emit new data with failures - should not show dialog again
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+
+            // Advance time to allow state updates
+            advanceTimeBy(1500)
+
+            assertEquals(
+                createMockVaultState(
+                    viewState = VaultState.ViewState.Content(
+                        loginItemsCount = 3,
+                        cardItemsCount = 0,
+                        identityItemsCount = 0,
+                        secureNoteItemsCount = 0,
+                        favoriteItems = listOf(),
+                        folderItems = listOf(),
+                        collectionItems = listOf(),
+                        noFolderItems = listOf(),
+                        trashItemsCount = 0,
+                        totpItemsCount = 1,
+                        itemTypesCount = 5,
+                        sshKeyItemsCount = 0,
+                        archivedItemsCount = 0,
+                        archiveEnabled = true,
+                        archiveSubText = null,
+                        archiveEndIcon = null,
+                        showCardGroup = true,
+                    ),
+                    dialog = null,
+                ).copy(
+                    hasShownDecryptionFailureAlert = true,
+                    cipherDecryptionFailureIds = persistentListOf(
+                        "mockId-1",
+                        "mockId-2",
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Test
     fun `TryAgainClick should sync the vault data`() {
@@ -1462,7 +2396,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         mutableVaultDataStateFlow.value = DataState.Error(
             error = IllegalStateException(),
             data = VaultData(
-                cipherViewList = emptyList(),
+                decryptCipherListResult = createMockDecryptCipherListResult(
+                    number = 1,
+                    successes = emptyList(),
+                ),
                 collectionViewList = emptyList(),
                 folderViewList = emptyList(),
                 sendViewList = emptyList(),
@@ -1472,8 +2409,8 @@ class VaultViewModelTest : BaseViewModelTest() {
         val initialState = DEFAULT_STATE.copy(
             viewState = VaultState.ViewState.NoItems,
             dialog = VaultState.DialogState.Error(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.generic_error_message.asText(),
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString.generic_error_message.asText(),
             ),
         )
         assertEquals(
@@ -1514,8 +2451,8 @@ class VaultViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(
                 isRefreshing = false,
                 dialog = VaultState.DialogState.Error(
-                    R.string.internet_connection_required_title.asText(),
-                    R.string.internet_connection_required_message.asText(),
+                    BitwardenString.internet_connection_required_title.asText(),
+                    BitwardenString.internet_connection_required_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1552,12 +2489,12 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `OverflowOptionClick Vault CopyNoteClick should call setText on the ClipboardManager`() =
         runTest {
-            val notes = "notes"
+            val notes = "mockNotes-1"
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyNoteClick(
-                        notes = notes,
+                        cipherId = "mockId-1",
                         requiresPasswordReprompt = false,
                     ),
                 ),
@@ -1565,9 +2502,82 @@ class VaultViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = notes,
-                    toastDescriptorOverride = R.string.notes.asText(),
+                    toastDescriptorOverride = BitwardenString.notes.asText(),
                 )
             }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyNoteClick should not call setText on the ClipboardManager when decryption fails`() =
+        runTest {
+            val cipherId = "cipherId"
+            val throwable = Throwable("Decryption failed")
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.Failure(error = throwable)
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyNoteClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = false,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = BitwardenString.decryption_error.asText(),
+                        message = BitwardenString.failed_to_decrypt_cipher_contact_support.asText(),
+                        error = throwable,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyNoteClick should not call setText on the ClipboardManager when cipher is not found`() =
+        runTest {
+            val cipherId = "cipherId"
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.CipherNotFound
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyNoteClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = false,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
+                        error = null,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
         }
 
     @Test
@@ -1575,10 +2585,19 @@ class VaultViewModelTest : BaseViewModelTest() {
         runTest {
             val number = "12345-4321-9876-6789"
             val viewModel = createViewModel()
+            coEvery {
+                vaultRepository.getCipher("mockId-1")
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    cipherType = CipherType.CARD,
+                    card = createMockCardView(number = 1, cardNumber = number),
+                ),
+            )
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyNumberClick(
-                        number = number,
+                        cipherId = "mockId-1",
                         requiresPasswordReprompt = true,
                     ),
                 ),
@@ -1586,22 +2605,94 @@ class VaultViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = number,
-                    toastDescriptorOverride = R.string.number.asText(),
+                    toastDescriptorOverride = BitwardenString.number.asText(),
                 )
             }
         }
 
     @Suppress("MaxLineLength")
     @Test
+    fun `OverflowOptionClick Vault CopyNumberClick should not call setText on the ClipboardManager when decryption fails`() =
+        runTest {
+            val cipherId = "cipherId"
+            val throwable = Throwable("Decryption failed")
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.Failure(error = throwable)
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyNumberClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = BitwardenString.decryption_error.asText(),
+                        message = BitwardenString.failed_to_decrypt_cipher_contact_support.asText(),
+                        error = throwable,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyNumberClick should not call setText on the ClipboardManager when cipher is not found`() =
+        runTest {
+            val cipherId = "cipherId"
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.CipherNotFound
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyNumberClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
+                        error = null,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `OverflowOptionClick Vault CopyPasswordClick should call setText on the ClipboardManager`() =
         runTest {
-            val password = "passTheWord"
+            val password = "mockPassword-1"
             val cipherId = "cipherId"
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                        password = password,
                         requiresPasswordReprompt = true,
                         cipherId = cipherId,
                     ),
@@ -1610,12 +2701,87 @@ class VaultViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = password,
-                    toastDescriptorOverride = R.string.password.asText(),
+                    toastDescriptorOverride = BitwardenString.password.asText(),
                 )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedPassword(cipherId = cipherId),
                 )
             }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyPasswordClick should not call setText on the ClipboardManager when decryption fails`() =
+        runTest {
+            val cipherId = "cipherId"
+            val throwable = Throwable("Decryption failed")
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.Failure(error = throwable)
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                        requiresPasswordReprompt = true,
+                        cipherId = cipherId,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+                organizationEventManager.trackEvent(event = any())
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = BitwardenString.decryption_error.asText(),
+                        message = BitwardenString.failed_to_decrypt_cipher_contact_support.asText(),
+                        error = throwable,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyPasswordClick should not call setText on the ClipboardManager when cipher is not found`() =
+        runTest {
+            val cipherId = "cipherId"
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.CipherNotFound
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                        requiresPasswordReprompt = true,
+                        cipherId = cipherId,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+                organizationEventManager.trackEvent(event = any())
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
+                        error = null,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
         }
 
     @Suppress("MaxLineLength")
@@ -1633,7 +2799,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyTotpClick(
-                        totpCode = totpCode,
+                        cipherId = totpCode,
                         requiresPasswordReprompt = false,
                     ),
                 ),
@@ -1642,7 +2808,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = code,
-                    toastDescriptorOverride = R.string.totp.asText(),
+                    toastDescriptorOverride = BitwardenString.totp.asText(),
                 )
             }
         }
@@ -1661,7 +2827,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyTotpClick(
-                        totpCode = totpCode,
+                        cipherId = totpCode,
                         requiresPasswordReprompt = false,
                     ),
                 ),
@@ -1682,10 +2848,20 @@ class VaultViewModelTest : BaseViewModelTest() {
             val securityCode = "234"
             val cipherId = "cipherId"
             val viewModel = createViewModel()
+
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    cipherType = CipherType.CARD,
+                    card = createMockCardView(number = 1, code = securityCode),
+                ),
+            )
+
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
-                        securityCode = securityCode,
                         cipherId = cipherId,
                         requiresPasswordReprompt = true,
                     ),
@@ -1694,12 +2870,87 @@ class VaultViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = securityCode,
-                    toastDescriptorOverride = R.string.security_code.asText(),
+                    toastDescriptorOverride = BitwardenString.security_code.asText(),
                 )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedCardCode(cipherId = cipherId),
                 )
             }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopySecurityCodeClick should send DecryptionErrorReceive when decryption fails`() =
+        runTest {
+            val cipherId = "cipherId"
+            val throwable = Throwable("Decryption failed")
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.Failure(error = throwable)
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+                organizationEventManager.trackEvent(event = any())
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = BitwardenString.decryption_error.asText(),
+                        message = BitwardenString.failed_to_decrypt_cipher_contact_support.asText(),
+                        error = throwable,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopySecurityCodeClick should send DecryptionErrorReceive when cipher is not found`() =
+        runTest {
+            val cipherId = "cipherId"
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.CipherNotFound
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+                organizationEventManager.trackEvent(event = any())
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
+                        error = null,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
         }
 
     @Suppress("MaxLineLength")
@@ -1718,7 +2969,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = username,
-                    toastDescriptorOverride = R.string.username.asText(),
+                    toastDescriptorOverride = BitwardenString.username.asText(),
                 )
             }
         }
@@ -1806,7 +3057,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(
                     VaultAction.OverflowMasterPasswordRepromptSubmit(
                         overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                            password = password,
                             requiresPasswordReprompt = true,
                             cipherId = "cipherId",
                         ),
@@ -1817,8 +3067,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialog = VaultState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             error = error,
                         ),
                     ),
@@ -1846,7 +3096,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(
                     VaultAction.OverflowMasterPasswordRepromptSubmit(
                         overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                            password = password,
                             requiresPasswordReprompt = true,
                             cipherId = "cipherId",
                         ),
@@ -1857,8 +3106,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialog = VaultState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.invalid_master_password.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.invalid_master_password.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -1872,16 +3121,22 @@ class VaultViewModelTest : BaseViewModelTest() {
         runTest {
             val password = "password"
             val cipherId = "cipherId"
+            val cipherView = createMockCipherView(
+                number = 1,
+                login = createMockLoginView(number = 1, password = password),
+            )
             coEvery {
                 authRepository.validatePassword(password = password)
             } returns ValidatePasswordResult.Success(isValid = true)
+            coEvery {
+                vaultRepository.getCipher(cipherId)
+            } returns GetCipherResult.Success(cipherView)
 
             val viewModel = createViewModel()
 
             viewModel.trySendAction(
                 VaultAction.OverflowMasterPasswordRepromptSubmit(
                     overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                        password = password,
                         requiresPasswordReprompt = true,
                         cipherId = cipherId,
                     ),
@@ -1892,7 +3147,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = password,
-                    toastDescriptorOverride = R.string.password.asText(),
+                    toastDescriptorOverride = BitwardenString.password.asText(),
                 )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedPassword(cipherId = cipherId),
@@ -1924,6 +3179,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                             shouldShowMasterPasswordReprompt = true,
                             username = null,
                             overflowOptions = persistentListOf(),
+                            hasDecryptionError = false,
                         ),
                         password = password,
                     ),
@@ -1932,8 +3188,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialog = VaultState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             error = error,
                         ),
                     ),
@@ -1965,6 +3221,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                             name = "name".asText(),
                             shouldShowMasterPasswordReprompt = true,
                             overflowOptions = persistentListOf(),
+                            hasDecryptionError = false,
                         ),
                         password = password,
                     ),
@@ -1973,8 +3230,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialog = VaultState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.invalid_master_password.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.invalid_master_password.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -1993,6 +3250,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 shouldShowMasterPasswordReprompt = true,
                 fullName = null,
                 overflowOptions = persistentListOf(),
+                hasDecryptionError = false,
             )
             coEvery {
                 authRepository.validatePassword(password = password)
@@ -2040,30 +3298,6 @@ class VaultViewModelTest : BaseViewModelTest() {
             )
         }
     }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `when feature flag ImportLoginsFlow is disabled, should show action card should always be false`() =
-        runTest {
-            mutableImportLoginsFeatureFlow.update { false }
-            val viewModel = createViewModel()
-            viewModel.stateFlow.test {
-                assertEquals(
-                    DEFAULT_STATE.copy(showImportActionCard = false),
-                    awaitItem(),
-                )
-                mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                    accounts = DEFAULT_USER_STATE.accounts.map {
-                        it.copy(
-                            firstTimeState = DEFAULT_FIRST_TIME_STATE.copy(
-                                showImportLoginsCard = true,
-                            ),
-                        )
-                    },
-                )
-                expectNoEvents()
-            }
-        }
 
     @Suppress("MaxLineLength")
     @Test
@@ -2137,6 +3371,22 @@ class VaultViewModelTest : BaseViewModelTest() {
             assertEquals(VaultEvent.ShowSnackbar(expectedSnackbarData), awaitItem())
         }
     }
+
+    @Test
+    fun `when PREMIUM_UPGRADED relay emits, snackbar is shown`() =
+        runTest {
+            val viewModel = createViewModel()
+            val expectedSnackbarData = BitwardenSnackbarData(
+                message = BitwardenString.upgraded_to_premium.asText(),
+            )
+            viewModel.eventFlow.test {
+                mutableSnackbarDataFlow.tryEmit(expectedSnackbarData)
+                assertEquals(
+                    VaultEvent.ShowSnackbar(expectedSnackbarData),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `when account switch action is handled, clear snackbar relay buffer should be called`() =
@@ -2230,11 +3480,10 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `SelectAddItemType action should set dialog state to SelectVaultAddItemType accordingly when RESTRICT_ITEM_TYPES is enabled`() =
         runTest {
-            mutableRemoveCardPolicyFeatureFlow.value = true
             val viewModel = createViewModel()
             mutableActivePoliciesFlow.emit(
                 listOf(
-                    SyncResponseJson.Policy(
+                    createMockPolicy(
                         organizationId = "Test Organization",
                         id = "testId",
                         type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
@@ -2269,29 +3518,346 @@ class VaultViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE.copy(
                     isRefreshing = false,
                     dialog = VaultState.DialogState.Error(
-                        R.string.internet_connection_required_title.asText(),
-                        R.string.internet_connection_required_message.asText(),
+                        BitwardenString.internet_connection_required_title.asText(),
+                        BitwardenString.internet_connection_required_message.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
             )
         }
 
+    @Test
+    fun `DecryptionErrorReceived should show decryption error dialog`() = runTest {
+        val viewModel = createViewModel()
+        val throwable = Throwable("Decryption failed")
+        viewModel.trySendAction(
+            VaultAction.Internal.DecryptionErrorReceive(
+                title = BitwardenString.decryption_error.asText(),
+                message = BitwardenString.failed_to_decrypt_cipher_contact_support.asText(),
+                error = throwable,
+            ),
+        )
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = VaultState.DialogState.Error(
+                    title = BitwardenString.decryption_error.asText(),
+                    message = BitwardenString.failed_to_decrypt_cipher_contact_support.asText(),
+                    error = throwable,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `UpdatedKdfToMinimumsReceived with Success should clear dialog and send a ShowSnackbar event`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    action = VaultAction.Internal.UpdatedKdfToMinimumsReceived(
+                        result = UpdateKdfMinimumsResult.Success,
+                    ),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(dialog = null),
+                    viewModel.stateFlow.value,
+                )
+                assertEquals(
+                    VaultEvent.ShowSnackbar(BitwardenString.encryption_settings_updated.asText()),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `UpdatedKdfToMinimumsReceived with ActiveAccountNotFound should show error dialog`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                action = VaultAction.Internal.UpdatedKdfToMinimumsReceived(
+                    result = UpdateKdfMinimumsResult.ActiveAccountNotFound,
+                ),
+            )
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString
+                            .kdf_update_failed_active_account_not_found
+                            .asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `UpdatedKdfToMinimumsReceived with Error should show error dialog`() = runTest {
+        val testError = Exception("Test error")
+        val viewModel = createViewModel()
+        viewModel.trySendAction(
+            action = VaultAction.Internal.UpdatedKdfToMinimumsReceived(
+                result = UpdateKdfMinimumsResult.Error(testError),
+            ),
+        )
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = VaultState.DialogState.Error(
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString
+                        .an_error_occurred_while_trying_to_update_your_kdf_settings
+                        .asText(),
+                    error = testError,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `vaultDataStateFlow Loaded with needsKdfUpdateToMinimums true should show KdfUpdateRequired dialog`() =
+        runTest {
+            coEvery { authRepository.needsKdfUpdateToMinimums() } returns true
+            mutableVaultDataStateFlow.value = DataState.Loaded(
+                data = VaultData(
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = listOf(
+                            createMockCipherListView(
+                                number = 1,
+                                type = CipherListViewType.Login(
+                                    createMockLoginListView(number = 1),
+                                ),
+                            ),
+                            createMockCipherListView(
+                                number = 2,
+                                type = CipherListViewType.Login(
+                                    createMockLoginListView(number = 2),
+                                ),
+                            ),
+                        ),
+                        failures = emptyList(),
+                    ),
+                    collectionViewList = emptyList(),
+                    folderViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val viewModel = createViewModel()
+
+            assertEquals(
+                createMockVaultState(
+                    viewState = VaultState.ViewState.Content(
+                        loginItemsCount = 2,
+                        cardItemsCount = 0,
+                        identityItemsCount = 0,
+                        secureNoteItemsCount = 0,
+                        favoriteItems = listOf(),
+                        folderItems = listOf(),
+                        collectionItems = listOf(),
+                        noFolderItems = listOf(),
+                        trashItemsCount = 0,
+                        totpItemsCount = 2,
+                        itemTypesCount = 5,
+                        sshKeyItemsCount = 0,
+                        archivedItemsCount = 0,
+                        archiveEnabled = true,
+                        archiveSubText = null,
+                        archiveEndIcon = null,
+                        showCardGroup = true,
+                    ),
+                    dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
+                        title = BitwardenString.update_your_encryption_settings.asText(),
+                        message = BitwardenString.the_new_recommended_encryption_settings_will_improve_your_account_desc_long.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `vaultDataStateFlow Loaded with needsKdfUpdateToMinimums false should not show KdfUpdateRequired dialog`() =
+        runTest {
+            coEvery { authRepository.needsKdfUpdateToMinimums() } returns false
+            mutableVaultDataStateFlow.value = DataState.Loaded(
+                data = VaultData(
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = listOf(
+                            createMockCipherListView(
+                                number = 1,
+                                type = CipherListViewType.Login(
+                                    createMockLoginListView(number = 1),
+                                ),
+                            ),
+                            createMockCipherListView(
+                                number = 2,
+                                type = CipherListViewType.Login(
+                                    createMockLoginListView(number = 2),
+                                ),
+                            ),
+                        ),
+                        failures = emptyList(),
+                    ),
+                    collectionViewList = emptyList(),
+                    folderViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val viewModel = createViewModel()
+
+            assertEquals(
+                createMockVaultState(
+                    viewState = VaultState.ViewState.Content(
+                        loginItemsCount = 2,
+                        cardItemsCount = 0,
+                        identityItemsCount = 0,
+                        secureNoteItemsCount = 0,
+                        favoriteItems = listOf(),
+                        folderItems = listOf(),
+                        collectionItems = listOf(),
+                        noFolderItems = listOf(),
+                        trashItemsCount = 0,
+                        totpItemsCount = 2,
+                        itemTypesCount = 5,
+                        sshKeyItemsCount = 0,
+                        archivedItemsCount = 0,
+                        archiveEnabled = true,
+                        archiveSubText = null,
+                        archiveEndIcon = null,
+                        showCardGroup = true,
+                    ),
+                    dialog = null,
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `on KdfUpdatePasswordRepromptSubmit should call updateKdfToMinimumsIfNeeded`() = runTest {
+        val password = "mock_password"
+        coEvery {
+            authRepository.updateKdfToMinimumsIfNeeded(password)
+        } returns UpdateKdfMinimumsResult.Success
+
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            action = VaultAction.KdfUpdatePasswordRepromptSubmit(password = password),
+        )
+
+        coVerify(exactly = 1) {
+            authRepository.updateKdfToMinimumsIfNeeded(password)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `CredentialExchangeProtocolExportFlagUpdateReceive should register for export when flag is enabled`() =
+        runTest {
+            mutableCxpExportFeatureFlagFlow.value = false
+            coEvery { credentialExchangeRegistryManager.register() } just awaits
+
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(
+                    isCredentialExchangeProtocolExportEnabled = true,
+                ),
+            )
+
+            coVerify {
+                credentialExchangeRegistryManager.register()
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `CredentialExchangeProtocolExportFlagUpdateReceive should unregister when flag is disabled`() =
+        runTest {
+            mutableCxpExportFeatureFlagFlow.value = true
+            every { settingsRepository.isAppRegisteredForExport() } returns true
+            coEvery { credentialExchangeRegistryManager.unregister() } just awaits
+
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(
+                    isCredentialExchangeProtocolExportEnabled = false,
+                ),
+            )
+
+            coVerify {
+                credentialExchangeRegistryManager.unregister()
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `CredentialExchangeProtocolExportFlagUpdateReceive should unregister when flag is enabled but GMS version is insufficient`() =
+        runTest {
+            mutableCxpExportFeatureFlagFlow.value = false
+            every { gmsManager.isVersionAtLeast(any()) } returns false
+            coEvery { credentialExchangeRegistryManager.unregister() } just awaits
+
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(
+                    isCredentialExchangeProtocolExportEnabled = true,
+                ),
+            )
+
+            coVerify {
+                credentialExchangeRegistryManager.unregister()
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `CredentialExchangeProtocolExportFlagUpdateReceive should unregister when flag is disabled and GMS version is sufficient`() =
+        runTest {
+            mutableCxpExportFeatureFlagFlow.value = true
+            every { settingsRepository.isAppRegisteredForExport() } returns true
+            coEvery { credentialExchangeRegistryManager.unregister() } just awaits
+
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(
+                    isCredentialExchangeProtocolExportEnabled = false,
+                ),
+            )
+
+            coVerify {
+                credentialExchangeRegistryManager.unregister()
+            }
+        }
+
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
             authRepository = authRepository,
+            environmentRepository = environmentRepository,
             clipboardManager = clipboardManager,
             policyManager = policyManager,
+            premiumStateManager = premiumStateManager,
             clock = clock,
             settingsRepository = settingsRepository,
             vaultRepository = vaultRepository,
             organizationEventManager = organizationEventManager,
-            featureFlagManager = featureFlagManager,
             firstTimeActionManager = firstTimeActionManager,
             snackbarRelayManager = snackbarRelayManager,
             reviewPromptManager = reviewPromptManager,
             specialCircumstanceManager = specialCircumstanceManager,
             networkConnectionManager = networkConnectionManager,
+            browserAutofillDialogManager = browserAutofillDialogManager,
+            credentialExchangeRegistryManager = credentialExchangeRegistryManager,
+            gmsManager = gmsManager,
+            featureFlagManager = featureFlagManager,
         )
 }
 
@@ -2316,47 +3882,55 @@ private val DEFAULT_FIRST_TIME_STATE = FirstTimeState(
     showImportLoginsCard = true,
 )
 
+private val DEFAULT_ACTIVE_ACCOUNT = UserState.Account(
+    userId = "activeUserId",
+    name = "Active User",
+    email = "active@bitwarden.com",
+    avatarColorHex = "#aa00aa",
+    environment = Environment.Us,
+    isPremium = true,
+    isLoggedIn = true,
+    isVaultUnlocked = true,
+    needsPasswordReset = false,
+    isBiometricsEnabled = false,
+    organizations = emptyList(),
+    needsMasterPassword = false,
+    trustedDevice = null,
+    hasMasterPassword = true,
+    isUsingKeyConnector = false,
+    onboardingStatus = OnboardingStatus.COMPLETE,
+    firstTimeState = DEFAULT_FIRST_TIME_STATE,
+    isExportable = true,
+    creationDate = Instant.parse("2023-10-01T12:00:00Z"),
+)
+
+private val DEFAULT_INACTIVE_ACCOUNT = UserState.Account(
+    userId = "lockedUserId",
+    name = "Locked User",
+    email = "locked@bitwarden.com",
+    avatarColorHex = "#00aaaa",
+    environment = Environment.Us,
+    isPremium = false,
+    isLoggedIn = true,
+    isVaultUnlocked = false,
+    needsPasswordReset = false,
+    isBiometricsEnabled = false,
+    organizations = emptyList(),
+    needsMasterPassword = false,
+    trustedDevice = null,
+    hasMasterPassword = true,
+    isUsingKeyConnector = false,
+    onboardingStatus = OnboardingStatus.COMPLETE,
+    firstTimeState = DEFAULT_FIRST_TIME_STATE,
+    isExportable = true,
+    creationDate = Instant.parse("2023-10-01T12:00:00Z"),
+)
+
 private val DEFAULT_USER_STATE = UserState(
     activeUserId = "activeUserId",
     accounts = listOf(
-        UserState.Account(
-            userId = "activeUserId",
-            name = "Active User",
-            email = "active@bitwarden.com",
-            avatarColorHex = "#aa00aa",
-            environment = Environment.Us,
-            isPremium = true,
-            isLoggedIn = true,
-            isVaultUnlocked = true,
-            needsPasswordReset = false,
-            isBiometricsEnabled = false,
-            organizations = emptyList(),
-            needsMasterPassword = false,
-            trustedDevice = null,
-            hasMasterPassword = true,
-            isUsingKeyConnector = false,
-            onboardingStatus = OnboardingStatus.COMPLETE,
-            firstTimeState = DEFAULT_FIRST_TIME_STATE,
-        ),
-        UserState.Account(
-            userId = "lockedUserId",
-            name = "Locked User",
-            email = "locked@bitwarden.com",
-            avatarColorHex = "#00aaaa",
-            environment = Environment.Us,
-            isPremium = false,
-            isLoggedIn = true,
-            isVaultUnlocked = false,
-            needsPasswordReset = false,
-            isBiometricsEnabled = false,
-            organizations = emptyList(),
-            needsMasterPassword = false,
-            trustedDevice = null,
-            hasMasterPassword = true,
-            isUsingKeyConnector = false,
-            onboardingStatus = OnboardingStatus.COMPLETE,
-            firstTimeState = DEFAULT_FIRST_TIME_STATE,
-        ),
+        DEFAULT_ACTIVE_ACCOUNT,
+        DEFAULT_INACTIVE_ACCOUNT,
     ),
 )
 
@@ -2365,7 +3939,7 @@ private fun createMockVaultState(
     dialog: VaultState.DialogState? = null,
 ): VaultState =
     VaultState(
-        appBarTitle = R.string.my_vault.asText(),
+        appBarTitle = BitwardenString.my_vault.asText(),
         avatarColorString = "#aa00aa",
         initials = "AU",
         accountSummaries = listOf(
@@ -2401,5 +3975,30 @@ private fun createMockVaultState(
         showImportActionCard = true,
         isRefreshing = false,
         flightRecorderSnackBar = null,
-        restrictItemTypesPolicyOrgIds = null,
+        cipherDecryptionFailureIds = persistentListOf(),
+        hasShownDecryptionFailureAlert = false,
+        restrictItemTypesPolicyOrgIds = emptyList(),
+        isArchiveEnabled = true,
+        isIntroducingArchiveActionCardDismissed = false,
+        isPremiumUpgradeBannerEligible = false,
     )
+
+private val DEFAULT_CONTENT_VIEW_STATE = VaultState.ViewState.Content(
+    itemTypesCount = 0,
+    loginItemsCount = 0,
+    cardItemsCount = 0,
+    identityItemsCount = 0,
+    secureNoteItemsCount = 0,
+    sshKeyItemsCount = 0,
+    totpItemsCount = 0,
+    favoriteItems = emptyList(),
+    folderItems = emptyList(),
+    noFolderItems = emptyList(),
+    collectionItems = emptyList(),
+    trashItemsCount = 0,
+    archivedItemsCount = null,
+    archiveEnabled = false,
+    archiveSubText = null,
+    archiveEndIcon = null,
+    showCardGroup = true,
+)

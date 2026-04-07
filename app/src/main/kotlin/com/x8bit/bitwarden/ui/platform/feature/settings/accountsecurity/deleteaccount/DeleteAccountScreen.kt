@@ -28,7 +28,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.cardStyle
@@ -36,15 +36,15 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenFilledErrorButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedErrorButton
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 
 /**
  * Displays the delete account screen.
@@ -70,23 +70,23 @@ fun DeleteAccountScreen(
     when (val dialog = state.dialog) {
         DeleteAccountState.DeleteAccountDialog.DeleteSuccess -> BitwardenBasicDialog(
             title = null,
-            message = stringResource(id = R.string.your_account_has_been_permanently_deleted),
-            onDismissRequest = remember(viewModel) {
-                { viewModel.trySendAction(DeleteAccountAction.AccountDeletionConfirm) }
+            message = stringResource(
+                id = BitwardenString.your_account_has_been_permanently_deleted,
+            ),
+            onDismissRequest = {
+                viewModel.trySendAction(DeleteAccountAction.AccountDeletionConfirm)
             },
         )
 
         is DeleteAccountState.DeleteAccountDialog.Error -> BitwardenBasicDialog(
-            title = stringResource(id = R.string.an_error_has_occurred),
+            title = stringResource(id = BitwardenString.an_error_has_occurred),
             message = dialog.message(),
             throwable = dialog.error,
-            onDismissRequest = remember(viewModel) {
-                { viewModel.trySendAction(DeleteAccountAction.DismissDialog) }
-            },
+            onDismissRequest = { viewModel.trySendAction(DeleteAccountAction.DismissDialog) },
         )
 
         DeleteAccountState.DeleteAccountDialog.Loading -> BitwardenLoadingDialog(
-            text = stringResource(id = R.string.loading),
+            text = stringResource(id = BitwardenString.loading),
         )
 
         null -> Unit
@@ -99,13 +99,11 @@ fun DeleteAccountScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.delete_account),
+                title = stringResource(id = BitwardenString.delete_account),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(DeleteAccountAction.CloseClick) }
-                },
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
+                onNavigationIconClick = { viewModel.trySendAction(DeleteAccountAction.CloseClick) },
             )
         },
     ) {
@@ -117,29 +115,29 @@ fun DeleteAccountScreen(
             Spacer(modifier = Modifier.height(16.dp))
             if (state.isUserManagedByOrganization) {
                 WarningMessageCard(
-                    headerText = stringResource(id = R.string.cannot_delete_your_account),
+                    headerText = stringResource(id = BitwardenString.cannot_delete_your_account),
                     subtitleText = stringResource(
-                        id = R.string.cannot_delete_your_account_explanation,
+                        id = BitwardenString.cannot_delete_your_account_explanation,
                     ),
                     modifier = Modifier.standardHorizontalMargin(),
                 )
             } else {
                 WarningMessageCard(
-                    headerText = stringResource(id = R.string.deleting_your_account_is_permanent),
-                    subtitleText = stringResource(id = R.string.delete_account_explanation),
+                    headerText = stringResource(
+                        id = BitwardenString.deleting_your_account_is_permanent,
+                    ),
+                    subtitleText = stringResource(id = BitwardenString.delete_account_explanation),
                     modifier = Modifier.standardHorizontalMargin(),
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 DeleteAccountButton(
-                    onDeleteAccountConfirmDialogClick = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(
-                                DeleteAccountAction.DeleteAccountConfirmDialogClick(it),
-                            )
-                        }
+                    onDeleteAccountConfirmDialogClick = {
+                        viewModel.trySendAction(
+                            DeleteAccountAction.DeleteAccountConfirmDialogClick(it),
+                        )
                     },
-                    onDeleteAccountClick = remember(viewModel) {
-                        { viewModel.trySendAction(DeleteAccountAction.DeleteAccountClick) }
+                    onDeleteAccountClick = {
+                        viewModel.trySendAction(DeleteAccountAction.DeleteAccountClick)
                     },
                     isUnlockWithPasswordEnabled = state.isUnlockWithPasswordEnabled,
                     modifier = Modifier
@@ -149,10 +147,8 @@ fun DeleteAccountScreen(
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 BitwardenOutlinedErrorButton(
-                    label = stringResource(id = R.string.cancel),
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(DeleteAccountAction.CancelClick) }
-                    },
+                    label = stringResource(id = BitwardenString.cancel),
+                    onClick = { viewModel.trySendAction(DeleteAccountAction.CancelClick) },
                     modifier = Modifier
                         .testTag("CANCEL")
                         .fillMaxWidth()
@@ -183,7 +179,7 @@ private fun DeleteAccountButton(
     }
 
     BitwardenFilledErrorButton(
-        label = stringResource(id = R.string.delete_account),
+        label = stringResource(id = BitwardenString.delete_account),
         onClick = {
             if (isUnlockWithPasswordEnabled) {
                 showPasswordDialog = true
@@ -237,7 +233,7 @@ private fun WarningMessageCard(
 @Composable
 private fun WarningMessageCard_preview() {
     WarningMessageCard(
-        headerText = stringResource(id = R.string.cannot_delete_your_account),
-        subtitleText = stringResource(id = R.string.cannot_delete_your_account_explanation),
+        headerText = stringResource(id = BitwardenString.cannot_delete_your_account),
+        subtitleText = stringResource(id = BitwardenString.cannot_delete_your_account_explanation),
     )
 }

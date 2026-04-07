@@ -6,6 +6,7 @@ import com.bitwarden.network.model.JwtTokenDataJson
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.bitwarden.network.model.UserDecryptionOptionsJson
+import com.bitwarden.network.model.createMockAccountKeysJson
 import com.bitwarden.network.util.parseJwtTokenDataOrNull
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
@@ -109,8 +110,8 @@ private val GET_TOKEN_RESPONSE_SUCCESS = GetTokenResponseJson.Success(
     kdfMemory = 16,
     kdfParallelism = 4,
     privateKey = "privateKey",
+    accountKeys = createMockAccountKeysJson(number = 1),
     shouldForcePasswordReset = false,
-    shouldResetMasterPassword = true,
     twoFactorToken = null,
     masterPasswordPolicyOptions = null,
     userDecryptionOptions = null,
@@ -126,6 +127,7 @@ private val USER_DECRYPTION_OPTIONS = UserDecryptionOptionsJson(
         hasManageResetPasswordPermission = true,
     ),
     keyConnectorUserDecryptionOptions = null,
+    masterPasswordUnlock = null,
 )
 private val PROFILE_1 = AccountJson.Profile(
     userId = USER_ID_1,

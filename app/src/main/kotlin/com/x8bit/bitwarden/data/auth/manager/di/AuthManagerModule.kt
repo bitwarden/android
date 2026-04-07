@@ -1,7 +1,8 @@
 package com.x8bit.bitwarden.data.auth.manager.di
 
 import android.content.Context
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.network.service.AccountsService
 import com.bitwarden.network.service.AuthRequestsService
 import com.bitwarden.network.service.DevicesService
@@ -16,6 +17,8 @@ import com.x8bit.bitwarden.data.auth.manager.AuthRequestNotificationManager
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestNotificationManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.AuthTokenManager
 import com.x8bit.bitwarden.data.auth.manager.AuthTokenManagerImpl
+import com.x8bit.bitwarden.data.auth.manager.KdfManager
+import com.x8bit.bitwarden.data.auth.manager.KdfManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager
 import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
@@ -24,6 +27,8 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManagerImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
@@ -107,26 +112,28 @@ object AuthManagerModule {
     @Provides
     @Singleton
     fun provideUserLogoutManager(
-        @ApplicationContext context: Context,
         authDiskSource: AuthDiskSource,
         generatorDiskSource: GeneratorDiskSource,
         passwordHistoryDiskSource: PasswordHistoryDiskSource,
         pushDiskSource: PushDiskSource,
         settingsDiskSource: SettingsDiskSource,
+        toastManager: ToastManager,
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
         dispatcherManager: DispatcherManager,
+        credentialExchangeRegistryManager: CredentialExchangeRegistryManager,
     ): UserLogoutManager =
         UserLogoutManagerImpl(
-            context = context,
             authDiskSource = authDiskSource,
             generatorDiskSource = generatorDiskSource,
             passwordHistoryDiskSource = passwordHistoryDiskSource,
             pushDiskSource = pushDiskSource,
             settingsDiskSource = settingsDiskSource,
+            toastManager = toastManager,
             vaultDiskSource = vaultDiskSource,
             vaultSdkSource = vaultSdkSource,
             dispatcherManager = dispatcherManager,
+            credentialExchangeRegistryManager = credentialExchangeRegistryManager,
         )
 
     @Provides
@@ -139,4 +146,18 @@ object AuthManagerModule {
     fun providesAuthTokenManager(
         authDiskSource: AuthDiskSource,
     ): AuthTokenManager = AuthTokenManagerImpl(authDiskSource = authDiskSource)
+
+    @Provides
+    @Singleton
+    fun providesKdfManager(
+        authDiskSource: AuthDiskSource,
+        vaultSdkSource: VaultSdkSource,
+        accountsService: AccountsService,
+        featureFlagManager: FeatureFlagManager,
+    ): KdfManager = KdfManagerImpl(
+        authDiskSource = authDiskSource,
+        vaultSdkSource = vaultSdkSource,
+        accountsService = accountsService,
+        featureFlagManager = featureFlagManager,
+    )
 }

@@ -6,7 +6,6 @@ import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -408,24 +407,24 @@ class VerificationCodeScreenTest : BitwardenComposeTest() {
     @Test
     fun `on overflow item click should display menu`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .performClick()
 
         composeTestRule
             .onAllNodesWithText(text = "Sync")
             .filterToOne(hasAnyAncestor(isPopup()))
-            .isDisplayed()
+            .assertIsDisplayed()
 
         composeTestRule
             .onAllNodesWithText(text = "Lock")
             .filterToOne(hasAnyAncestor(isPopup()))
-            .isDisplayed()
+            .assertIsDisplayed()
     }
 
     @Test
     fun `on sync click should send SyncClick`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .performClick()
 
         composeTestRule
@@ -441,7 +440,7 @@ class VerificationCodeScreenTest : BitwardenComposeTest() {
     @Test
     fun `on lock click should send LockClick`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .performClick()
 
         composeTestRule

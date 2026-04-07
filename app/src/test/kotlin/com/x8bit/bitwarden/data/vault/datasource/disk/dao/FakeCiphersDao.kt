@@ -11,6 +11,7 @@ class FakeCiphersDao : CiphersDao {
 
     var deleteCipherCalled: Boolean = false
     var deleteCiphersCalled: Boolean = false
+    var deleteSelectedCiphersCalled: Boolean = false
     var insertCiphersCalled: Boolean = false
 
     private val ciphersFlow = bufferedMutableSharedFlow<List<CipherEntity>>(replay = 1)
@@ -35,8 +36,31 @@ class FakeCiphersDao : CiphersDao {
         return count
     }
 
-    override fun getAllCiphers(userId: String): Flow<List<CipherEntity>> =
+    override suspend fun deleteSelectedCiphers(userId: String, cipherIds: List<String>): Int {
+        deleteSelectedCiphersCalled = true
+        val count = storedCiphers.count { it.userId == userId && it.id in cipherIds }
+        storedCiphers.removeAll { it.userId == userId && it.id in cipherIds }
+        ciphersFlow.tryEmit(storedCiphers.toList())
+        return count
+    }
+
+    override fun getAllCiphersFlow(userId: String): Flow<List<CipherEntity>> =
         ciphersFlow.map { ciphers -> ciphers.filter { it.userId == userId } }
+
+    override suspend fun getAllCiphers(userId: String): List<CipherEntity> =
+        storedCiphers.filter { it.userId == userId }
+
+    override suspend fun getSelectedCiphers(
+        userId: String,
+        cipherIds: List<String>,
+    ): List<CipherEntity> =
+        storedCiphers.filter { it.userId == userId && it.id in cipherIds }
+
+    override suspend fun getAllTotpCiphers(userId: String): List<CipherEntity> =
+        storedCiphers.filter { it.userId == userId && it.hasTotp }
+
+    override suspend fun getCipher(userId: String, cipherId: String): CipherEntity? =
+        storedCiphers.find { it.userId == userId && it.id == cipherId }
 
     override suspend fun insertCiphers(ciphers: List<CipherEntity>) {
         storedCiphers.addAll(ciphers)
@@ -50,4 +74,9 @@ class FakeCiphersDao : CiphersDao {
         ciphersFlow.tryEmit(ciphers.toList())
         return removed || ciphers.isNotEmpty()
     }
+
+    override fun hasPersonalCiphersFlow(userId: String): Flow<Boolean> =
+        ciphersFlow.map { ciphers ->
+            ciphers.any { it.userId == userId && it.organizationId == null }
+        }
 }

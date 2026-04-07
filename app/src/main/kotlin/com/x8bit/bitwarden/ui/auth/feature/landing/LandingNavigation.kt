@@ -23,7 +23,6 @@ fun NavController.navigateToLanding(navOptions: NavOptions? = null) {
  * Add the Landing screen to the nav graph.
  */
 fun NavGraphBuilder.landingDestination(
-    onNavigateToCreateAccount: () -> Unit,
     onNavigateToLogin: (emailAddress: String) -> Unit,
     onNavigateToEnvironment: () -> Unit,
     onNavigateToStartRegistration: () -> Unit,
@@ -31,7 +30,6 @@ fun NavGraphBuilder.landingDestination(
 ) {
     composableWithStayTransitions<LandingRoute> {
         LandingScreen(
-            onNavigateToCreateAccount = onNavigateToCreateAccount,
             onNavigateToLogin = onNavigateToLogin,
             onNavigateToEnvironment = onNavigateToEnvironment,
             onNavigateToStartRegistration = onNavigateToStartRegistration,

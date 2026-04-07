@@ -32,7 +32,6 @@ fun BitwardenBottomAppBar(
         navigationItems.forEach { navigationItem ->
             BitwardenNavigationBarItem(
                 labelRes = navigationItem.labelRes,
-                contentDescriptionRes = navigationItem.contentDescriptionRes,
                 selectedIconRes = navigationItem.iconResSelected,
                 unselectedIconRes = navigationItem.iconRes,
                 notificationCount = navigationItem.notificationCount,

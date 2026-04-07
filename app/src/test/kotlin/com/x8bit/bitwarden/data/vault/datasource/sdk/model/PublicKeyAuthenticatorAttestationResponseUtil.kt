@@ -18,7 +18,6 @@ fun createMockPublicKeyAttestationResponse(number: Int) =
         clientExtensionResults = ClientExtensionResults(
             credProps = CredPropsResult(
                 rk = true,
-                authenticatorDisplayName = "mockDisplayName",
             ),
         ),
         response = AuthenticatorAttestationResponse(

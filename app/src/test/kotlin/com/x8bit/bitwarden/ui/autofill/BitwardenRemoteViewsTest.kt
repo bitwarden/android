@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
@@ -24,8 +25,8 @@ import org.junit.jupiter.api.Test
 class BitwardenRemoteViewsTest {
     private val testContext: Context = mockk {
         every { this@mockk.getString(R.string.app_name) } returns APP_NAME
-        every { this@mockk.getString(R.string.go_to_my_vault) } returns GO_TO_MY_VAULT
-        every { this@mockk.getString(R.string.vault_is_locked) } returns VAULT_IS_LOCKED
+        every { this@mockk.getString(BitwardenString.go_to_my_vault) } returns GO_TO_MY_VAULT
+        every { this@mockk.getString(BitwardenString.vault_is_locked) } returns VAULT_IS_LOCKED
     }
     private val autofillAppInfo: AutofillAppInfo = mockk {
         every { this@mockk.context } returns testContext
@@ -56,13 +57,13 @@ class BitwardenRemoteViewsTest {
         // Setup
         every { testContext.isSystemDarkMode } returns false
         every {
-            ContextCompat.getString(testContext, R.string.autofill_suggestion)
+            ContextCompat.getString(testContext, BitwardenString.autofill_suggestion)
         } returns "Autofill suggestion"
         every {
-            ContextCompat.getString(testContext, R.string.type_card)
+            ContextCompat.getString(testContext, BitwardenString.type_card)
         } returns "Card"
         every {
-            ContextCompat.getString(testContext, R.string.type_login)
+            ContextCompat.getString(testContext, BitwardenString.type_login)
         } returns "Login"
         prepareRemoteViews(
             name = NAME,
@@ -129,13 +130,13 @@ class BitwardenRemoteViewsTest {
         // Setup
         every { testContext.isSystemDarkMode } returns true
         every {
-            ContextCompat.getString(testContext, R.string.autofill_suggestion)
+            ContextCompat.getString(testContext, BitwardenString.autofill_suggestion)
         } returns "Autofill suggestion"
         every {
-            ContextCompat.getString(testContext, R.string.type_card)
+            ContextCompat.getString(testContext, BitwardenString.type_card)
         } returns "Card"
         every {
-            ContextCompat.getString(testContext, R.string.type_login)
+            ContextCompat.getString(testContext, BitwardenString.type_login)
         } returns "Login"
         prepareRemoteViews(
             name = NAME,
@@ -204,7 +205,7 @@ class BitwardenRemoteViewsTest {
         prepareRemoteViews(
             name = APP_NAME,
             subtitle = VAULT_IS_LOCKED,
-            iconRes = BitwardenDrawable.icon,
+            iconRes = BitwardenDrawable.logo_bitwarden_icon,
         )
 
         // Test
@@ -232,7 +233,7 @@ class BitwardenRemoteViewsTest {
             anyConstructed<RemoteViews>()
                 .setImageViewResource(
                     R.id.icon,
-                    BitwardenDrawable.icon,
+                    BitwardenDrawable.logo_bitwarden_icon,
                 )
             anyConstructed<RemoteViews>()
                 .setInt(
@@ -262,7 +263,7 @@ class BitwardenRemoteViewsTest {
         prepareRemoteViews(
             name = APP_NAME,
             subtitle = GO_TO_MY_VAULT,
-            iconRes = BitwardenDrawable.icon,
+            iconRes = BitwardenDrawable.logo_bitwarden_icon,
         )
 
         // Test
@@ -290,7 +291,7 @@ class BitwardenRemoteViewsTest {
             anyConstructed<RemoteViews>()
                 .setImageViewResource(
                     R.id.icon,
-                    BitwardenDrawable.icon,
+                    BitwardenDrawable.logo_bitwarden_icon,
                 )
             anyConstructed<RemoteViews>()
                 .setInt(
@@ -386,7 +387,7 @@ private const val APP_NAME = "Bitwarden"
 private const val COLOR_DARK_BACKGROUND: Int = -15590873
 private const val COLOR_DARK_ICON_TINT: Int = -6904901
 private const val COLOR_DARK_TEXT_PRIMARY: Int = -788743
-private const val COLOR_DARK_TEXT_SECONDARY: Int = -7825227
+private const val COLOR_DARK_TEXT_SECONDARY: Int = -6904901
 private const val COLOR_LIGHT_BACKGROUND: Int = -788743
 private const val COLOR_LIGHT_ICON_TINT: Int = -10850927
 private const val COLOR_LIGHT_TEXT_PRIMARY: Int = -14999511

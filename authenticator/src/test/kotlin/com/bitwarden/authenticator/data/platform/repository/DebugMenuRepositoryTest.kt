@@ -2,7 +2,7 @@ package com.bitwarden.authenticator.data.platform.repository
 
 import app.cash.turbine.test
 import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
-import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.data.repository.ServerConfigRepository
 import io.mockk.every
@@ -98,10 +98,6 @@ class DebugMenuRepositoryTest {
         runTest {
             debugMenuRepository.resetFeatureFlagOverrides()
             verify(exactly = 1) {
-                mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
-                    FlagKey.PasswordManagerSync,
-                    FlagKey.PasswordManagerSync.defaultValue,
-                )
                 mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
                     FlagKey.BitwardenAuthenticationEnabled,
                     FlagKey.BitwardenAuthenticationEnabled.defaultValue,

@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.model
 
 /**
- * Models result of deleting an account.
+ * Models result of leaving an organization.
  */
 sealed class LeaveOrganizationResult {
     /**

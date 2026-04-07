@@ -12,7 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.core.net.toUri
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -20,24 +21,26 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
+import com.bitwarden.ui.platform.components.appbar.model.TopAppBarDividerStyle
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
-import com.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
+import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
+import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalExitManager
+import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.exit.ExitManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
-import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
-import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
-import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.composition.LocalPermissionsManager
-import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
+import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.handlers.AddEditSendHandlers
 
 /**
@@ -53,6 +56,7 @@ fun AddEditSendScreen(
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,
     onNavigateBack: () -> Unit,
     onNavigateUpToSearchOrRoot: () -> Unit,
+    onNavigateToGeneratorModal: (GeneratorMode.Modal) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val addSendHandlers = remember(viewModel) { AddEditSendHandlers.create(viewModel) }
@@ -65,9 +69,7 @@ fun AddEditSendScreen(
 
     val snackbarHostState = rememberBitwardenSnackbarHostState()
     BackHandler(
-        onBack = remember(viewModel) {
-            { viewModel.trySendAction(AddEditSendAction.CloseClick) }
-        },
+        onBack = { viewModel.trySendAction(AddEditSendAction.CloseClick) },
     )
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -88,13 +90,22 @@ fun AddEditSendScreen(
             }
 
             is AddEditSendEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
+
+            is AddEditSendEvent.NavigateToGeneratorModal -> {
+                onNavigateToGeneratorModal(event.generatorMode)
+            }
+
+            is AddEditSendEvent.NavigateToPremium -> {
+                intentManager.launchUri(uri = event.uri.toUri())
+            }
         }
     }
 
     AddEditSendDialogs(
         dialogState = state.dialogState,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(AddEditSendAction.DismissDialogClick) }
+        onDismissRequest = { viewModel.trySendAction(AddEditSendAction.DismissDialogClick) },
+        onUpgradeToPremiumClick = {
+            viewModel.trySendAction(AddEditSendAction.UpgradeToPremiumClick)
         },
     )
     BitwardenScaffold(
@@ -106,9 +117,9 @@ fun AddEditSendScreen(
                 title = state.screenDisplayName(),
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                    navigationIconContentDescription = stringResource(id = R.string.close),
-                    onNavigationIconClick = remember(viewModel) {
-                        { viewModel.trySendAction(AddEditSendAction.CloseClick) }
+                    navigationIconContentDescription = stringResource(id = BitwardenString.close),
+                    onNavigationIconClick = {
+                        viewModel.trySendAction(AddEditSendAction.CloseClick)
                     },
                 )
                     .takeUnless { state.isShared },
@@ -116,49 +127,38 @@ fun AddEditSendScreen(
                 scrollBehavior = scrollBehavior,
                 actions = {
                     BitwardenTextButton(
-                        label = stringResource(id = R.string.save),
+                        label = stringResource(id = BitwardenString.save),
                         isEnabled = !state.policyDisablesSend,
-                        onClick = remember(viewModel) {
-                            { viewModel.trySendAction(AddEditSendAction.SaveClick) }
-                        },
+                        onClick = { viewModel.trySendAction(AddEditSendAction.SaveClick) },
                         modifier = Modifier.testTag("SaveButton"),
                     )
-                    if (!state.isAddMode) {
-                        BitwardenOverflowActionItem(
-                            contentDescription = stringResource(R.string.more),
-                            menuItemDataList = persistentListOfNotNull(
-                                OverflowMenuItemData(
-                                    text = stringResource(id = R.string.remove_password),
-                                    onClick = remember(viewModel) {
-                                        {
-                                            viewModel.trySendAction(
-                                                AddEditSendAction.RemovePasswordClick,
-                                            )
-                                        }
-                                    },
-                                )
-                                    .takeIf { state.hasPassword && !state.policyDisablesSend },
-                                OverflowMenuItemData(
-                                    text = stringResource(id = R.string.copy_link),
-                                    onClick = remember(viewModel) {
-                                        { viewModel.trySendAction(AddEditSendAction.CopyLinkClick) }
-                                    },
-                                )
-                                    .takeIf { !state.policyDisablesSend },
-                                OverflowMenuItemData(
-                                    text = stringResource(id = R.string.share_link),
-                                    onClick = remember(viewModel) {
-                                        {
-                                            viewModel.trySendAction(
-                                                AddEditSendAction.ShareLinkClick,
-                                            )
-                                        }
-                                    },
-                                )
-                                    .takeIf { !state.policyDisablesSend },
-                            ),
-                        )
-                    }
+                    BitwardenOverflowActionItem(
+                        isVisible = !state.isAddMode,
+                        menuItemDataList = persistentListOfNotNull(
+                            OverflowMenuItemData(
+                                text = stringResource(id = BitwardenString.remove_password),
+                                onClick = {
+                                    viewModel.trySendAction(AddEditSendAction.RemovePasswordClick)
+                                },
+                            )
+                                .takeIf { state.hasPassword && !state.policyDisablesSend },
+                            OverflowMenuItemData(
+                                text = stringResource(id = BitwardenString.copy_link),
+                                onClick = {
+                                    viewModel.trySendAction(AddEditSendAction.CopyLinkClick)
+                                },
+                            )
+                                .takeIf { !state.policyDisablesSend },
+                            OverflowMenuItemData(
+                                text = stringResource(id = BitwardenString.share_link),
+                                isExternalLink = true,
+                                onClick = {
+                                    viewModel.trySendAction(AddEditSendAction.ShareLinkClick)
+                                },
+                            )
+                                .takeIf { !state.policyDisablesSend },
+                        ),
+                    )
                 },
             )
         },
@@ -195,8 +195,23 @@ fun AddEditSendScreen(
 private fun AddEditSendDialogs(
     dialogState: AddEditSendState.DialogState?,
     onDismissRequest: () -> Unit,
+    onUpgradeToPremiumClick: () -> Unit,
 ) {
     when (dialogState) {
+        is AddEditSendState.DialogState.EmailAuthRequiresPremium -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = BitwardenString.premium_subscription_required),
+                message = stringResource(
+                    id = BitwardenString.sharing_with_specific_people_is_a_premium_feature,
+                ),
+                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
+                onConfirmClick = onUpgradeToPremiumClick,
+                onDismissClick = onDismissRequest,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
         is AddEditSendState.DialogState.Error -> BitwardenBasicDialog(
             title = dialogState.title?.invoke(),
             message = dialogState.message(),

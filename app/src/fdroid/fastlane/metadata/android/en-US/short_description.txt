@@ -1,0 +1,1 @@
+Bitwarden is a login and password manager that helps keep you safe while online.

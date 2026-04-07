@@ -3,6 +3,7 @@
   "extends": [
     "github>bitwarden/renovate-config"
   ],
+  "ignoreDeps": ["com.bitwarden:sdk-android"],
   "enabledManagers": [
     "github-actions",
     "gradle",
@@ -17,16 +18,6 @@
       "matchUpdateTypes": [
         "minor",
         "patch"
-      ]
-    },
-    {
-      "groupName": "gradle minor",
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "matchManagers": [
-        "gradle"
       ]
     },
     {

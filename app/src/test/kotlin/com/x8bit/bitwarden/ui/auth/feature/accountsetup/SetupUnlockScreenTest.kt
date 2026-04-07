@@ -257,7 +257,7 @@ class SetupUnlockScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onAllNodesWithText(
                 text = "Your PIN must be at least 4 characters. Your PIN settings will be reset " +
-                    "if you ever fully log out of the application.",
+                    "if you manually log out of the Bitwarden app.",
             )
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()

@@ -102,7 +102,7 @@ class TemporalAccessorExtensionsTest {
 
         // US locale
         assertEquals(
-            "3:30 PM",
+            "3:30\u202FPM",
             instant.toFormattedTimeStyle(
                 timeStyle = FormatStyle.SHORT,
                 locale = Locale.US,
@@ -110,7 +110,7 @@ class TemporalAccessorExtensionsTest {
             ),
         )
         assertEquals(
-            "3:30:00 PM",
+            "3:30:00\u202FPM",
             instant.toFormattedTimeStyle(
                 timeStyle = FormatStyle.MEDIUM,
                 locale = Locale.US,
@@ -118,7 +118,7 @@ class TemporalAccessorExtensionsTest {
             ),
         )
         assertEquals(
-            "3:30:00 PM Z",
+            "3:30:00\u202FPM Z",
             instant.toFormattedTimeStyle(
                 timeStyle = FormatStyle.LONG,
                 locale = Locale.US,
@@ -126,7 +126,7 @@ class TemporalAccessorExtensionsTest {
             ),
         )
         assertEquals(
-            "3:30:00 PM Z",
+            "3:30:00\u202FPM Z",
             instant.toFormattedTimeStyle(
                 timeStyle = FormatStyle.FULL,
                 locale = Locale.US,
@@ -175,7 +175,7 @@ class TemporalAccessorExtensionsTest {
 
         // US locale
         assertEquals(
-            "12/10/23, 3:30 PM",
+            "12/10/23, 3:30\u202FPM",
             instant.toFormattedDateTimeStyle(
                 dateStyle = FormatStyle.SHORT,
                 timeStyle = FormatStyle.SHORT,
@@ -184,7 +184,7 @@ class TemporalAccessorExtensionsTest {
             ),
         )
         assertEquals(
-            "Dec 10, 2023, 3:30:00 PM",
+            "Dec 10, 2023, 3:30:00\u202FPM",
             instant.toFormattedDateTimeStyle(
                 dateStyle = FormatStyle.MEDIUM,
                 timeStyle = FormatStyle.MEDIUM,
@@ -193,7 +193,7 @@ class TemporalAccessorExtensionsTest {
             ),
         )
         assertEquals(
-            "December 10, 2023 at 3:30:00 PM Z",
+            "December 10, 2023, 3:30:00\u202FPM Z",
             instant.toFormattedDateTimeStyle(
                 dateStyle = FormatStyle.LONG,
                 timeStyle = FormatStyle.LONG,
@@ -202,7 +202,7 @@ class TemporalAccessorExtensionsTest {
             ),
         )
         assertEquals(
-            "Sunday, December 10, 2023 at 3:30:00 PM Z",
+            "Sunday, December 10, 2023, 3:30:00\u202FPM Z",
             instant.toFormattedDateTimeStyle(
                 dateStyle = FormatStyle.FULL,
                 timeStyle = FormatStyle.FULL,
@@ -231,7 +231,7 @@ class TemporalAccessorExtensionsTest {
             ),
         )
         assertEquals(
-            "10 December 2023 at 15:30:00 Z",
+            "10 December 2023, 15:30:00 Z",
             instant.toFormattedDateTimeStyle(
                 dateStyle = FormatStyle.LONG,
                 timeStyle = FormatStyle.LONG,
@@ -240,7 +240,7 @@ class TemporalAccessorExtensionsTest {
             ),
         )
         assertEquals(
-            "Sunday, 10 December 2023 at 15:30:00 Z",
+            "Sunday, 10 December 2023, 15:30:00 Z",
             instant.toFormattedDateTimeStyle(
                 dateStyle = FormatStyle.FULL,
                 timeStyle = FormatStyle.FULL,

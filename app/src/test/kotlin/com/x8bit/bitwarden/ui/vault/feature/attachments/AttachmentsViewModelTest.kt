@@ -3,23 +3,26 @@ package com.x8bit.bitwarden.ui.vault.feature.attachments
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.model.FileData
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.attachments.util.toViewState
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -27,22 +30,36 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+@Suppress("LargeClass")
 class AttachmentsViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
     }
+    private val environmentRepository: EnvironmentRepository = mockk {
+        every { environment } returns Environment.Us
+    }
     private val mutableVaultItemStateFlow =
         MutableStateFlow<DataState<CipherView?>>(DataState.Loading)
     private val vaultRepository: VaultRepository = mockk {
         every { getVaultItemStateFlow(any()) } returns mutableVaultItemStateFlow
+    }
+    private val mutableAttachmentUpdatesFlow = MutableStateFlow(true)
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every {
+            getFeatureFlag(FlagKey.AttachmentUpdates)
+        } answers { mutableAttachmentUpdatesFlow.value }
+        every { getFeatureFlagFlow(FlagKey.AttachmentUpdates) } returns mutableAttachmentUpdatesFlow
     }
 
     @BeforeEach
@@ -86,34 +103,121 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `SaveClick should display error dialog when user is not premium`() = runTest {
-        val cipherView = createMockCipherView(number = 1)
-        val state = DEFAULT_STATE.copy(
-            viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS,
-            dialogState = AttachmentsState.DialogState.Error(
-                title = null,
-                message = R.string.premium_required.asText(),
-                throwable = null,
-            ),
-            isPremiumUser = false,
-        )
-        mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
-        mutableUserStateFlow.value = null
+    fun `ItemClick should display RequiresPremium dialog when user is not Premium`() = runTest {
+        mutableUserStateFlow.update {
+            DEFAULT_USER_STATE.copy(
+                accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = false)),
+            )
+        }
         val viewModel = createViewModel()
-        viewModel.stateFlow.test {
-            assertEquals(state, awaitItem())
-            viewModel.trySendAction(AttachmentsAction.SaveClick)
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                AttachmentsAction.ItemClick(attachment = DEFAULT_ATTACHMENT_ITEM),
+            )
+            expectNoEvents()
+        }
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = AttachmentsState.DialogState.RequiresPremium,
+                isPremiumUser = false,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `ItemClick should emit NavigateToPreview when user is Premium`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                AttachmentsAction.ItemClick(attachment = DEFAULT_ATTACHMENT_ITEM),
+            )
             assertEquals(
-                state.copy(
-                    dialogState = AttachmentsState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.premium_required.asText(),
-                        throwable = null,
-                    ),
+                AttachmentsEvent.NavigateToPreview(
+                    cipherId = DEFAULT_STATE.cipherId,
+                    attachmentId = DEFAULT_ATTACHMENT_ITEM.id,
+                    fileName = DEFAULT_ATTACHMENT_ITEM.title,
+                    displaySize = DEFAULT_ATTACHMENT_ITEM.displaySize,
+                    isLargeFile = false,
                 ),
                 awaitItem(),
             )
         }
+    }
+
+    @Test
+    fun `UpgradeToPremiumClick should emit NavigateToUri`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AttachmentsAction.UpgradeToPremiumClick)
+            assertEquals(
+                AttachmentsEvent.NavigateToUri(
+                    uri = "https://vault.bitwarden.com/#/settings/subscription" +
+                        "/premium?callToAction=upgradeToPremium",
+                ),
+                awaitItem(),
+            )
+        }
+        verify(exactly = 1) {
+            environmentRepository.environment
+        }
+    }
+
+    @Test
+    fun `FileNameChange should update the newAttachment state`() = runTest {
+        val cipherView = createMockCipherView(number = 1)
+        mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
+        mutableUserStateFlow.value = DEFAULT_USER_STATE
+        val uri = mockk<Uri>()
+        val newAttachment = AttachmentsState.NewAttachment(
+            uri = uri,
+            extension = "png",
+            displayName = "cool_file",
+            sizeBytes = 100L,
+        )
+        val initialState = DEFAULT_STATE.copy(viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS)
+
+        val fileData = FileData(
+            fileName = "cool_file.png",
+            uri = uri,
+            sizeBytes = 100L,
+        )
+        mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
+        mutableUserStateFlow.value = DEFAULT_USER_STATE
+
+        val viewModel = createViewModel()
+        // Need to populate the VM with a file
+        viewModel.trySendAction(AttachmentsAction.FileChoose(fileData))
+
+        // Then alter the name
+        viewModel.trySendAction(AttachmentsAction.FileNameChange(fileName = "cool_file5"))
+
+        assertEquals(
+            initialState.copy(
+                viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS.copy(
+                    newAttachment = newAttachment.copy(displayName = "cool_file5"),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `SaveClick should display error dialog when user is not Premium`() = runTest {
+        val cipherView = createMockCipherView(number = 1)
+        mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
+        mutableUserStateFlow.value = null
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(AttachmentsAction.SaveClick)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS,
+                dialogState = AttachmentsState.DialogState.RequiresPremium,
+                isPremiumUser = false,
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -132,8 +236,9 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             assertEquals(
                 state.copy(
                     dialogState = AttachmentsState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.validation_field_required.asText(R.string.file.asText()),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.validation_field_required
+                            .asText(BitwardenString.file.asText()),
                         throwable = null,
                     ),
                 ),
@@ -151,14 +256,15 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         val state = DEFAULT_STATE.copy(
             viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS.copy(
                 newAttachment = AttachmentsState.NewAttachment(
-                    displayName = fileName,
+                    extension = "png",
+                    displayName = "test",
                     uri = uri,
                     sizeBytes = sizeToBig,
                 ),
             ),
             isPremiumUser = true,
         )
-        val fileData = IntentManager.FileData(
+        val fileData = FileData(
             fileName = fileName,
             uri = uri,
             sizeBytes = sizeToBig,
@@ -176,8 +282,8 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             assertEquals(
                 state.copy(
                     dialogState = AttachmentsState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.max_file_size.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.max_file_size.asText(),
                         throwable = null,
                     ),
                 ),
@@ -196,14 +302,15 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             val state = DEFAULT_STATE.copy(
                 viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS.copy(
                     newAttachment = AttachmentsState.NewAttachment(
-                        displayName = fileName,
+                        extension = "png",
+                        displayName = "test",
                         uri = uri,
                         sizeBytes = sizeJustRight,
                     ),
                 ),
                 isPremiumUser = true,
             )
-            val fileData = IntentManager.FileData(
+            val fileData = FileData(
                 fileName = fileName,
                 uri = uri,
                 sizeBytes = sizeJustRight,
@@ -234,7 +341,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     state.copy(
                         dialogState = AttachmentsState.DialogState.Loading(
-                            message = R.string.saving.asText(),
+                            message = BitwardenString.saving.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -242,7 +349,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     state.copy(
                         dialogState = AttachmentsState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = error.message!!.asText(),
                             throwable = error,
                         ),
@@ -271,14 +378,15 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             val state = DEFAULT_STATE.copy(
                 viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS.copy(
                     newAttachment = AttachmentsState.NewAttachment(
-                        displayName = fileName,
+                        extension = "png",
+                        displayName = "test",
                         uri = uri,
                         sizeBytes = sizeJustRight,
                     ),
                 ),
                 isPremiumUser = true,
             )
-            val fileData = IntentManager.FileData(
+            val fileData = FileData(
                 fileName = fileName,
                 uri = uri,
                 sizeBytes = sizeJustRight,
@@ -306,7 +414,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     state.copy(
                         dialogState = AttachmentsState.DialogState.Loading(
-                            message = R.string.saving.asText(),
+                            message = BitwardenString.saving.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -314,8 +422,8 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     state.copy(
                         dialogState = AttachmentsState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             throwable = error,
                         ),
                     ),
@@ -342,14 +450,15 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         val state = DEFAULT_STATE.copy(
             viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS.copy(
                 newAttachment = AttachmentsState.NewAttachment(
-                    displayName = fileName,
+                    extension = "png",
+                    displayName = "test",
                     uri = uri,
                     sizeBytes = sizeJustRight,
                 ),
             ),
             isPremiumUser = true,
         )
-        val fileData = IntentManager.FileData(
+        val fileData = FileData(
             fileName = fileName,
             uri = uri,
             sizeBytes = sizeJustRight,
@@ -373,7 +482,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(AttachmentsAction.SaveClick)
             assertEquals(
-                AttachmentsEvent.ShowSnackbar(R.string.save_attachment_success.asText()),
+                AttachmentsEvent.ShowSnackbar(BitwardenString.save_attachment_success.asText()),
                 awaitItem(),
             )
         }
@@ -402,7 +511,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ChooseFileClick should emit ShowToast`() = runTest {
+    fun `ChooseFileClick should emit ShowChooserSheet`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(AttachmentsAction.ChooseFileClick)
@@ -413,8 +522,8 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     @Test
     fun `ChooseFile should update state with new file data`() = runTest {
         val uri = createMockUri()
-        val fileData = IntentManager.FileData(
-            fileName = "filename-1",
+        val fileData = FileData(
+            fileName = "filename-1.png",
             uri = uri,
             sizeBytes = 100L,
         )
@@ -428,6 +537,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             initialState.copy(
                 viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS.copy(
                     newAttachment = AttachmentsState.NewAttachment(
+                        extension = "png",
                         displayName = "filename-1",
                         uri = uri,
                         sizeBytes = 100L,
@@ -461,7 +571,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = AttachmentsState.DialogState.Loading(
-                        message = R.string.deleting.asText(),
+                        message = BitwardenString.deleting.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -469,8 +579,8 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = AttachmentsState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                         throwable = error,
                     ),
                 ),
@@ -478,6 +588,55 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `DeleteClick with deleteCipherAttachment error with errorMessage should display that message`() =
+        runTest {
+            val cipherId = "mockId-1"
+            val attachmentId = "mockId-1"
+            val cipherView = createMockCipherView(number = 1)
+            val initialState = DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS,
+            )
+            val errorMessage = "You do not have permission to edit this."
+            val error = Throwable("Fail")
+            coEvery {
+                vaultRepository.deleteCipherAttachment(
+                    cipherId = cipherId,
+                    attachmentId = attachmentId,
+                    cipherView = cipherView,
+                )
+            } returns DeleteAttachmentResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+            mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
+
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(initialState, awaitItem())
+                viewModel.trySendAction(AttachmentsAction.DeleteClick(attachmentId))
+                assertEquals(
+                    initialState.copy(
+                        dialogState = AttachmentsState.DialogState.Loading(
+                            message = BitwardenString.deleting.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    initialState.copy(
+                        dialogState = AttachmentsState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = errorMessage.asText(),
+                            throwable = error,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `DeleteClick with deleteCipherAttachment success should emit ShowSnackbar`() = runTest {
@@ -497,7 +656,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(AttachmentsAction.DeleteClick(cipherId))
             assertEquals(
-                AttachmentsEvent.ShowSnackbar(R.string.attachment_deleted.asText()),
+                AttachmentsEvent.ShowSnackbar(BitwardenString.attachment_deleted.asText()),
                 awaitItem(),
             )
         }
@@ -512,7 +671,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = AttachmentsState.ViewState.Error(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -542,7 +701,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = AttachmentsState.ViewState.Error(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -570,11 +729,11 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = AttachmentsState.ViewState.Error(
-                    message = R.string.internet_connection_required_title
+                    message = BitwardenString.internet_connection_required_title
                         .asText()
                         .concat(
                             " ".asText(),
-                            R.string.internet_connection_required_message.asText(),
+                            BitwardenString.internet_connection_required_message.asText(),
                         ),
                 ),
             ),
@@ -605,7 +764,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = AttachmentsState.ViewState.Error(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -623,11 +782,28 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `AttachmentUpdatesFlow should update isAttachmentUpdatesEnabled state`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+
+            mutableAttachmentUpdatesFlow.update { false }
+            assertEquals(DEFAULT_STATE.copy(isAttachmentUpdatesEnabled = false), awaitItem())
+
+            mutableAttachmentUpdatesFlow.update { true }
+            assertEquals(DEFAULT_STATE, awaitItem())
+        }
+    }
+
     private fun createViewModel(
         initialState: AttachmentsState? = null,
     ): AttachmentsViewModel = AttachmentsViewModel(
         authRepo = authRepository,
+        environmentRepo = environmentRepository,
         vaultRepo = vaultRepository,
+        featureFlagManager = featureFlagManager,
         savedStateHandle = SavedStateHandle().apply {
             set("state", initialState)
             every {
@@ -637,29 +813,30 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     )
 }
 
+private val DEFAULT_ACCOUNT = UserState.Account(
+    userId = "mockUserId-1",
+    name = "Active User",
+    email = "active@bitwarden.com",
+    environment = Environment.Us,
+    avatarColorHex = "#aa00aa",
+    isPremium = true,
+    isLoggedIn = true,
+    isVaultUnlocked = true,
+    needsPasswordReset = false,
+    isBiometricsEnabled = false,
+    organizations = emptyList(),
+    needsMasterPassword = false,
+    trustedDevice = null,
+    hasMasterPassword = true,
+    isUsingKeyConnector = false,
+    onboardingStatus = OnboardingStatus.COMPLETE,
+    firstTimeState = FirstTimeState(showImportLoginsCard = true),
+    isExportable = true,
+    creationDate = null,
+)
 private val DEFAULT_USER_STATE = UserState(
     activeUserId = "mockUserId-1",
-    accounts = listOf(
-        UserState.Account(
-            userId = "mockUserId-1",
-            name = "Active User",
-            email = "active@bitwarden.com",
-            environment = Environment.Us,
-            avatarColorHex = "#aa00aa",
-            isPremium = true,
-            isLoggedIn = true,
-            isVaultUnlocked = true,
-            needsPasswordReset = false,
-            isBiometricsEnabled = false,
-            organizations = emptyList(),
-            needsMasterPassword = false,
-            trustedDevice = null,
-            hasMasterPassword = true,
-            isUsingKeyConnector = false,
-            onboardingStatus = OnboardingStatus.COMPLETE,
-            firstTimeState = FirstTimeState(showImportLoginsCard = true),
-        ),
-    ),
+    accounts = listOf(DEFAULT_ACCOUNT),
 )
 
 private val DEFAULT_STATE: AttachmentsState = AttachmentsState(
@@ -667,18 +844,21 @@ private val DEFAULT_STATE: AttachmentsState = AttachmentsState(
     viewState = AttachmentsState.ViewState.Loading,
     dialogState = null,
     isPremiumUser = true,
+    isAttachmentUpdatesEnabled = true,
 )
+
+private val DEFAULT_ATTACHMENT_ITEM: AttachmentsState.AttachmentItem =
+    AttachmentsState.AttachmentItem(
+        id = "mockId-1",
+        title = "mockFileName-1",
+        displaySize = "mockSizeName-1",
+        isLargeFile = false,
+    )
 
 private val DEFAULT_CONTENT_WITH_ATTACHMENTS: AttachmentsState.ViewState.Content =
     AttachmentsState.ViewState.Content(
         originalCipher = createMockCipherView(number = 1),
-        attachments = listOf(
-            AttachmentsState.AttachmentItem(
-                id = "mockId-1",
-                title = "mockFileName-1",
-                displaySize = "mockSizeName-1",
-            ),
-        ),
+        attachments = persistentListOf(DEFAULT_ATTACHMENT_ITEM),
         newAttachment = null,
     )
 

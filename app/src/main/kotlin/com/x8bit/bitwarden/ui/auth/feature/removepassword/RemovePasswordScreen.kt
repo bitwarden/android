@@ -14,28 +14,27 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 
 /**
  * The top level composable for the Remove Password screen.
@@ -48,13 +47,9 @@ fun RemovePasswordScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     RemovePasswordDialogs(
         dialogState = state.dialogState,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(RemovePasswordAction.DialogDismiss) }
-        },
-        onConfirmLeaveClick = remember(viewModel) {
-            {
-                viewModel.trySendAction(RemovePasswordAction.ConfirmLeaveOrganizationClick)
-            }
+        onDismissRequest = { viewModel.trySendAction(RemovePasswordAction.DialogDismiss) },
+        onConfirmLeaveClick = {
+            viewModel.trySendAction(RemovePasswordAction.ConfirmLeaveOrganizationClick)
         },
     )
 
@@ -65,7 +60,7 @@ fun RemovePasswordScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.remove_master_password),
+                title = stringResource(id = BitwardenString.remove_master_password),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = null,
             )
@@ -73,14 +68,10 @@ fun RemovePasswordScreen(
     ) {
         RemovePasswordScreenContent(
             state = state,
-            onContinueClick = remember(viewModel) {
-                { viewModel.trySendAction(RemovePasswordAction.ContinueClick) }
-            },
-            onInputChanged = remember(viewModel) {
-                { viewModel.trySendAction(RemovePasswordAction.InputChanged(it)) }
-            },
-            onLeaveOrganizationClick = remember(viewModel) {
-                { viewModel.trySendAction(RemovePasswordAction.LeaveOrganizationClick) }
+            onContinueClick = { viewModel.trySendAction(RemovePasswordAction.ContinueClick) },
+            onInputChanged = { viewModel.trySendAction(RemovePasswordAction.InputChanged(it)) },
+            onLeaveOrganizationClick = {
+                viewModel.trySendAction(RemovePasswordAction.LeaveOrganizationClick)
             },
             modifier = Modifier.fillMaxSize(),
         )
@@ -149,7 +140,7 @@ private fun RemovePasswordScreenContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         BitwardenPasswordField(
-            label = stringResource(id = R.string.master_password),
+            label = stringResource(id = BitwardenString.master_password),
             value = state.input,
             onValueChange = onInputChanged,
             showPasswordTestTag = "PasswordVisibilityToggle",
@@ -163,7 +154,7 @@ private fun RemovePasswordScreenContent(
         Spacer(modifier = Modifier.height(24.dp))
 
         BitwardenFilledButton(
-            label = stringResource(id = R.string.continue_text),
+            label = stringResource(id = BitwardenString.continue_text),
             onClick = onContinueClick,
             isEnabled = state.input.isNotEmpty(),
             modifier = Modifier
@@ -175,7 +166,7 @@ private fun RemovePasswordScreenContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         BitwardenOutlinedButton(
-            label = stringResource(id = R.string.leave_organization),
+            label = stringResource(id = BitwardenString.leave_organization),
             onClick = onLeaveOrganizationClick,
             modifier = Modifier
                 .testTag("LeaveOrganizationButton")
@@ -209,10 +200,10 @@ private fun RemovePasswordDialogs(
 
         is RemovePasswordState.DialogState.LeaveConfirmationPrompt -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(id = R.string.leave_organization),
+                title = stringResource(id = BitwardenString.leave_organization),
                 message = dialogState.message.invoke(),
-                confirmButtonText = stringResource(id = R.string.confirm),
-                dismissButtonText = stringResource(id = R.string.cancel),
+                confirmButtonText = stringResource(id = BitwardenString.confirm),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
                 onConfirmClick = onConfirmLeaveClick,
                 onDismissClick = onDismissRequest,
                 onDismissRequest = onDismissRequest,

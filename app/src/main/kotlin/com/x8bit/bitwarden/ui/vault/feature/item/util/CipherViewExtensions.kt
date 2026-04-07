@@ -7,6 +7,7 @@ import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.bitwarden.ui.platform.base.util.orZeroWidthSpace
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CardView
@@ -17,8 +18,8 @@ import com.bitwarden.vault.FieldType
 import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.IdentityView
 import com.bitwarden.vault.LoginUriView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
+import com.x8bit.bitwarden.ui.vault.feature.attachments.util.isLargeFile
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
@@ -27,6 +28,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import java.time.Clock
 import java.time.format.FormatStyle
 import java.util.Locale
@@ -47,27 +49,31 @@ fun CipherView.toViewState(
     baseIconUrl: String,
     isIconLoadingDisabled: Boolean,
     relatedLocations: ImmutableList<VaultItemLocation>,
+    hasOrganizations: Boolean,
 ): VaultItemState.ViewState =
     VaultItemState.ViewState.Content(
         common = VaultItemState.ViewState.Content.Common(
             currentCipher = this,
             name = name,
-            customFields = fields.orEmpty().map { fieldView ->
-                fieldView.toCustomField(
-                    previousState = previousState
-                        ?.common
-                        ?.customFields
-                        ?.find { it.id == fieldView.hashCode().toString() },
-                )
-            },
-            created = R.string.created.asText(
+            customFields = fields
+                .orEmpty()
+                .map { fieldView ->
+                    fieldView.toCustomField(
+                        previousState = previousState
+                            ?.common
+                            ?.customFields
+                            ?.find { it.id == fieldView.hashCode().toString() },
+                    )
+                }
+                .toImmutableList(),
+            created = BitwardenString.created.asText(
                 creationDate.toFormattedDateTimeStyle(
                     dateStyle = FormatStyle.MEDIUM,
                     timeStyle = FormatStyle.SHORT,
                     clock = clock,
                 ),
             ),
-            lastUpdated = R.string.last_edited.asText(
+            lastUpdated = BitwardenString.last_edited.asText(
                 revisionDate.toFormattedDateTimeStyle(
                     dateStyle = FormatStyle.MEDIUM,
                     timeStyle = FormatStyle.SHORT,
@@ -92,27 +98,26 @@ fun CipherView.toViewState(
                             title = requireNotNull(it.fileName),
                             displaySize = requireNotNull(it.sizeName),
                             url = requireNotNull(it.url),
-                            isLargeFile = try {
-                                requireNotNull(it.size).toLong() >= 10485760
-                            } catch (_: NumberFormatException) {
-                                false
-                            },
+                            isLargeFile = it.isLargeFile(),
                             isDownloadAllowed = isPremiumUser || this.organizationId != null,
                         )
                     }
                 }
-                .orEmpty(),
+                .orEmpty()
+                .toImmutableList(),
             canDelete = canDelete,
             canRestore = canRestore,
             canAssignToCollections = canAssignToCollections,
             canEdit = canEdit,
             favorite = this.favorite,
+            archived = this.archivedDate != null,
             passwordHistoryCount = passwordHistory?.count(),
             iconData = this.toIconData(
                 baseIconUrl = baseIconUrl,
                 isIconLoadingDisabled = isIconLoadingDisabled,
             ),
             relatedLocations = relatedLocations,
+            hasOrganizations = hasOrganizations,
         ),
         type = when (type) {
             CipherType.LOGIN -> {
@@ -137,7 +142,7 @@ fun CipherView.toViewState(
                             timeStyle = FormatStyle.SHORT,
                             clock = clock,
                         )
-                        ?.let { R.string.password_last_updated.asText(it) },
+                        ?.let { BitwardenString.password_updated.asText(it) },
                     isPremiumUser = isPremiumUser,
                     canViewTotpCode = isPremiumUser || this.organizationUseTotp,
                     totpCodeItemData = totpCodeItemData,
@@ -255,8 +260,8 @@ private fun LoginUriView.toUriData() =
         isLaunchable = !uri.isNullOrBlank(),
     )
 
-private fun Fido2Credential.getCreationDateText(clock: Clock): Text? =
-    R.string.created_x.asText(
+private fun Fido2Credential.getCreationDateText(clock: Clock): Text =
+    BitwardenString.created_x.asText(
         this.creationDate.toFormattedDateTimeStyle(
             dateStyle = FormatStyle.MEDIUM,
             timeStyle = FormatStyle.SHORT,

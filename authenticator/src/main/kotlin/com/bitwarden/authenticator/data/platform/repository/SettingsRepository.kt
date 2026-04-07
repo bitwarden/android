@@ -1,8 +1,9 @@
 package com.bitwarden.authenticator.data.platform.repository
 
-import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyResult
+import com.bitwarden.authenticator.data.platform.manager.lock.model.AppTimeout
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
+import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,7 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 /**
  * Provides an API for observing and modifying settings state.
  */
-interface SettingsRepository {
+interface SettingsRepository : FlightRecorderManager {
 
     /**
      * The [AppLanguage] for the current user.
@@ -38,14 +39,19 @@ interface SettingsRepository {
     var defaultSaveOption: DefaultSaveOption
 
     /**
+     * The current setting for enabling dynamic colors.
+     */
+    var isDynamicColorsEnabled: Boolean
+
+    /**
+     * Tracks changes to the [isDynamicColorsEnabled] value.
+     */
+    val isDynamicColorsEnabledFlow: StateFlow<Boolean>
+
+    /**
      * Flow that emits changes to [defaultSaveOption]
      */
     val defaultSaveOptionFlow: Flow<DefaultSaveOption>
-
-    /**
-     * Whether or not biometric unlocking is enabled for the current user.
-     */
-    val isUnlockWithBiometricsEnabled: Boolean
 
     /**
      * Tracks changes to the expiration alert threshold.
@@ -63,30 +69,19 @@ interface SettingsRepository {
     val hasSeenWelcomeTutorialFlow: StateFlow<Boolean>
 
     /**
-     * Sets whether or not screen capture is allowed for the current user.
+     * Sets whether screen capture is allowed for the current user.
      */
     var isScreenCaptureAllowed: Boolean
+
+    /**
+     * Whether screen capture is allowed for the current user.
+     */
+    val isScreenCaptureAllowedStateFlow: StateFlow<Boolean>
 
     /**
      * A set of Bitwarden account IDs that have previously been synced.
      */
     var previouslySyncedBitwardenAccountIds: Set<String>
-
-    /**
-     * Whether or not screen capture is allowed for the current user.
-     */
-    val isScreenCaptureAllowedStateFlow: StateFlow<Boolean>
-
-    /**
-     * Clears any previously stored encrypted user key used with biometrics for the current user.
-     */
-    fun clearBiometricsKey()
-
-    /**
-     * Stores the encrypted user key for biometrics, allowing it to be used to unlock the current
-     * user's vault.
-     */
-    suspend fun setupBiometricsKey(): BiometricsKeyResult
 
     /**
      * The current setting for crash logging.
@@ -99,12 +94,22 @@ interface SettingsRepository {
     val isCrashLoggingEnabledFlow: Flow<Boolean>
 
     /**
-     * Whether or not the user has previously dismissed the download Bitwarden action card.
+     * Whether the user has previously dismissed the download Bitwarden action card.
      */
     var hasUserDismissedDownloadBitwardenCard: Boolean
 
     /**
-     * Whether or not the user has previously dismissed the sync with Bitwarden action card.
+     * Whether the user has previously dismissed the sync with Bitwarden action card.
      */
     var hasUserDismissedSyncWithBitwardenCard: Boolean
+
+    /**
+     * Gets or sets the [AppTimeout].
+     */
+    var appTimeoutState: AppTimeout
+
+    /**
+     * Gets updates for the [AppTimeout].
+     */
+    val appTimeoutStateFlow: StateFlow<AppTimeout>
 }

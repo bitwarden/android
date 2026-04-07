@@ -2,27 +2,38 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pending
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.time.temporal.ChronoUnit
+import java.time.temporal.TemporalAccessor
 
 class PendingRequestsViewModelTest : BaseViewModelTest() {
 
@@ -40,6 +51,25 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
     private val settingsRepository = mockk<SettingsRepository> {
         every { getPullToRefreshEnabledFlow() } returns mutablePullToRefreshStateFlow
     }
+    private val mutableSnackbarDataFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
+    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
+        every {
+            getSnackbarDataFlow(relay = any(), relays = anyVararg())
+        } returns mutableSnackbarDataFlow
+    }
+    private val buildInfoManager = mockk<BuildInfoManager> {
+        every { isFdroid } returns false
+    }
+
+    @BeforeEach
+    fun setUp() {
+        mockkStatic(TemporalAccessor::toFormattedDateTimeStyle)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(TemporalAccessor::toFormattedDateTimeStyle)
+    }
 
     @Test
     fun `init should call getAuthRequestsWithUpdates`() {
@@ -52,13 +82,27 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `when SnackbarRelay flow updates, snackbar is shown`() = runTest {
+        val viewModel = createViewModel()
+        val expectedSnackbarData = BitwardenSnackbarData(message = "test message".asText())
+        viewModel.eventFlow.test {
+            mutableSnackbarDataFlow.tryEmit(expectedSnackbarData)
+            assertEquals(PendingRequestsEvent.ShowSnackbar(expectedSnackbarData), awaitItem())
+        }
+    }
+
     @Suppress("LongMethod")
     @Test
     fun `getPendingResults success with content should update state with some requests filtered`() {
-        val dateTimeFormatter = DateTimeFormatter
-            .ofPattern("M/d/yy, hh:mm a")
-            .withZone(fixedClock.zone)
-        val nowZonedDateTime = ZonedDateTime.now(fixedClock)
+        val nowInstant = fixedClock.instant()
+        every {
+            nowInstant.toFormattedDateTimeStyle(
+                dateStyle = FormatStyle.SHORT,
+                timeStyle = FormatStyle.SHORT,
+                clock = fixedClock,
+            )
+        } returns "10/27/23, 12:00 PM"
         val requestList = listOf(
             AuthRequest(
                 id = "1",
@@ -67,7 +111,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
                 ipAddress = "192.168.0.1",
                 key = "publicKey",
                 masterPasswordHash = "verySecureHash",
-                creationDate = nowZonedDateTime,
+                creationDate = nowInstant,
                 responseDate = null,
                 requestApproved = false,
                 originUrl = "www.bitwarden.com",
@@ -80,7 +124,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
                 ipAddress = "192.168.0.1",
                 key = "publicKey",
                 masterPasswordHash = "verySecureHash",
-                creationDate = nowZonedDateTime,
+                creationDate = nowInstant,
                 responseDate = null,
                 requestApproved = true,
                 originUrl = "www.bitwarden.com",
@@ -93,7 +137,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
                 ipAddress = "192.168.0.2",
                 key = "publicKey",
                 masterPasswordHash = "verySecureHash",
-                creationDate = nowZonedDateTime.minusMinutes(10),
+                creationDate = nowInstant.minus(10, ChronoUnit.MINUTES),
                 responseDate = null,
                 requestApproved = false,
                 originUrl = "www.bitwarden.com",
@@ -106,8 +150,8 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
                 ipAddress = "192.168.0.1",
                 key = "publicKey",
                 masterPasswordHash = "verySecureHash",
-                creationDate = nowZonedDateTime,
-                responseDate = nowZonedDateTime,
+                creationDate = nowInstant,
+                responseDate = nowInstant,
                 requestApproved = false,
                 originUrl = "www.bitwarden.com",
                 fingerprint = "fingerprint",
@@ -120,7 +164,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
                     PendingRequestsState.ViewState.Content.PendingLoginRequest(
                         fingerprintPhrase = "pantry-overdue-survive-sleep-jab",
                         platform = "Android",
-                        timestamp = nowZonedDateTime.format(dateTimeFormatter),
+                        timestamp = "10/27/23, 12:00 PM",
                     ),
                 ),
             ),
@@ -171,7 +215,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
     fun `on HideBottomSheet should make hideBottomSheet true`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(PendingRequestsAction.HideBottomSheet)
-        assertEquals(DEFAULT_STATE.copy(hideBottomSheet = true), viewModel.stateFlow.value)
+        assertEquals(DEFAULT_STATE.copy(internalHideBottomSheet = true), viewModel.stateFlow.value)
     }
 
     @Test
@@ -219,7 +263,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
             ipAddress = "192.168.0.2",
             key = "publicKey",
             masterPasswordHash = "verySecureHash",
-            creationDate = ZonedDateTime.now().minusMinutes(5),
+            creationDate = fixedClock.instant().minus(5, ChronoUnit.MINUTES),
             responseDate = null,
             requestApproved = false,
             originUrl = "www.bitwarden.com",
@@ -232,7 +276,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
             ipAddress = "192.168.0.3",
             key = "publicKey",
             masterPasswordHash = "verySecureHash",
-            creationDate = ZonedDateTime.now(),
+            creationDate = fixedClock.instant(),
             responseDate = null,
             requestApproved = false,
             originUrl = "www.bitwarden.com",
@@ -247,7 +291,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
             )
         } returns AuthRequestResult.Success(
             authRequest1.copy(
-                responseDate = ZonedDateTime.now(),
+                responseDate = fixedClock.instant(),
             ),
         )
         coEvery {
@@ -259,7 +303,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
             )
         } returns AuthRequestResult.Success(
             authRequest2.copy(
-                responseDate = ZonedDateTime.now(),
+                responseDate = fixedClock.instant(),
             ),
         )
         val viewModel = createViewModel()
@@ -286,9 +330,23 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `on LifecycleResume should update state`() = runTest {
-        val nowZonedDateTime = ZonedDateTime.now(fixedClock)
-        val fiveMinZonedDateTime = ZonedDateTime.now(fixedClock).minusMinutes(5)
-        val sixMinZonedDateTime = ZonedDateTime.now(fixedClock).minusMinutes(6)
+        val nowInstant = fixedClock.instant()
+        val fiveMinInstant = fixedClock.instant().minus(5, ChronoUnit.MINUTES)
+        val sixMinInstant = fixedClock.instant().minus(6, ChronoUnit.MINUTES)
+        every {
+            nowInstant.toFormattedDateTimeStyle(
+                dateStyle = FormatStyle.SHORT,
+                timeStyle = FormatStyle.SHORT,
+                clock = fixedClock,
+            )
+        } returns "10/27/23, 12:00 PM"
+        every {
+            fiveMinInstant.toFormattedDateTimeStyle(
+                dateStyle = FormatStyle.SHORT,
+                timeStyle = FormatStyle.SHORT,
+                clock = fixedClock,
+            )
+        } returns "10/27/23, 11:55 AM"
         val requestList = listOf(
             AuthRequest(
                 id = "1",
@@ -297,7 +355,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
                 ipAddress = "192.168.0.1",
                 key = "publicKey",
                 masterPasswordHash = "verySecureHash",
-                creationDate = sixMinZonedDateTime,
+                creationDate = sixMinInstant,
                 responseDate = null,
                 requestApproved = true,
                 originUrl = "www.bitwarden.com",
@@ -310,7 +368,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
                 ipAddress = "192.168.0.2",
                 key = "publicKey",
                 masterPasswordHash = "verySecureHash",
-                creationDate = fiveMinZonedDateTime,
+                creationDate = fiveMinInstant,
                 responseDate = null,
                 requestApproved = false,
                 originUrl = "www.bitwarden.com",
@@ -323,7 +381,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
                 ipAddress = "192.168.0.3",
                 key = "publicKey",
                 masterPasswordHash = "verySecureHash",
-                creationDate = nowZonedDateTime,
+                creationDate = nowInstant,
                 responseDate = null,
                 requestApproved = false,
                 originUrl = "www.bitwarden.com",
@@ -373,6 +431,8 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         clock = fixedClock,
         authRepository = authRepository,
         settingsRepository = settingsRepository,
+        snackbarRelayManager = snackbarRelayManager,
+        buildInfoManager = buildInfoManager,
         savedStateHandle = SavedStateHandle().apply { set("state", state) },
     )
 }
@@ -382,5 +442,6 @@ private val DEFAULT_STATE: PendingRequestsState = PendingRequestsState(
     viewState = PendingRequestsState.ViewState.Empty,
     isPullToRefreshSettingEnabled = false,
     isRefreshing = false,
-    hideBottomSheet = false,
+    internalHideBottomSheet = false,
+    isFdroid = false,
 )

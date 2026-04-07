@@ -1,12 +1,16 @@
 package com.x8bit.bitwarden.ui.platform.feature.debugmenu
 
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
+import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
+import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
@@ -23,12 +27,15 @@ import javax.inject.Inject
 /**
  * ViewModel for the [DebugMenuScreen]
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class DebugMenuViewModel @Inject constructor(
     featureFlagManager: FeatureFlagManager,
     private val debugMenuRepository: DebugMenuRepository,
     private val authRepository: AuthRepository,
     private val logsManager: LogsManager,
+    private val cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
+    private val environmentRepository: EnvironmentRepository,
 ) : BaseViewModel<DebugMenuState, DebugMenuEvent, DebugMenuAction>(
     initialState = DebugMenuState(featureFlags = persistentMapOf()),
 ) {
@@ -37,7 +44,7 @@ class DebugMenuViewModel @Inject constructor(
 
     init {
         combine(
-            flows = FlagKey.activeFlags.map { flagKey ->
+            flows = FlagKey.activePasswordManagerFlags.map { flagKey ->
                 featureFlagManager.getFeatureFlagFlow(flagKey).map { flagKey to it }
             },
         ) { DebugMenuAction.Internal.UpdateFeatureFlagMap(it.toMap()) }
@@ -56,6 +63,9 @@ class DebugMenuViewModel @Inject constructor(
             DebugMenuAction.ResetCoachMarkTourStatuses -> handleResetCoachMarkTourStatuses()
             DebugMenuAction.GenerateCrashClick -> handleCrashClick()
             DebugMenuAction.GenerateErrorReportClick -> handleErrorReportClick()
+            DebugMenuAction.TriggerCookieAcquisition -> handleTriggerCookieAcquisition()
+            DebugMenuAction.ClearSsoCookies -> handleClearSsoCookies()
+            DebugMenuAction.ResetPremiumUpgradeBanner -> handleResetPremiumUpgradeBanner()
         }
     }
 
@@ -90,6 +100,25 @@ class DebugMenuViewModel @Inject constructor(
         featureFlagResetJob = viewModelScope.launch {
             debugMenuRepository.resetFeatureFlagOverrides()
         }
+    }
+
+    private fun handleClearSsoCookies() {
+        debugMenuRepository.clearSsoCookies()
+    }
+
+    private fun handleResetPremiumUpgradeBanner() {
+        debugMenuRepository.resetPremiumUpgradeBannerDismiss()
+    }
+
+    private fun handleTriggerCookieAcquisition() {
+        cookieAcquisitionRequestManager.setPendingCookieAcquisition(
+            data = CookieAcquisitionRequest(
+                hostname = environmentRepository
+                    .environment
+                    .environmentUrlData
+                    .baseWebVaultUrlOrDefault,
+            ),
+        )
     }
 
     private fun handleNavigateBack() {
@@ -171,6 +200,21 @@ sealed class DebugMenuAction {
      * The user has clicked generate error report button.
      */
     data object GenerateErrorReportClick : DebugMenuAction()
+
+    /**
+     * The user has clicked trigger cookie acquisition button.
+     */
+    data object TriggerCookieAcquisition : DebugMenuAction()
+
+    /**
+     * The user has clicked clear SSO cookies button.
+     */
+    data object ClearSsoCookies : DebugMenuAction()
+
+    /**
+     * User has clicked to reset the Premium upgrade banner dismiss status.
+     */
+    data object ResetPremiumUpgradeBanner : DebugMenuAction()
 
     /**
      * Internal actions not triggered from the UI.

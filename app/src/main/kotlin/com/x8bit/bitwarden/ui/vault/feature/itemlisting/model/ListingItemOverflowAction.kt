@@ -2,10 +2,10 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting.model
 
 import android.os.Parcelable
 import com.bitwarden.send.SendType
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherType
-import com.x8bit.bitwarden.R
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -19,6 +19,11 @@ sealed class ListingItemOverflowAction : Parcelable {
     abstract val title: Text
 
     /**
+     * The content description of the option.
+     */
+    abstract val contentDescription: Text
+
+    /**
      * Represents the send actions.
      */
     sealed class SendAction : ListingItemOverflowAction() {
@@ -30,7 +35,8 @@ sealed class ListingItemOverflowAction : Parcelable {
             val sendId: String,
             val sendType: SendType,
         ) : SendAction() {
-            override val title: Text get() = R.string.view.asText()
+            override val title: Text get() = BitwardenString.view.asText()
+            override val contentDescription: Text get() = title
         }
 
         /**
@@ -41,7 +47,8 @@ sealed class ListingItemOverflowAction : Parcelable {
             val sendId: String,
             val sendType: SendType,
         ) : SendAction() {
-            override val title: Text get() = R.string.edit.asText()
+            override val title: Text get() = BitwardenString.edit.asText()
+            override val contentDescription: Text get() = title
         }
 
         /**
@@ -49,7 +56,8 @@ sealed class ListingItemOverflowAction : Parcelable {
          */
         @Parcelize
         data class CopyUrlClick(val sendUrl: String) : SendAction() {
-            override val title: Text get() = R.string.copy_link.asText()
+            override val title: Text get() = BitwardenString.copy_link.asText()
+            override val contentDescription: Text get() = title
         }
 
         /**
@@ -57,7 +65,9 @@ sealed class ListingItemOverflowAction : Parcelable {
          */
         @Parcelize
         data class ShareUrlClick(val sendUrl: String) : SendAction() {
-            override val title: Text get() = R.string.share_link.asText()
+            override val title: Text get() = BitwardenString.share_link.asText()
+            override val contentDescription: Text
+                get() = BitwardenString.external_link_format.asText(title)
         }
 
         /**
@@ -65,7 +75,8 @@ sealed class ListingItemOverflowAction : Parcelable {
          */
         @Parcelize
         data class RemovePasswordClick(val sendId: String) : SendAction() {
-            override val title: Text get() = R.string.remove_password.asText()
+            override val title: Text get() = BitwardenString.remove_password.asText()
+            override val contentDescription: Text get() = title
         }
 
         /**
@@ -73,7 +84,8 @@ sealed class ListingItemOverflowAction : Parcelable {
          */
         @Parcelize
         data class DeleteClick(val sendId: String) : SendAction() {
-            override val title: Text get() = R.string.delete.asText()
+            override val title: Text get() = BitwardenString.delete.asText()
+            override val contentDescription: Text get() = title
         }
     }
 
@@ -96,7 +108,8 @@ sealed class ListingItemOverflowAction : Parcelable {
             val cipherType: CipherType,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
-            override val title: Text get() = R.string.view.asText()
+            override val title: Text get() = BitwardenString.view.asText()
+            override val contentDescription: Text get() = title
         }
 
         /**
@@ -108,7 +121,8 @@ sealed class ListingItemOverflowAction : Parcelable {
             val cipherType: CipherType,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
-            override val title: Text get() = R.string.edit.asText()
+            override val title: Text get() = BitwardenString.edit.asText()
+            override val contentDescription: Text get() = title
         }
 
         /**
@@ -116,8 +130,9 @@ sealed class ListingItemOverflowAction : Parcelable {
          */
         @Parcelize
         data class CopyUsernameClick(val username: String) : VaultAction() {
-            override val title: Text get() = R.string.copy_username.asText()
+            override val title: Text get() = BitwardenString.copy_username.asText()
             override val requiresPasswordReprompt: Boolean get() = false
+            override val contentDescription: Text get() = title
         }
 
         /**
@@ -126,10 +141,10 @@ sealed class ListingItemOverflowAction : Parcelable {
         @Parcelize
         data class CopyPasswordClick(
             val cipherId: String,
-            val password: String,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
-            override val title: Text get() = R.string.copy_password.asText()
+            override val title: Text get() = BitwardenString.copy_password.asText()
+            override val contentDescription: Text get() = title
         }
 
         /**
@@ -137,10 +152,11 @@ sealed class ListingItemOverflowAction : Parcelable {
          */
         @Parcelize
         data class CopyTotpClick(
-            val totpCode: String,
+            val cipherId: String,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
-            override val title: Text get() = R.string.copy_totp.asText()
+            override val title: Text get() = BitwardenString.copy_totp.asText()
+            override val contentDescription: Text get() = title
         }
 
         /**
@@ -148,10 +164,11 @@ sealed class ListingItemOverflowAction : Parcelable {
          */
         @Parcelize
         data class CopyNumberClick(
-            val number: String,
+            val cipherId: String,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
-            override val title: Text get() = R.string.copy_number.asText()
+            override val title: Text get() = BitwardenString.copy_number.asText()
+            override val contentDescription: Text get() = title
         }
 
         /**
@@ -159,11 +176,11 @@ sealed class ListingItemOverflowAction : Parcelable {
          */
         @Parcelize
         data class CopySecurityCodeClick(
-            val securityCode: String,
             val cipherId: String,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
-            override val title: Text get() = R.string.copy_security_code.asText()
+            override val title: Text get() = BitwardenString.copy_security_code.asText()
+            override val contentDescription: Text get() = title
         }
 
         /**
@@ -171,10 +188,11 @@ sealed class ListingItemOverflowAction : Parcelable {
          */
         @Parcelize
         data class CopyNoteClick(
-            val notes: String,
+            val cipherId: String,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
-            override val title: Text get() = R.string.copy_notes.asText()
+            override val title: Text get() = BitwardenString.copy_notes.asText()
+            override val contentDescription: Text get() = title
         }
 
         /**
@@ -182,8 +200,30 @@ sealed class ListingItemOverflowAction : Parcelable {
          */
         @Parcelize
         data class LaunchClick(val url: String) : VaultAction() {
-            override val title: Text get() = R.string.launch.asText()
+            override val title: Text get() = BitwardenString.launch.asText()
             override val requiresPasswordReprompt: Boolean get() = false
+            override val contentDescription: Text
+                get() = BitwardenString.external_link_format.asText(title)
+        }
+
+        /**
+         * Click on the archive overflow option.
+         */
+        @Parcelize
+        data class ArchiveClick(val cipherId: String) : VaultAction() {
+            override val title: Text get() = BitwardenString.archive_verb.asText()
+            override val requiresPasswordReprompt: Boolean get() = true
+            override val contentDescription: Text get() = title
+        }
+
+        /**
+         * Click on the unarchive overflow option.
+         */
+        @Parcelize
+        data class UnarchiveClick(val cipherId: String) : VaultAction() {
+            override val title: Text get() = BitwardenString.unarchive.asText()
+            override val requiresPasswordReprompt: Boolean get() = true
+            override val contentDescription: Text get() = title
         }
     }
 }

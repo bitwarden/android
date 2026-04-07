@@ -1,8 +1,8 @@
 package com.bitwarden.authenticator.data.platform.manager
 
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
-import com.google.firebase.crashlytics.ktx.crashlytics
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.Firebase
+import com.google.firebase.crashlytics.crashlytics
 
 /**
  * CrashLogsManager implementation for standard flavor builds.

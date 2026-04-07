@@ -1,6 +1,7 @@
 package com.bitwarden.network.util
 
 import okio.ByteString.Companion.decodeBase64
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.nio.charset.Charset
 import java.security.cert.CertPathValidatorException
@@ -42,6 +43,14 @@ fun String.base64UrlDecodeOrNull(): String? =
 fun Throwable?.isNoConnectionError(): Boolean {
     return this is UnknownHostException ||
         this?.cause?.isNoConnectionError() ?: false
+}
+
+/**
+ * Returns true if the throwable represents a timeout error.
+ */
+fun Throwable?.isTimeoutError(): Boolean {
+    return this is SocketTimeoutException ||
+        this?.cause?.isTimeoutError() ?: false
 }
 
 /**

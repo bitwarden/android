@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import android.content.SharedPreferences
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.data.datasource.disk.BaseDiskSource
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 
 /**
  * Default implementation of the [FeatureFlagOverrideDiskSource]

@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.search
 
 import androidx.compose.ui.test.assert
-import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.filterToOne
@@ -19,6 +18,8 @@ import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.send.SendType
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertMasterPasswordDialogDisplayed
 import com.bitwarden.ui.util.assertNoDialogExists
@@ -26,11 +27,9 @@ import com.bitwarden.ui.util.isProgressBar
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForSend
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
@@ -45,6 +44,8 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertEquals
@@ -180,15 +181,13 @@ class SearchScreenTest : BitwardenComposeTest() {
     @Test
     fun `progressbar should be displayed according to state`() {
         mutableStateFlow.update { DEFAULT_STATE }
-        // There are 2 because of the pull-to-refresh
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
 
         mutableStateFlow.update {
             it.copy(viewState = SearchState.ViewState.Empty(message = null))
         }
 
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
     }
 
     @Test
@@ -228,7 +227,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(
+                    displayItems = persistentListOf(
                         createMockDisplayItemForCipher(number = 1),
                     ),
                 ),
@@ -243,7 +242,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(
+                    displayItems = persistentListOf(
                         createMockDisplayItemForCipher(number = 1),
                     ),
                 ),
@@ -258,7 +257,9 @@ class SearchScreenTest : BitwardenComposeTest() {
             viewModel.trySendAction(
                 SearchAction.ItemClick(
                     itemId = "mockId-1",
-                    itemType = SearchState.DisplayItem.ItemType.Vault(type = CipherType.LOGIN),
+                    itemType = SearchState.DisplayItem.ItemType.Vault(
+                        type = CipherType.LOGIN,
+                    ),
                 ),
             )
         }
@@ -404,7 +405,9 @@ class SearchScreenTest : BitwardenComposeTest() {
             viewModel.trySendAction(
                 SearchAction.ItemClick(
                     itemId = "mockId-1",
-                    itemType = SearchState.DisplayItem.ItemType.Vault(type = CipherType.LOGIN),
+                    itemType = SearchState.DisplayItem.ItemType.Vault(
+                        type = CipherType.LOGIN,
+                    ),
                 ),
             )
         }
@@ -415,7 +418,7 @@ class SearchScreenTest : BitwardenComposeTest() {
     fun `clicking on item when reprompt is required should show master password dialog`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = SearchState.ViewState.Content(
-                displayItems = listOf(
+                displayItems = persistentListOf(
                     createMockDisplayItemForCipher(number = 1).copy(
                         shouldDisplayMasterPasswordReprompt = true,
                     ),
@@ -593,14 +596,16 @@ class SearchScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(createMockDisplayItemForCipher(number = number)),
+                    displayItems = persistentListOf(
+                        createMockDisplayItemForCipher(number = number),
+                    ),
                 ),
             )
         }
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
 
@@ -615,7 +620,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
+                    displayItems = persistentListOf(createMockDisplayItemForCipher(number = 1)),
                 ),
             )
         }
@@ -623,7 +628,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -644,7 +649,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -665,7 +670,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -684,7 +689,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -696,7 +701,6 @@ class SearchScreenTest : BitwardenComposeTest() {
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                        password = "mockPassword-1",
                         requiresPasswordReprompt = true,
                         cipherId = "mockId-1",
                     ),
@@ -705,7 +709,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -724,6 +728,26 @@ class SearchScreenTest : BitwardenComposeTest() {
             )
         }
 
+        composeTestRule
+            .onNodeWithContentDescription("More options")
+            .assertIsDisplayed()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Archive")
+            .assert(hasAnyAncestor(isDialog()))
+            .performScrollTo()
+            .assertIsDisplayed()
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                SearchAction.OverflowOptionClick(
+                    overflowAction = ListingItemOverflowAction.VaultAction.ArchiveClick(
+                        cipherId = "mockId-1",
+                    ),
+                ),
+            )
+        }
+
         composeTestRule.assertNoDialogExists()
     }
 
@@ -733,7 +757,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(
+                    displayItems = persistentListOf(
                         createMockDisplayItemForCipher(number = 1)
                             .copy(shouldDisplayMasterPasswordReprompt = true),
                     ),
@@ -741,7 +765,7 @@ class SearchScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
 
@@ -762,7 +786,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(
+                    displayItems = persistentListOf(
                         createMockDisplayItemForCipher(number = 1)
                             .copy(shouldDisplayMasterPasswordReprompt = true),
                     ),
@@ -770,7 +794,7 @@ class SearchScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -811,14 +835,14 @@ class SearchScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(createMockDisplayItemForSend(number = number)),
+                    displayItems = persistentListOf(createMockDisplayItemForSend(number = number)),
                 ),
             )
         }
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
 
@@ -833,7 +857,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(createMockDisplayItemForSend(number = 1)),
+                    displayItems = persistentListOf(createMockDisplayItemForSend(number = 1)),
                 ),
             )
         }
@@ -841,7 +865,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription(label = "Options")
+            .onNodeWithContentDescription(label = "More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -860,7 +884,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -879,7 +903,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -897,7 +921,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -915,7 +939,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -941,7 +965,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(createMockDisplayItemForSend(number = 1)),
+                    displayItems = persistentListOf(createMockDisplayItemForSend(number = 1)),
                 ),
             )
         }
@@ -949,7 +973,7 @@ class SearchScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText(message).assertDoesNotExist()
 
         composeTestRule
-            .onNodeWithContentDescription("Options")
+            .onNodeWithContentDescription("More options")
             .assertIsDisplayed()
             .performClick()
         composeTestRule
@@ -1013,6 +1037,27 @@ class SearchScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
             .assert(hasAnyAncestor(isDialog()))
     }
+
+    @Test
+    fun `ArchiveRequiresPremium dialog should display based on state`() {
+        composeTestRule.assertNoDialogExists()
+        mutableStateFlow.update {
+            it.copy(dialogState = SearchState.DialogState.ArchiveRequiresPremium)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Archive unavailable")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Upgrade to Premium")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(SearchAction.UpgradeToPremiumClick)
+        }
+    }
 }
 
 private val DEFAULT_STATE: SearchState = SearchState(
@@ -1028,6 +1073,8 @@ private val DEFAULT_STATE: SearchState = SearchState(
     totpData = null,
     autofillSelectionData = null,
     isPremium = true,
+    restrictItemTypesPolicyOrgIds = persistentListOf(),
+    isArchiveEnabled = true,
 )
 
 private fun createStateForAutofill(
@@ -1035,12 +1082,11 @@ private fun createStateForAutofill(
 ): SearchState = DEFAULT_STATE
     .copy(
         viewState = SearchState.ViewState.Content(
-            displayItems = listOf(
-                createMockDisplayItemForCipher(number = 1)
-                    .copy(
-                        autofillSelectionOptions = AutofillSelectionOption.entries,
-                        shouldDisplayMasterPasswordReprompt = isRepromptRequired,
-                    ),
+            displayItems = persistentListOf(
+                createMockDisplayItemForCipher(number = 1).copy(
+                    autofillSelectionOptions = AutofillSelectionOption.entries.toImmutableList(),
+                    shouldDisplayMasterPasswordReprompt = isRepromptRequired,
+                ),
             ),
         ),
     )

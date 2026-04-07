@@ -1,6 +1,6 @@
 package com.bitwarden.authenticator.data.platform.manager
 
-import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.data.repository.ServerConfigRepository
 import kotlinx.coroutines.flow.Flow

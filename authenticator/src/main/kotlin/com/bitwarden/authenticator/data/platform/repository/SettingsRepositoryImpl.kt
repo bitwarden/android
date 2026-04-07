@@ -1,14 +1,12 @@
 package com.bitwarden.authenticator.data.platform.repository
 
 import com.bitwarden.authenticator.BuildConfig
-import com.bitwarden.authenticator.data.auth.datasource.disk.AuthDiskSource
-import com.bitwarden.authenticator.data.authenticator.datasource.sdk.AuthenticatorSdkSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
-import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
-import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyResult
+import com.bitwarden.authenticator.data.platform.manager.lock.model.AppTimeout
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
-import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -24,11 +22,10 @@ private val DEFAULT_IS_SCREEN_CAPTURE_ALLOWED = BuildConfig.DEBUG
  */
 class SettingsRepositoryImpl(
     private val settingsDiskSource: SettingsDiskSource,
-    private val authDiskSource: AuthDiskSource,
-    private val biometricsEncryptionManager: BiometricsEncryptionManager,
-    private val authenticatorSdkSource: AuthenticatorSdkSource,
+    flightRecorderManager: FlightRecorderManager,
     dispatcherManager: DispatcherManager,
-) : SettingsRepository {
+) : SettingsRepository,
+    FlightRecorderManager by flightRecorderManager {
 
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
 
@@ -47,8 +44,21 @@ class SettingsRepositoryImpl(
     override val defaultSaveOptionFlow: Flow<DefaultSaveOption>
         by settingsDiskSource::defaultSaveOptionFlow
 
-    override val isUnlockWithBiometricsEnabled: Boolean
-        get() = authDiskSource.getUserBiometricUnlockKey() != null
+    override var isDynamicColorsEnabled: Boolean
+        get() = settingsDiskSource.isDynamicColorsEnabled ?: false
+        set(value) {
+            settingsDiskSource.isDynamicColorsEnabled = value
+        }
+
+    override val isDynamicColorsEnabledFlow: StateFlow<Boolean>
+        get() = settingsDiskSource
+            .isDynamicColorsEnabledFlow
+            .map { it ?: false }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = isDynamicColorsEnabled,
+            )
 
     override val appThemeStateFlow: StateFlow<AppTheme>
         get() = settingsDiskSource
@@ -92,6 +102,7 @@ class SettingsRepositoryImpl(
                 isScreenCaptureAllowed = value,
             )
         }
+
     override var previouslySyncedBitwardenAccountIds: Set<String> by
     settingsDiskSource::previouslySyncedBitwardenAccountIds
 
@@ -104,23 +115,6 @@ class SettingsRepositoryImpl(
                 initialValue = settingsDiskSource.getScreenCaptureAllowed()
                     ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED,
             )
-
-    override suspend fun setupBiometricsKey(): BiometricsKeyResult {
-        biometricsEncryptionManager.setupBiometrics()
-        return authenticatorSdkSource
-            .generateBiometricsKey()
-            .onSuccess {
-                authDiskSource.storeUserBiometricUnlockKey(biometricsKey = it)
-            }
-            .fold(
-                onSuccess = { BiometricsKeyResult.Success },
-                onFailure = { BiometricsKeyResult.Error },
-            )
-    }
-
-    override fun clearBiometricsKey() {
-        authDiskSource.storeUserBiometricUnlockKey(biometricsKey = null)
-    }
 
     override var isCrashLoggingEnabled: Boolean
         get() = settingsDiskSource.isCrashLoggingEnabled ?: true
@@ -149,4 +143,36 @@ class SettingsRepositoryImpl(
         set(value) {
             settingsDiskSource.hasUserDismissedSyncWithBitwardenCard = value
         }
+
+    override var appTimeoutState: AppTimeout
+        get() = settingsDiskSource.appTimeoutInMinutes.toAppTimeout()
+        set(value) {
+            settingsDiskSource.appTimeoutInMinutes = value.timeoutInMinutes
+        }
+
+    override val appTimeoutStateFlow: StateFlow<AppTimeout> = settingsDiskSource
+        .appTimeoutInMinutesFlow
+        .map { it.toAppTimeout() }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = settingsDiskSource.appTimeoutInMinutes.toAppTimeout(),
+        )
 }
+
+/**
+ * Converts a stored [Int] representing an app timeout in minutes to a [AppTimeout].
+ */
+private fun Int?.toAppTimeout(): AppTimeout =
+    when (this) {
+        AppTimeout.Immediately.timeoutInMinutes -> AppTimeout.Immediately
+        AppTimeout.OneMinute.timeoutInMinutes -> AppTimeout.OneMinute
+        AppTimeout.FiveMinutes.timeoutInMinutes -> AppTimeout.FiveMinutes
+        AppTimeout.FifteenMinutes.timeoutInMinutes -> AppTimeout.FifteenMinutes
+        AppTimeout.ThirtyMinutes.timeoutInMinutes -> AppTimeout.ThirtyMinutes
+        AppTimeout.OneHour.timeoutInMinutes -> AppTimeout.OneHour
+        AppTimeout.FourHours.timeoutInMinutes -> AppTimeout.FourHours
+        AppTimeout.OnAppRestart.timeoutInMinutes -> AppTimeout.OnAppRestart
+        null -> AppTimeout.Never
+        else -> AppTimeout.Never
+    }

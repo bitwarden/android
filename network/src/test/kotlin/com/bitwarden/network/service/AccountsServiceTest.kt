@@ -6,15 +6,21 @@ import com.bitwarden.network.api.AuthenticatedKeyConnectorApi
 import com.bitwarden.network.api.UnauthenticatedAccountsApi
 import com.bitwarden.network.api.UnauthenticatedKeyConnectorApi
 import com.bitwarden.network.base.BaseServiceTest
+import com.bitwarden.network.model.KdfJson
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorKeyRequestJson
 import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
+import com.bitwarden.network.model.MasterPasswordAuthenticationDataJson
+import com.bitwarden.network.model.MasterPasswordUnlockDataJson
 import com.bitwarden.network.model.PasswordHintResponseJson
 import com.bitwarden.network.model.RegisterRequestJson
 import com.bitwarden.network.model.ResendEmailRequestJson
 import com.bitwarden.network.model.ResendNewDeviceOtpRequestJson
 import com.bitwarden.network.model.ResetPasswordRequestJson
 import com.bitwarden.network.model.SetPasswordRequestJson
+import com.bitwarden.network.model.UpdateKdfJsonRequest
+import com.bitwarden.network.model.VerificationCodeResponseJson
+import com.bitwarden.network.model.VerificationOtpResponseJson
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -47,11 +53,10 @@ class AccountsServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `createAccountKeys with empty response is success`() = runTest {
+    fun `createAccountKeys success response should return Success`() = runTest {
         val publicKey = "publicKey"
         val encryptedPrivateKey = "encryptedPrivateKey"
-        val json = ""
-        val response = MockResponse().setBody(json)
+        val response = MockResponse().setBody(CREATE_ACCOUNT_KEYS_REQUEST_RESPONSE)
         server.enqueue(response)
 
         val result = service.createAccountKeys(
@@ -136,7 +141,30 @@ class AccountsServiceTest : BaseServiceTest() {
                 ssoToken = null,
             ),
         )
-        assertTrue(result.isSuccess)
+        assertEquals(VerificationCodeResponseJson.Success.asSuccess(), result)
+    }
+
+    @Test
+    fun `resendVerificationCodeEmail with 400 response is Error`() = runTest {
+        val response = MockResponse().setResponseCode(400).setBody(INVALID_JSON)
+        server.enqueue(response)
+        val result = service.resendVerificationCodeEmail(
+            body = ResendEmailRequestJson(
+                deviceIdentifier = "3",
+                email = "example@email.com",
+                passwordHash = "37y4d8r379r4789nt387r39k3dr87nr93",
+                ssoToken = null,
+            ),
+        )
+        assertEquals(
+            VerificationCodeResponseJson
+                .Invalid(
+                    message = "User verification failed.",
+                    validationErrors = null,
+                )
+                .asSuccess(),
+            result,
+        )
     }
 
     @Test
@@ -264,4 +292,97 @@ class AccountsServiceTest : BaseServiceTest() {
         )
         assertTrue(result.isSuccess)
     }
+
+    @Test
+    fun `updateKdf success should return Success`() = runTest {
+        val response = MockResponse().setResponseCode(200)
+        server.enqueue(response)
+
+        val result = service.updateKdf(body = UPDATE_KDF_REQUEST)
+
+        assertTrue(result.isSuccess)
+    }
+
+    @Test
+    fun `updateKdf failure should return Failure`() = runTest {
+        val response = MockResponse().setResponseCode(400)
+        server.enqueue(response)
+
+        val result = service.updateKdf(body = UPDATE_KDF_REQUEST)
+
+        assertTrue(result.isFailure)
+    }
+
+    @Test
+    fun `resendNewDeviceOtp with 400 response is Error`() = runTest {
+        val response = MockResponse().setResponseCode(400).setBody(INVALID_JSON)
+        server.enqueue(response)
+        val result = service.resendNewDeviceOtp(
+            body = ResendNewDeviceOtpRequestJson(
+                email = "example@email.com",
+                passwordHash = "37y4d8r379r4789nt387r39k3dr87nr93",
+            ),
+        )
+        assertEquals(
+            VerificationOtpResponseJson
+                .Invalid(
+                    message = "User verification failed.",
+                    validationErrors = null,
+                )
+                .asSuccess(),
+            result,
+        )
+    }
 }
+
+private const val INVALID_JSON = """
+{
+  "message": "User verification failed.",
+  "validationErrors": null
+}
+"""
+
+private val UPDATE_KDF_REQUEST = UpdateKdfJsonRequest(
+    authenticationData = MasterPasswordAuthenticationDataJson(
+        kdf = KdfJson(
+            kdfType = KdfTypeJson.PBKDF2_SHA256,
+            iterations = 7,
+            memory = 1,
+            parallelism = 2,
+        ),
+        masterPasswordAuthenticationHash = "mockMasterPasswordHash",
+        salt = "mockSalt",
+    ),
+    key = "mockKey",
+    masterPasswordHash = "mockMasterPasswordHash",
+    newMasterPasswordHash = "mockNewMasterPasswordHash",
+    unlockData = MasterPasswordUnlockDataJson(
+        kdf = KdfJson(
+            kdfType = KdfTypeJson.PBKDF2_SHA256,
+            iterations = 7,
+            memory = 1,
+            parallelism = 2,
+        ),
+        masterKeyWrappedUserKey = "mockMasterPasswordKey",
+        salt = "mockSalt",
+    ),
+)
+private val CREATE_ACCOUNT_KEYS_REQUEST_RESPONSE = """
+{
+  "key": null,
+  "publicKey": "mockPublicKey-1",
+  "privateKey": "mockPrivateKey-1",
+  "accountKeys": {
+    "signatureKeyPair": null,
+    "publicKeyEncryptionKeyPair": {
+      "wrappedPrivateKey": "mockWrappedPrivateKey-1",
+      "publicKey": "mockPublicKey-1",
+      "signedPublicKey": null,
+      "object": "publicKeyEncryptionKeyPair"
+    },
+    "securityState": null,
+    "object": "privateKeys"
+  },
+  "object": "keys"
+}
+""".trimIndent()

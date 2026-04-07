@@ -17,7 +17,7 @@ class FakeDomainsDao : DomainsDao {
         deleteDomainsCalled = true
     }
 
-    override fun getDomains(userId: String): Flow<DomainsEntity?> {
+    override fun getDomainsFlow(userId: String): Flow<DomainsEntity?> {
         getDomainsCalled = true
         return mutableDomainsFlow
     }

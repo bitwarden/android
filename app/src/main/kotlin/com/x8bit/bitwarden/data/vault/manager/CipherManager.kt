@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.data.vault.manager
 
 import android.net.Uri
 import com.bitwarden.vault.CipherView
+import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
@@ -9,6 +11,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 
 /**
@@ -50,6 +53,27 @@ interface CipherManager {
         cipherView: CipherView,
         attachmentId: String,
     ): DownloadAttachmentResult
+
+    /**
+     * Attempt to retrieve a decrypted cipher based on the [cipherId].
+     */
+    suspend fun getCipher(cipherId: String): GetCipherResult
+
+    /**
+     * Attempt to archive a cipher.
+     */
+    suspend fun archiveCipher(
+        cipherId: String,
+        cipherView: CipherView,
+    ): ArchiveCipherResult
+
+    /**
+     * Attempt to unarchive a cipher.
+     */
+    suspend fun unarchiveCipher(
+        cipherId: String,
+        cipherView: CipherView,
+    ): UnarchiveCipherResult
 
     /**
      * Attempt to delete a cipher.
@@ -109,4 +133,12 @@ interface CipherManager {
         cipherView: CipherView,
         collectionIds: List<String>,
     ): ShareCipherResult
+
+    /**
+     * Migrate the attachments if they don't have their own key
+     */
+    suspend fun migrateAttachments(
+        userId: String,
+        cipherView: CipherView,
+    ): Result<CipherView>
 }

@@ -2,7 +2,7 @@
 
 package com.bitwarden.network.model
 
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Create a mock [SyncResponseJson.Profile] with a given [number].
@@ -10,7 +10,7 @@ import java.time.ZonedDateTime
 fun createMockProfile(
     number: Int,
     providerOrganizations: List<SyncResponseJson.Profile.Organization>? = listOf(
-        createMockOrganization(number = number),
+        createMockOrganizationNetwork(number = number),
     ),
     isPremiumFromOrganization: Boolean = false,
     shouldForcePasswordReset: Boolean = false,
@@ -18,11 +18,12 @@ fun createMockProfile(
     isEmailVerified: Boolean = false,
     isTwoFactorEnabled: Boolean = false,
     privateKey: String? = "mockPrivateKey-$number",
+    accountKeys: AccountKeysJson? = createMockAccountKeysJson(number = number),
     isPremium: Boolean = false,
     culture: String? = "mockCulture-$number",
     name: String? = "mockName-$number",
     organizations: List<SyncResponseJson.Profile.Organization>? = listOf(
-        createMockOrganization(number = number),
+        createMockOrganizationNetwork(number = number),
     ),
     shouldUseKeyConnector: Boolean = false,
     id: String = "mockId-$number",
@@ -33,7 +34,7 @@ fun createMockProfile(
     providers: List<SyncResponseJson.Profile.Provider>? = listOf(
         createMockProvider(number = number),
     ),
-    creationDate: ZonedDateTime = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+    creationDate: Instant = Instant.parse("2024-09-13T01:00:00.00Z"),
 ): SyncResponseJson.Profile =
     SyncResponseJson.Profile(
         providerOrganizations = providerOrganizations,
@@ -43,6 +44,7 @@ fun createMockProfile(
         isEmailVerified = isEmailVerified,
         isTwoFactorEnabled = isTwoFactorEnabled,
         privateKey = privateKey,
+        accountKeys = accountKeys,
         isPremium = isPremium,
         culture = culture,
         name = name,
@@ -60,7 +62,7 @@ fun createMockProfile(
 /**
  * Create a mock [SyncResponseJson.Profile.Organization] with a given [number].
  */
-fun createMockOrganization(
+fun createMockOrganizationNetwork(
     number: Int,
     shouldUsePolicies: Boolean = false,
     shouldUseKeyConnector: Boolean = false,
@@ -87,10 +89,10 @@ fun createMockOrganization(
     shouldUseEvents: Boolean = false,
     familySponsorshipFriendlyName: String? = "mockFamilySponsorshipFriendlyName-$number",
     shouldUseTotp: Boolean = false,
-    familySponsorshipLastSyncDate: ZonedDateTime? = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+    familySponsorshipLastSyncDate: Instant? = Instant.parse("2023-10-27T12:00:00Z"),
     name: String? = "mockName-$number",
     shouldUseApi: Boolean = false,
-    familySponsorshipValidUntil: ZonedDateTime? = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+    familySponsorshipValidUntil: Instant? = Instant.parse("2023-10-27T12:00:00Z"),
     status: OrganizationStatusType = OrganizationStatusType.ACCEPTED,
     userIsClaimedByOrganization: Boolean = false,
     limitItemDeletion: Boolean = false,
@@ -135,7 +137,9 @@ fun createMockOrganization(
  */
 fun createMockOrganizationKeys(
     number: Int,
-    organization: SyncResponseJson.Profile.Organization = createMockOrganization(number = number),
+    organization: SyncResponseJson.Profile.Organization = createMockOrganizationNetwork(
+        number = number,
+    ),
 ): Map<String, String> =
     mapOf(organization.id to requireNotNull(organization.key))
 

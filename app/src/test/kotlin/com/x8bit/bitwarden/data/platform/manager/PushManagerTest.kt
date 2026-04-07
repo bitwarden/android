@@ -1,12 +1,13 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.di.CoreModule
-import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
-import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.model.PushTokenRequest
 import com.bitwarden.network.service.PushService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
@@ -18,6 +19,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSourceImpl
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
+import com.x8bit.bitwarden.data.platform.manager.model.PremiumStatusChangedData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderDeleteData
@@ -26,6 +28,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.SyncSendDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncSendUpsertData
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -36,7 +39,6 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 class PushManagerTest {
@@ -55,6 +57,10 @@ class PushManagerTest {
         coEvery { putDeviceToken(any()) } returns Unit.asSuccess()
     }
 
+    private val mockFeatureFlagManager = mockk<FeatureFlagManager>(relaxed = true) {
+        every { getFeatureFlag(FlagKey.NoLogoutOnKdfChange) } returns false
+    }
+
     private lateinit var pushManager: PushManager
 
     @BeforeEach
@@ -66,6 +72,7 @@ class PushManagerTest {
             dispatcherManager = dispatcherManager,
             clock = clock,
             json = CoreModule.providesJson(),
+            featureFlagManager = mockFeatureFlagManager,
         )
     }
 
@@ -135,6 +142,70 @@ class PushManagerTest {
             }
         }
 
+        @Test
+        @Suppress("MaxLineLength")
+        fun `onMessageReceived with logout with kdf change as reason should not emit to logoutFlow`() =
+            runTest {
+                every {
+                    mockFeatureFlagManager.getFeatureFlag(FlagKey.NoLogoutOnKdfChange)
+                } returns true
+
+                val accountTokens = AccountTokensJson(
+                    accessToken = "accessToken",
+                    refreshToken = "refreshToken",
+                )
+                authDiskSource.storeAccountTokens(userId, accountTokens)
+                authDiskSource.userState =
+                    UserStateJson(userId, mapOf(userId to mockk<AccountJson>()))
+
+                pushManager.logoutFlow.test {
+                    pushManager.onMessageReceived(LOGOUT_KDF_NOTIFICATION_MAP)
+                    expectNoEvents()
+                }
+            }
+
+        @Test
+        fun `onMessageReceived with Premium status changed emits to premiumStatusChangedFlow`() =
+            runTest {
+                pushManager.premiumStatusChangedFlow.test {
+                    pushManager.onMessageReceived(
+                        PREMIUM_STATUS_CHANGED_NOTIFICATION_MAP,
+                    )
+                    assertEquals(
+                        PremiumStatusChangedData(
+                            userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                            isPremium = true,
+                        ),
+                        awaitItem(),
+                    )
+                }
+            }
+
+        @Test
+        fun `onMessageReceived with Premium status changed also emits to fullSyncFlow`() =
+            runTest {
+                pushManager.fullSyncFlow.test {
+                    pushManager.onMessageReceived(
+                        PREMIUM_STATUS_CHANGED_NOTIFICATION_MAP,
+                    )
+                    assertEquals(
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                        awaitItem(),
+                    )
+                }
+            }
+
+        @Test
+        fun `onMessageReceived with Premium status changed with null fields does not emit`() =
+            runTest {
+                pushManager.premiumStatusChangedFlow.test {
+                    pushManager.onMessageReceived(
+                        PREMIUM_STATUS_CHANGED_NULL_FIELDS_NOTIFICATION_MAP,
+                    )
+                    expectNoEvents()
+                }
+            }
+
         @Nested
         inner class LoggedOutUserState {
             @BeforeEach
@@ -157,11 +228,23 @@ class PushManagerTest {
             }
 
             @Test
+            fun `onMessageReceived with logout with KDF reason do not emits to logoutFlow`() =
+                runTest {
+                    every {
+                        mockFeatureFlagManager.getFeatureFlag(FlagKey.NoLogoutOnKdfChange)
+                    } returns true
+                    pushManager.logoutFlow.test {
+                        pushManager.onMessageReceived(LOGOUT_KDF_NOTIFICATION_MAP)
+                        expectNoEvents()
+                    }
+                }
+
+            @Test
             fun `onMessageReceived with ciphers emits to fullSyncFlow`() = runTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_MAP)
                     assertEquals(
-                        Unit,
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
                         awaitItem(),
                     )
                 }
@@ -180,7 +263,7 @@ class PushManagerTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_MAP)
                     assertEquals(
-                        Unit,
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
                         awaitItem(),
                     )
                 }
@@ -191,7 +274,19 @@ class PushManagerTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_MAP)
                     assertEquals(
-                        Unit,
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                        awaitItem(),
+                    )
+                }
+            }
+
+            @Test
+            fun `onMessageReceived with policy changed emit to fullSyncFlow`() = runTest {
+                val activeUserId = authDiskSource.userState?.activeUserId
+                pushManager.fullSyncFlow.test {
+                    pushManager.onMessageReceived(POLICY_CHANGED_NOTIFICATION_MAP)
+                    assertEquals(
+                        activeUserId,
                         awaitItem(),
                     )
                 }
@@ -219,10 +314,11 @@ class PushManagerTest {
                         pushManager.onMessageReceived(SYNC_CIPHER_CREATE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncCipherUpsertData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                                 cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                                 organizationId = "6a41d965-ed95-4eae-98c3-5f1ec609c2c1",
                                 collectionIds = listOf(),
-                                revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
+                                revisionDate = Instant.parse("2023-10-27T12:00:00.000Z"),
                                 isUpdate = false,
                             ),
                             awaitItem(),
@@ -237,6 +333,7 @@ class PushManagerTest {
                         pushManager.onMessageReceived(SYNC_CIPHER_DELETE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncCipherDeleteData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                                 cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                             ),
                             awaitItem(),
@@ -251,10 +348,11 @@ class PushManagerTest {
                         pushManager.onMessageReceived(SYNC_CIPHER_UPDATE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncCipherUpsertData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                                 cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                                 organizationId = "6a41d965-ed95-4eae-98c3-5f1ec609c2c1",
                                 collectionIds = listOf(),
-                                revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
+                                revisionDate = Instant.parse("2023-10-27T12:00:00.000Z"),
                                 isUpdate = true,
                             ),
                             awaitItem(),
@@ -269,8 +367,9 @@ class PushManagerTest {
                         pushManager.onMessageReceived(SYNC_FOLDER_CREATE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncFolderUpsertData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                                 folderId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-                                revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
+                                revisionDate = Instant.parse("2023-10-27T12:00:00.000Z"),
                                 isUpdate = false,
                             ),
                             awaitItem(),
@@ -285,6 +384,7 @@ class PushManagerTest {
                         pushManager.onMessageReceived(SYNC_FOLDER_DELETE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncFolderDeleteData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                                 folderId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                             ),
                             awaitItem(),
@@ -299,8 +399,9 @@ class PushManagerTest {
                         pushManager.onMessageReceived(SYNC_FOLDER_UPDATE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncFolderUpsertData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                                 folderId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-                                revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
+                                revisionDate = Instant.parse("2023-10-27T12:00:00.000Z"),
                                 isUpdate = true,
                             ),
                             awaitItem(),
@@ -315,6 +416,7 @@ class PushManagerTest {
                         pushManager.onMessageReceived(SYNC_LOGIN_DELETE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncCipherDeleteData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                                 cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                             ),
                             awaitItem(),
@@ -328,8 +430,9 @@ class PushManagerTest {
                     pushManager.onMessageReceived(SYNC_SEND_CREATE_NOTIFICATION_MAP)
                     assertEquals(
                         SyncSendUpsertData(
+                            userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                             sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-                            revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
+                            revisionDate = Instant.parse("2023-10-27T12:00:00.000Z"),
                             isUpdate = false,
                         ),
                         awaitItem(),
@@ -343,6 +446,7 @@ class PushManagerTest {
                     pushManager.onMessageReceived(SYNC_SEND_DELETE_NOTIFICATION_MAP)
                     assertEquals(
                         SyncSendDeleteData(
+                            userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                             sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                         ),
                         awaitItem(),
@@ -356,10 +460,22 @@ class PushManagerTest {
                     pushManager.onMessageReceived(SYNC_SEND_UPDATE_NOTIFICATION_MAP)
                     assertEquals(
                         SyncSendUpsertData(
+                            userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                             sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-                            revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
+                            revisionDate = Instant.parse("2023-10-27T12:00:00.000Z"),
                             isUpdate = true,
                         ),
+                        awaitItem(),
+                    )
+                }
+            }
+
+            @Test
+            fun `onMessageReceived with sync org keys emits to syncOrgKeysFlow`() = runTest {
+                pushManager.syncOrgKeysFlow.test {
+                    pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_MAP)
+                    assertEquals(
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
                         awaitItem(),
                     )
                 }
@@ -381,28 +497,36 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived with sync cipher create does nothing`() = runTest {
-                pushManager.syncCipherUpsertFlow.test {
-                    pushManager.onMessageReceived(SYNC_CIPHER_CREATE_NOTIFICATION_MAP)
-                    expectNoEvents()
+            fun `onMessageReceived with sync cipher create emits to syncCipherUpsertFlow`() =
+                runTest {
+                    pushManager.syncCipherUpsertFlow.test {
+                        pushManager.onMessageReceived(SYNC_CIPHER_CREATE_NOTIFICATION_MAP)
+                        expectNoEvents()
+                    }
                 }
-            }
 
             @Test
             fun `onMessageReceived with sync cipher delete does nothing`() = runTest {
                 pushManager.syncCipherDeleteFlow.test {
                     pushManager.onMessageReceived(SYNC_CIPHER_DELETE_NOTIFICATION_MAP)
-                    expectNoEvents()
+                    assertEquals(
+                        SyncCipherDeleteData(
+                            userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                            cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                        ),
+                        awaitItem(),
+                    )
                 }
             }
 
             @Test
-            fun `onMessageReceived with sync cipher update does nothing`() = runTest {
-                pushManager.syncCipherUpsertFlow.test {
-                    pushManager.onMessageReceived(SYNC_CIPHER_UPDATE_NOTIFICATION_MAP)
-                    expectNoEvents()
+            fun `onMessageReceived with sync cipher update emits to syncCipherUpsertFlow`() =
+                runTest {
+                    pushManager.syncCipherUpsertFlow.test {
+                        pushManager.onMessageReceived(SYNC_CIPHER_UPDATE_NOTIFICATION_MAP)
+                        expectNoEvents()
+                    }
                 }
-            }
 
             @Test
             fun `onMessageReceived with sync folder create does nothing`() = runTest {
@@ -413,12 +537,19 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived with sync folder delete does nothing`() = runTest {
-                pushManager.syncFolderDeleteFlow.test {
-                    pushManager.onMessageReceived(SYNC_FOLDER_DELETE_NOTIFICATION_MAP)
-                    expectNoEvents()
+            fun `onMessageReceived with sync folder delete emits to syncFolderDeleteFlow`() =
+                runTest {
+                    pushManager.syncFolderDeleteFlow.test {
+                        pushManager.onMessageReceived(SYNC_FOLDER_DELETE_NOTIFICATION_MAP)
+                        assertEquals(
+                            SyncFolderDeleteData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                                folderId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                            ),
+                            awaitItem(),
+                        )
+                    }
                 }
-            }
 
             @Test
             fun `onMessageReceived with sync folder update does nothing`() = runTest {
@@ -429,12 +560,19 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived with sync login delete does nothing`() = runTest {
-                pushManager.syncCipherDeleteFlow.test {
-                    pushManager.onMessageReceived(SYNC_LOGIN_DELETE_NOTIFICATION_MAP)
-                    expectNoEvents()
+            fun `onMessageReceived with sync login delete emits to syncCipherDeleteFlow`() =
+                runTest {
+                    pushManager.syncCipherDeleteFlow.test {
+                        pushManager.onMessageReceived(SYNC_LOGIN_DELETE_NOTIFICATION_MAP)
+                        assertEquals(
+                            SyncCipherDeleteData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                                cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                            ),
+                            awaitItem(),
+                        )
+                    }
                 }
-            }
 
             @Test
             fun `onMessageReceived with sync send create does nothing`() = runTest {
@@ -445,10 +583,16 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived with sync send delete does nothing`() = runTest {
+            fun `onMessageReceived with sync send delete emits to syncSendDeleteFlow`() = runTest {
                 pushManager.syncSendDeleteFlow.test {
                     pushManager.onMessageReceived(SYNC_SEND_DELETE_NOTIFICATION_MAP)
-                    expectNoEvents()
+                    assertEquals(
+                        SyncSendDeleteData(
+                            userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                            sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                        ),
+                        awaitItem(),
+                    )
                 }
             }
 
@@ -456,54 +600,6 @@ class PushManagerTest {
             fun `onMessageReceived with sync send update does nothing`() = runTest {
                 pushManager.syncSendUpsertFlow.test {
                     pushManager.onMessageReceived(SYNC_SEND_UPDATE_NOTIFICATION_MAP)
-                    expectNoEvents()
-                }
-            }
-        }
-
-        @Nested
-        inner class NullUserState {
-            @BeforeEach
-            fun setUp() {
-                authDiskSource.userState = null
-            }
-
-            @Test
-            fun `onMessageReceived with logout does nothing`() = runTest {
-                pushManager.logoutFlow.test {
-                    pushManager.onMessageReceived(LOGOUT_NOTIFICATION_MAP)
-                    expectNoEvents()
-                }
-            }
-
-            @Test
-            fun `onMessageReceived with sync ciphers does nothing`() = runTest {
-                pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_MAP)
-                    expectNoEvents()
-                }
-            }
-
-            @Test
-            fun `onMessageReceived with sync org keys does nothing`() = runTest {
-                pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_MAP)
-                    expectNoEvents()
-                }
-            }
-
-            @Test
-            fun `onMessageReceived with sync settings does nothing`() = runTest {
-                pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_MAP)
-                    expectNoEvents()
-                }
-            }
-
-            @Test
-            fun `onMessageReceived with sync vault does nothing`() = runTest {
-                pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_MAP)
                     expectNoEvents()
                 }
             }
@@ -535,24 +631,33 @@ class PushManagerTest {
             }
 
             @Test
+            fun `onMessageReceived with logout with kdf reason does not emit to logoutFlow`() =
+                runTest {
+                    every {
+                        mockFeatureFlagManager.getFeatureFlag(FlagKey.NoLogoutOnKdfChange)
+                    } returns true
+                    pushManager.logoutFlow.test {
+                        pushManager.onMessageReceived(LOGOUT_KDF_NOTIFICATION_MAP)
+                        expectNoEvents()
+                    }
+                }
+
+            @Test
             fun `onMessageReceived with sync ciphers emits to fullSyncFlow`() = runTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_MAP)
                     assertEquals(
-                        Unit,
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
                         awaitItem(),
                     )
                 }
             }
 
             @Test
-            fun `onMessageReceived with sync org keys emits to syncOrgKeysFlow`() = runTest {
+            fun `onMessageReceived with sync org keys does not emit`() = runTest {
                 pushManager.syncOrgKeysFlow.test {
                     pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_MAP)
-                    assertEquals(
-                        Unit,
-                        awaitItem(),
-                    )
+                    expectNoEvents()
                 }
             }
 
@@ -561,7 +666,7 @@ class PushManagerTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_MAP)
                     assertEquals(
-                        Unit,
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
                         awaitItem(),
                     )
                 }
@@ -572,7 +677,7 @@ class PushManagerTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_MAP)
                     assertEquals(
-                        Unit,
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
                         awaitItem(),
                     )
                 }
@@ -659,10 +764,10 @@ class PushManagerTest {
                 @Suppress("MaxLineLength")
                 @Test
                 fun `registerPushTokenIfNecessary should do nothing if registered less than 7 days before`() {
-                    val lastRegistration = ZonedDateTime.ofInstant(
-                        clock.instant().minus(6, ChronoUnit.DAYS).minus(23, ChronoUnit.HOURS),
-                        ZoneOffset.UTC,
-                    )
+                    val lastRegistration = clock
+                        .instant()
+                        .minus(6, ChronoUnit.DAYS)
+                        .minus(23, ChronoUnit.HOURS)
                     pushDiskSource.storeLastPushTokenRegistrationDate(
                         userId,
                         lastRegistration,
@@ -673,18 +778,18 @@ class PushManagerTest {
                     assertEquals(newToken, pushDiskSource.registeredPushToken)
                     // Assert the last registration value has not changed
                     assertEquals(
-                        lastRegistration.toEpochSecond(),
-                        pushDiskSource.getLastPushTokenRegistrationDate(userId)!!.toEpochSecond(),
+                        lastRegistration.epochSecond,
+                        pushDiskSource.getLastPushTokenRegistrationDate(userId)!!.epochSecond,
                     )
                 }
 
                 @Suppress("MaxLineLength")
                 @Test
                 fun `registerStoredPushTokenIfNecessary should do nothing if registered less than 7 days before`() {
-                    val lastRegistration = ZonedDateTime.ofInstant(
-                        clock.instant().minus(6, ChronoUnit.DAYS).minus(23, ChronoUnit.HOURS),
-                        ZoneOffset.UTC,
-                    )
+                    val lastRegistration = clock
+                        .instant()
+                        .minus(6, ChronoUnit.DAYS)
+                        .minus(23, ChronoUnit.HOURS)
                     pushDiskSource.registeredPushToken = newToken
                     pushDiskSource.storeLastPushTokenRegistrationDate(
                         userId,
@@ -696,18 +801,15 @@ class PushManagerTest {
                     assertEquals(newToken, pushDiskSource.registeredPushToken)
                     // Assert the last registration value has not changed
                     assertEquals(
-                        lastRegistration.toEpochSecond(),
-                        pushDiskSource.getLastPushTokenRegistrationDate(userId)!!.toEpochSecond(),
+                        lastRegistration.epochSecond,
+                        pushDiskSource.getLastPushTokenRegistrationDate(userId)!!.epochSecond,
                     )
                 }
 
                 @Suppress("MaxLineLength")
                 @Test
                 fun `registerPushTokenIfNecessary should update registeredPushToken, lastPushTokenRegistrationDate and currentPushToken`() {
-                    val lastRegistration = ZonedDateTime.ofInstant(
-                        clock.instant().minus(8, ChronoUnit.DAYS),
-                        ZoneOffset.UTC,
-                    )
+                    val lastRegistration = clock.instant().minus(8, ChronoUnit.DAYS)
                     pushDiskSource.storeLastPushTokenRegistrationDate(
                         userId,
                         lastRegistration,
@@ -719,7 +821,7 @@ class PushManagerTest {
                     }
                     assertEquals(
                         clock.instant().epochSecond,
-                        pushDiskSource.getLastPushTokenRegistrationDate(userId)?.toEpochSecond(),
+                        pushDiskSource.getLastPushTokenRegistrationDate(userId)?.epochSecond,
                     )
                     assertEquals(newToken, pushDiskSource.registeredPushToken)
                     assertEquals(newToken, pushDiskSource.getCurrentPushToken(userId))
@@ -728,10 +830,7 @@ class PushManagerTest {
                 @Suppress("MaxLineLength")
                 @Test
                 fun `registerStoredPushTokenIfNecessary should update registeredPushToken, lastPushTokenRegistrationDate and currentPushToken`() {
-                    val lastRegistration = ZonedDateTime.ofInstant(
-                        clock.instant().minus(8, ChronoUnit.DAYS),
-                        ZoneOffset.UTC,
-                    )
+                    val lastRegistration = clock.instant().minus(8, ChronoUnit.DAYS)
                     pushDiskSource.storeLastPushTokenRegistrationDate(
                         userId,
                         lastRegistration,
@@ -744,7 +843,7 @@ class PushManagerTest {
                     }
                     assertEquals(
                         clock.instant().epochSecond,
-                        pushDiskSource.getLastPushTokenRegistrationDate(userId)?.toEpochSecond(),
+                        pushDiskSource.getLastPushTokenRegistrationDate(userId)?.epochSecond,
                     )
                     assertEquals(newToken, pushDiskSource.registeredPushToken)
                     assertEquals(newToken, pushDiskSource.getCurrentPushToken(userId))
@@ -774,9 +873,7 @@ class PushManagerTest {
                         }
                         assertEquals(
                             clock.instant().epochSecond,
-                            pushDiskSource
-                                .getLastPushTokenRegistrationDate(userId)
-                                ?.toEpochSecond(),
+                            pushDiskSource.getLastPushTokenRegistrationDate(userId)?.epochSecond,
                         )
                         assertEquals(newToken, pushDiskSource.registeredPushToken)
                         assertEquals(newToken, pushDiskSource.getCurrentPushToken(userId))
@@ -793,9 +890,7 @@ class PushManagerTest {
                         }
                         assertEquals(
                             clock.instant().epochSecond,
-                            pushDiskSource
-                                .getLastPushTokenRegistrationDate(userId)
-                                ?.toEpochSecond(),
+                            pushDiskSource.getLastPushTokenRegistrationDate(userId)?.epochSecond,
                         )
                         assertEquals(newToken, pushDiskSource.registeredPushToken)
                         assertEquals(newToken, pushDiskSource.getCurrentPushToken(userId))
@@ -868,6 +963,33 @@ private val LOGOUT_NOTIFICATION_MAP = mapOf(
       "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
       "Date": "2023-10-27T12:00:00.000Z"
     }""",
+)
+
+private val LOGOUT_KDF_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "11",
+    "payload" to """{
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
+      "Date": "2023-10-27T12:00:00.000Z",
+      "Reason": 0
+    }""",
+)
+
+private val POLICY_CHANGED_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "25",
+    "payload" to """{                                                                                                                                                                                                                             
+        "OrganizationId": "7c68096d-5ff2-4265-8c24-b3b5011539cd",                                                                                                                                                                                   
+        "Policy": {                                                                                                                                                                                                                                 
+          "Id": "69642eee-80fc-476b-8954-b40c00a97f20",                                                                                                                                                                                             
+          "OrganizationId": "7c68096d-5ff2-4265-8c24-b3b5011539cd",                                                                                                                                                                                 
+          "Type": 6,                                                                                                                                                                                                                                
+          "Data": null,                                                                                                                                                                                                                             
+          "Enabled": true,                                                                                                                                                                                                                          
+          "CreationDate": "2026-03-13T10:17:07.0891504Z",                                                                                                                                                                                           
+          "RevisionDate": "2026-03-13T10:17:07.0892162Z"                                                                                                                                                                                            
+        }                                                                                                                                                                                                                                           
+      }""",
 )
 
 private val SYNC_CIPHER_CREATE_NOTIFICATION_MAP = mapOf(
@@ -1011,5 +1133,23 @@ private val SYNC_VAULT_NOTIFICATION_MAP = mapOf(
     "payload" to """{
       "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
       "Date": "2023-10-27T12:00:00.000Z"
+    }""",
+)
+
+private val PREMIUM_STATUS_CHANGED_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "27",
+    "payload" to """{
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
+      "Premium": true
+    }""",
+)
+
+private val PREMIUM_STATUS_CHANGED_NULL_FIELDS_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "27",
+    "payload" to """{
+      "UserId": null,
+      "Premium": null
     }""",
 )

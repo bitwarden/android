@@ -7,15 +7,14 @@ import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import io.mockk.every
 import io.mockk.just
@@ -64,11 +63,11 @@ class RemovePasswordScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(text = errorTitle)
             .assert(hasAnyAncestor(isDialog()))
-            .isDisplayed()
+            .assertIsDisplayed()
         composeTestRule
             .onNodeWithText(text = errorMessage)
             .assert(hasAnyAncestor(isDialog()))
-            .isDisplayed()
+            .assertIsDisplayed()
 
         val loadingMessage = "Loading message"
         mutableStateFlow.update {
@@ -82,7 +81,7 @@ class RemovePasswordScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(text = loadingMessage)
             .assert(hasAnyAncestor(isDialog()))
-            .isDisplayed()
+            .assertIsDisplayed()
 
         mutableStateFlow.update { it.copy(dialogState = null) }
 
@@ -96,7 +95,7 @@ class RemovePasswordScreenTest : BitwardenComposeTest() {
 
         mutableStateFlow.update { it.copy(description = description.asText()) }
 
-        composeTestRule.onNodeWithText(text = description).isDisplayed()
+        composeTestRule.onNodeWithText(text = description).assertIsDisplayed()
     }
 
     @Test
@@ -138,7 +137,7 @@ class RemovePasswordScreenTest : BitwardenComposeTest() {
             it.copy(
                 dialogState =
                     RemovePasswordState.DialogState.LeaveConfirmationPrompt(
-                        R.string.leave_organization.asText(),
+                        BitwardenString.leave_organization.asText(),
                     ),
             )
         }
@@ -158,7 +157,7 @@ class RemovePasswordScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 dialogState = RemovePasswordState.DialogState.LeaveConfirmationPrompt(
-                    R.string.leave_organization_name.asText(
+                    BitwardenString.leave_organization_name.asText(
                         "orgName",
                     ),
                 ),

@@ -17,6 +17,7 @@ data class BitwardenShapes(
     val contentTop: CornerBasedShape,
     val dialog: CornerBasedShape,
     val fab: CornerBasedShape,
+    val fabItem: CornerBasedShape,
     val infoCallout: CornerBasedShape,
     val menu: CornerBasedShape,
     val progressIndicator: CornerBasedShape,

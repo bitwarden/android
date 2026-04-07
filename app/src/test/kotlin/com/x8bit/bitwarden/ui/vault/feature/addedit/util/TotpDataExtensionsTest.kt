@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
+import com.bitwarden.ui.platform.model.TotpData
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
-import com.x8bit.bitwarden.ui.vault.model.TotpData
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic

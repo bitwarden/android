@@ -1,8 +1,8 @@
 package com.bitwarden.authenticator.data.platform.manager
 
 import app.cash.turbine.test
-import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.data.platform.repository.util.FakeServerConfigRepository
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.network.model.ConfigResponseJson
 import com.bitwarden.network.model.ConfigResponseJson.EnvironmentJson
@@ -73,7 +73,7 @@ class FeatureFlagManagerTest {
         )
 
         val flagValue = manager.getFeatureFlag(
-            key = FlagKey.PasswordManagerSync,
+            key = FlagKey.DummyBoolean,
             forceRefresh = false,
         )
         assertFalse(flagValue)
@@ -169,7 +169,7 @@ class FeatureFlagManagerTest {
         fakeServerConfigRepository.serverConfigValue = null
 
         val flagValue = manager.getFeatureFlag(
-            key = FlagKey.PasswordManagerSync,
+            key = FlagKey.DummyBoolean,
             forceRefresh = false,
         )
 
@@ -267,5 +267,6 @@ private val SERVER_CONFIG = ServerConfig(
             "dummy-boolean" to JsonPrimitive(true),
             "flexible-collections-v-1" to JsonPrimitive(false),
         ),
+        communication = null,
     ),
 )

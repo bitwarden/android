@@ -2,8 +2,8 @@ package com.bitwarden.authenticator.ui.platform.feature.debugmenu
 
 import app.cash.turbine.test
 import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
-import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.data.platform.repository.DebugMenuRepository
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -12,6 +12,8 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -64,9 +66,11 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
     fun `handleUpdateFeatureFlag should update the feature flag via the repository`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(
-            DebugMenuAction.UpdateFeatureFlag(FlagKey.PasswordManagerSync, false),
+            DebugMenuAction.UpdateFeatureFlag(FlagKey.BitwardenAuthenticationEnabled, false),
         )
-        verify { mockDebugMenuRepository.updateFeatureFlag(FlagKey.PasswordManagerSync, false) }
+        verify {
+            mockDebugMenuRepository.updateFeatureFlag(FlagKey.BitwardenAuthenticationEnabled, false)
+        }
     }
 
     private fun createViewModel(): DebugMenuViewModel = DebugMenuViewModel(
@@ -75,15 +79,15 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
     )
 }
 
-private val DEFAULT_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
-    FlagKey.BitwardenAuthenticationEnabled to true,
-    FlagKey.PasswordManagerSync to true,
-)
+private val DEFAULT_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = FlagKey
+    .activeAuthenticatorFlags
+    .associateWith { true }
+    .toImmutableMap()
 
-private val UPDATED_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
-    FlagKey.BitwardenAuthenticationEnabled to false,
-    FlagKey.PasswordManagerSync to false,
-)
+private val UPDATED_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = FlagKey
+    .activeAuthenticatorFlags
+    .associateWith { false }
+    .toImmutableMap()
 
 private val DEFAULT_STATE = DebugMenuState(
     featureFlags = DEFAULT_MAP_VALUE,

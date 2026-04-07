@@ -14,7 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -22,21 +21,23 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
+import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
+import com.bitwarden.ui.platform.components.row.BitwardenTextRow
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
-import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderDisplayItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -54,6 +55,7 @@ fun FoldersScreen(
     viewModel: FoldersViewModel = hiltViewModel(),
 ) {
     val state = viewModel.stateFlow.collectAsStateWithLifecycle()
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is FoldersEvent.NavigateBack -> onNavigateBack()
@@ -61,6 +63,8 @@ fun FoldersScreen(
             is FoldersEvent.NavigateToEditFolderScreen -> {
                 onNavigateToEditFolderScreen(event.folderId)
             }
+
+            is FoldersEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }
     }
 
@@ -71,35 +75,30 @@ fun FoldersScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.folders),
+                title = stringResource(id = BitwardenString.folders),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(FoldersAction.CloseButtonClick) }
-                },
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
+                onNavigationIconClick = { viewModel.trySendAction(FoldersAction.CloseButtonClick) },
             )
         },
         floatingActionButton = {
             BitwardenFloatingActionButton(
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(FoldersAction.AddFolderButtonClick) }
-                },
+                onClick = { viewModel.trySendAction(FoldersAction.AddFolderButtonClick) },
                 painter = rememberVectorPainter(id = BitwardenDrawable.ic_plus_large),
-                contentDescription = stringResource(id = R.string.add_item),
+                contentDescription = stringResource(id = BitwardenString.add_item),
                 modifier = Modifier
                     .testTag(tag = "AddItemButton")
                     .navigationBarsPadding(),
             )
         },
+        snackbarHost = { BitwardenSnackbarHost(bitwardenHostState = snackbarHostState) },
     ) {
         when (val viewState = state.value.viewState) {
             is FoldersState.ViewState.Content -> {
                 FoldersContent(
                     foldersList = viewState.folderList.toImmutableList(),
-                    onItemClick = remember(viewModel) {
-                        { viewModel.trySendAction(FoldersAction.FolderClick(it)) }
-                    },
+                    onItemClick = { viewModel.trySendAction(FoldersAction.FolderClick(it)) },
                     modifier = Modifier.fillMaxSize(),
                 )
             }
@@ -133,7 +132,7 @@ private fun FoldersContent(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = stringResource(id = R.string.no_folders_to_list),
+                text = stringResource(id = BitwardenString.no_folders_to_list),
                 textAlign = TextAlign.Center,
                 style = BitwardenTheme.typography.bodyMedium,
                 color = BitwardenTheme.colorScheme.text.primary,

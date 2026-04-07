@@ -3,8 +3,9 @@ package com.x8bit.bitwarden.ui.credentials.manager
 import androidx.credentials.CredentialProvider
 import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 
 /**
  * A no-op implementation of [CredentialProviderCompletionManagerImpl] provided when the build
@@ -12,9 +13,11 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialR
  */
 @OmitFromCoverage
 object CredentialProviderCompletionManagerUnsupportedApiImpl : CredentialProviderCompletionManager {
-    override fun completeFido2Registration(result: RegisterFido2CredentialResult) = Unit
+    override fun completeCredentialRegistration(result: CreateCredentialResult) = Unit
 
     override fun completeFido2Assertion(result: AssertFido2CredentialResult) = Unit
+
+    override fun completePasswordGet(result: GetPasswordCredentialResult) = Unit
 
     override fun completeProviderGetCredentialsRequest(result: GetCredentialsResult) = Unit
 }

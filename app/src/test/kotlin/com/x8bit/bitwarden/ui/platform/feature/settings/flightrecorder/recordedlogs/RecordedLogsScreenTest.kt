@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedlogs
 
-import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -16,17 +15,17 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.isProgressBar
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsAction
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsEvent
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsScreen
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsState
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsViewModel
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -103,8 +102,7 @@ class RecordedLogsScreenTest : BitwardenComposeTest() {
     @Test
     fun `UI should change based on ViewState`() {
         mutableStateFlow.update { it.copy(viewState = RecordedLogsState.ViewState.Loading) }
-        // There are 2 because of the pull-to-refresh
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
 
         mutableStateFlow.update { it.copy(viewState = RecordedLogsState.ViewState.Empty) }
         composeTestRule.onNodeWithText(text = "No logs recorded").assertIsDisplayed()
@@ -124,7 +122,7 @@ class RecordedLogsScreenTest : BitwardenComposeTest() {
                             id = "52",
                             title = "2025-04-12T03:15:00 – 2025-04-12T04:15:00".asText(),
                             subtextStart = "1.00 KB".asText(),
-                            subtextEnd = R.string.expires_on.asText("4/12/25"),
+                            subtextEnd = BitwardenString.expires_on.asText("4/12/25"),
                             isDeletedEnabled = true,
                         ),
                     ),
@@ -146,7 +144,7 @@ class RecordedLogsScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(viewState = RecordedLogsState.ViewState.Content(items = persistentListOf()))
         }
-        composeTestRule.onNodeWithContentDescription(label = "More").performClick()
+        composeTestRule.onNodeWithContentDescription(label = "More options").performClick()
         composeTestRule.onNodeWithText(text = "Share all").performClick()
 
         verify(exactly = 1) {
@@ -159,7 +157,7 @@ class RecordedLogsScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(viewState = RecordedLogsState.ViewState.Content(items = persistentListOf()))
         }
-        composeTestRule.onNodeWithContentDescription(label = "More").performClick()
+        composeTestRule.onNodeWithContentDescription(label = "More options").performClick()
         composeTestRule.onNodeWithText(text = "Delete all").performClick()
         composeTestRule
             .onAllNodesWithText(text = "Delete logs")
@@ -197,7 +195,7 @@ class RecordedLogsScreenTest : BitwardenComposeTest() {
             .onNodeWithText(text = "title")
             .performScrollTo()
             .onSiblings()
-            .filterToOne(matcher = hasContentDescription(value = "More"))
+            .filterToOne(matcher = hasContentDescription(value = "More options"))
             .performClick()
         composeTestRule.onNodeWithText(text = "Delete").assertIsEnabled()
 
@@ -220,7 +218,7 @@ class RecordedLogsScreenTest : BitwardenComposeTest() {
             .onNodeWithText(text = "title")
             .performScrollTo()
             .onSiblings()
-            .filterToOne(matcher = hasContentDescription(value = "More"))
+            .filterToOne(matcher = hasContentDescription(value = "More options"))
             .performClick()
         composeTestRule.onNodeWithText(text = "Delete").assertIsNotEnabled()
     }
@@ -245,7 +243,7 @@ class RecordedLogsScreenTest : BitwardenComposeTest() {
             .onNodeWithText(text = "title")
             .performScrollTo()
             .onSiblings()
-            .filterToOne(matcher = hasContentDescription(value = "More"))
+            .filterToOne(matcher = hasContentDescription(value = "More options"))
             .performClick()
         composeTestRule.onNodeWithText(text = "Share").performClick()
 
@@ -274,7 +272,7 @@ class RecordedLogsScreenTest : BitwardenComposeTest() {
             .onNodeWithText(text = "title")
             .performScrollTo()
             .onSiblings()
-            .filterToOne(matcher = hasContentDescription(value = "More"))
+            .filterToOne(matcher = hasContentDescription(value = "More options"))
             .performClick()
         composeTestRule.onNodeWithText(text = "Delete").performClick()
         composeTestRule
