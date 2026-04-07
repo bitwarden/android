@@ -22,11 +22,8 @@ class ServerCommunicationConfigRepositoryImpl(
 ) : ServerCommunicationConfigRepository {
 
     override suspend fun get(hostname: String): ServerCommunicationConfig? {
-        val serverCommunicationConfig = configDiskSource
-            .serverConfig
-            ?.serverData
-            ?.communication
-            ?: return null
+        val serverData = configDiskSource.serverConfig?.serverData
+        val serverCommunicationConfig = serverData?.communication ?: return null
 
         if (serverCommunicationConfig.bootstrap.type != "ssoCookieVendor") {
             return ServerCommunicationConfig(
@@ -43,6 +40,7 @@ class ServerCommunicationConfigRepositoryImpl(
             bootstrap = BootstrapConfig.SsoCookieVendor(
                 v1 = SsoCookieVendorConfig(
                     idpLoginUrl = serverCommunicationConfig.bootstrap.idpLoginUrl,
+                    vaultUrl = serverData.environment?.vaultUrl,
                     cookieName = serverCommunicationConfig.bootstrap.cookieName,
                     cookieDomain = serverCommunicationConfig.bootstrap.cookieDomain,
                     cookieValue = acquiredCookies,
