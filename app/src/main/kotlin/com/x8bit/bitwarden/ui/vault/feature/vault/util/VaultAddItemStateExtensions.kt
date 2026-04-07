@@ -82,6 +82,10 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toCipherType(): CipherT
         is VaultAddEditState.ViewState.Content.ItemType.Login -> CipherType.LOGIN
         is VaultAddEditState.ViewState.Content.ItemType.SecureNotes -> CipherType.SECURE_NOTE
         is VaultAddEditState.ViewState.Content.ItemType.SshKey -> CipherType.SSH_KEY
+        is VaultAddEditState.ViewState.Content.ItemType.BankAccount,
+        is VaultAddEditState.ViewState.Content.ItemType.DriversLicense,
+        is VaultAddEditState.ViewState.Content.ItemType.Passport,
+        -> throw IllegalArgumentException("SDK mapping not yet available for $this")
     }
 
 private fun VaultAddEditState.ViewState.Content.ItemType.toSshKeyView(): SshKeyView? =

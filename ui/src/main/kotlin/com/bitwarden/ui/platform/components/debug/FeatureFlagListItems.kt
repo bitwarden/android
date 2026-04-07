@@ -37,6 +37,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.V2EncryptionKeyConnector,
     FlagKey.V2EncryptionPassword,
     FlagKey.V2EncryptionTde,
+    FlagKey.NewItemTypes,
         -> {
         @Suppress("UNCHECKED_CAST")
         BooleanFlagItem(
@@ -95,4 +96,5 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.V2EncryptionKeyConnector -> stringResource(BitwardenString.v2_encryption_key_connector)
     FlagKey.V2EncryptionPassword -> stringResource(BitwardenString.v2_encryption_password)
     FlagKey.V2EncryptionTde -> stringResource(BitwardenString.v2_encryption_tde)
+    FlagKey.NewItemTypes -> stringResource(BitwardenString.new_item_types)
 }

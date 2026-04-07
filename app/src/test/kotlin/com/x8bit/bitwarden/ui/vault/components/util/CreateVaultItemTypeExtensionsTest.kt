@@ -38,6 +38,21 @@ class CreateVaultItemTypeExtensionsTest {
                     actualResult,
                 )
 
+                CreateVaultItemType.BANK_ACCOUNT -> assertEquals(
+                    VaultItemCipherType.BANK_ACCOUNT,
+                    actualResult,
+                )
+
+                CreateVaultItemType.DRIVERS_LICENSE -> assertEquals(
+                    VaultItemCipherType.DRIVERS_LICENSE,
+                    actualResult,
+                )
+
+                CreateVaultItemType.PASSPORT -> assertEquals(
+                    VaultItemCipherType.PASSPORT,
+                    actualResult,
+                )
+
                 CreateVaultItemType.FOLDER -> assertNull(actualResult)
             }
         }

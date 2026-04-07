@@ -67,4 +67,7 @@ private val VaultAddEditState.ViewState.Content.ItemType.defaultLinkedFieldTypeO
         is VaultAddEditState.ViewState.Content.ItemType.Login -> VaultLinkedFieldType.USERNAME
         is VaultAddEditState.ViewState.Content.ItemType.SecureNotes -> null
         is VaultAddEditState.ViewState.Content.ItemType.SshKey -> null
+        is VaultAddEditState.ViewState.Content.ItemType.BankAccount -> null
+        is VaultAddEditState.ViewState.Content.ItemType.DriversLicense -> null
+        is VaultAddEditState.ViewState.Content.ItemType.Passport -> null
     }

@@ -516,6 +516,15 @@ data class SyncResponseJson(
         @SerialName("sshKey")
         val sshKey: SshKey?,
 
+        @SerialName("bankAccount")
+        val bankAccount: BankAccount?,
+
+        @SerialName("driversLicense")
+        val driversLicense: DriversLicense?,
+
+        @SerialName("passport")
+        val passport: Passport?,
+
         @SerialName("collectionIds")
         val collectionIds: List<String>?,
 
@@ -786,6 +795,155 @@ data class SyncResponseJson(
 
             @SerialName("keyFingerprint")
             val keyFingerprint: String,
+        )
+
+        /**
+         * Represents a bank account in the vault response.
+         *
+         * @property bankName The name of the bank (nullable).
+         * @property nameOnAccount The name on the account (nullable).
+         * @property accountType The type of bank account (nullable).
+         * @property accountNumber The account number (nullable).
+         * @property routingNumber The routing/transit number (nullable).
+         * @property branchNumber The branch/institution number (nullable).
+         * @property pin The PIN (nullable).
+         * @property swiftCode The SWIFT code (nullable).
+         * @property iban The IBAN (nullable).
+         * @property bankContactPhone The bank contact phone number (nullable).
+         */
+        @Serializable
+        data class BankAccount(
+            @SerialName("bankName")
+            val bankName: String?,
+
+            @SerialName("nameOnAccount")
+            val nameOnAccount: String?,
+
+            @SerialName("accountType")
+            val accountType: String?,
+
+            @SerialName("accountNumber")
+            val accountNumber: String?,
+
+            @SerialName("routingNumber")
+            val routingNumber: String?,
+
+            @SerialName("branchNumber")
+            val branchNumber: String?,
+
+            @SerialName("pin")
+            val pin: String?,
+
+            @SerialName("swiftCode")
+            val swiftCode: String?,
+
+            @SerialName("iban")
+            val iban: String?,
+
+            @SerialName("bankContactPhone")
+            val bankContactPhone: String?,
+        )
+
+        /**
+         * Represents a driver's license in the vault response.
+         *
+         * @property firstName The first name (nullable).
+         * @property middleName The middle name (nullable).
+         * @property lastName The last name (nullable).
+         * @property licenseNumber The license number (nullable).
+         * @property issuingCountry The issuing country (nullable).
+         * @property issuingState The issuing state/province (nullable).
+         * @property expirationMonth The expiration month (nullable).
+         * @property expirationYear The expiration year (nullable).
+         * @property licenseClass The license class (nullable).
+         */
+        @Serializable
+        data class DriversLicense(
+            @SerialName("firstName")
+            val firstName: String?,
+
+            @SerialName("middleName")
+            val middleName: String?,
+
+            @SerialName("lastName")
+            val lastName: String?,
+
+            @SerialName("licenseNumber")
+            val licenseNumber: String?,
+
+            @SerialName("issuingCountry")
+            val issuingCountry: String?,
+
+            @SerialName("issuingState")
+            val issuingState: String?,
+
+            @SerialName("expirationMonth")
+            val expirationMonth: String?,
+
+            @SerialName("expirationYear")
+            val expirationYear: String?,
+
+            @SerialName("licenseClass")
+            val licenseClass: String?,
+        )
+
+        /**
+         * Represents a passport in the vault response.
+         *
+         * @property surname The surname (nullable).
+         * @property givenName The given name (nullable).
+         * @property dobMonth The month of birth (nullable).
+         * @property dobYear The year of birth (nullable).
+         * @property nationality The nationality (nullable).
+         * @property passportNumber The passport number (nullable).
+         * @property passportType The passport type (nullable).
+         * @property issuingCountry The issuing country (nullable).
+         * @property issuingAuthority The issuing authority/office (nullable).
+         * @property issueMonth The issue month (nullable).
+         * @property issueYear The issue year (nullable).
+         * @property expirationMonth The expiration month (nullable).
+         * @property expirationYear The expiration year (nullable).
+         */
+        @Serializable
+        data class Passport(
+            @SerialName("surname")
+            val surname: String?,
+
+            @SerialName("givenName")
+            val givenName: String?,
+
+            @SerialName("dobMonth")
+            val dobMonth: String?,
+
+            @SerialName("dobYear")
+            val dobYear: String?,
+
+            @SerialName("nationality")
+            val nationality: String?,
+
+            @SerialName("passportNumber")
+            val passportNumber: String?,
+
+            @SerialName("passportType")
+            val passportType: String?,
+
+            @SerialName("issuingCountry")
+            val issuingCountry: String?,
+
+            @SerialName("issuingAuthority")
+            val issuingAuthority: String?,
+
+            @SerialName("issueMonth")
+            val issueMonth: String?,
+
+            @SerialName("issueYear")
+            val issueYear: String?,
+
+            @SerialName("expirationMonth")
+            val expirationMonth: String?,
+
+            @SerialName("expirationYear")
+            val expirationYear: String?,
         )
 
         /**

@@ -43,6 +43,7 @@ sealed class FlagKey<out T : Any> {
                 V2EncryptionKeyConnector,
                 V2EncryptionPassword,
                 V2EncryptionTde,
+                NewItemTypes,
             )
         }
     }
@@ -158,6 +159,15 @@ sealed class FlagKey<out T : Any> {
      */
     data object V2EncryptionTde : FlagKey<Boolean>() {
         override val keyName: String = "pm-27279-v2-registration-tde-jit"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for new vault item types
+     * (Bank Account, Driver's License, Passport).
+     */
+    data object NewItemTypes : FlagKey<Boolean>() {
+        override val keyName: String = "pm-32009-new-item-types"
         override val defaultValue: Boolean = false
     }
 

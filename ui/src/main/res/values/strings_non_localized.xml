@@ -50,6 +50,7 @@
     <string name="v2_encryption_key_connector">V2 Encryption - Key Connector</string>
     <string name="v2_encryption_jit_password">V2 Encryption - JIT Password</string>
     <string name="v2_encryption_password">V2 Encryption - Password</string>
+    <string name="new_item_types">New Item Types</string>
 
     <!-- endregion Debug Menu -->
 </resources>
