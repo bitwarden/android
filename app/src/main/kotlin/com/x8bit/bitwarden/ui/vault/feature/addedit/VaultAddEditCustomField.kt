@@ -59,13 +59,16 @@ fun VaultAddEditCustomField(
 
     if (shouldShowChooserDialog) {
         CustomFieldActionDialog(
-            customFieldActions = CustomFieldAction.entries.filter { action ->
-                when (action) {
-                    CustomFieldAction.MOVE_UP -> showMoveUpAction
-                    CustomFieldAction.MOVE_DOWN -> showMoveDownAction
-                    else -> true
+            customFieldActions = CustomFieldAction
+                .entries
+                .filter { action ->
+                    when (action) {
+                        CustomFieldAction.MOVE_UP -> showMoveUpAction
+                        CustomFieldAction.MOVE_DOWN -> showMoveDownAction
+                        else -> true
+                    }
                 }
-            },
+                .toImmutableList(),
             onCustomFieldAction = { action ->
                 shouldShowChooserDialog = false
                 onCustomFieldAction(action, customField)
@@ -292,7 +295,7 @@ private fun CustomFieldLinkedField(
  */
 @Composable
 private fun CustomFieldActionDialog(
-    customFieldActions: List<CustomFieldAction> = CustomFieldAction.entries,
+    customFieldActions: ImmutableList<CustomFieldAction>,
     onCustomFieldAction: (CustomFieldAction) -> Unit,
     onEditAction: () -> Unit,
     onDismissRequest: () -> Unit,
