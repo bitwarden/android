@@ -137,10 +137,10 @@ private fun FreeDialogs(
                 title = dialogState.title(),
                 message = dialogState.message(),
                 confirmButtonText = stringResource(BitwardenString.try_again),
-                dismissButtonText = stringResource(BitwardenString.okay),
+                dismissButtonText = stringResource(BitwardenString.close),
                 onConfirmClick = handlers.onRetryPricingClick,
-                onDismissClick = handlers.onDismissError,
-                onDismissRequest = handlers.onDismissError,
+                onDismissClick = handlers.onClosePricingErrorClick,
+                onDismissRequest = handlers.onClosePricingErrorClick,
             )
         }
 
@@ -301,16 +301,17 @@ private fun PlanScreenFreeAccount_preview() {
     BitwardenTheme {
         BitwardenScaffold {
             FreeContent(
-                viewState = PlanState.ViewState.Free(rate = "$1.65"),
+                viewState = PlanState.ViewState.Free(rate = "$1.67"),
                 isDialogShowing = false,
                 handlers = PlanHandlers(
                     onBackClick = {},
                     onUpgradeNowClick = {},
                     onDismissError = {},
                     onRetryClick = {},
+                    onRetryPricingClick = {},
+                    onClosePricingErrorClick = {},
                     onCancelWaiting = {},
                     onGoBackClick = {},
-                    onRetryPricingClick = {},
                 ),
             )
         }

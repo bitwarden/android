@@ -156,7 +156,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_FREE_STATE.copy(
                         viewState = PlanState.ViewState.Free(
-                            rate = "$1.65",
+                            rate = "$1.67",
                             checkoutUrl = checkoutUrl,
                         ),
                         dialogState = PlanState.DialogState.WaitingForPayment,
@@ -244,7 +244,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_FREE_STATE.copy(
                         viewState = PlanState.ViewState.Free(
-                            rate = "$1.65",
+                            rate = "$1.67",
                             checkoutUrl = checkoutUrl,
                         ),
                         dialogState = PlanState.DialogState.WaitingForPayment,
@@ -313,7 +313,7 @@ class PlanViewModelTest : BaseViewModelTest() {
         runTest {
             val checkoutUrl = "https://checkout.stripe.com/session123"
             val freeState = PlanState.ViewState.Free(
-                rate = "$1.65",
+                rate = "$1.67",
                 checkoutUrl = checkoutUrl,
             )
             val viewModel = createViewModel(
@@ -478,7 +478,7 @@ class PlanViewModelTest : BaseViewModelTest() {
     // region Pricing fetch
 
     @Test
-    fun `pricing fetch failure should transition to Error ViewState`() =
+    fun `pricing fetch failure should show GetPricingError dialog`() =
         runTest {
             coEvery {
                 mockBillingRepository.getPremiumPlanPricing()
@@ -490,8 +490,15 @@ class PlanViewModelTest : BaseViewModelTest() {
 
             viewModel.stateFlow.test {
                 assertEquals(
-                    DEFAULT_LOADING_STATE.copy(
-                        viewState = PlanState.ViewState.Error,
+                    PlanState(
+                        planMode = PlanMode.Modal,
+                        viewState = PlanState.ViewState.Free(
+                            rate = "--",
+                        ),
+                        dialogState = PlanState.DialogState.GetPricingError(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
+                        ),
                     ),
                     awaitItem(),
                 )
@@ -511,8 +518,15 @@ class PlanViewModelTest : BaseViewModelTest() {
 
             viewModel.stateFlow.test {
                 assertEquals(
-                    DEFAULT_LOADING_STATE.copy(
-                        viewState = PlanState.ViewState.Error,
+                    PlanState(
+                        planMode = PlanMode.Modal,
+                        viewState = PlanState.ViewState.Free(
+                            rate = "--",
+                        ),
+                        dialogState = PlanState.DialogState.GetPricingError(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
+                        ),
                     ),
                     awaitItem(),
                 )
@@ -520,12 +534,65 @@ class PlanViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(PlanAction.RetryPricingClick)
 
                 assertEquals(
-                    DEFAULT_LOADING_STATE,
+                    PlanState(
+                        planMode = PlanMode.Modal,
+                        viewState = PlanState.ViewState.Free(
+                            rate = "--",
+                        ),
+                        dialogState = PlanState.DialogState.Loading(
+                            message = BitwardenString.loading.asText(),
+                        ),
+                    ),
                     awaitItem(),
                 )
                 assertEquals(
                     DEFAULT_FREE_STATE,
                     awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `ClosePricingErrorClick should clear dialog and emit NavigateBack`() =
+        runTest {
+            coEvery {
+                mockBillingRepository.getPremiumPlanPricing()
+            } returns PremiumPlanPricingResult.Error(
+                error = RuntimeException("Network error"),
+            )
+
+            val viewModel = createViewModel()
+
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                assertEquals(
+                    PlanState(
+                        planMode = PlanMode.Modal,
+                        viewState = PlanState.ViewState.Free(
+                            rate = "--",
+                        ),
+                        dialogState = PlanState.DialogState.GetPricingError(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
+                        ),
+                    ),
+                    stateFlow.awaitItem(),
+                )
+
+                viewModel.trySendAction(PlanAction.ClosePricingErrorClick)
+
+                assertEquals(
+                    PlanState(
+                        planMode = PlanMode.Modal,
+                        viewState = PlanState.ViewState.Free(
+                            rate = "--",
+                        ),
+                        dialogState = null,
+                    ),
+                    stateFlow.awaitItem(),
+                )
+                assertEquals(
+                    PlanEvent.NavigateBack,
+                    eventFlow.awaitItem(),
                 )
             }
         }
@@ -576,14 +643,6 @@ private val DEFAULT_USER_STATE = UserState(
     activeUserId = "user-id-1",
     accounts = listOf(DEFAULT_ACCOUNT),
     hasPendingAccountAddition = false,
-)
-
-private val DEFAULT_LOADING_STATE = PlanState(
-    planMode = PlanMode.Modal,
-    viewState = PlanState.ViewState.Free(
-        rate = "$1.67",
-    ),
-    dialogState = null,
 )
 
 private val DEFAULT_FREE_STATE = PlanState(

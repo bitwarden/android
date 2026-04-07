@@ -94,6 +94,10 @@ class PlanViewModel @Inject constructor(
             }
 
             is PlanAction.DismissError -> handleDismissError()
+            is PlanAction.ClosePricingErrorClick -> {
+                handleClosePricingErrorClick()
+            }
+
             is PlanAction.RetryClick -> handleRetryClick()
             is PlanAction.RetryPricingClick -> {
                 handleRetryPricingClick()
@@ -141,6 +145,11 @@ class PlanViewModel @Inject constructor(
 
     private fun handleDismissError() {
         mutableStateFlow.update { it.copy(dialogState = null) }
+    }
+
+    private fun handleClosePricingErrorClick() {
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        sendEvent(PlanEvent.NavigateBack)
     }
 
     private fun handleCancelWaiting() {
@@ -222,24 +231,27 @@ class PlanViewModel @Inject constructor(
     private fun handlePricingResultReceive(
         action: PlanAction.Internal.PricingResultReceive,
     ) {
-        mutableStateFlow.update {
+        onFreeContent { freeState ->
             when (val result = action.result) {
                 is PremiumPlanPricingResult.Success -> {
-                    it.copy(
-                        viewState = PlanState.ViewState.Free(
-                            rate = result.monthlyRate,
-                        ),
-                    )
+                    mutableStateFlow.update {
+                        it.copy(
+                            viewState = freeState.copy(rate = result.monthlyRate),
+                            dialogState = null,
+                        )
+                    }
                 }
 
                 is PremiumPlanPricingResult.Error -> {
-                    it.copy(
-                        dialogState = PlanState.DialogState.GetPricingError(
-                            title = BitwardenString.an_error_has_occurred.asText(),
-                            message = result.errorMessage?.asText()
-                                ?: BitwardenString.generic_error_message.asText(),
-                        ),
-                    )
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialogState = PlanState.DialogState.GetPricingError(
+                                title = BitwardenString.an_error_has_occurred.asText(),
+                                message = result.errorMessage?.asText()
+                                    ?: BitwardenString.generic_error_message.asText(),
+                            ),
+                        )
+                    }
                 }
             }
         }
@@ -409,6 +421,11 @@ sealed class PlanAction {
      * The user clicked retry on the pricing error screen.
      */
     data object RetryPricingClick : PlanAction()
+
+    /**
+     * The user clicked the close button on the pricing error dialog.
+     */
+    data object ClosePricingErrorClick : PlanAction()
 
     /**
      * The user dismissed the waiting for payment dialog.
