@@ -435,6 +435,14 @@ class VaultAddEditViewModel @Inject constructor(
 
     @Suppress("LongMethod")
     private fun handleSaveClick() = onContent { content ->
+        if (!content.type.isSdkSupported) {
+            sendEvent(
+                VaultAddEditEvent.ShowSnackbar(
+                    message = BitwardenString.an_error_has_occurred.asText(),
+                ),
+            )
+            return@onContent
+        }
         if (hasValidationErrors(content)) return@onContent
 
         mutableStateFlow.update {
@@ -2761,6 +2769,11 @@ data class VaultAddEditState(
                 abstract val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
 
                 /**
+                 * Whether this item type has SDK support for save operations.
+                 */
+                open val isSdkSupported: Boolean get() = true
+
+                /**
                  * Represents the login item information.
                  *
                  * @property username The username required for the login item.
@@ -2955,6 +2968,8 @@ data class VaultAddEditState(
                     override val itemTypeOption: ItemTypeOption
                         get() = ItemTypeOption.BANK_ACCOUNT
 
+                    override val isSdkSupported: Boolean get() = false
+
                     override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
                         get() = persistentListOf()
                 }
@@ -2976,6 +2991,8 @@ data class VaultAddEditState(
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption
                         get() = ItemTypeOption.DRIVERS_LICENSE
+
+                    override val isSdkSupported: Boolean get() = false
 
                     override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
                         get() = persistentListOf()
@@ -3002,6 +3019,8 @@ data class VaultAddEditState(
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption
                         get() = ItemTypeOption.PASSPORT
+
+                    override val isSdkSupported: Boolean get() = false
 
                     override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
                         get() = persistentListOf()

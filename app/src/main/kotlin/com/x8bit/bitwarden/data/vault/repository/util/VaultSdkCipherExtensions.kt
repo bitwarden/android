@@ -36,6 +36,7 @@ import com.bitwarden.vault.SecureNote
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SshKey
 import com.bitwarden.vault.UriMatchType
+import timber.log.Timber
 
 /**
  * Converts a Bitwarden SDK [Cipher] object to a corresponding
@@ -388,7 +389,9 @@ private fun CipherType.toNetworkCipherType(): CipherTypeJson =
  */
 fun List<SyncResponseJson.Cipher>.toEncryptedSdkCipherList(): List<Cipher> =
     mapNotNull {
-        runCatching { it.toEncryptedSdkCipher() }.getOrNull()
+        runCatching { it.toEncryptedSdkCipher() }
+            .onFailure { e -> Timber.w(e, "Failed to convert cipher: %s", it.id) }
+            .getOrNull()
     }
 
 /**

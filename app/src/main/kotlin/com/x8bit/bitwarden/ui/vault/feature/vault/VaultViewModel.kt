@@ -117,7 +117,7 @@ class VaultViewModel @Inject constructor(
     private val browserAutofillDialogManager: BrowserAutofillDialogManager,
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager,
     private val buildInfoManager: BuildInfoManager,
-    featureFlagManager: FeatureFlagManager,
+    private val featureFlagManager: FeatureFlagManager,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
@@ -434,12 +434,17 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleSelectAddItemType() {
+        val isNewItemTypesEnabled = featureFlagManager
+            .getFeatureFlag(FlagKey.NewItemTypes)
         // If policy is enable for any organization, exclude the card option
         val excludedOptions = persistentListOfNotNull(
             CreateVaultItemType.SSH_KEY,
             CreateVaultItemType.CARD.takeUnless {
                 state.restrictItemTypesPolicyOrgIds.isEmpty()
             },
+            CreateVaultItemType.BANK_ACCOUNT.takeUnless { isNewItemTypesEnabled },
+            CreateVaultItemType.DRIVERS_LICENSE.takeUnless { isNewItemTypesEnabled },
+            CreateVaultItemType.PASSPORT.takeUnless { isNewItemTypesEnabled },
         )
 
         mutableStateFlow.update {

@@ -11,6 +11,7 @@ import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.map
@@ -58,6 +59,7 @@ import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.credentials.util.getCreatePasskeyCredentialRequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
@@ -113,6 +115,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -152,6 +155,7 @@ class VaultItemListingViewModel @Inject constructor(
     private val toastManager: ToastManager,
     private val premiumStateManager: PremiumStateManager,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
+    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -844,8 +848,15 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun createVaultItemTypeSelectionExcludedOptions(): ImmutableList<CreateVaultItemType> {
+        val isNewItemTypesEnabled = featureFlagManager
+            .getFeatureFlag(FlagKey.NewItemTypes)
+        val newItemTypeExclusions = listOfNotNull(
+            CreateVaultItemType.BANK_ACCOUNT.takeUnless { isNewItemTypesEnabled },
+            CreateVaultItemType.DRIVERS_LICENSE.takeUnless { isNewItemTypesEnabled },
+            CreateVaultItemType.PASSPORT.takeUnless { isNewItemTypesEnabled },
+        )
         // If policy is enable for any organization, exclude the card option
-        return if (state.restrictItemTypesPolicyOrgIds.isNotEmpty()) {
+        val baseExclusions = if (state.restrictItemTypesPolicyOrgIds.isNotEmpty()) {
             persistentListOf(
                 CreateVaultItemType.CARD,
                 CreateVaultItemType.FOLDER,
@@ -857,6 +868,7 @@ class VaultItemListingViewModel @Inject constructor(
                 CreateVaultItemType.FOLDER,
             )
         }
+        return (baseExclusions + newItemTypeExclusions).toPersistentList()
     }
 
     private fun handleAddVaultItemClick() {
