@@ -3516,7 +3516,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onAllNodesWithContentDescriptionAfterScroll("Edit")
-            .onFirst()
+            .onLast()
             .performClick()
 
         composeTestRule
@@ -3527,10 +3527,10 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             viewModel.trySendAction(
                 VaultAddEditAction.Common.CustomFieldActionSelect(
                     customFieldAction = CustomFieldAction.MOVE_UP,
-                    customField = VaultAddEditState.Custom.BooleanField(
-                        itemId = "Test ID 1",
-                        name = "TestBoolean",
-                        value = false,
+                    customField = VaultAddEditState.Custom.HiddenField(
+                        itemId = "Test ID 3",
+                        name = "TestHidden",
+                        value = "TestHiddenVal",
                     ),
                 ),
             )
