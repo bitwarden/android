@@ -73,6 +73,9 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
 
                 is VaultAddEditState.ViewState.Content.ItemType.Identity -> Unit
                 is VaultAddEditState.ViewState.Content.ItemType.SshKey -> Unit
+                is VaultAddEditState.ViewState.Content.ItemType.BankAccount -> Unit
+                is VaultAddEditState.ViewState.Content.ItemType.DriversLicense -> Unit
+                is VaultAddEditState.ViewState.Content.ItemType.Passport -> Unit
                 is VaultAddEditState.ViewState.Content.ItemType.Login -> {
                     loginItemTypeHandlers.onSetupTotpClick(isGranted)
                 }
@@ -275,6 +278,10 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
                     sshKeyTypeHandlers = sshKeyItemTypeHandlers,
                 )
             }
+
+            is VaultAddEditState.ViewState.Content.ItemType.BankAccount -> Unit
+            is VaultAddEditState.ViewState.Content.ItemType.DriversLicense -> Unit
+            is VaultAddEditState.ViewState.Content.ItemType.Passport -> Unit
         }
 
         vaultAddEditAdditionalOptions(

@@ -39,6 +39,24 @@ enum class CipherTypeJson {
      */
     @SerialName("5")
     SSH_KEY,
+
+    /**
+     * A bank account.
+     */
+    @SerialName("6")
+    BANK_ACCOUNT,
+
+    /**
+     * A driver's license.
+     */
+    @SerialName("7")
+    DRIVERS_LICENSE,
+
+    /**
+     * A passport.
+     */
+    @SerialName("8")
+    PASSPORT,
 }
 
 @Keep

@@ -13,5 +13,8 @@ fun CreateVaultItemType.toVaultItemCipherTypeOrNull(): VaultItemCipherType? = wh
     CreateVaultItemType.IDENTITY -> VaultItemCipherType.IDENTITY
     CreateVaultItemType.SECURE_NOTE -> VaultItemCipherType.SECURE_NOTE
     CreateVaultItemType.SSH_KEY -> VaultItemCipherType.SSH_KEY
+    CreateVaultItemType.BANK_ACCOUNT -> VaultItemCipherType.BANK_ACCOUNT
+    CreateVaultItemType.DRIVERS_LICENSE -> VaultItemCipherType.DRIVERS_LICENSE
+    CreateVaultItemType.PASSPORT -> VaultItemCipherType.PASSPORT
     CreateVaultItemType.FOLDER -> null
 }

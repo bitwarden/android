@@ -706,6 +706,9 @@ class VaultItemListingViewModel @Inject constructor(
             CreateVaultItemType.IDENTITY,
             CreateVaultItemType.SECURE_NOTE,
             CreateVaultItemType.SSH_KEY,
+            CreateVaultItemType.BANK_ACCOUNT,
+            CreateVaultItemType.DRIVERS_LICENSE,
+            CreateVaultItemType.PASSPORT,
                 -> {
                 vaultItemType
                     .toVaultItemCipherTypeOrNull()

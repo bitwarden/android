@@ -66,6 +66,9 @@ fun Cipher.toEncryptedNetworkCipher(
         card = card?.toEncryptedNetworkCard(),
         key = key,
         sshKey = sshKey?.toEncryptedNetworkSshKey(),
+        bankAccount = null,
+        driversLicense = null,
+        passport = null,
         archivedDate = archivedDate,
         encryptedFor = encryptedFor,
     )
@@ -96,6 +99,9 @@ fun Cipher.toEncryptedNetworkCipherResponse(
         card = card?.toEncryptedNetworkCard(),
         attachments = attachments?.toNetworkAttachmentList(),
         sshKey = sshKey?.toEncryptedNetworkSshKey(),
+        bankAccount = null,
+        driversLicense = null,
+        passport = null,
         shouldOrganizationUseTotp = organizationUseTotp,
         shouldEdit = edit,
         revisionDate = revisionDate,
@@ -380,7 +386,9 @@ private fun CipherType.toNetworkCipherType(): CipherTypeJson =
  * Bitwarden SDK [Cipher] objects.
  */
 fun List<SyncResponseJson.Cipher>.toEncryptedSdkCipherList(): List<Cipher> =
-    map { it.toEncryptedSdkCipher() }
+    mapNotNull {
+        runCatching { it.toEncryptedSdkCipher() }.getOrNull()
+    }
 
 /**
  * Converts a [SyncResponseJson.Cipher] object to a corresponding
@@ -607,6 +615,10 @@ fun CipherTypeJson.toSdkCipherType(): CipherType =
         CipherTypeJson.CARD -> CipherType.CARD
         CipherTypeJson.IDENTITY -> CipherType.IDENTITY
         CipherTypeJson.SSH_KEY -> CipherType.SSH_KEY
+        CipherTypeJson.BANK_ACCOUNT,
+        CipherTypeJson.DRIVERS_LICENSE,
+        CipherTypeJson.PASSPORT,
+        -> throw IllegalArgumentException("SDK mapping not yet available for $this")
     }
 
 /**

@@ -35,6 +35,21 @@ enum class CreateVaultItemType(
     SSH_KEY(BitwardenString.type_ssh_key),
 
     /**
+     * A bank account cipher.
+     */
+    BANK_ACCOUNT(BitwardenString.type_bank_account),
+
+    /**
+     * A driver's license cipher.
+     */
+    DRIVERS_LICENSE(BitwardenString.type_drivers_license),
+
+    /**
+     * A passport cipher.
+     */
+    PASSPORT(BitwardenString.type_passport),
+
+    /**
      * A cipher item folder
      */
     FOLDER(BitwardenString.folder),

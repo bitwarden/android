@@ -89,6 +89,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
+import com.x8bit.bitwarden.ui.vault.model.VaultBankAccountType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.util.detectCardBrand
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -2552,6 +2553,9 @@ data class VaultAddEditState(
                 VaultItemCipherType.IDENTITY -> BitwardenString.new_identity.asText()
                 VaultItemCipherType.SECURE_NOTE -> BitwardenString.new_note.asText()
                 VaultItemCipherType.SSH_KEY -> BitwardenString.new_ssh_key.asText()
+                VaultItemCipherType.BANK_ACCOUNT -> BitwardenString.new_bank_account.asText()
+                VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.new_drivers_license.asText()
+                VaultItemCipherType.PASSPORT -> BitwardenString.new_passport.asText()
             }
 
             is VaultAddEditType.EditItem -> when (cipherType) {
@@ -2560,6 +2564,9 @@ data class VaultAddEditState(
                 VaultItemCipherType.IDENTITY -> BitwardenString.edit_identity.asText()
                 VaultItemCipherType.SECURE_NOTE -> BitwardenString.edit_note.asText()
                 VaultItemCipherType.SSH_KEY -> BitwardenString.edit_ssh_key.asText()
+                VaultItemCipherType.BANK_ACCOUNT -> BitwardenString.edit_bank_account.asText()
+                VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.edit_drivers_license.asText()
+                VaultItemCipherType.PASSPORT -> BitwardenString.edit_passport.asText()
             }
         }
 
@@ -2653,6 +2660,9 @@ data class VaultAddEditState(
         IDENTITY(BitwardenString.type_identity),
         SECURE_NOTES(BitwardenString.type_secure_note),
         SSH_KEYS(BitwardenString.type_ssh_key),
+        BANK_ACCOUNT(BitwardenString.type_bank_account),
+        DRIVERS_LICENSE(BitwardenString.type_drivers_license),
+        PASSPORT(BitwardenString.type_passport),
     }
 
     /**
@@ -2933,6 +2943,77 @@ data class VaultAddEditState(
                     val showFingerprint: Boolean = false,
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.SSH_KEYS
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf()
+                }
+
+                /**
+                 * Represents the bank account item information.
+                 */
+                @Parcelize
+                data class BankAccount(
+                    val bankName: String = "",
+                    val nameOnAccount: String = "",
+                    val accountType: VaultBankAccountType = VaultBankAccountType.SELECT,
+                    val accountNumber: String = "",
+                    val routingNumber: String = "",
+                    val branchNumber: String = "",
+                    val pin: String = "",
+                    val swiftCode: String = "",
+                    val iban: String = "",
+                    val bankContactPhone: String = "",
+                ) : ItemType() {
+                    override val itemTypeOption: ItemTypeOption
+                        get() = ItemTypeOption.BANK_ACCOUNT
+
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf()
+                }
+
+                /**
+                 * Represents the driver's license item information.
+                 */
+                @Parcelize
+                data class DriversLicense(
+                    val firstName: String = "",
+                    val middleName: String = "",
+                    val lastName: String = "",
+                    val licenseNumber: String = "",
+                    val issuingCountry: String = "",
+                    val issuingState: String = "",
+                    val expirationMonth: String = "",
+                    val expirationYear: String = "",
+                    val licenseClass: String = "",
+                ) : ItemType() {
+                    override val itemTypeOption: ItemTypeOption
+                        get() = ItemTypeOption.DRIVERS_LICENSE
+
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf()
+                }
+
+                /**
+                 * Represents the passport item information.
+                 */
+                @Parcelize
+                data class Passport(
+                    val surname: String = "",
+                    val givenName: String = "",
+                    val dobMonth: String = "",
+                    val dobYear: String = "",
+                    val nationality: String = "",
+                    val passportNumber: String = "",
+                    val passportType: String = "",
+                    val issuingCountry: String = "",
+                    val issuingAuthority: String = "",
+                    val issueMonth: String = "",
+                    val issueYear: String = "",
+                    val expirationMonth: String = "",
+                    val expirationYear: String = "",
+                ) : ItemType() {
+                    override val itemTypeOption: ItemTypeOption
+                        get() = ItemTypeOption.PASSPORT
+
                     override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
                         get() = persistentListOf()
                 }
