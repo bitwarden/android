@@ -34,8 +34,8 @@ import kotlinx.collections.immutable.toImmutableList
  * @param customField The field that is to be displayed.
  * @param onCustomFieldValueChange Invoked when the user changes the value.
  * @param onCustomFieldAction Invoked when the user chooses an action.
- * @param showMoveUpAction Whether the [CustomFieldAction.MOVE_UP] is displayed in the action dialog.
- * @param showMoveDownAction Whether the [CustomFieldAction.MOVE_DOWN] is displayed in the action dialog.
+ * @param showMoveUpAction Whether the move up action is displayed in the action dialog.
+ * @param showMoveDownAction Whether the move down action is displayed in the action dialog.
  * @param onHiddenVisibilityChanged Emits when the visibility of a hidden custom field changes.
  * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier Modifier for the UI elements.
