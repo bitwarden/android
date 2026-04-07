@@ -3,10 +3,13 @@ package com.x8bit.bitwarden.ui.vault.feature.cardscanner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -28,11 +31,13 @@ import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalCardTextAnalyzer
 import com.bitwarden.ui.platform.feature.cardscanner.util.CardTextAnalyzer
+import com.bitwarden.ui.platform.model.WindowSize
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.theme.LocalBitwardenColorScheme
 import com.bitwarden.ui.platform.theme.color.darkBitwardenColorScheme
+import com.bitwarden.ui.platform.util.rememberWindowSize
 
 /**
  * The screen to scan credit cards for the application.
@@ -91,36 +96,88 @@ fun CardScanScreen(
                 analyzer = cardTextAnalyzer,
                 modifier = Modifier.fillMaxSize(),
             )
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                CardScanOverlay(
-                    overlayWidth = 300.dp,
-                    modifier = Modifier.weight(2f),
-                )
+            when (rememberWindowSize()) {
+                WindowSize.Compact -> {
+                    CardScanContentCompact()
+                }
 
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.SpaceAround,
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxSize()
-                        .background(color = BitwardenTheme.colorScheme.background.scrim)
-                        .padding(horizontal = 16.dp),
-                ) {
-                    Text(
-                        text = stringResource(
-                            id = BitwardenString.scan_card_instruction,
-                        ),
-                        textAlign = TextAlign.Center,
-                        color = BitwardenTheme.colorScheme.text.primary,
-                        style = BitwardenTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                    )
-                    Spacer(modifier = Modifier.navigationBarsPadding())
+                WindowSize.Medium -> {
+                    CardScanContentMedium()
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun CardScanContentCompact(
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier,
+    ) {
+        CardScanOverlay(
+            overlayWidth = 300.dp,
+            modifier = Modifier.weight(2f),
+        )
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceAround,
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxSize()
+                .background(color = BitwardenTheme.colorScheme.background.scrim)
+                .padding(horizontal = 16.dp)
+                .verticalScroll(rememberScrollState()),
+        ) {
+            Text(
+                text = stringResource(
+                    id = BitwardenString.scan_card_instruction,
+                ),
+                textAlign = TextAlign.Center,
+                color = BitwardenTheme.colorScheme.text.primary,
+                style = BitwardenTheme.typography.bodyMedium,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+            Spacer(modifier = Modifier.navigationBarsPadding())
+        }
+    }
+}
+
+@Composable
+private fun CardScanContentMedium(
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier,
+    ) {
+        CardScanOverlay(
+            overlayWidth = 250.dp,
+            modifier = Modifier.weight(2f),
+        )
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceAround,
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxSize()
+                .background(color = BitwardenTheme.colorScheme.background.scrim)
+                .padding(horizontal = 16.dp)
+                .navigationBarsPadding()
+                .verticalScroll(rememberScrollState()),
+        ) {
+            Text(
+                text = stringResource(
+                    id = BitwardenString.scan_card_instruction,
+                ),
+                textAlign = TextAlign.Center,
+                color = BitwardenTheme.colorScheme.text.primary,
+                style = BitwardenTheme.typography.bodySmall,
+            )
         }
     }
 }

@@ -13,6 +13,7 @@ import io.mockk.verify
 import junit.framework.TestCase.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.robolectric.annotation.Config
 
 class CardScanScreenTest : BitwardenComposeTest() {
 
@@ -67,5 +68,13 @@ class CardScanScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText("Scan card")
             .assertExists()
+    }
+
+    @Config(qualifiers = "land")
+    @Test
+    fun `instruction text should display in landscape mode`() {
+        composeTestRule
+            .onNodeWithText("Position your card within the frame to scan it.")
+            .assertIsDisplayed()
     }
 }
