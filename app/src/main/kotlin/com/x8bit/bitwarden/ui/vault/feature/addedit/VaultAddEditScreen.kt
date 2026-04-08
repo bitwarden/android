@@ -86,6 +86,9 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTyp
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditBankAccountTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditDriversLicenseTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditPassportTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditUserVerificationHandlers
 import kotlinx.collections.immutable.ImmutableList
@@ -231,6 +234,18 @@ fun VaultAddEditScreen(
 
     val sshKeyItemTypeHandlers = remember(viewModel) {
         VaultAddEditSshKeyTypeHandlers.create(viewModel = viewModel)
+    }
+
+    val bankAccountItemTypeHandlers = remember(viewModel) {
+        VaultAddEditBankAccountTypeHandlers.create(viewModel = viewModel)
+    }
+
+    val driversLicenseItemTypeHandlers = remember(viewModel) {
+        VaultAddEditDriversLicenseTypeHandlers.create(viewModel = viewModel)
+    }
+
+    val passportItemTypeHandlers = remember(viewModel) {
+        VaultAddEditPassportTypeHandlers.create(viewModel = viewModel)
     }
 
     val archiveClickAction = { viewModel.trySendAction(VaultAddEditAction.Common.ArchiveClick) }
@@ -416,6 +431,9 @@ fun VaultAddEditScreen(
                         sshKeyItemTypeHandlers = sshKeyItemTypeHandlers,
                         isCardScannerEnabled = state.isCardScannerEnabled,
                         cardHolderNameFocusRequester = cardHolderNameFocusRequester,
+                        bankAccountItemTypeHandlers = bankAccountItemTypeHandlers,
+                        driversLicenseItemTypeHandlers = driversLicenseItemTypeHandlers,
+                        passportItemTypeHandlers = passportItemTypeHandlers,
                         lazyListState = lazyListState,
                         onPreviousCoachMark = {
                             coroutineScope.launch {

@@ -312,6 +312,18 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.ItemType.IdentityType -> handleIdentityTypeActions(action)
             is VaultAddEditAction.ItemType.CardType -> handleCardTypeActions(action)
             is VaultAddEditAction.ItemType.SshKeyType -> handleSshKeyTypeActions(action)
+            is VaultAddEditAction.ItemType.BankAccountType -> {
+                handleBankAccountTypeActions(action)
+            }
+
+            is VaultAddEditAction.ItemType.DriversLicenseType -> {
+                handleDriversLicenseTypeActions(action)
+            }
+
+            is VaultAddEditAction.ItemType.PassportType -> {
+                handlePassportTypeActions(action)
+            }
+
             is VaultAddEditAction.Internal -> handleInternalActions(action)
         }
     }
@@ -1686,6 +1698,230 @@ class VaultAddEditViewModel @Inject constructor(
 
     //endregion SSH Key Type Handlers
 
+    //region Bank Account Type Handlers
+
+    @Suppress("LongMethod")
+    private fun handleBankAccountTypeActions(
+        action: VaultAddEditAction.ItemType.BankAccountType,
+    ) {
+        when (action) {
+            is VaultAddEditAction.ItemType.BankAccountType.BankNameTextChange -> {
+                updateBankAccountContent { it.copy(bankName = action.bankName) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.NameOnAccountTextChange -> {
+                updateBankAccountContent {
+                    it.copy(nameOnAccount = action.nameOnAccount)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.AccountTypeSelect -> {
+                updateBankAccountContent {
+                    it.copy(accountType = action.accountType)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.AccountNumberTextChange -> {
+                updateBankAccountContent {
+                    it.copy(accountNumber = action.accountNumber)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.AccountNumberVisibilityChange -> {
+                // Visibility managed locally by the composable via rememberSaveable.
+                // Handler exists for future organization event tracking.
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.RoutingNumberTextChange -> {
+                updateBankAccountContent {
+                    it.copy(routingNumber = action.routingNumber)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.BranchNumberTextChange -> {
+                updateBankAccountContent {
+                    it.copy(branchNumber = action.branchNumber)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.PinTextChange -> {
+                updateBankAccountContent { it.copy(pin = action.pin) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.PinVisibilityChange -> {
+                // Visibility managed locally by the composable via rememberSaveable.
+                // Handler exists for future organization event tracking.
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.SwiftCodeTextChange -> {
+                updateBankAccountContent {
+                    it.copy(swiftCode = action.swiftCode)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.IbanTextChange -> {
+                updateBankAccountContent { it.copy(iban = action.iban) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.BankContactPhoneTextChange -> {
+                updateBankAccountContent {
+                    it.copy(bankContactPhone = action.phone)
+                }
+            }
+        }
+    }
+
+    //endregion Bank Account Type Handlers
+
+    //region Driver's License Type Handlers
+
+    private fun handleDriversLicenseTypeActions(
+        action: VaultAddEditAction.ItemType.DriversLicenseType,
+    ) {
+        when (action) {
+            is VaultAddEditAction.ItemType.DriversLicenseType.FirstNameTextChange -> {
+                updateDriversLicenseContent {
+                    it.copy(firstName = action.firstName)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.DriversLicenseType.MiddleNameTextChange -> {
+                updateDriversLicenseContent {
+                    it.copy(middleName = action.middleName)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.DriversLicenseType.LastNameTextChange -> {
+                updateDriversLicenseContent {
+                    it.copy(lastName = action.lastName)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.DriversLicenseType.LicenseNumberTextChange -> {
+                updateDriversLicenseContent {
+                    it.copy(licenseNumber = action.licenseNumber)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.DriversLicenseType.IssuingCountryTextChange -> {
+                updateDriversLicenseContent {
+                    it.copy(issuingCountry = action.country)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.DriversLicenseType.IssuingStateTextChange -> {
+                updateDriversLicenseContent {
+                    it.copy(issuingState = action.state)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.DriversLicenseType.ExpirationMonthSelect -> {
+                updateDriversLicenseContent {
+                    it.copy(expirationMonth = action.month.number)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.DriversLicenseType.ExpirationYearTextChange -> {
+                updateDriversLicenseContent {
+                    it.copy(expirationYear = action.year)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.DriversLicenseType.LicenseClassTextChange -> {
+                updateDriversLicenseContent {
+                    it.copy(licenseClass = action.licenseClass)
+                }
+            }
+        }
+    }
+
+    //endregion Driver's License Type Handlers
+
+    //region Passport Type Handlers
+
+    @Suppress("LongMethod")
+    private fun handlePassportTypeActions(
+        action: VaultAddEditAction.ItemType.PassportType,
+    ) {
+        when (action) {
+            is VaultAddEditAction.ItemType.PassportType.SurnameTextChange -> {
+                updatePassportContent { it.copy(surname = action.surname) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.GivenNameTextChange -> {
+                updatePassportContent {
+                    it.copy(givenName = action.givenName)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.DobMonthSelect -> {
+                updatePassportContent {
+                    it.copy(dobMonth = action.month.number)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.DobYearTextChange -> {
+                updatePassportContent { it.copy(dobYear = action.year) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.NationalityTextChange -> {
+                updatePassportContent {
+                    it.copy(nationality = action.nationality)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.PassportNumberTextChange -> {
+                updatePassportContent {
+                    it.copy(passportNumber = action.number)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.PassportTypeTextChange -> {
+                updatePassportContent {
+                    it.copy(passportType = action.type)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.IssuingCountryTextChange -> {
+                updatePassportContent {
+                    it.copy(issuingCountry = action.country)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.IssuingAuthorityTextChange -> {
+                updatePassportContent {
+                    it.copy(issuingAuthority = action.authority)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.IssueMonthSelect -> {
+                updatePassportContent {
+                    it.copy(issueMonth = action.month.number)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.IssueYearTextChange -> {
+                updatePassportContent {
+                    it.copy(issueYear = action.year)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.ExpirationMonthSelect -> {
+                updatePassportContent {
+                    it.copy(expirationMonth = action.month.number)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.ExpirationYearTextChange -> {
+                updatePassportContent {
+                    it.copy(expirationYear = action.year)
+                }
+            }
+        }
+    }
+
+    //endregion Passport Type Handlers
+
     //region Internal Type Handlers
 
     private fun handleInternalActions(action: VaultAddEditAction.Internal) {
@@ -2452,6 +2688,45 @@ class VaultAddEditViewModel @Inject constructor(
                     type = block(it),
                 )
             }
+        }
+    }
+
+    private inline fun updateBankAccountContent(
+        crossinline block: (
+            VaultAddEditState.ViewState.Content.ItemType.BankAccount,
+        ) -> VaultAddEditState.ViewState.Content.ItemType.BankAccount,
+    ) {
+        updateContent { currentContent ->
+            (currentContent.type as? VaultAddEditState.ViewState.Content.ItemType.BankAccount)
+                ?.let {
+                    currentContent.copy(type = block(it))
+                }
+        }
+    }
+
+    private inline fun updateDriversLicenseContent(
+        crossinline block: (
+            VaultAddEditState.ViewState.Content.ItemType.DriversLicense,
+        ) -> VaultAddEditState.ViewState.Content.ItemType.DriversLicense,
+    ) {
+        updateContent { currentContent ->
+            (currentContent.type as? VaultAddEditState.ViewState.Content.ItemType.DriversLicense)
+                ?.let {
+                    currentContent.copy(type = block(it))
+                }
+        }
+    }
+
+    private inline fun updatePassportContent(
+        crossinline block: (
+            VaultAddEditState.ViewState.Content.ItemType.Passport,
+        ) -> VaultAddEditState.ViewState.Content.ItemType.Passport,
+    ) {
+        updateContent { currentContent ->
+            (currentContent.type as? VaultAddEditState.ViewState.Content.ItemType.Passport)
+                ?.let {
+                    currentContent.copy(type = block(it))
+                }
         }
     }
 
@@ -3952,6 +4227,185 @@ sealed class VaultAddEditAction {
              * Fired when the private key's visibility has changed.
              */
             data class PrivateKeyVisibilityChange(val isVisible: Boolean) : SshKeyType()
+        }
+
+        /**
+         * Represents actions specific to the Bank Account type.
+         */
+        sealed class BankAccountType : ItemType() {
+            /** Fired when the bank name text input is changed. */
+            data class BankNameTextChange(val bankName: String) : BankAccountType()
+
+            /** Fired when the name on account text input is changed. */
+            data class NameOnAccountTextChange(
+                val nameOnAccount: String,
+            ) : BankAccountType()
+
+            /** Fired when the account type is selected. */
+            data class AccountTypeSelect(
+                val accountType: VaultBankAccountType,
+            ) : BankAccountType()
+
+            /** Fired when the account number text input is changed. */
+            data class AccountNumberTextChange(
+                val accountNumber: String,
+            ) : BankAccountType()
+
+            /** Fired when the account number visibility is changed. */
+            data class AccountNumberVisibilityChange(
+                val isVisible: Boolean,
+            ) : BankAccountType()
+
+            /** Fired when the routing number text input is changed. */
+            data class RoutingNumberTextChange(
+                val routingNumber: String,
+            ) : BankAccountType()
+
+            /** Fired when the branch number text input is changed. */
+            data class BranchNumberTextChange(
+                val branchNumber: String,
+            ) : BankAccountType()
+
+            /** Fired when the PIN text input is changed. */
+            data class PinTextChange(val pin: String) : BankAccountType()
+
+            /** Fired when the PIN visibility is changed. */
+            data class PinVisibilityChange(
+                val isVisible: Boolean,
+            ) : BankAccountType()
+
+            /** Fired when the SWIFT code text input is changed. */
+            data class SwiftCodeTextChange(
+                val swiftCode: String,
+            ) : BankAccountType()
+
+            /** Fired when the IBAN text input is changed. */
+            data class IbanTextChange(val iban: String) : BankAccountType()
+
+            /** Fired when the bank contact phone text input is changed. */
+            data class BankContactPhoneTextChange(
+                val phone: String,
+            ) : BankAccountType()
+        }
+
+        /**
+         * Represents actions specific to the Driver's License type.
+         */
+        sealed class DriversLicenseType : ItemType() {
+            /** Fired when the first name text input is changed. */
+            data class FirstNameTextChange(
+                val firstName: String,
+            ) : DriversLicenseType()
+
+            /** Fired when the middle name text input is changed. */
+            data class MiddleNameTextChange(
+                val middleName: String,
+            ) : DriversLicenseType()
+
+            /** Fired when the last name text input is changed. */
+            data class LastNameTextChange(
+                val lastName: String,
+            ) : DriversLicenseType()
+
+            /** Fired when the license number text input is changed. */
+            data class LicenseNumberTextChange(
+                val licenseNumber: String,
+            ) : DriversLicenseType()
+
+            /** Fired when the issuing country text input is changed. */
+            data class IssuingCountryTextChange(
+                val country: String,
+            ) : DriversLicenseType()
+
+            /** Fired when the issuing state text input is changed. */
+            data class IssuingStateTextChange(
+                val state: String,
+            ) : DriversLicenseType()
+
+            /** Fired when the expiration month is selected. */
+            data class ExpirationMonthSelect(
+                val month: VaultCardExpirationMonth,
+            ) : DriversLicenseType()
+
+            /** Fired when the expiration year text input is changed. */
+            data class ExpirationYearTextChange(
+                val year: String,
+            ) : DriversLicenseType()
+
+            /** Fired when the license class text input is changed. */
+            data class LicenseClassTextChange(
+                val licenseClass: String,
+            ) : DriversLicenseType()
+        }
+
+        /**
+         * Represents actions specific to the Passport type.
+         */
+        sealed class PassportType : ItemType() {
+            /** Fired when the surname text input is changed. */
+            data class SurnameTextChange(
+                val surname: String,
+            ) : PassportType()
+
+            /** Fired when the given name text input is changed. */
+            data class GivenNameTextChange(
+                val givenName: String,
+            ) : PassportType()
+
+            /** Fired when the date of birth month is selected. */
+            data class DobMonthSelect(
+                val month: VaultCardExpirationMonth,
+            ) : PassportType()
+
+            /** Fired when the date of birth year text input is changed. */
+            data class DobYearTextChange(
+                val year: String,
+            ) : PassportType()
+
+            /** Fired when the nationality text input is changed. */
+            data class NationalityTextChange(
+                val nationality: String,
+            ) : PassportType()
+
+            /** Fired when the passport number text input is changed. */
+            data class PassportNumberTextChange(
+                val number: String,
+            ) : PassportType()
+
+            /** Fired when the passport type text input is changed. */
+            data class PassportTypeTextChange(
+                val type: String,
+            ) : PassportType()
+
+            /** Fired when the issuing country text input is changed. */
+            data class IssuingCountryTextChange(
+                val country: String,
+            ) : PassportType()
+
+            /** Fired when the issuing authority text input is changed. */
+            data class IssuingAuthorityTextChange(
+                val authority: String,
+            ) : PassportType()
+
+            /** Fired when the issue month is selected. */
+            data class IssueMonthSelect(
+                val month: VaultCardExpirationMonth,
+            ) : PassportType()
+
+            /** Fired when the issue year text input is changed. */
+            data class IssueYearTextChange(
+                val year: String,
+            ) : PassportType()
+
+            /** Fired when the expiration month is selected. */
+            data class ExpirationMonthSelect(
+                val month: VaultCardExpirationMonth,
+            ) : PassportType()
+
+            /** Fired when the expiration year text input is changed. */
+            data class ExpirationYearTextChange(
+                val year: String,
+            ) : PassportType()
         }
     }
 

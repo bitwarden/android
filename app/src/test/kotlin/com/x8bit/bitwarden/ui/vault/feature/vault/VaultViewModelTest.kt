@@ -233,6 +233,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         } returns mutableCxpExportFeatureFlagFlow
         every { getFeatureFlagFlow(FlagKey.ArchiveItems) } returns mutableArchiveItemsFlagFlow
         every { getFeatureFlag(FlagKey.ArchiveItems) } returns mutableArchiveItemsFlagFlow.value
+        every { getFeatureFlag(FlagKey.NewItemTypes) } returns false
     }
 
     private val mutablePremiumUpgradeBannerEligibleFlow = MutableStateFlow(false)
@@ -3537,7 +3538,12 @@ class VaultViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultAction.SelectAddItemType)
         val expectedState = DEFAULT_STATE.copy(
             dialog = VaultState.DialogState.SelectVaultAddItemType(
-                excludedOptions = persistentListOf(CreateVaultItemType.SSH_KEY),
+                excludedOptions = persistentListOf(
+                    CreateVaultItemType.SSH_KEY,
+                    CreateVaultItemType.BANK_ACCOUNT,
+                    CreateVaultItemType.DRIVERS_LICENSE,
+                    CreateVaultItemType.PASSPORT,
+                ),
             ),
         )
         assertEquals(
@@ -3569,6 +3575,9 @@ class VaultViewModelTest : BaseViewModelTest() {
                     excludedOptions = persistentListOf(
                         CreateVaultItemType.SSH_KEY,
                         CreateVaultItemType.CARD,
+                        CreateVaultItemType.BANK_ACCOUNT,
+                        CreateVaultItemType.DRIVERS_LICENSE,
+                        CreateVaultItemType.PASSPORT,
                     ),
                 ),
                 restrictItemTypesPolicyOrgIds = listOf("Test Organization"),

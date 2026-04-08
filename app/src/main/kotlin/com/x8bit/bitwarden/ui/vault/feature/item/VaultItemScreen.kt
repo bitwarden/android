@@ -47,6 +47,9 @@ import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandl
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultBankAccountItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultDriversLicenseItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultPassportItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultSshKeyItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 
@@ -281,6 +284,15 @@ fun VaultItemScreen(
             vaultIdentityItemTypeHandlers = remember(viewModel) {
                 VaultIdentityItemTypeHandlers.create(viewModel = viewModel)
             },
+            vaultBankAccountItemTypeHandlers = remember(viewModel) {
+                VaultBankAccountItemTypeHandlers.create(viewModel = viewModel)
+            },
+            vaultDriversLicenseItemTypeHandlers = remember(viewModel) {
+                VaultDriversLicenseItemTypeHandlers.create(viewModel = viewModel)
+            },
+            vaultPassportItemTypeHandlers = remember(viewModel) {
+                VaultPassportItemTypeHandlers.create(viewModel = viewModel)
+            },
         )
     }
 }
@@ -365,6 +377,9 @@ private fun VaultItemContent(
     vaultCardItemTypeHandlers: VaultCardItemTypeHandlers,
     vaultSshKeyItemTypeHandlers: VaultSshKeyItemTypeHandlers,
     vaultIdentityItemTypeHandlers: VaultIdentityItemTypeHandlers,
+    vaultBankAccountItemTypeHandlers: VaultBankAccountItemTypeHandlers,
+    vaultDriversLicenseItemTypeHandlers: VaultDriversLicenseItemTypeHandlers,
+    vaultPassportItemTypeHandlers: VaultPassportItemTypeHandlers,
     modifier: Modifier = Modifier,
 ) {
     when (viewState) {
@@ -423,6 +438,39 @@ private fun VaultItemContent(
                         sshKeyItemState = viewState.type,
                         vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
                         vaultSshKeyItemTypeHandlers = vaultSshKeyItemTypeHandlers,
+                        modifier = modifier,
+                    )
+                }
+
+                is VaultItemState.ViewState.Content.ItemType.BankAccount -> {
+                    VaultItemBankAccountContent(
+                        commonState = viewState.common,
+                        bankAccountState = viewState.type,
+                        vaultBankAccountItemTypeHandlers =
+                            vaultBankAccountItemTypeHandlers,
+                        vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+                        modifier = modifier,
+                    )
+                }
+
+                is VaultItemState.ViewState.Content.ItemType.DriversLicense -> {
+                    VaultItemDriversLicenseContent(
+                        commonState = viewState.common,
+                        driversLicenseState = viewState.type,
+                        vaultDriversLicenseItemTypeHandlers =
+                            vaultDriversLicenseItemTypeHandlers,
+                        vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+                        modifier = modifier,
+                    )
+                }
+
+                is VaultItemState.ViewState.Content.ItemType.Passport -> {
+                    VaultItemPassportContent(
+                        commonState = viewState.common,
+                        passportState = viewState.type,
+                        vaultPassportItemTypeHandlers =
+                            vaultPassportItemTypeHandlers,
+                        vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
                         modifier = modifier,
                     )
                 }

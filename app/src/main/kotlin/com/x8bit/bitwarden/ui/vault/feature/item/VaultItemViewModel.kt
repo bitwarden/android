@@ -246,6 +246,10 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.ItemType.Card -> handleCardTypeActions(action)
             is VaultItemAction.ItemType.SshKey -> handleSshKeyTypeActions(action)
             is VaultItemAction.ItemType.Identity -> handleIdentityTypeActions(action)
+            is VaultItemAction.ItemType.BankAccount -> {
+                handleBankAccountTypeActions(action)
+            }
+
             is VaultItemAction.Common -> handleCommonActions(action)
             is VaultItemAction.Internal -> handleInternalAction(action)
         }
@@ -1041,6 +1045,125 @@ class VaultItemViewModel @Inject constructor(
 
     //endregion Identity Type Handlers
 
+    //region Bank Account Type Handlers
+
+    private fun handleBankAccountTypeActions(
+        action: VaultItemAction.ItemType.BankAccount,
+    ) {
+        when (action) {
+            VaultItemAction.ItemType.BankAccount.CopyAccountNumberClick -> {
+                handleCopyBankAccountNumberClick()
+            }
+
+            VaultItemAction.ItemType.BankAccount.CopyRoutingNumberClick -> {
+                handleCopyBankRoutingNumberClick()
+            }
+
+            VaultItemAction.ItemType.BankAccount.CopySwiftCodeClick -> {
+                handleCopyBankSwiftCodeClick()
+            }
+
+            VaultItemAction.ItemType.BankAccount.CopyIbanClick -> {
+                handleCopyBankIbanClick()
+            }
+
+            is VaultItemAction.ItemType.BankAccount.AccountNumberVisibilityClick -> {
+                handleBankAccountNumberVisibilityClick(action)
+            }
+
+            is VaultItemAction.ItemType.BankAccount.PinVisibilityClick -> {
+                handleBankPinVisibilityClick(action)
+            }
+        }
+    }
+
+    private fun handleCopyBankAccountNumberClick() {
+        onBankAccountContent { _, bankAccount ->
+            bankAccount.accountNumber?.let {
+                clipboardManager.setText(
+                    text = it.number,
+                    toastDescriptorOverride =
+                        BitwardenString.account_number.asText(),
+                )
+            }
+        }
+    }
+
+    private fun handleCopyBankRoutingNumberClick() {
+        onBankAccountContent { _, bankAccount ->
+            bankAccount.routingNumber?.let {
+                clipboardManager.setText(
+                    text = it,
+                    toastDescriptorOverride =
+                        BitwardenString.routing_number.asText(),
+                )
+            }
+        }
+    }
+
+    private fun handleCopyBankSwiftCodeClick() {
+        onBankAccountContent { _, bankAccount ->
+            bankAccount.swiftCode?.let {
+                clipboardManager.setText(
+                    text = it,
+                    toastDescriptorOverride =
+                        BitwardenString.swift_code.asText(),
+                )
+            }
+        }
+    }
+
+    private fun handleCopyBankIbanClick() {
+        onBankAccountContent { _, bankAccount ->
+            bankAccount.iban?.let {
+                clipboardManager.setText(
+                    text = it,
+                    toastDescriptorOverride = BitwardenString.iban.asText(),
+                )
+            }
+        }
+    }
+
+    private fun handleBankAccountNumberVisibilityClick(
+        action: VaultItemAction.ItemType.BankAccount.AccountNumberVisibilityClick,
+    ) {
+        onBankAccountContent { content, bankAccount ->
+            bankAccount.accountNumber?.let {
+                mutableStateFlow.update { currentState ->
+                    currentState.copy(
+                        viewState = content.copy(
+                            type = bankAccount.copy(
+                                accountNumber = it.copy(
+                                    isVisible = action.isVisible,
+                                ),
+                            ),
+                        ),
+                    )
+                }
+            }
+        }
+    }
+
+    private fun handleBankPinVisibilityClick(
+        action: VaultItemAction.ItemType.BankAccount.PinVisibilityClick,
+    ) {
+        onBankAccountContent { content, bankAccount ->
+            bankAccount.pin?.let {
+                mutableStateFlow.update { currentState ->
+                    currentState.copy(
+                        viewState = content.copy(
+                            type = bankAccount.copy(
+                                pin = it.copy(isVisible = action.isVisible),
+                            ),
+                        ),
+                    )
+                }
+            }
+        }
+    }
+
+    //endregion Bank Account Type Handlers
+
     //region Internal Type Handlers
 
     private fun handleInternalAction(action: VaultItemAction.Internal) {
@@ -1430,6 +1553,21 @@ class VaultItemViewModel @Inject constructor(
                 (content.type as? VaultItemState.ViewState.Content.ItemType.Identity)
                     ?.let { identityContent ->
                         block(content, identityContent)
+                    }
+            }
+    }
+
+    private inline fun onBankAccountContent(
+        crossinline block: (
+            VaultItemState.ViewState.Content,
+            VaultItemState.ViewState.Content.ItemType.BankAccount,
+        ) -> Unit,
+    ) {
+        state.viewState.asContentOrNull()
+            ?.let { content ->
+                (content.type as? VaultItemState.ViewState.Content.ItemType.BankAccount)
+                    ?.let { bankAccountContent ->
+                        block(content, bankAccountContent)
                     }
             }
     }
@@ -1884,6 +2022,71 @@ data class VaultItemState(
                     val privateKey: String,
                     val fingerprint: String,
                     val showPrivateKey: Boolean,
+                ) : ItemType()
+
+                /**
+                 * Represents the data for displaying a Bank Account item type.
+                 */
+                @Parcelize
+                data class BankAccount(
+                    val bankName: String?,
+                    val nameOnAccount: String?,
+                    val accountType: String?,
+                    val accountNumber: AccountNumberData?,
+                    val routingNumber: String?,
+                    val branchNumber: String?,
+                    val pin: PinData?,
+                    val swiftCode: String?,
+                    val iban: String?,
+                    val bankContactPhone: String?,
+                ) : ItemType() {
+
+                    /**
+                     * Data for the account number with visibility state.
+                     */
+                    @Parcelize
+                    data class AccountNumberData(
+                        val number: String,
+                        val isVisible: Boolean,
+                    ) : Parcelable
+
+                    /**
+                     * Data for the PIN with visibility state.
+                     */
+                    @Parcelize
+                    data class PinData(
+                        val pin: String,
+                        val isVisible: Boolean,
+                    ) : Parcelable
+                }
+
+                /**
+                 * Represents the data for displaying a Driver's License item type.
+                 */
+                @Parcelize
+                data class DriversLicense(
+                    val fullName: String?,
+                    val licenseNumber: String?,
+                    val issuingCountry: String?,
+                    val issuingState: String?,
+                    val expiration: String?,
+                    val licenseClass: String?,
+                ) : ItemType()
+
+                /**
+                 * Represents the data for displaying a Passport item type.
+                 */
+                @Parcelize
+                data class Passport(
+                    val fullName: String?,
+                    val dateOfBirth: String?,
+                    val nationality: String?,
+                    val passportNumber: String?,
+                    val passportType: String?,
+                    val issuingCountry: String?,
+                    val issuingAuthority: String?,
+                    val issueDate: String?,
+                    val expirationDate: String?,
                 ) : ItemType()
             }
         }
@@ -2346,6 +2549,33 @@ sealed class VaultItemAction {
              * The user has clicked the copy button for the address.
              */
             data object CopyAddressClick : Identity()
+        }
+
+        /**
+         * Represents actions specific to the Bank Account type.
+         */
+        sealed class BankAccount : ItemType() {
+            /** The user has clicked the copy button for the account number. */
+            data object CopyAccountNumberClick : BankAccount()
+
+            /** The user has clicked the copy button for the routing number. */
+            data object CopyRoutingNumberClick : BankAccount()
+
+            /** The user has clicked the copy button for the SWIFT code. */
+            data object CopySwiftCodeClick : BankAccount()
+
+            /** The user has clicked the copy button for the IBAN. */
+            data object CopyIbanClick : BankAccount()
+
+            /** The user has toggled the account number visibility. */
+            data class AccountNumberVisibilityClick(
+                val isVisible: Boolean,
+            ) : BankAccount()
+
+            /** The user has toggled the PIN visibility. */
+            data class PinVisibilityClick(
+                val isVisible: Boolean,
+            ) : BankAccount()
         }
     }
 

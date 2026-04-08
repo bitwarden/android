@@ -302,6 +302,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlag(FlagKey.ArchiveItems) } answers { mutableArchiveItemsFlow.value }
         every { getFeatureFlagFlow(FlagKey.ArchiveItems) } returns mutableArchiveItemsFlow
+        every { getFeatureFlag(FlagKey.NewItemTypes) } returns false
     }
 
     @BeforeEach
@@ -1612,6 +1613,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     excludedOptions = persistentListOf(
                         CreateVaultItemType.SSH_KEY,
                         CreateVaultItemType.FOLDER,
+                        CreateVaultItemType.BANK_ACCOUNT,
+                        CreateVaultItemType.DRIVERS_LICENSE,
+                        CreateVaultItemType.PASSPORT,
                     ),
                 ),
             ),
@@ -1636,6 +1640,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     excludedOptions = persistentListOf(
                         CreateVaultItemType.SSH_KEY,
                         CreateVaultItemType.FOLDER,
+                        CreateVaultItemType.BANK_ACCOUNT,
+                        CreateVaultItemType.DRIVERS_LICENSE,
+                        CreateVaultItemType.PASSPORT,
                     ),
                 ),
             ),
@@ -1674,6 +1681,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                             CreateVaultItemType.CARD,
                             CreateVaultItemType.FOLDER,
                             CreateVaultItemType.SSH_KEY,
+                            CreateVaultItemType.BANK_ACCOUNT,
+                            CreateVaultItemType.DRIVERS_LICENSE,
+                            CreateVaultItemType.PASSPORT,
                         ),
                     ),
                 ).copy(restrictItemTypesPolicyOrgIds = persistentListOf("Test Organization")),
@@ -1712,6 +1722,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                             CreateVaultItemType.CARD,
                             CreateVaultItemType.FOLDER,
                             CreateVaultItemType.SSH_KEY,
+                            CreateVaultItemType.BANK_ACCOUNT,
+                            CreateVaultItemType.DRIVERS_LICENSE,
+                            CreateVaultItemType.PASSPORT,
                         ),
                     ),
                 ).copy(restrictItemTypesPolicyOrgIds = persistentListOf("Test Organization")),

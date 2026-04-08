@@ -36,6 +36,9 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTyp
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditBankAccountTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditDriversLicenseTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditPassportTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
 
 /**
@@ -54,6 +57,9 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
     sshKeyItemTypeHandlers: VaultAddEditSshKeyTypeHandlers,
     isCardScannerEnabled: Boolean,
     cardHolderNameFocusRequester: FocusRequester,
+    bankAccountItemTypeHandlers: VaultAddEditBankAccountTypeHandlers,
+    driversLicenseItemTypeHandlers: VaultAddEditDriversLicenseTypeHandlers,
+    passportItemTypeHandlers: VaultAddEditPassportTypeHandlers,
     modifier: Modifier = Modifier,
     lazyListState: LazyListState,
     permissionsManager: PermissionsManager,
@@ -279,9 +285,26 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
                 )
             }
 
-            is VaultAddEditState.ViewState.Content.ItemType.BankAccount -> Unit
-            is VaultAddEditState.ViewState.Content.ItemType.DriversLicense -> Unit
-            is VaultAddEditState.ViewState.Content.ItemType.Passport -> Unit
+            is VaultAddEditState.ViewState.Content.ItemType.BankAccount -> {
+                vaultAddEditBankAccountItems(
+                    bankAccountState = state.type,
+                    bankAccountHandlers = bankAccountItemTypeHandlers,
+                )
+            }
+
+            is VaultAddEditState.ViewState.Content.ItemType.DriversLicense -> {
+                vaultAddEditDriversLicenseItems(
+                    driversLicenseState = state.type,
+                    driversLicenseHandlers = driversLicenseItemTypeHandlers,
+                )
+            }
+
+            is VaultAddEditState.ViewState.Content.ItemType.Passport -> {
+                vaultAddEditPassportItems(
+                    passportState = state.type,
+                    passportHandlers = passportItemTypeHandlers,
+                )
+            }
         }
 
         vaultAddEditAdditionalOptions(
