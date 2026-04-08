@@ -3616,7 +3616,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                 ),
                 type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
                 isIndividualVaultDisabled = false,
-            )
+            ),
         )
 
         // Expand the additional options UI before interacting with it
