@@ -120,6 +120,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     private val biometricsManager: BiometricsManager = mockk {
         every { isUserVerificationSupported } returns true
     }
+
     @Before
     fun setup() {
         setContent(
