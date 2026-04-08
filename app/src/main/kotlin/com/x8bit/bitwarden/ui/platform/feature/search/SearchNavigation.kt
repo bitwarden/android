@@ -73,10 +73,7 @@ fun SavedStateHandle.toSearchArgs(): SearchArgs {
             SearchableItemType.VAULT_SECURE_NOTES -> SearchType.Vault.SecureNotes
             SearchableItemType.VAULT_SSH_KEYS -> SearchType.Vault.SshKeys
             SearchableItemType.VAULT_BANK_ACCOUNTS -> SearchType.Vault.BankAccounts
-            SearchableItemType.VAULT_DRIVERS_LICENSES -> {
-                SearchType.Vault.DriversLicenses
-            }
-
+            SearchableItemType.VAULT_DRIVERS_LICENSES -> SearchType.Vault.DriversLicenses
             SearchableItemType.VAULT_PASSPORTS -> SearchType.Vault.Passports
             SearchableItemType.VAULT_NO_FOLDER -> SearchType.Vault.NoFolder
             SearchableItemType.VAULT_TRASH -> SearchType.Vault.Trash
@@ -146,10 +143,7 @@ private fun SearchType.toSearchableItemType(): SearchableItemType =
         SearchType.Vault.VerificationCodes -> SearchableItemType.VAULT_VERIFICATION_CODES
         SearchType.Vault.SshKeys -> SearchableItemType.VAULT_SSH_KEYS
         SearchType.Vault.BankAccounts -> SearchableItemType.VAULT_BANK_ACCOUNTS
-        SearchType.Vault.DriversLicenses -> {
-            SearchableItemType.VAULT_DRIVERS_LICENSES
-        }
-
+        SearchType.Vault.DriversLicenses -> SearchableItemType.VAULT_DRIVERS_LICENSES
         SearchType.Vault.Passports -> SearchableItemType.VAULT_PASSPORTS
         SearchType.Vault.Archive -> SearchableItemType.VAULT_ARCHIVE
     }

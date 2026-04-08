@@ -22,15 +22,13 @@ fun VaultItemListingState.ItemListingType.toSearchType(): SearchType =
         is VaultItemListingState.ItemListingType.Vault.Login -> SearchType.Vault.Logins
         is VaultItemListingState.ItemListingType.Vault.SecureNote -> SearchType.Vault.SecureNotes
         is VaultItemListingState.ItemListingType.Vault.SshKey -> SearchType.Vault.SshKeys
-        is VaultItemListingState.ItemListingType.Vault.BankAccount -> {
-            SearchType.Vault.BankAccounts
-        }
-
+        is VaultItemListingState.ItemListingType.Vault.BankAccount -> SearchType.Vault.BankAccounts
         is VaultItemListingState.ItemListingType.Vault.DriversLicense -> {
             SearchType.Vault.DriversLicenses
         }
 
         is VaultItemListingState.ItemListingType.Vault.Passport -> SearchType.Vault.Passports
+
         is VaultItemListingState.ItemListingType.Vault.Trash -> SearchType.Vault.Trash
         is VaultItemListingState.ItemListingType.Vault.Collection -> {
             SearchType.Vault.Collection(collectionId = collectionId)
@@ -66,7 +64,10 @@ fun VaultItemListingState.ItemListingType.Vault.toVaultItemCipherType(): VaultIt
             VaultItemCipherType.DRIVERS_LICENSE
         }
 
-        is VaultItemListingState.ItemListingType.Vault.Passport -> VaultItemCipherType.PASSPORT
+        is VaultItemListingState.ItemListingType.Vault.Passport -> {
+            VaultItemCipherType.PASSPORT
+        }
+
         is VaultItemListingState.ItemListingType.Vault.Login -> VaultItemCipherType.LOGIN
         is VaultItemListingState.ItemListingType.Vault.Collection -> VaultItemCipherType.LOGIN
         is VaultItemListingState.ItemListingType.Vault.Folder -> VaultItemCipherType.LOGIN

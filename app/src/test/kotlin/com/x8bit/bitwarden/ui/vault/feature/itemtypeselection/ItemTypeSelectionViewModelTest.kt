@@ -4,7 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.core.data.manager.model.FlagKey
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import io.mockk.every
 import io.mockk.mockk
@@ -19,6 +22,12 @@ class ItemTypeSelectionViewModelTest : BaseViewModelTest() {
         every {
             getFeatureFlag<Boolean>(FlagKey.NewItemTypes)
         } returns false
+    }
+
+    private val policyManager: PolicyManager = mockk {
+        every {
+            getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+        } returns emptyList()
     }
 
     @Test
@@ -87,9 +96,24 @@ class ItemTypeSelectionViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    fun `initial state should exclude Card when policy active`() {
+        every {
+            policyManager.getActivePolicies(
+                PolicyTypeJson.RESTRICT_ITEM_TYPES,
+            )
+        } returns listOf(mockk<SyncResponseJson.Policy>())
+        val viewModel = createViewModel()
+        val cipherTypes = viewModel.stateFlow.value.itemTypes
+            .map { it.cipherType }
+        assertTrue(VaultItemCipherType.CARD !in cipherTypes)
+        assertTrue(VaultItemCipherType.LOGIN in cipherTypes)
+    }
+
     private fun createViewModel(): ItemTypeSelectionViewModel =
         ItemTypeSelectionViewModel(
             savedStateHandle = SavedStateHandle(),
             featureFlagManager = featureFlagManager,
+            policyManager = policyManager,
         )
 }

@@ -6,8 +6,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.navigation
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
-import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListing
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.vaultItemListingDestination
 import com.x8bit.bitwarden.ui.vault.feature.itemtypeselection.itemTypeSelectionDestination

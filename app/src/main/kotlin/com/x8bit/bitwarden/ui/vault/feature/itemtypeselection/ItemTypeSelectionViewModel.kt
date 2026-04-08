@@ -7,9 +7,11 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.bitwarden.core.data.manager.model.FlagKey
+import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -26,11 +28,15 @@ private const val KEY_STATE = "state"
 class ItemTypeSelectionViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     featureFlagManager: FeatureFlagManager,
+    policyManager: PolicyManager,
 ) : BaseViewModel<ItemTypeSelectionState, ItemTypeSelectionEvent, ItemTypeSelectionAction>(
     initialState = savedStateHandle[KEY_STATE] ?: ItemTypeSelectionState(
         itemTypes = buildItemTypeList(
             isNewItemTypesEnabled = featureFlagManager
                 .getFeatureFlag(FlagKey.NewItemTypes),
+            hasRestrictItemTypesPolicy = policyManager
+                .getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+                .isNotEmpty(),
         ),
     ),
 ) {
@@ -56,8 +62,10 @@ class ItemTypeSelectionViewModel @Inject constructor(
     }
 }
 
+@Suppress("LongMethod")
 private fun buildItemTypeList(
     isNewItemTypesEnabled: Boolean,
+    hasRestrictItemTypesPolicy: Boolean,
 ): ImmutableList<ItemTypeSelectionState.ItemTypeOption> {
     val options = mutableListOf(
         ItemTypeSelectionState.ItemTypeOption(
@@ -65,22 +73,38 @@ private fun buildItemTypeList(
             icon = IconData.Local(BitwardenDrawable.ic_globe),
             title = BitwardenString.type_login.asText(),
         ),
-        ItemTypeSelectionState.ItemTypeOption(
-            cipherType = VaultItemCipherType.CARD,
-            icon = IconData.Local(BitwardenDrawable.ic_payment_card),
-            title = BitwardenString.type_card.asText(),
-        ),
-        ItemTypeSelectionState.ItemTypeOption(
-            cipherType = VaultItemCipherType.IDENTITY,
-            icon = IconData.Local(BitwardenDrawable.ic_id_card),
-            title = BitwardenString.type_identity.asText(),
-        ),
-        ItemTypeSelectionState.ItemTypeOption(
-            cipherType = VaultItemCipherType.SECURE_NOTE,
-            icon = IconData.Local(BitwardenDrawable.ic_note),
-            title = BitwardenString.type_secure_note.asText(),
+    )
+
+    // Card is excluded when restrict item types policy is active
+    if (!hasRestrictItemTypesPolicy) {
+        options.add(
+            ItemTypeSelectionState.ItemTypeOption(
+                cipherType = VaultItemCipherType.CARD,
+                icon = IconData.Local(
+                    BitwardenDrawable.ic_payment_card,
+                ),
+                title = BitwardenString.type_card.asText(),
+            ),
+        )
+    }
+
+    options.addAll(
+        listOf(
+            ItemTypeSelectionState.ItemTypeOption(
+                cipherType = VaultItemCipherType.IDENTITY,
+                icon = IconData.Local(BitwardenDrawable.ic_id_card),
+                title = BitwardenString.type_identity.asText(),
+            ),
+            ItemTypeSelectionState.ItemTypeOption(
+                cipherType = VaultItemCipherType.SECURE_NOTE,
+                icon = IconData.Local(BitwardenDrawable.ic_note),
+                title = BitwardenString.type_secure_note.asText(),
+            ),
         ),
     )
+
+    // SSH Key is intentionally excluded — SSH keys cannot be created
+    // from the app, only imported.
 
     if (isNewItemTypesEnabled) {
         options.addAll(
