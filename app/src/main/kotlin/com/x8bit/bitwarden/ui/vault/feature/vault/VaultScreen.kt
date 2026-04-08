@@ -236,10 +236,12 @@ private fun VaultScreenScaffold(
                             updateAccountMenuVisibility(!accountMenuVisible)
                         },
                     )
-                    BitwardenSearchActionItem(
-                        contentDescription = stringResource(id = BitwardenString.search_vault),
-                        onClick = vaultHandlers.searchIconClickAction,
-                    )
+                    if (state.shouldShowSearchIcon) {
+                        BitwardenSearchActionItem(
+                            contentDescription = stringResource(id = BitwardenString.search_vault),
+                            onClick = vaultHandlers.searchIconClickAction,
+                        )
+                    }
                     BitwardenOverflowActionItem(
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(

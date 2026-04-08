@@ -56,7 +56,7 @@ import kotlinx.collections.immutable.persistentListOf
 /**
  * UI for the send screen.
  */
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SendScreen(
@@ -137,10 +137,12 @@ fun SendScreen(
                 title = stringResource(id = BitwardenString.send),
                 scrollBehavior = scrollBehavior,
                 actions = {
-                    BitwardenSearchActionItem(
-                        contentDescription = stringResource(id = BitwardenString.search_sends),
-                        onClick = { viewModel.trySendAction(SendAction.SearchClick) },
-                    )
+                    if (state.shouldShowSearchIcon) {
+                        BitwardenSearchActionItem(
+                            contentDescription = stringResource(id = BitwardenString.search_sends),
+                            onClick = { viewModel.trySendAction(SendAction.SearchClick) },
+                        )
+                    }
                     BitwardenOverflowActionItem(
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(

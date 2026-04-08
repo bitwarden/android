@@ -1538,6 +1538,12 @@ data class VaultState(
     val avatarColor: Color get() = avatarColorString.hexToColor()
 
     /**
+     * Whether the search icon should be shown.
+     */
+    val shouldShowSearchIcon: Boolean
+        get() = viewState is ViewState.Content
+
+    /**
      * Indicates that the pull-to-refresh should be enabled in the UI.
      */
     val isPullToRefreshEnabled: Boolean
