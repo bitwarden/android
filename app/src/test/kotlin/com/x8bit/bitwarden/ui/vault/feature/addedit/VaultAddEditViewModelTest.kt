@@ -4110,6 +4110,54 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
+
+        @Test
+        fun `MiddleNameTextChange should update middle name`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.DriversLicenseType
+                    .MiddleNameTextChange(middleName = "Michael"),
+            )
+            val expectedState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
+                typeContentViewState =
+                    VaultAddEditState.ViewState.Content.ItemType.DriversLicense(
+                        middleName = "Michael",
+                    ),
+            )
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `IssuingStateTextChange should update issuing state`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.DriversLicenseType
+                    .IssuingStateTextChange(state = "California"),
+            )
+            val expectedState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
+                typeContentViewState =
+                    VaultAddEditState.ViewState.Content.ItemType.DriversLicense(
+                        issuingState = "California",
+                    ),
+            )
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `LicenseClassTextChange should update license class`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.DriversLicenseType
+                    .LicenseClassTextChange(licenseClass = "C"),
+            )
+            val expectedState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
+                typeContentViewState =
+                    VaultAddEditState.ViewState.Content.ItemType.DriversLicense(
+                        licenseClass = "C",
+                    ),
+            )
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
     }
 
     @Nested
@@ -4251,6 +4299,104 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
+
+        @Test
+        fun `DobYearTextChange should update date of birth year`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType
+                    .DobYearTextChange(year = "1990"),
+            )
+            val expectedState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.PASSPORT,
+                typeContentViewState =
+                    VaultAddEditState.ViewState.Content.ItemType.Passport(
+                        dobYear = "1990",
+                    ),
+            )
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `PassportTypeTextChange should update passport type`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType
+                    .PassportTypeTextChange(type = "P"),
+            )
+            val expectedState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.PASSPORT,
+                typeContentViewState =
+                    VaultAddEditState.ViewState.Content.ItemType.Passport(
+                        passportType = "P",
+                    ),
+            )
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `IssuingCountryTextChange should update issuing country`() =
+            runTest {
+                viewModel.trySendAction(
+                    VaultAddEditAction.ItemType.PassportType
+                        .IssuingCountryTextChange(country = "US"),
+                )
+                val expectedState = createVaultAddItemState(
+                    vaultItemCipherType = VaultItemCipherType.PASSPORT,
+                    typeContentViewState =
+                        VaultAddEditState.ViewState.Content.ItemType.Passport(
+                            issuingCountry = "US",
+                        ),
+                )
+                assertEquals(expectedState, viewModel.stateFlow.value)
+            }
+
+        @Test
+        fun `IssuingAuthorityTextChange should update authority`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType
+                    .IssuingAuthorityTextChange(authority = "Dept of State"),
+            )
+            val expectedState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.PASSPORT,
+                typeContentViewState =
+                    VaultAddEditState.ViewState.Content.ItemType.Passport(
+                        issuingAuthority = "Dept of State",
+                    ),
+            )
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `IssueYearTextChange should update issue year`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType
+                    .IssueYearTextChange(year = "2020"),
+            )
+            val expectedState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.PASSPORT,
+                typeContentViewState =
+                    VaultAddEditState.ViewState.Content.ItemType.Passport(
+                        issueYear = "2020",
+                    ),
+            )
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `ExpirationYearTextChange should update expiration year`() =
+            runTest {
+                viewModel.trySendAction(
+                    VaultAddEditAction.ItemType.PassportType
+                        .ExpirationYearTextChange(year = "2030"),
+                )
+                val expectedState = createVaultAddItemState(
+                    vaultItemCipherType = VaultItemCipherType.PASSPORT,
+                    typeContentViewState =
+                        VaultAddEditState.ViewState.Content.ItemType.Passport(
+                            expirationYear = "2030",
+                        ),
+                )
+                assertEquals(expectedState, viewModel.stateFlow.value)
+            }
     }
 
     @Test

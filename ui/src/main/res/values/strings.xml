@@ -1267,19 +1267,19 @@ Do you want to switch to this account?</string>
     <string name="once_archived_this_item_will_be_excluded">Once archived, this item will be excluded from search results and autofill suggestions.</string>
     <string name="pricing_unavailable">Pricing unavailable</string>
     <string name="view_bank_account">View bank account</string>
-    <string name="view_drivers_license">View driver\u2019s license</string>
+    <string name="view_drivers_license">View driver’s license</string>
     <string name="view_passport">View passport</string>
     <string name="new_bank_account">New bank account</string>
-    <string name="new_drivers_license">New driver\u2019s license</string>
+    <string name="new_drivers_license">New driver’s license</string>
     <string name="new_passport">New passport</string>
     <string name="edit_bank_account">Edit bank account</string>
-    <string name="edit_drivers_license">Edit driver\u2019s license</string>
+    <string name="edit_drivers_license">Edit driver’s license</string>
     <string name="edit_passport">Edit passport</string>
     <string name="type_bank_account">Bank account</string>
-    <string name="type_drivers_license">Driver\u2019s license</string>
+    <string name="type_drivers_license">Driver’s license</string>
     <string name="type_passport">Passport</string>
     <string name="bank_accounts">Bank accounts</string>
-    <string name="drivers_licenses">Driver\u2019s licenses</string>
+    <string name="drivers_licenses">Driver’s licenses</string>
     <string name="passports">Passports</string>
     <string name="bank_name">Bank name</string>
     <string name="name_on_account">Name on account</string>
@@ -1314,6 +1314,6 @@ Do you want to switch to this account?</string>
     <string name="month">Month</string>
     <string name="year">Year</string>
     <string name="bank_account_details">Bank account details</string>
-    <string name="drivers_license_details">Driver\u2019s license details</string>
+    <string name="drivers_license_details">Driver’s license details</string>
     <string name="passport_details">Passport details</string>
 </resources>
