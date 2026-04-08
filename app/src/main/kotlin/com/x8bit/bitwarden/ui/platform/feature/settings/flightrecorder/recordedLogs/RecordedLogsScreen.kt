@@ -283,7 +283,8 @@ private fun LogRow(
                 color = BitwardenTheme.colorScheme.text.primary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .testTag("LogNameLabel"),
             )
             Spacer(modifier = Modifier.height(height = 2.dp))
@@ -294,7 +295,8 @@ private fun LogRow(
                     color = BitwardenTheme.colorScheme.text.secondary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(weight = 1f)
+                    modifier = Modifier
+                        .weight(weight = 1f)
                         .testTag("LogSizeLabel"),
                 )
                 displayableItem.subtextEnd?.let {
@@ -306,7 +308,8 @@ private fun LogRow(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         textAlign = TextAlign.End,
-                        modifier = Modifier.weight(weight = 1f)
+                        modifier = Modifier
+                            .weight(weight = 1f)
                             .testTag("LogExpirationLabel"),
                     )
                 }
