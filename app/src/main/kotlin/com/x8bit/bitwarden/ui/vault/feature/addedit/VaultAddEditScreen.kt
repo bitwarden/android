@@ -584,12 +584,12 @@ private fun VaultAddEditItemDialogs(
 
         is VaultAddEditState.DialogState.CameraPermissionDenied -> {
             BitwardenTwoButtonDialog(
-                title = null,
+                title = stringResource(BitwardenString.allow_camera_access),
                 message = stringResource(
-                    id = BitwardenString.enable_camer_permission_to_use_the_scanner,
+                    id = BitwardenString.to_scan_your_card_we_need_access_to_your_camera,
                 ),
-                confirmButtonText = stringResource(id = BitwardenString.settings),
-                dismissButtonText = stringResource(id = BitwardenString.no_thanks),
+                confirmButtonText = stringResource(id = BitwardenString.go_to_settings),
+                dismissButtonText = stringResource(id = BitwardenString.not_now),
                 onConfirmClick = onCameraPermissionSettingsClick,
                 onDismissClick = onDismissRequest,
                 onDismissRequest = onDismissRequest,
