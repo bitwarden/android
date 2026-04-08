@@ -171,7 +171,7 @@
     <string name="autofill_noun">Autofill</string>
     <string name="autofill_verb">Autofill</string>
     <string name="autofill_or_view">Do you want to autofill or view this item?</string>
-    <string name="search">Search</string>
+    <string name="search">Search %1$s</string>
     <string name="learn_org">Learn about organizations</string>
     <string name="authenticator_app_title">Authenticator app</string>
     <string name="enter_verification_code_app">Enter the 6 digit verification code from your authenticator app.</string>

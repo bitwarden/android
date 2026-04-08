@@ -171,7 +171,7 @@
     <string name="autofill_noun">Automatisches Ausfüllen</string>
     <string name="autofill_verb">Automatisches Ausfüllen</string>
     <string name="autofill_or_view">Möchtest du diese Zugangsdaten automatisch ausfüllen oder ansehen?</string>
-    <string name="search">Durchsuchen</string>
+    <string name="search">%1$s durchsuchen</string>
     <string name="learn_org">Mehr über Organisationen erfahren</string>
     <string name="authenticator_app_title">Authenticator App</string>
     <string name="enter_verification_code_app">Gib den 6-stelligen Verifizierungscode aus deiner Authenticator App ein.</string>
