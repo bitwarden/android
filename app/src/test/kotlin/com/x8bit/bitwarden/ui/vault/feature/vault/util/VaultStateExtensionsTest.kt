@@ -90,5 +90,9 @@ class VaultStateExtensionsTest {
             archiveSubText = null,
             archiveEndIcon = null,
             showCardGroup = true,
+            bankAccountItemsCount = 0,
+            driversLicenseItemsCount = 0,
+            passportItemsCount = 0,
+            showNewItemTypes = false,
         )
 }

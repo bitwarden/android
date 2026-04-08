@@ -305,13 +305,75 @@ fun VaultContent(
                 label = stringResource(id = BitwardenString.type_ssh_key),
                 supportingLabel = state.sshKeyItemsCount.toString(),
                 onClick = vaultHandlers.sshKeyGroupClick,
-                cardStyle = CardStyle.Bottom,
+                cardStyle = if (state.showNewItemTypes) {
+                    CardStyle.Middle(dividerPadding = 56.dp)
+                } else {
+                    CardStyle.Bottom
+                },
                 modifier = Modifier
                     .animateItem()
                     .fillMaxWidth()
                     .testTag("SshKeyFilter")
                     .standardHorizontalMargin(),
             )
+        }
+
+        if (state.showNewItemTypes) {
+            item(key = "bank_accounts_group") {
+                BitwardenGroupItem(
+                    startIcon = IconData.Local(
+                        iconRes = BitwardenDrawable.ic_bank_account,
+                        testTag = "BankAccountCipherIcon",
+                    ),
+                    label = stringResource(id = BitwardenString.type_bank_account),
+                    supportingLabel = state.bankAccountItemsCount.toString(),
+                    onClick = vaultHandlers.bankAccountGroupClick,
+                    cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
+                    modifier = Modifier
+                        .animateItem()
+                        .fillMaxWidth()
+                        .testTag("BankAccountFilter")
+                        .standardHorizontalMargin(),
+                )
+            }
+
+            item(key = "drivers_licenses_group") {
+                BitwardenGroupItem(
+                    startIcon = IconData.Local(
+                        iconRes = BitwardenDrawable.ic_drivers_license,
+                        testTag = "DriversLicenseCipherIcon",
+                    ),
+                    label = stringResource(
+                        id = BitwardenString.type_drivers_license,
+                    ),
+                    supportingLabel = state.driversLicenseItemsCount.toString(),
+                    onClick = vaultHandlers.driversLicenseGroupClick,
+                    cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
+                    modifier = Modifier
+                        .animateItem()
+                        .fillMaxWidth()
+                        .testTag("DriversLicenseFilter")
+                        .standardHorizontalMargin(),
+                )
+            }
+
+            item(key = "passports_group") {
+                BitwardenGroupItem(
+                    startIcon = IconData.Local(
+                        iconRes = BitwardenDrawable.ic_passport,
+                        testTag = "PassportCipherIcon",
+                    ),
+                    label = stringResource(id = BitwardenString.type_passport),
+                    supportingLabel = state.passportItemsCount.toString(),
+                    onClick = vaultHandlers.passportGroupClick,
+                    cardStyle = CardStyle.Bottom,
+                    modifier = Modifier
+                        .animateItem()
+                        .fillMaxWidth()
+                        .testTag("PassportFilter")
+                        .standardHorizontalMargin(),
+                )
+            }
         }
 
         item(key = "types_spacer") {

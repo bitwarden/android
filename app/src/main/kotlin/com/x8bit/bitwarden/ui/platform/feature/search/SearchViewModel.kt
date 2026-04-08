@@ -1310,6 +1310,36 @@ sealed class SearchTypeData : Parcelable {
         }
 
         /**
+         * Indicates that we should be searching only bank account ciphers.
+         */
+        data object BankAccounts : Vault() {
+            override val title: Text
+                get() = BitwardenString.search.asText()
+                    .concat(" ".asText())
+                    .concat(BitwardenString.bank_accounts.asText())
+        }
+
+        /**
+         * Indicates that we should be searching only driver's license ciphers.
+         */
+        data object DriversLicenses : Vault() {
+            override val title: Text
+                get() = BitwardenString.search.asText()
+                    .concat(" ".asText())
+                    .concat(BitwardenString.drivers_licenses.asText())
+        }
+
+        /**
+         * Indicates that we should be searching only passport ciphers.
+         */
+        data object Passports : Vault() {
+            override val title: Text
+                get() = BitwardenString.search.asText()
+                    .concat(" ".asText())
+                    .concat(BitwardenString.passports.asText())
+        }
+
+        /**
          * Indicates that we should be searching only ciphers in the given collection.
          */
         data class Collection(

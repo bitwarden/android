@@ -78,6 +78,13 @@ fun CipherListView.determineListingPredicate(
             type is CipherListViewType.SshKey && isActive
         }
 
+        // TODO: Update filters when SDK adds CipherListViewType variants for
+        // bank account, driver's license, and passport (PM-34060, PM-32691, PM-32694).
+        is VaultItemListingState.ItemListingType.Vault.BankAccount,
+        is VaultItemListingState.ItemListingType.Vault.DriversLicense,
+        is VaultItemListingState.ItemListingType.Vault.Passport,
+        -> false
+
         is VaultItemListingState.ItemListingType.Vault.Trash -> {
             deletedDate != null
         }
@@ -242,6 +249,18 @@ fun VaultData.toViewState(
                         BitwardenString.no_ssh_keys
                     }
 
+                    VaultItemListingState.ItemListingType.Vault.BankAccount -> {
+                        BitwardenString.no_bank_accounts
+                    }
+
+                    VaultItemListingState.ItemListingType.Vault.DriversLicense -> {
+                        BitwardenString.no_drivers_licenses
+                    }
+
+                    VaultItemListingState.ItemListingType.Vault.Passport -> {
+                        BitwardenString.no_passports
+                    }
+
                     VaultItemListingState.ItemListingType.Vault.Archive -> {
                         BitwardenString.no_archives_message
                     }
@@ -270,6 +289,9 @@ fun VaultData.toViewState(
                         VaultItemListingState.ItemListingType.Vault.Login,
                         VaultItemListingState.ItemListingType.Vault.SecureNote,
                         VaultItemListingState.ItemListingType.Vault.SshKey,
+                        VaultItemListingState.ItemListingType.Vault.BankAccount,
+                        VaultItemListingState.ItemListingType.Vault.DriversLicense,
+                        VaultItemListingState.ItemListingType.Vault.Passport,
                             -> null
 
                         VaultItemListingState.ItemListingType.Vault.Archive -> {
@@ -303,6 +325,18 @@ fun VaultData.toViewState(
                             BitwardenString.new_ssh_key
                         }
 
+                        VaultItemListingState.ItemListingType.Vault.BankAccount -> {
+                            BitwardenString.new_bank_account
+                        }
+
+                        VaultItemListingState.ItemListingType.Vault.DriversLicense -> {
+                            BitwardenString.new_drivers_license
+                        }
+
+                        VaultItemListingState.ItemListingType.Vault.Passport -> {
+                            BitwardenString.new_passport
+                        }
+
                         else -> BitwardenString.new_item
                     }
                         .asText()
@@ -319,6 +353,9 @@ fun VaultData.toViewState(
                         VaultItemListingState.ItemListingType.Vault.Login,
                         VaultItemListingState.ItemListingType.Vault.SecureNote,
                         VaultItemListingState.ItemListingType.Vault.SshKey,
+                        VaultItemListingState.ItemListingType.Vault.BankAccount,
+                        VaultItemListingState.ItemListingType.Vault.DriversLicense,
+                        VaultItemListingState.ItemListingType.Vault.Passport,
                             -> null
 
                         VaultItemListingState.ItemListingType.Vault.Archive -> {
@@ -399,6 +436,9 @@ fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
         is VaultItemListingState.ItemListingType.Send.SendFile -> this
         is VaultItemListingState.ItemListingType.Send.SendText -> this
         is VaultItemListingState.ItemListingType.Vault.SshKey -> this
+        is VaultItemListingState.ItemListingType.Vault.BankAccount -> this
+        is VaultItemListingState.ItemListingType.Vault.DriversLicense -> this
+        is VaultItemListingState.ItemListingType.Vault.Passport -> this
         is VaultItemListingState.ItemListingType.Vault.Archive -> this
     }
 

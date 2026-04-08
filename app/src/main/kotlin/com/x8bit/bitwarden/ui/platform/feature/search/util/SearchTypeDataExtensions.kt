@@ -71,6 +71,9 @@ fun SearchTypeData.updateWithAdditionalDataIfNecessary(
         SearchTypeData.Vault.Trash -> this
         SearchTypeData.Vault.VerificationCodes -> this
         SearchTypeData.Vault.SshKeys -> this
+        SearchTypeData.Vault.BankAccounts -> this
+        SearchTypeData.Vault.DriversLicenses -> this
+        SearchTypeData.Vault.Passports -> this
     }
 
 /**
@@ -125,6 +128,13 @@ private fun CipherListView.filterBySearchType(
         is SearchTypeData.Vault.Logins -> type is CipherListViewType.Login && isActive
         is SearchTypeData.Vault.SecureNotes -> type is CipherListViewType.SecureNote && isActive
         is SearchTypeData.Vault.SshKeys -> type is CipherListViewType.SshKey && isActive
+        // TODO: Update filters when SDK adds CipherListViewType variants
+        // (PM-34060, PM-32691, PM-32694).
+        is SearchTypeData.Vault.BankAccounts,
+        is SearchTypeData.Vault.DriversLicenses,
+        is SearchTypeData.Vault.Passports,
+        -> false
+
         is SearchTypeData.Vault.VerificationCodes -> login?.totp != null && isActive
         is SearchTypeData.Vault.Trash -> deletedDate != null
     }

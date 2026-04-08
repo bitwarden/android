@@ -92,6 +92,7 @@ fun VaultScreen(
     onNavigateToVerificationCodeScreen: () -> Unit,
     onNavigateToVaultItemListingScreen: (vaultItemType: VaultItemListingType) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
+    onNavigateToItemTypeSelection: () -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
     onNavigateToImportLogins: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
@@ -138,6 +139,7 @@ fun VaultScreen(
             }
 
             VaultEvent.NavigateToVaultSearchScreen -> onNavigateToSearchVault(SearchType.Vault.All)
+            VaultEvent.NavigateToItemTypeSelection -> onNavigateToItemTypeSelection()
 
             is VaultEvent.NavigateToVerificationCodeScreen -> {
                 onNavigateToVerificationCodeScreen()

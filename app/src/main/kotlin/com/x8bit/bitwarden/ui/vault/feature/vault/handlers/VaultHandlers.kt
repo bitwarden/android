@@ -31,6 +31,9 @@ data class VaultHandlers(
     val identityGroupClick: () -> Unit,
     val secureNoteGroupClick: () -> Unit,
     val sshKeyGroupClick: () -> Unit,
+    val bankAccountGroupClick: () -> Unit,
+    val driversLicenseGroupClick: () -> Unit,
+    val passportGroupClick: () -> Unit,
     val archiveClick: () -> Unit,
     val trashClick: () -> Unit,
     val tryAgainClick: () -> Unit,
@@ -96,6 +99,15 @@ data class VaultHandlers(
                     viewModel.trySendAction(VaultAction.SecureNoteGroupClick)
                 },
                 sshKeyGroupClick = { viewModel.trySendAction(VaultAction.SshKeyGroupClick) },
+                bankAccountGroupClick = {
+                    viewModel.trySendAction(VaultAction.BankAccountGroupClick)
+                },
+                driversLicenseGroupClick = {
+                    viewModel.trySendAction(VaultAction.DriversLicenseGroupClick)
+                },
+                passportGroupClick = {
+                    viewModel.trySendAction(VaultAction.PassportGroupClick)
+                },
                 archiveClick = { viewModel.trySendAction(VaultAction.ArchiveClick) },
                 trashClick = { viewModel.trySendAction(VaultAction.TrashClick) },
                 tryAgainClick = { viewModel.trySendAction(VaultAction.TryAgainClick) },

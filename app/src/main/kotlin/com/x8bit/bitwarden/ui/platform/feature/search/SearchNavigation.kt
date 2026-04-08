@@ -37,6 +37,9 @@ enum class SearchableItemType {
     VAULT_IDENTITIES,
     VAULT_SECURE_NOTES,
     VAULT_SSH_KEYS,
+    VAULT_BANK_ACCOUNTS,
+    VAULT_DRIVERS_LICENSES,
+    VAULT_PASSPORTS,
     VAULT_COLLECTIONS,
     VAULT_NO_FOLDER,
     VAULT_FOLDER,
@@ -69,6 +72,12 @@ fun SavedStateHandle.toSearchArgs(): SearchArgs {
             SearchableItemType.VAULT_IDENTITIES -> SearchType.Vault.Identities
             SearchableItemType.VAULT_SECURE_NOTES -> SearchType.Vault.SecureNotes
             SearchableItemType.VAULT_SSH_KEYS -> SearchType.Vault.SshKeys
+            SearchableItemType.VAULT_BANK_ACCOUNTS -> SearchType.Vault.BankAccounts
+            SearchableItemType.VAULT_DRIVERS_LICENSES -> {
+                SearchType.Vault.DriversLicenses
+            }
+
+            SearchableItemType.VAULT_PASSPORTS -> SearchType.Vault.Passports
             SearchableItemType.VAULT_NO_FOLDER -> SearchType.Vault.NoFolder
             SearchableItemType.VAULT_TRASH -> SearchType.Vault.Trash
             SearchableItemType.VAULT_VERIFICATION_CODES -> SearchType.Vault.VerificationCodes
@@ -136,6 +145,12 @@ private fun SearchType.toSearchableItemType(): SearchableItemType =
         SearchType.Vault.Trash -> SearchableItemType.VAULT_TRASH
         SearchType.Vault.VerificationCodes -> SearchableItemType.VAULT_VERIFICATION_CODES
         SearchType.Vault.SshKeys -> SearchableItemType.VAULT_SSH_KEYS
+        SearchType.Vault.BankAccounts -> SearchableItemType.VAULT_BANK_ACCOUNTS
+        SearchType.Vault.DriversLicenses -> {
+            SearchableItemType.VAULT_DRIVERS_LICENSES
+        }
+
+        SearchType.Vault.Passports -> SearchableItemType.VAULT_PASSPORTS
         SearchType.Vault.Archive -> SearchableItemType.VAULT_ARCHIVE
     }
 
@@ -155,5 +170,8 @@ private fun SearchType.toIdOrNull(): String? =
         SearchType.Vault.Trash -> null
         SearchType.Vault.VerificationCodes -> null
         SearchType.Vault.SshKeys -> null
+        SearchType.Vault.BankAccounts -> null
+        SearchType.Vault.DriversLicenses -> null
+        SearchType.Vault.Passports -> null
         SearchType.Vault.Archive -> null
     }

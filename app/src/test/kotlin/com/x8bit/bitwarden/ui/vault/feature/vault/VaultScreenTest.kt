@@ -115,6 +115,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                 onDimBottomNavBarRequest = { onDimBottomNavBarRequestCalled = true },
                 onNavigateToVerificationCodeScreen = { onNavigateToVerificationCodeScreen = true },
                 onNavigateToSearchVault = { onNavigateToSearchScreen = true },
+                onNavigateToItemTypeSelection = { },
                 onNavigateToImportLogins = { onNavigateToImportLoginsCalled = true },
                 onNavigateToAddFolderScreen = { folderName ->
                     onNavigateToAddFolderCalled = true
@@ -2673,4 +2674,8 @@ private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultStat
     archiveSubText = null,
     archiveEndIcon = null,
     showCardGroup = true,
+    bankAccountItemsCount = 0,
+    driversLicenseItemsCount = 0,
+    passportItemsCount = 0,
+    showNewItemTypes = false,
 )

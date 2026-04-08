@@ -1996,6 +1996,12 @@ class SearchViewModelTest : BaseViewModelTest() {
                     SearchTypeData.Vault.NoFolder -> SearchType.Vault.NoFolder
                     SearchTypeData.Vault.SecureNotes -> SearchType.Vault.SecureNotes
                     SearchTypeData.Vault.SshKeys -> SearchType.Vault.SshKeys
+                    SearchTypeData.Vault.BankAccounts -> SearchType.Vault.BankAccounts
+                    SearchTypeData.Vault.DriversLicenses -> {
+                        SearchType.Vault.DriversLicenses
+                    }
+
+                    SearchTypeData.Vault.Passports -> SearchType.Vault.Passports
                     SearchTypeData.Vault.Trash -> SearchType.Vault.Trash
                     SearchTypeData.Vault.VerificationCodes -> SearchType.Vault.VerificationCodes
                     null -> SearchType.Vault.All

@@ -47,6 +47,7 @@ fun VaultData.toViewState(
     vaultFilterType: VaultFilterType,
     restrictItemTypesPolicyOrgIds: List<String>,
     isArchiveEnabled: Boolean,
+    isNewItemTypesEnabled: Boolean = false,
 ): VaultState.ViewState {
     val allCipherViews =
         decryptCipherListResult
@@ -150,6 +151,12 @@ fun VaultData.toViewState(
                 .count { it.type is CipherListViewType.SecureNote },
             sshKeyItemsCount = activeCipherViews
                 .count { it.type is CipherListViewType.SshKey },
+            // TODO: Update counts when SDK adds CipherListViewType variants
+            // (PM-34060, PM-32691, PM-32694). For now, counts will be 0.
+            bankAccountItemsCount = 0,
+            driversLicenseItemsCount = 0,
+            passportItemsCount = 0,
+            showNewItemTypes = isNewItemTypesEnabled,
             favoriteItems = activeDecryptedCipherViews
                 .filter { it.favorite }
                 .mapNotNull {

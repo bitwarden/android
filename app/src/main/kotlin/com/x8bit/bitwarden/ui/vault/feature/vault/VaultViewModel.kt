@@ -295,6 +295,7 @@ class VaultViewModel @Inject constructor(
         }
     }
 
+    @Suppress("LongMethod")
     override fun handleAction(action: VaultAction) {
         when (action) {
             is VaultAction.AddItemClick -> handleAddItemClick(action)
@@ -314,6 +315,9 @@ class VaultViewModel @Inject constructor(
             is VaultAction.VaultFilterTypeSelect -> handleVaultFilterTypeSelect(action)
             is VaultAction.SecureNoteGroupClick -> handleSecureNoteClick()
             is VaultAction.SshKeyGroupClick -> handleSshKeyClick()
+            is VaultAction.BankAccountGroupClick -> handleBankAccountClick()
+            is VaultAction.DriversLicenseGroupClick -> handleDriversLicenseClick()
+            is VaultAction.PassportGroupClick -> handlePassportClick()
             is VaultAction.ArchiveClick -> handleArchiveClick()
             is VaultAction.TrashClick -> handleTrashClick()
             is VaultAction.VaultItemClick -> handleVaultItemClick(action)
@@ -435,20 +439,28 @@ class VaultViewModel @Inject constructor(
     private fun handleSelectAddItemType() {
         val isNewItemTypesEnabled = featureFlagManager
             .getFeatureFlag(FlagKey.NewItemTypes)
+
+        if (isNewItemTypesEnabled) {
+            sendEvent(VaultEvent.NavigateToItemTypeSelection)
+            return
+        }
+
         // If policy is enable for any organization, exclude the card option
         val excludedOptions = persistentListOfNotNull(
             CreateVaultItemType.SSH_KEY,
             CreateVaultItemType.CARD.takeUnless {
                 state.restrictItemTypesPolicyOrgIds.isEmpty()
             },
-            CreateVaultItemType.BANK_ACCOUNT.takeUnless { isNewItemTypesEnabled },
-            CreateVaultItemType.DRIVERS_LICENSE.takeUnless { isNewItemTypesEnabled },
-            CreateVaultItemType.PASSPORT.takeUnless { isNewItemTypesEnabled },
+            CreateVaultItemType.BANK_ACCOUNT,
+            CreateVaultItemType.DRIVERS_LICENSE,
+            CreateVaultItemType.PASSPORT,
         )
 
         mutableStateFlow.update {
             it.copy(
-                dialog = VaultState.DialogState.SelectVaultAddItemType(excludedOptions),
+                dialog = VaultState.DialogState.SelectVaultAddItemType(
+                    excludedOptions,
+                ),
             )
         }
     }
@@ -659,6 +671,24 @@ class VaultViewModel @Inject constructor(
 
     private fun handleSshKeyClick() {
         sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.SshKey))
+    }
+
+    private fun handleBankAccountClick() {
+        sendEvent(
+            VaultEvent.NavigateToItemListing(VaultItemListingType.BankAccount),
+        )
+    }
+
+    private fun handleDriversLicenseClick() {
+        sendEvent(
+            VaultEvent.NavigateToItemListing(VaultItemListingType.DriversLicense),
+        )
+    }
+
+    private fun handlePassportClick() {
+        sendEvent(
+            VaultEvent.NavigateToItemListing(VaultItemListingType.Passport),
+        )
     }
 
     private fun handleVaultItemClick(action: VaultAction.VaultItemClick) {
@@ -1284,6 +1314,8 @@ class VaultViewModel @Inject constructor(
             isRefreshing = false,
             restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
             isArchiveEnabled = state.isArchiveEnabled,
+            isNewItemTypesEnabled = featureFlagManager
+                .getFeatureFlag(FlagKey.NewItemTypes),
         )
     }
 
@@ -1349,6 +1381,8 @@ class VaultViewModel @Inject constructor(
                     vaultFilterType = vaultFilterTypeOrDefault,
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                     isArchiveEnabled = state.isArchiveEnabled,
+                    isNewItemTypesEnabled = featureFlagManager
+                        .getFeatureFlag(FlagKey.NewItemTypes),
                 ),
                 dialog = dialog,
                 isRefreshing = false,
@@ -1394,6 +1428,8 @@ class VaultViewModel @Inject constructor(
                     vaultFilterType = vaultFilterTypeOrDefault,
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                     isArchiveEnabled = state.isArchiveEnabled,
+                    isNewItemTypesEnabled = featureFlagManager
+                        .getFeatureFlag(FlagKey.NewItemTypes),
                 ),
             )
         }
@@ -1660,6 +1696,10 @@ data class VaultState(
          * @property archiveSubText The subtext to be displayed on the archive item.
          * @property archiveEndIcon The end icon to be displayed on the archive item.
          * @property showCardGroup Is the card group available for display.
+         * @property bankAccountItemsCount The count of Bank Account type items.
+         * @property driversLicenseItemsCount The count of Driver's License type items.
+         * @property passportItemsCount The count of Passport type items.
+         * @property showNewItemTypes Whether to show the new item type groups.
          */
         @Parcelize
         data class Content(
@@ -1670,6 +1710,10 @@ data class VaultState(
             val identityItemsCount: Int,
             val secureNoteItemsCount: Int,
             val sshKeyItemsCount: Int,
+            val bankAccountItemsCount: Int,
+            val driversLicenseItemsCount: Int,
+            val passportItemsCount: Int,
+            val showNewItemTypes: Boolean,
             val favoriteItems: List<VaultItem>,
             val folderItems: List<FolderItem>,
             val noFolderItems: List<VaultItem>,
@@ -1886,6 +1930,70 @@ data class VaultState(
                 override val supportingLabel: Text? get() = null
                 override val type: VaultItemCipherType get() = VaultItemCipherType.SSH_KEY
             }
+
+            /**
+             * Represents a bank account item within the vault.
+             */
+            @Parcelize
+            data class BankAccount(
+                override val id: String,
+                override val name: Text,
+                override val startIcon: IconData =
+                    IconData.Local(BitwardenDrawable.ic_bank_account),
+                override val startIconTestTag: String = "BankAccountCipherIcon",
+                override val extraIconList: ImmutableList<IconData> = persistentListOf(),
+                override val overflowOptions:
+                    ImmutableList<ListingItemOverflowAction.VaultAction>,
+                override val shouldShowMasterPasswordReprompt: Boolean,
+                override val hasDecryptionError: Boolean,
+            ) : VaultItem() {
+                override val supportingLabel: Text? get() = null
+                override val type: VaultItemCipherType
+                    get() = VaultItemCipherType.BANK_ACCOUNT
+            }
+
+            /**
+             * Represents a driver's license item within the vault.
+             */
+            @Parcelize
+            data class DriversLicense(
+                override val id: String,
+                override val name: Text,
+                override val startIcon: IconData =
+                    IconData.Local(BitwardenDrawable.ic_drivers_license),
+                override val startIconTestTag: String =
+                    "DriversLicenseCipherIcon",
+                override val extraIconList: ImmutableList<IconData> = persistentListOf(),
+                override val overflowOptions:
+                    ImmutableList<ListingItemOverflowAction.VaultAction>,
+                override val shouldShowMasterPasswordReprompt: Boolean,
+                override val hasDecryptionError: Boolean,
+            ) : VaultItem() {
+                override val supportingLabel: Text? get() = null
+                override val type: VaultItemCipherType
+                    get() = VaultItemCipherType.DRIVERS_LICENSE
+            }
+
+            /**
+             * Represents a passport item within the vault.
+             */
+            @Parcelize
+            data class Passport(
+                override val id: String,
+                override val name: Text,
+                override val startIcon: IconData =
+                    IconData.Local(BitwardenDrawable.ic_passport),
+                override val startIconTestTag: String = "PassportCipherIcon",
+                override val extraIconList: ImmutableList<IconData> = persistentListOf(),
+                override val overflowOptions:
+                    ImmutableList<ListingItemOverflowAction.VaultAction>,
+                override val shouldShowMasterPasswordReprompt: Boolean,
+                override val hasDecryptionError: Boolean,
+            ) : VaultItem() {
+                override val supportingLabel: Text? get() = null
+                override val type: VaultItemCipherType
+                    get() = VaultItemCipherType.PASSPORT
+            }
         }
     }
 
@@ -1991,6 +2099,11 @@ sealed class VaultEvent {
      * Navigate to the Vault Search screen.
      */
     data object NavigateToVaultSearchScreen : VaultEvent()
+
+    /**
+     * Navigate to the item type selection screen.
+     */
+    data object NavigateToItemTypeSelection : VaultEvent()
 
     /**
      * Navigate to the Add Item screen.
@@ -2247,6 +2360,21 @@ sealed class VaultAction {
     data object SshKeyGroupClick : VaultAction()
 
     /**
+     * User clicked the bank account types button.
+     */
+    data object BankAccountGroupClick : VaultAction()
+
+    /**
+     * User clicked the driver's license types button.
+     */
+    data object DriversLicenseGroupClick : VaultAction()
+
+    /**
+     * User clicked the passport types button.
+     */
+    data object PassportGroupClick : VaultAction()
+
+    /**
      * User clicked the archive button.
      */
     data object ArchiveClick : VaultAction()
@@ -2489,6 +2617,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
     isRefreshing: Boolean,
     restrictItemTypesPolicyOrgIds: List<String>,
     isArchiveEnabled: Boolean,
+    isNewItemTypesEnabled: Boolean = false,
 ) {
     this.update {
         if (vaultData != null) {
@@ -2501,6 +2630,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                     isIconLoadingDisabled = isIconLoadingDisabled,
                     restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
                     isArchiveEnabled = isArchiveEnabled,
+                    isNewItemTypesEnabled = isNewItemTypesEnabled,
                 ),
                 dialog = VaultState.DialogState.Error(
                     title = errorTitle,

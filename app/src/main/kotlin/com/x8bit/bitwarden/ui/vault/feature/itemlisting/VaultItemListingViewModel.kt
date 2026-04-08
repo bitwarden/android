@@ -2907,6 +2907,9 @@ data class VaultItemListingState(
             ItemListingType.Vault.Login,
             ItemListingType.Vault.SecureNote,
             ItemListingType.Vault.SshKey,
+            ItemListingType.Vault.BankAccount,
+            ItemListingType.Vault.DriversLicense,
+            ItemListingType.Vault.Passport,
             ItemListingType.Vault.Trash,
             ItemListingType.Send.SendFile,
             ItemListingType.Send.SendText,
@@ -3347,6 +3350,33 @@ data class VaultItemListingState(
             data object SshKey : Vault() {
                 override val titleText: Text get() = BitwardenString.ssh_keys.asText()
                 override val hasFab: Boolean get() = false
+            }
+
+            /**
+             * A Bank account item listing.
+             */
+            data object BankAccount : Vault() {
+                override val titleText: Text
+                    get() = BitwardenString.bank_accounts.asText()
+                override val hasFab: Boolean get() = true
+            }
+
+            /**
+             * A Driver's license item listing.
+             */
+            data object DriversLicense : Vault() {
+                override val titleText: Text
+                    get() = BitwardenString.drivers_licenses.asText()
+                override val hasFab: Boolean get() = true
+            }
+
+            /**
+             * A Passport item listing.
+             */
+            data object Passport : Vault() {
+                override val titleText: Text
+                    get() = BitwardenString.passports.asText()
+                override val hasFab: Boolean get() = true
             }
 
             /**
