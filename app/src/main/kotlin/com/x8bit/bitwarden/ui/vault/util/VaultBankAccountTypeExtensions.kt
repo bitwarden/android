@@ -28,7 +28,10 @@ val VaultBankAccountType.longName: Text
     }
 
 /**
- * Helper that exposes the string name or null for a [VaultBankAccountType].
+ * Returns the SDK/network string value for a [VaultBankAccountType], or null for [SELECT].
+ *
+ * These are not user-facing display strings — they are the values sent to and received from
+ * the server/SDK. For user-facing display, use [longName] instead.
  */
 val VaultBankAccountType.stringNameOrNull: String?
     get() = when (this) {

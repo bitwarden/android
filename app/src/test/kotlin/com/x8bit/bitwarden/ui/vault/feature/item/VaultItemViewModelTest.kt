@@ -2573,6 +2573,261 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
+    inner class BankAccountActions {
+        private lateinit var viewModel: VaultItemViewModel
+
+        @BeforeEach
+        fun setup() {
+            viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(
+                    viewState = BANK_ACCOUNT_VIEW_STATE,
+                ),
+            )
+        }
+
+        @Test
+        fun `on CopyAccountNumberClick should copy account number`() = runTest {
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canRestore = false,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
+                    hasOrganizations = true,
+                )
+            } returns BANK_ACCOUNT_VIEW_STATE
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.BankAccount.CopyAccountNumberClick,
+            )
+
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "123456789",
+                    toastDescriptorOverride =
+                        BitwardenString.account_number.asText(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopyRoutingNumberClick should copy routing number`() = runTest {
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canRestore = false,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
+                    hasOrganizations = true,
+                )
+            } returns BANK_ACCOUNT_VIEW_STATE
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.BankAccount.CopyRoutingNumberClick,
+            )
+
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "021000021",
+                    toastDescriptorOverride =
+                        BitwardenString.routing_number.asText(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopySwiftCodeClick should copy SWIFT code`() = runTest {
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canRestore = false,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
+                    hasOrganizations = true,
+                )
+            } returns BANK_ACCOUNT_VIEW_STATE
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.BankAccount.CopySwiftCodeClick,
+            )
+
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "BOFAUS3N",
+                    toastDescriptorOverride =
+                        BitwardenString.swift_code.asText(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopyIbanClick should copy IBAN`() = runTest {
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canRestore = false,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
+                    hasOrganizations = true,
+                )
+            } returns BANK_ACCOUNT_VIEW_STATE
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.BankAccount.CopyIbanClick,
+            )
+
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "GB29NWBK60161331926819",
+                    toastDescriptorOverride = BitwardenString.iban.asText(),
+                )
+            }
+        }
+
+        @Test
+        fun `on AccountNumberVisibilityClick should toggle visibility`() =
+            runTest {
+                val bankAccountViewState = createViewState(
+                    type = DEFAULT_BANK_ACCOUNT_TYPE,
+                )
+                val bankAccountState = DEFAULT_STATE.copy(
+                    viewState = bankAccountViewState,
+                )
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canRestore = false,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
+                        hasOrganizations = true,
+                    )
+                } returns bankAccountViewState
+                mutableVaultItemFlow.value =
+                    DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value =
+                    DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value =
+                    DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value =
+                    DataState.Loaded(emptyList())
+
+                assertEquals(bankAccountState, viewModel.stateFlow.value)
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.BankAccount
+                        .AccountNumberVisibilityClick(isVisible = true),
+                )
+                assertEquals(
+                    bankAccountState.copy(
+                        viewState = bankAccountViewState.copy(
+                            type = DEFAULT_BANK_ACCOUNT_TYPE.copy(
+                                accountNumber = DEFAULT_BANK_ACCOUNT_TYPE
+                                    .accountNumber!!
+                                    .copy(isVisible = true),
+                            ),
+                        ),
+                    ),
+                    viewModel.stateFlow.value,
+                )
+            }
+
+        @Test
+        fun `on PinVisibilityClick should toggle visibility`() = runTest {
+            val bankAccountViewState = createViewState(
+                type = DEFAULT_BANK_ACCOUNT_TYPE,
+            )
+            val bankAccountState = DEFAULT_STATE.copy(
+                viewState = bankAccountViewState,
+            )
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canRestore = false,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
+                    hasOrganizations = true,
+                )
+            } returns bankAccountViewState
+            mutableVaultItemFlow.value =
+                DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value =
+                DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value =
+                DataState.Loaded(emptyList())
+
+            assertEquals(bankAccountState, viewModel.stateFlow.value)
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.BankAccount
+                    .PinVisibilityClick(isVisible = true),
+            )
+            assertEquals(
+                bankAccountState.copy(
+                    viewState = bankAccountViewState.copy(
+                        type = DEFAULT_BANK_ACCOUNT_TYPE.copy(
+                            pin = DEFAULT_BANK_ACCOUNT_TYPE.pin!!.copy(
+                                isVisible = true,
+                            ),
+                        ),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+    }
+
+    @Nested
     inner class VaultItemFlow {
         @BeforeEach
         fun setup() {
@@ -3190,6 +3445,34 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             VaultItemState.ViewState.Content(
                 common = DEFAULT_COMMON,
                 type = DEFAULT_IDENTITY_TYPE,
+            )
+
+        private val DEFAULT_BANK_ACCOUNT_TYPE:
+            VaultItemState.ViewState.Content.ItemType.BankAccount =
+            VaultItemState.ViewState.Content.ItemType.BankAccount(
+                bankName = "First National",
+                nameOnAccount = "John Doe",
+                accountType = "Checking",
+                accountNumber =
+                    VaultItemState.ViewState.Content.ItemType.BankAccount
+                        .AccountNumberData(
+                            number = "123456789",
+                            isVisible = false,
+                        ),
+                routingNumber = "021000021",
+                branchNumber = "001",
+                pin = VaultItemState.ViewState.Content.ItemType.BankAccount
+                    .PinData(pin = "1234", isVisible = false),
+                swiftCode = "BOFAUS3N",
+                iban = "GB29NWBK60161331926819",
+                bankContactPhone = "555-0100",
+            )
+
+        private val BANK_ACCOUNT_VIEW_STATE:
+            VaultItemState.ViewState.Content =
+            VaultItemState.ViewState.Content(
+                common = DEFAULT_COMMON,
+                type = DEFAULT_BANK_ACCOUNT_TYPE,
             )
     }
 }
