@@ -11,7 +11,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
@@ -48,7 +49,7 @@ fun VaultContent(
     modifier: Modifier = Modifier,
 ) {
     // Handles the master password prompt for the row click
-    var masterPasswordRepromptItem by remember {
+    var masterPasswordRepromptItem by rememberSaveable {
         mutableStateOf<VaultState.ViewState.VaultItem?>(value = null)
     }
     masterPasswordRepromptItem?.let { action ->
@@ -61,7 +62,7 @@ fun VaultContent(
         )
     }
     // Handles the master password prompt for the overflow clicks
-    var overflowMasterPasswordRepromptAction by remember {
+    var overflowMasterPasswordRepromptAction by rememberSaveable {
         mutableStateOf<ListingItemOverflowAction.VaultAction?>(value = null)
     }
     overflowMasterPasswordRepromptAction?.let { action ->
@@ -73,6 +74,31 @@ fun VaultContent(
             onDismissRequest = { overflowMasterPasswordRepromptAction = null },
         )
     }
+
+    var overflowSpeedBumpAction: ListingItemOverflowAction.VaultAction? by rememberSaveable {
+        mutableStateOf(value = null)
+    }
+    overflowSpeedBumpAction?.let { action ->
+        action
+            .speedBump
+            ?.let { speedBump ->
+                BitwardenTwoButtonDialog(
+                    twoButtonDialogData = speedBump,
+                    onConfirmClick = {
+                        overflowSpeedBumpAction = null
+                        vaultHandlers.overflowOptionClick(action)
+                    },
+                    onDismissClick = { overflowSpeedBumpAction = null },
+                    onDismissRequest = { overflowSpeedBumpAction = null },
+                )
+            }
+            ?: run {
+                // If we somehow get here and there is no speed bump, then we should keep on going.
+                overflowSpeedBumpAction = null
+                vaultHandlers.overflowOptionClick(action)
+            }
+    }
+
     LazyColumn(
         modifier = modifier,
     ) {
@@ -162,6 +188,8 @@ fun VaultContent(
                             action.requiresPasswordReprompt
                         ) {
                             overflowMasterPasswordRepromptAction = action
+                        } else if (action.speedBump != null) {
+                            overflowSpeedBumpAction = action
                         } else {
                             vaultHandlers.overflowOptionClick(action)
                         }
@@ -364,6 +392,8 @@ fun VaultContent(
                             action.requiresPasswordReprompt
                         ) {
                             overflowMasterPasswordRepromptAction = action
+                        } else if (action.speedBump != null) {
+                            overflowSpeedBumpAction = action
                         } else {
                             vaultHandlers.overflowOptionClick(action)
                         }

@@ -1,7 +1,11 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.model
 
 import android.os.Parcelable
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.send.SendType
+import com.bitwarden.ui.platform.components.dialog.model.BitwardenTwoButtonDialogData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -24,6 +28,11 @@ sealed class ListingItemOverflowAction : Parcelable {
     abstract val contentDescription: Text
 
     /**
+     * The data to be displayed for an optional speed bump dialog.
+     */
+    abstract val speedBump: BitwardenTwoButtonDialogData?
+
+    /**
      * Represents the send actions.
      */
     sealed class SendAction : ListingItemOverflowAction() {
@@ -37,6 +46,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         ) : SendAction() {
             override val title: Text get() = BitwardenString.view.asText()
             override val contentDescription: Text get() = title
+            override val speedBump: BitwardenTwoButtonDialogData? get() = null
         }
 
         /**
@@ -49,6 +59,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         ) : SendAction() {
             override val title: Text get() = BitwardenString.edit.asText()
             override val contentDescription: Text get() = title
+            override val speedBump: BitwardenTwoButtonDialogData? get() = null
         }
 
         /**
@@ -58,6 +69,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         data class CopyUrlClick(val sendUrl: String) : SendAction() {
             override val title: Text get() = BitwardenString.copy_link.asText()
             override val contentDescription: Text get() = title
+            override val speedBump: BitwardenTwoButtonDialogData? get() = null
         }
 
         /**
@@ -68,6 +80,7 @@ sealed class ListingItemOverflowAction : Parcelable {
             override val title: Text get() = BitwardenString.share_link.asText()
             override val contentDescription: Text
                 get() = BitwardenString.external_link_format.asText(title)
+            override val speedBump: BitwardenTwoButtonDialogData? get() = null
         }
 
         /**
@@ -77,6 +90,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         data class RemovePasswordClick(val sendId: String) : SendAction() {
             override val title: Text get() = BitwardenString.remove_password.asText()
             override val contentDescription: Text get() = title
+            override val speedBump: BitwardenTwoButtonDialogData? get() = null
         }
 
         /**
@@ -86,6 +100,13 @@ sealed class ListingItemOverflowAction : Parcelable {
         data class DeleteClick(val sendId: String) : SendAction() {
             override val title: Text get() = BitwardenString.delete.asText()
             override val contentDescription: Text get() = title
+            override val speedBump: BitwardenTwoButtonDialogData?
+                get() = BitwardenTwoButtonDialogData(
+                    title = BitwardenString.delete.asText(),
+                    message = BitwardenString.are_you_sure_delete_send.asText(),
+                    confirmButtonText = BitwardenString.yes.asText(),
+                    dismissButtonText = BitwardenString.cancel.asText(),
+                )
         }
     }
 
@@ -110,6 +131,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         ) : VaultAction() {
             override val title: Text get() = BitwardenString.view.asText()
             override val contentDescription: Text get() = title
+            override val speedBump: BitwardenTwoButtonDialogData? get() = null
         }
 
         /**
@@ -123,6 +145,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         ) : VaultAction() {
             override val title: Text get() = BitwardenString.edit.asText()
             override val contentDescription: Text get() = title
+            override val speedBump: BitwardenTwoButtonDialogData? get() = null
         }
 
         /**
@@ -133,6 +156,7 @@ sealed class ListingItemOverflowAction : Parcelable {
             override val title: Text get() = BitwardenString.copy_username.asText()
             override val requiresPasswordReprompt: Boolean get() = false
             override val contentDescription: Text get() = title
+            override val speedBump: BitwardenTwoButtonDialogData? get() = null
         }
 
         /**
@@ -145,6 +169,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         ) : VaultAction() {
             override val title: Text get() = BitwardenString.copy_password.asText()
             override val contentDescription: Text get() = title
+            override val speedBump: BitwardenTwoButtonDialogData? get() = null
         }
 
         /**
@@ -157,6 +182,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         ) : VaultAction() {
             override val title: Text get() = BitwardenString.copy_totp.asText()
             override val contentDescription: Text get() = title
+            override val speedBump: BitwardenTwoButtonDialogData? get() = null
         }
 
         /**
@@ -169,6 +195,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         ) : VaultAction() {
             override val title: Text get() = BitwardenString.copy_number.asText()
             override val contentDescription: Text get() = title
+            override val speedBump: BitwardenTwoButtonDialogData? get() = null
         }
 
         /**
@@ -181,6 +208,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         ) : VaultAction() {
             override val title: Text get() = BitwardenString.copy_security_code.asText()
             override val contentDescription: Text get() = title
+            override val speedBump: BitwardenTwoButtonDialogData? get() = null
         }
 
         /**
@@ -193,6 +221,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         ) : VaultAction() {
             override val title: Text get() = BitwardenString.copy_notes.asText()
             override val contentDescription: Text get() = title
+            override val speedBump: BitwardenTwoButtonDialogData? get() = null
         }
 
         /**
@@ -204,6 +233,7 @@ sealed class ListingItemOverflowAction : Parcelable {
             override val requiresPasswordReprompt: Boolean get() = false
             override val contentDescription: Text
                 get() = BitwardenString.external_link_format.asText(title)
+            override val speedBump: BitwardenTwoButtonDialogData? get() = null
         }
 
         /**
@@ -214,6 +244,13 @@ sealed class ListingItemOverflowAction : Parcelable {
             override val title: Text get() = BitwardenString.archive_verb.asText()
             override val requiresPasswordReprompt: Boolean get() = true
             override val contentDescription: Text get() = title
+            override val speedBump: BitwardenTwoButtonDialogData?
+                get() = BitwardenTwoButtonDialogData(
+                    title = BitwardenString.archive_item.asText(),
+                    message = BitwardenString.once_archived_this_item_will_be_excluded.asText(),
+                    confirmButtonText = BitwardenString.archive_verb.asText(),
+                    dismissButtonText = BitwardenString.cancel.asText(),
+                )
         }
 
         /**
@@ -224,6 +261,7 @@ sealed class ListingItemOverflowAction : Parcelable {
             override val title: Text get() = BitwardenString.unarchive.asText()
             override val requiresPasswordReprompt: Boolean get() = true
             override val contentDescription: Text get() = title
+            override val speedBump: BitwardenTwoButtonDialogData? get() = null
         }
     }
 }

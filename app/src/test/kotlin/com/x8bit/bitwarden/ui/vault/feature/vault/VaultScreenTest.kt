@@ -1355,6 +1355,57 @@ class VaultScreenTest : BitwardenComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `on vault item archive overflow option click should display archive confirmation dialog and emits ArchiveClick on confirmation`() {
+        val itemText = "Test Item"
+        val userName = "Bitwarden"
+        val cipherId = "12345"
+        val archiveAction = ListingItemOverflowAction.VaultAction.ArchiveClick(cipherId = cipherId)
+        val vaultItem = VaultState.ViewState.VaultItem.Login(
+            id = cipherId,
+            name = itemText.asText(),
+            username = userName.asText(),
+            overflowOptions = persistentListOf(archiveAction),
+            shouldShowMasterPasswordReprompt = false,
+            hasDecryptionError = false,
+        )
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    favoriteItems = listOf(vaultItem),
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(itemText))
+        composeTestRule
+            .onNodeWithText(text = itemText)
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "More options"))
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Archive")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Archive item")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Archive")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultAction.OverflowOptionClick(overflowAction = archiveAction))
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `clicking a favorite item overflow with password prompt should prompt for password before dismissing upon Cancel`() {
         val itemText = "Test Item"
         val userName = "Bitwarden"
