@@ -1,5 +1,10 @@
 package com.bitwarden.ui.platform.components.appbar
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.displayCutout
@@ -80,11 +85,17 @@ fun BitwardenSearchTopAppBar(
                 singleLine = true,
                 onValueChange = onSearchTermChange,
                 trailingIcon = {
-                    BitwardenStandardIconButton(
-                        vectorIconRes = BitwardenDrawable.ic_clear,
-                        contentDescription = clearIconContentDescription,
-                        onClick = { onSearchTermChange("") },
-                    )
+                    AnimatedVisibility(
+                        visible = searchTerm.isNotEmpty(),
+                        enter = scaleIn() + fadeIn(),
+                        exit = scaleOut() + fadeOut(),
+                    ) {
+                        BitwardenStandardIconButton(
+                            vectorIconRes = BitwardenDrawable.ic_clear,
+                            contentDescription = clearIconContentDescription,
+                            onClick = { onSearchTermChange("") },
+                        )
+                    }
                 },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 modifier = Modifier
