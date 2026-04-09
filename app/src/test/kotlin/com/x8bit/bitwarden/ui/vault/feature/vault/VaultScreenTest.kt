@@ -987,8 +987,32 @@ class VaultScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `search icon click should send SearchIconClick action`() {
-        mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.NoItems) }
-        composeTestRule.onNodeWithContentDescription("Search vault").performClick()
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultState.ViewState.Content(
+                    itemTypesCount = 0,
+                    totpItemsCount = 0,
+                    loginItemsCount = 0,
+                    cardItemsCount = 0,
+                    identityItemsCount = 0,
+                    secureNoteItemsCount = 0,
+                    sshKeyItemsCount = 0,
+                    favoriteItems = emptyList(),
+                    folderItems = emptyList(),
+                    noFolderItems = emptyList(),
+                    collectionItems = emptyList(),
+                    trashItemsCount = 0,
+                    archivedItemsCount = 0,
+                    archiveEnabled = false,
+                    archiveSubText = null,
+                    archiveEndIcon = null,
+                    showCardGroup = false,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithContentDescription("Search vault")
+            .performClick()
         verify { viewModel.trySendAction(VaultAction.SearchIconClick) }
     }
 

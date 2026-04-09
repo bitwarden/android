@@ -450,6 +450,15 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `search icon click should send SearchIconClick action`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayItemList = emptyList(),
+                    displayFolderList = emptyList(),
+                    displayCollectionList = emptyList(),
+                ),
+            )
+        }
         composeTestRule
             .onNodeWithContentDescription("Search vault")
             .performClick()

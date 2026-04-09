@@ -294,6 +294,15 @@ class SendScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `on search click should send SearchClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = SendState.ViewState.Content(
+                    textTypeCount = 0,
+                    fileTypeCount = 0,
+                    sendItems = emptyList(),
+                ),
+            )
+        }
         composeTestRule
             .onNodeWithContentDescription("Search Sends")
             .performClick()
