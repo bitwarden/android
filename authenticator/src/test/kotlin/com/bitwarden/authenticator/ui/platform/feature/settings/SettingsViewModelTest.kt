@@ -339,6 +339,63 @@ class SettingsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on ShowNextCodeToggle should update value in state and SettingsRepository`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                SettingsAction.DataClick.ShowNextCodeToggle(enabled = true),
+            )
+
+            verify(exactly = 1) {
+                settingsRepository.isShowNextCodeEnabled = true
+            }
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE.copy(isShowNextCodeEnabled = true),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `on ShowNextCodeUpdated should update value in state`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                SettingsAction.Internal.ShowNextCodeUpdated(isEnabled = true),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(isShowNextCodeEnabled = true),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `isShowNextCodeEnabledFlow emission should update state`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+
+            mutableIsShowNextCodeEnabledFlow.value = true
+            assertEquals(
+                DEFAULT_STATE.copy(isShowNextCodeEnabled = true),
+                awaitItem(),
+            )
+
+            mutableIsShowNextCodeEnabledFlow.value = false
+            assertEquals(
+                DEFAULT_STATE.copy(isShowNextCodeEnabled = false),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
     fun `on AppTimeoutChange should update value in state`() = runTest {
         val viewModel = createViewModel()
 
