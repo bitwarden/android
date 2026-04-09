@@ -60,7 +60,7 @@ User Request (UI Action)
 
 > **Quick start**: Use the `architect` agent (or `/plan-android-work <task>`) to refine
 > requirements and plan,
-> then the `android-implementer` agent (or `/work-on-android <task>`) for implementation,
+> then the `bitwarden-software-engineer:bitwarden-software-engineer` agent (or `/work-on-android <task>`) for implementation,
 > then `/review-android <PR#>` to review the result.
 
 ## Skills & Commands

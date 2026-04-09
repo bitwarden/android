@@ -55,9 +55,10 @@ The following marketplace plugins are required for the full pipeline. If a plugi
 | `bitwarden-security-engineer` | `bitwarden-marketplace` | Security review |
 | `bitwarden-code-review` | `bitwarden-marketplace` | Code quality review |
 | `bitwarden-architect` | `bitwarden-marketplace` | Architecture planning + architecture review |
+| `bitwarden-software-engineer` | `bitwarden-marketplace` | Implementation, testing, building, and committing |
 | `bitwarden-atlassian-tools` | `bitwarden-marketplace` | Optional — Jira/Confluence fetching |
 
-The `android-implementer` agent is local (defined in `.claude/agents/`) and always available. The `architect` agent is provided by the `bitwarden-architect` marketplace plugin.
+The `architect` agent is provided by the `bitwarden-architect` marketplace plugin.
 
 ## Step 1: Create Team
 
@@ -99,7 +100,7 @@ Also add these teammates at team creation time. They will persist across all imp
 
 | Teammate Name | Agent Type | Role |
 |---------------|-----------|------|
-| `implementer` | `android-implementer` | Implement, test, build, preflight, and commit |
+| `implementer` | `bitwarden-software-engineer:bitwarden-software-engineer` | Implement, test, build, preflight, and commit |
 | `requirements-reviewer` | `bitwarden-product-analyst:product-analyst` | Requirements conformance and QA handoff coverage |
 | `architecture-reviewer` | `bitwarden-architect:architect` | Architecture and pattern adherence |
 | `security-reviewer` | `bitwarden-security-engineer:bitwarden-security-engineer` | Security posture and zero-knowledge compliance |
