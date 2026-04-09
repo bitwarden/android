@@ -716,6 +716,12 @@ data class ItemListingState(
     val dialog: DialogState?,
 ) : Parcelable {
     /**
+     * Whether the search icon should be shown.
+     */
+    val shouldShowSearchIcon: Boolean
+        get() = viewState is ViewState.Content
+
+    /**
      * Represents the different view states of the [ItemListingScreen].
      */
     @Parcelize

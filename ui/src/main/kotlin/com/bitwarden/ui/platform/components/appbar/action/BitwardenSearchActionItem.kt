@@ -16,13 +16,16 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
  * It presents the search icon and offers an `onClick` callback for when the icon is tapped.
  *
  * @param contentDescription A description of the UI element, used for accessibility purposes.
+ * @param isDisplayed Whether this action item should be displayed.
  * @param onClick A callback to be invoked when this action item is clicked.
  */
 @Composable
 fun BitwardenSearchActionItem(
     contentDescription: String,
+    isDisplayed: Boolean = true,
     onClick: () -> Unit,
 ) {
+    if (!isDisplayed) return
     BitwardenStandardIconButton(
         vectorIconRes = BitwardenDrawable.ic_search,
         contentDescription = contentDescription,
