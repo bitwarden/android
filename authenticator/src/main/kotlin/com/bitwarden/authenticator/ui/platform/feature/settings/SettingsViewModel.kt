@@ -70,6 +70,7 @@ class SettingsViewModel @Inject constructor(
             defaultSaveOption = settingsRepository.defaultSaveOption,
             sharedAccountsState = authenticatorRepository.sharedCodesStateFlow.value,
             isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
+            isShowNextCodeEnabled = settingsRepository.isShowNextCodeEnabled,
             isDynamicColorsEnabled = settingsRepository.isDynamicColorsEnabled,
             appTimeout = settingsRepository.appTimeoutState,
         ),
@@ -99,6 +100,11 @@ class SettingsViewModel @Inject constructor(
         settingsRepository
             .appTimeoutStateFlow
             .map { SettingsAction.Internal.AppTimeoutStateUpdated(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+        settingsRepository
+            .isShowNextCodeEnabledFlow
+            .map { SettingsAction.Internal.ShowNextCodeUpdated(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
         snackbarRelayManager
@@ -160,6 +166,10 @@ class SettingsViewModel @Inject constructor(
 
             is SettingsAction.Internal.AppTimeoutStateUpdated -> {
                 handleAppTimeoutStateUpdated(action)
+            }
+
+            is SettingsAction.Internal.ShowNextCodeUpdated -> {
+                handleShowNextCodeUpdated(action)
             }
         }
     }
@@ -271,6 +281,19 @@ class SettingsViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(allowScreenCapture = action.enabled) }
     }
 
+    private fun handleShowNextCodeToggle(
+        action: SettingsAction.DataClick.ShowNextCodeToggle,
+    ) {
+        settingsRepository.isShowNextCodeEnabled = action.enabled
+        mutableStateFlow.update { it.copy(isShowNextCodeEnabled = action.enabled) }
+    }
+
+    private fun handleShowNextCodeUpdated(
+        action: SettingsAction.Internal.ShowNextCodeUpdated,
+    ) {
+        mutableStateFlow.update { it.copy(isShowNextCodeEnabled = action.isEnabled) }
+    }
+
     private fun handleUnlockWithBiometricToggleEnabled(
         action: SettingsAction.SecurityClick.UnlockWithBiometricToggleEnabled,
     ) {
@@ -309,6 +332,9 @@ class SettingsViewModel @Inject constructor(
             SettingsAction.DataClick.SyncLearnMoreClick -> handleSyncLearnMoreClick()
             is SettingsAction.DataClick.DefaultSaveOptionUpdated ->
                 handleDefaultSaveOptionChosen(action)
+
+            is SettingsAction.DataClick.ShowNextCodeToggle ->
+                handleShowNextCodeToggle(action)
         }
     }
 
@@ -463,6 +489,7 @@ class SettingsViewModel @Inject constructor(
             accountSyncState: AccountSyncState,
             sharedAccountsState: SharedVerificationCodesState,
             isScreenCaptureAllowed: Boolean,
+            isShowNextCodeEnabled: Boolean,
             isDynamicColorsEnabled: Boolean,
             appTimeout: AppTimeout,
         ): SettingsState {
@@ -492,6 +519,7 @@ class SettingsViewModel @Inject constructor(
                 showSyncWithBitwarden = shouldShowSyncWithBitwarden,
                 showDefaultSaveOptionRow = shouldShowDefaultSaveOption,
                 allowScreenCapture = isScreenCaptureAllowed,
+                isShowNextCodeEnabled = isShowNextCodeEnabled,
                 hasBiometricsSupport = true,
                 appTimeout = appTimeout,
             )
@@ -515,6 +543,7 @@ data class SettingsState(
     val version: Text,
     val copyrightInfo: Text,
     val allowScreenCapture: Boolean,
+    val isShowNextCodeEnabled: Boolean,
     val appTimeout: AppTimeout,
 ) : Parcelable {
 
@@ -702,6 +731,11 @@ sealed class SettingsAction {
          * User confirmed a new [DefaultSaveOption].
          */
         data class DefaultSaveOptionUpdated(val option: DefaultSaveOption) : DataClick()
+
+        /**
+         * Indicates the user toggled the show next code switch.
+         */
+        data class ShowNextCodeToggle(val enabled: Boolean) : DataClick()
     }
 
     /**
@@ -810,6 +844,13 @@ sealed class SettingsAction {
          */
         data class AppTimeoutStateUpdated(
             val appTimeout: AppTimeout,
+        ) : Internal()
+
+        /**
+         * Indicates that the show next code state on disk was updated.
+         */
+        data class ShowNextCodeUpdated(
+            val isEnabled: Boolean,
         ) : Internal()
     }
 }

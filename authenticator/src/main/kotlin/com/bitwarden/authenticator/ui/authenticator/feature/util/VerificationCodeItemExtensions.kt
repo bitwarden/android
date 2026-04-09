@@ -25,6 +25,7 @@ fun VerificationCodeItem.toDisplayItem(
     periodSeconds = periodSeconds,
     alertThresholdSeconds = alertThresholdSeconds,
     authCode = code,
+    nextAuthCode = nextCode.ifEmpty { null },
     showOverflow = showOverflow,
     favorite = (source as? AuthenticatorItem.Source.Local)?.isFavorite ?: false,
     showMoveToBitwarden = when (source) {

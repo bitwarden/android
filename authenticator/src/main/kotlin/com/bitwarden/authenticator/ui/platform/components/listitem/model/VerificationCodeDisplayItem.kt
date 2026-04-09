@@ -17,6 +17,7 @@ data class VerificationCodeDisplayItem(
     val periodSeconds: Int,
     val alertThresholdSeconds: Int,
     val authCode: String,
+    val nextAuthCode: String? = null,
     val startIcon: IconData = IconData.Local(
         iconRes = BitwardenDrawable.ic_login_item,
         testTag = "BitwardenIcon",

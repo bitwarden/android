@@ -64,6 +64,7 @@ class ItemListingViewModel @Inject constructor(
 ) : BaseViewModel<ItemListingState, ItemListingEvent, ItemListingAction>(
     initialState = ItemListingState(
         alertThresholdSeconds = settingsRepository.authenticatorAlertThresholdSeconds,
+        isShowNextCodeEnabled = settingsRepository.isShowNextCodeEnabled,
         viewState = ItemListingState.ViewState.Loading,
         dialog = null,
     ),
@@ -73,6 +74,12 @@ class ItemListingViewModel @Inject constructor(
         settingsRepository
             .authenticatorAlertThresholdSecondsFlow
             .map { ItemListingAction.Internal.AlertThresholdSecondsReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        settingsRepository
+            .isShowNextCodeEnabledFlow
+            .map { ItemListingAction.Internal.IsShowNextCodeEnabledReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -242,6 +249,10 @@ class ItemListingViewModel @Inject constructor(
 
             is ItemListingAction.Internal.AlertThresholdSecondsReceive -> {
                 handleAlertThresholdSecondsReceive(internalAction)
+            }
+
+            is ItemListingAction.Internal.IsShowNextCodeEnabledReceive -> {
+                handleIsShowNextCodeEnabledReceive(internalAction)
             }
 
             is ItemListingAction.Internal.TotpCodeReceive -> {
@@ -446,6 +457,16 @@ class ItemListingViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 alertThresholdSeconds = action.thresholdSeconds,
+            )
+        }
+    }
+
+    private fun handleIsShowNextCodeEnabledReceive(
+        action: ItemListingAction.Internal.IsShowNextCodeEnabledReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                isShowNextCodeEnabled = action.isShowNextCodeEnabled,
             )
         }
     }
@@ -712,6 +733,7 @@ const val ISSUER = "issuer"
 @Parcelize
 data class ItemListingState(
     val alertThresholdSeconds: Int,
+    val isShowNextCodeEnabled: Boolean,
     val viewState: ViewState,
     val dialog: DialogState?,
 ) : Parcelable {
@@ -983,6 +1005,13 @@ sealed class ItemListingAction {
          */
         data class AlertThresholdSecondsReceive(
             val thresholdSeconds: Int,
+        ) : Internal()
+
+        /**
+         * Indicates the show next code enabled setting has been received.
+         */
+        data class IsShowNextCodeEnabledReceive(
+            val isShowNextCodeEnabled: Boolean,
         ) : Internal()
 
         /**

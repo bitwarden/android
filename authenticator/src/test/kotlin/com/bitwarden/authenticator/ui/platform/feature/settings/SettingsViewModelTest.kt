@@ -62,6 +62,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
         every { isUnlockWithBiometricsEnabledFlow } returns mutableIsUnlockWithBiometricsEnabledFlow
     }
     private val mutableAppTimeoutStateFlow = MutableStateFlow<AppTimeout>(AppTimeout.OnAppRestart)
+    private val mutableIsShowNextCodeEnabledFlow = MutableStateFlow(false)
     private val settingsRepository: SettingsRepository = mockk {
         every { appLanguage } returns APP_LANGUAGE
         every { appTheme } returns APP_THEME
@@ -74,6 +75,9 @@ class SettingsViewModelTest : BaseViewModelTest() {
         every { isDynamicColorsEnabled } answers { mutableIsDynamicColorsEnabledFlow.value }
         every { isDynamicColorsEnabled = any() } just runs
         every { isDynamicColorsEnabledFlow } returns mutableIsDynamicColorsEnabledFlow
+        every { isShowNextCodeEnabled } returns false
+        every { isShowNextCodeEnabled = any() } just runs
+        every { isShowNextCodeEnabledFlow } returns mutableIsShowNextCodeEnabledFlow
         every { appTimeoutState = any() } just runs
         every { appTimeoutStateFlow } returns mutableAppTimeoutStateFlow
         every { appTimeoutState } answers { mutableAppTimeoutStateFlow.value }
@@ -450,6 +454,7 @@ private val DEFAULT_STATE = SettingsState(
         .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
     copyrightInfo = "© Bitwarden Inc. 2015-2024".asText(),
     allowScreenCapture = false,
+    isShowNextCodeEnabled = false,
     hasBiometricsSupport = true,
     appTimeout = AppTimeout.OnAppRestart,
 )

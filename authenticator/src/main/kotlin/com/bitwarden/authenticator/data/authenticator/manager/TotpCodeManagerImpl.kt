@@ -106,8 +106,17 @@ class TotpCodeManagerImpl @Inject constructor(
                 authenticatorSdkSource
                     .generateTotp(item.otpUri, dateTime)
                     .onSuccess { response ->
+                        val nextCodeValue = authenticatorSdkSource
+                            .generateTotp(
+                                item.otpUri,
+                                dateTime.plusSeconds(response.period.toLong()),
+                            )
+                            .getOrNull()
+                            ?.code
+                            .orEmpty()
                         verificationCodeItem = VerificationCodeItem(
                             code = response.code,
+                            nextCode = nextCodeValue,
                             periodSeconds = response.period.toInt(),
                             timeLeftSeconds = response.period.toInt() -
                                 (time % response.period.toInt()),

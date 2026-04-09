@@ -12,6 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,6 +39,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param onItemClick The lambda function to be invoked when the item is clicked.
  * @param onDropdownMenuClick A lambda function invoked when a dropdown menu action is clicked.
  * @param cardStyle The card style to be applied to this item.
+ * @param showNextCode Whether to display the next code preview when nearing expiration.
  * @param modifier The modifier for the item.
  */
 @Composable
@@ -45,10 +48,12 @@ fun VaultVerificationCodeItem(
     onItemClick: () -> Unit,
     onDropdownMenuClick: (VaultDropdownMenuAction) -> Unit,
     cardStyle: CardStyle,
+    showNextCode: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
     VaultVerificationCodeItem(
         authCode = displayItem.authCode,
+        nextAuthCode = displayItem.nextAuthCode,
         primaryLabel = displayItem.title,
         secondaryLabel = displayItem.subtitle,
         periodSeconds = displayItem.periodSeconds,
@@ -59,6 +64,7 @@ fun VaultVerificationCodeItem(
         onDropdownMenuClick = onDropdownMenuClick,
         showOverflow = displayItem.showOverflow,
         showMoveToBitwarden = displayItem.showMoveToBitwarden,
+        showNextCode = showNextCode,
         cardStyle = cardStyle,
         modifier = modifier,
     )
@@ -79,6 +85,8 @@ fun VaultVerificationCodeItem(
  * @param showOverflow Whether overflow menu should be available or not.
  * @param showMoveToBitwarden Whether the option to move the item to Bitwarden is displayed.
  * @param cardStyle The card style to be applied to this item.
+ * @param nextAuthCode The next verification code to preview when nearing expiration.
+ * @param showNextCode Whether to display the next code preview when nearing expiration.
  * @param modifier The modifier for the item.
  */
 @Suppress("LongMethod", "MagicNumber")
@@ -96,6 +104,8 @@ fun VaultVerificationCodeItem(
     showOverflow: Boolean,
     showMoveToBitwarden: Boolean,
     cardStyle: CardStyle,
+    nextAuthCode: String? = null,
+    showNextCode: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -152,14 +162,45 @@ fun VaultVerificationCodeItem(
             alertThresholdSeconds = alertThresholdSeconds,
         )
 
-        Text(
-            modifier = Modifier.testTag(tag = "AuthCode"),
-            text = authCode
-                .chunked(size = 3) { it.padEnd(length = 3, padChar = ' ') }
-                .joinToString(separator = " "),
-            style = BitwardenTheme.typography.sensitiveInfoSmall,
-            color = BitwardenTheme.colorScheme.text.primary,
-        )
+        Column(
+            horizontalAlignment = Alignment.End,
+        ) {
+            Text(
+                modifier = Modifier.testTag(tag = "AuthCode"),
+                text = authCode
+                    .chunked(size = 3) { it.padEnd(length = 3, padChar = ' ') }
+                    .joinToString(separator = " "),
+                style = BitwardenTheme.typography.sensitiveInfoSmall,
+                color = BitwardenTheme.colorScheme.text.primary,
+            )
+
+            if (showNextCode &&
+                nextAuthCode != null &&
+                timeLeftSeconds < NEXT_CODE_THRESHOLD_SECONDS
+            ) {
+                val formattedNextCode = nextAuthCode
+                    .chunked(size = 3) { "$it" }
+                    .joinToString(separator = " ")
+                val nextCodeDescription = stringResource(
+                    id = BitwardenString.next_code_x,
+                    formattedNextCode,
+                )
+                Text(
+                    modifier = Modifier
+                        .testTag(tag = "NextAuthCode")
+                        .semantics {
+                            contentDescription = nextCodeDescription
+                        },
+                    text = nextAuthCode
+                        .chunked(size = 3) {
+                            it.padEnd(length = 3, padChar = ' ')
+                        }
+                        .joinToString(separator = " "),
+                    style = BitwardenTheme.typography.sensitiveInfoSmall,
+                    color = BitwardenTheme.colorScheme.text.secondary,
+                )
+            }
+        }
 
         if (showOverflow) {
             BitwardenOverflowActionItem(
@@ -199,6 +240,8 @@ fun VaultVerificationCodeItem(
         }
     }
 }
+
+private const val NEXT_CODE_THRESHOLD_SECONDS = 10
 
 @Suppress("MagicNumber")
 @Preview(showBackground = true)

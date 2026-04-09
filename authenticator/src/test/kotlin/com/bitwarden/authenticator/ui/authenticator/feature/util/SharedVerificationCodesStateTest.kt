@@ -29,6 +29,7 @@ class SharedVerificationCodesStateTest {
             items = listOf(
                 VerificationCodeItem(
                     code = "123456",
+                    nextCode = "",
                     periodSeconds = 30,
                     timeLeftSeconds = 10,
                     issueTime = 100L,
@@ -44,6 +45,7 @@ class SharedVerificationCodesStateTest {
                 ),
                 VerificationCodeItem(
                     code = "987654",
+                    nextCode = "",
                     periodSeconds = 30,
                     timeLeftSeconds = 10,
                     issueTime = 100L,
@@ -123,6 +125,7 @@ class SharedVerificationCodesStateTest {
             items = listOf(
                 VerificationCodeItem(
                     code = "123456",
+                    nextCode = "",
                     periodSeconds = 30,
                     timeLeftSeconds = 10,
                     issueTime = 100L,
@@ -138,6 +141,7 @@ class SharedVerificationCodesStateTest {
                 ),
                 VerificationCodeItem(
                     code = "987654",
+                    nextCode = "",
                     periodSeconds = 30,
                     timeLeftSeconds = 10,
                     issueTime = 100L,
