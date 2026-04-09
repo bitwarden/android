@@ -58,22 +58,31 @@ User Request (UI Action)
 
 ### Workflow Skills
 
-> **Quick start**: Use the `android-architect` agent (or `/plan-android-work <task>`) to refine requirements and plan,
+> **Quick start**: Use the `architect` agent (or `/plan-android-work <task>`) to refine
+> requirements and plan,
 > then the `android-implementer` agent (or `/work-on-android <task>`) for implementation,
 > then `/review-android <PR#>` to review the result.
 
-Planning: 1–2 | Implementation: 3–7 | Review & PR: 8–10
+## Skills & Commands
 
-1. `refining-android-requirements` - Gap analysis and structured spec from any input source
-2. `planning-android-implementation` - Architecture design and phased task breakdown
-3. `implementing-android-code` - Patterns, gotchas, and templates for writing code
-4. `testing-android-code` - Test patterns and templates for verifying code
-5. `build-test-verify` - Build, test, lint, and deploy commands
-6. `perform-android-preflight-checklist` - Quality gate before committing
-7. `committing-android-changes` - Commit message format and pre-commit workflow
-8. `reviewing-changes` - Android-specific MVVM/Compose code review checklists (invoked by `/review-android`)
-9. `/review-android` - Full review workflow: PR context gathering → Android checklist → output
-10. `creating-android-pull-request` - PR creation workflow and templates
+| Skill | Triggers |
+|-------|---------|
+| `refining-android-requirements` | "refine requirements", "analyze ticket", "gap analysis" |
+| `planning-android-implementation` | "plan implementation", "architecture design", "phased task breakdown" |
+| `implementing-android-code` | "implement", "write code", "add screen", "create feature" |
+| `testing-android-code` | "write tests", "add test coverage", "unit test" |
+| `build-test-verify` | "build", "run tests", "lint", "format", "verify build" |
+| `perform-android-preflight-checklist` | "preflight", "self review", "ready to commit" |
+| `committing-android-changes` | "commit", "stage changes", "create commit" |
+| `reviewing-changes` | "review", "code review", "check PR" |
+| `creating-android-pull-request` | "create PR", "open pull request", "submit PR" |
+| `labeling-android-changes` | "label PR", "add labels", "categorize changes" |
+
+| Command | Usage |
+|---------|-------|
+| `/plan-android-work <task>` | Fetch ticket → refine requirements → design implementation approach |
+| `/work-on-android <task>` | Full workflow: implement → test → verify → preflight → commit → review → PR |
+| `/review-android <PR#>` | Full review workflow: PR context gathering → Android checklist → output |
 
 ---
 
