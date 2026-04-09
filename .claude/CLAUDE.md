@@ -72,11 +72,11 @@ User Request (UI Action)
 | `implementing-android-code` | "implement", "write code", "add screen", "create feature" |
 | `testing-android-code` | "write tests", "add test coverage", "unit test" |
 | `build-test-verify` | "build", "run tests", "lint", "format", "verify build" |
-| `perform-android-preflight-checklist` | "preflight", "self review", "ready to commit" |
-| `committing-android-changes` | "commit", "stage changes", "create commit" |
+| `bitwarden-delivery-tools:perform-preflight` | "preflight", "self review", "ready to commit" |
+| `bitwarden-delivery-tools:committing-changes` | "commit", "stage changes", "create commit" |
 | `reviewing-changes` | "review", "code review", "check PR" |
-| `creating-android-pull-request` | "create PR", "open pull request", "submit PR" |
-| `labeling-android-changes` | "label PR", "add labels", "categorize changes" |
+| `bitwarden-delivery-tools:creating-pull-request` | "create PR", "open pull request", "submit PR" |
+| `bitwarden-delivery-tools:labeling-changes` | "label PR", "add labels", "categorize changes" |
 
 | Command | Usage |
 |---------|-------|
@@ -134,8 +134,8 @@ In addition to the Key Principles above, follow these rules:
 - **Before writing code**: Use `implementing-android-code` skill for Bitwarden-specific patterns, gotchas, and templates
 - **Before writing tests**: Use `testing-android-code` skill for test patterns and templates
 - **Building/testing**: Use `build-test-verify` skill | App tests: `./gradlew app:testStandardDebugUnitTest`
-- **Before committing**: Use `perform-android-preflight-checklist` skill, then `committing-android-changes` skill for message format
+- **Before committing**: Use `bitwarden-delivery-tools:perform-preflight` skill, then `bitwarden-delivery-tools:committing-changes` skill for message format
 - **Code review**: Use `/review-android` for the full review workflow; `reviewing-changes` skill for checklist-only
-- **Creating PRs**: Use `creating-android-pull-request` skill for PR workflow and templates
+- **Creating PRs**: Use `bitwarden-delivery-tools:creating-pull-request` skill for PR workflow and templates
 - **Troubleshooting**: See `docs/TROUBLESHOOTING.md`
 - **Architecture**: `docs/ARCHITECTURE.md` | [Bitwarden SDK](https://github.com/bitwarden/sdk) | [Jetpack Compose](https://developer.android.com/jetpack/compose) | [Hilt DI](https://dagger.dev/hilt/)

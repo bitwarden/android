@@ -284,7 +284,7 @@ After all implementation phases are complete (or user decides to stop):
    - Number of review-fix cycles per phase
    - Total commits on the branch
 4. **Suggest next steps**:
-   - If all issues resolved: create a PR via `Skill(creating-android-pull-request)`
+   - If all issues resolved: create a PR via `Skill(bitwarden-delivery-tools:creating-pull-request)`
    - If user overrode remaining issues: note them as known items for the PR description
    - Review findings can be used as PR description context
 
