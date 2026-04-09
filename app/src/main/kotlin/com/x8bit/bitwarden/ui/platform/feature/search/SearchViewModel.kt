@@ -1274,7 +1274,7 @@ sealed class SearchTypeData : Parcelable {
          */
         data object Logins : Vault() {
             override val title: Text
-                get() = BitwardenString.search.asText(BitwardenString.logins.asText())
+                get() = BitwardenString.search_x.asText(BitwardenString.logins.asText())
         }
 
         /**
@@ -1282,7 +1282,7 @@ sealed class SearchTypeData : Parcelable {
          */
         data object Cards : Vault() {
             override val title: Text
-                get() = BitwardenString.search.asText(BitwardenString.cards.asText())
+                get() = BitwardenString.search_x.asText(BitwardenString.cards.asText())
         }
 
         /**
@@ -1290,7 +1290,7 @@ sealed class SearchTypeData : Parcelable {
          */
         data object Identities : Vault() {
             override val title: Text
-                get() = BitwardenString.search.asText(BitwardenString.identities.asText())
+                get() = BitwardenString.search_x.asText(BitwardenString.identities.asText())
         }
 
         /**
@@ -1298,7 +1298,7 @@ sealed class SearchTypeData : Parcelable {
          */
         data object SecureNotes : Vault() {
             override val title: Text
-                get() = BitwardenString.search.asText(BitwardenString.secure_notes.asText())
+                get() = BitwardenString.search_x.asText(BitwardenString.secure_notes.asText())
         }
 
         /**
@@ -1306,7 +1306,7 @@ sealed class SearchTypeData : Parcelable {
          */
         data object SshKeys : Vault() {
             override val title: Text
-                get() = BitwardenString.search.asText(BitwardenString.ssh_keys.asText())
+                get() = BitwardenString.search_x.asText(BitwardenString.ssh_keys.asText())
         }
 
         /**
@@ -1317,7 +1317,7 @@ sealed class SearchTypeData : Parcelable {
             val collectionName: String = "",
         ) : Vault() {
             override val title: Text
-                get() = BitwardenString.search.asText(collectionName.asText())
+                get() = BitwardenString.search_x.asText(collectionName.asText())
         }
 
         /**
@@ -1325,7 +1325,7 @@ sealed class SearchTypeData : Parcelable {
          */
         data object NoFolder : Vault() {
             override val title: Text
-                get() = BitwardenString.search.asText(BitwardenString.folder_none.asText())
+                get() = BitwardenString.search_x.asText(BitwardenString.folder_none.asText())
         }
 
         /**
@@ -1336,7 +1336,7 @@ sealed class SearchTypeData : Parcelable {
             val folderName: String = "",
         ) : Vault() {
             override val title: Text
-                get() = BitwardenString.search.asText(folderName.asText())
+                get() = BitwardenString.search_x.asText(folderName.asText())
         }
 
         /**
@@ -1344,7 +1344,7 @@ sealed class SearchTypeData : Parcelable {
          */
         data object Trash : Vault() {
             override val title: Text
-                get() = BitwardenString.search.asText(BitwardenString.trash.asText())
+                get() = BitwardenString.search_x.asText(BitwardenString.trash.asText())
         }
 
         /**
@@ -1352,7 +1352,7 @@ sealed class SearchTypeData : Parcelable {
          */
         data object VerificationCodes : Vault() {
             override val title: Text
-                get() = BitwardenString.search.asText(BitwardenString.verification_codes.asText())
+                get() = BitwardenString.search_x.asText(BitwardenString.verification_codes.asText())
         }
     }
 }
