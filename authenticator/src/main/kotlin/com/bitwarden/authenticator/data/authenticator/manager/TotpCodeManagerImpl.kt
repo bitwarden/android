@@ -113,7 +113,6 @@ class TotpCodeManagerImpl @Inject constructor(
                             )
                             .getOrNull()
                             ?.code
-                            .orEmpty()
                         verificationCodeItem = VerificationCodeItem(
                             code = response.code,
                             nextCode = nextCodeValue,

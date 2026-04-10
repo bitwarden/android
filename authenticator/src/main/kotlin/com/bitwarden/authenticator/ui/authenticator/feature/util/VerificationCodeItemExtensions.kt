@@ -8,8 +8,15 @@ import com.bitwarden.authenticator.ui.platform.components.listitem.model.Verific
 /**
  * Converts [VerificationCodeItem] to a [VerificationCodeDisplayItem].
  */
+private const val NEXT_CODE_THRESHOLD_SECONDS = 10
+
+/**
+ * Converts a [VerificationCodeItem] data model into a [VerificationCodeDisplayItem] for display in
+ * the UI.
+ */
 fun VerificationCodeItem.toDisplayItem(
     alertThresholdSeconds: Int,
+    isShowNextCodeEnabled: Boolean,
     sharedVerificationCodesState: SharedVerificationCodesState,
     showOverflow: Boolean,
 ): VerificationCodeDisplayItem = VerificationCodeDisplayItem(
@@ -25,7 +32,9 @@ fun VerificationCodeItem.toDisplayItem(
     periodSeconds = periodSeconds,
     alertThresholdSeconds = alertThresholdSeconds,
     authCode = code,
-    nextAuthCode = nextCode.ifEmpty { null },
+    nextAuthCode = nextCode?.takeIf {
+        isShowNextCodeEnabled && timeLeftSeconds < NEXT_CODE_THRESHOLD_SECONDS
+    },
     showOverflow = showOverflow,
     favorite = (source as? AuthenticatorItem.Source.Local)?.isFavorite ?: false,
     showMoveToBitwarden = when (source) {

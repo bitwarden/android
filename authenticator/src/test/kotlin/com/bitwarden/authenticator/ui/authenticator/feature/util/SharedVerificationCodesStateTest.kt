@@ -19,7 +19,10 @@ class SharedVerificationCodesStateTest {
         val expected = SharedCodesDisplayState.Codes(persistentListOf())
         assertEquals(
             expected,
-            state.toSharedCodesDisplayState(ALERT_THRESHOLD),
+            state.toSharedCodesDisplayState(
+                alertThresholdSeconds = ALERT_THRESHOLD,
+                isShowNextCodeEnabled = false,
+            ),
         )
     }
 
@@ -29,7 +32,7 @@ class SharedVerificationCodesStateTest {
             items = listOf(
                 VerificationCodeItem(
                     code = "123456",
-                    nextCode = "",
+                    nextCode = null,
                     periodSeconds = 30,
                     timeLeftSeconds = 10,
                     issueTime = 100L,
@@ -45,7 +48,7 @@ class SharedVerificationCodesStateTest {
                 ),
                 VerificationCodeItem(
                     code = "987654",
-                    nextCode = "",
+                    nextCode = null,
                     periodSeconds = 30,
                     timeLeftSeconds = 10,
                     issueTime = 100L,
@@ -115,7 +118,10 @@ class SharedVerificationCodesStateTest {
         )
         assertEquals(
             expected,
-            state.toSharedCodesDisplayState(ALERT_THRESHOLD),
+            state.toSharedCodesDisplayState(
+                alertThresholdSeconds = ALERT_THRESHOLD,
+                isShowNextCodeEnabled = false,
+            ),
         )
     }
 
@@ -125,7 +131,7 @@ class SharedVerificationCodesStateTest {
             items = listOf(
                 VerificationCodeItem(
                     code = "123456",
-                    nextCode = "",
+                    nextCode = null,
                     periodSeconds = 30,
                     timeLeftSeconds = 10,
                     issueTime = 100L,
@@ -141,7 +147,7 @@ class SharedVerificationCodesStateTest {
                 ),
                 VerificationCodeItem(
                     code = "987654",
-                    nextCode = "",
+                    nextCode = null,
                     periodSeconds = 30,
                     timeLeftSeconds = 10,
                     issueTime = 100L,
@@ -216,6 +222,7 @@ class SharedVerificationCodesStateTest {
                 currentSections = expected.sections.map {
                     it.copy(label = "junk to show that it does update the other values".asText())
                 },
+                isShowNextCodeEnabled = false,
             ),
         )
     }

@@ -28,7 +28,7 @@ class VerificationCodeItemExtensionsTest {
             periodSeconds = favoriteItem.periodSeconds,
             alertThresholdSeconds = alertThresholdSeconds,
             authCode = favoriteItem.code,
-            nextAuthCode = favoriteItem.nextCode.ifEmpty { null },
+            nextAuthCode = null,
             favorite = (favoriteItem.source as AuthenticatorItem.Source.Local).isFavorite,
             showOverflow = true,
             showMoveToBitwarden = false,
@@ -42,7 +42,7 @@ class VerificationCodeItemExtensionsTest {
             periodSeconds = nonFavoriteItem.periodSeconds,
             alertThresholdSeconds = alertThresholdSeconds,
             authCode = nonFavoriteItem.code,
-            nextAuthCode = nonFavoriteItem.nextCode.ifEmpty { null },
+            nextAuthCode = null,
             favorite = (nonFavoriteItem.source as AuthenticatorItem.Source.Local).isFavorite,
             showOverflow = true,
             showMoveToBitwarden = false,
@@ -52,6 +52,7 @@ class VerificationCodeItemExtensionsTest {
             expectedFavoriteItem,
             favoriteItem.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
                 sharedVerificationCodesState = SharedVerificationCodesState.Error,
                 showOverflow = true,
             ),
@@ -60,6 +61,7 @@ class VerificationCodeItemExtensionsTest {
             expectedNonFavoriteItem,
             nonFavoriteItem.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
                 sharedVerificationCodesState = SharedVerificationCodesState.Error,
                 showOverflow = true,
             ),
@@ -80,7 +82,7 @@ class VerificationCodeItemExtensionsTest {
                 periodSeconds = item.periodSeconds,
                 alertThresholdSeconds = alertThresholdSeconds,
                 authCode = item.code,
-                nextAuthCode = item.nextCode.ifEmpty { null },
+                nextAuthCode = null,
                 favorite = false,
                 showOverflow = true,
                 showMoveToBitwarden = false,
@@ -90,6 +92,7 @@ class VerificationCodeItemExtensionsTest {
             expectedDontShowMoveToBitwardenItem,
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
                 sharedVerificationCodesState = SharedVerificationCodesState.AppNotInstalled,
                 showOverflow = true,
             ),
@@ -98,6 +101,7 @@ class VerificationCodeItemExtensionsTest {
             expectedDontShowMoveToBitwardenItem,
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
                 sharedVerificationCodesState = SharedVerificationCodesState.Error,
                 showOverflow = true,
             ),
@@ -106,6 +110,7 @@ class VerificationCodeItemExtensionsTest {
             expectedDontShowMoveToBitwardenItem,
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
                 sharedVerificationCodesState = SharedVerificationCodesState.FeatureNotEnabled,
                 showOverflow = true,
             ),
@@ -114,6 +119,7 @@ class VerificationCodeItemExtensionsTest {
             expectedDontShowMoveToBitwardenItem,
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
                 sharedVerificationCodesState = SharedVerificationCodesState.Loading,
                 showOverflow = true,
             ),
@@ -122,6 +128,7 @@ class VerificationCodeItemExtensionsTest {
             expectedDontShowMoveToBitwardenItem,
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
                 sharedVerificationCodesState = SharedVerificationCodesState.OsVersionNotSupported,
                 showOverflow = true,
             ),
@@ -130,6 +137,7 @@ class VerificationCodeItemExtensionsTest {
             expectedDontShowMoveToBitwardenItem,
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
                 sharedVerificationCodesState = SharedVerificationCodesState.SyncNotEnabled,
                 showOverflow = true,
             ),
@@ -142,6 +150,7 @@ class VerificationCodeItemExtensionsTest {
             expectedShouldShowMoveToBitwardenItem,
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
                 sharedVerificationCodesState = SharedVerificationCodesState.Success(emptyList()),
                 showOverflow = true,
             ),
@@ -170,7 +179,7 @@ class VerificationCodeItemExtensionsTest {
             periodSeconds = favoriteItem.periodSeconds,
             alertThresholdSeconds = alertThresholdSeconds,
             authCode = favoriteItem.code,
-            nextAuthCode = favoriteItem.nextCode.ifEmpty { null },
+            nextAuthCode = null,
             favorite = false,
             showOverflow = false,
             showMoveToBitwarden = false,
@@ -180,6 +189,7 @@ class VerificationCodeItemExtensionsTest {
             expectedFavoriteItem,
             favoriteItem.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
                 sharedVerificationCodesState = SharedVerificationCodesState.Error,
                 showOverflow = false,
             ),

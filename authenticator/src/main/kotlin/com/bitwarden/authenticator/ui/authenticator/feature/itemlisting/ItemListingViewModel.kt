@@ -504,6 +504,7 @@ class ItemListingViewModel @Inject constructor(
                 val currentCodes = viewState?.sharedItems as? SharedCodesDisplayState.Codes
                 action.sharedCodesState.toSharedCodesDisplayState(
                     alertThresholdSeconds = state.alertThresholdSeconds,
+                    isShowNextCodeEnabled = state.isShowNextCodeEnabled,
                     currentSections = currentCodes?.sections.orEmpty(),
                 )
             }
@@ -525,6 +526,7 @@ class ItemListingViewModel @Inject constructor(
                     .map {
                         it.toDisplayItem(
                             alertThresholdSeconds = state.alertThresholdSeconds,
+                            isShowNextCodeEnabled = state.isShowNextCodeEnabled,
                             sharedVerificationCodesState = authenticatorRepository
                                 .sharedCodesStateFlow
                                 .value,
@@ -538,6 +540,7 @@ class ItemListingViewModel @Inject constructor(
                     .map {
                         it.toDisplayItem(
                             alertThresholdSeconds = state.alertThresholdSeconds,
+                            isShowNextCodeEnabled = state.isShowNextCodeEnabled,
                             sharedVerificationCodesState = authenticatorRepository
                                 .sharedCodesStateFlow
                                 .value,

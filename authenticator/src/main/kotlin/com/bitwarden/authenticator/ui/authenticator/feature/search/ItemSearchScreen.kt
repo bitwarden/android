@@ -82,7 +82,6 @@ fun ItemSearchScreen(
                 ItemSearchContent(
                     viewState = viewState,
                     searchHandlers = searchHandlers,
-                    showNextCode = state.isShowNextCodeEnabled,
                     modifier = Modifier.fillMaxSize(),
                 )
             }

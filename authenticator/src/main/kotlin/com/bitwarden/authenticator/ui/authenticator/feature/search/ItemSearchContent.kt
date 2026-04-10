@@ -31,7 +31,6 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 fun ItemSearchContent(
     viewState: ItemSearchState.ViewState.Content,
     searchHandlers: SearchHandlers,
-    showNextCode: Boolean,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
@@ -58,7 +57,6 @@ fun ItemSearchContent(
                 onItemClick = { searchHandlers.onItemClick(item.authCode) },
                 onDropdownMenuClick = { searchHandlers.onDropdownMenuClick(it, item) },
                 cardStyle = viewState.itemList.toListItemCardStyle(index = index),
-                showNextCode = showNextCode,
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
@@ -73,7 +71,6 @@ fun ItemSearchContent(
 
         sharedCodes(
             sharedItems = viewState.sharedItems,
-            showNextCode = showNextCode,
             onCopyClick = searchHandlers.onItemClick,
             onDropdownMenuClick = searchHandlers.onDropdownMenuClick,
         )
@@ -87,7 +84,6 @@ fun ItemSearchContent(
 
 private fun LazyListScope.sharedCodes(
     sharedItems: SharedCodesDisplayState,
-    showNextCode: Boolean,
     onCopyClick: (authCode: String) -> Unit,
     onDropdownMenuClick: (VaultDropdownMenuAction, VerificationCodeDisplayItem) -> Unit,
 ) {
@@ -111,7 +107,6 @@ private fun LazyListScope.sharedCodes(
                         onItemClick = { onCopyClick(item.authCode) },
                         onDropdownMenuClick = { onDropdownMenuClick(it, item) },
                         cardStyle = section.codes.toListItemCardStyle(index = index),
-                        showNextCode = showNextCode,
                         modifier = Modifier
                             .fillMaxWidth()
                             .standardHorizontalMargin(),

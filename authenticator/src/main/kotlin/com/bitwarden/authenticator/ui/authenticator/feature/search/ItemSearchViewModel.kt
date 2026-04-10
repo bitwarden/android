@@ -311,7 +311,10 @@ class ItemSearchViewModel @Inject constructor(
             is SharedVerificationCodesState.Success -> {
                 sharedData
                     .copy(items = sharedData.items.filterAndOrganize(searchTerm = searchTerm))
-                    .toSharedCodesDisplayState(alertThresholdSeconds = 7)
+                    .toSharedCodesDisplayState(
+                        alertThresholdSeconds = 7,
+                        isShowNextCodeEnabled = state.isShowNextCodeEnabled,
+                    )
             }
         }
 
@@ -328,6 +331,7 @@ class ItemSearchViewModel @Inject constructor(
                         .map {
                             it.toDisplayItem(
                                 alertThresholdSeconds = 7,
+                                isShowNextCodeEnabled = state.isShowNextCodeEnabled,
                                 sharedVerificationCodesState = authenticatorRepository
                                     .sharedCodesStateFlow
                                     .value,

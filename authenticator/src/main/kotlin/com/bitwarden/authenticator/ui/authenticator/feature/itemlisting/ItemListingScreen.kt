@@ -198,7 +198,6 @@ fun ItemListingScreen(
             is ItemListingState.ViewState.Content -> {
                 ItemListingContent(
                     state = currentState,
-                    showNextCode = state.isShowNextCodeEnabled,
                     onItemClick = { viewModel.trySendAction(ItemListingAction.ItemClick(it)) },
                     onDropdownMenuClick = { action, item ->
                         viewModel.trySendAction(
@@ -298,7 +297,6 @@ private fun ItemListingDialogs(
 @Composable
 private fun ItemListingContent(
     state: ItemListingState.ViewState.Content,
-    showNextCode: Boolean,
     onItemClick: (String) -> Unit,
     onDropdownMenuClick: (VaultDropdownMenuAction, VerificationCodeDisplayItem) -> Unit,
     onDownloadBitwardenClick: () -> Unit,
@@ -352,7 +350,6 @@ private fun ItemListingContent(
                     onItemClick = { onItemClick(item.authCode) },
                     onDropdownMenuClick = { action -> onDropdownMenuClick(action, item) },
                     cardStyle = state.favoriteItems.toListItemCardStyle(index = index),
-                    showNextCode = showNextCode,
                     modifier = Modifier
                         .standardHorizontalMargin()
                         .fillMaxWidth()
@@ -399,7 +396,6 @@ private fun ItemListingContent(
                     onItemClick = { onItemClick(item.authCode) },
                     onDropdownMenuClick = { action -> onDropdownMenuClick(action, item) },
                     cardStyle = state.itemList.toListItemCardStyle(index = index),
-                    showNextCode = showNextCode,
                     modifier = Modifier
                         .standardHorizontalMargin()
                         .fillMaxWidth()
@@ -443,7 +439,6 @@ private fun ItemListingContent(
                                     onDropdownMenuClick(action, item)
                                 },
                                 cardStyle = section.codes.toListItemCardStyle(index = index),
-                                showNextCode = showNextCode,
                                 modifier = Modifier
                                     .standardHorizontalMargin()
                                     .fillMaxWidth()
@@ -637,7 +632,6 @@ private fun ContentPreview() {
     val email = "longemailaddress+verification+codes@email.com"
     BitwardenTheme {
         ItemListingContent(
-            showNextCode = false,
             state = ItemListingState.ViewState.Content(
                 actionCard = null,
                 favoriteItems = persistentListOf(),

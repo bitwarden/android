@@ -75,7 +75,7 @@ class TotpCodeManagerTest {
         }
 
     @Test
-    fun `getTotpCodesFlow should emit item with empty nextCode when next code generation fails`() =
+    fun `getTotpCodesFlow should emit item with null nextCode when next code generation fails`() =
         runTest {
             val totp = "otpUri"
             val authenticatorItems = listOf(
@@ -96,7 +96,7 @@ class TotpCodeManagerTest {
             val expected = createMockVerificationCodeItem(
                 number = 1,
                 code = code,
-                nextCode = "",
+                nextCode = null,
                 issueTime = clock.instant().toEpochMilli(),
                 timeLeftSeconds = 30,
             )

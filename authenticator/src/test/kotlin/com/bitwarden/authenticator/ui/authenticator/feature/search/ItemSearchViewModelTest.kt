@@ -412,7 +412,7 @@ private val SHARED_DISPLAY_ITEMS = SharedCodesDisplayState.Codes(
                     periodSeconds = 30,
                     alertThresholdSeconds = 7,
                     authCode = "mockCode-2",
-                    nextAuthCode = "mockNextCode-2",
+                    nextAuthCode = null,
                     favorite = false,
                     showOverflow = false,
                     showMoveToBitwarden = false,
@@ -428,7 +428,7 @@ private val LOCAL_DISPLAY_ITEMS = persistentListOf(
     VerificationCodeDisplayItem(
         id = LOCAL_ITEMS[0].id,
         authCode = LOCAL_ITEMS[0].code,
-        nextAuthCode = LOCAL_ITEMS[0].nextCode.ifEmpty { null },
+        nextAuthCode = null,
         title = LOCAL_ITEMS[0].issuer!!,
         periodSeconds = LOCAL_ITEMS[0].periodSeconds,
         timeLeftSeconds = LOCAL_ITEMS[0].timeLeftSeconds,
