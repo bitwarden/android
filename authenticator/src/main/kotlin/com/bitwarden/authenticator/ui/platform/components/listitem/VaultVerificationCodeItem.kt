@@ -22,10 +22,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDropdownMenuAction
-import com.bitwarden.ui.platform.components.animation.AnimateNullableContentVisibility
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.cardStyle
+import com.bitwarden.ui.platform.components.animation.AnimateNullableContentVisibility
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
@@ -182,7 +182,7 @@ fun VaultVerificationCodeItem(
             ) { code ->
                 val nextCodeDescription = stringResource(
                     id = BitwardenString.next_code_x,
-                    code,
+                    formatArgs = arrayOf(code),
                 )
                 Text(
                     modifier = Modifier
@@ -244,7 +244,7 @@ fun VaultVerificationCodeItem(
 private fun VerificationCodeItem_preview() {
     BitwardenTheme {
         VaultVerificationCodeItem(
-            authCode = "1234567890".chunked(3).joinToString(" "),
+            authCode = "123456",
             primaryLabel = "Issuer, AKA Name",
             secondaryLabel = "username@bitwarden.com",
             periodSeconds = 30,

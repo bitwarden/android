@@ -5,14 +5,10 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.Authentic
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
 
-/**
- * Converts [VerificationCodeItem] to a [VerificationCodeDisplayItem].
- */
 private const val NEXT_CODE_THRESHOLD_SECONDS = 10
 
 /**
- * Converts a [VerificationCodeItem] data model into a [VerificationCodeDisplayItem] for display in
- * the UI.
+ * Converts [VerificationCodeItem] to a [VerificationCodeDisplayItem].
  */
 fun VerificationCodeItem.toDisplayItem(
     alertThresholdSeconds: Int,

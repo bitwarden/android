@@ -158,6 +158,102 @@ class VerificationCodeItemExtensionsTest {
     }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `toDisplayItem should populate nextAuthCode when setting enabled and time below threshold`() {
+        val alertThresholdSeconds = 7
+        val item = createMockVerificationCodeItem(
+            number = 1,
+            timeLeftSeconds = 5,
+        )
+        val expected = VerificationCodeDisplayItem(
+            id = item.id,
+            title = item.issuer!!,
+            subtitle = item.label,
+            timeLeftSeconds = item.timeLeftSeconds,
+            periodSeconds = item.periodSeconds,
+            alertThresholdSeconds = alertThresholdSeconds,
+            authCode = item.code,
+            nextAuthCode = item.nextCode,
+            favorite = false,
+            showOverflow = true,
+            showMoveToBitwarden = false,
+        )
+        assertEquals(
+            expected,
+            item.toDisplayItem(
+                alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
+                sharedVerificationCodesState = SharedVerificationCodesState.Error,
+                showOverflow = true,
+            ),
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `toDisplayItem should return null nextAuthCode when setting disabled even below threshold`() {
+        val alertThresholdSeconds = 7
+        val item = createMockVerificationCodeItem(
+            number = 1,
+            timeLeftSeconds = 5,
+        )
+        val expected = VerificationCodeDisplayItem(
+            id = item.id,
+            title = item.issuer!!,
+            subtitle = item.label,
+            timeLeftSeconds = item.timeLeftSeconds,
+            periodSeconds = item.periodSeconds,
+            alertThresholdSeconds = alertThresholdSeconds,
+            authCode = item.code,
+            nextAuthCode = null,
+            favorite = false,
+            showOverflow = true,
+            showMoveToBitwarden = false,
+        )
+        assertEquals(
+            expected,
+            item.toDisplayItem(
+                alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = false,
+                sharedVerificationCodesState = SharedVerificationCodesState.Error,
+                showOverflow = true,
+            ),
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `toDisplayItem should return null nextAuthCode when time above threshold even with setting enabled`() {
+        val alertThresholdSeconds = 7
+        val item = createMockVerificationCodeItem(
+            number = 1,
+            timeLeftSeconds = 15,
+        )
+        val expected = VerificationCodeDisplayItem(
+            id = item.id,
+            title = item.issuer!!,
+            subtitle = item.label,
+            timeLeftSeconds = item.timeLeftSeconds,
+            periodSeconds = item.periodSeconds,
+            alertThresholdSeconds = alertThresholdSeconds,
+            authCode = item.code,
+            nextAuthCode = null,
+            favorite = false,
+            showOverflow = true,
+            showMoveToBitwarden = false,
+        )
+        assertEquals(
+            expected,
+            item.toDisplayItem(
+                alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
+                sharedVerificationCodesState = SharedVerificationCodesState.Error,
+                showOverflow = true,
+            ),
+        )
+    }
+
+    @Test
     fun `toDisplayItem should map Shared items correctly`() {
         val alertThresholdSeconds = 7
         val favoriteItem = createMockVerificationCodeItem(
