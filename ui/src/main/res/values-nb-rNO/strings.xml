@@ -171,7 +171,7 @@
     <string name="autofill_noun">Auto-utfyll</string>
     <string name="autofill_verb">Auto-utfyll</string>
     <string name="autofill_or_view">Vil du auto-utfylle eller vise denne gjenstanden?</string>
-    <string name="search">Søk</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">Lær om organisasjoner</string>
     <string name="authenticator_app_title">Autentiseringsapp</string>
     <string name="enter_verification_code_app">Skriv inn den 6-sifrede verifiseringskoden som står på din autentiseringsapp.</string>
@@ -228,6 +228,8 @@ Skanning skjer automatisk.</string>
     <string name="copy_security_code">Kopier sikkerhetskoden</string>
     <string name="number">Nummer</string>
     <string name="security_code">Sikkerhetskode</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">Kort</string>
     <string name="type_identity">Identitet</string>
     <string name="type_login">Innlogging</string>
@@ -1251,4 +1253,6 @@ Vil du bytte til denne kontoen?</string>
     <string name="payment_not_received_yet">Payment not received yet</string>
     <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
     <string name="go_back">Go back</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
 </resources>

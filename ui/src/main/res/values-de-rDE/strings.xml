@@ -171,7 +171,7 @@
     <string name="autofill_noun">Automatisches Ausfüllen</string>
     <string name="autofill_verb">Automatisches Ausfüllen</string>
     <string name="autofill_or_view">Möchtest du diese Zugangsdaten automatisch ausfüllen oder ansehen?</string>
-    <string name="search">Durchsuchen</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">%1$s durchsuchen</string>
     <string name="learn_org">Mehr über Organisationen erfahren</string>
     <string name="authenticator_app_title">Authenticator App</string>
     <string name="enter_verification_code_app">Gib den 6-stelligen Verifizierungscode aus deiner Authenticator App ein.</string>
@@ -228,6 +228,8 @@ Das Scannen erfolgt automatisch.</string>
     <string name="copy_security_code">Sicherheitscode kopieren</string>
     <string name="number">Nummer</string>
     <string name="security_code">Sicherheitscode</string>
+    <string name="scan_card">Karte scannen</string>
+    <string name="scan_card_instruction">Positioniere deine Karte innerhalb des Rahmens, um sie zu scannen.</string>
     <string name="type_card">Karte</string>
     <string name="type_identity">Identität</string>
     <string name="type_login">Zugangsdaten</string>
@@ -1250,4 +1252,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="payment_not_received_yet">Zahlung noch nicht eingegangen</string>
     <string name="return_to_stripe_to_finish">Kehre in deinem Browser zu Stripe zurück, um das Upgrade abzuschließen.</string>
     <string name="go_back">Geh zurück</string>
+    <string name="allow_camera_access">Kamerazugriff erlauben</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">Um deine Karte zu scannen, benötigen wir Zugriff auf deine Kamera. Du kannst dies jederzeit in den Geräteeinstellungen ändern.</string>
 </resources>

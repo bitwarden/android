@@ -13,7 +13,7 @@
     <string name="delete">删除</string>
     <string name="preview">预览</string>
     <string name="deleting">正在删除…</string>
-    <string name="do_you_really_want_to_delete">确定要删除吗？这个操作无法撤消。</string>
+    <string name="do_you_really_want_to_delete">确定要删除吗？此操作无法撤消。</string>
     <string name="edit">编辑</string>
     <string name="edit_folder">编辑文件夹</string>
     <string name="email">电子邮箱</string>
@@ -103,7 +103,7 @@
     <string name="four_hours">4 小时</string>
     <string name="immediately">立即</string>
     <string name="vault_timeout_log_out_confirmation_title">将会话超时设置为「注销」吗？</string>
-    <string name="vault_timeout_log_out_confirmation_message">超时后您将被注销。您需要连接到互联网才能再次登录并访问您的密码库。您在此设备上保存的设置和 PIN 不会更改。</string>
+    <string name="vault_timeout_log_out_confirmation_message">超时后您将被注销。您需要连接到互联网才能再次登录并访问您的密码库。您在此设备上保存的设置和 PIN 码不会更改。</string>
     <string name="logging_in">正在登录…</string>
     <string name="login_to_bitwarden">登录到 Bitwarden</string>
     <string name="master_password_confirmation_val_message">两次填写的密码不一致。</string>
@@ -170,7 +170,7 @@
     <string name="autofill_noun">自动填充</string>
     <string name="autofill_verb">自动填充</string>
     <string name="autofill_or_view">您想自动填充还是查看此项目？</string>
-    <string name="search">搜索</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">搜索 %1$s</string>
     <string name="learn_org">了解组织</string>
     <string name="authenticator_app_title">验证器 App</string>
     <string name="enter_verification_code_app">请输入您的验证器 App 中的 6 位数验证码。</string>
@@ -181,20 +181,20 @@
     <string name="remember_email">记住电子邮箱</string>
     <string name="send_verification_code_again">重新发送代码</string>
     <string name="verification_email_not_sent">无法发送验证电子邮件。请重试。</string>
-    <string name="verification_email_sent">验证邮件已发送</string>
+    <string name="verification_email_sent">验证电子邮件已发送</string>
     <string name="yubi_key_instruction">要继续，请将您的 Yubico 安全密钥靠在设备背面或者将其插入设备的 USB 端口，然后触摸其按钮。</string>
     <string name="yubi_key_title">Yubico 安全密钥</string>
     <string name="add_new_attachment">添加新附件</string>
     <string name="attachments">附件</string>
     <string name="unable_to_download_file">无法下载文件。</string>
     <string name="downloading">正在下载…</string>
-    <string name="attachment_large_warning">此文件大小为 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>。要下载它吗？</string>
+    <string name="attachment_large_warning">此文件大小为 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>。您想要下载它吗？</string>
     <string name="authenticator_key">验证器密钥</string>
     <string name="verification_code_totp">验证码 (TOTP)</string>
     <string name="authenticator_key_added">已添加验证器密钥。</string>
     <string name="authenticator_key_read_error">无法读取验证器密钥。</string>
-    <string name="point_your_camera_at_the_qr_code">将您的摄像头对准二维码。
-扫描将自动完成。</string>
+    <string name="point_your_camera_at_the_qr_code">将您的相机对准二维码。
+扫描将自动进行。</string>
     <string name="copy_totp">复制 TOTP</string>
     <string name="copy_totp_automatically_description">如果登录项目包含验证器密钥，当自动填充此登录时，TOTP 验证码将复制到剪贴板。</string>
     <string name="copy_totp_automatically">自动复制 TOTP</string>
@@ -227,6 +227,8 @@
     <string name="copy_security_code">复制安全码</string>
     <string name="number">号码</string>
     <string name="security_code">安全码</string>
+    <string name="scan_card">扫描支付卡</string>
+    <string name="scan_card_instruction">将您的支付卡置于取景框内进行扫描。</string>
     <string name="type_card">支付卡</string>
     <string name="type_identity">身份</string>
     <string name="type_login">登录</string>
@@ -613,7 +615,7 @@
     <string name="login_request_has_already_expired">登录请求已过期。</string>
     <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">登录尝试来自：
 %1$s
-您想要切换到此账户吗？</string>
+要切换到此账户吗？</string>
     <string name="new_to_bitwarden">Bitwarden 新手吗？</string>
     <string name="get_master_passwordword_hint">获取主密码提示</string>
     <string name="logging_in_as_x_on_y">正在 %2$s 上以 %1$s 身份登录</string>
@@ -734,7 +736,7 @@
     <string name="check_your_email">检查您的电子邮箱</string>
     <string name="open_email_app">打开电子邮箱 App</string>
     <string name="email_verified">电子邮箱已验证</string>
-    <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">获取来自 Bitwarden 的建议、公告和调研电子邮件。随时 <annotation link="unsubscribe">取消订阅</annotation>。</string>
+    <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">获取来自 Bitwarden 的建议、公告和调研电子邮件。随时<annotation link="unsubscribe">取消订阅</annotation>。</string>
     <string name="security_prioritized">以安全为首要</string>
     <string name="welcome_message_1">将登录、支付卡和身份保存到您的安全密码库。Bitwarden 使用零知识、端到端的加密来保护您的重要信息。</string>
     <string name="welcome_message_2">设置生物识别解锁和自动填充，无需输入任何字符即可登录您的账户。</string>
@@ -753,7 +755,7 @@
     <string name="set_up_unlock_later">稍后设置解锁吗？</string>
     <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">您可以随时回到「设置」中的「账户安全」来完成此步骤。</string>
     <string name="confirm">确认</string>
-    <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">设置生物识别或选择一个 PIN 码，以快速访问您的密码库并自动填充您的登录信息。</string>
+    <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">设置生物识别或选择一个 PIN 码，以快速访问您的密码库以及自动填充您的登录。</string>
     <string name="never_lose_access_to_your_vault">千万不要失去对密码库的访问权限</string>
     <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">确保您始终可以访问您的密码库的最佳方法就是从一开始就设置好安全防护措施。</string>
     <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">创建安全且难忘的密码的最佳方法之一是使用密码短语。\n具体方法如下：</string>
@@ -994,7 +996,7 @@
     <string name="log_deleted">日志已删除</string>
     <string name="app_settings">App 设置</string>
     <string name="replace_existing_certificate">替换现有证书吗？</string>
-    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">别名为「%s」的证书已经存在。您要替换它吗？\n替换该证书可能会影响您与当前使用该证书的任何环境的连接。</string>
+    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">别名为「%s」的证书已存在。要替换它吗？\n替换该证书可能会影响与当前使用该证书的任何环境的连接。</string>
     <string name="replace_certificate">替换证书</string>
     <string name="unable_to_read_certificate">无法读取证书。</string>
     <string name="cannot_delete_your_account">无法删除您的账户</string>
@@ -1222,10 +1224,10 @@
     <string name="continue_without_syncing">继续而不同步</string>
     <string name="external_link">外部链接</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s，外部链接</string>
-    <string name="preview_not_available_for_files">%1$s 个文件的预览不可用。您仍然可以下载它以在您的设备上查看。</string>
-    <string name="this_file_is_too_large_to_preview">此文件太大，无法预览。您仍然可以下载它以在您的设备上查看。</string>
+    <string name="preview_not_available_for_files">%1$s 个文件的预览不可用。您仍然可以将其下载到您的设备上查看。</string>
+    <string name="this_file_is_too_large_to_preview">此文件太大，无法预览。您仍然可以将其下载到您的设备上查看。</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden 无法解密此文件，因此无法显示预览。</string>
-    <string name="preview_unavailable_for_this_file">此文件的预览不可用。您仍然可以下载它以在您的设备上查看。</string>
+    <string name="preview_unavailable_for_this_file">此文件的预览不可用。您仍然可以将其下载到您的设备上查看。</string>
     <string name="preview_unavailable">预览不可用</string>
     <string name="download_attachment">下载附件</string>
     <string name="upgraded_to_premium">升级到高级版</string>
@@ -1243,4 +1245,6 @@
     <string name="payment_not_received_yet">尚未收到付款</string>
     <string name="return_to_stripe_to_finish">返回浏览器中的 Stripe 以完成升级。</string>
     <string name="go_back">返回</string>
+    <string name="allow_camera_access">允许相机访问权限</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">要扫描您的支付卡，我们需要您的相机访问权限。您可以随时在您的设备设置中更改此设置。</string>
 </resources>

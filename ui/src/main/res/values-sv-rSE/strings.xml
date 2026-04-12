@@ -11,7 +11,7 @@
     <string name="copy_password">Kopiera lösenord</string>
     <string name="copy_username">Kopiera användarnamn</string>
     <string name="delete">Radera</string>
-    <string name="preview">Preview</string>
+    <string name="preview">Förhandsgranska</string>
     <string name="deleting">Raderar…</string>
     <string name="do_you_really_want_to_delete">Vill du verkligen radera? Detta går inte att ångra.</string>
     <string name="edit">Redigera</string>
@@ -171,7 +171,7 @@
     <string name="autofill_noun">Autofyll</string>
     <string name="autofill_verb">Autofyll</string>
     <string name="autofill_or_view">Vill du automatiskt fylla i den här inloggningen eller visa den?</string>
-    <string name="search">Sök</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">Läs mer om organisationer</string>
     <string name="authenticator_app_title">Autentiseringsapp</string>
     <string name="enter_verification_code_app">Ange den 6-siffriga verifieringskoden från din autentiseringsapp.</string>
@@ -206,7 +206,7 @@ Skanningen sker automatiskt.</string>
     <string name="choose_file">Välj fil</string>
     <string name="file">Fil</string>
     <string name="no_file_chosen">Ingen fil vald</string>
-    <string name="file_name">File name</string>
+    <string name="file_name">Filnamn</string>
     <string name="no_attachments">Det finns inga bilagor.</string>
     <string name="file_source">Filkälla</string>
     <string name="max_file_size">Filen får vara maximalt 100 MB.</string>
@@ -228,6 +228,8 @@ Skanningen sker automatiskt.</string>
     <string name="copy_security_code">Kopiera säkerhetskod</string>
     <string name="number">Nummer</string>
     <string name="security_code">Säkerhetskod</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">Kort</string>
     <string name="type_identity">Identitet</string>
     <string name="type_login">Inloggning</string>
@@ -381,7 +383,7 @@ Skanningen sker automatiskt.</string>
     <string name="capitalize">Versalisera</string>
     <string name="include_number">Inkludera siffra</string>
     <string name="download">Ladda ner</string>
-    <string name="download_file">Download file</string>
+    <string name="download_file">Ladda ner fil</string>
     <string name="login_expired">Din inloggningssession har upphört.</string>
     <string name="biometrics_direction">Biometrisk verifiering</string>
     <string name="device_verification">Enhetsverifiering</string>
@@ -1238,17 +1240,19 @@ Vill du byta till detta konto?</string>
     <string name="download_attachment">Ladda ned bilaga</string>
     <string name="upgraded_to_premium">Upgraded to premium</string>
     <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
-    <string name="per_month">/ month</string>
-    <string name="built_in_authenticator">Built-in authenticator</string>
-    <string name="emergency_access">Emergency access</string>
-    <string name="secure_file_storage">Secure file storage</string>
-    <string name="breach_monitoring">Breach monitoring</string>
-    <string name="upgrade_now">Upgrade now</string>
+    <string name="per_month">/ månad</string>
+    <string name="built_in_authenticator">Inbyggd autenticator</string>
+    <string name="emergency_access">Nödåtkomst</string>
+    <string name="secure_file_storage">Säker fillagring</string>
+    <string name="breach_monitoring">Intrångsmonitorering</string>
+    <string name="upgrade_now">Uppgradera nu</string>
     <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
     <string name="opening_checkout">Opening checkout…</string>
     <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
     <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
     <string name="payment_not_received_yet">Payment not received yet</string>
     <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
-    <string name="go_back">Go back</string>
+    <string name="go_back">Gå tillbaka</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
 </resources>

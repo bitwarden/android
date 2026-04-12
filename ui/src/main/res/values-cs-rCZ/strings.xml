@@ -173,7 +173,7 @@
     <string name="autofill_noun">Automatické vyplňování</string>
     <string name="autofill_verb">Automatické vyplňování</string>
     <string name="autofill_or_view">Chcete automaticky vyplnit nebo zobrazit tyto přihlašovací údaje?</string>
-    <string name="search">Hledat</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Najít %1$s</string>
     <string name="learn_org">Více o organizacích</string>
     <string name="authenticator_app_title">Ověřovací aplikace</string>
     <string name="enter_verification_code_app">Zadejte 6místný kód z ověřovací aplikace.</string>
@@ -230,6 +230,8 @@ Načtení proběhne automaticky.</string>
     <string name="copy_security_code">Kopírovat bezpečnostní kód</string>
     <string name="number">Číslo</string>
     <string name="security_code">Bezpečnostní kód</string>
+    <string name="scan_card">Naskenovat kartu</string>
+    <string name="scan_card_instruction">Pro naskenování umístěte svou kartu do rámečku.</string>
     <string name="type_card">Karta</string>
     <string name="type_identity">Identita</string>
     <string name="type_login">Přihlášení</string>
@@ -1270,4 +1272,6 @@ při opakování problémů.</string>
     <string name="payment_not_received_yet">Platba ještě nebyla přijata</string>
     <string name="return_to_stripe_to_finish">Vraťte se do Stripe ve Vašem prohlížeči, abyste dokončili aktualizaci.</string>
     <string name="go_back">Vrátit se</string>
+    <string name="allow_camera_access">Povolit přístup ke kameře</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">Pro naskenování karty budeme potřebovat přístup ke kameře. Toto můžete kdykoli změnit v nastavení zařízení.</string>
 </resources>

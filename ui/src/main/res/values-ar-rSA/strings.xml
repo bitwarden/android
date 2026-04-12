@@ -175,7 +175,7 @@
     <string name="autofill_noun">ملء تلقائي</string>
     <string name="autofill_verb">ملء تلقائي</string>
     <string name="autofill_or_view">هل تريد الملأ التلقائي أو رؤية هذا المعرّف؟</string>
-    <string name="search">بحث</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">تعرف على المؤسسات</string>
     <string name="authenticator_app_title">تطبيق المُصادَقة</string>
     <string name="enter_verification_code_app">أدخل رمز التحقق من 6 أرقام من تطبيق المصادقة الخاص بك.</string>
@@ -232,6 +232,8 @@
     <string name="copy_security_code">نسخ رمز الأمان</string>
     <string name="number">رقم</string>
     <string name="security_code">رمز الأمان</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">بطاقة</string>
     <string name="type_identity">الهوية</string>
     <string name="type_login">تسجيل الدخول</string>
@@ -1287,4 +1289,6 @@
     <string name="payment_not_received_yet">Payment not received yet</string>
     <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
     <string name="go_back">Go back</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
 </resources>

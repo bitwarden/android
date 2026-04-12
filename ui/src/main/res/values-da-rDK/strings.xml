@@ -171,7 +171,7 @@
     <string name="autofill_noun">Autoudfyld</string>
     <string name="autofill_verb">Autoudfyld</string>
     <string name="autofill_or_view">Skal dette emne autoudfyldes eller vises?</string>
-    <string name="search">Søg</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">Læs om organisationer</string>
     <string name="authenticator_app_title">Godkender-app</string>
     <string name="enter_verification_code_app">Angiv den 6-cifrede bekræftelseskode fra godkender-appen.</string>
@@ -228,6 +228,8 @@ Skanning vil ske automatisk.</string>
     <string name="copy_security_code">Kopiér sikkerhedskode</string>
     <string name="number">Nummer</string>
     <string name="security_code">Sikkerhedskode</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">Kort</string>
     <string name="type_identity">Identitet</string>
     <string name="type_login">Login</string>
@@ -1251,4 +1253,6 @@ Skift til denne konto?</string>
     <string name="payment_not_received_yet">Payment not received yet</string>
     <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
     <string name="go_back">Go back</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
 </resources>

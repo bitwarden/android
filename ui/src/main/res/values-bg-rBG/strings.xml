@@ -171,7 +171,7 @@
     <string name="autofill_noun">Автоматично попълване</string>
     <string name="autofill_verb">Автоматично попълване</string>
     <string name="autofill_or_view">Искате да разгледате записа или да го ползвате за дописване?</string>
-    <string name="search">Търсене</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Търсене на %1$s</string>
     <string name="learn_org">Разберете повече за организациите</string>
     <string name="authenticator_app_title">Приложение за удостоверяване</string>
     <string name="enter_verification_code_app">Въведете шестцифрения код за потвърждение от приложението за удостоверяване.</string>
@@ -228,6 +228,8 @@
     <string name="copy_security_code">Копиране на кода за сигурност</string>
     <string name="number">Номер</string>
     <string name="security_code">Код за сигурност</string>
+    <string name="scan_card">Сканиране на картата</string>
+    <string name="scan_card_instruction">Поставете картата си в рамката, за да я сканирате.</string>
     <string name="type_card">Карта</string>
     <string name="type_identity">Самоличност</string>
     <string name="type_login">Запис</string>
@@ -1253,4 +1255,6 @@
     <string name="payment_not_received_yet">Плащането все още не е получено</string>
     <string name="return_to_stripe_to_finish">Върнете се към Stripe в браузъра си, за да завършите надграждането.</string>
     <string name="go_back">Връщане назад</string>
+    <string name="allow_camera_access">Разрешаване на достъп до камерата</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">За да бъде сканирана картата, е необходим достъп до камерата. Можете да промените това по всяко време в настройките на устройството.</string>
 </resources>
