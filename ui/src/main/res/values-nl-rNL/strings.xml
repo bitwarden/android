@@ -206,6 +206,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="choose_file">Bestand kiezen</string>
     <string name="file">Bestand</string>
     <string name="no_file_chosen">Geen bestand gekozen</string>
+    <string name="file_name">Bestandsnaam</string>
     <string name="no_attachments">Er zijn geen bijlagen.</string>
     <string name="file_source">Bestandsbron</string>
     <string name="max_file_size">De maximale bestandsgrootte is 100 MB.</string>
@@ -1230,9 +1231,11 @@ Wilt u naar dit account wisselen?</string>
     <string name="external_link">Externe link</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, externe link</string>
     <string name="preview_not_available_for_files">Voorbeeld niet beschikbaar voor %1$s bestanden. Je kunt het nog steeds downloaden om het op je apparaat te bekijken.</string>
+    <string name="this_file_is_too_large_to_preview">Dit bestand is te groot om te bekijken. Je kunt het nog steeds downloaden om op je apparaat te bekijken.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden kan dit bestand niet decoderen, dus het voorbeeld kan niet worden weergegeven.</string>
     <string name="preview_unavailable_for_this_file">Voorbeeld niet beschikbaar voor dit] bestand. Je kunt het nog steeds downloaden om het op je apparaat te bekijken.</string>
     <string name="preview_unavailable">Voorbeeld niet beschikbaar</string>
+    <string name="download_attachment">Bijlage downloaden</string>
     <string name="upgraded_to_premium">Naar Premium opgewaardeerd</string>
     <string name="unlock_premium_features">Ontgrendel meer geavanceerde functies met een Premium-abonnement.</string>
     <string name="per_month">/ maand</string>

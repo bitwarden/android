@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -107,7 +108,9 @@ private fun CreatePasskeyScreenContent(
                 value = state.username,
                 onValueChange = onUsernameChange,
                 cardStyle = null,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("PasskeyUsernameField"),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -118,7 +121,9 @@ private fun CreatePasskeyScreenContent(
                 onValueChange = onRpIdChange,
                 placeholder = stringResource(R.string.rp_id_hint),
                 cardStyle = null,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("PasskeyRelyingPartyIdField"),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -129,7 +134,9 @@ private fun CreatePasskeyScreenContent(
                 onValueChange = onOriginChange,
                 placeholder = stringResource(R.string.origin_hint),
                 cardStyle = null,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("PasskeyOriginField"),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -138,7 +145,9 @@ private fun CreatePasskeyScreenContent(
                 label = stringResource(R.string.execute),
                 onClick = onExecuteClick,
                 isEnabled = !state.isLoading,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("PasskeyExecuteButton"),
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -147,7 +156,9 @@ private fun CreatePasskeyScreenContent(
                 label = stringResource(BitwardenString.clear),
                 onClick = onClearResultClick,
                 isEnabled = !state.isLoading,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("PasskeyClearButton"),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -159,7 +170,9 @@ private fun CreatePasskeyScreenContent(
                 cardStyle = null,
                 readOnly = true,
                 singleLine = false,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("PasskeyResultTextField"),
             )
 
             Spacer(modifier = Modifier.height(16.dp))

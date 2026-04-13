@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
@@ -34,7 +35,6 @@ import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
-import com.x8bit.bitwarden.data.platform.manager.GmsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -213,12 +213,13 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { delayDialog() } just runs
     }
 
+    private val buildInfoManager = mockk<BuildInfoManager> {
+        every { isFdroid } returns false
+    }
+
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager = mockk {
         coEvery { register() } returns RegisterExportResult.Success
         coEvery { unregister() } returns UnregisterExportResult.Success
-    }
-    private val gmsManager: GmsManager = mockk {
-        every { isVersionAtLeast(any()) } returns true
     }
     private val mutableCxpExportFeatureFlagFlow = MutableStateFlow(false)
     private val mutableArchiveItemsFlagFlow = MutableStateFlow(true)
@@ -3798,10 +3799,10 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `CredentialExchangeProtocolExportFlagUpdateReceive should unregister when flag is enabled but GMS version is insufficient`() =
+    fun `CredentialExchangeProtocolExportFlagUpdateReceive should unregister when flag is enabled but isFdroid is true`() =
         runTest {
+            every { buildInfoManager.isFdroid } returns true
             mutableCxpExportFeatureFlagFlow.value = false
-            every { gmsManager.isVersionAtLeast(any()) } returns false
             coEvery { credentialExchangeRegistryManager.unregister() } just awaits
 
             val viewModel = createViewModel()
@@ -3815,26 +3816,8 @@ class VaultViewModelTest : BaseViewModelTest() {
             coVerify {
                 credentialExchangeRegistryManager.unregister()
             }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `CredentialExchangeProtocolExportFlagUpdateReceive should unregister when flag is disabled and GMS version is sufficient`() =
-        runTest {
-            mutableCxpExportFeatureFlagFlow.value = true
-            every { settingsRepository.isAppRegisteredForExport() } returns true
-            coEvery { credentialExchangeRegistryManager.unregister() } just awaits
-
-            val viewModel = createViewModel()
-
-            viewModel.trySendAction(
-                VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(
-                    isCredentialExchangeProtocolExportEnabled = false,
-                ),
-            )
-
-            coVerify {
-                credentialExchangeRegistryManager.unregister()
+            coVerify(exactly = 0) {
+                credentialExchangeRegistryManager.register()
             }
         }
 
@@ -3856,7 +3839,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             networkConnectionManager = networkConnectionManager,
             browserAutofillDialogManager = browserAutofillDialogManager,
             credentialExchangeRegistryManager = credentialExchangeRegistryManager,
-            gmsManager = gmsManager,
+            buildInfoManager = buildInfoManager,
             featureFlagManager = featureFlagManager,
         )
 }

@@ -23,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -272,7 +273,8 @@ private fun LogRow(
                 paddingBottom = 12.dp,
                 paddingStart = 16.dp,
                 paddingEnd = 4.dp,
-            ),
+            )
+            .testTag("LogRow"),
     ) {
         Column(modifier = Modifier.weight(weight = 1f)) {
             Text(
@@ -281,7 +283,9 @@ private fun LogRow(
                 color = BitwardenTheme.colorScheme.text.primary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("LogNameLabel"),
             )
             Spacer(modifier = Modifier.height(height = 2.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -291,7 +295,9 @@ private fun LogRow(
                     color = BitwardenTheme.colorScheme.text.secondary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(weight = 1f),
+                    modifier = Modifier
+                        .weight(weight = 1f)
+                        .testTag("LogSizeLabel"),
                 )
                 displayableItem.subtextEnd?.let {
                     Spacer(modifier = Modifier.width(width = 4.dp))
@@ -302,7 +308,9 @@ private fun LogRow(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         textAlign = TextAlign.End,
-                        modifier = Modifier.weight(weight = 1f),
+                        modifier = Modifier
+                            .weight(weight = 1f)
+                            .testTag("LogExpirationLabel"),
                     )
                 }
             }

@@ -22,14 +22,56 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.dialog.model.BitwardenTwoButtonDialogData
 import com.bitwarden.ui.platform.components.dialog.util.maxDialogHeight
 import com.bitwarden.ui.platform.components.dialog.util.maxDialogWidth
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+
+/**
+ * Represents a Bitwarden-styled dialog with two buttons.
+ *
+ * @param twoButtonDialogData The data to be displayed.
+ * @param onConfirmClick Called when the confirm button is clicked.
+ * @param onDismissClick Called when the dismiss button is clicked.
+ * @param onDismissRequest Called when the user attempts to dismiss the dialog (for example by
+ * tapping outside of it).
+ * @param confirmTextColor The color of the confirm text.
+ * @param dismissTextColor The color of the dismiss text.
+ * @param dismissOnBackPress Indicates that the back button should dismiss the dialog.
+ * @param dismissOnClickOutside Indicates that tapping outside the dialog should dismiss the dialog.
+ */
+@Composable
+fun BitwardenTwoButtonDialog(
+    twoButtonDialogData: BitwardenTwoButtonDialogData,
+    onConfirmClick: () -> Unit,
+    onDismissClick: () -> Unit,
+    onDismissRequest: () -> Unit,
+    confirmTextColor: Color = BitwardenTheme.colorScheme.outlineButton.foreground,
+    dismissTextColor: Color = BitwardenTheme.colorScheme.outlineButton.foreground,
+    dismissOnBackPress: Boolean = true,
+    dismissOnClickOutside: Boolean = true,
+) {
+    BitwardenTwoButtonDialog(
+        title = twoButtonDialogData.title?.invoke(),
+        message = twoButtonDialogData.message(),
+        confirmButtonText = twoButtonDialogData.confirmButtonText(),
+        dismissButtonText = twoButtonDialogData.dismissButtonText(),
+        onConfirmClick = onConfirmClick,
+        onDismissClick = onDismissClick,
+        onDismissRequest = onDismissRequest,
+        confirmTextColor = confirmTextColor,
+        dismissTextColor = dismissTextColor,
+        dismissOnBackPress = dismissOnBackPress,
+        dismissOnClickOutside = dismissOnClickOutside,
+    )
+}
 
 /**
  * Represents a Bitwarden-styled dialog with two buttons.
@@ -44,12 +86,59 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * tapping outside of it).
  * @param confirmTextColor The color of the confirm text.
  * @param dismissTextColor The color of the dismiss text.
+ * @param dismissOnBackPress Indicates that the back button should dismiss the dialog.
+ * @param dismissOnClickOutside Indicates that tapping outside the dialog should dismiss the dialog.
+ */
+@Composable
+fun BitwardenTwoButtonDialog(
+    title: String?,
+    message: String,
+    confirmButtonText: String,
+    dismissButtonText: String,
+    onConfirmClick: () -> Unit,
+    onDismissClick: () -> Unit,
+    onDismissRequest: () -> Unit,
+    confirmTextColor: Color = BitwardenTheme.colorScheme.outlineButton.foreground,
+    dismissTextColor: Color = BitwardenTheme.colorScheme.outlineButton.foreground,
+    dismissOnBackPress: Boolean = true,
+    dismissOnClickOutside: Boolean = true,
+) {
+    BitwardenTwoButtonDialog(
+        title = title,
+        message = message.toAnnotatedString(),
+        confirmButtonText = confirmButtonText,
+        dismissButtonText = dismissButtonText,
+        onConfirmClick = onConfirmClick,
+        onDismissClick = onDismissClick,
+        onDismissRequest = onDismissRequest,
+        confirmTextColor = confirmTextColor,
+        dismissTextColor = dismissTextColor,
+        dismissOnBackPress = dismissOnBackPress,
+        dismissOnClickOutside = dismissOnClickOutside,
+    )
+}
+
+/**
+ * Represents a Bitwarden-styled dialog with two buttons.
+ *
+ * @param title the optional title to show.
+ * @param message message to show.
+ * @param confirmButtonText text to show on confirm button.
+ * @param dismissButtonText text to show on dismiss button.
+ * @param onConfirmClick called when the confirm button is clicked.
+ * @param onDismissClick called when the dismiss button is clicked.
+ * @param onDismissRequest called when the user attempts to dismiss the dialog (for example by
+ * tapping outside of it).
+ * @param confirmTextColor The color of the confirm text.
+ * @param dismissTextColor The color of the dismiss text.
+ * @param dismissOnBackPress Indicates that the back button should dismiss the dialog.
+ * @param dismissOnClickOutside Indicates that tapping outside the dialog should dismiss the dialog.
  */
 @Composable
 @Suppress("LongMethod")
 fun BitwardenTwoButtonDialog(
     title: String?,
-    message: String,
+    message: AnnotatedString,
     confirmButtonText: String,
     dismissButtonText: String,
     onConfirmClick: () -> Unit,

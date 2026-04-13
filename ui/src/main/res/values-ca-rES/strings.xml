@@ -206,6 +206,7 @@ L\'escaneig es farà automàticament.</string>
     <string name="choose_file">Trieu fitxer</string>
     <string name="file">Fitxer</string>
     <string name="no_file_chosen">No s\'ha escollit cap fitxer</string>
+    <string name="file_name">File name</string>
     <string name="no_attachments">No hi ha cap adjunt.</string>
     <string name="file_source">Origen del fitxer</string>
     <string name="max_file_size">La mida màxima del fitxer és de 100 MB.</string>
@@ -1230,9 +1231,11 @@ Voleu canviar a aquest compte?</string>
     <string name="external_link">External link</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
     <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
     <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
     <string name="preview_unavailable">Preview unavailable</string>
+    <string name="download_attachment">Download Attachment</string>
     <string name="upgraded_to_premium">Upgraded to premium</string>
     <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
     <string name="per_month">/ month</string>

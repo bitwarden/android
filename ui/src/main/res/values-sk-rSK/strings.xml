@@ -208,6 +208,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="choose_file">Vybrať súbor</string>
     <string name="file">Súbor</string>
     <string name="no_file_chosen">Nebol vybratý žiadny súbor</string>
+    <string name="file_name">Názov súboru</string>
     <string name="no_attachments">Nie sú žiadne prílohy.</string>
     <string name="file_source">Zdroj súboru</string>
     <string name="max_file_size">Maximálna veľkosť súboru je 100 MB.</string>
@@ -1248,9 +1249,11 @@ Chcete prepnúť na tento účet?</string>
     <string name="external_link">Externý odkaz</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Externý odkaz</string>
     <string name="preview_not_available_for_files">Pre súbory (%1$s) nie je k dispozícii náhľad. Stále si ich môžete stiahnuť a zobraziť na zariadení.</string>
+    <string name="this_file_is_too_large_to_preview">Tento súbor je príliš veľký na náhľad. Stále si ho môžete stiahnuť a zobraziť na zariadení.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden nedokázal tento súbor dešifrovať, preto nie je možné zobraziť náhľad.</string>
     <string name="preview_unavailable_for_this_file">Pre tento súbor nie je k dispozícii náhľad. Stále si ho môžete stiahnuť a zobraziť na zariadení.</string>
     <string name="preview_unavailable">Náhľad nie je k dispozícii</string>
+    <string name="download_attachment">Stiahnuť prílohu</string>
     <string name="upgraded_to_premium">Upgradované na Prémium</string>
     <string name="unlock_premium_features">S balíkom Prémium získate prístup k pokročilejším funkciám.</string>
     <string name="per_month">/mesiac</string>

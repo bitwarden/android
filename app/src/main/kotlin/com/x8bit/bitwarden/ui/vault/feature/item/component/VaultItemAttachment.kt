@@ -20,7 +20,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.cardStyle
+import com.bitwarden.ui.platform.base.util.spanStyleOf
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.model.CardStyle
@@ -55,10 +57,6 @@ fun VaultItemAttachment(
                 onClick = {
                     if (!attachmentItem.isDownloadAllowed) {
                         shouldShowPremiumWarningDialog = true
-                        return@cardStyle
-                    }
-                    if (attachmentItem.isLargeFile) {
-                        shouldShowSizeWarningDialog = true
                         return@cardStyle
                     }
                     onAttachmentPreviewClick(attachmentItem)
@@ -138,10 +136,14 @@ fun VaultItemAttachment(
 
     if (shouldShowSizeWarningDialog) {
         BitwardenTwoButtonDialog(
-            title = null,
-            message = stringResource(
-                BitwardenString.attachment_large_warning,
-                attachmentItem.displaySize,
+            title = stringResource(id = BitwardenString.download_attachment),
+            message = annotatedStringResource(
+                id = BitwardenString.attachment_large_warning,
+                args = arrayOf(attachmentItem.displaySize),
+                style = spanStyleOf(
+                    color = BitwardenTheme.colorScheme.text.primary,
+                    textStyle = BitwardenTheme.typography.bodyMedium,
+                ),
             ),
             confirmButtonText = stringResource(BitwardenString.yes),
             dismissButtonText = stringResource(BitwardenString.no),

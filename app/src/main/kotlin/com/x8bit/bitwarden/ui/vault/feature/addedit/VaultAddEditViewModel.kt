@@ -13,7 +13,10 @@ import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.feature.cardscanner.manager.CardScanManager
+import com.bitwarden.ui.platform.feature.cardscanner.util.CardScanResult
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.model.TotpData
 import com.bitwarden.ui.platform.resource.BitwardenPlurals
@@ -87,6 +90,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
+import com.x8bit.bitwarden.ui.vault.util.detectCardBrand
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -121,6 +125,7 @@ class VaultAddEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     featureFlagManager: FeatureFlagManager,
     generatorRepository: GeneratorRepository,
+    cardScanManager: CardScanManager,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val toastManager: ToastManager,
     private val authRepository: AuthRepository,
@@ -178,6 +183,7 @@ class VaultAddEditViewModel @Inject constructor(
 
             VaultAddEditState(
                 isArchiveEnabled = featureFlagManager.getFeatureFlag(FlagKey.ArchiveItems),
+                isCardScannerEnabled = featureFlagManager.getFeatureFlag(FlagKey.CardScanner),
                 vaultAddEditType = vaultAddEditType,
                 cipherType = vaultCipherType,
                 viewState = when (vaultAddEditType) {
@@ -279,6 +285,18 @@ class VaultAddEditViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.CardScanner)
+            .map { VaultAddEditAction.Internal.CardScannerFlagUpdateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        cardScanManager
+            .cardScanResultFlow
+            .map { VaultAddEditAction.Internal.CardScanResultReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         snackbarRelayManager
             .getSnackbarDataFlow(SnackbarRelay.CIPHER_MOVED_TO_ORGANIZATION)
             .map { VaultAddEditAction.Internal.SnackbarDataReceived(it) }
@@ -325,6 +343,10 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Common.ConfirmDeleteClick -> handleConfirmDeleteClick()
             is VaultAddEditAction.Common.CloseClick -> handleCloseClick()
             is VaultAddEditAction.Common.DismissDialog -> handleDismissDialog()
+            is VaultAddEditAction.Common.CameraPermissionSettingsClick -> {
+                handleCameraPermissionSettingsClick()
+            }
+
             is VaultAddEditAction.Common.SaveClick -> handleSaveClick()
             is VaultAddEditAction.Common.AddNewCustomFieldClick -> {
                 handleAddNewCustomFieldClick(action)
@@ -670,6 +692,11 @@ class VaultAddEditViewModel @Inject constructor(
 
     private fun handleDismissDialog() {
         clearDialogState()
+    }
+
+    private fun handleCameraPermissionSettingsClick() {
+        clearDialogState()
+        sendEvent(VaultAddEditEvent.NavigateToAppSettings)
     }
 
     private fun handleInitialAutofillDialogDismissed() {
@@ -1542,6 +1569,27 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.ItemType.CardType.SecurityCodeVisibilityChange -> {
                 handleSecurityCodeVisibilityChange(action)
             }
+
+            is VaultAddEditAction.ItemType.CardType.ScanCardClick -> {
+                handleScanCardClick(action)
+            }
+        }
+    }
+
+    private fun handleScanCardClick(
+        action: VaultAddEditAction.ItemType.CardType.ScanCardClick,
+    ) {
+        if (!state.isCardScannerEnabled) return
+        if (action.isGranted) {
+            sendEvent(VaultAddEditEvent.NavigateToCardScan)
+        } else {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = VaultAddEditState
+                        .DialogState
+                        .CameraPermissionDenied,
+                )
+            }
         }
     }
 
@@ -1651,6 +1699,14 @@ class VaultAddEditViewModel @Inject constructor(
 
             is VaultAddEditAction.Internal.ArchiveItemsFlagUpdateReceive -> {
                 handleArchiveItemsFlagUpdateReceive(action)
+            }
+
+            is VaultAddEditAction.Internal.CardScannerFlagUpdateReceive -> {
+                handleCardScannerFlagUpdateReceive(action)
+            }
+
+            is VaultAddEditAction.Internal.CardScanResultReceive -> {
+                handleCardScanResultReceive(action)
             }
 
             is VaultAddEditAction.Internal.DeleteCipherReceive -> handleDeleteCipherReceive(action)
@@ -1868,6 +1924,40 @@ class VaultAddEditViewModel @Inject constructor(
         action: VaultAddEditAction.Internal.ArchiveItemsFlagUpdateReceive,
     ) {
         mutableStateFlow.update { it.copy(isArchiveEnabled = action.isEnabled) }
+    }
+
+    private fun handleCardScannerFlagUpdateReceive(
+        action: VaultAddEditAction.Internal.CardScannerFlagUpdateReceive,
+    ) {
+        mutableStateFlow.update { it.copy(isCardScannerEnabled = action.isEnabled) }
+    }
+
+    private fun handleCardScanResultReceive(
+        action: VaultAddEditAction.Internal.CardScanResultReceive,
+    ) {
+        when (val result = action.cardScanResult) {
+            is CardScanResult.Success -> {
+                val data = result.cardScanData
+                updateCardContent { cardType ->
+                    cardType.copy(
+                        number = data.number ?: cardType.number,
+                        expirationYear = data.expirationYear
+                            ?: cardType.expirationYear,
+                        expirationMonth = data.expirationMonth
+                            ?.toExpirationMonth()
+                            ?: cardType.expirationMonth,
+                        securityCode = data.securityCode
+                            ?: cardType.securityCode,
+                        brand = data.number
+                            ?.detectCardBrand()
+                            ?: cardType.brand,
+                    )
+                }
+                sendEvent(VaultAddEditEvent.FocusCardHolderName)
+            }
+
+            is CardScanResult.ScanError -> Unit
+        }
     }
 
     private fun handleDeleteCipherReceive(action: VaultAddEditAction.Internal.DeleteCipherReceive) {
@@ -2404,6 +2494,24 @@ class VaultAddEditViewModel @Inject constructor(
     //endregion Utility Functions
 }
 
+@Suppress("MagicNumber")
+private fun String.toExpirationMonth(): VaultCardExpirationMonth =
+    when (this.toIntOrNull()) {
+        1 -> VaultCardExpirationMonth.JANUARY
+        2 -> VaultCardExpirationMonth.FEBRUARY
+        3 -> VaultCardExpirationMonth.MARCH
+        4 -> VaultCardExpirationMonth.APRIL
+        5 -> VaultCardExpirationMonth.MAY
+        6 -> VaultCardExpirationMonth.JUNE
+        7 -> VaultCardExpirationMonth.JULY
+        8 -> VaultCardExpirationMonth.AUGUST
+        9 -> VaultCardExpirationMonth.SEPTEMBER
+        10 -> VaultCardExpirationMonth.OCTOBER
+        11 -> VaultCardExpirationMonth.NOVEMBER
+        12 -> VaultCardExpirationMonth.DECEMBER
+        else -> VaultCardExpirationMonth.SELECT
+    }
+
 /**
  * Represents the state for adding an item to the vault.
  *
@@ -2428,6 +2536,7 @@ data class VaultAddEditState(
     val defaultUriMatchType: UriMatchType,
     private val shouldShowCoachMarkTour: Boolean,
     private val isArchiveEnabled: Boolean,
+    val isCardScannerEnabled: Boolean,
 ) : Parcelable {
 
     /**
@@ -3021,6 +3130,13 @@ data class VaultAddEditState(
          */
         @Parcelize
         data object Fido2PinSetUpError : DialogState()
+
+        /**
+         * Displays a dialog informing the user that camera permission is required
+         * to use the card scanner, with an option to navigate to app settings.
+         */
+        @Parcelize
+        data object CameraPermissionDenied : DialogState()
     }
 }
 
@@ -3099,6 +3215,11 @@ sealed class VaultAddEditEvent {
     data object NavigateToQrCodeScan : VaultAddEditEvent()
 
     /**
+     * Navigate to the card scan screen.
+     */
+    data object NavigateToCardScan : VaultAddEditEvent()
+
+    /**
      * Navigate to the manual code entry screen.
      */
     data object NavigateToManualCodeEntry : VaultAddEditEvent()
@@ -3142,6 +3263,16 @@ sealed class VaultAddEditEvent {
      * Navigate the user to the learn more help page
      */
     data object NavigateToLearnMore : VaultAddEditEvent()
+
+    /**
+     * Focus the cardholder name field after a successful card scan.
+     */
+    data object FocusCardHolderName : VaultAddEditEvent(), DeferredBackgroundEvent
+
+    /**
+     * Navigate to the app settings screen.
+     */
+    data object NavigateToAppSettings : VaultAddEditEvent()
 }
 
 /**
@@ -3168,6 +3299,11 @@ sealed class VaultAddEditAction {
          * The user has clicked to dismiss the dialog.
          */
         data object DismissDialog : Common()
+
+        /**
+         * The user has clicked the settings button in the camera permission dialog.
+         */
+        data object CameraPermissionSettingsClick : Common()
 
         /**
          * The user has clicked the attachments overflow option.
@@ -3698,6 +3834,13 @@ sealed class VaultAddEditAction {
              * @property isVisible The new code visibility state.
              */
             data class SecurityCodeVisibilityChange(val isVisible: Boolean) : CardType()
+
+            /**
+             * Fired when the scan card button is clicked.
+             *
+             * @property isGranted Whether camera permission was granted.
+             */
+            data class ScanCardClick(val isGranted: Boolean) : CardType()
         }
 
         /**
@@ -3840,6 +3983,20 @@ sealed class VaultAddEditAction {
          */
         data class ArchiveItemsFlagUpdateReceive(
             val isEnabled: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that the Card Scanner flag has been updated.
+         */
+        data class CardScannerFlagUpdateReceive(
+            val isEnabled: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that a card scan result has been received.
+         */
+        data class CardScanResultReceive(
+            val cardScanResult: CardScanResult,
         ) : Internal()
     }
 }

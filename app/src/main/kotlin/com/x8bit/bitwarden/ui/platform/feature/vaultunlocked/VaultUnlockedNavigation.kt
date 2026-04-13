@@ -58,6 +58,8 @@ import com.x8bit.bitwarden.ui.vault.feature.attachments.attachmentDestination
 import com.x8bit.bitwarden.ui.vault.feature.attachments.navigateToAttachment
 import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.navigateToPreviewAttachment
 import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.previewAttachmentDestination
+import com.x8bit.bitwarden.ui.vault.feature.cardscanner.cardScanDestination
+import com.x8bit.bitwarden.ui.vault.feature.cardscanner.navigateToCardScanScreen
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.importLoginsScreenDestination
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.navigateToImportLoginsScreen
 import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
@@ -179,6 +181,9 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateToQrCodeScanScreen = {
                 navController.navigateToQrCodeScanScreen()
             },
+            onNavigateToCardScanScreen = {
+                navController.navigateToCardScanScreen()
+            },
             onNavigateToManualCodeEntryScreen = {
                 navController.navigateToManualCodeEntryScreen()
             },
@@ -210,13 +215,10 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                     passwordHistoryMode = GeneratorPasswordHistoryMode.Item(itemId = it),
                 )
             },
-            onNavigateToPreviewAttachment = { cipherId, attachmentId, fileName ->
-                navController.navigateToPreviewAttachment(
-                    cipherId = cipherId,
-                    attachmentId = attachmentId,
-                    fileName = fileName,
-                )
-            },
+            onNavigateToPreviewAttachment = { navController.navigateToPreviewAttachment(it) },
+        )
+        cardScanDestination(
+            onNavigateBack = { navController.popBackStack() },
         )
         vaultQrCodeScanDestination(
             onNavigateToManualCodeEntryScreen = {
@@ -267,13 +269,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
         attachmentDestination(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateToPreviewAttachment = { cipherId, attachmentId, fileName ->
-                navController.navigateToPreviewAttachment(
-                    cipherId = cipherId,
-                    attachmentId = attachmentId,
-                    fileName = fileName,
-                )
-            },
+            onNavigateToPreviewAttachment = { navController.navigateToPreviewAttachment(it) },
         )
         setupUnlockDestination(
             onNavigateBack = {

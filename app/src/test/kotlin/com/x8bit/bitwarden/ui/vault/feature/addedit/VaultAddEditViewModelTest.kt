@@ -18,6 +18,9 @@ import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.feature.cardscanner.manager.CardScanManager
+import com.bitwarden.ui.platform.feature.cardscanner.util.CardScanData
+import com.bitwarden.ui.platform.feature.cardscanner.util.CardScanResult
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.model.TotpData
 import com.bitwarden.ui.platform.resource.BitwardenPlurals
@@ -224,9 +227,17 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     }
     private val environmentRepository = FakeEnvironmentRepository()
     private val mutableArchiveItemsFlow = MutableStateFlow(true)
+    private val mutableCardScannerFlow = MutableStateFlow(false)
+    private val mutableCardScanResultFlow =
+        bufferedMutableSharedFlow<CardScanResult>()
+    private val cardScanManager: CardScanManager = mockk {
+        every { cardScanResultFlow } returns mutableCardScanResultFlow
+    }
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlag(FlagKey.ArchiveItems) } answers { mutableArchiveItemsFlow.value }
         every { getFeatureFlagFlow(FlagKey.ArchiveItems) } returns mutableArchiveItemsFlow
+        every { getFeatureFlag(FlagKey.CardScanner) } answers { mutableCardScannerFlow.value }
+        every { getFeatureFlagFlow(FlagKey.CardScanner) } returns mutableCardScannerFlow
     }
 
     @BeforeEach
@@ -269,6 +280,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = true,
             isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -358,6 +370,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 defaultUriMatchType = UriMatchTypeModel.EXACT,
                 hasPremium = true,
                 isArchiveEnabled = true,
+                isCardScannerEnabled = false,
             ),
             viewModel.stateFlow.value,
         )
@@ -5117,6 +5130,277 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    fun `CardScannerFlagUpdateReceive should update isCardScannerEnabled`() =
+        runTest {
+            val initState = createVaultAddItemState()
+            val viewModel = createAddVaultItemViewModel()
+            mutableCardScannerFlow.value = true
+            assertEquals(
+                initState.copy(isCardScannerEnabled = true),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `CardScanResultReceive with Success should update card fields and focus name`() =
+        runTest {
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = VaultAddEditState
+                            .ViewState
+                            .Content
+                            .ItemType
+                            .Card(),
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                mutableCardScanResultFlow.tryEmit(
+                    CardScanResult.Success(
+                        cardScanData = CardScanData(
+                            number = "4111111111111111",
+                            expirationMonth = "12",
+                            expirationYear = "2025",
+                            securityCode = "123",
+                        ),
+                    ),
+                )
+                val expectedCard = VaultAddEditState
+                    .ViewState
+                    .Content
+                    .ItemType
+                    .Card(
+                        number = "4111111111111111",
+                        expirationYear = "2025",
+                        expirationMonth = VaultCardExpirationMonth.DECEMBER,
+                        securityCode = "123",
+                        brand = VaultCardBrand.VISA,
+                    )
+                val content = viewModel.stateFlow.value.viewState
+                    as VaultAddEditState.ViewState.Content
+                assertEquals(expectedCard, content.type)
+                assertEquals(
+                    VaultAddEditEvent.FocusCardHolderName,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `CardScanResultReceive with ScanError should not change state or focus`() =
+        runTest {
+            val initialCardState = VaultAddEditState
+                .ViewState
+                .Content
+                .ItemType
+                .Card()
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = initialCardState,
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                mutableCardScanResultFlow.tryEmit(CardScanResult.ScanError())
+                val content = viewModel.stateFlow.value.viewState
+                    as VaultAddEditState.ViewState.Content
+                assertEquals(initialCardState, content.type)
+                expectNoEvents()
+            }
+        }
+
+    @Test
+    fun `ScanCardClick with permission granted should send NavigateToCardScan`() =
+        runTest {
+            mutableCardScannerFlow.value = true
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = VaultAddEditState
+                            .ViewState
+                            .Content
+                            .ItemType
+                            .Card(),
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultAddEditAction.ItemType.CardType.ScanCardClick(
+                        isGranted = true,
+                    ),
+                )
+                assertEquals(
+                    VaultAddEditEvent.NavigateToCardScan,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `ScanCardClick when flag disabled should not navigate`() =
+        runTest {
+            mutableCardScannerFlow.value = false
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = VaultAddEditState
+                            .ViewState
+                            .Content
+                            .ItemType
+                            .Card(),
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultAddEditAction.ItemType.CardType.ScanCardClick(
+                        isGranted = true,
+                    ),
+                )
+                expectNoEvents()
+            }
+        }
+
+    @Test
+    fun `ScanCardClick with permission denied should show camera permission dialog`() =
+        runTest {
+            mutableCardScannerFlow.value = true
+            val initialState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.CARD,
+                typeContentViewState = VaultAddEditState
+                    .ViewState
+                    .Content
+                    .ItemType
+                    .Card(),
+            )
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = initialState,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.CardType.ScanCardClick(
+                    isGranted = false,
+                ),
+            )
+            assertEquals(
+                initialState.copy(
+                    dialog = VaultAddEditState
+                        .DialogState
+                        .CameraPermissionDenied,
+                    isCardScannerEnabled = true,
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `CameraPermissionSettingsClick should clear dialog and navigate to app settings`() =
+        runTest {
+            mutableCardScannerFlow.value = true
+            val initialState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.CARD,
+                typeContentViewState = VaultAddEditState
+                    .ViewState
+                    .Content
+                    .ItemType
+                    .Card(),
+                dialogState = VaultAddEditState
+                    .DialogState
+                    .CameraPermissionDenied,
+            )
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = initialState,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                stateFlow.skipItems(1)
+                viewModel.trySendAction(
+                    VaultAddEditAction.Common.CameraPermissionSettingsClick,
+                )
+                assertEquals(
+                    initialState.copy(
+                        dialog = null,
+                        isCardScannerEnabled = true,
+                    ),
+                    stateFlow.awaitItem(),
+                )
+                assertEquals(
+                    VaultAddEditEvent.NavigateToAppSettings,
+                    eventFlow.awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `CardScanResultReceive with partial scan should preserve existing fields`() =
+        runTest {
+            val initialCard = VaultAddEditState
+                .ViewState
+                .Content
+                .ItemType
+                .Card(
+                    cardHolderName = "EXISTING NAME",
+                    expirationMonth = VaultCardExpirationMonth.JUNE,
+                    expirationYear = "2030",
+                    securityCode = "999",
+                )
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = initialCard,
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                mutableCardScanResultFlow.tryEmit(
+                    CardScanResult.Success(
+                        cardScanData = CardScanData(
+                            number = "4111111111111111",
+                            expirationMonth = null,
+                            expirationYear = null,
+                            securityCode = null,
+                        ),
+                    ),
+                )
+                val expectedCard = initialCard.copy(
+                    number = "4111111111111111",
+                    brand = VaultCardBrand.VISA,
+                )
+                val content = viewModel.stateFlow.value.viewState
+                    as VaultAddEditState.ViewState.Content
+                assertEquals(expectedCard, content.type)
+                assertEquals(
+                    VaultAddEditEvent.FocusCardHolderName,
+                    awaitItem(),
+                )
+            }
+        }
+
     //region Helper functions
 
     @Suppress("LongParameterList")
@@ -5154,6 +5438,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = hasPremium,
             isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
     @Suppress("LongParameterList")
@@ -5239,6 +5524,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             featureFlagManager = featureFlagManager,
             authRepository = authRepository,
             clipboardManager = bitwardenClipboardManager,
+            cardScanManager = cardScanManager,
             policyManager = policyManager,
             vaultRepository = vaultRepo,
             bitwardenCredentialManager = bitwardenCredentialManager,

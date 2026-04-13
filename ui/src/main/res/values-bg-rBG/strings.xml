@@ -206,6 +206,7 @@
     <string name="choose_file">Изберете файл</string>
     <string name="file">Файл</string>
     <string name="no_file_chosen">Не е избран файл</string>
+    <string name="file_name">Име на файла</string>
     <string name="no_attachments">Няма прикачени файлове.</string>
     <string name="file_source">Източник на файла</string>
     <string name="max_file_size">Големината на файла е най-много 100 MB.</string>
@@ -1232,9 +1233,11 @@
     <string name="external_link">Външна връзка</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, външна връзка</string>
     <string name="preview_not_available_for_files">Не е възможно да се извърши преглед на %1$s файла. Все пак може да ги свалите и прегледате на устройството си.</string>
+    <string name="this_file_is_too_large_to_preview">Този файл е прекалено голям и не може да бъде прегледан. Можете да го свалите и разгледате на устройството си.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Битуорден не може да дешифрира този файл, така че той не може да бъде показан.</string>
     <string name="preview_unavailable_for_this_file">Не е възможно да се извърши преглед на този файл. Все пак може да го свалите и прегледате на устройството си.</string>
     <string name="preview_unavailable">Преглед не е възможен</string>
+    <string name="download_attachment">Сваляне на прикачения файл</string>
     <string name="upgraded_to_premium">Надградено до Платения план</string>
     <string name="unlock_premium_features">Отключете още разширени функционалности с Платения план.</string>
     <string name="per_month">/ месец</string>

@@ -728,26 +728,6 @@ class SearchScreenTest : BitwardenComposeTest() {
             )
         }
 
-        composeTestRule
-            .onNodeWithContentDescription("More options")
-            .assertIsDisplayed()
-            .performClick()
-        composeTestRule
-            .onNodeWithText("Archive")
-            .assert(hasAnyAncestor(isDialog()))
-            .performScrollTo()
-            .assertIsDisplayed()
-            .performClick()
-        verify(exactly = 1) {
-            viewModel.trySendAction(
-                SearchAction.OverflowOptionClick(
-                    overflowAction = ListingItemOverflowAction.VaultAction.ArchiveClick(
-                        cipherId = "mockId-1",
-                    ),
-                ),
-            )
-        }
-
         composeTestRule.assertNoDialogExists()
     }
 
@@ -959,7 +939,52 @@ class SearchScreenTest : BitwardenComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on send item delete overflow option click should display delete confirmation dialog and emits DeleteSendConfirmClick on confirmation`() {
+    fun `on vault item archive overflow option click should display archive confirmation dialog and emits ArchiveClick on confirmation`() {
+        val itemId = "mockId-1"
+        val title = "Archive item"
+        mutableStateFlow.update {
+            it.copy(
+                viewState = SearchState.ViewState.Content(
+                    displayItems = persistentListOf(createMockDisplayItemForCipher(number = 1)),
+                ),
+            )
+        }
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(text = title).assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "More options")
+            .assertIsDisplayed()
+            .performClick()
+        composeTestRule
+            .onNodeWithText(text = "Archive")
+            .performScrollTo()
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(title)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+        composeTestRule
+            .onNodeWithText(text = "Archive")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                SearchAction.OverflowOptionClick(
+                    overflowAction = ListingItemOverflowAction.VaultAction.ArchiveClick(
+                        cipherId = itemId,
+                    ),
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on send item delete overflow option click should display delete confirmation dialog and emits DeleteClick on confirmation`() {
         val sendId = "mockId-1"
         val message = "Are you sure you want to delete this Send?"
         mutableStateFlow.update {

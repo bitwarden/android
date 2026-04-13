@@ -987,8 +987,32 @@ class VaultScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `search icon click should send SearchIconClick action`() {
-        mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.NoItems) }
-        composeTestRule.onNodeWithContentDescription("Search vault").performClick()
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultState.ViewState.Content(
+                    itemTypesCount = 0,
+                    totpItemsCount = 0,
+                    loginItemsCount = 0,
+                    cardItemsCount = 0,
+                    identityItemsCount = 0,
+                    secureNoteItemsCount = 0,
+                    sshKeyItemsCount = 0,
+                    favoriteItems = emptyList(),
+                    folderItems = emptyList(),
+                    noFolderItems = emptyList(),
+                    collectionItems = emptyList(),
+                    trashItemsCount = 0,
+                    archivedItemsCount = 0,
+                    archiveEnabled = false,
+                    archiveSubText = null,
+                    archiveEndIcon = null,
+                    showCardGroup = false,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithContentDescription("Search vault")
+            .performClick()
         verify { viewModel.trySendAction(VaultAction.SearchIconClick) }
     }
 
@@ -1326,6 +1350,57 @@ class VaultScreenTest : BitwardenComposeTest() {
                     password = password,
                 ),
             )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on vault item archive overflow option click should display archive confirmation dialog and emits ArchiveClick on confirmation`() {
+        val itemText = "Test Item"
+        val userName = "Bitwarden"
+        val cipherId = "12345"
+        val archiveAction = ListingItemOverflowAction.VaultAction.ArchiveClick(cipherId = cipherId)
+        val vaultItem = VaultState.ViewState.VaultItem.Login(
+            id = cipherId,
+            name = itemText.asText(),
+            username = userName.asText(),
+            overflowOptions = persistentListOf(archiveAction),
+            shouldShowMasterPasswordReprompt = false,
+            hasDecryptionError = false,
+        )
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    favoriteItems = listOf(vaultItem),
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(itemText))
+        composeTestRule
+            .onNodeWithText(text = itemText)
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "More options"))
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Archive")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Archive item")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Archive")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultAction.OverflowOptionClick(overflowAction = archiveAction))
         }
     }
 

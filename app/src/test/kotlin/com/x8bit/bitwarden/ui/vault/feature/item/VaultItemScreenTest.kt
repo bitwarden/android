@@ -41,6 +41,7 @@ import com.bitwarden.ui.util.onNodeWithTextAfterScroll
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmentRoute
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
@@ -69,7 +70,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     private var onNavigateToMoveToOrganizationItemId: String? = null
     private var onNavigateToAttachmentsId: String? = null
     private var onNavigateToPasswordHistoryId: String? = null
-    private var onNavigateToPreviewAttachmentId: String? = null
+    private var onNavigateToPreviewAttachment: PreviewAttachmentRoute? = null
 
     private val intentManager = mockk<IntentManager>(relaxed = true)
 
@@ -94,9 +95,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                 },
                 onNavigateToAttachments = { onNavigateToAttachmentsId = it },
                 onNavigateToPasswordHistory = { onNavigateToPasswordHistoryId = it },
-                onNavigateToPreviewAttachment = { id, _, _ ->
-                    onNavigateToPreviewAttachmentId = id
-                },
+                onNavigateToPreviewAttachment = { onNavigateToPreviewAttachment = it },
             )
         }
     }
@@ -144,15 +143,23 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `NavigateToPreviewAttachment event should invoke onNavigateToPreviewAttachment`() {
-        val cipherId = "cipherId1234"
+        val route = PreviewAttachmentRoute(
+            cipherId = "cipherId1234",
+            attachmentId = "attachmentId4321",
+            fileName = "fileName",
+            displaySize = "2.89 MB",
+            isLargeFile = false,
+        )
         mutableEventFlow.tryEmit(
             VaultItemEvent.NavigateToPreviewAttachment(
-                cipherId = cipherId,
+                cipherId = "cipherId1234",
                 attachmentId = "attachmentId4321",
                 fileName = "fileName",
+                displaySize = "2.89 MB",
+                isLargeFile = false,
             ),
         )
-        assertEquals(cipherId, onNavigateToPreviewAttachmentId)
+        assertEquals(route, onNavigateToPreviewAttachment)
     }
 
     @Test
@@ -831,10 +838,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText(
-                "This attachment is 11 MB in size. Are you sure you want to download it onto " +
-                    "your device?",
-            )
+            .onAllNodesWithText("This file is 11 MB. Would you like to download it?")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
@@ -873,10 +877,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText(
-                "This attachment is 11 MB in size. Are you sure you want to download it onto " +
-                    "your device?",
-            )
+            .onAllNodesWithText("This file is 11 MB. Would you like to download it?")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 

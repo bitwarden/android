@@ -189,7 +189,7 @@
     <string name="attachments">Attachments</string>
     <string name="unable_to_download_file">Unable to download file.</string>
     <string name="downloading">Downloading…</string>
-    <string name="attachment_large_warning">This attachment is %1$s in size. Are you sure you want to download it onto your device?</string>
+    <string name="attachment_large_warning">This file is <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Would you like to download it?</string>
     <string name="authenticator_key">ऑथेंटिकेटर की</string>
     <string name="verification_code_totp">Verification code (TOTP)</string>
     <string name="authenticator_key_added">Authenticator key added.</string>
@@ -206,6 +206,7 @@ Scanning will happen automatically.</string>
     <string name="choose_file">Choose file</string>
     <string name="file">File</string>
     <string name="no_file_chosen">No file chosen</string>
+    <string name="file_name">File name</string>
     <string name="no_attachments">There are no attachments.</string>
     <string name="file_source">File Source</string>
     <string name="max_file_size">Maximum file size is 100 MB.</string>
@@ -1230,9 +1231,11 @@ Do you want to switch to this account?</string>
     <string name="external_link">External link</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
     <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
     <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
     <string name="preview_unavailable">Preview unavailable</string>
+    <string name="download_attachment">Download Attachment</string>
     <string name="upgraded_to_premium">Upgraded to premium</string>
     <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
     <string name="per_month">/ month</string>

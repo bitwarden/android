@@ -206,6 +206,7 @@ Skanningen sker automatiskt.</string>
     <string name="choose_file">Välj fil</string>
     <string name="file">Fil</string>
     <string name="no_file_chosen">Ingen fil vald</string>
+    <string name="file_name">File name</string>
     <string name="no_attachments">Det finns inga bilagor.</string>
     <string name="file_source">Filkälla</string>
     <string name="max_file_size">Filen får vara maximalt 100 MB.</string>
@@ -1230,9 +1231,11 @@ Vill du byta till detta konto?</string>
     <string name="external_link">Extern länk</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, extern länk</string>
     <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="this_file_is_too_large_to_preview">Den här filen är för stor för att förhandsgranskas. Du kan fortfarande ladda ner den för att visa den på din enhet.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
     <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
     <string name="preview_unavailable">Preview unavailable</string>
+    <string name="download_attachment">Ladda ned bilaga</string>
     <string name="upgraded_to_premium">Upgraded to premium</string>
     <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
     <string name="per_month">/ month</string>

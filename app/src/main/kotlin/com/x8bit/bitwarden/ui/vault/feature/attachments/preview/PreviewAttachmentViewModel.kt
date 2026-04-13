@@ -53,19 +53,27 @@ class PreviewAttachmentViewModel @Inject constructor(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val args = savedStateHandle.toPreviewAttachmentArgs()
         val isPreviewable = args.fileName.isPreviewable
+        val isLargeFile = args.isLargeFile
         PreviewAttachmentState(
             cipherId = args.cipherId,
             attachmentId = args.attachmentId,
             fileName = args.fileName,
+            displaySize = args.displaySize,
+            isLargeFile = isLargeFile,
             isPreviewable = isPreviewable,
-            viewState = if (isPreviewable) {
-                PreviewAttachmentState.ViewState.Loading()
-            } else {
+            viewState = if (!isPreviewable) {
                 PreviewAttachmentState.ViewState.Error(
                     message = BitwardenString
                         .preview_not_available_for_files
                         .asText(args.fileName.fileExtension),
                 )
+            } else if (isLargeFile) {
+                PreviewAttachmentState.ViewState.Error(
+                    message = BitwardenString.this_file_is_too_large_to_preview.asText(),
+                    illustrationRes = BitwardenDrawable.ill_file_error,
+                )
+            } else {
+                PreviewAttachmentState.ViewState.Loading()
             },
             dialogState = null,
         )
@@ -88,7 +96,7 @@ class PreviewAttachmentViewModel @Inject constructor(
         refreshDataFlow
             .filter {
                 // Don't bother retrieving the file is we cannot display it.
-                state.isPreviewable
+                state.isPreviewable && !state.isLargeFile
             }
             .flatMapLatest {
                 vaultRepository
@@ -106,6 +114,7 @@ class PreviewAttachmentViewModel @Inject constructor(
             PreviewAttachmentAction.CloseClick -> handleCloseClick()
             PreviewAttachmentAction.DismissDialog -> handleDismissDialog()
             PreviewAttachmentAction.DownloadClick -> handleDownloadClick()
+            PreviewAttachmentAction.ConfirmDownloadClick -> handleConfirmDownloadClick()
             PreviewAttachmentAction.BitmapRenderComplete -> handleBitmapRenderComplete()
             PreviewAttachmentAction.BitmapRenderError -> handleBitmapRenderError()
             PreviewAttachmentAction.FileMissing -> handleFileMissing()
@@ -316,6 +325,24 @@ class PreviewAttachmentViewModel @Inject constructor(
     }
 
     private fun handleDownloadClick() {
+        if (state.isLargeFile) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = PreviewAttachmentState.DialogState.DownloadLargeFileConfirmation(
+                        displaySize = state.displaySize,
+                    ),
+                )
+            }
+            return
+        }
+        downloadFile()
+    }
+
+    private fun handleConfirmDownloadClick() {
+        downloadFile()
+    }
+
+    private fun downloadFile() {
         mutableStateFlow.update {
             it.copy(
                 dialogState = PreviewAttachmentState.DialogState.Loading(
@@ -390,6 +417,8 @@ data class PreviewAttachmentState(
     val cipherId: String,
     val attachmentId: String,
     val fileName: String,
+    val displaySize: String,
+    val isLargeFile: Boolean,
     val isPreviewable: Boolean,
     val viewState: ViewState,
     val dialogState: DialogState?,
@@ -452,6 +481,14 @@ data class PreviewAttachmentState(
          */
         @Parcelize
         data object PreviewUnavailable : DialogState()
+
+        /**
+         * Represents a warning dialog when the user is about to download a large file.
+         */
+        @Parcelize
+        data class DownloadLargeFileConfirmation(
+            val displaySize: String,
+        ) : DialogState()
     }
 }
 
@@ -516,6 +553,11 @@ sealed class PreviewAttachmentAction {
      * User clicked the download button.
      */
     data object DownloadClick : PreviewAttachmentAction()
+
+    /**
+     * User clicked to confirm that they want to download the file.
+     */
+    data object ConfirmDownloadClick : PreviewAttachmentAction()
 
     /**
      * The bitmap has been rendered from file.

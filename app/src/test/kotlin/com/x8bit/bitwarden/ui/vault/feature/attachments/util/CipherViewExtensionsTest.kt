@@ -23,6 +23,7 @@ class CipherViewExtensionsTest {
                         id = "mockId-1",
                         title = "mockFileName-1",
                         displaySize = "mockSizeName-1",
+                        isLargeFile = false,
                     ),
                 ),
                 newAttachment = null,

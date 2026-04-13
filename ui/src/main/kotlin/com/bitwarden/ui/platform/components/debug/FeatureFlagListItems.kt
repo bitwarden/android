@@ -30,10 +30,15 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.NoLogoutOnKdfChange,
     FlagKey.MigrateMyVaultToMyItems,
     FlagKey.ArchiveItems,
+    FlagKey.CardScanner,
     FlagKey.SendEmailVerification,
     FlagKey.MobilePremiumUpgrade,
     FlagKey.ManageDevices,
     FlagKey.AttachmentUpdates,
+    FlagKey.V2EncryptionJitPassword,
+    FlagKey.V2EncryptionKeyConnector,
+    FlagKey.V2EncryptionPassword,
+    FlagKey.V2EncryptionTde,
         -> {
         @Suppress("UNCHECKED_CAST")
         BooleanFlagItem(
@@ -85,8 +90,13 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
 
     FlagKey.MigrateMyVaultToMyItems -> stringResource(BitwardenString.migrate_my_vault_to_my_items)
     FlagKey.ArchiveItems -> stringResource(BitwardenString.archive_items)
+    FlagKey.CardScanner -> stringResource(BitwardenString.scan_card)
     FlagKey.SendEmailVerification -> stringResource(BitwardenString.send_email_verification)
     FlagKey.MobilePremiumUpgrade -> stringResource(BitwardenString.mobile_premium_upgrade)
     FlagKey.ManageDevices -> stringResource(BitwardenString.manage_devices)
     FlagKey.AttachmentUpdates -> stringResource(BitwardenString.attachment_updates)
+    FlagKey.V2EncryptionJitPassword -> stringResource(BitwardenString.v2_encryption_jit_password)
+    FlagKey.V2EncryptionKeyConnector -> stringResource(BitwardenString.v2_encryption_key_connector)
+    FlagKey.V2EncryptionPassword -> stringResource(BitwardenString.v2_encryption_password)
+    FlagKey.V2EncryptionTde -> stringResource(BitwardenString.v2_encryption_tde)
 }

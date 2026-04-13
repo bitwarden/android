@@ -44,6 +44,22 @@ class FlagKeyTest {
             FlagKey.AttachmentUpdates.keyName,
             "pm-34224-mobile-attachment-updates",
         )
+        assertEquals(
+            FlagKey.V2EncryptionJitPassword.keyName,
+            "enable-account-encryption-v2-jit-password-registration",
+        )
+        assertEquals(
+            FlagKey.V2EncryptionKeyConnector.keyName,
+            "enable-account-encryption-v2-key-connector-registration",
+        )
+        assertEquals(
+            FlagKey.V2EncryptionPassword.keyName,
+            "pm-27278-v2-password-registration",
+        )
+        assertEquals(
+            FlagKey.V2EncryptionTde.keyName,
+            "pm-27279-v2-registration-tde-jit",
+        )
     }
 
     @Test
@@ -59,6 +75,10 @@ class FlagKeyTest {
                 FlagKey.SendEmailVerification,
                 FlagKey.MobilePremiumUpgrade,
                 FlagKey.AttachmentUpdates,
+                FlagKey.V2EncryptionJitPassword,
+                FlagKey.V2EncryptionKeyConnector,
+                FlagKey.V2EncryptionPassword,
+                FlagKey.V2EncryptionTde,
             ).all {
                 !it.defaultValue
             },

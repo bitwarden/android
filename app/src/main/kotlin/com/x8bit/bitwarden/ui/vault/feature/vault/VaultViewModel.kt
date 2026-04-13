@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.util.persistentListOfNotNull
@@ -37,8 +38,6 @@ import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
-import com.x8bit.bitwarden.data.platform.manager.GmsManager
-import com.x8bit.bitwarden.data.platform.manager.MINIMUM_CXP_GMS_VERSION
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -117,7 +116,7 @@ class VaultViewModel @Inject constructor(
     private val networkConnectionManager: NetworkConnectionManager,
     private val browserAutofillDialogManager: BrowserAutofillDialogManager,
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager,
-    private val gmsManager: GmsManager,
+    private val buildInfoManager: BuildInfoManager,
     featureFlagManager: FeatureFlagManager,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
@@ -1028,7 +1027,7 @@ class VaultViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             if (action.isCredentialExchangeProtocolExportEnabled &&
-                gmsManager.isVersionAtLeast(MINIMUM_CXP_GMS_VERSION)
+                !buildInfoManager.isFdroid
             ) {
                 credentialExchangeRegistryManager.register()
             } else {
@@ -1537,6 +1536,12 @@ data class VaultState(
      * The [Color] of the avatar.
      */
     val avatarColor: Color get() = avatarColorString.hexToColor()
+
+    /**
+     * Whether the search icon should be shown.
+     */
+    val shouldShowSearchIcon: Boolean
+        get() = viewState is ViewState.Content
 
     /**
      * Indicates that the pull-to-refresh should be enabled in the UI.

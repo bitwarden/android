@@ -148,12 +148,11 @@ fun ItemListingScreen(
                 title = stringResource(id = BitwardenString.verification_codes),
                 scrollBehavior = scrollBehavior,
                 actions = {
-                    if (state.viewState is ItemListingState.ViewState.Content) {
-                        BitwardenSearchActionItem(
-                            contentDescription = stringResource(id = BitwardenString.search_codes),
-                            onClick = onNavigateToSearch,
-                        )
-                    }
+                    BitwardenSearchActionItem(
+                        contentDescription = stringResource(id = BitwardenString.search_codes),
+                        isDisplayed = state.shouldShowSearchIcon,
+                        onClick = onNavigateToSearch,
+                    )
                 },
             )
         },

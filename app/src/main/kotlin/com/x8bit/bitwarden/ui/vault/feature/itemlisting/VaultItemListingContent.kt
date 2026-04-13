@@ -31,7 +31,7 @@ import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.SelectionItemData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingHandlers
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Content view for the [VaultItemListingScreen].
@@ -46,43 +46,29 @@ fun VaultItemListingContent(
     vaultItemListingHandlers: VaultItemListingHandlers,
     modifier: Modifier = Modifier,
 ) {
-    var showConfirmationDialog: ListingItemOverflowAction? by rememberSaveable {
+    var overflowSpeedBumpAction: ListingItemOverflowAction? by rememberSaveable {
         mutableStateOf(null)
     }
-    when (val option = showConfirmationDialog) {
-        is ListingItemOverflowAction.SendAction.DeleteClick -> {
-            BitwardenTwoButtonDialog(
-                title = stringResource(id = BitwardenString.delete),
-                message = stringResource(id = BitwardenString.are_you_sure_delete_send),
-                confirmButtonText = stringResource(id = BitwardenString.yes),
-                dismissButtonText = stringResource(id = BitwardenString.cancel),
-                onConfirmClick = {
-                    showConfirmationDialog = null
-                    vaultItemListingHandlers.overflowItemClick(option)
-                },
-                onDismissClick = { showConfirmationDialog = null },
-                onDismissRequest = { showConfirmationDialog = null },
-            )
-        }
 
-        is ListingItemOverflowAction.SendAction.CopyUrlClick,
-        is ListingItemOverflowAction.SendAction.EditClick,
-        is ListingItemOverflowAction.SendAction.ViewClick,
-        is ListingItemOverflowAction.SendAction.RemovePasswordClick,
-        is ListingItemOverflowAction.SendAction.ShareUrlClick,
-        is ListingItemOverflowAction.VaultAction.CopyNoteClick,
-        is ListingItemOverflowAction.VaultAction.CopyNumberClick,
-        is ListingItemOverflowAction.VaultAction.CopyPasswordClick,
-        is ListingItemOverflowAction.VaultAction.CopySecurityCodeClick,
-        is ListingItemOverflowAction.VaultAction.CopyUsernameClick,
-        is ListingItemOverflowAction.VaultAction.EditClick,
-        is ListingItemOverflowAction.VaultAction.LaunchClick,
-        is ListingItemOverflowAction.VaultAction.ViewClick,
-        is ListingItemOverflowAction.VaultAction.CopyTotpClick,
-        is ListingItemOverflowAction.VaultAction.ArchiveClick,
-        is ListingItemOverflowAction.VaultAction.UnarchiveClick,
-        null,
-            -> Unit
+    overflowSpeedBumpAction?.let { action ->
+        action
+            .speedBump
+            ?.let { speedBump ->
+                BitwardenTwoButtonDialog(
+                    twoButtonDialogData = speedBump,
+                    onConfirmClick = {
+                        overflowSpeedBumpAction = null
+                        vaultItemListingHandlers.overflowItemClick(action)
+                    },
+                    onDismissClick = { overflowSpeedBumpAction = null },
+                    onDismissRequest = { overflowSpeedBumpAction = null },
+                )
+            }
+            ?: run {
+                // If we somehow get here and there is no speed bump, then we should keep on going.
+                overflowSpeedBumpAction = null
+                vaultItemListingHandlers.overflowItemClick(action)
+            }
     }
 
     var masterPasswordRepromptData by remember { mutableStateOf<MasterPasswordRepromptData?>(null) }
@@ -264,8 +250,12 @@ fun VaultItemListingContent(
                                 contentDescription = option.contentDescription(),
                                 onClick = {
                                     when (option) {
-                                        is ListingItemOverflowAction.SendAction.DeleteClick -> {
-                                            showConfirmationDialog = option
+                                        is ListingItemOverflowAction.SendAction -> {
+                                            if (option.speedBump != null) {
+                                                overflowSpeedBumpAction = option
+                                            } else {
+                                                vaultItemListingHandlers.overflowItemClick(option)
+                                            }
                                         }
 
                                         is ListingItemOverflowAction.VaultAction -> {
@@ -276,19 +266,19 @@ fun VaultItemListingContent(
                                                     MasterPasswordRepromptData.OverflowItem(
                                                         action = option,
                                                     )
+                                            } else if (option.speedBump != null) {
+                                                overflowSpeedBumpAction = option
                                             } else {
                                                 vaultItemListingHandlers.overflowItemClick(option)
                                             }
                                         }
-
-                                        else -> vaultItemListingHandlers.overflowItemClick(option)
                                     }
                                 },
                             )
                         }
                         // Only show options if allowed
                         .filter { !policyDisablesSend }
-                        .toPersistentList(),
+                        .toImmutableList(),
                     cardStyle = state
                         .displayItemList
                         .toListItemCardStyle(index = index, dividerPadding = 56.dp),

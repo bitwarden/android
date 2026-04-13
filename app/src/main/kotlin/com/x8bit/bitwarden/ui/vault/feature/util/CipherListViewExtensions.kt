@@ -6,6 +6,7 @@ import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CopyableCipherFields
 import com.x8bit.bitwarden.data.autofill.util.login
+import com.x8bit.bitwarden.data.platform.util.isActive
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.model.VaultTrailingIcon
 import com.x8bit.bitwarden.ui.vault.util.toSdkCipherType
@@ -88,9 +89,7 @@ fun CipherListView.toOverflowActions(
                     ListingItemOverflowAction.VaultAction.LaunchClick(url = it)
                 },
                 ListingItemOverflowAction.VaultAction.ArchiveClick(cipherId = cipherId)
-                    .takeIf {
-                        this.archivedDate == null && deletedDate == null && isArchiveEnabled
-                    },
+                    .takeIf { this.isActive && isArchiveEnabled },
                 ListingItemOverflowAction.VaultAction.UnarchiveClick(cipherId = cipherId)
                     .takeIf {
                         this.archivedDate != null && deletedDate == null && isArchiveEnabled

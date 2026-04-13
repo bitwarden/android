@@ -33,6 +33,7 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.util.isActive
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
@@ -423,6 +424,8 @@ class VaultItemViewModel @Inject constructor(
                 cipherId = state.vaultItemId,
                 attachmentId = action.attachment.id,
                 fileName = action.attachment.title,
+                displaySize = action.attachment.displaySize,
+                isLargeFile = action.attachment.isLargeFile,
             ),
         )
     }
@@ -1514,7 +1517,7 @@ data class VaultItemState(
             viewState.asContentOrNull()
                 ?.common
                 ?.currentCipher
-                ?.let { it.archivedDate == null && it.deletedDate == null } == true
+                ?.isActive == true
 
     /**
      * Helper to determine if the UI should display the unarchive button.
@@ -2008,6 +2011,8 @@ sealed class VaultItemEvent {
         val cipherId: String,
         val attachmentId: String,
         val fileName: String,
+        val displaySize: String,
+        val isLargeFile: Boolean,
     ) : VaultItemEvent()
 
     /**

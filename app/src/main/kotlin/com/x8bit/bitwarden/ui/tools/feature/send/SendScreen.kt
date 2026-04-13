@@ -139,6 +139,7 @@ fun SendScreen(
                 actions = {
                     BitwardenSearchActionItem(
                         contentDescription = stringResource(id = BitwardenString.search_sends),
+                        isDisplayed = state.shouldShowSearchIcon,
                         onClick = { viewModel.trySendAction(SendAction.SearchClick) },
                     )
                     BitwardenOverflowActionItem(

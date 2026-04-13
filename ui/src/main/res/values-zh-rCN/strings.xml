@@ -13,7 +13,7 @@
     <string name="delete">删除</string>
     <string name="preview">预览</string>
     <string name="deleting">正在删除…</string>
-    <string name="do_you_really_want_to_delete">您确定要删除吗？这个操作无法撤消。</string>
+    <string name="do_you_really_want_to_delete">确定要删除吗？这个操作无法撤消。</string>
     <string name="edit">编辑</string>
     <string name="edit_folder">编辑文件夹</string>
     <string name="email">电子邮箱</string>
@@ -188,7 +188,7 @@
     <string name="attachments">附件</string>
     <string name="unable_to_download_file">无法下载文件。</string>
     <string name="downloading">正在下载…</string>
-    <string name="attachment_large_warning">此附件大小为 %1$s 。确定要将其下载到您的设备上吗？</string>
+    <string name="attachment_large_warning">此文件大小为 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>。要下载它吗？</string>
     <string name="authenticator_key">验证器密钥</string>
     <string name="verification_code_totp">验证码 (TOTP)</string>
     <string name="authenticator_key_added">已添加验证器密钥。</string>
@@ -205,6 +205,7 @@
     <string name="choose_file">选择文件</string>
     <string name="file">文件</string>
     <string name="no_file_chosen">未选择文件</string>
+    <string name="file_name">文件名称</string>
     <string name="no_attachments">没有附件。</string>
     <string name="file_source">文件来源</string>
     <string name="max_file_size">文件最大为 100 MB。</string>
@@ -408,9 +409,9 @@
     <string name="restoring">正在恢复…</string>
     <string name="item_restored">项目已恢复</string>
     <string name="trash">回收站</string>
-    <string name="do_you_really_want_to_permanently_delete_cipher">您确定要永久删除吗？此操作无法撤销。</string>
-    <string name="do_you_really_want_to_restore_cipher">您确定要恢复此项目吗？</string>
-    <string name="do_you_really_want_to_soft_delete_cipher">您确定要将其发送到回收站吗？</string>
+    <string name="do_you_really_want_to_permanently_delete_cipher">确定要永久删除吗？此操作无法撤销。</string>
+    <string name="do_you_really_want_to_restore_cipher">确定要恢复此项目吗？</string>
+    <string name="do_you_really_want_to_soft_delete_cipher">确定要将其发送到回收站吗？</string>
     <string name="account_biometric_invalidated">在验证主密码之前，此账户的生物识别解锁将禁用。</string>
     <string name="enable_sync_on_refresh">启用刷新时同步</string>
     <string name="enable_sync_on_refresh_description">使用下拉手势同步密码库。</string>
@@ -683,7 +684,7 @@
     <string name="session_timeout_action">会话超时动作</string>
     <string name="account_fingerprint_phrase">账户指纹短语</string>
     <string name="passkey_management_explanation_long">使用 Bitwarden 保存新的通行密钥并使用存储在密码库中的通行密钥登录。</string>
-    <string name="autofill_services_explanation_long">允许 Bitwarden 使用您保存的登录信息来登录设备上的其他 App。</string>
+    <string name="autofill_services_explanation_long">允许 Bitwarden 使用您保存的登录信息来登录您设备上的其他 App。</string>
     <string name="use_inline_autofill_explanation_long">选择在登录您的设备上的其他 App 时，自动填充建议的显示方式。</string>
     <string name="additional_options">附加选项</string>
     <string name="continue_to_web_app">前往网页 App 吗？</string>
@@ -803,7 +804,7 @@
     <string name="new_master_password_hint">新主密码提示</string>
     <string name="get_started">开始使用</string>
     <string name="save_and_protect_your_data">保存和保护您的数据</string>
-    <string name="the_vault_protects_more_than_just_passwords">密码库不仅保护密码。在这里可以安全地存储登录、ID、支付卡和笔记。</string>
+    <string name="the_vault_protects_more_than_just_passwords">密码库不仅保护密码。在这里还可以安全地存储登录、ID、支付卡和笔记。</string>
     <string name="new_login">新增登录</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">在任何平台上安全地与任何人共享文件和数据。您的信息将在限制曝光的同时保持端到端加密。</string>
     <string name="send_sensitive_information_safely">安全地发送敏感信息</string>
@@ -978,9 +979,9 @@
     <string name="please_try_again_or_select_a_different_log">请重试或选择其他日志。</string>
     <string name="the_log_file_you_are_trying_to_share_has_been_removed">您尝试分享的日志文件已被移除。</string>
     <string name="delete_log">删除日志</string>
-    <string name="do_you_really_want_to_delete_this_log">您确定要删除此日志吗？</string>
+    <string name="do_you_really_want_to_delete_this_log">确定要删除此日志吗？</string>
     <string name="delete_logs">删除日志</string>
-    <string name="do_you_really_want_to_delete_all_recorded_logs">您确定要删除所有记录的日志吗？</string>
+    <string name="do_you_really_want_to_delete_all_recorded_logs">确定要删除所有记录的日志吗？</string>
     <string name="confirm_key_connector_domain">确认 Key Connector 域名</string>
     <string name="key_connector_domain">Key Connector 域名：</string>
     <string name="key_connector_organization">组织：</string>
@@ -1057,7 +1058,7 @@
     <string name="help">帮助</string>
     <string name="launch_tutorial">打开教程</string>
     <string name="delete_item">删除项目</string>
-    <string name="do_you_really_want_to_permanently_delete_this_cannot_be_undone">您确定要永久删除吗？此操作无法撤销。</string>
+    <string name="do_you_really_want_to_permanently_delete_this_cannot_be_undone">确定要永久删除吗？此操作无法撤销。</string>
     <string name="data">数据</string>
     <string name="export">导出</string>
     <string name="export_confirmation_title">确认导出</string>
@@ -1179,7 +1180,7 @@
     <string name="resending">正在重新发送</string>
     <string name="you_left_the_organization">您已退出该组织</string>
     <string name="transfer_items_to_org">转移项目到 %1$s</string>
-    <string name="transfer_items_description">出于安全和合规考虑，<annotation arg="0">%1$s</annotation>要求所有项目归组织所有。点击「接受」以转移您的项目的所有权。<annotation link="learnMore">进一步了解</annotation></string>
+    <string name="transfer_items_description">为确保安全性和合规性，<annotation arg="0">%1$s</annotation> 要求所有项目由组织拥有。点击「接受」以转移您的项目的所有权。<annotation link="learnMore">进一步了解</annotation></string>
     <string name="decline_and_leave">拒绝并退出</string>
     <string name="why_am_i_seeing_this">为什么我会看到这个？</string>
     <string name="migrating_items_to_x">正在迁移项目到 %s</string>
@@ -1222,9 +1223,11 @@
     <string name="external_link">外部链接</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s，外部链接</string>
     <string name="preview_not_available_for_files">%1$s 个文件的预览不可用。您仍然可以下载它以在您的设备上查看。</string>
+    <string name="this_file_is_too_large_to_preview">此文件太大，无法预览。您仍然可以下载它以在您的设备上查看。</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden 无法解密此文件，因此无法显示预览。</string>
     <string name="preview_unavailable_for_this_file">此文件的预览不可用。您仍然可以下载它以在您的设备上查看。</string>
-    <string name="preview_unavailable">无法预览</string>
+    <string name="preview_unavailable">预览不可用</string>
+    <string name="download_attachment">下载附件</string>
     <string name="upgraded_to_premium">升级到高级版</string>
     <string name="unlock_premium_features">使用高级版方案解锁更多高级功能。</string>
     <string name="per_month">/月</string>

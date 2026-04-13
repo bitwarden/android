@@ -16,6 +16,8 @@ data class PreviewAttachmentRoute(
     val cipherId: String,
     val attachmentId: String,
     val fileName: String,
+    val displaySize: String,
+    val isLargeFile: Boolean,
 )
 
 /**
@@ -25,6 +27,8 @@ data class PreviewAttachmentArgs(
     val cipherId: String,
     val attachmentId: String,
     val fileName: String,
+    val displaySize: String,
+    val isLargeFile: Boolean,
 )
 
 /**
@@ -36,6 +40,8 @@ fun SavedStateHandle.toPreviewAttachmentArgs(): PreviewAttachmentArgs {
         cipherId = route.cipherId,
         attachmentId = route.attachmentId,
         fileName = route.fileName,
+        displaySize = route.displaySize,
+        isLargeFile = route.isLargeFile,
     )
 }
 
@@ -56,17 +62,11 @@ fun NavGraphBuilder.previewAttachmentDestination(
  * Navigate to the preview attachment screen.
  */
 fun NavController.navigateToPreviewAttachment(
-    cipherId: String,
-    attachmentId: String,
-    fileName: String,
+    route: PreviewAttachmentRoute,
     navOptions: NavOptions? = null,
 ) {
     navigate(
-        route = PreviewAttachmentRoute(
-            cipherId = cipherId,
-            attachmentId = attachmentId,
-            fileName = fileName,
-        ),
+        route = route,
         navOptions = navOptions,
     )
 }

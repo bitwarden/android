@@ -2980,6 +2980,12 @@ data class VaultItemListingState(
         get() = !isAutofill && !isCredentialManagerCreation && !isTotp
 
     /**
+     * Whether the search icon should be shown.
+     */
+    val shouldShowSearchIcon: Boolean
+        get() = viewState is ViewState.Content
+
+    /**
      * Whether the overflow menu should be shown.
      */
     val shouldShowOverflowMenu: Boolean

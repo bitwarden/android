@@ -191,7 +191,7 @@
     <string name="attachments">Přílohy</string>
     <string name="unable_to_download_file">Nelze stáhnout soubor.</string>
     <string name="downloading">Stahování...</string>
-    <string name="attachment_large_warning">Tato příloha má velikost %1$s. Opravdu ji chcete stáhnout do Vašeho zařízení?</string>
+    <string name="attachment_large_warning">Tento soubor je <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Opravdu jej chcete stáhnout?</string>
     <string name="authenticator_key">Autentizační klíč (TOTP)</string>
     <string name="verification_code_totp">Ověřovací kód (TOTP)</string>
     <string name="authenticator_key_added">Byl přidán ověřovací klíč.</string>
@@ -208,6 +208,7 @@ Načtení proběhne automaticky.</string>
     <string name="choose_file">Vybrat soubor</string>
     <string name="file">Soubor</string>
     <string name="no_file_chosen">Není vybrán žádný soubor</string>
+    <string name="file_name">Název souboru</string>
     <string name="no_attachments">Žádné přílohy.</string>
     <string name="file_source">Zdrojový soubor</string>
     <string name="max_file_size">Maximální velikost souboru je 100 MB.</string>
@@ -1249,9 +1250,11 @@ při opakování problémů.</string>
     <string name="external_link">Externí odkaz</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, externí odkaz</string>
     <string name="preview_not_available_for_files">Náhled není %1$s souborů k dispozici. Stále si je můžete stáhnout pro zobrazení na Vašem zařízení.</string>
+    <string name="this_file_is_too_large_to_preview">Tento soubor je pro náhled příliš velký. Stále si jej můžete stáhnout pro zobrazení na Vašem zařízení.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden nemohl dešifrovat tento soubor, takže náhled nelze zobrazit.</string>
     <string name="preview_unavailable_for_this_file">Náhled není pro tento soubor k dispozici. Stále si jej můžete stáhnout pro zobrazení na Vašem zařízení.</string>
     <string name="preview_unavailable">Náhled je nedostupný</string>
+    <string name="download_attachment">Stáhnout přílohu</string>
     <string name="upgraded_to_premium">Aktualizováno na Premium</string>
     <string name="unlock_premium_features">Odemkněte pokročilejší funkce s předplatným Premium.</string>
     <string name="per_month">/ měsíčně</string>

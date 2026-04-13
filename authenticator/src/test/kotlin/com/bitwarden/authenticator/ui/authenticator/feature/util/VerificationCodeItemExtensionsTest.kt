@@ -16,7 +16,7 @@ class VerificationCodeItemExtensionsTest {
         val alertThresholdSeconds = 7
         val favoriteItem = createMockVerificationCodeItem(
             number = 1,
-            source = createMockLocalAuthenticatorItemSource(number = 1, isFavorite = true),
+            source = createMockLocalAuthenticatorItemSource(isFavorite = true),
         )
         val nonFavoriteItem = createMockVerificationCodeItem(number = 2)
 

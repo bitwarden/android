@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.datasource.sdk
 import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.data.datasource.disk.util.FakeConfigDiskSource
 import com.bitwarden.network.model.ConfigResponseJson
+import com.bitwarden.network.model.ConfigResponseJson.EnvironmentJson
 import com.bitwarden.servercommunicationconfig.AcquiredCookie
 import com.bitwarden.servercommunicationconfig.BootstrapConfig
 import com.bitwarden.servercommunicationconfig.ServerCommunicationConfig
@@ -44,6 +45,7 @@ class ServerCommunicationConfigRepositoryTest {
     fun `get returns ServerCommunicationConfig with cookies when config exists`() = runTest {
         val hostname = "vault.bitwarden.com"
         val idpLoginUrl = "https://idp.example.com/login"
+        val vaultUrl = "https://api.bitwarden.com"
         val cookieName = "session"
         val cookieDomain = ".example.com"
         configDiskSource.serverConfig = ServerConfig(
@@ -53,7 +55,14 @@ class ServerCommunicationConfigRepositoryTest {
                 version = null,
                 gitHash = null,
                 server = null,
-                environment = null,
+                environment = EnvironmentJson(
+                    cloudRegion = null,
+                    vaultUrl = vaultUrl,
+                    apiUrl = null,
+                    identityUrl = null,
+                    notificationsUrl = null,
+                    ssoUrl = null,
+                ),
                 featureStates = null,
                 communication = ConfigResponseJson.CommunicationJson(
                     bootstrap = ConfigResponseJson.CommunicationJson.BootstrapJson(
@@ -81,6 +90,7 @@ class ServerCommunicationConfigRepositoryTest {
                 bootstrap = BootstrapConfig.SsoCookieVendor(
                     v1 = SsoCookieVendorConfig(
                         idpLoginUrl = idpLoginUrl,
+                        vaultUrl = vaultUrl,
                         cookieName = cookieName,
                         cookieDomain = cookieDomain,
                         cookieValue = listOf(
@@ -134,6 +144,7 @@ class ServerCommunicationConfigRepositoryTest {
                 bootstrap = BootstrapConfig.SsoCookieVendor(
                     v1 = SsoCookieVendorConfig(
                         idpLoginUrl = "https://$hostname/proxy-cookie-redirect-connector",
+                        vaultUrl = "https://api.bitwarden.com",
                         cookieName = "session",
                         cookieDomain = hostname,
                         cookieValue = listOf(
@@ -182,6 +193,7 @@ class ServerCommunicationConfigRepositoryTest {
             bootstrap = BootstrapConfig.SsoCookieVendor(
                 v1 = SsoCookieVendorConfig(
                     idpLoginUrl = "https://$hostname/proxy-cookie-redirect-connector",
+                    vaultUrl = null,
                     cookieName = "session",
                     cookieDomain = hostname,
                     cookieValue = null,

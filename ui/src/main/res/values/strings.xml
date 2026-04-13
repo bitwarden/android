@@ -171,7 +171,7 @@
     <string name="autofill_noun">Autofill</string>
     <string name="autofill_verb">Autofill</string>
     <string name="autofill_or_view">Do you want to autofill or view this item?</string>
-    <string name="search">Search</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">Learn about organizations</string>
     <string name="authenticator_app_title">Authenticator app</string>
     <string name="enter_verification_code_app">Enter the 6 digit verification code from your authenticator app.</string>
@@ -189,7 +189,7 @@
     <string name="attachments">Attachments</string>
     <string name="unable_to_download_file">Unable to download file.</string>
     <string name="downloading">Downloading…</string>
-    <string name="attachment_large_warning">This attachment is %1$s in size. Are you sure you want to download it onto your device?</string>
+    <string name="attachment_large_warning">This file is <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Would you like to download it?</string>
     <string name="authenticator_key">Authenticator key</string>
     <string name="verification_code_totp">Verification code (TOTP)</string>
     <string name="authenticator_key_added">Authenticator key added.</string>
@@ -228,6 +228,8 @@ Scanning will happen automatically.</string>
     <string name="copy_security_code">Copy security code</string>
     <string name="number">Number</string>
     <string name="security_code">Security code</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">Card</string>
     <string name="type_identity">Identity</string>
     <string name="type_login">Login</string>
@@ -1250,9 +1252,11 @@ Do you want to switch to this account?</string>
     <string name="recently_active"><annotation emphasis="bold">Recently active:</annotation> <annotation arg="0">%1$s</annotation></string>
     <string name="trusted">Trusted</string>
     <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
     <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
     <string name="preview_unavailable">Preview unavailable</string>
+    <string name="download_attachment">Download Attachment</string>
     <string name="upgraded_to_premium">Upgraded to premium</string>
     <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
     <string name="per_month">/ month</string>
@@ -1268,4 +1272,6 @@ Do you want to switch to this account?</string>
     <string name="payment_not_received_yet">Payment not received yet</string>
     <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
     <string name="go_back">Go back</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
 </resources>

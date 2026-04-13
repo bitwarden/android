@@ -1,14 +1,13 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
-import com.x8bit.bitwarden.data.platform.manager.GmsManager
-import com.x8bit.bitwarden.data.platform.manager.MINIMUM_CXP_GMS_VERSION
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -28,18 +27,19 @@ import javax.inject.Inject
 @HiltViewModel
 class VaultSettingsViewModel @Inject constructor(
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
+    private val buildInfoManager: BuildInfoManager,
     private val firstTimeActionManager: FirstTimeActionManager,
     private val featureFlagManager: FeatureFlagManager,
-    private val gmsManager: GmsManager,
     private val policyManager: PolicyManager,
 ) : BaseViewModel<VaultSettingsState, VaultSettingsEvent, VaultSettingsAction>(
     initialState = run {
         val firstTimeState = firstTimeActionManager.currentOrDefaultUserFirstTimeState
         VaultSettingsState(
             showImportActionCard = firstTimeState.showImportLoginsCardInSettings,
-            showImportItemsChevron = featureFlagManager.getFeatureFlag(
-                key = FlagKey.CredentialExchangeProtocolImport,
-            ) && gmsManager.isVersionAtLeast(MINIMUM_CXP_GMS_VERSION),
+            showImportItemsChevron = !buildInfoManager.isFdroid &&
+                featureFlagManager.getFeatureFlag(
+                    key = FlagKey.CredentialExchangeProtocolImport,
+                ),
         )
     },
 ) {
@@ -67,8 +67,8 @@ class VaultSettingsViewModel @Inject constructor(
             ) { isEnabled, policies ->
                 VaultSettingsAction.Internal.CredentialExchangeAvailabilityChanged(
                     isEnabled = isEnabled &&
-                        policies.isEmpty() &&
-                        gmsManager.isVersionAtLeast(MINIMUM_CXP_GMS_VERSION),
+                        !buildInfoManager.isFdroid &&
+                        policies.isEmpty(),
                 )
             }
             .onEach(::sendAction)
@@ -143,9 +143,9 @@ class VaultSettingsViewModel @Inject constructor(
     }
 
     private fun handleImportItemsClicked() {
-        if (featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport) &&
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP).isEmpty() &&
-            gmsManager.isVersionAtLeast(MINIMUM_CXP_GMS_VERSION)
+        if (!buildInfoManager.isFdroid &&
+            featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport) &&
+            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP).isEmpty()
         ) {
             sendEvent(VaultSettingsEvent.NavigateToImportItems)
         } else {
