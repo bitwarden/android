@@ -19,14 +19,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bitwarden.authenticator.ui.platform.util.isPortrait
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.StatusBarsAppearanceAffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -38,11 +36,13 @@ import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.bitwarden.ui.platform.composition.LocalQrCodeAnalyzer
 import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzer
+import com.bitwarden.ui.platform.model.WindowSize
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.theme.LocalBitwardenColorScheme
 import com.bitwarden.ui.platform.theme.color.darkBitwardenColorScheme
+import com.bitwarden.ui.platform.util.rememberWindowSize
 
 /**
  * The screen to scan QR codes for the application.
@@ -111,14 +111,18 @@ fun QrCodeScanScreen(
                 modifier = Modifier.fillMaxSize(),
             )
 
-            if (LocalConfiguration.current.isPortrait) {
-                PortraitQRCodeContent(
-                    onEnterCodeManuallyClick = onEnterCodeManuallyClick,
-                )
-            } else {
-                LandscapeQRCodeContent(
-                    onEnterCodeManuallyClick = onEnterCodeManuallyClick,
-                )
+            when (rememberWindowSize()) {
+                WindowSize.Compact -> {
+                    QrCodeContentCompact(
+                        onEnterCodeManuallyClick = onEnterCodeManuallyClick,
+                    )
+                }
+
+                WindowSize.Medium -> {
+                    QrCodeContentMedium(
+                        onEnterCodeManuallyClick = onEnterCodeManuallyClick,
+                    )
+                }
             }
         }
     }
@@ -152,7 +156,7 @@ private fun QrCodeScanDialogs(
 }
 
 @Composable
-private fun PortraitQRCodeContent(
+private fun QrCodeContentCompact(
     onEnterCodeManuallyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -193,7 +197,7 @@ private fun PortraitQRCodeContent(
 }
 
 @Composable
-private fun LandscapeQRCodeContent(
+private fun QrCodeContentMedium(
     onEnterCodeManuallyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
