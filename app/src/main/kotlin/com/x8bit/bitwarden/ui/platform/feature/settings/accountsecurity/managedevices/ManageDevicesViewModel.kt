@@ -24,7 +24,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.GetDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.GetDevicesResult
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.managedevices.util.toLastActivityLabel
-import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.managedevices.util.toReadableDeviceTypeName
+import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.managedevices.util.readableDeviceTypeName
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -269,7 +269,7 @@ class ManageDevicesViewModel @Inject constructor(
                 ManageDevicesState.ViewState.Content.DeviceItem(
                     id = device.id,
                     name = device.name,
-                    typeName = device.type.toReadableDeviceTypeName(resourceManager),
+                    typeName = device.type.readableDeviceTypeName,
                     isTrusted = device.isTrusted,
                     firstLoginDate = device.creationDate.toFormattedDateTimeStyle(
                         dateStyle = FormatStyle.MEDIUM,
@@ -278,7 +278,6 @@ class ManageDevicesViewModel @Inject constructor(
                     ),
                     lastActivityLabel = device.lastActivityDate.toLastActivityLabel(
                         clock = clock,
-                        resourceManager = resourceManager,
                     ),
                     status = status,
                     fingerprintPhrase = matchingRequest?.fingerprint,
