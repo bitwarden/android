@@ -23,6 +23,8 @@ import com.x8bit.bitwarden.data.auth.repository.util.getSsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.getWebAuthResult
 import com.x8bit.bitwarden.data.auth.util.getCompleteRegistrationDataIntentOrNull
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
+import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
+import com.x8bit.bitwarden.data.billing.util.getPremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
@@ -198,7 +200,7 @@ class MainViewModel @Inject constructor(
             is MainAction.SsoResult -> handleSsoResult(action)
             is MainAction.WebAuthnResult -> handleWebAuthnResult(action)
             is MainAction.CookieAcquisitionResult -> handleCookieAcquisitionResult(action)
-            is MainAction.PremiumCheckoutResult -> handlePremiumCheckoutResult()
+            is MainAction.PremiumCheckoutResult -> handlePremiumCheckoutResult(action)
             is MainAction.Internal -> handleInternalAction(action)
         }
     }
@@ -248,9 +250,12 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    private fun handlePremiumCheckoutResult() {
+    private fun handlePremiumCheckoutResult(action: MainAction.PremiumCheckoutResult) {
+        val callbackResult = action.authResult.getPremiumCheckoutCallbackResult()
         specialCircumstanceManager.specialCircumstance =
-            SpecialCircumstance.PremiumCheckoutResult
+            SpecialCircumstance.PremiumCheckoutResult(
+                isSuccess = callbackResult is PremiumCheckoutCallbackResult.Success,
+            )
     }
 
     private fun handleAppResumeDataUpdated(action: MainAction.ResumeScreenDataReceived) {
@@ -403,8 +408,11 @@ class MainViewModel @Inject constructor(
             }
 
             hasPremiumCheckoutCallback -> {
+                val callbackResult = intent.data.getPremiumCheckoutCallbackResult()
                 specialCircumstanceManager.specialCircumstance =
-                    SpecialCircumstance.PremiumCheckoutResult
+                    SpecialCircumstance.PremiumCheckoutResult(
+                        isSuccess = callbackResult is PremiumCheckoutCallbackResult.Success,
+                    )
             }
 
             hasGeneratorShortcut -> {

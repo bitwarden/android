@@ -321,6 +321,8 @@ private val DEFAULT_FREE_STATE = PlanState(
     planMode = PlanMode.Modal,
     viewState = PlanState.ViewState.Free(
         rate = "$1.65",
+        checkoutUrl = null,
+        isAwaitingPremiumStatus = false,
     ),
     dialogState = null,
 )

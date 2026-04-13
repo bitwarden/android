@@ -15,6 +15,9 @@ import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResult
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import java.time.Instant
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
 import io.mockk.every
@@ -24,6 +27,7 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -31,23 +35,34 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+@Suppress("LargeClass")
 class PlanViewModelTest : BaseViewModelTest() {
 
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val mockAuthRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
     }
-    private val mockBillingRepository: BillingRepository = mockk {
-        coEvery { getPremiumPlanPricing() } returns DEFAULT_PRICING_SUCCESS
-    }
+    private val mockBillingRepository: BillingRepository = mockk()
     private val mockSnackbarRelayManager: SnackbarRelayManager<SnackbarRelay> =
         mockk {
             every { sendSnackbarData(any(), any()) } just runs
         }
+    private val mutableSpecialCircumstanceStateFlow =
+        MutableStateFlow<SpecialCircumstance?>(null)
     private val mockSpecialCircumstanceManager: SpecialCircumstanceManager =
         mockk(relaxed = true) {
             every { specialCircumstance } returns null
+            every {
+                specialCircumstanceStateFlow
+            } returns mutableSpecialCircumstanceStateFlow
         }
+    private val mockVaultRepository: VaultRepository = mockk {
+        every { sync(any()) } just runs
+    }
+    private val mutableVaultLastSyncStateFlow = MutableStateFlow<Instant?>(null)
+    private val mockSettingsRepository: SettingsRepository = mockk {
+        every { vaultLastSyncStateFlow } returns mutableVaultLastSyncStateFlow
+    }
 
     @BeforeEach
     fun setup() {
@@ -97,17 +112,23 @@ class PlanViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `initial state should be WaitingForPayment when PremiumCheckoutResult special circumstance present`() =
+    fun `PremiumCheckoutResult with isSuccess false should show WaitingForPayment when not premium`() =
         runTest {
-            every {
-                mockSpecialCircumstanceManager.specialCircumstance
-            } returns SpecialCircumstance.PremiumCheckoutResult
-
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
+                assertEquals(DEFAULT_FREE_STATE, awaitItem())
+
+                mutableSpecialCircumstanceStateFlow.value =
+                    SpecialCircumstance.PremiumCheckoutResult(isSuccess = false)
+
                 assertEquals(
                     DEFAULT_FREE_STATE.copy(
+                        viewState = PlanState.ViewState.Free(
+                            rate = "$1.67",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = true,
+                        ),
                         dialogState = PlanState.DialogState.WaitingForPayment,
                     ),
                     awaitItem(),
@@ -116,6 +137,36 @@ class PlanViewModelTest : BaseViewModelTest() {
 
             verify {
                 mockSpecialCircumstanceManager.specialCircumstance = null
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `PremiumCheckoutResult with isSuccess true should send snackbar and navigate back when premium`() =
+        runTest {
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(
+                    DEFAULT_ACCOUNT.copy(isPremium = true),
+                ),
+            )
+
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                mutableSpecialCircumstanceStateFlow.value =
+                    SpecialCircumstance.PremiumCheckoutResult(isSuccess = true)
+
+                assertEquals(PlanEvent.NavigateBack, awaitItem())
+            }
+
+            verify {
+                mockSpecialCircumstanceManager.specialCircumstance = null
+                mockSnackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(
+                        message = BitwardenString.upgraded_to_premium.asText(),
+                    ),
+                    relay = SnackbarRelay.PREMIUM_UPGRADED,
+                )
             }
         }
 
@@ -131,7 +182,7 @@ class PlanViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `UpgradeNowClick should transition to Loading then emit LaunchBrowser and WaitingForPayment on success`() =
+    fun `UpgradeNowClick should transition to Loading then dismiss dialog and emit LaunchBrowser on success`() =
         runTest {
             val checkoutUrl = "https://checkout.stripe.com/session123"
             coEvery {
@@ -158,8 +209,9 @@ class PlanViewModelTest : BaseViewModelTest() {
                         viewState = PlanState.ViewState.Free(
                             rate = "$1.67",
                             checkoutUrl = checkoutUrl,
+                            isAwaitingPremiumStatus = false,
                         ),
-                        dialogState = PlanState.DialogState.WaitingForPayment,
+                        dialogState = null,
                     ),
                     stateFlow.awaitItem(),
                 )
@@ -210,7 +262,7 @@ class PlanViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `RetryClick should transition to Loading then emit LaunchBrowser and WaitingForPayment on success`() =
+    fun `RetryClick should transition to Loading then dismiss dialog and emit LaunchBrowser on success`() =
         runTest {
             val checkoutUrl = "https://checkout.stripe.com/session123"
             coEvery {
@@ -221,6 +273,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 initialState = DEFAULT_FREE_STATE.copy(
                     dialogState = PlanState.DialogState.CheckoutError,
                 ),
+                pricingResult = null,
             )
 
             viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
@@ -246,8 +299,9 @@ class PlanViewModelTest : BaseViewModelTest() {
                         viewState = PlanState.ViewState.Free(
                             rate = "$1.67",
                             checkoutUrl = checkoutUrl,
+                            isAwaitingPremiumStatus = false,
                         ),
-                        dialogState = PlanState.DialogState.WaitingForPayment,
+                        dialogState = null,
                     ),
                     stateFlow.awaitItem(),
                 )
@@ -269,6 +323,7 @@ class PlanViewModelTest : BaseViewModelTest() {
             initialState = DEFAULT_FREE_STATE.copy(
                 dialogState = PlanState.DialogState.CheckoutError,
             ),
+            pricingResult = null,
         )
 
         viewModel.stateFlow.test {
@@ -292,6 +347,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 initialState = DEFAULT_FREE_STATE.copy(
                     dialogState = PlanState.DialogState.WaitingForPayment,
                 ),
+                pricingResult = null,
             )
 
             viewModel.stateFlow.test {
@@ -315,12 +371,14 @@ class PlanViewModelTest : BaseViewModelTest() {
             val freeState = PlanState.ViewState.Free(
                 rate = "$1.67",
                 checkoutUrl = checkoutUrl,
+                isAwaitingPremiumStatus = false,
             )
             val viewModel = createViewModel(
                 initialState = DEFAULT_FREE_STATE.copy(
                     viewState = freeState,
                     dialogState = PlanState.DialogState.WaitingForPayment,
                 ),
+                pricingResult = null,
             )
 
             viewModel.eventFlow.test {
@@ -344,6 +402,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 initialState = DEFAULT_FREE_STATE.copy(
                     dialogState = PlanState.DialogState.WaitingForPayment,
                 ),
+                pricingResult = null,
             )
 
             viewModel.eventFlow.test {
@@ -356,29 +415,65 @@ class PlanViewModelTest : BaseViewModelTest() {
     @Test
     fun `premium status flip should send snackbar and emit NavigateBack when in WaitingForPayment`() =
         runTest {
-            val checkoutUrl = "https://checkout.stripe.com/session123"
-            coEvery {
-                mockBillingRepository.getCheckoutSessionUrl()
-            } returns CheckoutSessionResult.Success(url = checkoutUrl)
+            val viewModel = createViewModel(
+                initialState = DEFAULT_FREE_STATE.copy(
+                    viewState = PlanState.ViewState.Free(
+                        rate = "$1.67",
+                        checkoutUrl = null,
+                        isAwaitingPremiumStatus = true,
+                    ),
+                    dialogState = PlanState.DialogState.WaitingForPayment,
+                ),
+                pricingResult = null,
+            )
 
+            viewModel.eventFlow.test {
+                // Simulate premium status flip while WaitingForPayment.
+                mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                    accounts = listOf(
+                        DEFAULT_ACCOUNT.copy(isPremium = true),
+                    ),
+                )
+
+                assertEquals(PlanEvent.NavigateBack, awaitItem())
+            }
+
+            verify {
+                mockSnackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(
+                        message = BitwardenString.upgraded_to_premium.asText(),
+                    ),
+                    relay = SnackbarRelay.PREMIUM_UPGRADED,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `premium status flip via canceled special circumstance should send snackbar and emit NavigateBack`() =
+        runTest {
             val viewModel = createViewModel()
 
             viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
                 assertEquals(DEFAULT_FREE_STATE, stateFlow.awaitItem())
 
-                viewModel.trySendAction(PlanAction.UpgradeNowClick)
+                // Simulate returning from checkout canceled (isSuccess = false),
+                // then premium status updates.
+                mutableSpecialCircumstanceStateFlow.value =
+                    SpecialCircumstance.PremiumCheckoutResult(
+                        isSuccess = false,
+                    )
 
-                // Consume Loading and WaitingForPayment states.
-                stateFlow.awaitItem()
-                stateFlow.awaitItem()
                 assertEquals(
-                    PlanEvent.LaunchBrowser(
-                        url = checkoutUrl,
-                        authTabData = AuthTabData.CustomScheme(
-                            callbackUrl = PREMIUM_CHECKOUT_CALLBACK_URL,
+                    DEFAULT_FREE_STATE.copy(
+                        viewState = PlanState.ViewState.Free(
+                            rate = "$1.67",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = true,
                         ),
+                        dialogState = PlanState.DialogState.WaitingForPayment,
                     ),
-                    eventFlow.awaitItem(),
+                    stateFlow.awaitItem(),
                 )
 
                 // Simulate premium status flip.
@@ -406,33 +501,62 @@ class PlanViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `premium status flip should send snackbar and emit NavigateBack via special circumstance`() =
+    fun `PremiumCheckoutResult with isSuccess true should show Loading and trigger sync when not premium`() =
         runTest {
-            every {
-                mockSpecialCircumstanceManager.specialCircumstance
-            } returns SpecialCircumstance.PremiumCheckoutResult
-
             val viewModel = createViewModel()
 
-            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_FREE_STATE, awaitItem())
+
+                mutableSpecialCircumstanceStateFlow.value =
+                    SpecialCircumstance.PremiumCheckoutResult(isSuccess = true)
+
                 assertEquals(
                     DEFAULT_FREE_STATE.copy(
-                        dialogState = PlanState.DialogState.WaitingForPayment,
+                        viewState = PlanState.ViewState.Free(
+                            rate = "$1.67",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = true,
+                        ),
+                        dialogState = PlanState.DialogState.Loading(
+                            message = BitwardenString.syncing.asText(),
+                        ),
                     ),
-                    stateFlow.awaitItem(),
+                    awaitItem(),
                 )
+            }
 
-                // Simulate premium status flip.
+            verify {
+                mockSpecialCircumstanceManager.specialCircumstance = null
+                mockVaultRepository.sync(forced = true)
+            }
+        }
+
+    @Test
+    fun `UserStateUpdateReceive with premium during Loading should navigate back with snackbar`() =
+        runTest {
+            val viewModel = createViewModel(
+                initialState = DEFAULT_FREE_STATE.copy(
+                    viewState = PlanState.ViewState.Free(
+                        rate = "$1.67",
+                        checkoutUrl = null,
+                        isAwaitingPremiumStatus = true,
+                    ),
+                    dialogState = PlanState.DialogState.Loading(
+                        message = BitwardenString.syncing.asText(),
+                    ),
+                ),
+                pricingResult = null,
+            )
+
+            viewModel.eventFlow.test {
                 mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
                     accounts = listOf(
                         DEFAULT_ACCOUNT.copy(isPremium = true),
                     ),
                 )
 
-                assertEquals(
-                    PlanEvent.NavigateBack,
-                    eventFlow.awaitItem(),
-                )
+                assertEquals(PlanEvent.NavigateBack, awaitItem())
             }
 
             verify {
@@ -461,12 +585,57 @@ class PlanViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SyncCompleteReceive during Loading should fall back to WaitingForPayment when not premium`() =
+        runTest {
+            val awaitingFreeState = DEFAULT_FREE_STATE.copy(
+                viewState = PlanState.ViewState.Free(
+                    rate = "$1.67",
+                    checkoutUrl = null,
+                    isAwaitingPremiumStatus = true,
+                ),
+            )
+            val viewModel = createViewModel(
+                initialState = awaitingFreeState.copy(
+                    dialogState = PlanState.DialogState.Loading(
+                        message = BitwardenString.syncing.asText(),
+                    ),
+                ),
+                pricingResult = null,
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    awaitingFreeState.copy(
+                        dialogState = PlanState.DialogState.Loading(
+                            message = BitwardenString.syncing.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+
+                // Simulate sync completion without premium.
+                mutableVaultLastSyncStateFlow.value = Instant.now()
+
+                assertEquals(
+                    awaitingFreeState.copy(
+                        dialogState = PlanState.DialogState.PendingUpgrade,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
     @Test
     fun `saved state should be restored`() = runTest {
         val savedState = DEFAULT_FREE_STATE.copy(
             dialogState = PlanState.DialogState.CheckoutError,
         )
-        val viewModel = createViewModel(initialState = savedState)
+        val viewModel = createViewModel(
+            initialState = savedState,
+            pricingResult = null,
+        )
 
         viewModel.stateFlow.test {
             assertEquals(savedState, awaitItem())
@@ -480,13 +649,11 @@ class PlanViewModelTest : BaseViewModelTest() {
     @Test
     fun `pricing fetch failure should show GetPricingError dialog`() =
         runTest {
-            coEvery {
-                mockBillingRepository.getPremiumPlanPricing()
-            } returns PremiumPlanPricingResult.Error(
-                error = RuntimeException("Network error"),
+            val viewModel = createViewModel(
+                pricingResult = PremiumPlanPricingResult.Error(
+                    error = RuntimeException("Network error"),
+                ),
             )
-
-            val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
                 assertEquals(
@@ -494,6 +661,8 @@ class PlanViewModelTest : BaseViewModelTest() {
                         planMode = PlanMode.Modal,
                         viewState = PlanState.ViewState.Free(
                             rate = "--",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = false,
                         ),
                         dialogState = PlanState.DialogState.GetPricingError(
                             title = BitwardenString.an_error_has_occurred.asText(),
@@ -508,13 +677,11 @@ class PlanViewModelTest : BaseViewModelTest() {
     @Test
     fun `RetryPricingClick should transition to Loading then Free on success`() =
         runTest {
-            coEvery {
-                mockBillingRepository.getPremiumPlanPricing()
-            } returns PremiumPlanPricingResult.Error(
-                error = RuntimeException("Network error"),
-            ) andThen DEFAULT_PRICING_SUCCESS
-
-            val viewModel = createViewModel()
+            val viewModel = createViewModel(
+                pricingResult = PremiumPlanPricingResult.Error(
+                    error = RuntimeException("Network error"),
+                ),
+            )
 
             viewModel.stateFlow.test {
                 assertEquals(
@@ -522,6 +689,8 @@ class PlanViewModelTest : BaseViewModelTest() {
                         planMode = PlanMode.Modal,
                         viewState = PlanState.ViewState.Free(
                             rate = "--",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = false,
                         ),
                         dialogState = PlanState.DialogState.GetPricingError(
                             title = BitwardenString.an_error_has_occurred.asText(),
@@ -531,6 +700,11 @@ class PlanViewModelTest : BaseViewModelTest() {
                     awaitItem(),
                 )
 
+                // Override mock for retry to return success.
+                coEvery {
+                    mockBillingRepository.getPremiumPlanPricing()
+                } returns DEFAULT_PRICING_SUCCESS
+
                 viewModel.trySendAction(PlanAction.RetryPricingClick)
 
                 assertEquals(
@@ -538,6 +712,8 @@ class PlanViewModelTest : BaseViewModelTest() {
                         planMode = PlanMode.Modal,
                         viewState = PlanState.ViewState.Free(
                             rate = "--",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = false,
                         ),
                         dialogState = PlanState.DialogState.Loading(
                             message = BitwardenString.loading.asText(),
@@ -555,13 +731,11 @@ class PlanViewModelTest : BaseViewModelTest() {
     @Test
     fun `ClosePricingErrorClick should clear dialog and emit NavigateBack`() =
         runTest {
-            coEvery {
-                mockBillingRepository.getPremiumPlanPricing()
-            } returns PremiumPlanPricingResult.Error(
-                error = RuntimeException("Network error"),
+            val viewModel = createViewModel(
+                pricingResult = PremiumPlanPricingResult.Error(
+                    error = RuntimeException("Network error"),
+                ),
             )
-
-            val viewModel = createViewModel()
 
             viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
                 assertEquals(
@@ -569,6 +743,8 @@ class PlanViewModelTest : BaseViewModelTest() {
                         planMode = PlanMode.Modal,
                         viewState = PlanState.ViewState.Free(
                             rate = "--",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = false,
                         ),
                         dialogState = PlanState.DialogState.GetPricingError(
                             title = BitwardenString.an_error_has_occurred.asText(),
@@ -585,6 +761,8 @@ class PlanViewModelTest : BaseViewModelTest() {
                         planMode = PlanMode.Modal,
                         viewState = PlanState.ViewState.Free(
                             rate = "--",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = false,
                         ),
                         dialogState = null,
                     ),
@@ -602,7 +780,13 @@ class PlanViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         initialState: PlanState? = null,
         planMode: PlanMode = PlanMode.Modal,
+        pricingResult: PremiumPlanPricingResult? = DEFAULT_PRICING_SUCCESS,
     ): PlanViewModel {
+        coEvery {
+            mockBillingRepository.getPremiumPlanPricing()
+        } coAnswers {
+            pricingResult ?: awaitCancellation()
+        }
         val savedStateHandle = SavedStateHandle().apply {
             set("state", initialState)
             every { toPlanArgs() } returns PlanArgs(planMode = planMode)
@@ -613,6 +797,8 @@ class PlanViewModelTest : BaseViewModelTest() {
             billingRepository = mockBillingRepository,
             snackbarRelayManager = mockSnackbarRelayManager,
             specialCircumstanceManager = mockSpecialCircumstanceManager,
+            vaultRepository = mockVaultRepository,
+            settingsRepository = mockSettingsRepository,
         )
     }
 }
@@ -649,6 +835,8 @@ private val DEFAULT_FREE_STATE = PlanState(
     planMode = PlanMode.Modal,
     viewState = PlanState.ViewState.Free(
         rate = "$1.67",
+        checkoutUrl = null,
+        isAwaitingPremiumStatus = false,
     ),
     dialogState = null,
 )

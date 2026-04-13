@@ -20,8 +20,11 @@ import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResult
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -36,36 +39,32 @@ private const val PLACEHOLDER_RATE = "--"
 /**
  * The callback URL for the premium checkout custom tab.
  */
-const val PREMIUM_CHECKOUT_CALLBACK_URL = "bitwarden://premium-upgrade-callback"
+const val PREMIUM_CHECKOUT_CALLBACK_URL = "bitwarden://premium-checkout-result"
 
 /**
  * View model for the plan screen, handling the free-user upgrade flow.
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LongParameterList")
 @HiltViewModel
 class PlanViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val billingRepository: BillingRepository,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
-    authRepository: AuthRepository,
-    specialCircumstanceManager: SpecialCircumstanceManager,
+    private val authRepository: AuthRepository,
+    private val specialCircumstanceManager: SpecialCircumstanceManager,
+    private val vaultRepository: VaultRepository,
+    settingsRepository: SettingsRepository,
 ) : BaseViewModel<PlanState, PlanEvent, PlanAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: run {
-        val planMode = savedStateHandle.toPlanArgs().planMode
-        val dialogState = when (specialCircumstanceManager.specialCircumstance) {
-            is SpecialCircumstance.PremiumCheckoutResult -> {
-                specialCircumstanceManager.specialCircumstance = null
-                PlanState.DialogState.WaitingForPayment
-            }
-
-            else -> null
-        }
-        PlanState(
-            planMode = planMode,
-            viewState = PlanState.ViewState.Free(rate = PLACEHOLDER_RATE),
-            dialogState = dialogState,
-        )
-    },
+    initialState = savedStateHandle[KEY_STATE]
+        ?: PlanState(
+            planMode = savedStateHandle.toPlanArgs().planMode,
+            viewState = PlanState.ViewState.Free(
+                rate = PLACEHOLDER_RATE,
+                checkoutUrl = null,
+                isAwaitingPremiumStatus = false,
+            ),
+            dialogState = null,
+        ),
 ) {
     init {
         stateFlow
@@ -78,10 +77,24 @@ class PlanViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        specialCircumstanceManager
+            .specialCircumstanceStateFlow
+            .map { PlanAction.Internal.SpecialCircumstanceReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        settingsRepository
+            .vaultLastSyncStateFlow
+            .drop(count = 1)
+            .map { PlanAction.Internal.SyncCompleteReceive }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         viewModelScope.launch {
-            val result = billingRepository.getPremiumPlanPricing()
             sendAction(
-                PlanAction.Internal.PricingResultReceive(result),
+                PlanAction.Internal.PricingResultReceive(
+                    result = billingRepository.getPremiumPlanPricing(),
+                ),
             )
         }
     }
@@ -105,12 +118,22 @@ class PlanViewModel @Inject constructor(
 
             is PlanAction.CancelWaiting -> handleCancelWaiting()
             is PlanAction.GoBackClick -> handleGoBackClick()
+            is PlanAction.SyncClick -> handleSyncClick()
+            is PlanAction.ContinueClick -> handleContinueClick()
             is PlanAction.Internal.CheckoutUrlReceive -> {
                 handleCheckoutUrlReceive(action)
             }
 
             is PlanAction.Internal.UserStateUpdateReceive -> {
                 handleUserStateUpdateReceive(action)
+            }
+
+            is PlanAction.Internal.SpecialCircumstanceReceive -> {
+                handleSpecialCircumstanceReceive(action)
+            }
+
+            is PlanAction.Internal.SyncCompleteReceive -> {
+                handleSyncCompleteReceive()
             }
 
             is PlanAction.Internal.PricingResultReceive -> {
@@ -132,9 +155,10 @@ class PlanViewModel @Inject constructor(
             )
         }
         viewModelScope.launch {
-            val result = billingRepository.getCheckoutSessionUrl()
             sendAction(
-                PlanAction.Internal.CheckoutUrlReceive(result),
+                PlanAction.Internal.CheckoutUrlReceive(
+                    result = billingRepository.getCheckoutSessionUrl(),
+                ),
             )
         }
     }
@@ -154,6 +178,22 @@ class PlanViewModel @Inject constructor(
 
     private fun handleCancelWaiting() {
         mutableStateFlow.update { it.copy(dialogState = null) }
+    }
+
+    private fun handleSyncClick() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = PlanState.DialogState.Loading(
+                    message = BitwardenString.syncing.asText(),
+                ),
+            )
+        }
+        vaultRepository.sync(forced = true)
+    }
+
+    private fun handleContinueClick() {
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        sendEvent(PlanEvent.NavigateBack)
     }
 
     private fun handleGoBackClick() {
@@ -190,7 +230,7 @@ class PlanViewModel @Inject constructor(
                             viewState = freeState.copy(
                                 checkoutUrl = result.url,
                             ),
-                            dialogState = PlanState.DialogState.WaitingForPayment,
+                            dialogState = null,
                         )
                     }
                 }
@@ -207,18 +247,94 @@ class PlanViewModel @Inject constructor(
     private fun handleUserStateUpdateReceive(
         action: PlanAction.Internal.UserStateUpdateReceive,
     ) {
-        if (state.dialogState !is PlanState.DialogState.WaitingForPayment) return
+        onFreeContent { freeState ->
+            if (!freeState.isAwaitingPremiumStatus) return@onFreeContent
 
-        val isPremium = action.userState?.activeAccount?.isPremium == true
-        if (isPremium) {
-            snackbarRelayManager.sendSnackbarData(
-                data = BitwardenSnackbarData(
-                    message = BitwardenString.upgraded_to_premium.asText(),
-                ),
-                relay = SnackbarRelay.PREMIUM_UPGRADED,
-            )
-            sendEvent(PlanEvent.NavigateBack)
+            val isPremium = action.userState?.activeAccount?.isPremium == true
+            if (isPremium) {
+                handlePremiumUpgradeSuccess()
+            }
         }
+    }
+
+    private fun handleSpecialCircumstanceReceive(
+        action: PlanAction.Internal.SpecialCircumstanceReceive,
+    ) {
+        val checkoutResult = action.specialCircumstance
+            as? SpecialCircumstance.PremiumCheckoutResult ?: return
+        specialCircumstanceManager.specialCircumstance = null
+
+        if (!checkoutResult.isSuccess) {
+            // User canceled checkout — show "Payment not received yet" dialog.
+            onFreeContent { freeState ->
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = freeState.copy(
+                            isAwaitingPremiumStatus = true,
+                        ),
+                        dialogState = PlanState.DialogState.WaitingForPayment,
+                    )
+                }
+            }
+            return
+        }
+
+        // Success — check if already premium, otherwise trigger background sync.
+        val isPremium = authRepository
+            .userStateFlow
+            .value
+            ?.activeAccount
+            ?.isPremium == true
+        if (isPremium) {
+            handlePremiumUpgradeSuccess()
+        } else {
+            onFreeContent { freeState ->
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = freeState.copy(
+                            isAwaitingPremiumStatus = true,
+                        ),
+                        dialogState = PlanState.DialogState.Loading(
+                            message = BitwardenString.syncing.asText(),
+                        ),
+                    )
+                }
+            }
+            vaultRepository.sync(forced = true)
+        }
+    }
+
+    private fun handleSyncCompleteReceive() {
+        onFreeContent { freeState ->
+            if (!freeState.isAwaitingPremiumStatus) return@onFreeContent
+
+            val isPremium = authRepository
+                .userStateFlow
+                .value
+                ?.activeAccount
+                ?.isPremium == true
+            if (isPremium) {
+                handlePremiumUpgradeSuccess()
+            } else {
+                // Sync completed but premium not yet provisioned —
+                // prompt the user to retry or continue as free.
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = PlanState.DialogState.PendingUpgrade,
+                    )
+                }
+            }
+        }
+    }
+
+    private fun handlePremiumUpgradeSuccess() {
+        snackbarRelayManager.sendSnackbarData(
+            data = BitwardenSnackbarData(
+                message = BitwardenString.upgraded_to_premium.asText(),
+            ),
+            relay = SnackbarRelay.PREMIUM_UPGRADED,
+        )
+        sendEvent(PlanEvent.NavigateBack)
     }
 
     private inline fun onFreeContent(
@@ -332,7 +448,8 @@ data class PlanState(
         @Parcelize
         data class Free(
             override val rate: String,
-            val checkoutUrl: String? = null,
+            val checkoutUrl: String?,
+            val isAwaitingPremiumStatus: Boolean,
         ) : ViewState()
     }
 
@@ -365,10 +482,18 @@ data class PlanState(
         ) : DialogState()
 
         /**
-         * Waiting dialog shown after the browser has been launched for checkout.
+         * Waiting dialog shown when the user returns from checkout
+         * without completing payment.
          */
         @Parcelize
         data object WaitingForPayment : DialogState()
+
+        /**
+         * Dialog shown after a successful checkout when premium
+         * status has not yet been provisioned by the server.
+         */
+        @Parcelize
+        data object PendingUpgrade : DialogState()
     }
 }
 
@@ -438,6 +563,16 @@ sealed class PlanAction {
     data object GoBackClick : PlanAction()
 
     /**
+     * The user clicked sync on the pending upgrade dialog.
+     */
+    data object SyncClick : PlanAction()
+
+    /**
+     * The user chose to continue without waiting for upgrade.
+     */
+    data object ContinueClick : PlanAction()
+
+    /**
      * Models actions the view model sends itself.
      */
     sealed class Internal : PlanAction() {
@@ -456,6 +591,18 @@ sealed class PlanAction {
         data class UserStateUpdateReceive(
             val userState: UserState?,
         ) : Internal()
+
+        /**
+         * A special circumstance update has been received.
+         */
+        data class SpecialCircumstanceReceive(
+            val specialCircumstance: SpecialCircumstance?,
+        ) : Internal()
+
+        /**
+         * A vault sync has completed.
+         */
+        data object SyncCompleteReceive : Internal()
 
         /**
          * A pricing result has been received from the repository.

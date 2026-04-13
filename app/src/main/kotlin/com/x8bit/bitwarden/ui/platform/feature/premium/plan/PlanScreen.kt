@@ -156,6 +156,20 @@ private fun FreeDialogs(
             )
         }
 
+        is PlanState.DialogState.PendingUpgrade -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = BitwardenString.upgrade_pending),
+                message = stringResource(
+                    id = BitwardenString.upgrade_pending_message,
+                ),
+                confirmButtonText = stringResource(id = BitwardenString.sync_now),
+                dismissButtonText = stringResource(id = BitwardenString.continue_text),
+                onConfirmClick = handlers.onSyncClick,
+                onDismissClick = handlers.onContinueClick,
+                onDismissRequest = handlers.onContinueClick,
+            )
+        }
+
         is PlanState.DialogState.Loading -> {
             BitwardenLoadingDialog(text = dialogState.message())
         }
@@ -301,7 +315,11 @@ private fun PlanScreenFreeAccount_preview() {
     BitwardenTheme {
         BitwardenScaffold {
             FreeContent(
-                viewState = PlanState.ViewState.Free(rate = "$1.67"),
+                viewState = PlanState.ViewState.Free(
+                    rate = "$1.67",
+                    checkoutUrl = null,
+                    isAwaitingPremiumStatus = false,
+                ),
                 isDialogShowing = false,
                 handlers = PlanHandlers(
                     onBackClick = {},
@@ -312,6 +330,8 @@ private fun PlanScreenFreeAccount_preview() {
                     onClosePricingErrorClick = {},
                     onCancelWaiting = {},
                     onGoBackClick = {},
+                    onSyncClick = {},
+                    onContinueClick = {},
                 ),
             )
         }

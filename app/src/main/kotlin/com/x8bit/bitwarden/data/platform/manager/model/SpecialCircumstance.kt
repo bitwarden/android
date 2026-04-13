@@ -137,9 +137,14 @@ sealed class SpecialCircumstance : Parcelable {
     /**
      * The app was launched via a Premium checkout callback deep link,
      * indicating the user is returning from a Stripe checkout session.
+     *
+     * @property isSuccess `true` if the checkout completed successfully, `false` if the user
+     * canceled or closed the checkout without completing payment.
      */
     @Parcelize
-    data object PremiumCheckoutResult : SpecialCircumstance()
+    data class PremiumCheckoutResult(
+        val isSuccess: Boolean,
+    ) : SpecialCircumstance()
 
     /**
      * The app was launched to select an account to export credentials from.

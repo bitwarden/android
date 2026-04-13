@@ -57,14 +57,25 @@ class ShortcutUtilsTest {
         assertFalse(mockIntent.isPasswordGeneratorShortcut)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `isPremiumCheckoutCallback should return true when dataString is checkout callback`() {
+    fun `isPremiumCheckoutCallback should return true when dataString is success checkout callback`() {
         val mockIntent = mockk<Intent> {
-            every { dataString } returns "bitwarden://premium-upgrade-callback"
+            every { dataString } returns "bitwarden://premium-checkout-result?result=success"
         }
         assertTrue(mockIntent.isPremiumCheckoutCallback)
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isPremiumCheckoutCallback should return true when dataString is canceled checkout callback`() {
+        val mockIntent = mockk<Intent> {
+            every { dataString } returns "bitwarden://premium-checkout-result?result=canceled"
+        }
+        assertTrue(mockIntent.isPremiumCheckoutCallback)
+    }
+
+    @Suppress("MaxLineLength")
     @Test
     fun `isPremiumCheckoutCallback should return false when dataString is not checkout callback`() {
         val mockIntent = mockk<Intent> {

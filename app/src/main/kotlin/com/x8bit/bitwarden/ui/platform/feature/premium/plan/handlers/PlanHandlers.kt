@@ -16,6 +16,8 @@ data class PlanHandlers(
     val onClosePricingErrorClick: () -> Unit,
     val onCancelWaiting: () -> Unit,
     val onGoBackClick: () -> Unit,
+    val onSyncClick: () -> Unit,
+    val onContinueClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -34,6 +36,8 @@ data class PlanHandlers(
             },
             onCancelWaiting = { viewModel.trySendAction(PlanAction.CancelWaiting) },
             onGoBackClick = { viewModel.trySendAction(PlanAction.GoBackClick) },
+            onSyncClick = { viewModel.trySendAction(PlanAction.SyncClick) },
+            onContinueClick = { viewModel.trySendAction(PlanAction.ContinueClick) },
         )
     }
 }
