@@ -23,12 +23,11 @@ import com.x8bit.bitwarden.data.auth.repository.util.getSsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.getWebAuthResult
 import com.x8bit.bitwarden.data.auth.util.getCompleteRegistrationDataIntentOrNull
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
-import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
-import com.x8bit.bitwarden.data.billing.util.getPremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
+import com.x8bit.bitwarden.data.billing.util.getPremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.credentials.manager.CredentialProviderRequestManager
 import com.x8bit.bitwarden.data.credentials.manager.model.CredentialProviderRequest
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
@@ -251,11 +250,9 @@ class MainViewModel @Inject constructor(
     }
 
     private fun handlePremiumCheckoutResult(action: MainAction.PremiumCheckoutResult) {
-        val callbackResult = action.authResult.getPremiumCheckoutCallbackResult()
-        specialCircumstanceManager.specialCircumstance =
-            SpecialCircumstance.PremiumCheckoutResult(
-                isSuccess = callbackResult is PremiumCheckoutCallbackResult.Success,
-            )
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.PremiumCheckoutResult(
+            callbackResult = action.authResult.getPremiumCheckoutCallbackResult(),
+        )
     }
 
     private fun handleAppResumeDataUpdated(action: MainAction.ResumeScreenDataReceived) {
@@ -408,10 +405,9 @@ class MainViewModel @Inject constructor(
             }
 
             hasPremiumCheckoutCallback -> {
-                val callbackResult = intent.data.getPremiumCheckoutCallbackResult()
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.PremiumCheckoutResult(
-                        isSuccess = callbackResult is PremiumCheckoutCallbackResult.Success,
+                        callbackResult = intent.data.getPremiumCheckoutCallbackResult(),
                     )
             }
 

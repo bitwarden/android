@@ -5,6 +5,7 @@ import androidx.credentials.CredentialManager
 import com.bitwarden.cxf.model.ImportCredentialsRequestData
 import com.bitwarden.ui.platform.manager.share.model.ShareData
 import com.bitwarden.ui.platform.model.TotpData
+import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
@@ -137,13 +138,10 @@ sealed class SpecialCircumstance : Parcelable {
     /**
      * The app was launched via a Premium checkout callback deep link,
      * indicating the user is returning from a Stripe checkout session.
-     *
-     * @property isSuccess `true` if the checkout completed successfully, `false` if the user
-     * canceled or closed the checkout without completing payment.
      */
     @Parcelize
     data class PremiumCheckoutResult(
-        val isSuccess: Boolean,
+        val callbackResult: PremiumCheckoutCallbackResult,
     ) : SpecialCircumstance()
 
     /**

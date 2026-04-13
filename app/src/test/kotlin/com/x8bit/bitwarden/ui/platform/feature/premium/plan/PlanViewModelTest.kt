@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.billing.repository.BillingRepository
 import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResult
+import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
@@ -118,7 +119,9 @@ class PlanViewModelTest : BaseViewModelTest() {
                 assertEquals(DEFAULT_FREE_STATE, awaitItem())
 
                 mutableSpecialCircumstanceStateFlow.value =
-                    SpecialCircumstance.PremiumCheckoutResult(isSuccess = false)
+                    SpecialCircumstance.PremiumCheckoutResult(
+                        callbackResult = PremiumCheckoutCallbackResult.Canceled,
+                    )
 
                 assertEquals(
                     DEFAULT_FREE_STATE.copy(
@@ -152,7 +155,9 @@ class PlanViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 mutableSpecialCircumstanceStateFlow.value =
-                    SpecialCircumstance.PremiumCheckoutResult(isSuccess = true)
+                    SpecialCircumstance.PremiumCheckoutResult(
+                        callbackResult = PremiumCheckoutCallbackResult.Success,
+                    )
 
                 assertEquals(PlanEvent.NavigateBack, awaitItem())
             }
@@ -459,7 +464,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 // then premium status updates.
                 mutableSpecialCircumstanceStateFlow.value =
                     SpecialCircumstance.PremiumCheckoutResult(
-                        isSuccess = false,
+                        callbackResult = PremiumCheckoutCallbackResult.Canceled,
                     )
 
                 assertEquals(
@@ -507,7 +512,9 @@ class PlanViewModelTest : BaseViewModelTest() {
                 assertEquals(DEFAULT_FREE_STATE, awaitItem())
 
                 mutableSpecialCircumstanceStateFlow.value =
-                    SpecialCircumstance.PremiumCheckoutResult(isSuccess = true)
+                    SpecialCircumstance.PremiumCheckoutResult(
+                        callbackResult = PremiumCheckoutCallbackResult.Success,
+                    )
 
                 // Loading while sync is in progress.
                 awaitItem()

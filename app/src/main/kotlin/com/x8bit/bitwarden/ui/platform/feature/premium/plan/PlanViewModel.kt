@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResult
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
@@ -255,7 +256,7 @@ class PlanViewModel @Inject constructor(
             as? SpecialCircumstance.PremiumCheckoutResult ?: return
         specialCircumstanceManager.specialCircumstance = null
 
-        if (!checkoutResult.isSuccess) {
+        if (checkoutResult.callbackResult is PremiumCheckoutCallbackResult.Canceled) {
             // User canceled checkout — show "Payment not received yet" dialog.
             onFreeContent { freeState ->
                 mutableStateFlow.update {

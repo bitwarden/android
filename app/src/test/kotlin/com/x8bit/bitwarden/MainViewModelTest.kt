@@ -883,7 +883,9 @@ class MainViewModelTest : BaseViewModelTest() {
             MainAction.ReceiveFirstIntent(intent = mockIntent),
         )
         assertEquals(
-            SpecialCircumstance.PremiumCheckoutResult(isSuccess = true),
+            SpecialCircumstance.PremiumCheckoutResult(
+                callbackResult = PremiumCheckoutCallbackResult.Success,
+            ),
             specialCircumstanceManager.specialCircumstance,
         )
     }
@@ -904,7 +906,9 @@ class MainViewModelTest : BaseViewModelTest() {
             MainAction.ReceiveFirstIntent(intent = mockIntent),
         )
         assertEquals(
-            SpecialCircumstance.PremiumCheckoutResult(isSuccess = false),
+            SpecialCircumstance.PremiumCheckoutResult(
+                callbackResult = PremiumCheckoutCallbackResult.Canceled,
+            ),
             specialCircumstanceManager.specialCircumstance,
         )
     }
@@ -925,7 +929,9 @@ class MainViewModelTest : BaseViewModelTest() {
             MainAction.ReceiveNewIntent(intent = mockIntent),
         )
         assertEquals(
-            SpecialCircumstance.PremiumCheckoutResult(isSuccess = true),
+            SpecialCircumstance.PremiumCheckoutResult(
+                callbackResult = PremiumCheckoutCallbackResult.Success,
+            ),
             specialCircumstanceManager.specialCircumstance,
         )
     }
@@ -946,7 +952,9 @@ class MainViewModelTest : BaseViewModelTest() {
             MainAction.ReceiveNewIntent(intent = mockIntent),
         )
         assertEquals(
-            SpecialCircumstance.PremiumCheckoutResult(isSuccess = false),
+            SpecialCircumstance.PremiumCheckoutResult(
+                callbackResult = PremiumCheckoutCallbackResult.Canceled,
+            ),
             specialCircumstanceManager.specialCircumstance,
         )
     }
@@ -1257,7 +1265,9 @@ class MainViewModelTest : BaseViewModelTest() {
         )
 
         assertEquals(
-            SpecialCircumstance.PremiumCheckoutResult(isSuccess = true),
+            SpecialCircumstance.PremiumCheckoutResult(
+                callbackResult = PremiumCheckoutCallbackResult.Success,
+            ),
             specialCircumstanceManager.specialCircumstance,
         )
     }
@@ -1275,7 +1285,9 @@ class MainViewModelTest : BaseViewModelTest() {
         )
 
         assertEquals(
-            SpecialCircumstance.PremiumCheckoutResult(isSuccess = false),
+            SpecialCircumstance.PremiumCheckoutResult(
+                callbackResult = PremiumCheckoutCallbackResult.Canceled,
+            ),
             specialCircumstanceManager.specialCircumstance,
         )
     }
