@@ -20,11 +20,10 @@ import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResult
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -53,7 +52,6 @@ class PlanViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val vaultRepository: VaultRepository,
-    settingsRepository: SettingsRepository,
 ) : BaseViewModel<PlanState, PlanEvent, PlanAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: PlanState(
@@ -80,13 +78,6 @@ class PlanViewModel @Inject constructor(
         specialCircumstanceManager
             .specialCircumstanceStateFlow
             .map { PlanAction.Internal.SpecialCircumstanceReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        settingsRepository
-            .vaultLastSyncStateFlow
-            .drop(count = 1)
-            .map { PlanAction.Internal.SyncCompleteReceive }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -133,7 +124,7 @@ class PlanViewModel @Inject constructor(
             }
 
             is PlanAction.Internal.SyncCompleteReceive -> {
-                handleSyncCompleteReceive()
+                handleSyncCompleteReceive(action)
             }
 
             is PlanAction.Internal.PricingResultReceive -> {
@@ -188,7 +179,7 @@ class PlanViewModel @Inject constructor(
                 ),
             )
         }
-        vaultRepository.sync(forced = true)
+        triggerSync()
     }
 
     private fun handleContinueClick() {
@@ -300,11 +291,20 @@ class PlanViewModel @Inject constructor(
                     )
                 }
             }
-            vaultRepository.sync(forced = true)
+            triggerSync()
         }
     }
 
-    private fun handleSyncCompleteReceive() {
+    private fun triggerSync() {
+        viewModelScope.launch {
+            val result = vaultRepository.syncForResult(forced = true)
+            sendAction(PlanAction.Internal.SyncCompleteReceive(result))
+        }
+    }
+
+    private fun handleSyncCompleteReceive(
+        action: PlanAction.Internal.SyncCompleteReceive,
+    ) {
         onFreeContent { freeState ->
             if (!freeState.isAwaitingPremiumStatus) return@onFreeContent
 
@@ -602,7 +602,9 @@ sealed class PlanAction {
         /**
          * A vault sync has completed.
          */
-        data object SyncCompleteReceive : Internal()
+        data class SyncCompleteReceive(
+            val result: SyncVaultDataResult,
+        ) : Internal()
 
         /**
          * A pricing result has been received from the repository.

@@ -15,11 +15,11 @@ import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResult
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import java.time.Instant
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -57,11 +57,9 @@ class PlanViewModelTest : BaseViewModelTest() {
             } returns mutableSpecialCircumstanceStateFlow
         }
     private val mockVaultRepository: VaultRepository = mockk {
-        every { sync(any()) } just runs
-    }
-    private val mutableVaultLastSyncStateFlow = MutableStateFlow<Instant?>(null)
-    private val mockSettingsRepository: SettingsRepository = mockk {
-        every { vaultLastSyncStateFlow } returns mutableVaultLastSyncStateFlow
+        coEvery {
+            syncForResult(any())
+        } returns SyncVaultDataResult.Success(itemsAvailable = true)
     }
 
     @BeforeEach
@@ -501,7 +499,7 @@ class PlanViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `PremiumCheckoutResult with isSuccess true should show Loading and trigger sync when not premium`() =
+    fun `PremiumCheckoutResult with isSuccess true should trigger sync and show PendingUpgrade when not premium`() =
         runTest {
             val viewModel = createViewModel()
 
@@ -511,6 +509,10 @@ class PlanViewModelTest : BaseViewModelTest() {
                 mutableSpecialCircumstanceStateFlow.value =
                     SpecialCircumstance.PremiumCheckoutResult(isSuccess = true)
 
+                // Loading while sync is in progress.
+                awaitItem()
+
+                // Sync completes without premium — PendingUpgrade shown.
                 assertEquals(
                     DEFAULT_FREE_STATE.copy(
                         viewState = PlanState.ViewState.Free(
@@ -518,9 +520,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = true,
                         ),
-                        dialogState = PlanState.DialogState.Loading(
-                            message = BitwardenString.syncing.asText(),
-                        ),
+                        dialogState = PlanState.DialogState.PendingUpgrade,
                     ),
                     awaitItem(),
                 )
@@ -528,7 +528,9 @@ class PlanViewModelTest : BaseViewModelTest() {
 
             verify {
                 mockSpecialCircumstanceManager.specialCircumstance = null
-                mockVaultRepository.sync(forced = true)
+            }
+            coVerify {
+                mockVaultRepository.syncForResult(forced = true)
             }
         }
 
@@ -582,48 +584,6 @@ class PlanViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 expectNoEvents()
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `SyncCompleteReceive during Loading should fall back to WaitingForPayment when not premium`() =
-        runTest {
-            val awaitingFreeState = DEFAULT_FREE_STATE.copy(
-                viewState = PlanState.ViewState.Free(
-                    rate = "$1.67",
-                    checkoutUrl = null,
-                    isAwaitingPremiumStatus = true,
-                ),
-            )
-            val viewModel = createViewModel(
-                initialState = awaitingFreeState.copy(
-                    dialogState = PlanState.DialogState.Loading(
-                        message = BitwardenString.syncing.asText(),
-                    ),
-                ),
-                pricingResult = null,
-            )
-
-            viewModel.stateFlow.test {
-                assertEquals(
-                    awaitingFreeState.copy(
-                        dialogState = PlanState.DialogState.Loading(
-                            message = BitwardenString.syncing.asText(),
-                        ),
-                    ),
-                    awaitItem(),
-                )
-
-                // Simulate sync completion without premium.
-                mutableVaultLastSyncStateFlow.value = Instant.now()
-
-                assertEquals(
-                    awaitingFreeState.copy(
-                        dialogState = PlanState.DialogState.PendingUpgrade,
-                    ),
-                    awaitItem(),
-                )
             }
         }
 
@@ -798,7 +758,6 @@ class PlanViewModelTest : BaseViewModelTest() {
             snackbarRelayManager = mockSnackbarRelayManager,
             specialCircumstanceManager = mockSpecialCircumstanceManager,
             vaultRepository = mockVaultRepository,
-            settingsRepository = mockSettingsRepository,
         )
     }
 }

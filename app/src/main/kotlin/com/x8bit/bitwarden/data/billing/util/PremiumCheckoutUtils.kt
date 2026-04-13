@@ -24,8 +24,7 @@ private const val RESULT_SUCCESS = "success"
  * - [PremiumCheckoutCallbackResult.Canceled]: The user left without paying.
  */
 @OmitFromCoverage
-fun AuthTabIntent.AuthResult.getPremiumCheckoutCallbackResult():
-    PremiumCheckoutCallbackResult =
+fun AuthTabIntent.AuthResult.getPremiumCheckoutCallbackResult(): PremiumCheckoutCallbackResult =
     when (resultCode) {
         AuthTabIntent.RESULT_OK -> resultUri.getPremiumCheckoutCallbackResult()
         else -> PremiumCheckoutCallbackResult.Canceled
