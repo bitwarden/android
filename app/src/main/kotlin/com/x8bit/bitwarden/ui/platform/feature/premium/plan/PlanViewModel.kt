@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.ui.platform.feature.premium.plan
 
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
+import java.text.NumberFormat
+import java.util.Locale
 import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -34,6 +36,7 @@ import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
+private const val MONTHS_PER_YEAR = 12
 private const val PLACEHOLDER_RATE = "--"
 
 /**
@@ -125,7 +128,7 @@ class PlanViewModel @Inject constructor(
             }
 
             is PlanAction.Internal.SyncCompleteReceive -> {
-                handleSyncCompleteReceive(action)
+                handleSyncCompleteReceive()
             }
 
             is PlanAction.Internal.PricingResultReceive -> {
@@ -244,7 +247,7 @@ class PlanViewModel @Inject constructor(
 
             val isPremium = action.userState?.activeAccount?.isPremium == true
             if (isPremium) {
-                handlePremiumUpgradeSuccess()
+                onPremiumUpgradeSuccess()
             }
         }
     }
@@ -278,7 +281,7 @@ class PlanViewModel @Inject constructor(
             ?.activeAccount
             ?.isPremium == true
         if (isPremium) {
-            handlePremiumUpgradeSuccess()
+            onPremiumUpgradeSuccess()
         } else {
             onFreeContent { freeState ->
                 mutableStateFlow.update {
@@ -303,9 +306,7 @@ class PlanViewModel @Inject constructor(
         }
     }
 
-    private fun handleSyncCompleteReceive(
-        action: PlanAction.Internal.SyncCompleteReceive,
-    ) {
+    private fun handleSyncCompleteReceive() {
         onFreeContent { freeState ->
             if (!freeState.isAwaitingPremiumStatus) return@onFreeContent
 
@@ -315,7 +316,7 @@ class PlanViewModel @Inject constructor(
                 ?.activeAccount
                 ?.isPremium == true
             if (isPremium) {
-                handlePremiumUpgradeSuccess()
+                onPremiumUpgradeSuccess()
             } else {
                 // Sync completed but premium not yet provisioned —
                 // prompt the user to retry or continue as free.
@@ -328,7 +329,7 @@ class PlanViewModel @Inject constructor(
         }
     }
 
-    private fun handlePremiumUpgradeSuccess() {
+    private fun onPremiumUpgradeSuccess() {
         snackbarRelayManager.sendSnackbarData(
             data = BitwardenSnackbarData(
                 message = BitwardenString.upgraded_to_premium.asText(),
@@ -351,9 +352,12 @@ class PlanViewModel @Inject constructor(
         onFreeContent { freeState ->
             when (val result = action.result) {
                 is PremiumPlanPricingResult.Success -> {
+                    val formattedRate = NumberFormat
+                        .getCurrencyInstance(Locale.US)
+                        .format(result.annualPrice / MONTHS_PER_YEAR)
                     mutableStateFlow.update {
                         it.copy(
-                            viewState = freeState.copy(rate = result.monthlyRate),
+                            viewState = freeState.copy(rate = formattedRate),
                             dialogState = null,
                         )
                     }

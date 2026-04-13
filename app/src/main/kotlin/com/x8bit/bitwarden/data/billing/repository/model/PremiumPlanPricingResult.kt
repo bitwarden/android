@@ -10,10 +10,10 @@ sealed class PremiumPlanPricingResult {
     /**
      * The premium plan pricing was successfully retrieved.
      *
-     * @property monthlyRate The formatted monthly rate (e.g. "$1.67").
+     * @property annualPrice The annual price in the plan's currency.
      */
     data class Success(
-        val monthlyRate: String,
+        val annualPrice: Double,
     ) : PremiumPlanPricingResult()
 
     /**

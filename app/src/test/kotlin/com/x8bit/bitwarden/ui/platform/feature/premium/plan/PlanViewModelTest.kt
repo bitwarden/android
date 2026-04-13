@@ -807,6 +807,7 @@ private val DEFAULT_FREE_STATE = PlanState(
     dialogState = null,
 )
 
+private const val ANNUAL_PRICE = 19.99
 private val DEFAULT_PRICING_SUCCESS = PremiumPlanPricingResult.Success(
-    monthlyRate = "$1.67",
+    annualPrice = ANNUAL_PRICE,
 )

@@ -129,7 +129,7 @@ class BillingRepositoryTest {
 
             assertEquals(
                 PremiumPlanPricingResult.Success(
-                    monthlyRate = EXPECTED_MONTHLY_RATE,
+                    annualPrice = ANNUAL_PRICE,
                 ),
                 result,
             )
@@ -153,4 +153,3 @@ class BillingRepositoryTest {
 }
 
 private const val ANNUAL_PRICE = 19.99
-private const val EXPECTED_MONTHLY_RATE = "$1.67"

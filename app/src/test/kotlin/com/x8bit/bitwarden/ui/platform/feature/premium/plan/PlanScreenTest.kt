@@ -315,6 +315,152 @@ class PlanScreenTest : BitwardenComposeTest() {
     }
 
     // endregion Free content tests
+
+    // region PendingUpgrade dialog tests
+
+    @Test
+    fun `pending upgrade dialog should render when dialogState is PendingUpgrade`() {
+        composeTestRule
+            .onAllNodesWithText("Upgrade pending")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = PlanState.DialogState.PendingUpgrade,
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText("Upgrade pending")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+    }
+
+    @Test
+    fun `pending upgrade dialog should display sync now button`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = PlanState.DialogState.PendingUpgrade,
+            )
+        }
+        composeTestRule
+            .onAllNodesWithText("Sync now")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+    }
+
+    @Test
+    fun `pending upgrade dialog should display continue button`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = PlanState.DialogState.PendingUpgrade,
+            )
+        }
+        composeTestRule
+            .onAllNodesWithText("Continue")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+    }
+
+    @Test
+    fun `pending upgrade dialog sync now click should send SyncClick action`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = PlanState.DialogState.PendingUpgrade,
+            )
+        }
+        composeTestRule
+            .onAllNodesWithText("Sync now")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify { viewModel.trySendAction(PlanAction.SyncClick) }
+    }
+
+    @Test
+    fun `pending upgrade dialog continue click should send ContinueClick action`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = PlanState.DialogState.PendingUpgrade,
+            )
+        }
+        composeTestRule
+            .onAllNodesWithText("Continue")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify { viewModel.trySendAction(PlanAction.ContinueClick) }
+    }
+
+    // endregion PendingUpgrade dialog tests
+
+    // region GetPricingError dialog tests
+
+    @Test
+    fun `get pricing error dialog should render when dialogState is GetPricingError`() {
+        val title = "An error has occurred".asText()
+        val message = "Unable to retrieve pricing.".asText()
+
+        composeTestRule
+            .onAllNodesWithText("An error has occurred")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = PlanState.DialogState.GetPricingError(
+                    title = title,
+                    message = message,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText("An error has occurred")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+        composeTestRule
+            .onAllNodesWithText("Unable to retrieve pricing.")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+    }
+
+    @Test
+    fun `get pricing error dialog try again click should send RetryPricingClick action`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = PlanState.DialogState.GetPricingError(
+                    title = "An error has occurred".asText(),
+                    message = "Unable to retrieve pricing.".asText(),
+                ),
+            )
+        }
+        composeTestRule
+            .onAllNodesWithText("Try again")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify { viewModel.trySendAction(PlanAction.RetryPricingClick) }
+    }
+
+    @Test
+    fun `get pricing error dialog close click should send ClosePricingErrorClick action`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = PlanState.DialogState.GetPricingError(
+                    title = "An error has occurred".asText(),
+                    message = "Unable to retrieve pricing.".asText(),
+                ),
+            )
+        }
+        composeTestRule
+            .onAllNodesWithText("Close")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(PlanAction.ClosePricingErrorClick)
+        }
+    }
+
+    // endregion GetPricingError dialog tests
 }
 
 private val DEFAULT_FREE_STATE = PlanState(

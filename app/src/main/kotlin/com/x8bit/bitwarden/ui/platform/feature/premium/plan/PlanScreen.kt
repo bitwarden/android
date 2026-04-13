@@ -54,7 +54,6 @@ import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 /**
  * The screen for the plan -- shows upgrade flow for free users.
  */
-@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlanScreen(
