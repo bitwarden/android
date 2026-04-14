@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.sdk
 
+import com.bitwarden.auth.KeyConnectorRegistrationResult
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.FingerprintRequest
 import com.bitwarden.core.KeyConnectorResponse
@@ -12,6 +13,7 @@ import com.bitwarden.crypto.Kdf
 import com.bitwarden.sdk.AuthClient
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.PlatformClient
+import com.bitwarden.sdk.RegistrationClient
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import io.mockk.coEvery
@@ -26,7 +28,10 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class AuthSdkSourceTest {
-    private val clientAuth = mockk<AuthClient>()
+    private val clientRegistration = mockk<RegistrationClient>()
+    private val clientAuth = mockk<AuthClient> {
+        every { registration() } returns clientRegistration
+    }
     private val clientPlatform = mockk<PlatformClient> {
         coEvery { loadFlags(any()) } just runs
     }
@@ -41,6 +46,49 @@ class AuthSdkSourceTest {
     private val authSkdSource: AuthSdkSource = AuthSdkSourceImpl(
         sdkClientManager = sdkClientManager,
     )
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `postKeysForKeyConnectorRegistration should call SDK and return a Result with correct data`() =
+        runBlocking {
+            val userId = "userId"
+            val accessToken = "accessToken"
+            val keyConnectorUrl = "keyConnectorUrl"
+            val ssoOrgIdentifier = "ssoOrgIdentifier"
+            val expectedResult = mockk<KeyConnectorRegistrationResult>()
+            val slot = slot<suspend Client.() -> KeyConnectorRegistrationResult>()
+            coEvery {
+                sdkClientManager.singleUseClient(
+                    userId = userId,
+                    accessToken = accessToken,
+                    block = capture(slot),
+                )
+            } coAnswers { slot.captured(client) }
+            coEvery {
+                clientRegistration.postKeysForKeyConnectorRegistration(
+                    keyConnectorUrl = keyConnectorUrl,
+                    ssoOrgIdentifier = ssoOrgIdentifier,
+                )
+            } returns expectedResult
+
+            val result = authSkdSource.postKeysForKeyConnectorRegistration(
+                userId = userId,
+                accessToken = accessToken,
+                keyConnectorUrl = keyConnectorUrl,
+                ssoOrganizationIdentifier = ssoOrgIdentifier,
+            )
+
+            assertEquals(
+                expectedResult.asSuccess(),
+                result,
+            )
+            coVerify(exactly = 1) {
+                clientRegistration.postKeysForKeyConnectorRegistration(
+                    keyConnectorUrl = keyConnectorUrl,
+                    ssoOrgIdentifier = ssoOrgIdentifier,
+                )
+            }
+        }
 
     @Test
     fun `getNewAuthRequest should call SDK and return a Result with correct data`() = runBlocking {

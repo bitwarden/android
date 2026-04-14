@@ -1,10 +1,11 @@
 package com.x8bit.bitwarden.data.auth.manager
 
-import com.bitwarden.core.KeyConnectorResponse
 import com.bitwarden.crypto.Kdf
+import com.bitwarden.network.model.AccountKeysJson
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
 import com.x8bit.bitwarden.data.auth.manager.model.MigrateExistingUserToKeyConnectorResult
+import com.x8bit.bitwarden.data.auth.manager.model.MigrateNewUserToKeyConnectorResult
 
 /**
  * Manager used to interface with a key connector.
@@ -36,6 +37,8 @@ interface KeyConnectorManager {
      */
     @Suppress("LongParameterList")
     suspend fun migrateNewUserToKeyConnector(
+        userId: String,
+        accountKeys: AccountKeysJson?,
         url: String,
         accessToken: String,
         kdfType: KdfTypeJson,
@@ -43,5 +46,5 @@ interface KeyConnectorManager {
         kdfMemory: Int?,
         kdfParallelism: Int?,
         organizationIdentifier: String,
-    ): Result<KeyConnectorResponse>
+    ): Result<MigrateNewUserToKeyConnectorResult>
 }

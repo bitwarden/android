@@ -1671,6 +1671,7 @@ class AuthRepositoryImpl(
 
         checkForVaultUnlockError(
             onVaultUnlockError = { vaultUnlockError ->
+                authDiskSource.storeAccountTokens(userId = profile.userId, accountTokens = null)
                 return@userStateTransaction vaultUnlockError.toLoginErrorResult()
             },
         ) {
@@ -1888,9 +1889,12 @@ class AuthRepositoryImpl(
                     onSuccess = { it },
                 )
         } else {
-            // This is a new user who needs to setup the key connector
+            // This is a new user who needs to set up the key connector
+            val userId = profile.userId
             keyConnectorManager
                 .migrateNewUserToKeyConnector(
+                    userId = userId,
+                    accountKeys = loginResponse.accountKeys,
                     url = keyConnectorUrl,
                     accessToken = loginResponse.accessToken,
                     kdfType = loginResponse.kdfType,
@@ -1899,37 +1903,37 @@ class AuthRepositoryImpl(
                     kdfParallelism = loginResponse.kdfParallelism,
                     organizationIdentifier = orgIdentifier,
                 )
-                .map { keyConnectorResponse ->
-                    val accountKeys = loginResponse.accountKeys
-                    val result = unlockVault(
-                        accountCryptographicState = accountKeys.toAccountCryptographicState(
-                            privateKey = keyConnectorResponse.keys.private,
-                        ),
-                        accountProfile = profile,
-                        initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
-                            masterKey = keyConnectorResponse.masterKey,
-                            userKey = keyConnectorResponse.encryptedUserKey,
-                        ),
-                    )
-                    if (result is VaultUnlockResult.Success) {
-                        // We now know that login/unlock was successful, so we store the userKey
-                        // and privateKey we now have since it didn't exist on the loginResponse
-                        authDiskSource.storeUserKey(
-                            userId = profile.userId,
-                            userKey = keyConnectorResponse.encryptedUserKey,
+                .map { keyConnector ->
+                    this
+                        .unlockVault(
+                            accountCryptographicState = keyConnector.accountCryptographicState,
+                            accountProfile = profile,
+                            initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
+                                masterKey = keyConnector.masterKey,
+                                userKey = keyConnector.encryptedUserKey,
+                            ),
                         )
-                        // We continue to store the private key for backwards compatibility since
-                        // key connector conversion still relies on the private key.
-                        authDiskSource.storePrivateKey(
-                            userId = profile.userId,
-                            privateKey = keyConnectorResponse.keys.private,
-                        )
-                        authDiskSource.storeAccountKeys(
-                            userId = profile.userId,
-                            accountKeys = loginResponse.accountKeys,
-                        )
-                    }
-                    result
+                        .also { result ->
+                            if (result is VaultUnlockResult.Success) {
+                                // We now know that login/unlock was successful, so we store the
+                                // userKey and privateKey we now have since it didn't exist on the
+                                // loginResponse.
+                                authDiskSource.storeUserKey(
+                                    userId = userId,
+                                    userKey = keyConnector.encryptedUserKey,
+                                )
+                                // We continue to store the private key for backwards compatibility
+                                // since key connector conversion still relies on the private key.
+                                authDiskSource.storePrivateKey(
+                                    userId = userId,
+                                    privateKey = keyConnector.privateKey,
+                                )
+                                authDiskSource.storeAccountKeys(
+                                    userId = userId,
+                                    accountKeys = loginResponse.accountKeys,
+                                )
+                            }
+                        }
                 }
                 .fold(
                     // If the request failed, we want to abort the login process

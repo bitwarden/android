@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.sdk
 
+import com.bitwarden.auth.KeyConnectorRegistrationResult
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.KeyConnectorResponse
 import com.bitwarden.core.MasterPasswordPolicyOptions
@@ -13,6 +14,16 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
  * Source of authentication information and functionality from the Bitwarden SDK.
  */
 interface AuthSdkSource {
+    /**
+     * Enrolls the user to key connector unlock.
+     */
+    suspend fun postKeysForKeyConnectorRegistration(
+        userId: String,
+        accessToken: String,
+        keyConnectorUrl: String,
+        ssoOrganizationIdentifier: String,
+    ): Result<KeyConnectorRegistrationResult>
+
     /**
      * Gets the data needed to create a new auth request.
      */
