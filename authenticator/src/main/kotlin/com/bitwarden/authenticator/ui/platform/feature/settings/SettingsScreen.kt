@@ -451,7 +451,7 @@ private fun ColumnScope.VaultSettings(
     }
     BitwardenSwitch(
         label = stringResource(id = BitwardenString.show_next_code),
-        subtext = stringResource(id = BitwardenString.see_incoming_codes_in_the_list),
+        subtext = stringResource(id = BitwardenString.see_upcoming_codes_in_the_list),
         isChecked = isShowNextCodeEnabled,
         onCheckedChange = onShowNextCodeToggle,
         cardStyle = CardStyle.Bottom,
