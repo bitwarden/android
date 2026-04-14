@@ -5,7 +5,6 @@ import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
-import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -18,14 +17,11 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
-import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.awaitCancellation
@@ -44,10 +40,6 @@ class PlanViewModelTest : BaseViewModelTest() {
         every { userStateFlow } returns mutableUserStateFlow
     }
     private val mockBillingRepository: BillingRepository = mockk()
-    private val mockSnackbarRelayManager: SnackbarRelayManager<SnackbarRelay> =
-        mockk {
-            every { sendSnackbarData(any(), any()) } just runs
-        }
     private val mutableSpecialCircumstanceStateFlow =
         MutableStateFlow<SpecialCircumstance?>(null)
     private val mockSpecialCircumstanceManager: SpecialCircumstanceManager =
@@ -143,7 +135,7 @@ class PlanViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `PremiumCheckoutResult with isSuccess true should send snackbar and navigate back when premium`() =
+    fun `PremiumCheckoutResult with isSuccess true should show snackbar when premium`() =
         runTest {
             mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
                 accounts = listOf(
@@ -159,17 +151,18 @@ class PlanViewModelTest : BaseViewModelTest() {
                         callbackResult = PremiumCheckoutCallbackResult.Success,
                     )
 
-                assertEquals(PlanEvent.NavigateBack, awaitItem())
+                assertEquals(
+                    PlanEvent.ShowSnackbar(
+                        data = BitwardenSnackbarData(
+                            message = BitwardenString.upgraded_to_premium.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
             }
 
             verify {
                 mockSpecialCircumstanceManager.specialCircumstance = null
-                mockSnackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(
-                        message = BitwardenString.upgraded_to_premium.asText(),
-                    ),
-                    relay = SnackbarRelay.PREMIUM_UPGRADED,
-                )
             }
         }
 
@@ -416,7 +409,7 @@ class PlanViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `premium status flip should send snackbar and emit NavigateBack when in WaitingForPayment`() =
+    fun `premium status flip should show snackbar when in WaitingForPayment`() =
         runTest {
             val viewModel = createViewModel(
                 initialState = DEFAULT_FREE_STATE.copy(
@@ -438,22 +431,20 @@ class PlanViewModelTest : BaseViewModelTest() {
                     ),
                 )
 
-                assertEquals(PlanEvent.NavigateBack, awaitItem())
-            }
-
-            verify {
-                mockSnackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(
-                        message = BitwardenString.upgraded_to_premium.asText(),
+                assertEquals(
+                    PlanEvent.ShowSnackbar(
+                        data = BitwardenSnackbarData(
+                            message = BitwardenString.upgraded_to_premium.asText(),
+                        ),
                     ),
-                    relay = SnackbarRelay.PREMIUM_UPGRADED,
+                    awaitItem(),
                 )
             }
         }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `premium status flip via canceled special circumstance should send snackbar and emit NavigateBack`() =
+    fun `premium status flip via canceled special circumstance should show snackbar`() =
         runTest {
             val viewModel = createViewModel()
 
@@ -486,18 +477,19 @@ class PlanViewModelTest : BaseViewModelTest() {
                     ),
                 )
 
+                // State clears dialog and isAwaitingPremiumStatus.
                 assertEquals(
-                    PlanEvent.NavigateBack,
-                    eventFlow.awaitItem(),
+                    DEFAULT_FREE_STATE,
+                    stateFlow.awaitItem(),
                 )
-            }
 
-            verify {
-                mockSnackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(
-                        message = BitwardenString.upgraded_to_premium.asText(),
+                assertEquals(
+                    PlanEvent.ShowSnackbar(
+                        data = BitwardenSnackbarData(
+                            message = BitwardenString.upgraded_to_premium.asText(),
+                        ),
                     ),
-                    relay = SnackbarRelay.PREMIUM_UPGRADED,
+                    eventFlow.awaitItem(),
                 )
             }
         }
@@ -541,8 +533,9 @@ class PlanViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `UserStateUpdateReceive with premium during Loading should navigate back with snackbar`() =
+    fun `UserStateUpdateReceive with premium during Loading should show snackbar`() =
         runTest {
             val viewModel = createViewModel(
                 initialState = DEFAULT_FREE_STATE.copy(
@@ -552,7 +545,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                         isAwaitingPremiumStatus = true,
                     ),
                     dialogState = PlanState.DialogState.Loading(
-                        message = BitwardenString.syncing.asText(),
+                        message = BitwardenString.confirming_your_upgrade.asText(),
                     ),
                 ),
                 pricingResult = null,
@@ -565,15 +558,13 @@ class PlanViewModelTest : BaseViewModelTest() {
                     ),
                 )
 
-                assertEquals(PlanEvent.NavigateBack, awaitItem())
-            }
-
-            verify {
-                mockSnackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(
-                        message = BitwardenString.upgraded_to_premium.asText(),
+                assertEquals(
+                    PlanEvent.ShowSnackbar(
+                        data = BitwardenSnackbarData(
+                            message = BitwardenString.upgraded_to_premium.asText(),
+                        ),
                     ),
-                    relay = SnackbarRelay.PREMIUM_UPGRADED,
+                    awaitItem(),
                 )
             }
         }
@@ -762,7 +753,6 @@ class PlanViewModelTest : BaseViewModelTest() {
             savedStateHandle = savedStateHandle,
             authRepository = mockAuthRepository,
             billingRepository = mockBillingRepository,
-            snackbarRelayManager = mockSnackbarRelayManager,
             specialCircumstanceManager = mockSpecialCircumstanceManager,
             vaultRepository = mockVaultRepository,
         )

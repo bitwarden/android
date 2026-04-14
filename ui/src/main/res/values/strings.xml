@@ -1239,6 +1239,7 @@ Do you want to switch to this account?</string>
     <string name="preview_unavailable">Preview unavailable</string>
     <string name="download_attachment">Download Attachment</string>
     <string name="upgraded_to_premium">Upgraded to premium</string>
+    <string name="confirming_your_upgrade">Confirming your upgrade…</string>
     <string name="upgrade_pending">Upgrade pending</string>
     <string name="upgrade_pending_message">Your upgrade is being processed. You’ll remain on the free plan until it’s complete. Sync now to check, or continue and it will update automatically.</string>
     <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>

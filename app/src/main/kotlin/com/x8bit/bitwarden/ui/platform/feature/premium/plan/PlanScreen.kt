@@ -41,6 +41,8 @@ import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
@@ -64,6 +66,7 @@ fun PlanScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val handlers = remember(viewModel) { PlanHandlers.create(viewModel) }
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -76,6 +79,7 @@ fun PlanScreen(
             }
 
             PlanEvent.NavigateBack -> onNavigateBack()
+            is PlanEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }
     }
 
@@ -89,6 +93,9 @@ fun PlanScreen(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
+        snackbarHost = {
+            BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
+        },
         topBar = {
             BitwardenTopAppBar(
                 title = stringResource(id = BitwardenString.upgrade_to_premium),

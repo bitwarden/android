@@ -10,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
-import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
@@ -25,7 +24,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -47,12 +45,11 @@ const val PREMIUM_CHECKOUT_CALLBACK_URL = "bitwarden://premium-checkout-result"
 /**
  * View model for the plan screen, handling the free-user upgrade flow.
  */
-@Suppress("TooManyFunctions", "LongParameterList")
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class PlanViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val billingRepository: BillingRepository,
-    private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val authRepository: AuthRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val vaultRepository: VaultRepository,
@@ -179,7 +176,7 @@ class PlanViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = PlanState.DialogState.Loading(
-                    message = BitwardenString.syncing.asText(),
+                    message = BitwardenString.confirming_your_upgrade.asText(),
                 ),
             )
         }
@@ -290,7 +287,7 @@ class PlanViewModel @Inject constructor(
                             isAwaitingPremiumStatus = true,
                         ),
                         dialogState = PlanState.DialogState.Loading(
-                            message = BitwardenString.syncing.asText(),
+                            message = BitwardenString.confirming_your_upgrade.asText(),
                         ),
                     )
                 }
@@ -330,13 +327,24 @@ class PlanViewModel @Inject constructor(
     }
 
     private fun onPremiumUpgradeSuccess() {
-        snackbarRelayManager.sendSnackbarData(
-            data = BitwardenSnackbarData(
-                message = BitwardenString.upgraded_to_premium.asText(),
+        onFreeContent { freeState ->
+            mutableStateFlow.update {
+                it.copy(
+                    viewState = freeState.copy(
+                        isAwaitingPremiumStatus = false,
+                    ),
+                    dialogState = null,
+                )
+            }
+        }
+        sendEvent(
+            PlanEvent.ShowSnackbar(
+                data = BitwardenSnackbarData(
+                    message = BitwardenString.upgraded_to_premium.asText(),
+                ),
             ),
-            relay = SnackbarRelay.PREMIUM_UPGRADED,
         )
-        sendEvent(PlanEvent.NavigateBack)
+        // TODO: transition to Premium ViewState (PM-33517)
     }
 
     private inline fun onFreeContent(
@@ -520,6 +528,13 @@ sealed class PlanEvent {
      * Navigate back to the previous screen.
      */
     data object NavigateBack : PlanEvent()
+
+    /**
+     * Show a snackbar with the given [data].
+     */
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : PlanEvent()
 }
 
 /**
