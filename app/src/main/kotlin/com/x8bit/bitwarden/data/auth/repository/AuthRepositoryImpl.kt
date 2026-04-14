@@ -5,6 +5,7 @@ import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.RegisterTdeKeyResponse
 import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
@@ -100,8 +101,10 @@ import com.x8bit.bitwarden.data.auth.repository.util.CookieCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
+import com.x8bit.bitwarden.data.auth.repository.util.accountKeysJson
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
+import com.x8bit.bitwarden.data.auth.repository.util.privateKey
 import com.x8bit.bitwarden.data.auth.repository.util.toAccountCryptographicState
 import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
 import com.x8bit.bitwarden.data.auth.repository.util.toRemovedPasswordUserStateJson
@@ -115,6 +118,7 @@ import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -145,6 +149,7 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.time.Clock
 import javax.inject.Singleton
@@ -178,9 +183,10 @@ class AuthRepositoryImpl(
     private val userStateManager: UserStateManager,
     private val kdfManager: KdfManager,
     private val toastManager: ToastManager,
+    private val featureFlagManager: FeatureFlagManager,
     logsManager: LogsManager,
     pushManager: PushManager,
-    dispatcherManager: DispatcherManager,
+    private val dispatcherManager: DispatcherManager,
 ) : AuthRepository,
     AuthRequestManager by authRequestManager,
     BiometricsEncryptionManager by biometricsEncryptionManager,
@@ -1182,7 +1188,9 @@ class AuthRepositoryImpl(
                 }
             }
             .onSuccess {
-                authDiskSource.userState = authDiskSource.userState?.toUserStateJsonWithPassword()
+                authDiskSource.userState = authDiskSource.userState?.toUserStateJsonWithPassword(
+                    masterPasswordUnlock = null,
+                )
                 this.organizationIdentifier = null
             }
             .fold(
@@ -1191,8 +1199,79 @@ class AuthRepositoryImpl(
             )
     }
 
-    @Suppress("LongMethod")
     private suspend fun setPasswordForJit(
+        profile: AccountJson.Profile,
+        organizationIdentifier: String,
+        password: String,
+        passwordHint: String?,
+    ): SetPasswordResult {
+        if (!featureFlagManager.getFeatureFlag(FlagKey.V2EncryptionJitPassword)) {
+            return setPasswordForJitV1(
+                profile = profile,
+                organizationIdentifier = organizationIdentifier,
+                password = password,
+                passwordHint = passwordHint,
+            )
+        }
+        val userId = profile.userId
+        return organizationService
+            .getOrganizationAutoEnrollStatus(organizationIdentifier = organizationIdentifier)
+            .flatMap { enrollStatus ->
+                organizationService
+                    .getOrganizationKeys(organizationId = enrollStatus.organizationId)
+                    .map { orgKeys -> enrollStatus to orgKeys }
+            }
+            .flatMap { (enrollStatus, orgKeys) ->
+                withContext(dispatcherManager.io) {
+                    authSdkSource.postKeysForJitPasswordRegistration(
+                        userId = userId,
+                        organizationId = enrollStatus.organizationId,
+                        organizationPublicKey = orgKeys.publicKey,
+                        organizationSsoIdentifier = organizationIdentifier,
+                        salt = profile.email,
+                        masterPassword = password,
+                        masterPasswordHint = passwordHint,
+                        shouldResetPasswordEnroll = enrollStatus.isResetPasswordEnabled,
+                    )
+                }
+            }
+            .onSuccess { response ->
+                authDiskSource.storeAccountKeys(
+                    userId = userId,
+                    accountKeys = response.accountCryptographicState.accountKeysJson,
+                )
+                // TDE and SSO user creation still uses crypto-v1. These users are not
+                // expected to have the AEAD keys so we only store the private key for now.
+                // See https://github.com/bitwarden/android/pull/5682#discussion_r2273940332
+                // for more details.
+                authDiskSource.storePrivateKey(
+                    userId = userId,
+                    privateKey = response.accountCryptographicState.privateKey,
+                )
+                authDiskSource.userState = authDiskSource.userState?.toUserStateJsonWithPassword(
+                    masterPasswordUnlock = response.masterPasswordUnlock,
+                )
+                this.organizationIdentifier = null
+            }
+            .flatMap { response ->
+                // Logging in with the password instead of the decrypted userKey will store
+                // the master password hash automatically.
+                when (val result = vaultRepository.unlockVaultWithMasterPassword(password)) {
+                    VaultUnlockResult.Success -> response.asSuccess()
+                    is VaultUnlockError -> {
+                        (result.error ?: IllegalStateException("Failed to unlock vault"))
+                            .asFailure()
+                    }
+                }
+            }
+            .fold(
+                onFailure = { SetPasswordResult.Error(error = it) },
+                onSuccess = { SetPasswordResult.Success },
+            )
+    }
+
+    @Suppress("LongMethod")
+    private suspend fun setPasswordForJitV1(
         profile: AccountJson.Profile,
         organizationIdentifier: String,
         password: String,
@@ -1255,7 +1334,9 @@ class AuthRepositoryImpl(
                 }
             }
             .onSuccess {
-                authDiskSource.userState = authDiskSource.userState?.toUserStateJsonWithPassword()
+                authDiskSource.userState = authDiskSource.userState?.toUserStateJsonWithPassword(
+                    masterPasswordUnlock = null,
+                )
                 this.organizationIdentifier = null
             }
             .fold(

@@ -1,7 +1,9 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
+import com.bitwarden.core.MasterPasswordUnlockData
 import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
 import com.bitwarden.network.model.KdfTypeJson
+import com.bitwarden.network.model.MasterPasswordUnlockDataJson
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
@@ -9,6 +11,7 @@ import com.bitwarden.network.model.UserDecryptionOptionsJson
 import com.bitwarden.ui.platform.base.util.toHexColorRepresentation
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
+import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfRequestModel
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
@@ -108,20 +111,34 @@ fun UserStateJson.toUpdatedUserStateJson(
  * Updates the [UserStateJson] to set the `hasMasterPassword` value to `true` after a user sets
  * their password.
  */
-fun UserStateJson.toUserStateJsonWithPassword(): UserStateJson {
+fun UserStateJson.toUserStateJsonWithPassword(
+    masterPasswordUnlock: MasterPasswordUnlockData?,
+): UserStateJson {
     val account = this.activeAccount
     val profile = account.profile
+    val userDecryptionOptions = profile.userDecryptionOptions
+    val masterPasswordUnlockJson = masterPasswordUnlock
+        ?.let {
+            MasterPasswordUnlockDataJson(
+                salt = it.salt,
+                kdf = it.kdf.toKdfRequestModel(),
+                masterKeyWrappedUserKey = it.masterKeyWrappedUserKey,
+            )
+        }
+        ?: userDecryptionOptions?.masterPasswordUnlock
     val updatedProfile = profile
         .copy(
             forcePasswordResetReason = null,
-            userDecryptionOptions = profile
-                .userDecryptionOptions
-                ?.copy(hasMasterPassword = true)
+            userDecryptionOptions = userDecryptionOptions
+                ?.copy(
+                    hasMasterPassword = true,
+                    masterPasswordUnlock = masterPasswordUnlockJson,
+                )
                 ?: UserDecryptionOptionsJson(
                     hasMasterPassword = true,
                     keyConnectorUserDecryptionOptions = null,
                     trustedDeviceUserDecryptionOptions = null,
-                    masterPasswordUnlock = null,
+                    masterPasswordUnlock = masterPasswordUnlockJson,
                 ),
         )
     val updatedAccount = account.copy(profile = updatedProfile)
