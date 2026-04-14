@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.repository
 
 import app.cash.turbine.test
 import com.bitwarden.auth.JitMasterPasswordRegistrationResponse
+import com.bitwarden.auth.TdeRegistrationResponse
 import com.bitwarden.core.AuthRequestMethod
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.InitUserCryptoMethod
@@ -295,6 +296,7 @@ class AuthRepositoryTest {
     }
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlag(FlagKey.V2EncryptionJitPassword) } returns true
+        every { getFeatureFlag(FlagKey.V2EncryptionTde) } returns true
     }
 
     private val repository: AuthRepository = AuthRepositoryImpl(
@@ -985,9 +987,11 @@ class AuthRepositoryTest {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `createNewSsoUser when makeRegisterTdeKeysAndUnlockVault fails returns failure`() =
+    fun `createNewSsoUser when makeRegisterTdeKeysAndUnlockVault fails returns failure for v1 encryption`() =
         runTest {
+            every { featureFlagManager.getFeatureFlag(FlagKey.V2EncryptionTde) } returns false
             val shouldTrustDevice = false
             val orgIdentifier = "rememberedOrgIdentifier"
             val orgId = "organizationId"
@@ -1038,169 +1042,319 @@ class AuthRepositoryTest {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `createNewSsoUser when createAccountKeys fails returns failure`() = runTest {
-        val shouldTrustDevice = false
-        val orgIdentifier = "rememberedOrgIdentifier"
-        val orgId = "organizationId"
-        val orgPublicKey = "organizationPublicKey"
-        val userPrivateKey = "userPrivateKey"
-        val userPublicKey = "userPublicKey"
-        val userAdminReset = "userAdminReset"
-        val orgAutoEnrollStatusResponse = OrganizationAutoEnrollStatusResponseJson(
-            organizationId = orgId,
-            isResetPasswordEnabled = false,
-        )
-        val orgKeysResponse = OrganizationKeysResponseJson(
-            privateKey = "privateKey",
-            publicKey = orgPublicKey,
-        )
-        val registerTdeKeyResponse = RegisterTdeKeyResponse(
-            privateKey = userPrivateKey,
-            publicKey = userPublicKey,
-            adminReset = userAdminReset,
-            deviceKey = null,
-        )
-        val error = Throwable("Fail!")
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        fakeAuthDiskSource.rememberedOrgIdentifier = orgIdentifier
-        fakeAuthDiskSource.storeShouldTrustDevice(
-            userId = USER_ID_1,
-            shouldTrustDevice = shouldTrustDevice,
-        )
-        coEvery {
-            organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
-        } returns orgAutoEnrollStatusResponse.asSuccess()
-        coEvery {
-            organizationService.getOrganizationKeys(orgId)
-        } returns orgKeysResponse.asSuccess()
-        coEvery {
-            authSdkSource.makeRegisterTdeKeysAndUnlockVault(
-                userId = USER_ID_1,
-                email = EMAIL,
-                orgPublicKey = orgPublicKey,
-                rememberDevice = shouldTrustDevice,
-            )
-        } returns registerTdeKeyResponse.asSuccess()
-        coEvery {
-            accountsService.createAccountKeys(
-                publicKey = userPublicKey,
-                encryptedPrivateKey = userPrivateKey,
-            )
-        } returns error.asFailure()
-
-        val result = repository.createNewSsoUser()
-
-        assertEquals(NewSsoUserResult.Failure(error = error), result)
-        coVerify(exactly = 1) {
-            organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
-            organizationService.getOrganizationKeys(orgId)
-            authSdkSource.makeRegisterTdeKeysAndUnlockVault(
-                userId = USER_ID_1,
-                email = EMAIL,
-                orgPublicKey = orgPublicKey,
-                rememberDevice = shouldTrustDevice,
-            )
-            accountsService.createAccountKeys(
-                publicKey = userPublicKey,
-                encryptedPrivateKey = userPrivateKey,
-            )
-        }
-    }
-
-    @Test
-    fun `createNewSsoUser when organizationResetPasswordEnroll fails returns failure`() = runTest {
-        val shouldTrustDevice = false
-        val orgIdentifier = "rememberedOrgIdentifier"
-        val orgId = "organizationId"
-        val orgPublicKey = "organizationPublicKey"
-        val userPrivateKey = "userPrivateKey"
-        val userPublicKey = "userPublicKey"
-        val userAdminReset = "userAdminReset"
-        val orgAutoEnrollStatusResponse = OrganizationAutoEnrollStatusResponseJson(
-            organizationId = orgId,
-            isResetPasswordEnabled = false,
-        )
-        val orgKeysResponse = OrganizationKeysResponseJson(
-            privateKey = "privateKey",
-            publicKey = orgPublicKey,
-        )
-        val registerTdeKeyResponse = RegisterTdeKeyResponse(
-            privateKey = userPrivateKey,
-            publicKey = userPublicKey,
-            adminReset = userAdminReset,
-            deviceKey = null,
-        )
-        val error = Throwable("Fail!")
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        fakeAuthDiskSource.rememberedOrgIdentifier = orgIdentifier
-        fakeAuthDiskSource.storeShouldTrustDevice(
-            userId = USER_ID_1,
-            shouldTrustDevice = shouldTrustDevice,
-        )
-        coEvery {
-            organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
-        } returns orgAutoEnrollStatusResponse.asSuccess()
-        coEvery {
-            organizationService.getOrganizationKeys(orgId)
-        } returns orgKeysResponse.asSuccess()
-        coEvery {
-            authSdkSource.makeRegisterTdeKeysAndUnlockVault(
-                userId = USER_ID_1,
-                email = EMAIL,
-                orgPublicKey = orgPublicKey,
-                rememberDevice = shouldTrustDevice,
-            )
-        } returns registerTdeKeyResponse.asSuccess()
-        coEvery {
-            accountsService.createAccountKeys(
-                publicKey = userPublicKey,
-                encryptedPrivateKey = userPrivateKey,
-            )
-        } returns CreateAccountKeysResponseJson(
-            key = null,
-            publicKey = userPublicKey,
-            privateKey = userPrivateKey,
-            accountKeys = null,
-        ).asSuccess()
-        coEvery {
-            organizationService.organizationResetPasswordEnroll(
+    fun `createNewSsoUser when postKeysForTdeRegistration fails returns failure`() =
+        runTest {
+            val shouldTrustDevice = false
+            val orgIdentifier = "rememberedOrgIdentifier"
+            val orgId = "organizationId"
+            val orgPublicKey = "organizationPublicKey"
+            val orgAutoEnrollStatusResponse = OrganizationAutoEnrollStatusResponseJson(
                 organizationId = orgId,
-                userId = USER_ID_1,
-                passwordHash = null,
-                resetPasswordKey = userAdminReset,
+                isResetPasswordEnabled = false,
             )
-        } returns error.asFailure()
+            val orgKeysResponse = OrganizationKeysResponseJson(
+                privateKey = "privateKey",
+                publicKey = orgPublicKey,
+            )
+            val error = Throwable("Fail!")
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.rememberedOrgIdentifier = orgIdentifier
 
-        val result = repository.createNewSsoUser()
+            fakeAuthDiskSource.storeShouldTrustDevice(
+                userId = USER_ID_1,
+                shouldTrustDevice = shouldTrustDevice,
+            )
+            coEvery {
+                organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
+            } returns orgAutoEnrollStatusResponse.asSuccess()
+            coEvery {
+                organizationService.getOrganizationKeys(orgId)
+            } returns orgKeysResponse.asSuccess()
+            coEvery {
+                authSdkSource.postKeysForTdeRegistration(
+                    userId = USER_ID_1,
+                    organizationId = orgId,
+                    organizationPublicKey = orgPublicKey,
+                    deviceIdentifier = "testUniqueAppId",
+                    shouldTrustDevice = shouldTrustDevice,
+                )
+            } returns error.asFailure()
 
-        assertEquals(NewSsoUserResult.Failure(error = error), result)
-        coVerify(exactly = 1) {
-            organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
-            organizationService.getOrganizationKeys(orgId)
-            authSdkSource.makeRegisterTdeKeysAndUnlockVault(
-                userId = USER_ID_1,
-                email = EMAIL,
-                orgPublicKey = orgPublicKey,
-                rememberDevice = shouldTrustDevice,
-            )
-            accountsService.createAccountKeys(
-                publicKey = userPublicKey,
-                encryptedPrivateKey = userPrivateKey,
-            )
-            organizationService.organizationResetPasswordEnroll(
-                organizationId = orgId,
-                userId = USER_ID_1,
-                passwordHash = null,
-                resetPasswordKey = userAdminReset,
-            )
+            val result = repository.createNewSsoUser()
+
+            assertEquals(NewSsoUserResult.Failure(error = error), result)
+            coVerify(exactly = 1) {
+                organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
+                organizationService.getOrganizationKeys(orgId)
+                authSdkSource.postKeysForTdeRegistration(
+                    userId = USER_ID_1,
+                    organizationId = orgId,
+                    organizationPublicKey = orgPublicKey,
+                    deviceIdentifier = "testUniqueAppId",
+                    shouldTrustDevice = shouldTrustDevice,
+                )
+            }
         }
-    }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `createNewSsoUser when shouldTrustDevice false should not trust the device returns Success`() =
+    fun `createNewSsoUser when postKeysForTdeRegistration succeeds returns success`() =
         runTest {
+            val shouldTrustDevice = true
+            val orgIdentifier = "rememberedOrgIdentifier"
+            val orgId = "organizationId"
+            val orgPublicKey = "organizationPublicKey"
+            val orgKeys = mapOf<String, String>()
+            val userKey = "userKey"
+            val privateKey = "privateKey"
+            val deviceKey = "deviceKey"
+            val orgAutoEnrollStatusResponse = OrganizationAutoEnrollStatusResponseJson(
+                organizationId = orgId,
+                isResetPasswordEnabled = false,
+            )
+            val orgKeysResponse = OrganizationKeysResponseJson(
+                privateKey = "privateKey",
+                publicKey = orgPublicKey,
+            )
+            val accountCryptographicState = WrappedAccountCryptographicState.V2(
+                privateKey = privateKey,
+                securityState = "securityState",
+                signedPublicKey = "signedPublicKey",
+                signingKey = "signingKey",
+            )
+            val response = TdeRegistrationResponse(
+                accountCryptographicState = accountCryptographicState,
+                deviceKey = deviceKey,
+                userKey = userKey,
+            )
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.rememberedOrgIdentifier = orgIdentifier
+            fakeAuthDiskSource.storeOrganizationKeys(userId = USER_ID_1, organizationKeys = orgKeys)
+            fakeAuthDiskSource.storeShouldTrustDevice(
+                userId = USER_ID_1,
+                shouldTrustDevice = shouldTrustDevice,
+            )
+            coEvery {
+                organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
+            } returns orgAutoEnrollStatusResponse.asSuccess()
+            coEvery {
+                organizationService.getOrganizationKeys(orgId)
+            } returns orgKeysResponse.asSuccess()
+            coEvery {
+                authSdkSource.postKeysForTdeRegistration(
+                    userId = USER_ID_1,
+                    organizationId = orgId,
+                    organizationPublicKey = orgPublicKey,
+                    deviceIdentifier = "testUniqueAppId",
+                    shouldTrustDevice = shouldTrustDevice,
+                )
+            } returns response.asSuccess()
+            coEvery {
+                vaultRepository.unlockVault(
+                    accountCryptographicState = accountCryptographicState,
+                    userId = USER_ID_1,
+                    email = SINGLE_USER_STATE_1.activeAccount.profile.email,
+                    kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
+                    initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                        decryptedUserKey = userKey,
+                    ),
+                    organizationKeys = orgKeys,
+                )
+            } returns VaultUnlockResult.Success
+
+            val result = repository.createNewSsoUser()
+
+            assertEquals(NewSsoUserResult.Success, result)
+            fakeAuthDiskSource.assertAccountKeys(
+                userId = USER_ID_1,
+                accountKeys = accountCryptographicState.accountKeysJson,
+            )
+            fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = privateKey)
+            fakeAuthDiskSource.assertDeviceKey(userId = USER_ID_1, deviceKey = deviceKey)
+            coVerify(exactly = 1) {
+                organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
+                organizationService.getOrganizationKeys(orgId)
+                authSdkSource.postKeysForTdeRegistration(
+                    userId = USER_ID_1,
+                    organizationId = orgId,
+                    organizationPublicKey = orgPublicKey,
+                    deviceIdentifier = "testUniqueAppId",
+                    shouldTrustDevice = shouldTrustDevice,
+                )
+            }
+        }
+
+    @Test
+    fun `createNewSsoUser when createAccountKeys fails returns failure for v1 encryption`() =
+        runTest {
+            every { featureFlagManager.getFeatureFlag(FlagKey.V2EncryptionTde) } returns false
+            val shouldTrustDevice = false
+            val orgIdentifier = "rememberedOrgIdentifier"
+            val orgId = "organizationId"
+            val orgPublicKey = "organizationPublicKey"
+            val userPrivateKey = "userPrivateKey"
+            val userPublicKey = "userPublicKey"
+            val userAdminReset = "userAdminReset"
+            val orgAutoEnrollStatusResponse = OrganizationAutoEnrollStatusResponseJson(
+                organizationId = orgId,
+                isResetPasswordEnabled = false,
+            )
+            val orgKeysResponse = OrganizationKeysResponseJson(
+                privateKey = "privateKey",
+                publicKey = orgPublicKey,
+            )
+            val registerTdeKeyResponse = RegisterTdeKeyResponse(
+                privateKey = userPrivateKey,
+                publicKey = userPublicKey,
+                adminReset = userAdminReset,
+                deviceKey = null,
+            )
+            val error = Throwable("Fail!")
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.rememberedOrgIdentifier = orgIdentifier
+            fakeAuthDiskSource.storeShouldTrustDevice(
+                userId = USER_ID_1,
+                shouldTrustDevice = shouldTrustDevice,
+            )
+            coEvery {
+                organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
+            } returns orgAutoEnrollStatusResponse.asSuccess()
+            coEvery {
+                organizationService.getOrganizationKeys(orgId)
+            } returns orgKeysResponse.asSuccess()
+            coEvery {
+                authSdkSource.makeRegisterTdeKeysAndUnlockVault(
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    orgPublicKey = orgPublicKey,
+                    rememberDevice = shouldTrustDevice,
+                )
+            } returns registerTdeKeyResponse.asSuccess()
+            coEvery {
+                accountsService.createAccountKeys(
+                    publicKey = userPublicKey,
+                    encryptedPrivateKey = userPrivateKey,
+                )
+            } returns error.asFailure()
+
+            val result = repository.createNewSsoUser()
+
+            assertEquals(NewSsoUserResult.Failure(error = error), result)
+            coVerify(exactly = 1) {
+                organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
+                organizationService.getOrganizationKeys(orgId)
+                authSdkSource.makeRegisterTdeKeysAndUnlockVault(
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    orgPublicKey = orgPublicKey,
+                    rememberDevice = shouldTrustDevice,
+                )
+                accountsService.createAccountKeys(
+                    publicKey = userPublicKey,
+                    encryptedPrivateKey = userPrivateKey,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `createNewSsoUser when organizationResetPasswordEnroll fails returns failure for v1 encryption`() =
+        runTest {
+            every { featureFlagManager.getFeatureFlag(FlagKey.V2EncryptionTde) } returns false
+            val shouldTrustDevice = false
+            val orgIdentifier = "rememberedOrgIdentifier"
+            val orgId = "organizationId"
+            val orgPublicKey = "organizationPublicKey"
+            val userPrivateKey = "userPrivateKey"
+            val userPublicKey = "userPublicKey"
+            val userAdminReset = "userAdminReset"
+            val orgAutoEnrollStatusResponse = OrganizationAutoEnrollStatusResponseJson(
+                organizationId = orgId,
+                isResetPasswordEnabled = false,
+            )
+            val orgKeysResponse = OrganizationKeysResponseJson(
+                privateKey = "privateKey",
+                publicKey = orgPublicKey,
+            )
+            val registerTdeKeyResponse = RegisterTdeKeyResponse(
+                privateKey = userPrivateKey,
+                publicKey = userPublicKey,
+                adminReset = userAdminReset,
+                deviceKey = null,
+            )
+            val error = Throwable("Fail!")
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.rememberedOrgIdentifier = orgIdentifier
+            fakeAuthDiskSource.storeShouldTrustDevice(
+                userId = USER_ID_1,
+                shouldTrustDevice = shouldTrustDevice,
+            )
+            coEvery {
+                organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
+            } returns orgAutoEnrollStatusResponse.asSuccess()
+            coEvery {
+                organizationService.getOrganizationKeys(orgId)
+            } returns orgKeysResponse.asSuccess()
+            coEvery {
+                authSdkSource.makeRegisterTdeKeysAndUnlockVault(
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    orgPublicKey = orgPublicKey,
+                    rememberDevice = shouldTrustDevice,
+                )
+            } returns registerTdeKeyResponse.asSuccess()
+            coEvery {
+                accountsService.createAccountKeys(
+                    publicKey = userPublicKey,
+                    encryptedPrivateKey = userPrivateKey,
+                )
+            } returns CreateAccountKeysResponseJson(
+                key = null,
+                publicKey = userPublicKey,
+                privateKey = userPrivateKey,
+                accountKeys = null,
+            ).asSuccess()
+            coEvery {
+                organizationService.organizationResetPasswordEnroll(
+                    organizationId = orgId,
+                    userId = USER_ID_1,
+                    passwordHash = null,
+                    resetPasswordKey = userAdminReset,
+                )
+            } returns error.asFailure()
+
+            val result = repository.createNewSsoUser()
+
+            assertEquals(NewSsoUserResult.Failure(error = error), result)
+            coVerify(exactly = 1) {
+                organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
+                organizationService.getOrganizationKeys(orgId)
+                authSdkSource.makeRegisterTdeKeysAndUnlockVault(
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    orgPublicKey = orgPublicKey,
+                    rememberDevice = shouldTrustDevice,
+                )
+                accountsService.createAccountKeys(
+                    publicKey = userPublicKey,
+                    encryptedPrivateKey = userPrivateKey,
+                )
+                organizationService.organizationResetPasswordEnroll(
+                    organizationId = orgId,
+                    userId = USER_ID_1,
+                    passwordHash = null,
+                    resetPasswordKey = userAdminReset,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `createNewSsoUser when shouldTrustDevice false should not trust the device returns Success for v1 encryption`() =
+        runTest {
+            every { featureFlagManager.getFeatureFlag(FlagKey.V2EncryptionTde) } returns false
             val shouldTrustDevice = false
             val orgIdentifier = "rememberedOrgIdentifier"
             val orgId = "organizationId"
@@ -1291,9 +1445,11 @@ class AuthRepositoryTest {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `createNewSsoUser when shouldTrustDevice true should trust the device returns Success`() =
+    fun `createNewSsoUser when shouldTrustDevice true should trust the device returns Success for v1 encryption`() =
         runTest {
+            every { featureFlagManager.getFeatureFlag(FlagKey.V2EncryptionTde) } returns false
             val shouldTrustDevice = true
             val orgIdentifier = "rememberedOrgIdentifier"
             val orgId = "organizationId"
