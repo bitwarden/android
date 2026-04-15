@@ -1241,7 +1241,6 @@ class VaultViewModel @Inject constructor(
                 vaultFilterData = vaultFilterData,
                 isPremium = userState.activeAccount.isPremium,
                 showImportActionCard = firstTimeState.showImportLoginsCard,
-                dialog = it.dialog,
             )
         }
     }
