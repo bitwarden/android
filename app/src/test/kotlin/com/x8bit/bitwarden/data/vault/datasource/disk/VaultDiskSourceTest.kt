@@ -34,7 +34,7 @@ import java.time.Instant
 
 class VaultDiskSourceTest {
 
-    private val json = CoreModule.providesJson()
+    private val json = CoreModule.providesJson(buildInfoManager = mockk(relaxed = true))
     private val dispatcherManager: FakeDispatcherManager = FakeDispatcherManager()
     private lateinit var ciphersDao: FakeCiphersDao
     private lateinit var collectionsDao: FakeCollectionsDao

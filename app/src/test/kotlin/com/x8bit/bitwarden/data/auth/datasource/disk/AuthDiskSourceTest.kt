@@ -42,7 +42,7 @@ class AuthDiskSourceTest {
         every { migrateIfNecessary() } just runs
     }
 
-    private val json = CoreModule.providesJson()
+    private val json = CoreModule.providesJson(buildInfoManager = mockk(relaxed = true))
 
     private val authDiskSource = AuthDiskSourceImpl(
         encryptedSharedPreferences = fakeEncryptedSharedPreferences,

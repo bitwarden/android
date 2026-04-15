@@ -12,7 +12,9 @@ import org.junit.jupiter.api.assertNull
 
 class RelyingPartyParserTest {
 
-    private val relyingPartyParser = RelyingPartyParserImpl(json = CoreModule.providesJson())
+    private val relyingPartyParser = RelyingPartyParserImpl(
+        json = CoreModule.providesJson(buildInfoManager = mockk(relaxed = true)),
+    )
 
     @Test
     fun `parse GetPublicKeyCredentialOption should return relyingPartyId`() {
