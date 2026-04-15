@@ -169,9 +169,28 @@ class VaultViewModel @Inject constructor(
     private val vaultFilterTypeOrDefault: VaultFilterType
         get() = state.vaultFilterData?.selectedVaultFilterType ?: VaultFilterType.AllVaults
 
+    /**
+     * Tracks whether a forced sync was initiated to resolve a KDF update check. While true,
+     * the KDF update dialog is suppressed until the sync completes.
+     */
+    private var isAwaitingKdfSync = false
+
     init {
-        // Attempt a sync each time we are on a fresh Vault Screen.
-        vaultRepository.syncIfNecessary()
+        // Force a sync if a KDF update is detected as necessary to ensure we have the latest KDF
+        // settings from the server. This handles the case where the user updated their KDF
+        // settings on another device. Otherwise, attempt a sync based on the normal criteria.
+        if (authRepository.needsKdfUpdateToMinimums()) {
+            isAwaitingKdfSync = true
+            viewModelScope.launch {
+                try {
+                    vaultRepository.syncForResult(forced = true)
+                } finally {
+                    sendAction(VaultAction.Internal.KdfSyncCompletedReceive)
+                }
+            }
+        } else {
+            vaultRepository.syncIfNecessary()
+        }
 
         // Reset the current vault filter type for the current user
         vaultRepository.vaultFilterType = vaultFilterTypeOrDefault
@@ -965,6 +984,10 @@ class VaultViewModel @Inject constructor(
                 handleUpdatedKdfToMinimumsReceived(action)
             }
 
+            is VaultAction.Internal.KdfSyncCompletedReceive -> {
+                handleKdfSyncCompletedReceive()
+            }
+
             is VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive -> {
                 handleCredentialExchangeProtocolExportFlagUpdateReceive(action)
             }
@@ -981,6 +1004,23 @@ class VaultViewModel @Inject constructor(
 
             is VaultAction.Internal.PremiumUpgradeBannerEligibilityReceive -> {
                 handlePremiumUpgradeBannerEligibilityReceive(action)
+            }
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    private fun handleKdfSyncCompletedReceive() {
+        isAwaitingKdfSync = false
+        if (authRepository.needsKdfUpdateToMinimums()) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
+                        title = BitwardenString.update_your_encryption_settings.asText(),
+                        message = BitwardenString
+                            .the_new_recommended_encryption_settings_will_improve_your_account_desc_long
+                            .asText(),
+                    ),
+                )
             }
         }
     }
@@ -1201,6 +1241,7 @@ class VaultViewModel @Inject constructor(
                 vaultFilterData = vaultFilterData,
                 isPremium = userState.activeAccount.isPremium,
                 showImportActionCard = firstTimeState.showImportLoginsCard,
+                dialog = it.dialog,
             )
         }
     }
@@ -1274,25 +1315,26 @@ class VaultViewModel @Inject constructor(
     private fun getDialogVaultLoaded(
         shouldShowDecryptionAlert: Boolean,
         vaultData: DataState.Loaded<VaultData>,
-    ): VaultState.DialogState? = if (authRepository.needsKdfUpdateToMinimums()) {
-        VaultState.DialogState.VaultLoadKdfUpdateRequired(
-            title = BitwardenString.update_your_encryption_settings.asText(),
-            message = BitwardenString
-                .the_new_recommended_encryption_settings_will_improve_your_account_desc_long
-                .asText(),
-        )
-    } else if (shouldShowDecryptionAlert ||
-        state.dialog is VaultState.DialogState.VaultLoadCipherDecryptionError
-    ) {
-        VaultState.DialogState.VaultLoadCipherDecryptionError(
-            title = BitwardenString.decryption_error.asText(),
-            cipherCount = vaultData.data.decryptCipherListResult.failures.size,
-        )
-    } else if (state.dialog is VaultState.DialogState.ThirdPartyBrowserAutofill) {
-        state.dialog
-    } else {
-        null
-    }
+    ): VaultState.DialogState? =
+        if (!isAwaitingKdfSync && authRepository.needsKdfUpdateToMinimums()) {
+            VaultState.DialogState.VaultLoadKdfUpdateRequired(
+                title = BitwardenString.update_your_encryption_settings.asText(),
+                message = BitwardenString
+                    .the_new_recommended_encryption_settings_will_improve_your_account_desc_long
+                    .asText(),
+            )
+        } else if (shouldShowDecryptionAlert ||
+            state.dialog is VaultState.DialogState.VaultLoadCipherDecryptionError
+        ) {
+            VaultState.DialogState.VaultLoadCipherDecryptionError(
+                title = BitwardenString.decryption_error.asText(),
+                cipherCount = vaultData.data.decryptCipherListResult.failures.size,
+            )
+        } else if (state.dialog is VaultState.DialogState.ThirdPartyBrowserAutofill) {
+            state.dialog
+        } else {
+            null
+        }
 
     private fun updateVaultState(
         vaultData: VaultData,
@@ -2384,6 +2426,11 @@ sealed class VaultAction {
         data class UpdatedKdfToMinimumsReceived(
             val result: UpdateKdfMinimumsResult,
         ) : Internal()
+
+        /**
+         * Indicates the forced sync triggered for a KDF update check has completed.
+         */
+        data object KdfSyncCompletedReceive : Internal()
 
         /**
          * Indicates that the Credential Exchange Protocol export flag has been updated.

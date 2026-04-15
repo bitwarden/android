@@ -10,11 +10,14 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.UserDecryptionOptionsJson
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCollection
 import com.bitwarden.network.model.createMockDomains
 import com.bitwarden.network.model.createMockFolder
+import com.bitwarden.network.model.createMockMasterPasswordUnlock
 import com.bitwarden.network.model.createMockOrganizationKeys
 import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.bitwarden.network.model.createMockPolicy
@@ -728,6 +731,16 @@ class VaultSyncManagerTest {
                         profile = MOCK_PROFILE.copy(
                             avatarColorHex = "mockAvatarColor-1",
                             stamp = "mockSecurityStamp-1",
+                            kdfType = KdfTypeJson.PBKDF2_SHA256,
+                            kdfIterations = 600000,
+                            kdfMemory = null,
+                            kdfParallelism = null,
+                            userDecryptionOptions = UserDecryptionOptionsJson(
+                                hasMasterPassword = true,
+                                masterPasswordUnlock = createMockMasterPasswordUnlock(number = 1),
+                                trustedDeviceUserDecryptionOptions = null,
+                                keyConnectorUserDecryptionOptions = null,
+                            ),
                         ),
                     ),
                 ),

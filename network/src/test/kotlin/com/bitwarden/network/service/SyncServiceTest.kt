@@ -391,6 +391,18 @@ private const val SYNC_SUCCESS_JSON = """
       "expirationDate": "2023-10-27T12:00:00.00Z",
       "authType": 1
     }
-  ]
+  ],
+  "userDecryption": {
+    "masterPasswordUnlock": {
+      "kdf": {
+        "kdfType": 0,
+        "iterations": 600000,
+        "memory": null,
+        "parallelism": null
+      },
+      "masterKeyWrappedUserKey": "mockMasterKeyWrappedUserKey-1",
+      "salt": "mockSalt-1"
+    }
+  }
 }
 """
