@@ -295,7 +295,6 @@ Scanning will happen automatically.</string>
     <string name="field_type_text">Text</string>
     <string name="select_type_field">What type of custom field do you want to add?</string>
     <string name="remove">Remove</string>
-    <string name="new_uri">New URI</string>
     <string name="add_website">Add website</string>
     <string name="base_domain">Base domain</string>
     <string name="default_text">Default (%1$s)</string>
@@ -667,7 +666,9 @@ Do you want to switch to this account?</string>
     <string name="you_will_be_notified_once_approved">You will be notified once approved.</string>
     <string name="trouble_logging_in">Trouble logging in?</string>
     <string name="block_auto_fill">Block autofill</string>
+    <string name="no_uris_blocked">No URIs blocked</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Autofill will not be offered for these URIs.</string>
+    <string name="edit_blocked_uri">Edit blocked URI</string>
     <string name="new_blocked_uri">New blocked URI</string>
     <string name="invalid_format_use_https_http_or_android_app">Invalid format. Use https://, http://, or androidapp://</string>
     <string name="enter_uri">Enter URI</string>

@@ -42,7 +42,6 @@ fun AddEditBlockedUriDialog(
     onUriChange: (String) -> Unit,
     onCancelClick: () -> Unit,
     onSaveClick: (String) -> Unit,
-    onDeleteClick: (() -> Unit)? = null,
     onDismissRequest: () -> Unit,
 ) {
     Dialog(
@@ -66,7 +65,13 @@ fun AddEditBlockedUriDialog(
                 modifier = Modifier
                     .padding(top = 24.dp, start = 24.dp, end = 24.dp)
                     .fillMaxWidth(),
-                text = stringResource(id = BitwardenString.new_uri),
+                text = stringResource(
+                    id = if (isEdit) {
+                        BitwardenString.edit_blocked_uri
+                    } else {
+                        BitwardenString.new_blocked_uri
+                    },
+                ),
                 color = BitwardenTheme.colorScheme.text.primary,
                 style = BitwardenTheme.typography.headlineSmall,
             )
@@ -104,13 +109,6 @@ fun AddEditBlockedUriDialog(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(start = 8.dp, top = 24.dp, bottom = 24.dp, end = 24.dp),
             ) {
-                if (isEdit && onDeleteClick != null) {
-                    BitwardenTextButton(
-                        label = stringResource(id = BitwardenString.remove),
-                        onClick = onDeleteClick,
-                    )
-                }
-
                 BitwardenTextButton(
                     label = stringResource(id = BitwardenString.cancel),
                     onClick = onCancelClick,

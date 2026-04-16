@@ -10,6 +10,9 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill.util.isValidPattern
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill.util.validateUri
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
@@ -40,7 +43,9 @@ class BlockAutoFillViewModel @Inject constructor(
         mutableStateFlow.update { currentState ->
             if (uris.isNotEmpty()) {
                 currentState.copy(
-                    viewState = BlockAutoFillState.ViewState.Content(uris.map { it }),
+                    viewState = BlockAutoFillState.ViewState.Content(
+                        blockedUris = uris.distinct().toImmutableList(),
+                    ),
                 )
             } else {
                 currentState.copy(
@@ -163,7 +168,7 @@ class BlockAutoFillViewModel @Inject constructor(
 }
 
 /**
- * Represents the state for block auto fill.
+ * Represents the state for block autofill.
  *
  * @property viewState indicates what view state the screen is in.
  */
@@ -203,7 +208,7 @@ data class BlockAutoFillState(
          */
         @Parcelize
         data class Content(
-            val blockedUris: List<String> = emptyList(),
+            val blockedUris: ImmutableList<String> = persistentListOf(),
         ) : ViewState()
 
         /**

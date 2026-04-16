@@ -11,10 +11,12 @@ import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
+import com.bitwarden.ui.util.assertNoPopupExists
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -68,7 +70,7 @@ class BlockAutoFillScreenTest : BitwardenComposeTest() {
     @Test
     fun `Screen should display content state view when in ViewState Content`() {
         mutableStateFlow.value = BlockAutoFillState(
-            viewState = BlockAutoFillState.ViewState.Content(listOf("uri1", "uri2")),
+            viewState = BlockAutoFillState.ViewState.Content(persistentListOf("uri1", "uri2")),
         )
 
         listOf("uri1", "uri2").forEach { uri ->
@@ -110,17 +112,6 @@ class BlockAutoFillScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `on URI item click should send EditUriClick`() {
-        mutableStateFlow.value = BlockAutoFillState(
-            viewState = BlockAutoFillState.ViewState.Content(listOf("uri1")),
-        )
-
-        composeTestRule.onNodeWithText("uri1").performClick()
-
-        verify { viewModel.trySendAction(BlockAutoFillAction.EditUriClick(uri = "uri1")) }
-    }
-
-    @Test
     fun `should show add URI dialog according to state`() {
         composeTestRule.assertNoDialogExists()
 
@@ -130,33 +121,36 @@ class BlockAutoFillScreenTest : BitwardenComposeTest() {
                 originalUri = null,
                 errorMessage = null,
             ),
-            viewState = BlockAutoFillState.ViewState.Content(listOf("uri1")),
+            viewState = BlockAutoFillState.ViewState.Content(persistentListOf("uri1")),
         )
 
         composeTestRule
-            .onNodeWithText("New URI")
+            .onNodeWithText("New blocked URI")
             .assert(hasAnyAncestor(isDialog()))
     }
 
     @Test
-    fun `clicking a uri from the list should send EditUriClick action`() {
-        val testUri = "http://test.com"
+    fun `clicking edit in popup menu should send EditUriClick action`() {
+        composeTestRule.assertNoPopupExists()
 
-        composeTestRule.assertNoDialogExists()
-
+        val uriToRemove = "http://uriToRemove.com"
         mutableStateFlow.value = BlockAutoFillState(
-            dialog = BlockAutoFillState.DialogState.AddEdit(
-                uri = testUri,
-                originalUri = testUri,
-                errorMessage = null,
+            viewState = BlockAutoFillState.ViewState.Content(
+                blockedUris = persistentListOf(uriToRemove),
             ),
-            viewState = BlockAutoFillState.ViewState.Content(listOf("uri1")),
         )
 
         composeTestRule
-            .onNodeWithText("New URI")
-            .assert(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
+            .onNodeWithContentDescription(label = "More options")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Edit")
+            .performScrollTo()
+            .performClick()
+
+        verify { viewModel.trySendAction(BlockAutoFillAction.EditUriClick(uri = uriToRemove)) }
     }
 
     @Test
@@ -171,7 +165,7 @@ class BlockAutoFillScreenTest : BitwardenComposeTest() {
                 originalUri = null,
                 errorMessage = errorMessage.asText(),
             ),
-            viewState = BlockAutoFillState.ViewState.Content(listOf("uri1")),
+            viewState = BlockAutoFillState.ViewState.Content(persistentListOf("uri1")),
         )
 
         composeTestRule
@@ -190,7 +184,7 @@ class BlockAutoFillScreenTest : BitwardenComposeTest() {
                 originalUri = null,
                 errorMessage = null,
             ),
-            viewState = BlockAutoFillState.ViewState.Content(listOf("existingUri")),
+            viewState = BlockAutoFillState.ViewState.Content(persistentListOf("existingUri")),
         )
 
         val newUri = "http://newuri.com"
@@ -209,7 +203,7 @@ class BlockAutoFillScreenTest : BitwardenComposeTest() {
                 originalUri = null,
                 errorMessage = null,
             ),
-            viewState = BlockAutoFillState.ViewState.Content(emptyList()),
+            viewState = BlockAutoFillState.ViewState.Content(persistentListOf()),
         )
 
         composeTestRule.onNodeWithText("Cancel").performClick()
@@ -218,20 +212,25 @@ class BlockAutoFillScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `clicking remove in dialog should send RemoveUriClick action`() {
-        composeTestRule.assertNoDialogExists()
+    fun `clicking delete in popup menu should send RemoveUriClick action`() {
+        composeTestRule.assertNoPopupExists()
 
         val uriToRemove = "http://uriToRemove.com"
         mutableStateFlow.value = BlockAutoFillState(
-            dialog = BlockAutoFillState.DialogState.AddEdit(
-                uri = uriToRemove,
-                originalUri = uriToRemove,
-                errorMessage = null,
+            viewState = BlockAutoFillState.ViewState.Content(
+                blockedUris = persistentListOf(uriToRemove),
             ),
-            viewState = BlockAutoFillState.ViewState.Content(listOf(uriToRemove, "otherUri")),
         )
 
-        composeTestRule.onNodeWithText("Remove").performClick()
+        composeTestRule
+            .onNodeWithContentDescription(label = "More options")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Delete")
+            .performScrollTo()
+            .performClick()
 
         verify { viewModel.trySendAction(BlockAutoFillAction.RemoveUriClick(uri = uriToRemove)) }
     }

@@ -8,6 +8,8 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -24,7 +26,7 @@ class BlockAutoFillViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             val expectedState = BlockAutoFillState(
                 viewState = BlockAutoFillState.ViewState.Content(
-                    blockedUris = listOf("blockedUri"),
+                    blockedUris = persistentListOf("blockedUri"),
                 ),
             )
 
@@ -64,7 +66,9 @@ class BlockAutoFillViewModelTest : BaseViewModelTest() {
                 originalUri = null,
                 errorMessage = null,
             ),
-            viewState = BlockAutoFillState.ViewState.Content(blockedUris = listOf("blockedUri")),
+            viewState = BlockAutoFillState.ViewState.Content(
+                blockedUris = persistentListOf("blockedUri"),
+            ),
         )
 
         assertEquals(expectedState, viewModel.stateFlow.value)
@@ -82,7 +86,7 @@ class BlockAutoFillViewModelTest : BaseViewModelTest() {
                 originalUri = testUri,
                 errorMessage = null,
             ),
-            viewState = BlockAutoFillState.ViewState.Content(listOf("blockedUri")),
+            viewState = BlockAutoFillState.ViewState.Content(persistentListOf("blockedUri")),
         )
 
         assertEquals(expectedState, viewModel.stateFlow.value)
@@ -104,7 +108,7 @@ class BlockAutoFillViewModelTest : BaseViewModelTest() {
         val expectedState = BlockAutoFillState(
             dialog = null,
             viewState = BlockAutoFillState.ViewState.Content(
-                blockedUris = listOf("http://b.com"),
+                blockedUris = persistentListOf("http://b.com"),
             ),
         )
 
@@ -128,7 +132,7 @@ class BlockAutoFillViewModelTest : BaseViewModelTest() {
         val expectedState = BlockAutoFillState(
             dialog = null,
             viewState = BlockAutoFillState.ViewState.Content(
-                blockedUris = blockedUris,
+                blockedUris = blockedUris.toImmutableList(),
             ),
         )
 
@@ -152,7 +156,11 @@ class BlockAutoFillViewModelTest : BaseViewModelTest() {
         val expectedState = BlockAutoFillState(
             dialog = null,
             viewState = BlockAutoFillState.ViewState.Content(
-                blockedUris = listOf("http://existing.com", "http://new.com", "http://another.com"),
+                blockedUris = persistentListOf(
+                    "http://existing.com",
+                    "http://new.com",
+                    "http://another.com",
+                ),
             ),
         )
 
@@ -189,7 +197,7 @@ class BlockAutoFillViewModelTest : BaseViewModelTest() {
         val expectedState = BlockAutoFillState(
             dialog = null,
             viewState = BlockAutoFillState.ViewState.Content(
-                blockedUris = listOf("http://other.com", "http://new.com"),
+                blockedUris = persistentListOf("http://other.com", "http://new.com"),
             ),
         )
 
@@ -217,7 +225,7 @@ class BlockAutoFillViewModelTest : BaseViewModelTest() {
         val expectedState = BlockAutoFillState(
             dialog = null,
             viewState = BlockAutoFillState.ViewState.Content(
-                blockedUris = listOf("http://other.com", "http://same.com"),
+                blockedUris = persistentListOf("http://other.com", "http://same.com"),
             ),
         )
 
@@ -249,7 +257,7 @@ class BlockAutoFillViewModelTest : BaseViewModelTest() {
                 errorMessage = BitwardenString.the_urix_is_already_blocked.asText("http://b.com"),
             ),
             viewState = BlockAutoFillState.ViewState.Content(
-                blockedUris = listOf("http://a.com", "http://b.com"),
+                blockedUris = persistentListOf("http://a.com", "http://b.com"),
             ),
         )
 
