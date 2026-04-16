@@ -169,24 +169,15 @@ class VaultViewModel @Inject constructor(
     private val vaultFilterTypeOrDefault: VaultFilterType
         get() = state.vaultFilterData?.selectedVaultFilterType ?: VaultFilterType.AllVaults
 
-    /**
-     * Tracks whether a forced sync was initiated to resolve a KDF update check. While true,
-     * the KDF update dialog is suppressed until the sync completes.
-     */
-    private var isAwaitingKdfSync = false
-
     init {
         // Force a sync if a KDF update is detected as necessary to ensure we have the latest KDF
         // settings from the server. This handles the case where the user updated their KDF
         // settings on another device. Otherwise, attempt a sync based on the normal criteria.
         if (authRepository.needsKdfUpdateToMinimums()) {
-            isAwaitingKdfSync = true
+            mutableStateFlow.update { it.copy(isAwaitingKdfSync = true) }
             viewModelScope.launch {
-                try {
-                    vaultRepository.syncForResult(forced = true)
-                } finally {
-                    sendAction(VaultAction.Internal.KdfSyncCompletedReceive)
-                }
+                vaultRepository.syncForResult(forced = true)
+                sendAction(VaultAction.Internal.KdfSyncCompletedReceive)
             }
         } else {
             vaultRepository.syncIfNecessary()
@@ -1010,7 +1001,7 @@ class VaultViewModel @Inject constructor(
 
     @Suppress("MaxLineLength")
     private fun handleKdfSyncCompletedReceive() {
-        isAwaitingKdfSync = false
+        mutableStateFlow.update { it.copy(isAwaitingKdfSync = false) }
         if (authRepository.needsKdfUpdateToMinimums()) {
             mutableStateFlow.update {
                 it.copy(
@@ -1315,7 +1306,7 @@ class VaultViewModel @Inject constructor(
         shouldShowDecryptionAlert: Boolean,
         vaultData: DataState.Loaded<VaultData>,
     ): VaultState.DialogState? =
-        if (!isAwaitingKdfSync && authRepository.needsKdfUpdateToMinimums()) {
+        if (!state.isAwaitingKdfSync && authRepository.needsKdfUpdateToMinimums()) {
             VaultState.DialogState.VaultLoadKdfUpdateRequired(
                 title = BitwardenString.update_your_encryption_settings.asText(),
                 message = BitwardenString
@@ -1557,6 +1548,7 @@ data class VaultState(
     val restrictItemTypesPolicyOrgIds: List<String>,
     val isIntroducingArchiveActionCardDismissed: Boolean,
     val isPremiumUpgradeBannerEligible: Boolean = false,
+    val isAwaitingKdfSync: Boolean = false,
 ) : Parcelable {
 
     /**

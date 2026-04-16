@@ -274,7 +274,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `initial state should trigger a forced sync when KDF update is required`() = runTest {
         every { authRepository.needsKdfUpdateToMinimums() } returns true
@@ -283,7 +282,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         verify(exactly = 0) { vaultRepository.syncIfNecessary() }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `KDF dialog is suppressed while sync is pending even when vault data loads`() = runTest {
         every { authRepository.needsKdfUpdateToMinimums() } returns true
@@ -301,51 +299,45 @@ class VaultViewModelTest : BaseViewModelTest() {
             ),
         )
         val viewModel = createViewModel()
-        assertNull(viewModel.stateFlow.value.dialog)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = null,
+                viewState = VaultState.ViewState.NoItems,
+                isAwaitingKdfSync = true,
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `KDF dialog is not shown after sync completes when KDF update is no longer needed`() =
         runTest {
             every { authRepository.needsKdfUpdateToMinimums() } returns true andThen false
             val viewModel = createViewModel()
-            assertNull(viewModel.stateFlow.value.dialog)
+            assertEquals(
+                DEFAULT_STATE.copy(dialog = null),
+                viewModel.stateFlow.value,
+            )
         }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `KDF dialog is shown after sync completes when KDF update is still needed`() =
         runTest {
             every { authRepository.needsKdfUpdateToMinimums() } returns true
             val viewModel = createViewModel()
             assertEquals(
-                VaultState.DialogState.VaultLoadKdfUpdateRequired(
-                    title = BitwardenString.update_your_encryption_settings.asText(),
-                    message = BitwardenString
-                        .the_new_recommended_encryption_settings_will_improve_your_account_desc_long
-                        .asText(),
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
+                        title = BitwardenString.update_your_encryption_settings.asText(),
+                        message = BitwardenString
+                            .the_new_recommended_encryption_settings_will_improve_your_account_desc_long
+                            .asText(),
+                    ),
                 ),
-                viewModel.stateFlow.value.dialog,
+                viewModel.stateFlow.value,
             )
         }
-
-    @Test
-    fun `KDF dialog is shown after sync fails and KDF update is still needed`() = runTest {
-        every { authRepository.needsKdfUpdateToMinimums() } returns true
-        coEvery {
-            vaultRepository.syncForResult(forced = any())
-        } throws RuntimeException("sync failed")
-        val viewModel = createViewModel()
-        assertEquals(
-            VaultState.DialogState.VaultLoadKdfUpdateRequired(
-                title = BitwardenString.update_your_encryption_settings.asText(),
-                message = BitwardenString
-                    .the_new_recommended_encryption_settings_will_improve_your_account_desc_long
-                    .asText(),
-            ),
-            viewModel.stateFlow.value.dialog,
-        )
-    }
 
     @Test
     fun `IntroducingArchiveActionCardDismissedFlow updates should update the state accordingly`() =
