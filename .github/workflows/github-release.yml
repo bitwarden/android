@@ -229,6 +229,7 @@ jobs:
           # Extract release tag from URL
           release_id_from_url=$(echo "$release_url" | sed 's/.*\/tag\///')
           echo "release_id_from_url=$release_id_from_url" >> "$GITHUB_OUTPUT"
+          echo "is_latest_release=$is_latest_release" >> "$GITHUB_OUTPUT"
           echo "url=$release_url" >> "$GITHUB_OUTPUT"
 
           echo "✅ Release created: $release_url"
@@ -241,6 +242,7 @@ jobs:
           ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
           _VERSION_NAME: ${{ steps.get_release_info.outputs.version_name }}
           _RELEASE_ID: ${{ steps.create_release.outputs.release_id_from_url }}
+          _IS_LATEST: ${{ steps.create_release.outputs.is_latest_release }}
         run: |
           echo "Getting current release body. Release ID: $_RELEASE_ID"
           current_body=$(gh release view "$_RELEASE_ID" --json body --jq .body)
@@ -254,7 +256,7 @@ jobs:
           ${current_body}
           **Builds Source:** https://github.com/${{ github.repository }}/actions/runs/$ARTIFACT_RUN_ID"
 
-          new_release_url=$(gh release edit "$_RELEASE_ID" --notes "$updated_body")
+          new_release_url=$(gh release edit "$_RELEASE_ID" --notes "$updated_body" --latest="$_IS_LATEST")
 
           # draft release links change after editing
           echo "release_url=$new_release_url" >> "$GITHUB_OUTPUT"
