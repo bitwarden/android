@@ -11,7 +11,7 @@
     <string name="copy_password">Copier le mot de passe</string>
     <string name="copy_username">Copier le nom d\'utilisateur</string>
     <string name="delete">Supprimer</string>
-    <string name="preview">Preview</string>
+    <string name="preview">Aperçu</string>
     <string name="deleting">Suppression…</string>
     <string name="do_you_really_want_to_delete">Êtes-vous sûr de vouloir supprimer ? Cette action ne peut pas être annulée.</string>
     <string name="edit">Modifier</string>
@@ -43,7 +43,7 @@
     <string name="master_password">Mot de passe principal</string>
     <string name="master_password_required">Mot de passe principal (requis)</string>
     <string name="new_master_password_required">Nouveau mot de passe principal (requis)</string>
-    <string name="more_options">More options</string>
+    <string name="more_options">Plus d\'options</string>
     <string name="my_vault">Mon coffre</string>
     <string name="name">Nom</string>
     <string name="item_name_required">Nom de l\'élément (obligatoire)</string>
@@ -130,7 +130,7 @@
     <string name="no_text_sends">Il n\'y a aucun texte Send dans votre coffre.</string>
     <string name="no_file_sends">Il n\'y a aucun fichier Send dans votre coffre.</string>
     <string name="no_ssh_keys">Il n\'y a aucune clé SSH dans votre coffre.</string>
-    <string name="no_archives_title">Archive is empty</string>
+    <string name="no_archives_title">L\'archive est vide</string>
     <string name="no_archives_message">Fill your archive with items you don’t want to see in search results and autofill suggestions but might need someday.</string>
     <string name="new_text_send">Nouveau texte Send</string>
     <string name="new_file_send">Nouveau fichier Send</string>
@@ -171,7 +171,7 @@
     <string name="autofill_noun">Saisie automatique</string>
     <string name="autofill_verb">Saisie automatique</string>
     <string name="autofill_or_view">Voulez-vous saisir automatiquement ou afficher cet élément ?</string>
-    <string name="search">Rechercher</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">En savoir plus sur les organisations</string>
     <string name="authenticator_app_title">Application d\'authentification</string>
     <string name="enter_verification_code_app">Saisissez le code de vérification à 6 chiffres depuis votre application d\'authentification.</string>
@@ -179,7 +179,7 @@
     <string name="enter_verification_code_new_device">Nous ne reconnaissons pas cet appareil. Saisissez le code envoyé à votre adresse courriel pour vérifier votre identité.</string>
     <string name="recovery_code_title">Code de récupération</string>
     <string name="remember">Rappelez-vous</string>
-    <string name="remember_email">Se souvenir de l\'e-mail</string>
+    <string name="remember_email">Se souvenir du courriel</string>
     <string name="send_verification_code_again">Envoyer à nouveau le courriel de code de vérification</string>
     <string name="verification_email_not_sent">Impossible d\'envoyer le courriel de vérification. Essayez à nouveau.</string>
     <string name="verification_email_sent">Courriel de vérification envoyé</string>
@@ -201,12 +201,12 @@ La numérisation se fera automatiquement.</string>
     <string name="copy_totp_automatically">Copier le TOTP automatiquement</string>
     <string name="premium_required">Une adhésion Premium est requise pour utiliser cette fonctionnalité.</string>
     <string name="attachment_deleted">Pièce jointe supprimée</string>
-    <string name="attachments_unavailable">Attachments unavailable</string>
+    <string name="attachments_unavailable">Pièces jointes non disponibles</string>
     <string name="attachments_are_a_premium_feature">Attachments are a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="choose_file">Choisir un fichier</string>
     <string name="file">Fichier</string>
     <string name="no_file_chosen">Aucun fichier choisi</string>
-    <string name="file_name">File name</string>
+    <string name="file_name">Nom du fichier</string>
     <string name="no_attachments">Il n\'y a aucune pièce jointe.</string>
     <string name="file_source">Source du fichier</string>
     <string name="max_file_size">La taille maximale du fichier est de 100 Mo.</string>
@@ -228,6 +228,8 @@ La numérisation se fera automatiquement.</string>
     <string name="copy_security_code">Copier le code de sécurité</string>
     <string name="number">Numéro</string>
     <string name="security_code">Code de sécurité</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">Carte de paiement</string>
     <string name="type_identity">Identité</string>
     <string name="type_login">Identifiant</string>
@@ -307,7 +309,7 @@ La numérisation se fera automatiquement.</string>
     <string name="organization">Organisation</string>
     <string name="try_again">Réessayer</string>
     <string name="created">Créé : %1$s</string>
-    <string name="password_updated">Password updated: %1$s</string>
+    <string name="password_updated">Mot de passe mis à jour : %1$s</string>
     <string name="last_edited">Dernière modification : %1$s</string>
     <string name="invalid_email">Adresse électronique invalide.</string>
     <string name="cards">Cartes</string>
@@ -381,7 +383,7 @@ La numérisation se fera automatiquement.</string>
     <string name="capitalize">Mettre une majuscule</string>
     <string name="include_number">Inclure un chiffre</string>
     <string name="download">Télécharger</string>
-    <string name="download_file">Download file</string>
+    <string name="download_file">Télécharger le fichier</string>
     <string name="login_expired">Votre session a expiré.</string>
     <string name="biometrics_direction">Vérification biométrique</string>
     <string name="device_verification">Vérification de l\'appareil</string>
@@ -455,9 +457,9 @@ La numérisation se fera automatiquement.</string>
     <string name="deletion_date_info">Le Send sera définitivement supprimé à la date et heure spécifiées.</string>
     <string name="who_can_view">Who can view</string>
     <string name="anyone_with_the_link">Anyone with the link</string>
-    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
+    <string name="anyone_with_link_can_view_send">Toute personne disposant de ce lien peut afficher ce Send</string>
     <string name="specific_people">Specific people</string>
-    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
+    <string name="specific_people_verification_info">Après avoir partagé ce lien Send, les personnes devront vérifier leur courriel avec un code pour afficher ce Send</string>
     <string name="anyone_with_password">Anyone with a password set by you</string>
     <string name="add_email">Add email</string>
     <string name="pending_delete">En attente de suppression</string>
@@ -732,7 +734,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="user_verification_direction">Vérification de l’utilisateur</string>
     <string name="create_account_on">Création du compte sur</string>
     <string name="create_account_on_with_colon">Créer le compte sur :</string>
-    <string name="we_sent_an_email_to">Nous avons envoyé un email à <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
+    <string name="we_sent_an_email_to">Nous avons envoyé un courriel à <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">En continuant, vous acceptez les <annotation link="termsOfService">conditions générales d\'utilisation</annotation> et la <annotation link="privacyPolicy">politique de confidentialité</annotation></string>
     <string name="unsubscribe">Se désabonner</string>
     <string name="check_your_email">Vérifiez votre courriel</string>
@@ -772,7 +774,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="learn_about_other_ways_to_prevent_account_lockout">En savoir plus sur les autres moyens d\'empêcher le blocage du compte</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">En savoir plus sur les moyens de prévenir le blocage du compte</annotation></string>
     <string name="help_with_server_geolocations">Aide sur les géolocalisations des serveurs.</string>
-    <string name="email_address_required">Adresse mail (requise)</string>
+    <string name="email_address_required">Adresse courriel (requise)</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Sélectionnez le lien dans le courriel pour vérifier votre adresse courriel et continuer à créer votre compte.</string>
     <string name="change_email_address">Changer l\'adresse email</string>
     <string name="next">Suivant</string>
@@ -841,7 +843,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="fill_out_the_form_and_import_your_saved_password_file">Remplissez le formulaire et <annotation emphasis="bold">importez votre fichier de mots de passe enregistré.</annotation></string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Pour votre sécurité, assurez-vous de <annotation emphasis="bold">supprimer votre fichier de mot de passe enregistré.</annotation></string>
     <string name="need_help_check_out_import_help">Besoin d\'aide ? Consultez la <annotation link="importHelp">page d\'aide à l\'importation</annotation>.</string>
-    <string name="import_help">import help</string>
+    <string name="import_help">aide à l\'importation</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Enregistrez le fichier exporté</annotation> dans un emplacement de votre ordinateur où vous pourrez le retrouver facilement.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Ce n\'est pas un serveur Bitwarden reconnu. Vous devrez peut-être vérifier auprès de votre fournisseur ou mettre à jour votre serveur.</string>
     <string name="syncing_logins_loading_message">Synchronisation des identifiants…</string>
@@ -880,7 +882,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="copy_ssn">Copier le numéro de Sécurité Sociale</string>
     <string name="copy_passport_number">Copier le numéro de passeport</string>
     <string name="copy_license_number">Copier le numéro de permis de conduire</string>
-    <string name="copy_email">Copier l\'adresse mail</string>
+    <string name="copy_email">Copier l\'adresse courriel</string>
     <string name="copy_phone">Copier le numéro de téléphone</string>
     <string name="copy_address">Copier l\'adresse</string>
     <string name="biometrics_no_longer_supported_title">La biométrie n\'est plus prise en charge sur cet appareil</string>
@@ -952,10 +954,10 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">L\'opération d\'identification a échoué car l\'élément sélectionné n\'existe pas.</string>
     <string name="credential_operation_failed_because_user_verification_was_cancelled">L\'opération d\'identification a échoué car la vérification de l\'utilisateur a été annulée.</string>
     <string name="self_host_server_url">URL du serveur autohébergé</string>
-    <string name="use_brave_autofill_integration">Utilisez l\'intégration de remplissage automatique Brave</string>
+    <string name="use_brave_autofill_integration">Utilisez l\'intégration de saisie automatique Brave</string>
     <string name="use_chrome_autofill_integration">Utiliser l\'intégration de la saisie automatique de Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Utiliser l\'intégration de saisie automatique de Chrome Beta</string>
-    <string name="use_vivaldi_autofill_integration">Use Vivaldi autofill integration</string>
+    <string name="use_vivaldi_autofill_integration">Utilisez l\'intégration de saisie automatique de Vivaldi</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Améliore le remplissage des connexions pour les sites Web pris en charge sur les navigateurs sélectionnés. Une fois activé, vous serez dirigé vers les paramètres du navigateur pour activer le remplissage automatique par un tiers.</string>
     <string name="show_more">Afficher plus</string>
     <string name="no_folder">Aucun dossier</string>
@@ -1187,68 +1189,70 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="loading_vault_data">Chargement des données du coffre…</string>
     <string name="resending">Nouvel envoi en cours</string>
     <string name="you_left_the_organization">Vous avez quitté l\'organisation</string>
-    <string name="transfer_items_to_org">Transfer items to %1$s</string>
+    <string name="transfer_items_to_org">Transférer les éléments vers %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items. <annotation link="learnMore">Learn more</annotation></string>
-    <string name="decline_and_leave">Decline and leave</string>
-    <string name="why_am_i_seeing_this">Why am I seeing this?</string>
+    <string name="decline_and_leave">Refuser et quitter</string>
+    <string name="why_am_i_seeing_this">Pourquoi vois-je ceci ?</string>
     <string name="migrating_items_to_x">Migrating items to %s</string>
     <string name="failed_to_migrate_items_to_x">Failed to migrate items to %s</string>
-    <string name="search_archive">Search archive</string>
-    <string name="archive_noun">Archive</string>
-    <string name="archive_verb">Archive</string>
-    <string name="unarchive">Unarchive</string>
-    <string name="archived">Archived</string>
-    <string name="hidden_items">Hidden items</string>
-    <string name="unable_to_archive_selected_item">Unable to archive selected item.</string>
-    <string name="unable_to_unarchive_selected_item">Unable to unarchive selected item.</string>
-    <string name="archiving">Archiving</string>
-    <string name="unarchiving">Unarchiving</string>
+    <string name="search_archive">Rechercher dans l\'archive</string>
+    <string name="archive_noun">Archiver</string>
+    <string name="archive_verb">Archiver</string>
+    <string name="unarchive">Désarchiver</string>
+    <string name="archived">Archivé</string>
+    <string name="hidden_items">Éléments masqués</string>
+    <string name="unable_to_archive_selected_item">Impossible d\'archiver l\'élément sélectionné.</string>
+    <string name="unable_to_unarchive_selected_item">Impossible d\'archiver les éléments sélectionnés.</string>
+    <string name="archiving">En cours d\'archivage</string>
+    <string name="unarchiving">En cours de désarchivage</string>
     <string name="item_moved_to_archived">Item moved to archive</string>
-    <string name="item_moved_to_vault">Item moved to vault</string>
-    <string name="archive_unavailable">Archive unavailable</string>
-    <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
-    <string name="upgrade_to_premium">Upgrade to Premium</string>
-    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="item_moved_to_vault">Élément déplacé vers le coffre</string>
+    <string name="archive_unavailable">Archive indisponible</string>
+    <string name="archiving_items_is_a_premium_feature">L\'archivage est une fonctionnalité Premium. Votre abonnement actuel n\'inclut pas l\'accès à cette fonctionnalité.</string>
+    <string name="upgrade_to_premium">Mettre à niveau vers la version Premium</string>
+    <string name="unlock_advanced_security_features">Débloquer les fonctionnalités de sécurité avancées</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
-    <string name="this_item_is_archived">This item is archived.</string>
+    <string name="this_item_is_archived">Cet élément est archivé.</string>
     <string name="introducing_archive">Introducing archive</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>
     <string name="go_to_archive">Go to archive</string>
     <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">This item is archived. Saving changes will restore it to your vault.</string>
-    <string name="your_premium_subscription_ended">Your Premium subscription ended</string>
+    <string name="your_premium_subscription_ended">Votre abonnement Premium a expiré</string>
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">To regain access to your archive, restart your Premium subscription. If you edit details for an archived item before restarting, it’ll be moved back into your vault.</string>
     <string name="restart_premium">Restart Premium</string>
     <string name="items_transferred">Items transferred</string>
     <string name="updated_master_password">Mot de passe principal mis à jour</string>
-    <string name="invalid_email_addresses">Invalid email addresses</string>
-    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
-    <string name="no_email_addresses_entered">No email addresses entered</string>
-    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
-    <string name="sync_with_browser">Sync with browser</string>
+    <string name="invalid_email_addresses">Adresses courriel invalides</string>
+    <string name="one_or_more_email_addresses_are_incorrect">Une ou plusieurs adresses courriel sont incorrectes. Veuillez vérifier et réessayer.</string>
+    <string name="no_email_addresses_entered">Aucune adresse courriel saisie</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Entrez au moins une adresse courriel valide pour partager ce Send.</string>
+    <string name="sync_with_browser">Synchroniser avec le navigateur</string>
     <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
-    <string name="launch_browser">Launch browser</string>
-    <string name="continue_without_syncing">Continue without syncing</string>
-    <string name="external_link">External link</string>
+    <string name="launch_browser">Ouvrir le navigateur</string>
+    <string name="continue_without_syncing">Continuer sans synchroniser</string>
+    <string name="external_link">Lien externe</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
-    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
-    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
+    <string name="preview_not_available_for_files">L\'aperçu est indisponible pour %1$s fichiers. Vous pouvez toujours les télécharger pour les afficher sur votre appareil.</string>
+    <string name="this_file_is_too_large_to_preview">Ce fichier est trop volumineux pour être prévisualisé. Vous pouvez toujours le télécharger pour l\'afficher sur votre appareil.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
-    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
-    <string name="preview_unavailable">Preview unavailable</string>
+    <string name="preview_unavailable_for_this_file">L\'aperçu est indisponible pour ce fichier. Vous pouvez toujours le télécharger pour l\'afficher sur votre appareil.</string>
+    <string name="preview_unavailable">Aperçu non disponible</string>
     <string name="download_attachment">Download Attachment</string>
     <string name="upgraded_to_premium">Upgraded to premium</string>
     <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
-    <string name="per_month">/ month</string>
-    <string name="built_in_authenticator">Built-in authenticator</string>
-    <string name="emergency_access">Emergency access</string>
-    <string name="secure_file_storage">Secure file storage</string>
-    <string name="breach_monitoring">Breach monitoring</string>
-    <string name="upgrade_now">Upgrade now</string>
+    <string name="per_month">/ mois</string>
+    <string name="built_in_authenticator">Authentificateur intégré</string>
+    <string name="emergency_access">Accès d\'urgence</string>
+    <string name="secure_file_storage">Stockage sécurisé de fichier</string>
+    <string name="breach_monitoring">Surveillance des fuites</string>
+    <string name="upgrade_now">Mettre à niveau maintenant</string>
     <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
     <string name="opening_checkout">Opening checkout…</string>
     <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
     <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
     <string name="payment_not_received_yet">Payment not received yet</string>
     <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
-    <string name="go_back">Go back</string>
+    <string name="go_back">Revenir en arrière</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
 </resources>

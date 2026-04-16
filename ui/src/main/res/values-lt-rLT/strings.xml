@@ -173,7 +173,7 @@
     <string name="autofill_noun">Autofill</string>
     <string name="autofill_verb">Autofill</string>
     <string name="autofill_or_view">Ar norite automatiškai užpildyti ar peržiūrėti šį elementą?</string>
-    <string name="search">Ieškoti</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">Sužinoti apie organizacijas</string>
     <string name="authenticator_app_title">Autentifikavimo programa</string>
     <string name="enter_verification_code_app">Įveskite 6 skaitmenų patvirtinimo kodą iš autentifikavimo programos.</string>
@@ -230,6 +230,8 @@ Nuskaitymas vyks automatiškai.</string>
     <string name="copy_security_code">Kopijuoti saugos kodą</string>
     <string name="number">Numeris</string>
     <string name="security_code">Apsaugos kodas</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">Kortelė</string>
     <string name="type_identity">Tapatybė</string>
     <string name="type_login">Prisijungti</string>
@@ -1269,4 +1271,6 @@ Ar norite pereiti prie šios paskyros?</string>
     <string name="payment_not_received_yet">Payment not received yet</string>
     <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
     <string name="go_back">Go back</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
 </resources>

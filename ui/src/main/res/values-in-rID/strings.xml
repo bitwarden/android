@@ -170,7 +170,7 @@
     <string name="autofill_noun">Isi otomatis</string>
     <string name="autofill_verb">Isi otomatis</string>
     <string name="autofill_or_view">Apakah Anda ingin mengisi otomatis atau melihat info masuk ini?</string>
-    <string name="search">Pencarian</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">Pelajari tentang Organisasi</string>
     <string name="authenticator_app_title">Aplikasi Autentikasi</string>
     <string name="enter_verification_code_app">Masukkan 6 digit kode verifikasi dari aplikasi autentikasi Anda.</string>
@@ -227,6 +227,8 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="copy_security_code">Salin kode keamanan</string>
     <string name="number">Nomor</string>
     <string name="security_code">Kode Keamanan</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">Kartu</string>
     <string name="type_identity">Identitas</string>
     <string name="type_login">Login</string>
@@ -1243,4 +1245,6 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="payment_not_received_yet">Payment not received yet</string>
     <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
     <string name="go_back">Go back</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
 </resources>

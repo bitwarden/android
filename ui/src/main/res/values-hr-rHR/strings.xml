@@ -11,7 +11,7 @@
     <string name="copy_password">Kopiraj lozinku</string>
     <string name="copy_username">Kopiraj korisničko ime</string>
     <string name="delete">Izbriši</string>
-    <string name="preview">Preview</string>
+    <string name="preview">Pretpregled</string>
     <string name="deleting">Brisanje…</string>
     <string name="do_you_really_want_to_delete">Sigurno želiš izbrisati? To se ne može poništiti.</string>
     <string name="edit">Uredi</string>
@@ -43,7 +43,7 @@
     <string name="master_password">Glavna lozinka</string>
     <string name="master_password_required">Glavna lozinka (obavezno)</string>
     <string name="new_master_password_required">Nova glavna lozinka (obavezno)</string>
-    <string name="more_options">More options</string>
+    <string name="more_options">Više mogućnosti</string>
     <string name="my_vault">Moj trezor</string>
     <string name="name">Naziv</string>
     <string name="item_name_required">Naziv stavke (obavezno)</string>
@@ -131,8 +131,8 @@
     <string name="no_text_sends">U tvom trezoru nema tekst Sendova.</string>
     <string name="no_file_sends">U tvom trezoru nema datotečnih Sendova.</string>
     <string name="no_ssh_keys">U tvom trezoru nema SSH ključeva.</string>
-    <string name="no_archives_title">Archive is empty</string>
-    <string name="no_archives_message">Fill your archive with items you don’t want to see in search results and autofill suggestions but might need someday.</string>
+    <string name="no_archives_title">Arhiva je prazna</string>
+    <string name="no_archives_message">Ispuni svoju arhivu stavkama koje ne želiš vidjeti u rezultatima pretraživanja i prijedlozima auto-ispune, ali bi ti jednog dana ipak mogle zatrebati.</string>
     <string name="new_text_send">Novi tekstualni Send</string>
     <string name="new_file_send">Novi datotečni Send</string>
     <string name="no_username">Nema korisničkog imena</string>
@@ -172,7 +172,7 @@
     <string name="autofill_noun">Auto-ispuna</string>
     <string name="autofill_verb">Auto-ispuna</string>
     <string name="autofill_or_view">Želiš li auto-ispuniti ili pogledati ovu stavku?</string>
-    <string name="search">Traži</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">Više o organizacijama</string>
     <string name="authenticator_app_title">Autentifikatorska aplikacija</string>
     <string name="enter_verification_code_app">Unesi 6-znamenkasti kôd za provjeru iz autentifikatorske aplikacije.</string>
@@ -201,12 +201,12 @@
     <string name="copy_totp_automatically">Automatski kopiraj TOTP</string>
     <string name="premium_required">Za korištenje ove značajke potrebno je premium članstvo.</string>
     <string name="attachment_deleted">Privitak izbrisan</string>
-    <string name="attachments_unavailable">Attachments unavailable</string>
-    <string name="attachments_are_a_premium_feature">Attachments are a Premium feature. Your current plan does not include access to this feature.</string>
+    <string name="attachments_unavailable">Privici nisu dostupni</string>
+    <string name="attachments_are_a_premium_feature">Privici su Premium značajka. Tvoj trenutni paket ne uključuje pristup ovoj značajki.</string>
     <string name="choose_file">Odaberi datoteku</string>
     <string name="file">Datoteka</string>
     <string name="no_file_chosen">Nije odabrana datoteka</string>
-    <string name="file_name">File name</string>
+    <string name="file_name">Naziv datoteke</string>
     <string name="no_attachments">Nema privitaka.</string>
     <string name="file_source">Izvor datoteke</string>
     <string name="max_file_size">Najveća veličina datoteke je 100 MB.</string>
@@ -228,6 +228,8 @@
     <string name="copy_security_code">Kopiraj kontrolni broj</string>
     <string name="number">Broj</string>
     <string name="security_code">Kontrolni broj</string>
+    <string name="scan_card">Skeniraj karticu</string>
+    <string name="scan_card_instruction">Za skeniranje, postavi karticu unutar okvira.</string>
     <string name="type_card">Platna kartica</string>
     <string name="type_identity">Identitet</string>
     <string name="type_login">Prijava</string>
@@ -307,7 +309,7 @@
     <string name="organization">Organizacija</string>
     <string name="try_again">Pokušaj ponovno</string>
     <string name="created">Stvoreno: %1$s</string>
-    <string name="password_updated">Password updated: %1$s</string>
+    <string name="password_updated">Lozinka ažuriranja: %1$s</string>
     <string name="last_edited">Zadnje uređeno: %1$s</string>
     <string name="invalid_email">Nevažeća adresa e-pošte.</string>
     <string name="cards">Platne kartice</string>
@@ -382,7 +384,7 @@
     <string name="capitalize">Prva slova velika</string>
     <string name="include_number">Uključi broj</string>
     <string name="download">Preuzmi</string>
-    <string name="download_file">Download file</string>
+    <string name="download_file">Preuzmi datoteku</string>
     <string name="login_expired">Sesija je istekla.</string>
     <string name="biometrics_direction">Biometrijska autentifikacija</string>
     <string name="device_verification">Provjera uređaja</string>
@@ -454,13 +456,13 @@
     <string name="deletion_date">Obriši za</string>
     <string name="deletion_time">Vrijeme brisanja</string>
     <string name="deletion_date_info">Send će nakon navedenog vremena biti trajno izbrisan.</string>
-    <string name="who_can_view">Who can view</string>
-    <string name="anyone_with_the_link">Anyone with the link</string>
-    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
-    <string name="specific_people">Specific people</string>
-    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
-    <string name="anyone_with_password">Anyone with a password set by you</string>
-    <string name="add_email">Add email</string>
+    <string name="who_can_view">Tko može pogledati</string>
+    <string name="anyone_with_the_link">Svatko s poveznicom</string>
+    <string name="anyone_with_link_can_view_send">Bilo tko s ovom poveznicom može pogledati ovaj Send</string>
+    <string name="specific_people">Određene osobe</string>
+    <string name="specific_people_verification_info">Nakon dijeljenja Send poveznice, osobe će za prikaz Senda morati potvrditi svoju adresu e-pošte pomoću kôda</string>
+    <string name="anyone_with_password">Bilo tko sa zadanom lozinkom</string>
+    <string name="add_email">Dodaj e-poštu</string>
     <string name="pending_delete">Čeka brisanje</string>
     <string name="expired">Isteklo</string>
     <string name="expires_at">Ističe: %s</string>
@@ -502,7 +504,7 @@
     <string name="hide_email">Sakrij moju adresu e-pošte od primatelja.</string>
     <string name="send_options_policy_in_effect">Jedno ili više pravila organizacije utječe na postavke Senda.</string>
     <string name="send_file_premium_required">Kod besplatnog računa moguće je dijeljenje samo teksta. Za slanje datoteka potrebno je premium članstvo.</string>
-    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Dijeljene s određenim osobama je Premium značajka. Tvoj trenutni paket ne uključuje pristup ovoj značajki.</string>
     <string name="password_prompt">Ponovno zatraži glavnu lozinku</string>
     <string name="password_confirmation">Potvrda glavne lozinke</string>
     <string name="password_confirmation_desc">Ova radnja je zaštićena. Za nastavak i potvrdu identiteta, unesi svoju glavnu lozinku.</string>
@@ -512,10 +514,10 @@
     <string name="remove_master_password">Ukloni glavnu lozinku</string>
     <string name="leave_organization">Napusti organizaciju</string>
     <string name="leave_organization_name">Napusti %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Sigurno želiš napustiti?</string>
     <string name="leave_organization_button">Napusti %1$s</string>
-    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features. <annotation link="learnMore">Learn more</annotation></string>
-    <string name="contact_your_admin_to_regain_access">Contact your admin to regain access.</string>
+    <string name="leave_organization_warning">Odbijanjem, tvoje osobne stavke ostat će na tvojem računu, ali ćeš izgubiti pristup dijeljenim stavkama i značajkama organizacije. <annotation link="learnMore">Više o tome</annotation></string>
+    <string name="contact_your_admin_to_regain_access">Za ponovni pristup kontaktiraj svog administratora.</string>
     <string name="fido2_authenticate_web_authn">Autentifikacija WebAuthn</string>
     <string name="fido2_return_to_app">Povratak u aplikaciju</string>
     <string name="reset_password_auto_enroll_invite_warning">Pravilo ove organizacija automatski će te učlaniti u ponovno postavljanje lozinke. Učlanjenje će omogućiti administratorima organizacije promjenu tvoje glavne lozinke.</string>
@@ -675,8 +677,8 @@
     <string name="invalid_uri">Neispravan URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s je već blokiran</string>
     <string name="login_approved">Prijava odobrena</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Log in with device must be set up in the settings of the Bitwarden app.</string>
-    <string name="need_another_option_view_all_login_options">Need another option? <annotation link="viewAll">View all login options</annotation></string>
+    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Prijava uređajem mora biti namještena u postavka Bitwarden mobilne aplikacije.</string>
+    <string name="need_another_option_view_all_login_options">Trebaš drugu mogućnost? <annotation link="viewAll">Vidi sve mogućnosti prijave</annotation></string>
     <string name="log_in_with_device">Prijava uređajem</string>
     <string name="logging_in_on">Prijava na</string>
     <string name="logging_in_on_with_colon">Prijava na:</string>
@@ -844,7 +846,7 @@
     <string name="fill_out_the_form_and_import_your_saved_password_file">Ispuni obrazac i <annotation emphasis="bold">uvezi svoju datoteku spremljenih lozinki</annotation>.</string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Za svoju sigurnost, <annotation emphasis="bold">obriši datoteku spremljenih lozinki</annotation>.</string>
     <string name="need_help_check_out_import_help">Trebaš pomoć? Pogledaj <annotation emphasis="bold">pomoć za uvoz</annotation>.</string>
-    <string name="import_help">import help</string>
+    <string name="import_help">pomoć za uvoz</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Spremi izvezenu datoteku</annotation> na mjesto na računalu koje možeš lako naći.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Ovo nije prepoznati Bitwarden poslužitelj. Možda ćeš morati provjeriti kod svog davatelja usluga ili ažurirati svoj poslužitelj.</string>
     <string name="syncing_logins_loading_message">Sinkronizacija prijava…</string>
@@ -870,9 +872,9 @@
     <string name="copy_fingerprint">Kopiraj otisak prsta</string>
     <string name="enable_notifications">Omogući obavijesti</string>
     <plurals name="notifications_content_description">
-        <item quantity="one">%d notification</item>
-        <item quantity="few">%d notifications</item>
-        <item quantity="other">%d notifications</item>
+        <item quantity="one">%d obavijest</item>
+        <item quantity="few">%d obavijesti</item>
+        <item quantity="other">%d obavijesti</item>
     </plurals>
     <string name="log_in_quickly_and_easily_across_devices">Prijavite se brzo i jednostavno na svim uređajima</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden te može obavijestiti svaki put kada s drugog uređaja dobiješ dobiješ zahtjev za prijavu.</string>
@@ -948,7 +950,7 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">Operacija pristupnog ključa nije uspjela jer nije odabrana niti jedna stavka.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operacija s pristupnim ključem nije uspjela jer zahtjev nije podržan.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operacija lozinke nije uspjela jer odabrana stavka ne postoji.</string>
-    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Operacija lozinke nije uspjela jer odabrana stavka nema važeću lozinku.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Operacija lozinke nije uspjela jer nije odabrana niti jedna stavka.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Operacija vjerodajnice nije uspjela jer zahtjev nije valjan.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Operacija vjerodajnice nije uspjela jer zahtjev nije podržan.</string>
@@ -960,7 +962,7 @@
     <string name="use_brave_autofill_integration">Koristi auto-ispunu s Brave integracijom</string>
     <string name="use_chrome_autofill_integration">Koristi Chrome integraciju auto-ispune</string>
     <string name="use_chrome_beta_autofill_integration">Koristi Chrome Beta integraciju auto-ispune</string>
-    <string name="use_vivaldi_autofill_integration">Use Vivaldi autofill integration</string>
+    <string name="use_vivaldi_autofill_integration">Koristi auto-ispunu s Vivaldi integracijom</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Poboljšava ispunjavanje prijava za podržane web-lokacije na odabranim preglednicima. Nakon uključivanja, slijedi preusmjerenja na postavke preglednika za omogućavanje auto-ispune treće strane.</string>
     <string name="show_more">Prikaži više</string>
     <string name="no_folder">Nema mape</string>
@@ -1076,8 +1078,8 @@ bilo kakav problem.</string>
     <string name="export">Izvoz</string>
     <string name="export_confirmation_title">Potvrdi izvoz</string>
     <string name="export_success">Podaci uspješno izvezeni</string>
-    <string name="included_in_this_export">Included in this export</string>
-    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren’t included</string>
+    <string name="included_in_this_export">Uključeno u ovaj izvještaj</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Izvest će se samo kodovi pohranjeni lokalno na ovom uređaju. Sinkronizirani kodovi nisu uključeni</string>
     <string name="security">Sigurnost</string>
     <string name="too_many_failed_biometric_attempts">Previše neuspjelih biometrijskih pokušaja.</string>
     <string name="version">Verzija</string>
@@ -1194,70 +1196,72 @@ bilo kakav problem.</string>
     <string name="lock_app">Zaključaj aplikaciju</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Upotrijebi metodu zaključavanja uređaja za otključavanje aplikacije</string>
     <string name="loading_vault_data">Učitavanje podataka trezora…</string>
-    <string name="resending">Resending</string>
-    <string name="you_left_the_organization">You left the organization</string>
-    <string name="transfer_items_to_org">Transfer items to %1$s</string>
-    <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items. <annotation link="learnMore">Learn more</annotation></string>
+    <string name="resending">Ponovno slanje</string>
+    <string name="you_left_the_organization">Organizacija napuštena</string>
+    <string name="transfer_items_to_org">Premjesti stavke u %1$s</string>
+    <string name="transfer_items_description">Zbog sigurnosti i usklađenosti <annotation arg="0">%1$s</annotation> zahtijeva da su sve stavke u vlasništvu organizacije. Pristani na prijenos vlasništva svih tvojih stavki. <annotation link="learnMore">Više o tome</annotation></string>
     <string name="decline_and_leave">Odbij i napusti</string>
     <string name="why_am_i_seeing_this">Zašto ovo vidim?</string>
-    <string name="migrating_items_to_x">Migrating items to %s</string>
-    <string name="failed_to_migrate_items_to_x">Failed to migrate items to %s</string>
+    <string name="migrating_items_to_x">Migriranje stavki u %s</string>
+    <string name="failed_to_migrate_items_to_x">Nije uspjela migracija stavki u %s</string>
     <string name="search_archive">Pretraži arhivu</string>
     <string name="archive_noun">Arhiva</string>
     <string name="archive_verb">Arhiva</string>
     <string name="unarchive">Poništi arhiviranje</string>
     <string name="archived">Arhivirano</string>
     <string name="hidden_items">Skrivene stavke</string>
-    <string name="unable_to_archive_selected_item">Unable to archive selected item.</string>
-    <string name="unable_to_unarchive_selected_item">Unable to unarchive selected item.</string>
+    <string name="unable_to_archive_selected_item">Odabrane stavke nije moguće arhivirati.</string>
+    <string name="unable_to_unarchive_selected_item">Odrabrane stavke nije moguće vratiti iz arhive.</string>
     <string name="archiving">Arhiviranje</string>
-    <string name="unarchiving">Unarchiving</string>
+    <string name="unarchiving">Vrećanje iz arhive</string>
     <string name="item_moved_to_archived">Stavka premještena u arhivu</string>
-    <string name="item_moved_to_vault">Item moved to vault</string>
-    <string name="archive_unavailable">Archive unavailable</string>
-    <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
+    <string name="item_moved_to_vault">Stavke premještene u trezor</string>
+    <string name="archive_unavailable">Arhiva nedostupna</string>
+    <string name="archiving_items_is_a_premium_feature">Arhiviranje je Premium značajka. Tvoj trenutni paket ne uključuje pristup ovoj značajki.</string>
     <string name="upgrade_to_premium">Nadogradnja na premium</string>
-    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
-    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
-    <string name="this_item_is_archived">This item is archived.</string>
-    <string name="introducing_archive">Introducing archive</string>
-    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>
-    <string name="go_to_archive">Go to archive</string>
-    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">This item is archived. Saving changes will restore it to your vault.</string>
-    <string name="your_premium_subscription_ended">Your Premium subscription ended</string>
-    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">To regain access to your archive, restart your Premium subscription. If you edit details for an archived item before restarting, it’ll be moved back into your vault.</string>
-    <string name="restart_premium">Restart Premium</string>
-    <string name="items_transferred">Items transferred</string>
+    <string name="unlock_advanced_security_features">Otključaj napredne sigurnosne značajke</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Premium paket daje ti više alata za sigurnost i nadzor.</string>
+    <string name="this_item_is_archived">Ova stavka je arhivirana.</string>
+    <string name="introducing_archive">Predstavljamo Arhivu</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Čuvaj stavke koje ti trenutno ne trebaju sigurne, ali izvan vidokruga.</string>
+    <string name="go_to_archive">Idi u arhivu</string>
+    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Ova stavka je arhivirana. Spremanje promjena vratiti će stavku u tvoj trezor.</string>
+    <string name="your_premium_subscription_ended">Toja Premium pretplata je završila</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Za ponovni pristup svojoj arhivi, ponovno pokreni Premium pretplatu. Ako urediš detalje arhivirane stavke prije ponovnog pokretanja, ona će biti vraćena u tvoj trezor.</string>
+    <string name="restart_premium">Ponovno Pokreni Premium</string>
+    <string name="items_transferred">Stavke prenesene</string>
     <string name="updated_master_password">Glavna lozinka ažurirana</string>
-    <string name="invalid_email_addresses">Invalid email addresses</string>
-    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
-    <string name="no_email_addresses_entered">No email addresses entered</string>
-    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
-    <string name="sync_with_browser">Sync with browser</string>
-    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
-    <string name="launch_browser">Launch browser</string>
-    <string name="continue_without_syncing">Continue without syncing</string>
-    <string name="external_link">External link</string>
-    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
-    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
-    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
-    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
-    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
-    <string name="preview_unavailable">Preview unavailable</string>
-    <string name="download_attachment">Download Attachment</string>
-    <string name="upgraded_to_premium">Upgraded to premium</string>
-    <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
-    <string name="per_month">/ month</string>
-    <string name="built_in_authenticator">Built-in authenticator</string>
-    <string name="emergency_access">Emergency access</string>
-    <string name="secure_file_storage">Secure file storage</string>
-    <string name="breach_monitoring">Breach monitoring</string>
-    <string name="upgrade_now">Upgrade now</string>
-    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
-    <string name="opening_checkout">Opening checkout…</string>
-    <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
-    <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
-    <string name="payment_not_received_yet">Payment not received yet</string>
-    <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
-    <string name="go_back">Go back</string>
+    <string name="invalid_email_addresses">Nevažeća adresa e-pošte</string>
+    <string name="one_or_more_email_addresses_are_incorrect">Jedna ili više adresa nisu ispravne. Provjeri i pokušaj ponovno.</string>
+    <string name="no_email_addresses_entered">Nije unesena niti jedna adresa</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Za dijeljenje Senda unesi barem jednu važeću adresu e-pošte.</string>
+    <string name="sync_with_browser">Sinkrozniziraj s preglednikom</string>
+    <string name="sync_with_browser_description">Za povezivanje s %1$s, sinkroniziraj svoj zadani preglednik s mobilnom aplikacijom Bitwarden. Kada se otvori preglednik, dovrši prijavu ako se to od tebe zatraži.\nNakon sinkronizacije, bit ćeš vraćen/a u ovu aplikaciju.</string>
+    <string name="launch_browser">Pokreni preglednik</string>
+    <string name="continue_without_syncing">Nastavi bez sinkronizacije</string>
+    <string name="external_link">Vanjska poveznica</string>
+    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, vanjska poveznica</string>
+    <string name="preview_not_available_for_files">Pregled nije dostupan za %1$s datoteke/a. I dalje ih možeš preuzeti za pregled na svom uređaju.</string>
+    <string name="this_file_is_too_large_to_preview">Ova je datoteka prevelika za pretpregled. I dalje ju možeš preuzeti za pregled na svom uređaju.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden nije mogao dešifrirati ovu datoteku, tako da pretpregled ne može biti prikazan.</string>
+    <string name="preview_unavailable_for_this_file">Za ovu stavku pretpregled nije dostupan. I dalje ju možeš preuzeti za pregled na svom uređaju.</string>
+    <string name="preview_unavailable">Pretpregled nedostupan</string>
+    <string name="download_attachment">Preuzmi privitak</string>
+    <string name="upgraded_to_premium"> Nadogradi na Premium</string>
+    <string name="unlock_premium_features">Otključaj više naprednig mogućnosti s paketom Premium.</string>
+    <string name="per_month">/ mj.</string>
+    <string name="built_in_authenticator">Ugrađeni autentifikator</string>
+    <string name="emergency_access">Pristup u nuždi</string>
+    <string name="secure_file_storage">Sigurna pohrana datoteka</string>
+    <string name="breach_monitoring">Nadzor proboja</string>
+    <string name="upgrade_now">Nadogradi sada</string>
+    <string name="stripe_checkout_footer">Kupnju ćeš dovršiti na sigurnoj blagajni Stripea.</string>
+    <string name="opening_checkout">Otvaranje kupnje…</string>
+    <string name="secure_checkout_didnt_load">Sigurna blagajna nije učitana</string>
+    <string name="trouble_opening_payment_page">Nismo mogli otvoriti stranicu za plaćanje, pokušaj ponovno.</string>
+    <string name="payment_not_received_yet">Uplata još nije primljena</string>
+    <string name="return_to_stripe_to_finish">Za dovršetak kupnje, vrati se u Stripe.</string>
+    <string name="go_back">Nazad</string>
+    <string name="allow_camera_access">Dopusti pristup kameri</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">Za skeniranje kartice trebamo pristup tvojoj kameri. Ovo možeš bilo kada promijeniti u postavkama uređaja.</string>
 </resources>

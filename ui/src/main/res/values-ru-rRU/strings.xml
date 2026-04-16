@@ -173,7 +173,7 @@
     <string name="autofill_noun">Автозаполнение</string>
     <string name="autofill_verb">Автозаполнение</string>
     <string name="autofill_or_view">Выполнить автозаполнение или просмотреть этот элемент?</string>
-    <string name="search">Поиск</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Поиск %1$s</string>
     <string name="learn_org">Узнать об организациях</string>
     <string name="authenticator_app_title">Приложение-аутентификатор</string>
     <string name="enter_verification_code_app">Введите 6-значный код подтверждения из вашего приложения-аутентификатора.</string>
@@ -230,6 +230,8 @@
     <string name="copy_security_code">Скопировать код безопасности</string>
     <string name="number">Номер</string>
     <string name="security_code">Код безопасности</string>
+    <string name="scan_card">Сканировать карту</string>
+    <string name="scan_card_instruction">Поместите карту в рамку для сканирования.</string>
     <string name="type_card">Карта</string>
     <string name="type_identity">Личная информация</string>
     <string name="type_login">Логин</string>
@@ -1269,4 +1271,6 @@
     <string name="payment_not_received_yet">Оплата пока не поступила</string>
     <string name="return_to_stripe_to_finish">Вернитесь на сайт Stripe в браузере, чтобы завершить изменение.</string>
     <string name="go_back">Вернуться</string>
+    <string name="allow_camera_access">Разрешить доступ к камере</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">Для сканирования карты нам потребуется доступ к вашей камере. Вы можете изменить это в любое время в настройках устройства.</string>
 </resources>

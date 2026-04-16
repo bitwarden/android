@@ -170,7 +170,7 @@
     <string name="autofill_noun">自動填入</string>
     <string name="autofill_verb">自動填入</string>
     <string name="autofill_or_view">您想自動填入還是檢視此項目？</string>
-    <string name="search">搜尋</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">了解組織</string>
     <string name="authenticator_app_title">驗證器應用程式</string>
     <string name="enter_verification_code_app">輸入驗證器應用程式提供的 6 位數驗證碼。</string>
@@ -205,7 +205,7 @@
     <string name="choose_file">選擇檔案</string>
     <string name="file">檔案</string>
     <string name="no_file_chosen">未選擇任何檔案</string>
-    <string name="file_name">File name</string>
+    <string name="file_name">檔案名稱</string>
     <string name="no_attachments">沒有附件。</string>
     <string name="file_source">檔案來源</string>
     <string name="max_file_size">檔案最大為 100MB。</string>
@@ -227,6 +227,8 @@
     <string name="copy_security_code">複製安全代碼</string>
     <string name="number">號碼</string>
     <string name="security_code">安全代碼</string>
+    <string name="scan_card">掃描卡片</string>
+    <string name="scan_card_instruction">請將卡片置於框內以進行掃描。</string>
     <string name="type_card">支付卡</string>
     <string name="type_identity">身分</string>
     <string name="type_login">登入</string>
@@ -1223,11 +1225,11 @@
     <string name="external_link">外部連結</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s，外部連結</string>
     <string name="preview_not_available_for_files">無法預覽 %1$s 類型的檔案。您仍可下載後在裝置上檢視。</string>
-    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
+    <string name="this_file_is_too_large_to_preview">此檔案過大，無法預覽。您仍可下載後在裝置上檢視。</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden 無法解密此檔案，因此無法顯示預覽。</string>
     <string name="preview_unavailable_for_this_file">此檔案無法預覽。您仍可下載後在裝置上檢視。</string>
     <string name="preview_unavailable">無法預覽</string>
-    <string name="download_attachment">Download Attachment</string>
+    <string name="download_attachment">下載附件</string>
     <string name="upgraded_to_premium">升級到 Premium</string>
     <string name="unlock_premium_features">透過 Premium 方案解鎖更多進階功能。</string>
     <string name="per_month">/ 月</string>
@@ -1243,4 +1245,6 @@
     <string name="payment_not_received_yet">尚未收到付款</string>
     <string name="return_to_stripe_to_finish">請在瀏覽器中返回 Stripe 完成升級流程。</string>
     <string name="go_back">返回</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
 </resources>

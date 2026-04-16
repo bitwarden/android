@@ -171,7 +171,7 @@
     <string name="autofill_noun">Autocompletar</string>
     <string name="autofill_verb">Autocompletar</string>
     <string name="autofill_or_view">¿Quieres autocompletar o ver este elemento?</string>
-    <string name="search">Buscar</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">Aprende sobre organizaciones</string>
     <string name="authenticator_app_title">Aplicación de autenticación</string>
     <string name="enter_verification_code_app">Introduce el código de verificación de 6 dígitos de tu aplicación autenticadora.</string>
@@ -228,6 +228,8 @@ El escaneo se realizará automáticamente.</string>
     <string name="copy_security_code">Copiar código de seguridad</string>
     <string name="number">Número</string>
     <string name="security_code">Código de seguridad</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">Tarjeta</string>
     <string name="type_identity">Identidad</string>
     <string name="type_login">Entrada</string>
@@ -1254,4 +1256,6 @@ cualquier problema.</string>
     <string name="payment_not_received_yet">Payment not received yet</string>
     <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
     <string name="go_back">Go back</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
 </resources>

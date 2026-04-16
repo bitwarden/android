@@ -171,7 +171,7 @@
     <string name="autofill_noun">Otomatik doldur</string>
     <string name="autofill_verb">Otomatik doldur</string>
     <string name="autofill_or_view">Bu kaydı otomatik doldurmak veya görüntülemek ister misiniz?</string>
-    <string name="search">Ara</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Ara: %1$s</string>
     <string name="learn_org">Kuruluşlar hakkında bilgi al</string>
     <string name="authenticator_app_title">Kimlik doğrulama uygulaması</string>
     <string name="enter_verification_code_app">Kimlik doğrulama uygulamanızdaki 6 haneli doğrulama kodunu girin.</string>
@@ -228,6 +228,8 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="copy_security_code">Güvenlik kodunu kopyala</string>
     <string name="number">Numara</string>
     <string name="security_code">Güvenlik kodu</string>
+    <string name="scan_card">Kartı tara</string>
+    <string name="scan_card_instruction">Kartınızı taramak için çerçevenin içine yerleştirin.</string>
     <string name="type_card">Kart</string>
     <string name="type_identity">Kimlik</string>
     <string name="type_login">Hesap</string>
@@ -1250,4 +1252,6 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="payment_not_received_yet">Payment not received yet</string>
     <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
     <string name="go_back">Go back</string>
+    <string name="allow_camera_access">Kamera erişimine izin verin</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">Kartınızı taramak için kameranıza erişmemiz gerekiyor. Bu izni istediğiniz zaman cihaz ayarlarınızdan değiştirebilirsiniz.</string>
 </resources>

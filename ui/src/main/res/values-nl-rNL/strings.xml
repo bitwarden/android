@@ -171,7 +171,7 @@
     <string name="autofill_noun">Automatisch invullen</string>
     <string name="autofill_verb">Automatisch invullen</string>
     <string name="autofill_or_view">Wilt je dit item automatisch invullen of bekijken?</string>
-    <string name="search">Zoeken</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Zoek %1$s</string>
     <string name="learn_org">Meer over organisaties</string>
     <string name="authenticator_app_title">Authenticatie-app</string>
     <string name="enter_verification_code_app">Voer de 6-cijferige verificatiecode uit je authenticatie-app in.</string>
@@ -228,6 +228,8 @@ Het scannen gebeurt automatisch.</string>
     <string name="copy_security_code">Beveiligingscode kopiëren</string>
     <string name="number">Kaartnummer</string>
     <string name="security_code">Beveiligingscode</string>
+    <string name="scan_card">Kaart scannen</string>
+    <string name="scan_card_instruction">Positioneer je kaart binnen het kader om te scannen.</string>
     <string name="type_card">Kaart</string>
     <string name="type_identity">Identiteit</string>
     <string name="type_login">Login</string>
@@ -1251,4 +1253,6 @@ Wilt u naar dit account wisselen?</string>
     <string name="payment_not_received_yet">Betaling nog niet ontvangen</string>
     <string name="return_to_stripe_to_finish">Terug naar Stripe in je browser voor het afronden van opwaarderen.</string>
     <string name="go_back">Ga terug</string>
+    <string name="allow_camera_access">Cameratoegang toestaan</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">Om je kaart te scannen, hebben we toegang tot je camera nodig. Je kunt dit op ieder moment wijzigen in je apparaatinstellingen.</string>
 </resources>

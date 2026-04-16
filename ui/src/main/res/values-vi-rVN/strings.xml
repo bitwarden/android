@@ -170,7 +170,7 @@
     <string name="autofill_noun">Tự động điền</string>
     <string name="autofill_verb">Tự động điền</string>
     <string name="autofill_or_view">Bạn muốn tự động điền hay xem mục này?</string>
-    <string name="search">Tìm kiếm</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">Tìm hiểu về tổ chức</string>
     <string name="authenticator_app_title">Ứng dụng xác thực</string>
     <string name="enter_verification_code_app">Nhập mã xác nhận 6 chữ số từ ứng dụng xác thực của bạn.</string>
@@ -227,6 +227,8 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="copy_security_code">Sao chép mã bảo mật</string>
     <string name="number">Số thẻ</string>
     <string name="security_code">Mã bảo mật</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">Thẻ</string>
     <string name="type_identity">Danh tính</string>
     <string name="type_login">Đăng nhập</string>
@@ -1246,4 +1248,6 @@ các vấn đề.</string>
     <string name="payment_not_received_yet">Payment not received yet</string>
     <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
     <string name="go_back">Go back</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
 </resources>

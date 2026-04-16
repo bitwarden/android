@@ -171,7 +171,7 @@
     <string name="autofill_noun">Avto-doldur</string>
     <string name="autofill_verb">Avto-doldur</string>
     <string name="autofill_or_view">Avto-doldurmaq və ya bu elementə baxmaq istəyirsiniz?</string>
-    <string name="search">Axtar</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">%1$s axtar</string>
     <string name="learn_org">Təşkilatlar barədə daha ətraflı</string>
     <string name="authenticator_app_title">Kimlik doğrulayıcı tətbiqi</string>
     <string name="enter_verification_code_app">Kimlik doğrulayıcı tətbiqindən 6 rəqəmli doğrulama kodunu daxil edin.</string>
@@ -206,7 +206,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="choose_file">Fayl seç</string>
     <string name="file">Fayl</string>
     <string name="no_file_chosen">Heç bir fayl seçilməyib</string>
-    <string name="file_name">File name</string>
+    <string name="file_name">Fayl adı</string>
     <string name="no_attachments">Heç bir qoşma yoxdur.</string>
     <string name="file_source">Fayl mənbəsi</string>
     <string name="max_file_size">Maksimal fayl həcmi 100 MB-dır</string>
@@ -228,6 +228,8 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="copy_security_code">Güvənlik kodunu kopyala</string>
     <string name="number">Nömrə</string>
     <string name="security_code">Güvənlik kodu</string>
+    <string name="scan_card">Kartı skan et</string>
+    <string name="scan_card_instruction">Skan etmək üçün kartınızı çərçivəyə yerləşdirin.</string>
     <string name="type_card">Kart</string>
     <string name="type_identity">Kimlik</string>
     <string name="type_login">Giriş</string>
@@ -1232,11 +1234,11 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="external_link">Xarici keçid</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Xarici keçidi</string>
     <string name="preview_not_available_for_files">%1$s fayl üçün önizləmə mövcud deyil. Hələ də cihazınızda baxmaq üçün endirə bilərsiniz.</string>
-    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
+    <string name="this_file_is_too_large_to_preview">Bu fayl, önizləmək üçün çox böyükdür. Cihazınızda baxmaq üçün yenə də endirə bilərsiniz.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden bu faylın şifrəsini aça bilmədi, ona görə də önizləmə nümayiş oluna bilmir.</string>
     <string name="preview_unavailable_for_this_file">Bu fayl üçün önizləmə mövcud deyil. Hələ də cihazınızda baxmaq üçün endirə bilərsiniz.</string>
     <string name="preview_unavailable">Önizləmə mövcud deyil</string>
-    <string name="download_attachment">Download Attachment</string>
+    <string name="download_attachment">Qoşmanı endir</string>
     <string name="upgraded_to_premium">\"Premium\"a yüksəldildi</string>
     <string name="unlock_premium_features">Premium planla daha qabaqcıl özəlliklərin kilidini açın.</string>
     <string name="per_month">/ ay</string>
@@ -1252,4 +1254,6 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="payment_not_received_yet">Ödəniş hələ alınmayıb</string>
     <string name="return_to_stripe_to_finish">Yüksəltməni tamamlamaq üçün brauzerinizdə Stripe-a qayıdın.</string>
     <string name="go_back">Geri qayıt</string>
+    <string name="allow_camera_access">Kamera erişiminə icazə ver</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">Kartınızı skan etmək üçün kameranıza erişməliyik. Bunu istənilən vaxt cihaz ayarlarında dəyişdirə bilərsiniz.</string>
 </resources>

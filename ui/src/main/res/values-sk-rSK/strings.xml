@@ -173,7 +173,7 @@
     <string name="autofill_noun">Automatické vypĺňanie</string>
     <string name="autofill_verb">Automatické vypĺňanie</string>
     <string name="autofill_or_view">Chcete automaticky vyplniť alebo zobraziť toto prihlásenie?</string>
-    <string name="search">Hladať</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Hľadať %1$s</string>
     <string name="learn_org">Zistiť viac o organizáciách</string>
     <string name="authenticator_app_title">Overovacia aplikácia</string>
     <string name="enter_verification_code_app">Zadajte 6-miestny verifikačný kód z vašej overovacej aplikácie.</string>
@@ -230,6 +230,8 @@ Skenovanie prebehne automaticky.</string>
     <string name="copy_security_code">Kopírovať bezpečnostný kód</string>
     <string name="number">Číslo</string>
     <string name="security_code">Bezpečnostný kód</string>
+    <string name="scan_card">Nasnímať kartu</string>
+    <string name="scan_card_instruction">Umiestnite kartu do rámčeka a nasnímajte ju.</string>
     <string name="type_card">Karta</string>
     <string name="type_identity">Identita</string>
     <string name="type_login">Prihlásenie</string>
@@ -1269,4 +1271,6 @@ Chcete prepnúť na tento účet?</string>
     <string name="payment_not_received_yet">Platba ešte nebola prijatá</string>
     <string name="return_to_stripe_to_finish">Vráťte sa do Stripe v prehliadači a dokončite upgrade.</string>
     <string name="go_back">Prejsť späť</string>
+    <string name="allow_camera_access">Povoliť prístup k fotoaparátu</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">Na naskenovanie vašej karty budeme potrebovať prístup k vášmu fotoaparátu. Toto nastavenie môžete kedykoľvek zmeniť v nastaveniach zariadenia.</string>
 </resources>

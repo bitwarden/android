@@ -171,7 +171,7 @@
     <string name="autofill_noun">Automata-kitöltő</string>
     <string name="autofill_verb">Automata-kitöltő</string>
     <string name="autofill_or_view">Automatikusan kitöltésre vagy megtekintésre kerüljön ez az elem?</string>
-    <string name="search">Keresés</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">%1$s keresése</string>
     <string name="learn_org">Információ szervezetekről</string>
     <string name="authenticator_app_title">Hitelesítő alkalmazás</string>
     <string name="enter_verification_code_app">Add meg a 6 számjegyű ellenőrző kódot a hitelesítő alkalmazásodból.</string>
@@ -227,6 +227,8 @@
     <string name="copy_security_code">Biztonsági kód másolása</string>
     <string name="number">Szám</string>
     <string name="security_code">Biztonsági Kód</string>
+    <string name="scan_card">Kártya átvizsgálása</string>
+    <string name="scan_card_instruction">Helyezzük a kártyát a keretbe az átvizsgáláshoz.</string>
     <string name="type_card">Kártya</string>
     <string name="type_identity">Azonosság</string>
     <string name="type_login">Bejelentkezés</string>
@@ -1230,11 +1232,11 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="external_link">Külső hivatkozás</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Külső hivatkozás</string>
     <string name="preview_not_available_for_files">Az előnézet nem érhető el %1$s fájlokhoz. Továbbra is letölthetjük, hogy megtekinthessük az eszközön.</string>
-    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
+    <string name="this_file_is_too_large_to_preview">Ez a fájl túl nagy az előnézethez. Továbbra is letölthetjük, hogy megtekinthessük az eszközön.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">A Bitwarden nem tudta visszafejteni ezt a fájlt, így az előnézet nem jeleníthető meg.</string>
     <string name="preview_unavailable_for_this_file">Az előnézet nem érhető el ehhez a fájlhoz. Továbbra is letölthetjük, hogy megtekinthessük az eszközön.</string>
     <string name="preview_unavailable">Az előnézet nem érhető el.</string>
-    <string name="download_attachment">Download Attachment</string>
+    <string name="download_attachment">Melléklet letöltése</string>
     <string name="upgraded_to_premium">Áttérés Prémium csomagra</string>
     <string name="unlock_premium_features">Fejlettebb funkciók feloldása Prémium csomaggal.</string>
     <string name="per_month">/ hónap</string>
@@ -1250,4 +1252,6 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="payment_not_received_yet">A fizetés még nem érkezett meg.</string>
     <string name="return_to_stripe_to_finish">Visszatérés a Stripe-hoz a böngészőben az áttérés befejezéséhez.</string>
     <string name="go_back">Vissza</string>
+    <string name="allow_camera_access">Kamera elérés engedélyezése</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">A kártya beolvasásához hozzá kell férni a kamerához. Ezt bármikor módosítható az eszköz beállításaiban.</string>
 </resources>

@@ -171,7 +171,7 @@
     <string name="autofill_noun">Emplenament automàtic</string>
     <string name="autofill_verb">Emplenament automàtic</string>
     <string name="autofill_or_view">Voleu omplir automàticament o visualitzar aquest element?</string>
-    <string name="search">Cerca</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">Més informació sobre les organitzacions</string>
     <string name="authenticator_app_title">Aplicació autenticadora</string>
     <string name="enter_verification_code_app">Introduïu el codi de verificació de 6 dígits de l\'aplicació autenticadora.</string>
@@ -228,6 +228,8 @@ L\'escaneig es farà automàticament.</string>
     <string name="copy_security_code">Copia el codi de seguretat</string>
     <string name="number">Número</string>
     <string name="security_code">Codi de seguretat</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">Targeta</string>
     <string name="type_identity">Identitat</string>
     <string name="type_login">Inici de sessió</string>
@@ -1251,4 +1253,6 @@ Voleu canviar a aquest compte?</string>
     <string name="payment_not_received_yet">Payment not received yet</string>
     <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
     <string name="go_back">Go back</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
 </resources>

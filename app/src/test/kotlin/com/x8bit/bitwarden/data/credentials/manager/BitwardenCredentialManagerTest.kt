@@ -512,9 +512,10 @@ class BitwardenCredentialManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `registerFido2Credential should return MissingHostUrl when calling app if privileged and origin is missing`() =
+    fun `registerFido2Credential should return MissingHostUrl when calling app if privileged and relying party and origin are missing`() =
         runTest {
             every { mockCreatePublicKeyCredentialRequest.origin } returns null
+            every { json.decodeFromStringOrNull<PasskeyAttestationOptions>(any()) } returns null
 
             val result = bitwardenCredentialManager.registerFido2Credential(
                 userId = "mockUserId",
@@ -1503,7 +1504,7 @@ private val DEFAULT_ANDROID_ORIGIN = Origin.Android(
         assetLinkUrl = "https://$DEFAULT_HOST/.well-known/assetlinks.json",
     ),
 )
-private val DEFAULT_WEB_ORIGIN = Origin.Web("bitwarden.com")
+private val DEFAULT_WEB_ORIGIN = Origin.Web("https://bitwarden.com")
 private const val DEFAULT_FIDO2_AUTH_REQUEST_JSON = """
 {
   "allowCredentials": [],
