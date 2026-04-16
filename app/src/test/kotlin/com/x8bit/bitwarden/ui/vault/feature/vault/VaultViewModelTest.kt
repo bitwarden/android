@@ -320,12 +320,12 @@ class VaultViewModelTest : BaseViewModelTest() {
             )
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `KDF dialog is shown after sync completes when KDF update is still needed`() =
         runTest {
             every { authRepository.needsKdfUpdateToMinimums() } returns true
             val viewModel = createViewModel()
+            @Suppress("MaxLineLength")
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(

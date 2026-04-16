@@ -999,11 +999,11 @@ class VaultViewModel @Inject constructor(
         }
     }
 
-    @Suppress("MaxLineLength")
     private fun handleKdfSyncCompletedReceive() {
         mutableStateFlow.update { it.copy(isAwaitingKdfSync = false) }
         if (authRepository.needsKdfUpdateToMinimums()) {
             mutableStateFlow.update {
+                @Suppress("MaxLineLength")
                 it.copy(
                     dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
                         title = BitwardenString.update_your_encryption_settings.asText(),
