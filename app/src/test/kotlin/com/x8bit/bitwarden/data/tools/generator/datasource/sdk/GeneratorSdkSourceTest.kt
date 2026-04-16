@@ -13,6 +13,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -23,7 +24,8 @@ class GeneratorSdkSourceTest {
         every { generators() } returns clientGenerators
     }
     private val sdkClientManager = mockk<SdkClientManager> {
-        coEvery { getOrCreateClient(userId = null) } returns client
+        val slot = slot<suspend Client.() -> String>()
+        coEvery { singleUseClient(block = capture(slot)) } coAnswers { slot.captured(client) }
     }
     private val generatorSdkSource: GeneratorSdkSource = GeneratorSdkSourceImpl(sdkClientManager)
 

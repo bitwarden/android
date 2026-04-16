@@ -18,7 +18,7 @@ data class BitwardenServiceClientConfig(
     val authTokenProvider: AuthTokenProvider,
     val certificateProvider: CertificateProvider,
     val cookieProvider: CookieProvider,
-    val clock: Clock = Clock.systemDefaultZone(),
+    val clock: Clock,
     val enableHttpBodyLogging: Boolean = false,
 ) {
     /**
