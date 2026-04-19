@@ -1274,4 +1274,7 @@ při opakování problémů.</string>
     <string name="go_back">Vrátit se</string>
     <string name="allow_camera_access">Povolit přístup ke kameře</string>
     <string name="to_scan_your_card_we_need_access_to_your_camera">Pro naskenování karty budeme potřebovat přístup ke kameře. Toto můžete kdykoli změnit v nastavení zařízení.</string>
+    <string name="show_next_code">Zobrazit další kód</string>
+    <string name="see_upcoming_codes_in_the_list">Zobrazit nadcházející kódy v seznamu</string>
+    <string name="next_code_x">Další kód, %1$s</string>
 </resources>

@@ -1255,4 +1255,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="go_back">Ga terug</string>
     <string name="allow_camera_access">Cameratoegang toestaan</string>
     <string name="to_scan_your_card_we_need_access_to_your_camera">Om je kaart te scannen, hebben we toegang tot je camera nodig. Je kunt dit op ieder moment wijzigen in je apparaatinstellingen.</string>
+    <string name="show_next_code">Volgende code tonen</string>
+    <string name="see_upcoming_codes_in_the_list">Bekijk volgende codes in de lijst</string>
+    <string name="next_code_x">Volgende code, %1$s</string>
 </resources>

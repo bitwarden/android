@@ -173,7 +173,7 @@
     <string name="autofill_noun">Autouzupełnianie</string>
     <string name="autofill_verb">Autouzupełnianie</string>
     <string name="autofill_or_view">Co chcesz zrobić z elementem?</string>
-    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Szukaj %1$s</string>
     <string name="learn_org">Dowiedz się więcej o organizacjach</string>
     <string name="authenticator_app_title">Aplikacja uwierzytelniająca</string>
     <string name="enter_verification_code_app">Wpisz 6-cyfrowy kod weryfikacyjny z aplikacji uwierzytelniającej.</string>
@@ -230,7 +230,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="copy_security_code">Kopiuj kod zabezpieczający</string>
     <string name="number">Numer</string>
     <string name="security_code">Kod zabezpieczający</string>
-    <string name="scan_card">Scan card</string>
+    <string name="scan_card">Zeskanuj kartę</string>
     <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">Karta</string>
     <string name="type_identity">Tożsamość</string>
@@ -1254,17 +1254,17 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
     <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
     <string name="preview_unavailable">Podgląd jest niedostępny</string>
-    <string name="download_attachment">Download Attachment</string>
-    <string name="upgraded_to_premium">Upgraded to premium</string>
+    <string name="download_attachment">Pobierz załącznik</string>
+    <string name="upgraded_to_premium">Kup konto Premium</string>
     <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
     <string name="per_month">/ miesiąc</string>
     <string name="built_in_authenticator">Wbudowana aplikacja uwierzytelniająca</string>
     <string name="emergency_access">Dostęp awaryjny</string>
     <string name="secure_file_storage">Bezpieczne przechowywanie plików</string>
     <string name="breach_monitoring">Breach monitoring</string>
-    <string name="upgrade_now">Upgrade now</string>
+    <string name="upgrade_now">Ulepsz teraz</string>
     <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
-    <string name="opening_checkout">Opening checkout…</string>
+    <string name="opening_checkout">Otwieranie zamówienia…</string>
     <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
     <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
     <string name="payment_not_received_yet">Nie otrzymano jeszcze płatności</string>
@@ -1272,4 +1272,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="go_back">Go back</string>
     <string name="allow_camera_access">Allow camera access</string>
     <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
+    <string name="show_next_code">Pokaż następny kod</string>
+    <string name="see_upcoming_codes_in_the_list">See upcoming codes in the list</string>
+    <string name="next_code_x">Następny kod, %1$s</string>
 </resources>

@@ -1273,4 +1273,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="go_back">Prejsť späť</string>
     <string name="allow_camera_access">Povoliť prístup k fotoaparátu</string>
     <string name="to_scan_your_card_we_need_access_to_your_camera">Na naskenovanie vašej karty budeme potrebovať prístup k vášmu fotoaparátu. Toto nastavenie môžete kedykoľvek zmeniť v nastaveniach zariadenia.</string>
+    <string name="show_next_code">Zobraziť ďalší kód</string>
+    <string name="see_upcoming_codes_in_the_list">Pozrite si nadchádzajúce kódy v zozname</string>
+    <string name="next_code_x">Ďalší kód, %1$s</string>
 </resources>

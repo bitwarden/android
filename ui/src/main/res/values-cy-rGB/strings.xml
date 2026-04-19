@@ -1291,4 +1291,7 @@ Do you want to switch to this account?</string>
     <string name="go_back">Go back</string>
     <string name="allow_camera_access">Allow camera access</string>
     <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
+    <string name="show_next_code">Show next code</string>
+    <string name="see_upcoming_codes_in_the_list">See upcoming codes in the list</string>
+    <string name="next_code_x">Next code, %1$s</string>
 </resources>
