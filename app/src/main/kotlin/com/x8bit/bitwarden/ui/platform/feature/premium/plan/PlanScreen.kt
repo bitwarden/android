@@ -247,10 +247,7 @@ private fun PremiumDetailsCard(
     ) {
         Column(
             modifier = Modifier
-                .padding(
-                    top = 16.dp,
-                    bottom = 12.dp,
-                )
+                .padding(bottom = 12.dp)
                 .standardHorizontalMargin(),
         ) {
             PriceRow(

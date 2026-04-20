@@ -640,7 +640,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                             isAwaitingPremiumStatus = false,
                         ),
                         dialogState = PlanState.DialogState.GetPricingError(
-                            title = BitwardenString.an_error_has_occurred.asText(),
+                            title = BitwardenString.pricing_unavailable.asText(),
                             message = BitwardenString.generic_error_message.asText(),
                         ),
                     ),
@@ -668,7 +668,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                             isAwaitingPremiumStatus = false,
                         ),
                         dialogState = PlanState.DialogState.GetPricingError(
-                            title = BitwardenString.an_error_has_occurred.asText(),
+                            title = BitwardenString.pricing_unavailable.asText(),
                             message = BitwardenString.generic_error_message.asText(),
                         ),
                     ),
@@ -722,7 +722,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                             isAwaitingPremiumStatus = false,
                         ),
                         dialogState = PlanState.DialogState.GetPricingError(
-                            title = BitwardenString.an_error_has_occurred.asText(),
+                            title = BitwardenString.pricing_unavailable.asText(),
                             message = BitwardenString.generic_error_message.asText(),
                         ),
                     ),
