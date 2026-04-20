@@ -377,7 +377,7 @@ class PlanViewModel @Inject constructor(
                     mutableStateFlow.update {
                         it.copy(
                             dialogState = PlanState.DialogState.GetPricingError(
-                                title = BitwardenString.an_error_has_occurred.asText(),
+                                title = BitwardenString.pricing_unavailable.asText(),
                                 message = result.errorMessage?.asText()
                                     ?: BitwardenString.generic_error_message.asText(),
                             ),

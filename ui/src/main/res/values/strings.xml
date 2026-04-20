@@ -1263,4 +1263,5 @@ Do you want to switch to this account?</string>
     <string name="next_code_x">Next code, %1$s</string>
     <string name="archive_item">Archive item</string>
     <string name="once_archived_this_item_will_be_excluded">Once archived, this item will be excluded from search results and autofill suggestions.</string>
+    <string name="pricing_unavailable">Pricing unavailable</string>
 </resources>
