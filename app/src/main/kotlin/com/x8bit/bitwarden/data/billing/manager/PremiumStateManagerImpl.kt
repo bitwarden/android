@@ -61,11 +61,12 @@ class PremiumStateManagerImpl(
                         ?: flowOf(false)
                 },
             vaultRepository.vaultDataStateFlow,
-        ) { userState,
-            isInAppBillingSupported,
-            featureFlagEnabled,
-            isDismissed,
-            vaultDataState,
+        ) {
+                userState,
+                isInAppBillingSupported,
+                featureFlagEnabled,
+                isDismissed,
+                vaultDataState,
             ->
             val activeAccount = userState?.activeAccount
                 ?: return@combine false
