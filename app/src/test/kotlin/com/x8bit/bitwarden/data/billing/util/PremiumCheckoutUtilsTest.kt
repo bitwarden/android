@@ -30,7 +30,6 @@ class PremiumCheckoutUtilsTest {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `getPremiumCheckoutCallbackResult should return Success for case insensitive SUCCESS`() {
         val uri = mockk<Uri> {
@@ -42,7 +41,6 @@ class PremiumCheckoutUtilsTest {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `getPremiumCheckoutCallbackResult should return Canceled when result param is missing`() {
         val uri = mockk<Uri> {

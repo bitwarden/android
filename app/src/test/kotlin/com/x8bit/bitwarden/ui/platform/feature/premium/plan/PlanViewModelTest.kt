@@ -131,7 +131,6 @@ class PlanViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `PremiumCheckoutResult with isSuccess true should show snackbar when premium`() =
         runTest {
@@ -405,7 +404,6 @@ class PlanViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `premium status flip should show snackbar when in WaitingForPayment`() =
         runTest {
@@ -440,7 +438,6 @@ class PlanViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `premium status flip via canceled special circumstance should show snackbar`() =
         runTest {
@@ -531,7 +528,6 @@ class PlanViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `UserStateUpdateReceive with premium during Loading should show snackbar`() =
         runTest {
