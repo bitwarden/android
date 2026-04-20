@@ -75,7 +75,6 @@ class ShortcutUtilsTest {
         assertTrue(mockIntent.isPremiumCheckoutCallback)
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `isPremiumCheckoutCallback should return false when dataString is not checkout callback`() {
         val mockIntent = mockk<Intent> {
