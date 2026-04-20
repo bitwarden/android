@@ -603,6 +603,29 @@ class PlanViewModelTest : BaseViewModelTest() {
     // region Pricing fetch
 
     @Test
+    fun `initial state before pricing fetch resolves should show Loading dialog`() =
+        runTest {
+            val viewModel = createViewModel(pricingResult = null)
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    PlanState(
+                        planMode = PlanMode.Modal,
+                        viewState = PlanState.ViewState.Free(
+                            rate = "--",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = false,
+                        ),
+                        dialogState = PlanState.DialogState.Loading(
+                            message = BitwardenString.loading.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
     fun `pricing fetch failure should show GetPricingError dialog`() =
         runTest {
             val viewModel = createViewModel(
