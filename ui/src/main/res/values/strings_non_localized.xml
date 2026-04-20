@@ -42,8 +42,6 @@
     <string name="avoid_logout_on_kdf_change">Avoid logout on KDF change</string>
     <string name="migrate_my_vault_to_my_items">Migrate My Vault to My Items</string>
     <string name="archive_items">Archive Items</string>
-    <string name="archive_item">Archive item</string>
-    <string name="once_archived_this_item_will_be_excluded">Once archived, this item will be excluded from search results and autofill suggestions.</string>
     <string name="send_email_verification">Send Email Verification</string>
     <string name="trigger_cookie_acquisition">Trigger cookie acquisition</string>
     <string name="clear_sso_cookies">Clear SSO cookies</string>
