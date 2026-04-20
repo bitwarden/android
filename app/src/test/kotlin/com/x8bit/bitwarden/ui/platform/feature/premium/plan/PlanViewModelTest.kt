@@ -44,10 +44,8 @@ class PlanViewModelTest : BaseViewModelTest() {
         MutableStateFlow<SpecialCircumstance?>(null)
     private val mockSpecialCircumstanceManager: SpecialCircumstanceManager =
         mockk(relaxed = true) {
-            every { specialCircumstance } returns null
-            every {
-                specialCircumstanceStateFlow
-            } returns mutableSpecialCircumstanceStateFlow
+            every { specialCircumstance } returns mutableSpecialCircumstanceStateFlow.value
+            every { specialCircumstanceStateFlow } returns mutableSpecialCircumstanceStateFlow
         }
     private val mockVaultRepository: VaultRepository = mockk {
         coEvery {
