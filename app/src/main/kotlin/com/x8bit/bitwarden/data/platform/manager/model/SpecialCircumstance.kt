@@ -140,7 +140,7 @@ sealed class SpecialCircumstance : Parcelable {
      * indicating the user is returning from a Stripe checkout session.
      */
     @Parcelize
-    data class PremiumCheckoutResult(
+    data class PremiumCheckout(
         val callbackResult: PremiumCheckoutCallbackResult,
     ) : SpecialCircumstance()
 

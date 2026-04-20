@@ -109,7 +109,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 assertEquals(DEFAULT_FREE_STATE, awaitItem())
 
                 mutableSpecialCircumstanceStateFlow.value =
-                    SpecialCircumstance.PremiumCheckoutResult(
+                    SpecialCircumstance.PremiumCheckout(
                         callbackResult = PremiumCheckoutCallbackResult.Canceled,
                     )
 
@@ -145,7 +145,7 @@ class PlanViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 mutableSpecialCircumstanceStateFlow.value =
-                    SpecialCircumstance.PremiumCheckoutResult(
+                    SpecialCircumstance.PremiumCheckout(
                         callbackResult = PremiumCheckoutCallbackResult.Success,
                     )
 
@@ -452,7 +452,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 // Simulate returning from checkout canceled (isSuccess = false),
                 // then premium status updates.
                 mutableSpecialCircumstanceStateFlow.value =
-                    SpecialCircumstance.PremiumCheckoutResult(
+                    SpecialCircumstance.PremiumCheckout(
                         callbackResult = PremiumCheckoutCallbackResult.Canceled,
                     )
 
@@ -502,7 +502,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 assertEquals(DEFAULT_FREE_STATE, awaitItem())
 
                 mutableSpecialCircumstanceStateFlow.value =
-                    SpecialCircumstance.PremiumCheckoutResult(
+                    SpecialCircumstance.PremiumCheckout(
                         callbackResult = PremiumCheckoutCallbackResult.Success,
                     )
 

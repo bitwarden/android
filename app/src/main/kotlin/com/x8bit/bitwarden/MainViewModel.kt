@@ -250,7 +250,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun handlePremiumCheckoutResult(action: MainAction.PremiumCheckoutResult) {
-        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.PremiumCheckoutResult(
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.PremiumCheckout(
             callbackResult = action.authResult.getPremiumCheckoutCallbackResult(),
         )
     }
@@ -406,7 +406,7 @@ class MainViewModel @Inject constructor(
 
             hasPremiumCheckoutCallback -> {
                 specialCircumstanceManager.specialCircumstance =
-                    SpecialCircumstance.PremiumCheckoutResult(
+                    SpecialCircumstance.PremiumCheckout(
                         callbackResult = intent.data.getPremiumCheckoutCallbackResult(),
                     )
             }

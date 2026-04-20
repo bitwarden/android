@@ -255,7 +255,7 @@ class PlanViewModel @Inject constructor(
         action: PlanAction.Internal.SpecialCircumstanceReceive,
     ) {
         val checkoutResult = action.specialCircumstance
-            as? SpecialCircumstance.PremiumCheckoutResult ?: return
+            as? SpecialCircumstance.PremiumCheckout ?: return
         specialCircumstanceManager.specialCircumstance = null
 
         if (checkoutResult.callbackResult is PremiumCheckoutCallbackResult.Canceled) {
