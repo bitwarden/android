@@ -2,14 +2,22 @@ package com.x8bit.bitwarden.data.billing.repository
 
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.network.model.BitwardenSubscriptionResponseJson
+import com.bitwarden.network.model.CadenceTypeJson
+import com.bitwarden.network.model.CartItemJson
+import com.bitwarden.network.model.CartJson
 import com.bitwarden.network.model.CheckoutSessionResponseJson
+import com.bitwarden.network.model.PasswordManagerCartItemsJson
 import com.bitwarden.network.model.PortalUrlResponseJson
 import com.bitwarden.network.model.PremiumPlanResponseJson
+import com.bitwarden.network.model.SubscriptionStatusJson
 import com.bitwarden.network.service.BillingService
 import com.x8bit.bitwarden.data.billing.manager.PlayBillingManager
 import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
 import com.x8bit.bitwarden.data.billing.repository.model.CustomerPortalResult
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResult
+import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStatus
+import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionResult
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -150,6 +158,53 @@ class BillingRepositoryTest {
                 result,
             )
         }
+
+    @Test
+    fun `getSubscription when service returns success should return Success`() =
+        runTest {
+            coEvery {
+                billingService.getSubscription()
+            } returns ACTIVE_SUBSCRIPTION_RESPONSE.asSuccess()
+
+            val result = repository.getSubscription()
+
+            assertTrue(result is SubscriptionResult.Success)
+            val subscription = (result as SubscriptionResult.Success).subscription
+            assertEquals(PremiumSubscriptionStatus.ACTIVE, subscription.status)
+            assertEquals(19.80, subscription.seatsCost, 0.001)
+            assertEquals(19.80, subscription.nextChargeTotal, 0.001)
+        }
+
+    @Test
+    fun `getSubscription when service returns failure should return Error`() =
+        runTest {
+            val exception = RuntimeException("Network error")
+            coEvery {
+                billingService.getSubscription()
+            } returns exception.asFailure()
+
+            val result = repository.getSubscription()
+
+            assertEquals(
+                SubscriptionResult.Error(error = exception),
+                result,
+            )
+        }
 }
 
 private const val ANNUAL_PRICE = 19.99
+
+private val ACTIVE_SUBSCRIPTION_RESPONSE = BitwardenSubscriptionResponseJson(
+    status = SubscriptionStatusJson.ACTIVE,
+    cart = CartJson(
+        passwordManager = PasswordManagerCartItemsJson(
+            seats = CartItemJson(
+                translationKey = "premiumMembership",
+                quantity = 1,
+                cost = 19.80,
+            ),
+        ),
+        cadence = CadenceTypeJson.ANNUALLY,
+        estimatedTax = 0.0,
+    ),
+)

@@ -71,6 +71,23 @@ val darkBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
         weak2 = PrimitiveColors.yellow200,
         error = PrimitiveColors.red200,
     ),
+    statusBadge = BitwardenColorScheme.StatusBadgeColors(
+        success = BitwardenColorScheme.StatusBadgeVariantColors(
+            border = PrimitiveColors.statusBadgeGreenBorder,
+            background = PrimitiveColors.statusBadgeGreenBg,
+            text = PrimitiveColors.green400,
+        ),
+        error = BitwardenColorScheme.StatusBadgeVariantColors(
+            border = PrimitiveColors.statusBadgeRedBorder,
+            background = PrimitiveColors.statusBadgeRedBg,
+            text = PrimitiveColors.red400,
+        ),
+        warning = BitwardenColorScheme.StatusBadgeVariantColors(
+            border = PrimitiveColors.statusBadgeOrangeBorder,
+            background = PrimitiveColors.statusBadgeOrangeBg,
+            text = PrimitiveColors.statusBadgeOrangeText,
+        ),
+    ),
     illustration = BitwardenColorScheme.IllustrationColors(
         outline = PrimitiveColors.blue500,
         backgroundPrimary = PrimitiveColors.blue200,
@@ -148,6 +165,23 @@ val lightBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
         weak1 = PrimitiveColors.red300,
         weak2 = PrimitiveColors.yellow300,
         error = PrimitiveColors.red300,
+    ),
+    statusBadge = BitwardenColorScheme.StatusBadgeColors(
+        success = BitwardenColorScheme.StatusBadgeVariantColors(
+            border = PrimitiveColors.statusBadgeGreenBorder,
+            background = PrimitiveColors.statusBadgeGreenBg,
+            text = PrimitiveColors.green400,
+        ),
+        error = BitwardenColorScheme.StatusBadgeVariantColors(
+            border = PrimitiveColors.statusBadgeRedBorder,
+            background = PrimitiveColors.statusBadgeRedBg,
+            text = PrimitiveColors.red400,
+        ),
+        warning = BitwardenColorScheme.StatusBadgeVariantColors(
+            border = PrimitiveColors.statusBadgeOrangeBorder,
+            background = PrimitiveColors.statusBadgeOrangeBg,
+            text = PrimitiveColors.statusBadgeOrangeText,
+        ),
     ),
     illustration = BitwardenColorScheme.IllustrationColors(
         outline = PrimitiveColors.blue700,
@@ -233,6 +267,11 @@ fun dynamicBitwardenColorScheme(
             weak2 = defaultTheme.status.weak2,
             error = defaultTheme.status.error,
         ),
+        statusBadge = BitwardenColorScheme.StatusBadgeColors(
+            success = defaultTheme.statusBadge.success,
+            error = defaultTheme.statusBadge.error,
+            warning = defaultTheme.statusBadge.warning,
+        ),
         illustration = BitwardenColorScheme.IllustrationColors(
             outline = materialColorScheme.onSurface,
             backgroundPrimary = if (isDarkTheme) {
@@ -306,4 +345,11 @@ private data object PrimitiveColors {
 
     val pink100: Color = Color(color = 0xFFC01176)
     val pink200: Color = Color(color = 0xFFFF8FD0)
+    val statusBadgeGreenBorder: Color = Color(color = 0xFFB9F8CF)
+    val statusBadgeGreenBg: Color = Color(color = 0xFFF0FDF4)
+    val statusBadgeRedBorder: Color = Color(color = 0xFFFFC9C9)
+    val statusBadgeRedBg: Color = Color(color = 0xFFFEF2F2)
+    val statusBadgeOrangeBorder: Color = Color(color = 0xFFFCD9BD)
+    val statusBadgeOrangeBg: Color = Color(color = 0xFFFFF8F1)
+    val statusBadgeOrangeText: Color = Color(color = 0xFFB23300)
 }

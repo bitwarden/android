@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.billing.repository
 import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
 import com.x8bit.bitwarden.data.billing.repository.model.CustomerPortalResult
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResult
+import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionResult
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -29,4 +30,9 @@ interface BillingRepository {
      * Retrieves the premium plan pricing information.
      */
     suspend fun getPremiumPlanPricing(): PremiumPlanPricingResult
+
+    /**
+     * Fetches the current user's premium subscription details.
+     */
+    suspend fun getSubscription(): SubscriptionResult
 }

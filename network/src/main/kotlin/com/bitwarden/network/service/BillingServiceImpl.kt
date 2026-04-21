@@ -1,6 +1,7 @@
 package com.bitwarden.network.service
 
 import com.bitwarden.network.api.AuthenticatedBillingApi
+import com.bitwarden.network.model.BitwardenSubscriptionResponseJson
 import com.bitwarden.network.model.CheckoutSessionRequestJson
 import com.bitwarden.network.model.CheckoutSessionResponseJson
 import com.bitwarden.network.model.PortalUrlResponseJson
@@ -31,5 +32,10 @@ internal class BillingServiceImpl(
     override suspend fun getPremiumPlan(): Result<PremiumPlanResponseJson> =
         authenticatedBillingApi
             .getPremiumPlan()
+            .toResult()
+
+    override suspend fun getSubscription(): Result<BitwardenSubscriptionResponseJson> =
+        authenticatedBillingApi
+            .getSubscription()
             .toResult()
 }
