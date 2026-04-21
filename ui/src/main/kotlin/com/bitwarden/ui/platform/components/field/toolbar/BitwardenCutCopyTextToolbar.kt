@@ -2,13 +2,13 @@ package com.bitwarden.ui.platform.components.field.toolbar
 
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.os.PersistableBundle
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.platform.TextToolbar
 import androidx.compose.ui.platform.TextToolbarStatus
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.getSelectedText
-import androidx.core.os.persistableBundleOf
 import com.bitwarden.annotation.OmitFromCoverage
 
 /**
@@ -41,9 +41,9 @@ class BitwardenCutCopyTextToolbar(
                         ClipData
                             .newPlainText("", value.getSelectedText())
                             .apply {
-                                description.extras = persistableBundleOf(
-                                    "android.content.extra.IS_SENSITIVE" to true,
-                                )
+                                description.extras = PersistableBundle(1).apply {
+                                    putBoolean("android.content.extra.IS_SENSITIVE", true)
+                                }
                             },
                     )
                 }
@@ -55,9 +55,9 @@ class BitwardenCutCopyTextToolbar(
                         ClipData
                             .newPlainText("", value.getSelectedText())
                             .apply {
-                                description.extras = persistableBundleOf(
-                                    "android.content.extra.IS_SENSITIVE" to true,
-                                )
+                                description.extras = PersistableBundle(1).apply {
+                                    putBoolean("android.content.extra.IS_SENSITIVE", true)
+                                }
                             },
                     )
                     // Clear selection
