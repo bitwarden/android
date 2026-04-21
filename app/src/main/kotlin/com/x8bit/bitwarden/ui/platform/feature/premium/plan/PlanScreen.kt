@@ -243,11 +243,16 @@ private fun PremiumDetailsCard(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .cardStyle(cardStyle = CardStyle.Full),
+            .cardStyle(
+                cardStyle = CardStyle.Full,
+                // Override bottom padding to account for custom
+                // `BitwardenContentBlock` vertical padding, below.
+                paddingBottom = 0.dp,
+            ),
     ) {
         Column(
             modifier = Modifier
-                .padding(bottom = 12.dp)
+                .padding(bottom = 16.dp)
                 .standardHorizontalMargin(),
         ) {
             PriceRow(
@@ -264,9 +269,7 @@ private fun PremiumDetailsCard(
             )
         }
 
-        BitwardenHorizontalDivider(
-            modifier = Modifier.padding(start = 16.dp),
-        )
+        BitwardenHorizontalDivider()
 
         val features = listOf(
             BitwardenString.built_in_authenticator,
@@ -282,7 +285,7 @@ private fun PremiumDetailsCard(
                 ),
                 headerTextStyle = BitwardenTheme.typography.titleMedium,
                 showDivider = index != features.lastIndex,
-                modifier = Modifier.padding(vertical = 6.dp),
+                modifier = Modifier.padding(vertical = 8.dp),
             )
         }
     }
