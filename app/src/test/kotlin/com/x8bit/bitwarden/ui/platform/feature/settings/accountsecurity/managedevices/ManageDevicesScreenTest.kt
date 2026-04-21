@@ -22,6 +22,7 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -234,8 +235,8 @@ private val DEFAULT_DEVICE_ITEM = ManageDevicesState.ViewState.Content.DeviceIte
 )
 
 private val DEFAULT_STATE = ManageDevicesState(
-    authRequests = emptyList(),
-    devices = emptyList(),
+    authRequests = persistentListOf(),
+    devices = persistentListOf(),
     viewState = ManageDevicesState.ViewState.Loading,
     isPullToRefreshSettingEnabled = false,
     isRefreshing = false,
