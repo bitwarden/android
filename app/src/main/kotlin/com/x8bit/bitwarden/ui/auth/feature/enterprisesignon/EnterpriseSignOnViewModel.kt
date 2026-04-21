@@ -52,6 +52,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
         ?: EnterpriseSignOnState(
             dialogState = null,
             orgIdentifierInput = "",
+            emailAddress = savedStateHandle.toEnterpriseSignOnArgs().emailAddress,
         ),
 ) {
 
@@ -231,7 +232,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = null,
-                        orgIdentifierInput = authRepository.rememberedOrgIdentifier ?: "",
+                        orgIdentifierInput = authRepository.rememberedOrgIdentifier.orEmpty(),
                     )
                 }
             }
@@ -249,7 +250,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialogState = null,
-                    orgIdentifierInput = authRepository.rememberedOrgIdentifier ?: "",
+                    orgIdentifierInput = authRepository.rememberedOrgIdentifier.orEmpty(),
                 )
             }
             return
@@ -456,7 +457,10 @@ class EnterpriseSignOnViewModel @Inject constructor(
     private fun handleConfirmKeyConnectorDomainClick() {
         showLoading()
         viewModelScope.launch {
-            val result = authRepository.continueKeyConnectorLogin()
+            val result = authRepository.continueKeyConnectorLogin(
+                orgIdentifier = state.orgIdentifierInput,
+                email = state.emailAddress,
+            )
             sendAction(EnterpriseSignOnAction.Internal.OnLoginResult(result))
         }
     }
@@ -474,6 +478,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
 data class EnterpriseSignOnState(
     val dialogState: DialogState?,
     val orgIdentifierInput: String,
+    val emailAddress: String,
 ) : Parcelable {
     /**
      * Represents the current state of any dialogs on the screen.

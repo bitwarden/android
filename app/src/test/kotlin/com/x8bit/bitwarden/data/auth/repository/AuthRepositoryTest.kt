@@ -4004,7 +4004,6 @@ class AuthRepositoryTest {
                     environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
                 )
             } returns SINGLE_USER_STATE_1
-            repository.rememberedOrgIdentifier = ORGANIZATION_IDENTIFIER
 
             val result = repository.login(
                 email = EMAIL,
@@ -4016,7 +4015,10 @@ class AuthRepositoryTest {
 
             assertEquals(LoginResult.ConfirmKeyConnectorDomain(keyConnectorUrl), result)
 
-            val continueResult = repository.continueKeyConnectorLogin()
+            val continueResult = repository.continueKeyConnectorLogin(
+                orgIdentifier = ORGANIZATION_IDENTIFIER,
+                email = EMAIL,
+            )
             assertEquals(LoginResult.Error(errorMessage = null, error = error), continueResult)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
             fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
@@ -4114,7 +4116,6 @@ class AuthRepositoryTest {
                     environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
                 )
             } returns SINGLE_USER_STATE_1
-            repository.rememberedOrgIdentifier = ORGANIZATION_IDENTIFIER
             val result = repository.login(
                 email = EMAIL,
                 ssoCode = SSO_CODE,
@@ -4125,7 +4126,10 @@ class AuthRepositoryTest {
 
             assertEquals(LoginResult.ConfirmKeyConnectorDomain(keyConnectorUrl), result)
 
-            val continueResult = repository.continueKeyConnectorLogin()
+            val continueResult = repository.continueKeyConnectorLogin(
+                orgIdentifier = ORGANIZATION_IDENTIFIER,
+                email = EMAIL,
+            )
             assertEquals(LoginResult.Success, continueResult)
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = PRIVATE_KEY)
@@ -4293,8 +4297,6 @@ class AuthRepositoryTest {
                 )
             } returns VaultUnlockResult.Success
 
-            repository.rememberedOrgIdentifier = ORGANIZATION_IDENTIFIER
-
             val loginResult = repository.login(
                 email = EMAIL,
                 ssoCode = SSO_CODE,
@@ -4304,7 +4306,10 @@ class AuthRepositoryTest {
             )
             assertEquals(LoginResult.ConfirmKeyConnectorDomain(keyConnectorUrl), loginResult)
 
-            val result = repository.continueKeyConnectorLogin()
+            val result = repository.continueKeyConnectorLogin(
+                orgIdentifier = ORGANIZATION_IDENTIFIER,
+                email = EMAIL,
+            )
             assertEquals(LoginResult.Success, result)
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = "privateKey")
@@ -7513,7 +7518,10 @@ class AuthRepositoryTest {
     @Test
     fun `continueKeyConnectorLogin returns error if keyConnectorResponse is null`() =
         runTest {
-            val continueResult = repository.continueKeyConnectorLogin()
+            val continueResult = repository.continueKeyConnectorLogin(
+                orgIdentifier = ORGANIZATION_IDENTIFIER,
+                email = EMAIL,
+            )
             assertEquals(
                 LoginResult.Error(
                     errorMessage = null,

@@ -676,15 +676,18 @@ class AuthRepositoryImpl(
             error = MissingPropertyException("Identity Token Auth Model"),
         )
 
-    override suspend fun continueKeyConnectorLogin(): LoginResult {
+    override suspend fun continueKeyConnectorLogin(
+        orgIdentifier: String,
+        email: String,
+    ): LoginResult {
         val response = keyConnectorResponse ?: return LoginResult.Error(
             errorMessage = null,
             error = MissingPropertyException("Key Connector Response"),
         )
         return handleLoginCommonSuccess(
             loginResponse = response,
-            email = rememberedEmailAddress.orEmpty(),
-            orgIdentifier = rememberedOrgIdentifier,
+            email = email,
+            orgIdentifier = orgIdentifier,
             password = null,
             deviceData = null,
             userConfirmedKeyConnector = true,
