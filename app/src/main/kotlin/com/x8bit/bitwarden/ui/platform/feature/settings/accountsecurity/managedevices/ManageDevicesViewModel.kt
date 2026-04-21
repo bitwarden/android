@@ -26,6 +26,9 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.managede
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.managedevices.util.toLastActivityLabel
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -53,8 +56,8 @@ class ManageDevicesViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<ManageDevicesState, ManageDevicesEvent, ManageDevicesAction>(
     initialState = savedStateHandle[KEY_STATE] ?: ManageDevicesState(
-        authRequests = emptyList(),
-        devices = emptyList(),
+        authRequests = persistentListOf(),
+        devices = persistentListOf(),
         viewState = ManageDevicesState.ViewState.Loading,
         isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
         isRefreshing = false,
@@ -191,7 +194,7 @@ class ManageDevicesViewModel @Inject constructor(
         }
         mutableStateFlow.update {
             it.copy(
-                authRequests = filteredRequests,
+                authRequests = filteredRequests.toImmutableList(),
                 authRequestsLoaded = true,
                 isRefreshing = if (state.devicesLoaded) false else it.isRefreshing,
             )
@@ -214,7 +217,7 @@ class ManageDevicesViewModel @Inject constructor(
 
         mutableStateFlow.update {
             it.copy(
-                devices = devicesResult.devices,
+                devices = devicesResult.devices.toImmutableList(),
                 devicesLoaded = true,
                 isRefreshing = if (state.authRequestsLoaded) false else it.isRefreshing,
             )
@@ -274,8 +277,8 @@ class ManageDevicesViewModel @Inject constructor(
  */
 @Parcelize
 data class ManageDevicesState(
-    val authRequests: List<AuthRequest>,
-    val devices: List<DeviceInfo>,
+    val authRequests: ImmutableList<AuthRequest>,
+    val devices: ImmutableList<DeviceInfo>,
     val viewState: ViewState,
     private val isPullToRefreshSettingEnabled: Boolean,
     val isRefreshing: Boolean,
