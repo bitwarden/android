@@ -1254,4 +1254,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="go_back">Go back</string>
     <string name="allow_camera_access">Kamera erişimine izin verin</string>
     <string name="to_scan_your_card_we_need_access_to_your_camera">Kartınızı taramak için kameranıza erişmemiz gerekiyor. Bu izni istediğiniz zaman cihaz ayarlarınızdan değiştirebilirsiniz.</string>
+    <string name="show_next_code">Sonraki kodu göster</string>
+    <string name="see_upcoming_codes_in_the_list">Listede yaklaşan kodları göster</string>
+    <string name="next_code_x">Sonraki kod, %1$s</string>
 </resources>

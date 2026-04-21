@@ -1246,4 +1246,7 @@
     <string name="go_back">戻る</string>
     <string name="allow_camera_access">カメラへのアクセスを許可</string>
     <string name="to_scan_your_card_we_need_access_to_your_camera">カードをスキャンするには、カメラにアクセスする必要があります。デバイスの設定からいつでも変更できます。</string>
+    <string name="show_next_code">次のコードを表示</string>
+    <string name="see_upcoming_codes_in_the_list">リスト内の次のコードを表示</string>
+    <string name="next_code_x">次のコード %1$s</string>
 </resources>

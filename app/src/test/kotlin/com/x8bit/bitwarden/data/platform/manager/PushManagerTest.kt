@@ -71,7 +71,7 @@ class PushManagerTest {
             pushService = pushService,
             dispatcherManager = dispatcherManager,
             clock = clock,
-            json = CoreModule.providesJson(),
+            json = CoreModule.providesJson(buildInfoManager = mockk(relaxed = true)),
             featureFlagManager = mockFeatureFlagManager,
         )
     }

@@ -24,7 +24,7 @@ import java.time.Instant
 @Suppress("LargeClass")
 class SettingsDiskSourceTest {
     private val fakeSharedPreferences = FakeSharedPreferences()
-    private val json = CoreModule.providesJson()
+    private val json = CoreModule.providesJson(buildInfoManager = mockk(relaxed = true))
 
     private val settingsDiskSource: SettingsDiskSource = SettingsDiskSourceImpl(
         sharedPreferences = fakeSharedPreferences,

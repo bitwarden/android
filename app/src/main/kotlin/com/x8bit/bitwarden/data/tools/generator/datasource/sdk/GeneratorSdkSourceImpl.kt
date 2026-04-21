@@ -21,36 +21,36 @@ class GeneratorSdkSourceImpl(
     override suspend fun generatePassword(
         request: PasswordGeneratorRequest,
     ): Result<String> = runCatchingWithLogs {
-        getClient().generators().password(request)
+        useClient { generators().password(request) }
     }
 
     override suspend fun generatePassphrase(
         request: PassphraseGeneratorRequest,
     ): Result<String> = runCatchingWithLogs {
-        getClient().generators().passphrase(request)
+        useClient { generators().passphrase(request) }
     }
 
     override suspend fun generatePlusAddressedEmail(
         request: UsernameGeneratorRequest.Subaddress,
     ): Result<String> = runCatchingWithLogs {
-        getClient().generators().username(request)
+        useClient { generators().username(request) }
     }
 
     override suspend fun generateCatchAllEmail(
         request: UsernameGeneratorRequest.Catchall,
     ): Result<String> = runCatchingWithLogs {
-        getClient().generators().username(request)
+        useClient { generators().username(request) }
     }
 
     override suspend fun generateRandomWord(
         request: UsernameGeneratorRequest.Word,
     ): Result<String> = runCatchingWithLogs {
-        getClient().generators().username(request)
+        useClient { generators().username(request) }
     }
 
     override suspend fun generateForwardedServiceEmail(
         request: UsernameGeneratorRequest.Forwarded,
     ): Result<String> = runCatchingWithLogs {
-        getClient().generators().username(request)
+        useClient { generators().username(request) }
     }
 }

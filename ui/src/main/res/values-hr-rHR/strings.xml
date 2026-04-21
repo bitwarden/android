@@ -172,7 +172,7 @@
     <string name="autofill_noun">Auto-ispuna</string>
     <string name="autofill_verb">Auto-ispuna</string>
     <string name="autofill_or_view">Želiš li auto-ispuniti ili pogledati ovu stavku?</string>
-    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Pretraži %1$s</string>
     <string name="learn_org">Više o organizacijama</string>
     <string name="authenticator_app_title">Autentifikatorska aplikacija</string>
     <string name="enter_verification_code_app">Unesi 6-znamenkasti kôd za provjeru iz autentifikatorske aplikacije.</string>
@@ -269,7 +269,7 @@
     <string name="passport_number">Broj putovnice</string>
     <string name="phone">Telefon</string>
     <string name="september">rujan</string>
-    <string name="ssn">Broj zdravstvenog osiguranja</string>
+    <string name="ssn">OIB</string>
     <string name="state_province">Država / Pokrajina</string>
     <string name="title">Titula</string>
     <string name="zip_postal_code">Poštanski broj</string>
@@ -1264,4 +1264,7 @@ bilo kakav problem.</string>
     <string name="go_back">Nazad</string>
     <string name="allow_camera_access">Dopusti pristup kameri</string>
     <string name="to_scan_your_card_we_need_access_to_your_camera">Za skeniranje kartice trebamo pristup tvojoj kameri. Ovo možeš bilo kada promijeniti u postavkama uređaja.</string>
+    <string name="show_next_code">Show next code</string>
+    <string name="see_upcoming_codes_in_the_list">See upcoming codes in the list</string>
+    <string name="next_code_x">Next code, %1$s</string>
 </resources>

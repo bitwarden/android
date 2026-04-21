@@ -217,7 +217,11 @@ fun SettingsScreen(
                 onDefaultSaveOptionUpdated = {
                     viewModel.trySendAction(SettingsAction.DataClick.DefaultSaveOptionUpdated(it))
                 },
+                onShowNextCodeToggle = {
+                    viewModel.trySendAction(SettingsAction.DataClick.ShowNextCodeToggle(it))
+                },
                 defaultSaveOption = state.defaultSaveOption,
+                isShowNextCodeEnabled = state.isShowNextCodeEnabled,
                 shouldShowDefaultSaveOptions = state.showDefaultSaveOptionRow,
                 shouldShowSyncWithBitwardenApp = state.showSyncWithBitwarden,
             )
@@ -354,12 +358,14 @@ private fun ColumnScope.SecuritySettings(
 @Suppress("LongMethod")
 private fun ColumnScope.VaultSettings(
     defaultSaveOption: DefaultSaveOption,
+    isShowNextCodeEnabled: Boolean,
     onExportClick: () -> Unit,
     onImportClick: () -> Unit,
     onBackupClick: () -> Unit,
     onSyncWithBitwardenClick: () -> Unit,
     onSyncLearnMoreClick: () -> Unit,
     onDefaultSaveOptionUpdated: (DefaultSaveOption) -> Unit,
+    onShowNextCodeToggle: (Boolean) -> Unit,
     shouldShowSyncWithBitwardenApp: Boolean,
     shouldShowDefaultSaveOptions: Boolean,
 ) {
@@ -397,11 +403,7 @@ private fun ColumnScope.VaultSettings(
         dialogMessage = stringResource(BitwardenString.data_backup_message),
         dialogConfirmButtonText = stringResource(BitwardenString.learn_more),
         dialogDismissButtonText = stringResource(BitwardenString.okay),
-        cardStyle = if (shouldShowSyncWithBitwardenApp || shouldShowDefaultSaveOptions) {
-            CardStyle.Middle()
-        } else {
-            CardStyle.Bottom
-        },
+        cardStyle = CardStyle.Middle(),
     )
     if (shouldShowSyncWithBitwardenApp) {
         val learnMore = stringResource(id = BitwardenString.learn_more_link)
@@ -429,11 +431,7 @@ private fun ColumnScope.VaultSettings(
                     )
                 }
                 .standardHorizontalMargin(),
-            cardStyle = if (shouldShowDefaultSaveOptions) {
-                CardStyle.Middle()
-            } else {
-                CardStyle.Bottom
-            },
+            cardStyle = CardStyle.Middle(),
             content = {
                 Icon(
                     modifier = Modifier.mirrorIfRtl(),
@@ -451,6 +449,17 @@ private fun ColumnScope.VaultSettings(
             modifier = Modifier.standardHorizontalMargin(),
         )
     }
+    BitwardenSwitch(
+        label = stringResource(id = BitwardenString.show_next_code),
+        subtext = stringResource(id = BitwardenString.see_upcoming_codes_in_the_list),
+        isChecked = isShowNextCodeEnabled,
+        onCheckedChange = onShowNextCodeToggle,
+        cardStyle = CardStyle.Bottom,
+        modifier = Modifier
+            .testTag("ShowNextCodeToggle")
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
+    )
 }
 
 @Composable
@@ -471,7 +480,7 @@ private fun DefaultSaveOptionSelectionRow(
                 .first { it.displayLabel(resources) == selectedOptionLabel }
             onSaveOptionUpdated(selectedOption)
         },
-        cardStyle = CardStyle.Bottom,
+        cardStyle = CardStyle.Middle(),
         modifier = modifier,
     )
 }

@@ -1256,4 +1256,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="go_back">Geri qayıt</string>
     <string name="allow_camera_access">Kamera erişiminə icazə ver</string>
     <string name="to_scan_your_card_we_need_access_to_your_camera">Kartınızı skan etmək üçün kameranıza erişməliyik. Bunu istənilən vaxt cihaz ayarlarında dəyişdirə bilərsiniz.</string>
+    <string name="show_next_code">Show next code</string>
+    <string name="see_upcoming_codes_in_the_list">See upcoming codes in the list</string>
+    <string name="next_code_x">Next code, %1$s</string>
 </resources>

@@ -15,10 +15,16 @@ class SdkClientManagerImpl(
     sdkRepoFactory: SdkRepositoryFactory,
     sdkPlatformApiFactory: SdkPlatformApiFactory,
     private val featureFlagManager: FeatureFlagManager,
-    private val clientProvider: suspend (userId: String?) -> Client = { userId ->
+    private val clientProvider: suspend (
+        userId: String?,
+        accessToken: String?,
+    ) -> Client = { userId, accessToken ->
         Client(
-            tokenProvider = sdkRepoFactory.getClientManagedTokens(userId = userId),
-            settings = null,
+            tokenProvider = sdkRepoFactory.getClientManagedTokens(
+                userId = userId,
+                accessToken = accessToken,
+            ),
+            settings = sdkRepoFactory.getClientSettings(),
         )
             .apply {
                 platform().loadFlags(featureFlagManager.sdkFeatureFlags)
@@ -32,7 +38,7 @@ class SdkClientManagerImpl(
             }
     },
 ) : SdkClientManager {
-    private val userIdToClientMap = mutableMapOf<String?, Client>()
+    private val userIdToClientMap = mutableMapOf<String, Client>()
 
     init {
         // The SDK requires access to Android APIs that were not made public until API 31. In order
@@ -44,8 +50,14 @@ class SdkClientManagerImpl(
     }
 
     override suspend fun getOrCreateClient(
+        userId: String,
+    ): Client = userIdToClientMap.getOrPut(key = userId) { clientProvider(userId, null) }
+
+    override suspend fun <T> singleUseClient(
         userId: String?,
-    ): Client = userIdToClientMap.getOrPut(key = userId) { clientProvider(userId) }
+        accessToken: String?,
+        block: suspend Client.() -> T,
+    ): T = clientProvider(userId, accessToken).use { it.block() }
 
     override fun destroyClient(
         userId: String?,

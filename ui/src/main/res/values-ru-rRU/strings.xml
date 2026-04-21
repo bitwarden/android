@@ -1273,4 +1273,7 @@
     <string name="go_back">Вернуться</string>
     <string name="allow_camera_access">Разрешить доступ к камере</string>
     <string name="to_scan_your_card_we_need_access_to_your_camera">Для сканирования карты нам потребуется доступ к вашей камере. Вы можете изменить это в любое время в настройках устройства.</string>
+    <string name="show_next_code">Показать следующий код</string>
+    <string name="see_upcoming_codes_in_the_list">Просмотр будущих кодов в списке</string>
+    <string name="next_code_x">Следующий код, %1$s</string>
 </resources>

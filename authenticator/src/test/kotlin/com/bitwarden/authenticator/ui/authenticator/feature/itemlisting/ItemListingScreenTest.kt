@@ -575,6 +575,7 @@ private val SHARED_ACCOUNTS_SECTION = SharedCodesDisplayState.SharedCodesAccount
 
 private val DEFAULT_STATE = ItemListingState(
     alertThresholdSeconds = ALERT_THRESHOLD,
+    isShowNextCodeEnabled = false,
     viewState = ItemListingState.ViewState.NoItems(
         actionCard = null,
     ),

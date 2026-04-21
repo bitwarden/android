@@ -42,11 +42,11 @@ object PlatformNetworkModule {
 
     @Provides
     @Singleton
-    fun provideBitwardenServiceClient(
+    fun provideBitwardenServiceClientConfig(
         baseUrlsProvider: BaseUrlsProvider,
         authDiskSource: AuthDiskSource,
         clock: Clock,
-    ): BitwardenServiceClient = bitwardenServiceClient(
+    ): BitwardenServiceClientConfig =
         BitwardenServiceClientConfig(
             clock = clock,
             appIdProvider = authDiskSource,
@@ -59,6 +59,7 @@ object PlatformNetworkModule {
             enableHttpBodyLogging = BuildConfig.DEBUG,
             authTokenProvider = object : AuthTokenProvider {
                 override fun getAuthTokenDataOrNull(): AuthTokenData? = null
+
                 override fun getAuthTokenDataOrNull(userId: String): AuthTokenData? = null
             },
             certificateProvider = object : CertificateProvider {
@@ -66,7 +67,7 @@ object PlatformNetworkModule {
                     keyType: Array<out String>?,
                     issuers: Array<out Principal>?,
                     socket: Socket?,
-                ) = ""
+                ): String = ""
 
                 override fun getCertificateChain(alias: String?): Array<X509Certificate>? = null
 
@@ -77,9 +78,16 @@ object PlatformNetworkModule {
 
                 override fun getCookies(hostname: String): List<NetworkCookie> = emptyList()
 
-                override fun acquireCookies(hostname: String) = Unit
+                override fun acquireCookies(hostname: String): Unit = Unit
             },
-        ),
+        )
+
+    @Provides
+    @Singleton
+    fun provideBitwardenServiceClient(
+        serviceClientConfig: BitwardenServiceClientConfig,
+    ): BitwardenServiceClient = bitwardenServiceClient(
+        config = serviceClientConfig,
     )
 
     @Provides

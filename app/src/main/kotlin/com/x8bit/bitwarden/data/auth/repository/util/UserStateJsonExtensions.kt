@@ -58,6 +58,7 @@ fun UserStateJson.toUpdatedUserStateJson(
     val userId = syncProfile.id
     val account = this.accounts[userId] ?: return this
     val profile = account.profile
+    val masterPasswordUnlockKdf = syncResponse.userDecryption?.masterPasswordUnlock?.kdf
     val userDecryptionOptions = syncResponse
         .userDecryption
         ?.let { syncUserDecryption ->
@@ -83,6 +84,14 @@ fun UserStateJson.toUpdatedUserStateJson(
             isTwoFactorEnabled = syncProfile.isTwoFactorEnabled,
             creationDate = syncProfile.creationDate,
             userDecryptionOptions = userDecryptionOptions,
+            kdfType = masterPasswordUnlockKdf?.kdfType
+                ?: profile.kdfType,
+            kdfIterations = masterPasswordUnlockKdf?.iterations
+                ?: profile.kdfIterations,
+            kdfMemory = masterPasswordUnlockKdf?.memory
+                ?: profile.kdfMemory,
+            kdfParallelism = masterPasswordUnlockKdf?.parallelism
+                ?: profile.kdfParallelism,
         )
     val updatedAccount = account.copy(profile = updatedProfile)
     return this

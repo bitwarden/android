@@ -1255,4 +1255,7 @@ Pretende mudar para esta conta?</string>
     <string name="go_back">Voltar atrás</string>
     <string name="allow_camera_access">Permitir acesso à câmara</string>
     <string name="to_scan_your_card_we_need_access_to_your_camera">Para digitalizar o seu cartão, precisamos de acesso à sua câmara. Pode alterar esta definição a qualquer momento nas definições do seu dispositivo.</string>
+    <string name="show_next_code">Mostrar próximo código</string>
+    <string name="see_upcoming_codes_in_the_list">Veja os códigos seguintes na lista</string>
+    <string name="next_code_x">Próximo código, %1$s</string>
 </resources>

@@ -37,6 +37,7 @@ fun createMockVerificationCodeItem(
     number: Int,
     id: String = "mockId-$number",
     code: String = "mockCode-$number",
+    nextCode: String? = "mockNextCode-$number",
     periodSeconds: Int = 30,
     timeLeftSeconds: Int = 120,
     issueTime: Long = 0,
@@ -46,6 +47,7 @@ fun createMockVerificationCodeItem(
 ): VerificationCodeItem =
     VerificationCodeItem(
         code = code,
+        nextCode = nextCode,
         periodSeconds = periodSeconds,
         timeLeftSeconds = timeLeftSeconds,
         issueTime = issueTime,

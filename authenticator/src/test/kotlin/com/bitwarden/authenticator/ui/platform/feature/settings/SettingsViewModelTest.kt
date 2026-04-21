@@ -62,6 +62,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
         every { isUnlockWithBiometricsEnabledFlow } returns mutableIsUnlockWithBiometricsEnabledFlow
     }
     private val mutableAppTimeoutStateFlow = MutableStateFlow<AppTimeout>(AppTimeout.OnAppRestart)
+    private val mutableIsShowNextCodeEnabledFlow = MutableStateFlow(false)
     private val settingsRepository: SettingsRepository = mockk {
         every { appLanguage } returns APP_LANGUAGE
         every { appTheme } returns APP_THEME
@@ -74,6 +75,9 @@ class SettingsViewModelTest : BaseViewModelTest() {
         every { isDynamicColorsEnabled } answers { mutableIsDynamicColorsEnabledFlow.value }
         every { isDynamicColorsEnabled = any() } just runs
         every { isDynamicColorsEnabledFlow } returns mutableIsDynamicColorsEnabledFlow
+        every { isShowNextCodeEnabled } returns false
+        every { isShowNextCodeEnabled = any() } just runs
+        every { isShowNextCodeEnabledFlow } returns mutableIsShowNextCodeEnabledFlow
         every { appTimeoutState = any() } just runs
         every { appTimeoutStateFlow } returns mutableAppTimeoutStateFlow
         every { appTimeoutState } answers { mutableAppTimeoutStateFlow.value }
@@ -335,6 +339,63 @@ class SettingsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on ShowNextCodeToggle should update value in state and SettingsRepository`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                SettingsAction.DataClick.ShowNextCodeToggle(enabled = true),
+            )
+
+            verify(exactly = 1) {
+                settingsRepository.isShowNextCodeEnabled = true
+            }
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE.copy(isShowNextCodeEnabled = true),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `on ShowNextCodeUpdated should update value in state`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                SettingsAction.Internal.ShowNextCodeUpdated(isEnabled = true),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(isShowNextCodeEnabled = true),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `isShowNextCodeEnabledFlow emission should update state`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+
+            mutableIsShowNextCodeEnabledFlow.value = true
+            assertEquals(
+                DEFAULT_STATE.copy(isShowNextCodeEnabled = true),
+                awaitItem(),
+            )
+
+            mutableIsShowNextCodeEnabledFlow.value = false
+            assertEquals(
+                DEFAULT_STATE.copy(isShowNextCodeEnabled = false),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
     fun `on AppTimeoutChange should update value in state`() = runTest {
         val viewModel = createViewModel()
 
@@ -450,6 +511,7 @@ private val DEFAULT_STATE = SettingsState(
         .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
     copyrightInfo = "© Bitwarden Inc. 2015-2024".asText(),
     allowScreenCapture = false,
+    isShowNextCodeEnabled = false,
     hasBiometricsSupport = true,
     appTimeout = AppTimeout.OnAppRestart,
 )

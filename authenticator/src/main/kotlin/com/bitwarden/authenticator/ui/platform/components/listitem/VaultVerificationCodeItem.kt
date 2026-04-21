@@ -1,5 +1,9 @@
 package com.bitwarden.authenticator.ui.platform.components.listitem
 
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -19,6 +25,7 @@ import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDr
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.cardStyle
+import com.bitwarden.ui.platform.components.animation.AnimateNullableContentVisibility
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
@@ -49,6 +56,7 @@ fun VaultVerificationCodeItem(
 ) {
     VaultVerificationCodeItem(
         authCode = displayItem.authCode,
+        nextAuthCode = displayItem.nextAuthCode,
         primaryLabel = displayItem.title,
         secondaryLabel = displayItem.subtitle,
         periodSeconds = displayItem.periodSeconds,
@@ -79,6 +87,7 @@ fun VaultVerificationCodeItem(
  * @param showOverflow Whether overflow menu should be available or not.
  * @param showMoveToBitwarden Whether the option to move the item to Bitwarden is displayed.
  * @param cardStyle The card style to be applied to this item.
+ * @param nextAuthCode The next verification code to preview when nearing expiration.
  * @param modifier The modifier for the item.
  */
 @Suppress("LongMethod", "MagicNumber")
@@ -96,6 +105,7 @@ fun VaultVerificationCodeItem(
     showOverflow: Boolean,
     showMoveToBitwarden: Boolean,
     cardStyle: CardStyle,
+    nextAuthCode: String?,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -152,14 +162,42 @@ fun VaultVerificationCodeItem(
             alertThresholdSeconds = alertThresholdSeconds,
         )
 
-        Text(
-            modifier = Modifier.testTag(tag = "AuthCode"),
-            text = authCode
-                .chunked(size = 3) { it.padEnd(length = 3, padChar = ' ') }
-                .joinToString(separator = " "),
-            style = BitwardenTheme.typography.sensitiveInfoSmall,
-            color = BitwardenTheme.colorScheme.text.primary,
-        )
+        Column(
+            horizontalAlignment = Alignment.End,
+        ) {
+            Text(
+                modifier = Modifier.testTag(tag = "AuthCode"),
+                text = authCode
+                    .chunked(size = 3) { it.padEnd(length = 3, padChar = ' ') }
+                    .joinToString(separator = " "),
+                style = BitwardenTheme.typography.sensitiveInfoSmall,
+                color = BitwardenTheme.colorScheme.text.primary,
+            )
+
+            AnimateNullableContentVisibility(
+                targetState = nextAuthCode,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically(),
+                label = "AnimateNextCode",
+            ) { code ->
+                val nextCodeDescription = stringResource(
+                    id = BitwardenString.next_code_x,
+                    formatArgs = arrayOf(code),
+                )
+                Text(
+                    modifier = Modifier
+                        .testTag(tag = "NextAuthCode")
+                        .semantics {
+                            contentDescription = nextCodeDescription
+                        },
+                    text = code
+                        .chunked(size = 3) { it.padEnd(length = 3, padChar = ' ') }
+                        .joinToString(separator = " "),
+                    style = BitwardenTheme.typography.sensitiveInfoSmall,
+                    color = BitwardenTheme.colorScheme.text.secondary,
+                )
+            }
+        }
 
         if (showOverflow) {
             BitwardenOverflowActionItem(
@@ -206,7 +244,7 @@ fun VaultVerificationCodeItem(
 private fun VerificationCodeItem_preview() {
     BitwardenTheme {
         VaultVerificationCodeItem(
-            authCode = "1234567890".chunked(3).joinToString(" "),
+            authCode = "123456",
             primaryLabel = "Issuer, AKA Name",
             secondaryLabel = "username@bitwarden.com",
             periodSeconds = 30,
@@ -219,6 +257,7 @@ private fun VerificationCodeItem_preview() {
             modifier = Modifier.padding(horizontal = 16.dp),
             showMoveToBitwarden = true,
             cardStyle = CardStyle.Full,
+            nextAuthCode = null,
         )
     }
 }

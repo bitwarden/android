@@ -28,6 +28,7 @@ class VerificationCodeItemExtensionsTest {
             periodSeconds = favoriteItem.periodSeconds,
             alertThresholdSeconds = alertThresholdSeconds,
             authCode = favoriteItem.code,
+            nextAuthCode = null,
             favorite = (favoriteItem.source as AuthenticatorItem.Source.Local).isFavorite,
             showOverflow = true,
             showMoveToBitwarden = false,
@@ -41,6 +42,7 @@ class VerificationCodeItemExtensionsTest {
             periodSeconds = nonFavoriteItem.periodSeconds,
             alertThresholdSeconds = alertThresholdSeconds,
             authCode = nonFavoriteItem.code,
+            nextAuthCode = null,
             favorite = (nonFavoriteItem.source as AuthenticatorItem.Source.Local).isFavorite,
             showOverflow = true,
             showMoveToBitwarden = false,
@@ -50,6 +52,7 @@ class VerificationCodeItemExtensionsTest {
             expectedFavoriteItem,
             favoriteItem.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
                 sharedVerificationCodesState = SharedVerificationCodesState.Error,
                 showOverflow = true,
             ),
@@ -58,6 +61,7 @@ class VerificationCodeItemExtensionsTest {
             expectedNonFavoriteItem,
             nonFavoriteItem.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
                 sharedVerificationCodesState = SharedVerificationCodesState.Error,
                 showOverflow = true,
             ),
@@ -78,6 +82,7 @@ class VerificationCodeItemExtensionsTest {
                 periodSeconds = item.periodSeconds,
                 alertThresholdSeconds = alertThresholdSeconds,
                 authCode = item.code,
+                nextAuthCode = null,
                 favorite = false,
                 showOverflow = true,
                 showMoveToBitwarden = false,
@@ -87,6 +92,7 @@ class VerificationCodeItemExtensionsTest {
             expectedDontShowMoveToBitwardenItem,
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
                 sharedVerificationCodesState = SharedVerificationCodesState.AppNotInstalled,
                 showOverflow = true,
             ),
@@ -95,6 +101,7 @@ class VerificationCodeItemExtensionsTest {
             expectedDontShowMoveToBitwardenItem,
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
                 sharedVerificationCodesState = SharedVerificationCodesState.Error,
                 showOverflow = true,
             ),
@@ -103,6 +110,7 @@ class VerificationCodeItemExtensionsTest {
             expectedDontShowMoveToBitwardenItem,
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
                 sharedVerificationCodesState = SharedVerificationCodesState.FeatureNotEnabled,
                 showOverflow = true,
             ),
@@ -111,6 +119,7 @@ class VerificationCodeItemExtensionsTest {
             expectedDontShowMoveToBitwardenItem,
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
                 sharedVerificationCodesState = SharedVerificationCodesState.Loading,
                 showOverflow = true,
             ),
@@ -119,6 +128,7 @@ class VerificationCodeItemExtensionsTest {
             expectedDontShowMoveToBitwardenItem,
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
                 sharedVerificationCodesState = SharedVerificationCodesState.OsVersionNotSupported,
                 showOverflow = true,
             ),
@@ -127,6 +137,7 @@ class VerificationCodeItemExtensionsTest {
             expectedDontShowMoveToBitwardenItem,
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
                 sharedVerificationCodesState = SharedVerificationCodesState.SyncNotEnabled,
                 showOverflow = true,
             ),
@@ -139,7 +150,104 @@ class VerificationCodeItemExtensionsTest {
             expectedShouldShowMoveToBitwardenItem,
             item.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
                 sharedVerificationCodesState = SharedVerificationCodesState.Success(emptyList()),
+                showOverflow = true,
+            ),
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `toDisplayItem should populate nextAuthCode when setting enabled and time below threshold`() {
+        val alertThresholdSeconds = 7
+        val item = createMockVerificationCodeItem(
+            number = 1,
+            timeLeftSeconds = 5,
+        )
+        val expected = VerificationCodeDisplayItem(
+            id = item.id,
+            title = item.issuer!!,
+            subtitle = item.label,
+            timeLeftSeconds = item.timeLeftSeconds,
+            periodSeconds = item.periodSeconds,
+            alertThresholdSeconds = alertThresholdSeconds,
+            authCode = item.code,
+            nextAuthCode = item.nextCode,
+            favorite = false,
+            showOverflow = true,
+            showMoveToBitwarden = false,
+        )
+        assertEquals(
+            expected,
+            item.toDisplayItem(
+                alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
+                sharedVerificationCodesState = SharedVerificationCodesState.Error,
+                showOverflow = true,
+            ),
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `toDisplayItem should return null nextAuthCode when setting disabled even below threshold`() {
+        val alertThresholdSeconds = 7
+        val item = createMockVerificationCodeItem(
+            number = 1,
+            timeLeftSeconds = 5,
+        )
+        val expected = VerificationCodeDisplayItem(
+            id = item.id,
+            title = item.issuer!!,
+            subtitle = item.label,
+            timeLeftSeconds = item.timeLeftSeconds,
+            periodSeconds = item.periodSeconds,
+            alertThresholdSeconds = alertThresholdSeconds,
+            authCode = item.code,
+            nextAuthCode = null,
+            favorite = false,
+            showOverflow = true,
+            showMoveToBitwarden = false,
+        )
+        assertEquals(
+            expected,
+            item.toDisplayItem(
+                alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = false,
+                sharedVerificationCodesState = SharedVerificationCodesState.Error,
+                showOverflow = true,
+            ),
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `toDisplayItem should return null nextAuthCode when time above threshold even with setting enabled`() {
+        val alertThresholdSeconds = 7
+        val item = createMockVerificationCodeItem(
+            number = 1,
+            timeLeftSeconds = 15,
+        )
+        val expected = VerificationCodeDisplayItem(
+            id = item.id,
+            title = item.issuer!!,
+            subtitle = item.label,
+            timeLeftSeconds = item.timeLeftSeconds,
+            periodSeconds = item.periodSeconds,
+            alertThresholdSeconds = alertThresholdSeconds,
+            authCode = item.code,
+            nextAuthCode = null,
+            favorite = false,
+            showOverflow = true,
+            showMoveToBitwarden = false,
+        )
+        assertEquals(
+            expected,
+            item.toDisplayItem(
+                alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
+                sharedVerificationCodesState = SharedVerificationCodesState.Error,
                 showOverflow = true,
             ),
         )
@@ -167,6 +275,7 @@ class VerificationCodeItemExtensionsTest {
             periodSeconds = favoriteItem.periodSeconds,
             alertThresholdSeconds = alertThresholdSeconds,
             authCode = favoriteItem.code,
+            nextAuthCode = null,
             favorite = false,
             showOverflow = false,
             showMoveToBitwarden = false,
@@ -176,6 +285,7 @@ class VerificationCodeItemExtensionsTest {
             expectedFavoriteItem,
             favoriteItem.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = true,
                 sharedVerificationCodesState = SharedVerificationCodesState.Error,
                 showOverflow = false,
             ),

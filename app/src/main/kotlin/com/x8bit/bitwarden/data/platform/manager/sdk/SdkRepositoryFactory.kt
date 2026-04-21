@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager.sdk
 
 import com.bitwarden.core.ClientManagedTokens
+import com.bitwarden.core.ClientSettings
 import com.bitwarden.sdk.Repositories
 import com.bitwarden.sdk.ServerCommunicationConfigRepository
 
@@ -16,7 +17,15 @@ interface SdkRepositoryFactory {
     /**
      * Retrieves or creates a [ClientManagedTokens] for use with the Bitwarden SDK.
      */
-    fun getClientManagedTokens(userId: String?): ClientManagedTokens
+    fun getClientManagedTokens(
+        userId: String?,
+        accessToken: String?,
+    ): ClientManagedTokens
+
+    /**
+     * Retrieves or creates a [ClientSettings] for use with the Bitwarden SDK.
+     */
+    fun getClientSettings(): ClientSettings
 
     /**
      * Retrieves or creates a [ServerCommunicationConfigRepository] for use with the Bitwarden SDK.

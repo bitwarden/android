@@ -15,6 +15,7 @@ import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.data.manager.NativeLibraryManager
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.network.BitwardenServiceClient
+import com.bitwarden.network.model.BitwardenServiceClientConfig
 import com.bitwarden.network.service.EventService
 import com.bitwarden.network.service.PushService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
@@ -367,11 +368,13 @@ object PlatformManagerModule {
         cookieDiskSource: CookieDiskSource,
         configDiskSource: ConfigDiskSource,
         authDiskSource: AuthDiskSource,
+        serviceClientConfig: BitwardenServiceClientConfig,
     ): SdkRepositoryFactory = SdkRepositoryFactoryImpl(
         vaultDiskSource = vaultDiskSource,
         cookieDiskSource = cookieDiskSource,
         configDiskSource = configDiskSource,
         authDiskSource = authDiskSource,
+        serviceClientConfig = serviceClientConfig,
     )
 
     @Provides

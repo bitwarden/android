@@ -27,25 +27,21 @@ class AuthSdkSourceImpl(
     override suspend fun getNewAuthRequest(
         email: String,
     ): Result<AuthRequestResponse> = runCatchingWithLogs {
-        getClient()
-            .auth()
-            .newAuthRequest(
-                email = email.lowercase(),
-            )
+        useClient { auth().newAuthRequest(email = email.lowercase()) }
     }
 
     override suspend fun getUserFingerprint(
         email: String,
         publicKey: String,
     ): Result<String> = runCatchingWithLogs {
-        getClient()
-            .platform()
-            .fingerprint(
+        useClient {
+            platform().fingerprint(
                 req = FingerprintRequest(
                     fingerprintMaterial = email.lowercase(),
                     publicKey = publicKey,
                 ),
             )
+        }
     }
 
     override suspend fun hashPassword(
@@ -54,21 +50,19 @@ class AuthSdkSourceImpl(
         kdf: Kdf,
         purpose: HashPurpose,
     ): Result<String> = runCatchingWithLogs {
-        getClient()
-            .auth()
-            .hashPassword(
+        useClient {
+            auth().hashPassword(
                 email = email,
                 password = password,
                 kdfParams = kdf,
                 purpose = purpose,
             )
+        }
     }
 
     override suspend fun makeKeyConnectorKeys(): Result<KeyConnectorResponse> =
         runCatchingWithLogs {
-            getClient()
-                .auth()
-                .makeKeyConnectorKeys()
+            useClient { auth().makeKeyConnectorKeys() }
         }
 
     override suspend fun makeRegisterKeys(
@@ -76,13 +70,13 @@ class AuthSdkSourceImpl(
         password: String,
         kdf: Kdf,
     ): Result<RegisterKeyResponse> = runCatchingWithLogs {
-        getClient()
-            .auth()
-            .makeRegisterKeys(
+        useClient {
+            auth().makeRegisterKeys(
                 email = email,
                 password = password,
                 kdf = kdf,
             )
+        }
     }
 
     override suspend fun makeRegisterTdeKeysAndUnlockVault(
@@ -105,15 +99,16 @@ class AuthSdkSourceImpl(
         password: String,
         additionalInputs: List<String>,
     ): Result<PasswordStrength> = runCatchingWithLogs {
-        @Suppress("UnsafeCallOnNullableType")
-        getClient()
-            .auth()
-            .passwordStrength(
-                password = password,
-                email = email,
-                additionalInputs = additionalInputs,
-            )
-            .toPasswordStrengthOrNull()!!
+        useClient {
+            @Suppress("UnsafeCallOnNullableType")
+            auth()
+                .passwordStrength(
+                    password = password,
+                    email = email,
+                    additionalInputs = additionalInputs,
+                )
+                .toPasswordStrengthOrNull()!!
+        }
     }
 
     override suspend fun satisfiesPolicy(
@@ -121,12 +116,12 @@ class AuthSdkSourceImpl(
         passwordStrength: PasswordStrength,
         policy: MasterPasswordPolicyOptions,
     ): Result<Boolean> = runCatchingWithLogs {
-        getClient()
-            .auth()
-            .satisfiesPolicy(
+        useClient {
+            auth().satisfiesPolicy(
                 password = password,
                 strength = passwordStrength.toUByte(),
                 policy = policy,
             )
+        }
     }
 }

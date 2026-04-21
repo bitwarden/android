@@ -10,6 +10,7 @@ import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRe
 import com.bitwarden.authenticator.data.authenticator.repository.model.DeleteItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDropdownMenuAction
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
@@ -54,6 +55,11 @@ class ItemSearchViewModelTest : BaseViewModelTest() {
     }
     private val authenticatorBridgeManager = mockk<AuthenticatorBridgeManager>()
     private val mockClipboardManager = mockk<BitwardenClipboardManager>()
+    private val mutableIsShowNextCodeEnabledFlow = MutableStateFlow(false)
+    private val mockSettingsRepository = mockk<SettingsRepository> {
+        every { isShowNextCodeEnabled } returns false
+        every { isShowNextCodeEnabledFlow } returns mutableIsShowNextCodeEnabledFlow
+    }
     private val mutableSnackbarFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
     private val snackbarRelayManager = mockk<SnackbarRelayManager<SnackbarRelay>> {
         every {
@@ -366,11 +372,13 @@ class ItemSearchViewModelTest : BaseViewModelTest() {
             authenticatorRepository = mockAuthenticatorRepository,
             authenticatorBridgeManager = authenticatorBridgeManager,
             snackbarRelayManager = snackbarRelayManager,
+            settingsRepository = mockSettingsRepository,
         )
 }
 
 private val DEFAULT_STATE: ItemSearchState = ItemSearchState(
     searchTerm = "",
+    isShowNextCodeEnabled = false,
     viewState = ItemSearchState.ViewState.Empty(message = null),
     dialog = null,
 )
@@ -404,6 +412,7 @@ private val SHARED_DISPLAY_ITEMS = SharedCodesDisplayState.Codes(
                     periodSeconds = 30,
                     alertThresholdSeconds = 7,
                     authCode = "mockCode-2",
+                    nextAuthCode = null,
                     favorite = false,
                     showOverflow = false,
                     showMoveToBitwarden = false,
@@ -419,6 +428,7 @@ private val LOCAL_DISPLAY_ITEMS = persistentListOf(
     VerificationCodeDisplayItem(
         id = LOCAL_ITEMS[0].id,
         authCode = LOCAL_ITEMS[0].code,
+        nextAuthCode = null,
         title = LOCAL_ITEMS[0].issuer!!,
         periodSeconds = LOCAL_ITEMS[0].periodSeconds,
         timeLeftSeconds = LOCAL_ITEMS[0].timeLeftSeconds,

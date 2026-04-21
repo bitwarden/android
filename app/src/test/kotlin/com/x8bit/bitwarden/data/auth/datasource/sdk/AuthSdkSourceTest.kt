@@ -20,6 +20,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.slot
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -34,7 +35,7 @@ class AuthSdkSourceTest {
         every { platform() } returns clientPlatform
     }
     private val sdkClientManager = mockk<SdkClientManager> {
-        coEvery { getOrCreateClient(userId = null) } returns client
+        coEvery { getOrCreateClient(userId = any()) } returns client
     }
 
     private val authSkdSource: AuthSdkSource = AuthSdkSourceImpl(
@@ -43,6 +44,10 @@ class AuthSdkSourceTest {
 
     @Test
     fun `getNewAuthRequest should call SDK and return a Result with correct data`() = runBlocking {
+        val slot = slot<suspend Client.() -> AuthRequestResponse>()
+        coEvery {
+            sdkClientManager.singleUseClient(block = capture(slot))
+        } coAnswers { slot.captured(client) }
         val email = "test@gmail.com"
         val expectedResult = mockk<AuthRequestResponse>()
         coEvery {
@@ -62,6 +67,10 @@ class AuthSdkSourceTest {
 
     @Test
     fun `getUserFingerprint should call SDK and return a Result with correct data`() = runBlocking {
+        val slot = slot<suspend Client.() -> String>()
+        coEvery {
+            sdkClientManager.singleUseClient(block = capture(slot))
+        } coAnswers { slot.captured(client) }
         val email = "email@gmail.com"
         val publicKey = "publicKey"
         val expectedResult = "fingerprint"
@@ -91,6 +100,10 @@ class AuthSdkSourceTest {
 
     @Test
     fun `hashPassword should call SDK and return a Result with the correct data`() = runBlocking {
+        val slot = slot<suspend Client.() -> String>()
+        coEvery {
+            sdkClientManager.singleUseClient(block = capture(slot))
+        } coAnswers { slot.captured(client) }
         val email = "email"
         val password = "password"
         val kdf = mockk<Kdf>()
@@ -128,6 +141,10 @@ class AuthSdkSourceTest {
     @Test
     fun `makeKeyConnectorKeys should call SDK and return a Result with the correct data`() =
         runBlocking {
+            val slot = slot<suspend Client.() -> KeyConnectorResponse>()
+            coEvery {
+                sdkClientManager.singleUseClient(block = capture(slot))
+            } coAnswers { slot.captured(client) }
             val expectedResult = mockk<KeyConnectorResponse>()
             coEvery { clientAuth.makeKeyConnectorKeys() } returns expectedResult
 
@@ -142,6 +159,10 @@ class AuthSdkSourceTest {
     @Test
     fun `makeRegisterKeys should call SDK and return a Result with the correct data`() =
         runBlocking {
+            val slot = slot<suspend Client.() -> RegisterKeyResponse>()
+            coEvery {
+                sdkClientManager.singleUseClient(block = capture(slot))
+            } coAnswers { slot.captured(client) }
             val email = "email"
             val password = "password"
             val kdf = mockk<Kdf>()
@@ -181,7 +202,6 @@ class AuthSdkSourceTest {
             val orgPublicKey = "orgPublicKey"
             val rememberDevice = true
             val expectedResult = mockk<RegisterTdeKeyResponse>()
-            coEvery { sdkClientManager.getOrCreateClient(userId = userId) } returns client
             coEvery {
                 clientAuth.makeRegisterTdeKeys(
                     email = email,
@@ -209,6 +229,10 @@ class AuthSdkSourceTest {
     @Test
     fun `passwordStrength should call SDK and return a Result with the correct data`() =
         runBlocking {
+            val slot = slot<suspend Client.() -> PasswordStrength>()
+            coEvery {
+                sdkClientManager.singleUseClient(block = capture(slot))
+            } coAnswers { slot.captured(client) }
             val email = "email"
             val password = "password"
             val additionalInputs = listOf("test1", "test2")
@@ -243,6 +267,10 @@ class AuthSdkSourceTest {
     @Test
     fun `satisfiesPolicy should call SDK and return a Result with the correct data`() =
         runBlocking {
+            val slot = slot<suspend Client.() -> Boolean>()
+            coEvery {
+                sdkClientManager.singleUseClient(block = capture(slot))
+            } coAnswers { slot.captured(client) }
             val password = "password"
             val passwordStrength = PasswordStrength.LEVEL_3
             val rawStrength = 3.toUByte()

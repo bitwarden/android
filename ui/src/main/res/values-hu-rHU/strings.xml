@@ -1254,4 +1254,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="go_back">Vissza</string>
     <string name="allow_camera_access">Kamera elérés engedélyezése</string>
     <string name="to_scan_your_card_we_need_access_to_your_camera">A kártya beolvasásához hozzá kell férni a kamerához. Ezt bármikor módosítható az eszköz beállításaiban.</string>
+    <string name="show_next_code">Következő kód megjelenítése</string>
+    <string name="see_upcoming_codes_in_the_list">Lásd a következő kódokat a listában</string>
+    <string name="next_code_x">Következő kód, %1$s</string>
 </resources>

@@ -20,6 +20,7 @@ private const val ALERT_THRESHOLD_SECONDS_KEY = "alertThresholdSeconds"
 private const val APP_TIMEOUT_IN_MINUTES_KEY = "appTimeoutInMinutes"
 private const val FIRST_LAUNCH_KEY = "hasSeenWelcomeTutorial"
 private const val CRASH_LOGGING_ENABLED_KEY = "crashLoggingEnabled"
+private const val SHOW_NEXT_CODE_ENABLED_KEY = "showNextCodeEnabled"
 private const val SCREEN_CAPTURE_ALLOW_KEY = "screenCaptureAllowed"
 private const val HAS_USER_DISMISSED_DOWNLOAD_BITWARDEN_KEY =
     "hasUserDismissedDownloadBitwardenCard"
@@ -51,6 +52,9 @@ class SettingsDiskSourceImpl(
     private val mutableAppTimeoutInMinutesFlow = bufferedMutableSharedFlow<Int?>()
 
     private val mutableIsCrashLoggingEnabledFlow =
+        bufferedMutableSharedFlow<Boolean?>()
+
+    private val mutableIsShowNextCodeEnabledFlow =
         bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableDefaultSaveOptionFlow =
@@ -156,6 +160,17 @@ class SettingsDiskSourceImpl(
     override val isCrashLoggingEnabledFlow: Flow<Boolean?>
         get() = mutableIsCrashLoggingEnabledFlow
             .onSubscription { emit(getBoolean(CRASH_LOGGING_ENABLED_KEY)) }
+
+    override var isShowNextCodeEnabled: Boolean?
+        get() = getBoolean(key = SHOW_NEXT_CODE_ENABLED_KEY)
+        set(value) {
+            putBoolean(key = SHOW_NEXT_CODE_ENABLED_KEY, value = value)
+            mutableIsShowNextCodeEnabledFlow.tryEmit(value)
+        }
+
+    override val isShowNextCodeEnabledFlow: Flow<Boolean?>
+        get() = mutableIsShowNextCodeEnabledFlow
+            .onSubscription { emit(getBoolean(SHOW_NEXT_CODE_ENABLED_KEY)) }
 
     override var hasUserDismissedDownloadBitwardenCard: Boolean?
         get() = getBoolean(HAS_USER_DISMISSED_DOWNLOAD_BITWARDEN_KEY)

@@ -48,14 +48,55 @@ class TotpCodeManagerTest {
                 createMockAuthenticatorItem(number = 1, otpUri = totp),
             )
             val code = "123456"
+            val nextCode = "654321"
             val totpResponse = TotpResponse(code = code, period = 30u)
+            val nextTotpResponse = TotpResponse(code = nextCode, period = 30u)
             coEvery {
                 authenticatorSdkSource.generateTotp(totp = totp, time = clock.instant())
             } returns totpResponse.asSuccess()
+            coEvery {
+                authenticatorSdkSource.generateTotp(
+                    totp = totp,
+                    time = clock.instant().plusSeconds(30),
+                )
+            } returns nextTotpResponse.asSuccess()
 
             val expected = createMockVerificationCodeItem(
                 number = 1,
                 code = code,
+                nextCode = nextCode,
+                issueTime = clock.instant().toEpochMilli(),
+                timeLeftSeconds = 30,
+            )
+
+            manager.getTotpCodesFlow(authenticatorItems).test {
+                assertEquals(listOf(expected), awaitItem())
+            }
+        }
+
+    @Test
+    fun `getTotpCodesFlow should emit item with null nextCode when next code generation fails`() =
+        runTest {
+            val totp = "otpUri"
+            val authenticatorItems = listOf(
+                createMockAuthenticatorItem(number = 1, otpUri = totp),
+            )
+            val code = "123456"
+            val totpResponse = TotpResponse(code = code, period = 30u)
+            coEvery {
+                authenticatorSdkSource.generateTotp(totp = totp, time = clock.instant())
+            } returns totpResponse.asSuccess()
+            coEvery {
+                authenticatorSdkSource.generateTotp(
+                    totp = totp,
+                    time = clock.instant().plusSeconds(30),
+                )
+            } returns Exception().asFailure()
+
+            val expected = createMockVerificationCodeItem(
+                number = 1,
+                code = code,
+                nextCode = null,
                 issueTime = clock.instant().toEpochMilli(),
                 timeLeftSeconds = 30,
             )

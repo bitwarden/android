@@ -50,7 +50,7 @@ object PlatformNetworkModule {
 
     @Provides
     @Singleton
-    fun provideBitwardenServiceClient(
+    fun provideBitwardenServiceClientConfig(
         authTokenManager: AuthTokenManager,
         baseUrlsProvider: BaseUrlsProvider,
         authDiskSource: AuthDiskSource,
@@ -58,20 +58,26 @@ object PlatformNetworkModule {
         buildInfoManager: BuildInfoManager,
         networkCookieManager: NetworkCookieManager,
         clock: Clock,
-    ): BitwardenServiceClient = bitwardenServiceClient(
-        BitwardenServiceClientConfig(
-            clock = clock,
-            appIdProvider = authDiskSource,
-            clientData = BitwardenServiceClientConfig.ClientData(
-                userAgent = HEADER_VALUE_USER_AGENT,
-                clientName = HEADER_VALUE_CLIENT_NAME,
-                clientVersion = HEADER_VALUE_CLIENT_VERSION,
-            ),
-            authTokenProvider = authTokenManager,
-            baseUrlsProvider = baseUrlsProvider,
-            certificateProvider = certificateManager,
-            enableHttpBodyLogging = buildInfoManager.isDevBuild,
-            cookieProvider = networkCookieManager,
+    ): BitwardenServiceClientConfig = BitwardenServiceClientConfig(
+        clock = clock,
+        appIdProvider = authDiskSource,
+        clientData = BitwardenServiceClientConfig.ClientData(
+            userAgent = HEADER_VALUE_USER_AGENT,
+            clientName = HEADER_VALUE_CLIENT_NAME,
+            clientVersion = HEADER_VALUE_CLIENT_VERSION,
         ),
+        authTokenProvider = authTokenManager,
+        baseUrlsProvider = baseUrlsProvider,
+        certificateProvider = certificateManager,
+        enableHttpBodyLogging = buildInfoManager.isDevBuild,
+        cookieProvider = networkCookieManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideBitwardenServiceClient(
+        serviceClientConfig: BitwardenServiceClientConfig,
+    ): BitwardenServiceClient = bitwardenServiceClient(
+        config = serviceClientConfig,
     )
 }

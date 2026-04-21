@@ -76,6 +76,7 @@ dependencies {
     testFixturesImplementation(libs.junit.jupiter)
     testFixturesImplementation(libs.junit.vintage)
     testFixturesImplementation(libs.kotlinx.serialization)
+    testFixturesImplementation(libs.mockk.mockk)
     testFixturesImplementation(platform(libs.square.okhttp.bom))
     testFixturesImplementation(libs.square.okhttp)
     testFixturesImplementation(libs.square.okhttp.mockwebserver)

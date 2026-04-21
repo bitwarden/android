@@ -1254,4 +1254,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="go_back">Geh zurück</string>
     <string name="allow_camera_access">Kamerazugriff erlauben</string>
     <string name="to_scan_your_card_we_need_access_to_your_camera">Um deine Karte zu scannen, benötigen wir Zugriff auf deine Kamera. Du kannst dies jederzeit in den Geräteeinstellungen ändern.</string>
+    <string name="show_next_code">Nächsten Code anzeigen</string>
+    <string name="see_upcoming_codes_in_the_list">Die nächsten Codes sind in der Liste zu sehen</string>
+    <string name="next_code_x">Nächster Code, %1$s</string>
 </resources>

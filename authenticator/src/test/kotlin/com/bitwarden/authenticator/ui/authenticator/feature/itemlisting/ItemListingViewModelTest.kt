@@ -40,6 +40,7 @@ import org.junit.jupiter.api.Test
 
 class ItemListingViewModelTest : BaseViewModelTest() {
 
+    private val mutableIsShowNextCodeEnabledFlow = MutableStateFlow(false)
     private val mutableAuthenticatorAlertThresholdFlow =
         MutableStateFlow(AUTHENTICATOR_ALERT_SECONDS)
     private val mutableVerificationCodesFlow =
@@ -64,6 +65,8 @@ class ItemListingViewModelTest : BaseViewModelTest() {
         every {
             authenticatorAlertThresholdSecondsFlow
         } returns mutableAuthenticatorAlertThresholdFlow
+        every { isShowNextCodeEnabled } returns false
+        every { isShowNextCodeEnabledFlow } returns mutableIsShowNextCodeEnabledFlow
         every { hasUserDismissedDownloadBitwardenCard } returns false
     }
     private val mutableSnackbarFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
@@ -578,6 +581,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
 private const val AUTHENTICATOR_ALERT_SECONDS = 7
 private val DEFAULT_STATE = ItemListingState(
     alertThresholdSeconds = AUTHENTICATOR_ALERT_SECONDS,
+    isShowNextCodeEnabled = false,
     viewState = ItemListingState.ViewState.Loading,
     dialog = null,
 )
@@ -598,6 +602,7 @@ private val LOCAL_CODE = VerificationCodeDisplayItem(
 private val LOCAL_VERIFICATION_ITEMS = listOf(
     VerificationCodeItem(
         code = "123456",
+        nextCode = null,
         periodSeconds = 60,
         timeLeftSeconds = 430,
         issueTime = 35L,
@@ -608,6 +613,7 @@ private val LOCAL_VERIFICATION_ITEMS = listOf(
     ),
     VerificationCodeItem(
         code = "123456",
+        nextCode = null,
         periodSeconds = 60,
         timeLeftSeconds = 430,
         issueTime = 35L,
@@ -621,6 +627,7 @@ private val LOCAL_VERIFICATION_ITEMS = listOf(
 private val SHARED_VERIFICATION_ITEMS = listOf(
     VerificationCodeItem(
         code = "987654",
+        nextCode = null,
         periodSeconds = 60,
         timeLeftSeconds = 430,
         issueTime = 35L,
@@ -639,13 +646,17 @@ private val SHARED_VERIFICATION_ITEMS = listOf(
 private val LOCAL_DISPLAY_ITEMS = LOCAL_VERIFICATION_ITEMS.map {
     it.toDisplayItem(
         alertThresholdSeconds = AUTHENTICATOR_ALERT_SECONDS,
+        isShowNextCodeEnabled = false,
         sharedVerificationCodesState = SharedVerificationCodesState.AppNotInstalled,
         showOverflow = true,
     )
 }
 
 private val SHARED_DISPLAY_ITEMS = SharedVerificationCodesState.Success(SHARED_VERIFICATION_ITEMS)
-    .toSharedCodesDisplayState(AUTHENTICATOR_ALERT_SECONDS)
+    .toSharedCodesDisplayState(
+        alertThresholdSeconds = AUTHENTICATOR_ALERT_SECONDS,
+        isShowNextCodeEnabled = false,
+    )
 
 private val LOCAL_FAVORITE_ITEMS = LOCAL_DISPLAY_ITEMS.filter { it.favorite }.toImmutableList()
 private val LOCAL_NON_FAVORITE_ITEMS = LOCAL_DISPLAY_ITEMS
