@@ -98,7 +98,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
-import com.x8bit.bitwarden.data.auth.repository.model.GetDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.GetDevicesResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
@@ -6682,46 +6681,10 @@ class AuthRepositoryTest {
         coVerify(exactly = 1) { devicesService.getDevices() }
         assertTrue(result is GetDevicesResult.Success)
         assertEquals(1, (result as GetDevicesResult.Success).devices.size)
-        assertEquals("deviceId", result.devices.first().id)
-    }
-
-    @Test
-    fun `getDeviceByIdentifier should return Error when service returns failure`() = runTest {
-        val error = Throwable("Fail!")
-        coEvery {
-            devicesService.getDeviceByIdentifier(UNIQUE_APP_ID)
-        } returns error.asFailure()
-
-        val result = repository.getDeviceByIdentifier()
-
-        coVerify(exactly = 1) { devicesService.getDeviceByIdentifier(UNIQUE_APP_ID) }
-        assertEquals(GetDeviceResult.Error, result)
-    }
-
-    @Test
-    fun `getDeviceByIdentifier should return Success when service returns success`() = runTest {
-        val deviceJson = DeviceResponseJson(
-            id = "deviceId",
-            name = "Test Device",
-            identifier = UNIQUE_APP_ID,
-            type = 0,
-            creationDate = Instant.parse("2023-10-27T12:00:00Z"),
-            lastActivityDate = null,
-            isTrusted = false,
-            encryptedUserKey = null,
-            encryptedPublicKey = null,
-            devicePendingAuthRequest = null,
-        )
-        coEvery {
-            devicesService.getDeviceByIdentifier(UNIQUE_APP_ID)
-        } returns deviceJson.asSuccess()
-
-        val result = repository.getDeviceByIdentifier()
-
-        coVerify(exactly = 1) { devicesService.getDeviceByIdentifier(UNIQUE_APP_ID) }
-        assertTrue(result is GetDeviceResult.Success)
-        assertEquals("deviceId", (result as GetDeviceResult.Success).device.id)
-        assertEquals(UNIQUE_APP_ID, result.device.identifier)
+        val device = result.devices.first()
+        assertEquals("deviceId", device.id)
+        // identifier "deviceIdentifier" != uniqueAppId "testUniqueAppId", so not current device
+        assertFalse(device.isCurrentDevice)
     }
 
     @Test

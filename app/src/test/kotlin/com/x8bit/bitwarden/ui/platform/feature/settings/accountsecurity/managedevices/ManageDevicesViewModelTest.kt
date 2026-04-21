@@ -15,10 +15,8 @@ import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.DeviceInfo
 import com.x8bit.bitwarden.data.auth.repository.model.DevicePendingAuthRequest
-import com.x8bit.bitwarden.data.auth.repository.model.GetDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.GetDevicesResult
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -52,10 +50,6 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
     private val authRepository = mockk<AuthRepository> {
         every { getAuthRequestsWithUpdates() } returns mutableAuthRequestsWithUpdatesFlow
         coEvery { getDevices() } returns GetDevicesResult.Success(emptyList())
-        coEvery { getDeviceByIdentifier() } returns GetDeviceResult.Success(DEFAULT_DEVICE)
-    }
-    private val resourceManager = mockk<ResourceManager> {
-        every { getString(any()) } returns "Mock"
     }
     private val mutablePullToRefreshStateFlow = MutableStateFlow(false)
     private val settingsRepository = mockk<SettingsRepository> {
@@ -97,7 +91,6 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
         coVerify {
             authRepository.getAuthRequestsWithUpdates()
             authRepository.getDevices()
-            authRepository.getDeviceByIdentifier()
         }
     }
 
@@ -126,30 +119,43 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `LifecycleResume should re-fetch devices and auth requests`() = runTest {
+    fun `LifecycleResume should re-fetch auth requests only`() = runTest {
         val viewModel = createViewModel()
         viewModel.trySendAction(ManageDevicesAction.LifecycleResume)
         // getAuthRequestsWithUpdates called twice: once on init, once on resume
         verify(exactly = 2) { authRepository.getAuthRequestsWithUpdates() }
-        coVerify(exactly = 2) { authRepository.getDevices() }
-        coVerify(exactly = 2) { authRepository.getDeviceByIdentifier() }
+        coVerify(exactly = 1) { authRepository.getDevices() }
     }
 
     @Test
-    fun `RefreshPull should reset loaded state, set isRefreshing, and re-fetch data`() = runTest {
+    fun `RefreshPull when devices loaded should re-fetch auth requests only`() = runTest {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
-            // Skip initial states from init
             skipItems(1)
 
             viewModel.trySendAction(ManageDevicesAction.RefreshPull)
 
-            // After refresh, isRefreshing should be true transiently and devices reloaded
-            coVerify(exactly = 2) { authRepository.getDevices() }
+            coVerify(exactly = 1) { authRepository.getDevices() }
             verify(exactly = 2) { authRepository.getAuthRequestsWithUpdates() }
             cancelAndIgnoreRemainingEvents()
         }
     }
+
+    @Test
+    fun `RefreshPull when devices failed should re-fetch both devices and auth requests`() =
+        runTest {
+            coEvery { authRepository.getDevices() } returns GetDevicesResult.Error
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                skipItems(1)
+
+                viewModel.trySendAction(ManageDevicesAction.RefreshPull)
+
+                coVerify(exactly = 2) { authRepository.getDevices() }
+                verify(exactly = 2) { authRepository.getAuthRequestsWithUpdates() }
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
 
     @Test
     fun `PendingRequestRowClick should emit NavigateToLoginApproval`() = runTest {
@@ -165,18 +171,8 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `AllDevicesResultReceive with device error should show error state`() {
+    fun `when getDevices returns error should show error state`() {
         coEvery { authRepository.getDevices() } returns GetDevicesResult.Error
-        val viewModel = createViewModel()
-        assertEquals(
-            ManageDevicesState.ViewState.Error,
-            viewModel.stateFlow.value.viewState,
-        )
-    }
-
-    @Test
-    fun `AllDevicesResultReceive with current device error should show error state`() {
-        coEvery { authRepository.getDeviceByIdentifier() } returns GetDeviceResult.Error
         val viewModel = createViewModel()
         assertEquals(
             ManageDevicesState.ViewState.Error,
@@ -229,7 +225,6 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `content state should sort devices with current first, pending second, others last`() {
-        val currentDeviceId = DEFAULT_DEVICE.id
         val pendingRequest = DevicePendingAuthRequest(
             id = "auth-req-1",
             creationDate = fixedClock.instant(),
@@ -247,7 +242,7 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
             originUrl = "www.bitwarden.com",
             fingerprint = "fingerprint-phrase",
         )
-        val currentDevice = DEFAULT_DEVICE
+        val currentDevice = DEFAULT_DEVICE.copy(isCurrentDevice = true)
         val pendingDevice = DEFAULT_DEVICE.copy(
             id = "device-pending",
             pendingAuthRequest = pendingRequest,
@@ -256,9 +251,6 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
 
         coEvery { authRepository.getDevices() } returns GetDevicesResult.Success(
             devices = listOf(otherDevice, pendingDevice, currentDevice),
-        )
-        coEvery { authRepository.getDeviceByIdentifier() } returns GetDeviceResult.Success(
-            currentDevice,
         )
 
         val viewModel = createViewModel()
@@ -270,14 +262,13 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
         assertEquals(DeviceSessionStatus.Current, content.items[0].status)
         assertEquals(DeviceSessionStatus.Pending, content.items[1].status)
         assertEquals(DeviceSessionStatus.None, content.items[2].status)
-        assertEquals(currentDeviceId, content.items[0].id)
+        assertEquals(currentDevice.id, content.items[0].id)
         assertEquals(pendingDevice.id, content.items[1].id)
     }
 
     private fun createViewModel(state: ManageDevicesState? = null) = ManageDevicesViewModel(
         clock = fixedClock,
         authRepository = authRepository,
-        resourceManager = resourceManager,
         snackbarRelayManager = snackbarRelayManager,
         settingsRepository = settingsRepository,
         buildInfoManager = buildInfoManager,
@@ -294,4 +285,5 @@ private val DEFAULT_DEVICE = DeviceInfo(
     creationDate = Instant.parse("2023-10-27T12:00:00Z"),
     lastActivityDate = Instant.parse("2023-10-27T12:00:00Z"),
     pendingAuthRequest = null,
+    isCurrentDevice = false,
 )

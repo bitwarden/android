@@ -224,7 +224,7 @@ private fun ManageDevicesContent(
                             dividerPadding = 0.dp,
                         ),
                         modifier = Modifier
-                            .testTag("LoginRequestCell")
+                            .testTag("CurrentItemCell")
                             .fillMaxWidth()
                             .standardHorizontalMargin(),
                     )

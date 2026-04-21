@@ -20,17 +20,13 @@ import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.DeviceInfo
-import com.x8bit.bitwarden.data.auth.repository.model.GetDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.GetDevicesResult
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.managedevices.util.toLastActivityLabel
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.managedevices.util.readableDeviceTypeName
-import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
+import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.managedevices.util.toLastActivityLabel
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -51,7 +47,6 @@ private const val KEY_STATE = "state"
 class ManageDevicesViewModel @Inject constructor(
     private val clock: Clock,
     private val authRepository: AuthRepository,
-    private val resourceManager: ResourceManager,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     settingsRepository: SettingsRepository,
     buildInfoManager: BuildInfoManager,
@@ -60,7 +55,6 @@ class ManageDevicesViewModel @Inject constructor(
     initialState = savedStateHandle[KEY_STATE] ?: ManageDevicesState(
         authRequests = emptyList(),
         devices = emptyList(),
-        currentDeviceId = null,
         viewState = ManageDevicesState.ViewState.Loading,
         isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
         isRefreshing = false,
@@ -71,7 +65,6 @@ class ManageDevicesViewModel @Inject constructor(
     ),
 ) {
     private var authJob: Job = Job().apply { complete() }
-    private var devicesJob: Job = Job().apply { complete() }
 
     init {
         updateAuthRequestList()
@@ -112,19 +105,20 @@ class ManageDevicesViewModel @Inject constructor(
 
     private fun handleOnLifecycleResumed() {
         updateAuthRequestList()
-        fetchAllDevices()
     }
 
     private fun handleRefreshPull() {
+        val shouldRefetchDevices = !state.devicesLoaded
         mutableStateFlow.update {
             it.copy(
                 isRefreshing = true,
-                devicesLoaded = false,
                 authRequestsLoaded = false,
             )
         }
         updateAuthRequestList()
-        fetchAllDevices()
+        if (shouldRefetchDevices) {
+            fetchAllDevices()
+        }
     }
 
     private fun handlePendingRequestRowClicked(
@@ -143,8 +137,8 @@ class ManageDevicesViewModel @Inject constructor(
                 handleSnackbarDataReceive(action)
             }
 
-            is ManageDevicesAction.Internal.AllDevicesResultReceive -> {
-                handleAllDevicesResultReceived(action)
+            is ManageDevicesAction.Internal.GetDevicesResultReceive -> {
+                handleGetDevicesResultReceived(action)
             }
 
             is ManageDevicesAction.Internal.AuthRequestsResultReceive -> {
@@ -177,18 +171,12 @@ class ManageDevicesViewModel @Inject constructor(
     }
 
     private fun fetchAllDevices() {
-        devicesJob.cancel()
-        devicesJob = viewModelScope.launch {
-            coroutineScope {
-                val devicesDeferred = async { authRepository.getDevices() }
-                val currentDeviceDeferred = async { authRepository.getDeviceByIdentifier() }
-                sendAction(
-                    ManageDevicesAction.Internal.AllDevicesResultReceive(
-                        devicesResult = devicesDeferred.await(),
-                        currentDeviceResult = currentDeviceDeferred.await(),
-                    ),
-                )
-            }
+        viewModelScope.launch {
+            sendAction(
+                ManageDevicesAction.Internal.GetDevicesResultReceive(
+                    devicesResult = authRepository.getDevices(),
+                ),
+            )
         }
     }
 
@@ -213,17 +201,10 @@ class ManageDevicesViewModel @Inject constructor(
         }
     }
 
-    private fun handleAllDevicesResultReceived(
-        action: ManageDevicesAction.Internal.AllDevicesResultReceive,
+    private fun handleGetDevicesResultReceived(
+        action: ManageDevicesAction.Internal.GetDevicesResultReceive,
     ) {
         val devicesResult = action.devicesResult as? GetDevicesResult.Success
-            ?: run {
-                mutableStateFlow.update {
-                    it.copy(viewState = ManageDevicesState.ViewState.Error, isRefreshing = false)
-                }
-                return
-            }
-        val currentDeviceResult = action.currentDeviceResult as? GetDeviceResult.Success
             ?: run {
                 mutableStateFlow.update {
                     it.copy(viewState = ManageDevicesState.ViewState.Error, isRefreshing = false)
@@ -234,7 +215,6 @@ class ManageDevicesViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 devices = devicesResult.devices,
-                currentDeviceId = currentDeviceResult.device.id,
                 devicesLoaded = true,
                 isRefreshing = if (state.authRequestsLoaded) false else it.isRefreshing,
             )
@@ -251,7 +231,7 @@ class ManageDevicesViewModel @Inject constructor(
                 compareBy<DeviceInfo> { device ->
                     val matchingRequest = device.pendingAuthRequest?.let { authRequestMap[it.id] }
                     when {
-                        device.id == state.currentDeviceId -> 0
+                        device.isCurrentDevice -> 0
                         matchingRequest != null -> 1
                         else -> 2
                     }
@@ -262,7 +242,7 @@ class ManageDevicesViewModel @Inject constructor(
             .map { device ->
                 val matchingRequest = device.pendingAuthRequest?.let { authRequestMap[it.id] }
                 val status = when {
-                    device.id == state.currentDeviceId -> DeviceSessionStatus.Current
+                    device.isCurrentDevice -> DeviceSessionStatus.Current
                     matchingRequest != null -> DeviceSessionStatus.Pending
                     else -> DeviceSessionStatus.None
                 }
@@ -296,7 +276,6 @@ class ManageDevicesViewModel @Inject constructor(
 data class ManageDevicesState(
     val authRequests: List<AuthRequest>,
     val devices: List<DeviceInfo>,
-    val currentDeviceId: String?,
     val viewState: ViewState,
     private val isPullToRefreshSettingEnabled: Boolean,
     val isRefreshing: Boolean,
@@ -451,11 +430,10 @@ sealed class ManageDevicesAction {
         ) : Internal()
 
         /**
-         * Indicates that the combined result of fetching all devices has been received.
+         * Indicates that the get devices has been received.
          */
-        data class AllDevicesResultReceive(
+        data class GetDevicesResultReceive(
             val devicesResult: GetDevicesResult,
-            val currentDeviceResult: GetDeviceResult,
         ) : Internal()
 
         /**

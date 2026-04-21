@@ -886,6 +886,26 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `on ManageDevicesClick should emit NavigateToManageDevices`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AccountSecurityAction.ManageDevicesClick)
+            assertEquals(AccountSecurityEvent.NavigateToManageDevices, awaitItem())
+        }
+    }
+
+    @Test
+    fun `when ManageDevices flag updates, should update isManageDevicesEnabled state`() = runTest {
+        val viewModel = createViewModel()
+        mutableManageDevicesFlagFlow.emit(true)
+        val expectedState = DEFAULT_STATE.copy(isManageDevicesEnabled = true)
+        assertEquals(
+            viewModel.stateFlow.value,
+            expectedState,
+        )
+    }
+
     @Suppress("LongParameterList")
     private fun createViewModel(
         initialState: AccountSecurityState? = DEFAULT_STATE,

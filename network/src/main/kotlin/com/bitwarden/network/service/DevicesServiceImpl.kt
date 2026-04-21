@@ -2,7 +2,6 @@ package com.bitwarden.network.service
 
 import com.bitwarden.network.api.AuthenticatedDevicesApi
 import com.bitwarden.network.api.UnauthenticatedDevicesApi
-import com.bitwarden.network.model.DeviceResponseJson
 import com.bitwarden.network.model.DevicesResponseJson
 import com.bitwarden.network.model.TrustedDeviceKeysRequestJson
 import com.bitwarden.network.model.TrustedDeviceKeysResponseJson
@@ -18,11 +17,6 @@ internal class DevicesServiceImpl(
 ) : DevicesService {
     override suspend fun getDevices(): Result<DevicesResponseJson> =
         authenticatedDevicesApi.getDevices().toResult()
-
-    override suspend fun getDeviceByIdentifier(
-        deviceIdentifier: String,
-    ): Result<DeviceResponseJson> =
-        authenticatedDevicesApi.getDeviceByIdentifier(deviceIdentifier).toResult()
 
     override suspend fun getIsKnownDevice(
         emailAddress: String,

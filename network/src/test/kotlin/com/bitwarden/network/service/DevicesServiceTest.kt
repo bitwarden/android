@@ -4,6 +4,8 @@ import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.network.api.AuthenticatedDevicesApi
 import com.bitwarden.network.api.UnauthenticatedDevicesApi
 import com.bitwarden.network.base.BaseServiceTest
+import com.bitwarden.network.model.DeviceResponseJson
+import com.bitwarden.network.model.DevicesResponseJson
 import com.bitwarden.network.model.TrustedDeviceKeysResponseJson
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
@@ -21,6 +23,22 @@ class DevicesServiceTest : BaseServiceTest() {
         authenticatedDevicesApi = authenticatedDevicesApi,
         unauthenticatedDevicesApi = unauthenticatedDevicesApi,
     )
+
+    @Test
+    fun `getDevices when request response is Failure should return Failure`() = runTest {
+        val response = MockResponse().setResponseCode(400)
+        server.enqueue(response)
+        val actual = service.getDevices()
+        assertTrue(actual.isFailure)
+    }
+
+    @Test
+    fun `getDevices when request response is Success should return Success`() = runTest {
+        val response = MockResponse().setBody(GET_DEVICES_RESPONSE_JSON).setResponseCode(200)
+        server.enqueue(response)
+        val actual = service.getDevices()
+        assertEquals(GET_DEVICES_RESPONSE.asSuccess(), actual)
+    }
 
     @Test
     fun `getIsKnownDevice when request response is Failure should return Failure`() = runTest {
@@ -64,6 +82,42 @@ class DevicesServiceTest : BaseServiceTest() {
         assertEquals(TRUST_DEVICE_RESPONSE.asSuccess(), actual)
     }
 }
+
+private val GET_DEVICES_RESPONSE: DevicesResponseJson = DevicesResponseJson(
+    devices = listOf(
+        DeviceResponseJson(
+            id = "0d31b6fb-d282-43c7-b614-b13e0129dbd7",
+            name = "Pixel 8",
+            identifier = "ea7c0a13-5ce4-4f96-8e17-4fc7fa54f464",
+            type = 0,
+            creationDate = Instant.parse("2024-03-25T18:04:28.23Z"),
+            lastActivityDate = Instant.parse("2024-03-26T10:00:00.00Z"),
+            isTrusted = true,
+            encryptedUserKey = null,
+            encryptedPublicKey = null,
+            devicePendingAuthRequest = null,
+        ),
+    ),
+)
+
+private const val GET_DEVICES_RESPONSE_JSON: String = """
+{
+  "data": [
+    {
+      "id": "0d31b6fb-d282-43c7-b614-b13e0129dbd7",
+      "name": "Pixel 8",
+      "identifier": "ea7c0a13-5ce4-4f96-8e17-4fc7fa54f464",
+      "type": 0,
+      "creationDate": "2024-03-25T18:04:28.23Z",
+      "lastActivityDate": "2024-03-26T10:00:00.00Z",
+      "isTrusted": true,
+      "encryptedUserKey": null,
+      "encryptedPublicKey": null,
+      "devicePendingAuthRequest": null
+    }
+  ]
+}
+"""
 
 private val TRUST_DEVICE_RESPONSE: TrustedDeviceKeysResponseJson =
     TrustedDeviceKeysResponseJson(

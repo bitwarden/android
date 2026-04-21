@@ -70,7 +70,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
-import com.x8bit.bitwarden.data.auth.repository.model.GetDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.GetDevicesResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
@@ -1278,20 +1277,8 @@ class AuthRepositoryImpl(
                 onSuccess = { response ->
                     GetDevicesResult.Success(
                         devices = response.devices.map { json ->
-                            json.toDeviceInfo()
+                            json.toDeviceInfo(currentDeviceIdentifier = authDiskSource.uniqueAppId)
                         },
-                    )
-                },
-            )
-
-    override suspend fun getDeviceByIdentifier(): GetDeviceResult =
-        devicesService
-            .getDeviceByIdentifier(authDiskSource.uniqueAppId)
-            .fold(
-                onFailure = { GetDeviceResult.Error },
-                onSuccess = { json ->
-                    GetDeviceResult.Success(
-                        device = json.toDeviceInfo(),
                     )
                 },
             )

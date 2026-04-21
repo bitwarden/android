@@ -10,7 +10,7 @@ import java.time.Instant
  *
  * @property id The unique identifier of the device.
  * @property name The name of the device.
- * @property identifier The unique identifier of the device.
+ * @property identifier The unique install identifier of the device.
  * @property type The type of the device.
  * @property creationDate The date and time on which this device was created.
  * @property isTrusted Whether this device is trusted.

@@ -7,7 +7,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.DevicePendingAuthRequest
 /**
  * Maps the given [DeviceResponseJson] to a [DeviceInfo].
  */
-fun DeviceResponseJson.toDeviceInfo(): DeviceInfo =
+fun DeviceResponseJson.toDeviceInfo(currentDeviceIdentifier: String): DeviceInfo =
     DeviceInfo(
         id = id,
         name = name,
@@ -22,4 +22,5 @@ fun DeviceResponseJson.toDeviceInfo(): DeviceInfo =
                 creationDate = it.creationDate,
             )
         },
+        isCurrentDevice = identifier == currentDeviceIdentifier,
     )

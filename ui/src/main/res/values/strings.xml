@@ -1233,11 +1233,11 @@ Do you want to switch to this account?</string>
     <string name="external_link">External link</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
     <string name="manage_devices">Manage devices</string>
-    <string name="mobile">Mobile</string>
-    <string name="extension">Extension</string>
-    <string name="web">Web</string>
-    <string name="desktop">Desktop</string>
-    <string name="cli">CLI</string>
+    <string name="mobile_platform">Mobile - %1$s</string>
+    <string name="extension_platform">Extension - %1$s</string>
+    <string name="web_platform">Web - %1$s</string>
+    <string name="desktop_platform">Desktop - %1$s</string>
+    <string name="cli_platform">CLI - %1$s</string>
     <string name="sdk">SDK</string>
     <string name="server">Server</string>
     <string name="unknown_device">Unknown device</string>

@@ -53,6 +53,7 @@
     <string name="v2_encryption_key_connector">V2 Encryption - Key Connector</string>
     <string name="v2_encryption_jit_password">V2 Encryption - JIT Password</string>
     <string name="v2_encryption_password">V2 Encryption - Password</string>
+    <string name="manage_devices_flag">Manage devices</string>
 
     <!-- endregion Debug Menu -->
 </resources>

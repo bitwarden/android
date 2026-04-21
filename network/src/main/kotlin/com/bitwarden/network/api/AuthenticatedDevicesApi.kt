@@ -1,7 +1,6 @@
 package com.bitwarden.network.api
 
 import androidx.annotation.Keep
-import com.bitwarden.network.model.DeviceResponseJson
 import com.bitwarden.network.model.DevicesResponseJson
 import com.bitwarden.network.model.NetworkResult
 import com.bitwarden.network.model.TrustedDeviceKeysRequestJson
@@ -18,11 +17,6 @@ import retrofit2.http.Path
 internal interface AuthenticatedDevicesApi {
     @GET("/devices")
     suspend fun getDevices(): NetworkResult<DevicesResponseJson>
-
-    @GET("/devices/identifier/{deviceIdentifier}")
-    suspend fun getDeviceByIdentifier(
-        @Path(value = "deviceIdentifier") deviceIdentifier: String,
-    ): NetworkResult<DeviceResponseJson>
 
     @PUT("/devices/{appId}/keys")
     suspend fun updateTrustedDeviceKeys(

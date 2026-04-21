@@ -236,7 +236,6 @@ private val DEFAULT_DEVICE_ITEM = ManageDevicesState.ViewState.Content.DeviceIte
 private val DEFAULT_STATE = ManageDevicesState(
     authRequests = emptyList(),
     devices = emptyList(),
-    currentDeviceId = null,
     viewState = ManageDevicesState.ViewState.Loading,
     isPullToRefreshSettingEnabled = false,
     isRefreshing = false,
