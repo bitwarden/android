@@ -4,12 +4,14 @@ import androidx.annotation.DrawableRes
 import androidx.compose.material3.Text
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -18,6 +20,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
@@ -29,6 +32,7 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     specialCircumstanceManager: SpecialCircumstanceManager,
     firstTimeActionManager: FirstTimeActionManager,
+    featureFlagManager: FeatureFlagManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SettingsState, SettingsEvent, SettingsAction>(
     initialState = SettingsState(
@@ -36,6 +40,8 @@ class SettingsViewModel @Inject constructor(
         securityCount = firstTimeActionManager.allSecuritySettingsBadgeCountFlow.value,
         autoFillCount = firstTimeActionManager.allAutofillSettingsBadgeCountFlow.value,
         vaultCount = firstTimeActionManager.allVaultSettingsBadgeCountFlow.value,
+        isMobilePremiumUpgradeEnabled = featureFlagManager
+            .getFeatureFlag(FlagKey.MobilePremiumUpgrade),
     ),
 ) {
 
@@ -54,6 +60,16 @@ class SettingsViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.MobilePremiumUpgrade)
+            .map {
+                SettingsAction.Internal.MobilePremiumUpgradeFlagUpdate(
+                    isMobilePremiumUpgradeEnabled = it,
+                )
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         when (specialCircumstanceManager.specialCircumstance) {
             SpecialCircumstance.AccountSecurityShortcut -> {
                 sendEvent(SettingsEvent.NavigateAccountSecurityShortcut)
@@ -66,9 +82,13 @@ class SettingsViewModel @Inject constructor(
 
     override fun handleAction(action: SettingsAction): Unit = when (action) {
         is SettingsAction.CloseClick -> handleCloseClick()
-        is SettingsAction.SettingsClick -> handleAccountSecurityClick(action)
+        is SettingsAction.SettingsClick -> handleSettingsClick(action)
         is SettingsAction.Internal.SettingsNotificationCountUpdate -> {
             handleSettingsNotificationCountUpdate(action)
+        }
+
+        is SettingsAction.Internal.MobilePremiumUpgradeFlagUpdate -> {
+            handleMobilePremiumUpgradeFlagUpdate(action)
         }
     }
 
@@ -88,7 +108,18 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private fun handleAccountSecurityClick(action: SettingsAction.SettingsClick) {
+    private fun handleMobilePremiumUpgradeFlagUpdate(
+        action: SettingsAction.Internal.MobilePremiumUpgradeFlagUpdate,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                isMobilePremiumUpgradeEnabled =
+                    action.isMobilePremiumUpgradeEnabled,
+            )
+        }
+    }
+
+    private fun handleSettingsClick(action: SettingsAction.SettingsClick) {
         when (action.settings) {
             Settings.ACCOUNT_SECURITY -> {
                 sendEvent(SettingsEvent.NavigateAccountSecurity)
@@ -104,6 +135,10 @@ class SettingsViewModel @Inject constructor(
 
             Settings.APPEARANCE -> {
                 sendEvent(SettingsEvent.NavigateAppearance)
+            }
+
+            Settings.PLAN -> {
+                sendEvent(SettingsEvent.NavigatePlan)
             }
 
             Settings.OTHER -> {
@@ -125,8 +160,18 @@ data class SettingsState(
     private val autoFillCount: Int,
     private val securityCount: Int,
     private val vaultCount: Int,
+    private val isMobilePremiumUpgradeEnabled: Boolean = false,
 ) {
     val shouldShowCloseButton: Boolean = isPreAuth
+
+    /**
+     * Whether the plan row should be shown. The row is visible when the
+     * mobile premium upgrade feature flag is enabled and the user is
+     * authenticated.
+     */
+    private val shouldShowPlanRow: Boolean =
+        !isPreAuth && isMobilePremiumUpgradeEnabled
+
     val settingRows: ImmutableList<Settings> = Settings
         .entries
         .filter { setting ->
@@ -135,6 +180,7 @@ data class SettingsState(
                 Settings.AUTO_FILL -> !isPreAuth
                 Settings.VAULT -> !isPreAuth
                 Settings.APPEARANCE -> true
+                Settings.PLAN -> shouldShowPlanRow
                 Settings.OTHER -> true
                 Settings.ABOUT -> true
             }
@@ -168,7 +214,7 @@ sealed class SettingsEvent {
     data object NavigateAccountSecurity : SettingsEvent()
 
     /**
-     * Navigate to the account security screen.
+     * Navigate to the account security screen via shortcut.
      */
     data object NavigateAccountSecurityShortcut : SettingsEvent(), DeferredBackgroundEvent
 
@@ -191,6 +237,11 @@ sealed class SettingsEvent {
      * Navigate to the vault screen.
      */
     data object NavigateVault : SettingsEvent()
+
+    /**
+     * Navigate to the plan screen.
+     */
+    data object NavigatePlan : SettingsEvent()
 }
 
 /**
@@ -198,7 +249,7 @@ sealed class SettingsEvent {
  */
 sealed class SettingsAction {
     /**
-     * THe user has clicked the close button
+     * The user has clicked the close button.
      */
     data object CloseClick : SettingsAction()
 
@@ -220,6 +271,13 @@ sealed class SettingsAction {
             val autoFillCount: Int,
             val securityCount: Int,
             val vaultCount: Int,
+        ) : Internal()
+
+        /**
+         * Update the mobile premium upgrade feature flag state.
+         */
+        data class MobilePremiumUpgradeFlagUpdate(
+            val isMobilePremiumUpgradeEnabled: Boolean,
         ) : Internal()
     }
 }
@@ -254,6 +312,11 @@ enum class Settings(
         text = BitwardenString.appearance.asText(),
         vectorIconRes = BitwardenDrawable.ic_paintbrush,
         testTag = "AppearanceSettingsButton",
+    ),
+    PLAN(
+        text = BitwardenString.plan.asText(),
+        vectorIconRes = BitwardenDrawable.ic_plan,
+        testTag = "PlanSettingsButton",
     ),
     OTHER(
         text = BitwardenString.other.asText(),

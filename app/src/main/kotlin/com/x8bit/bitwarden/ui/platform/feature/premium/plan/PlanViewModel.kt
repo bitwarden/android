@@ -43,7 +43,9 @@ private const val PLACEHOLDER_RATE = "--"
 const val PREMIUM_CHECKOUT_CALLBACK_URL = "bitwarden://premium-checkout-result"
 
 /**
- * View model for the plan screen, handling the free-user upgrade flow.
+ * View model for the plan screen, driving the upgrade flow for free users and a
+ * placeholder surface for premium users until PM-35455 wires in subscription
+ * management.
  */
 @Suppress("TooManyFunctions")
 @HiltViewModel
@@ -54,18 +56,27 @@ class PlanViewModel @Inject constructor(
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val vaultRepository: VaultRepository,
 ) : BaseViewModel<PlanState, PlanEvent, PlanAction>(
-    initialState = savedStateHandle[KEY_STATE]
-        ?: PlanState(
-            planMode = savedStateHandle.toPlanArgs().planMode,
-            viewState = PlanState.ViewState.Free(
-                rate = PLACEHOLDER_RATE,
-                checkoutUrl = null,
-                isAwaitingPremiumStatus = false,
-            ),
-            dialogState = PlanState.DialogState.Loading(
-                message = BitwardenString.loading.asText(),
-            ),
-        ),
+    initialState = savedStateHandle[KEY_STATE] ?: run {
+        val planMode = savedStateHandle.toPlanArgs().planMode
+        val isPremium = authRepository
+            .userStateFlow
+            .value
+            ?.activeAccount
+            ?.isPremium == true
+        PlanState(
+            planMode = planMode,
+            viewState = if (isPremium) {
+                PlanState.ViewState.Premium
+            } else {
+                PlanState.ViewState.Free(
+                    rate = PLACEHOLDER_RATE,
+                    checkoutUrl = null,
+                    isAwaitingPremiumStatus = false,
+                )
+            },
+            dialogState = null,
+        )
+    },
 ) {
     init {
         stateFlow
@@ -84,22 +95,21 @@ class PlanViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        viewModelScope.launch {
-            sendAction(
-                PlanAction.Internal.PricingResultReceive(
-                    result = billingRepository.getPremiumPlanPricing(),
-                ),
-            )
+        onFreeContent {
+            viewModelScope.launch {
+                sendAction(
+                    PlanAction.Internal.PricingResultReceive(
+                        result = billingRepository.getPremiumPlanPricing(),
+                    ),
+                )
+            }
         }
     }
 
     override fun handleAction(action: PlanAction) {
         when (action) {
             is PlanAction.BackClick -> handleBackClick()
-            is PlanAction.UpgradeNowClick -> {
-                handleUpgradeNowClick()
-            }
-
+            is PlanAction.UpgradeNowClick -> handleUpgradeNowClick()
             is PlanAction.DismissError -> handleDismissError()
             is PlanAction.ClosePricingErrorClick -> {
                 handleClosePricingErrorClick()
@@ -346,7 +356,6 @@ class PlanViewModel @Inject constructor(
                 ),
             ),
         )
-        // TODO: transition to Premium ViewState (PM-33517)
     }
 
     private inline fun onFreeContent(
@@ -359,30 +368,32 @@ class PlanViewModel @Inject constructor(
     private fun handlePricingResultReceive(
         action: PlanAction.Internal.PricingResultReceive,
     ) {
-        onFreeContent { freeState ->
-            when (val result = action.result) {
-                is PremiumPlanPricingResult.Success -> {
-                    val formattedRate = NumberFormat
-                        .getCurrencyInstance(Locale.US)
-                        .format(result.annualPrice / MONTHS_PER_YEAR)
-                    mutableStateFlow.update {
-                        it.copy(
-                            viewState = freeState.copy(rate = formattedRate),
-                            dialogState = null,
-                        )
+        when (val result = action.result) {
+            is PremiumPlanPricingResult.Success -> {
+                val formattedRate = NumberFormat
+                    .getCurrencyInstance(Locale.US)
+                    .format(result.annualPrice / MONTHS_PER_YEAR)
+                mutableStateFlow.update { currentState ->
+                    val updatedViewState = when (val vs = currentState.viewState) {
+                        is PlanState.ViewState.Free -> vs.copy(rate = formattedRate)
+                        PlanState.ViewState.Premium -> vs
                     }
+                    currentState.copy(
+                        viewState = updatedViewState,
+                        dialogState = null,
+                    )
                 }
+            }
 
-                is PremiumPlanPricingResult.Error -> {
-                    mutableStateFlow.update {
-                        it.copy(
-                            dialogState = PlanState.DialogState.GetPricingError(
-                                title = BitwardenString.pricing_unavailable.asText(),
-                                message = result.errorMessage?.asText()
-                                    ?: BitwardenString.generic_error_message.asText(),
-                            ),
-                        )
-                    }
+            is PremiumPlanPricingResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = PlanState.DialogState.GetPricingError(
+                            title = BitwardenString.pricing_unavailable.asText(),
+                            message = result.errorMessage?.asText()
+                                ?: BitwardenString.generic_error_message.asText(),
+                        ),
+                    )
                 }
             }
         }
@@ -448,24 +459,37 @@ data class PlanState(
         }
 
     /**
+     * The title string resource for the top app bar.
+     */
+    @get:StringRes
+    val title: Int
+        get() = when (viewState) {
+            is ViewState.Free -> BitwardenString.upgrade_to_premium
+            ViewState.Premium -> BitwardenString.plan
+        }
+
+    /**
      * Models the content state of the plan screen.
      */
     sealed class ViewState : Parcelable {
-
-        /**
-         * The monthly billing rate for the plan.
-         */
-        abstract val rate: String
 
         /**
          * Free user view — shows upgrade pricing and feature list.
          */
         @Parcelize
         data class Free(
-            override val rate: String,
+            val rate: String,
             val checkoutUrl: String?,
             val isAwaitingPremiumStatus: Boolean,
         ) : ViewState()
+
+        /**
+         * Premium user view. Empty placeholder until PM-35455 wires
+         * subscription management (status, billing amount, next charge,
+         * manage plan / cancel actions).
+         */
+        @Parcelize
+        data object Premium : ViewState()
     }
 
     /**

@@ -54,7 +54,7 @@ import com.x8bit.bitwarden.ui.platform.feature.premium.plan.handlers.PlanHandler
 import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 
 /**
- * The screen for the plan -- shows upgrade flow for free users.
+ * The screen for the plan — shows the upgrade flow for free users.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -98,7 +98,7 @@ fun PlanScreen(
         },
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = BitwardenString.upgrade_to_premium),
+                title = stringResource(id = state.title),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = state.navigationIcon),
                 navigationIconContentDescription = stringResource(
@@ -116,8 +116,23 @@ fun PlanScreen(
                     handlers = handlers,
                 )
             }
+
+            PlanState.ViewState.Premium -> {
+                PremiumContent(modifier = Modifier.fillMaxSize())
+            }
         }
     }
+}
+
+@Composable
+private fun PremiumContent(
+    modifier: Modifier = Modifier,
+) {
+    // TODO(PM-35455): Render the premium subscription management UI —
+    // status badge, next-charge summary, billing / storage / discount /
+    // tax line items, and manage plan / cancel actions — once the
+    // subscription fetch path is wired up.
+    Spacer(modifier = modifier)
 }
 
 @Composable

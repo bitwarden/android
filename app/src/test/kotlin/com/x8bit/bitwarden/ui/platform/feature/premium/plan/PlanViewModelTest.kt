@@ -599,7 +599,7 @@ class PlanViewModelTest : BaseViewModelTest() {
     // region Pricing fetch
 
     @Test
-    fun `initial state before pricing fetch resolves should show Loading dialog`() =
+    fun `initial state before pricing fetch resolves should show placeholder rate`() =
         runTest {
             val viewModel = createViewModel(pricingResult = null)
 
@@ -612,9 +612,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = false,
                         ),
-                        dialogState = PlanState.DialogState.Loading(
-                            message = BitwardenString.loading.asText(),
-                        ),
+                        dialogState = null,
                     ),
                     awaitItem(),
                 )
@@ -750,7 +748,54 @@ class PlanViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    fun `init should fetch pricing for Free viewstate`() = runTest {
+        createViewModel()
+
+        coVerify(exactly = 1) {
+            mockBillingRepository.getPremiumPlanPricing()
+        }
+    }
+
+    @Test
+    fun `init should not fetch pricing for Premium viewstate`() = runTest {
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = true)),
+        )
+
+        createViewModel()
+
+        coVerify(exactly = 0) {
+            mockBillingRepository.getPremiumPlanPricing()
+        }
+    }
+
     // endregion Pricing fetch
+
+    // region Premium user path
+
+    @Test
+    fun `initial state should be Premium ViewState for premium user`() =
+        runTest {
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = true)),
+            )
+
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    PlanState(
+                        planMode = PlanMode.Modal,
+                        viewState = PlanState.ViewState.Premium,
+                        dialogState = null,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    // endregion Premium user path
 
     private fun createViewModel(
         initialState: PlanState? = null,

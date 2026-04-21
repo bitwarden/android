@@ -49,6 +49,7 @@ class PlanScreenTest : BitwardenComposeTest() {
         every {
             startAuthTab(uri = any(), authTabData = any(), launcher = any())
         } just runs
+        every { launchUri(any()) } just runs
     }
 
     @Before
