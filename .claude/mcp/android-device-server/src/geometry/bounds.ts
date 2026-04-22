@@ -43,7 +43,7 @@ export function boundsEqual(a: Rect, b: Rect): boolean {
  * Parse Android bounds string "[left,top][right,bottom]" into a Rect.
  */
 export function parseBounds(bounds: string): Rect | null {
-  const match = bounds.match(/\[(\d+),(\d+)\]\[(\d+),(\d+)\]/);
+  const match = bounds.match(/\[(-?\d+),(-?\d+)\]\[(-?\d+),(-?\d+)\]/);
   if (!match) return null;
   return {
     left: parseInt(match[1], 10),

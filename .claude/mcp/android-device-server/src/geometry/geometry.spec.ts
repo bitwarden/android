@@ -94,6 +94,15 @@ describe('bounds', () => {
       });
     });
 
+    it('parses bounds with negative origin (partially off-screen element)', () => {
+      expect(parseBounds('[-40,-20][1040,100]')).toEqual({
+        left: -40,
+        top: -20,
+        right: 1040,
+        bottom: 100,
+      });
+    });
+
     it('returns null for invalid format', () => {
       expect(parseBounds('invalid')).toBeNull();
       expect(parseBounds('[100,200]')).toBeNull();
