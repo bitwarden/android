@@ -62,6 +62,8 @@ fun VaultAddEditState.ViewState.Content.toCipherView(
         login = type.toLoginView(common = common, clock = clock),
         card = type.toCardView(),
         sshKey = type.toSshKeyView(),
+        // TODO PM-32810: Add Bank Account Type
+        bankAccount = null,
 
         // Fields we always grab from the UI
         name = common.name,

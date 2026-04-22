@@ -739,6 +739,7 @@ private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     identity = null,
     card = null,
     secureNote = null,
+    bankAccount = null,
     favorite = false,
     reprompt = CipherRepromptType.PASSWORD,
     organizationUseTotp = false,

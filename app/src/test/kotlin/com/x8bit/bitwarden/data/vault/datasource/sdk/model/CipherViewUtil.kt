@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.vault.AttachmentView
+import com.bitwarden.vault.BankAccountView
 import com.bitwarden.vault.CardView
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -51,6 +52,7 @@ fun createMockCipherView(
     clock: Clock = FIXED_CLOCK,
     fido2Credentials: List<Fido2Credential>? = null,
     sshKey: SshKeyView? = createMockSshKeyView(number = number),
+    bankAccount: BankAccountView = createMockBankAccountView(number = number),
     login: LoginView? = createMockLoginView(
         number = number,
         password = password,
@@ -94,6 +96,7 @@ fun createMockCipherView(
             cipherType == CipherType.IDENTITY
         },
         sshKey = sshKey.takeIf { cipherType == CipherType.SSH_KEY },
+        bankAccount = bankAccount.takeIf { cipherType == CipherType.BANK_ACCOUNT },
         favorite = false,
         passwordHistory = passwordHistory,
         permissions = createMockSdkCipherPermissions(),
@@ -267,6 +270,23 @@ fun createMockSshKeyView(number: Int): SshKeyView =
         publicKey = "mockPublicKey-$number",
         privateKey = "mockPrivateKey-$number",
         fingerprint = "mockKeyFingerprint-$number",
+    )
+
+/**
+ * Create a mock [BankAccountView] with a given [number].
+ */
+fun createMockBankAccountView(number: Int): BankAccountView =
+    BankAccountView(
+        bankName = "mockBankName-$number",
+        nameOnAccount = "mockNameOnAccount-$number",
+        accountType = "mockAccountType-$number",
+        accountNumber = "mockAccountNumber-$number",
+        routingNumber = "mockRoutingNumber-$number",
+        branchNumber = "mockBranchNumber-$number",
+        pin = "mockPin-$number",
+        swiftCode = "mokSwiftCode-$number",
+        iban = "mockIban-$number",
+        bankContactPhone = "mockBankContractPhone-$number",
     )
 
 /**

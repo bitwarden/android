@@ -212,6 +212,8 @@ fun CipherView.toViewState(
                         ?.showPrivateKey == true,
                 )
             }
+
+            CipherType.BANK_ACCOUNT -> TODO("PM-32810: Add Bank Account Type")
         },
     )
 
@@ -302,6 +304,7 @@ private val CipherType.iconRes: Int
         CipherType.IDENTITY -> BitwardenDrawable.ic_id_card
         CipherType.SSH_KEY -> BitwardenDrawable.ic_ssh_key
         CipherType.LOGIN -> BitwardenDrawable.ic_globe
+        CipherType.BANK_ACCOUNT -> TODO("PM-32810: Add Bank Account Type")
     }
 
 @get:DrawableRes
