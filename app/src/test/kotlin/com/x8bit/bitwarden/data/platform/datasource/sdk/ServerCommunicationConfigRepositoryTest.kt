@@ -193,7 +193,7 @@ class ServerCommunicationConfigRepositoryTest {
             bootstrap = BootstrapConfig.SsoCookieVendor(
                 v1 = SsoCookieVendorConfig(
                     idpLoginUrl = "https://$hostname/proxy-cookie-redirect-connector",
-                    vaultUrl = null,
+                    vaultUrl = "https://api.bitwarden.com",
                     cookieName = "session",
                     cookieDomain = hostname,
                     cookieValue = null,
