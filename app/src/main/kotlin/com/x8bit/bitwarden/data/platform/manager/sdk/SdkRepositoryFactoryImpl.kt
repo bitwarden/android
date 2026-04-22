@@ -34,6 +34,7 @@ class SdkRepositoryFactoryImpl(
                 authDiskSource = authDiskSource,
             ),
             ephemeralPinEnvelopeState = null,
+            organizationSharedKey = null,
         )
 
     override fun getClientManagedTokens(
