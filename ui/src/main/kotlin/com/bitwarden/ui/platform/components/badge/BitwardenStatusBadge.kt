@@ -3,6 +3,7 @@ package com.bitwarden.ui.platform.components.badge
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
@@ -29,11 +30,12 @@ fun BitwardenStatusBadge(
     colors: BitwardenColorScheme.StatusBadgeVariantColors,
     modifier: Modifier = Modifier,
 ) {
-    val shape = RoundedCornerShape(percent = 100)
+    val shape = RoundedCornerShape(size = 12.dp)
     Surface(
         shape = shape,
         color = colors.background,
         modifier = modifier
+            .height(24.dp)
             .border(
                 width = 1.dp,
                 color = colors.border,
@@ -46,7 +48,7 @@ fun BitwardenStatusBadge(
             color = colors.text,
             modifier = Modifier.padding(
                 horizontal = 8.dp,
-                vertical = 2.dp,
+                vertical = 4.dp,
             ),
         )
     }
