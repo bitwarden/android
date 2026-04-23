@@ -36,6 +36,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
@@ -1111,11 +1112,11 @@ private val FIXED_CLOCK: Clock = Clock.fixed(
 private val SUBSCRIPTION_INFO_ACTIVE = SubscriptionInfo(
     status = PremiumSubscriptionStatus.ACTIVE,
     cadence = PlanCadence.ANNUALLY,
-    seatsCost = 19.80,
-    storageCost = 24.00,
-    discountAmount = 2.10,
-    estimatedTax = 3.85,
-    nextChargeTotal = 45.55,
+    seatsCost = BigDecimal("19.80"),
+    storageCost = BigDecimal("24.00"),
+    discountAmount = BigDecimal("2.10"),
+    estimatedTax = BigDecimal("3.85"),
+    nextChargeTotal = BigDecimal("45.55"),
     nextCharge = Instant.parse("2026-04-02T00:00:00Z"),
     canceledDate = null,
     suspensionDate = null,

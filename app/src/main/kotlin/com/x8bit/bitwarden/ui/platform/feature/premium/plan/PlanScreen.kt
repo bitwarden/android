@@ -569,6 +569,7 @@ private fun PremiumSubscriptionStatus.labelRes(): Int = when (this) {
         BitwardenString.subscription_status_overdue_payment
 
     PremiumSubscriptionStatus.PAST_DUE -> BitwardenString.subscription_status_past_due
+    PremiumSubscriptionStatus.PAUSED -> BitwardenString.subscription_status_paused
 }
 
 @Composable
@@ -577,6 +578,7 @@ private fun PremiumSubscriptionStatus.badgeColors() = when (this) {
     PremiumSubscriptionStatus.CANCELED -> BitwardenTheme.colorScheme.statusBadge.error
     PremiumSubscriptionStatus.OVERDUE_PAYMENT,
     PremiumSubscriptionStatus.PAST_DUE,
+    PremiumSubscriptionStatus.PAUSED,
         -> BitwardenTheme.colorScheme.statusBadge.warning
 }
 

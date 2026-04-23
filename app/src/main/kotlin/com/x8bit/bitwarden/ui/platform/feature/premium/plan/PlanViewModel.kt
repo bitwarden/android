@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import java.math.BigDecimal
 import java.text.NumberFormat
 import java.time.Clock
 import java.time.Instant
@@ -580,8 +581,8 @@ class PlanViewModel @Inject constructor(
         )
     }
 
-    private fun Double.toBillingAmountText(cadence: PlanCadence): Text {
-        if (this == 0.0) return PLACEHOLDER_TEXT.asText()
+    private fun BigDecimal.toBillingAmountText(cadence: PlanCadence): Text {
+        if (this.signum() == 0) return PLACEHOLDER_TEXT.asText()
         val formatted = currencyFormatter.format(this)
         val cadenceRes = when (cadence) {
             PlanCadence.ANNUALLY -> BitwardenString.billing_rate_per_year
@@ -590,9 +591,9 @@ class PlanViewModel @Inject constructor(
         return cadenceRes.asText(formatted)
     }
 
-    private fun Double?.toMoneyText(negative: Boolean = false): String =
+    private fun BigDecimal?.toMoneyText(negative: Boolean = false): String =
         when {
-            this == null || this == 0.0 -> PLACEHOLDER_TEXT
+            this == null || this.signum() == 0 -> PLACEHOLDER_TEXT
             negative -> "-${currencyFormatter.format(this)}"
             else -> currencyFormatter.format(this)
         }
@@ -625,6 +626,9 @@ class PlanViewModel @Inject constructor(
                     gracePeriodDays ?: 0,
                     suspensionDate ?: PLACEHOLDER_TEXT,
                 )
+
+            PremiumSubscriptionStatus.PAUSED ->
+                BitwardenString.subscription_paused_description.asText()
         }
 
     private fun Instant.toLocalizedDate(): String =
