@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.theme.color.BitwardenColorScheme
 
@@ -54,7 +55,7 @@ fun BitwardenStatusBadge(
 @OmitFromCoverage
 @Preview
 @Composable
-private fun BitwardenStatusBadge_SuccessPreview() {
+private fun BitwardenStatusBadge_Preview() {
     BitwardenTheme {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             BitwardenStatusBadge(
@@ -66,7 +67,29 @@ private fun BitwardenStatusBadge_SuccessPreview() {
                 colors = BitwardenTheme.colorScheme.statusBadge.error,
             )
             BitwardenStatusBadge(
-                label = "Overdue payment",
+                label = "Update payment",
+                colors = BitwardenTheme.colorScheme.statusBadge.warning,
+            )
+        }
+    }
+}
+
+@OmitFromCoverage
+@Preview
+@Composable
+private fun BitwardenStatusBadge_PreviewDark() {
+    BitwardenTheme(theme = AppTheme.DARK) {
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            BitwardenStatusBadge(
+                label = "Active",
+                colors = BitwardenTheme.colorScheme.statusBadge.success,
+            )
+            BitwardenStatusBadge(
+                label = "Canceled",
+                colors = BitwardenTheme.colorScheme.statusBadge.error,
+            )
+            BitwardenStatusBadge(
+                label = "Update payment",
                 colors = BitwardenTheme.colorScheme.statusBadge.warning,
             )
         }
