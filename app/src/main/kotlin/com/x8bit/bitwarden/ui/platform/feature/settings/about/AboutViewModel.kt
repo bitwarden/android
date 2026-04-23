@@ -9,6 +9,7 @@ import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.core.data.manager.util.deviceData
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -47,7 +48,7 @@ class AboutViewModel @Inject constructor(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val serverData = serverConfigRepository.serverConfigStateFlow.value?.serverData
         AboutState(
-            version = "Version: ${buildInfoManager.versionData}".asText(),
+            version = BitwardenString.version_x.asText(buildInfoManager.versionData),
             sdkVersion = "\uD83E\uDD80 SDK: ${buildInfoManager.sdkData}".asText(),
             serverData = StringBuilder()
                 .append("\uD83C\uDF29 Server:")

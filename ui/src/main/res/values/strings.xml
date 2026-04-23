@@ -1077,6 +1077,7 @@ Do you want to switch to this account?</string>
     <string name="security">Security</string>
     <string name="too_many_failed_biometric_attempts">Too many failed biometrics attempts.</string>
     <string name="version">Version</string>
+    <string name="version_x" comment="%1$s is the version string (e.g. 2025.1.0 (1234)).">Version: %1$s</string>
     <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">Learn more about how to use Bitwarden Authenticator on the Help Center.</string>
     <string name="key">Key</string>
     <string name="create_verification_code">Create Verification code</string>
