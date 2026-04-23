@@ -27,17 +27,15 @@ import java.time.Instant
 
 /**
  * Default implementation of [PremiumStateManager].
- *
- * Combines five upstream flows into a single eligibility signal using [combine].
  */
 @Suppress("LongParameterList")
 class PremiumStateManagerImpl(
     private val authDiskSource: AuthDiskSource,
     authRepository: AuthRepository,
-    billingRepository: BillingRepository,
+    private val billingRepository: BillingRepository,
     private val settingsDiskSource: SettingsDiskSource,
     vaultRepository: VaultRepository,
-    featureFlagManager: FeatureFlagManager,
+    private val featureFlagManager: FeatureFlagManager,
     private val clock: Clock,
     dispatcherManager: DispatcherManager,
 ) : PremiumStateManager {
@@ -90,18 +88,9 @@ class PremiumStateManagerImpl(
                 initialValue = false,
             )
 
-    override val isInAppUpgradeAvailableFlow: StateFlow<Boolean> =
-        combine(
-            billingRepository.isInAppBillingSupportedFlow,
-            featureFlagManager.getFeatureFlagFlow(FlagKey.MobilePremiumUpgrade),
-        ) { isInAppBillingSupported, featureFlagEnabled ->
-            isInAppBillingSupported && featureFlagEnabled
-        }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Eagerly,
-                initialValue = false,
-            )
+    override fun isInAppUpgradeAvailable(): Boolean =
+        billingRepository.isInAppBillingSupportedFlow.value &&
+            featureFlagManager.getFeatureFlag(FlagKey.MobilePremiumUpgrade)
 
     override fun dismissPremiumUpgradeBanner() {
         val activeUserId = authDiskSource.userState?.activeUserId ?: return

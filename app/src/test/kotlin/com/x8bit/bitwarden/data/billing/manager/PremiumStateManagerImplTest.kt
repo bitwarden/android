@@ -66,6 +66,9 @@ class PremiumStateManagerImplTest {
         every {
             getFeatureFlagFlow(FlagKey.MobilePremiumUpgrade)
         } returns mutableMobilePremiumUpgradeFlagFlow
+        every {
+            getFeatureFlag(FlagKey.MobilePremiumUpgrade)
+        } answers { mutableMobilePremiumUpgradeFlagFlow.value }
     }
 
     private val dispatcherManager = FakeDispatcherManager()
@@ -331,44 +334,32 @@ class PremiumStateManagerImplTest {
     }
 
     @Test
-    fun `isInAppUpgradeAvailableFlow should emit true when billing supported and flag enabled`() =
-        runTest {
-            val manager = createManager()
-            manager.isInAppUpgradeAvailableFlow.test {
-                assertTrue(awaitItem())
-            }
-        }
+    fun `isInAppUpgradeAvailable should return true when billing supported and flag enabled`() {
+        val manager = createManager()
+        assertTrue(manager.isInAppUpgradeAvailable())
+    }
 
     @Test
-    fun `isInAppUpgradeAvailableFlow should emit false when billing not supported`() =
-        runTest {
-            mutableIsInAppBillingSupportedFlow.value = false
-            val manager = createManager()
-            manager.isInAppUpgradeAvailableFlow.test {
-                assertFalse(awaitItem())
-            }
-        }
+    fun `isInAppUpgradeAvailable should return false when billing not supported`() {
+        mutableIsInAppBillingSupportedFlow.value = false
+        val manager = createManager()
+        assertFalse(manager.isInAppUpgradeAvailable())
+    }
 
     @Test
-    fun `isInAppUpgradeAvailableFlow should emit false when feature flag disabled`() =
-        runTest {
-            mutableMobilePremiumUpgradeFlagFlow.value = false
-            val manager = createManager()
-            manager.isInAppUpgradeAvailableFlow.test {
-                assertFalse(awaitItem())
-            }
-        }
+    fun `isInAppUpgradeAvailable should return false when feature flag disabled`() {
+        mutableMobilePremiumUpgradeFlagFlow.value = false
+        val manager = createManager()
+        assertFalse(manager.isInAppUpgradeAvailable())
+    }
 
     @Test
-    fun `isInAppUpgradeAvailableFlow should emit false when both conditions are false`() =
-        runTest {
-            mutableIsInAppBillingSupportedFlow.value = false
-            mutableMobilePremiumUpgradeFlagFlow.value = false
-            val manager = createManager()
-            manager.isInAppUpgradeAvailableFlow.test {
-                assertFalse(awaitItem())
-            }
-        }
+    fun `isInAppUpgradeAvailable should return false when both conditions are false`() {
+        mutableIsInAppBillingSupportedFlow.value = false
+        mutableMobilePremiumUpgradeFlagFlow.value = false
+        val manager = createManager()
+        assertFalse(manager.isInAppUpgradeAvailable())
+    }
 
     @Test
     fun `dismissPremiumUpgradeBanner should store dismissed state for active user`() {
