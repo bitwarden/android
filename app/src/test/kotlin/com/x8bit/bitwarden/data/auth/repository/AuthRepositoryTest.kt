@@ -5682,46 +5682,11 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `setPassword with authSdkSource hashPassword failure should return Error`() = runTest {
-        val password = "password"
-        val error = Throwable("Fail")
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        coEvery {
-            authSdkSource.hashPassword(
-                email = EMAIL,
-                password = password,
-                kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
-            )
-        } returns error.asFailure()
-
-        val result = repository.setPassword(
-            organizationIdentifier = "organizationId",
-            password = password,
-            passwordHint = "passwordHint",
-        )
-
-        assertEquals(SetPasswordResult.Error(error = error), result)
-        fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
-        fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
-        fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
-    }
-
-    @Test
     fun `setPassword with authSdkSource makeRegisterKeys failure should return Error`() = runTest {
         val password = "password"
-        val passwordHash = "passwordHash"
         val error = Throwable("Fail")
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        coEvery {
-            authSdkSource.hashPassword(
-                email = EMAIL,
-                password = password,
-                kdf = kdf,
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
-            )
-        } returns passwordHash.asSuccess()
         coEvery {
             authSdkSource.makeRegisterKeys(
                 email = EMAIL,
@@ -5737,7 +5702,6 @@ class AuthRepositoryTest {
         )
 
         assertEquals(SetPasswordResult.Error(error = error), result)
-        fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
         fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
         fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
@@ -5746,9 +5710,7 @@ class AuthRepositoryTest {
     @Test
     fun `setPassword with vaultSdkSource updatePassword failure should return Error`() = runTest {
         val password = "password"
-        val passwordHash = "passwordHash"
         val error = Throwable("Fail")
-        val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1.copy(
             accounts = mapOf(
                 USER_ID_1 to ACCOUNT_1.copy(
@@ -5760,14 +5722,6 @@ class AuthRepositoryTest {
             ),
         )
         coEvery {
-            authSdkSource.hashPassword(
-                email = EMAIL,
-                password = password,
-                kdf = kdf,
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
-            )
-        } returns passwordHash.asSuccess()
-        coEvery {
             vaultSdkSource.updatePassword(userId = USER_ID_1, newPassword = password)
         } returns error.asFailure()
 
@@ -5778,7 +5732,6 @@ class AuthRepositoryTest {
         )
 
         assertEquals(SetPasswordResult.Error(error = error), result)
-        fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
         fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
         fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
@@ -5817,14 +5770,6 @@ class AuthRepositoryTest {
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         coEvery {
-            authSdkSource.hashPassword(
-                email = EMAIL,
-                password = password,
-                kdf = kdf,
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
-            )
-        } returns passwordHash.asSuccess()
-        coEvery {
             authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
         } returns registerKeyResponse.asSuccess()
         coEvery {
@@ -5838,7 +5783,6 @@ class AuthRepositoryTest {
         )
 
         assertEquals(SetPasswordResult.Error(error = error), result)
-        fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
         fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
         fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
@@ -5878,14 +5822,6 @@ class AuthRepositoryTest {
             ),
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        coEvery {
-            authSdkSource.hashPassword(
-                email = EMAIL,
-                password = password,
-                kdf = kdf,
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
-            )
-        } returns passwordHash.asSuccess()
         coEvery {
             authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
         } returns registerKeyResponse.asSuccess()
@@ -5931,17 +5867,10 @@ class AuthRepositoryTest {
         )
 
         assertEquals(SetPasswordResult.Success, result)
-        fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = passwordHash)
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = privateRsaKey)
         fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = encryptedUserKey)
         fakeAuthDiskSource.assertUserState(SINGLE_USER_STATE_1_WITH_PASS)
-        coVerify {
-            authSdkSource.hashPassword(
-                email = EMAIL,
-                password = password,
-                kdf = kdf,
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
-            )
+        coVerify(exactly = 1) {
             authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
             accountsService.setPassword(body = setPasswordRequestJson)
             organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
@@ -5981,7 +5910,6 @@ class AuthRepositoryTest {
             ),
         )
         val profile = userState.activeAccount.profile
-        val kdf = profile.toSdkParams()
         val updatePasswordResponse = UpdatePasswordResponse(
             passwordHash = passwordHash,
             newKey = encryptedUserKey,
@@ -5998,14 +5926,6 @@ class AuthRepositoryTest {
             keys = null,
         )
         fakeAuthDiskSource.userState = userState
-        coEvery {
-            authSdkSource.hashPassword(
-                email = EMAIL,
-                password = password,
-                kdf = kdf,
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
-            )
-        } returns passwordHash.asSuccess()
         coEvery {
             vaultSdkSource.updatePassword(userId = USER_ID_1, newPassword = password)
         } returns updatePasswordResponse.asSuccess()
@@ -6051,21 +5971,11 @@ class AuthRepositoryTest {
         )
 
         assertEquals(SetPasswordResult.Success, result)
-        fakeAuthDiskSource.assertMasterPasswordHash(
-            userId = USER_ID_1,
-            passwordHash = passwordHash,
-        )
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
         fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
         fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = encryptedUserKey)
         fakeAuthDiskSource.assertUserState(SINGLE_USER_STATE_1_WITH_PASS)
         coVerify(exactly = 1) {
-            authSdkSource.hashPassword(
-                email = EMAIL,
-                password = password,
-                kdf = kdf,
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
-            )
             vaultSdkSource.updatePassword(userId = USER_ID_1, newPassword = password)
             accountsService.setPassword(body = setPasswordRequestJson)
             organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
@@ -6119,14 +6029,6 @@ class AuthRepositoryTest {
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         coEvery {
-            authSdkSource.hashPassword(
-                email = EMAIL,
-                password = password,
-                kdf = kdf,
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
-            )
-        } returns passwordHash.asSuccess()
-        coEvery {
             authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
         } returns registerKeyResponse.asSuccess()
         coEvery {
@@ -6144,17 +6046,10 @@ class AuthRepositoryTest {
         )
 
         assertEquals(SetPasswordResult.Error(error = error), result)
-        fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = privateRsaKey)
         fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = encryptedUserKey)
         fakeAuthDiskSource.assertUserState(SINGLE_USER_STATE_1)
-        coVerify {
-            authSdkSource.hashPassword(
-                email = EMAIL,
-                password = password,
-                kdf = kdf,
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
-            )
+        coVerify(exactly = 1) {
             authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
             accountsService.setPassword(body = setPasswordRequestJson)
             vaultRepository.unlockVaultWithMasterPassword(password)
