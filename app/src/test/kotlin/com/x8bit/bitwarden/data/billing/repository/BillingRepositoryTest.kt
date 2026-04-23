@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
 
 class BillingRepositoryTest {
 
@@ -171,8 +172,8 @@ class BillingRepositoryTest {
             assertTrue(result is SubscriptionResult.Success)
             val subscription = (result as SubscriptionResult.Success).subscription
             assertEquals(PremiumSubscriptionStatus.ACTIVE, subscription.status)
-            assertEquals(19.80, subscription.seatsCost, 0.001)
-            assertEquals(19.80, subscription.nextChargeTotal, 0.001)
+            assertEquals(BigDecimal("19.80"), subscription.seatsCost)
+            assertEquals(BigDecimal("19.80"), subscription.nextChargeTotal)
         }
 
     @Test
@@ -201,10 +202,10 @@ private val ACTIVE_SUBSCRIPTION_RESPONSE = BitwardenSubscriptionResponseJson(
             seats = CartItemJson(
                 translationKey = "premiumMembership",
                 quantity = 1,
-                cost = 19.80,
+                cost = BigDecimal("19.80"),
             ),
         ),
         cadence = CadenceTypeJson.ANNUALLY,
-        estimatedTax = 0.0,
+        estimatedTax = BigDecimal.ZERO,
     ),
 )

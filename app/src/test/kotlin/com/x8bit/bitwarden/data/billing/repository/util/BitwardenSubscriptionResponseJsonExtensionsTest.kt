@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
 import java.time.Instant
 
 class BitwardenSubscriptionResponseJsonExtensionsTest {
@@ -64,18 +65,18 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
 
     @Test
     fun `toSubscriptionInfo maps seatsCost and null storageCost when not present`() {
-        val info = buildResponse(seatsCost = 19.80).toSubscriptionInfo()
-        assertEquals(19.80, info.seatsCost, 0.001)
+        val info = buildResponse(seatsCost = BigDecimal("19.80")).toSubscriptionInfo()
+        assertEquals(BigDecimal("19.80"), info.seatsCost)
         assertNull(info.storageCost)
     }
 
     @Test
     fun `toSubscriptionInfo maps storageCost from additionalStorage when present`() {
         val info = buildResponse(
-            seatsCost = 19.80,
-            storageCost = 24.00,
+            seatsCost = BigDecimal("19.80"),
+            storageCost = BigDecimal("24.00"),
         ).toSubscriptionInfo()
-        assertEquals(24.00, info.storageCost!!, 0.001)
+        assertEquals(BigDecimal("24.00"), info.storageCost)
     }
 
     @Test
@@ -89,52 +90,52 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
         val info = buildResponse(
             discount = BitwardenDiscountJson(
                 type = DiscountTypeJson.AMOUNT_OFF,
-                value = 2.10,
+                value = BigDecimal("2.10"),
             ),
         ).toSubscriptionInfo()
-        assertEquals(2.10, info.discountAmount!!, 0.001)
+        assertEquals(BigDecimal("2.10"), info.discountAmount)
     }
 
     @Test
     fun `toSubscriptionInfo discountAmount for PERCENT_OFF applies to PM subtotal`() {
         // seats 20 + storage 10 = 30 subtotal, 15% = 4.50
         val info = buildResponse(
-            seatsCost = 20.0,
-            storageCost = 10.0,
+            seatsCost = BigDecimal("20.00"),
+            storageCost = BigDecimal("10.00"),
             discount = BitwardenDiscountJson(
                 type = DiscountTypeJson.PERCENT_OFF,
-                value = 15.0,
+                value = BigDecimal("15.00"),
             ),
         ).toSubscriptionInfo()
-        assertEquals(4.50, info.discountAmount!!, 0.001)
+        assertEquals(BigDecimal("4.50"), info.discountAmount)
     }
 
     @Test
     fun `toSubscriptionInfo passes estimatedTax through`() {
-        val info = buildResponse(estimatedTax = 3.85).toSubscriptionInfo()
-        assertEquals(3.85, info.estimatedTax, 0.001)
+        val info = buildResponse(estimatedTax = BigDecimal("3.85")).toSubscriptionInfo()
+        assertEquals(BigDecimal("3.85"), info.estimatedTax)
     }
 
     @Test
     fun `toSubscriptionInfo nextChargeTotal sums line items, subtracts discount, adds tax`() {
         // Matches the design example: 19.80 + 24.00 - 2.10 + 3.85 = 45.55
         val info = buildResponse(
-            seatsCost = 19.80,
-            storageCost = 24.00,
+            seatsCost = BigDecimal("19.80"),
+            storageCost = BigDecimal("24.00"),
             discount = BitwardenDiscountJson(
                 type = DiscountTypeJson.AMOUNT_OFF,
-                value = 2.10,
+                value = BigDecimal("2.10"),
             ),
-            estimatedTax = 3.85,
+            estimatedTax = BigDecimal("3.85"),
         ).toSubscriptionInfo()
-        assertEquals(45.55, info.nextChargeTotal, 0.001)
+        assertEquals(BigDecimal("45.55"), info.nextChargeTotal)
     }
 
     @Test
     fun `toSubscriptionInfo nextChargeTotal with minimal cart equals seatsCost`() {
         // User-provided JSON: 19.80 + 0 - 0 + 0 = 19.80
-        val info = buildResponse(seatsCost = 19.80).toSubscriptionInfo()
-        assertEquals(19.80, info.nextChargeTotal, 0.001)
+        val info = buildResponse(seatsCost = BigDecimal("19.80")).toSubscriptionInfo()
+        assertEquals(BigDecimal("19.80"), info.nextChargeTotal)
     }
 
     @Test
@@ -167,10 +168,10 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
     private fun buildResponse(
         status: SubscriptionStatusJson = SubscriptionStatusJson.ACTIVE,
         cadence: CadenceTypeJson = CadenceTypeJson.ANNUALLY,
-        seatsCost: Double = 19.80,
-        storageCost: Double? = null,
+        seatsCost: BigDecimal = BigDecimal("19.80"),
+        storageCost: BigDecimal? = null,
         discount: BitwardenDiscountJson? = null,
-        estimatedTax: Double = 0.0,
+        estimatedTax: BigDecimal = BigDecimal.ZERO,
         storage: StorageJson? = null,
         canceled: Instant? = null,
         nextCharge: Instant? = null,

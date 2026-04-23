@@ -3,6 +3,7 @@ package com.bitwarden.network.model
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.math.BigDecimal
 import java.time.Instant
 
 /**
@@ -98,8 +99,9 @@ data class CartJson(
     @SerialName("discount")
     val discount: BitwardenDiscountJson? = null,
 
+    @Contextual
     @SerialName("estimatedTax")
-    val estimatedTax: Double,
+    val estimatedTax: BigDecimal,
 )
 
 /**
@@ -149,8 +151,9 @@ data class CartItemJson(
     @SerialName("quantity")
     val quantity: Long,
 
+    @Contextual
     @SerialName("cost")
-    val cost: Double,
+    val cost: BigDecimal,
 
     @SerialName("discount")
     val discount: BitwardenDiscountJson? = null,
@@ -167,8 +170,9 @@ data class BitwardenDiscountJson(
     @SerialName("type")
     val type: DiscountTypeJson,
 
+    @Contextual
     @SerialName("value")
-    val value: Double,
+    val value: BigDecimal,
 )
 
 /**

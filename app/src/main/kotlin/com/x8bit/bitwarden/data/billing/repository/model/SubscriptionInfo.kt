@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.billing.repository.model
 
+import java.math.BigDecimal
 import java.time.Instant
 
 /**
@@ -23,11 +24,11 @@ import java.time.Instant
 data class SubscriptionInfo(
     val status: PremiumSubscriptionStatus,
     val cadence: PlanCadence,
-    val seatsCost: Double,
-    val storageCost: Double?,
-    val discountAmount: Double?,
-    val estimatedTax: Double,
-    val nextChargeTotal: Double,
+    val seatsCost: BigDecimal,
+    val storageCost: BigDecimal?,
+    val discountAmount: BigDecimal?,
+    val estimatedTax: BigDecimal,
+    val nextChargeTotal: BigDecimal,
     val nextCharge: Instant?,
     val canceledDate: Instant?,
     val suspensionDate: Instant?,

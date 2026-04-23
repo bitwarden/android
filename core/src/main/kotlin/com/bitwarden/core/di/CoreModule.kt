@@ -1,6 +1,7 @@
 package com.bitwarden.core.di
 
 import com.bitwarden.core.data.manager.BuildInfoManager
+import com.bitwarden.core.data.serializer.BigDecimalSerializer
 import com.bitwarden.core.data.serializer.InstantSerializer
 import dagger.Module
 import dagger.Provides
@@ -34,6 +35,7 @@ object CoreModule {
         explicitNulls = false
         serializersModule = SerializersModule {
             contextual(InstantSerializer())
+            contextual(BigDecimalSerializer())
         }
 
         // Respect model default property values.

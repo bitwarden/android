@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import retrofit2.create
+import java.math.BigDecimal
 import java.time.Instant
 
 class BillingServiceTest : BaseServiceTest() {
@@ -289,20 +290,20 @@ private val SUBSCRIPTION_RESPONSE = BitwardenSubscriptionResponseJson(
             seats = CartItemJson(
                 translationKey = "premiumMembership",
                 quantity = 1,
-                cost = 19.80,
+                cost = BigDecimal("19.80"),
             ),
             additionalStorage = CartItemJson(
                 translationKey = "additionalStorage",
                 quantity = 24,
-                cost = 24.00,
+                cost = BigDecimal("24.00"),
             ),
         ),
         cadence = CadenceTypeJson.ANNUALLY,
         discount = BitwardenDiscountJson(
             type = DiscountTypeJson.AMOUNT_OFF,
-            value = 2.10,
+            value = BigDecimal("2.10"),
         ),
-        estimatedTax = 3.85,
+        estimatedTax = BigDecimal("3.85"),
     ),
     storage = StorageJson(
         available = 5,

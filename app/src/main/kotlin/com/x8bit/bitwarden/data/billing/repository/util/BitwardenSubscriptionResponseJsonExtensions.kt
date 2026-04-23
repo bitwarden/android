@@ -8,8 +8,11 @@ import com.bitwarden.network.model.SubscriptionStatusJson
 import com.x8bit.bitwarden.data.billing.repository.model.PlanCadence
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStatus
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionInfo
+import java.math.BigDecimal
+import java.math.RoundingMode
 
-private const val PERCENT_DIVISOR = 100.0
+private val PERCENT_DIVISOR: BigDecimal = BigDecimal("100")
+private const val MONEY_SCALE: Int = 2
 
 /**
  * Maps a [BitwardenSubscriptionResponseJson] into a [SubscriptionInfo] domain
@@ -25,12 +28,12 @@ fun BitwardenSubscriptionResponseJson.toSubscriptionInfo(): SubscriptionInfo {
     val seatsCost = cart.passwordManager.seats.cost
     val storageCost = cart.passwordManager.additionalStorage?.cost
     val discountAmount = cart.discount?.toMoneyAmount(
-        subtotal = seatsCost + (storageCost ?: 0.0),
+        subtotal = seatsCost + (storageCost ?: BigDecimal.ZERO),
     )
     val estimatedTax = cart.estimatedTax
     val nextChargeTotal = seatsCost +
-        (storageCost ?: 0.0) -
-        (discountAmount ?: 0.0) +
+        (storageCost ?: BigDecimal.ZERO) -
+        (discountAmount ?: BigDecimal.ZERO) +
         estimatedTax
 
     return SubscriptionInfo(
@@ -70,8 +73,11 @@ private fun CadenceTypeJson.toPlanCadence(): PlanCadence = when (this) {
     CadenceTypeJson.MONTHLY -> PlanCadence.MONTHLY
 }
 
-private fun BitwardenDiscountJson.toMoneyAmount(subtotal: Double): Double =
+private fun BitwardenDiscountJson.toMoneyAmount(subtotal: BigDecimal): BigDecimal =
     when (type) {
         DiscountTypeJson.AMOUNT_OFF -> value
-        DiscountTypeJson.PERCENT_OFF -> subtotal * value / PERCENT_DIVISOR
+        DiscountTypeJson.PERCENT_OFF ->
+            subtotal
+                .multiply(value)
+                .divide(PERCENT_DIVISOR, MONEY_SCALE, RoundingMode.HALF_EVEN)
     }
