@@ -8,4 +8,5 @@ enum class PremiumSubscriptionStatus {
     CANCELED,
     OVERDUE_PAYMENT,
     PAST_DUE,
+    PAUSED,
 }

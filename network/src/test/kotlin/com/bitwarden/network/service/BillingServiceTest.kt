@@ -465,6 +465,7 @@ private fun subscriptionResponseJsonForStatus(
         SubscriptionStatusJson.INCOMPLETE_EXPIRED -> "incomplete_expired"
         SubscriptionStatusJson.UNPAID -> "unpaid"
         SubscriptionStatusJson.TRIALING -> "trialing"
+        SubscriptionStatusJson.PAUSED -> "paused"
     }
     return """
     {

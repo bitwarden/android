@@ -74,6 +74,9 @@ enum class SubscriptionStatusJson {
 
     @SerialName("trialing")
     TRIALING,
+
+    @SerialName("paused")
+    PAUSED,
 }
 
 /**

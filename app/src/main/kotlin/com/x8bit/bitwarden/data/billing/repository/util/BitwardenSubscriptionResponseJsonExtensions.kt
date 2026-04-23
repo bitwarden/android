@@ -66,6 +66,8 @@ private fun SubscriptionStatusJson.toPremiumSubscriptionStatus(): PremiumSubscri
         -> PremiumSubscriptionStatus.OVERDUE_PAYMENT
 
         SubscriptionStatusJson.PAST_DUE -> PremiumSubscriptionStatus.PAST_DUE
+
+        SubscriptionStatusJson.PAUSED -> PremiumSubscriptionStatus.PAUSED
     }
 
 private fun CadenceTypeJson.toPlanCadence(): PlanCadence = when (this) {

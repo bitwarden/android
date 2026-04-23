@@ -55,6 +55,14 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
     }
 
     @Test
+    fun `toSubscriptionInfo maps PAUSED to PAUSED`() {
+        val info = buildResponse(
+            status = SubscriptionStatusJson.PAUSED,
+        ).toSubscriptionInfo()
+        assertEquals(PremiumSubscriptionStatus.PAUSED, info.status)
+    }
+
+    @Test
     fun `toSubscriptionInfo maps cadence to PlanCadence`() {
         val annually = buildResponse(cadence = CadenceTypeJson.ANNUALLY).toSubscriptionInfo()
         assertEquals(PlanCadence.ANNUALLY, annually.cadence)
