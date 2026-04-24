@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySele
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
+import com.x8bit.bitwarden.data.billing.util.getPremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.credentials.manager.CredentialProviderRequestManager
 import com.x8bit.bitwarden.data.credentials.manager.model.CredentialProviderRequest
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
@@ -198,7 +199,7 @@ class MainViewModel @Inject constructor(
             is MainAction.SsoResult -> handleSsoResult(action)
             is MainAction.WebAuthnResult -> handleWebAuthnResult(action)
             is MainAction.CookieAcquisitionResult -> handleCookieAcquisitionResult(action)
-            is MainAction.PremiumCheckoutResult -> handlePremiumCheckoutResult()
+            is MainAction.PremiumCheckoutResult -> handlePremiumCheckoutResult(action)
             is MainAction.Internal -> handleInternalAction(action)
         }
     }
@@ -248,9 +249,10 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    private fun handlePremiumCheckoutResult() {
-        specialCircumstanceManager.specialCircumstance =
-            SpecialCircumstance.PremiumCheckoutResult
+    private fun handlePremiumCheckoutResult(action: MainAction.PremiumCheckoutResult) {
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.PremiumCheckout(
+            callbackResult = action.authResult.getPremiumCheckoutCallbackResult(),
+        )
     }
 
     private fun handleAppResumeDataUpdated(action: MainAction.ResumeScreenDataReceived) {
@@ -404,7 +406,9 @@ class MainViewModel @Inject constructor(
 
             hasPremiumCheckoutCallback -> {
                 specialCircumstanceManager.specialCircumstance =
-                    SpecialCircumstance.PremiumCheckoutResult
+                    SpecialCircumstance.PremiumCheckout(
+                        callbackResult = intent.data.getPremiumCheckoutCallbackResult(),
+                    )
             }
 
             hasGeneratorShortcut -> {

@@ -21,7 +21,7 @@ class ServerCommunicationConfigRepositoryImpl(
     private val configDiskSource: ConfigDiskSource,
 ) : ServerCommunicationConfigRepository {
 
-    override suspend fun get(hostname: String): ServerCommunicationConfig? {
+    override suspend fun get(domain: String): ServerCommunicationConfig? {
         val serverData = configDiskSource.serverConfig?.serverData
         val serverCommunicationConfig = serverData?.communication ?: return null
 
@@ -31,8 +31,13 @@ class ServerCommunicationConfigRepositoryImpl(
             )
         }
 
+        // We return null here since we do not have the appropriate data to complete the
+        // transaction. This will trigger a cookie acquisition with the server.
+        val vaultUrl = serverData.environment?.vaultUrl ?: return null
+        val cookieName = serverCommunicationConfig.bootstrap.cookieName ?: return null
+        val cookieDomain = serverCommunicationConfig.bootstrap.cookieDomain ?: return null
         val acquiredCookies = cookieDiskSource
-            .getCookieConfig(hostname)
+            .getCookieConfig(hostname = domain)
             ?.cookies
             ?.toAcquiredCookiesList()
 
@@ -40,24 +45,24 @@ class ServerCommunicationConfigRepositoryImpl(
             bootstrap = BootstrapConfig.SsoCookieVendor(
                 v1 = SsoCookieVendorConfig(
                     idpLoginUrl = serverCommunicationConfig.bootstrap.idpLoginUrl,
-                    vaultUrl = serverData.environment?.vaultUrl,
-                    cookieName = serverCommunicationConfig.bootstrap.cookieName,
-                    cookieDomain = serverCommunicationConfig.bootstrap.cookieDomain,
+                    vaultUrl = vaultUrl,
+                    cookieName = cookieName,
+                    cookieDomain = cookieDomain,
                     cookieValue = acquiredCookies,
                 ),
             ),
         )
     }
 
-    override suspend fun save(hostname: String, config: ServerCommunicationConfig) =
+    override suspend fun save(domain: String, config: ServerCommunicationConfig) =
         when (val bootstrapConfig = config.bootstrap) {
             is BootstrapConfig.SsoCookieVendor -> {
                 // Only store cookies from [config]. The communication config is synced with the
                 // server (api/config), which takes precedence over the local configuration.
                 cookieDiskSource.storeCookieConfig(
-                    hostname = hostname,
+                    hostname = domain,
                     config = CookieConfigurationData(
-                        hostname = hostname,
+                        hostname = domain,
                         cookies = bootstrapConfig.v1.cookieValue
                             ?.toConfigurationDataCookies()
                             .orEmpty(),
@@ -68,7 +73,7 @@ class ServerCommunicationConfigRepositoryImpl(
             BootstrapConfig.Direct -> {
                 // Clear any existing cookie configuration now that the communication config
                 // has been updated.
-                cookieDiskSource.storeCookieConfig(hostname = hostname, config = null)
+                cookieDiskSource.storeCookieConfig(hostname = domain, config = null)
             }
         }
 }

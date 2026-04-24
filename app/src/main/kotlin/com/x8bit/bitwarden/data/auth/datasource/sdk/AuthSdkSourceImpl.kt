@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.sdk
 
+import com.bitwarden.auth.KeyConnectorRegistrationResult
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.FingerprintRequest
 import com.bitwarden.core.KeyConnectorResponse
@@ -23,6 +24,20 @@ class AuthSdkSourceImpl(
     sdkClientManager: SdkClientManager,
 ) : BaseSdkSource(sdkClientManager = sdkClientManager),
     AuthSdkSource {
+
+    override suspend fun postKeysForKeyConnectorRegistration(
+        userId: String,
+        accessToken: String,
+        keyConnectorUrl: String,
+        ssoOrganizationIdentifier: String,
+    ): Result<KeyConnectorRegistrationResult> = runCatchingWithLogs {
+        useClient(userId = userId, accessToken = accessToken) {
+            auth().registration().postKeysForKeyConnectorRegistration(
+                keyConnectorUrl = keyConnectorUrl,
+                ssoOrgIdentifier = ssoOrganizationIdentifier,
+            )
+        }
+    }
 
     override suspend fun getNewAuthRequest(
         email: String,

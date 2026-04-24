@@ -25,4 +25,4 @@ val Intent.isAccountSecurityShortcut: Boolean
  * checkout session, `false` otherwise.
  */
 val Intent.isPremiumCheckoutCallback: Boolean
-    get() = dataString?.equals("bitwarden://premium-upgrade-callback") == true
+    get() = dataString?.startsWith("bitwarden://premium-checkout-result") == true

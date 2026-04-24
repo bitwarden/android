@@ -9,6 +9,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.toRoute
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
 import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.bitwarden.ui.platform.util.ParcelableRouteSerializer
 import kotlinx.parcelize.Parcelize
@@ -72,6 +73,17 @@ fun SavedStateHandle.toPlanArgs(): PlanArgs {
 }
 
 /**
+ * Register inside settingsGraph — bottom nav visible.
+ */
+fun NavGraphBuilder.planDestination(
+    onNavigateBack: () -> Unit,
+) {
+    composableWithPushTransitions<PlanRoute.Standard> {
+        PlanScreen(onNavigateBack = onNavigateBack)
+    }
+}
+
+/**
  * Register at parent vaultUnlockedGraph level — bottom nav hidden.
  */
 fun NavGraphBuilder.planModalDestination(
@@ -80,6 +92,13 @@ fun NavGraphBuilder.planModalDestination(
     composableWithSlideTransitions<PlanRoute.Modal> {
         PlanScreen(onNavigateBack = onNavigateBack)
     }
+}
+
+/**
+ * Navigate to the plan screen (standard, within settings graph).
+ */
+fun NavController.navigateToPlan(navOptions: NavOptions? = null) {
+    navigate(route = PlanRoute.Standard, navOptions = navOptions)
 }
 
 /**

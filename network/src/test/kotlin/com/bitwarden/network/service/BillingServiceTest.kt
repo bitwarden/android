@@ -5,6 +5,7 @@ import com.bitwarden.network.api.AuthenticatedBillingApi
 import com.bitwarden.network.base.BaseServiceTest
 import com.bitwarden.network.model.CheckoutSessionResponseJson
 import com.bitwarden.network.model.PortalUrlResponseJson
+import com.bitwarden.network.model.PremiumPlanResponseJson
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -56,6 +57,26 @@ class BillingServiceTest : BaseServiceTest() {
         val actual = service.getPortalUrl()
         assertEquals(PORTAL_URL_RESPONSE.asSuccess(), actual)
     }
+
+    @Test
+    fun `getPremiumPlan when response is Failure should return Failure`() =
+        runTest {
+            val response = MockResponse().setResponseCode(400)
+            server.enqueue(response)
+            val actual = service.getPremiumPlan()
+            assertTrue(actual.isFailure)
+        }
+
+    @Test
+    fun `getPremiumPlan when response is Success should return Success`() =
+        runTest {
+            val response = MockResponse()
+                .setBody(PREMIUM_PLAN_RESPONSE_JSON)
+                .setResponseCode(200)
+            server.enqueue(response)
+            val actual = service.getPremiumPlan()
+            assertEquals(PREMIUM_PLAN_RESPONSE.asSuccess(), actual)
+        }
 }
 
 private const val CHECKOUT_SESSION_RESPONSE_JSON = """
@@ -76,4 +97,38 @@ private const val PORTAL_URL_RESPONSE_JSON = """
 
 private val PORTAL_URL_RESPONSE = PortalUrlResponseJson(
     url = "https://billing.stripe.com/p/session/test_portal_456",
+)
+
+private const val PREMIUM_PLAN_RESPONSE_JSON = """
+{
+  "name": "Premium",
+  "legacyYear": null,
+  "available": true,
+  "seat": {
+    "stripePriceId": "premium-annually-2026",
+    "price": 19.99,
+    "provided": 0
+  },
+  "storage": {
+    "stripePriceId": "personal-storage-gb-annually",
+    "price": 4.00,
+    "provided": 5
+  }
+}
+"""
+
+private val PREMIUM_PLAN_RESPONSE = PremiumPlanResponseJson(
+    name = "Premium",
+    legacyYear = null,
+    isAvailable = true,
+    seat = PremiumPlanResponseJson.PurchasableJson(
+        stripePriceId = "premium-annually-2026",
+        price = 19.99,
+        provided = 0,
+    ),
+    storage = PremiumPlanResponseJson.PurchasableJson(
+        stripePriceId = "personal-storage-gb-annually",
+        price = 4.00,
+        provided = 5,
+    ),
 )

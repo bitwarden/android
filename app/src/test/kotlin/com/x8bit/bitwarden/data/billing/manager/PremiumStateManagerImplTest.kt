@@ -66,6 +66,9 @@ class PremiumStateManagerImplTest {
         every {
             getFeatureFlagFlow(FlagKey.MobilePremiumUpgrade)
         } returns mutableMobilePremiumUpgradeFlagFlow
+        every {
+            getFeatureFlag(FlagKey.MobilePremiumUpgrade)
+        } answers { mutableMobilePremiumUpgradeFlagFlow.value }
     }
 
     private val dispatcherManager = FakeDispatcherManager()
@@ -328,6 +331,34 @@ class PremiumStateManagerImplTest {
             mutableIsInAppBillingSupportedFlow.value = true
             assertTrue(awaitItem())
         }
+    }
+
+    @Test
+    fun `isInAppUpgradeAvailable should return true when billing supported and flag enabled`() {
+        val manager = createManager()
+        assertTrue(manager.isInAppUpgradeAvailable())
+    }
+
+    @Test
+    fun `isInAppUpgradeAvailable should return false when billing not supported`() {
+        mutableIsInAppBillingSupportedFlow.value = false
+        val manager = createManager()
+        assertFalse(manager.isInAppUpgradeAvailable())
+    }
+
+    @Test
+    fun `isInAppUpgradeAvailable should return false when feature flag disabled`() {
+        mutableMobilePremiumUpgradeFlagFlow.value = false
+        val manager = createManager()
+        assertFalse(manager.isInAppUpgradeAvailable())
+    }
+
+    @Test
+    fun `isInAppUpgradeAvailable should return false when both conditions are false`() {
+        mutableIsInAppBillingSupportedFlow.value = false
+        mutableMobilePremiumUpgradeFlagFlow.value = false
+        val manager = createManager()
+        assertFalse(manager.isInAppUpgradeAvailable())
     }
 
     @Test

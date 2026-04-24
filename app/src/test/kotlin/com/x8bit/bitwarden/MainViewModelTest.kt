@@ -1,8 +1,11 @@
 package com.x8bit.bitwarden
 
 import android.content.Intent
+import android.net.Uri
 import androidx.browser.auth.AuthTabIntent
 import androidx.credentials.GetPublicKeyCredentialOption
+import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
+import com.x8bit.bitwarden.data.billing.util.getPremiumCheckoutCallbackResult
 import androidx.credentials.provider.BiometricPromptResult
 import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
@@ -196,6 +199,7 @@ class MainViewModelTest : BaseViewModelTest() {
             AuthTabIntent.AuthResult::getDuoCallbackTokenResult,
             AuthTabIntent.AuthResult::getSsoCallbackResult,
             AuthTabIntent.AuthResult::getWebAuthResult,
+            AuthTabIntent.AuthResult::getPremiumCheckoutCallbackResult,
         )
         mockkStatic(
             Intent::isMyVaultShortcut,
@@ -228,6 +232,7 @@ class MainViewModelTest : BaseViewModelTest() {
             AuthTabIntent.AuthResult::getDuoCallbackTokenResult,
             AuthTabIntent.AuthResult::getSsoCallbackResult,
             AuthTabIntent.AuthResult::getWebAuthResult,
+            AuthTabIntent.AuthResult::getPremiumCheckoutCallbackResult,
         )
         unmockkStatic(
             Intent::isMyVaultShortcut,
@@ -864,34 +869,92 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveFirstIntent with Premium checkout callback should set special circumstance to PremiumCheckoutResult`() {
+    fun `on ReceiveFirstIntent with Premium checkout success callback should set PremiumCheckoutResult with isSuccess true`() {
         val viewModel = createViewModel()
+        val mockUri = mockk<Uri> {
+            every { getQueryParameter("result") } returns "success"
+        }
         val mockIntent = createMockIntent(
             mockIsPremiumCheckoutCallback = true,
+            mockDataUri = mockUri,
         )
 
         viewModel.trySendAction(
             MainAction.ReceiveFirstIntent(intent = mockIntent),
         )
         assertEquals(
-            SpecialCircumstance.PremiumCheckoutResult,
+            SpecialCircumstance.PremiumCheckout(
+                callbackResult = PremiumCheckoutCallbackResult.Success,
+            ),
             specialCircumstanceManager.specialCircumstance,
         )
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveNewIntent with Premium checkout callback should set special circumstance to PremiumCheckoutResult`() {
+    fun `on ReceiveFirstIntent with Premium checkout canceled callback should set PremiumCheckoutResult with isSuccess false`() {
         val viewModel = createViewModel()
+        val mockUri = mockk<Uri> {
+            every { getQueryParameter("result") } returns "canceled"
+        }
         val mockIntent = createMockIntent(
             mockIsPremiumCheckoutCallback = true,
+            mockDataUri = mockUri,
+        )
+
+        viewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(intent = mockIntent),
+        )
+        assertEquals(
+            SpecialCircumstance.PremiumCheckout(
+                callbackResult = PremiumCheckoutCallbackResult.Canceled,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveNewIntent with Premium checkout success callback should set PremiumCheckoutResult with isSuccess true`() {
+        val viewModel = createViewModel()
+        val mockUri = mockk<Uri> {
+            every { getQueryParameter("result") } returns "success"
+        }
+        val mockIntent = createMockIntent(
+            mockIsPremiumCheckoutCallback = true,
+            mockDataUri = mockUri,
         )
 
         viewModel.trySendAction(
             MainAction.ReceiveNewIntent(intent = mockIntent),
         )
         assertEquals(
-            SpecialCircumstance.PremiumCheckoutResult,
+            SpecialCircumstance.PremiumCheckout(
+                callbackResult = PremiumCheckoutCallbackResult.Success,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveNewIntent with Premium checkout canceled callback should set PremiumCheckoutResult with isSuccess false`() {
+        val viewModel = createViewModel()
+        val mockUri = mockk<Uri> {
+            every { getQueryParameter("result") } returns "canceled"
+        }
+        val mockIntent = createMockIntent(
+            mockIsPremiumCheckoutCallback = true,
+            mockDataUri = mockUri,
+        )
+
+        viewModel.trySendAction(
+            MainAction.ReceiveNewIntent(intent = mockIntent),
+        )
+        assertEquals(
+            SpecialCircumstance.PremiumCheckout(
+                callbackResult = PremiumCheckoutCallbackResult.Canceled,
+            ),
             specialCircumstanceManager.specialCircumstance,
         )
     }
@@ -1189,9 +1252,12 @@ class MainViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on PremiumCheckoutResult should set PremiumCheckoutResult special circumstance`() {
-        val authResult = mockk<AuthTabIntent.AuthResult>()
+    fun `on PremiumCheckoutResult with RESULT_OK should set PremiumCheckoutResult with isSuccess true`() {
+        val authResult = mockk<AuthTabIntent.AuthResult> {
+            every { getPremiumCheckoutCallbackResult() } returns PremiumCheckoutCallbackResult.Success
+        }
         val viewModel = createViewModel()
 
         viewModel.trySendAction(
@@ -1199,7 +1265,29 @@ class MainViewModelTest : BaseViewModelTest() {
         )
 
         assertEquals(
-            SpecialCircumstance.PremiumCheckoutResult,
+            SpecialCircumstance.PremiumCheckout(
+                callbackResult = PremiumCheckoutCallbackResult.Success,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on PremiumCheckoutResult with RESULT_CANCELED should set PremiumCheckoutResult with isSuccess false`() {
+        val authResult = mockk<AuthTabIntent.AuthResult> {
+            every { getPremiumCheckoutCallbackResult() } returns PremiumCheckoutCallbackResult.Canceled
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            MainAction.PremiumCheckoutResult(authResult = authResult),
+        )
+
+        assertEquals(
+            SpecialCircumstance.PremiumCheckout(
+                callbackResult = PremiumCheckoutCallbackResult.Canceled,
+            ),
             specialCircumstanceManager.specialCircumstance,
         )
     }
@@ -1319,6 +1407,7 @@ private fun createMockIntent(
     mockIsPremiumCheckoutCallback: Boolean = false,
     mockIsAddTotpLoginItemFromAuthenticator: Boolean = false,
     mockProviderImportCredentialsRequest: ProviderImportCredentialsRequest? = null,
+    mockDataUri: Uri? = null,
 ): Intent = mockk<Intent> {
     every { getTotpDataOrNull() } returns mockTotpData
     every { getPasswordlessRequestDataIntentOrNull() } returns mockPasswordlessRequestData
@@ -1331,6 +1420,7 @@ private fun createMockIntent(
     every { isPremiumCheckoutCallback } returns mockIsPremiumCheckoutCallback
     every { isAddTotpLoginItemFromAuthenticator() } returns mockIsAddTotpLoginItemFromAuthenticator
     every { getProviderImportCredentialsRequest() } returns mockProviderImportCredentialsRequest
+    every { data } returns mockDataUri
 }
 
 private val FIXED_CLOCK: Clock = Clock.fixed(

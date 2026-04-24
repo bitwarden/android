@@ -3,10 +3,7 @@ package com.x8bit.bitwarden.data.billing.manager
 import kotlinx.coroutines.flow.StateFlow
 
 /**
- * Manages the consolidated eligibility state for the Premium upgrade banner.
- *
- * Combines multiple upstream signals (Premium status, billing support, feature flag,
- * banner dismissal, account age, and vault item count) into a single observable flow.
+ * Manages Premium upgrade state for the active user.
  */
 interface PremiumStateManager {
 
@@ -15,6 +12,11 @@ interface PremiumStateManager {
      * or `false` otherwise.
      */
     val isPremiumUpgradeBannerEligibleFlow: StateFlow<Boolean>
+
+    /**
+     * Returns `true` when the in-app upgrade flow is available, or `false` otherwise.
+     */
+    fun isInAppUpgradeAvailable(): Boolean
 
     /**
      * Marks the Premium upgrade banner as dismissed for the current user.

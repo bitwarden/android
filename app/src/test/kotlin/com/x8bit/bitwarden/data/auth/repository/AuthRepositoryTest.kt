@@ -4,13 +4,13 @@ import app.cash.turbine.test
 import com.bitwarden.core.AuthRequestMethod
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.InitUserCryptoMethod
-import com.bitwarden.core.KeyConnectorResponse
 import com.bitwarden.core.MasterPasswordAuthenticationData
 import com.bitwarden.core.MasterPasswordUnlockData
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.core.RegisterTdeKeyResponse
 import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.UpdatePasswordResponse
+import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.manager.toast.ToastManager
@@ -94,6 +94,7 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.MigrateExistingUserToKeyConnectorResult
+import com.x8bit.bitwarden.data.auth.manager.model.MigrateNewUserToKeyConnectorResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
@@ -3992,6 +3993,8 @@ class AuthRepositoryTest {
             } returns successResponse.asSuccess()
             coEvery {
                 keyConnectorManager.migrateNewUserToKeyConnector(
+                    userId = USER_ID_1,
+                    accountKeys = null,
                     url = keyConnectorUrl,
                     accessToken = ACCESS_TOKEN,
                     kdfType = PROFILE_1.kdfType!!,
@@ -4007,7 +4010,6 @@ class AuthRepositoryTest {
                     environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
                 )
             } returns SINGLE_USER_STATE_1
-            repository.rememberedOrgIdentifier = ORGANIZATION_IDENTIFIER
 
             val result = repository.login(
                 email = EMAIL,
@@ -4019,7 +4021,10 @@ class AuthRepositoryTest {
 
             assertEquals(LoginResult.ConfirmKeyConnectorDomain(keyConnectorUrl), result)
 
-            val continueResult = repository.continueKeyConnectorLogin()
+            val continueResult = repository.continueKeyConnectorLogin(
+                orgIdentifier = ORGANIZATION_IDENTIFIER,
+                email = EMAIL,
+            )
             assertEquals(LoginResult.Error(errorMessage = null, error = error), continueResult)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
             fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
@@ -4036,6 +4041,8 @@ class AuthRepositoryTest {
                     deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 keyConnectorManager.migrateNewUserToKeyConnector(
+                    userId = USER_ID_1,
+                    accountKeys = null,
                     url = keyConnectorUrl,
                     accessToken = ACCESS_TOKEN,
                     kdfType = PROFILE_1.kdfType!!,
@@ -4062,13 +4069,14 @@ class AuthRepositoryTest {
                 privateKey = null,
             )
             val masterKey = "masterKey"
-            val keyConnectorResponse = mockk<KeyConnectorResponse> {
-                every {
-                    this@mockk.keys
-                } returns RsaKeyPair(public = PUBLIC_KEY, private = PRIVATE_KEY)
-                every { this@mockk.masterKey } returns masterKey
-                every { this@mockk.encryptedUserKey } returns ENCRYPTED_USER_KEY
-            }
+            val keyConnectorResult = MigrateNewUserToKeyConnectorResult(
+                privateKey = PRIVATE_KEY,
+                masterKey = masterKey,
+                encryptedUserKey = ENCRYPTED_USER_KEY,
+                accountCryptographicState = WrappedAccountCryptographicState.V1(
+                    privateKey = PRIVATE_KEY,
+                ),
+            )
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -4083,6 +4091,8 @@ class AuthRepositoryTest {
             } returns successResponse.asSuccess()
             coEvery {
                 keyConnectorManager.migrateNewUserToKeyConnector(
+                    userId = USER_ID_1,
+                    accountKeys = null,
                     url = keyConnectorUrl,
                     accessToken = ACCESS_TOKEN,
                     kdfType = PROFILE_1.kdfType!!,
@@ -4091,15 +4101,10 @@ class AuthRepositoryTest {
                     kdfParallelism = PROFILE_1.kdfParallelism,
                     organizationIdentifier = ORGANIZATION_IDENTIFIER,
                 )
-            } returns keyConnectorResponse.asSuccess()
+            } returns keyConnectorResult.asSuccess()
             coEvery {
                 vaultRepository.unlockVault(
-                    accountCryptographicState = createWrappedAccountCryptographicState(
-                        privateKey = PRIVATE_KEY,
-                        securityState = null,
-                        signedPublicKey = null,
-                        signingKey = null,
-                    ),
+                    accountCryptographicState = keyConnectorResult.accountCryptographicState,
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
@@ -4117,7 +4122,6 @@ class AuthRepositoryTest {
                     environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
                 )
             } returns SINGLE_USER_STATE_1
-            repository.rememberedOrgIdentifier = ORGANIZATION_IDENTIFIER
             val result = repository.login(
                 email = EMAIL,
                 ssoCode = SSO_CODE,
@@ -4128,7 +4132,10 @@ class AuthRepositoryTest {
 
             assertEquals(LoginResult.ConfirmKeyConnectorDomain(keyConnectorUrl), result)
 
-            val continueResult = repository.continueKeyConnectorLogin()
+            val continueResult = repository.continueKeyConnectorLogin(
+                orgIdentifier = ORGANIZATION_IDENTIFIER,
+                email = EMAIL,
+            )
             assertEquals(LoginResult.Success, continueResult)
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = PRIVATE_KEY)
@@ -4145,6 +4152,8 @@ class AuthRepositoryTest {
                     deeplinkScheme = DEEPLINK_SCHEME,
                 )
                 keyConnectorManager.migrateNewUserToKeyConnector(
+                    userId = USER_ID_1,
+                    accountKeys = null,
                     url = keyConnectorUrl,
                     accessToken = ACCESS_TOKEN,
                     kdfType = PROFILE_1.kdfType!!,
@@ -4154,12 +4163,7 @@ class AuthRepositoryTest {
                     organizationIdentifier = ORGANIZATION_IDENTIFIER,
                 )
                 vaultRepository.unlockVault(
-                    accountCryptographicState = createWrappedAccountCryptographicState(
-                        privateKey = "privateKey",
-                        securityState = null,
-                        signedPublicKey = null,
-                        signingKey = null,
-                    ),
+                    accountCryptographicState = keyConnectorResult.accountCryptographicState,
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
@@ -4237,13 +4241,14 @@ class AuthRepositoryTest {
             )
 
             val masterKey = "masterKey"
-            val keyConnectorResponse = mockk<KeyConnectorResponse> {
-                every {
-                    this@mockk.keys
-                } returns RsaKeyPair(public = PUBLIC_KEY, private = PRIVATE_KEY)
-                every { this@mockk.masterKey } returns masterKey
-                every { this@mockk.encryptedUserKey } returns ENCRYPTED_USER_KEY
-            }
+            val keyConnectorResult = MigrateNewUserToKeyConnectorResult(
+                privateKey = PRIVATE_KEY,
+                masterKey = masterKey,
+                encryptedUserKey = ENCRYPTED_USER_KEY,
+                accountCryptographicState = WrappedAccountCryptographicState.V1(
+                    privateKey = PRIVATE_KEY,
+                ),
+            )
 
             coEvery {
                 identityService.getToken(
@@ -4267,6 +4272,8 @@ class AuthRepositoryTest {
 
             coEvery {
                 keyConnectorManager.migrateNewUserToKeyConnector(
+                    userId = USER_ID_1,
+                    accountKeys = null,
                     url = keyConnectorUrl,
                     accessToken = ACCESS_TOKEN,
                     kdfType = PROFILE_1.kdfType!!,
@@ -4275,16 +4282,11 @@ class AuthRepositoryTest {
                     kdfParallelism = PROFILE_1.kdfParallelism,
                     organizationIdentifier = ORGANIZATION_IDENTIFIER,
                 )
-            } returns keyConnectorResponse.asSuccess()
+            } returns keyConnectorResult.asSuccess()
 
             coEvery {
                 vaultRepository.unlockVault(
-                    accountCryptographicState = createWrappedAccountCryptographicState(
-                        privateKey = PRIVATE_KEY,
-                        securityState = null,
-                        signedPublicKey = null,
-                        signingKey = null,
-                    ),
+                    accountCryptographicState = keyConnectorResult.accountCryptographicState,
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
@@ -4296,8 +4298,6 @@ class AuthRepositoryTest {
                 )
             } returns VaultUnlockResult.Success
 
-            repository.rememberedOrgIdentifier = ORGANIZATION_IDENTIFIER
-
             val loginResult = repository.login(
                 email = EMAIL,
                 ssoCode = SSO_CODE,
@@ -4307,7 +4307,10 @@ class AuthRepositoryTest {
             )
             assertEquals(LoginResult.ConfirmKeyConnectorDomain(keyConnectorUrl), loginResult)
 
-            val result = repository.continueKeyConnectorLogin()
+            val result = repository.continueKeyConnectorLogin(
+                orgIdentifier = ORGANIZATION_IDENTIFIER,
+                email = EMAIL,
+            )
             assertEquals(LoginResult.Success, result)
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = "privateKey")
@@ -7555,7 +7558,10 @@ class AuthRepositoryTest {
     @Test
     fun `continueKeyConnectorLogin returns error if keyConnectorResponse is null`() =
         runTest {
-            val continueResult = repository.continueKeyConnectorLogin()
+            val continueResult = repository.continueKeyConnectorLogin(
+                orgIdentifier = ORGANIZATION_IDENTIFIER,
+                email = EMAIL,
+            )
             assertEquals(
                 LoginResult.Error(
                     errorMessage = null,

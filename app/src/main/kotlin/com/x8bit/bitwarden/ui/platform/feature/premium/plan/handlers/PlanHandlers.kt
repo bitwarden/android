@@ -12,8 +12,12 @@ data class PlanHandlers(
     val onUpgradeNowClick: () -> Unit,
     val onDismissError: () -> Unit,
     val onRetryClick: () -> Unit,
+    val onRetryPricingClick: () -> Unit,
+    val onClosePricingErrorClick: () -> Unit,
     val onCancelWaiting: () -> Unit,
     val onGoBackClick: () -> Unit,
+    val onSyncClick: () -> Unit,
+    val onContinueClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -26,8 +30,14 @@ data class PlanHandlers(
             onUpgradeNowClick = { viewModel.trySendAction(PlanAction.UpgradeNowClick) },
             onDismissError = { viewModel.trySendAction(PlanAction.DismissError) },
             onRetryClick = { viewModel.trySendAction(PlanAction.RetryClick) },
+            onRetryPricingClick = { viewModel.trySendAction(PlanAction.RetryPricingClick) },
+            onClosePricingErrorClick = {
+                viewModel.trySendAction(PlanAction.ClosePricingErrorClick)
+            },
             onCancelWaiting = { viewModel.trySendAction(PlanAction.CancelWaiting) },
             onGoBackClick = { viewModel.trySendAction(PlanAction.GoBackClick) },
+            onSyncClick = { viewModel.trySendAction(PlanAction.SyncClick) },
+            onContinueClick = { viewModel.trySendAction(PlanAction.ContinueClick) },
         )
     }
 }

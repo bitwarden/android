@@ -5,6 +5,7 @@ import androidx.credentials.CredentialManager
 import com.bitwarden.cxf.model.ImportCredentialsRequestData
 import com.bitwarden.ui.platform.manager.share.model.ShareData
 import com.bitwarden.ui.platform.model.TotpData
+import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
@@ -139,7 +140,9 @@ sealed class SpecialCircumstance : Parcelable {
      * indicating the user is returning from a Stripe checkout session.
      */
     @Parcelize
-    data object PremiumCheckoutResult : SpecialCircumstance()
+    data class PremiumCheckout(
+        val callbackResult: PremiumCheckoutCallbackResult,
+    ) : SpecialCircumstance()
 
     /**
      * The app was launched to select an account to export credentials from.

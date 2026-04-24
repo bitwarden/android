@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.billing.repository
 
 import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
 import com.x8bit.bitwarden.data.billing.repository.model.CustomerPortalResult
+import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResult
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -23,4 +24,9 @@ interface BillingRepository {
      * Retrieves the Stripe customer portal URL for managing the Premium subscription.
      */
     suspend fun getPortalUrl(): CustomerPortalResult
+
+    /**
+     * Retrieves the premium plan pricing information.
+     */
+    suspend fun getPremiumPlanPricing(): PremiumPlanPricingResult
 }
