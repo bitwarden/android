@@ -61,6 +61,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
+import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
@@ -73,6 +74,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toSnackbarData
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
+import com.x8bit.bitwarden.ui.vault.feature.verificationcode.util.createVerificationCodeItem
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.awaits
@@ -143,6 +145,9 @@ class VaultViewModelTest : BaseViewModelTest() {
     private val mutableVaultDataStateFlow =
         MutableStateFlow<DataState<VaultData>>(DataState.Loading)
 
+    private val mutableAuthCodesFlow =
+        MutableStateFlow<DataState<List<VerificationCodeItem>>>(DataState.Loading)
+
     private var switchAccountResult: SwitchAccountResult = SwitchAccountResult.NoChange
 
     private val mutableFirstTimeStateFlow = MutableStateFlow(FirstTimeState())
@@ -186,6 +191,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     private val vaultRepository: VaultRepository = mockk {
         every { vaultFilterType = any() } just runs
         every { vaultDataStateFlow } returns mutableVaultDataStateFlow
+        every { getAuthCodesFlow() } returns mutableAuthCodesFlow
         every { sync(forced = any()) } just runs
         coEvery { syncForResult(forced = any()) } returns SyncVaultDataResult.Success(
             itemsAvailable = true,
@@ -3889,6 +3895,123 @@ class VaultViewModelTest : BaseViewModelTest() {
                 credentialExchangeRegistryManager.register()
             }
         }
+
+    @Test
+    fun `authCodesFlow Loaded with premium user should set totpItemsCount to all codes`() =
+        runTest {
+            mutableVaultDataStateFlow.tryEmit(
+                DataState.Loaded(
+                    VaultData(
+                        decryptCipherListResult = createMockDecryptCipherListResult(
+                            number = 1,
+                            successes = listOf(createMockCipherListView(number = 1)),
+                        ),
+                        collectionViewList = emptyList(),
+                        folderViewList = emptyList(),
+                        sendViewList = emptyList(),
+                    ),
+                ),
+            )
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                awaitItem() // initial Content state with fallback totpItemsCount
+
+                mutableAuthCodesFlow.value = DataState.Loaded(
+                    listOf(
+                        createVerificationCodeItem(number = 1).copy(orgUsesTotp = true),
+                        createVerificationCodeItem(number = 2).copy(orgUsesTotp = false),
+                    ),
+                )
+                val contentViewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    itemTypesCount = 5,
+                    totpItemsCount = 2,
+                    loginItemsCount = 1,
+                    archivedItemsCount = 0,
+                    archiveEnabled = true,
+                )
+
+                assertEquals(
+                    createMockVaultState(viewState = contentViewState),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `authCodesFlow Loaded with non-premium user should set totpItemsCount to orgUsesTotp codes only`() =
+        runTest {
+            mutableUserStateFlow.update {
+                it?.copy(
+                    accounts = it.accounts.map { account ->
+                        if (account.userId == "activeUserId") {
+                            account.copy(isPremium = false)
+                        } else {
+                            account
+                        }
+                    },
+                )
+            }
+            mutableVaultDataStateFlow.tryEmit(
+                DataState.Loaded(
+                    VaultData(
+                        decryptCipherListResult = createMockDecryptCipherListResult(
+                            number = 1,
+                            successes = listOf(createMockCipherListView(number = 1)),
+                        ),
+                        collectionViewList = emptyList(),
+                        folderViewList = emptyList(),
+                        sendViewList = emptyList(),
+                    ),
+                ),
+            )
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                awaitItem() // initial Content state with fallback totpItemsCount
+
+                mutableAuthCodesFlow.value = DataState.Loaded(
+                    listOf(
+                        createVerificationCodeItem(number = 1).copy(orgUsesTotp = true),
+                        createVerificationCodeItem(number = 2).copy(orgUsesTotp = false),
+                    ),
+                )
+
+                val contentViewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    itemTypesCount = 5,
+                    totpItemsCount = 1,
+                    loginItemsCount = 1,
+                    archivedItemsCount = null,
+                    archiveEnabled = true,
+                    archiveSubText = BitwardenString.premium_subscription_required.asText(),
+                    archiveEndIcon = BitwardenDrawable.ic_locked,
+                )
+
+                assertEquals(
+                    createMockVaultState(viewState = contentViewState).copy(
+                        isPremium = false,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `authCodesFlow Loaded when viewState is not Content should not update state`() = runTest {
+        // mutableVaultDataStateFlow stays Loading so viewState remains Loading (not Content)
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+
+            mutableAuthCodesFlow.value = DataState.Loaded(
+                listOf(createVerificationCodeItem(number = 1)),
+            )
+
+            expectNoEvents()
+        }
+    }
 
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(

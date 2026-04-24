@@ -47,6 +47,7 @@ fun VaultData.toViewState(
     vaultFilterType: VaultFilterType,
     restrictItemTypesPolicyOrgIds: List<String>,
     isArchiveEnabled: Boolean,
+    totpItemsCount: Int? = null,
 ): VaultState.ViewState {
     val allCipherViews =
         decryptCipherListResult
@@ -135,13 +136,15 @@ fun VaultData.toViewState(
         val archiveCount = allCipherViews.count {
             it.archivedDate != null && it.deletedDate == null
         }
+        val totpItemsCount = totpItemsCount ?: if (isPremium) {
+            totpItems.count()
+        } else {
+            totpItems.count { it.organizationUseTotp }
+        }
+
         VaultState.ViewState.Content(
             itemTypesCount = itemTypesCount,
-            totpItemsCount = if (isPremium) {
-                totpItems.count()
-            } else {
-                totpItems.count { it.organizationUseTotp }
-            },
+            totpItemsCount = totpItemsCount,
             loginItemsCount = activeCipherViews.count { it.type is CipherListViewType.Login },
             cardItemsCount = cardCount,
             identityItemsCount = activeCipherViews
