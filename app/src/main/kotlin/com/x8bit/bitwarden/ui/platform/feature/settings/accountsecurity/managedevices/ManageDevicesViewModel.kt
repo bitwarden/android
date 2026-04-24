@@ -187,8 +187,9 @@ class ManageDevicesViewModel @Inject constructor(
         action: ManageDevicesAction.Internal.AuthRequestsResultReceive,
     ) {
         val filteredRequests = when (val result = action.authRequestsUpdatesResult) {
-            is AuthRequestsUpdatesResult.Update ->
+            is AuthRequestsUpdatesResult.Update -> {
                 result.authRequests.filterRespondedAndExpired(clock = clock)
+            }
 
             is AuthRequestsUpdatesResult.Error -> emptyList()
         }
