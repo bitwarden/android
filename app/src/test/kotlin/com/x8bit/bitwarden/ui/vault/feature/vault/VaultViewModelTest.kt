@@ -226,10 +226,12 @@ class VaultViewModelTest : BaseViewModelTest() {
         coEvery { unregister() } returns UnregisterExportResult.Success
     }
     private val mutableCxpExportFeatureFlagFlow = MutableStateFlow(false)
+    private val mutableNewItemTypesFlagFlow = MutableStateFlow(false)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every {
             getFeatureFlagFlow(FlagKey.CredentialExchangeProtocolExport)
         } returns mutableCxpExportFeatureFlagFlow
+        every { getFeatureFlag(FlagKey.NewItemTypes) } answers { mutableNewItemTypesFlagFlow.value }
     }
 
     private val mutablePremiumUpgradeBannerEligibleFlow = MutableStateFlow(false)
@@ -3537,7 +3539,12 @@ class VaultViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultAction.SelectAddItemType)
         val expectedState = DEFAULT_STATE.copy(
             dialog = VaultState.DialogState.SelectVaultAddItemType(
-                excludedOptions = persistentListOf(CreateVaultItemType.SSH_KEY),
+                excludedOptions = persistentListOf(
+                    CreateVaultItemType.SSH_KEY,
+                    CreateVaultItemType.BANK_ACCOUNT,
+                    CreateVaultItemType.DRIVERS_LICENSE,
+                    CreateVaultItemType.PASSPORT,
+                ),
             ),
         )
         assertEquals(
@@ -3569,6 +3576,9 @@ class VaultViewModelTest : BaseViewModelTest() {
                     excludedOptions = persistentListOf(
                         CreateVaultItemType.SSH_KEY,
                         CreateVaultItemType.CARD,
+                        CreateVaultItemType.BANK_ACCOUNT,
+                        CreateVaultItemType.DRIVERS_LICENSE,
+                        CreateVaultItemType.PASSPORT,
                     ),
                 ),
                 restrictItemTypesPolicyOrgIds = listOf("Test Organization"),
@@ -3578,6 +3588,25 @@ class VaultViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value,
             )
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SelectAddItemType action should not exclude bank account, drivers license, or passport when NewItemTypes flag is enabled`() {
+        mutableNewItemTypesFlagFlow.value = true
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(VaultAction.SelectAddItemType)
+
+        val expectedState = DEFAULT_STATE.copy(
+            dialog = VaultState.DialogState.SelectVaultAddItemType(
+                excludedOptions = persistentListOf(CreateVaultItemType.SSH_KEY),
+            ),
+        )
+        assertEquals(
+            expectedState,
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Test
     fun `InternetConnectionErrorReceived should show network error if no internet connection`() =
