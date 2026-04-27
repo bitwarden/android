@@ -582,7 +582,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
         val verificationItem = VerificationCodeItem(
             code = "123456",
             periodSeconds = 60,
-            timeLeftSeconds = 430,
+            timeLeftSeconds = 5,
             issueTime = 35L,
             id = "1",
             issuer = "issuer",

@@ -70,6 +70,10 @@ class ItemListingViewModel @Inject constructor(
     ),
 ) {
 
+    // Cached once so that handleShowNextTotpCodeReceive can read `.value` from the
+    // already-subscribed flow rather than creating a new unsubscribed instance.
+    private val localCodesFlow = authenticatorRepository.getLocalVerificationCodesFlow()
+
     init {
         settingsRepository
             .authenticatorAlertThresholdSecondsFlow
@@ -84,7 +88,7 @@ class ItemListingViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         combine(
-            flow = authenticatorRepository.getLocalVerificationCodesFlow(),
+            flow = localCodesFlow,
             flow2 = authenticatorRepository.sharedCodesStateFlow,
             ItemListingAction.Internal::AuthCodesUpdated,
         )
@@ -467,10 +471,10 @@ class ItemListingViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(showNextTotpCode = action.showNextTotpCode)
         }
-        // Re-derive the displayed list so that the next code is shown/hidden immediately
-        // when the user toggles the setting.
+        // Immediately re-derive the displayed list using the cached subscribed flow so that
+        // next-code visibility changes take effect without waiting for the next 1-second tick.
         val codesUpdate = ItemListingAction.Internal.AuthCodesUpdated(
-            localCodes = authenticatorRepository.getLocalVerificationCodesFlow().value,
+            localCodes = localCodesFlow.value,
             sharedCodesState = authenticatorRepository.sharedCodesStateFlow.value,
         )
         handleAuthenticatorDataReceive(codesUpdate)

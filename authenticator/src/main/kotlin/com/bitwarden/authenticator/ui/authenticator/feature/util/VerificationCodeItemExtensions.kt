@@ -5,12 +5,15 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.Authentic
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
 
+private const val NEXT_CODE_SHOW_THRESHOLD_SECONDS = 10
+
 /**
  * Converts [VerificationCodeItem] to a [VerificationCodeDisplayItem].
  *
  * @param showNextCode When `true`, the upcoming code is mapped to
- *  [VerificationCodeDisplayItem.nextAuthCode]. When `false`, [VerificationCodeDisplayItem.nextAuthCode]
- *  is always `null`.
+ *  [VerificationCodeDisplayItem.nextAuthCode] for items within the last
+ *  [NEXT_CODE_SHOW_THRESHOLD_SECONDS] seconds of their validity period. When `false`,
+ *  [VerificationCodeDisplayItem.nextAuthCode] is always `null`.
  */
 fun VerificationCodeItem.toDisplayItem(
     alertThresholdSeconds: Int,
@@ -30,7 +33,11 @@ fun VerificationCodeItem.toDisplayItem(
     periodSeconds = periodSeconds,
     alertThresholdSeconds = alertThresholdSeconds,
     authCode = code,
-    nextAuthCode = if (showNextCode) nextCode else null,
+    nextAuthCode = if (showNextCode && timeLeftSeconds <= NEXT_CODE_SHOW_THRESHOLD_SECONDS) {
+        nextCode
+    } else {
+        null
+    },
     showOverflow = showOverflow,
     favorite = (source as? AuthenticatorItem.Source.Local)?.isFavorite ?: false,
     showMoveToBitwarden = when (source) {

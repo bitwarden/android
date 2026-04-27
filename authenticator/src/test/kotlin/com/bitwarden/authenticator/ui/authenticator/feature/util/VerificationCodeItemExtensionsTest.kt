@@ -146,8 +146,9 @@ class VerificationCodeItemExtensionsTest {
     }
 
     @Test
-    fun `toDisplayItem should set nextAuthCode to nextCode when showNextCode is true`() {
-        val item = createMockVerificationCodeItem(number = 1, nextCode = "654321")
+    @Suppress("MaxLineLength")
+    fun `toDisplayItem should set nextAuthCode when showNextCode is true and timeLeftSeconds is within threshold`() {
+        val item = createMockVerificationCodeItem(number = 1, nextCode = "654321", timeLeftSeconds = 5)
         val result = item.toDisplayItem(
             alertThresholdSeconds = 7,
             sharedVerificationCodesState = SharedVerificationCodesState.Error,
@@ -158,8 +159,38 @@ class VerificationCodeItemExtensionsTest {
     }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `toDisplayItem should set nextAuthCode when showNextCode is true and timeLeftSeconds equals threshold`() {
+        val item = createMockVerificationCodeItem(number = 1, nextCode = "654321", timeLeftSeconds = 10)
+        val result = item.toDisplayItem(
+            alertThresholdSeconds = 7,
+            sharedVerificationCodesState = SharedVerificationCodesState.Error,
+            showOverflow = true,
+            showNextCode = true,
+        )
+        assertEquals("654321", result.nextAuthCode)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `toDisplayItem should set nextAuthCode to null when showNextCode is true but timeLeftSeconds exceeds threshold`() {
+        val item = createMockVerificationCodeItem(number = 1, nextCode = "654321", timeLeftSeconds = 11)
+        val result = item.toDisplayItem(
+            alertThresholdSeconds = 7,
+            sharedVerificationCodesState = SharedVerificationCodesState.Error,
+            showOverflow = true,
+            showNextCode = true,
+        )
+        assertEquals(null, result.nextAuthCode)
+    }
+
+    @Test
     fun `toDisplayItem should set nextAuthCode to null when showNextCode is false`() {
-        val item = createMockVerificationCodeItem(number = 1, nextCode = "654321")
+        val item = createMockVerificationCodeItem(
+            number = 1,
+            nextCode = "654321",
+            timeLeftSeconds = 5,
+        )
         val result = item.toDisplayItem(
             alertThresholdSeconds = 7,
             sharedVerificationCodesState = SharedVerificationCodesState.Error,
@@ -172,7 +203,7 @@ class VerificationCodeItemExtensionsTest {
     @Test
     @Suppress("MaxLineLength")
     fun `toDisplayItem should set nextAuthCode to null when showNextCode true but nextCode is null`() {
-        val item = createMockVerificationCodeItem(number = 1, nextCode = null)
+        val item = createMockVerificationCodeItem(number = 1, nextCode = null, timeLeftSeconds = 5)
         val result = item.toDisplayItem(
             alertThresholdSeconds = 7,
             sharedVerificationCodesState = SharedVerificationCodesState.Error,
