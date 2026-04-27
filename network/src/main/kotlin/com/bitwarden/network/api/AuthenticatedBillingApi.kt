@@ -4,7 +4,9 @@ import com.bitwarden.network.model.CheckoutSessionRequestJson
 import com.bitwarden.network.model.CheckoutSessionResponseJson
 import com.bitwarden.network.model.NetworkResult
 import com.bitwarden.network.model.PortalUrlResponseJson
+import com.bitwarden.network.model.PremiumPlanResponseJson
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 /**
@@ -13,7 +15,7 @@ import retrofit2.http.POST
 internal interface AuthenticatedBillingApi {
 
     /**
-     * Creates a Stripe checkout session for premium upgrade.
+     * Creates a Stripe checkout session for Premium upgrade.
      */
     @POST("/account/billing/vnext/premium/checkout")
     suspend fun createCheckoutSession(
@@ -21,8 +23,14 @@ internal interface AuthenticatedBillingApi {
     ): NetworkResult<CheckoutSessionResponseJson>
 
     /**
-     * Creates a Stripe customer portal session for managing the premium subscription.
+     * Creates a Stripe customer portal session for managing the Premium subscription.
      */
     @POST("/account/billing/vnext/portal-session")
     suspend fun getPortalUrl(): NetworkResult<PortalUrlResponseJson>
+
+    /**
+     * Retrieves the premium plan pricing information.
+     */
+    @GET("/plans/premium")
+    suspend fun getPremiumPlan(): NetworkResult<PremiumPlanResponseJson>
 }

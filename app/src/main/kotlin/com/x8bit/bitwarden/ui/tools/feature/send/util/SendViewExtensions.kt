@@ -35,7 +35,7 @@ fun SendView.toLabelIcons(clock: Clock = Clock.systemDefaultZone()): ImmutableLi
  */
 fun SendView.toOverflowActions(
     baseWebSendUrl: String,
-): List<ListingItemOverflowAction.SendAction> =
+): ImmutableList<ListingItemOverflowAction.SendAction> =
     this
         .id
         ?.let { sendId ->
@@ -55,6 +55,7 @@ fun SendView.toOverflowActions(
             )
         }
         .orEmpty()
+        .toImmutableList()
 
 /**
  * Creates a sharable url from a [SendView].

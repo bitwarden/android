@@ -11,6 +11,7 @@
     <string name="copy_password">Kopírovat heslo</string>
     <string name="copy_username">Kopírovat uživatelské jméno</string>
     <string name="delete">Smazat</string>
+    <string name="preview">Náhled</string>
     <string name="deleting">Mazání...</string>
     <string name="do_you_really_want_to_delete">Opravdu chcete smazat tuto položku? Akce je nevratná.</string>
     <string name="edit">Upravit</string>
@@ -172,7 +173,7 @@
     <string name="autofill_noun">Automatické vyplňování</string>
     <string name="autofill_verb">Automatické vyplňování</string>
     <string name="autofill_or_view">Chcete automaticky vyplnit nebo zobrazit tyto přihlašovací údaje?</string>
-    <string name="search">Hledat</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Najít %1$s</string>
     <string name="learn_org">Více o organizacích</string>
     <string name="authenticator_app_title">Ověřovací aplikace</string>
     <string name="enter_verification_code_app">Zadejte 6místný kód z ověřovací aplikace.</string>
@@ -190,7 +191,7 @@
     <string name="attachments">Přílohy</string>
     <string name="unable_to_download_file">Nelze stáhnout soubor.</string>
     <string name="downloading">Stahování...</string>
-    <string name="attachment_large_warning">Tato příloha má velikost %1$s. Opravdu ji chcete stáhnout do Vašeho zařízení?</string>
+    <string name="attachment_large_warning">Tento soubor je <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Opravdu jej chcete stáhnout?</string>
     <string name="authenticator_key">Autentizační klíč (TOTP)</string>
     <string name="verification_code_totp">Ověřovací kód (TOTP)</string>
     <string name="authenticator_key_added">Byl přidán ověřovací klíč.</string>
@@ -207,6 +208,7 @@ Načtení proběhne automaticky.</string>
     <string name="choose_file">Vybrat soubor</string>
     <string name="file">Soubor</string>
     <string name="no_file_chosen">Není vybrán žádný soubor</string>
+    <string name="file_name">Název souboru</string>
     <string name="no_attachments">Žádné přílohy.</string>
     <string name="file_source">Zdrojový soubor</string>
     <string name="max_file_size">Maximální velikost souboru je 100 MB.</string>
@@ -228,6 +230,8 @@ Načtení proběhne automaticky.</string>
     <string name="copy_security_code">Kopírovat bezpečnostní kód</string>
     <string name="number">Číslo</string>
     <string name="security_code">Bezpečnostní kód</string>
+    <string name="scan_card">Naskenovat kartu</string>
+    <string name="scan_card_instruction">Pro naskenování umístěte svou kartu do rámečku.</string>
     <string name="type_card">Karta</string>
     <string name="type_identity">Identita</string>
     <string name="type_login">Přihlášení</string>
@@ -383,6 +387,7 @@ Načtení proběhne automaticky.</string>
     <string name="capitalize">Velká písmena na začátku slova</string>
     <string name="include_number">Zahrnout číslice</string>
     <string name="download">Stáhnout</string>
+    <string name="download_file">Stáhnout soubor</string>
     <string name="login_expired">Platnost přihlášení vypršela.</string>
     <string name="biometrics_direction">Použít biometrii k ověření</string>
     <string name="device_verification">Ověřování zařízení</string>
@@ -501,7 +506,7 @@ Načtení proběhne automaticky.</string>
     <string name="about_send">O Send</string>
     <string name="hide_email">Skrýt mou e-mailovou adresu před příjemci</string>
     <string name="send_options_policy_in_effect">Jedna nebo více zásad organizace ovlivňuje nastavení Send.</string>
-    <string name="send_file_premium_required">Bezplatné účty jsou omezeny pouze na sdílení textu. K používání souborů pomocí Send je vyžadováno prémiové členství.</string>
+    <string name="send_file_premium_required">Bezplatné účty jsou omezeny jen na sdílení textu. K používání souborů pomocí Send je vyžadováno členství Premium.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Sdílení s vybranými lidmi je prémiová funkce. Váš aktuální plán nezahrnuje přístup k této funkci.</string>
     <string name="password_prompt">Zeptat se znovu na hlavní heslo</string>
     <string name="password_confirmation">Potvrzení hlavního hesla</string>
@@ -512,10 +517,10 @@ Načtení proběhne automaticky.</string>
     <string name="remove_master_password">Odebrat hlavní heslo</string>
     <string name="leave_organization">Opustit organizaci</string>
     <string name="leave_organization_name">Opustit %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Opravdu chcete opustit %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Opravdu chcete odejít?</string>
     <string name="leave_organization_button">Opustit %1$s</string>
-    <string name="leave_organization_warning">Odmítnutím zůstanou Vaše osobní položky ve Vašem účtu, ale ztratíte přístup ke sdíleným položkám a funkcím organizace.\n\nKontaktujte svého správce pro opětovné udělení přístupu.</string>
-    <string name="how_to_manage_my_vault">Jak spravovat můj trezor</string>
+    <string name="leave_organization_warning">Odmítnutím zůstanou Vaše osobní položky ve Vašem účtu, ale ztratíte přístup ke sdíleným položkám a funkcím organizace. <annotation link="learnMore">Více informací</annotation></string>
+    <string name="contact_your_admin_to_regain_access">Obraťte se na svého správce, abyste znovu získali přístup.</string>
     <string name="fido2_authenticate_web_authn">Ověření WebAuthn</string>
     <string name="fido2_return_to_app">Zpět do aplikace</string>
     <string name="reset_password_auto_enroll_invite_warning">Tato organizace má podnikové zásady, které Vás automaticky zaregistrují k obnovení hesla. Registrace umožní správcům organizace změnit Vaše hlavní heslo.</string>
@@ -951,6 +956,7 @@ Chcete se přepnout na tento účet?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Operace přístupového klíče se nezdařila, protože nebyla vybrána žádná položka.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operace přístupového klíče se nezdařila, protože je požadavek nepodporovaný.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operace hesla se nezdařila, protože vybraná položka neexistuje.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Operace hesla se nezdařila, protože vybraná položka nemá platné heslo.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Operace hesla se nezdařila, protože nebyla vybrána žádná položka.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Operace přístupových údajů se nezdařila, protože je požadavek neplatný.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Operace přístupových údajů se nezdařila, protože je požadavek nepodporovaný.</string>
@@ -1203,7 +1209,7 @@ při opakování problémů.</string>
     <string name="resending">Opakované odesílání</string>
     <string name="you_left_the_organization">Opustili jste organizaci</string>
     <string name="transfer_items_to_org">Převést položky do %1$s</string>
-    <string name="transfer_items_description">%1$s vyžaduje, aby byly všechny položky vlastněny organizací z důvodu bezpečnosti a shody. Klepnutím na tlačítko pro převod vlastnictví Vašich položek.</string>
+    <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> vyžaduje, aby byly všechny položky vlastněny organizací z důvodu bezpečnosti a shody. Klepnutím na tlačítko potvrďte převod vlastnictví Vašich položek. <annotation link="learnMore">Více informací</annotation></string>
     <string name="decline_and_leave">Odmítnout a opustit</string>
     <string name="why_am_i_seeing_this">Proč se mi toto zobrazuje?</string>
     <string name="migrating_items_to_x">Přesouvání položek do %s</string>
@@ -1223,6 +1229,8 @@ při opakování problémů.</string>
     <string name="archive_unavailable">Archiv je nedostupný</string>
     <string name="archiving_items_is_a_premium_feature">Archivace položek je prémiová funkce. Váš aktuální plán nezahrnuje přístup k této funkci.</string>
     <string name="upgrade_to_premium">Aktualizovat na Premium</string>
+    <string name="unlock_advanced_security_features">Odemknout pokročilé bezpečnostní funkce</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Předplatné Premium Vám dává více nástrojů k bezpečí a kontrole.</string>
     <string name="this_item_is_archived">Tato položka je archivována.</string>
     <string name="introducing_archive">Představujeme Archiv</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Uchovávejte položky, které momentálně nepotřebujete. V bezpečí, nepozorovaně.</string>
@@ -1243,4 +1251,30 @@ při opakování problémů.</string>
     <string name="continue_without_syncing">Pokračovat bez synchronizace</string>
     <string name="external_link">Externí odkaz</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, externí odkaz</string>
+    <string name="preview_not_available_for_files">Náhled není %1$s souborů k dispozici. Stále si je můžete stáhnout pro zobrazení na Vašem zařízení.</string>
+    <string name="this_file_is_too_large_to_preview">Tento soubor je pro náhled příliš velký. Stále si jej můžete stáhnout pro zobrazení na Vašem zařízení.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden nemohl dešifrovat tento soubor, takže náhled nelze zobrazit.</string>
+    <string name="preview_unavailable_for_this_file">Náhled není pro tento soubor k dispozici. Stále si jej můžete stáhnout pro zobrazení na Vašem zařízení.</string>
+    <string name="preview_unavailable">Náhled je nedostupný</string>
+    <string name="download_attachment">Stáhnout přílohu</string>
+    <string name="upgraded_to_premium">Aktualizováno na Premium</string>
+    <string name="unlock_premium_features">Odemkněte pokročilejší funkce s předplatným Premium.</string>
+    <string name="per_month">/ měsíčně</string>
+    <string name="built_in_authenticator">Vestavěný autentifikátor</string>
+    <string name="emergency_access">Nouzový přístup</string>
+    <string name="secure_file_storage">Zabezpečené úložiště souborů</string>
+    <string name="breach_monitoring">Sledování úniků</string>
+    <string name="upgrade_now">Aktualizovat nyní</string>
+    <string name="stripe_checkout_footer">Pro dokončení nákupu přejdete do zabezpečené pokladny Stripe.</string>
+    <string name="opening_checkout">Otevírání pokladny...</string>
+    <string name="secure_checkout_didnt_load">Zabezpečená pokladna se nenačetla</string>
+    <string name="trouble_opening_payment_page">Měli jsme potíže s otevřením platební stránky, zkuste to znovu.</string>
+    <string name="payment_not_received_yet">Platba ještě nebyla přijata</string>
+    <string name="return_to_stripe_to_finish">Vraťte se do Stripe ve Vašem prohlížeči, abyste dokončili aktualizaci.</string>
+    <string name="go_back">Vrátit se</string>
+    <string name="allow_camera_access">Povolit přístup ke kameře</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">Pro naskenování karty budeme potřebovat přístup ke kameře. Toto můžete kdykoli změnit v nastavení zařízení.</string>
+    <string name="show_next_code">Zobrazit další kód</string>
+    <string name="see_upcoming_codes_in_the_list">Zobrazit nadcházející kódy v seznamu</string>
+    <string name="next_code_x">Další kód, %1$s</string>
 </resources>

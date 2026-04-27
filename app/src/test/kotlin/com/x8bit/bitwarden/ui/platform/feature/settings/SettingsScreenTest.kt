@@ -25,6 +25,7 @@ class SettingsScreenTest : BitwardenComposeTest() {
     private var haveCalledNavigateToOther = false
     private var haveCalledNavigateToVault = false
     private var haveCalledNavigateBack = false
+    private var haveCalledNavigateToPlan = false
 
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val mutableEventFlow = bufferedMutableSharedFlow<SettingsEvent>()
@@ -45,6 +46,9 @@ class SettingsScreenTest : BitwardenComposeTest() {
                 onNavigateToOther = { haveCalledNavigateToOther = true },
                 onNavigateToVault = { haveCalledNavigateToVault = true },
                 onNavigateBack = { haveCalledNavigateBack = true },
+                onNavigateToPlan = {
+                    haveCalledNavigateToPlan = true
+                },
             )
         }
     }
@@ -143,6 +147,12 @@ class SettingsScreenTest : BitwardenComposeTest() {
     fun `on NavigateBack should call onNavigateBack`() {
         mutableEventFlow.tryEmit(SettingsEvent.NavigateBack)
         assertTrue(haveCalledNavigateBack)
+    }
+
+    @Test
+    fun `on NavigatePlan should call onNavigateToPlan`() {
+        mutableEventFlow.tryEmit(SettingsEvent.NavigatePlan)
+        assertTrue(haveCalledNavigateToPlan)
     }
 
     @Test

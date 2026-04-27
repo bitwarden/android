@@ -9,13 +9,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -23,6 +27,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,22 +37,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bitwarden.authenticator.ui.platform.util.isPortrait
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.model.WindowSize
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.platform.util.rememberWindowSize
 import kotlinx.coroutines.launch
 
 /**
@@ -78,6 +83,10 @@ fun TutorialScreen(
 
     BitwardenScaffold(
         modifier = Modifier.fillMaxSize(),
+        contentWindowInsets = ScaffoldDefaults
+            .contentWindowInsets
+            .union(WindowInsets.displayCutout)
+            .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
     ) {
         TutorialScreenContent(
             state = state,
@@ -118,20 +127,20 @@ private fun TutorialScreenContent(
             state = pagerState,
             modifier = Modifier.fillMaxWidth(),
         ) { index ->
-            if (LocalConfiguration.current.isPortrait) {
-                TutorialScreenPortrait(
-                    state = state.pages[index],
-                    modifier = Modifier
-                        .standardHorizontalMargin()
-                        .statusBarsPadding(),
-                )
-            } else {
-                TutorialScreenLandscape(
-                    state = state.pages[index],
-                    modifier = Modifier
-                        .standardHorizontalMargin()
-                        .statusBarsPadding(),
-                )
+            when (rememberWindowSize()) {
+                WindowSize.Compact -> {
+                    TutorialContentCompact(
+                        state = state.pages[index],
+                        modifier = Modifier.standardHorizontalMargin(),
+                    )
+                }
+
+                WindowSize.Medium -> {
+                    TutorialContentMedium(
+                        state = state.pages[index],
+                        modifier = Modifier.standardHorizontalMargin(),
+                    )
+                }
             }
         }
 
@@ -170,7 +179,7 @@ private fun TutorialScreenContent(
 }
 
 @Composable
-private fun TutorialScreenPortrait(
+private fun TutorialContentCompact(
     state: TutorialState.TutorialSlide,
     modifier: Modifier = Modifier,
 ) {
@@ -203,7 +212,7 @@ private fun TutorialScreenPortrait(
 }
 
 @Composable
-private fun TutorialScreenLandscape(
+private fun TutorialContentMedium(
     state: TutorialState.TutorialSlide,
     modifier: Modifier = Modifier,
 ) {

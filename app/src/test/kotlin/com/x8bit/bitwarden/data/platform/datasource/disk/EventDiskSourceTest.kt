@@ -6,6 +6,7 @@ import com.bitwarden.network.model.OrganizationEventJson
 import com.bitwarden.network.model.OrganizationEventType
 import com.x8bit.bitwarden.data.platform.datasource.disk.dao.FakeOrganizationEventDao
 import com.x8bit.bitwarden.data.platform.datasource.disk.entity.OrganizationEventEntity
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -23,7 +24,7 @@ class EventDiskSourceTest {
 
     private val fakeOrganizationEventDao = FakeOrganizationEventDao()
     private val fakeDispatcherManager = FakeDispatcherManager()
-    private val json = CoreModule.providesJson()
+    private val json = CoreModule.providesJson(buildInfoManager = mockk(relaxed = true))
 
     private val eventDiskSource: EventDiskSource = EventDiskSourceImpl(
         organizationEventDao = fakeOrganizationEventDao,

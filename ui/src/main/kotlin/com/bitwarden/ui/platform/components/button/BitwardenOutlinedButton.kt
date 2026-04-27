@@ -18,7 +18,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
+import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.components.button.color.bitwardenOutlinedButtonColors
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.button.model.BitwardenOutlinedButtonColors
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -30,12 +32,44 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 /**
  * Represents a Bitwarden-styled filled [OutlinedButton].
  *
+ * @param buttonData The data for the button.
+ * @param modifier The [Modifier] to be applied to the button.
+ * @param colors The colors for the button.
+ * @param cardStyle The optional card style to surround the button.
+ * @param cardInsets The internal insets for the card, only applied when the [cardStyle] is not
+ * `null`.
+ */
+@Composable
+fun BitwardenOutlinedButton(
+    buttonData: BitwardenButtonData,
+    modifier: Modifier = Modifier,
+    colors: BitwardenOutlinedButtonColors = bitwardenOutlinedButtonColors(),
+    cardStyle: CardStyle? = null,
+    cardInsets: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
+) {
+    BitwardenOutlinedButton(
+        label = buttonData.label(),
+        onClick = buttonData.onClick,
+        icon = buttonData.icon,
+        isExternalLink = buttonData.isExternalLink,
+        isEnabled = buttonData.isEnabled,
+        cardStyle = cardStyle,
+        colors = colors,
+        cardInsets = cardInsets,
+        modifier = modifier.nullableTestTag(tag = buttonData.testTag),
+    )
+}
+
+/**
+ * Represents a Bitwarden-styled filled [OutlinedButton].
+ *
  * @param label The label for the button.
  * @param onClick The callback when the button is clicked.
  * @param modifier The [Modifier] to be applied to the button.
  * @param icon The icon for the button.
  * @param isEnabled Whether the button is enabled.
  * @param isExternalLink Indicates that this button launches an external link.
+ * @param colors The colors for the button.
  * @param cardStyle The optional card style to surround the button.
  * @param cardInsets The internal insets for the card, only applied when the [cardStyle] is not
  * `null`.

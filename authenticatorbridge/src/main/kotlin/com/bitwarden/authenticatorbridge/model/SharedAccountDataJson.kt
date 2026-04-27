@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  *
  * For domain level model, see [SharedAccountData].
  *
- * @param accounts The list of shared accounts.
+ * @property accounts The list of shared accounts.
  */
 @Serializable
 internal data class SharedAccountDataJson(
@@ -19,12 +19,13 @@ internal data class SharedAccountDataJson(
     /**
      * Models a single shared account in a serializable format.
      *
-     * @param userId user ID tied to the account.
-     * @param name name associated with the account.
-     * @param email email associated with the account.
-     * @param environmentLabel environment associated with the account.
-     * @param totpUris list of totp URIs associated with the account.
-     * @param lastSyncTime the last time the account was synced by the main Bitwarden app.
+     * @property userId user ID tied to the account.
+     * @property name name associated with the account.
+     * @property email email associated with the account.
+     * @property environmentLabel environment associated with the account.
+     * @property totpUris list of totp URIs associated with the account. This is for legacy use
+     * only.
+     * @property cipherData list of ciphers containing totp URIs associated with the account.
      */
     @Serializable
     data class AccountJson(
@@ -40,7 +41,39 @@ internal data class SharedAccountDataJson(
         @SerialName("environmentLabel")
         val environmentLabel: String,
 
+        // TODO: PM-34085 Remove totpUris.
         @SerialName("totpUris")
         val totpUris: List<String>,
+
+        // TODO: PM-34085 Make cipherData nonnull.
+        @SerialName("cipherData")
+        val cipherData: List<CipherJson>?,
+    )
+
+    /**
+     * Models a single shared cipher in a serializable format.
+     *
+     * @property uri the totp URI associated with this cipher.
+     * @property id the ID of this cipher.
+     * @property name the name of this cipher.
+     * @property username the username for this cipher.
+     * @property isFavorite indicates if this cipher is favorited.
+     */
+    @Serializable
+    data class CipherJson(
+        @SerialName("uri")
+        val uri: String,
+
+        @SerialName("id")
+        val id: String,
+
+        @SerialName("cipherName")
+        val name: String,
+
+        @SerialName("username")
+        val username: String?,
+
+        @SerialName("isFavorite")
+        val isFavorite: Boolean,
     )
 }

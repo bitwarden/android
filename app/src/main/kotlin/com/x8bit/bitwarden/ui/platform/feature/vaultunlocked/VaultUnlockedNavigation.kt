@@ -13,6 +13,8 @@ import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupUnlockScr
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupAutoFillDestination
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupBrowserAutofillDestination
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupUnlockDestination
+import com.x8bit.bitwarden.ui.platform.feature.premium.plan.navigateToPlanModal
+import com.x8bit.bitwarden.ui.platform.feature.premium.plan.planModalDestination
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchRoute
 import com.x8bit.bitwarden.ui.platform.feature.search.navigateToSearch
 import com.x8bit.bitwarden.ui.platform.feature.search.searchDestination
@@ -52,6 +54,10 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.addedit.vaultAddEditDestination
 import com.x8bit.bitwarden.ui.vault.feature.attachments.attachmentDestination
 import com.x8bit.bitwarden.ui.vault.feature.attachments.navigateToAttachment
+import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.navigateToPreviewAttachment
+import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.previewAttachmentDestination
+import com.x8bit.bitwarden.ui.vault.feature.cardscanner.cardScanDestination
+import com.x8bit.bitwarden.ui.vault.feature.cardscanner.navigateToCardScanScreen
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.importLoginsScreenDestination
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.navigateToImportLoginsScreen
 import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
@@ -137,6 +143,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateToAboutPrivilegedApps = {
                 navController.navigateToAboutPrivilegedAppsScreen()
             },
+            onNavigateToPlan = { navController.navigateToPlanModal() },
         )
         flightRecorderDestination(
             isPreAuth = false,
@@ -166,6 +173,9 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         vaultAddEditDestination(
             onNavigateToQrCodeScanScreen = {
                 navController.navigateToQrCodeScanScreen()
+            },
+            onNavigateToCardScanScreen = {
+                navController.navigateToCardScanScreen()
             },
             onNavigateToManualCodeEntryScreen = {
                 navController.navigateToManualCodeEntryScreen()
@@ -198,6 +208,10 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                     passwordHistoryMode = GeneratorPasswordHistoryMode.Item(itemId = it),
                 )
             },
+            onNavigateToPreviewAttachment = { navController.navigateToPreviewAttachment(it) },
+        )
+        cardScanDestination(
+            onNavigateBack = { navController.popBackStack() },
         )
         vaultQrCodeScanDestination(
             onNavigateToManualCodeEntryScreen = {
@@ -248,6 +262,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
         attachmentDestination(
             onNavigateBack = { navController.popBackStack() },
+            onNavigateToPreviewAttachment = { navController.navigateToPreviewAttachment(it) },
         )
         setupUnlockDestination(
             onNavigateBack = {
@@ -262,6 +277,12 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateBack = { navController.popBackStack() },
         )
         importLoginsScreenDestination(
+            onNavigateBack = { navController.popBackStack() },
+        )
+        previewAttachmentDestination(
+            onNavigateBack = { navController.popBackStack() },
+        )
+        planModalDestination(
             onNavigateBack = { navController.popBackStack() },
         )
     }

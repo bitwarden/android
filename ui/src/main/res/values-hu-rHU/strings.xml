@@ -11,6 +11,7 @@
     <string name="copy_password">Jelszó másolása</string>
     <string name="copy_username">Felhasználónév másolása</string>
     <string name="delete">Törlés</string>
+    <string name="preview">Előnézet</string>
     <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Tényleg törölni akarod? Ezt nem lehet visszavonni.</string>
     <string name="edit">Szerkesztés</string>
@@ -170,7 +171,7 @@
     <string name="autofill_noun">Automata-kitöltő</string>
     <string name="autofill_verb">Automata-kitöltő</string>
     <string name="autofill_or_view">Automatikusan kitöltésre vagy megtekintésre kerüljön ez az elem?</string>
-    <string name="search">Keresés</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">%1$s keresése</string>
     <string name="learn_org">Információ szervezetekről</string>
     <string name="authenticator_app_title">Hitelesítő alkalmazás</string>
     <string name="enter_verification_code_app">Add meg a 6 számjegyű ellenőrző kódot a hitelesítő alkalmazásodból.</string>
@@ -204,6 +205,7 @@
     <string name="choose_file">Fájl kiválasztása</string>
     <string name="file">Fájl</string>
     <string name="no_file_chosen">Nincs kiválasztott fájl</string>
+    <string name="file_name">Fájlnév</string>
     <string name="no_attachments">Nincsenek mellékletek.</string>
     <string name="file_source">Fájl forrás</string>
     <string name="max_file_size">Maximális fájl méret 100 MB.</string>
@@ -225,6 +227,8 @@
     <string name="copy_security_code">Biztonsági kód másolása</string>
     <string name="number">Szám</string>
     <string name="security_code">Biztonsági Kód</string>
+    <string name="scan_card">Kártya átvizsgálása</string>
+    <string name="scan_card_instruction">Helyezzük a kártyát a keretbe az átvizsgáláshoz.</string>
     <string name="type_card">Kártya</string>
     <string name="type_identity">Azonosság</string>
     <string name="type_login">Bejelentkezés</string>
@@ -378,6 +382,7 @@
     <string name="capitalize">Nagy kezdőbetű</string>
     <string name="include_number">Szám is</string>
     <string name="download">Letöltés</string>
+    <string name="download_file">Fájl letöltése</string>
     <string name="login_expired">A bejelentkezési munkamenet lejárt.</string>
     <string name="biometrics_direction">Biometrikus ellenőrzés</string>
     <string name="device_verification">Eszköz ellenőrzés</string>
@@ -507,10 +512,10 @@
     <string name="remove_master_password">Mesterjelszó eltávolítása</string>
     <string name="leave_organization">Kilépés a szervezetből</string>
     <string name="leave_organization_name">Elhagyjuk %1$s szervezetet?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Biztosan el akarjuk hagyni %1$s szervezetet?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Biztosan el akarjuk hagyni [%1$s] szervezetet?</string>
     <string name="leave_organization_button">%1$s elhagyása</string>
     <string name="leave_organization_warning">Az elutasítással a személyes elemek a fiókban maradnak, de elveszítjük hozzáférést a megosztott elemekhez és a szervezeti funkciókhoz.\n\nVegyük fel a kkapcsolatot az adminisztrátorral a visszaszerzéshez.</string>
-    <string name="how_to_manage_my_vault">Hogyan kezeljük a saját széfet</string>
+    <string name="contact_your_admin_to_regain_access">Lépjünk kapcsolatba az adminisztrátorral a hozzáférés visszaszerzéséért.</string>
     <string name="fido2_authenticate_web_authn">WebAuthn hitelesítése</string>
     <string name="fido2_return_to_app">Vissza az alkalmazásba</string>
     <string name="reset_password_auto_enroll_invite_warning">Ennek a szervezetnek van egy vállalati házirendje, amely automatikusan regisztrál a jelszó alaphelyzetbe állítására. A regisztráció lehetővé teszi a szervezet adminisztrátorainak a mesterjelszó megváltoztatását.</string>
@@ -939,6 +944,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">A belépőkulcs művelet meghiúsult, mert nincs kiválasztott elem.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">A belépőkulcs művelet meghiúsult, mert a kérés nem támogatott.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">A jelszó művelet nem sikerült, mert a kiválasztott elem nem létezik.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">A jelszó művelet nem sikerült, mert a kiválasztott elem nem rendelkezik érvényes jelszóval.</string>
     <string name="password_operation_failed_because_no_item_was_selected">A jelszó művelet nem sikerült, mert nem lett elem kiválasztva.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">A hitelesítő művelet meghiúsult, mert a kérés érvénytelen.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">A hitelesítő művelet meghiúsult, mert a kérés nem támogatott.</string>
@@ -1203,6 +1209,8 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="archive_unavailable">Az archívum nem elérhető.</string>
     <string name="archiving_items_is_a_premium_feature">Az elemek archiválása prémium funkció. A jelenlegi csomag nem tartalmazza a hozzáférést ehhez a funkcióhoz.</string>
     <string name="upgrade_to_premium">Áttérés Prémium csomagra</string>
+    <string name="unlock_advanced_security_features">Fejlett biztonsági funkciók feloldása</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Prémium előfizetés több eszközt biztosít a biztonság és az irányítás megőrzéséhez.</string>
     <string name="this_item_is_archived">Ez az elem archiválva van.</string>
     <string name="introducing_archive">Archívum bemutatása</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Tartsuk biztonságban azokat az elemeket, amelyekre jelenleg nincs szükség, de ne lássuk azokat.</string>
@@ -1223,4 +1231,30 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="continue_without_syncing">Folytatás szinkronizálás nélkül</string>
     <string name="external_link">Külső hivatkozás</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Külső hivatkozás</string>
+    <string name="preview_not_available_for_files">Az előnézet nem érhető el %1$s fájlokhoz. Továbbra is letölthetjük, hogy megtekinthessük az eszközön.</string>
+    <string name="this_file_is_too_large_to_preview">Ez a fájl túl nagy az előnézethez. Továbbra is letölthetjük, hogy megtekinthessük az eszközön.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">A Bitwarden nem tudta visszafejteni ezt a fájlt, így az előnézet nem jeleníthető meg.</string>
+    <string name="preview_unavailable_for_this_file">Az előnézet nem érhető el ehhez a fájlhoz. Továbbra is letölthetjük, hogy megtekinthessük az eszközön.</string>
+    <string name="preview_unavailable">Az előnézet nem érhető el.</string>
+    <string name="download_attachment">Melléklet letöltése</string>
+    <string name="upgraded_to_premium">Áttérés Prémium csomagra</string>
+    <string name="unlock_premium_features">Fejlettebb funkciók feloldása Prémium csomaggal.</string>
+    <string name="per_month">/ hónap</string>
+    <string name="built_in_authenticator">Beépített hitelesítő</string>
+    <string name="emergency_access">Sürgősségi hozzáférés</string>
+    <string name="secure_file_storage">Biztonságos fájl tárolás</string>
+    <string name="breach_monitoring">Adatszivárgás figyelés</string>
+    <string name="upgrade_now">Áttérés most</string>
+    <string name="stripe_checkout_footer">A vásárlás befejezéséhez keressük fel a Stripe biztonságos pénztárát.</string>
+    <string name="opening_checkout">Pénztár megnyitása…</string>
+    <string name="secure_checkout_didnt_load">A biztonságos pénztár nem töltődött be.</string>
+    <string name="trouble_opening_payment_page">Problémák adódtak a fizetési oldal megnyitásával, úgyhogy próbáljuk újra.</string>
+    <string name="payment_not_received_yet">A fizetés még nem érkezett meg.</string>
+    <string name="return_to_stripe_to_finish">Visszatérés a Stripe-hoz a böngészőben az áttérés befejezéséhez.</string>
+    <string name="go_back">Vissza</string>
+    <string name="allow_camera_access">Kamera elérés engedélyezése</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">A kártya beolvasásához hozzá kell férni a kamerához. Ezt bármikor módosítható az eszköz beállításaiban.</string>
+    <string name="show_next_code">Következő kód megjelenítése</string>
+    <string name="see_upcoming_codes_in_the_list">Lásd a következő kódokat a listában</string>
+    <string name="next_code_x">Következő kód, %1$s</string>
 </resources>

@@ -480,7 +480,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `SaveClick for file without premium show error dialog`() {
+    fun `SaveClick for file without Premium show error dialog`() {
         mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
             accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = false)),
         )
@@ -1412,7 +1412,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `AuthTypeSelect with Email auth without premium should show premium dialog`() = runTest {
+    fun `AuthTypeSelect with Email auth without Premium should show Premium dialog`() = runTest {
         val nonPremiumState = DEFAULT_STATE.copy(isPremium = false)
         val viewModel = createViewModel(nonPremiumState)
 
@@ -1430,7 +1430,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `AuthTypeSelect with Email auth with premium should allow selection`() = runTest {
+    fun `AuthTypeSelect with Email auth with Premium should allow selection`() = runTest {
         every { UUID.randomUUID().toString() } returns "uuid"
         val premiumState = DEFAULT_STATE.copy(isPremium = true)
         val viewModel = createViewModel(premiumState)

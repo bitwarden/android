@@ -454,6 +454,7 @@ private fun VaultItemListingScaffold(
                     }
                     BitwardenSearchActionItem(
                         contentDescription = stringResource(id = BitwardenString.search_vault),
+                        isDisplayed = state.shouldShowSearchIcon,
                         onClick = vaultItemListingHandlers.searchIconClick,
                     )
                     BitwardenOverflowActionItem(

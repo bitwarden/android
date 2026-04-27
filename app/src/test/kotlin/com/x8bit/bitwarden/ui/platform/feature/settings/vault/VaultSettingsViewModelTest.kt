@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.network.model.PolicyTypeJson
@@ -11,7 +12,6 @@ import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
-import com.x8bit.bitwarden.data.platform.manager.GmsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
@@ -29,6 +29,9 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class VaultSettingsViewModelTest : BaseViewModelTest() {
+    private val buildInfoManager = mockk<BuildInfoManager> {
+        every { isFdroid } returns false
+    }
     private val mutableFirstTimeStateFlow = MutableStateFlow(DEFAULT_FIRST_TIME_STATE)
     private val firstTimeActionManager = mockk<FirstTimeActionManager> {
         every { currentOrDefaultUserFirstTimeState } returns DEFAULT_FIRST_TIME_STATE
@@ -41,9 +44,6 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         every {
             getFeatureFlagFlow(FlagKey.CredentialExchangeProtocolImport)
         } returns mutableFeatureFlagFlow
-    }
-    private val gmsManager = mockk<GmsManager> {
-        every { isVersionAtLeast(any()) } returns true
     }
     private val mutablePoliciesFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Policy>>()
     private val policyManager = mockk<PolicyManager> {
@@ -224,10 +224,12 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `showImportItemsChevron should be false when GMS version is insufficient`() {
-        every { gmsManager.isVersionAtLeast(any()) } returns false
+    fun `showImportItemsChevron should be false when feature flag is enabled but policy exists`() {
         val viewModel = createViewModel()
+        mutableFeatureFlagFlow.tryEmit(true)
+        mutablePoliciesFlow.tryEmit(listOf(mockk()))
         assertEquals(
             VaultSettingsState(showImportActionCard = true, showImportItemsChevron = false),
             viewModel.stateFlow.value,
@@ -235,9 +237,22 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ImportItemsClick should emit NavigateToImportVault when GMS version is insufficient`() =
+    fun `showImportItemsChevron should be false when isFdroid is true`() {
+        every { buildInfoManager.isFdroid } returns true
+        val viewModel = createViewModel()
+        assertEquals(
+            VaultSettingsState(
+                showImportActionCard = true,
+                showImportItemsChevron = false,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `ImportItemsClick should emit NavigateToImportVault when isFdroid is true`() =
         runTest {
-            every { gmsManager.isVersionAtLeast(any()) } returns false
+            every { buildInfoManager.isFdroid } returns true
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
                 viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
@@ -248,23 +263,11 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `showImportItemsChevron should be false when feature flag and GMS sufficient but policy exists`() {
-        val viewModel = createViewModel()
-        mutableFeatureFlagFlow.tryEmit(true)
-        mutablePoliciesFlow.tryEmit(listOf(mockk()))
-        assertEquals(
-            VaultSettingsState(showImportActionCard = true, showImportItemsChevron = false),
-            viewModel.stateFlow.value,
-        )
-    }
-
     private fun createViewModel(): VaultSettingsViewModel = VaultSettingsViewModel(
+        buildInfoManager = buildInfoManager,
         firstTimeActionManager = firstTimeActionManager,
         snackbarRelayManager = snackbarRelayManager,
         featureFlagManager = featureFlagManager,
-        gmsManager = gmsManager,
         policyManager = policyManager,
     )
 }

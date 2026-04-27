@@ -11,6 +11,7 @@
     <string name="copy_password">Kopiera lösenord</string>
     <string name="copy_username">Kopiera användarnamn</string>
     <string name="delete">Radera</string>
+    <string name="preview">Förhandsgranska</string>
     <string name="deleting">Raderar…</string>
     <string name="do_you_really_want_to_delete">Vill du verkligen radera? Detta går inte att ångra.</string>
     <string name="edit">Redigera</string>
@@ -170,7 +171,7 @@
     <string name="autofill_noun">Autofyll</string>
     <string name="autofill_verb">Autofyll</string>
     <string name="autofill_or_view">Vill du automatiskt fylla i den här inloggningen eller visa den?</string>
-    <string name="search">Sök</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">Läs mer om organisationer</string>
     <string name="authenticator_app_title">Autentiseringsapp</string>
     <string name="enter_verification_code_app">Ange den 6-siffriga verifieringskoden från din autentiseringsapp.</string>
@@ -205,6 +206,7 @@ Skanningen sker automatiskt.</string>
     <string name="choose_file">Välj fil</string>
     <string name="file">Fil</string>
     <string name="no_file_chosen">Ingen fil vald</string>
+    <string name="file_name">Filnamn</string>
     <string name="no_attachments">Det finns inga bilagor.</string>
     <string name="file_source">Filkälla</string>
     <string name="max_file_size">Filen får vara maximalt 100 MB.</string>
@@ -226,6 +228,8 @@ Skanningen sker automatiskt.</string>
     <string name="copy_security_code">Kopiera säkerhetskod</string>
     <string name="number">Nummer</string>
     <string name="security_code">Säkerhetskod</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">Kort</string>
     <string name="type_identity">Identitet</string>
     <string name="type_login">Inloggning</string>
@@ -379,6 +383,7 @@ Skanningen sker automatiskt.</string>
     <string name="capitalize">Versalisera</string>
     <string name="include_number">Inkludera siffra</string>
     <string name="download">Ladda ner</string>
+    <string name="download_file">Ladda ner fil</string>
     <string name="login_expired">Din inloggningssession har upphört.</string>
     <string name="biometrics_direction">Biometrisk verifiering</string>
     <string name="device_verification">Enhetsverifiering</string>
@@ -508,10 +513,10 @@ Skanningen sker automatiskt.</string>
     <string name="remove_master_password">Ta bort huvudlösenord</string>
     <string name="leave_organization">Lämna organisation</string>
     <string name="leave_organization_name">Lämna %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Är du säker på att du vill lämna %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Är du säker på att du vill lämna [%1$s]?</string>
     <string name="leave_organization_button">Lämna %1$s</string>
     <string name="leave_organization_warning">Genom att avböja kommer dina personliga saker att finnas kvar på ditt konto, men du kommer att förlora åtkomst till delade objekt och organisationsfunktioner.\n\nKontakta administratören för att återfå åtkomst.</string>
-    <string name="how_to_manage_my_vault">Hur man hanterar Mitt valv</string>
+    <string name="contact_your_admin_to_regain_access">Kontakta administratören för att återfå åtkomst.</string>
     <string name="fido2_authenticate_web_authn">Autentisera WebAuthn</string>
     <string name="fido2_return_to_app">Återvänd till app</string>
     <string name="reset_password_auto_enroll_invite_warning">Denna organisation har en företagspolicy som automatiskt registrerar dig för lösenordsåterställning. Deltagandet gör det möjligt för organisationsadministratörer att ändra ditt huvudlösenord.</string>
@@ -940,6 +945,7 @@ Vill du byta till detta konto?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Åtgärden för inloggningsnyckel misslyckades eftersom inget objekt valdes.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Åtgärden för inloggningsnyckel misslyckades eftersom begäran inte stöds.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Åtgärd för lösenord misslyckades därför att det valda objektet inte finns.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Åtgärd för lösenord misslyckades därför att inget objekt valdes.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Åtgärden för inloggningsuppgifter misslyckades eftersom begäran är ogiltig.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Åtgärden för inloggningsuppgifter misslyckades eftersom begäran inte stöds.</string>
@@ -1204,6 +1210,8 @@ Vill du byta till detta konto?</string>
     <string name="archive_unavailable">Arkivet inte tillgängligt</string>
     <string name="archiving_items_is_a_premium_feature">Arkivering av objekt är en Premium-funktion. Din nuvarande plan inkluderar inte tillgång till denna funktion.</string>
     <string name="upgrade_to_premium">Uppgradera till premium</string>
+    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">Detta objekt är arkiverat.</string>
     <string name="introducing_archive">Introducerar arkiv</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Håll objekt som du inte behöver just nu är säkra, men utom synhåll.</string>
@@ -1224,4 +1232,30 @@ Vill du byta till detta konto?</string>
     <string name="continue_without_syncing">Fortsätt utan att synkronisera</string>
     <string name="external_link">Extern länk</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, extern länk</string>
+    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="this_file_is_too_large_to_preview">Den här filen är för stor för att förhandsgranskas. Du kan fortfarande ladda ner den för att visa den på din enhet.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
+    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
+    <string name="preview_unavailable">Preview unavailable</string>
+    <string name="download_attachment">Ladda ned bilaga</string>
+    <string name="upgraded_to_premium">Upgraded to premium</string>
+    <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
+    <string name="per_month">/ månad</string>
+    <string name="built_in_authenticator">Inbyggd autenticator</string>
+    <string name="emergency_access">Nödåtkomst</string>
+    <string name="secure_file_storage">Säker fillagring</string>
+    <string name="breach_monitoring">Intrångsmonitorering</string>
+    <string name="upgrade_now">Uppgradera nu</string>
+    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="opening_checkout">Opening checkout…</string>
+    <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
+    <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
+    <string name="payment_not_received_yet">Payment not received yet</string>
+    <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
+    <string name="go_back">Gå tillbaka</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
+    <string name="show_next_code">Show next code</string>
+    <string name="see_upcoming_codes_in_the_list">See upcoming codes in the list</string>
+    <string name="next_code_x">Next code, %1$s</string>
 </resources>

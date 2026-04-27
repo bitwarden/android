@@ -92,7 +92,7 @@ fun QrCodeScanScreen(
                 cameraErrorReceive = {
                     viewModel.trySendAction(QrCodeScanAction.CameraSetupErrorReceive)
                 },
-                qrCodeAnalyzer = qrCodeAnalyzer,
+                analyzer = qrCodeAnalyzer,
                 modifier = Modifier.fillMaxSize(),
             )
             when (rememberWindowSize()) {

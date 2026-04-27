@@ -19,6 +19,8 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 /**
  * Generate a symmetric [SecretKey] that will used for encrypting IPC traffic.
@@ -167,37 +169,82 @@ private fun generateCipher(): Cipher =
 /**
  * Helper function for converting [SharedAccountData] to a serializable [SharedAccountDataJson].
  */
-private fun SharedAccountData.toJsonModel() = SharedAccountDataJson(
+private fun SharedAccountData.toJsonModel(): SharedAccountDataJson = SharedAccountDataJson(
     accounts = this.accounts.map { account ->
         SharedAccountDataJson.AccountJson(
             userId = account.userId,
             name = account.name,
             environmentLabel = account.environmentLabel,
             email = account.email,
-            totpUris = account.totpUris,
+            // TODO: PM-34085 Remove totpUris from this model.
+            totpUris = account.cipherData.mapNotNull { it.legacyUri },
+            cipherData = account.cipherData.map { it.toJsonModel() },
         )
     },
 )
 
 /**
+ * Helper function for converting [SharedAccountData.CipherData] to a
+ * [SharedAccountDataJson.CipherJson].
+ */
+private fun SharedAccountData.CipherData.toJsonModel(): SharedAccountDataJson.CipherJson =
+    SharedAccountDataJson.CipherJson(
+        uri = this.uri,
+        id = this.id,
+        name = this.name,
+        username = this.username,
+        isFavorite = this.isFavorite,
+    )
+
+/**
  * Helper function for converting [SharedAccountDataJson] to a [SharedAccountData].
  */
-private fun SharedAccountDataJson.toDomainModel() = SharedAccountData(
+private fun SharedAccountDataJson.toDomainModel(): SharedAccountData = SharedAccountData(
     accounts = this.accounts.map { account ->
         SharedAccountData.Account(
             userId = account.userId,
             name = account.name,
             environmentLabel = account.environmentLabel,
             email = account.email,
-            totpUris = account.totpUris,
+            cipherData = account.cipherData?.map { it.toCipherData() }
+            // TODO: PM-34085 Remove this mapping from totpUris.
+                ?: account.totpUris.map { it.toCipherData() },
         )
     },
 )
 
 /**
+ * Helper function for converting [SharedAccountDataJson.CipherJson] to a
+ * [SharedAccountData.CipherData].
+ */
+private fun SharedAccountDataJson.CipherJson.toCipherData(): SharedAccountData.CipherData =
+    SharedAccountData.CipherData(
+        uri = this.uri,
+        legacyUri = this.uri,
+        id = this.id,
+        name = this.name,
+        username = this.username,
+        isFavorite = this.isFavorite,
+    )
+
+/**
+ * Helper function for converting [String] URI to a [SharedAccountData.CipherData].
+ * TODO: PM-34085 Remove this function, it is only needed for legacy support.
+ */
+@OptIn(ExperimentalUuidApi::class)
+private fun String.toCipherData(): SharedAccountData.CipherData = SharedAccountData.CipherData(
+    uri = this,
+    legacyUri = this,
+    id = Uuid.random().toString(),
+    name = "",
+    username = null,
+    isFavorite = false,
+)
+
+/**
  * Helper function for converting [AddTotpLoginItemDataJson] to a [AddTotpLoginItemData].
  */
-private fun AddTotpLoginItemDataJson.toDomainModel() = AddTotpLoginItemData(
+private fun AddTotpLoginItemDataJson.toDomainModel(): AddTotpLoginItemData = AddTotpLoginItemData(
     totpUri = totpUri,
 )
 
@@ -205,6 +252,6 @@ private fun AddTotpLoginItemDataJson.toDomainModel() = AddTotpLoginItemData(
  * Helper function for converting [AddTotpLoginItemData] to a serializable
  * [AddTotpLoginItemDataJson].
  */
-private fun AddTotpLoginItemData.toJsonModel() = AddTotpLoginItemDataJson(
+private fun AddTotpLoginItemData.toJsonModel(): AddTotpLoginItemDataJson = AddTotpLoginItemDataJson(
     totpUri = totpUri,
 )

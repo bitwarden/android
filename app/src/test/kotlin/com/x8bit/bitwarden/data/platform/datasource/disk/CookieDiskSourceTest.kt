@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.datasource.disk
 import com.bitwarden.core.di.CoreModule
 import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.CookieConfigurationData
+import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
@@ -10,7 +11,7 @@ import org.junit.jupiter.api.Test
 class CookieDiskSourceTest {
     private val fakeEncryptedSharedPreferences = FakeSharedPreferences()
     private val fakeSharedPreferences = FakeSharedPreferences()
-    private val json = CoreModule.providesJson()
+    private val json = CoreModule.providesJson(buildInfoManager = mockk(relaxed = true))
 
     private val cookieDiskSource: CookieDiskSource = CookieDiskSourceImpl(
         sharedPreferences = fakeSharedPreferences,

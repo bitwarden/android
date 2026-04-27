@@ -11,6 +11,7 @@
     <string name="copy_password">Копиране на паролата</string>
     <string name="copy_username">Копиране на потребителското име</string>
     <string name="delete">Изтриване</string>
+    <string name="preview">Преглед</string>
     <string name="deleting">Изтриване…</string>
     <string name="do_you_really_want_to_delete">Наистина ли искате да го изтриете? Действието не може да бъде отменено.</string>
     <string name="edit">Редактиране</string>
@@ -170,7 +171,7 @@
     <string name="autofill_noun">Автоматично попълване</string>
     <string name="autofill_verb">Автоматично попълване</string>
     <string name="autofill_or_view">Искате да разгледате записа или да го ползвате за дописване?</string>
-    <string name="search">Търсене</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Търсене на %1$s</string>
     <string name="learn_org">Разберете повече за организациите</string>
     <string name="authenticator_app_title">Приложение за удостоверяване</string>
     <string name="enter_verification_code_app">Въведете шестцифрения код за потвърждение от приложението за удостоверяване.</string>
@@ -205,6 +206,7 @@
     <string name="choose_file">Изберете файл</string>
     <string name="file">Файл</string>
     <string name="no_file_chosen">Не е избран файл</string>
+    <string name="file_name">Име на файла</string>
     <string name="no_attachments">Няма прикачени файлове.</string>
     <string name="file_source">Източник на файла</string>
     <string name="max_file_size">Големината на файла е най-много 100 MB.</string>
@@ -226,6 +228,8 @@
     <string name="copy_security_code">Копиране на кода за сигурност</string>
     <string name="number">Номер</string>
     <string name="security_code">Код за сигурност</string>
+    <string name="scan_card">Сканиране на картата</string>
+    <string name="scan_card_instruction">Поставете картата си в рамката, за да я сканирате.</string>
     <string name="type_card">Карта</string>
     <string name="type_identity">Самоличност</string>
     <string name="type_login">Запис</string>
@@ -379,6 +383,7 @@
     <string name="capitalize">Главни букви</string>
     <string name="include_number">И цифри</string>
     <string name="download">Изтегляне</string>
+    <string name="download_file">Сваляне на файла</string>
     <string name="login_expired">Сесията ви изтече.</string>
     <string name="biometrics_direction">Потвърждаване с биометрични данни.</string>
     <string name="device_verification">Потвърждаване на устройствата</string>
@@ -508,10 +513,10 @@
     <string name="remove_master_password">Премахване на главната парола</string>
     <string name="leave_organization">Напускане на организацията</string>
     <string name="leave_organization_name">Напускане на %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Наистина ли искате да напуснете %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Наистина ли искате да напуснете [%1$s]?</string>
     <string name="leave_organization_button">Напускане на %1$s</string>
     <string name="leave_organization_warning">Ако откажете, Вашите собствени елементи ще останат в акаунта Ви, но ще загубите достъп до споделените елементи и функционалностите на организацията.\n\nСвържете се с администратора си, ако искате отново да получите достъп.</string>
-    <string name="how_to_manage_my_vault">Как да управлявам трезора си</string>
+    <string name="contact_your_admin_to_regain_access">Свържете се с администратор, за да получите достъп отново.</string>
     <string name="fido2_authenticate_web_authn">Идентификация WebAuthn</string>
     <string name="fido2_return_to_app">Назад към приложението</string>
     <string name="reset_password_auto_enroll_invite_warning">Тази организация включва автоматично новите си потребители в смяната на пароли. Това означава, че администраторите на организацията ще могат да променят главната Ви парола.</string>
@@ -940,6 +945,7 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">Операцията със секретния ключ беше неуспешна, тъй като няма избран елемент.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Операцията със секретния ключ беше неуспешна, тъй като заявката не се поддържа.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Операцията с паролата беше неуспешна, тъй като избраният елемент не съществува.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Операцията с паролата беше неуспешна, тъй като избраният елемент няма правилно зададена парола.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Операцията с паролата беше неуспешна, тъй като няма избран елемент.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Операцията с данни за вписване беше неуспешна, тъй като заявката е грешна.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Операцията с данни за вписване беше неуспешна, тъй като заявката не се поддържа.</string>
@@ -1206,6 +1212,8 @@
     <string name="archive_unavailable">Архивирането не е налично</string>
     <string name="archiving_items_is_a_premium_feature">Архивирането на елементи е платена функционалност. Текущият Ви план не включва достъп до нея.</string>
     <string name="upgrade_to_premium">Надградете до Платения план</string>
+    <string name="unlock_advanced_security_features">Отключване на разширените функционалности по сигурността</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Платеният план предоставя повече инструменти за защита и управление.</string>
     <string name="this_item_is_archived">Този елемент е архивиран.</string>
     <string name="introducing_archive">Представяме архива</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Съхранявайте елементите, които не Ви трябват точно в момента, на сигурно, но незабележимо място.</string>
@@ -1226,4 +1234,30 @@
     <string name="continue_without_syncing">Продължаване без синхронизиране</string>
     <string name="external_link">Външна връзка</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, външна връзка</string>
+    <string name="preview_not_available_for_files">Не е възможно да се извърши преглед на %1$s файла. Все пак може да ги свалите и прегледате на устройството си.</string>
+    <string name="this_file_is_too_large_to_preview">Този файл е прекалено голям и не може да бъде прегледан. Можете да го свалите и разгледате на устройството си.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Битуорден не може да дешифрира този файл, така че той не може да бъде показан.</string>
+    <string name="preview_unavailable_for_this_file">Не е възможно да се извърши преглед на този файл. Все пак може да го свалите и прегледате на устройството си.</string>
+    <string name="preview_unavailable">Преглед не е възможен</string>
+    <string name="download_attachment">Сваляне на прикачения файл</string>
+    <string name="upgraded_to_premium">Надградено до Платения план</string>
+    <string name="unlock_premium_features">Отключете още разширени функционалности с Платения план.</string>
+    <string name="per_month">/ месец</string>
+    <string name="built_in_authenticator">Вграден удостоверител</string>
+    <string name="emergency_access">Авариен достъп</string>
+    <string name="secure_file_storage">Сигурно съхранение на файлове</string>
+    <string name="breach_monitoring">Наблюдение за пробиви</string>
+    <string name="upgrade_now">Надграждане сега</string>
+    <string name="stripe_checkout_footer">Ще бъдете прехвърлен(а) към страницата за сигурни разплащания на Stripe, за да завършите покупката си.</string>
+    <string name="opening_checkout">Отваряне на страницата за разплащания…</string>
+    <string name="secure_checkout_didnt_load">Страницата за разплащания не може да бъде заредена</string>
+    <string name="trouble_opening_payment_page">Имаше проблем при отварянето на страницата за разплащания. Моля, опитайте отново.</string>
+    <string name="payment_not_received_yet">Плащането все още не е получено</string>
+    <string name="return_to_stripe_to_finish">Върнете се към Stripe в браузъра си, за да завършите надграждането.</string>
+    <string name="go_back">Връщане назад</string>
+    <string name="allow_camera_access">Разрешаване на достъп до камерата</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">За да бъде сканирана картата, е необходим достъп до камерата. Можете да промените това по всяко време в настройките на устройството.</string>
+    <string name="show_next_code">Показване на следващия код</string>
+    <string name="see_upcoming_codes_in_the_list">Вижте следващите кодове в списъка</string>
+    <string name="next_code_x">Следващ код, %1$s</string>
 </resources>

@@ -163,13 +163,16 @@ private fun VaultAddEditState.ViewState.Content.toPasswordHistory(
     )
 
     return listOf(
-        common.originalCipher?.passwordHistory.orEmpty(),
         newPasswordHistory,
+        common.originalCipher?.passwordHistory.orEmpty(),
         newHiddenFieldHistory,
     )
         .flatten()
+        // Ensure that they are in the correct order before saving.
+        .sortedByDescending { it.lastUsedDate }
+        // Only persist the 5 most recent items.
+        .take(5)
         .ifEmpty { null }
-        ?.takeLast(5)
 }
 
 private fun getPasswordHistory(

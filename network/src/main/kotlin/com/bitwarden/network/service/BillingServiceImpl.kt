@@ -4,6 +4,7 @@ import com.bitwarden.network.api.AuthenticatedBillingApi
 import com.bitwarden.network.model.CheckoutSessionRequestJson
 import com.bitwarden.network.model.CheckoutSessionResponseJson
 import com.bitwarden.network.model.PortalUrlResponseJson
+import com.bitwarden.network.model.PremiumPlanResponseJson
 import com.bitwarden.network.util.toResult
 
 private const val PLATFORM = "android"
@@ -25,5 +26,10 @@ internal class BillingServiceImpl(
     override suspend fun getPortalUrl(): Result<PortalUrlResponseJson> =
         authenticatedBillingApi
             .getPortalUrl()
+            .toResult()
+
+    override suspend fun getPremiumPlan(): Result<PremiumPlanResponseJson> =
+        authenticatedBillingApi
+            .getPremiumPlan()
             .toResult()
 }

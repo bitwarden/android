@@ -11,6 +11,7 @@
     <string name="copy_password">Salin sandi</string>
     <string name="copy_username">Salin nama pengguna</string>
     <string name="delete">Hapus</string>
+    <string name="preview">Preview</string>
     <string name="deleting">Menghapus…</string>
     <string name="do_you_really_want_to_delete">Apakah Anda yakin ingin menghapusnya? Ini tidak dapat dibatalkan.</string>
     <string name="edit">Ubah</string>
@@ -169,7 +170,7 @@
     <string name="autofill_noun">Isi otomatis</string>
     <string name="autofill_verb">Isi otomatis</string>
     <string name="autofill_or_view">Apakah Anda ingin mengisi otomatis atau melihat info masuk ini?</string>
-    <string name="search">Pencarian</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">Pelajari tentang Organisasi</string>
     <string name="authenticator_app_title">Aplikasi Autentikasi</string>
     <string name="enter_verification_code_app">Masukkan 6 digit kode verifikasi dari aplikasi autentikasi Anda.</string>
@@ -204,6 +205,7 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="choose_file">Pilih Berkas</string>
     <string name="file">Berkas</string>
     <string name="no_file_chosen">Tidak ada berkas yang dipilih</string>
+    <string name="file_name">File name</string>
     <string name="no_attachments">Tidak ada lampiran.</string>
     <string name="file_source">Sumber Berkas</string>
     <string name="max_file_size">Ukuran berkas maksimal adalah 100 MB.</string>
@@ -225,6 +227,8 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="copy_security_code">Salin kode keamanan</string>
     <string name="number">Nomor</string>
     <string name="security_code">Kode Keamanan</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">Kartu</string>
     <string name="type_identity">Identitas</string>
     <string name="type_login">Login</string>
@@ -377,6 +381,7 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="capitalize">Huruf kapital</string>
     <string name="include_number">Sertakan nomor</string>
     <string name="download">Unduh</string>
+    <string name="download_file">Download file</string>
     <string name="login_expired">Sesi masuk Anda telah berakhir.</string>
     <string name="biometrics_direction">Verifikasi Biometrik</string>
     <string name="device_verification">Verifikasi perangkat</string>
@@ -506,10 +511,10 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="remove_master_password">Hapus sandi utama</string>
     <string name="leave_organization">Tinggalkan Organisasi</string>
     <string name="leave_organization_name">Tinggalkan %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Apakah Anda yakin ingin keluar %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Apakah Anda yakin ingin keluar [%1$s]?</string>
     <string name="leave_organization_button">Keluar %1$s</string>
     <string name="leave_organization_warning">Dengan menolak, item pribadi akan tetap ada di akun Anda, tetapi Anda akan kehilangan akses ke item bersama dan fitur organisasi.\n\nHubungi admin untuk memulihkan akses.</string>
-    <string name="how_to_manage_my_vault">Bagaimana cara mengelola Brankas Saya</string>
+    <string name="contact_your_admin_to_regain_access">Hubungi administrator Anda untuk memulihkan akses.</string>
     <string name="fido2_authenticate_web_authn">Otentikasi WebAuthn</string>
     <string name="fido2_return_to_app">Kembali ke apl</string>
     <string name="reset_password_auto_enroll_invite_warning">Organisasi ini memiliki kebijakan enterprise yang akan otomatis mendaftarkan Anda ke reset sandi. Pendaftaran ini memungkinkan administrator organisasi mengubah sandi utama Anda.</string>
@@ -934,6 +939,7 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Operasi kunci sandi gagal karena tidak ada item yang dipilih.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operasi kunci sandi gagal karena permintaan tidak didukung.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operasi sandi gagal karena item yang dipilih tidak ada.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Operasi sandi gagal karena tidak ada item yang dipilih.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Operasi kredensial gagal karena permintaan tidak valid.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Operasi kredensial gagal karena permintaan tidak didukung.</string>
@@ -1195,6 +1201,8 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="archive_unavailable">Arsip tidak tersedia</string>
     <string name="archiving_items_is_a_premium_feature">Mengarsipkan item adalah fitur Premium. Paket Anda saat ini tidak termasuk akses ke fitur ini.</string>
     <string name="upgrade_to_premium">Tingkatkan ke premium</string>
+    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">Item ini diarsipkan.</string>
     <string name="introducing_archive">Memperkenalkan Arsip</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Simpan item yang belum Anda perlukan dengan aman tanpa terlihat.</string>
@@ -1216,4 +1224,30 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="continue_without_syncing">Lanjutkan tanpa sinkronisasi</string>
     <string name="external_link">Tautan eksternal</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
+    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
+    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
+    <string name="preview_unavailable">Preview unavailable</string>
+    <string name="download_attachment">Download Attachment</string>
+    <string name="upgraded_to_premium">Upgraded to premium</string>
+    <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
+    <string name="per_month">/ month</string>
+    <string name="built_in_authenticator">Built-in authenticator</string>
+    <string name="emergency_access">Emergency access</string>
+    <string name="secure_file_storage">Secure file storage</string>
+    <string name="breach_monitoring">Breach monitoring</string>
+    <string name="upgrade_now">Upgrade now</string>
+    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="opening_checkout">Opening checkout…</string>
+    <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
+    <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
+    <string name="payment_not_received_yet">Payment not received yet</string>
+    <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
+    <string name="go_back">Go back</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
+    <string name="show_next_code">Show next code</string>
+    <string name="see_upcoming_codes_in_the_list">See upcoming codes in the list</string>
+    <string name="next_code_x">Next code, %1$s</string>
 </resources>

@@ -251,7 +251,7 @@ class SettingsDiskSourceImpl(
         // - should show add login coach mark
         // - should show generator coach mark
         // - should show introducing archive action card dismissed
-        // - premium upgrade banner dismissed
+        // - Premium upgrade banner dismissed
     }
 
     override fun getIntroducingArchiveActionCardDismissed(userId: String): Boolean? =

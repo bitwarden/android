@@ -230,7 +230,10 @@ interface AuthRepository :
     /**
      * Continue the previously halted login attempt.
      */
-    suspend fun continueKeyConnectorLogin(): LoginResult
+    suspend fun continueKeyConnectorLogin(
+        orgIdentifier: String,
+        email: String,
+    ): LoginResult
 
     /**
      * Cancel the previously halted login attempt.

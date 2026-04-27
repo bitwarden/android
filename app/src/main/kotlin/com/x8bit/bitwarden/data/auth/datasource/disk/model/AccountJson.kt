@@ -42,7 +42,7 @@ data class AccountJson(
      * @property name The user's name (if applicable).
      * @property stamp The account's security stamp (if applicable).
      * @property organizationId The ID of the associated organization (if applicable).
-     * @property hasPremium True if the user has a premium account.
+     * @property hasPremium True if the user has a Premium account.
      * @property avatarColorHex Hex color value for a user's avatar in the "#AARRGGBB" format.
      * @property forcePasswordResetReason Describes the reason for a forced password reset.
      * @property kdfType The KDF type.

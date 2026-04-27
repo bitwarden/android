@@ -57,6 +57,7 @@ class EnterpriseSignOnScreenTest : BitwardenComposeTest() {
                 sso = ssoLauncher,
                 webAuthn = mockk(),
                 cookie = mockk(),
+                premiumCheckout = mockk(),
             ),
             intentManager = intentManager,
         ) {
@@ -281,11 +282,10 @@ class EnterpriseSignOnScreenTest : BitwardenComposeTest() {
             .performClick()
         verify { viewModel.trySendAction(EnterpriseSignOnAction.CancelKeyConnectorDomainClick) }
     }
-
-    companion object {
-        private val DEFAULT_STATE = EnterpriseSignOnState(
-            dialogState = null,
-            orgIdentifierInput = "",
-        )
-    }
 }
+
+private val DEFAULT_STATE = EnterpriseSignOnState(
+    dialogState = null,
+    orgIdentifierInput = "",
+    emailAddress = "test@gmail.com",
+)

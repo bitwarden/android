@@ -42,6 +42,7 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmentRoute
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
@@ -63,6 +64,7 @@ fun VaultItemScreen(
     onNavigateToMoveToOrganization: (vaultItemId: String, showOnlyCollections: Boolean) -> Unit,
     onNavigateToAttachments: (vaultItemId: String) -> Unit,
     onNavigateToPasswordHistory: (vaultItemId: String) -> Unit,
+    onNavigateToPreviewAttachment: (route: PreviewAttachmentRoute) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val fileChooserLauncher = intentManager.getActivityResultLauncher { activityResult ->
@@ -113,6 +115,18 @@ fun VaultItemScreen(
             is VaultItemEvent.NavigateToSelectAttachmentSaveLocation -> {
                 fileChooserLauncher.launch(
                     intentManager.createDocumentIntent(event.fileName),
+                )
+            }
+
+            is VaultItemEvent.NavigateToPreviewAttachment -> {
+                onNavigateToPreviewAttachment(
+                    PreviewAttachmentRoute(
+                        cipherId = event.cipherId,
+                        attachmentId = event.attachmentId,
+                        fileName = event.fileName,
+                        displaySize = event.displaySize,
+                        isLargeFile = event.isLargeFile,
+                    ),
                 )
             }
         }

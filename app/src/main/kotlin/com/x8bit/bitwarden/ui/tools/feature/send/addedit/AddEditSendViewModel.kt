@@ -564,7 +564,7 @@ class AddEditSendViewModel @Inject constructor(
     }
 
     private fun handleAuthTypeSelect(action: AddEditSendAction.AuthTypeSelect) {
-        // Check if user is trying to select Email auth without premium
+        // Check if user is trying to select Email auth without Premium
         if (action.sendAuth is SendAuth.Email && !state.isPremium) {
             mutableStateFlow.update {
                 it.copy(dialogState = AddEditSendState.DialogState.EmailAuthRequiresPremium)
@@ -712,7 +712,7 @@ class AddEditSendViewModel @Inject constructor(
             (content.selectedType as? AddEditSendState.ViewState.Content.SendType.File)
                 ?.let { fileType ->
                     if (!state.isPremium) {
-                        // We should never get here without a premium account, but we do one last
+                        // We should never get here without a Premium account, but we do one last
                         // check just in case.
                         mutableStateFlow.update {
                             it.copy(
@@ -1057,7 +1057,7 @@ data class AddEditSendState(
 
         /**
          * Displays a dialog to the user indicating that email authentication requires
-         * a premium account.
+         * a Premium account.
          */
         @Parcelize
         data object EmailAuthRequiresPremium : DialogState()
@@ -1110,7 +1110,7 @@ sealed class AddEditSendEvent {
     ) : AddEditSendEvent()
 
     /**
-     * Navigate to the premium upgrade page.
+     * Navigate to the Premium upgrade page.
      */
     data class NavigateToPremium(val uri: String) : AddEditSendEvent()
 }
@@ -1250,7 +1250,7 @@ sealed class AddEditSendAction {
     data class AuthEmailRemove(val authEmail: AuthEmail) : AddEditSendAction()
 
     /**
-     * User clicked upgrade to premium from the email auth premium dialog.
+     * User clicked upgrade to Premium from the email auth Premium dialog.
      */
     data object UpgradeToPremiumClick : AddEditSendAction()
 

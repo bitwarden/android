@@ -43,6 +43,18 @@
     {
       "type": "android",
       "info": {
+        "package_name": "org.calyxos.chromium",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "CB:33:EE:73:84:2F:2F:BD:C3:E3:52:5F:D1:C3:74:07:41:82:6F:33:84:9B:C9:6F:95:4D:76:18:17:D3:00:EB"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
         "package_name": "org.cromite.cromite",
         "signatures": [
           {

@@ -41,6 +41,7 @@ import com.bitwarden.ui.util.onNodeWithTextAfterScroll
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmentRoute
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
@@ -69,6 +70,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     private var onNavigateToMoveToOrganizationItemId: String? = null
     private var onNavigateToAttachmentsId: String? = null
     private var onNavigateToPasswordHistoryId: String? = null
+    private var onNavigateToPreviewAttachment: PreviewAttachmentRoute? = null
 
     private val intentManager = mockk<IntentManager>(relaxed = true)
 
@@ -93,6 +95,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                 },
                 onNavigateToAttachments = { onNavigateToAttachmentsId = it },
                 onNavigateToPasswordHistory = { onNavigateToPasswordHistoryId = it },
+                onNavigateToPreviewAttachment = { onNavigateToPreviewAttachment = it },
             )
         }
     }
@@ -136,6 +139,27 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         val id = "id1234"
         mutableEventFlow.tryEmit(VaultItemEvent.NavigateToPasswordHistory(itemId = id))
         assertEquals(id, onNavigateToPasswordHistoryId)
+    }
+
+    @Test
+    fun `NavigateToPreviewAttachment event should invoke onNavigateToPreviewAttachment`() {
+        val route = PreviewAttachmentRoute(
+            cipherId = "cipherId1234",
+            attachmentId = "attachmentId4321",
+            fileName = "fileName",
+            displaySize = "2.89 MB",
+            isLargeFile = false,
+        )
+        mutableEventFlow.tryEmit(
+            VaultItemEvent.NavigateToPreviewAttachment(
+                cipherId = "cipherId1234",
+                attachmentId = "attachmentId4321",
+                fileName = "fileName",
+                displaySize = "2.89 MB",
+                isLargeFile = false,
+            ),
+        )
+        assertEquals(route, onNavigateToPreviewAttachment)
     }
 
     @Test
@@ -246,14 +270,14 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ArchiveRequiresPremium dialog on upgrade to premium click should emit UpgradeToPremiumClick`() {
+    fun `ArchiveRequiresPremium dialog on upgrade to Premium click should emit UpgradeToPremiumClick`() {
         composeTestRule.assertNoDialogExists()
         mutableStateFlow.update {
             it.copy(dialog = VaultItemState.DialogState.ArchiveRequiresPremium)
         }
 
         composeTestRule
-            .onNodeWithText(text = "Upgrade to premium")
+            .onNodeWithText(text = "Upgrade to Premium")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -711,7 +735,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                 composeTestRule.onNodeWithTextAfterScroll("boolean").assertIsDisplayed()
 
                 mutableStateFlow.update { currentState ->
-                    updateCommonContent(currentState) { copy(customFields = emptyList()) }
+                    updateCommonContent(currentState) { copy(customFields = persistentListOf()) }
                 }
 
                 composeTestRule.assertScrollableNodeDoesNotExist("CUSTOM FIELDS")
@@ -732,7 +756,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                 composeTestRule.onNodeWithTextAfterScroll("11 MB").assertIsDisplayed()
 
                 mutableStateFlow.update { currentState ->
-                    updateCommonContent(currentState) { copy(attachments = emptyList()) }
+                    updateCommonContent(currentState) { copy(attachments = persistentListOf()) }
                 }
 
                 composeTestRule.assertScrollableNodeDoesNotExist("ATTACHMENTS")
@@ -742,12 +766,12 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `attachment download click for non-premium users should show an error dialog`() {
+    fun `attachment download click for non-Premium users should show an error dialog`() {
         mutableStateFlow.update { currentState ->
             currentState.copy(
                 viewState = EMPTY_LOGIN_VIEW_STATE.copy(
                     common = EMPTY_COMMON.copy(
-                        attachments = listOf(
+                        attachments = persistentListOf(
                             VaultItemState.ViewState.Content.Common.AttachmentItem(
                                 id = "attachment-id",
                                 displaySize = "11 MB",
@@ -763,7 +787,9 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule.assertNoDialogExists()
-        composeTestRule.onNodeWithContentDescriptionAfterScroll("Download").performClick()
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Download, External link")
+            .performClick()
 
         composeTestRule
             .onAllNodesWithText(
@@ -774,7 +800,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText(text = "Upgrade to premium")
+            .onAllNodesWithText(text = "Upgrade to Premium")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -791,7 +817,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             currentState.copy(
                 viewState = EMPTY_LOGIN_VIEW_STATE.copy(
                     common = EMPTY_COMMON.copy(
-                        attachments = listOf(
+                        attachments = persistentListOf(
                             VaultItemState.ViewState.Content.Common.AttachmentItem(
                                 id = "attachment-id",
                                 displaySize = "11 MB",
@@ -807,13 +833,12 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule.assertNoDialogExists()
-        composeTestRule.onNodeWithContentDescriptionAfterScroll("Download").performClick()
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Download, External link")
+            .performClick()
 
         composeTestRule
-            .onAllNodesWithText(
-                "This attachment is 11 MB in size. Are you sure you want to download it onto " +
-                    "your device?",
-            )
+            .onAllNodesWithText("This file is 11 MB. Would you like to download it?")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
@@ -840,20 +865,19 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             currentState.copy(
                 viewState = EMPTY_LOGIN_VIEW_STATE.copy(
                     common = EMPTY_COMMON.copy(
-                        attachments = listOf(attachment),
+                        attachments = persistentListOf(attachment),
                     ),
                 ),
             )
         }
 
         composeTestRule.assertNoDialogExists()
-        composeTestRule.onNodeWithContentDescriptionAfterScroll("Download").performClick()
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Download, External link")
+            .performClick()
 
         composeTestRule
-            .onAllNodesWithText(
-                "This attachment is 11 MB in size. Are you sure you want to download it onto " +
-                    "your device?",
-            )
+            .onAllNodesWithText("This file is 11 MB. Would you like to download it?")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
@@ -883,14 +907,16 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             currentState.copy(
                 viewState = EMPTY_LOGIN_VIEW_STATE.copy(
                     common = EMPTY_COMMON.copy(
-                        attachments = listOf(attachment),
+                        attachments = persistentListOf(attachment),
                     ),
                 ),
             )
         }
 
         composeTestRule.assertNoDialogExists()
-        composeTestRule.onNodeWithContentDescriptionAfterScroll("Download").performClick()
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Download, External link")
+            .performClick()
 
         composeTestRule.assertNoDialogExists()
 
@@ -915,7 +941,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                     currentState.copy(
                         viewState = typeState.copy(
                             common = EMPTY_COMMON.copy(
-                                customFields = listOf(textField),
+                                customFields = persistentListOf(textField),
                             ),
                         ),
                     )
@@ -954,7 +980,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                     currentState.copy(
                         viewState = typeState.copy(
                             common = EMPTY_COMMON.copy(
-                                customFields = listOf(hiddenField),
+                                customFields = persistentListOf(hiddenField),
                             ),
                         ),
                     )
@@ -968,7 +994,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
                 mutableStateFlow.update { currentState ->
                     updateCommonContent(currentState) {
-                        copy(customFields = listOf(hiddenField.copy(isCopyable = false)))
+                        copy(customFields = persistentListOf(hiddenField.copy(isCopyable = false)))
                     }
                 }
 
@@ -996,7 +1022,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                     currentState.copy(
                         viewState = typeState.copy(
                             common = EMPTY_COMMON.copy(
-                                customFields = listOf(hiddenField),
+                                customFields = persistentListOf(hiddenField),
                             ),
                         ),
                     )
@@ -1031,7 +1057,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                     currentState.copy(
                         viewState = typeState.copy(
                             common = EMPTY_COMMON.copy(
-                                customFields = listOf(textField),
+                                customFields = persistentListOf(textField),
                             ),
                         ),
                     )
@@ -1066,7 +1092,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                     currentState.copy(
                         viewState = typeState.copy(
                             common = EMPTY_COMMON.copy(
-                                customFields = listOf(textField),
+                                customFields = persistentListOf(textField),
                             ),
                         ),
                     )
@@ -1080,7 +1106,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
                 mutableStateFlow.update { currentState ->
                     updateCommonContent(currentState) {
-                        copy(customFields = listOf(textField.copy(isCopyable = false)))
+                        copy(customFields = persistentListOf(textField.copy(isCopyable = false)))
                     }
                 }
 
@@ -1727,7 +1753,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                             type = DEFAULT_IDENTITY,
                             common = EMPTY_COMMON.copy(
                                 notes = "this is a note",
-                                customFields = listOf(textField),
+                                customFields = persistentListOf(textField),
                             ),
                         ),
                     )
@@ -1763,7 +1789,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                             type = DEFAULT_IDENTITY,
                             common = EMPTY_COMMON.copy(
                                 notes = "this is a note",
-                                customFields = listOf(textField),
+                                customFields = persistentListOf(textField),
                             ),
                         ),
                     )
@@ -1819,7 +1845,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                             type = DEFAULT_SSH_KEY,
                             common = EMPTY_COMMON.copy(
                                 notes = "this is a note",
-                                customFields = listOf(textField),
+                                customFields = persistentListOf(textField),
                             ),
                         ),
                     )
@@ -2064,7 +2090,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             currentState.copy(
                 viewState = EMPTY_LOGIN_VIEW_STATE.copy(
                     common = EMPTY_COMMON.copy(
-                        customFields = listOf(linkedFieldUserName, linkedFieldsPassword),
+                        customFields = persistentListOf(linkedFieldUserName, linkedFieldsPassword),
                     ),
                 ),
             )
@@ -2082,7 +2108,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             currentState.copy(
                 viewState = EMPTY_LOGIN_VIEW_STATE.copy(
                     common = EMPTY_COMMON.copy(
-                        customFields = listOf(),
+                        customFields = persistentListOf(),
                     ),
                 ),
             )
@@ -3326,7 +3352,7 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
         created = BitwardenString.created.asText(""),
         lastUpdated = BitwardenString.last_edited.asText("Dec 31, 1969, 06:16 PM"),
         notes = "Lots of notes",
-        customFields = listOf(
+        customFields = persistentListOf(
             VaultItemState.ViewState.Content.Common.Custom.TextField(
                 id = "12345",
                 name = "text",
@@ -3347,7 +3373,7 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
             ),
         ),
         requiresCloneConfirmation = false,
-        attachments = listOf(
+        attachments = persistentListOf(
             VaultItemState.ViewState.Content.Common.AttachmentItem(
                 id = "attachment-id",
                 displaySize = "11 MB",
@@ -3441,9 +3467,9 @@ private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
         created = BitwardenString.created.asText("Dec 1, 1969, 05:20 PM"),
         lastUpdated = BitwardenString.last_edited.asText("Dec 31, 1969, 06:16 PM"),
         notes = null,
-        customFields = emptyList(),
+        customFields = persistentListOf(),
         requiresCloneConfirmation = false,
-        attachments = emptyList(),
+        attachments = persistentListOf(),
         canDelete = true,
         canRestore = true,
         canAssignToCollections = true,

@@ -1112,7 +1112,7 @@ data class SearchState(
          */
         @Parcelize
         data class Content(
-            val displayItems: List<DisplayItem>,
+            val displayItems: ImmutableList<DisplayItem>,
         ) : ViewState() {
             override val hasVaultFilter: Boolean get() = true
         }
@@ -1169,7 +1169,7 @@ data class SearchState(
         ) : DialogState()
 
         /**
-         * Displays a dialog to the user indicating that archiving requires a premium account.
+         * Displays a dialog to the user indicating that archiving requires a Premium account.
          */
         @Parcelize
         data object ArchiveRequiresPremium : DialogState()
@@ -1188,9 +1188,9 @@ data class SearchState(
         val totpCode: String?,
         val iconData: IconData,
         val extraIconList: ImmutableList<IconData>,
-        val overflowOptions: List<ListingItemOverflowAction>,
+        val overflowOptions: ImmutableList<ListingItemOverflowAction>,
         val overflowTestTag: String?,
-        val autofillSelectionOptions: List<AutofillSelectionOption>,
+        val autofillSelectionOptions: ImmutableList<AutofillSelectionOption>,
         val shouldDisplayMasterPasswordReprompt: Boolean,
         val itemType: ItemType,
     ) : Parcelable {
@@ -1274,9 +1274,7 @@ sealed class SearchTypeData : Parcelable {
          */
         data object Logins : Vault() {
             override val title: Text
-                get() = BitwardenString.search.asText()
-                    .concat(" ".asText())
-                    .concat(BitwardenString.logins.asText())
+                get() = BitwardenString.search_x.asText(BitwardenString.logins.asText())
         }
 
         /**
@@ -1284,9 +1282,7 @@ sealed class SearchTypeData : Parcelable {
          */
         data object Cards : Vault() {
             override val title: Text
-                get() = BitwardenString.search.asText()
-                    .concat(" ".asText())
-                    .concat(BitwardenString.cards.asText())
+                get() = BitwardenString.search_x.asText(BitwardenString.cards.asText())
         }
 
         /**
@@ -1294,9 +1290,7 @@ sealed class SearchTypeData : Parcelable {
          */
         data object Identities : Vault() {
             override val title: Text
-                get() = BitwardenString.search.asText()
-                    .concat(" ".asText())
-                    .concat(BitwardenString.identities.asText())
+                get() = BitwardenString.search_x.asText(BitwardenString.identities.asText())
         }
 
         /**
@@ -1304,9 +1298,7 @@ sealed class SearchTypeData : Parcelable {
          */
         data object SecureNotes : Vault() {
             override val title: Text
-                get() = BitwardenString.search.asText()
-                    .concat(" ".asText())
-                    .concat(BitwardenString.secure_notes.asText())
+                get() = BitwardenString.search_x.asText(BitwardenString.secure_notes.asText())
         }
 
         /**
@@ -1314,9 +1306,7 @@ sealed class SearchTypeData : Parcelable {
          */
         data object SshKeys : Vault() {
             override val title: Text
-                get() = BitwardenString.search.asText()
-                    .concat(" ".asText())
-                    .concat(BitwardenString.ssh_keys.asText())
+                get() = BitwardenString.search_x.asText(BitwardenString.ssh_keys.asText())
         }
 
         /**
@@ -1327,9 +1317,7 @@ sealed class SearchTypeData : Parcelable {
             val collectionName: String = "",
         ) : Vault() {
             override val title: Text
-                get() = BitwardenString.search.asText()
-                    .concat(" ".asText())
-                    .concat(collectionName.asText())
+                get() = BitwardenString.search_x.asText(collectionName.asText())
         }
 
         /**
@@ -1337,9 +1325,7 @@ sealed class SearchTypeData : Parcelable {
          */
         data object NoFolder : Vault() {
             override val title: Text
-                get() = BitwardenString.search.asText()
-                    .concat(" ".asText())
-                    .concat(BitwardenString.folder_none.asText())
+                get() = BitwardenString.search_x.asText(BitwardenString.folder_none.asText())
         }
 
         /**
@@ -1350,9 +1336,7 @@ sealed class SearchTypeData : Parcelable {
             val folderName: String = "",
         ) : Vault() {
             override val title: Text
-                get() = BitwardenString.search.asText()
-                    .concat(" ".asText())
-                    .concat(folderName.asText())
+                get() = BitwardenString.search_x.asText(folderName.asText())
         }
 
         /**
@@ -1360,9 +1344,7 @@ sealed class SearchTypeData : Parcelable {
          */
         data object Trash : Vault() {
             override val title: Text
-                get() = BitwardenString.search.asText()
-                    .concat(" ".asText())
-                    .concat(BitwardenString.trash.asText())
+                get() = BitwardenString.search_x.asText(BitwardenString.trash.asText())
         }
 
         /**
@@ -1370,9 +1352,7 @@ sealed class SearchTypeData : Parcelable {
          */
         data object VerificationCodes : Vault() {
             override val title: Text
-                get() = BitwardenString.search.asText()
-                    .concat(" ".asText())
-                    .concat(BitwardenString.verification_codes.asText())
+                get() = BitwardenString.search_x.asText(BitwardenString.verification_codes.asText())
         }
     }
 }
@@ -1443,7 +1423,7 @@ sealed class SearchAction {
     ) : SearchAction()
 
     /**
-     * User clicked the upgrade to premium button.
+     * User clicked the upgrade to Premium button.
      */
     data object UpgradeToPremiumClick : SearchAction()
 

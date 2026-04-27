@@ -1,8 +1,11 @@
 package com.x8bit.bitwarden
 
 import android.content.Intent
+import android.net.Uri
 import androidx.browser.auth.AuthTabIntent
 import androidx.credentials.GetPublicKeyCredentialOption
+import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
+import com.x8bit.bitwarden.data.billing.util.getPremiumCheckoutCallbackResult
 import androidx.credentials.provider.BiometricPromptResult
 import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
@@ -71,6 +74,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLang
 import com.x8bit.bitwarden.ui.platform.util.isAccountSecurityShortcut
 import com.x8bit.bitwarden.ui.platform.util.isMyVaultShortcut
 import com.x8bit.bitwarden.ui.platform.util.isPasswordGeneratorShortcut
+import com.x8bit.bitwarden.ui.platform.util.isPremiumCheckoutCallback
 import com.x8bit.bitwarden.ui.vault.util.getTotpDataOrNull
 import io.mockk.coEvery
 import io.mockk.every
@@ -195,11 +199,13 @@ class MainViewModelTest : BaseViewModelTest() {
             AuthTabIntent.AuthResult::getDuoCallbackTokenResult,
             AuthTabIntent.AuthResult::getSsoCallbackResult,
             AuthTabIntent.AuthResult::getWebAuthResult,
+            AuthTabIntent.AuthResult::getPremiumCheckoutCallbackResult,
         )
         mockkStatic(
             Intent::isMyVaultShortcut,
             Intent::isPasswordGeneratorShortcut,
             Intent::isAccountSecurityShortcut,
+            Intent::isPremiumCheckoutCallback,
         )
         mockkObject(
             ProviderCreateCredentialRequest.Companion,
@@ -226,11 +232,13 @@ class MainViewModelTest : BaseViewModelTest() {
             AuthTabIntent.AuthResult::getDuoCallbackTokenResult,
             AuthTabIntent.AuthResult::getSsoCallbackResult,
             AuthTabIntent.AuthResult::getWebAuthResult,
+            AuthTabIntent.AuthResult::getPremiumCheckoutCallbackResult,
         )
         unmockkStatic(
             Intent::isMyVaultShortcut,
             Intent::isPasswordGeneratorShortcut,
             Intent::isAccountSecurityShortcut,
+            Intent::isPremiumCheckoutCallback,
         )
         unmockkObject(
             ProviderCreateCredentialRequest.Companion,
@@ -861,6 +869,98 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `on ReceiveFirstIntent with Premium checkout success callback should set PremiumCheckoutResult with isSuccess true`() {
+        val viewModel = createViewModel()
+        val mockUri = mockk<Uri> {
+            every { getQueryParameter("result") } returns "success"
+        }
+        val mockIntent = createMockIntent(
+            mockIsPremiumCheckoutCallback = true,
+            mockDataUri = mockUri,
+        )
+
+        viewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(intent = mockIntent),
+        )
+        assertEquals(
+            SpecialCircumstance.PremiumCheckout(
+                callbackResult = PremiumCheckoutCallbackResult.Success,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveFirstIntent with Premium checkout canceled callback should set PremiumCheckoutResult with isSuccess false`() {
+        val viewModel = createViewModel()
+        val mockUri = mockk<Uri> {
+            every { getQueryParameter("result") } returns "canceled"
+        }
+        val mockIntent = createMockIntent(
+            mockIsPremiumCheckoutCallback = true,
+            mockDataUri = mockUri,
+        )
+
+        viewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(intent = mockIntent),
+        )
+        assertEquals(
+            SpecialCircumstance.PremiumCheckout(
+                callbackResult = PremiumCheckoutCallbackResult.Canceled,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveNewIntent with Premium checkout success callback should set PremiumCheckoutResult with isSuccess true`() {
+        val viewModel = createViewModel()
+        val mockUri = mockk<Uri> {
+            every { getQueryParameter("result") } returns "success"
+        }
+        val mockIntent = createMockIntent(
+            mockIsPremiumCheckoutCallback = true,
+            mockDataUri = mockUri,
+        )
+
+        viewModel.trySendAction(
+            MainAction.ReceiveNewIntent(intent = mockIntent),
+        )
+        assertEquals(
+            SpecialCircumstance.PremiumCheckout(
+                callbackResult = PremiumCheckoutCallbackResult.Success,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveNewIntent with Premium checkout canceled callback should set PremiumCheckoutResult with isSuccess false`() {
+        val viewModel = createViewModel()
+        val mockUri = mockk<Uri> {
+            every { getQueryParameter("result") } returns "canceled"
+        }
+        val mockIntent = createMockIntent(
+            mockIsPremiumCheckoutCallback = true,
+            mockDataUri = mockUri,
+        )
+
+        viewModel.trySendAction(
+            MainAction.ReceiveNewIntent(intent = mockIntent),
+        )
+        assertEquals(
+            SpecialCircumstance.PremiumCheckout(
+                callbackResult = PremiumCheckoutCallbackResult.Canceled,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `on ReceiveNewIntent with a password generator deeplink data should set the special circumstance to GeneratorShortcut`() {
         val viewModel = createViewModel()
         val mockIntent = createMockIntent(mockIsPasswordGeneratorShortcut = true)
@@ -1154,6 +1254,46 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `on PremiumCheckoutResult with RESULT_OK should set PremiumCheckoutResult with isSuccess true`() {
+        val authResult = mockk<AuthTabIntent.AuthResult> {
+            every { getPremiumCheckoutCallbackResult() } returns PremiumCheckoutCallbackResult.Success
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            MainAction.PremiumCheckoutResult(authResult = authResult),
+        )
+
+        assertEquals(
+            SpecialCircumstance.PremiumCheckout(
+                callbackResult = PremiumCheckoutCallbackResult.Success,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on PremiumCheckoutResult with RESULT_CANCELED should set PremiumCheckoutResult with isSuccess false`() {
+        val authResult = mockk<AuthTabIntent.AuthResult> {
+            every { getPremiumCheckoutCallbackResult() } returns PremiumCheckoutCallbackResult.Canceled
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            MainAction.PremiumCheckoutResult(authResult = authResult),
+        )
+
+        assertEquals(
+            SpecialCircumstance.PremiumCheckout(
+                callbackResult = PremiumCheckoutCallbackResult.Canceled,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `cookie acquisition should emit NavigateToCookieAcquisition when vault unlocked with matching hostname`() =
         runTest {
             mutableCookieAcquisitionRequestFlow.value = CookieAcquisitionRequest(
@@ -1264,8 +1404,10 @@ private fun createMockIntent(
     mockIsMyVaultShortcut: Boolean = false,
     mockIsPasswordGeneratorShortcut: Boolean = false,
     mockIsAccountSecurityShortcut: Boolean = false,
+    mockIsPremiumCheckoutCallback: Boolean = false,
     mockIsAddTotpLoginItemFromAuthenticator: Boolean = false,
     mockProviderImportCredentialsRequest: ProviderImportCredentialsRequest? = null,
+    mockDataUri: Uri? = null,
 ): Intent = mockk<Intent> {
     every { getTotpDataOrNull() } returns mockTotpData
     every { getPasswordlessRequestDataIntentOrNull() } returns mockPasswordlessRequestData
@@ -1275,8 +1417,10 @@ private fun createMockIntent(
     every { isMyVaultShortcut } returns mockIsMyVaultShortcut
     every { isPasswordGeneratorShortcut } returns mockIsPasswordGeneratorShortcut
     every { isAccountSecurityShortcut } returns mockIsAccountSecurityShortcut
+    every { isPremiumCheckoutCallback } returns mockIsPremiumCheckoutCallback
     every { isAddTotpLoginItemFromAuthenticator() } returns mockIsAddTotpLoginItemFromAuthenticator
     every { getProviderImportCredentialsRequest() } returns mockProviderImportCredentialsRequest
+    every { data } returns mockDataUri
 }
 
 private val FIXED_CLOCK: Clock = Clock.fixed(

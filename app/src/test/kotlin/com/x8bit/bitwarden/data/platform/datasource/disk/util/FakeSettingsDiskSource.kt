@@ -515,7 +515,7 @@ class FakeSettingsDiskSource(
     }
 
     /**
-     * Asserts that the stored premium upgrade banner dismissed matches the [expected] one.
+     * Asserts that the stored Premium upgrade banner dismissed matches the [expected] one.
      */
     fun assertPremiumUpgradeBannerDismissed(userId: String, expected: Boolean?) {
         assertEquals(expected, storedPremiumUpgradeBannerDismissed[userId])

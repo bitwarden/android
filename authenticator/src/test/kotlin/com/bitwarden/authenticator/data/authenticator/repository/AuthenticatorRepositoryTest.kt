@@ -4,7 +4,6 @@ import android.net.Uri
 import app.cash.turbine.test
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.util.FakeAuthenticatorDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.entity.createMockAuthenticatorItemEntity
-import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
@@ -25,6 +24,7 @@ import com.bitwarden.authenticatorbridge.model.SharedAccountData
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.util.mockBuilder
+import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.ui.platform.model.FileData
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -38,7 +38,6 @@ import io.mockk.unmockkConstructor
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -163,7 +162,7 @@ class AuthenticatorRepositoryTest {
             every { sharedAccounts.toAuthenticatorItems() } returns authenticatorItems
             every {
                 mockTotpCodeManager.getTotpCodesFlow(authenticatorItems)
-            } returns flowOf(verificationCodes)
+            } returns MutableStateFlow(verificationCodes)
             authenticatorRepository.sharedCodesStateFlow.test {
                 assertEquals(SharedVerificationCodesState.Loading, awaitItem())
                 mutableAccountSyncStateFlow.value = AccountSyncState.Success(sharedAccounts)
@@ -182,7 +181,7 @@ class AuthenticatorRepositoryTest {
                     name = null,
                     email = "test@test.com",
                     environmentLabel = "bitwarden.com",
-                    totpUris = emptyList(),
+                    cipherData = emptyList(),
                 ),
             )
             authenticatorRepository.firstTimeAccountSyncFlow.test {
@@ -203,7 +202,7 @@ class AuthenticatorRepositoryTest {
                     name = null,
                     email = "test@test.com",
                     environmentLabel = "bitwarden.com",
-                    totpUris = emptyList(),
+                    cipherData = emptyList(),
                 ),
             )
             authenticatorRepository.firstTimeAccountSyncFlow.test {

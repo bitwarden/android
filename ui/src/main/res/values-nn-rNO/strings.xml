@@ -11,6 +11,7 @@
     <string name="copy_password">Skriv av passord</string>
     <string name="copy_username">Skriv av brukarnamn</string>
     <string name="delete">Sletta</string>
+    <string name="preview">Preview</string>
     <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Er du heilt trygg på at du vil sletta? Ein kan ikkje angra på dette.</string>
     <string name="edit">Rediger</string>
@@ -170,7 +171,7 @@
     <string name="autofill_noun">Autofill</string>
     <string name="autofill_verb">Autofill</string>
     <string name="autofill_or_view">Vil du fylla ut ubede eller sjå på oppføringa?</string>
-    <string name="search">Leita</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">Lær om samskipnader</string>
     <string name="authenticator_app_title">Authenticator app</string>
     <string name="enter_verification_code_app">Enter the 6 digit verification code from your authenticator app.</string>
@@ -205,6 +206,7 @@ Skanning skjer automatisk.</string>
     <string name="choose_file">Vel fil</string>
     <string name="file">Fil</string>
     <string name="no_file_chosen">Inga fil er vald</string>
+    <string name="file_name">File name</string>
     <string name="no_attachments">Det er inga vedlegg.</string>
     <string name="file_source">Filkjelde</string>
     <string name="max_file_size">Den høgste tillatne filstorleiken er 100 MB.</string>
@@ -226,6 +228,8 @@ Skanning skjer automatisk.</string>
     <string name="copy_security_code">Skriv av trygdenykelen</string>
     <string name="number">Kortnummer</string>
     <string name="security_code">Trygdenykel</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">Kort</string>
     <string name="type_identity">Identitet</string>
     <string name="type_login">Innskriving</string>
@@ -379,6 +383,7 @@ Skanning skjer automatisk.</string>
     <string name="capitalize">Stor førebokstav</string>
     <string name="include_number">Inkluder tal</string>
     <string name="download">Lasta ned</string>
+    <string name="download_file">Download file</string>
     <string name="login_expired">Innskrivingsøkta di er gått ut.</string>
     <string name="biometrics_direction">Biometrisk stadfesting</string>
     <string name="device_verification">Device verification</string>
@@ -508,10 +513,10 @@ Skanning skjer automatisk.</string>
     <string name="remove_master_password">Remove master password</string>
     <string name="leave_organization">Far ut av samskipnad</string>
     <string name="leave_organization_name">Far frå %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave?</string>
     <string name="leave_organization_button">Leave %1$s</string>
-    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
-    <string name="how_to_manage_my_vault">How to manage My vault</string>
+    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features. <annotation link="learnMore">Learn more</annotation></string>
+    <string name="contact_your_admin_to_regain_access">Contact your admin to regain access.</string>
     <string name="fido2_authenticate_web_authn">Authenticate WebAuthn</string>
     <string name="fido2_return_to_app">Return to app</string>
     <string name="reset_password_auto_enroll_invite_warning">This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</string>
@@ -940,6 +945,7 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
@@ -1184,7 +1190,7 @@ Do you want to switch to this account?</string>
     <string name="resending">Resending</string>
     <string name="you_left_the_organization">You left the organization</string>
     <string name="transfer_items_to_org">Transfer items to %1$s</string>
-    <string name="transfer_items_description">%1$s is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items.</string>
+    <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items. <annotation link="learnMore">Learn more</annotation></string>
     <string name="decline_and_leave">Decline and leave</string>
     <string name="why_am_i_seeing_this">Why am I seeing this?</string>
     <string name="migrating_items_to_x">Migrating items to %s</string>
@@ -1203,7 +1209,9 @@ Do you want to switch to this account?</string>
     <string name="item_moved_to_vault">Item moved to vault</string>
     <string name="archive_unavailable">Archive unavailable</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
-    <string name="upgrade_to_premium">Upgrade to premium</string>
+    <string name="upgrade_to_premium">Upgrade to Premium</string>
+    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">This item is archived.</string>
     <string name="introducing_archive">Introducing archive</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>
@@ -1224,4 +1232,30 @@ Do you want to switch to this account?</string>
     <string name="continue_without_syncing">Continue without syncing</string>
     <string name="external_link">External link</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
+    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
+    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
+    <string name="preview_unavailable">Preview unavailable</string>
+    <string name="download_attachment">Download Attachment</string>
+    <string name="upgraded_to_premium">Upgraded to premium</string>
+    <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
+    <string name="per_month">/ month</string>
+    <string name="built_in_authenticator">Built-in authenticator</string>
+    <string name="emergency_access">Emergency access</string>
+    <string name="secure_file_storage">Secure file storage</string>
+    <string name="breach_monitoring">Breach monitoring</string>
+    <string name="upgrade_now">Upgrade now</string>
+    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="opening_checkout">Opening checkout…</string>
+    <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
+    <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
+    <string name="payment_not_received_yet">Payment not received yet</string>
+    <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
+    <string name="go_back">Go back</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
+    <string name="show_next_code">Show next code</string>
+    <string name="see_upcoming_codes_in_the_list">See upcoming codes in the list</string>
+    <string name="next_code_x">Next code, %1$s</string>
 </resources>

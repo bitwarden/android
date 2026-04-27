@@ -131,8 +131,8 @@ class CredentialProviderCompletionManagerImpl(
                             intent = intent,
                             response = GetCredentialResponse(
                                 credential = PasswordCredential(
-                                    id = result.credential.username ?: "",
-                                    password = result.credential.password ?: "",
+                                    id = result.username.orEmpty(),
+                                    password = result.password,
                                 ),
                             ),
                         )

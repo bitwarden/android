@@ -160,6 +160,18 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `reset Premium upgrade banner should send ResetPremiumUpgradeBanner action`() {
+        composeTestRule
+            .onNodeWithText("Reset Premium upgrade banner")
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(DebugMenuAction.ResetPremiumUpgradeBanner)
+        }
+    }
+
+    @Test
     fun `reset all coach mark tours should send ResetCoachMarkTourStatuses action`() {
         composeTestRule
             .onNodeWithText("Reset all coach mark tours")

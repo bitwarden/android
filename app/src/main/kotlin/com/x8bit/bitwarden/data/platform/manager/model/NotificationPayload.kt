@@ -99,7 +99,7 @@ sealed class NotificationPayload {
     ) : NotificationPayload()
 
     /**
-     * A notification payload for premium status changes.
+     * A notification payload for Premium status changes.
      */
     @Serializable
     data class PremiumStatusChangedNotification(

@@ -82,7 +82,7 @@ fun NavGraphBuilder.authGraph(
                 navController.navigateToMasterPasswordGuidance()
             },
             onNavigateToPreventAccountLockout = {
-                navController.navigateToPreventAccountLockout()
+                navController.navigateToPreventAccountLockout(isPasswordReset = false)
             },
             onNavigateToLogin = { emailAddress ->
                 navController.navigateToLogin(
@@ -172,11 +172,14 @@ fun NavGraphBuilder.authGraph(
             onNavigateToGeneratePassword = { navController.navigateToMasterPasswordGenerator() },
         )
         preventAccountLockoutDestination(
+            isPasswordReset = false,
             onNavigateBack = { navController.popBackStack() },
         )
         masterPasswordGeneratorDestination(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateToPreventLockout = { navController.navigateToPreventAccountLockout() },
+            onNavigateToPreventLockout = {
+                navController.navigateToPreventAccountLockout(isPasswordReset = false)
+            },
             onNavigateBackWithPassword = {
                 navController.popUpToCompleteRegistration()
             },

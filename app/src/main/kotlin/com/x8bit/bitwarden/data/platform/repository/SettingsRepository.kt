@@ -253,12 +253,12 @@ interface SettingsRepository : FlightRecorderManager {
     fun dismissIntroducingArchiveActionCard()
 
     /**
-     * Gets updates for whether the premium upgrade banner is dismissed.
+     * Gets updates for whether the Premium upgrade banner is dismissed.
      */
     fun getPremiumUpgradeBannerDismissedFlow(): StateFlow<Boolean>
 
     /**
-     * Stores that the premium upgrade banner has been dismissed for the active user.
+     * Stores that the Premium upgrade banner has been dismissed for the active user.
      */
     fun dismissPremiumUpgradeBanner()
 

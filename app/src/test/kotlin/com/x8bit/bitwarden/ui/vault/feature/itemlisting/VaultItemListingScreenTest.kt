@@ -50,7 +50,6 @@ import com.bitwarden.ui.util.performYesDialogButtonClick
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
@@ -223,7 +222,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `premium action card restart premium button click should send UpgradeToPremiumClick`() {
+    fun `Premium action card restart Premium button click should send UpgradeToPremiumClick`() {
         composeTestRule
             .onNodeWithText(text = "Your Premium subscription ended")
             .assertDoesNotExist()
@@ -451,6 +450,15 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `search icon click should send SearchIconClick action`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayItemList = emptyList(),
+                    displayFolderList = emptyList(),
+                    displayCollectionList = emptyList(),
+                ),
+            )
+        }
         composeTestRule
             .onNodeWithContentDescription("Search vault")
             .performClick()
@@ -1444,6 +1452,55 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `on item archive overflow option click should display archive confirmation dialog and emits ArchiveClick on confirmation`() {
+        val cipherId = "mockId-1"
+        val archiveAction = ListingItemOverflowAction.VaultAction.ArchiveClick(cipherId = cipherId)
+        mutableStateFlow.update {
+            it.copy(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayCollectionList = emptyList(),
+                    displayItemList = listOf(
+                        createCipherDisplayItem(number = 1).copy(
+                            overflowOptions = listOf(archiveAction),
+                        ),
+                    ),
+                    displayFolderList = emptyList(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "mockTitle-1")
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "More options"))
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Archive")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Archive item")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Archive")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                action = VaultItemListingsAction.OverflowOptionClick(action = archiveAction),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `on cipher item overflow option click when reprompt is required should show the master password dialog`() {
         mutableStateFlow.update {
             it.copy(
@@ -2056,7 +2113,10 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `GetPasswordCredentialResult event should call CredentialProviderCompletionManager with result`() {
-        val result = GetPasswordCredentialResult.Success(createMockLoginView(1))
+        val result = GetPasswordCredentialResult.Success(
+            username = "mockUsername-1",
+            password = "mockPassword-1",
+        )
         mutableEventFlow.tryEmit(
             VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(result),
         )
@@ -2514,7 +2574,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithText(text = "Upgrade to premium")
+            .onNodeWithText(text = "Upgrade to Premium")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 

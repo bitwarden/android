@@ -52,6 +52,7 @@ class CookieAcquisitionScreenTest : BitwardenComposeTest() {
                 sso = mockk(),
                 webAuthn = mockk(),
                 cookie = cookieLauncher,
+                premiumCheckout = mockk(),
             ),
             intentManager = intentManager,
         ) {
@@ -111,7 +112,6 @@ class CookieAcquisitionScreenTest : BitwardenComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `continue without syncing button click should send ContinueWithoutSyncingClick action`() {
         composeTestRule

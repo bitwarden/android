@@ -61,9 +61,7 @@ fun BitwardenErrorContent(
         buttonData?.let {
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenFilledButton(
-                label = it.label(),
-                onClick = it.onClick,
-                icon = it.icon,
+                buttonData = it,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
         }

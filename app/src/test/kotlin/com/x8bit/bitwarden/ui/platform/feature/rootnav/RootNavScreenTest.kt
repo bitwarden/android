@@ -11,7 +11,7 @@ import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupUnlockRoute
 import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraphRoute
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationRoute
 import com.x8bit.bitwarden.ui.auth.feature.expiredregistrationlink.ExpiredRegistrationLinkRoute
-import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordRoute
+import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordGraphRoute
 import com.x8bit.bitwarden.ui.auth.feature.setpassword.SetPasswordRoute
 import com.x8bit.bitwarden.ui.auth.feature.trusteddevice.TrustedDeviceGraphRoute
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.VaultUnlockRoute
@@ -165,7 +165,7 @@ class RootNavScreenTest : BitwardenComposeTest() {
         composeTestRule.runOnIdle {
             verify {
                 mockNavHostController.navigate(
-                    route = ResetPasswordRoute,
+                    route = ResetPasswordGraphRoute,
                     navOptions = expectedNavOptions,
                 )
             }

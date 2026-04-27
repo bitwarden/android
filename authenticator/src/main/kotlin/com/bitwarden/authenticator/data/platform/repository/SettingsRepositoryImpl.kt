@@ -132,6 +132,22 @@ class SettingsRepositoryImpl(
                 initialValue = isCrashLoggingEnabled,
             )
 
+    override var isShowNextCodeEnabled: Boolean
+        get() = settingsDiskSource.isShowNextCodeEnabled ?: false
+        set(value) {
+            settingsDiskSource.isShowNextCodeEnabled = value
+        }
+
+    override val isShowNextCodeEnabledFlow: Flow<Boolean>
+        get() = settingsDiskSource
+            .isShowNextCodeEnabledFlow
+            .map { it ?: isShowNextCodeEnabled }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = isShowNextCodeEnabled,
+            )
+
     override var hasUserDismissedDownloadBitwardenCard: Boolean
         get() = settingsDiskSource.hasUserDismissedDownloadBitwardenCard ?: false
         set(value) {

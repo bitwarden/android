@@ -58,8 +58,8 @@ User Request (UI Action)
 
 ### Workflow Skills
 
-> **Quick start**: Use `/plan-android-work <task>` to refine requirements and plan,
-> then `/work-on-android <task>` for implementation,
+> **Quick start**: Use the `android-architect` agent (or `/plan-android-work <task>`) to refine requirements and plan,
+> then the `android-implementer` agent (or `/work-on-android <task>`) for implementation,
 > then `/review-android <PR#>` to review the result.
 
 Planning: 1–2 | Implementation: 3–7 | Review & PR: 8–10

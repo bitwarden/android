@@ -4,6 +4,7 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.Authentic
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.util.sortAlphabetically
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import kotlinx.collections.immutable.toImmutableList
@@ -13,6 +14,7 @@ import kotlinx.collections.immutable.toImmutableList
  */
 fun SharedVerificationCodesState.Success.toSharedCodesDisplayState(
     alertThresholdSeconds: Int,
+    isShowNextCodeEnabled: Boolean,
     currentSections: List<SharedCodesDisplayState.SharedCodesAccountSection> = emptyList(),
 ): SharedCodesDisplayState.Codes {
     val codesMap =
@@ -24,6 +26,7 @@ fun SharedVerificationCodesState.Success.toSharedCodesDisplayState(
         codesMap[it.source]?.add(
             it.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
+                isShowNextCodeEnabled = isShowNextCodeEnabled,
                 // Always map based on Error state, because shared codes will never
                 // show "Copy to Bitwarden vault" action.
                 sharedVerificationCodesState = SharedVerificationCodesState.Error,
@@ -41,12 +44,14 @@ fun SharedVerificationCodesState.Success.toSharedCodesDisplayState(
                     it.key.environmentLabel,
                     it.value.size,
                 ),
-                codes = it.value.toImmutableList(),
+                codes = it.value.sortAlphabetically().toImmutableList(),
                 isExpanded = currentSections
                     .find { section -> section.id == it.key.userId }
                     ?.isExpanded
                     ?: true,
+                sortKey = it.key.email,
             )
         }
+        .sortAlphabetically()
         .let { SharedCodesDisplayState.Codes(it.toImmutableList()) }
 }

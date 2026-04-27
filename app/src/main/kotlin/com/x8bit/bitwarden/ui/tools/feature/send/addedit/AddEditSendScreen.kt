@@ -151,6 +151,7 @@ fun AddEditSendScreen(
                                 .takeIf { !state.policyDisablesSend },
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.share_link),
+                                isExternalLink = true,
                                 onClick = {
                                     viewModel.trySendAction(AddEditSendAction.ShareLinkClick)
                                 },

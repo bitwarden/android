@@ -57,7 +57,6 @@ class UserLogoutManagerImpl(
         val ableToSwitchToNewAccount = switchUserIfAvailable(
             currentUserId = userId,
             isSecurityStamp = isSecurityStamp,
-            removeCurrentUserFromAccounts = true,
         )
 
         if (!ableToSwitchToNewAccount) {
@@ -85,12 +84,6 @@ class UserLogoutManagerImpl(
         val pinProtectedUserKey = authDiskSource.getPinProtectedUserKey(userId = userId)
         val pinProtectedUserKeyEnvelope = authDiskSource.getPinProtectedUserKeyEnvelope(
             userId = userId,
-        )
-
-        switchUserIfAvailable(
-            currentUserId = userId,
-            removeCurrentUserFromAccounts = false,
-            isSecurityStamp = isSecurityStamp,
         )
 
         clearData(userId = userId)
@@ -135,7 +128,6 @@ class UserLogoutManagerImpl(
 
     private fun switchUserIfAvailable(
         currentUserId: String,
-        removeCurrentUserFromAccounts: Boolean,
         isSecurityStamp: Boolean,
     ): Boolean {
         val currentUserState = authDiskSource.userState ?: return false
@@ -143,8 +135,7 @@ class UserLogoutManagerImpl(
         val currentAccountsMap = currentUserState.accounts
 
         // Remove the active user from the accounts map
-        val updatedAccounts = currentAccountsMap
-            .filterKeys { it != currentUserId }
+        val updatedAccounts = currentAccountsMap.filterKeys { it != currentUserId }
 
         // Check if there is a new active user
         return if (updatedAccounts.isNotEmpty()) {
@@ -163,11 +154,7 @@ class UserLogoutManagerImpl(
             // Update the user information and emit an updated token
             authDiskSource.userState = currentUserState.copy(
                 activeUserId = updatedActiveUserId,
-                accounts = if (removeCurrentUserFromAccounts) {
-                    updatedAccounts
-                } else {
-                    currentAccountsMap
-                },
+                accounts = updatedAccounts,
             )
             true
         } else {

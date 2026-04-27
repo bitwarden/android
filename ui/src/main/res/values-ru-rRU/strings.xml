@@ -11,6 +11,7 @@
     <string name="copy_password">Скопировать пароль</string>
     <string name="copy_username">Скопировать имя пользователя</string>
     <string name="delete">Удалить</string>
+    <string name="preview">Предпросмотр</string>
     <string name="deleting">Удаление…</string>
     <string name="do_you_really_want_to_delete">Вы действительно хотите удалить? Это действие необратимо.</string>
     <string name="edit">Изменить</string>
@@ -172,7 +173,7 @@
     <string name="autofill_noun">Автозаполнение</string>
     <string name="autofill_verb">Автозаполнение</string>
     <string name="autofill_or_view">Выполнить автозаполнение или просмотреть этот элемент?</string>
-    <string name="search">Поиск</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Поиск %1$s</string>
     <string name="learn_org">Узнать об организациях</string>
     <string name="authenticator_app_title">Приложение-аутентификатор</string>
     <string name="enter_verification_code_app">Введите 6-значный код подтверждения из вашего приложения-аутентификатора.</string>
@@ -207,6 +208,7 @@
     <string name="choose_file">Выбрать файл</string>
     <string name="file">Файл</string>
     <string name="no_file_chosen">Файл не выбран</string>
+    <string name="file_name">Название файла</string>
     <string name="no_attachments">Нет вложений.</string>
     <string name="file_source">Источник файла</string>
     <string name="max_file_size">Максимальный размер файла 100 МБ.</string>
@@ -228,6 +230,8 @@
     <string name="copy_security_code">Скопировать код безопасности</string>
     <string name="number">Номер</string>
     <string name="security_code">Код безопасности</string>
+    <string name="scan_card">Сканировать карту</string>
+    <string name="scan_card_instruction">Поместите карту в рамку для сканирования.</string>
     <string name="type_card">Карта</string>
     <string name="type_identity">Личная информация</string>
     <string name="type_login">Логин</string>
@@ -383,6 +387,7 @@
     <string name="capitalize">С заглавной буквы</string>
     <string name="include_number">Добавить цифру</string>
     <string name="download">Загрузить</string>
+    <string name="download_file">Скачать файл</string>
     <string name="login_expired">Истек срок действия вашей сессии.</string>
     <string name="biometrics_direction">Биометрическая верификация.</string>
     <string name="device_verification">Проверка устройства</string>
@@ -512,10 +517,10 @@
     <string name="remove_master_password">Удалить мастер-пароль</string>
     <string name="leave_organization">Покинуть организацию</string>
     <string name="leave_organization_name">Покинуть %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Вы уверены, что хотите покинуть %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Вы уверены, что хотите покинуть [%1$s]?</string>
     <string name="leave_organization_button">Покинуть %1$s</string>
     <string name="leave_organization_warning">В случае отказа ваши личные данные останутся в вашем аккаунте, но вы потеряете доступ к общим элементам и возможностям организации.\n\nОбратитесь к своему администратору, чтобы восстановить доступ.</string>
-    <string name="how_to_manage_my_vault">Как управлять моим хранилищем</string>
+    <string name="contact_your_admin_to_regain_access">Свяжитесь с вашим администратором для восстановления доступа.</string>
     <string name="fido2_authenticate_web_authn">Аутентификация WebAutn</string>
     <string name="fido2_return_to_app">Вернуться в приложение</string>
     <string name="reset_password_auto_enroll_invite_warning">В этой организации действует корпоративная политика, которая автоматически зарегистрирует вас на сброс пароля. Регистрация позволит администраторам организации изменить ваш мастер-пароль.</string>
@@ -952,6 +957,7 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">Операция с Passkey не удалась, поскольку не был выбран ни один элемент.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Операция с Passkey не удалась, поскольку запрос не поддерживается.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Операция с паролем не удалась, поскольку выбранный элемент не существует.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Операция с паролем не удалась, поскольку у выбранного элемента нет действительного пароля.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Операция с паролем не удалась, поскольку не был выбран ни один элемент.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Операция с учетными данными не удалась, поскольку запрос некорректен.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Операция с учетными данными не удалась, поскольку запрос не поддерживается.</string>
@@ -1222,6 +1228,8 @@
     <string name="archive_unavailable">Архив недоступен</string>
     <string name="archiving_items_is_a_premium_feature">Архивирование элементов является Премиум функцией. Она не входит в ваш текущий тарифный план.</string>
     <string name="upgrade_to_premium">Обновить до Премиум</string>
+    <string name="unlock_advanced_security_features">Разблокировать дополнительные функции безопасности</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">План Премиум дает вам больше возможностей по обеспечения безопасности и контроля.</string>
     <string name="this_item_is_archived">Этот элемент архивирован.</string>
     <string name="introducing_archive">Представляем архив</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Храните элементы, которые вам сейчас не нужны, в безопасности, но вне поля зрения.</string>
@@ -1242,4 +1250,30 @@
     <string name="continue_without_syncing">Продолжить без синхронизации</string>
     <string name="external_link">Внешняя ссылка</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, внешняя ссылка</string>
+    <string name="preview_not_available_for_files">Предпросмотр недоступен для %1$s файлов. Вы можете скачать его для просмотра на вашем устройстве.</string>
+    <string name="this_file_is_too_large_to_preview">Этот файл слишком велик для предварительного просмотра. Вы можете скачать его, чтобы просмотреть на своем устройстве.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden не смог расшифровать этот файл, поэтому предпросмотр не может быть отображен.</string>
+    <string name="preview_unavailable_for_this_file">Предпросмотр недоступен для этого файла. Вы можете скачать его для просмотра на вашем устройстве.</string>
+    <string name="preview_unavailable">Предпросмотр недоступен</string>
+    <string name="download_attachment">Скачать вложение</string>
+    <string name="upgraded_to_premium">Обновлено до Премиум</string>
+    <string name="unlock_premium_features">Разблокировать дополнительные возможности с Премиум.</string>
+    <string name="per_month">/ месяц</string>
+    <string name="built_in_authenticator">Встроенный аутентификатор</string>
+    <string name="emergency_access">Экстренный доступ</string>
+    <string name="secure_file_storage">Защищенное хранилище файлов</string>
+    <string name="breach_monitoring">Мониторинг нарушений</string>
+    <string name="upgrade_now">Изменить сейчас</string>
+    <string name="stripe_checkout_footer">Вас перенаправит на защищенную страницу оформления заказа Stripe для завершения покупки.</string>
+    <string name="opening_checkout">Начинается оформление заказа…</string>
+    <string name="secure_checkout_didnt_load">Защищенная оплата не загрузилась</string>
+    <string name="trouble_opening_payment_page">У нас возникли проблемы с открытием страницы оплаты, поэтому попробуйте еще раз.</string>
+    <string name="payment_not_received_yet">Оплата пока не поступила</string>
+    <string name="return_to_stripe_to_finish">Вернитесь на сайт Stripe в браузере, чтобы завершить изменение.</string>
+    <string name="go_back">Вернуться</string>
+    <string name="allow_camera_access">Разрешить доступ к камере</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">Для сканирования карты нам потребуется доступ к вашей камере. Вы можете изменить это в любое время в настройках устройства.</string>
+    <string name="show_next_code">Показать следующий код</string>
+    <string name="see_upcoming_codes_in_the_list">Просмотр будущих кодов в списке</string>
+    <string name="next_code_x">Следующий код, %1$s</string>
 </resources>

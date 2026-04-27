@@ -11,6 +11,7 @@
     <string name="copy_password">Passwort kopieren</string>
     <string name="copy_username">Benutzername kopieren</string>
     <string name="delete">Löschen</string>
+    <string name="preview">Vorschau</string>
     <string name="deleting">Wird gelöscht…</string>
     <string name="do_you_really_want_to_delete">Wirklich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.</string>
     <string name="edit">Bearbeiten</string>
@@ -170,7 +171,7 @@
     <string name="autofill_noun">Automatisches Ausfüllen</string>
     <string name="autofill_verb">Automatisches Ausfüllen</string>
     <string name="autofill_or_view">Möchtest du diese Zugangsdaten automatisch ausfüllen oder ansehen?</string>
-    <string name="search">Durchsuchen</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">%1$s durchsuchen</string>
     <string name="learn_org">Mehr über Organisationen erfahren</string>
     <string name="authenticator_app_title">Authenticator App</string>
     <string name="enter_verification_code_app">Gib den 6-stelligen Verifizierungscode aus deiner Authenticator App ein.</string>
@@ -205,6 +206,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="choose_file">Datei auswählen</string>
     <string name="file">Datei</string>
     <string name="no_file_chosen">Keine Datei ausgewählt</string>
+    <string name="file_name">Dateiname</string>
     <string name="no_attachments">Keine Anhänge verfügbar.</string>
     <string name="file_source">Dateiquelle</string>
     <string name="max_file_size">Die maximale Dateigröße beträgt 100 MB.</string>
@@ -226,6 +228,8 @@ Das Scannen erfolgt automatisch.</string>
     <string name="copy_security_code">Sicherheitscode kopieren</string>
     <string name="number">Nummer</string>
     <string name="security_code">Sicherheitscode</string>
+    <string name="scan_card">Karte scannen</string>
+    <string name="scan_card_instruction">Positioniere deine Karte innerhalb des Rahmens, um sie zu scannen.</string>
     <string name="type_card">Karte</string>
     <string name="type_identity">Identität</string>
     <string name="type_login">Zugangsdaten</string>
@@ -379,6 +383,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="capitalize">Wortanfänge großschreiben</string>
     <string name="include_number">Ziffern einschließen</string>
     <string name="download">Herunterladen</string>
+    <string name="download_file">Datei herunterladen</string>
     <string name="login_expired">Deine Sitzung ist abgelaufen.</string>
     <string name="biometrics_direction">Biometrische Verifizierung</string>
     <string name="device_verification">Geräteverifizierung</string>
@@ -508,10 +513,10 @@ Das Scannen erfolgt automatisch.</string>
     <string name="remove_master_password">Master-Passwort entfernen</string>
     <string name="leave_organization">Organisation verlassen</string>
     <string name="leave_organization_name">%1$s verlassen?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Bist du sicher, dass du %1$s verlassen möchtest?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Bist du sicher, dass du [%1$s] verlassen möchtest?</string>
     <string name="leave_organization_button">%1$s verlassen</string>
     <string name="leave_organization_warning">Wenn du ablehnst, bleiben deine persönlichen Einträge in deinem Konto erhalten, aber du wirst den Zugriff auf geteilte Einträge und Organisationsfunktionen verlieren.\n\nKontaktiere deinen Administrator, um den Zugriff wiederherzustellen.</string>
-    <string name="how_to_manage_my_vault">So verwaltest du deinen Tresor</string>
+    <string name="contact_your_admin_to_regain_access">Kontaktiere deinen Administrator, um wieder Zugriff zu erhalten.</string>
     <string name="fido2_authenticate_web_authn">WebAuthn authentifizieren</string>
     <string name="fido2_return_to_app">Zurück zur App</string>
     <string name="reset_password_auto_enroll_invite_warning">Diese Organisation hat eine Unternehmensrichtlinie, die dich automatisch für die Passwortzurücksetzung registriert. Die Registrierung wird es Administratoren der Organisation erlauben, dein Master-Passwort zu ändern.</string>
@@ -939,6 +944,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Der Passkey-Vorgang ist fehlgeschlagen, da kein Eintrag ausgewählt wurde.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Der Passkey-Vorgang ist fehlgeschlagen, weil die Anfrage nicht unterstützt wird.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Der Passwort-Vorgang ist fehlgeschlagen, da der ausgewählte Eintrag nicht existiert.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Der Passwort-Vorgang ist fehlgeschlagen, da der ausgewählte Eintrag kein gültiges Password hat.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Der Passwort-Vorgang ist fehlgeschlagen, da kein Eintrag ausgewählt wurde.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Der Anmeldevorgang ist fehlgeschlagen, da die Anfrage ungültig ist.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Der Anmeldevorgang ist fehlgeschlagen, da die Anfrage nicht unterstützt wird.</string>
@@ -1203,6 +1209,8 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="archive_unavailable">Archiv nicht verfügbar</string>
     <string name="archiving_items_is_a_premium_feature">Das Archivieren von Einträgen ist eine Premium-Funktion. Dein aktueller Tarif umfasst keinen Zugriff auf diese Funktion.</string>
     <string name="upgrade_to_premium">Auf Premium upgraden</string>
+    <string name="unlock_advanced_security_features">Erweiterte Sicherheitsfunktionen freischalten</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Mit einem Premium-Tarif stehen dir mehr Werkzeuge zur Verfügung, um sicher zu bleiben und die Kontrolle zu behalten.</string>
     <string name="this_item_is_archived">Dieser Eintrag ist archiviert.</string>
     <string name="introducing_archive">Einführung des Archivs</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Bewahre Einträge, die du derzeit nicht benötigst, sicher, aber außer Sichtweite auf.</string>
@@ -1223,4 +1231,30 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="continue_without_syncing">Ohne Synchronisierung fortfahren</string>
     <string name="external_link">Externer Link</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Externer Link</string>
+    <string name="preview_not_available_for_files">Für %1$s Dateien ist keine Vorschau verfügbar. Du kannst sie trotzdem herunterladen, um sie auf deinem Gerät anzuzeigen.</string>
+    <string name="this_file_is_too_large_to_preview">Diese Datei ist zu groß für die Vorschau. Du kannst sie trotzdem herunterladen, um sie auf deinem Gerät anzuzeigen.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden konnte diese Datei nicht entschlüsseln, daher kann die Vorschau nicht angezeigt werden.</string>
+    <string name="preview_unavailable_for_this_file">Für diese Datei ist keine Vorschau verfügbar. Du kannst sie trotzdem herunterladen, um sie auf deinem Gerät anzuzeigen.</string>
+    <string name="preview_unavailable">Vorschau nicht verfügbar</string>
+    <string name="download_attachment">Anhang herunterladen</string>
+    <string name="upgraded_to_premium">Auf Premium upgraden</string>
+    <string name="unlock_premium_features">Schalte mehr erweiterte Funktionen mit einem Premium-Tarif frei.</string>
+    <string name="per_month">/ Monat</string>
+    <string name="built_in_authenticator">Integrierter Authenticator</string>
+    <string name="emergency_access">Notfallzugriff</string>
+    <string name="secure_file_storage">Sichere Dateispeicherung</string>
+    <string name="breach_monitoring">Datendiebstahl-Überwachung</string>
+    <string name="upgrade_now">Jetzt upgraden</string>
+    <string name="stripe_checkout_footer">Du wirst zur sicheren Kaufabwicklung von Stripe weitergeleitet, um deinen Kauf abzuschließen.</string>
+    <string name="opening_checkout">Kaufabwicklung wird geöffnet…</string>
+    <string name="secure_checkout_didnt_load">Die sichere Kaufabwicklung wurde nicht geladen</string>
+    <string name="trouble_opening_payment_page">Wir hatten Probleme beim Öffnen der Zahlungsseite. Bitte versuche es erneut.</string>
+    <string name="payment_not_received_yet">Zahlung noch nicht eingegangen</string>
+    <string name="return_to_stripe_to_finish">Kehre in deinem Browser zu Stripe zurück, um das Upgrade abzuschließen.</string>
+    <string name="go_back">Geh zurück</string>
+    <string name="allow_camera_access">Kamerazugriff erlauben</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">Um deine Karte zu scannen, benötigen wir Zugriff auf deine Kamera. Du kannst dies jederzeit in den Geräteeinstellungen ändern.</string>
+    <string name="show_next_code">Nächsten Code anzeigen</string>
+    <string name="see_upcoming_codes_in_the_list">Die nächsten Codes sind in der Liste zu sehen</string>
+    <string name="next_code_x">Nächster Code, %1$s</string>
 </resources>

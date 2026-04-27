@@ -5,6 +5,7 @@ import com.bitwarden.cxf.importer.CredentialExchangeImporter
 import com.bitwarden.cxf.manager.CredentialExchangeCompletionManager
 import com.bitwarden.cxf.validator.CredentialExchangeRequestValidator
 import com.bitwarden.ui.platform.base.BaseComposeTest
+import com.bitwarden.ui.platform.feature.cardscanner.util.CardTextAnalyzer
 import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzer
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.manager.IntentManager
@@ -49,6 +50,7 @@ abstract class BitwardenComposeTest : BaseComposeTest() {
         credentialExchangeImporter: CredentialExchangeImporter = mockk(),
         credentialExchangeCompletionManager: CredentialExchangeCompletionManager = mockk(),
         credentialExchangeRequestValidator: CredentialExchangeRequestValidator = mockk(),
+        cardTextAnalyzer: CardTextAnalyzer = mockk(),
         qrCodeAnalyzer: QrCodeAnalyzer = mockk(),
         test: @Composable () -> Unit,
     ) {
@@ -69,6 +71,7 @@ abstract class BitwardenComposeTest : BaseComposeTest() {
                 credentialExchangeImporter = credentialExchangeImporter,
                 credentialExchangeCompletionManager = credentialExchangeCompletionManager,
                 credentialExchangeRequestValidator = credentialExchangeRequestValidator,
+                cardTextAnalyzer = cardTextAnalyzer,
                 qrCodeAnalyzer = qrCodeAnalyzer,
             ) {
                 BitwardenTheme(

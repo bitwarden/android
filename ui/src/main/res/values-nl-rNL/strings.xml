@@ -11,6 +11,7 @@
     <string name="copy_password">Wachtwoord kopiëren</string>
     <string name="copy_username">Gebruikersnaam kopiëren</string>
     <string name="delete">Verwijderen</string>
+    <string name="preview">Voorbeeld</string>
     <string name="deleting">Verwijderen…</string>
     <string name="do_you_really_want_to_delete">Weet je zeker dat je wilt verwijderen? Je kunt dit niet ongedaan maken.</string>
     <string name="edit">Bewerken</string>
@@ -170,7 +171,7 @@
     <string name="autofill_noun">Automatisch invullen</string>
     <string name="autofill_verb">Automatisch invullen</string>
     <string name="autofill_or_view">Wilt je dit item automatisch invullen of bekijken?</string>
-    <string name="search">Zoeken</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Zoek %1$s</string>
     <string name="learn_org">Meer over organisaties</string>
     <string name="authenticator_app_title">Authenticatie-app</string>
     <string name="enter_verification_code_app">Voer de 6-cijferige verificatiecode uit je authenticatie-app in.</string>
@@ -205,6 +206,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="choose_file">Bestand kiezen</string>
     <string name="file">Bestand</string>
     <string name="no_file_chosen">Geen bestand gekozen</string>
+    <string name="file_name">Bestandsnaam</string>
     <string name="no_attachments">Er zijn geen bijlagen.</string>
     <string name="file_source">Bestandsbron</string>
     <string name="max_file_size">De maximale bestandsgrootte is 100 MB.</string>
@@ -226,6 +228,8 @@ Het scannen gebeurt automatisch.</string>
     <string name="copy_security_code">Beveiligingscode kopiëren</string>
     <string name="number">Kaartnummer</string>
     <string name="security_code">Beveiligingscode</string>
+    <string name="scan_card">Kaart scannen</string>
+    <string name="scan_card_instruction">Positioneer je kaart binnen het kader om te scannen.</string>
     <string name="type_card">Kaart</string>
     <string name="type_identity">Identiteit</string>
     <string name="type_login">Login</string>
@@ -379,6 +383,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="capitalize">Beginhoofdletters</string>
     <string name="include_number">Cijfer toevoegen</string>
     <string name="download">Downloaden</string>
+    <string name="download_file">Bestand downloaden</string>
     <string name="login_expired">Je inlogsessie is verlopen.</string>
     <string name="biometrics_direction">Biometrische verificatie</string>
     <string name="device_verification">Apparaat verificatie</string>
@@ -508,10 +513,10 @@ Het scannen gebeurt automatisch.</string>
     <string name="remove_master_password">Hoofdwachtwoord verwijderen</string>
     <string name="leave_organization">Organisatie verlaten</string>
     <string name="leave_organization_name">%1$s verlaten?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Weet je zeker dat je %1$s wilt verlaten?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Weet je zeker dat je [%1$s] wilt verlaten?</string>
     <string name="leave_organization_button">%1$s verlaten</string>
     <string name="leave_organization_warning">Door te weigeren, blijven je persoonlijke items in je account, maar verlies je toegang tot gedeelde items en organisatiefunctionaliteit.\n\nNeem contact op met je beheerder om weer toegang te krijgen.</string>
-    <string name="how_to_manage_my_vault">Hoe Mijn kluis beheren</string>
+    <string name="contact_your_admin_to_regain_access">Neem contact op met je beheerder om weer toegang te krijgen.</string>
     <string name="fido2_authenticate_web_authn">Authenticeer WebAuthn</string>
     <string name="fido2_return_to_app">Terug naar de app</string>
     <string name="reset_password_auto_enroll_invite_warning">Deze organisatie heeft een ondernemingsbeleid dat je automatisch inschrijft bij het resetten van je wachtwoord. Inschrijving stelt organisatiebeheerders in staat om je hoofdwachtwoord te wijzigen.</string>
@@ -940,6 +945,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Passkey-bewerking mislukt omdat er geen item geselecteerd is.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey-bewerking mislukt omdat het verzoek niet ondersteund is.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Wachtwoord-bewerking mislukt omdat het geselecteerde item niet bestaat.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Wachtwoord-bewerking mislukt omdat het geselecteerde item geen geldig wachtwoord heeft.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Wachtwoord-bewerking mislukt omdat er geen item geselecteerd is.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Bewerking op inloggegeven mislukt omdat het verzoek ongeldig is.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Bewerking op inloggegeven mislukt omdat het verzoek niet ondersteund is.</string>
@@ -1204,6 +1210,8 @@ Wilt u naar dit account wisselen?</string>
     <string name="archive_unavailable">Archief niet beschikbaar</string>
     <string name="archiving_items_is_a_premium_feature">Het archiveren van items is een Premium-functie. Toegang tot deze functie is niet inbegrepen in je huidige abonnement.</string>
     <string name="upgrade_to_premium">Naar Premium upgraden</string>
+    <string name="unlock_advanced_security_features">Geavanceerde beveiligingsfuncties ontgrendelen</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Een Premium-abonnement geeft je meer tools om veilig en in controle te blijven.</string>
     <string name="this_item_is_archived">Dit item is gearchiveerd.</string>
     <string name="introducing_archive">Archief introduceren</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Houd voorwerpen die je nu niet nodig hebt, veilig maar uit zicht.</string>
@@ -1224,4 +1232,30 @@ Wilt u naar dit account wisselen?</string>
     <string name="continue_without_syncing">Doorgaan zonder synchroniseren</string>
     <string name="external_link">Externe link</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, externe link</string>
+    <string name="preview_not_available_for_files">Voorbeeld niet beschikbaar voor %1$s bestanden. Je kunt het nog steeds downloaden om het op je apparaat te bekijken.</string>
+    <string name="this_file_is_too_large_to_preview">Dit bestand is te groot om te bekijken. Je kunt het nog steeds downloaden om op je apparaat te bekijken.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden kan dit bestand niet decoderen, dus het voorbeeld kan niet worden weergegeven.</string>
+    <string name="preview_unavailable_for_this_file">Voorbeeld niet beschikbaar voor dit] bestand. Je kunt het nog steeds downloaden om het op je apparaat te bekijken.</string>
+    <string name="preview_unavailable">Voorbeeld niet beschikbaar</string>
+    <string name="download_attachment">Bijlage downloaden</string>
+    <string name="upgraded_to_premium">Naar Premium opgewaardeerd</string>
+    <string name="unlock_premium_features">Ontgrendel meer geavanceerde functies met een Premium-abonnement.</string>
+    <string name="per_month">/ maand</string>
+    <string name="built_in_authenticator">Ingebouwde authenticator</string>
+    <string name="emergency_access">Noodtoegang</string>
+    <string name="secure_file_storage">Beveiligde bestandsopslag</string>
+    <string name="breach_monitoring">Lek-monitoring</string>
+    <string name="upgrade_now">Nu upgraden</string>
+    <string name="stripe_checkout_footer">Je gaat naar Stripe\'s beveiligde checkout voor het afronden van je aankoop.</string>
+    <string name="opening_checkout">Checkout openen…</string>
+    <string name="secure_checkout_didnt_load">Beveiligde checkout werd niet geladen</string>
+    <string name="trouble_opening_payment_page">We hebben problemen gehad met het openen van de betaalpagina, dus probeer het opnieuw.</string>
+    <string name="payment_not_received_yet">Betaling nog niet ontvangen</string>
+    <string name="return_to_stripe_to_finish">Terug naar Stripe in je browser voor het afronden van opwaarderen.</string>
+    <string name="go_back">Ga terug</string>
+    <string name="allow_camera_access">Cameratoegang toestaan</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">Om je kaart te scannen, hebben we toegang tot je camera nodig. Je kunt dit op ieder moment wijzigen in je apparaatinstellingen.</string>
+    <string name="show_next_code">Volgende code tonen</string>
+    <string name="see_upcoming_codes_in_the_list">Bekijk volgende codes in de lijst</string>
+    <string name="next_code_x">Volgende code, %1$s</string>
 </resources>

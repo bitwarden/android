@@ -19,6 +19,7 @@ import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.IdentityView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
+import com.x8bit.bitwarden.ui.vault.feature.attachments.util.isLargeFile
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
@@ -27,6 +28,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import java.time.Clock
 import java.time.format.FormatStyle
 import java.util.Locale
@@ -53,14 +55,17 @@ fun CipherView.toViewState(
         common = VaultItemState.ViewState.Content.Common(
             currentCipher = this,
             name = name,
-            customFields = fields.orEmpty().map { fieldView ->
-                fieldView.toCustomField(
-                    previousState = previousState
-                        ?.common
-                        ?.customFields
-                        ?.find { it.id == fieldView.hashCode().toString() },
-                )
-            },
+            customFields = fields
+                .orEmpty()
+                .map { fieldView ->
+                    fieldView.toCustomField(
+                        previousState = previousState
+                            ?.common
+                            ?.customFields
+                            ?.find { it.id == fieldView.hashCode().toString() },
+                    )
+                }
+                .toImmutableList(),
             created = BitwardenString.created.asText(
                 creationDate.toFormattedDateTimeStyle(
                     dateStyle = FormatStyle.MEDIUM,
@@ -93,16 +98,13 @@ fun CipherView.toViewState(
                             title = requireNotNull(it.fileName),
                             displaySize = requireNotNull(it.sizeName),
                             url = requireNotNull(it.url),
-                            isLargeFile = try {
-                                requireNotNull(it.size).toLong() >= 10485760
-                            } catch (_: NumberFormatException) {
-                                false
-                            },
+                            isLargeFile = it.isLargeFile(),
                             isDownloadAllowed = isPremiumUser || this.organizationId != null,
                         )
                     }
                 }
-                .orEmpty(),
+                .orEmpty()
+                .toImmutableList(),
             canDelete = canDelete,
             canRestore = canRestore,
             canAssignToCollections = canAssignToCollections,

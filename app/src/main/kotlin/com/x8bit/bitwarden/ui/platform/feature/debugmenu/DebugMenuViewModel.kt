@@ -65,6 +65,7 @@ class DebugMenuViewModel @Inject constructor(
             DebugMenuAction.GenerateErrorReportClick -> handleErrorReportClick()
             DebugMenuAction.TriggerCookieAcquisition -> handleTriggerCookieAcquisition()
             DebugMenuAction.ClearSsoCookies -> handleClearSsoCookies()
+            DebugMenuAction.ResetPremiumUpgradeBanner -> handleResetPremiumUpgradeBanner()
         }
     }
 
@@ -103,6 +104,10 @@ class DebugMenuViewModel @Inject constructor(
 
     private fun handleClearSsoCookies() {
         debugMenuRepository.clearSsoCookies()
+    }
+
+    private fun handleResetPremiumUpgradeBanner() {
+        debugMenuRepository.resetPremiumUpgradeBannerDismiss()
     }
 
     private fun handleTriggerCookieAcquisition() {
@@ -205,6 +210,11 @@ sealed class DebugMenuAction {
      * The user has clicked clear SSO cookies button.
      */
     data object ClearSsoCookies : DebugMenuAction()
+
+    /**
+     * User has clicked to reset the Premium upgrade banner dismiss status.
+     */
+    data object ResetPremiumUpgradeBanner : DebugMenuAction()
 
     /**
      * Internal actions not triggered from the UI.

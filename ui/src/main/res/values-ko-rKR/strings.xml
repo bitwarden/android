@@ -11,6 +11,7 @@
     <string name="copy_password">비밀번호 복사</string>
     <string name="copy_username">사용자 이름 복사</string>
     <string name="delete">삭제</string>
+    <string name="preview">Preview</string>
     <string name="deleting">삭제 중...</string>
     <string name="do_you_really_want_to_delete">정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.</string>
     <string name="edit">편집</string>
@@ -169,7 +170,7 @@
     <string name="autofill_noun">자동 완성</string>
     <string name="autofill_verb">자동 완성</string>
     <string name="autofill_or_view">이 항목을 보거나 자동 완성하시겠습니까?</string>
-    <string name="search">검색</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">조직에 대해 알아보기</string>
     <string name="authenticator_app_title">인증 앱</string>
     <string name="enter_verification_code_app">인증 앱에서 6자리 인증 코드를 입력하세요.</string>
@@ -204,6 +205,7 @@
     <string name="choose_file">파일 선택</string>
     <string name="file">파일</string>
     <string name="no_file_chosen">선택한 파일 없음</string>
+    <string name="file_name">File name</string>
     <string name="no_attachments">첨부 파일이 없습니다.</string>
     <string name="file_source">파일 위치</string>
     <string name="max_file_size">최대 파일 크기는 100MB입니다.</string>
@@ -225,6 +227,8 @@
     <string name="copy_security_code">보안 코드 복사</string>
     <string name="number">번호</string>
     <string name="security_code">보안 코드</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">카드</string>
     <string name="type_identity">신원</string>
     <string name="type_login">로그인</string>
@@ -377,6 +381,7 @@
     <string name="capitalize">첫 글자를 대문자로</string>
     <string name="include_number">숫자 포함</string>
     <string name="download">다운로드</string>
+    <string name="download_file">Download file</string>
     <string name="login_expired">로그인 세션이 만료되었습니다.</string>
     <string name="biometrics_direction">인증하기 위해 생체 인식을 사용하세요.</string>
     <string name="device_verification">기기 인증</string>
@@ -506,10 +511,10 @@
     <string name="remove_master_password">마스터 비밀번호 제거</string>
     <string name="leave_organization">조직 나가기</string>
     <string name="leave_organization_name">%1$s 조직을 떠나시겠어요?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave?</string>
     <string name="leave_organization_button">%1$s 떠나기</string>
-    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
-    <string name="how_to_manage_my_vault">내 보관함을 관리하는 법</string>
+    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features. <annotation link="learnMore">Learn more</annotation></string>
+    <string name="contact_your_admin_to_regain_access">Contact your admin to regain access.</string>
     <string name="fido2_authenticate_web_authn">WebAuthn 인증</string>
     <string name="fido2_return_to_app">앱으로 돌아가기</string>
     <string name="reset_password_auto_enroll_invite_warning">이 조직에는 자동으로 비밀번호 재설정에 등록하는 기업 정책이 있습니다. 등록하면 조직 관리자가 마스터 암호를 변경할 수 있습니다.</string>
@@ -767,7 +772,7 @@
     <string name="help_with_server_geolocations">Help with server geolocations</string>
     <string name="email_address_required">이메일 주소 (필수)</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">이메일의 링크를 클릭하여 이메일 주소를 인증하고 회원가입을 완료해주세요.</string>
-    <string name="change_email_address">이메일 주소 변경ㅂ</string>
+    <string name="change_email_address">이메일 주소 변경</string>
     <string name="next">Next</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden은 잊어버린 마스터 비밀번호를 복구할 수 없습니다.</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden은 잊어버린 마스터 비밀번호를 재설정할 수 없습니다.</string>
@@ -934,6 +939,7 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
@@ -1175,7 +1181,7 @@
     <string name="resending">재전송 중</string>
     <string name="you_left_the_organization">조직을 떠났습니다</string>
     <string name="transfer_items_to_org">%1$s에 항목 전송</string>
-    <string name="transfer_items_description">%1$s is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items.</string>
+    <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items. <annotation link="learnMore">Learn more</annotation></string>
     <string name="decline_and_leave">거부 및 떠나기</string>
     <string name="why_am_i_seeing_this">왜 이 화면이 표시됩니까?</string>
     <string name="migrating_items_to_x">Migrating items to %s</string>
@@ -1194,7 +1200,9 @@
     <string name="item_moved_to_vault">항목을 보관함으로 이동함</string>
     <string name="archive_unavailable">Archive unavailable</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
-    <string name="upgrade_to_premium">Upgrade to premium</string>
+    <string name="upgrade_to_premium">Upgrade to Premium</string>
+    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">This item is archived.</string>
     <string name="introducing_archive">Introducing archive</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>
@@ -1215,4 +1223,30 @@
     <string name="continue_without_syncing">동기화 없이 계속</string>
     <string name="external_link">외부 링크</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
+    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
+    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
+    <string name="preview_unavailable">Preview unavailable</string>
+    <string name="download_attachment">Download Attachment</string>
+    <string name="upgraded_to_premium">Upgraded to premium</string>
+    <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
+    <string name="per_month">/ month</string>
+    <string name="built_in_authenticator">Built-in authenticator</string>
+    <string name="emergency_access">Emergency access</string>
+    <string name="secure_file_storage">Secure file storage</string>
+    <string name="breach_monitoring">Breach monitoring</string>
+    <string name="upgrade_now">Upgrade now</string>
+    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="opening_checkout">Opening checkout…</string>
+    <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
+    <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
+    <string name="payment_not_received_yet">Payment not received yet</string>
+    <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
+    <string name="go_back">Go back</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
+    <string name="show_next_code">Show next code</string>
+    <string name="see_upcoming_codes_in_the_list">See upcoming codes in the list</string>
+    <string name="next_code_x">Next code, %1$s</string>
 </resources>

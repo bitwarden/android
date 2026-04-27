@@ -182,6 +182,44 @@ class DebugMenuRepositoryTest {
             mockCookieDiskSource.clearCookies()
         }
     }
+
+    @Test
+    fun `resetPremiumUpgradeBannerDismiss should store null for the current user`() {
+        val userId = "testUserId"
+        val mockUserStateJson = mockk<UserStateJson>(relaxed = true) {
+            every { activeUserId } returns userId
+        }
+        every { mockAuthDiskSource.userState } returns mockUserStateJson
+        every {
+            mockSettingsDiskSource.storePremiumUpgradeBannerDismissed(
+                userId = any(),
+                isDismissed = any(),
+            )
+        } just runs
+
+        debugMenuRepository.resetPremiumUpgradeBannerDismiss()
+
+        verify(exactly = 1) {
+            mockSettingsDiskSource.storePremiumUpgradeBannerDismissed(
+                userId = userId,
+                isDismissed = null,
+            )
+        }
+    }
+
+    @Test
+    fun `resetPremiumUpgradeBannerDismiss should do nothing if no active user`() {
+        every { mockAuthDiskSource.userState } returns null
+
+        debugMenuRepository.resetPremiumUpgradeBannerDismiss()
+
+        verify(exactly = 0) {
+            mockSettingsDiskSource.storePremiumUpgradeBannerDismissed(
+                userId = any(),
+                isDismissed = any(),
+            )
+        }
+    }
 }
 
 private const val TEST_STRING_VALUE = "test"
