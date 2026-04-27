@@ -2,7 +2,6 @@
 
 package com.x8bit.bitwarden.ui.platform.feature.premium.plan
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -62,6 +62,8 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStatus
 import com.x8bit.bitwarden.ui.platform.composition.LocalAuthTabLaunchers
 import com.x8bit.bitwarden.ui.platform.feature.premium.plan.handlers.PlanHandlers
+import com.x8bit.bitwarden.ui.platform.feature.premium.plan.util.badgeColors
+import com.x8bit.bitwarden.ui.platform.feature.premium.plan.util.labelRes
 import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 
 /**
@@ -536,8 +538,7 @@ private fun SubscriptionLineItem(
     value: String,
     testTag: String,
     modifier: Modifier = Modifier,
-    valueColor: androidx.compose.ui.graphics.Color =
-        BitwardenTheme.colorScheme.text.primary,
+    valueColor: Color = BitwardenTheme.colorScheme.text.primary,
 ) {
     Row(
         modifier = modifier
@@ -559,27 +560,6 @@ private fun SubscriptionLineItem(
             color = valueColor,
         )
     }
-}
-
-@StringRes
-private fun PremiumSubscriptionStatus.labelRes(): Int = when (this) {
-    PremiumSubscriptionStatus.ACTIVE -> BitwardenString.subscription_status_active
-    PremiumSubscriptionStatus.CANCELED -> BitwardenString.subscription_status_canceled
-    PremiumSubscriptionStatus.OVERDUE_PAYMENT ->
-        BitwardenString.subscription_status_overdue_payment
-
-    PremiumSubscriptionStatus.PAST_DUE -> BitwardenString.subscription_status_past_due
-    PremiumSubscriptionStatus.PAUSED -> BitwardenString.subscription_status_paused
-}
-
-@Composable
-private fun PremiumSubscriptionStatus.badgeColors() = when (this) {
-    PremiumSubscriptionStatus.ACTIVE -> BitwardenTheme.colorScheme.statusBadge.success
-    PremiumSubscriptionStatus.CANCELED -> BitwardenTheme.colorScheme.statusBadge.error
-    PremiumSubscriptionStatus.OVERDUE_PAYMENT,
-    PremiumSubscriptionStatus.PAST_DUE,
-    PremiumSubscriptionStatus.PAUSED,
-        -> BitwardenTheme.colorScheme.statusBadge.warning
 }
 
 @Preview
