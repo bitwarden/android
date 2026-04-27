@@ -28,8 +28,7 @@ internal class NetworkResultCall<T>(
 ) : Call<NetworkResult<T>> {
     override fun cancel(): Unit = backingCall.cancel()
 
-    override fun clone(): Call<NetworkResult<T>> =
-        NetworkResultCall(backingCall, successType)
+    override fun clone(): Call<NetworkResult<T>> = NetworkResultCall(backingCall, successType)
 
     override fun enqueue(callback: Callback<NetworkResult<T>>): Unit = backingCall.enqueue(
         object : Callback<T> {

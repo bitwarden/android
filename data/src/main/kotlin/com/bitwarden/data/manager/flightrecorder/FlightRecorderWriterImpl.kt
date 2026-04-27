@@ -46,7 +46,9 @@ internal class FlightRecorderWriterImpl(
                 environment.identityUrl,
                 environment.notificationsUrl,
                 environment.ssoUrl,
-            ).mapNotNull { runCatching { URI(it).host }.getOrNull() }.toSet()
+            )
+                .mapNotNull { runCatching { URI(it).host }.getOrNull() }
+                .toSet()
         }
 
     override suspend fun deleteLog(data: FlightRecorderDataSet.FlightRecorderData) {
