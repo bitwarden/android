@@ -61,7 +61,11 @@ class VaultSdkCipherExtensionsTest {
 
     @Test
     fun `toEncryptedNetworkCipherResponse should convert an Sdk Cipher to a cipher`() {
-        val sdkCipher = createMockSdkCipher(number = 1, clock = FIXED_CLOCK)
+        val sdkCipher = createMockSdkCipher(
+            number = 1,
+            clock = FIXED_CLOCK,
+            bankAccount = createMockSdkBankAccount(number = 1),
+        )
 
         val result = sdkCipher.toEncryptedNetworkCipherResponse(
             encryptedFor = "mockEncryptedFor-1",
@@ -79,7 +83,11 @@ class VaultSdkCipherExtensionsTest {
 
     @Test
     fun `toEncryptedNetworkCipher should convert an Sdk Cipher to a Network Cipher`() {
-        val sdkCipher = createMockSdkCipher(number = 1, clock = FIXED_CLOCK)
+        val sdkCipher = createMockSdkCipher(
+            number = 1,
+            clock = FIXED_CLOCK,
+            bankAccount = createMockSdkBankAccount(number = 1),
+        )
         val syncCipher = sdkCipher.toEncryptedNetworkCipher(
             encryptedFor = "mockEncryptedFor-1",
         )
@@ -116,8 +124,16 @@ class VaultSdkCipherExtensionsTest {
         val sdkCiphers = syncCiphers.toEncryptedSdkCipherList()
         assertEquals(
             listOf(
-                createMockSdkCipher(number = 1, clock = FIXED_CLOCK),
-                createMockSdkCipher(number = 2, clock = FIXED_CLOCK),
+                createMockSdkCipher(
+                    number = 1,
+                    clock = FIXED_CLOCK,
+                    bankAccount = createMockSdkBankAccount(number = 1),
+                ),
+                createMockSdkCipher(
+                    number = 2,
+                    clock = FIXED_CLOCK,
+                    bankAccount = createMockSdkBankAccount(number = 2),
+                ),
             ),
             sdkCiphers,
         )
@@ -131,7 +147,11 @@ class VaultSdkCipherExtensionsTest {
         )
         val sdkCipher = syncCipher.toEncryptedSdkCipher()
         assertEquals(
-            createMockSdkCipher(number = 1, clock = FIXED_CLOCK),
+            createMockSdkCipher(
+                number = 1,
+                clock = FIXED_CLOCK,
+                bankAccount = createMockSdkBankAccount(number = 1),
+            ),
             sdkCipher,
         )
     }
@@ -509,7 +529,14 @@ class VaultSdkCipherExtensionsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `EncryptionContext toEncryptedNetworkCipher should convert an EncryptionContext to a Network Cipher`() {
-        val encryptionContext = createMockEncryptionContext(number = 1)
+        val encryptionContext = createMockEncryptionContext(
+            number = 1,
+            cipher = createMockSdkCipher(
+                number = 1,
+                clock = FIXED_CLOCK,
+                bankAccount = createMockSdkBankAccount(number = 1),
+            ),
+        )
         assertEquals(
             createMockCipherJsonRequest(
                 number = 1,
@@ -526,7 +553,14 @@ class VaultSdkCipherExtensionsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `EncryptionContext toEncryptedNetworkCipherResponse should convert an EncryptionContext to a cipher`() {
-        val encryptionContext = createMockEncryptionContext(number = 1)
+        val encryptionContext = createMockEncryptionContext(
+            number = 1,
+            cipher = createMockSdkCipher(
+                number = 1,
+                clock = FIXED_CLOCK,
+                bankAccount = createMockSdkBankAccount(number = 1),
+            ),
+        )
         assertEquals(
             createMockCipher(
                 number = 1,
