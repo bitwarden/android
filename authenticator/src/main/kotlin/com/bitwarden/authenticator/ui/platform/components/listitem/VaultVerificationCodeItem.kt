@@ -33,7 +33,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 /**
  * The verification code item displayed to the user.
  *
- * @param displayItem he model containing all relevant data to be displayed.
+ * @param displayItem The model containing all relevant data to be displayed.
  * @param onItemClick The lambda function to be invoked when the item is clicked.
  * @param onDropdownMenuClick A lambda function invoked when a dropdown menu action is clicked.
  * @param cardStyle The card style to be applied to this item.
@@ -61,8 +61,11 @@ fun VaultVerificationCodeItem(
         showMoveToBitwarden = displayItem.showMoveToBitwarden,
         cardStyle = cardStyle,
         modifier = modifier,
+        nextAuthCode = displayItem.nextAuthCode,
     )
 }
+
+private const val NEXT_CODE_THRESHOLD_SECONDS = 5
 
 /**
  * The verification code item displayed to the user.
@@ -80,6 +83,8 @@ fun VaultVerificationCodeItem(
  * @param showMoveToBitwarden Whether the option to move the item to Bitwarden is displayed.
  * @param cardStyle The card style to be applied to this item.
  * @param modifier The modifier for the item.
+ * @param nextAuthCode The next verification code to display when the current code is near expiry,
+ * or null if not yet available.
  */
 @Suppress("LongMethod", "MagicNumber")
 @Composable
@@ -97,6 +102,7 @@ fun VaultVerificationCodeItem(
     showMoveToBitwarden: Boolean,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
+    nextAuthCode: String? = null,
 ) {
     Row(
         modifier = modifier
@@ -145,21 +151,39 @@ fun VaultVerificationCodeItem(
             }
         }
 
-        BitwardenCircularCountdownIndicator(
-            modifier = Modifier.testTag(tag = "CircularCountDown"),
-            timeLeftSeconds = timeLeftSeconds,
-            periodSeconds = periodSeconds,
-            alertThresholdSeconds = alertThresholdSeconds,
-        )
+        Column(horizontalAlignment = Alignment.End) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(space = 16.dp),
+            ) {
+                BitwardenCircularCountdownIndicator(
+                    modifier = Modifier.testTag(tag = "CircularCountDown"),
+                    timeLeftSeconds = timeLeftSeconds,
+                    periodSeconds = periodSeconds,
+                    alertThresholdSeconds = alertThresholdSeconds,
+                )
 
-        Text(
-            modifier = Modifier.testTag(tag = "AuthCode"),
-            text = authCode
-                .chunked(size = 3) { it.padEnd(length = 3, padChar = ' ') }
-                .joinToString(separator = " "),
-            style = BitwardenTheme.typography.sensitiveInfoSmall,
-            color = BitwardenTheme.colorScheme.text.primary,
-        )
+                Text(
+                    modifier = Modifier.testTag(tag = "AuthCode"),
+                    text = authCode
+                        .chunked(size = 3) { it.padEnd(length = 3, padChar = ' ') }
+                        .joinToString(separator = " "),
+                    style = BitwardenTheme.typography.sensitiveInfoSmall,
+                    color = BitwardenTheme.colorScheme.text.primary,
+                )
+            }
+
+            if (nextAuthCode != null && timeLeftSeconds <= NEXT_CODE_THRESHOLD_SECONDS) {
+                Text(
+                    modifier = Modifier.testTag(tag = "NextAuthCode"),
+                    text = stringResource(id = BitwardenString.next_verification_code) +
+                        " " +
+                        nextAuthCode.chunked(size = 3).joinToString(separator = " "),
+                    style = BitwardenTheme.typography.bodySmall,
+                    color = BitwardenTheme.colorScheme.text.secondary,
+                )
+            }
+        }
 
         if (showOverflow) {
             BitwardenOverflowActionItem(
@@ -210,7 +234,7 @@ private fun VerificationCodeItem_preview() {
             primaryLabel = "Issuer, AKA Name",
             secondaryLabel = "username@bitwarden.com",
             periodSeconds = 30,
-            timeLeftSeconds = 15,
+            timeLeftSeconds = 3,
             alertThresholdSeconds = 7,
             startIcon = IconData.Local(BitwardenDrawable.ic_login_item),
             onItemClick = {},
@@ -219,6 +243,7 @@ private fun VerificationCodeItem_preview() {
             modifier = Modifier.padding(horizontal = 16.dp),
             showMoveToBitwarden = true,
             cardStyle = CardStyle.Full,
+            nextAuthCode = "987654321",
         )
     }
 }

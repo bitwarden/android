@@ -24,4 +24,5 @@ data class VerificationCodeDisplayItem(
     val favorite: Boolean,
     val showOverflow: Boolean,
     val showMoveToBitwarden: Boolean,
+    val nextAuthCode: String? = null,
 ) : Parcelable
