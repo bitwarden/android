@@ -378,4 +378,5 @@ private val DEFAULT_STATE = SettingsState(
     allowScreenCapture = false,
     hasBiometricsSupport = true,
     appTimeout = AppTimeout.OnAppRestart,
+    showNextTotpCode = false,
 )

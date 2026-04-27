@@ -7,11 +7,16 @@ import com.bitwarden.authenticator.ui.platform.components.listitem.model.Verific
 
 /**
  * Converts [VerificationCodeItem] to a [VerificationCodeDisplayItem].
+ *
+ * @param showNextCode When `true`, the upcoming code is mapped to
+ *  [VerificationCodeDisplayItem.nextAuthCode]. When `false`, [VerificationCodeDisplayItem.nextAuthCode]
+ *  is always `null`.
  */
 fun VerificationCodeItem.toDisplayItem(
     alertThresholdSeconds: Int,
     sharedVerificationCodesState: SharedVerificationCodesState,
     showOverflow: Boolean,
+    showNextCode: Boolean = false,
 ): VerificationCodeDisplayItem = VerificationCodeDisplayItem(
     id = id,
     title = issuer ?: label ?: "--",
@@ -25,6 +30,7 @@ fun VerificationCodeItem.toDisplayItem(
     periodSeconds = periodSeconds,
     alertThresholdSeconds = alertThresholdSeconds,
     authCode = code,
+    nextAuthCode = if (showNextCode) nextCode else null,
     showOverflow = showOverflow,
     favorite = (source as? AuthenticatorItem.Source.Local)?.isFavorite ?: false,
     showMoveToBitwarden = when (source) {

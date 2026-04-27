@@ -64,6 +64,7 @@ class ItemListingViewModel @Inject constructor(
 ) : BaseViewModel<ItemListingState, ItemListingEvent, ItemListingAction>(
     initialState = ItemListingState(
         alertThresholdSeconds = settingsRepository.authenticatorAlertThresholdSeconds,
+        showNextTotpCode = settingsRepository.showNextTotpCode,
         viewState = ItemListingState.ViewState.Loading,
         dialog = null,
     ),
@@ -73,6 +74,12 @@ class ItemListingViewModel @Inject constructor(
         settingsRepository
             .authenticatorAlertThresholdSecondsFlow
             .map { ItemListingAction.Internal.AlertThresholdSecondsReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        settingsRepository
+            .showNextTotpCodeStateFlow
+            .map { ItemListingAction.Internal.ShowNextTotpCodeReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -242,6 +249,10 @@ class ItemListingViewModel @Inject constructor(
 
             is ItemListingAction.Internal.AlertThresholdSecondsReceive -> {
                 handleAlertThresholdSecondsReceive(internalAction)
+            }
+
+            is ItemListingAction.Internal.ShowNextTotpCodeReceive -> {
+                handleShowNextTotpCodeReceive(internalAction)
             }
 
             is ItemListingAction.Internal.TotpCodeReceive -> {
@@ -450,6 +461,21 @@ class ItemListingViewModel @Inject constructor(
         }
     }
 
+    private fun handleShowNextTotpCodeReceive(
+        action: ItemListingAction.Internal.ShowNextTotpCodeReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(showNextTotpCode = action.showNextTotpCode)
+        }
+        // Re-derive the displayed list so that the next code is shown/hidden immediately
+        // when the user toggles the setting.
+        val codesUpdate = ItemListingAction.Internal.AuthCodesUpdated(
+            localCodes = authenticatorRepository.getLocalVerificationCodesFlow().value,
+            sharedCodesState = authenticatorRepository.sharedCodesStateFlow.value,
+        )
+        handleAuthenticatorDataReceive(codesUpdate)
+    }
+
     private fun handleDialogDismiss() {
         mutableStateFlow.update {
             it.copy(dialog = null)
@@ -508,6 +534,7 @@ class ItemListingViewModel @Inject constructor(
                                 .sharedCodesStateFlow
                                 .value,
                             showOverflow = true,
+                            showNextCode = state.showNextTotpCode,
                         )
                     }
                     .sortAlphabetically()
@@ -521,6 +548,7 @@ class ItemListingViewModel @Inject constructor(
                                 .sharedCodesStateFlow
                                 .value,
                             showOverflow = true,
+                            showNextCode = state.showNextTotpCode,
                         )
                     }
                     .sortAlphabetically()
@@ -712,6 +740,7 @@ const val ISSUER = "issuer"
 @Parcelize
 data class ItemListingState(
     val alertThresholdSeconds: Int,
+    val showNextTotpCode: Boolean,
     val viewState: ViewState,
     val dialog: DialogState?,
 ) : Parcelable {
@@ -989,6 +1018,13 @@ sealed class ItemListingAction {
          */
         data class AlertThresholdSecondsReceive(
             val thresholdSeconds: Int,
+        ) : Internal()
+
+        /**
+         * Indicates that the show-next-TOTP-code setting has changed.
+         */
+        data class ShowNextTotpCodeReceive(
+            val showNextTotpCode: Boolean,
         ) : Internal()
 
         /**

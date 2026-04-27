@@ -146,6 +146,43 @@ class VerificationCodeItemExtensionsTest {
     }
 
     @Test
+    fun `toDisplayItem should set nextAuthCode to nextCode when showNextCode is true`() {
+        val item = createMockVerificationCodeItem(number = 1, nextCode = "654321")
+        val result = item.toDisplayItem(
+            alertThresholdSeconds = 7,
+            sharedVerificationCodesState = SharedVerificationCodesState.Error,
+            showOverflow = true,
+            showNextCode = true,
+        )
+        assertEquals("654321", result.nextAuthCode)
+    }
+
+    @Test
+    fun `toDisplayItem should set nextAuthCode to null when showNextCode is false`() {
+        val item = createMockVerificationCodeItem(number = 1, nextCode = "654321")
+        val result = item.toDisplayItem(
+            alertThresholdSeconds = 7,
+            sharedVerificationCodesState = SharedVerificationCodesState.Error,
+            showOverflow = true,
+            showNextCode = false,
+        )
+        assertEquals(null, result.nextAuthCode)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `toDisplayItem should set nextAuthCode to null when showNextCode true but nextCode is null`() {
+        val item = createMockVerificationCodeItem(number = 1, nextCode = null)
+        val result = item.toDisplayItem(
+            alertThresholdSeconds = 7,
+            sharedVerificationCodesState = SharedVerificationCodesState.Error,
+            showOverflow = true,
+            showNextCode = true,
+        )
+        assertEquals(null, result.nextAuthCode)
+    }
+
+    @Test
     fun `toDisplayItem should map Shared items correctly`() {
         val alertThresholdSeconds = 7
         val favoriteItem = createMockVerificationCodeItem(

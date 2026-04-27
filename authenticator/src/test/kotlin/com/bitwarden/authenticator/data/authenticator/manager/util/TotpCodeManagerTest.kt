@@ -48,16 +48,82 @@ class TotpCodeManagerTest {
                 createMockAuthenticatorItem(number = 1, otpUri = totp),
             )
             val code = "123456"
+            val nextCode = "654321"
             val totpResponse = TotpResponse(code = code, period = 30u)
+            val nextTotpResponse = TotpResponse(code = nextCode, period = 30u)
             coEvery {
                 authenticatorSdkSource.generateTotp(totp = totp, time = clock.instant())
             } returns totpResponse.asSuccess()
+            coEvery {
+                authenticatorSdkSource.generateTotp(
+                    totp = totp,
+                    time = Instant.ofEpochMilli(clock.millis() + THIRTY_SECONDS_MILLIS),
+                )
+            } returns nextTotpResponse.asSuccess()
 
             val expected = createMockVerificationCodeItem(
                 number = 1,
                 code = code,
                 issueTime = clock.instant().toEpochMilli(),
                 timeLeftSeconds = 30,
+                nextCode = nextCode,
+            )
+
+            manager.getTotpCodesFlow(authenticatorItems).test {
+                assertEquals(listOf(expected), awaitItem())
+            }
+        }
+
+    @Test
+    fun `getTotpCodesFlow should set nextCode to null for HOTP items`() = runTest {
+        val totp = "otpauth://hotp/Issuer:user@example.com?secret=ABC&counter=1"
+        val authenticatorItems = listOf(
+            createMockAuthenticatorItem(number = 1, otpUri = totp),
+        )
+        val code = "123456"
+        val totpResponse = TotpResponse(code = code, period = 30u)
+        coEvery {
+            authenticatorSdkSource.generateTotp(totp = totp, time = clock.instant())
+        } returns totpResponse.asSuccess()
+
+        val expected = createMockVerificationCodeItem(
+            number = 1,
+            code = code,
+            issueTime = clock.instant().toEpochMilli(),
+            timeLeftSeconds = 30,
+            nextCode = null,
+        )
+
+        manager.getTotpCodesFlow(authenticatorItems).test {
+            assertEquals(listOf(expected), awaitItem())
+        }
+    }
+
+    @Test
+    fun `getTotpCodesFlow should set nextCode to null when next code generation fails`() =
+        runTest {
+            val totp = "otpUri"
+            val authenticatorItems = listOf(
+                createMockAuthenticatorItem(number = 1, otpUri = totp),
+            )
+            val code = "123456"
+            val totpResponse = TotpResponse(code = code, period = 30u)
+            coEvery {
+                authenticatorSdkSource.generateTotp(totp = totp, time = clock.instant())
+            } returns totpResponse.asSuccess()
+            coEvery {
+                authenticatorSdkSource.generateTotp(
+                    totp = totp,
+                    time = Instant.ofEpochMilli(clock.millis() + THIRTY_SECONDS_MILLIS),
+                )
+            } returns Exception().asFailure()
+
+            val expected = createMockVerificationCodeItem(
+                number = 1,
+                code = code,
+                issueTime = clock.instant().toEpochMilli(),
+                timeLeftSeconds = 30,
+                nextCode = null,
             )
 
             manager.getTotpCodesFlow(authenticatorItems).test {
@@ -84,3 +150,5 @@ class TotpCodeManagerTest {
             }
         }
 }
+
+private const val THIRTY_SECONDS_MILLIS: Long = 30_000L

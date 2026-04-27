@@ -77,6 +77,8 @@ class SettingsViewModelTest : BaseViewModelTest() {
         every { appTimeoutState = any() } just runs
         every { appTimeoutStateFlow } returns mutableAppTimeoutStateFlow
         every { appTimeoutState } answers { mutableAppTimeoutStateFlow.value }
+        every { showNextTotpCode } returns false
+        every { showNextTotpCode = any() } just runs
     }
     private val clipboardManager: BitwardenClipboardManager = mockk()
     private val mutableSnackbarFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
@@ -410,6 +412,37 @@ class SettingsViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `on ShowNextTotpCodeToggle enabled should update repository and state`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+            viewModel.trySendAction(SettingsAction.ShowNextTotpCodeToggle(enabled = true))
+            assertEquals(DEFAULT_STATE.copy(showNextTotpCode = true), awaitItem())
+        }
+        verify { settingsRepository.showNextTotpCode = true }
+    }
+
+    @Test
+    fun `on ShowNextTotpCodeToggle disabled should update repository and state`() = runTest {
+        val viewModel = createViewModel(
+            savedState = DEFAULT_STATE.copy(showNextTotpCode = true),
+        )
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE.copy(showNextTotpCode = true), awaitItem())
+            viewModel.trySendAction(SettingsAction.ShowNextTotpCodeToggle(enabled = false))
+            assertEquals(DEFAULT_STATE.copy(showNextTotpCode = false), awaitItem())
+        }
+        verify { settingsRepository.showNextTotpCode = false }
+    }
+
+    @Test
+    fun `initialState should reflect repository showNextTotpCode value`() {
+        every { settingsRepository.showNextTotpCode } returns true
+        val viewModel = createViewModel(savedState = null)
+        assertEquals(true, viewModel.stateFlow.value.showNextTotpCode)
+    }
+
     private fun createViewModel(
         savedState: SettingsState? = DEFAULT_STATE,
     ): SettingsViewModel = SettingsViewModel(
@@ -452,4 +485,5 @@ private val DEFAULT_STATE = SettingsState(
     allowScreenCapture = false,
     hasBiometricsSupport = true,
     appTimeout = AppTimeout.OnAppRestart,
+    showNextTotpCode = false,
 )

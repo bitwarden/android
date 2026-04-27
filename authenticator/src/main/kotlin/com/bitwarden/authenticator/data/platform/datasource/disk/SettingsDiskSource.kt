@@ -145,4 +145,19 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
      * Stores whether [isScreenCaptureAllowed].
      */
     fun storeScreenCaptureAllowed(isScreenCaptureAllowed: Boolean?)
+
+    /**
+     * Gets whether the user has enabled showing the next TOTP code in the item list.
+     */
+    fun getShowNextTotpCode(): Boolean?
+
+    /**
+     * Stores whether the user has enabled showing the next TOTP code in the item list.
+     */
+    fun storeShowNextTotpCode(value: Boolean?)
+
+    /**
+     * Emits updates that track [getShowNextTotpCode].
+     */
+    fun getShowNextTotpCodeFlow(): Flow<Boolean?>
 }

@@ -12,6 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -59,6 +61,7 @@ fun VaultVerificationCodeItem(
         onDropdownMenuClick = onDropdownMenuClick,
         showOverflow = displayItem.showOverflow,
         showMoveToBitwarden = displayItem.showMoveToBitwarden,
+        nextAuthCode = displayItem.nextAuthCode,
         cardStyle = cardStyle,
         modifier = modifier,
     )
@@ -78,6 +81,8 @@ fun VaultVerificationCodeItem(
  * @param onDropdownMenuClick A lambda function invoked when a dropdown menu action is clicked.
  * @param showOverflow Whether overflow menu should be available or not.
  * @param showMoveToBitwarden Whether the option to move the item to Bitwarden is displayed.
+ * @param nextAuthCode The upcoming authentication code, displayed below the current code when
+ *  non-null.
  * @param cardStyle The card style to be applied to this item.
  * @param modifier The modifier for the item.
  */
@@ -97,6 +102,7 @@ fun VaultVerificationCodeItem(
     showMoveToBitwarden: Boolean,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
+    nextAuthCode: String? = null,
 ) {
     Row(
         modifier = modifier
@@ -152,14 +158,30 @@ fun VaultVerificationCodeItem(
             alertThresholdSeconds = alertThresholdSeconds,
         )
 
-        Text(
-            modifier = Modifier.testTag(tag = "AuthCode"),
-            text = authCode
-                .chunked(size = 3) { it.padEnd(length = 3, padChar = ' ') }
-                .joinToString(separator = " "),
-            style = BitwardenTheme.typography.sensitiveInfoSmall,
-            color = BitwardenTheme.colorScheme.text.primary,
-        )
+        Column(
+            horizontalAlignment = Alignment.End,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Text(
+                modifier = Modifier.testTag(tag = "AuthCode"),
+                text = authCode.formatAsAuthCode(),
+                style = BitwardenTheme.typography.sensitiveInfoSmall,
+                color = BitwardenTheme.colorScheme.text.primary,
+            )
+            if (nextAuthCode != null) {
+                val formattedNextAuthCode = nextAuthCode.formatAsAuthCode()
+                Text(
+                    modifier = Modifier
+                        .testTag(tag = "NextVerificationCode")
+                        .semantics {
+                            contentDescription = "Next code, $formattedNextAuthCode"
+                        },
+                    text = formattedNextAuthCode,
+                    style = BitwardenTheme.typography.sensitiveInfoSmall,
+                    color = BitwardenTheme.colorScheme.text.secondary,
+                )
+            }
+        }
 
         if (showOverflow) {
             BitwardenOverflowActionItem(
@@ -199,6 +221,15 @@ fun VaultVerificationCodeItem(
         }
     }
 }
+
+/**
+ * Formats an authenticator code by inserting a space every 3 characters for readability.
+ */
+@Suppress("MagicNumber")
+private fun String.formatAsAuthCode(): String =
+    this
+        .chunked(size = 3) { it.padEnd(length = 3, padChar = ' ') }
+        .joinToString(separator = " ")
 
 @Suppress("MagicNumber")
 @Preview(showBackground = true)

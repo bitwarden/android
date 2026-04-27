@@ -43,6 +43,7 @@ fun createMockVerificationCodeItem(
     label: String = "mockLabel-$number",
     issuer: String = "mockIssuer-$number",
     source: AuthenticatorItem.Source = createMockLocalAuthenticatorItemSource(),
+    nextCode: String? = null,
 ): VerificationCodeItem =
     VerificationCodeItem(
         code = code,
@@ -53,6 +54,7 @@ fun createMockVerificationCodeItem(
         label = label,
         issuer = issuer,
         source = source,
+        nextCode = nextCode,
     )
 
 /**

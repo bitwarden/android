@@ -169,6 +169,39 @@ class SettingsRepositoryTest {
     }
 
     @Test
+    fun `showNextTotpCode should default to false when disk source is null`() {
+        every { settingsDiskSource.getShowNextTotpCode() } returns null
+        assertFalse(settingsRepository.showNextTotpCode)
+    }
+
+    @Test
+    fun `showNextTotpCode should pull from and update SettingsDiskSource`() {
+        every { settingsDiskSource.getShowNextTotpCode() } returns true
+        assertTrue(settingsRepository.showNextTotpCode)
+        verify { settingsDiskSource.getShowNextTotpCode() }
+
+        every { settingsDiskSource.storeShowNextTotpCode(value = true) } just runs
+        settingsRepository.showNextTotpCode = true
+        verify { settingsDiskSource.storeShowNextTotpCode(value = true) }
+    }
+
+    @Test
+    fun `showNextTotpCodeStateFlow should match SettingsDiskSource`() = runTest {
+        val mutableFlow = bufferedMutableSharedFlow<Boolean?>()
+        every { settingsDiskSource.getShowNextTotpCodeFlow() } returns mutableFlow
+        every { settingsDiskSource.getShowNextTotpCode() } returns null
+
+        settingsRepository.showNextTotpCodeStateFlow.test {
+            assertFalse(awaitItem())
+            mutableFlow.emit(true)
+            assertTrue(awaitItem())
+            mutableFlow.emit(false)
+            assertFalse(awaitItem())
+            expectNoEvents()
+        }
+    }
+
+    @Test
     fun `previouslySyncedBitwardenAccountIds should pull from and update SettingsDiskSource`() {
         // Reading from repository should read from disk source:
         every { settingsDiskSource.previouslySyncedBitwardenAccountIds } returns emptySet()

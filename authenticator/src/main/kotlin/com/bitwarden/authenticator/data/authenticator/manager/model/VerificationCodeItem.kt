@@ -12,6 +12,8 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.Authentic
  * @property issueTime The time the verification code was issued.
  * @property id The cipher id of the item.
  * @property username The username associated with the item.
+ * @property nextCode The next TOTP code that will become valid when the current one expires, or
+ *  `null` if not available (HOTP items, SDK failures, or items that have not yet computed it).
  */
 data class VerificationCodeItem(
     val code: String,
@@ -22,6 +24,7 @@ data class VerificationCodeItem(
     val issuer: String?,
     val label: String?,
     val source: AuthenticatorItem.Source,
+    val nextCode: String? = null,
 ) {
     /**
      * The composite label of the authenticator item. Used for constructing an OTPAuth URI.

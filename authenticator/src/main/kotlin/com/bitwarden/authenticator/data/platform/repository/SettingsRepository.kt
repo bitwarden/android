@@ -112,4 +112,14 @@ interface SettingsRepository : FlightRecorderManager {
      * Gets updates for the [AppTimeout].
      */
     val appTimeoutStateFlow: StateFlow<AppTimeout>
+
+    /**
+     * Whether the next TOTP code should be displayed below the current code in the item list.
+     */
+    var showNextTotpCode: Boolean
+
+    /**
+     * Tracks changes to the [showNextTotpCode] value.
+     */
+    val showNextTotpCodeStateFlow: StateFlow<Boolean>
 }

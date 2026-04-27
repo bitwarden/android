@@ -18,9 +18,11 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import java.time.Clock
+import java.time.Instant
 import javax.inject.Inject
 
 private const val ONE_SECOND_MILLISECOND = 1000L
+private const val HOTP_URI_PREFIX = "otpauth://hotp/"
 
 /**
  * Primary implementation of [TotpCodeManager].
@@ -106,16 +108,22 @@ class TotpCodeManagerImpl @Inject constructor(
                 authenticatorSdkSource
                     .generateTotp(item.otpUri, dateTime)
                     .onSuccess { response ->
+                        val periodSeconds = response.period.toInt()
+                        val nextCode = generateNextCodeOrNull(
+                            item = item,
+                            issueTimeMillis = clock.millis(),
+                            periodSeconds = periodSeconds,
+                        )
                         verificationCodeItem = VerificationCodeItem(
                             code = response.code,
-                            periodSeconds = response.period.toInt(),
-                            timeLeftSeconds = response.period.toInt() -
-                                (time % response.period.toInt()),
+                            periodSeconds = periodSeconds,
+                            timeLeftSeconds = periodSeconds - (time % periodSeconds),
                             issueTime = clock.millis(),
                             id = item.cipherId,
                             issuer = item.issuer,
                             label = item.label,
                             source = item.source,
+                            nextCode = nextCode,
                         )
                     }
                     .onFailure {
@@ -129,12 +137,35 @@ class TotpCodeManagerImpl @Inject constructor(
                 verificationCodeItem = verificationCodeItem.copy(
                     timeLeftSeconds = verificationCodeItem.periodSeconds -
                         (time % verificationCodeItem.periodSeconds),
+                    nextCode = verificationCodeItem.nextCode,
                 )
             }
 
             emit(verificationCodeItem)
             delay(ONE_SECOND_MILLISECOND)
         }
+    }
+
+    /**
+     * Computes the next TOTP code for the given [item] by generating a code valid at
+     * `issueTimeMillis + periodSeconds`. Returns `null` for HOTP items or when the SDK call
+     * fails. HOTP items are excluded because next-code generation requires advancing the counter.
+     */
+    private suspend fun generateNextCodeOrNull(
+        item: AuthenticatorItem,
+        issueTimeMillis: Long,
+        periodSeconds: Int,
+    ): String? {
+        if (item.otpUri.contains(other = HOTP_URI_PREFIX, ignoreCase = true)) {
+            return null
+        }
+        val nextInstant = Instant.ofEpochMilli(
+            issueTimeMillis + (periodSeconds * ONE_SECOND_MILLISECOND),
+        )
+        return authenticatorSdkSource
+            .generateTotp(totp = item.otpUri, time = nextInstant)
+            .getOrNull()
+            ?.code
     }
 }
 

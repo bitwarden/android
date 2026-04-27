@@ -42,6 +42,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
 
     private val mutableAuthenticatorAlertThresholdFlow =
         MutableStateFlow(AUTHENTICATOR_ALERT_SECONDS)
+    private val mutableShowNextTotpCodeFlow = MutableStateFlow(false)
     private val mutableVerificationCodesFlow =
         MutableStateFlow<DataState<List<VerificationCodeItem>>>(DataState.Loading)
     private val mutableSharedCodesFlow =
@@ -64,6 +65,8 @@ class ItemListingViewModelTest : BaseViewModelTest() {
         every {
             authenticatorAlertThresholdSecondsFlow
         } returns mutableAuthenticatorAlertThresholdFlow
+        every { showNextTotpCode } answers { mutableShowNextTotpCodeFlow.value }
+        every { showNextTotpCodeStateFlow } returns mutableShowNextTotpCodeFlow
         every { hasUserDismissedDownloadBitwardenCard } returns false
     }
     private val mutableSnackbarFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
@@ -565,6 +568,49 @@ class ItemListingViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `initialState should reflect repository showNextTotpCode value`() {
+        mutableShowNextTotpCodeFlow.value = true
+        every { settingsRepository.showNextTotpCode } returns true
+        val viewModel = createViewModel()
+        assertEquals(true, viewModel.stateFlow.value.showNextTotpCode)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `when showNextTotpCodeStateFlow updates, content list items reflect the new setting`() {
+        val verificationItem = VerificationCodeItem(
+            code = "123456",
+            periodSeconds = 60,
+            timeLeftSeconds = 430,
+            issueTime = 35L,
+            id = "1",
+            issuer = "issuer",
+            label = "accountName",
+            source = AuthenticatorItem.Source.Local(isFavorite = false),
+            nextCode = "654321",
+        )
+        mutableVerificationCodesFlow.value = DataState.Loaded(listOf(verificationItem))
+        mutableSharedCodesFlow.value =
+            SharedVerificationCodesState.Success(emptyList())
+
+        val viewModel = createViewModel()
+
+        // Initially show-next is false: nextAuthCode is null on display item.
+        val initialContent =
+            viewModel.stateFlow.value.viewState as ItemListingState.ViewState.Content
+        assertEquals(null, initialContent.itemList.first().nextAuthCode)
+        assertEquals(false, viewModel.stateFlow.value.showNextTotpCode)
+
+        // Toggling on emits a new state with showNextTotpCode = true and nextAuthCode populated.
+        mutableShowNextTotpCodeFlow.value = true
+
+        val updatedContent =
+            viewModel.stateFlow.value.viewState as ItemListingState.ViewState.Content
+        assertEquals("654321", updatedContent.itemList.first().nextAuthCode)
+        assertEquals(true, viewModel.stateFlow.value.showNextTotpCode)
+    }
+
     private fun createViewModel(): ItemListingViewModel = ItemListingViewModel(
         authenticatorRepository = authenticatorRepository,
         authenticatorBridgeManager = authenticatorBridgeManager,
@@ -578,6 +624,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
 private const val AUTHENTICATOR_ALERT_SECONDS = 7
 private val DEFAULT_STATE = ItemListingState(
     alertThresholdSeconds = AUTHENTICATOR_ALERT_SECONDS,
+    showNextTotpCode = false,
     viewState = ItemListingState.ViewState.Loading,
     dialog = null,
 )

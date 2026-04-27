@@ -234,6 +234,22 @@ fun SettingsScreen(
                     viewModel.trySendAction(SettingsAction.AppearanceChange.DynamicColorChange(it))
                 },
             )
+            Spacer(modifier = Modifier.height(8.dp))
+            BitwardenSwitch(
+                label = stringResource(id = BitwardenString.show_next_code),
+                supportingText = stringResource(
+                    id = BitwardenString.see_incoming_codes_in_the_list,
+                ),
+                isChecked = state.showNextTotpCode,
+                onCheckedChange = {
+                    viewModel.trySendAction(SettingsAction.ShowNextTotpCodeToggle(it))
+                },
+                cardStyle = CardStyle.Full,
+                modifier = Modifier
+                    .testTag(tag = "ShowNextTotpCodeSwitch")
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
             Spacer(Modifier.height(16.dp))
             HelpSettings(
                 onTutorialClick = {

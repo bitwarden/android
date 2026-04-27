@@ -72,6 +72,7 @@ class SettingsViewModel @Inject constructor(
             isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
             isDynamicColorsEnabled = settingsRepository.isDynamicColorsEnabled,
             appTimeout = settingsRepository.appTimeoutState,
+            showNextTotpCode = settingsRepository.showNextTotpCode,
         ),
 ) {
 
@@ -134,8 +135,19 @@ class SettingsViewModel @Inject constructor(
                 handleBiometricSupportChanged(action)
             }
 
+            is SettingsAction.ShowNextTotpCodeToggle -> {
+                handleShowNextTotpCodeToggle(action)
+            }
+
             is SettingsAction.Internal -> handleInternalAction(action)
         }
+    }
+
+    private fun handleShowNextTotpCodeToggle(
+        action: SettingsAction.ShowNextTotpCodeToggle,
+    ) {
+        settingsRepository.showNextTotpCode = action.enabled
+        mutableStateFlow.update { it.copy(showNextTotpCode = action.enabled) }
     }
 
     private fun handleInternalAction(action: SettingsAction.Internal) {
@@ -465,6 +477,7 @@ class SettingsViewModel @Inject constructor(
             isScreenCaptureAllowed: Boolean,
             isDynamicColorsEnabled: Boolean,
             appTimeout: AppTimeout,
+            showNextTotpCode: Boolean,
         ): SettingsState {
             val currentYear = Year.now(clock)
             val copyrightInfo = "© Bitwarden Inc. 2015-$currentYear".asText()
@@ -494,6 +507,7 @@ class SettingsViewModel @Inject constructor(
                 allowScreenCapture = isScreenCaptureAllowed,
                 hasBiometricsSupport = true,
                 appTimeout = appTimeout,
+                showNextTotpCode = showNextTotpCode,
             )
         }
     }
@@ -516,6 +530,7 @@ data class SettingsState(
     val copyrightInfo: Text,
     val allowScreenCapture: Boolean,
     val appTimeout: AppTimeout,
+    val showNextTotpCode: Boolean,
 ) : Parcelable {
 
     /**
@@ -638,6 +653,11 @@ sealed class SettingsAction {
      * Indicates an update on device biometrics support.
      */
     data class BiometricSupportChanged(val isBiometricsSupported: Boolean) : SettingsAction()
+
+    /**
+     * Indicates the user toggled the "Show next code" switch.
+     */
+    data class ShowNextTotpCodeToggle(val enabled: Boolean) : SettingsAction()
 
     /**
      * Models actions for the Security section of settings.

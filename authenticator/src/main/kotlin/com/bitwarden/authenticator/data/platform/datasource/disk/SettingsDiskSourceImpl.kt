@@ -27,6 +27,7 @@ private const val HAS_USER_DISMISSED_SYNC_WITH_BITWARDEN_KEY =
     "hasUserDismissedSyncWithBitwardenCard"
 private const val PREVIOUSLY_SYNCED_BITWARDEN_ACCOUNT_IDS_KEY =
     "previouslySyncedBitwardenAccountIds"
+private const val SHOW_NEXT_TOTP_CODE_KEY = "showNextTotpCode"
 private const val DEFAULT_ALERT_THRESHOLD_SECONDS = 7
 
 /**
@@ -57,6 +58,8 @@ class SettingsDiskSourceImpl(
         bufferedMutableSharedFlow<DefaultSaveOption>()
 
     private val mutableDynamicColorsFlow = bufferedMutableSharedFlow<Boolean?>()
+
+    private val mutableShowNextTotpCodeFlow = bufferedMutableSharedFlow<Boolean?>()
 
     override var appLanguage: AppLanguage?
         get() = getString(key = APP_LANGUAGE_KEY)
@@ -226,4 +229,14 @@ class SettingsDiskSourceImpl(
         )
         mutableScreenCaptureAllowedFlow.tryEmit(isScreenCaptureAllowed)
     }
+
+    override fun getShowNextTotpCode(): Boolean? = getBoolean(key = SHOW_NEXT_TOTP_CODE_KEY)
+
+    override fun storeShowNextTotpCode(value: Boolean?) {
+        putBoolean(key = SHOW_NEXT_TOTP_CODE_KEY, value = value)
+        mutableShowNextTotpCodeFlow.tryEmit(value)
+    }
+
+    override fun getShowNextTotpCodeFlow(): Flow<Boolean?> = mutableShowNextTotpCodeFlow
+        .onSubscription { emit(getShowNextTotpCode()) }
 }

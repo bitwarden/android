@@ -158,6 +158,22 @@ class SettingsRepositoryImpl(
             started = SharingStarted.Eagerly,
             initialValue = settingsDiskSource.appTimeoutInMinutes.toAppTimeout(),
         )
+
+    override var showNextTotpCode: Boolean
+        get() = settingsDiskSource.getShowNextTotpCode() ?: false
+        set(value) {
+            settingsDiskSource.storeShowNextTotpCode(value = value)
+        }
+
+    override val showNextTotpCodeStateFlow: StateFlow<Boolean>
+        get() = settingsDiskSource
+            .getShowNextTotpCodeFlow()
+            .map { it ?: false }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = showNextTotpCode,
+            )
 }
 
 /**
