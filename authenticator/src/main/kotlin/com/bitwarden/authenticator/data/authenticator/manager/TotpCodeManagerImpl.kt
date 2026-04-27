@@ -137,7 +137,6 @@ class TotpCodeManagerImpl @Inject constructor(
                 verificationCodeItem = verificationCodeItem.copy(
                     timeLeftSeconds = verificationCodeItem.periodSeconds -
                         (time % verificationCodeItem.periodSeconds),
-                    nextCode = verificationCodeItem.nextCode,
                 )
             }
 
@@ -156,7 +155,7 @@ class TotpCodeManagerImpl @Inject constructor(
         issueTimeMillis: Long,
         periodSeconds: Int,
     ): String? {
-        if (item.otpUri.contains(other = HOTP_URI_PREFIX, ignoreCase = true)) {
+        if (item.otpUri.startsWith(prefix = HOTP_URI_PREFIX, ignoreCase = true)) {
             return null
         }
         val nextInstant = Instant.ofEpochMilli(

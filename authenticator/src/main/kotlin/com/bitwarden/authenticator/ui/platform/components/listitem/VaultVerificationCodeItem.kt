@@ -170,11 +170,15 @@ fun VaultVerificationCodeItem(
             )
             if (nextAuthCode != null) {
                 val formattedNextAuthCode = nextAuthCode.formatAsAuthCode()
+                val nextCodeContentDescription = stringResource(
+                    id = BitwardenString.next_code_x,
+                    formattedNextAuthCode,
+                )
                 Text(
                     modifier = Modifier
                         .testTag(tag = "NextVerificationCode")
                         .semantics {
-                            contentDescription = "Next code, $formattedNextAuthCode"
+                            contentDescription = nextCodeContentDescription
                         },
                     text = formattedNextAuthCode,
                     style = BitwardenTheme.typography.sensitiveInfoSmall,

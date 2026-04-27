@@ -280,6 +280,7 @@ Scanning will happen automatically.</string>
     <string name="show_website_icons_description">Show a recognizable image next to each login</string>
     <string name="show_next_code">Show next code</string>
     <string name="see_incoming_codes_in_the_list">See incoming codes in the list</string>
+    <string name="next_code_x">Next code, %1$s</string>
     <string name="icons_url">Icons server URL</string>
     <string name="vault_is_locked">Vault is locked</string>
     <string name="go_to_my_vault">Go to my vault</string>
