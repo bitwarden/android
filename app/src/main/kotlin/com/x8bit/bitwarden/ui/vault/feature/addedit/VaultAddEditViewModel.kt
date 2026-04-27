@@ -2968,8 +2968,6 @@ data class VaultAddEditState(
                     override val itemTypeOption: ItemTypeOption
                         get() = ItemTypeOption.BANK_ACCOUNT
 
-                    override val isSdkSupported: Boolean get() = false
-
                     override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
                         get() = persistentListOf()
                 }
@@ -2986,6 +2984,7 @@ data class VaultAddEditState(
                     val issuingCountry: String = "",
                     val issuingState: String = "",
                     val expirationMonth: String = "",
+                    val expirationDay: String = "",
                     val expirationYear: String = "",
                     val licenseClass: String = "",
                 ) : ItemType() {
@@ -3006,6 +3005,7 @@ data class VaultAddEditState(
                     val surname: String = "",
                     val givenName: String = "",
                     val dobMonth: String = "",
+                    val dobDay: String = "",
                     val dobYear: String = "",
                     val nationality: String = "",
                     val passportNumber: String = "",
@@ -3013,8 +3013,10 @@ data class VaultAddEditState(
                     val issuingCountry: String = "",
                     val issuingAuthority: String = "",
                     val issueMonth: String = "",
+                    val issueDay: String = "",
                     val issueYear: String = "",
                     val expirationMonth: String = "",
+                    val expirationDay: String = "",
                     val expirationYear: String = "",
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption

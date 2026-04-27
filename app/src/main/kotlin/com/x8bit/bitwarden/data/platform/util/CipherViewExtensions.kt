@@ -53,6 +53,7 @@ val CipherView.subtitle: String?
 
         CipherType.SECURE_NOTE,
         CipherType.SSH_KEY,
+        CipherType.BANK_ACCOUNT,
             -> null
 
         CipherType.BANK_ACCOUNT -> TODO("PM-32810: Add Bank Account Type")

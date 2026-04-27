@@ -50,6 +50,7 @@ fun createMockSdkCipher(number: Int, clock: Clock = FIXED_CLOCK): Cipher =
         archivedDate = clock.instant(),
         attachments = listOf(createMockSdkAttachment(number = number)),
         card = createMockSdkCard(number = number),
+        bankAccount = createMockSdkBankAccount(number = number),
         fields = listOf(createMockSdkField(number = number)),
         identity = createMockSdkIdentity(number = number),
         sshKey = createMockSdkSshKey(number = number),
@@ -157,6 +158,23 @@ fun createMockSdkField(number: Int): Field =
         name = "mockName-$number",
         type = FieldType.HIDDEN,
         value = "mockValue-$number",
+    )
+
+/**
+ * Create a mock [BankAccount] with a given [number].
+ */
+fun createMockSdkBankAccount(number: Int): BankAccount =
+    BankAccount(
+        bankName = "mockBankName-$number",
+        nameOnAccount = "mockNameOnAccount-$number",
+        accountType = "checking",
+        accountNumber = "mockAccountNumber-$number",
+        routingNumber = "mockRoutingNumber-$number",
+        branchNumber = "mockBranchNumber-$number",
+        pin = "mockPin-$number",
+        swiftCode = "mockSwiftCode-$number",
+        iban = "mockIban-$number",
+        bankContactPhone = "mockBankContactPhone-$number",
     )
 
 /**

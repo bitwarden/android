@@ -277,7 +277,49 @@ fun createMockDisplayItemForCipher(
             )
         }
 
-        CipherType.BANK_ACCOUNT -> TODO("PM-32810: Add Bank Account Type")
+        CipherType.BANK_ACCOUNT -> {
+            VaultItemListingState.DisplayItem(
+                id = "mockId-$number",
+                title = "mockName-$number".asText(),
+                titleTestTag = "CipherNameLabel",
+                secondSubtitle = secondSubtitle,
+                secondSubtitleTestTag = secondSubtitleTestTag,
+                subtitle = subtitle,
+                subtitleTestTag = "CipherSubTitleLabel",
+                iconData = IconData.Local(BitwardenDrawable.ic_note),
+                extraIconList = persistentListOf(
+                    IconData.Local(
+                        iconRes = BitwardenDrawable.ic_collections,
+                        contentDescription = BitwardenString.collections.asText(),
+                        testTag = "CipherInCollectionIcon",
+                    ),
+                    IconData.Local(
+                        iconRes = BitwardenDrawable.ic_paperclip,
+                        contentDescription = BitwardenString.attachments.asText(),
+                        testTag = "CipherWithAttachmentsIcon",
+                    ),
+                ),
+                overflowOptions = listOf(
+                    ListingItemOverflowAction.VaultAction.ViewClick(
+                        cipherId = "mockId-$number",
+                        cipherType = cipherType,
+                        requiresPasswordReprompt = requiresPasswordReprompt,
+                    ),
+                    ListingItemOverflowAction.VaultAction.EditClick(
+                        cipherId = "mockId-$number",
+                        cipherType = cipherType,
+                        requiresPasswordReprompt = requiresPasswordReprompt,
+                    ),
+                    ListingItemOverflowAction.VaultAction.ArchiveClick(cipherId = "mockId-$number"),
+                ),
+                optionsTestTag = "CipherOptionsButton",
+                isAutofill = false,
+                isCredentialCreation = false,
+                shouldShowMasterPasswordReprompt = false,
+                iconTestTag = "BankAccountCipherIcon",
+                itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = cipherType),
+            )
+        }
     }
 
 /**

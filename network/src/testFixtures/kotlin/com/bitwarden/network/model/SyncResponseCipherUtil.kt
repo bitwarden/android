@@ -270,7 +270,7 @@ fun createMockBankAccount(
     number: Int,
     bankName: String? = "mockBankName-$number",
     nameOnAccount: String? = "mockNameOnAccount-$number",
-    accountType: String? = "mockAccountType-$number",
+    accountType: BankAccountTypeJson? = BankAccountTypeJson.CHECKING,
     accountNumber: String? = "mockAccountNumber-$number",
     routingNumber: String? = "mockRoutingNumber-$number",
     branchNumber: String? = "mockBranchNumber-$number",
@@ -304,6 +304,7 @@ fun createMockDriversLicense(
     issuingCountry: String? = "mockIssuingCountry-$number",
     issuingState: String? = "mockIssuingState-$number",
     expirationMonth: String? = "mockExpirationMonth-$number",
+    expirationDay: String? = "mockExpirationDay-$number",
     expirationYear: String? = "mockExpirationYear-$number",
     licenseClass: String? = "mockLicenseClass-$number",
 ): SyncResponseJson.Cipher.DriversLicense =
@@ -315,6 +316,7 @@ fun createMockDriversLicense(
         issuingCountry = issuingCountry,
         issuingState = issuingState,
         expirationMonth = expirationMonth,
+        expirationDay = expirationDay,
         expirationYear = expirationYear,
         licenseClass = licenseClass,
     )
@@ -327,6 +329,7 @@ fun createMockPassport(
     surname: String? = "mockSurname-$number",
     givenName: String? = "mockGivenName-$number",
     dobMonth: String? = "mockDobMonth-$number",
+    dobDay: String? = "mockDobDay-$number",
     dobYear: String? = "mockDobYear-$number",
     nationality: String? = "mockNationality-$number",
     passportNumber: String? = "mockPassportNumber-$number",
@@ -334,14 +337,17 @@ fun createMockPassport(
     issuingCountry: String? = "mockIssuingCountry-$number",
     issuingAuthority: String? = "mockIssuingAuthority-$number",
     issueMonth: String? = "mockIssueMonth-$number",
+    issueDay: String? = "mockIssueDay-$number",
     issueYear: String? = "mockIssueYear-$number",
     expirationMonth: String? = "mockExpirationMonth-$number",
+    expirationDay: String? = "mockExpirationDay-$number",
     expirationYear: String? = "mockExpirationYear-$number",
 ): SyncResponseJson.Cipher.Passport =
     SyncResponseJson.Cipher.Passport(
         surname = surname,
         givenName = givenName,
         dobMonth = dobMonth,
+        dobDay = dobDay,
         dobYear = dobYear,
         nationality = nationality,
         passportNumber = passportNumber,
@@ -349,8 +355,10 @@ fun createMockPassport(
         issuingCountry = issuingCountry,
         issuingAuthority = issuingAuthority,
         issueMonth = issueMonth,
+        issueDay = issueDay,
         issueYear = issueYear,
         expirationMonth = expirationMonth,
+        expirationDay = expirationDay,
         expirationYear = expirationYear,
     )
 

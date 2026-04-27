@@ -820,7 +820,7 @@ data class SyncResponseJson(
             val nameOnAccount: String?,
 
             @SerialName("accountType")
-            val accountType: String?,
+            val accountType: BankAccountTypeJson?,
 
             @SerialName("accountNumber")
             val accountNumber: String?,
@@ -854,6 +854,7 @@ data class SyncResponseJson(
          * @property issuingCountry The issuing country (nullable).
          * @property issuingState The issuing state/province (nullable).
          * @property expirationMonth The expiration month (nullable).
+         * @property expirationDay The expiration day of month (nullable).
          * @property expirationYear The expiration year (nullable).
          * @property licenseClass The license class (nullable).
          */
@@ -880,6 +881,9 @@ data class SyncResponseJson(
             @SerialName("expirationMonth")
             val expirationMonth: String?,
 
+            @SerialName("expirationDay")
+            val expirationDay: String?,
+
             @SerialName("expirationYear")
             val expirationYear: String?,
 
@@ -893,6 +897,7 @@ data class SyncResponseJson(
          * @property surname The surname (nullable).
          * @property givenName The given name (nullable).
          * @property dobMonth The month of birth (nullable).
+         * @property dobDay The day of month of birth (nullable).
          * @property dobYear The year of birth (nullable).
          * @property nationality The nationality (nullable).
          * @property passportNumber The passport number (nullable).
@@ -900,8 +905,10 @@ data class SyncResponseJson(
          * @property issuingCountry The issuing country (nullable).
          * @property issuingAuthority The issuing authority/office (nullable).
          * @property issueMonth The issue month (nullable).
+         * @property issueDay The issue day of month (nullable).
          * @property issueYear The issue year (nullable).
          * @property expirationMonth The expiration month (nullable).
+         * @property expirationDay The expiration day of month (nullable).
          * @property expirationYear The expiration year (nullable).
          */
         @Serializable
@@ -914,6 +921,9 @@ data class SyncResponseJson(
 
             @SerialName("dobMonth")
             val dobMonth: String?,
+
+            @SerialName("dobDay")
+            val dobDay: String?,
 
             @SerialName("dobYear")
             val dobYear: String?,
@@ -936,11 +946,17 @@ data class SyncResponseJson(
             @SerialName("issueMonth")
             val issueMonth: String?,
 
+            @SerialName("issueDay")
+            val issueDay: String?,
+
             @SerialName("issueYear")
             val issueYear: String?,
 
             @SerialName("expirationMonth")
             val expirationMonth: String?,
+
+            @SerialName("expirationDay")
+            val expirationDay: String?,
 
             @SerialName("expirationYear")
             val expirationYear: String?,

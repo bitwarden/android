@@ -45,7 +45,6 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySele
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
-import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.manager.OriginManager
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
@@ -153,7 +152,6 @@ class VaultItemListingViewModel @Inject constructor(
     private val networkConnectionManager: NetworkConnectionManager,
     private val relyingPartyParser: RelyingPartyParser,
     private val toastManager: ToastManager,
-    private val premiumStateManager: PremiumStateManager,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
@@ -667,16 +665,9 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun handleUpgradeToPremiumClick() {
         clearDialogState()
-        if (premiumStateManager.isInAppUpgradeAvailable()) {
-            sendEvent(VaultItemListingEvent.NavigateToPlanModal)
-        } else {
-            val baseUrl = environmentRepository
-                .environment
-                .environmentUrlData
-                .baseWebVaultUrlOrDefault
-            val url = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium"
-            sendEvent(VaultItemListingEvent.NavigateToUrl(url = url))
-        }
+        val baseUrl = environmentRepository.environment.environmentUrlData.baseWebVaultUrlOrDefault
+        val url = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium"
+        sendEvent(VaultItemListingEvent.NavigateToUrl(url = url))
     }
 
     private fun handleRemoveSendPasswordClick(
@@ -1354,7 +1345,7 @@ class VaultItemListingViewModel @Inject constructor(
                     CipherType.CARD -> VaultItemCipherType.CARD
                     CipherType.IDENTITY -> VaultItemCipherType.IDENTITY
                     CipherType.SSH_KEY -> VaultItemCipherType.SSH_KEY
-                    CipherType.BANK_ACCOUNT -> TODO("PM-32810: Add Bank Account Type")
+                    CipherType.BANK_ACCOUNT -> VaultItemCipherType.BANK_ACCOUNT
                 },
             ),
         )
@@ -1376,7 +1367,7 @@ class VaultItemListingViewModel @Inject constructor(
                     CipherType.CARD -> VaultItemCipherType.CARD
                     CipherType.IDENTITY -> VaultItemCipherType.IDENTITY
                     CipherType.SSH_KEY -> VaultItemCipherType.SSH_KEY
-                    CipherType.BANK_ACCOUNT -> TODO("PM-32810: Add Bank Account Type")
+                    CipherType.BANK_ACCOUNT -> VaultItemCipherType.BANK_ACCOUNT
                 },
             ),
         )
@@ -3504,11 +3495,6 @@ sealed class VaultItemListingEvent {
     data class NavigateToUrl(
         val url: String,
     ) : VaultItemListingEvent()
-
-    /**
-     * Navigates to the in-app plan modal for premium upgrade.
-     */
-    data object NavigateToPlanModal : VaultItemListingEvent()
 
     /**
      * Navigates to the SearchScreen with the given type filter.

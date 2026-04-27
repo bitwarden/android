@@ -246,7 +246,40 @@ fun createMockDisplayItemForCipher(
             )
         }
 
-        CipherType.BANK_ACCOUNT -> TODO("PM-32810: Add Bank Account Type")
+        CipherType.BANK_ACCOUNT -> {
+            SearchState.DisplayItem(
+                id = "mockId-$number",
+                title = "mockName-$number",
+                titleTestTag = "CipherNameLabel",
+                subtitle = null,
+                subtitleTestTag = "CipherSubTitleLabel",
+                iconData = IconData.Local(BitwardenDrawable.ic_note),
+                extraIconList = persistentListOf(
+                    IconData.Local(
+                        iconRes = BitwardenDrawable.ic_collections,
+                        contentDescription = BitwardenString.collections.asText(),
+                        testTag = "CipherInCollectionIcon",
+                    ),
+                ),
+                overflowOptions = persistentListOf(
+                    ListingItemOverflowAction.VaultAction.ViewClick(
+                        cipherId = "mockId-$number",
+                        cipherType = CipherType.BANK_ACCOUNT,
+                        requiresPasswordReprompt = true,
+                    ),
+                    ListingItemOverflowAction.VaultAction.EditClick(
+                        cipherId = "mockId-$number",
+                        cipherType = CipherType.BANK_ACCOUNT,
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+                overflowTestTag = "CipherOptionsButton",
+                totpCode = null,
+                autofillSelectionOptions = persistentListOf(),
+                shouldDisplayMasterPasswordReprompt = false,
+                itemType = SearchState.DisplayItem.ItemType.Vault(type = cipherType),
+            )
+        }
     }
 
 /**

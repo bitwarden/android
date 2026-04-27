@@ -97,6 +97,7 @@ fun createCipherView(type: CipherType, isEmpty: Boolean): CipherView =
         login = createLoginView(isEmpty = isEmpty),
         identity = createIdentityView(isEmpty = isEmpty),
         card = null,
+        bankAccount = null,
         secureNote = null,
         bankAccount = null,
         favorite = false,

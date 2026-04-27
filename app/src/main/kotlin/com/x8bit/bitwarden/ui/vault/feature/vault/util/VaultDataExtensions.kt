@@ -365,7 +365,8 @@ private fun CipherListView.toVaultItemOrNull(
             hasDecryptionError = hasDecryptionError,
         )
 
-        CipherListViewType.BankAccount -> TODO("PM-32810: Add Bank Account Type")
+        // TODO: [PM-32009] Map BankAccount to its own VaultItem subclass when the UI is wired.
+        CipherListViewType.BankAccount -> null
     }
 }
 

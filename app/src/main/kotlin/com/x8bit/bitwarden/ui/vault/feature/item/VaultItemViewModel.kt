@@ -1872,6 +1872,60 @@ data class VaultItemState(
                     val fingerprint: String,
                     val showPrivateKey: Boolean,
                 ) : ItemType()
+
+                /**
+                 * Represents the `BankAccount` item type.
+                 */
+                data class BankAccount(
+                    val bankName: String?,
+                    val nameOnAccount: String?,
+                    val accountType: String?,
+                    val accountNumber: String?,
+                    val routingNumber: String?,
+                    val branchNumber: String?,
+                    val pin: String?,
+                    val swiftCode: String?,
+                    val iban: String?,
+                    val bankContactPhone: String?,
+                ) : ItemType()
+
+                /**
+                 * Represents the `DriversLicense` item type.
+                 */
+                data class DriversLicense(
+                    val firstName: String?,
+                    val middleName: String?,
+                    val lastName: String?,
+                    val licenseNumber: String?,
+                    val issuingCountry: String?,
+                    val issuingState: String?,
+                    val expirationMonth: String?,
+                    val expirationDay: String?,
+                    val expirationYear: String?,
+                    val licenseClass: String?,
+                ) : ItemType()
+
+                /**
+                 * Represents the `Passport` item type.
+                 */
+                data class Passport(
+                    val surname: String?,
+                    val givenName: String?,
+                    val dobMonth: String?,
+                    val dobDay: String?,
+                    val dobYear: String?,
+                    val nationality: String?,
+                    val passportNumber: String?,
+                    val passportType: String?,
+                    val issuingCountry: String?,
+                    val issuingAuthority: String?,
+                    val issueMonth: String?,
+                    val issueDay: String?,
+                    val issueYear: String?,
+                    val expirationMonth: String?,
+                    val expirationDay: String?,
+                    val expirationYear: String?,
+                ) : ItemType()
             }
         }
 

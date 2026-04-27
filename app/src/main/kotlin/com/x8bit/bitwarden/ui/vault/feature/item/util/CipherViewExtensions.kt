@@ -214,7 +214,20 @@ fun CipherView.toViewState(
                 )
             }
 
-            CipherType.BANK_ACCOUNT -> TODO("PM-32810: Add Bank Account Type")
+            CipherType.BANK_ACCOUNT -> {
+                VaultItemState.ViewState.Content.ItemType.BankAccount(
+                    bankName = bankAccount?.bankName,
+                    nameOnAccount = bankAccount?.nameOnAccount,
+                    accountType = bankAccount?.accountType,
+                    accountNumber = bankAccount?.accountNumber,
+                    routingNumber = bankAccount?.routingNumber,
+                    branchNumber = bankAccount?.branchNumber,
+                    pin = bankAccount?.pin,
+                    swiftCode = bankAccount?.swiftCode,
+                    iban = bankAccount?.iban,
+                    bankContactPhone = bankAccount?.bankContactPhone,
+                )
+            }
         },
     )
 
@@ -305,7 +318,7 @@ private val CipherType.iconRes: Int
         CipherType.IDENTITY -> BitwardenDrawable.ic_id_card
         CipherType.SSH_KEY -> BitwardenDrawable.ic_ssh_key
         CipherType.LOGIN -> BitwardenDrawable.ic_globe
-        CipherType.BANK_ACCOUNT -> TODO("PM-32810: Add Bank Account Type")
+        CipherType.BANK_ACCOUNT -> BitwardenDrawable.ic_note
     }
 
 @get:DrawableRes

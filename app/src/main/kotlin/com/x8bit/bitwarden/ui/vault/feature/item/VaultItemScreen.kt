@@ -429,6 +429,19 @@ private fun VaultItemContent(
                         modifier = modifier,
                     )
                 }
+
+                is VaultItemState.ViewState.Content.ItemType.BankAccount,
+                is VaultItemState.ViewState.Content.ItemType.DriversLicense,
+                is VaultItemState.ViewState.Content.ItemType.Passport,
+                    -> {
+                    // These item types are gated behind the pm-32009-new-item-types feature
+                    // flag and cannot be received until their full infrastructure ships.
+                    VaultItemSecureNoteContent(
+                        commonState = viewState.common,
+                        vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+                        modifier = modifier,
+                    )
+                }
             }
         }
 
