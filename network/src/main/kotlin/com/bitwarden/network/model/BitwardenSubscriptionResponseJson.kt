@@ -27,26 +27,26 @@ data class BitwardenSubscriptionResponseJson(
     val cart: CartJson,
 
     @SerialName("storage")
-    val storage: StorageJson? = null,
+    val storage: StorageJson?,
 
     @Contextual
     @SerialName("cancelAt")
-    val cancelAt: Instant? = null,
+    val cancelAt: Instant?,
 
     @Contextual
     @SerialName("canceled")
-    val canceled: Instant? = null,
+    val canceled: Instant?,
 
     @Contextual
     @SerialName("nextCharge")
-    val nextCharge: Instant? = null,
+    val nextCharge: Instant?,
 
     @Contextual
     @SerialName("suspension")
-    val suspension: Instant? = null,
+    val suspension: Instant?,
 
     @SerialName("gracePeriod")
-    val gracePeriod: Int? = null,
+    val gracePeriod: Int?,
 )
 
 /**
@@ -94,13 +94,13 @@ data class CartJson(
     val passwordManager: PasswordManagerCartItemsJson,
 
     @SerialName("secretsManager")
-    val secretsManager: SecretsManagerCartItemsJson? = null,
+    val secretsManager: SecretsManagerCartItemsJson?,
 
     @SerialName("cadence")
     val cadence: CadenceTypeJson,
 
     @SerialName("discount")
-    val discount: BitwardenDiscountJson? = null,
+    val discount: BitwardenDiscountJson?,
 
     @Contextual
     @SerialName("estimatedTax")
@@ -119,7 +119,7 @@ data class PasswordManagerCartItemsJson(
     val seats: CartItemJson,
 
     @SerialName("additionalStorage")
-    val additionalStorage: CartItemJson? = null,
+    val additionalStorage: CartItemJson?,
 )
 
 /**
@@ -135,7 +135,7 @@ data class SecretsManagerCartItemsJson(
     val seats: CartItemJson,
 
     @SerialName("additionalServiceAccounts")
-    val additionalServiceAccounts: CartItemJson? = null,
+    val additionalServiceAccounts: CartItemJson?,
 )
 
 /**
@@ -159,7 +159,7 @@ data class CartItemJson(
     val cost: BigDecimal,
 
     @SerialName("discount")
-    val discount: BitwardenDiscountJson? = null,
+    val discount: BitwardenDiscountJson?,
 )
 
 /**

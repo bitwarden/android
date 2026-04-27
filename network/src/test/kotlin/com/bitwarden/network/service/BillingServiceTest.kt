@@ -291,13 +291,16 @@ private val SUBSCRIPTION_RESPONSE = BitwardenSubscriptionResponseJson(
                 translationKey = "premiumMembership",
                 quantity = 1,
                 cost = BigDecimal("19.80"),
+                discount = null,
             ),
             additionalStorage = CartItemJson(
                 translationKey = "additionalStorage",
                 quantity = 24,
                 cost = BigDecimal("24.00"),
+                discount = null,
             ),
         ),
+        secretsManager = null,
         cadence = CadenceTypeJson.ANNUALLY,
         discount = BitwardenDiscountJson(
             type = DiscountTypeJson.AMOUNT_OFF,
@@ -310,7 +313,11 @@ private val SUBSCRIPTION_RESPONSE = BitwardenSubscriptionResponseJson(
         used = 0.0,
         readableUsed = "0 Bytes",
     ),
+    cancelAt = null,
+    canceled = null,
     nextCharge = Instant.parse("2026-04-02T00:00:00Z"),
+    suspension = null,
+    gracePeriod = null,
 )
 
 private const val SUBSCRIPTION_RESPONSE_MONTHLY_JSON = """

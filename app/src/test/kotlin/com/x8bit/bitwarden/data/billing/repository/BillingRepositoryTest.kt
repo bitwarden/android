@@ -15,8 +15,10 @@ import com.bitwarden.network.service.BillingService
 import com.x8bit.bitwarden.data.billing.manager.PlayBillingManager
 import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
 import com.x8bit.bitwarden.data.billing.repository.model.CustomerPortalResult
+import com.x8bit.bitwarden.data.billing.repository.model.PlanCadence
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResult
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStatus
+import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionInfo
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionResult
 import io.mockk.coEvery
 import io.mockk.every
@@ -169,11 +171,24 @@ class BillingRepositoryTest {
 
             val result = repository.getSubscription()
 
-            assertTrue(result is SubscriptionResult.Success)
-            val subscription = (result as SubscriptionResult.Success).subscription
-            assertEquals(PremiumSubscriptionStatus.ACTIVE, subscription.status)
-            assertEquals(BigDecimal("19.80"), subscription.seatsCost)
-            assertEquals(BigDecimal("19.80"), subscription.nextChargeTotal)
+            assertEquals(
+                SubscriptionResult.Success(
+                    subscription = SubscriptionInfo(
+                        status = PremiumSubscriptionStatus.ACTIVE,
+                        cadence = PlanCadence.ANNUALLY,
+                        seatsCost = BigDecimal("19.80"),
+                        storageCost = null,
+                        discountAmount = null,
+                        estimatedTax = BigDecimal.ZERO,
+                        nextChargeTotal = BigDecimal("19.80"),
+                        nextCharge = null,
+                        canceledDate = null,
+                        suspensionDate = null,
+                        gracePeriodDays = null,
+                    ),
+                ),
+                result,
+            )
         }
 
     @Test
@@ -203,9 +218,19 @@ private val ACTIVE_SUBSCRIPTION_RESPONSE = BitwardenSubscriptionResponseJson(
                 translationKey = "premiumMembership",
                 quantity = 1,
                 cost = BigDecimal("19.80"),
+                discount = null,
             ),
+            additionalStorage = null,
         ),
+        secretsManager = null,
         cadence = CadenceTypeJson.ANNUALLY,
+        discount = null,
         estimatedTax = BigDecimal.ZERO,
     ),
+    storage = null,
+    cancelAt = null,
+    canceled = null,
+    nextCharge = null,
+    suspension = null,
+    gracePeriod = null,
 )
