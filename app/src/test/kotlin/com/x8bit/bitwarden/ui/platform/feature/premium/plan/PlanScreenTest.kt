@@ -4,8 +4,6 @@ import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsEnabled
-import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
@@ -182,27 +180,6 @@ class PlanScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTag("StripeFooterText")
             .assertExists()
-    }
-
-    @Test
-    fun `upgrade now button should be enabled when dialogState is null`() {
-        composeTestRule
-            .onNodeWithTag("UpgradeNowButton")
-            .assertIsEnabled()
-    }
-
-    @Test
-    fun `upgrade now button should be disabled when dialogState is Loading`() {
-        mutableStateFlow.update {
-            it.copy(
-                dialogState = PlanState.DialogState.Loading(
-                    message = BitwardenString.opening_checkout.asText(),
-                ),
-            )
-        }
-        composeTestRule
-            .onNodeWithTag("UpgradeNowButton")
-            .assertIsNotEnabled()
     }
 
     @Test
@@ -673,27 +650,6 @@ class PlanScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `manage plan button should be enabled when dialogState is null`() {
-        mutableStateFlow.update { it.copy(viewState = DEFAULT_PREMIUM_VIEW_STATE) }
-        composeTestRule
-            .onNodeWithTag("ManagePlanButton")
-            .assertIsEnabled()
-    }
-
-    @Test
-    fun `manage plan button should be disabled when dialogState is Loading`() {
-        mutableStateFlow.update {
-            it.copy(
-                viewState = DEFAULT_PREMIUM_VIEW_STATE,
-                dialogState = PlanState.DialogState.LoadingPortal,
-            )
-        }
-        composeTestRule
-            .onNodeWithTag("ManagePlanButton")
-            .assertIsNotEnabled()
-    }
-
-    @Test
     fun `cancel premium button should render when showCancelButton is true`() {
         mutableStateFlow.update {
             it.copy(
@@ -729,19 +685,6 @@ class PlanScreenTest : BitwardenComposeTest() {
             .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(PlanAction.CancelPremiumClick) }
-    }
-
-    @Test
-    fun `cancel premium button should be disabled when dialogState is not null`() {
-        mutableStateFlow.update {
-            it.copy(
-                viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(showCancelButton = true),
-                dialogState = PlanState.DialogState.LoadingPortal,
-            )
-        }
-        composeTestRule
-            .onNodeWithTag("CancelPremiumButton")
-            .assertIsNotEnabled()
     }
 
     // endregion Action buttons

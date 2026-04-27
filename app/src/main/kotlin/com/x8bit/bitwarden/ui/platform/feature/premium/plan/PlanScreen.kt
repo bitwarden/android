@@ -128,7 +128,6 @@ fun PlanScreen(
             is PlanState.ViewState.Free -> {
                 FreeContent(
                     viewState = viewState,
-                    isDialogShowing = state.dialogState != null,
                     handlers = handlers,
                 )
             }
@@ -136,7 +135,6 @@ fun PlanScreen(
             is PlanState.ViewState.Premium -> {
                 PremiumContent(
                     viewState = viewState,
-                    isDialogShowing = state.dialogState != null,
                     handlers = handlers,
                 )
             }
@@ -257,7 +255,6 @@ private fun PlanDialogs(
 @Composable
 private fun FreeContent(
     viewState: PlanState.ViewState.Free,
-    isDialogShowing: Boolean,
     handlers: PlanHandlers,
     modifier: Modifier = Modifier,
 ) {
@@ -278,7 +275,6 @@ private fun FreeContent(
         BitwardenFilledButton(
             label = stringResource(id = BitwardenString.upgrade_now),
             onClick = handlers.onUpgradeNowClick,
-            isEnabled = !isDialogShowing,
             icon = rememberVectorPainter(id = BitwardenDrawable.ic_external_link),
             modifier = Modifier
                 .standardHorizontalMargin()
@@ -387,7 +383,6 @@ private fun PriceRow(
 @Composable
 private fun PremiumContent(
     viewState: PlanState.ViewState.Premium,
-    isDialogShowing: Boolean,
     handlers: PlanHandlers,
     modifier: Modifier = Modifier,
 ) {
@@ -407,7 +402,6 @@ private fun PremiumContent(
         BitwardenFilledButton(
             label = stringResource(id = BitwardenString.manage_plan),
             onClick = handlers.onManagePlanClick,
-            isEnabled = !isDialogShowing,
             icon = rememberVectorPainter(id = BitwardenDrawable.ic_external_link),
             modifier = Modifier
                 .standardHorizontalMargin()
@@ -420,7 +414,6 @@ private fun PremiumContent(
             BitwardenOutlinedButton(
                 label = stringResource(id = BitwardenString.cancel_premium),
                 onClick = handlers.onCancelPremiumClick,
-                isEnabled = !isDialogShowing,
                 icon = rememberVectorPainter(id = BitwardenDrawable.ic_external_link),
                 modifier = Modifier
                     .standardHorizontalMargin()
@@ -574,7 +567,6 @@ private fun PlanScreenFreeAccount_preview() {
                     checkoutUrl = null,
                     isAwaitingPremiumStatus = false,
                 ),
-                isDialogShowing = false,
                 handlers = PlanHandlers(
                     onBackClick = {},
                     onUpgradeNowClick = {},
@@ -618,7 +610,6 @@ private fun PlanScreenPremiumAccount_preview() {
                     nextChargeDateText = "April 2, 2026",
                     showCancelButton = true,
                 ),
-                isDialogShowing = false,
                 handlers = PlanHandlers(
                     onBackClick = {},
                     onUpgradeNowClick = {},
