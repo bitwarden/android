@@ -785,7 +785,6 @@ private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     revisionDate = FIXED_CLOCK.instant(),
     archivedDate = null,
     sshKey = null,
-    bankAccount = null,
     attachmentDecryptionFailures = null,
 )
 

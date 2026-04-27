@@ -52,7 +52,6 @@ fun createMockCipherView(
     clock: Clock = FIXED_CLOCK,
     fido2Credentials: List<Fido2Credential>? = null,
     sshKey: SshKeyView? = createMockSshKeyView(number = number),
-    bankAccount: BankAccountView = createMockBankAccountView(number = number),
     login: LoginView? = createMockLoginView(
         number = number,
         password = password,
@@ -94,7 +93,6 @@ fun createMockCipherView(
         },
         attachments = attachments,
         card = card,
-        bankAccount = bankAccount,
         fields = listOf(createMockFieldView(number = number)),
         identity = createMockIdentityView(number = number).takeIf {
             cipherType == CipherType.IDENTITY
@@ -304,23 +302,6 @@ fun createMockSshKeyView(number: Int): SshKeyView =
         publicKey = "mockPublicKey-$number",
         privateKey = "mockPrivateKey-$number",
         fingerprint = "mockKeyFingerprint-$number",
-    )
-
-/**
- * Create a mock [BankAccountView] with a given [number].
- */
-fun createMockBankAccountView(number: Int): BankAccountView =
-    BankAccountView(
-        bankName = "mockBankName-$number",
-        nameOnAccount = "mockNameOnAccount-$number",
-        accountType = "mockAccountType-$number",
-        accountNumber = "mockAccountNumber-$number",
-        routingNumber = "mockRoutingNumber-$number",
-        branchNumber = "mockBranchNumber-$number",
-        pin = "mockPin-$number",
-        swiftCode = "mokSwiftCode-$number",
-        iban = "mockIban-$number",
-        bankContactPhone = "mockBankContractPhone-$number",
     )
 
 /**

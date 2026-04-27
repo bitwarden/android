@@ -54,8 +54,6 @@ fun createMockSdkCipher(number: Int, clock: Clock = FIXED_CLOCK): Cipher =
         fields = listOf(createMockSdkField(number = number)),
         identity = createMockSdkIdentity(number = number),
         sshKey = createMockSdkSshKey(number = number),
-        // TODO: PM-32810: Add Bank Account Type
-        bankAccount = null,
         favorite = false,
         passwordHistory = listOf(createMockSdkPasswordHistory(number = number, clock = clock)),
         permissions = createMockSdkCipherPermissions(),
