@@ -8,47 +8,60 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 /**
  * Formats a card number using brand-specific spacing rules.
  *
- * AMEX numbers use `4-6-5` grouping and 14-digit Diners Club numbers use `4-6-4` grouping.
- * All other brands are formatted in groups of 4 digits.
+ * The input string is first sanitized to remove non-digit characters, then the card brand is
+ * detected based on the digit patterns. Finally, the digits are grouped into blocks according to
+ * the brand's formatting rules, and spaces are inserted between the blocks for improved
+ * readability.
  *
  * @return The formatted card number.
  */
-@Suppress("MagicNumber")
 fun String.formatCardNumber(): String {
     val digits = sanitizeCardNumber()
-    val brand = digits.detectCardBrand()
-    val defaultFormatted = digits.formatWithSpacesAt(
-        *(4 until digits.length step 4)
-            .toList()
-            .toIntArray(),
-    )
+    if (digits.isEmpty()) return this
+    val blocks = digits.detectCardBrand().formattingBlocks(digitCount = digits.length)
+    return digits.chunkByBlocks(blocks).joinToString(separator = " ")
+}
 
-    return when (brand) {
-        VaultCardBrand.AMEX -> digits.formatWithSpacesAt(4, 10)
-        VaultCardBrand.DINERS_CLUB -> if (digits.length == 14) {
-            digits.formatWithSpacesAt(4, 10)
-        } else {
-            defaultFormatted
+/**
+ * Returns the digit group sizes used to format a card number for a specific brand.
+ *
+ * @param digitCount The total number of sanitized digits available for formatting.
+ * @return A list of block sizes that defines how the card number should be grouped.
+ */
+@Suppress("MagicNumber")
+private fun VaultCardBrand.formattingBlocks(digitCount: Int): List<Int> {
+    val default = listOf(4, 4, 4, 4)
+    return when (this) {
+        VaultCardBrand.AMEX -> listOf(4, 6, 5)
+        VaultCardBrand.DINERS_CLUB -> if (digitCount == 14) listOf(4, 6, 4) else default
+        VaultCardBrand.MAESTRO -> when (digitCount) {
+            13 -> listOf(4, 4, 5)
+            15 -> listOf(4, 6, 5)
+            19 -> listOf(4, 4, 4, 4, 3)
+            else -> default
         }
-        else -> defaultFormatted
+        VaultCardBrand.UNIONPAY -> if (digitCount == 19) listOf(6, 13) else default
+        else -> default
     }
 }
 
 /**
- * Inserts spaces before the character indices in [positions].
+ * Splits the string into blocks of specified sizes.
  *
- * Indices outside the current string range are ignored.
+ * If the total of the block sizes is less than the string length, the remaining characters are
+ * included as an additional block at the end of the list.
  *
- * @return The formatted string.
+ * @param blocks A list of integers specifying the size of each block.
+ * @return A list of string blocks based on the specified sizes.
  */
-private fun String.formatWithSpacesAt(vararg positions: Int): String {
-    val spacingPositions = positions.toSet()
-    val result = StringBuilder()
-    for (i in indices) {
-        if (i in spacingPositions) result.append(" ")
-        result.append(this[i])
+private fun String.chunkByBlocks(blocks: List<Int>): List<String> = buildList {
+    var remaining = this@chunkByBlocks
+    for (size in blocks) {
+        if (remaining.isEmpty()) return@buildList
+        add(remaining.take(size))
+        remaining = remaining.drop(size)
     }
-    return result.toString()
+    if (remaining.isNotEmpty()) add(remaining)
 }
 
 /**
