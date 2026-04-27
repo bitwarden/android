@@ -176,9 +176,10 @@ fun VaultVerificationCodeItem(
             if (nextAuthCode != null && timeLeftSeconds <= NEXT_CODE_THRESHOLD_SECONDS) {
                 Text(
                     modifier = Modifier.testTag(tag = "NextAuthCode"),
-                    text = stringResource(id = BitwardenString.next_verification_code) +
-                        " " +
+                    text = stringResource(
+                        id = BitwardenString.next_verification_code,
                         nextAuthCode.chunked(size = 3).joinToString(separator = " "),
+                    ),
                     style = BitwardenTheme.typography.bodySmall,
                     color = BitwardenTheme.colorScheme.text.secondary,
                 )
