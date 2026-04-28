@@ -36,7 +36,6 @@ private val FIXED_CLOCK: Clock = Clock.fixed(
 fun createMockSdkCipher(
     number: Int,
     clock: Clock = FIXED_CLOCK,
-    bankAccount: BankAccount? = createMockSdkBankAccount(number = number),
 ): Cipher =
     Cipher(
         id = "mockId-$number",
@@ -54,7 +53,7 @@ fun createMockSdkCipher(
         archivedDate = clock.instant(),
         attachments = listOf(createMockSdkAttachment(number = number)),
         card = createMockSdkCard(number = number),
-        bankAccount = bankAccount,
+        bankAccount = createMockSdkBankAccount(number = number),
         fields = listOf(createMockSdkField(number = number)),
         identity = createMockSdkIdentity(number = number),
         sshKey = createMockSdkSshKey(number = number),
