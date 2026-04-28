@@ -1,8 +1,6 @@
 package com.bitwarden.network
 
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.core.data.serializer.BigDecimalSerializer
-import com.bitwarden.core.data.serializer.InstantSerializer
 import com.bitwarden.network.interceptor.AuthTokenManager
 import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.network.interceptor.CookieInterceptor
@@ -45,8 +43,6 @@ import com.bitwarden.network.service.PushServiceImpl
 import com.bitwarden.network.service.SendsServiceImpl
 import com.bitwarden.network.service.SyncServiceImpl
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.contextual
 import retrofit2.create
 
 /**
@@ -55,6 +51,7 @@ import retrofit2.create
 @OmitFromCoverage
 internal class BitwardenServiceClientImpl(
     private val bitwardenServiceClientConfig: BitwardenServiceClientConfig,
+    private val clientJson: Json,
 ) : BitwardenServiceClient {
 
     private val authTokenManager: AuthTokenManager = AuthTokenManager(
@@ -64,23 +61,7 @@ internal class BitwardenServiceClientImpl(
     override val tokenProvider: TokenProvider = authTokenManager
 
     override val cookieProvider: CookieProvider = bitwardenServiceClientConfig.cookieProvider
-    private val clientJson = Json {
 
-        // If there are keys returned by the server not modeled by a serializable class,
-        // ignore them.
-        // This makes additive server changes non-breaking.
-        ignoreUnknownKeys = true
-
-        // We allow for nullable values to have keys missing in the JSON response.
-        explicitNulls = false
-        serializersModule = SerializersModule {
-            contextual(InstantSerializer())
-            contextual(BigDecimalSerializer())
-        }
-
-        // Respect model default property values.
-        coerceInputValues = true
-    }
     private val retrofits: Retrofits by lazy {
         RetrofitsImpl(
             authTokenManager = authTokenManager,
