@@ -58,7 +58,7 @@ User Request (UI Action)
 
 ### Workflow Skills
 
-> **Quick start**: Use the `architect` agent (or `/plan-android-work <task>`) to refine
+> **Quick start**: Use the `bitwarden-tech-lead:bitwarden-tech-lead` agent (or `/plan-android-work <task>`) to refine
 > requirements and plan,
 > then the `bitwarden-software-engineer:bitwarden-software-engineer` agent (or `/work-on-android <task>`) for implementation,
 > then `/review-android <PR#>` to review the result.
@@ -67,16 +67,12 @@ User Request (UI Action)
 
 | Skill | Triggers |
 |-------|---------|
-| `refining-android-requirements` | "refine requirements", "analyze ticket", "gap analysis" |
-| `planning-android-implementation` | "plan implementation", "architecture design", "phased task breakdown" |
-| `implementing-android-code` | "implement", "write code", "add screen", "create feature" |
-| `testing-android-code` | "write tests", "add test coverage", "unit test" |
 | `build-test-verify` | "build", "run tests", "lint", "format", "verify build" |
-| `bitwarden-delivery-tools:perform-preflight` | "preflight", "self review", "ready to commit" |
-| `bitwarden-delivery-tools:committing-changes` | "commit", "stage changes", "create commit" |
+| `implementing-android-code` | "implement", "write code", "add screen", "create feature" |
+| `planning-android-implementation` | "plan implementation", "architecture design", "phased task breakdown" |
+| `refining-android-requirements` | "refine requirements", "analyze ticket", "gap analysis" |
 | `reviewing-changes` | "review", "code review", "check PR" |
-| `bitwarden-delivery-tools:creating-pull-request` | "create PR", "open pull request", "submit PR" |
-| `bitwarden-delivery-tools:labeling-changes` | "label PR", "add labels", "categorize changes" |
+| `testing-android-code` | "write tests", "add test coverage", "unit test" |
 
 | Command | Usage |
 |---------|-------|
