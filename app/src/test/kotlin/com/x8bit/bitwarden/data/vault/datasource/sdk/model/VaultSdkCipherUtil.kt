@@ -134,23 +134,6 @@ fun createMockSdkSshKey(number: Int): SshKey =
     )
 
 /**
- * Create a mock [BankAccount] with a given [number].
- */
-fun createMockBankAccount(number: Int): BankAccount =
-    BankAccount(
-        bankName = "mockBankName-$number",
-        nameOnAccount = "mockNameOnAccount-$number",
-        accountType = "mockAccountType-$number",
-        accountNumber = "mockAccountNumber-$number",
-        routingNumber = "mockRoutingNumber-$number",
-        branchNumber = "mockBranchNumber-$number",
-        pin = "mockPin-$number",
-        swiftCode = "mokSwiftCode-$number",
-        iban = "mockIban-$number",
-        bankContactPhone = "mockBankContractPhone-$number",
-    )
-
-/**
  * Create a mock [Field] with a given [number].
  */
 fun createMockSdkField(number: Int): Field =
