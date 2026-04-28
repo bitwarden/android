@@ -25,6 +25,7 @@ import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
@@ -101,6 +102,7 @@ class SearchViewModel @Inject constructor(
     private val vaultRepo: VaultRepository,
     private val authRepo: AuthRepository,
     private val environmentRepo: EnvironmentRepository,
+    private val premiumStateManager: PremiumStateManager,
     settingsRepo: SettingsRepository,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     specialCircumstanceManager: SpecialCircumstanceManager,
@@ -318,9 +320,16 @@ class SearchViewModel @Inject constructor(
 
     private fun handleUpgradeToPremiumClick() {
         mutableStateFlow.update { it.copy(dialogState = null) }
-        val baseUrl = environmentRepo.environment.environmentUrlData.baseWebVaultUrlOrDefault
-        val url = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium"
-        sendEvent(SearchEvent.NavigateToUrl(url = url))
+        if (premiumStateManager.isInAppUpgradeAvailable()) {
+            sendEvent(SearchEvent.NavigateToPlanModal)
+        } else {
+            val baseUrl = environmentRepo
+                .environment
+                .environmentUrlData
+                .baseWebVaultUrlOrDefault
+            val url = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium"
+            sendEvent(SearchEvent.NavigateToUrl(url = url))
+        }
     }
 
     private fun handleOverflowItemClick(action: SearchAction.OverflowOptionClick) {
@@ -1574,6 +1583,11 @@ sealed class SearchEvent {
     data class NavigateToUrl(
         val url: String,
     ) : SearchEvent()
+
+    /**
+     * Navigates to the in-app plan modal for premium upgrade.
+     */
+    data object NavigateToPlanModal : SearchEvent()
 
     /**
      * Shares the [content] with share sheet.

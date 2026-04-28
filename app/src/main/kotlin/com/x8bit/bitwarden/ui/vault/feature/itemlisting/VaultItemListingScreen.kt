@@ -85,6 +85,7 @@ fun VaultItemListingScreen(
     onNavigateToAddEditSendItem: (route: AddEditSendRoute) -> Unit,
     onNavigateToViewSendItem: (route: ViewSendRoute) -> Unit,
     onNavigateToSearch: (searchType: SearchType) -> Unit,
+    onNavigateToPlan: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     exitManager: ExitManager = LocalExitManager.current,
     credentialProviderCompletionManager: CredentialProviderCompletionManager =
@@ -144,6 +145,8 @@ fun VaultItemListingScreen(
             is VaultItemListingEvent.NavigateToUrl -> {
                 intentManager.launchUri(event.url.toUri())
             }
+
+            VaultItemListingEvent.NavigateToPlanModal -> onNavigateToPlan()
 
             is VaultItemListingEvent.NavigateToAddSendItem -> {
                 onNavigateToAddEditSendItem(

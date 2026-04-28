@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
 import com.bitwarden.vault.Attachment
+import com.bitwarden.vault.BankAccount
 import com.bitwarden.vault.Card
 import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherPermissions
@@ -52,6 +53,8 @@ fun createMockSdkCipher(number: Int, clock: Clock = FIXED_CLOCK): Cipher =
         fields = listOf(createMockSdkField(number = number)),
         identity = createMockSdkIdentity(number = number),
         sshKey = createMockSdkSshKey(number = number),
+        // TODO: PM-32810: Add Bank Account Type
+        bankAccount = null,
         favorite = false,
         passwordHistory = listOf(createMockSdkPasswordHistory(number = number, clock = clock)),
         permissions = createMockSdkCipherPermissions(),
@@ -126,6 +129,23 @@ fun createMockSdkSshKey(number: Int): SshKey =
         publicKey = "mockPublicKey-$number",
         privateKey = "mockPrivateKey-$number",
         fingerprint = "mockKeyFingerprint-$number",
+    )
+
+/**
+ * Create a mock [BankAccount] with a given [number].
+ */
+fun createMockBankAccount(number: Int): BankAccount =
+    BankAccount(
+        bankName = "mockBankName-$number",
+        nameOnAccount = "mockNameOnAccount-$number",
+        accountType = "mockAccountType-$number",
+        accountNumber = "mockAccountNumber-$number",
+        routingNumber = "mockRoutingNumber-$number",
+        branchNumber = "mockBranchNumber-$number",
+        pin = "mockPin-$number",
+        swiftCode = "mokSwiftCode-$number",
+        iban = "mockIban-$number",
+        bankContactPhone = "mockBankContractPhone-$number",
     )
 
 /**

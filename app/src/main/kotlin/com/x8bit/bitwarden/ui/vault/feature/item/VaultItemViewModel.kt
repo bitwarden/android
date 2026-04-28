@@ -25,6 +25,7 @@ import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
@@ -82,6 +83,7 @@ class VaultItemViewModel @Inject constructor(
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
+    private val premiumStateManager: PremiumStateManager,
     featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultItemState, VaultItemEvent, VaultItemAction>(
     // We load the state from the savedStateHandle for testing purposes.
@@ -744,9 +746,16 @@ class VaultItemViewModel @Inject constructor(
 
     private fun handleUpgradeToPremiumClick() {
         updateDialogState(dialog = null)
-        val baseUrl = environmentRepository.environment.environmentUrlData.baseWebVaultUrlOrDefault
-        val uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium"
-        sendEvent(VaultItemEvent.NavigateToUri(uri = uri))
+        if (premiumStateManager.isInAppUpgradeAvailable()) {
+            sendEvent(VaultItemEvent.NavigateToPlanModal)
+        } else {
+            val baseUrl = environmentRepository
+                .environment
+                .environmentUrlData
+                .baseWebVaultUrlOrDefault
+            val uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium"
+            sendEvent(VaultItemEvent.NavigateToUri(uri = uri))
+        }
     }
 
     private fun handlePasswordVisibilityClicked(
@@ -1975,6 +1984,11 @@ sealed class VaultItemEvent {
     data class NavigateToUri(
         val uri: String,
     ) : VaultItemEvent()
+
+    /**
+     * Navigates to the in-app plan modal for premium upgrade.
+     */
+    data object NavigateToPlanModal : VaultItemEvent()
 
     /**
      * Navigates to the attachments screen.

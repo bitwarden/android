@@ -1,6 +1,7 @@
 package com.bitwarden.network
 
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.data.serializer.BigDecimalSerializer
 import com.bitwarden.core.data.serializer.InstantSerializer
 import com.bitwarden.network.interceptor.AuthTokenManager
 import com.bitwarden.network.interceptor.BaseUrlInterceptors
@@ -74,6 +75,7 @@ internal class BitwardenServiceClientImpl(
         explicitNulls = false
         serializersModule = SerializersModule {
             contextual(InstantSerializer())
+            contextual(BigDecimalSerializer())
         }
 
         // Respect model default property values.

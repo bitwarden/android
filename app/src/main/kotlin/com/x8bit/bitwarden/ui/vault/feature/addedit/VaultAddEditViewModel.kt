@@ -33,6 +33,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
@@ -141,6 +142,7 @@ class VaultAddEditViewModel @Inject constructor(
     private val networkConnectionManager: NetworkConnectionManager,
     private val firstTimeActionManager: FirstTimeActionManager,
     private val environmentRepository: EnvironmentRepository,
+    private val premiumStateManager: PremiumStateManager,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -652,12 +654,19 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleUpgradeToPremiumClick() {
-        val baseUrl = environmentRepository.environment.environmentUrlData.baseWebVaultUrlOrDefault
-        sendEvent(
-            VaultAddEditEvent.NavigateToPremium(
-                uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium",
-            ),
-        )
+        if (premiumStateManager.isInAppUpgradeAvailable()) {
+            sendEvent(VaultAddEditEvent.NavigateToPlanModal)
+        } else {
+            val baseUrl = environmentRepository
+                .environment
+                .environmentUrlData
+                .baseWebVaultUrlOrDefault
+            sendEvent(
+                VaultAddEditEvent.NavigateToPremium(
+                    uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium",
+                ),
+            )
+        }
     }
 
     private fun handleConfirmDeleteClick() {
@@ -3196,6 +3205,11 @@ sealed class VaultAddEditEvent {
     data class NavigateToPremium(
         val uri: String,
     ) : VaultAddEditEvent()
+
+    /**
+     * Navigates to the in-app plan modal for premium upgrade.
+     */
+    data object NavigateToPlanModal : VaultAddEditEvent()
 
     /**
      * Navigates to the collections screen.

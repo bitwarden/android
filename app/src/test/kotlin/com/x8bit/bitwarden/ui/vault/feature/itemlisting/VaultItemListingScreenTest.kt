@@ -100,6 +100,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     private var onNavigateToVaultItemListingScreenType: VaultItemListingType? = null
     private var onNavigateToAddFolderCalled = false
     private var onNavigateToAddFolderParentFolderName: String? = null
+    private var onNavigateToPlanCalled: Boolean = false
 
     private val exitManager: ExitManager = mockk {
         every { exitApplication() } just runs
@@ -146,6 +147,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
                     onNavigateToAddFolderCalled = true
                     onNavigateToAddFolderParentFolderName = folderName
                 },
+                onNavigateToPlan = { onNavigateToPlanCalled = true },
             )
         }
     }
@@ -633,6 +635,12 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         verify(exactly = 1) {
             intentManager.launchUri(url.toUri())
         }
+    }
+
+    @Test
+    fun `NavigateToPlanModal event should invoke onNavigateToPlan`() {
+        mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToPlanModal)
+        assertTrue(onNavigateToPlanCalled)
     }
 
     @Test
@@ -1588,6 +1596,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
     }
 
+    @Suppress("LongMethod")
     @Test
     fun `on send item overflow option click should emit the appropriate action`() {
         val number = 1

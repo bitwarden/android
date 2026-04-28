@@ -26,6 +26,7 @@ fun NavGraphBuilder.sendGraph(
     onNavigateToAddEditSend: (route: AddEditSendRoute) -> Unit,
     onNavigateToViewSend: (ViewSendRoute) -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
+    onNavigateToPlan: () -> Unit,
 ) {
     navigation<SendGraphRoute>(
         startDestination = SendRoute,
@@ -46,6 +47,7 @@ fun NavGraphBuilder.sendGraph(
             onNavigateToAddEditSendItem = onNavigateToAddEditSend,
             onNavigateToViewSendItem = onNavigateToViewSend,
             onNavigateToSearchSend = onNavigateToSearchSend,
+            onNavigateToPlan = onNavigateToPlan,
         )
     }
 }

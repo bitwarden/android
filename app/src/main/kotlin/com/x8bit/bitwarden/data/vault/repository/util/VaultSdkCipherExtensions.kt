@@ -373,6 +373,7 @@ private fun CipherType.toNetworkCipherType(): CipherTypeJson =
         CipherType.CARD -> CipherTypeJson.CARD
         CipherType.IDENTITY -> CipherTypeJson.IDENTITY
         CipherType.SSH_KEY -> CipherTypeJson.SSH_KEY
+        CipherType.BANK_ACCOUNT -> TODO("PM-32810: Add Bank Account Type")
     }
 
 /**
@@ -401,6 +402,8 @@ fun SyncResponseJson.Cipher.toEncryptedSdkCipher(): Cipher =
         sshKey = sshKey?.toSdkSshKey(),
         card = card?.toSdkCard(),
         secureNote = secureNote?.toSdkSecureNote(),
+        // TODO: PM-32810: Add Bank Account Type
+        bankAccount = null,
         favorite = isFavorite,
         reprompt = reprompt.toSdkRepromptType(),
         organizationUseTotp = shouldOrganizationUseTotp,
@@ -717,6 +720,7 @@ fun Cipher.toFailureCipherListView(): CipherListView =
 
             CipherType.IDENTITY -> CipherListViewType.Identity
             CipherType.SSH_KEY -> CipherListViewType.SshKey
+            CipherType.BANK_ACCOUNT -> CipherListViewType.BankAccount
         },
         favorite = favorite,
         reprompt = reprompt,

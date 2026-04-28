@@ -379,6 +379,8 @@ private fun CipherListView.toVaultItemOrNull(
                 reprompt == CipherRepromptType.PASSWORD,
             hasDecryptionError = hasDecryptionError,
         )
+
+        CipherListViewType.BankAccount -> TODO("PM-32810: Add Bank Account Type")
     }
 }
 
