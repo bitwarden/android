@@ -19,7 +19,7 @@ fun createMockCipherJsonRequest(
     login: SyncResponseJson.Cipher.Login? = createMockLogin(number = number),
     card: SyncResponseJson.Cipher.Card? = createMockCard(number = number),
     sshKey: SyncResponseJson.Cipher.SshKey? = createMockSshKey(number = number),
-    bankAccount: SyncResponseJson.Cipher.BankAccount? = null,
+    bankAccount: SyncResponseJson.Cipher.BankAccount? = createMockBankAccount(number = number),
     driversLicense: SyncResponseJson.Cipher.DriversLicense? = null,
     passport: SyncResponseJson.Cipher.Passport? = null,
     identity: SyncResponseJson.Cipher.Identity? = createMockIdentity(number = number),

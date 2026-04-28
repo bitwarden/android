@@ -629,6 +629,18 @@ private const val CREATE_ATTACHMENT_SUCCESS_JSON = """
       "privateKey": "mockPrivateKey-1",
       "keyFingerprint": "mockKeyFingerprint-1"
     },
+    "bankAccount": {
+      "bankName": "mockBankName-1",
+      "nameOnAccount": "mockNameOnAccount-1",
+      "accountType": "checking",
+      "accountNumber": "mockAccountNumber-1",
+      "routingNumber": "mockRoutingNumber-1",
+      "branchNumber": "mockBranchNumber-1",
+      "pin": "mockPin-1",
+      "swiftCode": "mockSwiftCode-1",
+      "iban": "mockIban-1",
+      "bankContactPhone": "mockBankContactPhone-1"
+    },
     "encryptedFor": "mockEncryptedFor-1",
     "archivedDate": "2023-10-27T12:00:00.00Z"
   }
@@ -757,6 +769,18 @@ private const val CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON = """
     "publicKey": "mockPublicKey-1",
     "privateKey": "mockPrivateKey-1",
     "keyFingerprint": "mockKeyFingerprint-1"
+  },
+  "bankAccount": {
+    "bankName": "mockBankName-1",
+    "nameOnAccount": "mockNameOnAccount-1",
+    "accountType": "checking",
+    "accountNumber": "mockAccountNumber-1",
+    "routingNumber": "mockRoutingNumber-1",
+    "branchNumber": "mockBranchNumber-1",
+    "pin": "mockPin-1",
+    "swiftCode": "mockSwiftCode-1",
+    "iban": "mockIban-1",
+    "bankContactPhone": "mockBankContactPhone-1"
   },
   "encryptedFor": "mockEncryptedFor-1",
   "archivedDate": "2023-10-27T12:00:00.00Z"

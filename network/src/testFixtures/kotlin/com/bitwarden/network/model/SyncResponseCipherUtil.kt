@@ -32,7 +32,7 @@ fun createMockCipher(
     card: SyncResponseJson.Cipher.Card? = createMockCard(number = number),
     identity: SyncResponseJson.Cipher.Identity? = createMockIdentity(number = number),
     sshKey: SyncResponseJson.Cipher.SshKey? = createMockSshKey(number = number),
-    bankAccount: SyncResponseJson.Cipher.BankAccount? = null,
+    bankAccount: SyncResponseJson.Cipher.BankAccount? = createMockBankAccount(number = number),
     driversLicense: SyncResponseJson.Cipher.DriversLicense? = null,
     passport: SyncResponseJson.Cipher.Passport? = null,
     secureNote: SyncResponseJson.Cipher.SecureNote? = createMockSecureNote(),
