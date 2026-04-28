@@ -276,7 +276,7 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
                                 name = currentDevice.name,
                                 typeName = currentDevice.type.readableDeviceTypeName,
                                 isTrusted = currentDevice.isTrusted,
-                                firstLoginDate = "Oct 27, 2023, 12:00:00 PM",
+                                firstLoginDate = "Oct 27, 2023, 12:00:00\u202FPM",
                                 lastActivityLabel = currentDevice.lastActivityDate
                                     .toLastActivityLabel(clock = fixedClock),
                                 status = DeviceSessionStatus.Current,
@@ -287,7 +287,7 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
                                 name = pendingDevice.name,
                                 typeName = pendingDevice.type.readableDeviceTypeName,
                                 isTrusted = pendingDevice.isTrusted,
-                                firstLoginDate = "Oct 27, 2023, 12:00:00 PM",
+                                firstLoginDate = "Oct 27, 2023, 12:00:00\u202FPM",
                                 lastActivityLabel = pendingDevice.lastActivityDate
                                     .toLastActivityLabel(clock = fixedClock),
                                 status = DeviceSessionStatus.Pending,
@@ -298,7 +298,7 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
                                 name = otherDevice.name,
                                 typeName = otherDevice.type.readableDeviceTypeName,
                                 isTrusted = otherDevice.isTrusted,
-                                firstLoginDate = "Oct 27, 2023, 12:00:00 PM",
+                                firstLoginDate = "Oct 27, 2023, 12:00:00\u202FPM",
                                 lastActivityLabel = otherDevice.lastActivityDate
                                     .toLastActivityLabel(clock = fixedClock),
                                 status = DeviceSessionStatus.None,
