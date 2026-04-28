@@ -15,6 +15,7 @@ import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.map
+import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
@@ -115,7 +116,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -850,25 +850,14 @@ class VaultItemListingViewModel @Inject constructor(
     private fun createVaultItemTypeSelectionExcludedOptions(): ImmutableList<CreateVaultItemType> {
         val isNewItemTypesEnabled = featureFlagManager
             .getFeatureFlag(FlagKey.NewItemTypes)
-        val newItemTypeExclusions = listOfNotNull(
+        return persistentListOfNotNull(
+            CreateVaultItemType.CARD.takeIf { state.restrictItemTypesPolicyOrgIds.isNotEmpty() },
+            CreateVaultItemType.FOLDER,
+            CreateVaultItemType.SSH_KEY,
             CreateVaultItemType.BANK_ACCOUNT.takeUnless { isNewItemTypesEnabled },
             CreateVaultItemType.DRIVERS_LICENSE.takeUnless { isNewItemTypesEnabled },
             CreateVaultItemType.PASSPORT.takeUnless { isNewItemTypesEnabled },
         )
-        // If policy is enable for any organization, exclude the card option
-        val baseExclusions = if (state.restrictItemTypesPolicyOrgIds.isNotEmpty()) {
-            persistentListOf(
-                CreateVaultItemType.CARD,
-                CreateVaultItemType.FOLDER,
-                CreateVaultItemType.SSH_KEY,
-            )
-        } else {
-            persistentListOf(
-                CreateVaultItemType.SSH_KEY,
-                CreateVaultItemType.FOLDER,
-            )
-        }
-        return (baseExclusions + newItemTypeExclusions).toPersistentList()
     }
 
     private fun handleAddVaultItemClick() {

@@ -5,7 +5,6 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
-import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState.ViewState.Content.ItemType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 
 /**
@@ -20,14 +19,17 @@ val SELECT_TEXT: Text
 /**
  * Transforms a [VaultItemCipherType] into [VaultAddEditState.ViewState.Content.ItemType].
  */
-fun VaultItemCipherType.toItemType(): ItemType =
+fun VaultItemCipherType.toItemType(): VaultAddEditState.ViewState.Content.ItemType =
     when (this) {
-        VaultItemCipherType.LOGIN -> ItemType.Login()
-        VaultItemCipherType.CARD -> ItemType.Card()
-        VaultItemCipherType.IDENTITY -> ItemType.Identity()
-        VaultItemCipherType.SECURE_NOTE -> ItemType.SecureNotes
-        VaultItemCipherType.SSH_KEY -> ItemType.SshKey()
-        VaultItemCipherType.BANK_ACCOUNT -> ItemType.BankAccount()
-        VaultItemCipherType.DRIVERS_LICENSE -> ItemType.DriversLicense()
-        VaultItemCipherType.PASSPORT -> ItemType.Passport()
+        VaultItemCipherType.LOGIN -> VaultAddEditState.ViewState.Content.ItemType.Login()
+        VaultItemCipherType.CARD -> VaultAddEditState.ViewState.Content.ItemType.Card()
+        VaultItemCipherType.IDENTITY -> VaultAddEditState.ViewState.Content.ItemType.Identity()
+        VaultItemCipherType.SECURE_NOTE -> VaultAddEditState.ViewState.Content.ItemType.SecureNotes
+        VaultItemCipherType.SSH_KEY -> VaultAddEditState.ViewState.Content.ItemType.SshKey()
+        VaultItemCipherType.BANK_ACCOUNT ->
+            VaultAddEditState.ViewState.Content.ItemType.BankAccount()
+        VaultItemCipherType.DRIVERS_LICENSE ->
+            VaultAddEditState.ViewState.Content.ItemType.DriversLicense()
+        VaultItemCipherType.PASSPORT ->
+            VaultAddEditState.ViewState.Content.ItemType.Passport()
     }

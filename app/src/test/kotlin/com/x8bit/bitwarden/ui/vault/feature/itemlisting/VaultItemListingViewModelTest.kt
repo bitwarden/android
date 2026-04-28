@@ -1628,8 +1628,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
                 dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
                     excludedOptions = persistentListOf(
-                        CreateVaultItemType.SSH_KEY,
                         CreateVaultItemType.FOLDER,
+                        CreateVaultItemType.SSH_KEY,
                         CreateVaultItemType.BANK_ACCOUNT,
                         CreateVaultItemType.DRIVERS_LICENSE,
                         CreateVaultItemType.PASSPORT,
@@ -1655,8 +1655,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
                 dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
                     excludedOptions = persistentListOf(
-                        CreateVaultItemType.SSH_KEY,
                         CreateVaultItemType.FOLDER,
+                        CreateVaultItemType.SSH_KEY,
                         CreateVaultItemType.BANK_ACCOUNT,
                         CreateVaultItemType.DRIVERS_LICENSE,
                         CreateVaultItemType.PASSPORT,
@@ -1768,8 +1768,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
                 dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
                     excludedOptions = persistentListOf(
-                        CreateVaultItemType.SSH_KEY,
                         CreateVaultItemType.FOLDER,
+                        CreateVaultItemType.SSH_KEY,
                     ),
                 ),
             ),

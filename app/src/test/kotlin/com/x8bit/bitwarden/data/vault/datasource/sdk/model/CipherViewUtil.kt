@@ -60,9 +60,7 @@ fun createMockCipherView(
         fido2Credentials = fido2Credentials,
     ),
     card: CardView? = createMockCardView(number = number).takeIf { cipherType == CipherType.CARD },
-    bankAccount: BankAccountView? = createMockBankAccountView(number = number).takeIf {
-        cipherType == CipherType.BANK_ACCOUNT
-    },
+    bankAccount: BankAccountView? = createMockBankAccountView(number = number),
     attachments: List<AttachmentView> = listOf(createMockAttachmentView(number = number)),
     isArchived: Boolean = false,
     passwordHistory: List<PasswordHistoryView> = listOf(

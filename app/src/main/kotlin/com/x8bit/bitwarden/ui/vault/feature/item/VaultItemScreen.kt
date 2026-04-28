@@ -434,8 +434,9 @@ private fun VaultItemContent(
                 is VaultItemState.ViewState.Content.ItemType.DriversLicense,
                 is VaultItemState.ViewState.Content.ItemType.Passport,
                     -> {
-                    // These item types are gated behind the pm-32009-new-item-types feature
-                    // flag and cannot be received until their full infrastructure ships.
+                    // TODO(PM-32810): Render dedicated content for new item types once the UI
+                    //  ships in the phase-05-07 PR. Until then these are gated behind the
+                    //  pm-32009-new-item-types feature flag and cannot be received.
                     VaultItemSecureNoteContent(
                         commonState = viewState.common,
                         vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
