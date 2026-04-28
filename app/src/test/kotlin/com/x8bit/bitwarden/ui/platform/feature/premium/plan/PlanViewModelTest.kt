@@ -860,6 +860,259 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
 
     @Test
+    fun `SubscriptionResultReceive Success with OverduePayment status should describe overdue`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        status = PremiumSubscriptionStatus.OVERDUE_PAYMENT,
+                        suspensionDate = Instant.parse("2026-04-21T00:00:00Z"),
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            status = PremiumSubscriptionStatus.OVERDUE_PAYMENT,
+                            descriptionText = BitwardenString
+                                .subscription_overdue_description
+                                .asText("April 21, 2026"),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with PastDue status should describe grace period`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        status = PremiumSubscriptionStatus.PAST_DUE,
+                        suspensionDate = Instant.parse("2026-04-21T00:00:00Z"),
+                        gracePeriodDays = 7,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            status = PremiumSubscriptionStatus.PAST_DUE,
+                            descriptionText = BitwardenString
+                                .subscription_past_due_description
+                                .asText(7, "April 21, 2026"),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with PastDue and null gracePeriodDays uses fallback`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        status = PremiumSubscriptionStatus.PAST_DUE,
+                        suspensionDate = Instant.parse("2026-04-21T00:00:00Z"),
+                        gracePeriodDays = null,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            status = PremiumSubscriptionStatus.PAST_DUE,
+                            descriptionText = BitwardenString
+                                .subscription_past_due_description
+                                .asText(0, "April 21, 2026"),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with Paused status should describe paused`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        status = PremiumSubscriptionStatus.PAUSED,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            status = PremiumSubscriptionStatus.PAUSED,
+                            descriptionText = BitwardenString
+                                .subscription_paused_description
+                                .asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with Monthly cadence formats per-month rate`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        cadence = PlanCadence.MONTHLY,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            billingAmountText = BitwardenString
+                                .billing_rate_per_month
+                                .asText("$19.80"),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with zero seatsCost shows placeholder rate`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        seatsCost = BigDecimal.ZERO,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            billingAmountText = PLACEHOLDER.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with null line items shows placeholder text`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        storageCost = null,
+                        discountAmount = null,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            storageCostText = PLACEHOLDER,
+                            discountAmountText = PLACEHOLDER,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with zero line items shows placeholder text`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        storageCost = BigDecimal.ZERO,
+                        discountAmount = BigDecimal.ZERO,
+                        estimatedTax = BigDecimal.ZERO,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            storageCostText = PLACEHOLDER,
+                            discountAmountText = PLACEHOLDER,
+                            estimatedTaxText = PLACEHOLDER,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with null nextCharge shows placeholder date`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        nextCharge = null,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            descriptionText = BitwardenString
+                                .premium_next_charge_summary
+                                .asText("$45.55", PLACEHOLDER),
+                            nextChargeDateText = null,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
     fun `SubscriptionResultReceive Error should show SubscriptionError dialog`() = runTest {
         markUserPremium()
 
