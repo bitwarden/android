@@ -820,7 +820,7 @@ data class SyncResponseJson(
             val nameOnAccount: String?,
 
             @SerialName("accountType")
-            val accountType: BankAccountTypeJson?,
+            val accountType: String?,
 
             @SerialName("accountNumber")
             val accountNumber: String?,

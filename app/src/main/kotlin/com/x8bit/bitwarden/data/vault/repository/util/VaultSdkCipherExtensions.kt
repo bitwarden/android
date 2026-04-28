@@ -4,7 +4,6 @@ package com.x8bit.bitwarden.data.vault.repository.util
 
 import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
 import com.bitwarden.network.model.AttachmentJsonRequest
-import com.bitwarden.network.model.BankAccountTypeJson
 import com.bitwarden.network.model.CipherJsonRequest
 import com.bitwarden.network.model.CipherMiniResponseJson
 import com.bitwarden.network.model.CipherRepromptTypeJson
@@ -165,7 +164,7 @@ private fun BankAccount.toEncryptedNetworkBankAccount(): SyncResponseJson.Cipher
     SyncResponseJson.Cipher.BankAccount(
         bankName = bankName,
         nameOnAccount = nameOnAccount,
-        accountType = accountType?.toNetworkBankAccountType(),
+        accountType = accountType,
         accountNumber = accountNumber,
         routingNumber = routingNumber,
         branchNumber = branchNumber,
@@ -525,7 +524,7 @@ fun SyncResponseJson.Cipher.BankAccount.toSdkBankAccount(): BankAccount =
     BankAccount(
         bankName = bankName,
         nameOnAccount = nameOnAccount,
-        accountType = accountType?.toSdkAccountType(),
+        accountType = accountType,
         accountNumber = accountNumber,
         routingNumber = routingNumber,
         branchNumber = branchNumber,
@@ -534,28 +533,6 @@ fun SyncResponseJson.Cipher.BankAccount.toSdkBankAccount(): BankAccount =
         iban = iban,
         bankContactPhone = bankContactPhone,
     )
-
-/**
- * Transforms a [BankAccountTypeJson] into the string value expected by the SDK.
- */
-private fun BankAccountTypeJson.toSdkAccountType(): String = when (this) {
-    BankAccountTypeJson.CHECKING -> "checking"
-    BankAccountTypeJson.SAVINGS -> "savings"
-    BankAccountTypeJson.CERTIFICATE_OF_DEPOSIT -> "certificateOfDeposit"
-    BankAccountTypeJson.LINE_OF_CREDIT -> "lineOfCredit"
-    BankAccountTypeJson.INVESTMENT_BROKERAGE -> "investmentBrokerage"
-    BankAccountTypeJson.MONEY_MARKET -> "moneyMarket"
-    BankAccountTypeJson.OTHER -> "other"
-}
-
-/**
- * Transforms an SDK bank account type string into a [BankAccountTypeJson]. Falls back to
- * [BankAccountTypeJson.OTHER] when the value does not match any known variant.
- */
-private fun String.toNetworkBankAccountType(): BankAccountTypeJson =
-    BankAccountTypeJson.entries
-        .firstOrNull { it.toSdkAccountType().equals(this, ignoreCase = true) }
-        ?: BankAccountTypeJson.OTHER
 
 /**
  * Transforms a [SyncResponseJson.Cipher.SecureNote] into

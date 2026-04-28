@@ -169,7 +169,7 @@ fun createMockSdkBankAccount(number: Int): BankAccount =
     BankAccount(
         bankName = "mockBankName-$number",
         nameOnAccount = "mockNameOnAccount-$number",
-        accountType = "checking",
+        accountType = "mockAccountType-$number",
         accountNumber = "mockAccountNumber-$number",
         routingNumber = "mockRoutingNumber-$number",
         branchNumber = "mockBranchNumber-$number",

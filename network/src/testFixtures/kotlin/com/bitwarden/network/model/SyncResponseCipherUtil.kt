@@ -270,7 +270,7 @@ fun createMockBankAccount(
     number: Int,
     bankName: String? = "mockBankName-$number",
     nameOnAccount: String? = "mockNameOnAccount-$number",
-    accountType: BankAccountTypeJson? = BankAccountTypeJson.CHECKING,
+    accountType: String? = "mockAccountType-$number",
     accountNumber: String? = "mockAccountNumber-$number",
     routingNumber: String? = "mockRoutingNumber-$number",
     branchNumber: String? = "mockBranchNumber-$number",

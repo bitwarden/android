@@ -632,7 +632,7 @@ private const val CREATE_ATTACHMENT_SUCCESS_JSON = """
     "bankAccount": {
       "bankName": "mockBankName-1",
       "nameOnAccount": "mockNameOnAccount-1",
-      "accountType": "checking",
+      "accountType": "mockAccountType-1",
       "accountNumber": "mockAccountNumber-1",
       "routingNumber": "mockRoutingNumber-1",
       "branchNumber": "mockBranchNumber-1",
@@ -773,7 +773,7 @@ private const val CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON = """
   "bankAccount": {
     "bankName": "mockBankName-1",
     "nameOnAccount": "mockNameOnAccount-1",
-    "accountType": "checking",
+    "accountType": "mockAccountType-1",
     "accountNumber": "mockAccountNumber-1",
     "routingNumber": "mockRoutingNumber-1",
     "branchNumber": "mockBranchNumber-1",

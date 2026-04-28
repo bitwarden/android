@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.data.vault.repository.util
 
-import com.bitwarden.network.model.BankAccountTypeJson
 import com.bitwarden.network.model.CipherRepromptTypeJson
 import com.bitwarden.network.model.CipherTypeJson
 import com.bitwarden.network.model.FieldTypeJson
@@ -196,67 +195,6 @@ class VaultSdkCipherExtensionsTest {
         val syncBankAccount = createMockBankAccount(number = 1, accountType = null)
         val sdkBankAccount = syncBankAccount.toSdkBankAccount()
         assertNull(sdkBankAccount.accountType)
-    }
-
-    @Test
-    fun `toSdkBankAccount should map every BankAccountTypeJson value to the SDK string`() {
-        val expected = mapOf(
-            BankAccountTypeJson.CHECKING to "checking",
-            BankAccountTypeJson.SAVINGS to "savings",
-            BankAccountTypeJson.CERTIFICATE_OF_DEPOSIT to "certificateOfDeposit",
-            BankAccountTypeJson.LINE_OF_CREDIT to "lineOfCredit",
-            BankAccountTypeJson.INVESTMENT_BROKERAGE to "investmentBrokerage",
-            BankAccountTypeJson.MONEY_MARKET to "moneyMarket",
-            BankAccountTypeJson.OTHER to "other",
-        )
-
-        BankAccountTypeJson.entries.forEach { jsonType ->
-            val sdkBankAccount = createMockBankAccount(
-                number = 1,
-                accountType = jsonType,
-            ).toSdkBankAccount()
-            assertEquals(expected.getValue(jsonType), sdkBankAccount.accountType)
-        }
-    }
-
-    @Test
-    fun `toEncryptedNetworkBankAccount round trip should preserve every account type variant`() {
-        BankAccountTypeJson.entries.forEach { jsonType ->
-            val sdkBankAccount = createMockSdkBankAccount(number = 1).copy(
-                accountType = when (jsonType) {
-                    BankAccountTypeJson.CHECKING -> "checking"
-                    BankAccountTypeJson.SAVINGS -> "savings"
-                    BankAccountTypeJson.CERTIFICATE_OF_DEPOSIT -> "certificateOfDeposit"
-                    BankAccountTypeJson.LINE_OF_CREDIT -> "lineOfCredit"
-                    BankAccountTypeJson.INVESTMENT_BROKERAGE -> "investmentBrokerage"
-                    BankAccountTypeJson.MONEY_MARKET -> "moneyMarket"
-                    BankAccountTypeJson.OTHER -> "other"
-                },
-            )
-            val sdkCipher = createMockSdkCipher(number = 1, clock = FIXED_CLOCK)
-                .copy(bankAccount = sdkBankAccount)
-
-            val networkCipher = sdkCipher.toEncryptedNetworkCipherResponse(
-                encryptedFor = "mockEncryptedFor-1",
-            )
-
-            assertEquals(jsonType, networkCipher.bankAccount?.accountType)
-        }
-    }
-
-    @Test
-    fun `toEncryptedNetworkBankAccount should fall back to OTHER for an unknown SDK string`() {
-        val sdkBankAccount = createMockSdkBankAccount(number = 1).copy(
-            accountType = "not-a-real-type",
-        )
-        val sdkCipher = createMockSdkCipher(number = 1, clock = FIXED_CLOCK)
-            .copy(bankAccount = sdkBankAccount)
-
-        val networkCipher = sdkCipher.toEncryptedNetworkCipherResponse(
-            encryptedFor = "mockEncryptedFor-1",
-        )
-
-        assertEquals(BankAccountTypeJson.OTHER, networkCipher.bankAccount?.accountType)
     }
 
     @Test
