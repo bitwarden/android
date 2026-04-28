@@ -31,7 +31,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.core.text.isDigitsOnly
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.annotation.OmitFromCoverage
@@ -474,10 +473,10 @@ private fun SubscriptionCard(
         SubscriptionLineItem(
             label = stringResource(id = BitwardenString.discount),
             value = viewState.discountAmountText,
-            valueColor = if (viewState.discountAmountText.isDigitsOnly()) {
-                BitwardenTheme.colorScheme.statusBadge.success.text
-            } else {
+            valueColor = if (viewState.discountAmountText == "--") {
                 BitwardenTheme.colorScheme.text.primary
+            } else {
+                BitwardenTheme.colorScheme.statusBadge.success.text
             },
             testTag = "DiscountRow",
         )
