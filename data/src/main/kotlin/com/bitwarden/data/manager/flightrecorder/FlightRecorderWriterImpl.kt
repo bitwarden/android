@@ -2,6 +2,7 @@ package com.bitwarden.data.manager.flightrecorder
 
 import android.os.Build
 import android.util.Log
+import androidx.core.net.toUri
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
@@ -18,7 +19,6 @@ import java.io.File
 import java.io.FileWriter
 import java.io.PrintWriter
 import java.io.StringWriter
-import java.net.URI
 import java.time.Clock
 import java.time.Instant
 import kotlin.time.Duration.Companion.milliseconds
@@ -47,7 +47,7 @@ internal class FlightRecorderWriterImpl(
                 environment.notificationsUrl,
                 environment.ssoUrl,
             )
-                .mapNotNull { runCatching { URI(it).host }.getOrNull() }
+                .mapNotNull { it.toUri().host }
                 .toSet()
         }
 
