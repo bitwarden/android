@@ -432,6 +432,9 @@ private fun SubscriptionCard(
     viewState: PlanState.ViewState.Premium,
     modifier: Modifier = Modifier,
 ) {
+    val rowModifier = Modifier
+        .fillMaxWidth()
+        .standardHorizontalMargin()
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -441,16 +444,13 @@ private fun SubscriptionCard(
                 paddingBottom = 0.dp,
             ),
     ) {
-        Column(
+        SubscriptionHeader(
+            status = viewState.status,
+            descriptionText = viewState.descriptionText,
             modifier = Modifier
                 .padding(bottom = 16.dp)
                 .standardHorizontalMargin(),
-        ) {
-            SubscriptionHeader(
-                status = viewState.status,
-                descriptionText = viewState.descriptionText,
-            )
-        }
+        )
 
         BitwardenHorizontalDivider()
 
@@ -458,6 +458,7 @@ private fun SubscriptionCard(
             label = stringResource(id = BitwardenString.billing_amount),
             value = viewState.billingAmountText(),
             testTag = "BillingAmountRow",
+            modifier = rowModifier,
         )
 
         BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
@@ -466,6 +467,7 @@ private fun SubscriptionCard(
             label = stringResource(id = BitwardenString.storage_cost),
             value = viewState.storageCostText,
             testTag = "StorageCostRow",
+            modifier = rowModifier,
         )
 
         BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
@@ -479,6 +481,7 @@ private fun SubscriptionCard(
                 BitwardenTheme.colorScheme.statusBadge.success.text
             },
             testTag = "DiscountRow",
+            modifier = rowModifier,
         )
 
         BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
@@ -487,6 +490,7 @@ private fun SubscriptionCard(
             label = stringResource(id = BitwardenString.estimated_tax),
             value = viewState.estimatedTaxText,
             testTag = "EstimatedTaxRow",
+            modifier = rowModifier,
         )
     }
 }
@@ -534,8 +538,6 @@ private fun SubscriptionLineItem(
 ) {
     Row(
         modifier = modifier
-            .fillMaxWidth()
-            .standardHorizontalMargin()
             .padding(vertical = 16.dp)
             .testTag(testTag),
         horizontalArrangement = Arrangement.SpaceBetween,

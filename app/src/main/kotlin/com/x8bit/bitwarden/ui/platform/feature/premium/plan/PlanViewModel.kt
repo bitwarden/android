@@ -5,6 +5,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.util.toFormattedDateStyle
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
@@ -38,7 +39,6 @@ import java.math.BigDecimal
 import java.text.NumberFormat
 import java.time.Clock
 import java.time.Instant
-import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
 import javax.inject.Inject
@@ -91,9 +91,6 @@ class PlanViewModel @Inject constructor(
 
     private val currencyFormatter: NumberFormat =
         NumberFormat.getCurrencyInstance(Locale.US)
-
-    private val dateFormatter: DateTimeFormatter =
-        DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.US)
 
     init {
         stateFlow
@@ -632,7 +629,11 @@ class PlanViewModel @Inject constructor(
         }
 
     private fun Instant.toLocalizedDate(): String =
-        dateFormatter.format(this.atZone(clock.zone))
+        toFormattedDateStyle(
+            dateStyle = FormatStyle.LONG,
+            locale = Locale.US,
+            clock = clock,
+        )
 
     // endregion Shared handlers
 }
