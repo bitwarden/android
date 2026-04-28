@@ -45,13 +45,13 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialRegist
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialSearchUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
-import timber.log.Timber
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.io.File
 import java.time.Instant
 
@@ -441,15 +441,16 @@ class VaultSdkSourceImpl(
                 view = cipherListView,
                 time = time,
             )
-    }.onFailure { throwable ->
-        val isMissingSecret = throwable is BitwardenException.Totp &&
-            throwable.v1 is TotpException.MissingSecret
-        if (isMissingSecret) {
-            Timber.w("TOTP generation skipped: missing secret")
-        } else {
-            Timber.w(throwable)
-        }
     }
+        .onFailure { throwable ->
+            val isMissingSecret = throwable is BitwardenException.Totp &&
+                throwable.v1 is TotpException.MissingSecret
+            if (isMissingSecret) {
+                Timber.w("TOTP generation skipped: missing secret")
+            } else {
+                Timber.w(throwable)
+            }
+        }
 
     override suspend fun moveToOrganization(
         userId: String,
