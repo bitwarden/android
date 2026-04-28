@@ -134,17 +134,6 @@ fun createMockSdkSshKey(number: Int): SshKey =
     )
 
 /**
- * Create a mock [Field] with a given [number].
- */
-fun createMockSdkField(number: Int): Field =
-    Field(
-        linkedId = 100U,
-        name = "mockName-$number",
-        type = FieldType.HIDDEN,
-        value = "mockValue-$number",
-    )
-
-/**
  * Create a mock [BankAccount] with a given [number].
  */
 fun createMockSdkBankAccount(number: Int): BankAccount =
@@ -159,6 +148,17 @@ fun createMockSdkBankAccount(number: Int): BankAccount =
         swiftCode = "mockSwiftCode-$number",
         iban = "mockIban-$number",
         bankContactPhone = "mockBankContactPhone-$number",
+    )
+
+/**
+ * Create a mock [Field] with a given [number].
+ */
+fun createMockSdkField(number: Int): Field =
+    Field(
+        linkedId = 100U,
+        name = "mockName-$number",
+        type = FieldType.HIDDEN,
+        value = "mockValue-$number",
     )
 
 /**
