@@ -438,6 +438,31 @@ class VaultRepositoryImpl(
             )
     }
 
+    override suspend fun countValidTotpCiphers(isPremium: Boolean, time: Instant): Int {
+        val userId = activeUserId ?: return 0
+        val decryptedCipherList = decryptCipherListResultStateFlow
+            .value
+            .data
+            ?.successes
+            ?.filter {
+                it.type is CipherListViewType.Login &&
+                    !it.login?.totp.isNullOrBlank() &&
+                    it.isActive
+            }
+            ?.toFilteredList(vaultFilterType)
+            ?: return 0
+
+        return decryptedCipherList
+            .count { cipher ->
+                (isPremium || cipher.organizationUseTotp) &&
+                    vaultSdkSource.generateTotpForCipherListView(
+                        userId = userId,
+                        cipherListView = cipher,
+                        time = time,
+                    ).isSuccess
+            }
+    }
+
     override suspend fun exportVaultDataToString(
         format: ExportFormat,
         restrictedTypes: List<CipherType>,

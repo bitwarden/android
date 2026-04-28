@@ -61,7 +61,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
-import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
@@ -74,7 +73,6 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toSnackbarData
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
-import com.x8bit.bitwarden.ui.vault.feature.verificationcode.util.createVerificationCodeItem
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.awaits
@@ -145,9 +143,6 @@ class VaultViewModelTest : BaseViewModelTest() {
     private val mutableVaultDataStateFlow =
         MutableStateFlow<DataState<VaultData>>(DataState.Loading)
 
-    private val mutableAuthCodesFlow =
-        MutableStateFlow<DataState<List<VerificationCodeItem>>>(DataState.Loading)
-
     private var switchAccountResult: SwitchAccountResult = SwitchAccountResult.NoChange
 
     private val mutableFirstTimeStateFlow = MutableStateFlow(FirstTimeState())
@@ -191,7 +186,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     private val vaultRepository: VaultRepository = mockk {
         every { vaultFilterType = any() } just runs
         every { vaultDataStateFlow } returns mutableVaultDataStateFlow
-        every { getAuthCodesFlow() } returns mutableAuthCodesFlow
+        coEvery { countValidTotpCiphers(isPremium = any(), time = any()) } returns 0
         every { sync(forced = any()) } just runs
         coEvery { syncForResult(forced = any()) } returns SyncVaultDataResult.Success(
             itemsAvailable = true,
@@ -1466,7 +1461,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     collectionItems = listOf(),
                     noFolderItems = listOf(),
                     trashItemsCount = 0,
-                    totpItemsCount = 1,
+                    totpItemsCount = 0,
                     itemTypesCount = 5,
                     sshKeyItemsCount = 0,
                     archivedItemsCount = 0,
@@ -1475,6 +1470,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     archiveEndIcon = null,
                     showCardGroup = true,
                 ),
+                totpCodesCount = 0,
             )
             val viewModel = createViewModel()
             viewModel.trySendAction(VaultAction.SyncClick)
@@ -1532,6 +1528,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         runTest {
             val expectedState = createMockVaultState(
                 viewState = VaultState.ViewState.NoItems,
+                totpCodesCount = 0,
             )
             val viewModel = createViewModel()
             viewModel.trySendAction(VaultAction.SyncClick)
@@ -2436,7 +2433,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         collectionItems = listOf(),
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
-                        totpItemsCount = 1,
+                        totpItemsCount = 0,
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = 0,
@@ -2446,6 +2443,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         showCardGroup = true,
                     ),
                     dialog = null,
+                    totpCodesCount = 0,
                 ).copy(
                     hasShownDecryptionFailureAlert = true,
                     cipherDecryptionFailureIds = persistentListOf(
@@ -3897,32 +3895,33 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `authCodesFlow Loaded with premium user should set totpItemsCount to all codes`() =
+    fun `vault data loaded with premium user should set totpItemsCount to countValidTotpCiphers`() =
         runTest {
-            mutableVaultDataStateFlow.tryEmit(
-                DataState.Loaded(
-                    VaultData(
-                        decryptCipherListResult = createMockDecryptCipherListResult(
-                            number = 1,
-                            successes = listOf(createMockCipherListView(number = 1)),
-                        ),
-                        collectionViewList = emptyList(),
-                        folderViewList = emptyList(),
-                        sendViewList = emptyList(),
-                    ),
-                ),
-            )
+            coEvery {
+                vaultRepository.countValidTotpCiphers(isPremium = true, time = any())
+            } returns 2
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
-                awaitItem() // initial Content state with fallback totpItemsCount
+                assertEquals(DEFAULT_STATE, awaitItem())
 
-                mutableAuthCodesFlow.value = DataState.Loaded(
-                    listOf(
-                        createVerificationCodeItem(number = 1).copy(orgUsesTotp = true),
-                        createVerificationCodeItem(number = 2).copy(orgUsesTotp = false),
+                mutableVaultDataStateFlow.tryEmit(
+                    DataState.Loaded(
+                        VaultData(
+                            decryptCipherListResult = createMockDecryptCipherListResult(
+                                number = 1,
+                                successes = listOf(createMockCipherListView(number = 1)),
+                            ),
+                            collectionViewList = emptyList(),
+                            folderViewList = emptyList(),
+                            sendViewList = emptyList(),
+                        ),
                     ),
                 )
+
+                // Content state with default totpItemsCount (null → 0 from toViewState)
+                awaitItem()
+
                 val contentViewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     itemTypesCount = 5,
                     totpItemsCount = 2,
@@ -3930,9 +3929,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                     archivedItemsCount = 0,
                     archiveEnabled = true,
                 )
-
                 assertEquals(
-                    createMockVaultState(viewState = contentViewState),
+                    createMockVaultState(viewState = contentViewState, totpCodesCount = 2),
                     awaitItem(),
                 )
             }
@@ -3940,7 +3938,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `authCodesFlow Loaded with non-premium user should set totpItemsCount to orgUsesTotp codes only`() =
+    fun `vault data loaded with non-premium user should set totpItemsCount to countValidTotpCiphers`() =
         runTest {
             mutableUserStateFlow.update {
                 it?.copy(
@@ -3953,30 +3951,30 @@ class VaultViewModelTest : BaseViewModelTest() {
                     },
                 )
             }
-            mutableVaultDataStateFlow.tryEmit(
-                DataState.Loaded(
-                    VaultData(
-                        decryptCipherListResult = createMockDecryptCipherListResult(
-                            number = 1,
-                            successes = listOf(createMockCipherListView(number = 1)),
-                        ),
-                        collectionViewList = emptyList(),
-                        folderViewList = emptyList(),
-                        sendViewList = emptyList(),
-                    ),
-                ),
-            )
+            coEvery {
+                vaultRepository.countValidTotpCiphers(isPremium = false, time = any())
+            } returns 1
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
-                awaitItem() // initial Content state with fallback totpItemsCount
+                awaitItem() // initial Loading state
 
-                mutableAuthCodesFlow.value = DataState.Loaded(
-                    listOf(
-                        createVerificationCodeItem(number = 1).copy(orgUsesTotp = true),
-                        createVerificationCodeItem(number = 2).copy(orgUsesTotp = false),
+                mutableVaultDataStateFlow.tryEmit(
+                    DataState.Loaded(
+                        VaultData(
+                            decryptCipherListResult = createMockDecryptCipherListResult(
+                                number = 1,
+                                successes = listOf(createMockCipherListView(number = 1)),
+                            ),
+                            collectionViewList = emptyList(),
+                            folderViewList = emptyList(),
+                            sendViewList = emptyList(),
+                        ),
                     ),
                 )
+
+                // Content state with default totpItemsCount (null → 0 from toViewState)
+                awaitItem()
 
                 val contentViewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     itemTypesCount = 5,
@@ -3987,29 +3985,28 @@ class VaultViewModelTest : BaseViewModelTest() {
                     archiveSubText = BitwardenString.premium_subscription_required.asText(),
                     archiveEndIcon = BitwardenDrawable.ic_locked,
                 )
-
                 assertEquals(
-                    createMockVaultState(viewState = contentViewState).copy(
-                        isPremium = false,
-                    ),
+                    createMockVaultState(
+                        viewState = contentViewState,
+                        totpCodesCount = 1,
+                    ).copy(isPremium = false),
                     awaitItem(),
                 )
             }
         }
 
     @Test
-    fun `authCodesFlow Loaded when viewState is not Content should not update state`() = runTest {
-        // mutableVaultDataStateFlow stays Loading so viewState remains Loading (not Content)
+    fun `vault data loading should not trigger countValidTotpCiphers`() = runTest {
+        // mutableVaultDataStateFlow stays Loading so no data is available
         val viewModel = createViewModel()
 
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
-
-            mutableAuthCodesFlow.value = DataState.Loaded(
-                listOf(createVerificationCodeItem(number = 1)),
-            )
-
             expectNoEvents()
+        }
+
+        coVerify(exactly = 0) {
+            vaultRepository.countValidTotpCiphers(isPremium = any(), time = any())
         }
     }
 
@@ -4112,6 +4109,7 @@ private val DEFAULT_USER_STATE = UserState(
 private fun createMockVaultState(
     viewState: VaultState.ViewState,
     dialog: VaultState.DialogState? = null,
+    totpCodesCount: Int? = null,
 ): VaultState =
     VaultState(
         appBarTitle = BitwardenString.my_vault.asText(),
@@ -4156,6 +4154,7 @@ private fun createMockVaultState(
         isArchiveEnabled = true,
         isIntroducingArchiveActionCardDismissed = false,
         isPremiumUpgradeBannerEligible = false,
+        totpCodesCount = totpCodesCount,
     )
 
 private val DEFAULT_CONTENT_VIEW_STATE = VaultState.ViewState.Content(

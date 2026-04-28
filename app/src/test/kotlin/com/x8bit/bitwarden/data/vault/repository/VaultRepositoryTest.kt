@@ -21,6 +21,7 @@ import com.bitwarden.network.model.createMockFolder
 import com.bitwarden.network.model.createMockOrganizationKeys
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.SendView
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.DecryptCipherListResult
@@ -36,7 +37,9 @@ import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockAccount
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSend
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
@@ -1018,6 +1021,199 @@ class VaultRepositoryTest {
             ),
             result,
         )
+    }
+
+    @Test
+    fun `countValidTotpCiphers with no active user should return 0`() = runTest {
+        fakeAuthDiskSource.userState = null
+
+        val result = vaultRepository.countValidTotpCiphers(
+            isPremium = true,
+            time = Instant.parse("2023-10-27T12:00:00Z"),
+        )
+
+        assertEquals(0, result)
+    }
+
+    @Test
+    fun `countValidTotpCiphers with no decrypted data should return 0`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        mutableDecryptCipherListResultStateFlow.value = DataState.Loading
+
+        val result = vaultRepository.countValidTotpCiphers(
+            isPremium = true,
+            time = Instant.parse("2023-10-27T12:00:00Z"),
+        )
+
+        assertEquals(0, result)
+    }
+
+    @Test
+    fun `countValidTotpCiphers with premium user should count all ciphers where SDK succeeds`() =
+        runTest {
+            val totpResponse = TotpResponse("Testcode", 30u)
+            coEvery {
+                vaultSdkSource.generateTotpForCipherListView(any(), any(), any())
+            } returns totpResponse.asSuccess()
+            mutableDecryptCipherListResultStateFlow.value = DataState.Loaded(
+                DecryptCipherListResult(
+                    successes = listOf(
+                        createMockCipherListView(number = 1),
+                        createMockCipherListView(number = 2),
+                    ),
+                    failures = emptyList(),
+                ),
+            )
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+            val result = vaultRepository.countValidTotpCiphers(
+                isPremium = true,
+                time = Instant.parse("2023-10-27T12:00:00Z"),
+            )
+
+            assertEquals(2, result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `countValidTotpCiphers with non-premium user should count only organizationUseTotp ciphers`() =
+        runTest {
+            val totpResponse = TotpResponse("Testcode", 30u)
+            coEvery {
+                vaultSdkSource.generateTotpForCipherListView(any(), any(), any())
+            } returns totpResponse.asSuccess()
+            mutableDecryptCipherListResultStateFlow.value = DataState.Loaded(
+                DecryptCipherListResult(
+                    successes = listOf(
+                        createMockCipherListView(number = 1, organizationUseTotp = true),
+                        createMockCipherListView(number = 2, organizationUseTotp = false),
+                    ),
+                    failures = emptyList(),
+                ),
+            )
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+            val result = vaultRepository.countValidTotpCiphers(
+                isPremium = false,
+                time = Instant.parse("2023-10-27T12:00:00Z"),
+            )
+
+            assertEquals(1, result)
+        }
+
+    @Test
+    fun `countValidTotpCiphers should exclude ciphers where SDK generateTotp fails`() = runTest {
+        val cipher1 = createMockCipherListView(number = 1)
+        val cipher2 = createMockCipherListView(number = 2)
+        coEvery {
+            vaultSdkSource.generateTotpForCipherListView(
+                userId = any(),
+                cipherListView = cipher1,
+                time = any(),
+            )
+        } returns TotpResponse("Testcode", 30u).asSuccess()
+        coEvery {
+            vaultSdkSource.generateTotpForCipherListView(
+                userId = any(),
+                cipherListView = cipher2,
+                time = any(),
+            )
+        } returns RuntimeException("SDK error").asFailure()
+        mutableDecryptCipherListResultStateFlow.value = DataState.Loaded(
+            DecryptCipherListResult(
+                successes = listOf(cipher1, cipher2),
+                failures = emptyList(),
+            ),
+        )
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        val result = vaultRepository.countValidTotpCiphers(
+            isPremium = true,
+            time = Instant.parse("2023-10-27T12:00:00Z"),
+        )
+
+        assertEquals(1, result)
+    }
+
+    @Test
+    fun `countValidTotpCiphers should exclude non-Login type ciphers`() = runTest {
+        coEvery {
+            vaultSdkSource.generateTotpForCipherListView(any(), any(), any())
+        } returns TotpResponse("Testcode", 30u).asSuccess()
+        mutableDecryptCipherListResultStateFlow.value = DataState.Loaded(
+            DecryptCipherListResult(
+                successes = listOf(
+                    createMockCipherListView(number = 1),
+                    createMockCipherListView(
+                        number = 2,
+                        type = CipherListViewType.Card(createMockCardListView(number = 2)),
+                    ),
+                ),
+                failures = emptyList(),
+            ),
+        )
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        val result = vaultRepository.countValidTotpCiphers(
+            isPremium = true,
+            time = Instant.parse("2023-10-27T12:00:00Z"),
+        )
+
+        assertEquals(1, result)
+    }
+
+    @Test
+    fun `countValidTotpCiphers should exclude Login ciphers with null TOTP`() = runTest {
+        coEvery {
+            vaultSdkSource.generateTotpForCipherListView(any(), any(), any())
+        } returns TotpResponse("Testcode", 30u).asSuccess()
+        mutableDecryptCipherListResultStateFlow.value = DataState.Loaded(
+            DecryptCipherListResult(
+                successes = listOf(
+                    createMockCipherListView(number = 1),
+                    createMockCipherListView(
+                        number = 2,
+                        type = CipherListViewType.Login(
+                            createMockLoginListView(number = 2, totp = null),
+                        ),
+                    ),
+                ),
+                failures = emptyList(),
+            ),
+        )
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        val result = vaultRepository.countValidTotpCiphers(
+            isPremium = true,
+            time = Instant.parse("2023-10-27T12:00:00Z"),
+        )
+
+        assertEquals(1, result)
+    }
+
+    @Test
+    fun `countValidTotpCiphers should exclude deleted and archived ciphers`() = runTest {
+        coEvery {
+            vaultSdkSource.generateTotpForCipherListView(any(), any(), any())
+        } returns TotpResponse("Testcode", 30u).asSuccess()
+        mutableDecryptCipherListResultStateFlow.value = DataState.Loaded(
+            DecryptCipherListResult(
+                successes = listOf(
+                    createMockCipherListView(number = 1),
+                    createMockCipherListView(number = 2, isDeleted = true),
+                    createMockCipherListView(number = 3, isArchived = true),
+                ),
+                failures = emptyList(),
+            ),
+        )
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        val result = vaultRepository.countValidTotpCiphers(
+            isPremium = true,
+            time = Instant.parse("2023-10-27T12:00:00Z"),
+        )
+
+        assertEquals(1, result)
     }
 
     @Test

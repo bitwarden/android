@@ -50,7 +50,6 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.userFriendlyMessage
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
-import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
@@ -83,7 +82,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -170,8 +168,6 @@ class VaultViewModel @Inject constructor(
      */
     private val vaultFilterTypeOrDefault: VaultFilterType
         get() = state.vaultFilterData?.selectedVaultFilterType ?: VaultFilterType.AllVaults
-
-    private val authCodesFlow = vaultRepository.getAuthCodesFlow()
 
     init {
         // Force a sync if a KDF update is detected as necessary to ensure we have the latest KDF
@@ -280,12 +276,6 @@ class VaultViewModel @Inject constructor(
         featureFlagManager
             .getFeatureFlagFlow(FlagKey.ArchiveItems)
             .map { VaultAction.Internal.ArchiveItemsFlagUpdateReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        authCodesFlow
-            .mapNotNull { (it as? DataState.Loaded)?.data }
-            .map { VaultAction.Internal.AuthCodesReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -1006,8 +996,6 @@ class VaultViewModel @Inject constructor(
             is VaultAction.Internal.PremiumUpgradeBannerEligibilityReceive -> {
                 handlePremiumUpgradeBannerEligibilityReceive(action)
             }
-
-            is VaultAction.Internal.AuthCodesReceive -> handleAuthCodesReceive(action)
         }
     }
 
@@ -1145,25 +1133,6 @@ class VaultViewModel @Inject constructor(
         }
     }
 
-    private fun handleAuthCodesReceive(action: VaultAction.Internal.AuthCodesReceive) {
-        mutableStateFlow.update { state ->
-            val content = state.viewState as? VaultState.ViewState.Content
-                ?: return@update state
-            state.copy(
-                viewState = content.copy(
-                    totpItemsCount = computeTotpItemsCount(action.codes),
-                ),
-            )
-        }
-    }
-
-    private fun computeTotpItemsCount(codes: List<VerificationCodeItem>): Int =
-        if (state.isPremium) {
-            codes.size
-        } else {
-            codes.count { it.orgUsesTotp }
-        }
-
     private fun handleDecryptionErrorReceive(action: VaultAction.Internal.DecryptionErrorReceive) {
         mutableStateFlow.update {
             it.copy(
@@ -1272,9 +1241,28 @@ class VaultViewModel @Inject constructor(
         // navigating.
         if (state.isSwitchingAccounts) return
 
-        updateViewState(
-            vaultData = action.vaultData,
-        )
+        updateViewState(vaultData = action.vaultData)
+
+        if (action.vaultData.data != null) {
+            viewModelScope.launch {
+                updateTotpCodesCount(
+                    vaultRepository.countValidTotpCiphers(
+                        isPremium = state.isPremium,
+                        time = clock.instant(),
+                    ),
+                )
+            }
+        }
+    }
+
+    private fun updateTotpCodesCount(count: Int) {
+        mutableStateFlow.update { state ->
+            val content = state.viewState as? VaultState.ViewState.Content
+            state.copy(
+                totpCodesCount = count,
+                viewState = content?.copy(totpItemsCount = count) ?: state.viewState,
+            )
+        }
     }
 
     private fun updateViewState(vaultData: DataState<VaultData>) {
@@ -1372,7 +1360,7 @@ class VaultViewModel @Inject constructor(
                     vaultFilterType = vaultFilterTypeOrDefault,
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                     isArchiveEnabled = state.isArchiveEnabled,
-                    totpItemsCount = authCodesFlow.value.data?.let { computeTotpItemsCount(it) },
+                    totpItemsCount = state.totpCodesCount,
                 ),
                 dialog = dialog,
                 isRefreshing = false,
@@ -1418,7 +1406,7 @@ class VaultViewModel @Inject constructor(
                     vaultFilterType = vaultFilterTypeOrDefault,
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                     isArchiveEnabled = state.isArchiveEnabled,
-                    totpItemsCount = authCodesFlow.value.data?.let { computeTotpItemsCount(it) },
+                    totpItemsCount = state.totpCodesCount,
                 ),
             )
         }
@@ -1582,6 +1570,7 @@ data class VaultState(
     val isIntroducingArchiveActionCardDismissed: Boolean,
     val isPremiumUpgradeBannerEligible: Boolean = false,
     val isAwaitingKdfSync: Boolean = false,
+    val totpCodesCount: Int? = null,
 ) : Parcelable {
 
     /**
@@ -2497,13 +2486,6 @@ sealed class VaultAction {
          */
         data class PremiumUpgradeBannerEligibilityReceive(
             val isEligible: Boolean,
-        ) : Internal()
-
-        /**
-         * Indicates that auth codes were received.
-         */
-        data class AuthCodesReceive(
-            val codes: List<VerificationCodeItem>,
         ) : Internal()
     }
 }
