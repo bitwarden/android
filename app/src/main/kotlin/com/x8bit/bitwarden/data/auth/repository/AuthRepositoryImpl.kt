@@ -5,6 +5,7 @@ import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.RegisterTdeKeyResponse
 import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
@@ -100,8 +101,10 @@ import com.x8bit.bitwarden.data.auth.repository.util.CookieCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
+import com.x8bit.bitwarden.data.auth.repository.util.accountKeysJson
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
+import com.x8bit.bitwarden.data.auth.repository.util.privateKey
 import com.x8bit.bitwarden.data.auth.repository.util.toAccountCryptographicState
 import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
 import com.x8bit.bitwarden.data.auth.repository.util.toRemovedPasswordUserStateJson
@@ -115,6 +118,7 @@ import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -145,6 +149,7 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.time.Clock
 import javax.inject.Singleton
@@ -178,9 +183,10 @@ class AuthRepositoryImpl(
     private val userStateManager: UserStateManager,
     private val kdfManager: KdfManager,
     private val toastManager: ToastManager,
+    private val featureFlagManager: FeatureFlagManager,
     logsManager: LogsManager,
     pushManager: PushManager,
-    dispatcherManager: DispatcherManager,
+    private val dispatcherManager: DispatcherManager,
 ) : AuthRepository,
     AuthRequestManager by authRequestManager,
     BiometricsEncryptionManager by biometricsEncryptionManager,
@@ -1105,85 +1111,73 @@ class AuthRepositoryImpl(
             )
     }
 
-    @Suppress("LongMethod")
     override suspend fun setPassword(
         organizationIdentifier: String,
         password: String,
         passwordHint: String?,
     ): SetPasswordResult {
-        val activeAccount = authDiskSource
-            .userState
-            ?.activeAccount
+        val profile = authDiskSource.userState?.activeAccount?.profile
             ?: return SetPasswordResult.Error(error = NoActiveUserException())
-        val userId = activeAccount.profile.userId
-
-        // Update the saved master password hash.
-        val passwordHash = authSdkSource
-            .hashPassword(
-                email = activeAccount.profile.email,
-                password = password,
-                kdf = activeAccount.profile.toSdkParams(),
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
-            )
-            .getOrElse { return@setPassword SetPasswordResult.Error(error = it) }
-
-        return when (activeAccount.profile.forcePasswordResetReason) {
+        return when (profile.forcePasswordResetReason) {
             ForcePasswordResetReason.TDE_USER_WITHOUT_PASSWORD_HAS_PASSWORD_RESET_PERMISSION -> {
-                vaultSdkSource
-                    .updatePassword(userId = userId, newPassword = password)
-                    .map { it.newKey to null }
+                setUpdatedPassword(
+                    profile = profile,
+                    organizationIdentifier = organizationIdentifier,
+                    password = password,
+                    passwordHint = passwordHint,
+                )
             }
 
             ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
             ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN,
             null,
                 -> {
-                authSdkSource
-                    .makeRegisterKeys(
-                        email = activeAccount.profile.email,
-                        password = password,
-                        kdf = activeAccount.profile.toSdkParams(),
-                    )
-                    .map { it.encryptedUserKey to it.keys }
+                setPasswordForJit(
+                    profile = profile,
+                    organizationIdentifier = organizationIdentifier,
+                    password = password,
+                    passwordHint = passwordHint,
+                )
             }
         }
-            .flatMap { (encryptedUserKey, rsaKeys) ->
+    }
+
+    private suspend fun setUpdatedPassword(
+        profile: AccountJson.Profile,
+        organizationIdentifier: String,
+        password: String,
+        passwordHint: String?,
+    ): SetPasswordResult {
+        val userId = profile.userId
+        return vaultSdkSource
+            .updatePassword(userId = userId, newPassword = password)
+            .flatMap { response ->
                 accountsService
                     .setPassword(
                         body = SetPasswordRequestJson(
-                            passwordHash = passwordHash,
+                            passwordHash = response.passwordHash,
                             passwordHint = passwordHint,
                             organizationIdentifier = organizationIdentifier,
-                            kdfIterations = activeAccount.profile.kdfIterations,
-                            kdfMemory = activeAccount.profile.kdfMemory,
-                            kdfParallelism = activeAccount.profile.kdfParallelism,
-                            kdfType = activeAccount.profile.kdfType,
-                            key = encryptedUserKey,
-                            keys = rsaKeys?.let {
-                                RegisterRequestJson.Keys(
-                                    publicKey = it.public,
-                                    encryptedPrivateKey = it.private,
-                                )
-                            },
+                            kdfIterations = profile.kdfIterations,
+                            kdfMemory = profile.kdfMemory,
+                            kdfParallelism = profile.kdfParallelism,
+                            kdfType = profile.kdfType,
+                            key = response.newKey,
+                            keys = null,
                         ),
                     )
                     .onSuccess {
-                        rsaKeys?.private?.let {
-                            // This process is used by TDE and Enterprise accounts during initial
-                            // login. We continue to store the locally generated keys
-                            // until TDE and Enterprise accounts support AEAD keys.
-                            authDiskSource.storePrivateKey(userId = userId, privateKey = it)
-                        }
-                        authDiskSource.storeUserKey(userId = userId, userKey = encryptedUserKey)
+                        authDiskSource.storeUserKey(userId = userId, userKey = response.newKey)
                     }
+                    .map { response.passwordHash }
             }
-            .flatMap {
+            .flatMap { masterPasswordHash ->
                 when (val result = vaultRepository.unlockVaultWithMasterPassword(password)) {
                     is VaultUnlockResult.Success -> {
                         enrollUserInPasswordReset(
                             userId = userId,
                             organizationIdentifier = organizationIdentifier,
-                            passwordHash = passwordHash,
+                            passwordHash = masterPasswordHash,
                         )
                     }
 
@@ -1194,8 +1188,155 @@ class AuthRepositoryImpl(
                 }
             }
             .onSuccess {
-                authDiskSource.storeMasterPasswordHash(userId = userId, passwordHash = passwordHash)
-                authDiskSource.userState = authDiskSource.userState?.toUserStateJsonWithPassword()
+                authDiskSource.userState = authDiskSource.userState?.toUserStateJsonWithPassword(
+                    masterPasswordUnlock = null,
+                )
+                this.organizationIdentifier = null
+            }
+            .fold(
+                onFailure = { SetPasswordResult.Error(error = it) },
+                onSuccess = { SetPasswordResult.Success },
+            )
+    }
+
+    private suspend fun setPasswordForJit(
+        profile: AccountJson.Profile,
+        organizationIdentifier: String,
+        password: String,
+        passwordHint: String?,
+    ): SetPasswordResult {
+        if (!featureFlagManager.getFeatureFlag(FlagKey.V2EncryptionJitPassword)) {
+            return setPasswordForJitV1(
+                profile = profile,
+                organizationIdentifier = organizationIdentifier,
+                password = password,
+                passwordHint = passwordHint,
+            )
+        }
+        val userId = profile.userId
+        return organizationService
+            .getOrganizationAutoEnrollStatus(organizationIdentifier = organizationIdentifier)
+            .flatMap { enrollStatus ->
+                organizationService
+                    .getOrganizationKeys(organizationId = enrollStatus.organizationId)
+                    .map { orgKeys -> enrollStatus to orgKeys }
+            }
+            .flatMap { (enrollStatus, orgKeys) ->
+                withContext(dispatcherManager.io) {
+                    authSdkSource.postKeysForJitPasswordRegistration(
+                        userId = userId,
+                        organizationId = enrollStatus.organizationId,
+                        organizationPublicKey = orgKeys.publicKey,
+                        organizationSsoIdentifier = organizationIdentifier,
+                        salt = profile.email,
+                        masterPassword = password,
+                        masterPasswordHint = passwordHint,
+                        shouldResetPasswordEnroll = enrollStatus.isResetPasswordEnabled,
+                    )
+                }
+            }
+            .onSuccess { response ->
+                authDiskSource.storeAccountKeys(
+                    userId = userId,
+                    accountKeys = response.accountCryptographicState.accountKeysJson,
+                )
+                // TDE and SSO user creation still uses crypto-v1. These users are not
+                // expected to have the AEAD keys so we only store the private key for now.
+                // See https://github.com/bitwarden/android/pull/5682#discussion_r2273940332
+                // for more details.
+                authDiskSource.storePrivateKey(
+                    userId = userId,
+                    privateKey = response.accountCryptographicState.privateKey,
+                )
+                authDiskSource.userState = authDiskSource.userState?.toUserStateJsonWithPassword(
+                    masterPasswordUnlock = response.masterPasswordUnlock,
+                )
+                this.organizationIdentifier = null
+            }
+            .flatMap { response ->
+                // Logging in with the password instead of the decrypted userKey will store
+                // the master password hash automatically.
+                when (val result = vaultRepository.unlockVaultWithMasterPassword(password)) {
+                    VaultUnlockResult.Success -> response.asSuccess()
+                    is VaultUnlockError -> {
+                        (result.error ?: IllegalStateException("Failed to unlock vault"))
+                            .asFailure()
+                    }
+                }
+            }
+            .fold(
+                onFailure = { SetPasswordResult.Error(error = it) },
+                onSuccess = { SetPasswordResult.Success },
+            )
+    }
+
+    @Suppress("LongMethod")
+    private suspend fun setPasswordForJitV1(
+        profile: AccountJson.Profile,
+        organizationIdentifier: String,
+        password: String,
+        passwordHint: String?,
+    ): SetPasswordResult {
+        val userId = profile.userId
+        return authSdkSource
+            .makeRegisterKeys(
+                email = profile.email,
+                password = password,
+                kdf = profile.toSdkParams(),
+            )
+            .flatMap { response ->
+                accountsService
+                    .setPassword(
+                        body = SetPasswordRequestJson(
+                            passwordHash = response.masterPasswordHash,
+                            passwordHint = passwordHint,
+                            organizationIdentifier = organizationIdentifier,
+                            kdfIterations = profile.kdfIterations,
+                            kdfMemory = profile.kdfMemory,
+                            kdfParallelism = profile.kdfParallelism,
+                            kdfType = profile.kdfType,
+                            key = response.encryptedUserKey,
+                            keys = RegisterRequestJson.Keys(
+                                publicKey = response.keys.public,
+                                encryptedPrivateKey = response.keys.private,
+                            ),
+                        ),
+                    )
+                    .onSuccess {
+                        // This process is used by TDE and Enterprise accounts during initial
+                        // login. We continue to store the locally generated keys
+                        // until TDE and Enterprise accounts support AEAD keys.
+                        authDiskSource.storePrivateKey(
+                            userId = userId,
+                            privateKey = response.keys.private,
+                        )
+                        authDiskSource.storeUserKey(
+                            userId = userId,
+                            userKey = response.encryptedUserKey,
+                        )
+                    }
+                    .map { response.masterPasswordHash }
+            }
+            .flatMap { masterPasswordHash ->
+                when (val result = vaultRepository.unlockVaultWithMasterPassword(password)) {
+                    is VaultUnlockResult.Success -> {
+                        enrollUserInPasswordReset(
+                            userId = userId,
+                            organizationIdentifier = organizationIdentifier,
+                            passwordHash = masterPasswordHash,
+                        )
+                    }
+
+                    is VaultUnlockError -> {
+                        (result.error ?: IllegalStateException("Failed to unlock vault"))
+                            .asFailure()
+                    }
+                }
+            }
+            .onSuccess {
+                authDiskSource.userState = authDiskSource.userState?.toUserStateJsonWithPassword(
+                    masterPasswordUnlock = null,
+                )
                 this.organizationIdentifier = null
             }
             .fold(

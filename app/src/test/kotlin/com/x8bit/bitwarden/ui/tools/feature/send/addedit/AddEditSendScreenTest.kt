@@ -58,6 +58,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     private var navgatedGeneratorMode: GeneratorMode.Modal? = null
     private var onNavigateBackCalled = false
     private var onNavigateUpToSearchOrRootCalled = false
+    private var onNavigateToPlanCalled = false
 
     private val exitManager: ExitManager = mockk(relaxed = true) {
         every { exitApplication() } just runs
@@ -87,6 +88,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                 onNavigateToGeneratorModal = { mode ->
                     navgatedGeneratorMode = mode
                 },
+                onNavigateToPlan = { onNavigateToPlanCalled = true },
             )
         }
     }
@@ -112,6 +114,12 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         )
 
         assertEquals(mode, navgatedGeneratorMode)
+    }
+
+    @Test
+    fun `on NavigateToPlanModal event should call onNavigateToPlan`() {
+        mutableEventFlow.tryEmit(AddEditSendEvent.NavigateToPlanModal)
+        assertTrue(onNavigateToPlanCalled)
     }
 
     @Test

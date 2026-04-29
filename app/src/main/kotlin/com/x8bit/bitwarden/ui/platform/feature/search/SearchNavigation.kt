@@ -86,12 +86,14 @@ fun SavedStateHandle.toSearchArgs(): SearchArgs {
 /**
  * Add search destinations to the nav graph.
  */
+@Suppress("LongParameterList")
 fun NavGraphBuilder.searchDestination(
     onNavigateBack: () -> Unit,
     onNavigateToAddEditSend: (route: AddEditSendRoute) -> Unit,
     onNavigateToViewSend: (route: ViewSendRoute) -> Unit,
     onNavigateToEditCipher: (args: VaultAddEditArgs) -> Unit,
     onNavigateToViewCipher: (args: VaultItemArgs) -> Unit,
+    onNavigateToPlan: () -> Unit,
 ) {
     composableWithSlideTransitions<SearchRoute> {
         SearchScreen(
@@ -100,6 +102,7 @@ fun NavGraphBuilder.searchDestination(
             onNavigateToViewSend = onNavigateToViewSend,
             onNavigateToEditCipher = onNavigateToEditCipher,
             onNavigateToViewCipher = onNavigateToViewCipher,
+            onNavigateToPlan = onNavigateToPlan,
         )
     }
 }

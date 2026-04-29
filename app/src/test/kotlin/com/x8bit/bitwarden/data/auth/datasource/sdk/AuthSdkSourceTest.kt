@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.sdk
 
+import com.bitwarden.auth.JitMasterPasswordRegistrationRequest
+import com.bitwarden.auth.JitMasterPasswordRegistrationResponse
 import com.bitwarden.auth.KeyConnectorRegistrationResult
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.FingerprintRequest
@@ -46,6 +48,63 @@ class AuthSdkSourceTest {
     private val authSkdSource: AuthSdkSource = AuthSdkSourceImpl(
         sdkClientManager = sdkClientManager,
     )
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `postKeysForJitPasswordRegistration should call SDK and return a Result with correct data`() =
+        runBlocking {
+            val userId = "userId"
+            val organizationId = "organizationId"
+            val organizationPublicKey = "organizationPublicKey"
+            val organizationSsoIdentifier = "organizationSsoIdentifier"
+            val salt = "salt"
+            val masterPassword = "masterPassword"
+            val masterPasswordHint = "masterPasswordHint"
+            val shouldResetPasswordEnroll = false
+            val expectedResult = mockk<JitMasterPasswordRegistrationResponse>()
+            coEvery { sdkClientManager.getOrCreateClient(userId = userId) } returns client
+            coEvery {
+                clientRegistration.postKeysForJitPasswordRegistration(
+                    request = JitMasterPasswordRegistrationRequest(
+                        orgId = organizationId,
+                        orgPublicKey = organizationPublicKey,
+                        organizationSsoIdentifier = organizationSsoIdentifier,
+                        userId = userId,
+                        salt = salt,
+                        masterPassword = masterPassword,
+                        masterPasswordHint = masterPasswordHint,
+                        resetPasswordEnroll = shouldResetPasswordEnroll,
+                    ),
+                )
+            } returns expectedResult
+
+            val result = authSkdSource.postKeysForJitPasswordRegistration(
+                organizationId = organizationId,
+                organizationPublicKey = organizationPublicKey,
+                organizationSsoIdentifier = organizationSsoIdentifier,
+                userId = userId,
+                salt = salt,
+                masterPassword = masterPassword,
+                masterPasswordHint = masterPasswordHint,
+                shouldResetPasswordEnroll = shouldResetPasswordEnroll,
+            )
+
+            assertEquals(expectedResult, result.getOrThrow())
+            coVerify(exactly = 1) {
+                clientRegistration.postKeysForJitPasswordRegistration(
+                    request = JitMasterPasswordRegistrationRequest(
+                        orgId = organizationId,
+                        orgPublicKey = organizationPublicKey,
+                        organizationSsoIdentifier = organizationSsoIdentifier,
+                        userId = userId,
+                        salt = salt,
+                        masterPassword = masterPassword,
+                        masterPasswordHint = masterPasswordHint,
+                        resetPasswordEnroll = shouldResetPasswordEnroll,
+                    ),
+                )
+            }
+        }
 
     @Suppress("MaxLineLength")
     @Test

@@ -98,6 +98,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     private var onNavigateToAttachmentsId: String? = null
     private var onNavigateToCardScanScreenCalled = false
     private var onNavigateToMoveToOrganizationId: String? = null
+    private var onNavigateToPlanCalled = false
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultAddEditEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE_LOGIN)
@@ -140,6 +141,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                 onNavigateToAttachments = { onNavigateToAttachmentsId = it },
                 onNavigateToMoveToOrganization = { id, _ -> onNavigateToMoveToOrganizationId = id },
                 onNavigateToCardScanScreen = { onNavigateToCardScanScreenCalled = true },
+                onNavigateToPlan = { onNavigateToPlanCalled = true },
                 viewModel = viewModel,
             )
         }
@@ -273,6 +275,12 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             ),
         )
         assertEquals(GeneratorMode.Modal.Username(website), onNavigateToGeneratorModalType)
+    }
+
+    @Test
+    fun `on NavigateToPlanModal event should invoke onNavigateToPlan`() {
+        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToPlanModal)
+        assertTrue(onNavigateToPlanCalled)
     }
 
     @Test
@@ -4643,7 +4651,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
             isCardScannerEnabled = false,
         )
 
@@ -4660,7 +4667,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
             isCardScannerEnabled = false,
         )
 
@@ -4677,7 +4683,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
             isCardScannerEnabled = false,
         )
 
@@ -4694,7 +4699,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
             isCardScannerEnabled = false,
         )
 
@@ -4721,7 +4725,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
             isCardScannerEnabled = false,
         )
 
@@ -4738,7 +4741,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
             isCardScannerEnabled = false,
         )
 
@@ -4755,7 +4757,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
             isCardScannerEnabled = false,
         )
 

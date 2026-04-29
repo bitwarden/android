@@ -1,7 +1,68 @@
+@file:Suppress("TooManyFunctions")
+
 package com.x8bit.bitwarden.ui.vault.util
 
 import com.bitwarden.ui.platform.feature.cardscanner.util.sanitizeCardNumber
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
+
+/**
+ * Formats a card number using brand-specific spacing rules.
+ *
+ * The input string is first sanitized to remove non-digit characters, then the card brand is
+ * detected based on the digit patterns. Finally, the digits are grouped into blocks according to
+ * the brand's formatting rules, and spaces are inserted between the blocks for improved
+ * readability.
+ *
+ * @return The formatted card number.
+ */
+fun String.formatCardNumber(): String {
+    val digits = sanitizeCardNumber()
+    if (digits.isEmpty()) return this
+    val blocks = digits.detectCardBrand().formattingBlocks(digitCount = digits.length)
+    return digits.chunkByBlocks(blocks).joinToString(separator = " ")
+}
+
+/**
+ * Returns the digit group sizes used to format a card number for a specific brand.
+ *
+ * @param digitCount The total number of sanitized digits available for formatting.
+ * @return A list of block sizes that defines how the card number should be grouped.
+ */
+@Suppress("MagicNumber")
+private fun VaultCardBrand.formattingBlocks(digitCount: Int): List<Int> {
+    val default = listOf(4, 4, 4, 4)
+    return when (this) {
+        VaultCardBrand.AMEX -> listOf(4, 6, 5)
+        VaultCardBrand.DINERS_CLUB -> if (digitCount == 14) listOf(4, 6, 4) else default
+        VaultCardBrand.MAESTRO -> when (digitCount) {
+            13 -> listOf(4, 4, 5)
+            15 -> listOf(4, 6, 5)
+            19 -> listOf(4, 4, 4, 4, 3)
+            else -> default
+        }
+        VaultCardBrand.UNIONPAY -> if (digitCount == 19) listOf(6, 13) else default
+        else -> default
+    }
+}
+
+/**
+ * Splits the string into blocks of specified sizes.
+ *
+ * If the total of the block sizes is less than the string length, the remaining characters are
+ * included as an additional block at the end of the list.
+ *
+ * @param blocks A list of integers specifying the size of each block.
+ * @return A list of string blocks based on the specified sizes.
+ */
+private fun String.chunkByBlocks(blocks: List<Int>): List<String> = buildList {
+    var remaining = this@chunkByBlocks
+    for (size in blocks) {
+        if (remaining.isEmpty()) return@buildList
+        add(remaining.take(size))
+        remaining = remaining.drop(size)
+    }
+    if (remaining.isNotEmpty()) add(remaining)
+}
 
 /**
  * Detects the card brand based on the card number prefix.

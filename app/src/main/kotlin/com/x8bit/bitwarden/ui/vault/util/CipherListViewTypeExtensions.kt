@@ -13,4 +13,5 @@ fun CipherListViewType.toSdkCipherType(): CipherType =
         is CipherListViewType.Login -> CipherType.LOGIN
         CipherListViewType.SecureNote -> CipherType.SECURE_NOTE
         CipherListViewType.SshKey -> CipherType.SSH_KEY
+        CipherListViewType.BankAccount -> CipherType.BANK_ACCOUNT
     }

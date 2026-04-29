@@ -73,6 +73,7 @@ class SearchScreenTest : BitwardenComposeTest() {
     private var onNavigateToViewSendRoute: ViewSendRoute? = null
     private var onNavigateToEditCipherArgs: VaultAddEditArgs? = null
     private var onNavigateToViewCipherArgs: VaultItemArgs? = null
+    private var onNavigateToPlanCalled = false
 
     @Before
     fun setup() {
@@ -87,6 +88,7 @@ class SearchScreenTest : BitwardenComposeTest() {
                 onNavigateToViewSend = { onNavigateToViewSendRoute = it },
                 onNavigateToEditCipher = { onNavigateToEditCipherArgs = it },
                 onNavigateToViewCipher = { onNavigateToViewCipherArgs = it },
+                onNavigateToPlan = { onNavigateToPlanCalled = true },
             )
         }
     }
@@ -151,6 +153,12 @@ class SearchScreenTest : BitwardenComposeTest() {
         verify(exactly = 1) {
             intentManager.launchUri(url.toUri())
         }
+    }
+
+    @Test
+    fun `NavigateToPlanModal should call onNavigateToPlan`() {
+        mutableEventFlow.tryEmit(SearchEvent.NavigateToPlanModal)
+        assertTrue(onNavigateToPlanCalled)
     }
 
     @Test
@@ -1099,7 +1107,6 @@ private val DEFAULT_STATE: SearchState = SearchState(
     autofillSelectionData = null,
     isPremium = true,
     restrictItemTypesPolicyOrgIds = persistentListOf(),
-    isArchiveEnabled = true,
 )
 
 private fun createStateForAutofill(

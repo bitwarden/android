@@ -20,6 +20,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
 import java.net.Socket
 import java.security.Principal
 import java.security.PrivateKey
@@ -86,8 +87,10 @@ object PlatformNetworkModule {
     @Singleton
     fun provideBitwardenServiceClient(
         serviceClientConfig: BitwardenServiceClientConfig,
+        json: Json,
     ): BitwardenServiceClient = bitwardenServiceClient(
         config = serviceClientConfig,
+        json = json,
     )
 
     @Provides

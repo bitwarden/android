@@ -1,7 +1,9 @@
 package com.bitwarden.core.di
 
 import com.bitwarden.core.data.manager.BuildInfoManager
+import com.bitwarden.core.data.serializer.BigDecimalSerializer
 import com.bitwarden.core.data.serializer.InstantSerializer
+import com.bitwarden.core.data.serializer.SafeListSerializer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,6 +36,8 @@ object CoreModule {
         explicitNulls = false
         serializersModule = SerializersModule {
             contextual(InstantSerializer())
+            contextual(BigDecimalSerializer())
+            contextual(List::class) { args -> SafeListSerializer(args.first()) }
         }
 
         // Respect model default property values.

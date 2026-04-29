@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.sdk
 
+import com.bitwarden.auth.JitMasterPasswordRegistrationRequest
+import com.bitwarden.auth.JitMasterPasswordRegistrationResponse
 import com.bitwarden.auth.KeyConnectorRegistrationResult
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.FingerprintRequest
@@ -24,6 +26,33 @@ class AuthSdkSourceImpl(
     sdkClientManager: SdkClientManager,
 ) : BaseSdkSource(sdkClientManager = sdkClientManager),
     AuthSdkSource {
+
+    override suspend fun postKeysForJitPasswordRegistration(
+        userId: String,
+        organizationId: String,
+        organizationPublicKey: String,
+        organizationSsoIdentifier: String,
+        salt: String,
+        masterPassword: String,
+        masterPasswordHint: String?,
+        shouldResetPasswordEnroll: Boolean,
+    ): Result<JitMasterPasswordRegistrationResponse> = runCatchingWithLogs {
+        getClient(userId = userId)
+            .auth()
+            .registration()
+            .postKeysForJitPasswordRegistration(
+                request = JitMasterPasswordRegistrationRequest(
+                    orgId = organizationId,
+                    orgPublicKey = organizationPublicKey,
+                    userId = userId,
+                    organizationSsoIdentifier = organizationSsoIdentifier,
+                    salt = salt,
+                    masterPassword = masterPassword,
+                    masterPasswordHint = masterPasswordHint,
+                    resetPasswordEnroll = shouldResetPasswordEnroll,
+                ),
+            )
+    }
 
     override suspend fun postKeysForKeyConnectorRegistration(
         userId: String,

@@ -310,7 +310,7 @@ private const val SYNC_SUCCESS_JSON = """
         "mockCollectionId-1"
       ],
       "name": "mockName-1",
-      "id": "mockId-1"
+      "id": "mockId-1",
       "fields": [
         {
           "linkedId": 100,
