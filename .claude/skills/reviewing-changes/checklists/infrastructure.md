@@ -4,15 +4,6 @@
 
 ### First Pass: Understand the Change
 
-<thinking>
-Assess infrastructure change:
-1. What problem does this solve?
-2. Does this affect production builds, CI/CD, or dev workflow?
-3. What's the risk if this breaks?
-4. Can this be tested before merge?
-5. What's the rollback plan?
-</thinking>
-
 **1. Identify the goal:**
 - What problem does this solve?
 - Is this optimization, fix, or new capability?
@@ -29,15 +20,6 @@ Assess infrastructure change:
 - Resource usage changes?
 
 ### Second Pass: Verify Implementation
-
-<thinking>
-Verify configuration and impact:
-1. Is the configuration syntax valid?
-2. Are secrets/credentials handled securely?
-3. What's the impact on build times and CI performance?
-4. How will this affect the team's workflow?
-5. Is there adequate testing/validation?
-</thinking>
 
 **4. Configuration correctness:**
 - Syntax valid?
@@ -189,16 +171,7 @@ Use `reference/priority-framework.md` to classify findings as Critical/Important
 
 ## Output Format
 
-Follow the format guidance from `SKILL.md` Step 5 (concise summary with critical issues only, detailed inline comments with `<details>` tags).
-
-```markdown
-**Overall Assessment:** APPROVE / REQUEST CHANGES
-
-**Critical Issues** (if any):
-- [One-line summary of each critical blocking issue with file:line reference]
-
-See inline comments for all issue details.
-```
+See `examples/review-outputs.md` for the required output format and inline comment structure.
 
 ## Example Review
 

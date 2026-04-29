@@ -13,7 +13,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -66,10 +65,8 @@ fun DebugMenuScreen(
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(BitwardenDrawable.ic_back),
                     navigationIconContentDescription = stringResource(id = BitwardenString.back),
-                    onNavigationIconClick = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(DebugMenuAction.NavigateBack)
-                        }
+                    onNavigationIconClick = {
+                        viewModel.trySendAction(DebugMenuAction.NavigateBack)
                     },
                 ),
             )
@@ -83,14 +80,10 @@ fun DebugMenuScreen(
         } else {
             FeatureFlagContent(
                 featureFlagMap = state.featureFlags,
-                onValueChange = remember(viewModel) {
-                    { key, value ->
-                        viewModel.trySendAction(DebugMenuAction.UpdateFeatureFlag(key, value))
-                    }
+                onValueChange = { key, value ->
+                    viewModel.trySendAction(DebugMenuAction.UpdateFeatureFlag(key, value))
                 },
-                onResetValues = remember(viewModel) {
-                    { viewModel.trySendAction(DebugMenuAction.ResetFeatureFlagValues) }
-                },
+                onResetValues = { viewModel.trySendAction(DebugMenuAction.ResetFeatureFlagValues) },
                 modifier = Modifier
                     .verticalScroll(rememberScrollState()),
             )

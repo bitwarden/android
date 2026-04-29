@@ -272,6 +272,56 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             )
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `DeleteClick with DeleteFolderResult Failure with errorMessage should show error dialog with that message`() =
+        runTest {
+            val errorMessage = "User-friendly error message"
+            val error = Throwable("Oops")
+            val stateWithoutDialog = FolderAddEditState(
+                folderAddEditType = FolderAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+                dialog = null,
+                viewState = FolderAddEditState.ViewState.Content(
+                    folderName = DEFAULT_FOLDER_NAME,
+                ),
+                parentFolderName = null,
+            )
+
+            val viewModel = createViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = stateWithoutDialog,
+                ),
+            )
+
+            mutableFoldersStateFlow.value =
+                DataState.Loaded(
+                    FolderView(
+                        id = DEFAULT_EDIT_ITEM_ID,
+                        name = DEFAULT_FOLDER_NAME,
+                        revisionDate = FIXED_CLOCK.instant(),
+                    ),
+                )
+
+            coEvery {
+                vaultRepository.deleteFolder(folderId = DEFAULT_EDIT_ITEM_ID)
+            } returns DeleteFolderResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+
+            viewModel.trySendAction(FolderAddEditAction.DeleteClick)
+
+            assertEquals(
+                stateWithoutDialog.copy(
+                    dialog = FolderAddEditState.DialogState.Error(
+                        message = errorMessage.asText(),
+                        throwable = error,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
     @Test
     fun `SaveClick with empty name should show an error dialog`() =
         runTest {
@@ -461,6 +511,47 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in add mode, SaveClick createFolder error with errorMessage should show error dialog with that message`() =
+        runTest {
+            val errorMessage = "User-friendly error message"
+            val state = FolderAddEditState(
+                folderAddEditType = FolderAddEditType.AddItem,
+                dialog = null,
+                viewState = FolderAddEditState.ViewState.Content(
+                    folderName = DEFAULT_FOLDER_NAME,
+                ),
+                parentFolderName = null,
+            )
+
+            val viewModel = createViewModel(
+                createSavedStateHandleWithState(
+                    state = state,
+                ),
+            )
+
+            val error = Throwable("Oops")
+            coEvery {
+                vaultRepository.createFolder(any())
+            } returns CreateFolderResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+
+            viewModel.trySendAction(FolderAddEditAction.SaveClick)
+
+            assertEquals(
+                state.copy(
+                    dialog = FolderAddEditState.DialogState.Error(
+                        message = errorMessage.asText(),
+                        throwable = error,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
     @Test
     fun `in edit mode, SaveClick should show dialog, and remove it once an item is saved`() =
         runTest {
@@ -559,6 +650,56 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in edit mode, SaveClick updateFolder error with errorMessage should show error dialog with that message`() =
+        runTest {
+            val errorMessage = "User-friendly error message"
+            val state = FolderAddEditState(
+                folderAddEditType = FolderAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+                dialog = null,
+                viewState = FolderAddEditState.ViewState.Content(
+                    folderName = DEFAULT_FOLDER_NAME,
+                ),
+                parentFolderName = null,
+            )
+
+            val viewModel = createViewModel(
+                createSavedStateHandleWithState(
+                    state = state,
+                ),
+            )
+            val error = Throwable("Oops")
+
+            mutableFoldersStateFlow.value =
+                DataState.Loaded(
+                    FolderView(
+                        id = DEFAULT_EDIT_ITEM_ID,
+                        name = DEFAULT_FOLDER_NAME,
+                        revisionDate = FIXED_CLOCK.instant(),
+                    ),
+                )
+
+            coEvery {
+                vaultRepository.updateFolder(any(), any())
+            } returns UpdateFolderResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+
+            viewModel.trySendAction(FolderAddEditAction.SaveClick)
+
+            assertEquals(
+                state.copy(
+                    dialog = FolderAddEditState.DialogState.Error(
+                        message = errorMessage.asText(),
+                        throwable = error,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Test
     fun `DismissDialog should emit update dialog state to null`() = runTest {

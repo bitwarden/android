@@ -11,6 +11,7 @@
     <string name="copy_password">Salin sandi</string>
     <string name="copy_username">Salin nama pengguna</string>
     <string name="delete">Hapus</string>
+    <string name="preview">Preview</string>
     <string name="deleting">Menghapus…</string>
     <string name="do_you_really_want_to_delete">Apakah Anda yakin ingin menghapusnya? Ini tidak dapat dibatalkan.</string>
     <string name="edit">Ubah</string>
@@ -42,7 +43,7 @@
     <string name="master_password">Sandi utama</string>
     <string name="master_password_required">Sandi utama (wajib)</string>
     <string name="new_master_password_required">Sandi utama baru (wajib)</string>
-    <string name="more">Lainnya</string>
+    <string name="more_options">More options</string>
     <string name="my_vault">Brankas Saya</string>
     <string name="name">Nama</string>
     <string name="item_name_required">Nama item (wajib)</string>
@@ -128,8 +129,8 @@
     <string name="no_text_sends">Tidak ada teks Kirim di brankas Anda.</string>
     <string name="no_file_sends">Tidak ada file Kirim di brankas Anda.</string>
     <string name="no_ssh_keys">Tidak ada kunci SSH di brankas Anda.</string>
-    <string name="no_archives_title">Archive is empty</string>
-    <string name="no_archives_message">Fill your archive with items you don’t want to see in search results and autofill suggestions but might need someday.</string>
+    <string name="no_archives_title">Arsip kosong</string>
+    <string name="no_archives_message">Simpan item ke arsip agar tidak muncul di pencarian dan saran isi otomatis, namun tetap tersedia jika dibutuhkan nanti.</string>
     <string name="new_text_send">Teks Kirim baru</string>
     <string name="new_file_send">File Kirim baru</string>
     <string name="no_username">Tidak ada nama pengguna</string>
@@ -169,7 +170,7 @@
     <string name="autofill_noun">Isi otomatis</string>
     <string name="autofill_verb">Isi otomatis</string>
     <string name="autofill_or_view">Apakah Anda ingin mengisi otomatis atau melihat info masuk ini?</string>
-    <string name="search">Pencarian</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">Pelajari tentang Organisasi</string>
     <string name="authenticator_app_title">Aplikasi Autentikasi</string>
     <string name="enter_verification_code_app">Masukkan 6 digit kode verifikasi dari aplikasi autentikasi Anda.</string>
@@ -199,9 +200,12 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="copy_totp_automatically">Salin TOTP secara otomatis</string>
     <string name="premium_required">Keanggotaan premium diperlukan untuk menggunakan fitur ini.</string>
     <string name="attachment_deleted">Lampiran dihapus</string>
+    <string name="attachments_unavailable">Attachments unavailable</string>
+    <string name="attachments_are_a_premium_feature">Attachments are a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="choose_file">Pilih Berkas</string>
     <string name="file">Berkas</string>
     <string name="no_file_chosen">Tidak ada berkas yang dipilih</string>
+    <string name="file_name">File name</string>
     <string name="no_attachments">Tidak ada lampiran.</string>
     <string name="file_source">Sumber Berkas</string>
     <string name="max_file_size">Ukuran berkas maksimal adalah 100 MB.</string>
@@ -223,6 +227,8 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="copy_security_code">Salin kode keamanan</string>
     <string name="number">Nomor</string>
     <string name="security_code">Kode Keamanan</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">Kartu</string>
     <string name="type_identity">Identitas</string>
     <string name="type_login">Login</string>
@@ -302,7 +308,7 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="organization">Organisasi</string>
     <string name="try_again">Coba Lagi</string>
     <string name="created">Dibuat: %1$s</string>
-    <string name="password_last_updated">Sandi terakhir diperbarui: %1$s</string>
+    <string name="password_updated">Sandi diperbarui: %1$s</string>
     <string name="last_edited">Terakhir diubah: %1$s</string>
     <string name="invalid_email">Alamat email tidak valid.</string>
     <string name="cards">Kartu</string>
@@ -375,6 +381,7 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="capitalize">Huruf kapital</string>
     <string name="include_number">Sertakan nomor</string>
     <string name="download">Unduh</string>
+    <string name="download_file">Download file</string>
     <string name="login_expired">Sesi masuk Anda telah berakhir.</string>
     <string name="biometrics_direction">Verifikasi Biometrik</string>
     <string name="device_verification">Verifikasi perangkat</string>
@@ -446,13 +453,13 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="deletion_date">Tanggal Penghapusan</string>
     <string name="deletion_time">Waktu Penghapusan</string>
     <string name="deletion_date_info">Kirim akan terhapus permanen pada waktu dan tanggal yang ditetapkan.</string>
-    <string name="who_can_view">Who can view</string>
-    <string name="anyone_with_the_link">Anyone with the link</string>
-    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
-    <string name="specific_people">Specific people</string>
-    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
-    <string name="anyone_with_password">Anyone with a password set by you</string>
-    <string name="add_email">Add email</string>
+    <string name="who_can_view">Siapa yang dapat melihat</string>
+    <string name="anyone_with_the_link">Siapa saja yang punya tautannya</string>
+    <string name="anyone_with_link_can_view_send">Siapa saja yang punya tautan ini dapat melihat Kirim ini</string>
+    <string name="specific_people">Orang tertentu</string>
+    <string name="specific_people_verification_info">Setelah membagikan tautan Kirim ini, individu perlu memverifikasi email mereka dengan kode untuk melihat Kirim ini</string>
+    <string name="anyone_with_password">Siapa saja yang memakai sandi dari Anda</string>
+    <string name="add_email">Tambah email</string>
     <string name="pending_delete">Penghapusan menunggu keputusan</string>
     <string name="expired">Kedaluwarsa</string>
     <string name="expires_at">Kedaluwarsa pada %s</string>
@@ -494,6 +501,7 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="hide_email">Sembunyikan alamat email saya dari penerima</string>
     <string name="send_options_policy_in_effect">Satu atau lebih kebijakan orgnanisasi mempengaruhi pilihan Send Anda.</string>
     <string name="send_file_premium_required">Akun gratis dibatasi hanya untuk berbagi teks. Keanggotaan premium diperlukan untuk menggunakan berkas dengan Send.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Berbagi dengan orang tertentu adalah fitur Premium. Paket Anda saat ini tidak termasuk akses ke fitur ini.</string>
     <string name="password_prompt">Pengingat ulang sandi utama</string>
     <string name="password_confirmation">Konfirmasi sandi utama</string>
     <string name="password_confirmation_desc">Tindakan ini dilindungi, untuk melanjutkan harap masukkan ulang sandi utama Anda untuk memverifikasi identitas Anda.</string>
@@ -503,10 +511,10 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="remove_master_password">Hapus sandi utama</string>
     <string name="leave_organization">Tinggalkan Organisasi</string>
     <string name="leave_organization_name">Tinggalkan %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
-    <string name="leave_organization_button">Leave %1$s</string>
-    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
-    <string name="how_to_manage_my_vault">How to manage My vault</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Apakah Anda yakin ingin keluar [%1$s]?</string>
+    <string name="leave_organization_button">Keluar %1$s</string>
+    <string name="leave_organization_warning">Dengan menolak, item pribadi akan tetap ada di akun Anda, tetapi Anda akan kehilangan akses ke item bersama dan fitur organisasi.\n\nHubungi admin untuk memulihkan akses.</string>
+    <string name="contact_your_admin_to_regain_access">Hubungi administrator Anda untuk memulihkan akses.</string>
     <string name="fido2_authenticate_web_authn">Otentikasi WebAuthn</string>
     <string name="fido2_return_to_app">Kembali ke apl</string>
     <string name="reset_password_auto_enroll_invite_warning">Organisasi ini memiliki kebijakan enterprise yang akan otomatis mendaftarkan Anda ke reset sandi. Pendaftaran ini memungkinkan administrator organisasi mengubah sandi utama Anda.</string>
@@ -663,8 +671,8 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="invalid_uri">URI tidak valid</string>
     <string name="the_urix_is_already_blocked">URI %1$s sudah diblokir</string>
     <string name="login_approved">Masuk diizinkan</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Log in with device must be set up in the settings of the Bitwarden app.</string>
-    <string name="need_another_option_view_all_login_options">Need another option? <annotation link="viewAll">View all login options</annotation></string>
+    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Login menggunakan perangkat harus diatur di pengaturan aplikasi Bitwarden.</string>
+    <string name="need_another_option_view_all_login_options">Butuh opsi lain? <annotation link="viewAll">Lihat semua opsi login</annotation></string>
     <string name="log_in_with_device">Masuk dengan perangkat</string>
     <string name="logging_in_on">Sedang masuk</string>
     <string name="logging_in_on_with_colon">Sedang masuk di:</string>
@@ -830,6 +838,7 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="fill_out_the_form_and_import_your_saved_password_file">Isi formulir lalu <annotation emphasis="bold">impor file sandi tersimpan Anda.</annotation></string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Demi keamanan Anda, pastikan untuk <annotation emphasis="bold">menghapus file sandi tersimpan Anda.</annotation></string>
     <string name="need_help_check_out_import_help">Butuh bantuan? Lihat <annotation link="importHelp">bantuan impor</annotation>.</string>
+    <string name="import_help">import help</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Simpan file ekspor</annotation> di komputer Anda pada tempat mudah ditemukan.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Ini bukan server Bitwarden yang dikenali. Anda mungkin perlu memeriksa dengan penyedia atau memperbarui server Anda.</string>
     <string name="syncing_logins_loading_message">Menyinkronkan login…</string>
@@ -854,6 +863,9 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="copy_public_key">Salin kunci publik</string>
     <string name="copy_fingerprint">Salin sidik jari</string>
     <string name="enable_notifications">Aktifkan pemberitahuan</string>
+    <plurals name="notifications_content_description">
+        <item quantity="other">%d notifikasi</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">Masuk dengan cepat dan mudah lintas perangkat</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden dapat memberi Anda notifikasi setiap kali ada permintaan login baru dari perangkat lain.</string>
     <string name="skip_for_now">Lewati dulu</string>
@@ -927,6 +939,7 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Operasi kunci sandi gagal karena tidak ada item yang dipilih.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operasi kunci sandi gagal karena permintaan tidak didukung.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operasi sandi gagal karena item yang dipilih tidak ada.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Operasi sandi gagal karena tidak ada item yang dipilih.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Operasi kredensial gagal karena permintaan tidak valid.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Operasi kredensial gagal karena permintaan tidak didukung.</string>
@@ -938,7 +951,7 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="use_brave_autofill_integration">Gunakan integrasi isi otomatis Brave</string>
     <string name="use_chrome_autofill_integration">Gunakan integrasi isi otomatis Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Gunakan integrasi isi otomatis Chrome Beta</string>
-    <string name="use_vivaldi_autofill_integration">Use Vivaldi autofill integration</string>
+    <string name="use_vivaldi_autofill_integration">Gunakan integrasi isi otomatis Vivaldi</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Meningkatkan pengisian login untuk situs web yang didukung pada browser terpilih. Setelah diaktifkan, Anda akan diarahkan ke pengaturan browser untuk mengaktifkan isi otomatis pihak ketiga.</string>
     <string name="show_more">Lihat selengkapnya</string>
     <string name="no_folder">Tidak ada folder</string>
@@ -1051,8 +1064,8 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="export">Ekspor</string>
     <string name="export_confirmation_title">Konfirmasi ekspor</string>
     <string name="export_success">Data berhasil diekspor</string>
-    <string name="included_in_this_export">Included in this export</string>
-    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren\'t included</string>
+    <string name="included_in_this_export">Termasuk dalam ekspor ini</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Hanya kode lokal di perangkat ini yang diekspor. Kode tersinkron tidak termasuk</string>
     <string name="security">Keamanan</string>
     <string name="too_many_failed_biometric_attempts">Terlalu banyak kesalahan percobaan biometrik.</string>
     <string name="version">Versi</string>
@@ -1138,7 +1151,6 @@ Apakah Anda ingin beralih ke akun ini?</string>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Aktifkan Isi Otomatis browser untuk tetap mengisi sandi</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Browser Anda baru saja diperbarui, yang menyebabkan isi otomatis Bitwarden nonaktif. Untuk tetap mengisi sandi dengan Bitwarden, aktifkan isi otomatis browser di pengaturan isi otomatis.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Browser Anda baru saja diperbarui, yang menyebabkan isi otomatis Bitwarden nonaktif. Untuk tetap mengisi sandi dengan Bitwarden, aktifkan isi otomatis browser di pengaturan isi otomatis.</string>
     <string name="not_now">Lain kali</string>
     <string name="import_from_bitwarden">Impor dari Bitwarden</string>
     <string name="select_account">Pilih akun</string>
@@ -1166,37 +1178,76 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="lock_app">Kunci aplikasi</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Gunakan metode kunci perangkat Anda untuk membuka kunci aplikasi</string>
     <string name="loading_vault_data">Memuat data brangkas…</string>
-    <string name="resending">Resending</string>
-    <string name="you_left_the_organization">You left the organization</string>
-    <string name="transfer_items_to_org">Transfer items to %1$s</string>
-    <string name="transfer_items_description">%1$s is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items.</string>
-    <string name="decline_and_leave">Decline and leave</string>
-    <string name="why_am_i_seeing_this">Why am I seeing this?</string>
-    <string name="migrating_items_to_x">Migrating items to %s</string>
-    <string name="failed_to_migrate_items_to_x">Failed to migrate items to %s</string>
-    <string name="search_archive">Search archive</string>
-    <string name="archive_noun">Archive</string>
-    <string name="archive_verb">Archive</string>
-    <string name="unarchive">Unarchive</string>
-    <string name="archived">Archived</string>
-    <string name="hidden_items">Hidden items</string>
-    <string name="unable_to_archive_selected_item">Unable to archive selected item.</string>
-    <string name="unable_to_unarchive_selected_item">Unable to unarchive selected item.</string>
-    <string name="archiving">Archiving</string>
-    <string name="unarchiving">Unarchiving</string>
-    <string name="item_moved_to_archived">Item moved to archive</string>
-    <string name="item_moved_to_vault">Item moved to vault</string>
-    <string name="archive_unavailable">Archive unavailable</string>
-    <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
-    <string name="upgrade_to_premium">Upgrade to premium</string>
-    <string name="this_item_is_archived">This item is archived.</string>
-    <string name="introducing_archive">Introducing archive</string>
-    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>
-    <string name="go_to_archive">Go to archive</string>
-    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">This item is archived. Saving changes will restore it to your vault.</string>
-    <string name="your_premium_subscription_ended">Your Premium subscription ended</string>
-    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">To regain access to your archive, restart your Premium subscription. If you edit details for an archived item before restarting, it’ll be moved back into your vault.</string>
-    <string name="restart_premium">Restart Premium</string>
-    <string name="items_transferred">Items transferred</string>
+    <string name="resending">Kirim ulang</string>
+    <string name="you_left_the_organization">Anda telah keluar dari organisasi</string>
+    <string name="transfer_items_to_org">Memindahkan item ke %1$s</string>
+    <string name="transfer_items_description">%1$s mewajibkan semua item dimiliki oleh organisasi demi keamanan dan kepatuhan. Klik Terima untuk mengalihkan kepemilikan item Anda.</string>
+    <string name="decline_and_leave">Tolak dan keluar</string>
+    <string name="why_am_i_seeing_this">Mengapa saya melihat ini?</string>
+    <string name="migrating_items_to_x">Migrasi item ke %s</string>
+    <string name="failed_to_migrate_items_to_x">Gagal migrasi item ke %s</string>
+    <string name="search_archive">Cari arsip</string>
+    <string name="archive_noun">Arsip</string>
+    <string name="archive_verb">Arsip</string>
+    <string name="unarchive">Batal arsip</string>
+    <string name="archived">Diarsipkan</string>
+    <string name="hidden_items">Item tersembunyi</string>
+    <string name="unable_to_archive_selected_item">Tidak dapat mengarsipkan item yang dipilih.</string>
+    <string name="unable_to_unarchive_selected_item">Tidak dapat membatalkan arsip item yang dipilih.</string>
+    <string name="archiving">Mengarsipkan</string>
+    <string name="unarchiving">Membatalkan arsip</string>
+    <string name="item_moved_to_archived">Item dipindahkan ke arsip</string>
+    <string name="item_moved_to_vault">Item dipindahkan ke brankas</string>
+    <string name="archive_unavailable">Arsip tidak tersedia</string>
+    <string name="archiving_items_is_a_premium_feature">Mengarsipkan item adalah fitur Premium. Paket Anda saat ini tidak termasuk akses ke fitur ini.</string>
+    <string name="upgrade_to_premium">Tingkatkan ke premium</string>
+    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
+    <string name="this_item_is_archived">Item ini diarsipkan.</string>
+    <string name="introducing_archive">Memperkenalkan Arsip</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Simpan item yang belum Anda perlukan dengan aman tanpa terlihat.</string>
+    <string name="go_to_archive">Pergi ke arsip</string>
+    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Item ini diarsipkan. Menyimpan perubahan akan mengembalikannya ke brankas Anda.</string>
+    <string name="your_premium_subscription_ended">Langganan Premium Anda telah berakhir</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Untuk memulihkan akses ke arsip, aktifkan kembali langganan Premium Anda. Jika Anda mengedit detail untuk item yang diarsipkan sebelum berlangganan, item tersebut akan dipindahkan kembali ke brankas Anda.</string>
+    <string name="restart_premium">Aktifkan kembali Premium</string>
+    <string name="items_transferred">Item dipindahkan</string>
     <string name="updated_master_password">Sandi utama diperbarui</string>
+    <string name="invalid_email_addresses">Alamat email tidak valid</string>
+    <string name="one_or_more_email_addresses_are_incorrect">Satu atau lebih alamat email salah. Mohon periksa dan coba lagi.</string>
+    <string name="no_email_addresses_entered">Tidak ada alamat email yang dimasukkan</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Masukkan setidaknya satu alamat email valid untuk membagikan Kirim ini.</string>
+    <string name="sync_with_browser">Sinkron dengan browser</string>
+    <string name="sync_with_browser_description">Untuk terhubung ke %1$s, sinkronkan browser bawaan Anda dengan apl seluler Bitwarden. Saat browser terbuka, selesaikan proses masuk jika diminta.
+\nSetelah sinkronisasi selesai, Anda akan kembali ke aplikasi ini.</string>
+    <string name="launch_browser">Buka browser</string>
+    <string name="continue_without_syncing">Lanjutkan tanpa sinkronisasi</string>
+    <string name="external_link">Tautan eksternal</string>
+    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
+    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
+    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
+    <string name="preview_unavailable">Preview unavailable</string>
+    <string name="download_attachment">Download Attachment</string>
+    <string name="upgraded_to_premium">Upgraded to premium</string>
+    <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
+    <string name="per_month">/ month</string>
+    <string name="built_in_authenticator">Built-in authenticator</string>
+    <string name="emergency_access">Emergency access</string>
+    <string name="secure_file_storage">Secure file storage</string>
+    <string name="breach_monitoring">Breach monitoring</string>
+    <string name="upgrade_now">Upgrade now</string>
+    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="opening_checkout">Opening checkout…</string>
+    <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
+    <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
+    <string name="payment_not_received_yet">Payment not received yet</string>
+    <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
+    <string name="go_back">Go back</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
+    <string name="show_next_code">Show next code</string>
+    <string name="see_upcoming_codes_in_the_list">See upcoming codes in the list</string>
+    <string name="next_code_x">Next code, %1$s</string>
 </resources>

@@ -210,7 +210,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="sso_cookie_vendor"
+                    android:host="sso-cookie-vendor"
                     android:scheme="bitwarden" />
             </intent-filter>
         </activity>

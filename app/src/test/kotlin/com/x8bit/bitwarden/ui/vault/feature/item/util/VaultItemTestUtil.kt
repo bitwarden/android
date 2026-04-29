@@ -98,6 +98,7 @@ fun createCipherView(type: CipherType, isEmpty: Boolean): CipherView =
         identity = createIdentityView(isEmpty = isEmpty),
         card = null,
         secureNote = null,
+        bankAccount = null,
         favorite = false,
         reprompt = CipherRepromptType.PASSWORD,
         organizationUseTotp = false,
@@ -175,9 +176,9 @@ fun createCommonContent(
             created = BitwardenString.created.asText("Jan 1, 1970, 12:16\u202FAM"),
             lastUpdated = BitwardenString.last_edited.asText("Jan 1, 1970, 12:16\u202FAM"),
             notes = null,
-            customFields = emptyList(),
+            customFields = persistentListOf(),
             requiresCloneConfirmation = false,
-            attachments = emptyList(),
+            attachments = persistentListOf(),
             canDelete = true,
             canRestore = true,
             canAssignToCollections = true,
@@ -195,7 +196,7 @@ fun createCommonContent(
             created = BitwardenString.created.asText("Jan 1, 1970, 12:16\u202FAM"),
             lastUpdated = BitwardenString.last_edited.asText("Jan 1, 1970, 12:16\u202FAM"),
             notes = "Lots of notes",
-            customFields = listOf(
+            customFields = persistentListOf(
                 FieldView(
                     name = "text",
                     value = "value",
@@ -233,7 +234,7 @@ fun createCommonContent(
                     .toCustomField(null),
             ),
             requiresCloneConfirmation = true,
-            attachments = listOf(
+            attachments = persistentListOf(
                 VaultItemState.ViewState.Content.Common.AttachmentItem(
                     id = "attachment-id",
                     displaySize = "11 MB",

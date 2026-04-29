@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
@@ -70,6 +69,7 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToImportLogins: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
+    onNavigateToPlan: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -92,17 +92,15 @@ fun VaultUnlockedNavBarScreen(
         navigateToFolders = onNavigateToFolders,
         navigateToPendingRequests = onNavigateToPendingRequests,
         navigateToPasswordHistory = onNavigateToPasswordHistory,
-        generatorTabClickedAction = remember(viewModel) {
-            { viewModel.trySendAction(VaultUnlockedNavBarAction.GeneratorTabClick) }
+        generatorTabClickedAction = {
+            viewModel.trySendAction(VaultUnlockedNavBarAction.GeneratorTabClick)
         },
-        sendTabClickedAction = remember(viewModel) {
-            { viewModel.trySendAction(VaultUnlockedNavBarAction.SendTabClick) }
+        sendTabClickedAction = { viewModel.trySendAction(VaultUnlockedNavBarAction.SendTabClick) },
+        vaultTabClickedAction = {
+            viewModel.trySendAction(VaultUnlockedNavBarAction.VaultTabClick)
         },
-        vaultTabClickedAction = remember(viewModel) {
-            { viewModel.trySendAction(VaultUnlockedNavBarAction.VaultTabClick) }
-        },
-        settingsTabClickedAction = remember(viewModel) {
-            { viewModel.trySendAction(VaultUnlockedNavBarAction.SettingsTabClick) }
+        settingsTabClickedAction = {
+            viewModel.trySendAction(VaultUnlockedNavBarAction.SettingsTabClick)
         },
         onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
         onNavigateToSetupAutoFillScreen = onNavigateToSetupAutoFillScreen,
@@ -112,6 +110,7 @@ fun VaultUnlockedNavBarScreen(
         onNavigateToFlightRecorder = onNavigateToFlightRecorder,
         onNavigateToRecordedLogs = onNavigateToRecordedLogs,
         onNavigateToAboutPrivilegedApps = onNavigateToAboutPrivilegedApps,
+        onNavigateToPlan = onNavigateToPlan,
     )
 }
 
@@ -147,6 +146,7 @@ private fun VaultUnlockedNavBarScaffold(
     onNavigateToImportLogins: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
+    onNavigateToPlan: () -> Unit,
 ) {
     var shouldDimNavBar by rememberSaveable { mutableStateOf(value = false) }
 
@@ -154,10 +154,7 @@ private fun VaultUnlockedNavBarScaffold(
     // We need to ignore the all insets here and let the content screens handle it themselves.
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val navigationItems = persistentListOf<NavigationItem>(
-        VaultUnlockedNavBarTab.Vault(
-            labelRes = state.vaultNavBarLabelRes,
-            contentDescriptionRes = state.vaultNavBarContentDescriptionRes,
-        ),
+        VaultUnlockedNavBarTab.Vault(labelRes = state.vaultNavBarLabelRes),
         VaultUnlockedNavBarTab.Send,
         VaultUnlockedNavBarTab.Generator,
         VaultUnlockedNavBarTab.Settings(state.notificationState.settingsTabNotificationCount),
@@ -208,12 +205,14 @@ private fun VaultUnlockedNavBarScaffold(
                     navController.navigateToSettingsGraphRoot()
                     navController.navigateToAutoFill()
                 },
+                onNavigateToPlan = onNavigateToPlan,
             )
             sendGraph(
                 navController = navController,
                 onNavigateToAddEditSend = onNavigateToAddEditSend,
                 onNavigateToViewSend = onNavigateToViewSend,
                 onNavigateToSearchSend = onNavigateToSearchSend,
+                onNavigateToPlan = onNavigateToPlan,
             )
             generatorGraph(
                 onNavigateToPasswordHistory = { navigateToPasswordHistory() },

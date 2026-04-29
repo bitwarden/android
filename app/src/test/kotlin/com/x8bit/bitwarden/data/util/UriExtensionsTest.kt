@@ -356,4 +356,13 @@ class UriExtensionsTest {
             uriWithCustomScheme.addSchemeToUriIfNecessary(),
         )
     }
+
+    @Test
+    fun `addSchemeToUriIfNecessary should return the original URI for invalid URI`() {
+        val invalidUri = URI("turn:198.51.100.1:5349[Password1234][]")
+        assertEquals(
+            invalidUri,
+            invalidUri.addSchemeToUriIfNecessary(),
+        )
+    }
 }

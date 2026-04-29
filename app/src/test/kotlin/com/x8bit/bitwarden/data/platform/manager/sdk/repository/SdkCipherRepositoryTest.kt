@@ -186,6 +186,83 @@ class SdkCipherRepositoryTest {
             vaultDiskSource.saveCipher(userId = USER_ID, cipher = responseCipher)
         }
     }
+
+    @Test
+    fun `setBulk should skip entries where ids do not match`() = runTest {
+        val cipher = mockk<Cipher> {
+            every { id } returns "differentId"
+        }
+
+        sdkCipherRepository.setBulk(values = mapOf("cipherId" to cipher))
+
+        coVerify(exactly = 0) {
+            vaultDiskSource.saveCiphers(userId = any(), ciphers = any())
+        }
+    }
+
+    @Test
+    fun `setBulk should save valid entries via saveCiphers`() = runTest {
+        val cipherId = "cipherId"
+        val responseCipher = mockk<SyncResponseJson.Cipher>()
+        val cipher = mockk<Cipher> {
+            every { id } returns cipherId
+            every {
+                toEncryptedNetworkCipherResponse(encryptedFor = USER_ID)
+            } returns responseCipher
+        }
+        coEvery {
+            vaultDiskSource.saveCiphers(userId = USER_ID, ciphers = listOf(responseCipher))
+        } just runs
+
+        sdkCipherRepository.setBulk(values = mapOf(cipherId to cipher))
+
+        coVerify(exactly = 1) {
+            vaultDiskSource.saveCiphers(userId = USER_ID, ciphers = listOf(responseCipher))
+        }
+    }
+
+    @Test
+    fun `setBulk should do nothing for empty map`() = runTest {
+        sdkCipherRepository.setBulk(values = emptyMap())
+
+        coVerify(exactly = 0) {
+            vaultDiskSource.saveCiphers(userId = any(), ciphers = any())
+        }
+    }
+
+    @Test
+    fun `removeBulk should call deleteSelectedCiphers`() = runTest {
+        val ids = listOf("id1", "id2")
+        coEvery {
+            vaultDiskSource.deleteSelectedCiphers(userId = USER_ID, cipherIds = ids)
+        } just runs
+
+        sdkCipherRepository.removeBulk(keys = ids)
+
+        coVerify(exactly = 1) {
+            vaultDiskSource.deleteSelectedCiphers(userId = USER_ID, cipherIds = ids)
+        }
+    }
+
+    @Test
+    fun `removeBulk should not call deleteSelectedCiphers for empty list`() = runTest {
+        sdkCipherRepository.removeBulk(keys = emptyList())
+
+        coVerify(exactly = 0) {
+            vaultDiskSource.deleteSelectedCiphers(userId = any(), cipherIds = any())
+        }
+    }
+
+    @Test
+    fun `removeAll should call deleteAllCiphers`() = runTest {
+        coEvery { vaultDiskSource.deleteAllCiphers(userId = USER_ID) } just runs
+
+        sdkCipherRepository.removeAll()
+
+        coVerify(exactly = 1) {
+            vaultDiskSource.deleteAllCiphers(userId = USER_ID)
+        }
+    }
 }
 
 private const val USER_ID: String = "userId"

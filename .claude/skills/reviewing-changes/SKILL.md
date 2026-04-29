@@ -1,7 +1,6 @@
 ---
 name: reviewing-changes
-version: 3.0.0
-description: Guides Android code reviews with type-specific checklists and MVVM/Compose pattern validation. Use when reviewing Android PRs, pull requests, diffs, or local changes involving Kotlin, ViewModel, Composable, Repository, or Gradle files. Triggered by "review PR", "review changes", "check this code", "Android review", or code review requests mentioning bitwarden/android. Loads specialized checklists for feature additions, bug fixes, UI refinements, refactoring, dependency updates, and infrastructure changes.
+description: Android-specific code review checklist and MVVM/Compose pattern validation for Bitwarden Android — use this for any review task, even if the user doesn't explicitly ask for a "checklist". Detects change type automatically and loads the right review strategy (feature additions, bug fixes, UI refinements, refactoring, dependency updates, infrastructure). Triggered by "review PR", "review changes", "review this code", "check this code", "Android review", code review requests on Kotlin/ViewModel/Composable/Repository/Gradle files, or any time someone asks to look at a diff, PR, or code changes in bitwarden/android.
 ---
 
 # Reviewing Changes - Android Additions
@@ -10,15 +9,9 @@ This skill provides Android-specific workflow additions that complement the base
 
 ## Instructions
 
-**IMPORTANT**: Use structured thinking throughout your review process. Plan your analysis in `<thinking>` tags before providing final feedback.
+**IMPORTANT**: Work systematically through each step before providing feedback. Each checklist file includes structured thinking guidance for its review passes.
 
 ### Step 1: Retrieve Additional Details
-
-<thinking>
-Determine if more context is available for the changes:
-1. Are there JIRA tickets or GitHub Issues mentioned in the PR title or body?
-2. Are there other GitHub pull requests mentioned in the PR title or body?
-</thinking>
 
 Retrieve any additional information linked to the pull request using available tools (JIRA MCP, GitHub API).
 
@@ -28,15 +21,11 @@ If pull request title and message do not provide enough context, request additio
 - Link to another pull request
 - Add more detail to the PR title or body
 
-### Step 2: Detect Change Type with Android Refinements
+**Android metadata checks** — flag as ❓ if any of these are missing:
+- PR includes `*Screen.kt` or Composable changes but has no screenshots
+- PR adds new `ViewModel` or `Repository` but has no test plan or test file changes
 
-<thinking>
-Analyze the changeset systematically:
-1. What files were modified? (code vs config vs docs)
-2. What is the PR/commit title indicating?
-3. Is there new functionality or just modifications?
-4. What's the risk level of these changes?
-</thinking>
+### Step 2: Detect Change Type with Android Refinements
 
 Use the base change type detection from the agent, with Android-specific refinements:
 
@@ -65,21 +54,13 @@ The checklist provides:
 
 ### Step 4: Execute Review Following Checklist
 
-<thinking>
-Before diving into details:
-1. What are the highest-risk areas of this change?
-2. Which architectural patterns need verification?
-3. What security implications exist?
-4. How should I prioritize my findings?
-5. What tone is appropriate for this feedback?
-</thinking>
-
 Follow the checklist's multi-pass strategy, thinking through each pass systematically.
 
 ### Step 5: Consult Android Reference Materials As Needed
 
 Load reference files only when needed for specific questions:
 
+- **Re-reviews** → invoke `reviewing-incremental-changes` agent skill; scope to changed lines only, do not flag new issues in unchanged code
 - **Issue prioritization** → `reference/priority-framework.md` (Critical vs Suggested vs Optional)
 - **Phrasing feedback** → `reference/review-psychology.md` (questions vs commands, I-statements)
 - **Architecture questions** → `reference/architectural-patterns.md` (MVVM, Hilt DI, module org, error handling)
@@ -91,6 +72,7 @@ Load reference files only when needed for specific questions:
 
 ## Core Principles
 
+- **Priority order**: Security → Correctness → Breaking Changes → Performance → Maintainability
 - **Appropriate depth**: Match review rigor to change complexity and risk
 - **Specific references**: Always use `file:line_number` format for precise location
 - **Actionable feedback**: Say what to do and why, not just what's wrong

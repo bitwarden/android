@@ -42,7 +42,7 @@ class AuthDiskSourceTest {
         every { migrateIfNecessary() } just runs
     }
 
-    private val json = CoreModule.providesJson()
+    private val json = CoreModule.providesJson(buildInfoManager = mockk(relaxed = true))
 
     private val authDiskSource = AuthDiskSourceImpl(
         encryptedSharedPreferences = fakeEncryptedSharedPreferences,
@@ -446,6 +446,28 @@ class AuthDiskSourceTest {
             mockUserKey,
             actual,
         )
+    }
+
+    @Test
+    fun `getLocalUserDataKey should pull from SharedPreferences`() {
+        val userKeyBaseKey = "bwPreferencesStorage:localUserDataKey"
+        val mockUserId = "mockUserId"
+        val mockLocalUserKey = "mockLocalUserDataKey"
+        fakeSharedPreferences.edit {
+            putString("${userKeyBaseKey}_$mockUserId", mockLocalUserKey)
+        }
+        val actual = authDiskSource.getLocalUserDataKey(userId = mockUserId)
+        assertEquals(mockLocalUserKey, actual)
+    }
+
+    @Test
+    fun `storeLocalUserDataKey should update SharedPreferences`() {
+        val userKeyBaseKey = "bwPreferencesStorage:localUserDataKey"
+        val mockUserId = "mockUserId"
+        val mockLocalUserKey = "mockLocalUserDataKey"
+        authDiskSource.storeLocalUserDataKey(userId = mockUserId, wrappedKey = mockLocalUserKey)
+        val actual = fakeSharedPreferences.getString("${userKeyBaseKey}_$mockUserId", null)
+        assertEquals(mockLocalUserKey, actual)
     }
 
     @Test

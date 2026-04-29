@@ -26,12 +26,17 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.BitwardenAuthenticationEnabled,
     FlagKey.CredentialExchangeProtocolImport,
     FlagKey.CredentialExchangeProtocolExport,
-    FlagKey.CipherKeyEncryption,
     FlagKey.ForceUpdateKdfSettings,
     FlagKey.NoLogoutOnKdfChange,
     FlagKey.MigrateMyVaultToMyItems,
-    FlagKey.ArchiveItems,
+    FlagKey.CardScanner,
     FlagKey.SendEmailVerification,
+    FlagKey.MobilePremiumUpgrade,
+    FlagKey.AttachmentUpdates,
+    FlagKey.V2EncryptionJitPassword,
+    FlagKey.V2EncryptionKeyConnector,
+    FlagKey.V2EncryptionPassword,
+    FlagKey.V2EncryptionTde,
         -> {
         @Suppress("UNCHECKED_CAST")
         BooleanFlagItem(
@@ -75,7 +80,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
 
     FlagKey.CredentialExchangeProtocolImport -> stringResource(BitwardenString.cxp_import)
     FlagKey.CredentialExchangeProtocolExport -> stringResource(BitwardenString.cxp_export)
-    FlagKey.CipherKeyEncryption -> stringResource(BitwardenString.cipher_key_encryption)
     FlagKey.ForceUpdateKdfSettings -> stringResource(BitwardenString.force_update_kdf_settings)
     FlagKey.NoLogoutOnKdfChange -> stringResource(BitwardenString.avoid_logout_on_kdf_change)
     FlagKey.BitwardenAuthenticationEnabled -> {
@@ -83,6 +87,12 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     }
 
     FlagKey.MigrateMyVaultToMyItems -> stringResource(BitwardenString.migrate_my_vault_to_my_items)
-    FlagKey.ArchiveItems -> stringResource(BitwardenString.archive_items)
+    FlagKey.CardScanner -> stringResource(BitwardenString.scan_card)
     FlagKey.SendEmailVerification -> stringResource(BitwardenString.send_email_verification)
+    FlagKey.MobilePremiumUpgrade -> stringResource(BitwardenString.mobile_premium_upgrade)
+    FlagKey.AttachmentUpdates -> stringResource(BitwardenString.attachment_updates)
+    FlagKey.V2EncryptionJitPassword -> stringResource(BitwardenString.v2_encryption_jit_password)
+    FlagKey.V2EncryptionKeyConnector -> stringResource(BitwardenString.v2_encryption_key_connector)
+    FlagKey.V2EncryptionPassword -> stringResource(BitwardenString.v2_encryption_password)
+    FlagKey.V2EncryptionTde -> stringResource(BitwardenString.v2_encryption_tde)
 }

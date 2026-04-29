@@ -291,7 +291,7 @@ class LoginScreenTest : BitwardenComposeTest() {
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
         // Open the overflow menu
-        composeTestRule.onNodeWithContentDescription("More").performClick()
+        composeTestRule.onNodeWithContentDescription("More options").performClick()
         // Click on the password hint item in the dropdown
         composeTestRule
             .onAllNodesWithText("Get your master password hint")

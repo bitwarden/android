@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.coachmark.CoachMarkActionText
 import com.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
 import com.bitwarden.ui.platform.components.coachmark.scope.CoachMarkScope
@@ -31,7 +32,6 @@ import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -386,9 +386,10 @@ private fun TotpRow(
                 )
             }
         },
-        tooltip = TooltipData(
+        helpData = BitwardenHelpButtonData(
             onClick = loginItemTypeHandlers.onAuthenticatorHelpToolTipClick,
             contentDescription = stringResource(id = BitwardenString.authenticator_key_help),
+            isExternalLink = true,
         ),
         supportingContentPadding = PaddingValues(),
         supportingContent = {

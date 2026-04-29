@@ -7,14 +7,15 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.Authentic
  * of verification items.
  *
  * @property code The verification code for the item.
+ * @property nextCode The verification code for the next time period.
  * @property periodSeconds The time span where the code is valid in seconds.
  * @property timeLeftSeconds The seconds remaining until a new code is required.
  * @property issueTime The time the verification code was issued.
  * @property id The cipher id of the item.
- * @property username The username associated with the item.
  */
 data class VerificationCodeItem(
     val code: String,
+    val nextCode: String?,
     val periodSeconds: Int,
     val timeLeftSeconds: Int,
     val issueTime: Long,

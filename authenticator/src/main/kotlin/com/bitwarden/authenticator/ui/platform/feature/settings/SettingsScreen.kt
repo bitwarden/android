@@ -35,17 +35,22 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.authenticator.data.platform.manager.lock.model.AppTimeout
 import com.bitwarden.authenticator.ui.platform.components.biometrics.BiometricChanges
 import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
+import com.bitwarden.authenticator.ui.platform.feature.settings.security.util.displayLabel
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -64,6 +69,7 @@ import com.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
+import com.bitwarden.ui.platform.components.support.BitwardenSupportingText
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
@@ -95,12 +101,8 @@ fun SettingsScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val snackbarState = rememberBitwardenSnackbarHostState()
     var showBiometricsPrompt by rememberSaveable { mutableStateOf(false) }
-    val unlockWithBiometricToggle: (cipher: Cipher) -> Unit = remember(viewModel) {
-        {
-            viewModel.trySendAction(
-                SettingsAction.SecurityClick.UnlockWithBiometricToggleEnabled(cipher = it),
-            )
-        }
+    val unlockWithBiometricToggle: (cipher: Cipher) -> Unit = {
+        viewModel.trySendAction(SettingsAction.SecurityClick.UnlockWithBiometricToggleEnabled(it))
     }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -162,10 +164,8 @@ fun SettingsScreen(
 
     BiometricChanges(
         biometricsManager = biometricsManager,
-        onBiometricSupportChange = remember(viewModel) {
-            {
-                viewModel.trySendAction(SettingsAction.BiometricSupportChanged(it))
-            }
+        onBiometricSupportChange = {
+            viewModel.trySendAction(SettingsAction.BiometricSupportChanged(it))
         },
     )
 
@@ -189,101 +189,75 @@ fun SettingsScreen(
         ) {
             SecuritySettings(
                 state = state,
-                biometricsManager = biometricsManager,
-                onBiometricToggle = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            SettingsAction.SecurityClick.UnlockWithBiometricToggle(it),
-                        )
-                    }
+                onBiometricToggle = {
+                    viewModel.trySendAction(
+                        SettingsAction.SecurityClick.UnlockWithBiometricToggle(it),
+                    )
                 },
-                onScreenCaptureChange = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            SettingsAction.SecurityClick.AllowScreenCaptureToggle(it),
-                        )
-                    }
+                onScreenCaptureChange = {
+                    viewModel.trySendAction(
+                        SettingsAction.SecurityClick.AllowScreenCaptureToggle(it),
+                    )
+                },
+                onAppTimeoutChange = {
+                    viewModel.trySendAction(SettingsAction.SecurityClick.AppTimeoutChange(it))
                 },
             )
             Spacer(modifier = Modifier.height(16.dp))
             VaultSettings(
-                onExportClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(SettingsAction.DataClick.ExportClick)
-                    }
+                onExportClick = { viewModel.trySendAction(SettingsAction.DataClick.ExportClick) },
+                onImportClick = { viewModel.trySendAction(SettingsAction.DataClick.ImportClick) },
+                onBackupClick = { viewModel.trySendAction(SettingsAction.DataClick.BackupClick) },
+                onSyncWithBitwardenClick = {
+                    viewModel.trySendAction(SettingsAction.DataClick.SyncWithBitwardenClick)
                 },
-                onImportClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(SettingsAction.DataClick.ImportClick)
-                    }
+                onSyncLearnMoreClick = {
+                    viewModel.trySendAction(SettingsAction.DataClick.SyncLearnMoreClick)
                 },
-                onBackupClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(SettingsAction.DataClick.BackupClick)
-                    }
+                onDefaultSaveOptionUpdated = {
+                    viewModel.trySendAction(SettingsAction.DataClick.DefaultSaveOptionUpdated(it))
                 },
-                onSyncWithBitwardenClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(SettingsAction.DataClick.SyncWithBitwardenClick)
-                    }
-                },
-                onSyncLearnMoreClick = remember(viewModel) {
-                    { viewModel.trySendAction(SettingsAction.DataClick.SyncLearnMoreClick) }
-                },
-                onDefaultSaveOptionUpdated = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            SettingsAction.DataClick.DefaultSaveOptionUpdated(it),
-                        )
-                    }
+                onShowNextCodeToggle = {
+                    viewModel.trySendAction(SettingsAction.DataClick.ShowNextCodeToggle(it))
                 },
                 defaultSaveOption = state.defaultSaveOption,
+                isShowNextCodeEnabled = state.isShowNextCodeEnabled,
                 shouldShowDefaultSaveOptions = state.showDefaultSaveOptionRow,
                 shouldShowSyncWithBitwardenApp = state.showSyncWithBitwarden,
             )
             Spacer(modifier = Modifier.height(16.dp))
             AppearanceSettings(
                 state = state.appearance,
-                onLanguageSelection = remember(viewModel) {
-                    { viewModel.trySendAction(SettingsAction.AppearanceChange.LanguageChange(it)) }
+                onLanguageSelection = {
+                    viewModel.trySendAction(SettingsAction.AppearanceChange.LanguageChange(it))
                 },
-                onThemeSelection = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(SettingsAction.AppearanceChange.ThemeChange(it))
-                    }
+                onThemeSelection = {
+                    viewModel.trySendAction(SettingsAction.AppearanceChange.ThemeChange(it))
                 },
-                onDynamicColorChange = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            SettingsAction.AppearanceChange.DynamicColorChange(it),
-                        )
-                    }
+                onDynamicColorChange = {
+                    viewModel.trySendAction(SettingsAction.AppearanceChange.DynamicColorChange(it))
                 },
             )
             Spacer(Modifier.height(16.dp))
             HelpSettings(
-                onTutorialClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(SettingsAction.HelpClick.ShowTutorialClick)
-                    }
+                onTutorialClick = {
+                    viewModel.trySendAction(SettingsAction.HelpClick.ShowTutorialClick)
                 },
-                onHelpCenterClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(SettingsAction.HelpClick.HelpCenterClick)
-                    }
+                onHelpCenterClick = {
+                    viewModel.trySendAction(SettingsAction.HelpClick.HelpCenterClick)
                 },
             )
             Spacer(modifier = Modifier.height(16.dp))
             AboutSettings(
                 state = state,
-                onSubmitCrashLogsCheckedChange = remember(viewModel) {
-                    { viewModel.trySendAction(SettingsAction.AboutClick.SubmitCrashLogsClick(it)) }
+                onSubmitCrashLogsCheckedChange = {
+                    viewModel.trySendAction(SettingsAction.AboutClick.SubmitCrashLogsClick(it))
                 },
-                onPrivacyPolicyClick = remember(viewModel) {
-                    { viewModel.trySendAction(SettingsAction.AboutClick.PrivacyPolicyClick) }
+                onPrivacyPolicyClick = {
+                    viewModel.trySendAction(SettingsAction.AboutClick.PrivacyPolicyClick)
                 },
-                onVersionClick = remember(viewModel) {
-                    { viewModel.trySendAction(SettingsAction.AboutClick.VersionClick) }
+                onVersionClick = {
+                    viewModel.trySendAction(SettingsAction.AboutClick.VersionClick)
                 },
             )
             Box(
@@ -309,11 +283,12 @@ fun SettingsScreen(
 //region Security settings
 
 @Composable
-private fun SecuritySettings(
+private fun ColumnScope.SecuritySettings(
     state: SettingsState,
-    biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     onBiometricToggle: (Boolean) -> Unit,
     onScreenCaptureChange: (Boolean) -> Unit,
+    onAppTimeoutChange: (AppTimeout.Type) -> Unit,
+    resources: Resources = LocalResources.current,
 ) {
     Spacer(modifier = Modifier.height(height = 12.dp))
     BitwardenListHeaderText(
@@ -323,26 +298,51 @@ private fun SecuritySettings(
         label = stringResource(id = BitwardenString.security),
     )
 
-    Spacer(modifier = Modifier.height(8.dp))
     if (state.hasBiometricsSupport) {
-        UnlockWithBiometricsRow(
+        Spacer(modifier = Modifier.height(height = 8.dp))
+        BitwardenSwitch(
+            cardStyle = CardStyle.Top(),
+            label = stringResource(id = BitwardenString.lock_app),
+            isChecked = state.isUnlockWithBiometricsEnabled,
+            onCheckedChange = { onBiometricToggle(it) },
             modifier = Modifier
                 .testTag("UnlockWithBiometricsSwitch")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
-            isChecked = state.isUnlockWithBiometricsEnabled,
-            onBiometricToggle = { onBiometricToggle(it) },
-            biometricsManager = biometricsManager,
+        )
+        BitwardenMultiSelectButton(
+            label = stringResource(id = BitwardenString.session_timeout),
+            options = AppTimeout.Type.entries.map { it.displayLabel() }.toImmutableList(),
+            selectedOption = state.appTimeout.type.displayLabel(),
+            onOptionSelected = { selectedType ->
+                val selectedOption = AppTimeout.Type.entries.first {
+                    it.displayLabel.toString(resources) == selectedType
+                }
+                onAppTimeoutChange(selectedOption)
+            },
+            isEnabled = state.isUnlockWithBiometricsEnabled,
+            textFieldTestTag = "SessionTimeoutStatusLabel",
+            cardStyle = CardStyle.Middle(),
+            modifier = Modifier
+                .testTag("AppTimeoutSwitch")
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+        BitwardenSupportingText(
+            text = stringResource(
+                id = BitwardenString.use_your_devices_lock_method_to_unlock_the_app,
+            ),
+            cardStyle = CardStyle.Bottom,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
     }
 
+    Spacer(modifier = Modifier.height(height = 8.dp))
     ScreenCaptureRow(
         currentValue = state.allowScreenCapture,
-        cardStyle = if (state.hasBiometricsSupport) {
-            CardStyle.Bottom
-        } else {
-            CardStyle.Full
-        },
+        cardStyle = CardStyle.Full,
         onValueChange = onScreenCaptureChange,
         modifier = Modifier
             .fillMaxWidth()
@@ -358,12 +358,14 @@ private fun SecuritySettings(
 @Suppress("LongMethod")
 private fun ColumnScope.VaultSettings(
     defaultSaveOption: DefaultSaveOption,
+    isShowNextCodeEnabled: Boolean,
     onExportClick: () -> Unit,
     onImportClick: () -> Unit,
     onBackupClick: () -> Unit,
     onSyncWithBitwardenClick: () -> Unit,
     onSyncLearnMoreClick: () -> Unit,
     onDefaultSaveOptionUpdated: (DefaultSaveOption) -> Unit,
+    onShowNextCodeToggle: (Boolean) -> Unit,
     shouldShowSyncWithBitwardenApp: Boolean,
     shouldShowDefaultSaveOptions: Boolean,
 ) {
@@ -401,13 +403,10 @@ private fun ColumnScope.VaultSettings(
         dialogMessage = stringResource(BitwardenString.data_backup_message),
         dialogConfirmButtonText = stringResource(BitwardenString.learn_more),
         dialogDismissButtonText = stringResource(BitwardenString.okay),
-        cardStyle = if (shouldShowSyncWithBitwardenApp || shouldShowDefaultSaveOptions) {
-            CardStyle.Middle()
-        } else {
-            CardStyle.Bottom
-        },
+        cardStyle = CardStyle.Middle(),
     )
     if (shouldShowSyncWithBitwardenApp) {
+        val learnMore = stringResource(id = BitwardenString.learn_more_link)
         BitwardenTextRow(
             text = stringResource(id = BitwardenString.sync_with_bitwarden_app),
             description = annotatedStringResource(
@@ -419,17 +418,25 @@ private fun ColumnScope.VaultSettings(
                 },
             ),
             onClick = onSyncWithBitwardenClick,
-            modifier = Modifier.standardHorizontalMargin(),
-            cardStyle = if (shouldShowDefaultSaveOptions) {
-                CardStyle.Middle()
-            } else {
-                CardStyle.Bottom
-            },
+            modifier = Modifier
+                .semantics {
+                    customActions = listOf(
+                        CustomAccessibilityAction(
+                            label = learnMore,
+                            action = {
+                                onSyncLearnMoreClick()
+                                true
+                            },
+                        ),
+                    )
+                }
+                .standardHorizontalMargin(),
+            cardStyle = CardStyle.Middle(),
             content = {
                 Icon(
                     modifier = Modifier.mirrorIfRtl(),
                     painter = painterResource(id = BitwardenDrawable.ic_external_link),
-                    contentDescription = null,
+                    contentDescription = stringResource(id = BitwardenString.external_link),
                     tint = BitwardenTheme.colorScheme.icon.primary,
                 )
             },
@@ -442,6 +449,17 @@ private fun ColumnScope.VaultSettings(
             modifier = Modifier.standardHorizontalMargin(),
         )
     }
+    BitwardenSwitch(
+        label = stringResource(id = BitwardenString.show_next_code),
+        subtext = stringResource(id = BitwardenString.see_upcoming_codes_in_the_list),
+        isChecked = isShowNextCodeEnabled,
+        onCheckedChange = onShowNextCodeToggle,
+        cardStyle = CardStyle.Bottom,
+        modifier = Modifier
+            .testTag("ShowNextCodeToggle")
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
+    )
 }
 
 @Composable
@@ -462,28 +480,8 @@ private fun DefaultSaveOptionSelectionRow(
                 .first { it.displayLabel(resources) == selectedOptionLabel }
             onSaveOptionUpdated(selectedOption)
         },
-        cardStyle = CardStyle.Bottom,
+        cardStyle = CardStyle.Middle(),
         modifier = modifier,
-    )
-}
-
-@Composable
-private fun UnlockWithBiometricsRow(
-    isChecked: Boolean,
-    onBiometricToggle: (Boolean) -> Unit,
-    biometricsManager: BiometricsManager,
-    modifier: Modifier = Modifier,
-) {
-    if (!biometricsManager.isBiometricsSupported) return
-    BitwardenSwitch(
-        modifier = modifier,
-        cardStyle = CardStyle.Top(),
-        label = stringResource(id = BitwardenString.lock_app),
-        subtext = stringResource(
-            id = BitwardenString.use_your_devices_lock_method_to_unlock_the_app,
-        ),
-        isChecked = isChecked,
-        onCheckedChange = onBiometricToggle,
     )
 }
 
@@ -719,6 +717,7 @@ private fun CopyRow(
         ) {
             Text(
                 modifier = Modifier
+                    .semantics { hideFromAccessibility() }
                     .padding(end = 16.dp)
                     .weight(1f),
                 text = text(),
@@ -727,7 +726,7 @@ private fun CopyRow(
             )
             Icon(
                 painter = rememberVectorPainter(id = BitwardenDrawable.ic_copy),
-                contentDescription = null,
+                contentDescription = stringResource(id = BitwardenString.copy),
                 tint = BitwardenTheme.colorScheme.icon.primary,
             )
         }

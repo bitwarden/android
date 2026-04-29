@@ -1,5 +1,6 @@
 package com.bitwarden.network.service
 
+import com.bitwarden.network.model.ArchiveCipherResponseJson
 import com.bitwarden.network.model.AttachmentInfo
 import com.bitwarden.network.model.AttachmentJsonRequest
 import com.bitwarden.network.model.AttachmentJsonResponse
@@ -12,6 +13,7 @@ import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.ImportCiphersResponseJson
 import com.bitwarden.network.model.ShareCipherJsonRequest
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.UnarchiveCipherResponseJson
 import com.bitwarden.network.model.UpdateCipherCollectionsJsonRequest
 import com.bitwarden.network.model.UpdateCipherResponseJson
 import java.io.File
@@ -24,12 +26,12 @@ interface CiphersService {
     /**
      * Attempt to archive a cipher.
      */
-    suspend fun archiveCipher(cipherId: String): Result<Unit>
+    suspend fun archiveCipher(cipherId: String): Result<ArchiveCipherResponseJson>
 
     /**
      * Attempt to unarchive a cipher.
      */
-    suspend fun unarchiveCipher(cipherId: String): Result<Unit>
+    suspend fun unarchiveCipher(cipherId: String): Result<UnarchiveCipherResponseJson>
 
     /**
      * Attempt to create a cipher.

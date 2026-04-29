@@ -142,7 +142,7 @@ private fun getMatchingDomains(
  * @param cipherListView The cipher to be judged for a match.
  * @param resourceCacheManager The [ResourceCacheManager] for fetching cached resources.
  * @param defaultUriMatchType The global default [UriMatchType].
- * @param isAndroidApp Whether or not the [matchUri] belongs to an Android app.
+ * @param isAndroidApp Whether the [matchUri] belongs to an Android app.
  * @param matchingDomains The set of domains that match the domain of [matchUri].
  * @param matchUri The uri that this cipher is being matched to.
  */
@@ -180,7 +180,7 @@ private fun checkForCipherMatch(
  *
  * @param resourceCacheManager The [ResourceCacheManager] for fetching cached resources.
  * @param defaultUriMatchType The global default [UriMatchType].
- * @param isAndroidApp Whether or not the [matchUri] belongs to an Android app.
+ * @param isAndroidApp Whether the [matchUri] belongs to an Android app.
  * @param matchingDomains The set of domains that match the domain of [matchUri].
  * @param matchUri The uri that this [LoginUriView] is being matched to.
  */

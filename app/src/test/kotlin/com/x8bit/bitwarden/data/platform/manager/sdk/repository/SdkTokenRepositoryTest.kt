@@ -34,7 +34,6 @@ class SdkTokenRepositoryTest {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `getAccessToken should return null when userId is valid and accessToken is null`() =
         runTest {
@@ -69,10 +68,23 @@ class SdkTokenRepositoryTest {
             }
         }
 
+    @Test
+    fun `getAccessToken should return access token when accessToken is manually provided`() =
+        runTest {
+            val accessToken = "access_token"
+            val repository = createSdkTokenRepository(accessToken = accessToken)
+            assertEquals(accessToken, repository.getAccessToken())
+            verify(exactly = 0) {
+                authDiskSource.getAccountTokens(userId = USER_ID)
+            }
+        }
+
     private fun createSdkTokenRepository(
         userId: String? = USER_ID,
+        accessToken: String? = null,
     ): SdkTokenRepository = SdkTokenRepository(
         userId = userId,
+        accessToken = accessToken,
         authDiskSource = authDiskSource,
     )
 }

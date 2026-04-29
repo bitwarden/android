@@ -31,10 +31,10 @@ import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenFilledErrorButton
-import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
@@ -160,7 +160,6 @@ private fun LeaveOrganizationContent(
         Text(
             text = stringResource(
                 id = BitwardenString.are_you_sure_you_want_to_leave_organization,
-                state.organizationName,
             ),
             style = BitwardenTheme.typography.titleMedium,
             color = BitwardenTheme.colorScheme.text.primary,
@@ -171,11 +170,26 @@ private fun LeaveOrganizationContent(
         )
 
         Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = stringResource(id = BitwardenString.leave_organization_warning),
+        BitwardenHyperTextLink(
+            annotatedResId = BitwardenString.leave_organization_warning,
+            annotationKey = "learnMore",
+            accessibilityString = stringResource(BitwardenString.learn_more),
+            onClick = onHelpLinkClick,
             style = BitwardenTheme.typography.bodyMedium,
-            color = BitwardenTheme.colorScheme.text.secondary,
+            color = BitwardenTheme.colorScheme.text.primary,
+            isExternalLink = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = stringResource(
+                id = BitwardenString.contact_your_admin_to_regain_access,
+            ),
+            style = BitwardenTheme.typography.bodyMedium,
+            color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
@@ -194,17 +208,6 @@ private fun LeaveOrganizationContent(
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        BitwardenTextButton(
-            label = stringResource(id = BitwardenString.how_to_manage_my_vault),
-            onClick = onHelpLinkClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
-
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }

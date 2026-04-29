@@ -6,7 +6,7 @@ import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**
- * A reusable dialog for confirming whether or not the user wants to overwrite an existing credential.
+ * A reusable dialog for confirming whether the user wants to overwrite an existing credential.
  *
  * @param onConfirmClick A callback for when the overwrite confirmation button is clicked.
  * @param onDismissRequest A callback for when the dialog is requesting dismissal.

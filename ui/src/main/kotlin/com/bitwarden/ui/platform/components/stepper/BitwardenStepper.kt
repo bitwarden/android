@@ -29,9 +29,9 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param modifier Modifier.
  * @param supportingText An optional supporting text that will appear below the stepper.
  * @param range Range of valid values.
- * @param isIncrementEnabled whether or not the increment button should be enabled.
- * @param isDecrementEnabled whether or not the decrement button should be enabled.
- * @param textFieldReadOnly whether or not the text field should be read only. The stepper
+ * @param isIncrementEnabled whether the increment button should be enabled.
+ * @param isDecrementEnabled whether the decrement button should be enabled.
+ * @param textFieldReadOnly whether the text field should be read only. The stepper
  * increment and decrement buttons function regardless of this value.
  */
 @Composable
@@ -83,9 +83,9 @@ fun BitwardenStepper(
  * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier Modifier.
  * @param range Range of valid values.
- * @param isIncrementEnabled whether or not the increment button should be enabled.
- * @param isDecrementEnabled whether or not the decrement button should be enabled.
- * @param textFieldReadOnly whether or not the text field should be read only. The stepper
+ * @param isIncrementEnabled whether the increment button should be enabled.
+ * @param isDecrementEnabled whether the decrement button should be enabled.
+ * @param textFieldReadOnly whether the text field should be read only. The stepper
  * increment and decrement buttons function regardless of this value.
  */
 @Suppress("CyclomaticComplexMethod")

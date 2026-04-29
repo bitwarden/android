@@ -7,6 +7,7 @@ import com.bitwarden.data.repository.ServerConfigRepository
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
+import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import io.mockk.every
@@ -42,11 +43,16 @@ class DebugMenuRepositoryTest {
         every { hasUserLoggedInOrCreatedAccount = any() } just runs
     }
 
+    private val mockCookieDiskSource = mockk<CookieDiskSource> {
+        every { clearCookies() } just runs
+    }
+
     private val debugMenuRepository = DebugMenuRepositoryImpl(
         featureFlagOverrideDiskSource = mockFeatureFlagOverrideDiskSource,
         serverConfigRepository = mockServerConfigRepository,
         settingsDiskSource = mockSettingsDiskSource,
         authDiskSource = mockAuthDiskSource,
+        cookieDiskSource = mockCookieDiskSource,
     )
 
     @Test
@@ -167,6 +173,51 @@ class DebugMenuRepositoryTest {
         verify(exactly = 1) {
             mockSettingsDiskSource.storeShouldShowGeneratorCoachMark(shouldShow = null)
             mockSettingsDiskSource.storeShouldShowAddLoginCoachMark(shouldShow = null)
+        }
+    }
+    @Test
+    fun `clearSsoCookies should call clearCookies on CookieDiskSource`() {
+        debugMenuRepository.clearSsoCookies()
+        verify(exactly = 1) {
+            mockCookieDiskSource.clearCookies()
+        }
+    }
+
+    @Test
+    fun `resetPremiumUpgradeBannerDismiss should store null for the current user`() {
+        val userId = "testUserId"
+        val mockUserStateJson = mockk<UserStateJson>(relaxed = true) {
+            every { activeUserId } returns userId
+        }
+        every { mockAuthDiskSource.userState } returns mockUserStateJson
+        every {
+            mockSettingsDiskSource.storePremiumUpgradeBannerDismissed(
+                userId = any(),
+                isDismissed = any(),
+            )
+        } just runs
+
+        debugMenuRepository.resetPremiumUpgradeBannerDismiss()
+
+        verify(exactly = 1) {
+            mockSettingsDiskSource.storePremiumUpgradeBannerDismissed(
+                userId = userId,
+                isDismissed = null,
+            )
+        }
+    }
+
+    @Test
+    fun `resetPremiumUpgradeBannerDismiss should do nothing if no active user`() {
+        every { mockAuthDiskSource.userState } returns null
+
+        debugMenuRepository.resetPremiumUpgradeBannerDismiss()
+
+        verify(exactly = 0) {
+            mockSettingsDiskSource.storePremiumUpgradeBannerDismissed(
+                userId = any(),
+                isDismissed = any(),
+            )
         }
     }
 }

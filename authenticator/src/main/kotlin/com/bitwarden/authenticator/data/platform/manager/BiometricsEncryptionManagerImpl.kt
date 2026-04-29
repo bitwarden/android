@@ -79,6 +79,7 @@ class BiometricsEncryptionManagerImpl(
             )
         }
         authDiskSource.storeUserBiometricUnlockKey(biometricsKey = null)
+        settingsDiskSource.appTimeoutInMinutes = null
         authDiskSource.userBiometricKeyInitVector = null
         keystore.deleteEntry(ENCRYPTION_KEY_NAME)
     }

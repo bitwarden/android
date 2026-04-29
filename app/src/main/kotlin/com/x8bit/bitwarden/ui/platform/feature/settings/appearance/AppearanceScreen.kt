@@ -14,7 +14,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalResources
@@ -27,10 +26,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -66,12 +65,10 @@ fun AppearanceScreen(
 
     AppearanceDialogs(
         dialogState = state.dialogState,
-        onConfirmEnableDynamicColorsClick = remember(viewModel) {
-            { viewModel.trySendAction(AppearanceAction.ConfirmEnableDynamicColorsClick) }
+        onConfirmEnableDynamicColorsClick = {
+            viewModel.trySendAction(AppearanceAction.ConfirmEnableDynamicColorsClick)
         },
-        onDismissDialog = remember(viewModel) {
-            { viewModel.trySendAction(AppearanceAction.DismissDialog) }
-        },
+        onDismissDialog = { viewModel.trySendAction(AppearanceAction.DismissDialog) },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -85,9 +82,7 @@ fun AppearanceScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = BitwardenString.back),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(AppearanceAction.BackClick) }
-                },
+                onNavigationIconClick = { viewModel.trySendAction(AppearanceAction.BackClick) },
             )
         },
     ) {
@@ -99,8 +94,8 @@ fun AppearanceScreen(
             Spacer(modifier = Modifier.height(height = 12.dp))
             LanguageSelectionRow(
                 currentSelection = state.language,
-                onLanguageSelection = remember(viewModel) {
-                    { viewModel.trySendAction(AppearanceAction.LanguageChange(it)) }
+                onLanguageSelection = {
+                    viewModel.trySendAction(AppearanceAction.LanguageChange(it))
                 },
                 modifier = Modifier
                     .testTag("LanguageChooser")
@@ -110,9 +105,7 @@ fun AppearanceScreen(
             Spacer(modifier = Modifier.height(height = 8.dp))
             ThemeSelectionRow(
                 currentSelection = state.theme,
-                onThemeSelection = remember(viewModel) {
-                    { viewModel.trySendAction(AppearanceAction.ThemeChange(it)) }
-                },
+                onThemeSelection = { viewModel.trySendAction(AppearanceAction.ThemeChange(it)) },
                 modifier = Modifier
                     .testTag("ThemeChooser")
                     .standardHorizontalMargin()
@@ -123,8 +116,8 @@ fun AppearanceScreen(
                 BitwardenSwitch(
                     label = stringResource(id = BitwardenString.use_dynamic_colors),
                     isChecked = state.isDynamicColorsEnabled,
-                    onCheckedChange = remember(viewModel) {
-                        { viewModel.trySendAction(AppearanceAction.DynamicColorsToggle(it)) }
+                    onCheckedChange = {
+                        viewModel.trySendAction(AppearanceAction.DynamicColorsToggle(it))
                     },
                     cardStyle = CardStyle.Full,
                     modifier = Modifier
@@ -140,16 +133,17 @@ fun AppearanceScreen(
                     id = BitwardenString.show_website_icons_description,
                 ),
                 isChecked = state.showWebsiteIcons,
-                onCheckedChange = remember(viewModel) {
-                    { viewModel.trySendAction(AppearanceAction.ShowWebsiteIconsToggle(it)) }
+                onCheckedChange = {
+                    viewModel.trySendAction(AppearanceAction.ShowWebsiteIconsToggle(it))
                 },
-                tooltip = TooltipData(
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(AppearanceAction.ShowWebsiteIconsTooltipClick) }
+                helpData = BitwardenHelpButtonData(
+                    onClick = {
+                        viewModel.trySendAction(AppearanceAction.ShowWebsiteIconsTooltipClick)
                     },
                     contentDescription = stringResource(
                         id = BitwardenString.show_website_icons_help,
                     ),
+                    isExternalLink = true,
                 ),
                 cardStyle = CardStyle.Full,
                 modifier = Modifier

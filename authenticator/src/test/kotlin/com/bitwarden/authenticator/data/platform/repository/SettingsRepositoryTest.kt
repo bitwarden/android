@@ -2,6 +2,7 @@ package com.bitwarden.authenticator.data.platform.repository
 
 import app.cash.turbine.test
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
+import com.bitwarden.authenticator.data.platform.manager.lock.model.AppTimeout
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
@@ -10,6 +11,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -19,8 +21,11 @@ import org.junit.jupiter.api.Test
 
 class SettingsRepositoryTest {
 
+    private val mutableAppTimeoutInMinutesFlow = MutableStateFlow<Int?>(null)
     private val settingsDiskSource: SettingsDiskSource = mockk {
         every { getAlertThresholdSeconds() } returns 7
+        every { appTimeoutInMinutesFlow } returns mutableAppTimeoutInMinutesFlow
+        every { appTimeoutInMinutes } answers { mutableAppTimeoutInMinutesFlow.value }
     }
 
     private val settingsRepository: SettingsRepository = SettingsRepositoryImpl(
@@ -134,6 +139,65 @@ class SettingsRepositoryTest {
             mutableDynamicColorsFlow.emit(true)
             assertTrue(awaitItem())
             mutableDynamicColorsFlow.emit(false)
+            assertFalse(awaitItem())
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `appTimeoutState should pull from and update SettingsDiskSource`() {
+        // Reading from repository should read from disk source:
+        assertEquals(AppTimeout.Never, settingsRepository.appTimeoutState)
+        verify { settingsDiskSource.appTimeoutInMinutes }
+
+        // Writing to repository should write to disk source:
+        every { settingsDiskSource.appTimeoutInMinutes = 5 } just runs
+        settingsRepository.appTimeoutState = AppTimeout.FiveMinutes
+        verify { settingsDiskSource.appTimeoutInMinutes = 5 }
+    }
+
+    @Test
+    fun `appTimeoutStateFlow should match SettingsDiskSource`() = runTest {
+        settingsRepository.appTimeoutStateFlow.test {
+            assertEquals(AppTimeout.Never, awaitItem())
+            mutableAppTimeoutInMinutesFlow.emit(1)
+            assertEquals(AppTimeout.OneMinute, awaitItem())
+            mutableAppTimeoutInMinutesFlow.emit(240)
+            assertEquals(AppTimeout.FourHours, awaitItem())
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `isShowNextCodeEnabled should default to false when disk source returns null`() {
+        every { settingsDiskSource.isShowNextCodeEnabled } returns null
+        assertFalse(settingsRepository.isShowNextCodeEnabled)
+    }
+
+    @Test
+    fun `isShowNextCodeEnabled should return disk source value when set`() {
+        every { settingsDiskSource.isShowNextCodeEnabled } returns true
+        assertTrue(settingsRepository.isShowNextCodeEnabled)
+    }
+
+    @Test
+    fun `isShowNextCodeEnabled setter should write to disk source`() {
+        every { settingsDiskSource.isShowNextCodeEnabled = true } just runs
+        settingsRepository.isShowNextCodeEnabled = true
+        verify { settingsDiskSource.isShowNextCodeEnabled = true }
+    }
+
+    @Test
+    fun `isShowNextCodeEnabledFlow should map null to false and emit updates`() = runTest {
+        val mutableShowNextCodeFlow = bufferedMutableSharedFlow<Boolean?>()
+        every { settingsDiskSource.isShowNextCodeEnabledFlow } returns mutableShowNextCodeFlow
+        every { settingsDiskSource.isShowNextCodeEnabled } returns null
+
+        settingsRepository.isShowNextCodeEnabledFlow.test {
+            assertFalse(awaitItem())
+            mutableShowNextCodeFlow.emit(true)
+            assertTrue(awaitItem())
+            mutableShowNextCodeFlow.emit(false)
             assertFalse(awaitItem())
             expectNoEvents()
         }

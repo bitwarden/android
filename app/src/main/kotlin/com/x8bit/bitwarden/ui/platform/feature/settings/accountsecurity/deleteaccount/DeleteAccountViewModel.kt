@@ -162,9 +162,9 @@ class DeleteAccountViewModel @Inject constructor(
  * Models state for the Delete Account screen.
  *
  * @param dialog The dialog for the [DeleteAccountScreen].
- * @param isUnlockWithPasswordEnabled Whether or not the user is able to unlock the vault with
+ * @param isUnlockWithPasswordEnabled Whether the user is able to unlock the vault with
  * their master password.
- * @param isUserManagedByOrganization Whether or not the user is managed by an organization.
+ * @param isUserManagedByOrganization Whether the user is managed by an organization.
  */
 @Parcelize
 data class DeleteAccountState(

@@ -6,7 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Represents different types of cipher repromt.
+ * Represents different types of cipher reprompt.
  */
 @Serializable(CipherRepromptTypeSerializer::class)
 enum class CipherRepromptTypeJson {

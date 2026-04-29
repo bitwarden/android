@@ -15,7 +15,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -49,9 +48,7 @@ fun SetPasswordScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     SetPasswordDialogs(
         dialogState = state.dialogState,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(SetPasswordAction.DialogDismiss) }
-        },
+        onDismissRequest = { viewModel.trySendAction(SetPasswordAction.DialogDismiss) },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -67,16 +64,12 @@ fun SetPasswordScreen(
                 actions = {
                     BitwardenTextButton(
                         label = stringResource(id = BitwardenString.cancel),
-                        onClick = remember(viewModel) {
-                            { viewModel.trySendAction(SetPasswordAction.CancelClick) }
-                        },
+                        onClick = { viewModel.trySendAction(SetPasswordAction.CancelClick) },
                         modifier = Modifier.testTag("CancelButton"),
                     )
                     BitwardenTextButton(
                         label = stringResource(id = BitwardenString.submit),
-                        onClick = remember(viewModel) {
-                            { viewModel.trySendAction(SetPasswordAction.SubmitClick) }
-                        },
+                        onClick = { viewModel.trySendAction(SetPasswordAction.SubmitClick) },
                         modifier = Modifier.testTag("SubmitButton"),
                     )
                 },
@@ -85,14 +78,14 @@ fun SetPasswordScreen(
     ) {
         SetPasswordScreenContent(
             state = state,
-            onPasswordInputChanged = remember(viewModel) {
-                { viewModel.trySendAction(SetPasswordAction.PasswordInputChanged(it)) }
+            onPasswordInputChanged = {
+                viewModel.trySendAction(SetPasswordAction.PasswordInputChanged(it))
             },
-            onRetypePasswordInputChanged = remember(viewModel) {
-                { viewModel.trySendAction(SetPasswordAction.RetypePasswordInputChanged(it)) }
+            onRetypePasswordInputChanged = {
+                viewModel.trySendAction(SetPasswordAction.RetypePasswordInputChanged(it))
             },
-            onPasswordHintInputChanged = remember(viewModel) {
-                { viewModel.trySendAction(SetPasswordAction.PasswordHintInputChanged(it)) }
+            onPasswordHintInputChanged = {
+                viewModel.trySendAction(SetPasswordAction.PasswordHintInputChanged(it))
             },
             modifier = Modifier
                 .fillMaxSize(),

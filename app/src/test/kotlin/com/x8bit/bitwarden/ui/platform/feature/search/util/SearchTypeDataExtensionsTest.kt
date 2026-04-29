@@ -24,6 +24,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -375,7 +376,6 @@ class SearchTypeDataExtensionsTest {
             isAutofill = false,
             hasMasterPassword = true,
             isPremiumUser = true,
-            isArchiveEnabled = true,
         )
 
         assertEquals(SearchState.ViewState.Empty(message = null), result)
@@ -401,12 +401,11 @@ class SearchTypeDataExtensionsTest {
             isAutofill = false,
             hasMasterPassword = true,
             isPremiumUser = true,
-            isArchiveEnabled = true,
         )
 
         assertEquals(
             SearchState.ViewState.Content(
-                displayItems = listOf(
+                displayItems = persistentListOf(
                     createMockDisplayItemForCipher(number = 0),
                     createMockDisplayItemForCipher(number = 1),
                     createMockDisplayItemForCipher(number = 2),
@@ -444,18 +443,17 @@ class SearchTypeDataExtensionsTest {
             isAutofill = true,
             hasMasterPassword = true,
             isPremiumUser = true,
-            isArchiveEnabled = true,
         )
 
         assertEquals(
             SearchState.ViewState.Content(
-                displayItems = listOf(
+                displayItems = persistentListOf(
                     createMockDisplayItemForCipher(
                         number = 0,
                         cipherType = CipherType.CARD,
                     )
                         .copy(
-                            autofillSelectionOptions = listOf(
+                            autofillSelectionOptions = persistentListOf(
                                 AutofillSelectionOption.AUTOFILL,
                                 AutofillSelectionOption.VIEW,
                             ),
@@ -463,7 +461,7 @@ class SearchTypeDataExtensionsTest {
                         ),
                     createMockDisplayItemForCipher(number = 1)
                         .copy(
-                            autofillSelectionOptions = listOf(
+                            autofillSelectionOptions = persistentListOf(
                                 AutofillSelectionOption.AUTOFILL,
                                 AutofillSelectionOption.AUTOFILL_AND_SAVE,
                                 AutofillSelectionOption.VIEW,
@@ -472,7 +470,7 @@ class SearchTypeDataExtensionsTest {
                         ),
                     createMockDisplayItemForCipher(number = 2)
                         .copy(
-                            autofillSelectionOptions = listOf(
+                            autofillSelectionOptions = persistentListOf(
                                 AutofillSelectionOption.AUTOFILL,
                                 AutofillSelectionOption.AUTOFILL_AND_SAVE,
                                 AutofillSelectionOption.VIEW,
@@ -495,7 +493,6 @@ class SearchTypeDataExtensionsTest {
             isAutofill = false,
             hasMasterPassword = true,
             isPremiumUser = true,
-            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -530,12 +527,11 @@ class SearchTypeDataExtensionsTest {
             hasMasterPassword = true,
             isAutofill = false,
             isPremiumUser = true,
-            isArchiveEnabled = true,
         )
 
         assertEquals(
             SearchState.ViewState.Content(
-                displayItems = listOf(
+                displayItems = persistentListOf(
                     createMockDisplayItemForCipher(
                         number = 1,
                         cipherType = CipherType.LOGIN,
@@ -634,7 +630,7 @@ class SearchTypeDataExtensionsTest {
 
             assertEquals(
                 SearchState.ViewState.Content(
-                    displayItems = listOf(
+                    displayItems = persistentListOf(
                         createMockDisplayItemForSend(number = 0),
                         createMockDisplayItemForSend(number = 1),
                         createMockDisplayItemForSend(number = 2),

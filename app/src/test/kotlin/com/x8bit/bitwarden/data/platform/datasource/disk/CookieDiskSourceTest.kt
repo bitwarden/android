@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.datasource.disk
 import com.bitwarden.core.di.CoreModule
 import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.CookieConfigurationData
+import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
@@ -10,7 +11,7 @@ import org.junit.jupiter.api.Test
 class CookieDiskSourceTest {
     private val fakeEncryptedSharedPreferences = FakeSharedPreferences()
     private val fakeSharedPreferences = FakeSharedPreferences()
-    private val json = CoreModule.providesJson()
+    private val json = CoreModule.providesJson(buildInfoManager = mockk(relaxed = true))
 
     private val cookieDiskSource: CookieDiskSource = CookieDiskSourceImpl(
         sharedPreferences = fakeSharedPreferences,
@@ -136,6 +137,38 @@ class CookieDiskSourceTest {
 
         assertNull(cookieDiskSource.getCookieConfig(hostname1))
         assertEquals(config2, cookieDiskSource.getCookieConfig(hostname2))
+    }
+
+    @Test
+    fun `clearCookies should remove all stored cookie configs`() {
+        val hostname1 = "vault.bitwarden.com"
+        val hostname2 = "other.bitwarden.com"
+        val config1 = CookieConfigurationData(
+            hostname = hostname1,
+            cookies = listOf(
+                CookieConfigurationData.Cookie(name = "A", value = "1"),
+            ),
+        )
+        val config2 = CookieConfigurationData(
+            hostname = hostname2,
+            cookies = listOf(
+                CookieConfigurationData.Cookie(name = "B", value = "2"),
+            ),
+        )
+
+        cookieDiskSource.storeCookieConfig(hostname1, config1)
+        cookieDiskSource.storeCookieConfig(hostname2, config2)
+
+        cookieDiskSource.clearCookies()
+
+        assertNull(cookieDiskSource.getCookieConfig(hostname1))
+        assertNull(cookieDiskSource.getCookieConfig(hostname2))
+    }
+
+    @Test
+    fun `clearCookies should be safe to call when no cookies are stored`() {
+        cookieDiskSource.clearCookies()
+        assertNull(cookieDiskSource.getCookieConfig("vault.bitwarden.com"))
     }
 
     @Test

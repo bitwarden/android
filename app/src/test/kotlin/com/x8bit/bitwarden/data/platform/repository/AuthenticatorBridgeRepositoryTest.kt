@@ -99,6 +99,7 @@ class AuthenticatorBridgeRepositoryTest {
                     method = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = USER_1_UNLOCK_KEY,
                     ),
+                    upgradeToken = null,
                 ),
             )
         } returns InitializeCryptoResult.Success.asSuccess()
@@ -118,6 +119,7 @@ class AuthenticatorBridgeRepositoryTest {
                     method = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = USER_2_UNLOCK_KEY,
                     ),
+                    upgradeToken = null,
                 ),
             )
         } returns InitializeCryptoResult.Success.asSuccess()
@@ -219,6 +221,7 @@ class AuthenticatorBridgeRepositoryTest {
                         method = InitUserCryptoMethod.DecryptedKey(
                             decryptedUserKey = USER_2_UNLOCK_KEY,
                         ),
+                        upgradeToken = null,
                     ),
                 )
                 scopedVaultSdkSource.initializeOrganizationCrypto(
@@ -261,6 +264,7 @@ class AuthenticatorBridgeRepositoryTest {
                         method = InitUserCryptoMethod.DecryptedKey(
                             decryptedUserKey = USER_1_UNLOCK_KEY,
                         ),
+                        upgradeToken = null,
                     ),
                 )
                 scopedVaultSdkSource.initializeOrganizationCrypto(
@@ -287,6 +291,7 @@ class AuthenticatorBridgeRepositoryTest {
                         method = InitUserCryptoMethod.DecryptedKey(
                             decryptedUserKey = USER_2_UNLOCK_KEY,
                         ),
+                        upgradeToken = null,
                     ),
                 )
                 scopedVaultSdkSource.initializeOrganizationCrypto(
@@ -325,6 +330,7 @@ class AuthenticatorBridgeRepositoryTest {
                         method = InitUserCryptoMethod.DecryptedKey(
                             decryptedUserKey = USER_1_UNLOCK_KEY,
                         ),
+                        upgradeToken = null,
                     ),
                 )
             } returns InitializeCryptoResult.AuthenticationError(error = Throwable()).asSuccess()
@@ -350,6 +356,7 @@ class AuthenticatorBridgeRepositoryTest {
                         method = InitUserCryptoMethod.DecryptedKey(
                             decryptedUserKey = USER_1_UNLOCK_KEY,
                         ),
+                        upgradeToken = null,
                     ),
                 )
                 scopedVaultSdkSource.initializeCrypto(
@@ -367,6 +374,7 @@ class AuthenticatorBridgeRepositoryTest {
                         method = InitUserCryptoMethod.DecryptedKey(
                             decryptedUserKey = USER_2_UNLOCK_KEY,
                         ),
+                        upgradeToken = null,
                     ),
                 )
                 scopedVaultSdkSource.initializeOrganizationCrypto(
@@ -532,25 +540,47 @@ private val USER_1_ENCRYPTED_SDK_TOTP_CIPHER = mockk<Cipher>()
 private val USER_2_ENCRYPTED_SDK_TOTP_CIPHER = mockk<Cipher>()
 
 private val USER_1_DECRYPTED_TOTP_CIPHER = mockk<CipherView> {
+    every { id } returns "id1"
     every { login?.totp } returns "totp"
     every { login?.username } returns "username"
     every { name } returns "cipher1"
+    every { favorite } returns true
 }
 private val USER_2_DECRYPTED_TOTP_CIPHER = mockk<CipherView> {
+    every { id } returns "id2"
     every { login?.totp } returns "totp"
     every { login?.username } returns "username"
     every { name } returns "cipher1"
+    every { favorite } returns false
 }
 
-private val USER_1_EXPECTED_TOTP_LIST = listOf("totp")
-private val USER_2_EXPECTED_TOTP_LIST = listOf("totp")
+private val USER_1_EXPECTED_CIPHER_LIST = listOf(
+    SharedAccountData.CipherData(
+        uri = "totp",
+        legacyUri = "totp",
+        id = "id1",
+        name = "cipher1",
+        username = "username",
+        isFavorite = true,
+    ),
+)
+private val USER_2_EXPECTED_CIPHER_LIST = listOf(
+    SharedAccountData.CipherData(
+        uri = "totp",
+        legacyUri = "totp",
+        id = "id2",
+        name = "cipher1",
+        username = "username",
+        isFavorite = false,
+    ),
+)
 
 private val USER_1_SHARED_ACCOUNT = SharedAccountData.Account(
     userId = ACCOUNT_JSON_1.profile.userId,
     name = ACCOUNT_JSON_1.profile.name,
     email = ACCOUNT_JSON_1.profile.email,
     environmentLabel = Environment.Us.label,
-    totpUris = USER_1_EXPECTED_TOTP_LIST,
+    cipherData = USER_1_EXPECTED_CIPHER_LIST,
 )
 
 private val USER_2_SHARED_ACCOUNT = SharedAccountData.Account(
@@ -558,7 +588,7 @@ private val USER_2_SHARED_ACCOUNT = SharedAccountData.Account(
     name = ACCOUNT_JSON_2.profile.name,
     email = ACCOUNT_JSON_2.profile.email,
     environmentLabel = Environment.Us.label,
-    totpUris = USER_2_EXPECTED_TOTP_LIST,
+    cipherData = USER_2_EXPECTED_CIPHER_LIST,
 )
 
 private val USER_1_CIPHERS = listOf(

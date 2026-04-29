@@ -9,6 +9,7 @@ import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRe
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.authenticator.repository.util.isSyncWithBitwardenEnabled
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.bitwarden.authenticator.data.platform.manager.lock.model.AppTimeout
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
@@ -60,6 +61,8 @@ class SettingsViewModelTest : BaseViewModelTest() {
         every { isUnlockWithBiometricsEnabled } returns true
         every { isUnlockWithBiometricsEnabledFlow } returns mutableIsUnlockWithBiometricsEnabledFlow
     }
+    private val mutableAppTimeoutStateFlow = MutableStateFlow<AppTimeout>(AppTimeout.OnAppRestart)
+    private val mutableIsShowNextCodeEnabledFlow = MutableStateFlow(false)
     private val settingsRepository: SettingsRepository = mockk {
         every { appLanguage } returns APP_LANGUAGE
         every { appTheme } returns APP_THEME
@@ -72,6 +75,12 @@ class SettingsViewModelTest : BaseViewModelTest() {
         every { isDynamicColorsEnabled } answers { mutableIsDynamicColorsEnabledFlow.value }
         every { isDynamicColorsEnabled = any() } just runs
         every { isDynamicColorsEnabledFlow } returns mutableIsDynamicColorsEnabledFlow
+        every { isShowNextCodeEnabled } returns false
+        every { isShowNextCodeEnabled = any() } just runs
+        every { isShowNextCodeEnabledFlow } returns mutableIsShowNextCodeEnabledFlow
+        every { appTimeoutState = any() } just runs
+        every { appTimeoutStateFlow } returns mutableAppTimeoutStateFlow
+        every { appTimeoutState } answers { mutableAppTimeoutStateFlow.value }
     }
     private val clipboardManager: BitwardenClipboardManager = mockk()
     private val mutableSnackbarFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
@@ -304,6 +313,164 @@ class SettingsViewModelTest : BaseViewModelTest() {
             )
         }
 
+    @Test
+    fun `on AppTimeoutStateUpdated should update value in state`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+
+            viewModel.trySendAction(
+                SettingsAction.Internal.AppTimeoutStateUpdated(appTimeout = AppTimeout.Immediately),
+            )
+            assertEquals(
+                DEFAULT_STATE.copy(appTimeout = AppTimeout.Immediately),
+                awaitItem(),
+            )
+
+            viewModel.trySendAction(
+                SettingsAction.Internal.AppTimeoutStateUpdated(appTimeout = AppTimeout.OneMinute),
+            )
+            assertEquals(
+                DEFAULT_STATE.copy(appTimeout = AppTimeout.OneMinute),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `on ShowNextCodeToggle should update value in state and SettingsRepository`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                SettingsAction.DataClick.ShowNextCodeToggle(enabled = true),
+            )
+
+            verify(exactly = 1) {
+                settingsRepository.isShowNextCodeEnabled = true
+            }
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE.copy(isShowNextCodeEnabled = true),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `on ShowNextCodeUpdated should update value in state`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                SettingsAction.Internal.ShowNextCodeUpdated(isEnabled = true),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(isShowNextCodeEnabled = true),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `isShowNextCodeEnabledFlow emission should update state`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+
+            mutableIsShowNextCodeEnabledFlow.value = true
+            assertEquals(
+                DEFAULT_STATE.copy(isShowNextCodeEnabled = true),
+                awaitItem(),
+            )
+
+            mutableIsShowNextCodeEnabledFlow.value = false
+            assertEquals(
+                DEFAULT_STATE.copy(isShowNextCodeEnabled = false),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `on AppTimeoutChange should update value in state`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            SettingsAction.SecurityClick.AppTimeoutChange(appTimeout = AppTimeout.Type.IMMEDIATELY),
+        )
+        verify {
+            settingsRepository.appTimeoutState = AppTimeout.Immediately
+        }
+
+        viewModel.trySendAction(
+            SettingsAction.SecurityClick.AppTimeoutChange(appTimeout = AppTimeout.Type.ONE_MINUTE),
+        )
+        verify {
+            settingsRepository.appTimeoutState = AppTimeout.OneMinute
+        }
+
+        viewModel.trySendAction(
+            SettingsAction.SecurityClick.AppTimeoutChange(
+                appTimeout = AppTimeout.Type.FIVE_MINUTES,
+            ),
+        )
+        verify {
+            settingsRepository.appTimeoutState = AppTimeout.FiveMinutes
+        }
+
+        viewModel.trySendAction(
+            SettingsAction.SecurityClick.AppTimeoutChange(
+                appTimeout = AppTimeout.Type.FIFTEEN_MINUTES,
+            ),
+        )
+        verify {
+            settingsRepository.appTimeoutState = AppTimeout.FifteenMinutes
+        }
+
+        viewModel.trySendAction(
+            SettingsAction.SecurityClick.AppTimeoutChange(
+                appTimeout = AppTimeout.Type.THIRTY_MINUTES,
+            ),
+        )
+        verify {
+            settingsRepository.appTimeoutState = AppTimeout.ThirtyMinutes
+        }
+
+        viewModel.trySendAction(
+            SettingsAction.SecurityClick.AppTimeoutChange(appTimeout = AppTimeout.Type.ONE_HOUR),
+        )
+        verify {
+            settingsRepository.appTimeoutState = AppTimeout.OneHour
+        }
+
+        viewModel.trySendAction(
+            SettingsAction.SecurityClick.AppTimeoutChange(appTimeout = AppTimeout.Type.FOUR_HOURS),
+        )
+        verify {
+            settingsRepository.appTimeoutState = AppTimeout.FourHours
+        }
+
+        viewModel.trySendAction(
+            SettingsAction.SecurityClick.AppTimeoutChange(
+                appTimeout = AppTimeout.Type.ON_APP_RESTART,
+            ),
+        )
+        verify {
+            settingsRepository.appTimeoutState = AppTimeout.OnAppRestart
+        }
+
+        viewModel.trySendAction(
+            SettingsAction.SecurityClick.AppTimeoutChange(appTimeout = AppTimeout.Type.NEVER),
+        )
+        verify {
+            settingsRepository.appTimeoutState = AppTimeout.Never
+        }
+    }
+
     private fun createViewModel(
         savedState: SettingsState? = DEFAULT_STATE,
     ): SettingsViewModel = SettingsViewModel(
@@ -344,5 +511,7 @@ private val DEFAULT_STATE = SettingsState(
         .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
     copyrightInfo = "© Bitwarden Inc. 2015-2024".asText(),
     allowScreenCapture = false,
+    isShowNextCodeEnabled = false,
     hasBiometricsSupport = true,
+    appTimeout = AppTimeout.OnAppRestart,
 )

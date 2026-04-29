@@ -14,7 +14,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -83,15 +82,13 @@ fun EnterpriseSignOnScreen(
 
     EnterpriseSignOnDialogs(
         dialogState = state.dialogState,
-        onConfirmKeyConnectorDomain = remember(viewModel) {
-            { viewModel.trySendAction(EnterpriseSignOnAction.ConfirmKeyConnectorDomainClick) }
+        onConfirmKeyConnectorDomain = {
+            viewModel.trySendAction(EnterpriseSignOnAction.ConfirmKeyConnectorDomainClick)
         },
-        onDismissKeyConnectorDomain = remember(viewModel) {
-            { viewModel.trySendAction(EnterpriseSignOnAction.CancelKeyConnectorDomainClick) }
+        onDismissKeyConnectorDomain = {
+            viewModel.trySendAction(EnterpriseSignOnAction.CancelKeyConnectorDomainClick)
         },
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(EnterpriseSignOnAction.DialogDismiss) }
-        },
+        onDismissRequest = { viewModel.trySendAction(EnterpriseSignOnAction.DialogDismiss) },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -105,15 +102,13 @@ fun EnterpriseSignOnScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(EnterpriseSignOnAction.CloseButtonClick) }
+                onNavigationIconClick = {
+                    viewModel.trySendAction(EnterpriseSignOnAction.CloseButtonClick)
                 },
                 actions = {
                     BitwardenTextButton(
                         label = stringResource(id = BitwardenString.log_in_verb),
-                        onClick = remember(viewModel) {
-                            { viewModel.trySendAction(EnterpriseSignOnAction.LogInClick) }
-                        },
+                        onClick = { viewModel.trySendAction(EnterpriseSignOnAction.LogInClick) },
                         modifier = Modifier.testTag("LoginButton"),
                     )
                 },
@@ -122,8 +117,8 @@ fun EnterpriseSignOnScreen(
     ) {
         EnterpriseSignOnScreenContent(
             state = state,
-            onOrgIdentifierInputChange = remember(viewModel) {
-                { viewModel.trySendAction(EnterpriseSignOnAction.OrgIdentifierInputChange(it)) }
+            onOrgIdentifierInputChange = {
+                viewModel.trySendAction(EnterpriseSignOnAction.OrgIdentifierInputChange(it))
             },
             modifier = Modifier.fillMaxSize(),
         )

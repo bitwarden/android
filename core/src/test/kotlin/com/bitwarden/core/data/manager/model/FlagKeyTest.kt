@@ -17,10 +17,6 @@ class FlagKeyTest {
             "cxp-export-mobile",
         )
         assertEquals(
-            FlagKey.CipherKeyEncryption.keyName,
-            "cipher-key-encryption",
-        )
-        assertEquals(
             FlagKey.BitwardenAuthenticationEnabled.keyName,
             "bitwarden-authentication-enabled",
         )
@@ -33,12 +29,32 @@ class FlagKeyTest {
             "pm-20558-migrate-myvault-to-myitems",
         )
         assertEquals(
-            FlagKey.ArchiveItems.keyName,
-            "pm-19148-innovation-archive",
-        )
-        assertEquals(
             FlagKey.SendEmailVerification.keyName,
             "pm-19051-send-email-verification",
+        )
+        assertEquals(
+            FlagKey.MobilePremiumUpgrade.keyName,
+            "PM-31697-premium-upgrade-path",
+        )
+        assertEquals(
+            FlagKey.AttachmentUpdates.keyName,
+            "pm-34224-mobile-attachment-updates",
+        )
+        assertEquals(
+            FlagKey.V2EncryptionJitPassword.keyName,
+            "enable-account-encryption-v2-jit-password-registration",
+        )
+        assertEquals(
+            FlagKey.V2EncryptionKeyConnector.keyName,
+            "enable-account-encryption-v2-key-connector-registration",
+        )
+        assertEquals(
+            FlagKey.V2EncryptionPassword.keyName,
+            "pm-27278-v2-password-registration",
+        )
+        assertEquals(
+            FlagKey.V2EncryptionTde.keyName,
+            "pm-27279-v2-registration-tde-jit",
         )
     }
 
@@ -48,12 +64,16 @@ class FlagKeyTest {
             listOf(
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
-                FlagKey.CipherKeyEncryption,
                 FlagKey.BitwardenAuthenticationEnabled,
                 FlagKey.ForceUpdateKdfSettings,
                 FlagKey.MigrateMyVaultToMyItems,
-                FlagKey.ArchiveItems,
                 FlagKey.SendEmailVerification,
+                FlagKey.MobilePremiumUpgrade,
+                FlagKey.AttachmentUpdates,
+                FlagKey.V2EncryptionJitPassword,
+                FlagKey.V2EncryptionKeyConnector,
+                FlagKey.V2EncryptionPassword,
+                FlagKey.V2EncryptionTde,
             ).all {
                 !it.defaultValue
             },

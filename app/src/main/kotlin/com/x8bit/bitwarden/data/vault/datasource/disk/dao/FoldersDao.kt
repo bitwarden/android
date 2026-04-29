@@ -31,9 +31,33 @@ interface FoldersDao {
      * Retrieves all folders from the database for a given [userId].
      */
     @Query("SELECT * FROM folders WHERE user_id = :userId")
-    fun getAllFolders(
+    fun getAllFoldersFlow(
         userId: String,
     ): Flow<List<FolderEntity>>
+
+    /**
+     * Retrieves all folders from the database for a given [userId].
+     */
+    @Query("SELECT * FROM folders WHERE user_id = :userId")
+    fun getAllFolders(
+        userId: String,
+    ): List<FolderEntity>
+
+    /**
+     * Retrieves a folder from the database for a given [userId] and [folderId].
+     */
+    @Query("SELECT * FROM folders WHERE user_id = :userId AND id = :folderId LIMIT 1")
+    suspend fun getFolder(
+        userId: String,
+        folderId: String,
+    ): FolderEntity?
+
+    /**
+     * Deletes the stored folders associated with the given [userId] whose IDs are in [folderIds].
+     * This will return the number of rows deleted by this query.
+     */
+    @Query("DELETE FROM folders WHERE user_id = :userId AND id IN (:folderIds)")
+    suspend fun deleteSelectedFolders(userId: String, folderIds: List<String>): Int
 
     /**
      * Deletes all the stored folders associated with the given [userId]. This will return the

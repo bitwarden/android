@@ -14,6 +14,7 @@ import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.data.autofill.util.card
 import com.x8bit.bitwarden.data.autofill.util.login
+import com.x8bit.bitwarden.data.platform.util.isActive
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.util.toFailureCipherListView
 import com.x8bit.bitwarden.ui.vault.feature.util.getFilteredCollections
@@ -23,6 +24,7 @@ import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
+import kotlinx.collections.immutable.persistentListOf
 
 private const val ANDROID_URI = "androidapp://"
 private const val IOS_URI = "iosapp://"
@@ -44,7 +46,6 @@ fun VaultData.toViewState(
     baseIconUrl: String,
     vaultFilterType: VaultFilterType,
     restrictItemTypesPolicyOrgIds: List<String>,
-    isArchiveEnabled: Boolean,
 ): VaultState.ViewState {
     val allCipherViews =
         decryptCipherListResult
@@ -63,9 +64,7 @@ fun VaultData.toViewState(
                 excludeDeleted = false,
             )
 
-    val activeCipherViews = allCipherViews
-        .filter { it.deletedDate == null && it.archivedDate == null }
-
+    val activeCipherViews = allCipherViews.filter { it.isActive }
     val activeDecryptedCipherViews = decryptCipherListResult
         .successes
         .applyFilters(
@@ -111,7 +110,6 @@ fun VaultData.toViewState(
                     baseIconUrl = baseIconUrl,
                     isPremiumUser = isPremium,
                     hasDecryptionError = false,
-                    isArchiveEnabled = isArchiveEnabled,
                 )
             }
             .plus(
@@ -124,7 +122,6 @@ fun VaultData.toViewState(
                             baseIconUrl = baseIconUrl,
                             isPremiumUser = isPremium,
                             hasDecryptionError = true,
-                            isArchiveEnabled = isArchiveEnabled,
                         )
                     },
             )
@@ -159,7 +156,6 @@ fun VaultData.toViewState(
                         baseIconUrl = baseIconUrl,
                         isPremiumUser = isPremium,
                         hasDecryptionError = false,
-                        isArchiveEnabled = isArchiveEnabled,
                     )
                 }
                 .plus(
@@ -172,7 +168,6 @@ fun VaultData.toViewState(
                                 baseIconUrl = baseIconUrl,
                                 isPremiumUser = isPremium,
                                 hasDecryptionError = true,
-                                isArchiveEnabled = isArchiveEnabled,
                             )
                         },
                 ),
@@ -219,7 +214,6 @@ fun VaultData.toViewState(
                 },
             trashItemsCount = allCipherViews.count { it.deletedDate != null },
             archivedItemsCount = archiveCount.takeIf { isPremium || archiveCount > 0 },
-            archiveEnabled = isArchiveEnabled,
             archiveEndIcon = BitwardenDrawable.ic_locked.takeIf { !isPremium && archiveCount == 0 },
             archiveSubText = BitwardenString
                 .premium_subscription_required
@@ -279,14 +273,13 @@ fun List<LoginUriView>?.toLoginIconData(
 /**
  * Transforms a [CipherListView] into a [VaultState.ViewState.VaultItem].
  */
-@Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod", "LongParameterList")
+@Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod")
 private fun CipherListView.toVaultItemOrNull(
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     baseIconUrl: String,
     isPremiumUser: Boolean,
     hasDecryptionError: Boolean,
-    isArchiveEnabled: Boolean,
 ): VaultState.ViewState.VaultItem? {
     val id = this.id ?: return null
     return when (type) {
@@ -304,12 +297,11 @@ private fun CipherListView.toVaultItemOrNull(
                 usePasskeyDefaultIcon = false,
             ),
             overflowOptions = if (hasDecryptionError) {
-                emptyList()
+                persistentListOf()
             } else {
                 toOverflowActions(
                     hasMasterPassword = hasMasterPassword,
                     isPremiumUser = isPremiumUser,
-                    isArchiveEnabled = isArchiveEnabled,
                 )
             },
             extraIconList = toLabelIcons(),
@@ -324,7 +316,6 @@ private fun CipherListView.toVaultItemOrNull(
             overflowOptions = toOverflowActions(
                 hasMasterPassword = hasMasterPassword,
                 isPremiumUser = isPremiumUser,
-                isArchiveEnabled = isArchiveEnabled,
             ),
             extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
@@ -340,7 +331,6 @@ private fun CipherListView.toVaultItemOrNull(
             overflowOptions = toOverflowActions(
                 hasMasterPassword = hasMasterPassword,
                 isPremiumUser = isPremiumUser,
-                isArchiveEnabled = isArchiveEnabled,
             ),
             extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
@@ -355,7 +345,6 @@ private fun CipherListView.toVaultItemOrNull(
             overflowOptions = toOverflowActions(
                 hasMasterPassword = hasMasterPassword,
                 isPremiumUser = isPremiumUser,
-                isArchiveEnabled = isArchiveEnabled,
             ),
             extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
@@ -370,12 +359,13 @@ private fun CipherListView.toVaultItemOrNull(
             overflowOptions = toOverflowActions(
                 hasMasterPassword = hasMasterPassword,
                 isPremiumUser = isPremiumUser,
-                isArchiveEnabled = isArchiveEnabled,
             ),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
                 reprompt == CipherRepromptType.PASSWORD,
             hasDecryptionError = hasDecryptionError,
         )
+
+        CipherListViewType.BankAccount -> TODO("PM-32810: Add Bank Account Type")
     }
 }
 

@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 /**
- * Responsible for managing whether or not the app review prompt should be shown.
+ * Responsible for managing whether the app review prompt should be shown.
  */
 interface ReviewPromptManager {
     /**
@@ -20,8 +20,7 @@ interface ReviewPromptManager {
     fun registerCreateSendAction()
 
     /**
-     * Returns a boolean value indicating whether or not the user should be prompted to
-     * review the app.
+     * Returns a boolean value indicating whether the user should be prompted to review the app.
      */
     fun shouldPromptForAppReview(): Boolean
 }

@@ -4,15 +4,6 @@
 
 ### First Pass: Visual Changes
 
-<thinking>
-Analyze the UI changes:
-1. What visual/UX problem is being solved?
-2. Are there designs or screenshots to reference?
-3. Is this affecting existing screens or new ones?
-4. What's the scope of visual changes?
-5. Are design tokens (colors, spacing, typography) being used correctly?
-</thinking>
-
 **1. Understand the changes:**
 - What visual/UX problem is being solved?
 - Are there designs or screenshots to reference?
@@ -24,15 +15,6 @@ Analyze the UI changes:
 - Could existing components be reused?
 
 ### Second Pass: Implementation Review
-
-<thinking>
-Check implementation quality:
-1. Are Compose best practices followed?
-2. Is state hoisting applied correctly?
-3. Are existing components reused where possible?
-4. Is accessibility properly handled?
-5. Does this follow design system patterns?
-</thinking>
 
 **3. Compose best practices:**
 - Composables properly structured?
@@ -187,16 +169,7 @@ Use `reference/priority-framework.md` to classify findings as Critical/Important
 
 ## Output Format
 
-Follow the format guidance from `SKILL.md` Step 5 (concise summary with critical issues only, detailed inline comments with `<details>` tags).
-
-```markdown
-**Overall Assessment:** APPROVE / REQUEST CHANGES
-
-**Critical Issues** (if any):
-- [One-line summary of each critical blocking issue with file:line reference]
-
-See inline comments for all issue details.
-```
+See `examples/review-outputs.md` for the required output format and inline comment structure.
 
 ## Example Review
 

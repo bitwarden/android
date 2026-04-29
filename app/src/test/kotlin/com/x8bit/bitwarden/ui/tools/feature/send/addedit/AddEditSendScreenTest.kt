@@ -58,6 +58,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     private var navgatedGeneratorMode: GeneratorMode.Modal? = null
     private var onNavigateBackCalled = false
     private var onNavigateUpToSearchOrRootCalled = false
+    private var onNavigateToPlanCalled = false
 
     private val exitManager: ExitManager = mockk(relaxed = true) {
         every { exitApplication() } just runs
@@ -87,6 +88,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                 onNavigateToGeneratorModal = { mode ->
                     navgatedGeneratorMode = mode
                 },
+                onNavigateToPlan = { onNavigateToPlanCalled = true },
             )
         }
     }
@@ -112,6 +114,12 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         )
 
         assertEquals(mode, navgatedGeneratorMode)
+    }
+
+    @Test
+    fun `on NavigateToPlanModal event should call onNavigateToPlan`() {
+        mutableEventFlow.tryEmit(AddEditSendEvent.NavigateToPlanModal)
+        assertTrue(onNavigateToPlanCalled)
     }
 
     @Test
@@ -303,7 +311,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -342,7 +350,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -357,7 +365,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -376,7 +384,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -395,7 +403,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -978,7 +986,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Upgrade to premium")
+            .onNodeWithText("Upgrade to Premium")
             .performClick()
 
         verify { viewModel.trySendAction(AddEditSendAction.UpgradeToPremiumClick) }
@@ -1317,7 +1325,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `auth type chooser should show EMAIL option for premium users`() {
+    fun `auth type chooser should show EMAIL option for Premium users`() {
         mutableStateFlow.update {
             it.copy(
                 isPremium = true,

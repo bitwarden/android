@@ -273,7 +273,7 @@ class SendManagerImpl(
         val isUpdate = syncSendUpsertData.isUpdate
         val revisionDate = syncSendUpsertData.revisionDate
         val localSend = vaultDiskSource
-            .getSends(userId = userId)
+            .getSendsFlow(userId = userId)
             .first()
             .find { it.id == sendId }
         val isValidCreate = !isUpdate && localSend == null

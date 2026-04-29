@@ -73,7 +73,7 @@ class AboutScreenTest : BitwardenComposeTest() {
     @Test
     fun `on flight recorder tooltip click should emit FlightRecorderTooltipClick`() {
         composeTestRule
-            .onNodeWithContentDescription("Flight recorder help")
+            .onNodeWithContentDescription("Flight recorder help, External link")
             .performScrollTo()
             .performClick()
         verify {

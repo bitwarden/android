@@ -22,9 +22,13 @@ sealed class ImportCredentialsResult {
     data class SyncFailed(val error: Throwable) : ImportCredentialsResult()
 
     /**
-     * Indicates there was an error importing the vault data.
+     * Indicates there was an error importing the vault data. The optional [errorMessage] may be
+     * displayed directly in the UI when present.
      *
      * @param error The error that occurred during import.
      */
-    data class Error(val error: Throwable) : ImportCredentialsResult()
+    data class Error(
+        val error: Throwable,
+        val errorMessage: String? = null,
+    ) : ImportCredentialsResult()
 }

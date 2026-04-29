@@ -374,7 +374,7 @@ class VerificationCodeViewModel @Inject constructor(
     }
 
     /**
-     * Filter verification codes in the event that the user is not a "premium" account but
+     * Filter verification codes in the event that the user is not a "Premium" account but
      * has TOTP codes associated with a legacy organization.
      */
     private fun filterAuthCodesForDataState(

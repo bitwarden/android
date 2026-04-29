@@ -5,11 +5,12 @@ import com.bitwarden.network.provider.CookieProvider
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
+import timber.log.Timber
 
 private const val HEADER_COOKIE = "Cookie"
 private const val HTTP_REDIRECT = 302
-private const val PATH_CONFIG = "/api/config"
-private const val PATH_SSO_COOKIE_VENDOR = "/api/sso-cookie-vendor"
+private const val PATH_CONFIG = "/config"
+private const val PATH_SSO_COOKIE_VENDOR = "/sso-cookie-vendor"
 
 /**
  * Paths that should not receive cookie handling.
@@ -28,7 +29,7 @@ private val EXCLUDED_PATHS = listOf(
  * Bitwarden API endpoints behind a load balancer.
  *
  * **Behavior:**
- * - Skips excluded paths that should not receive cookies (`/api/config`, `/api/sso-cookie-vendor`)
+ * - Skips excluded paths that should not receive cookies (`/config`, `/sso-cookie-vendor`)
  * - Preempts requests when cookie bootstrap is needed by throwing [CookieRedirectException]
  *   before the request is sent, avoiding a wasted round-trip
  * - Attaches available cookies to the request Cookie header
@@ -47,7 +48,8 @@ internal class CookieInterceptor(
         val path = url.encodedPath
 
         // Skip excluded paths that should not receive cookies.
-        if (EXCLUDED_PATHS.any { path.startsWith(it) }) {
+        if (EXCLUDED_PATHS.any { path.endsWith(it) }) {
+            Timber.d("Cookie interceptor skipping excluded path: $path")
             return chain.proceed(originalRequest)
         }
 
@@ -56,6 +58,7 @@ internal class CookieInterceptor(
         // Preempt: if cookies are required but not yet available, trigger acquisition
         // immediately rather than making a doomed request.
         if (cookieProvider.needsBootstrap(hostname)) {
+            Timber.d("Cookie bootstrap required for $hostname, triggering acquisition")
             cookieProvider.acquireCookies(hostname)
             throw CookieRedirectException(hostname = hostname)
         }
@@ -69,6 +72,7 @@ internal class CookieInterceptor(
 
         // Close the response body to release the connection back to the pool
         // before throwing to cancel the current request.
+        Timber.d("Received 302 redirect for $hostname, triggering cookie re-acquisition")
         response.close()
         cookieProvider.acquireCookies(hostname)
         throw CookieRedirectException(

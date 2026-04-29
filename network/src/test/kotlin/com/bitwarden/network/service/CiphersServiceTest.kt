@@ -4,6 +4,7 @@ import android.net.Uri
 import com.bitwarden.network.api.AzureApi
 import com.bitwarden.network.api.CiphersApi
 import com.bitwarden.network.base.BaseServiceTest
+import com.bitwarden.network.model.ArchiveCipherResponseJson
 import com.bitwarden.network.model.AttachmentJsonResponse
 import com.bitwarden.network.model.BulkShareCiphersJsonRequest
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
@@ -12,6 +13,7 @@ import com.bitwarden.network.model.FileUploadType
 import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.ImportCiphersResponseJson
 import com.bitwarden.network.model.ShareCipherJsonRequest
+import com.bitwarden.network.model.UnarchiveCipherResponseJson
 import com.bitwarden.network.model.UpdateCipherCollectionsJsonRequest
 import com.bitwarden.network.model.UpdateCipherResponseJson
 import com.bitwarden.network.model.createMockAttachment
@@ -65,20 +67,71 @@ class CiphersServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `archiveCipher should execute the archiveCipher API`() = runTest {
-        server.enqueue(MockResponse().setResponseCode(200))
-        val cipherId = "cipherId"
-        val result = ciphersService.archiveCipher(cipherId = cipherId)
-        assertEquals(Unit, result.getOrThrow())
-    }
+    fun `archiveCipher with success response should return a Success with the correct cipher`() =
+        runTest {
+            server.enqueue(
+                MockResponse().setBody(CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON),
+            )
+            val result = ciphersService.archiveCipher(cipherId = "cipherId")
+            assertEquals(
+                ArchiveCipherResponseJson.Success(
+                    cipher = createMockCipher(number = 1),
+                ),
+                result.getOrThrow(),
+            )
+        }
 
     @Test
-    fun `unarchiveCipher should execute the unarchiveCipher API`() = runTest {
-        server.enqueue(MockResponse().setResponseCode(200))
-        val cipherId = "cipherId"
-        val result = ciphersService.unarchiveCipher(cipherId = cipherId)
-        assertEquals(Unit, result.getOrThrow())
-    }
+    fun `archiveCipher with an invalid response should return an Invalid with the correct data`() =
+        runTest {
+            server.enqueue(
+                MockResponse()
+                    .setResponseCode(400)
+                    .setBody(UPDATE_CIPHER_INVALID_JSON),
+            )
+            val result = ciphersService.archiveCipher(cipherId = "cipherId")
+            assertEquals(
+                ArchiveCipherResponseJson.Invalid(
+                    message = "You do not have permission to edit this.",
+                    validationErrors = null,
+                ),
+                result.getOrThrow(),
+            )
+        }
+
+    @Test
+    fun `unarchiveCipher with success response should return a Success with the correct cipher`() =
+        runTest {
+            server.enqueue(
+                MockResponse().setBody(CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON),
+            )
+            val result = ciphersService.unarchiveCipher(cipherId = "cipherId")
+            assertEquals(
+                UnarchiveCipherResponseJson.Success(
+                    cipher = createMockCipher(number = 1),
+                ),
+                result.getOrThrow(),
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unarchiveCipher with an invalid response should return an Invalid with the correct data`() =
+        runTest {
+            server.enqueue(
+                MockResponse()
+                    .setResponseCode(400)
+                    .setBody(UPDATE_CIPHER_INVALID_JSON),
+            )
+            val result = ciphersService.unarchiveCipher(cipherId = "cipherId")
+            assertEquals(
+                UnarchiveCipherResponseJson.Invalid(
+                    message = "You do not have permission to edit this.",
+                    validationErrors = null,
+                ),
+                result.getOrThrow(),
+            )
+        }
 
     @Test
     fun `createCipher should return the correct response`() = runTest {

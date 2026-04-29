@@ -11,6 +11,7 @@
     <string name="copy_password">Kopiraj geslo</string>
     <string name="copy_username">Kopiraj uporabniško ime</string>
     <string name="delete">Izbriši</string>
+    <string name="preview">Preview</string>
     <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Ste prepričani, da želite izbrisati? Tega ni mogoče povrniti.</string>
     <string name="edit">Uredi</string>
@@ -42,7 +43,7 @@
     <string name="master_password">Glavno geslo</string>
     <string name="master_password_required">Master password (required)</string>
     <string name="new_master_password_required">New master password (required)</string>
-    <string name="more">Več</string>
+    <string name="more_options">More options</string>
     <string name="my_vault">Moj trezor</string>
     <string name="name">Naziv</string>
     <string name="item_name_required">Item name (required)</string>
@@ -172,7 +173,7 @@
     <string name="autofill_noun">Autofill</string>
     <string name="autofill_verb">Autofill</string>
     <string name="autofill_or_view">Želite samodejno izpolniti ali prikazati ta element?</string>
-    <string name="search">Iskanje</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">Več o organizacijah</string>
     <string name="authenticator_app_title">Avtentikacijska aplikacija</string>
     <string name="enter_verification_code_app">Vnesite 6 mestno številčno verifikacijsko kodo z vaše avtentifikacijske aplikacije.</string>
@@ -190,7 +191,7 @@
     <string name="attachments">Priloge</string>
     <string name="unable_to_download_file">Datoteke ni moč prenesti.</string>
     <string name="downloading">Downloading…</string>
-    <string name="attachment_large_warning">This attachment is %1$s in size. Are you sure you want to download it onto your device?</string>
+    <string name="attachment_large_warning">This file is <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Would you like to download it?</string>
     <string name="authenticator_key">Ključ avtentikatorja (TOTP)</string>
     <string name="verification_code_totp">Verifikacijska koda (TOTP)</string>
     <string name="authenticator_key_added">Ključ avtentikatorja je bil dodan.</string>
@@ -202,9 +203,12 @@ Scanning will happen automatically.</string>
     <string name="copy_totp_automatically">Samodejno kopiraj TOTP</string>
     <string name="premium_required">Premium članstvo je potrebno za uporabo te funkcije.</string>
     <string name="attachment_deleted">Priloga izbrisana</string>
+    <string name="attachments_unavailable">Attachments unavailable</string>
+    <string name="attachments_are_a_premium_feature">Attachments are a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="choose_file">Izberite datoteko</string>
     <string name="file">Datoteka</string>
     <string name="no_file_chosen">Datoteka ni izbrana</string>
+    <string name="file_name">File name</string>
     <string name="no_attachments">Ni prilog.</string>
     <string name="file_source">Vir datoteke</string>
     <string name="max_file_size">Največja velikost datoteke je 100 MB.</string>
@@ -226,6 +230,8 @@ Scanning will happen automatically.</string>
     <string name="copy_security_code">Kopiraj varnostno kodo</string>
     <string name="number">Številka</string>
     <string name="security_code">Varnostna koda</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">Kartica</string>
     <string name="type_identity">Identiteta</string>
     <string name="type_login">Prijava</string>
@@ -305,7 +311,7 @@ Scanning will happen automatically.</string>
     <string name="organization">Organizacija</string>
     <string name="try_again">Poskusite znova</string>
     <string name="created">Created: %1$s</string>
-    <string name="password_last_updated">Password last updated: %1$s</string>
+    <string name="password_updated">Password updated: %1$s</string>
     <string name="last_edited">Last edited: %1$s</string>
     <string name="invalid_email">Neveljaven e-poštni naslov.</string>
     <string name="cards">Plačilne kartice</string>
@@ -381,6 +387,7 @@ Scanning will happen automatically.</string>
     <string name="capitalize">Zapiši z veliko začetnico</string>
     <string name="include_number">Vključi številko</string>
     <string name="download">Prenesi</string>
+    <string name="download_file">Download file</string>
     <string name="login_expired">Vaša seja je potekla.</string>
     <string name="biometrics_direction">Biometrična avtentikacija</string>
     <string name="device_verification">Device verification</string>
@@ -500,6 +507,7 @@ Scanning will happen automatically.</string>
     <string name="hide_email">Skrij moj e-poštni naslov od prejemnikov.</string>
     <string name="send_options_policy_in_effect">Ena ali več pravilnikov organizacije vpliva na vaše možnosti pošiljanja.</string>
     <string name="send_file_premium_required">Brezplačni računi so omejeni samo na besedilne pošiljke. Za uporabo datotečnih pošiljk je potrebno članstvo Premium.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">Ponovno zahtevaj glavno geslo</string>
     <string name="password_confirmation">Master password confirmation</string>
     <string name="password_confirmation_desc">This action is protected, to continue please re-enter your master password to verify your identity.</string>
@@ -509,10 +517,10 @@ Scanning will happen automatically.</string>
     <string name="remove_master_password">Remove master password</string>
     <string name="leave_organization">Leave organization</string>
     <string name="leave_organization_name">Leave %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave?</string>
     <string name="leave_organization_button">Leave %1$s</string>
-    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
-    <string name="how_to_manage_my_vault">How to manage My vault</string>
+    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features. <annotation link="learnMore">Learn more</annotation></string>
+    <string name="contact_your_admin_to_regain_access">Contact your admin to regain access.</string>
     <string name="fido2_authenticate_web_authn">Authenticate WebAuthn</string>
     <string name="fido2_return_to_app">Return to app</string>
     <string name="reset_password_auto_enroll_invite_warning">This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</string>
@@ -773,7 +781,7 @@ Do you want to switch to this account?</string>
     <string name="write_this_password_down_and_keep_it_somewhere_safe">Write this password down and keep it somewhere safe.</string>
     <string name="learn_about_other_ways_to_prevent_account_lockout">Learn about other ways to prevent account lockout</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
-    <string name="help_with_server_geolocations">Help with server geolocations.</string>
+    <string name="help_with_server_geolocations">Help with server geolocations</string>
     <string name="email_address_required">Email address (required)</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Select the link in the email to verify your email address and continue creating your account.</string>
     <string name="change_email_address">Change email address</string>
@@ -845,6 +853,7 @@ Do you want to switch to this account?</string>
     <string name="fill_out_the_form_and_import_your_saved_password_file">Fill out the form and <annotation emphasis="bold">import your saved password file.</annotation></string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">For your security, be sure to <annotation emphasis="bold">delete your saved password file.</annotation></string>
     <string name="need_help_check_out_import_help">Need help? Check out <annotation link="importHelp">import help</annotation>.</string>
+    <string name="import_help">import help</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Save the exported file</annotation> somewhere on your computer you can find easily.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">This is not a recognized Bitwarden server. You may need to check with your provider or update your server.</string>
     <string name="syncing_logins_loading_message">Syncing logins…</string>
@@ -869,6 +878,12 @@ Do you want to switch to this account?</string>
     <string name="copy_public_key">Copy public key</string>
     <string name="copy_fingerprint">Copy fingerprint</string>
     <string name="enable_notifications">Enable notifications</string>
+    <plurals name="notifications_content_description">
+        <item quantity="one">%d notification</item>
+        <item quantity="two">%d notifications</item>
+        <item quantity="few">%d notifications</item>
+        <item quantity="other">%d notifications</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">Log in quickly and easily across devices</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
     <string name="skip_for_now">Skip for now</string>
@@ -942,6 +957,7 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
@@ -1070,7 +1086,7 @@ Do you want to switch to this account?</string>
     <string name="export_confirmation_title">Confirm export</string>
     <string name="export_success">Data exported successfully</string>
     <string name="included_in_this_export">Included in this export</string>
-    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren\'t included</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren’t included</string>
     <string name="security">Varnost</string>
     <string name="too_many_failed_biometric_attempts">Too many failed biometrics attempts.</string>
     <string name="version">Različica</string>
@@ -1162,7 +1178,6 @@ Do you want to switch to this account?</string>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
     <string name="not_now">Not now</string>
     <string name="import_from_bitwarden">Import from Bitwarden</string>
     <string name="select_account">Select account</string>
@@ -1193,7 +1208,7 @@ Do you want to switch to this account?</string>
     <string name="resending">Resending</string>
     <string name="you_left_the_organization">You left the organization</string>
     <string name="transfer_items_to_org">Transfer items to %1$s</string>
-    <string name="transfer_items_description">%1$s is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items.</string>
+    <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items. <annotation link="learnMore">Learn more</annotation></string>
     <string name="decline_and_leave">Decline and leave</string>
     <string name="why_am_i_seeing_this">Why am I seeing this?</string>
     <string name="migrating_items_to_x">Migrating items to %s</string>
@@ -1212,7 +1227,9 @@ Do you want to switch to this account?</string>
     <string name="item_moved_to_vault">Item moved to vault</string>
     <string name="archive_unavailable">Archive unavailable</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
-    <string name="upgrade_to_premium">Upgrade to premium</string>
+    <string name="upgrade_to_premium">Upgrade to Premium</string>
+    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">This item is archived.</string>
     <string name="introducing_archive">Introducing archive</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>
@@ -1223,4 +1240,40 @@ Do you want to switch to this account?</string>
     <string name="restart_premium">Restart Premium</string>
     <string name="items_transferred">Items transferred</string>
     <string name="updated_master_password">Updated master password</string>
+    <string name="invalid_email_addresses">Invalid email addresses</string>
+    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
+    <string name="no_email_addresses_entered">No email addresses entered</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="sync_with_browser">Sync with browser</string>
+    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
+    <string name="launch_browser">Launch browser</string>
+    <string name="continue_without_syncing">Continue without syncing</string>
+    <string name="external_link">External link</string>
+    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
+    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
+    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
+    <string name="preview_unavailable">Preview unavailable</string>
+    <string name="download_attachment">Download Attachment</string>
+    <string name="upgraded_to_premium">Upgraded to premium</string>
+    <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
+    <string name="per_month">/ month</string>
+    <string name="built_in_authenticator">Built-in authenticator</string>
+    <string name="emergency_access">Emergency access</string>
+    <string name="secure_file_storage">Secure file storage</string>
+    <string name="breach_monitoring">Breach monitoring</string>
+    <string name="upgrade_now">Upgrade now</string>
+    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="opening_checkout">Opening checkout…</string>
+    <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
+    <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
+    <string name="payment_not_received_yet">Payment not received yet</string>
+    <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
+    <string name="go_back">Go back</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
+    <string name="show_next_code">Show next code</string>
+    <string name="see_upcoming_codes_in_the_list">See upcoming codes in the list</string>
+    <string name="next_code_x">Next code, %1$s</string>
 </resources>

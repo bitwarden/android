@@ -22,10 +22,12 @@ data object SettingsTutorialRoute
 /**
  * Add the top level Tutorial screen to the nav graph.
  */
-fun NavGraphBuilder.tutorialDestination(onTutorialFinished: () -> Unit) {
+fun NavGraphBuilder.tutorialDestination() {
     composableWithStayTransitions<TutorialRoute> {
         TutorialScreen(
-            onTutorialFinished = onTutorialFinished,
+            onTutorialFinished = {
+                // State-based navigation will handle this.
+            },
         )
     }
 }

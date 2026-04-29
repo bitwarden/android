@@ -14,9 +14,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -68,8 +68,8 @@ fun GetPasswordOrPasskeyScreen(
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                     navigationIconContentDescription = stringResource(BitwardenString.back),
-                    onNavigationIconClick = remember(viewModel) {
-                        { viewModel.trySendAction(GetPasswordOrPasskeyAction.BackClick) }
+                    onNavigationIconClick = {
+                        viewModel.trySendAction(GetPasswordOrPasskeyAction.BackClick)
                     },
                 ),
             )
@@ -86,14 +86,15 @@ fun GetPasswordOrPasskeyScreen(
             BitwardenTextField(
                 label = stringResource(R.string.relying_party_id),
                 value = state.rpId,
-                onValueChange = remember(viewModel) {
-                    { viewModel.trySendAction(GetPasswordOrPasskeyAction.RpIdChanged(it)) }
+                onValueChange = {
+                    viewModel.trySendAction(GetPasswordOrPasskeyAction.RpIdChanged(it))
                 },
                 placeholder = stringResource(R.string.rp_id_hint),
                 cardStyle = null,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .standardHorizontalMargin(),
+                    .standardHorizontalMargin()
+                    .testTag("GetPasswordOrPasskeyRelyingPartyIdField"),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -101,40 +102,39 @@ fun GetPasswordOrPasskeyScreen(
             BitwardenTextField(
                 label = stringResource(R.string.origin_optional),
                 value = state.origin,
-                onValueChange = remember(viewModel) {
-                    { viewModel.trySendAction(GetPasswordOrPasskeyAction.OriginChanged(it)) }
+                onValueChange = {
+                    viewModel.trySendAction(GetPasswordOrPasskeyAction.OriginChanged(it))
                 },
                 placeholder = stringResource(R.string.origin_hint),
                 cardStyle = null,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .standardHorizontalMargin(),
+                    .standardHorizontalMargin()
+                    .testTag("GetPasswordOrPasskeyOriginField"),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             BitwardenFilledButton(
                 label = stringResource(R.string.execute),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(GetPasswordOrPasskeyAction.ExecuteClick) }
-                },
+                onClick = { viewModel.trySendAction(GetPasswordOrPasskeyAction.ExecuteClick) },
                 isEnabled = !state.isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .standardHorizontalMargin(),
+                    .standardHorizontalMargin()
+                    .testTag("GetPasswordOrPasskeyExecuteButton"),
             )
 
             Spacer(modifier = Modifier.height(12.dp))
 
             BitwardenTextButton(
                 label = stringResource(R.string.clear),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(GetPasswordOrPasskeyAction.ClearResultClick) }
-                },
+                onClick = { viewModel.trySendAction(GetPasswordOrPasskeyAction.ClearResultClick) },
                 isEnabled = !state.isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .standardHorizontalMargin(),
+                    .standardHorizontalMargin()
+                    .testTag("GetPasswordOrPasskeyClearButton"),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -148,7 +148,8 @@ fun GetPasswordOrPasskeyScreen(
                 singleLine = false,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .standardHorizontalMargin(),
+                    .standardHorizontalMargin()
+                    .testTag("GetPasswordOrPasskeyResultField"),
             )
 
             Spacer(modifier = Modifier.height(16.dp))

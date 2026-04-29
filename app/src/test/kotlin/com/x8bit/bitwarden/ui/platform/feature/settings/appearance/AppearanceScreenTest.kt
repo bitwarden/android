@@ -178,7 +178,7 @@ class AppearanceScreenTest : BitwardenComposeTest() {
     @Test
     fun `on show website icons tooltip click should send ShowWebsiteIconsToggled`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "Show website icons help")
+            .onNodeWithContentDescription(label = "Show website icons help, External link")
             .performScrollTo()
             .performClick()
         verify {

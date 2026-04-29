@@ -147,7 +147,7 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `AddSendSelected with file type and non premium user should display dialog`() {
+    fun `AddSendSelected with file type and non Premium user should display dialog`() {
         val state = DEFAULT_STATE.copy(isPremiumUser = false, policyDisablesSend = false)
         val viewModel = createViewModel(state = state)
         viewModel.trySendAction(SendAction.AddSendSelected(sendType = SendItemType.FILE))
@@ -238,6 +238,44 @@ class SendViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Test
+    fun `DeleteSendClick with deleteSend error with message should display error message`() =
+        runTest {
+            val sendId = "sendId1234"
+            val sendItem = mockk<SendState.ViewState.Content.SendItem> {
+                every { id } returns sendId
+            }
+            val errorMessage = "User-friendly error"
+            val error = Throwable("Oops")
+            coEvery {
+                vaultRepo.deleteSend(sendId)
+            } returns DeleteSendResult.Error(errorMessage = errorMessage, error = error)
+
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                viewModel.trySendAction(SendAction.DeleteSendClick(sendItem))
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = SendState.DialogState.Loading(
+                            BitwardenString.deleting.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = SendState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = errorMessage.asText(),
+                            throwable = error,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `DeleteSendClick with deleteSend success should emit ShowSnackbar`() = runTest {
@@ -708,6 +746,7 @@ private val DEFAULT_USER_ACCOUNT_STATE = UserState.Account(
     onboardingStatus = OnboardingStatus.COMPLETE,
     firstTimeState = FirstTimeState(showImportLoginsCard = true),
     isExportable = true,
+    creationDate = null,
 )
 
 private val DEFAULT_USER_STATE = UserState(

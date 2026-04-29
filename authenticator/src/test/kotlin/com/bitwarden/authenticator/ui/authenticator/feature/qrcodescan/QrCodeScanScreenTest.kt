@@ -142,5 +142,6 @@ class QrCodeScanScreenTest : AuthenticatorComposeTest() {
 }
 
 private val DEFAULT_STATE = QrCodeScanState(
+    hasHandledScan = false,
     dialog = null,
 )

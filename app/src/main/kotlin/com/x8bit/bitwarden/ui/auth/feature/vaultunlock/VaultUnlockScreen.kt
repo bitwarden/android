@@ -97,11 +97,11 @@ fun VaultUnlockScreen(
         }
     }
 
-    val onBiometricsUnlockSuccess: (cipher: Cipher) -> Unit = remember(viewModel) {
-        { viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(it)) }
+    val onBiometricsUnlockSuccess: (cipher: Cipher) -> Unit = {
+        viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(it))
     }
-    val onBiometricsLockOut: () -> Unit = remember(viewModel) {
-        { viewModel.trySendAction(VaultUnlockAction.BiometricsLockOut) }
+    val onBiometricsLockOut: () -> Unit = {
+        viewModel.trySendAction(VaultUnlockAction.BiometricsLockOut)
     }
 
     EventsEffect(viewModel = viewModel) { event ->
@@ -145,9 +145,7 @@ fun VaultUnlockScreen(
         is VaultUnlockState.VaultUnlockDialog.Error -> BitwardenBasicDialog(
             title = dialog.title(),
             message = dialog.message(),
-            onDismissRequest = remember(viewModel) {
-                { viewModel.trySendAction(VaultUnlockAction.DismissDialog) }
-            },
+            onDismissRequest = { viewModel.trySendAction(VaultUnlockAction.DismissDialog) },
             throwable = dialog.throwable,
         )
 
@@ -177,13 +175,9 @@ fun VaultUnlockScreen(
     if (showLogoutConfirmationDialog) {
         BitwardenLogoutConfirmationDialog(
             onDismissRequest = { showLogoutConfirmationDialog = false },
-            onConfirmClick = remember(viewModel) {
-                {
-                    showLogoutConfirmationDialog = false
-                    viewModel.trySendAction(
-                        VaultUnlockAction.ConfirmLogoutClick,
-                    )
-                }
+            onConfirmClick = {
+                showLogoutConfirmationDialog = false
+                viewModel.trySendAction(VaultUnlockAction.ConfirmLogoutClick)
             },
         )
     }
@@ -215,7 +209,6 @@ fun VaultUnlockScreen(
                         )
                     }
                     BitwardenOverflowActionItem(
-                        contentDescription = stringResource(BitwardenString.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.log_out),
@@ -230,18 +223,16 @@ fun VaultUnlockScreen(
             BitwardenAccountSwitcher(
                 isVisible = accountMenuVisible,
                 accountSummaries = state.accountSummaries.toImmutableList(),
-                onSwitchAccountClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultUnlockAction.SwitchAccountClick(it)) }
+                onSwitchAccountClick = {
+                    viewModel.trySendAction(VaultUnlockAction.SwitchAccountClick(it))
                 },
-                onLockAccountClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultUnlockAction.LockAccountClick(it)) }
+                onLockAccountClick = {
+                    viewModel.trySendAction(VaultUnlockAction.LockAccountClick(it))
                 },
-                onLogoutAccountClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultUnlockAction.LogoutAccountClick(it)) }
+                onLogoutAccountClick = {
+                    viewModel.trySendAction(VaultUnlockAction.LogoutAccountClick(it))
                 },
-                onAddAccountClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultUnlockAction.AddAccountClick) }
-                },
+                onAddAccountClick = { viewModel.trySendAction(VaultUnlockAction.AddAccountClick) },
                 onDismissRequest = { accountMenuVisible = false },
                 topAppBarScrollBehavior = scrollBehavior,
                 modifier = Modifier.fillMaxSize(),
@@ -270,9 +261,7 @@ fun VaultUnlockScreen(
                 BitwardenPasswordField(
                     label = state.vaultUnlockType.unlockScreenInputLabel(),
                     value = state.input,
-                    onValueChange = remember(viewModel) {
-                        { viewModel.trySendAction(VaultUnlockAction.InputChanged(it)) }
-                    },
+                    onValueChange = { viewModel.trySendAction(VaultUnlockAction.InputChanged(it)) },
                     keyboardType = state.vaultUnlockType.unlockScreenKeyboardType,
                     showPasswordTestTag = state
                         .vaultUnlockType
@@ -280,9 +269,7 @@ fun VaultUnlockScreen(
                     autoFocus = state.showKeyboard && autoFocusDelayCompleted,
                     imeAction = ImeAction.Done,
                     keyboardActions = KeyboardActions(
-                        onDone = remember(viewModel) {
-                            { viewModel.trySendAction(VaultUnlockAction.UnlockClick) }
-                        },
+                        onDone = { viewModel.trySendAction(VaultUnlockAction.UnlockClick) },
                     ),
                     passwordFieldTestTag = state.vaultUnlockType.unlockScreenInputTestTag,
                     cardStyle = CardStyle.Top(),
@@ -322,9 +309,7 @@ fun VaultUnlockScreen(
             if (state.showBiometricLogin && biometricsManager.isBiometricsSupported) {
                 BitwardenOutlinedButton(
                     label = stringResource(id = BitwardenString.use_biometrics_to_unlock),
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick) }
-                    },
+                    onClick = { viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick) },
                     modifier = Modifier
                         .standardHorizontalMargin()
                         .fillMaxWidth(),
@@ -343,9 +328,7 @@ fun VaultUnlockScreen(
             if (!state.hideInput) {
                 BitwardenFilledButton(
                     label = stringResource(id = BitwardenString.unlock),
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(VaultUnlockAction.UnlockClick) }
-                    },
+                    onClick = { viewModel.trySendAction(VaultUnlockAction.UnlockClick) },
                     isEnabled = state.input.isNotEmpty(),
                     modifier = Modifier
                         .testTag("UnlockVaultButton")

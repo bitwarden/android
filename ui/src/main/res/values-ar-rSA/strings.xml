@@ -11,6 +11,7 @@
     <string name="copy_password">نسخ كلمة المرور</string>
     <string name="copy_username">انسخ اسم المستخدم</string>
     <string name="delete">حذف</string>
+    <string name="preview">Preview</string>
     <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">هل تريد حقا أن تحذف؟ هذا لا يمكن التراجع عنها.</string>
     <string name="edit">تعديل</string>
@@ -42,7 +43,7 @@
     <string name="master_password">كلمة المرور الرئيسية</string>
     <string name="master_password_required">كلمة المرور الرئيسية (مطلوب)</string>
     <string name="new_master_password_required">كلمة المرور الرئيسية الجديدة (مطلوب)</string>
-    <string name="more">المزيد</string>
+    <string name="more_options">More options</string>
     <string name="my_vault">خزانتي</string>
     <string name="name">الاسم</string>
     <string name="item_name_required">اسم العنصر (مطلوب)</string>
@@ -174,7 +175,7 @@
     <string name="autofill_noun">ملء تلقائي</string>
     <string name="autofill_verb">ملء تلقائي</string>
     <string name="autofill_or_view">هل تريد الملأ التلقائي أو رؤية هذا المعرّف؟</string>
-    <string name="search">بحث</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">تعرف على المؤسسات</string>
     <string name="authenticator_app_title">تطبيق المُصادَقة</string>
     <string name="enter_verification_code_app">أدخل رمز التحقق من 6 أرقام من تطبيق المصادقة الخاص بك.</string>
@@ -204,9 +205,12 @@
     <string name="copy_totp_automatically">نسخ TOTP تلقائياً</string>
     <string name="premium_required">هذه المِيزة متاحة فقط للعضوية المميزة.</string>
     <string name="attachment_deleted">تم حذف المرفق</string>
+    <string name="attachments_unavailable">Attachments unavailable</string>
+    <string name="attachments_are_a_premium_feature">Attachments are a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="choose_file">اختيار ملف</string>
     <string name="file">ملف</string>
     <string name="no_file_chosen">لم يتم اختيار ملف</string>
+    <string name="file_name">File name</string>
     <string name="no_attachments">لا توجد مرفقات.</string>
     <string name="file_source">مصدر الملف</string>
     <string name="max_file_size">الحد الأقصى لحجم الملف هو 100 ميغابايت.</string>
@@ -228,6 +232,8 @@
     <string name="copy_security_code">نسخ رمز الأمان</string>
     <string name="number">رقم</string>
     <string name="security_code">رمز الأمان</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">بطاقة</string>
     <string name="type_identity">الهوية</string>
     <string name="type_login">تسجيل الدخول</string>
@@ -307,7 +313,7 @@
     <string name="organization">المؤسسة</string>
     <string name="try_again">حاول مرة أخرى</string>
     <string name="created">Created: %1$s</string>
-    <string name="password_last_updated">Password last updated: %1$s</string>
+    <string name="password_updated">Password updated: %1$s</string>
     <string name="last_edited">Last edited: %1$s</string>
     <string name="invalid_email">عنوان البريد الإلكتروني غير صالح.</string>
     <string name="cards">البطاقات</string>
@@ -385,6 +391,7 @@
     <string name="capitalize">كبّر الحروف</string>
     <string name="include_number">تضمين الرقم</string>
     <string name="download">تنزيل</string>
+    <string name="download_file">Download file</string>
     <string name="login_expired">انتهت صَلاحِيَة جَلسة تسجيل دخولك.</string>
     <string name="biometrics_direction">المصادقة البيومترية</string>
     <string name="device_verification">Device verification</string>
@@ -504,6 +511,7 @@
     <string name="hide_email">إخفاء عنوان البريد الإلكتروني الخاص بي من المستلمين</string>
     <string name="send_options_policy_in_effect">واحدة أو أكثر من سياسات المؤسسة تؤثر على خيارات إرسال الخاص بك.</string>
     <string name="send_file_premium_required">الحسابات المجانية مقيدة بمشاركة النص فقط. مطلوب عضوية مميزة لاستخدام الملفات مع الإرسال.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">إعادة توجيه كلمة المرور الرئيسية</string>
     <string name="password_confirmation">تأكيد كلمة المرور الرئيسية</string>
     <string name="password_confirmation_desc">هذا الإجراء محمي، للاستمرار أعد إدخال كلمة المرور الرئيسية للتحقق من هويتك.</string>
@@ -513,10 +521,10 @@
     <string name="remove_master_password">إزالة كلمة المرور الرئيسية</string>
     <string name="leave_organization">مغادرة المؤسسة</string>
     <string name="leave_organization_name">مغادرة %1$s؟</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Are you sure you want to leave?</string>
     <string name="leave_organization_button">Leave %1$s</string>
-    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features.\n\nContact your admin to regain access.</string>
-    <string name="how_to_manage_my_vault">How to manage My vault</string>
+    <string name="leave_organization_warning">By declining, your personal items will stay in your account, but you’ll lose access to shared items and organization features. <annotation link="learnMore">Learn more</annotation></string>
+    <string name="contact_your_admin_to_regain_access">Contact your admin to regain access.</string>
     <string name="fido2_authenticate_web_authn">مصادقة WebAuthn</string>
     <string name="fido2_return_to_app">الرجوع إلى التطبيق</string>
     <string name="reset_password_auto_enroll_invite_warning">هذه المؤسسة لديها سياسة الشركة التي ستقوم تلقائياً بتسجيلك في إعادة تعيين كلمة المرور. التسجيل سيسمح لمسؤولي المؤسسة بتغيير كلمة المرور الرئيسية الخاصة بك.</string>
@@ -855,6 +863,7 @@
     <string name="fill_out_the_form_and_import_your_saved_password_file">املأ النموذج واستورد ملف كلمة المرور المحفوظة.</string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">للأمان الخاص بك، تأكد من حذف ملف كلمة المرور المحفوظة.</string>
     <string name="need_help_check_out_import_help">بحاجة إلى مساعدة؟ تحقق من مساعدة الاستيراد.</string>
+    <string name="import_help">import help</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">حفظ الملف المصدّر في مكان ما على جهاز الكمبيوتر الخاص بك يمكنك العثور عليه بسهولة.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">هذا ليس خادم بت واردن المعترف به. قد تحتاج إلى التحقق مع المزود الخاص بك أو تحديث الخادم الخاص بك.</string>
     <string name="syncing_logins_loading_message">مزامنة تسجيلات الدخول...</string>
@@ -879,6 +888,14 @@
     <string name="copy_public_key">نسخ المفتاح العام</string>
     <string name="copy_fingerprint">نسخ بصمة الإصبع</string>
     <string name="enable_notifications">تفعيل اإشعارات</string>
+    <plurals name="notifications_content_description">
+        <item quantity="zero">%d notifications</item>
+        <item quantity="one">%d notification</item>
+        <item quantity="two">%d notifications</item>
+        <item quantity="few">%d notifications</item>
+        <item quantity="many">%d notifications</item>
+        <item quantity="other">%d notifications</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">تسجيل الدخول بسرعة وسهولة عبر الأجهزة</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">بت واردن يمكنه إعلامك في كل مرة تتلقى فيها طلب تسجيل دخول جديد من جهاز آخر.</string>
     <string name="skip_for_now">تخطي الآن</string>
@@ -952,6 +969,7 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">فشلت عملية المرور لأنه لم يتم تحديد أي عنصر.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">فشلت عملية المرور لأن الطلب غير مدعوم.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
@@ -1082,7 +1100,7 @@
     <string name="export_confirmation_title">تأكيد التصدير</string>
     <string name="export_success">تم تصدير البيانات بنجاح</string>
     <string name="included_in_this_export">Included in this export</string>
-    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren\'t included</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren’t included</string>
     <string name="security">الأمان</string>
     <string name="too_many_failed_biometric_attempts">العديد من محاولات القياس الحيوي الفاشلة.</string>
     <string name="version">الإصدار</string>
@@ -1178,7 +1196,6 @@
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</string>
     <string name="not_now">Not now</string>
     <string name="import_from_bitwarden">Import from Bitwarden</string>
     <string name="select_account">Select account</string>
@@ -1209,7 +1226,7 @@
     <string name="resending">Resending</string>
     <string name="you_left_the_organization">You left the organization</string>
     <string name="transfer_items_to_org">Transfer items to %1$s</string>
-    <string name="transfer_items_description">%1$s is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items.</string>
+    <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items. <annotation link="learnMore">Learn more</annotation></string>
     <string name="decline_and_leave">Decline and leave</string>
     <string name="why_am_i_seeing_this">Why am I seeing this?</string>
     <string name="migrating_items_to_x">Migrating items to %s</string>
@@ -1228,7 +1245,9 @@
     <string name="item_moved_to_vault">Item moved to vault</string>
     <string name="archive_unavailable">Archive unavailable</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
-    <string name="upgrade_to_premium">Upgrade to premium</string>
+    <string name="upgrade_to_premium">Upgrade to Premium</string>
+    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">This item is archived.</string>
     <string name="introducing_archive">Introducing archive</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>
@@ -1239,4 +1258,40 @@
     <string name="restart_premium">Restart Premium</string>
     <string name="items_transferred">Items transferred</string>
     <string name="updated_master_password">تحديث كلمة المرور الرئيسية</string>
+    <string name="invalid_email_addresses">Invalid email addresses</string>
+    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
+    <string name="no_email_addresses_entered">No email addresses entered</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="sync_with_browser">Sync with browser</string>
+    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
+    <string name="launch_browser">Launch browser</string>
+    <string name="continue_without_syncing">Continue without syncing</string>
+    <string name="external_link">External link</string>
+    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
+    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
+    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
+    <string name="preview_unavailable">Preview unavailable</string>
+    <string name="download_attachment">Download Attachment</string>
+    <string name="upgraded_to_premium">Upgraded to premium</string>
+    <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
+    <string name="per_month">/ month</string>
+    <string name="built_in_authenticator">Built-in authenticator</string>
+    <string name="emergency_access">Emergency access</string>
+    <string name="secure_file_storage">Secure file storage</string>
+    <string name="breach_monitoring">Breach monitoring</string>
+    <string name="upgrade_now">Upgrade now</string>
+    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="opening_checkout">Opening checkout…</string>
+    <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
+    <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
+    <string name="payment_not_received_yet">Payment not received yet</string>
+    <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
+    <string name="go_back">Go back</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
+    <string name="show_next_code">Show next code</string>
+    <string name="see_upcoming_codes_in_the_list">See upcoming codes in the list</string>
+    <string name="next_code_x">Next code, %1$s</string>
 </resources>

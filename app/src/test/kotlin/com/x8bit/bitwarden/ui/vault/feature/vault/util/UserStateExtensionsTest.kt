@@ -88,6 +88,7 @@ class UserStateExtensionsTest {
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
                         isExportable = true,
+                        creationDate = null,
                     ),
                     UserState.Account(
                         userId = "lockedUserId",
@@ -115,6 +116,7 @@ class UserStateExtensionsTest {
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
                         isExportable = true,
+                        creationDate = null,
                     ),
                     UserState.Account(
                         userId = "unlockedUserId",
@@ -146,6 +148,7 @@ class UserStateExtensionsTest {
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
                         isExportable = true,
+                        creationDate = null,
                     ),
                     UserState.Account(
                         userId = "loggedOutUserId",
@@ -177,6 +180,7 @@ class UserStateExtensionsTest {
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
                         isExportable = true,
+                        creationDate = null,
                     ),
                 ),
             )
@@ -223,6 +227,7 @@ class UserStateExtensionsTest {
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
                 isExportable = true,
+                creationDate = null,
             )
                 .toAccountSummary(isActive = true),
         )
@@ -267,6 +272,7 @@ class UserStateExtensionsTest {
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
                 isExportable = true,
+                creationDate = null,
             )
                 .toAccountSummary(isActive = false),
         )
@@ -315,6 +321,7 @@ class UserStateExtensionsTest {
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
                         isExportable = true,
+                        creationDate = null,
                     ),
                 ),
             )
@@ -344,6 +351,7 @@ class UserStateExtensionsTest {
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
                 isExportable = true,
+                creationDate = null,
             )
                 .toVaultFilterData(isIndividualVaultDisabled = false),
         )
@@ -400,6 +408,7 @@ class UserStateExtensionsTest {
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
                 isExportable = true,
+                creationDate = null,
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = false,
@@ -457,6 +466,7 @@ class UserStateExtensionsTest {
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
                 isExportable = true,
+                creationDate = null,
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = true,

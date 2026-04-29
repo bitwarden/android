@@ -35,7 +35,12 @@ fun VaultAddEditState.ViewState.Content.toCipherView(
     CipherView(
         // Pulled from original cipher when editing, otherwise uses defaults
         id = common.originalCipher?.id,
-        collectionIds = common.originalCipher?.collectionIds.orEmpty(),
+        collectionIds = common.originalCipher?.collectionIds
+            ?: common.selectedOwner
+                ?.collections
+                ?.filter { it.isSelected }
+                ?.map { it.id }
+                .orEmpty(),
         key = common.originalCipher?.key,
         edit = common.originalCipher?.edit ?: true,
         viewPassword = common.originalCipher?.viewPassword ?: true,
@@ -57,6 +62,8 @@ fun VaultAddEditState.ViewState.Content.toCipherView(
         login = type.toLoginView(common = common, clock = clock),
         card = type.toCardView(),
         sshKey = type.toSshKeyView(),
+        // TODO PM-32810: Add Bank Account Type
+        bankAccount = null,
 
         // Fields we always grab from the UI
         name = common.name,
@@ -158,13 +165,16 @@ private fun VaultAddEditState.ViewState.Content.toPasswordHistory(
     )
 
     return listOf(
-        common.originalCipher?.passwordHistory.orEmpty(),
         newPasswordHistory,
+        common.originalCipher?.passwordHistory.orEmpty(),
         newHiddenFieldHistory,
     )
         .flatten()
+        // Ensure that they are in the correct order before saving.
+        .sortedByDescending { it.lastUsedDate }
+        // Only persist the 5 most recent items.
+        .take(5)
         .ifEmpty { null }
-        ?.takeLast(5)
 }
 
 private fun getPasswordHistory(

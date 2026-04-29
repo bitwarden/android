@@ -15,9 +15,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.RevokeFromOrganizationResu
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
-import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
@@ -45,10 +43,6 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
 
     private val mockSnackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
         every { sendSnackbarData(data = any(), relay = any()) } just runs
-    }
-
-    private val mockOrganizationEventManager: OrganizationEventManager = mockk {
-        every { trackEvent(any()) } just runs
     }
 
     private val mockVaultMigrationManager: VaultMigrationManager = mockk {
@@ -138,11 +132,6 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
                         message = BitwardenString.you_left_the_organization.asText(),
                     ),
                 )
-                mockOrganizationEventManager.trackEvent(
-                    event = OrganizationEvent.ItemOrganizationDeclined(
-                        organizationId = ORGANIZATION_ID,
-                    ),
-                )
                 mockVaultMigrationManager.clearMigrationState()
             }
 
@@ -169,7 +158,8 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
                         message = BitwardenString.generic_error_message.asText(),
                         error = null,
                     ),
-                ), awaitItem(),
+                ),
+                awaitItem(),
             )
 
             // Dismiss the dialog
@@ -203,7 +193,8 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
                         message = BitwardenString.internet_connection_required_message.asText(),
                         error = error,
                     ),
-                ), awaitItem(),
+                ),
+                awaitItem(),
             )
 
             // Dismiss the dialog and clear migration
@@ -238,15 +229,8 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
             organizationName = "Saved Organization",
             dialogState = null,
         )
-        val savedStateHandle = SavedStateHandle(mapOf("state" to savedState))
 
-        val viewModel = LeaveOrganizationViewModel(
-            authRepository = mockAuthRepository,
-            snackbarRelayManager = mockSnackbarRelayManager,
-            organizationEventManager = mockOrganizationEventManager,
-            vaultMigrationManager = mockVaultMigrationManager,
-            savedStateHandle = savedStateHandle,
-        )
+        val viewModel = createViewModel(state = savedState)
 
         assertEquals(savedState, viewModel.stateFlow.value)
     }
@@ -257,7 +241,6 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
         return LeaveOrganizationViewModel(
             authRepository = mockAuthRepository,
             snackbarRelayManager = mockSnackbarRelayManager,
-            organizationEventManager = mockOrganizationEventManager,
             vaultMigrationManager = mockVaultMigrationManager,
             savedStateHandle = SavedStateHandle(mapOf("state" to state)),
         )
@@ -298,6 +281,7 @@ private val DEFAULT_USER_STATE = UserState(
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(),
             isExportable = true,
+            creationDate = null,
         ),
     ),
 )

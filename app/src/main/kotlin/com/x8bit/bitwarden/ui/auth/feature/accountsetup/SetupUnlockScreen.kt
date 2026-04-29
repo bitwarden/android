@@ -93,9 +93,7 @@ fun SetupUnlockScreen(
 
     SetupUnlockScreenDialogs(
         dialogState = state.dialogState,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(SetupUnlockAction.DismissDialog) }
-        },
+        onDismissRequest = { viewModel.trySendAction(SetupUnlockAction.DismissDialog) },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -121,10 +119,8 @@ fun SetupUnlockScreen(
                         navigationIconContentDescription = stringResource(
                             id = BitwardenString.close,
                         ),
-                        onNavigationIconClick = remember(viewModel) {
-                            {
-                                viewModel.trySendAction(SetupUnlockAction.CloseClick)
-                            }
+                        onNavigationIconClick = {
+                            viewModel.trySendAction(SetupUnlockAction.CloseClick)
                         },
                     )
                 },

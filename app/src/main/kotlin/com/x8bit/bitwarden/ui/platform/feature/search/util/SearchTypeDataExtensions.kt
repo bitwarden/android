@@ -20,6 +20,7 @@ import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.autofill.util.login
+import com.x8bit.bitwarden.data.platform.util.isActive
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
@@ -29,6 +30,9 @@ import com.x8bit.bitwarden.ui.vault.feature.util.toLabelIcons
 import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import com.x8bit.bitwarden.ui.vault.util.toSdkCipherType
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import java.time.Clock
 import java.time.format.FormatStyle
 
@@ -108,46 +112,20 @@ private fun CipherListView.filterBySearchType(
     searchTypeData: SearchTypeData.Vault,
 ): Boolean =
     when (searchTypeData) {
-        SearchTypeData.Vault.All -> deletedDate == null && archivedDate == null
+        SearchTypeData.Vault.All -> isActive
         SearchTypeData.Vault.Archive -> archivedDate != null && deletedDate == null
-        is SearchTypeData.Vault.Cards -> {
-            type is CipherListViewType.Card && deletedDate == null && archivedDate == null
-        }
-
+        is SearchTypeData.Vault.Cards -> type is CipherListViewType.Card && isActive
         is SearchTypeData.Vault.Collection -> {
-            searchTypeData.collectionId in this.collectionIds &&
-                deletedDate == null &&
-                archivedDate == null
+            searchTypeData.collectionId in this.collectionIds && isActive
         }
 
-        is SearchTypeData.Vault.Folder -> {
-            folderId == searchTypeData.folderId && deletedDate == null && archivedDate == null
-        }
-
-        SearchTypeData.Vault.NoFolder -> {
-            folderId == null && deletedDate == null && archivedDate == null
-        }
-
-        is SearchTypeData.Vault.Identities -> {
-            type is CipherListViewType.Identity && deletedDate == null && archivedDate == null
-        }
-
-        is SearchTypeData.Vault.Logins -> {
-            type is CipherListViewType.Login && deletedDate == null && archivedDate == null
-        }
-
-        is SearchTypeData.Vault.SecureNotes -> {
-            type is CipherListViewType.SecureNote && deletedDate == null && archivedDate == null
-        }
-
-        is SearchTypeData.Vault.SshKeys -> {
-            type is CipherListViewType.SshKey && deletedDate == null && archivedDate == null
-        }
-
-        is SearchTypeData.Vault.VerificationCodes -> {
-            login?.totp != null && deletedDate == null && archivedDate == null
-        }
-
+        is SearchTypeData.Vault.Folder -> folderId == searchTypeData.folderId && isActive
+        SearchTypeData.Vault.NoFolder -> folderId == null && isActive
+        is SearchTypeData.Vault.Identities -> type is CipherListViewType.Identity && isActive
+        is SearchTypeData.Vault.Logins -> type is CipherListViewType.Login && isActive
+        is SearchTypeData.Vault.SecureNotes -> type is CipherListViewType.SecureNote && isActive
+        is SearchTypeData.Vault.SshKeys -> type is CipherListViewType.SshKey && isActive
+        is SearchTypeData.Vault.VerificationCodes -> login?.totp != null && isActive
         is SearchTypeData.Vault.Trash -> deletedDate != null
     }
 
@@ -186,7 +164,6 @@ fun List<CipherListView>.toViewState(
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isPremiumUser: Boolean,
-    isArchiveEnabled: Boolean,
 ): SearchState.ViewState =
     when {
         searchTerm.isEmpty() -> SearchState.ViewState.Empty(message = null)
@@ -198,9 +175,7 @@ fun List<CipherListView>.toViewState(
                     isIconLoadingDisabled = isIconLoadingDisabled,
                     isAutofill = isAutofill,
                     isPremiumUser = isPremiumUser,
-                    isArchiveEnabled = isArchiveEnabled,
-                )
-                    .sortAlphabetically(),
+                ),
             )
         }
 
@@ -211,34 +186,32 @@ fun List<CipherListView>.toViewState(
         }
     }
 
-@Suppress("LongParameterList")
 private fun List<CipherListView>.toDisplayItemList(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isPremiumUser: Boolean,
-    isArchiveEnabled: Boolean,
-): List<SearchState.DisplayItem> =
-    this.map {
-        it.toDisplayItem(
-            baseIconUrl = baseIconUrl,
-            hasMasterPassword = hasMasterPassword,
-            isIconLoadingDisabled = isIconLoadingDisabled,
-            isAutofill = isAutofill,
-            isPremiumUser = isPremiumUser,
-            isArchiveEnabled = isArchiveEnabled,
-        )
-    }
+): ImmutableList<SearchState.DisplayItem> =
+    this
+        .map {
+            it.toDisplayItem(
+                baseIconUrl = baseIconUrl,
+                hasMasterPassword = hasMasterPassword,
+                isIconLoadingDisabled = isIconLoadingDisabled,
+                isAutofill = isAutofill,
+                isPremiumUser = isPremiumUser,
+            )
+        }
+        .sortAlphabetically()
+        .toImmutableList()
 
-@Suppress("LongParameterList")
 private fun CipherListView.toDisplayItem(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isPremiumUser: Boolean,
-    isArchiveEnabled: Boolean,
 ): SearchState.DisplayItem =
     SearchState.DisplayItem(
         id = id.orEmpty(),
@@ -254,7 +227,6 @@ private fun CipherListView.toDisplayItem(
         overflowOptions = toOverflowActions(
             hasMasterPassword = hasMasterPassword,
             isPremiumUser = isPremiumUser,
-            isArchiveEnabled = isArchiveEnabled,
         ),
         overflowTestTag = "CipherOptionsButton",
         totpCode = login?.totp,
@@ -263,9 +235,8 @@ private fun CipherListView.toDisplayItem(
             // Only valid for autofill
             .filter { isAutofill }
             // Only Login types get the save option
-            .filter {
-                this.login != null || (it != AutofillSelectionOption.AUTOFILL_AND_SAVE)
-            },
+            .filter { this.login != null || (it != AutofillSelectionOption.AUTOFILL_AND_SAVE) }
+            .toImmutableList(),
         shouldDisplayMasterPasswordReprompt = hasMasterPassword &&
             reprompt == CipherRepromptType.PASSWORD,
         itemType = SearchState.DisplayItem.ItemType.Vault(type = this.type.toSdkCipherType()),
@@ -295,6 +266,7 @@ private val CipherListViewType.iconRes: Int
         is CipherListViewType.Card -> BitwardenDrawable.ic_payment_card
         CipherListViewType.Identity -> BitwardenDrawable.ic_id_card
         CipherListViewType.SshKey -> BitwardenDrawable.ic_ssh_key
+        CipherListViewType.BankAccount -> TODO("PM-32810: Add Bank Account Type")
     }
 
 /**
@@ -364,8 +336,7 @@ fun List<SendView>.toViewState(
                 displayItems = toDisplayItemList(
                     baseWebSendUrl = baseWebSendUrl,
                     clock = clock,
-                )
-                    .sortAlphabetically(),
+                ),
             )
         }
 
@@ -379,13 +350,16 @@ fun List<SendView>.toViewState(
 private fun List<SendView>.toDisplayItemList(
     baseWebSendUrl: String,
     clock: Clock,
-): List<SearchState.DisplayItem> =
-    this.map {
-        it.toDisplayItem(
-            baseWebSendUrl = baseWebSendUrl,
-            clock = clock,
-        )
-    }
+): ImmutableList<SearchState.DisplayItem> =
+    this
+        .map {
+            it.toDisplayItem(
+                baseWebSendUrl = baseWebSendUrl,
+                clock = clock,
+            )
+        }
+        .sortAlphabetically()
+        .toImmutableList()
 
 private fun SendView.toDisplayItem(
     baseWebSendUrl: String,
@@ -411,7 +385,7 @@ private fun SendView.toDisplayItem(
         overflowOptions = toOverflowActions(baseWebSendUrl = baseWebSendUrl),
         overflowTestTag = "SendOptionsButton",
         totpCode = null,
-        autofillSelectionOptions = emptyList(),
+        autofillSelectionOptions = persistentListOf(),
         shouldDisplayMasterPasswordReprompt = false,
         itemType = SearchState.DisplayItem.ItemType.Sends(type = this.type),
     )

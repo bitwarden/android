@@ -11,10 +11,9 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
  */
 class SdkTokenRepository(
     private val userId: String?,
+    private val accessToken: String?,
     private val authDiskSource: AuthDiskSource,
 ) : ClientManagedTokens {
     override suspend fun getAccessToken(): String? =
-        userId?.let {
-            authDiskSource.getAccountTokens(userId = it)?.accessToken
-        }
+        accessToken ?: userId?.let { authDiskSource.getAccountTokens(userId = it)?.accessToken }
 }

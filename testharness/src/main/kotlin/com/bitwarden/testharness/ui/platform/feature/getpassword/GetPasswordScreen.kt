@@ -15,9 +15,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -65,8 +65,8 @@ fun GetPasswordScreen(
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                     navigationIconContentDescription = stringResource(BitwardenString.back),
-                    onNavigationIconClick = remember(viewModel) {
-                        { viewModel.trySendAction(GetPasswordAction.BackClick) }
+                    onNavigationIconClick = {
+                        viewModel.trySendAction(GetPasswordAction.BackClick)
                     },
                 ),
             )
@@ -93,26 +93,24 @@ fun GetPasswordScreen(
 
             BitwardenFilledButton(
                 label = stringResource(R.string.execute),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(GetPasswordAction.ExecuteClick) }
-                },
+                onClick = { viewModel.trySendAction(GetPasswordAction.ExecuteClick) },
                 isEnabled = !state.isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .standardHorizontalMargin(),
+                    .standardHorizontalMargin()
+                    .testTag("GetPaswordExecuteButton"),
             )
 
             Spacer(modifier = Modifier.height(12.dp))
 
             BitwardenTextButton(
                 label = stringResource(R.string.clear),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(GetPasswordAction.ClearResultClick) }
-                },
+                onClick = { viewModel.trySendAction(GetPasswordAction.ClearResultClick) },
                 isEnabled = !state.isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .standardHorizontalMargin(),
+                    .standardHorizontalMargin()
+                    .testTag("GetPasswordClearButton"),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -126,7 +124,8 @@ fun GetPasswordScreen(
                 singleLine = false,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .standardHorizontalMargin(),
+                    .standardHorizontalMargin()
+                    .testTag("GetPasswordResultTextField"),
             )
 
             Spacer(modifier = Modifier.height(16.dp))

@@ -11,6 +11,7 @@
     <string name="copy_password">複製密碼</string>
     <string name="copy_username">複製使用者名稱</string>
     <string name="delete">刪除</string>
+    <string name="preview">預覽</string>
     <string name="deleting">正在刪除…</string>
     <string name="do_you_really_want_to_delete">您確定要刪除嗎？刪除後將無法復原。</string>
     <string name="edit">編輯</string>
@@ -42,7 +43,7 @@
     <string name="master_password">主密碼</string>
     <string name="master_password_required">主密碼（必填）</string>
     <string name="new_master_password_required">新增主密碼（必填）</string>
-    <string name="more">更多</string>
+    <string name="more_options">更多選項</string>
     <string name="my_vault">我的密碼庫</string>
     <string name="name">名稱</string>
     <string name="item_name_required">項目名稱（必填）</string>
@@ -169,7 +170,7 @@
     <string name="autofill_noun">自動填入</string>
     <string name="autofill_verb">自動填入</string>
     <string name="autofill_or_view">您想自動填入還是檢視此項目？</string>
-    <string name="search">搜尋</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">了解組織</string>
     <string name="authenticator_app_title">驗證器應用程式</string>
     <string name="enter_verification_code_app">輸入驗證器應用程式提供的 6 位數驗證碼。</string>
@@ -199,9 +200,12 @@
     <string name="copy_totp_automatically">自動複製 TOTP</string>
     <string name="premium_required">進階會員才可使用此功能。</string>
     <string name="attachment_deleted">已刪除附件</string>
+    <string name="attachments_unavailable">附件不可用</string>
+    <string name="attachments_are_a_premium_feature">附件是進階版功能。您目前的方案不包含此功能的存取權限。</string>
     <string name="choose_file">選擇檔案</string>
     <string name="file">檔案</string>
     <string name="no_file_chosen">未選擇任何檔案</string>
+    <string name="file_name">檔案名稱</string>
     <string name="no_attachments">沒有附件。</string>
     <string name="file_source">檔案來源</string>
     <string name="max_file_size">檔案最大為 100MB。</string>
@@ -223,6 +227,8 @@
     <string name="copy_security_code">複製安全代碼</string>
     <string name="number">號碼</string>
     <string name="security_code">安全代碼</string>
+    <string name="scan_card">掃描卡片</string>
+    <string name="scan_card_instruction">請將卡片置於框內以進行掃描。</string>
     <string name="type_card">支付卡</string>
     <string name="type_identity">身分</string>
     <string name="type_login">登入</string>
@@ -302,7 +308,7 @@
     <string name="organization">組織</string>
     <string name="try_again">再試一次</string>
     <string name="created">建立於：%1$s</string>
-    <string name="password_last_updated">密碼最後更新於：%1$s</string>
+    <string name="password_updated">密碼更新於：%1$s</string>
     <string name="last_edited">最後編輯於：%1$s</string>
     <string name="invalid_email">無效的電子郵件地址。</string>
     <string name="cards">支付卡</string>
@@ -375,6 +381,7 @@
     <string name="capitalize">大寫</string>
     <string name="include_number">包含數字</string>
     <string name="download">下載</string>
+    <string name="download_file">下載檔案</string>
     <string name="login_expired">您的登入階段已逾期。</string>
     <string name="biometrics_direction">生物辨識驗證</string>
     <string name="device_verification">裝置驗證</string>
@@ -446,13 +453,13 @@
     <string name="deletion_date">刪除日期</string>
     <string name="deletion_time">刪除時間</string>
     <string name="deletion_date_info">此 Send 將在指定的日期和時間後被永久刪除。</string>
-    <string name="who_can_view">Who can view</string>
-    <string name="anyone_with_the_link">Anyone with the link</string>
-    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
-    <string name="specific_people">Specific people</string>
-    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
-    <string name="anyone_with_password">Anyone with a password set by you</string>
-    <string name="add_email">Add email</string>
+    <string name="who_can_view">誰可以檢視</string>
+    <string name="anyone_with_the_link">任何持有連結的人</string>
+    <string name="anyone_with_link_can_view_send">任何持有此連結的人都可以檢視此 Send</string>
+    <string name="specific_people">特定人員</string>
+    <string name="specific_people_verification_info">分享此 Send 連結後，收件者需使用驗證碼驗證其電子郵件，才能檢視此 Send</string>
+    <string name="anyone_with_password">任何持有您設定之密碼的人</string>
+    <string name="add_email">新增電子郵件</string>
     <string name="pending_delete">等待刪除</string>
     <string name="expired">已逾期</string>
     <string name="expires_at">於 %s 到期</string>
@@ -494,6 +501,7 @@
     <string name="hide_email">對收件人隱藏我的電子郵件地址</string>
     <string name="send_options_policy_in_effect">一個或多個組織原則正影響您的 Send 選項。</string>
     <string name="send_file_premium_required">免費帳戶僅限於共用文字。若想使用檔案 Send，需要進階會員資格。</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">與特定人員分享為 Premium 功能。您目前的方案不包含此功能的使用權限。</string>
     <string name="password_prompt">重新詢問主密碼</string>
     <string name="password_confirmation">確認主密碼</string>
     <string name="password_confirmation_desc">此動作受到保護。若要繼續，請重新輸入您的主密碼以驗證您的身分。</string>
@@ -503,10 +511,10 @@
     <string name="remove_master_password">移除主密碼</string>
     <string name="leave_organization">離開組織</string>
     <string name="leave_organization_name">離開 %1$s？</string>
-    <string name="are_you_sure_you_want_to_leave_organization">您確定要離開 %1$s？</string>
+    <string name="are_you_sure_you_want_to_leave_organization">您確定要離開 [%1$s]？</string>
     <string name="leave_organization_button">離開 %1$s</string>
     <string name="leave_organization_warning">若選擇拒絕，您的個人項目將保留在帳號中，但您將失去對共用項目與組織功能的存取權。\n\n請聯絡您的管理員以重新取得存取權限。</string>
-    <string name="how_to_manage_my_vault">如何管理我的密碼庫</string>
+    <string name="contact_your_admin_to_regain_access">請聯絡您的管理員以重新取得存取權限。</string>
     <string name="fido2_authenticate_web_authn">驗證 WebAuthn</string>
     <string name="fido2_return_to_app">返回應用程式</string>
     <string name="reset_password_auto_enroll_invite_warning">此組織有一個可以為您自動註冊密碼重設的企業原則。註冊後將允許組織管理員變更您的主密碼。</string>
@@ -831,6 +839,7 @@
     <string name="fill_out_the_form_and_import_your_saved_password_file">填入表單並<annotation emphasis="bold">匯入您的密碼檔案</annotation>。</string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">為了您的安全，記得<annotation emphasis="bold">刪除先前匯出的密碼檔案</annotation>。</string>
     <string name="need_help_check_out_import_help">需要幫助嗎？看看我們的<annotation link="importHelp">匯入說明</annotation>。</string>
+    <string name="import_help">匯入說明</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">在您的電腦上<annotation emphasis="bold">儲存匯出的檔案</annotation>方便日後尋找。</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">這不是一個 Bitwarden 伺服器。您可能需要聯繫您的提供商或更新您的伺服器。</string>
     <string name="syncing_logins_loading_message">正在同步登入資訊...</string>
@@ -855,6 +864,9 @@
     <string name="copy_public_key">複製公開金鑰</string>
     <string name="copy_fingerprint">複製指紋</string>
     <string name="enable_notifications">啟用通知</string>
+    <plurals name="notifications_content_description">
+        <item quantity="other">%d 通知</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">快速輕鬆的使用不同裝置登入</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden 可以在您透過其它裝置收到新登入要求時通知您。</string>
     <string name="skip_for_now">下次再說</string>
@@ -928,6 +940,7 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">通行金鑰操作失敗，因為未選取任何項目。</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">通行金鑰操作失敗，因為該請求不受支援。</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">密碼操作失敗，因為所選項目不存在。</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">密碼操作失敗，因為所選項目沒有有效的密碼。</string>
     <string name="password_operation_failed_because_no_item_was_selected">密碼操作失敗，因為未選取任何項目。</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">憑證操作失敗，因為請求無效。</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">憑證操作失敗，因為該請求不受支援。</string>
@@ -939,7 +952,7 @@
     <string name="use_brave_autofill_integration">使用 Brave 自動填入整合功能</string>
     <string name="use_chrome_autofill_integration">使用 Chrome 自動填入整合功能</string>
     <string name="use_chrome_beta_autofill_integration">使用 Chrome Beta 自動填入整合功能</string>
-    <string name="use_vivaldi_autofill_integration">Use Vivaldi autofill integration</string>
+    <string name="use_vivaldi_autofill_integration">使用 Vivaldi 自動填入整合功能</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">在支援的網站上改善所選瀏覽器的登入自動填入體驗。啟用後，您將被導向至瀏覽器設定以啟用第三方自動填入功能。</string>
     <string name="show_more">顯示更多</string>
     <string name="no_folder">預設資料夾</string>
@@ -1139,7 +1152,6 @@
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">啟用瀏覽器自動填入功能以持續自動填入密碼</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">您的瀏覽器最近更新，已停用 Bitwarden 的自動填入功能。若要繼續使用 Bitwarden 自動填入密碼，請在自動填入設定中啟用瀏覽器自動填入。</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">您的瀏覽器最近更新，已停用 Bitwarden 的自動填入功能。若要繼續使用 Bitwarden 自動填入密碼，請在自動填入設定中為所有已安裝的瀏覽器啟用自動填入功能。</string>
     <string name="not_now">以後再說</string>
     <string name="import_from_bitwarden">從 Bitwarden 匯入</string>
     <string name="select_account">選擇帳號</string>
@@ -1190,6 +1202,8 @@
     <string name="archive_unavailable">封存不可用</string>
     <string name="archiving_items_is_a_premium_feature">封存項目為進階版功能。您目前的方案不包含此功能。</string>
     <string name="upgrade_to_premium">升級到 Premium</string>
+    <string name="unlock_advanced_security_features">解鎖進階安全功能</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Premium 方案可提供更多工具，讓您保持安全並掌控一切。</string>
     <string name="this_item_is_archived">此項目已被封存。</string>
     <string name="introducing_archive">封存功能介紹</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">將您目前不需要的項目安全保存，同時隱藏於視線之外。</string>
@@ -1200,4 +1214,40 @@
     <string name="restart_premium">重新啟用進階版</string>
     <string name="items_transferred">項目已轉移</string>
     <string name="updated_master_password">已更新主密碼</string>
+    <string name="invalid_email_addresses">電郵無效</string>
+    <string name="one_or_more_email_addresses_are_incorrect">一個或多個電子郵件地址不正確。請檢查後再試一次。</string>
+    <string name="no_email_addresses_entered">尚未輸入任何電子郵件地址</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">請至少輸入一個有效的電子郵件地址以分享此 Send。</string>
+    <string name="sync_with_browser">與瀏覽器同步</string>
+    <string name="sync_with_browser_description">若要連線至 %1$s，請將您的預設瀏覽器與 Bitwarden 行動應用程式同步。瀏覽器開啟後，如有提示請完成登入。\n同步完成後，您將返回此應用程式。</string>
+    <string name="launch_browser">開啟瀏覽器</string>
+    <string name="continue_without_syncing">不進行同步並繼續</string>
+    <string name="external_link">外部連結</string>
+    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s，外部連結</string>
+    <string name="preview_not_available_for_files">無法預覽 %1$s 類型的檔案。您仍可下載後在裝置上檢視。</string>
+    <string name="this_file_is_too_large_to_preview">此檔案過大，無法預覽。您仍可下載後在裝置上檢視。</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden 無法解密此檔案，因此無法顯示預覽。</string>
+    <string name="preview_unavailable_for_this_file">此檔案無法預覽。您仍可下載後在裝置上檢視。</string>
+    <string name="preview_unavailable">無法預覽</string>
+    <string name="download_attachment">下載附件</string>
+    <string name="upgraded_to_premium">升級到 Premium</string>
+    <string name="unlock_premium_features">透過 Premium 方案解鎖更多進階功能。</string>
+    <string name="per_month">/ 月</string>
+    <string name="built_in_authenticator">內建驗證器</string>
+    <string name="emergency_access">緊急存取</string>
+    <string name="secure_file_storage">安全檔案儲存</string>
+    <string name="breach_monitoring">外洩監控</string>
+    <string name="upgrade_now">立即升級</string>
+    <string name="stripe_checkout_footer">您將前往 Stripe 的安全結帳頁面完成購買。</string>
+    <string name="opening_checkout">正在開啟結帳頁面…</string>
+    <string name="secure_checkout_didnt_load">安全結帳頁面未成功載入</string>
+    <string name="trouble_opening_payment_page">開啟付款頁面時發生問題，請再試一次。</string>
+    <string name="payment_not_received_yet">尚未收到付款</string>
+    <string name="return_to_stripe_to_finish">請在瀏覽器中返回 Stripe 完成升級流程。</string>
+    <string name="go_back">返回</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
+    <string name="show_next_code">Show next code</string>
+    <string name="see_upcoming_codes_in_the_list">See upcoming codes in the list</string>
+    <string name="next_code_x">Next code, %1$s</string>
 </resources>

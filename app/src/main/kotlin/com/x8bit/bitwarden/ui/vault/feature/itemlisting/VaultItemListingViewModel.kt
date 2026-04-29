@@ -11,7 +11,6 @@ import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.map
@@ -45,6 +44,7 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySele
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.manager.OriginManager
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
@@ -58,7 +58,6 @@ import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.credentials.util.getCreatePasskeyCredentialRequestOrNull
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
@@ -151,8 +150,8 @@ class VaultItemListingViewModel @Inject constructor(
     private val networkConnectionManager: NetworkConnectionManager,
     private val relyingPartyParser: RelyingPartyParser,
     private val toastManager: ToastManager,
+    private val premiumStateManager: PremiumStateManager,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
-    featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -194,7 +193,6 @@ class VaultItemListingViewModel @Inject constructor(
             getCredentialsRequest = providerGetCredentialsRequest,
             isPremium = userState.activeAccount.isPremium,
             isRefreshing = false,
-            isArchiveEnabled = featureFlagManager.getFeatureFlag(FlagKey.ArchiveItems),
         )
     },
 ) {
@@ -239,12 +237,6 @@ class VaultItemListingViewModel @Inject constructor(
                 SnackbarRelay.SEND_UPDATED,
             )
             .map { VaultItemListingsAction.Internal.SnackbarDataReceived(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        featureFlagManager
-            .getFeatureFlagFlow(FlagKey.ArchiveItems)
-            .map { VaultItemListingsAction.Internal.ArchiveItemsFlagUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -600,7 +592,7 @@ class VaultItemListingViewModel @Inject constructor(
             return
         }
 
-        // There's no need to ask the user whether or not they want to use their master password
+        // There's no need to ask the user whether they want to use their master password
         // on login, and shouldRequireMasterPasswordOnRestart is hardcoded to false, because the
         // user can only reach this part of the flow if they have no master password.
         settingsRepository.storeUnlockPin(
@@ -671,9 +663,16 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun handleUpgradeToPremiumClick() {
         clearDialogState()
-        val baseUrl = environmentRepository.environment.environmentUrlData.baseWebVaultUrlOrDefault
-        val url = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium"
-        sendEvent(VaultItemListingEvent.NavigateToUrl(url = url))
+        if (premiumStateManager.isInAppUpgradeAvailable()) {
+            sendEvent(VaultItemListingEvent.NavigateToPlanModal)
+        } else {
+            val baseUrl = environmentRepository
+                .environment
+                .environmentUrlData
+                .baseWebVaultUrlOrDefault
+            val url = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium"
+            sendEvent(VaultItemListingEvent.NavigateToUrl(url = url))
+        }
     }
 
     private fun handleRemoveSendPasswordClick(
@@ -1340,6 +1339,7 @@ class VaultItemListingViewModel @Inject constructor(
                     CipherType.CARD -> VaultItemCipherType.CARD
                     CipherType.IDENTITY -> VaultItemCipherType.IDENTITY
                     CipherType.SSH_KEY -> VaultItemCipherType.SSH_KEY
+                    CipherType.BANK_ACCOUNT -> TODO("PM-32810: Add Bank Account Type")
                 },
             ),
         )
@@ -1361,6 +1361,7 @@ class VaultItemListingViewModel @Inject constructor(
                     CipherType.CARD -> VaultItemCipherType.CARD
                     CipherType.IDENTITY -> VaultItemCipherType.IDENTITY
                     CipherType.SSH_KEY -> VaultItemCipherType.SSH_KEY
+                    CipherType.BANK_ACCOUNT -> TODO("PM-32810: Add Bank Account Type")
                 },
             ),
         )
@@ -1684,10 +1685,6 @@ class VaultItemListingViewModel @Inject constructor(
                 handleCredentialOperationFailureReceive(action)
             }
 
-            is VaultItemListingsAction.Internal.ArchiveItemsFlagUpdateReceive -> {
-                handleArchiveItemsFlagUpdateReceive(action)
-            }
-
             is VaultItemListingsAction.Internal.ArchiveCipherReceive -> {
                 handleArchiveCipherReceive(action)
             }
@@ -1708,12 +1705,6 @@ class VaultItemListingViewModel @Inject constructor(
         )
     }
 
-    private fun handleArchiveItemsFlagUpdateReceive(
-        action: VaultItemListingsAction.Internal.ArchiveItemsFlagUpdateReceive,
-    ) {
-        mutableStateFlow.update { it.copy(isArchiveEnabled = action.isEnabled) }
-    }
-
     private fun handleArchiveCipherReceive(
         action: VaultItemListingsAction.Internal.ArchiveCipherReceive,
     ) {
@@ -1723,7 +1714,8 @@ class VaultItemListingViewModel @Inject constructor(
                     it.copy(
                         dialogState = VaultItemListingState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = BitwardenString.unable_to_archive_selected_item.asText(),
+                            message = result.errorMessage?.asText()
+                                ?: BitwardenString.unable_to_archive_selected_item.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -1750,7 +1742,8 @@ class VaultItemListingViewModel @Inject constructor(
                     it.copy(
                         dialogState = VaultItemListingState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = BitwardenString.unable_to_unarchive_selected_item.asText(),
+                            message = result.errorMessage?.asText()
+                                ?: BitwardenString.unable_to_unarchive_selected_item.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -2547,11 +2540,28 @@ class VaultItemListingViewModel @Inject constructor(
             bitwardenCredentialManager.isUserVerified = false
             clearDialogState()
 
-            val event = selectedCipher.login
+            val event = selectedCipher
+                .login
                 ?.let { credential ->
-                    VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
-                        GetPasswordCredentialResult.Success(credential = credential),
-                    )
+                    credential
+                        .password
+                        ?.takeIf { it.isNotEmpty() }
+                        ?.let { password ->
+                            VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
+                                GetPasswordCredentialResult.Success(
+                                    username = credential.username,
+                                    password = password,
+                                ),
+                            )
+                        }
+                        ?: VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
+                            @Suppress("MaxLineLength")
+                            GetPasswordCredentialResult.Error(
+                                message = BitwardenString
+                                    .password_operation_failed_because_the_selected_item_does_not_have_a_valid_password
+                                    .asText(),
+                            ),
+                        )
                 }
                 ?: VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
                     GetPasswordCredentialResult.Error(
@@ -2644,7 +2654,6 @@ class VaultItemListingViewModel @Inject constructor(
                             totpData = state.totpData,
                             isPremiumUser = state.isPremium,
                             restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
-                            isArchiveEnabled = state.isArchiveEnabled,
                         )
                     }
 
@@ -2852,7 +2861,6 @@ data class VaultItemListingState(
     val hasMasterPassword: Boolean,
     val isPremium: Boolean,
     val isRefreshing: Boolean,
-    val isArchiveEnabled: Boolean,
 ) {
     /**
      * Indicates what action card to display.
@@ -2883,7 +2891,7 @@ data class VaultItemListingState(
         }
 
     /**
-     * Whether or not the add FAB should be shown.
+     * Whether the add FAB should be shown.
      */
     val hasAddItemFabButton: Boolean
         get() = if (restrictItemTypesPolicyOrgIds.isNotEmpty() &&
@@ -2896,19 +2904,19 @@ data class VaultItemListingState(
         }
 
     /**
-     * Whether or not this represents a listing screen for autofill.
+     * Whether this represents a listing screen for autofill.
      */
     val isAutofill: Boolean
         get() = autofillSelectionData != null
 
     /**
-     * Whether or not this represents a listing screen for CredentialManager creation requests.
+     * Whether this represents a listing screen for CredentialManager creation requests.
      */
     val isCredentialManagerCreation: Boolean
         get() = createCredentialRequest != null
 
     /**
-     * Whether or not this represents a listing screen for totp.
+     * Whether this represents a listing screen for totp.
      */
     val isTotp: Boolean get() = totpData != null
 
@@ -2949,19 +2957,25 @@ data class VaultItemListingState(
         get() = isPullToRefreshSettingEnabled && viewState.isPullToRefreshEnabled
 
     /**
-     * Whether or not the account switcher should be shown.
+     * Whether the account switcher should be shown.
      */
     val shouldShowAccountSwitcher: Boolean
         get() = isAutofill || isCredentialManagerCreation || isTotp
 
     /**
-     * Whether or not the navigation icon should be shown.
+     * Whether the navigation icon should be shown.
      */
     val shouldShowNavigationIcon: Boolean
         get() = !isAutofill && !isCredentialManagerCreation && !isTotp
 
     /**
-     * Whether or not the overflow menu should be shown.
+     * Whether the search icon should be shown.
+     */
+    val shouldShowSearchIcon: Boolean
+        get() = viewState is ViewState.Content
+
+    /**
+     * Whether the overflow menu should be shown.
      */
     val shouldShowOverflowMenu: Boolean
         get() = !isAutofill && !isCredentialManagerCreation && !isTotp
@@ -3093,7 +3107,7 @@ data class VaultItemListingState(
         ) : DialogState()
 
         /**
-         * Displays a dialog to the user indicating that archiving requires a premium account.
+         * Displays a dialog to the user indicating that archiving requires a Premium account.
          */
         @Parcelize
         data object ArchiveRequiresPremium : DialogState()
@@ -3104,7 +3118,7 @@ data class VaultItemListingState(
      */
     sealed class ActionCardState {
         /**
-         * Indicates that your premium subscription has lapsed.
+         * Indicates that your Premium subscription has lapsed.
          */
         data object PremiumSubscription : ActionCardState()
     }
@@ -3180,10 +3194,10 @@ data class VaultItemListingState(
      * @property iconTestTag The test tag for the icon (nullable).
      * @property overflowOptions list of options for the item's overflow menu.
      * @property optionsTestTag The test tag associated with the [overflowOptions].
-     * @property isAutofill whether or not this screen is part of an autofill flow.
-     * @property isCredentialCreation whether or not this screen is part of CredentialManager
+     * @property isAutofill whether this screen is part of an autofill flow.
+     * @property isCredentialCreation whether this screen is part of CredentialManager
      * creation flow.
-     * @property shouldShowMasterPasswordReprompt whether or not a master password reprompt is
+     * @property shouldShowMasterPasswordReprompt whether a master password reprompt is
      * required for various secure actions.
      * @property itemType Indicates the type of item this is.
      */
@@ -3263,7 +3277,7 @@ data class VaultItemListingState(
         abstract val titleText: Text
 
         /**
-         * Whether or not the screen has a floating action button (FAB).
+         * Whether the screen has a floating action button (FAB).
          */
         abstract val hasFab: Boolean
 
@@ -3477,6 +3491,11 @@ sealed class VaultItemListingEvent {
     ) : VaultItemListingEvent()
 
     /**
+     * Navigates to the in-app plan modal for premium upgrade.
+     */
+    data object NavigateToPlanModal : VaultItemListingEvent()
+
+    /**
      * Navigates to the SearchScreen with the given type filter.
      */
     data class NavigateToSearchScreen(
@@ -3663,7 +3682,7 @@ sealed class VaultItemListingsAction {
     ) : VaultItemListingsAction()
 
     /**
-     * Click the upgrade to premium button.
+     * Click the upgrade to Premium button.
      */
     data object UpgradeToPremiumClick : VaultItemListingsAction()
 
@@ -3935,13 +3954,6 @@ sealed class VaultItemListingsAction {
         data class SnackbarDataReceived(
             val data: BitwardenSnackbarData,
         ) : Internal(), BackgroundEvent
-
-        /**
-         * Indicates that the Archive Items flag has been updated.
-         */
-        data class ArchiveItemsFlagUpdateReceive(
-            val isEnabled: Boolean,
-        ) : Internal()
 
         /**
          * Indicates that an error occurred while decrypting a cipher.

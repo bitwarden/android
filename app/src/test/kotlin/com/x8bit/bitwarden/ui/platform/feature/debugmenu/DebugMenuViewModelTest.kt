@@ -110,11 +110,9 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
     @Test
     fun `handleUpdateFeatureFlag should update the feature flag via the repository`() {
         val viewModel = createViewModel()
-        viewModel.trySendAction(
-            DebugMenuAction.UpdateFeatureFlag(FlagKey.CipherKeyEncryption, false),
-        )
+        viewModel.trySendAction(DebugMenuAction.UpdateFeatureFlag(FlagKey.DummyBoolean, false))
         verify(exactly = 1) {
-            mockDebugMenuRepository.updateFeatureFlag(FlagKey.CipherKeyEncryption, false)
+            mockDebugMenuRepository.updateFeatureFlag(FlagKey.DummyBoolean, false)
         }
     }
 
@@ -142,6 +140,25 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(DebugMenuAction.ResetCoachMarkTourStatuses)
         verify(exactly = 1) {
             mockDebugMenuRepository.resetCoachMarkTourStatuses()
+        }
+    }
+
+    @Test
+    fun `ClearSsoCookies should call clearSsoCookies on DebugMenuRepository`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(DebugMenuAction.ClearSsoCookies)
+        verify(exactly = 1) {
+            mockDebugMenuRepository.clearSsoCookies()
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ResetPremiumUpgradeBanner should call resetPremiumUpgradeBannerDismiss on DebugMenuRepository`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(DebugMenuAction.ResetPremiumUpgradeBanner)
+        verify(exactly = 1) {
+            mockDebugMenuRepository.resetPremiumUpgradeBannerDismiss()
         }
     }
 

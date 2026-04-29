@@ -20,12 +20,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -34,6 +39,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param label The label for the button.
  * @param onClick The callback when the button is clicked.
  * @param modifier The [Modifier] to be applied to the button.
+ * @param isExternalLink Indicates that this button launches an external link.
  */
 @Composable
 fun BitwardenClickableText(
@@ -41,12 +47,21 @@ fun BitwardenClickableText(
     onClick: () -> Unit,
     style: TextStyle,
     modifier: Modifier = Modifier,
+    isExternalLink: Boolean = false,
     leadingIcon: Painter? = null,
     innerPadding: PaddingValues = PaddingValues(vertical = 4.dp, horizontal = 16.dp),
     isEnabled: Boolean = true,
     cornerSize: Dp = 28.dp,
     color: Color = BitwardenTheme.colorScheme.text.interaction,
 ) {
+    val formattedAccessibilityString = if (isExternalLink) {
+        stringResource(
+            id = BitwardenString.external_link_format,
+            formatArgs = arrayOf(label),
+        )
+    } else {
+        label
+    }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
@@ -58,7 +73,10 @@ fun BitwardenClickableText(
                 enabled = isEnabled,
                 onClick = onClick,
             )
-            .padding(paddingValues = innerPadding),
+            .padding(paddingValues = innerPadding)
+            .semantics(mergeDescendants = true) {
+                contentDescription = formattedAccessibilityString
+            },
     ) {
         leadingIcon?.let {
             Icon(
@@ -78,6 +96,7 @@ fun BitwardenClickableText(
             textAlign = TextAlign.Start,
             color = color,
             style = style,
+            modifier = Modifier.semantics { hideFromAccessibility() },
         )
     }
 }

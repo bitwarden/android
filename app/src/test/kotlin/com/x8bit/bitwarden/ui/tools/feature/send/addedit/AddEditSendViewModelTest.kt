@@ -19,6 +19,7 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
@@ -109,6 +110,9 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         every { sendSnackbarData(data = any(), relay = any()) } just runs
     }
 
+    private val premiumStateManager: PremiumStateManager = mockk {
+        every { isInAppUpgradeAvailable() } returns false
+    }
     private val mutableSendEmailVerificationFeatureFlagFlow = MutableStateFlow(false)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every {
@@ -480,7 +484,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `SaveClick for file without premium show error dialog`() {
+    fun `SaveClick for file without Premium show error dialog`() {
         mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
             accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = false)),
         )
@@ -823,6 +827,59 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Test
+    fun `DeleteClick vaultRepository deleteSend Error with message should display error message`() =
+        runTest {
+            val errorMessage = "User-friendly error"
+            val error = Throwable("Ooops")
+            val sendId = "mockId-1"
+            coEvery {
+                vaultRepository.deleteSend(sendId)
+            } returns DeleteSendResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+            val initialState = DEFAULT_STATE.copy(
+                addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
+            )
+            val mockSendView = createMockSendView(number = 1)
+            every {
+                mockSendView.toViewState(
+                    baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
+                    isHideEmailAddressEnabled = true,
+                    isSendEmailVerificationEnabled = false,
+                )
+            } returns DEFAULT_VIEW_STATE
+            mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
+            val viewModel = createViewModel(
+                state = initialState,
+                addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(initialState, awaitItem())
+                viewModel.trySendAction(AddEditSendAction.DeleteClick)
+                assertEquals(
+                    initialState.copy(
+                        dialogState = AddEditSendState.DialogState.Loading(
+                            message = BitwardenString.deleting.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    initialState.copy(
+                        dialogState = AddEditSendState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = errorMessage.asText(),
+                            throwable = error,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `DeleteClick vaultRepository deleteSend Success should emit NavigateUpToSearchOrRoot`() =
@@ -1359,7 +1416,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `AuthTypeSelect with Email auth without premium should show premium dialog`() = runTest {
+    fun `AuthTypeSelect with Email auth without Premium should show Premium dialog`() = runTest {
         val nonPremiumState = DEFAULT_STATE.copy(isPremium = false)
         val viewModel = createViewModel(nonPremiumState)
 
@@ -1377,7 +1434,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `AuthTypeSelect with Email auth with premium should allow selection`() = runTest {
+    fun `AuthTypeSelect with Email auth with Premium should allow selection`() = runTest {
         every { UUID.randomUUID().toString() } returns "uuid"
         val premiumState = DEFAULT_STATE.copy(isPremium = true)
         val viewModel = createViewModel(premiumState)
@@ -1405,20 +1462,33 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `UpgradeToPremiumClick should send NavigateToPremium event`() = runTest {
-        val viewModel = createViewModel()
-
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(AddEditSendAction.UpgradeToPremiumClick)
-            val event = awaitItem()
-            assertEquals(
-                AddEditSendEvent.NavigateToPremium(
-                    uri = "https://vault.bitwarden.com/#/settings/subscription/premium?callToAction=upgradeToPremium",
-                ),
-                event,
-            )
+    fun `UpgradeToPremiumClick should send NavigateToPremium when in-app upgrade not available`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(AddEditSendAction.UpgradeToPremiumClick)
+                assertEquals(
+                    AddEditSendEvent.NavigateToPremium(
+                        uri = "https://vault.bitwarden.com/#/settings/subscription/premium?callToAction=upgradeToPremium",
+                    ),
+                    awaitItem(),
+                )
+            }
         }
-    }
+
+    @Test
+    fun `UpgradeToPremiumClick should send NavigateToPlanModal when in-app upgrade available`() =
+        runTest {
+            every { premiumStateManager.isInAppUpgradeAvailable() } returns true
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(AddEditSendAction.UpgradeToPremiumClick)
+                assertEquals(
+                    AddEditSendEvent.NavigateToPlanModal,
+                    awaitItem(),
+                )
+            }
+        }
 
     //endregion Authentication Tests
 
@@ -1446,6 +1516,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         snackbarRelayManager = snackbarRelayManager,
         generatorRepository = generatorRepository,
         featureFlagManager = featureFlagManager,
+        premiumStateManager = premiumStateManager,
     )
 }
 
@@ -1509,6 +1580,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     onboardingStatus = OnboardingStatus.COMPLETE,
     firstTimeState = FirstTimeState(showImportLoginsCard = true),
     isExportable = true,
+    creationDate = null,
 )
 
 private val DEFAULT_USER_STATE = UserState(

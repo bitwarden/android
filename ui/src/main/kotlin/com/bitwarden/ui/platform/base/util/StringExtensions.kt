@@ -11,6 +11,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.core.graphics.toColorInt
+import timber.log.Timber
 import java.net.URI
 import java.net.URISyntaxException
 import java.text.Normalizer
@@ -41,7 +42,7 @@ private const val ANDROID_APP_URI_SCHEME: String = "androidapp://"
 fun String?.orZeroWidthSpace(): String = this.orNullIfBlank() ?: ZERO_WIDTH_CHARACTER
 
 /**
- * Whether or not string is a valid email address.
+ * Whether the string is a valid email address.
  *
  * By default, this function will [useStrictValidation] by asserting that:
  * * The string starts with a string of characters including periods, underscores, percent symbols,
@@ -54,7 +55,7 @@ fun String?.orZeroWidthSpace(): String = this.orNullIfBlank() ?: ZERO_WIDTH_CHAR
  * When [useStrictValidation] is `false`, this function will only assert that the string contains an
  * '@' symbol.
  *
- * @param useStrictValidation Whether or not to use strict validation. Defaults to `true`.
+ * @param useStrictValidation Whether to use strict validation. Defaults to `true`.
  */
 fun String.isValidEmail(useStrictValidation: Boolean = true): Boolean =
     if (useStrictValidation) {
@@ -83,7 +84,7 @@ fun String.isValidUri(): Boolean =
 fun String.toHostOrPathOrNull(): String? {
     val uri = try {
         URI(this)
-    } catch (e: URISyntaxException) {
+    } catch (_: URISyntaxException) {
         return null
     }
     return uri.host ?: uri.path
@@ -169,11 +170,16 @@ fun String.toAnnotatedString(): AnnotatedString = AnnotatedString(text = this)
  * Supported formats:
  * - "rrggbb" / "#rrggbb"
  * - "aarrggbb" / "#aarrggbb"
+ * Support for some default color names per the [toColorInt] function.
  */
-fun String.hexToColor(): Color = if (startsWith("#")) {
-    Color(toColorInt())
-} else {
-    Color("#$this".toColorInt())
+fun String.hexToColor(): Color {
+    val colorString = if (Regex("^[0-9A-Fa-f]+$").matches(this)) "#$this" else this
+    return try {
+        Color(colorString.toColorInt())
+    } catch (e: IllegalArgumentException) {
+        Timber.e(e, "Failed to parse color: $this")
+        Color.Black
+    }
 }
 
 /**
@@ -181,7 +187,6 @@ fun String.hexToColor(): Color = if (startsWith("#")) {
  * This can be applied to any [String] in order to provide some deterministic color value based on
  * arbitrary [String] properties.
  */
-@OptIn(ExperimentalStdlibApi::class)
 @Suppress("MagicNumber")
 fun String.toHexColorRepresentation(): String {
     // Produces a string with exactly two hexadecimal digits.

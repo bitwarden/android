@@ -12,6 +12,7 @@ import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.performCustomAccessibilityAction
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import io.mockk.every
 import io.mockk.mockk
@@ -68,18 +69,20 @@ class LeaveOrganizationScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `help link button click should emit HelpLinkClick action`() {
+    fun `learn more hypertext click should emit HelpLinkClick action`() {
         composeTestRule
-            .onNodeWithText("How to manage My vault")
-            .performScrollTo()
-            .performClick()
+            .onNodeWithText(
+                text = "By declining, your personal items will stay in your account, but you’ll " +
+                    "lose access to shared items and organization features. Learn more",
+            )
+            .performCustomAccessibilityAction(label = "Learn more, External link")
         verify { viewModel.trySendAction(LeaveOrganizationAction.HelpLinkClick) }
     }
 
     @Test
-    fun `organization name should be displayed in title`() {
+    fun `organization name should NOT be displayed in title`() {
         composeTestRule
-            .onNodeWithText("Are you sure you want to leave $ORGANIZATION_NAME?")
+            .onNodeWithText("Are you sure you want to leave?")
             .assertExists()
     }
 
@@ -96,8 +99,7 @@ class LeaveOrganizationScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(
                 text = "By declining, your personal items will stay in your account, but you’ll " +
-                    "lose access to shared items and organization features.\n\nContact your " +
-                    "admin to regain access.",
+                    "lose access to shared items and organization features. Learn more",
             )
             .assertExists()
     }

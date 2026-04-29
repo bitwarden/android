@@ -4,15 +4,6 @@
 
 ### First Pass: Identify and Assess
 
-<thinking>
-Before diving into details:
-1. Which dependencies were updated?
-2. What are the version changes? (patch, minor, major)
-3. Are any security-sensitive libraries involved? (crypto, auth, networking)
-4. Any pre-release versions (alpha, beta, RC)?
-5. What's the blast radius if something breaks?
-</thinking>
-
 **1. Identify the change:**
 - Which library? Old version → New version?
 - Major (X.0.0), Minor (0.X.0), or Patch (0.0.X) version change?
@@ -24,15 +15,6 @@ Before diving into details:
 - Check if this is a breaking change version
 
 ### Second Pass: Deep Analysis
-
-<thinking>
-For each dependency update:
-1. What changes are in this release?
-2. Are there breaking changes?
-3. Are there security fixes?
-4. Do we use the affected APIs?
-5. How does this affect our codebase?
-</thinking>
 
 **3. Review release notes** (if available):
 - Breaking changes mentioned?
@@ -92,16 +74,7 @@ Use `reference/priority-framework.md` to classify findings as Critical/Important
 
 ## Output Format
 
-Follow the format guidance from `SKILL.md` Step 5 (concise summary with critical issues only, detailed inline comments with `<details>` tags).
-
-```markdown
-**Overall Assessment:** APPROVE / REQUEST CHANGES
-
-**Critical Issues** (if any):
-- [One-line summary of each critical blocking issue with file:line reference]
-
-See inline comments for all issue details.
-```
+See `examples/review-outputs.md` for the required output format and inline comment structure.
 
 ## Example Reviews
 

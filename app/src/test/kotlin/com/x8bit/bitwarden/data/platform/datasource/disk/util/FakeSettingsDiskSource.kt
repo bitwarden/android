@@ -67,6 +67,7 @@ class FakeSettingsDiskSource(
     private val storedDisableAutofillSavePrompt = mutableMapOf<String, Boolean?>()
     private val storedPullToRefreshEnabled = mutableMapOf<String, Boolean?>()
     private var storedIntroducingArchiveActionCardDismissed = mutableMapOf<String, Boolean?>()
+    private var storedPremiumUpgradeBannerDismissed = mutableMapOf<String, Boolean?>()
     private val storedInlineAutofillEnabled = mutableMapOf<String, Boolean?>()
     private val storedBlockedAutofillUris = mutableMapOf<String, List<String>?>()
     private var storedIsIconLoadingDisabled: Boolean? = null
@@ -110,6 +111,9 @@ class FakeSettingsDiskSource(
         bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableIntroducingArchiveActionCardDismissedFlow =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutablePremiumUpgradeBannerDismissedFlow =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     override var appLanguage: AppLanguage?
@@ -341,6 +345,18 @@ class FakeSettingsDiskSource(
         getMutableIntroducingArchiveActionCardDismissedFlow(userId = userId).tryEmit(isDismissed)
     }
 
+    override fun getPremiumUpgradeBannerDismissed(userId: String): Boolean? =
+        storedPremiumUpgradeBannerDismissed[userId]
+
+    override fun getPremiumUpgradeBannerDismissedFlow(userId: String): Flow<Boolean?> =
+        getMutablePremiumUpgradeBannerDismissedFlow(userId = userId)
+            .onSubscription { emit(getPremiumUpgradeBannerDismissed(userId = userId)) }
+
+    override fun storePremiumUpgradeBannerDismissed(userId: String, isDismissed: Boolean?) {
+        storedPremiumUpgradeBannerDismissed[userId] = isDismissed
+        getMutablePremiumUpgradeBannerDismissedFlow(userId = userId).tryEmit(isDismissed)
+    }
+
     override fun getInlineAutofillEnabled(userId: String): Boolean? =
         storedInlineAutofillEnabled[userId]
 
@@ -499,6 +515,13 @@ class FakeSettingsDiskSource(
     }
 
     /**
+     * Asserts that the stored Premium upgrade banner dismissed matches the [expected] one.
+     */
+    fun assertPremiumUpgradeBannerDismissed(userId: String, expected: Boolean?) {
+        assertEquals(expected, storedPremiumUpgradeBannerDismissed[userId])
+    }
+
+    /**
      * Asserts that the stored last sync time matches the [expected] one.
      */
     fun assertLastSyncTime(userId: String, expected: Instant?) {
@@ -559,6 +582,13 @@ class FakeSettingsDiskSource(
         userId: String,
     ): MutableSharedFlow<Boolean?> =
         mutableIntroducingArchiveActionCardDismissedFlow.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutablePremiumUpgradeBannerDismissedFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutablePremiumUpgradeBannerDismissedFlow.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 

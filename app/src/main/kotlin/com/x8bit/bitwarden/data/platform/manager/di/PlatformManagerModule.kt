@@ -15,6 +15,7 @@ import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.data.manager.NativeLibraryManager
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.network.BitwardenServiceClient
+import com.bitwarden.network.model.BitwardenServiceClientConfig
 import com.bitwarden.network.service.EventService
 import com.bitwarden.network.service.PushService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
@@ -30,8 +31,6 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacyAppCenterMigrator
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManagerImpl
-import com.x8bit.bitwarden.data.platform.manager.AppStateManager
-import com.x8bit.bitwarden.data.platform.manager.AppStateManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.AssetManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
@@ -105,12 +104,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object PlatformManagerModule {
-
-    @Provides
-    @Singleton
-    fun provideAppStateManager(
-        application: Application,
-    ): AppStateManager = AppStateManagerImpl(application = application)
 
     @Provides
     @Singleton
@@ -375,11 +368,13 @@ object PlatformManagerModule {
         cookieDiskSource: CookieDiskSource,
         configDiskSource: ConfigDiskSource,
         authDiskSource: AuthDiskSource,
+        serviceClientConfig: BitwardenServiceClientConfig,
     ): SdkRepositoryFactory = SdkRepositoryFactoryImpl(
         vaultDiskSource = vaultDiskSource,
         cookieDiskSource = cookieDiskSource,
         configDiskSource = configDiskSource,
         authDiskSource = authDiskSource,
+        serviceClientConfig = serviceClientConfig,
     )
 
     @Provides

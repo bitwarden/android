@@ -49,6 +49,7 @@ import com.bitwarden.ui.platform.components.appbar.model.TopAppBarDividerStyle
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.bitwarden.ui.platform.components.coachmark.CoachMarkActionText
@@ -61,7 +62,6 @@ import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.field.model.TextToolbarType
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.segment.BitwardenSegmentedButton
 import com.bitwarden.ui.platform.components.segment.SegmentedButtonOptionContent
@@ -176,26 +176,17 @@ fun GeneratorScreen(
             }
         }
     }
-    val onRegenerateClick: () -> Unit = remember(viewModel) {
-        { viewModel.trySendAction(GeneratorAction.RegenerateClick) }
+    val onRegenerateClick: () -> Unit = { viewModel.trySendAction(GeneratorAction.RegenerateClick) }
+
+    val onCopyClick: () -> Unit = { viewModel.trySendAction(GeneratorAction.CopyClick) }
+
+    val onMainStateOptionClicked: (GeneratorState.MainTypeOption) -> Unit = {
+        viewModel.trySendAction(GeneratorAction.MainTypeOptionSelect(it))
     }
 
-    val onCopyClick: () -> Unit = remember(viewModel) {
-        { viewModel.trySendAction(GeneratorAction.CopyClick) }
+    val onUsernameOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit = {
+        viewModel.trySendAction(GeneratorAction.MainType.Username.UsernameTypeOptionSelect(it))
     }
-
-    val onMainStateOptionClicked: (GeneratorState.MainTypeOption) -> Unit = remember(viewModel) {
-        { viewModel.trySendAction(GeneratorAction.MainTypeOptionSelect(it)) }
-    }
-
-    val onUsernameOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit =
-        remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    GeneratorAction.MainType.Username.UsernameTypeOptionSelect(it),
-                )
-            }
-        }
 
     val onShowNextCoachMark: () -> Unit = remember {
         { scope.launch { coachMarkState.showNextCoachMark() } }
@@ -227,20 +218,16 @@ fun GeneratorScreen(
                         ModalAppBar(
                             generatorMode = generatorMode,
                             scrollBehavior = scrollBehavior,
-                            onCloseClick = remember(viewModel) {
-                                { viewModel.trySendAction(GeneratorAction.CloseClick) }
-                            },
-                            onSaveClick = remember(viewModel) {
-                                { viewModel.trySendAction(GeneratorAction.SaveClick) }
-                            },
+                            onCloseClick = { viewModel.trySendAction(GeneratorAction.CloseClick) },
+                            onSaveClick = { viewModel.trySendAction(GeneratorAction.SaveClick) },
                         )
                     }
 
                     GeneratorMode.Default -> {
                         DefaultAppBar(
                             scrollBehavior = scrollBehavior,
-                            onPasswordHistoryClick = remember(viewModel) {
-                                { viewModel.trySendAction(GeneratorAction.PasswordHistoryClick) }
+                            onPasswordHistoryClick = {
+                                viewModel.trySendAction(GeneratorAction.PasswordHistoryClick)
                             },
                         )
                     }
@@ -311,7 +298,6 @@ private fun DefaultAppBar(
         dividerStyle = TopAppBarDividerStyle.NONE,
         actions = {
             BitwardenOverflowActionItem(
-                contentDescription = stringResource(BitwardenString.more),
                 menuItemDataList = persistentListOf(
                     OverflowMenuItemData(
                         text = stringResource(id = BitwardenString.password_history),
@@ -1170,9 +1156,10 @@ private fun UsernameOptionsItem(
         supportingText = currentSubState.selectedType.supportingStringResId?.let {
             stringResource(id = it)
         },
-        tooltip = TooltipData(
+        helpData = BitwardenHelpButtonData(
             onClick = usernameTypeHandlers.onUsernameTooltipClicked,
             contentDescription = stringResource(id = BitwardenString.learn_more),
+            isExternalLink = true,
         ),
         cardStyle = CardStyle.Full,
         modifier = modifier.testTag(tag = "UsernameTypePicker"),

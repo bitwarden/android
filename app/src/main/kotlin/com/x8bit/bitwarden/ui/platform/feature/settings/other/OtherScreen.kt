@@ -71,9 +71,7 @@ fun OtherScreen(
 
     OtherDialogs(
         dialogState = state.dialogState,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(OtherAction.DismissDialog) }
-        },
+        onDismissRequest = { viewModel.trySendAction(OtherAction.DismissDialog) },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -87,9 +85,7 @@ fun OtherScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = BitwardenString.back),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(OtherAction.BackClick) }
-                },
+                onNavigationIconClick = { viewModel.trySendAction(OtherAction.BackClick) },
             )
         },
         snackbarHost = {
@@ -98,17 +94,13 @@ fun OtherScreen(
     ) {
         OtherContent(
             state = state,
-            onEnableSyncCheckChange = remember(viewModel) {
-                { viewModel.trySendAction(OtherAction.AllowSyncToggle(it)) }
+            onEnableSyncCheckChange = { viewModel.trySendAction(OtherAction.AllowSyncToggle(it)) },
+            onSyncClick = { viewModel.trySendAction(OtherAction.SyncNowButtonClick) },
+            onClipboardFrequencyChange = {
+                viewModel.trySendAction(OtherAction.ClearClipboardFrequencyChange(it))
             },
-            onSyncClick = remember(viewModel) {
-                { viewModel.trySendAction(OtherAction.SyncNowButtonClick) }
-            },
-            onClipboardFrequencyChange = remember(viewModel) {
-                { viewModel.trySendAction(OtherAction.ClearClipboardFrequencyChange(it)) }
-            },
-            onScreenCaptureChange = remember(viewModel) {
-                { viewModel.trySendAction(OtherAction.AllowScreenCaptureToggle(it)) }
+            onScreenCaptureChange = {
+                viewModel.trySendAction(OtherAction.AllowScreenCaptureToggle(it))
             },
             modifier = Modifier.fillMaxSize(),
         )

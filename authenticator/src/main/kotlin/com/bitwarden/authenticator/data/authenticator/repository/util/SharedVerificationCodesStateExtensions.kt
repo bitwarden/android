@@ -4,7 +4,7 @@ import com.bitwarden.authenticator.data.authenticator.manager.model.Verification
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 
 /**
- * Whether or not the user has enabled sync with Bitwarden and the two apps are successfully
+ * Whether the user has enabled sync with Bitwarden and the two apps are successfully
  * syncing. This is useful to know when to show certain sync UI and also when to support
  * moving codes to Bitwarden.
  */

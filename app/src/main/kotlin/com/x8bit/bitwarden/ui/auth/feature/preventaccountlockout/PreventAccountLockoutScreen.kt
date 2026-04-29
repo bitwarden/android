@@ -14,7 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -61,10 +60,8 @@ fun PreventAccountLockoutScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                onNavigationIconClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(PreventAccountLockoutAction.CloseClickAction)
-                    }
+                onNavigationIconClick = {
+                    viewModel.trySendAction(PreventAccountLockoutAction.CloseClickAction)
                 },
             )
         },

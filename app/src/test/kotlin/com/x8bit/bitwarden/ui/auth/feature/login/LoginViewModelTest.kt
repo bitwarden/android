@@ -133,6 +133,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                     onboardingStatus = OnboardingStatus.COMPLETE,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
                     isExportable = true,
+                    creationDate = null,
                 ),
             ),
         )

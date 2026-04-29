@@ -15,7 +15,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -41,10 +40,8 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 fun SetupCompleteScreen(
     viewModel: SetupCompleteViewModel = hiltViewModel(),
 ) {
-    val setupCompleteAction: () -> Unit = remember(viewModel) {
-        {
-            viewModel.trySendAction(SetupCompleteAction.CompleteSetup)
-        }
+    val setupCompleteAction: () -> Unit = {
+        viewModel.trySendAction(SetupCompleteAction.CompleteSetup)
     }
 
     // Handle system back action to complete the setup.

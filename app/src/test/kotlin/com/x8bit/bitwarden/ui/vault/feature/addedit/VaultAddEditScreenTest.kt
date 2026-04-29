@@ -8,6 +8,7 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
@@ -31,6 +32,7 @@ import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -94,7 +96,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     private var onNavigateToManualCodeEntryScreenCalled = false
     private var onNavigateToGeneratorModalType: GeneratorMode.Modal? = null
     private var onNavigateToAttachmentsId: String? = null
+    private var onNavigateToCardScanScreenCalled = false
     private var onNavigateToMoveToOrganizationId: String? = null
+    private var onNavigateToPlanCalled = false
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultAddEditEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE_LOGIN)
@@ -136,6 +140,8 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                 onNavigateToGeneratorModal = { onNavigateToGeneratorModalType = it },
                 onNavigateToAttachments = { onNavigateToAttachmentsId = it },
                 onNavigateToMoveToOrganization = { id, _ -> onNavigateToMoveToOrganizationId = id },
+                onNavigateToCardScanScreen = { onNavigateToCardScanScreenCalled = true },
+                onNavigateToPlan = { onNavigateToPlanCalled = true },
                 viewModel = viewModel,
             )
         }
@@ -189,6 +195,45 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `on NavigateToCardScan event should invoke onNavigateToCardScanScreen`() {
+        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToCardScan)
+        assertTrue(onNavigateToCardScanScreenCalled)
+    }
+
+    @Test
+    fun `on FocusCardHolderName event should focus field`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD
+        composeTestRule.waitForIdle()
+        mutableEventFlow.tryEmit(VaultAddEditEvent.FocusCardHolderName)
+        composeTestRule.waitForIdle()
+        composeTestRule
+            .onNodeWithTag("CardholderNameEntry")
+            .performScrollTo()
+            .assertIsFocused()
+    }
+
+    @Test
+    fun `scan card button should be displayed when isCardScannerEnabled is true`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD.copy(
+            isCardScannerEnabled = true,
+        )
+        composeTestRule
+            .onNodeWithText("Scan card")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `scan card button should not be displayed when isCardScannerEnabled is false`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD.copy(
+            isCardScannerEnabled = false,
+        )
+        composeTestRule
+            .onNodeWithText("Scan card")
+            .assertDoesNotExist()
+    }
+
+    @Test
     fun `on NavigateToManualCodeEntry event should invoke NavigateToManualCodeEntry`() {
         mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToManualCodeEntry)
         assertTrue(onNavigateToManualCodeEntryScreenCalled)
@@ -233,6 +278,12 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `on NavigateToPlanModal event should invoke onNavigateToPlan`() {
+        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToPlanModal)
+        assertTrue(onNavigateToPlanCalled)
+    }
+
+    @Test
     fun `on CompleteCredentialCreate event should invoke CredentialProviderCompletionManager`() {
         val result = CreateCredentialResult.Success.Fido2CredentialRegistered(
             responseJson = "mockRegistrationResponse",
@@ -268,14 +319,14 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ArchiveRequiresPremium dialog on upgrade to premium click should emit UpgradeToPremiumClick`() {
+    fun `ArchiveRequiresPremium dialog on upgrade to Premium click should emit UpgradeToPremiumClick`() {
         composeTestRule.assertNoDialogExists()
         mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
             dialog = VaultAddEditState.DialogState.ArchiveRequiresPremium,
         )
 
         composeTestRule
-            .onNodeWithText(text = "Upgrade to premium")
+            .onNodeWithText(text = "Upgrade to Premium")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -1268,7 +1319,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     @Test
     fun `Clicking the Authenticator key tooltip sends AuthenticatorHelpToolTipClick action`() {
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Authenticator key help")
+            .onNodeWithContentDescriptionAfterScroll(
+                label = "Authenticator key help, External link",
+            )
             .performClick()
 
         verify {
@@ -1329,7 +1382,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1356,7 +1409,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1381,7 +1434,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1442,7 +1495,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1487,7 +1540,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1514,7 +1567,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1543,7 +1596,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1571,7 +1624,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1618,7 +1671,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -1658,7 +1711,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
-            .filterToOne(hasContentDescription(value = "Options"))
+            .filterToOne(hasContentDescription(value = "More options"))
             .performClick()
 
         composeTestRule
@@ -3071,7 +3124,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Master password re-prompt help")
+            .onNodeWithContentDescriptionAfterScroll(
+                label = "Master password re-prompt help, External link",
+            )
             .performClick()
 
         verify {
@@ -3512,7 +3567,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onAllNodesWithContentDescriptionAfterScroll("Edit")
-            .onFirst()
+            .onLast()
             .performClick()
 
         composeTestRule
@@ -3523,14 +3578,115 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             viewModel.trySendAction(
                 VaultAddEditAction.Common.CustomFieldActionSelect(
                     customFieldAction = CustomFieldAction.MOVE_UP,
-                    customField = VaultAddEditState.Custom.BooleanField(
-                        itemId = "Test ID 1",
-                        name = "TestBoolean",
-                        value = false,
+                    customField = VaultAddEditState.Custom.HiddenField(
+                        itemId = "Test ID 3",
+                        name = "TestHidden",
+                        value = "TestHiddenVal",
                     ),
                 ),
             )
         }
+    }
+
+    @Test
+    fun `clicking first custom field edit icon only shows move down action in dialog`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithContentDescriptionAfterScroll("Edit")
+            .onFirst()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Move Up")
+            .assertIsNotDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Move down")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `clicking middle custom field edit icon shows both move actions in dialog`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithContentDescriptionAfterScroll("Edit")[1]
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Move Up")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Move down")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `clicking last custom field edit icon only shows move up action in dialog`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithContentDescriptionAfterScroll("Edit")
+            .onLast()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Move Up")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Move down")
+            .assertIsNotDisplayed()
+    }
+
+    @Test
+    fun `clicking single custom field edit icon shows no move actions in dialog`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS.copy(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.BooleanField("Test ID 1", "TestBoolean", false),
+                    ),
+                ),
+                type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                isIndividualVaultDisabled = false,
+            ),
+        )
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithContentDescriptionAfterScroll("Edit")
+            .onFirst()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Move Up")
+            .assertIsNotDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Move down")
+            .assertIsNotDisplayed()
     }
 
     @Test
@@ -3548,7 +3704,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -3594,7 +3750,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         // Open the overflow menu
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         // Confirm Collections option is present
@@ -3641,7 +3797,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -3725,7 +3881,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -3773,7 +3929,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -4326,7 +4482,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertCountEquals(0)
         // Open the overflow menu
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         // Confirm it does not exist
@@ -4361,7 +4517,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertCountEquals(0)
 
         composeTestRule
-            .onNodeWithContentDescription("More")
+            .onNodeWithContentDescription("More options")
             .performClick()
 
         composeTestRule
@@ -4429,7 +4585,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertCountEquals(0)
 
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .performClick()
 
         composeTestRule
@@ -4465,7 +4621,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertCountEquals(0)
 
         composeTestRule
-            .onNodeWithContentDescription(label = "More")
+            .onNodeWithContentDescription(label = "More options")
             .performClick()
 
         composeTestRule
@@ -4495,7 +4651,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddEditState(
@@ -4511,7 +4667,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
         private val DEFAULT_STATE_IDENTITY = VaultAddEditState(
@@ -4527,7 +4683,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
         private val DEFAULT_STATE_CARD = VaultAddEditState(
@@ -4543,7 +4699,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS = VaultAddEditState(
@@ -4569,7 +4725,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddEditState(
@@ -4585,7 +4741,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
         private val DEFAULT_STATE_SSH_KEYS = VaultAddEditState(
@@ -4601,7 +4757,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
         private val ALTERED_COLLECTIONS = listOf(

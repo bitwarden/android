@@ -124,6 +124,24 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     fun getIntroducingArchiveActionCardDismissedFlow(userId: String): Flow<Boolean?>
 
     /**
+     * Retrieves the stored value of whether the Premium upgrade banner has been dismissed.
+     */
+    fun getPremiumUpgradeBannerDismissed(userId: String): Boolean?
+
+    /**
+     * Stores whether the Premium upgrade banner has been dismissed.
+     */
+    fun storePremiumUpgradeBannerDismissed(
+        userId: String,
+        isDismissed: Boolean?,
+    )
+
+    /**
+     * Emits updates that track [getPremiumUpgradeBannerDismissed] for the given [userId].
+     */
+    fun getPremiumUpgradeBannerDismissedFlow(userId: String): Flow<Boolean?>
+
+    /**
      * Retrieves the biometric integrity validity for the given [userId] and
      * [systemBioIntegrityState].
      */
@@ -229,7 +247,7 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     fun storeDefaultUriMatchType(userId: String, uriMatchType: UriMatchType?)
 
     /**
-     * Gets the value for whether or not the autofill save prompt should be disabled for the
+     * Gets the value for whether the autofill save prompt should be disabled for the
      * given [userId].
      */
     fun getAutofillSavePromptDisabled(userId: String): Boolean?
@@ -295,13 +313,13 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     fun getUserHasSignedInPreviously(userId: String): Boolean
 
     /**
-     * Gets whether or not the given [userId] has signalled they want to enable autofill in
+     * Gets whether the given [userId] has signaled they want to enable autofill in
      * onboarding.
      */
     fun getShowBrowserAutofillSettingBadge(userId: String): Boolean?
 
     /**
-     * Stores the given value for whether or not the given [userId] has signalled they want to
+     * Stores the given value for whether the given [userId] has signaled they want to
      * enable the browser autofill integration in onboarding.
      */
     fun storeShowBrowserAutofillSettingBadge(userId: String, showBadge: Boolean?)
@@ -312,13 +330,13 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     fun getShowBrowserAutofillSettingBadgeFlow(userId: String): Flow<Boolean?>
 
     /**
-     * Gets whether or not the given [userId] has signalled they want to enable autofill in
+     * Gets whether the given [userId] has signaled they want to enable autofill in
      * onboarding.
      */
     fun getShowAutoFillSettingBadge(userId: String): Boolean?
 
     /**
-     * Stores the given value for whether or not the given [userId] has signalled they want to
+     * Stores the given value for whether the given [userId] has signaled they want to
      * enable autofill in onboarding.
      */
     fun storeShowAutoFillSettingBadge(userId: String, showBadge: Boolean?)
@@ -329,13 +347,13 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     fun getShowAutoFillSettingBadgeFlow(userId: String): Flow<Boolean?>
 
     /**
-     * Gets whether or not the given [userId] has signalled they want to enable unlock options
+     * Gets whether the given [userId] has signaled they want to enable unlock options
      * later, during onboarding.
      */
     fun getShowUnlockSettingBadge(userId: String): Boolean?
 
     /**
-     * Stores the given value for whether or not the given [userId] has signalled they want to
+     * Stores the given value for whether the given [userId] has signaled they want to
      * set up unlock options later, during onboarding.
      */
     fun storeShowUnlockSettingBadge(userId: String, showBadge: Boolean?)
@@ -346,12 +364,12 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     fun getShowUnlockSettingBadgeFlow(userId: String): Flow<Boolean?>
 
     /**
-     * Gets whether or not the given [userId] has signalled they want to import logins later.
+     * Gets whether the given [userId] has signaled they want to import logins later.
      */
     fun getShowImportLoginsSettingBadge(userId: String): Boolean?
 
     /**
-     * Stores the given value for whether or not the given [userId] has signalled they want to
+     * Stores the given value for whether the given [userId] has signaled they want to
      * set import logins later, during first time usage.
      */
     fun storeShowImportLoginsSettingBadge(userId: String, showBadge: Boolean?)
@@ -362,13 +380,13 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     fun getShowImportLoginsSettingBadgeFlow(userId: String): Flow<Boolean?>
 
     /**
-     * Gets whether or not the application has registered for export via the credential exchange
+     * Gets whether the application has registered for export via the credential exchange
      * protocol.
      */
     fun getAppRegisteredForExport(): Boolean?
 
     /**
-     * Stores the given value for whether or not the application has registered for export via
+     * Stores the given value for whether the application has registered for export via
      * the credential exchange protocol.
      */
     fun storeAppRegisteredForExport(isRegistered: Boolean?)

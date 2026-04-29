@@ -18,6 +18,9 @@ import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.feature.cardscanner.manager.CardScanManager
+import com.bitwarden.ui.platform.feature.cardscanner.util.CardScanData
+import com.bitwarden.ui.platform.feature.cardscanner.util.CardScanResult
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.model.TotpData
 import com.bitwarden.ui.platform.resource.BitwardenPlurals
@@ -39,6 +42,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
@@ -223,10 +227,17 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         every { show(message = any(), duration = any()) } just runs
     }
     private val environmentRepository = FakeEnvironmentRepository()
-    private val mutableArchiveItemsFlow = MutableStateFlow(true)
+    private val premiumStateManager: PremiumStateManager = mockk {
+        every { isInAppUpgradeAvailable() } returns false
+    }
+    private val mutableCardScannerFlow = MutableStateFlow(false)
+    private val mutableCardScanResultFlow = bufferedMutableSharedFlow<CardScanResult>()
+    private val cardScanManager: CardScanManager = mockk {
+        every { cardScanResultFlow } returns mutableCardScanResultFlow
+    }
     private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(FlagKey.ArchiveItems) } answers { mutableArchiveItemsFlow.value }
-        every { getFeatureFlagFlow(FlagKey.ArchiveItems) } returns mutableArchiveItemsFlow
+        every { getFeatureFlag(FlagKey.CardScanner) } answers { mutableCardScannerFlow.value }
+        every { getFeatureFlagFlow(FlagKey.CardScanner) } returns mutableCardScannerFlow
     }
 
     @BeforeEach
@@ -268,7 +279,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = true,
-            isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -357,7 +368,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 shouldShowCoachMarkTour = false,
                 defaultUriMatchType = UriMatchTypeModel.EXACT,
                 hasPremium = true,
-                isArchiveEnabled = true,
+                isCardScannerEnabled = false,
             ),
             viewModel.stateFlow.value,
         )
@@ -539,20 +550,35 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `UpgradeToPremiumClick should emit NavigateToPremium`() = runTest {
-        val viewModel = createAddVaultItemViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultAddEditAction.Common.UpgradeToPremiumClick)
-            assertEquals(
-                VaultAddEditEvent.NavigateToPremium(
-                    uri = "https://vault.bitwarden.com/#/" +
-                        "settings/subscription/premium" +
-                        "?callToAction=upgradeToPremium",
-                ),
-                awaitItem(),
-            )
+    fun `UpgradeToPremiumClick should emit NavigateToPremium when in-app upgrade not available`() =
+        runTest {
+            val viewModel = createAddVaultItemViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.UpgradeToPremiumClick)
+                assertEquals(
+                    VaultAddEditEvent.NavigateToPremium(
+                        uri = "https://vault.bitwarden.com/#/" +
+                            "settings/subscription/premium" +
+                            "?callToAction=upgradeToPremium",
+                    ),
+                    awaitItem(),
+                )
+            }
         }
-    }
+
+    @Test
+    fun `UpgradeToPremiumClick should emit NavigateToPlanModal when in-app upgrade available`() =
+        runTest {
+            every { premiumStateManager.isInAppUpgradeAvailable() } returns true
+            val viewModel = createAddVaultItemViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.UpgradeToPremiumClick)
+                assertEquals(
+                    VaultAddEditEvent.NavigateToPlanModal,
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `snackbar relay emission should send ShowSnackbar`() = runTest {
@@ -700,6 +726,80 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     vaultAddEditType = vaultAddEditType,
                     dialogState = VaultAddEditState.DialogState.Generic(
                         message = BitwardenString.generic_error_message.asText(),
+                        error = error,
+                    ),
+                    commonContentViewState = createCommonContentViewState(
+                        name = "mockName-1",
+                        originalCipher = createMockCipherView(number = 1),
+                        notes = "mockNotes-1",
+                        customFieldData = listOf(
+                            VaultAddEditState.Custom.HiddenField(
+                                itemId = "testId",
+                                name = "mockName-1",
+                                value = "mockValue-1",
+                            ),
+                        ),
+                    ),
+                    typeContentViewState = createLoginTypeContentViewState(
+                        username = "mockUsername-1",
+                        password = "mockPassword-1",
+                        uri = listOf(
+                            UriItem(
+                                id = "testId",
+                                uri = "www.mockuri1.com",
+                                match = UriMatchType.HOST,
+                                checksum = "mockUriChecksum-1",
+                            ),
+                        ),
+                        totpCode = "mockTotp-1",
+                        canViewPassword = true,
+                        fido2CredentialCreationDateTime = null,
+                    )
+                        .copy(totp = "mockTotp-1"),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ConfirmDeleteClick with DeleteCipherResult error with errorMessage should display that message`() =
+        runTest {
+            val cipherListView = createMockCipherListView(number = 1)
+            val cipherView = createMockCipherView(number = 1)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val initState = createVaultAddItemState(vaultAddEditType = vaultAddEditType)
+            mutableVaultDataFlow.value = DataState.Loaded(
+                data = createVaultData(cipherListView = cipherListView),
+            )
+
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = initState,
+                    vaultAddEditType = vaultAddEditType,
+                    vaultItemCipherType = VaultItemCipherType.LOGIN,
+                ),
+            )
+
+            val errorMessage = "You do not have permission to edit this."
+            val error = Throwable("Oh dang.")
+            coEvery {
+                vaultRepository.softDeleteCipher(
+                    cipherId = "mockId-1",
+                    cipherView = cipherView,
+                )
+            } returns DeleteCipherResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+
+            viewModel.trySendAction(VaultAddEditAction.Common.ConfirmDeleteClick)
+
+            assertEquals(
+                createVaultAddItemState(
+                    vaultAddEditType = vaultAddEditType,
+                    dialogState = VaultAddEditState.DialogState.Generic(
+                        message = errorMessage.asText(),
                         error = error,
                     ),
                     commonContentViewState = createCommonContentViewState(
@@ -2304,7 +2404,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `ArchiveClick without premium should show ArchiveRequiresPremium dialog`() = runTest {
+    fun `ArchiveClick without Premium should show ArchiveRequiresPremium dialog`() = runTest {
         val cipherListView = createMockCipherListView(number = 1, isArchived = false)
         val cipherView = createMockCipherView(number = 1, isArchived = false)
         val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
@@ -2478,6 +2578,96 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `ArchiveClick with ArchiveCipherResult error with errorMessage should display that message`() =
+        runTest {
+            mutableUserStateFlow.update {
+                it?.copy(
+                    accounts = it.accounts.map { account ->
+                        account.copy(isPremium = true)
+                    },
+                )
+            }
+            val cipherListView =
+                createMockCipherListView(number = 1, isArchived = false)
+            val cipherView =
+                createMockCipherView(number = 1, isArchived = false)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val initState = createVaultAddItemState(
+                vaultAddEditType = vaultAddEditType,
+                commonContentViewState = createCommonContentViewState(
+                    originalCipher = cipherView,
+                ),
+                hasPremium = true,
+            )
+            mutableVaultDataFlow.value = DataState.Loaded(
+                data = createVaultData(cipherListView = cipherListView),
+            )
+
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = initState,
+                    vaultAddEditType = vaultAddEditType,
+                    vaultItemCipherType = VaultItemCipherType.LOGIN,
+                ),
+            )
+
+            val errorMessage = "You do not have permission to edit this."
+            val error = Throwable("Oh dang.")
+            coEvery {
+                vaultRepository.archiveCipher(
+                    cipherId = "mockId-1",
+                    cipherView = cipherView,
+                )
+            } returns ArchiveCipherResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+
+            viewModel.trySendAction(VaultAddEditAction.Common.ArchiveClick)
+
+            assertEquals(
+                createVaultAddItemState(
+                    hasPremium = true,
+                    vaultAddEditType = vaultAddEditType,
+                    dialogState = VaultAddEditState.DialogState.Generic(
+                        message = errorMessage.asText(),
+                        error = error,
+                    ),
+                    commonContentViewState = createCommonContentViewState(
+                        name = "mockName-1",
+                        originalCipher = createMockCipherView(number = 1),
+                        notes = "mockNotes-1",
+                        customFieldData = listOf(
+                            VaultAddEditState.Custom.HiddenField(
+                                itemId = "testId",
+                                name = "mockName-1",
+                                value = "mockValue-1",
+                            ),
+                        ),
+                    ),
+                    typeContentViewState = createLoginTypeContentViewState(
+                        username = "mockUsername-1",
+                        password = "mockPassword-1",
+                        uri = listOf(
+                            UriItem(
+                                id = "testId",
+                                uri = "www.mockuri1.com",
+                                match = UriMatchType.HOST,
+                                checksum = "mockUriChecksum-1",
+                            ),
+                        ),
+                        totpCode = "mockTotp-1",
+                        canViewPassword = true,
+                        fido2CredentialCreationDateTime = null,
+                    )
+                        .copy(totp = "mockTotp-1"),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `UnarchiveClick with UnarchiveCipherResult Success should send snackbar event and NavigateBack`() =
         runTest {
             val cipherListView = createMockCipherListView(number = 1, isArchived = false)
@@ -2587,6 +2777,95 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `UnarchiveClick with UnarchiveCipherResult error with errorMessage should display that message`() =
+        runTest {
+            mutableUserStateFlow.update {
+                it?.copy(
+                    accounts = it.accounts.map { account ->
+                        account.copy(isPremium = true)
+                    },
+                )
+            }
+            val cipherListView =
+                createMockCipherListView(number = 1, isArchived = false)
+            val cipherView =
+                createMockCipherView(number = 1, isArchived = false)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val initState = createVaultAddItemState(
+                vaultAddEditType = vaultAddEditType,
+                commonContentViewState = createCommonContentViewState(
+                    originalCipher = cipherView,
+                ),
+                hasPremium = true,
+            )
+            mutableVaultDataFlow.value = DataState.Loaded(
+                data = createVaultData(cipherListView = cipherListView),
+            )
+
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = initState,
+                    vaultAddEditType = vaultAddEditType,
+                    vaultItemCipherType = VaultItemCipherType.LOGIN,
+                ),
+            )
+
+            val errorMessage = "You do not have permission to edit this."
+            val error = Throwable("Oh dang.")
+            coEvery {
+                vaultRepository.unarchiveCipher(
+                    cipherId = "mockId-1",
+                    cipherView = cipherView,
+                )
+            } returns UnarchiveCipherResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+
+            viewModel.trySendAction(VaultAddEditAction.Common.UnarchiveClick)
+
+            assertEquals(
+                createVaultAddItemState(
+                    hasPremium = true,
+                    vaultAddEditType = vaultAddEditType,
+                    dialogState = VaultAddEditState.DialogState.Generic(
+                        message = errorMessage.asText(),
+                        error = error,
+                    ),
+                    commonContentViewState = createCommonContentViewState(
+                        name = "mockName-1",
+                        originalCipher = createMockCipherView(number = 1),
+                        notes = "mockNotes-1",
+                        customFieldData = listOf(
+                            VaultAddEditState.Custom.HiddenField(
+                                itemId = "testId",
+                                name = "mockName-1",
+                                value = "mockValue-1",
+                            ),
+                        ),
+                    ),
+                    typeContentViewState = createLoginTypeContentViewState(
+                        username = "mockUsername-1",
+                        password = "mockPassword-1",
+                        uri = listOf(
+                            UriItem(
+                                id = "testId",
+                                uri = "www.mockuri1.com",
+                                match = UriMatchType.HOST,
+                                checksum = "mockUriChecksum-1",
+                            ),
+                        ),
+                        totpCode = "mockTotp-1",
+                        canViewPassword = true,
+                        fido2CredentialCreationDateTime = null,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Nested
     inner class VaultAddEditLoginTypeItemActions {
@@ -4864,6 +5143,277 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    fun `CardScannerFlagUpdateReceive should update isCardScannerEnabled`() =
+        runTest {
+            val initState = createVaultAddItemState()
+            val viewModel = createAddVaultItemViewModel()
+            mutableCardScannerFlow.value = true
+            assertEquals(
+                initState.copy(isCardScannerEnabled = true),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `CardScanResultReceive with Success should update card fields and focus name`() =
+        runTest {
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = VaultAddEditState
+                            .ViewState
+                            .Content
+                            .ItemType
+                            .Card(),
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                mutableCardScanResultFlow.tryEmit(
+                    CardScanResult.Success(
+                        cardScanData = CardScanData(
+                            number = "4111111111111111",
+                            expirationMonth = "12",
+                            expirationYear = "2025",
+                            securityCode = "123",
+                        ),
+                    ),
+                )
+                val expectedCard = VaultAddEditState
+                    .ViewState
+                    .Content
+                    .ItemType
+                    .Card(
+                        number = "4111111111111111",
+                        expirationYear = "2025",
+                        expirationMonth = VaultCardExpirationMonth.DECEMBER,
+                        securityCode = "123",
+                        brand = VaultCardBrand.VISA,
+                    )
+                val content = viewModel.stateFlow.value.viewState
+                    as VaultAddEditState.ViewState.Content
+                assertEquals(expectedCard, content.type)
+                assertEquals(
+                    VaultAddEditEvent.FocusCardHolderName,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `CardScanResultReceive with ScanError should not change state or focus`() =
+        runTest {
+            val initialCardState = VaultAddEditState
+                .ViewState
+                .Content
+                .ItemType
+                .Card()
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = initialCardState,
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                mutableCardScanResultFlow.tryEmit(CardScanResult.ScanError())
+                val content = viewModel.stateFlow.value.viewState
+                    as VaultAddEditState.ViewState.Content
+                assertEquals(initialCardState, content.type)
+                expectNoEvents()
+            }
+        }
+
+    @Test
+    fun `ScanCardClick with permission granted should send NavigateToCardScan`() =
+        runTest {
+            mutableCardScannerFlow.value = true
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = VaultAddEditState
+                            .ViewState
+                            .Content
+                            .ItemType
+                            .Card(),
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultAddEditAction.ItemType.CardType.ScanCardClick(
+                        isGranted = true,
+                    ),
+                )
+                assertEquals(
+                    VaultAddEditEvent.NavigateToCardScan,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `ScanCardClick when flag disabled should not navigate`() =
+        runTest {
+            mutableCardScannerFlow.value = false
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = VaultAddEditState
+                            .ViewState
+                            .Content
+                            .ItemType
+                            .Card(),
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultAddEditAction.ItemType.CardType.ScanCardClick(
+                        isGranted = true,
+                    ),
+                )
+                expectNoEvents()
+            }
+        }
+
+    @Test
+    fun `ScanCardClick with permission denied should show camera permission dialog`() =
+        runTest {
+            mutableCardScannerFlow.value = true
+            val initialState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.CARD,
+                typeContentViewState = VaultAddEditState
+                    .ViewState
+                    .Content
+                    .ItemType
+                    .Card(),
+            )
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = initialState,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.CardType.ScanCardClick(
+                    isGranted = false,
+                ),
+            )
+            assertEquals(
+                initialState.copy(
+                    dialog = VaultAddEditState
+                        .DialogState
+                        .CameraPermissionDenied,
+                    isCardScannerEnabled = true,
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `CameraPermissionSettingsClick should clear dialog and navigate to app settings`() =
+        runTest {
+            mutableCardScannerFlow.value = true
+            val initialState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.CARD,
+                typeContentViewState = VaultAddEditState
+                    .ViewState
+                    .Content
+                    .ItemType
+                    .Card(),
+                dialogState = VaultAddEditState
+                    .DialogState
+                    .CameraPermissionDenied,
+            )
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = initialState,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                stateFlow.skipItems(1)
+                viewModel.trySendAction(
+                    VaultAddEditAction.Common.CameraPermissionSettingsClick,
+                )
+                assertEquals(
+                    initialState.copy(
+                        dialog = null,
+                        isCardScannerEnabled = true,
+                    ),
+                    stateFlow.awaitItem(),
+                )
+                assertEquals(
+                    VaultAddEditEvent.NavigateToAppSettings,
+                    eventFlow.awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `CardScanResultReceive with partial scan should preserve existing fields`() =
+        runTest {
+            val initialCard = VaultAddEditState
+                .ViewState
+                .Content
+                .ItemType
+                .Card(
+                    cardHolderName = "EXISTING NAME",
+                    expirationMonth = VaultCardExpirationMonth.JUNE,
+                    expirationYear = "2030",
+                    securityCode = "999",
+                )
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = initialCard,
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                mutableCardScanResultFlow.tryEmit(
+                    CardScanResult.Success(
+                        cardScanData = CardScanData(
+                            number = "4111111111111111",
+                            expirationMonth = null,
+                            expirationYear = null,
+                            securityCode = null,
+                        ),
+                    ),
+                )
+                val expectedCard = initialCard.copy(
+                    number = "4111111111111111",
+                    brand = VaultCardBrand.VISA,
+                )
+                val content = viewModel.stateFlow.value.viewState
+                    as VaultAddEditState.ViewState.Content
+                assertEquals(expectedCard, content.type)
+                assertEquals(
+                    VaultAddEditEvent.FocusCardHolderName,
+                    awaitItem(),
+                )
+            }
+        }
+
     //region Helper functions
 
     @Suppress("LongParameterList")
@@ -4900,7 +5450,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             createCredentialRequest = createCredentialRequest,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = hasPremium,
-            isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
     @Suppress("LongParameterList")
@@ -4986,6 +5536,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             featureFlagManager = featureFlagManager,
             authRepository = authRepository,
             clipboardManager = bitwardenClipboardManager,
+            cardScanManager = cardScanManager,
             policyManager = policyManager,
             vaultRepository = vaultRepo,
             bitwardenCredentialManager = bitwardenCredentialManager,
@@ -5000,6 +5551,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             networkConnectionManager = networkConnectionManager,
             firstTimeActionManager = firstTimeActionManager,
             environmentRepository = environmentRepository,
+            premiumStateManager = premiumStateManager,
         )
 
     private fun createVaultData(
@@ -5049,6 +5601,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     onboardingStatus = OnboardingStatus.COMPLETE,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
                     isExportable = true,
+                    creationDate = null,
                 ),
             ),
             hasPendingAccountAddition = false,

@@ -16,7 +16,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -67,27 +66,23 @@ fun PasswordHistoryScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = BitwardenString.back),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(PasswordHistoryAction.CloseClick) }
+                onNavigationIconClick = {
+                    viewModel.trySendAction(PasswordHistoryAction.CloseClick)
                 },
                 actions = {
-                    if (state.menuEnabled) {
-                        BitwardenOverflowActionItem(
-                            contentDescription = stringResource(BitwardenString.more),
-                            menuItemDataList = persistentListOf(
-                                OverflowMenuItemData(
-                                    text = stringResource(id = BitwardenString.clear),
-                                    onClick = remember(viewModel) {
-                                        {
-                                            viewModel.trySendAction(
-                                                PasswordHistoryAction.PasswordClearClick,
-                                            )
-                                        }
-                                    },
-                                ),
+                    BitwardenOverflowActionItem(
+                        isVisible = state.menuEnabled,
+                        menuItemDataList = persistentListOf(
+                            OverflowMenuItemData(
+                                text = stringResource(id = BitwardenString.clear),
+                                onClick = {
+                                    viewModel.trySendAction(
+                                        PasswordHistoryAction.PasswordClearClick,
+                                    )
+                                },
                             ),
-                        )
-                    }
+                        ),
+                    )
                 },
             )
         },

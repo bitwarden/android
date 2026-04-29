@@ -51,6 +51,8 @@ private const val IS_DYNAMIC_COLORS_ENABLED = "isDynamicColorsEnabled"
 private const val BROWSER_AUTOFILL_DIALOG_RESHOW_TIME = "browserAutofillDialogReshowTime"
 private const val INTRODUCING_ARCHIVE_ACTION_CARD_DISMISSED =
     "introducingArchiveActionCardDismissed"
+private const val PREMIUM_UPGRADE_BANNER_DISMISSED =
+    "premiumUpgradeBannerDismissed"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -90,6 +92,9 @@ class SettingsDiskSourceImpl(
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutableIntroducingArchiveActionCardDismissedFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutablePremiumUpgradeBannerDismissedFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutableIsIconLoadingDisabledFlow = bufferedMutableSharedFlow<Boolean?>()
@@ -246,6 +251,7 @@ class SettingsDiskSourceImpl(
         // - should show add login coach mark
         // - should show generator coach mark
         // - should show introducing archive action card dismissed
+        // - Premium upgrade banner dismissed
     }
 
     override fun getIntroducingArchiveActionCardDismissed(userId: String): Boolean? =
@@ -267,6 +273,26 @@ class SettingsDiskSourceImpl(
     override fun getIntroducingArchiveActionCardDismissedFlow(userId: String): Flow<Boolean?> =
         getMutableIntroducingArchiveActionCardDismissedFlow(userId = userId)
             .onSubscription { emit(getIntroducingArchiveActionCardDismissed(userId = userId)) }
+
+    override fun getPremiumUpgradeBannerDismissed(userId: String): Boolean? =
+        getBoolean(
+            key = PREMIUM_UPGRADE_BANNER_DISMISSED.appendIdentifier(identifier = userId),
+        )
+
+    override fun storePremiumUpgradeBannerDismissed(
+        userId: String,
+        isDismissed: Boolean?,
+    ) {
+        putBoolean(
+            key = PREMIUM_UPGRADE_BANNER_DISMISSED.appendIdentifier(identifier = userId),
+            value = isDismissed,
+        )
+        getMutablePremiumUpgradeBannerDismissedFlow(userId = userId).tryEmit(isDismissed)
+    }
+
+    override fun getPremiumUpgradeBannerDismissedFlow(userId: String): Flow<Boolean?> =
+        getMutablePremiumUpgradeBannerDismissedFlow(userId = userId)
+            .onSubscription { emit(getPremiumUpgradeBannerDismissed(userId = userId)) }
 
     override fun getAccountBiometricIntegrityValidity(
         userId: String,
@@ -609,6 +635,13 @@ class SettingsDiskSourceImpl(
         userId: String,
     ): MutableSharedFlow<Boolean?> =
         mutableIntroducingArchiveActionCardDismissedFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutablePremiumUpgradeBannerDismissedFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutablePremiumUpgradeBannerDismissedFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 

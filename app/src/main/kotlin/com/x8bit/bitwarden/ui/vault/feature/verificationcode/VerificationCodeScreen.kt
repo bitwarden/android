@@ -29,6 +29,7 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -39,6 +40,7 @@ import com.bitwarden.ui.platform.components.scaffold.model.rememberBitwardenPull
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.manager.util.RegisterScreenDataOnLifecycleEffect
@@ -72,9 +74,7 @@ fun VerificationCodeScreen(
     val pullToRefreshState = rememberBitwardenPullToRefreshState(
         isEnabled = state.isPullToRefreshEnabled,
         isRefreshing = state.isRefreshing,
-        onRefresh = remember(viewModel) {
-            { viewModel.trySendAction(VerificationCodeAction.RefreshPull) }
-        },
+        onRefresh = { viewModel.trySendAction(VerificationCodeAction.RefreshPull) },
     )
 
     RegisterScreenDataOnLifecycleEffect(
@@ -119,7 +119,6 @@ fun VerificationCodeScreen(
                         onClick = verificationCodeHandler.searchIconClick,
                     )
                     BitwardenOverflowActionItem(
-                        contentDescription = stringResource(BitwardenString.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.sync),
@@ -151,7 +150,10 @@ fun VerificationCodeScreen(
             is VerificationCodeState.ViewState.Error -> {
                 BitwardenErrorContent(
                     message = viewState.message.invoke(),
-                    onTryAgainClick = verificationCodeHandler.refreshClick,
+                    buttonData = BitwardenButtonData(
+                        label = BitwardenString.try_again.asText(),
+                        onClick = verificationCodeHandler.refreshClick,
+                    ),
                     modifier = Modifier.fillMaxSize(),
                 )
             }

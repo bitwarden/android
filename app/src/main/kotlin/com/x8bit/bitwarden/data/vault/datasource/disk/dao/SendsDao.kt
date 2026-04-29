@@ -25,7 +25,7 @@ interface SendsDao {
      * Retrieves all sends from the database for a given [userId].
      */
     @Query("SELECT * FROM sends WHERE user_id = :userId")
-    fun getAllSends(
+    fun getAllSendsFlow(
         userId: String,
     ): Flow<List<SendEntity>>
 

@@ -11,6 +11,7 @@
     <string name="copy_password">คัดลอกรหัสผ่าน</string>
     <string name="copy_username">คัดลอกชื่อผู้ใช้</string>
     <string name="delete">ลบ</string>
+    <string name="preview">Preview</string>
     <string name="deleting">กำลังลบ…</string>
     <string name="do_you_really_want_to_delete">คุณแน่ใจหรือไม่ว่าต้องการลบ? การกระทำนี้ไม่สามารถเลิกทำได้</string>
     <string name="edit">แก้ไข</string>
@@ -42,7 +43,7 @@
     <string name="master_password">รหัสผ่านหลัก</string>
     <string name="master_password_required">รหัสผ่านหลัก (จำเป็น)</string>
     <string name="new_master_password_required">รหัสผ่านหลักใหม่ (จำเป็น)</string>
-    <string name="more">เพิ่มเติม</string>
+    <string name="more_options">ตัวเลือกเพิ่มเติม</string>
     <string name="my_vault">ตู้เซฟของฉัน</string>
     <string name="name">ชื่อ</string>
     <string name="item_name_required">ชื่อรายการ (จำเป็น)</string>
@@ -128,8 +129,8 @@
     <string name="no_text_sends">ไม่มีรายการ Send แบบข้อความในตู้นิรภัยของคุณ</string>
     <string name="no_file_sends">ไม่มีรายการ Send แบบไฟล์ในตู้นิรภัยของคุณ</string>
     <string name="no_ssh_keys">ไม่มีคีย์ SSH ในตู้นิรภัยของคุณ</string>
-    <string name="no_archives_title">Archive is empty</string>
-    <string name="no_archives_message">Fill your archive with items you don’t want to see in search results and autofill suggestions but might need someday.</string>
+    <string name="no_archives_title">ไม่มีรายการเก็บถาวร</string>
+    <string name="no_archives_message">ย้ายรายการที่คุณไม่อยากให้เห็นในผลการค้นหาและคำแนะนำป้อนอัตโนมัติ แต่เผื่อต้องใช้ในอนาคต มาไว้ในรายการเก็บถาวร</string>
     <string name="new_text_send">ข้อความ Send ใหม่</string>
     <string name="new_file_send">ไฟล์ Send ใหม่</string>
     <string name="no_username">ไม่มีชื่อผู้ใช้</string>
@@ -169,7 +170,7 @@
     <string name="autofill_noun">การป้อนอัตโนมัติ</string>
     <string name="autofill_verb">ป้อนอัตโนมัติ</string>
     <string name="autofill_or_view">คุณต้องการกรอกข้อมูลอัตโนมัติหรือดูรายการนี้หรือไม่?</string>
-    <string name="search">ค้นหา</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">เรียนรู้เพิ่มเติมเกี่ยวกับองค์กร</string>
     <string name="authenticator_app_title">แอป Authenticator</string>
     <string name="enter_verification_code_app">ป้อนรหัสยืนยัน 6 หลักจากคุณแอป authenticator</string>
@@ -199,9 +200,12 @@
     <string name="copy_totp_automatically">คัดลอก TOTP อัตโนมัติ</string>
     <string name="premium_required">จำเป็นต้องมีสมาชิกระดับพรีเมียมเพื่อใช้คุณลักษณะนี้</string>
     <string name="attachment_deleted">ลบสิ่งที่แนบมา</string>
+    <string name="attachments_unavailable">ไฟล์แนบไม่พร้อมใช้งาน</string>
+    <string name="attachments_are_a_premium_feature">ไฟล์แนบเป็นคุณสมบัติพรีเมียม แผนการสมัครสมาชิกปัจจุบันของคุณไม่สามารถใช้งานได้</string>
     <string name="choose_file">เลือกไฟล์</string>
     <string name="file">ไฟล์</string>
     <string name="no_file_chosen">ไม่มีไฟล์ที่เลือก</string>
+    <string name="file_name">File name</string>
     <string name="no_attachments">ไม่มีสิ่งที่แนบมา</string>
     <string name="file_source">แหล่งที่มาของไฟล์</string>
     <string name="max_file_size">ขนาดไฟล์สูงสุดคือ 100 MB</string>
@@ -223,6 +227,8 @@
     <string name="copy_security_code">คัดลอกรหัสรักษาความปลอดภัย</string>
     <string name="number">หมายเลข</string>
     <string name="security_code">รหัสความปลอดภัย</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">บัตร</string>
     <string name="type_identity">ข้อมูลระบุตัวตน</string>
     <string name="type_login">เข้าสู่ระบบ</string>
@@ -302,7 +308,7 @@
     <string name="organization">องค์กร</string>
     <string name="try_again">Try Again</string>
     <string name="created">สร้างเมื่อ: %1$s</string>
-    <string name="password_last_updated">อัปเดตรหัสผ่านล่าสุด: %1$s</string>
+    <string name="password_updated">อัปเดตรหัสผ่านแล้ว: %1$s</string>
     <string name="last_edited">แก้ไขล่าสุด: %1$s</string>
     <string name="invalid_email">ที่อยู่อีเมลไม่ถูกต้อง</string>
     <string name="cards">บัตร</string>
@@ -375,6 +381,7 @@
     <string name="capitalize">ตัวพิมพ์ใหญ่</string>
     <string name="include_number">รวมตัวเลข</string>
     <string name="download">ดาวน์โหลด</string>
+    <string name="download_file">Download file</string>
     <string name="login_expired">เซสชันการเข้าสู่ระบบของคุณหมดอายุแล้ว</string>
     <string name="biometrics_direction">การยืนยันไบโอเมตริก</string>
     <string name="device_verification">การยืนยันอุปกรณ์</string>
@@ -446,13 +453,13 @@
     <string name="deletion_date">วันที่ลบ</string>
     <string name="deletion_time">เวลาลบ</string>
     <string name="deletion_date_info">Send นี้จะถูกลบถาวรในวันที่และเวลาที่ระบุ</string>
-    <string name="who_can_view">Who can view</string>
-    <string name="anyone_with_the_link">Anyone with the link</string>
-    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
-    <string name="specific_people">Specific people</string>
-    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
-    <string name="anyone_with_password">Anyone with a password set by you</string>
-    <string name="add_email">Add email</string>
+    <string name="who_can_view">ใครสามารดูได้</string>
+    <string name="anyone_with_the_link">ทุกคนที่มีลิ้ง</string>
+    <string name="anyone_with_link_can_view_send">ทุกคนที่มีลิงก์นี้สามารถดูรายการ Send นี้ได้</string>
+    <string name="specific_people">บุคคลที่ระบุ</string>
+    <string name="specific_people_verification_info">หลังจากแชร์ลิงก์ Send นี้ ผู้รับจะต้องยืนยันอีเมลด้วยรหัสเพื่อดูรายการ Send นี้</string>
+    <string name="anyone_with_password">ทุกคนที่มีรหัสผ่านที่คุณตั้งไว้</string>
+    <string name="add_email">เพิ่มอีเมล</string>
     <string name="pending_delete">รอการลบ</string>
     <string name="expired">หมดอายุ</string>
     <string name="expires_at">หมดอายุเวลา %s</string>
@@ -493,7 +500,8 @@
     <string name="about_send">เกี่ยวกับ Send</string>
     <string name="hide_email">ซ่อนที่อยู่อีเมลของฉันจากผู้รับ</string>
     <string name="send_options_policy_in_effect">นโยบายองค์กรอย่างน้อยหนึ่งรายการมีผลต่อตัวเลือก Send ของคุณ</string>
-    <string name="send_file_premium_required">บัญชีฟรีถูกจำกัดให้แชร์ได้เฉพาะข้อความ ต้องเป็นสมาชิกพรีเมียมเพื่อใช้ไฟล์กับ Send</string>
+    <string name="send_file_premium_required">Free accounts are restricted to sharing text only. A Premium membership is required to use files with Send.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">การแชร์กับบุคคลที่ระบุเป็นฟีเจอร์พรีเมียม แผนปัจจุบันของคุณไม่สามารถใช้งานฟีเจอร์นี้ได้</string>
     <string name="password_prompt">ถามรหัสผ่านหลักซ้ำ</string>
     <string name="password_confirmation">ยืนยันรหัสผ่านหลัก</string>
     <string name="password_confirmation_desc">การกระทำนี้ได้รับการป้องกัน โปรดกรอกรหัสผ่านหลักอีกครั้งเพื่อยืนยันตัวตนของคุณ</string>
@@ -503,10 +511,10 @@
     <string name="remove_master_password">ลบรหัสผ่านหลัก</string>
     <string name="leave_organization">ออกจากองค์กร</string>
     <string name="leave_organization_name">ออกจาก %1$s หรือไม่</string>
-    <string name="are_you_sure_you_want_to_leave_organization">ยืนยันการออกจาก %1$s หรือไม่</string>
+    <string name="are_you_sure_you_want_to_leave_organization">ยืนยันการออกจาก [%1$s] หรือไม่</string>
     <string name="leave_organization_button">ออกจาก %1$s</string>
     <string name="leave_organization_warning">หากปฏิเสธ รายการส่วนตัวของคุณจะยังคงอยู่ในบัญชี แต่คุณจะเสียสิทธิ์เข้าถึงรายการที่แชร์และฟีเจอร์ขององค์กร\n\nโปรดติดต่อผู้ดูแลระบบเพื่อขอรับสิทธิ์เข้าถึงอีกครั้ง</string>
-    <string name="how_to_manage_my_vault">วิธีจัดการตู้นิรภัยของฉัน</string>
+    <string name="contact_your_admin_to_regain_access">ติดต่อผู้ดูแลระบบเพื่อขอรับสิทธิ์เข้าถึงอีกครั้ง</string>
     <string name="fido2_authenticate_web_authn">ยืนยันตัวตน WebAuthn</string>
     <string name="fido2_return_to_app">กลับไปที่แอป</string>
     <string name="reset_password_auto_enroll_invite_warning">องค์กรนี้มีนโยบายองค์กรที่จะลงทะเบียนคุณในการรีเซ็ตรหัสผ่านโดยอัตโนมัติ การลงทะเบียนจะอนุญาตให้ผู้ดูแลระบบองค์กรเปลี่ยนรหัสผ่านหลักของคุณได้</string>
@@ -830,6 +838,7 @@
     <string name="fill_out_the_form_and_import_your_saved_password_file">กรอกแบบฟอร์มและ <annotation emphasis="bold">นำเข้าไฟล์รหัสผ่านที่บันทึกไว้ของคุณ</annotation></string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">เพื่อความปลอดภัย โปรดแน่ใจว่าได้ <annotation emphasis="bold">ลบไฟล์รหัสผ่านที่บันทึกไว้ของคุณ</annotation></string>
     <string name="need_help_check_out_import_help">ต้องการความช่วยเหลือหรือไม่ ดู<annotation link="importHelp">วิธีนำเข้า</annotation></string>
+    <string name="import_help">นำเข้าความช่วยเหลือ</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">บันทึกไฟล์ที่ส่งออก</annotation> ไว้ในตำแหน่งบนคอมพิวเตอร์ที่คุณหาได้ง่าย</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">นี่ไม่ใช่เซิร์ฟเวอร์ Bitwarden ที่รู้จัก คุณอาจต้องตรวจสอบกับผู้ให้บริการของคุณหรืออัปเดตเซิร์ฟเวอร์</string>
     <string name="syncing_logins_loading_message">กำลังซิงค์ข้อมูลเข้าสู่ระบบ…</string>
@@ -854,6 +863,9 @@
     <string name="copy_public_key">คัดลอก Public Key</string>
     <string name="copy_fingerprint">คัดลอกลายนิ้วมือ</string>
     <string name="enable_notifications">เปิดการแจ้งเตือน</string>
+    <plurals name="notifications_content_description">
+        <item quantity="other">%d การแจ้งเตือน</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">เข้าสู่ระบบอย่างรวดเร็วและง่ายดายข้ามอุปกรณ์</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden สามารถแจ้งเตือนคุณทุกครั้งที่คุณได้รับคำขอเข้าสู่ระบบใหม่จากอุปกรณ์อื่น</string>
     <string name="skip_for_now">ข้ามไปก่อน</string>
@@ -927,6 +939,7 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">การดำเนินการพาสคีย์ล้มเหลวเนื่องจากไม่ได้เลือกรายการ</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">การดำเนินการพาสคีย์ล้มเหลวเนื่องจากไม่รองรับคำขอ</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">การดำเนินการรหัสผ่านล้มเหลวเนื่องจากไม่มีรายการที่เลือก</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
     <string name="password_operation_failed_because_no_item_was_selected">การดำเนินการรหัสผ่านล้มเหลวเนื่องจากไม่ได้เลือกรายการ</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">การดำเนินการข้อมูลประจำตัวล้มเหลวเนื่องจากคำขอไม่ถูกต้อง</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">การดำเนินการข้อมูลประจำตัวล้มเหลวเนื่องจากไม่รองรับคำขอ</string>
@@ -938,7 +951,7 @@
     <string name="use_brave_autofill_integration">ใช้การรวมการป้อนอัตโนมัติใน Brave</string>
     <string name="use_chrome_autofill_integration">ใช้การรวมการป้อนอัตโนมัติใน Chrome</string>
     <string name="use_chrome_beta_autofill_integration">ใช้การรวมการป้อนอัตโนมัติใน Chrome Beta</string>
-    <string name="use_vivaldi_autofill_integration">Use Vivaldi autofill integration</string>
+    <string name="use_vivaldi_autofill_integration">ใช้การทำงานร่วมกับการป้อนอัตโนมัติของ Vivaldi</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">ปรับปรุงการกรอกข้อมูลเข้าสู่ระบบสำหรับเว็บไซต์ที่รองรับบนเบราว์เซอร์ที่เลือก เมื่อเปิดใช้งาน คุณจะถูกนำไปยังการตั้งค่าเบราว์เซอร์เพื่อเปิดใช้งานการป้อนอัตโนมัติจากบุคคลที่สาม</string>
     <string name="show_more">แสดงเพิ่มเติม</string>
     <string name="no_folder">ไม่มีโฟลเดอร์</string>
@@ -1138,7 +1151,6 @@
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">เปิดใช้งานการป้อนอัตโนมัติของเบราว์เซอร์เพื่อป้อนรหัสผ่านต่อไป</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">เบราว์เซอร์ของคุณเพิ่งได้รับการอัปเดต ซึ่งปิดใช้งานการป้อนอัตโนมัติของ Bitwarden เพื่อป้อนรหัสผ่านด้วย Bitwarden ต่อไป ให้เปิดใช้งานการป้อนอัตโนมัติของเบราว์เซอร์ในการตั้งค่าการป้อนอัตโนมัติ</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">เบราว์เซอร์ของคุณเพิ่งได้รับการอัปเดต ซึ่งปิดใช้งานการป้อนอัตโนมัติของ Bitwarden เพื่อป้อนรหัสผ่านด้วย Bitwarden ต่อไป ให้เปิดใช้งานการป้อนอัตโนมัติของเบราว์เซอร์สำหรับเบราว์เซอร์ที่ติดตั้งทั้งหมดในการตั้งค่าการป้อนอัตโนมัติ</string>
     <string name="not_now">ไม่ใช่ตอนนี้</string>
     <string name="import_from_bitwarden">นำเข้าจาก Bitwarden</string>
     <string name="select_account">เลือกบัญชี</string>
@@ -1174,29 +1186,67 @@
     <string name="why_am_i_seeing_this">ทำไมฉันถึงเห็นสิ่งนี้</string>
     <string name="migrating_items_to_x">กำลังย้ายรายการไปยัง %s</string>
     <string name="failed_to_migrate_items_to_x">ย้ายรายการไปยัง %s ไม่สำเร็จ</string>
-    <string name="search_archive">Search archive</string>
-    <string name="archive_noun">Archive</string>
-    <string name="archive_verb">Archive</string>
-    <string name="unarchive">Unarchive</string>
-    <string name="archived">Archived</string>
-    <string name="hidden_items">Hidden items</string>
-    <string name="unable_to_archive_selected_item">Unable to archive selected item.</string>
-    <string name="unable_to_unarchive_selected_item">Unable to unarchive selected item.</string>
-    <string name="archiving">Archiving</string>
-    <string name="unarchiving">Unarchiving</string>
-    <string name="item_moved_to_archived">Item moved to archive</string>
-    <string name="item_moved_to_vault">Item moved to vault</string>
-    <string name="archive_unavailable">Archive unavailable</string>
-    <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
-    <string name="upgrade_to_premium">Upgrade to premium</string>
-    <string name="this_item_is_archived">This item is archived.</string>
-    <string name="introducing_archive">Introducing archive</string>
-    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>
-    <string name="go_to_archive">Go to archive</string>
-    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">This item is archived. Saving changes will restore it to your vault.</string>
-    <string name="your_premium_subscription_ended">Your Premium subscription ended</string>
-    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">To regain access to your archive, restart your Premium subscription. If you edit details for an archived item before restarting, it’ll be moved back into your vault.</string>
-    <string name="restart_premium">Restart Premium</string>
-    <string name="items_transferred">Items transferred</string>
+    <string name="search_archive">ค้นหารายการเก็บถาวร</string>
+    <string name="archive_noun">รายการเก็บถาวร</string>
+    <string name="archive_verb">รายการเก็บถาวร</string>
+    <string name="unarchive">ยกเลิกการเก็บถาวร</string>
+    <string name="archived">เก็บถาวรแล้ว</string>
+    <string name="hidden_items">รายการที่ซ่อนไว้</string>
+    <string name="unable_to_archive_selected_item">ไม่สามารถเก็บถาวรรายการที่เลือก</string>
+    <string name="unable_to_unarchive_selected_item">ไม่สามารถยกเลิกการเก็บถาวรรายการที่เลือก</string>
+    <string name="archiving">กำลังเก็บถาวร</string>
+    <string name="unarchiving">กำลังยกเลิกการเก็บถาวร</string>
+    <string name="item_moved_to_archived">ย้ายรายการไปที่เก็บถาวรแล้ว</string>
+    <string name="item_moved_to_vault">ย้ายรายการไปที่ตู้นิรภัยแล้ว</string>
+    <string name="archive_unavailable">รายการเก็บถาวรไม่พร้อมใช้งาน</string>
+    <string name="archiving_items_is_a_premium_feature">การเก็บถาวรรายการเป็นฟีเจอร์พรีเมียม แผนปัจจุบันของคุณไม่สามารถใช้งานฟีเจอร์นี้ได้</string>
+    <string name="upgrade_to_premium">อัปเกรดเป็นพรีเมียม</string>
+    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
+    <string name="this_item_is_archived">รายการนี้เก็บถาวรอยู่</string>
+    <string name="introducing_archive">ขอแนะนำการเก็บถาวร</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">เก็บรายการที่ยังไม่จำเป็นต้องใช้ในตอนนี้ให้ปลอดภัยและพ้นสายตา</string>
+    <string name="go_to_archive">ไปที่รายการเก็บถาวร</string>
+    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">รายการนี้เก็บถาวรอยู่ การบันทึกการเปลี่ยนแปลงจะย้ายรายการกลับไปที่ตู้นิรภัย</string>
+    <string name="your_premium_subscription_ended">สมาชิกพรีเมียมสิ้นสุดลงแล้ว</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">โปรดเปิดใช้พรีเมียมอีกครั้งเพื่อเข้าถึงรายการเก็บถาวร หากแก้ไขรายละเอียดของรายการที่เก็บถาวรก่อนเปิดใช้งาน รายการนั้นจะย้ายกลับไปที่ตู้นิรภัย</string>
+    <string name="restart_premium">เปิดใช้พรีเมียมอีกครั้ง</string>
+    <string name="items_transferred">ถ่ายโอนรายการแล้ว</string>
     <string name="updated_master_password">อัปเดตรหัสผ่านหลักแล้ว</string>
+    <string name="invalid_email_addresses">ที่อยู่อีเมลไม่ถูกต้อง</string>
+    <string name="one_or_more_email_addresses_are_incorrect">มีที่อยู่อีเมลอย่างน้อยหนึ่งรายการไม่ถูกต้อง โปรดตรวจสอบแล้วลองอีกครั้ง</string>
+    <string name="no_email_addresses_entered">ไม่ได้ระบุที่อยู่อีเมล</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">โปรดระบุที่อยู่อีเมลที่ถูกต้องอย่างน้อยหนึ่งรายการเพื่อแชร์รายการ Send นี้</string>
+    <string name="sync_with_browser">ซิงค์กับบราว์เซอร์</string>
+    <string name="sync_with_browser_description">เมื่อต้องการเชื่อมต่อกับ %1$s ให้ซิงค์เบราว์เซอร์เริ่มต้นกับแอปมือถือ Bitwarden เมื่อเบราว์เซอร์เปิดขึ้น ให้เข้าสู่ระบบให้เสร็จสิ้นหากได้รับแจ้ง\nเมื่อซิงค์เสร็จแล้ว ระบบจะพากลับมาที่แอปนี้</string>
+    <string name="launch_browser">เปิดบราว์เซอร์</string>
+    <string name="continue_without_syncing">ดำเนินการต่อโดยไม่ซิงค์</string>
+    <string name="external_link">ลิงก์ภายนอก</string>
+    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, ลิ้งก์ภายนอก</string>
+    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
+    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
+    <string name="preview_unavailable">Preview unavailable</string>
+    <string name="download_attachment">Download Attachment</string>
+    <string name="upgraded_to_premium">Upgraded to premium</string>
+    <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
+    <string name="per_month">/ month</string>
+    <string name="built_in_authenticator">Built-in authenticator</string>
+    <string name="emergency_access">Emergency access</string>
+    <string name="secure_file_storage">Secure file storage</string>
+    <string name="breach_monitoring">Breach monitoring</string>
+    <string name="upgrade_now">Upgrade now</string>
+    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="opening_checkout">Opening checkout…</string>
+    <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
+    <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
+    <string name="payment_not_received_yet">Payment not received yet</string>
+    <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
+    <string name="go_back">Go back</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
+    <string name="show_next_code">Show next code</string>
+    <string name="see_upcoming_codes_in_the_list">See upcoming codes in the list</string>
+    <string name="next_code_x">Next code, %1$s</string>
 </resources>

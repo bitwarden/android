@@ -7,9 +7,10 @@ import androidx.compose.ui.graphics.Color
  * The default [BitwardenColorScheme] for dark mode.
  */
 val darkBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
+    isDarkTheme = true,
     text = BitwardenColorScheme.TextColors(
         primary = PrimitiveColors.gray200,
-        secondary = PrimitiveColors.gray600,
+        secondary = PrimitiveColors.gray500,
         interaction = PrimitiveColors.blue400,
         reversed = PrimitiveColors.gray1200,
         codePink = PrimitiveColors.pink200,
@@ -38,10 +39,10 @@ val darkBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
     ),
     filledButton = BitwardenColorScheme.FilledButtonColors(
         background = PrimitiveColors.blue400,
-        backgroundDisabled = PrimitiveColors.gray900,
+        backgroundDisabled = PrimitiveColors.gray1000,
         backgroundReversed = PrimitiveColors.gray1100,
         foreground = PrimitiveColors.gray1100,
-        foregroundDisabled = PrimitiveColors.gray500,
+        foregroundDisabled = PrimitiveColors.gray900,
         foregroundReversed = PrimitiveColors.blue400,
     ),
     outlineButton = BitwardenColorScheme.OutlineButtonColors(
@@ -70,6 +71,23 @@ val darkBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
         weak2 = PrimitiveColors.yellow200,
         error = PrimitiveColors.red200,
     ),
+    statusBadge = BitwardenColorScheme.StatusBadgeColors(
+        success = BitwardenColorScheme.StatusBadgeVariantColors(
+            border = PrimitiveColors.green800,
+            background = PrimitiveColors.green950,
+            text = PrimitiveColors.green150,
+        ),
+        error = BitwardenColorScheme.StatusBadgeVariantColors(
+            border = PrimitiveColors.red800,
+            background = PrimitiveColors.red950,
+            text = PrimitiveColors.red150,
+        ),
+        warning = BitwardenColorScheme.StatusBadgeVariantColors(
+            border = PrimitiveColors.orange800,
+            background = PrimitiveColors.orange950,
+            text = PrimitiveColors.orange200,
+        ),
+    ),
     illustration = BitwardenColorScheme.IllustrationColors(
         outline = PrimitiveColors.blue500,
         backgroundPrimary = PrimitiveColors.blue200,
@@ -84,6 +102,7 @@ val darkBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
  * The default [BitwardenColorScheme] for light mode.
  */
 val lightBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
+    isDarkTheme = false,
     text = BitwardenColorScheme.TextColors(
         primary = PrimitiveColors.gray1300,
         secondary = PrimitiveColors.gray700,
@@ -131,7 +150,7 @@ val lightBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
     ),
     toggleButton = BitwardenColorScheme.ToggleButtonColors(
         backgroundOn = PrimitiveColors.blue500,
-        backgroundOff = PrimitiveColors.gray500,
+        backgroundOff = PrimitiveColors.gray600,
         switch = PrimitiveColors.gray100,
     ),
     sliderButton = BitwardenColorScheme.SliderButtonColors(
@@ -146,6 +165,23 @@ val lightBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
         weak1 = PrimitiveColors.red300,
         weak2 = PrimitiveColors.yellow300,
         error = PrimitiveColors.red300,
+    ),
+    statusBadge = BitwardenColorScheme.StatusBadgeColors(
+        success = BitwardenColorScheme.StatusBadgeVariantColors(
+            border = PrimitiveColors.green150,
+            background = PrimitiveColors.green050,
+            text = PrimitiveColors.green400,
+        ),
+        error = BitwardenColorScheme.StatusBadgeVariantColors(
+            border = PrimitiveColors.red150,
+            background = PrimitiveColors.red050,
+            text = PrimitiveColors.red400,
+        ),
+        warning = BitwardenColorScheme.StatusBadgeVariantColors(
+            border = PrimitiveColors.orange200,
+            background = PrimitiveColors.orange050,
+            text = PrimitiveColors.orange700,
+        ),
     ),
     illustration = BitwardenColorScheme.IllustrationColors(
         outline = PrimitiveColors.blue700,
@@ -167,6 +203,7 @@ fun dynamicBitwardenColorScheme(
 ): BitwardenColorScheme {
     val defaultTheme = if (isDarkTheme) darkBitwardenColorScheme else lightBitwardenColorScheme
     return BitwardenColorScheme(
+        isDarkTheme = isDarkTheme,
         text = BitwardenColorScheme.TextColors(
             primary = materialColorScheme.onBackground,
             secondary = materialColorScheme.onSurface,
@@ -230,6 +267,11 @@ fun dynamicBitwardenColorScheme(
             weak2 = defaultTheme.status.weak2,
             error = defaultTheme.status.error,
         ),
+        statusBadge = BitwardenColorScheme.StatusBadgeColors(
+            success = defaultTheme.statusBadge.success,
+            error = defaultTheme.statusBadge.error,
+            warning = defaultTheme.statusBadge.warning,
+        ),
         illustration = BitwardenColorScheme.IllustrationColors(
             outline = materialColorScheme.onSurface,
             backgroundPrimary = if (isDarkTheme) {
@@ -269,10 +311,10 @@ private data object PrimitiveColors {
     val gray300: Color = Color(color = 0xFFE6E9EF)
     val gray400: Color = Color(color = 0xFFD3D9E3)
     val gray500: Color = Color(color = 0xFF96A3BB)
-    val gray600: Color = Color(color = 0xFF8898B5)
+    val gray600: Color = Color(color = 0xFF7F8FAD)
     val gray700: Color = Color(color = 0xFF5A6D91)
     val gray800: Color = Color(color = 0xFF79808E)
-    val gray900: Color = Color(color = 0xFF525B6A)
+    val gray900: Color = Color(color = 0xFF657185)
     val gray1000: Color = Color(color = 0xFF303946)
     val gray1100: Color = Color(color = 0xFF202733)
     val gray1200: Color = Color(color = 0xFF121A27)
@@ -287,19 +329,33 @@ private data object PrimitiveColors {
     val blue600: Color = Color(color = 0xFF1A41AC)
     val blue700: Color = Color(color = 0xFF020F66)
 
+    val green050: Color = Color(color = 0xFFF0FDF4)
     val green100: Color = Color(color = 0xFFBFECC3)
+    val green150: Color = Color(color = 0xFFB9F8CF)
     val green200: Color = Color(color = 0xFF6BF178)
     val green300: Color = Color(color = 0xFF0C8018)
     val green400: Color = Color(color = 0xFF08540F)
+    val green800: Color = Color(color = 0xFF016630)
+    val green950: Color = Color(color = 0xFF032E15)
 
+    val red050: Color = Color(color = 0xFFFEF2F2)
     val red100: Color = Color(color = 0xFFFFECEF)
+    val red150: Color = Color(color = 0xFFFFC9C9)
     val red200: Color = Color(color = 0xFFFF4E63)
     val red300: Color = Color(color = 0xFFCB263A)
     val red400: Color = Color(color = 0xFF951B2A)
+    val red800: Color = Color(color = 0xFF9F0712)
+    val red950: Color = Color(color = 0xFF460809)
 
     val yellow100: Color = Color(color = 0xFFFFF8E4)
     val yellow200: Color = Color(color = 0xFFFFBF00)
     val yellow300: Color = Color(color = 0xFFAC5800)
+
+    val orange050: Color = Color(color = 0xFFFFF8F1)
+    val orange200: Color = Color(color = 0xFFFCD9BD)
+    val orange700: Color = Color(color = 0xFFB23300)
+    val orange800: Color = Color(color = 0xFF8A2203)
+    val orange950: Color = Color(color = 0xFF441600)
 
     val pink100: Color = Color(color = 0xFFC01176)
     val pink200: Color = Color(color = 0xFFFF8FD0)

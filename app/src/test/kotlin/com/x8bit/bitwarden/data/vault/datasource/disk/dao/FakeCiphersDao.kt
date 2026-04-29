@@ -11,6 +11,7 @@ class FakeCiphersDao : CiphersDao {
 
     var deleteCipherCalled: Boolean = false
     var deleteCiphersCalled: Boolean = false
+    var deleteSelectedCiphersCalled: Boolean = false
     var insertCiphersCalled: Boolean = false
 
     private val ciphersFlow = bufferedMutableSharedFlow<List<CipherEntity>>(replay = 1)
@@ -31,6 +32,14 @@ class FakeCiphersDao : CiphersDao {
         deleteCipherCalled = true
         val count = storedCiphers.count { it.userId == userId && it.id == cipherId }
         storedCiphers.removeAll { it.userId == userId && it.id == cipherId }
+        ciphersFlow.tryEmit(storedCiphers.toList())
+        return count
+    }
+
+    override suspend fun deleteSelectedCiphers(userId: String, cipherIds: List<String>): Int {
+        deleteSelectedCiphersCalled = true
+        val count = storedCiphers.count { it.userId == userId && it.id in cipherIds }
+        storedCiphers.removeAll { it.userId == userId && it.id in cipherIds }
         ciphersFlow.tryEmit(storedCiphers.toList())
         return count
     }

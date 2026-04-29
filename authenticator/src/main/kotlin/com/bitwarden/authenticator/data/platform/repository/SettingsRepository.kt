@@ -1,5 +1,6 @@
 package com.bitwarden.authenticator.data.platform.repository
 
+import com.bitwarden.authenticator.data.platform.manager.lock.model.AppTimeout
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
@@ -68,12 +69,12 @@ interface SettingsRepository : FlightRecorderManager {
     val hasSeenWelcomeTutorialFlow: StateFlow<Boolean>
 
     /**
-     * Sets whether or not screen capture is allowed for the current user.
+     * Sets whether screen capture is allowed for the current user.
      */
     var isScreenCaptureAllowed: Boolean
 
     /**
-     * Whether or not screen capture is allowed for the current user.
+     * Whether screen capture is allowed for the current user.
      */
     val isScreenCaptureAllowedStateFlow: StateFlow<Boolean>
 
@@ -93,12 +94,32 @@ interface SettingsRepository : FlightRecorderManager {
     val isCrashLoggingEnabledFlow: Flow<Boolean>
 
     /**
-     * Whether or not the user has previously dismissed the download Bitwarden action card.
+     * Whether the next TOTP code preview is enabled.
+     */
+    var isShowNextCodeEnabled: Boolean
+
+    /**
+     * Emits updates that track the [isShowNextCodeEnabled] value.
+     */
+    val isShowNextCodeEnabledFlow: Flow<Boolean>
+
+    /**
+     * Whether the user has previously dismissed the download Bitwarden action card.
      */
     var hasUserDismissedDownloadBitwardenCard: Boolean
 
     /**
-     * Whether or not the user has previously dismissed the sync with Bitwarden action card.
+     * Whether the user has previously dismissed the sync with Bitwarden action card.
      */
     var hasUserDismissedSyncWithBitwardenCard: Boolean
+
+    /**
+     * Gets or sets the [AppTimeout].
+     */
+    var appTimeoutState: AppTimeout
+
+    /**
+     * Gets updates for the [AppTimeout].
+     */
+    val appTimeoutStateFlow: StateFlow<AppTimeout>
 }

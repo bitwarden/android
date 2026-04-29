@@ -10,7 +10,7 @@ import java.time.Instant
 /**
  * The payload of a push notification.
  *
- * Note: The data we receive is not always reliable, so everything is nullable and we validate the
+ * Note: The data we receive is not always reliable, so everything is nullable, and we validate the
  * data in the [PushManager] as necessary.
  */
 @OptIn(ExperimentalSerializationApi::class)
@@ -96,5 +96,14 @@ sealed class NotificationPayload {
     @Serializable
     data class SyncNotification(
         @JsonNames("UserId", "userId") override val userId: String?,
+    ) : NotificationPayload()
+
+    /**
+     * A notification payload for Premium status changes.
+     */
+    @Serializable
+    data class PremiumStatusChangedNotification(
+        @JsonNames("UserId", "userId") override val userId: String?,
+        @JsonNames("Premium", "premium") val isPremium: Boolean?,
     ) : NotificationPayload()
 }

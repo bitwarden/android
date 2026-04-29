@@ -130,4 +130,46 @@ class SettingDiskSourceTest {
             settingDiskSource.previouslySyncedBitwardenAccountIds,
         )
     }
+
+    @Test
+    fun `isShowNextCodeEnabled should read and write from shared preferences`() = runTest {
+        val sharedPrefsKey = "bwPreferencesStorage:showNextCodeEnabled"
+
+        settingDiskSource.isShowNextCodeEnabledFlow.test {
+            // Shared preferences and the disk source start with the same value:
+            assertNull(settingDiskSource.isShowNextCodeEnabled)
+            assertNull(awaitItem())
+
+            // Updating the disk source updates shared preferences:
+            settingDiskSource.isShowNextCodeEnabled = true
+            assertTrue(sharedPreferences.getBoolean(sharedPrefsKey, false))
+            assertTrue(awaitItem()!!)
+
+            // Updating the disk source to false:
+            settingDiskSource.isShowNextCodeEnabled = false
+            assertFalse(sharedPreferences.getBoolean(sharedPrefsKey, true))
+            assertFalse(awaitItem()!!)
+
+            // Updating shared preferences updates the disk source:
+            sharedPreferences.edit {
+                putBoolean(sharedPrefsKey, true)
+            }
+            assertTrue(settingDiskSource.isShowNextCodeEnabled!!)
+        }
+    }
+
+    @Test
+    fun `appTimeoutInMinutes should read and write from shared preferences`() {
+        val sharedPrefsKey = "bwPreferencesStorage:appTimeoutInMinutes"
+
+        // Shared preferences and the disk source start with the same value:
+        assertNull(settingDiskSource.appTimeoutInMinutes)
+
+        // Updating the disk source updates shared preferences:
+        settingDiskSource.appTimeoutInMinutes = 60
+        assertEquals(sharedPreferences.getInt(sharedPrefsKey, 0), 60)
+
+        sharedPreferences.edit { putInt(sharedPrefsKey, 240) }
+        assertEquals(settingDiskSource.appTimeoutInMinutes, 240)
+    }
 }

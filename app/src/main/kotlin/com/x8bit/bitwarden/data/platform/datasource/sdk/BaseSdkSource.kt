@@ -15,8 +15,21 @@ abstract class BaseSdkSource(
      * Helper function to retrieve the [Client] associated with the given [userId].
      */
     protected suspend fun getClient(
-        userId: String? = null,
+        userId: String,
     ): Client = sdkClientManager.getOrCreateClient(userId = userId)
+
+    /**
+     * Helper function to retrieve a new [Client] and use it in the given [block].
+     */
+    protected suspend fun <T> useClient(
+        userId: String? = null,
+        accessToken: String? = null,
+        block: suspend Client.() -> T,
+    ): T = sdkClientManager.singleUseClient(
+        userId = userId,
+        accessToken = accessToken,
+        block = block,
+    )
 
     /**
      * Invokes the [block] with `this` value as its receiver and returns its result if it was

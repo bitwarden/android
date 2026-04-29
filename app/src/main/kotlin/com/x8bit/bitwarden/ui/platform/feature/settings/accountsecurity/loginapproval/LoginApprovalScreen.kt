@@ -16,7 +16,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
@@ -66,22 +65,16 @@ fun LoginApprovalScreen(
 
     LoginApprovalDialogs(
         state = state.dialogState,
-        onDismissError = remember(viewModel) {
-            { viewModel.trySendAction(LoginApprovalAction.ErrorDialogDismiss) }
+        onDismissError = { viewModel.trySendAction(LoginApprovalAction.ErrorDialogDismiss) },
+        onConfirmChangeAccount = {
+            viewModel.trySendAction(LoginApprovalAction.ApproveAccountChangeClick)
         },
-        onConfirmChangeAccount = remember(viewModel) {
-            { viewModel.trySendAction(LoginApprovalAction.ApproveAccountChangeClick) }
-        },
-        onDismissChangeAccount = remember(viewModel) {
-            { viewModel.trySendAction(LoginApprovalAction.CancelAccountChangeClick) }
+        onDismissChangeAccount = {
+            viewModel.trySendAction(LoginApprovalAction.CancelAccountChangeClick)
         },
     )
 
-    BackHandler(
-        onBack = remember(viewModel) {
-            { viewModel.trySendAction(LoginApprovalAction.CloseClick) }
-        },
-    )
+    BackHandler(onBack = { viewModel.trySendAction(LoginApprovalAction.CloseClick) })
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
         modifier = Modifier
@@ -93,9 +86,7 @@ fun LoginApprovalScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(LoginApprovalAction.CloseClick) }
-                },
+                onNavigationIconClick = { viewModel.trySendAction(LoginApprovalAction.CloseClick) },
             )
         },
     ) {
@@ -103,11 +94,11 @@ fun LoginApprovalScreen(
             is LoginApprovalState.ViewState.Content -> {
                 LoginApprovalContent(
                     state = viewState,
-                    onConfirmLoginClick = remember(viewModel) {
-                        { viewModel.trySendAction(LoginApprovalAction.ApproveRequestClick) }
+                    onConfirmLoginClick = {
+                        viewModel.trySendAction(LoginApprovalAction.ApproveRequestClick)
                     },
-                    onDeclineLoginClick = remember(viewModel) {
-                        { viewModel.trySendAction(LoginApprovalAction.DeclineRequestClick) }
+                    onDeclineLoginClick = {
+                        viewModel.trySendAction(LoginApprovalAction.DeclineRequestClick)
                     },
                     modifier = Modifier.fillMaxSize(),
                 )

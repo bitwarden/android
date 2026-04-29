@@ -366,11 +366,7 @@ fun ExampleScreen(
         BitwardenSwitch(
             label = stringResource(id = R.string.toggle_label),
             isChecked = state.isToggleEnabled,
-            // Use remember(viewModel) to ensure the unstable lambda doesn't trigger unnecessary
-            // recompositions.
-            onCheckedChange = remember(viewModel) {
-                { viewModel.trySendAction(ExampleAction.ToggleValueUpdate(it)) }
-            },
+            onCheckedChange = { viewModel.trySendAction(ExampleAction.ToggleValueUpdate(it)) },
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
@@ -380,9 +376,7 @@ fun ExampleScreen(
 
         BitwardenFilledButton(
             label = stringResource(id = R.string.continue_text),
-            onClick = remember(viewModel) {
-                { viewModel.trySendAction(ExampleAction.ContinueButtonClick) }
-            },
+            onClick = { viewModel.trySendAction(ExampleAction.ContinueButtonClick) },
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),

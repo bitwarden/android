@@ -16,7 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -123,9 +122,7 @@ fun TwoFactorLoginScreen(
 
     TwoFactorLoginDialogs(
         dialogState = state.dialogState,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(TwoFactorLoginAction.DialogDismiss) }
-        },
+        onDismissRequest = { viewModel.trySendAction(TwoFactorLoginAction.DialogDismiss) },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -143,29 +140,26 @@ fun TwoFactorLoginScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(TwoFactorLoginAction.CloseButtonClick) }
+                onNavigationIconClick = {
+                    viewModel.trySendAction(TwoFactorLoginAction.CloseButtonClick)
                 },
                 actions = {
-                    if (!state.isNewDeviceVerification) {
-                        BitwardenOverflowActionItem(
-                            contentDescription = stringResource(BitwardenString.more),
-                            menuItemDataList = state.availableAuthMethods
-                                .map {
-                                    OverflowMenuItemData(
-                                        text = it.title(),
-                                        onClick = remember(viewModel) {
-                                            {
-                                                viewModel.trySendAction(
-                                                    TwoFactorLoginAction.SelectAuthMethod(it),
-                                                )
-                                            }
-                                        },
-                                    )
-                                }
-                                .toPersistentList(),
-                        )
-                    }
+                    BitwardenOverflowActionItem(
+                        isVisible = !state.isNewDeviceVerification,
+                        menuItemDataList = state
+                            .availableAuthMethods
+                            .map {
+                                OverflowMenuItemData(
+                                    text = it.title(),
+                                    onClick = {
+                                        viewModel.trySendAction(
+                                            TwoFactorLoginAction.SelectAuthMethod(it),
+                                        )
+                                    },
+                                )
+                            }
+                            .toPersistentList(),
+                    )
                 },
             )
         },
@@ -175,17 +169,17 @@ fun TwoFactorLoginScreen(
     ) {
         TwoFactorLoginScreenContent(
             state = state,
-            onCodeInputChange = remember(viewModel) {
-                { viewModel.trySendAction(TwoFactorLoginAction.CodeInputChanged(it)) }
+            onCodeInputChange = {
+                viewModel.trySendAction(TwoFactorLoginAction.CodeInputChanged(it))
             },
-            onContinueButtonClick = remember(viewModel) {
-                { viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick) }
+            onContinueButtonClick = {
+                viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
             },
-            onRememberMeToggle = remember(viewModel) {
-                { viewModel.trySendAction(TwoFactorLoginAction.RememberMeToggle(it)) }
+            onRememberMeToggle = {
+                viewModel.trySendAction(TwoFactorLoginAction.RememberMeToggle(it))
             },
-            onResendEmailButtonClick = remember(viewModel) {
-                { viewModel.trySendAction(TwoFactorLoginAction.ResendEmailClick) }
+            onResendEmailButtonClick = {
+                viewModel.trySendAction(TwoFactorLoginAction.ResendEmailClick)
             },
             modifier = Modifier.fillMaxSize(),
         )

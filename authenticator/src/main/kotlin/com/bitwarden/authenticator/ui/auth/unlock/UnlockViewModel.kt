@@ -5,8 +5,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.data.auth.repository.AuthRepository
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsUnlockResult
-import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -97,7 +97,7 @@ class UnlockViewModel @Inject constructor(
 
             BiometricsUnlockResult.Success -> {
                 mutableStateFlow.update { it.copy(dialog = null) }
-                sendEvent(UnlockEvent.NavigateToItemListing)
+                // State-based navigation will take it from here.
             }
         }
     }
@@ -181,12 +181,7 @@ sealed class UnlockEvent {
     /**
      * Prompts the user for biometrics unlock.
      */
-    data class PromptForBiometrics(val cipher: Cipher) : UnlockEvent(), BackgroundEvent
-
-    /**
-     * Navigates to the item listing screen.
-     */
-    data object NavigateToItemListing : UnlockEvent()
+    data class PromptForBiometrics(val cipher: Cipher) : UnlockEvent(), DeferredBackgroundEvent
 }
 
 /**

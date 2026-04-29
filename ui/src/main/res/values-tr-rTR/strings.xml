@@ -11,6 +11,7 @@
     <string name="copy_password">Parolayı kopyala</string>
     <string name="copy_username">Kullanıcı adını kopyala</string>
     <string name="delete">Sil</string>
+    <string name="preview">Ön izleme</string>
     <string name="deleting">Siliniyor…</string>
     <string name="do_you_really_want_to_delete">Gerçekten silmek istiyor musunuz? Bu işlem geri alınamaz.</string>
     <string name="edit">Düzenle</string>
@@ -42,7 +43,7 @@
     <string name="master_password">Ana parola</string>
     <string name="master_password_required">Ana parola (gerekli)</string>
     <string name="new_master_password_required">Yeni ana parola (gerekli)</string>
-    <string name="more">Daha fazla</string>
+    <string name="more_options">Diğer seçenekler</string>
     <string name="my_vault">Kasam</string>
     <string name="name">Ad</string>
     <string name="item_name_required">Hesap adı (gerekli)</string>
@@ -170,7 +171,7 @@
     <string name="autofill_noun">Otomatik doldur</string>
     <string name="autofill_verb">Otomatik doldur</string>
     <string name="autofill_or_view">Bu kaydı otomatik doldurmak veya görüntülemek ister misiniz?</string>
-    <string name="search">Ara</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Ara: %1$s</string>
     <string name="learn_org">Kuruluşlar hakkında bilgi al</string>
     <string name="authenticator_app_title">Kimlik doğrulama uygulaması</string>
     <string name="enter_verification_code_app">Kimlik doğrulama uygulamanızdaki 6 haneli doğrulama kodunu girin.</string>
@@ -200,9 +201,12 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="copy_totp_automatically">TOTP\'yi otomatik kopyala</string>
     <string name="premium_required">Bu özelliği kullanmak için premium üyelik gereklidir.</string>
     <string name="attachment_deleted">Dosya silindi</string>
+    <string name="attachments_unavailable">Ekler kullanılamıyor</string>
+    <string name="attachments_are_a_premium_feature">Attachments are a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="choose_file">Dosya seç</string>
     <string name="file">Dosya</string>
     <string name="no_file_chosen">Dosya seçilmedi</string>
+    <string name="file_name">Dosya adı</string>
     <string name="no_attachments">Ek dosya yok.</string>
     <string name="file_source">Dosya kaynağı</string>
     <string name="max_file_size">Maksimum dosya boyutu 100 MB\'dir.</string>
@@ -224,6 +228,8 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="copy_security_code">Güvenlik kodunu kopyala</string>
     <string name="number">Numara</string>
     <string name="security_code">Güvenlik kodu</string>
+    <string name="scan_card">Kartı tara</string>
+    <string name="scan_card_instruction">Kartınızı taramak için çerçevenin içine yerleştirin.</string>
     <string name="type_card">Kart</string>
     <string name="type_identity">Kimlik</string>
     <string name="type_login">Hesap</string>
@@ -303,7 +309,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="organization">Kuruluş</string>
     <string name="try_again">Yeniden dene</string>
     <string name="created">Oluşturulma: %1$s</string>
-    <string name="password_last_updated">Son parola güncellemesi: %1$s</string>
+    <string name="password_updated">Parola güncellendi: %1$s</string>
     <string name="last_edited">Son düzenleme: %1$s</string>
     <string name="invalid_email">Geçersiz e-posta adresi.</string>
     <string name="cards">Kartlar</string>
@@ -377,6 +383,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="capitalize">Baş harfleri büyük yap</string>
     <string name="include_number">Rakam ekle</string>
     <string name="download">İndir</string>
+    <string name="download_file">Dosyayı indir</string>
     <string name="login_expired">Oturumunuzun süresi doldu.</string>
     <string name="biometrics_direction">Biyometrik doğrulama</string>
     <string name="device_verification">Cihaz doğrulama</string>
@@ -496,6 +503,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="hide_email">E-posta adresimi alıcılardan gizle</string>
     <string name="send_options_policy_in_effect">Bir veya daha fazla kuruluş ilkesi Send seçeneklerinizi etkiliyor.</string>
     <string name="send_file_premium_required">Ücretsiz hesaplar yalnızca metin paylaşabilir. Send ile dosya paylaşmak için premium üyelik gerekir.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">Ana parolayı yeniden iste</string>
     <string name="password_confirmation">Ana parola onayı</string>
     <string name="password_confirmation_desc">Bu işlem korumalıdır. İşleme devam etmek için lütfen ana parolanızı yeniden girin.</string>
@@ -505,10 +513,10 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="remove_master_password">Ana parolayı kaldır</string>
     <string name="leave_organization">Kuruluştan ayrıl</string>
     <string name="leave_organization_name">%1$s kuruluşundan ayrılınsın mı?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">%1$s kuruluşundan ayrılmak istediğinizden emin misiniz?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">[%1$s] kuruluşundan ayrılmak istediğinizden emin misiniz?</string>
     <string name="leave_organization_button">%1$s kuruluşundan ayrıl</string>
     <string name="leave_organization_warning">Reddederseniz kişisel kayıtlarınız hesabınızda kalır, ancak paylaşılan kayıtlara ve kuruluş özelliklerine erişiminizi kaybedersiniz.</string>
-    <string name="how_to_manage_my_vault">Kasamı nasıl yönetebilirim</string>
+    <string name="contact_your_admin_to_regain_access">Erişiminizi yeniden kazanmak için yöneticinizle iletişime geçin.</string>
     <string name="fido2_authenticate_web_authn">WebAutn ile doğrula</string>
     <string name="fido2_return_to_app">Uygulamaya dön</string>
     <string name="reset_password_auto_enroll_invite_warning">Bu kuruluşun sizi otomatik olarak parola sıfırlamaya ekleyen bir ilkesi bulunmakta. Bu ilkeye eklenmek, kuruluş yöneticilerinin ana parolanızı değiştirebilmesini sağlar.</string>
@@ -834,6 +842,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="fill_out_the_form_and_import_your_saved_password_file">Formu doldurun ve <annotation emphasis="bold">kaydedilmiş parola dosyanızı içe aktarın.</annotation></string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Güvenliğiniz için, <annotation emphasis="bold">kayıtlı parola dosyanızı sildiğinizden emin olun.</annotation></string>
     <string name="need_help_check_out_import_help">Yardıma mı ihtiyacınız var? <annotation link="importHelp">İçe aktarma yardımına</annotation> göz atın.</string>
+    <string name="import_help">import help</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Dışa aktardığınız dosyayı bilgisayarınızda kolayca bulabileceğiniz bir yere <annotation emphasis="bold">kaydedin</annotation>.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Bu Bitwarden sunucusu tanınmıyor. Servis sağlayıcınızdan bilgi alın veya sunucunuzu güncelleyin.</string>
     <string name="syncing_logins_loading_message">Hesaplar eşitleniyor…</string>
@@ -858,6 +867,10 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="copy_public_key">Ortak anahtarı kopyala</string>
     <string name="copy_fingerprint">Parmak izini kopyala</string>
     <string name="enable_notifications">Bildirimleri etkinleştir</string>
+    <plurals name="notifications_content_description">
+        <item quantity="one">%d bildirim</item>
+        <item quantity="other">%d bildirim</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">Farklı cihazlarda hızlıca ve kolayca oturum açın</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Başka bir cihazdan yeni bir giriş isteği aldığınızda Bitwarden size bildirim gönderebilir.</string>
     <string name="skip_for_now">Şimdilik geç</string>
@@ -931,6 +944,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Hiçbir kayıt seçilmediği için geçiş anahtarı işlemi başarısız oldu.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">İstek desteklenmediği için geçiş anahtarı işlemi başarısız oldu.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Seçilen kayıt mevcut olmadığından parola işlemi başarısız oldu.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Hiçbir kayıt seçilmediği için parola işlemi başarısız oldu.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">İstek geçersiz olduğu için kimlik bilgileriyle ilgili işlem başarısız oldu.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">İstek desteklenmediği için kimlik bilgileriyle ilgili işlem başarısız oldu.</string>
@@ -1145,7 +1159,6 @@ Bu hesaba geçmek ister misiniz?</string>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Parolaları doldurmaya devam etmek için tarayıcıda otomatik doldurma etkinleştirin</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Tarayıcınız yakın zamanda güncellendi ve bu güncelleme Bitwarden otomatik doldurmayı devre dışı bıraktı. Parolalarınızı Bitwarden ile doldurmaya devam etmek için, otomatik doldurmayı tarayıcı otomatik doldurma ayarlarından etkinleştirin.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Tarayıcılarınız yakın zamanda güncellendi ve bu güncellemeler Bitwarden otomatik doldurmayı devre dışı bıraktı. Parolalarınızı Bitwarden ile doldurmaya devam etmek için, otomatik doldurma ayarlarından yüklü tüm tarayıcılar için tarayıcı otomatik doldurmayı etkinleştirin.</string>
     <string name="not_now">Şimdi değil</string>
     <string name="import_from_bitwarden">Bitwarden\'dan içe aktar</string>
     <string name="select_account">Hesap seç</string>
@@ -1196,6 +1209,8 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="archive_unavailable">Arşiv kullanılamıyor</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Premium’a yükselt</string>
+    <string name="unlock_advanced_security_features">Gelişmiş güvenlik özelliklerinin kilidini açın</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Premium paket size daha fazla güvenlik ve kontrol olanağı sunan ek araçlara erişmenizi sağlar.</string>
     <string name="this_item_is_archived">Bu kayıt arşivlendi.</string>
     <string name="introducing_archive">Arşiv özelliğiyle tanışın</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Şu anda ihtiyacınız olmayan kayıtlara gözden uzak, güvenli bir yerde saklayın.</string>
@@ -1206,4 +1221,40 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="restart_premium">Premium’u yeniden başlat</string>
     <string name="items_transferred">Kayıtlar aktarıldı</string>
     <string name="updated_master_password">Ana parola güncellendi</string>
+    <string name="invalid_email_addresses">Geçersiz e-posta adresi</string>
+    <string name="one_or_more_email_addresses_are_incorrect">Bir veya daha fazla e posta adresi geçersiz. Lütfen kontrol edip yeniden deneyin.</string>
+    <string name="no_email_addresses_entered">E-posta adresi girilmedi</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Bu Send\'i paylaşmak için en az bir geçerli e-posta adresi girin.</string>
+    <string name="sync_with_browser">Tarayıcıyla eşitleyin</string>
+    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
+    <string name="launch_browser">Tarayıcıyı aç</string>
+    <string name="continue_without_syncing">Eşitleme yapmadan devam et</string>
+    <string name="external_link">Dış bağlantı</string>
+    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
+    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
+    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
+    <string name="preview_unavailable">Ön izleme kullanılamıyor</string>
+    <string name="download_attachment">Ek dosyayı indir</string>
+    <string name="upgraded_to_premium">Upgraded to premium</string>
+    <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
+    <string name="per_month">/ month</string>
+    <string name="built_in_authenticator">Built-in authenticator</string>
+    <string name="emergency_access">Emergency access</string>
+    <string name="secure_file_storage">Secure file storage</string>
+    <string name="breach_monitoring">Breach monitoring</string>
+    <string name="upgrade_now">Upgrade now</string>
+    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="opening_checkout">Opening checkout…</string>
+    <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
+    <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
+    <string name="payment_not_received_yet">Payment not received yet</string>
+    <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
+    <string name="go_back">Go back</string>
+    <string name="allow_camera_access">Kamera erişimine izin verin</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">Kartınızı taramak için kameranıza erişmemiz gerekiyor. Bu izni istediğiniz zaman cihaz ayarlarınızdan değiştirebilirsiniz.</string>
+    <string name="show_next_code">Sonraki kodu göster</string>
+    <string name="see_upcoming_codes_in_the_list">Listede yaklaşan kodları göster</string>
+    <string name="next_code_x">Sonraki kod, %1$s</string>
 </resources>

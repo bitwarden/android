@@ -18,12 +18,12 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -86,9 +86,7 @@ fun RecordedLogsScreen(
 
     RecordedLogsDialogs(
         dialogState = state.dialogState,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(RecordedLogsAction.DismissDialog) }
-        },
+        onDismissRequest = { viewModel.trySendAction(RecordedLogsAction.DismissDialog) },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -98,18 +96,16 @@ fun RecordedLogsScreen(
                 title = stringResource(id = BitwardenString.recorded_logs_title),
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(RecordedLogsAction.BackClick) }
-                },
+                onNavigationIconClick = { viewModel.trySendAction(RecordedLogsAction.BackClick) },
                 scrollBehavior = scrollBehavior,
                 actions = {
                     RecordedLogsOverflowMenu(
                         isOverflowEnabled = state.viewState.isOverflowEnabled,
-                        onDeleteAllClick = remember(viewModel) {
-                            { viewModel.trySendAction(RecordedLogsAction.DeleteAllClick) }
+                        onDeleteAllClick = {
+                            viewModel.trySendAction(RecordedLogsAction.DeleteAllClick)
                         },
-                        onShareAllClick = remember(viewModel) {
-                            { viewModel.trySendAction(RecordedLogsAction.ShareAllClick) }
+                        onShareAllClick = {
+                            viewModel.trySendAction(RecordedLogsAction.ShareAllClick)
                         },
                     )
                 },
@@ -122,11 +118,11 @@ fun RecordedLogsScreen(
             is RecordedLogsState.ViewState.Content -> {
                 RecordedLogsContent(
                     viewState = viewState,
-                    onShareItemClick = remember(viewModel) {
-                        { viewModel.trySendAction(RecordedLogsAction.ShareClick(it)) }
+                    onShareItemClick = {
+                        viewModel.trySendAction(RecordedLogsAction.ShareClick(it))
                     },
-                    onDeleteItemClick = remember(viewModel) {
-                        { viewModel.trySendAction(RecordedLogsAction.DeleteClick(it)) }
+                    onDeleteItemClick = {
+                        viewModel.trySendAction(RecordedLogsAction.DeleteClick(it))
                     },
                 )
             }
@@ -173,7 +169,6 @@ private fun RecordedLogsOverflowMenu(
         )
     }
     BitwardenOverflowActionItem(
-        contentDescription = stringResource(BitwardenString.more),
         modifier = modifier,
         menuItemDataList = persistentListOf(
             OverflowMenuItemData(
@@ -278,7 +273,8 @@ private fun LogRow(
                 paddingBottom = 12.dp,
                 paddingStart = 16.dp,
                 paddingEnd = 4.dp,
-            ),
+            )
+            .testTag("LogRow"),
     ) {
         Column(modifier = Modifier.weight(weight = 1f)) {
             Text(
@@ -287,7 +283,9 @@ private fun LogRow(
                 color = BitwardenTheme.colorScheme.text.primary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("LogNameLabel"),
             )
             Spacer(modifier = Modifier.height(height = 2.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -297,7 +295,9 @@ private fun LogRow(
                     color = BitwardenTheme.colorScheme.text.secondary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(weight = 1f),
+                    modifier = Modifier
+                        .weight(weight = 1f)
+                        .testTag("LogSizeLabel"),
                 )
                 displayableItem.subtextEnd?.let {
                     Spacer(modifier = Modifier.width(width = 4.dp))
@@ -308,14 +308,15 @@ private fun LogRow(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         textAlign = TextAlign.End,
-                        modifier = Modifier.weight(weight = 1f),
+                        modifier = Modifier
+                            .weight(weight = 1f)
+                            .testTag("LogExpirationLabel"),
                     )
                 }
             }
         }
         Spacer(modifier = Modifier.width(width = 12.dp))
         BitwardenOverflowActionItem(
-            contentDescription = stringResource(BitwardenString.more),
             menuItemDataList = persistentListOf(
                 OverflowMenuItemData(
                     text = stringResource(id = BitwardenString.share),

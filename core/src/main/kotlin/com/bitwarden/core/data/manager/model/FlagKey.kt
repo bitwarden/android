@@ -33,11 +33,16 @@ sealed class FlagKey<out T : Any> {
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
                 ForceUpdateKdfSettings,
-                CipherKeyEncryption,
                 NoLogoutOnKdfChange,
                 MigrateMyVaultToMyItems,
-                ArchiveItems,
                 SendEmailVerification,
+                CardScanner,
+                MobilePremiumUpgrade,
+                AttachmentUpdates,
+                V2EncryptionJitPassword,
+                V2EncryptionKeyConnector,
+                V2EncryptionPassword,
+                V2EncryptionTde,
             )
         }
     }
@@ -57,14 +62,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object CredentialExchangeProtocolExport : FlagKey<Boolean>() {
         override val keyName: String = "cxp-export-mobile"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key for the Cipher Key Encryption feature.
-     */
-    data object CipherKeyEncryption : FlagKey<Boolean>() {
-        override val keyName: String = "cipher-key-encryption"
         override val defaultValue: Boolean = false
     }
 
@@ -101,18 +98,66 @@ sealed class FlagKey<out T : Any> {
     }
 
     /**
-     * Data object holding the feature flag key for the Archive Items feature.
-     */
-    data object ArchiveItems : FlagKey<Boolean>() {
-        override val keyName: String = "pm-19148-innovation-archive"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
      * Data object holding the feature flag key for the Send Email Verification feature.
      */
     data object SendEmailVerification : FlagKey<Boolean>() {
         override val keyName: String = "pm-19051-send-email-verification"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the card scanner feature.
+     */
+    data object CardScanner : FlagKey<Boolean>() {
+        override val keyName: String = "pm-34171-card-scanner"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the mobile Premium upgrade feature.
+     */
+    data object MobilePremiumUpgrade : FlagKey<Boolean>() {
+        override val keyName: String = "PM-31697-premium-upgrade-path"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the Attachment Feature Updates.
+     */
+    data object AttachmentUpdates : FlagKey<Boolean>() {
+        override val keyName: String = "pm-34224-mobile-attachment-updates"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for Encryption V2 pertaining to JIT Password.
+     */
+    data object V2EncryptionJitPassword : FlagKey<Boolean>() {
+        override val keyName: String = "enable-account-encryption-v2-jit-password-registration"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for Encryption V2 pertaining to Key Connector.
+     */
+    data object V2EncryptionKeyConnector : FlagKey<Boolean>() {
+        override val keyName: String = "enable-account-encryption-v2-key-connector-registration"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for Encryption V2 pertaining to Password.
+     */
+    data object V2EncryptionPassword : FlagKey<Boolean>() {
+        override val keyName: String = "pm-27278-v2-password-registration"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for Encryption V2 pertaining to TDE.
+     */
+    data object V2EncryptionTde : FlagKey<Boolean>() {
+        override val keyName: String = "pm-27279-v2-registration-tde-jit"
         override val defaultValue: Boolean = false
     }
 

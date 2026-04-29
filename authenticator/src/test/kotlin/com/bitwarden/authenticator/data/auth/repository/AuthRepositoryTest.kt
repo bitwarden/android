@@ -4,6 +4,10 @@ import app.cash.turbine.test
 import com.bitwarden.authenticator.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.sdk.AuthenticatorSdkSource
 import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
+import com.bitwarden.authenticator.data.platform.manager.lock.AppLockManager
+import com.bitwarden.authenticator.data.platform.manager.lock.model.AppLockState
+import com.bitwarden.authenticator.data.platform.manager.lock.model.AppTimeout
+import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyResult
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsUnlockResult
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
@@ -14,9 +18,15 @@ import com.bitwarden.core.data.util.asSuccess
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.runs
+import io.mockk.unmockkConstructor
+import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -27,15 +37,22 @@ import javax.crypto.Cipher
 
 class AuthRepositoryTest {
     private val authDiskSource: FakeAuthDiskSource = FakeAuthDiskSource()
+    private val settingsRepository: SettingsRepository = mockk()
     private val authenticatorSdkSource: AuthenticatorSdkSource = mockk()
     private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk()
     private val realtimeManager: RealtimeManager = mockk()
+    private val appLockManager: AppLockManager = mockk {
+        every { appLockStateFlow } returns MutableStateFlow(AppLockState.UNLOCKED)
+        every { manualAppUnlock() } just runs
+    }
 
     private val authRepository: AuthRepository = AuthRepositoryImpl(
         authDiskSource = authDiskSource,
+        settingsRepository = settingsRepository,
         authenticatorSdkSource = authenticatorSdkSource,
         biometricsEncryptionManager = biometricsEncryptionManager,
         realtimeManager = realtimeManager,
+        appLockManager = appLockManager,
         dispatcherManager = FakeDispatcherManager(),
     )
 
@@ -45,6 +62,11 @@ class AuthRepositoryTest {
         every {
             anyConstructed<MissingPropertyException>() == any<MissingPropertyException>()
         } returns true
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkConstructor(MissingPropertyException::class)
     }
 
     @Test
@@ -78,6 +100,9 @@ class AuthRepositoryTest {
         coVerify(exactly = 1) {
             authenticatorSdkSource.generateBiometricsKey()
         }
+        verify(exactly = 0) {
+            appLockManager.manualAppUnlock()
+        }
     }
 
     @Test
@@ -93,6 +118,9 @@ class AuthRepositoryTest {
         coVerify(exactly = 1) {
             authenticatorSdkSource.generateBiometricsKey()
         }
+        verify(exactly = 0) {
+            appLockManager.manualAppUnlock()
+        }
     }
 
     @Test
@@ -103,6 +131,7 @@ class AuthRepositoryTest {
         coEvery { authenticatorSdkSource.generateBiometricsKey() } returns biometricsKey.asSuccess()
         every { CIPHER.doFinal(any()) } returns encryptedBytes
         every { CIPHER.iv } returns iv
+        every { settingsRepository.appTimeoutState = AppTimeout.OnAppRestart } just runs
 
         val result = authRepository.setupBiometricsKey(cipher = CIPHER)
 
@@ -111,6 +140,10 @@ class AuthRepositoryTest {
         authDiskSource.assertUserBiometricKeyInitVector(iv)
         coVerify(exactly = 1) {
             authenticatorSdkSource.generateBiometricsKey()
+        }
+        verify(exactly = 1) {
+            appLockManager.manualAppUnlock()
+            settingsRepository.appTimeoutState = AppTimeout.OnAppRestart
         }
     }
 
@@ -126,6 +159,9 @@ class AuthRepositoryTest {
             ),
             result,
         )
+        verify(exactly = 0) {
+            appLockManager.manualAppUnlock()
+        }
     }
 
     @Test
@@ -141,6 +177,9 @@ class AuthRepositoryTest {
             val result = authRepository.unlockWithBiometrics(cipher = CIPHER)
 
             assertEquals(BiometricsUnlockResult.BiometricDecodingError(error), result)
+            verify(exactly = 0) {
+                appLockManager.manualAppUnlock()
+            }
         }
 
     @Test
@@ -155,6 +194,9 @@ class AuthRepositoryTest {
         val result = authRepository.unlockWithBiometrics(cipher = CIPHER)
 
         assertEquals(BiometricsUnlockResult.Success, result)
+        verify(exactly = 1) {
+            appLockManager.manualAppUnlock()
+        }
     }
 
     @Test
@@ -169,6 +211,9 @@ class AuthRepositoryTest {
             val result = authRepository.unlockWithBiometrics(cipher = CIPHER)
 
             assertEquals(BiometricsUnlockResult.BiometricDecodingError(error), result)
+            verify(exactly = 0) {
+                appLockManager.manualAppUnlock()
+            }
         }
 
     @Test
@@ -186,6 +231,9 @@ class AuthRepositoryTest {
         assertEquals(BiometricsUnlockResult.Success, result)
         authDiskSource.assertUserBiometricUnlockKey(encryptedBytes.toString(Charsets.ISO_8859_1))
         authDiskSource.assertUserBiometricKeyInitVector(initVector)
+        verify(exactly = 1) {
+            appLockManager.manualAppUnlock()
+        }
     }
 
     @Test

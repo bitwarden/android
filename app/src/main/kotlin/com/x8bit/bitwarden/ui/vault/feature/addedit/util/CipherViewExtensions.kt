@@ -98,6 +98,8 @@ fun CipherView.toViewState(
                 privateKey = sshKey?.privateKey.orEmpty(),
                 fingerprint = sshKey?.fingerprint.orEmpty(),
             )
+
+            CipherType.BANK_ACCOUNT -> TODO("PM-32810: Add Bank Account Type")
         },
         common = VaultAddEditState.ViewState.Content.Common(
             originalCipher = this,

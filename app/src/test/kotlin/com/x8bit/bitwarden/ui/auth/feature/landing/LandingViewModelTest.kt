@@ -96,6 +96,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                     onboardingStatus = OnboardingStatus.COMPLETE,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
                     isExportable = true,
+                    creationDate = null,
                 ),
             ),
         )
@@ -249,6 +250,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
             isExportable = true,
+            creationDate = null,
         )
         val userState = UserState(
             activeUserId = "activeUserId",
@@ -307,6 +309,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
                 isExportable = true,
+                creationDate = null,
             )
             val userState = UserState(
                 activeUserId = "activeUserId",
@@ -369,6 +372,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
                 isExportable = true,
+                creationDate = null,
             )
             val userState = UserState(
                 activeUserId = "activeUserId",
@@ -533,6 +537,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
             isExportable = true,
+            creationDate = null,
         )
 
         val userState = UserState(
@@ -570,6 +575,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
             isExportable = true,
+            creationDate = null,
         )
 
         val userState = UserState(

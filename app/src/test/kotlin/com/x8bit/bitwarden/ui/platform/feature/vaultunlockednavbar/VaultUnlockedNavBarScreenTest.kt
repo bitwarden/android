@@ -64,6 +64,7 @@ class VaultUnlockedNavBarScreenTest : BitwardenComposeTest() {
                 onNavigateToFlightRecorder = {},
                 onNavigateToRecordedLogs = {},
                 onNavigateToAboutPrivilegedApps = {},
+                onNavigateToPlan = {},
             )
         }
     }
@@ -77,10 +78,7 @@ class VaultUnlockedNavBarScreenTest : BitwardenComposeTest() {
     @Test
     fun `NavigateToVaultScreen should navigate to VaultScreen`() {
         mutableEventFlow.tryEmit(
-            VaultUnlockedNavBarEvent.NavigateToVaultScreen(
-                labelRes = BitwardenString.my_vault,
-                contentDescRes = BitwardenString.my_vault,
-            ),
+            VaultUnlockedNavBarEvent.NavigateToVaultScreen(labelRes = BitwardenString.my_vault),
         )
         composeTestRule.runOnIdle {
             verify {
@@ -97,7 +95,6 @@ class VaultUnlockedNavBarScreenTest : BitwardenComposeTest() {
         mutableEventFlow.tryEmit(
             VaultUnlockedNavBarEvent.Shortcut.NavigateToVaultScreen(
                 labelRes = BitwardenString.my_vault,
-                contentDescRes = BitwardenString.my_vault,
             ),
         )
         composeTestRule.runOnIdle {
@@ -191,7 +188,6 @@ class VaultUnlockedNavBarScreenTest : BitwardenComposeTest() {
         mutableStateFlow.tryEmit(
             VaultUnlockedNavBarState(
                 vaultNavBarLabelRes = BitwardenString.vaults,
-                vaultNavBarContentDescriptionRes = BitwardenString.vaults,
                 notificationState = VaultUnlockedNavBarNotificationState(
                     settingsTabNotificationCount = 0,
                 ),
@@ -231,7 +227,6 @@ class VaultUnlockedNavBarScreenTest : BitwardenComposeTest() {
 
 private val DEFAULT_STATE = VaultUnlockedNavBarState(
     vaultNavBarLabelRes = BitwardenString.my_vault,
-    vaultNavBarContentDescriptionRes = BitwardenString.my_vault,
     notificationState = VaultUnlockedNavBarNotificationState(
         settingsTabNotificationCount = 0,
     ),

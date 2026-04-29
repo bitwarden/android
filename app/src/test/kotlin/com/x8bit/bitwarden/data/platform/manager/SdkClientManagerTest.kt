@@ -22,7 +22,7 @@ class SdkClientManagerTest {
         every { loadLibrary(any()) } returns Result.success(Unit)
     }
     private val sdkRepoFactory: SdkRepositoryFactory = mockk {
-        every { getCipherRepository(userId = any()) } returns mockk()
+        every { getRepositories(userId = any()) } returns mockk()
     }
     private val sdkPlatformApiFactory: SdkPlatformApiFactory = mockk {
         every { getServerCommunicationConfigPlatformApi() } returns mockk()
@@ -73,6 +73,17 @@ class SdkClientManagerTest {
         }
 
     @Test
+    fun `singleUseClient should create a new client everytime and run the lambda with it`() =
+        runTest {
+            val sdkClientManager = createSdkClientManager()
+            val firstClient = sdkClientManager.singleUseClient { this }
+
+            // Additional calls should always create a new client
+            val secondClient = sdkClientManager.singleUseClient { this }
+            assertNotEquals(firstClient, secondClient)
+        }
+
+    @Test
     fun `destroyClient should call close on the Client and remove it from the cache`() = runTest {
         val sdkClientManager = createSdkClientManager()
         val userId = "userId"
@@ -88,7 +99,7 @@ class SdkClientManagerTest {
     }
 
     private fun createSdkClientManager(): SdkClientManagerImpl = SdkClientManagerImpl(
-        clientProvider = { mockk(relaxed = true) },
+        clientProvider = { _, _ -> mockk(relaxed = true) },
         nativeLibraryManager = mockNativeLibraryManager,
         featureFlagManager = mockk(),
         sdkRepoFactory = sdkRepoFactory,

@@ -385,6 +385,78 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `MoveClick with shareCipher error with errorMessage should show error dialog with that message`() =
+        runTest {
+            val viewModel = createViewModel()
+            mutableCollectionFlow.tryEmit(value = DataState.Loaded(DEFAULT_COLLECTIONS))
+            mutableVaultItemFlow.tryEmit(
+                value = DataState.Loaded(createMockCipherView(number = 1)),
+            )
+            val errorMessage = "You do not have permission to edit this."
+            val error = Throwable("Fail")
+            coEvery {
+                vaultRepository.shareCipher(
+                    cipherId = "mockCipherId",
+                    organizationId = "mockOrganizationId-1",
+                    cipherView = createMockCipherView(number = 1),
+                    collectionIds = listOf("mockId-1"),
+                )
+            } returns ShareCipherResult.Error(
+                errorMessage = errorMessage,
+                error = error,
+            )
+            viewModel.stateFlow.test {
+                assertEquals(
+                    initialState.copy(
+                        viewState = VaultMoveToOrganizationState.ViewState.Content(
+                            organizations = createMockOrganizationList(),
+                            selectedOrganizationId = "mockOrganizationId-1",
+                            cipherToMove = createMockCipherView(number = 1),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                viewModel.trySendAction(VaultMoveToOrganizationAction.MoveClick)
+                assertEquals(
+                    initialState.copy(
+                        dialogState = VaultMoveToOrganizationState.DialogState.Loading(
+                            message = BitwardenString.saving.asText(),
+                        ),
+                        viewState = VaultMoveToOrganizationState.ViewState.Content(
+                            organizations = createMockOrganizationList(),
+                            selectedOrganizationId = "mockOrganizationId-1",
+                            cipherToMove = createMockCipherView(number = 1),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    initialState.copy(
+                        dialogState = VaultMoveToOrganizationState.DialogState.Error(
+                            message = errorMessage.asText(),
+                            throwable = error,
+                        ),
+                        viewState = VaultMoveToOrganizationState.ViewState.Content(
+                            organizations = createMockOrganizationList(),
+                            selectedOrganizationId = "mockOrganizationId-1",
+                            cipherToMove = createMockCipherView(number = 1),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+            coVerify {
+                vaultRepository.shareCipher(
+                    cipherId = "mockCipherId",
+                    organizationId = "mockOrganizationId-1",
+                    cipherView = createMockCipherView(number = 1),
+                    collectionIds = listOf("mockId-1"),
+                )
+            }
+        }
+
     @Test
     fun `MoveClick with shareCipher success should emit NavigateBack`() = runTest {
         val viewModel = createViewModel()
@@ -547,6 +619,7 @@ private val DEFAULT_USER_STATE = UserState(
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
             isExportable = true,
+            creationDate = null,
         ),
     ),
 )

@@ -11,6 +11,7 @@
     <string name="copy_password">Copia la password</string>
     <string name="copy_username">Copia il nome utente</string>
     <string name="delete">Elimina l\'elemento</string>
+    <string name="preview">Preview</string>
     <string name="deleting">Eliminazione…</string>
     <string name="do_you_really_want_to_delete">Vuoi davvero eliminare questo elemento? Questa azione è irreversibile.</string>
     <string name="edit">Modifica l\'elemento</string>
@@ -42,7 +43,7 @@
     <string name="master_password">Password principale</string>
     <string name="master_password_required">Password principale (necessaria)</string>
     <string name="new_master_password_required">Nuova password principale (necessaria)</string>
-    <string name="more">Altro</string>
+    <string name="more_options">Altre opzioni</string>
     <string name="my_vault">Cassaforte</string>
     <string name="name">Nome</string>
     <string name="item_name_required">Nome dell\'elemento (necessario)</string>
@@ -170,7 +171,7 @@
     <string name="autofill_noun">Riempimento automatico</string>
     <string name="autofill_verb">Riempimento automatico</string>
     <string name="autofill_or_view">Seleziona l\'azione</string>
-    <string name="search">Cerca</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">Scopri di più sulle organizzazioni</string>
     <string name="authenticator_app_title">App di autenticazione</string>
     <string name="enter_verification_code_app">Inserisci il codice di verifica a 6 cifre dell\'app di autenticazione</string>
@@ -199,9 +200,12 @@
     <string name="copy_totp_automatically">Copia automatica del codice 2FA</string>
     <string name="premium_required">Passa a un abbonamento premium per utilizzare questa funzionalità</string>
     <string name="attachment_deleted">Allegato eliminato</string>
+    <string name="attachments_unavailable">Allegati non disponibili</string>
+    <string name="attachments_are_a_premium_feature">L\'archiviazione è una funzionalità Premium. Il tuo piano attuale non include questa funzionalità.</string>
     <string name="choose_file">Seleziona il file</string>
     <string name="file">File</string>
     <string name="no_file_chosen">Nessun file selezionato</string>
+    <string name="file_name">File name</string>
     <string name="no_attachments">Nessun file allegato</string>
     <string name="file_source">Origine del file</string>
     <string name="max_file_size">Seleziona un file inferiore o uguale a 100 MB</string>
@@ -223,6 +227,8 @@
     <string name="copy_security_code">Copia il codice di sicurezza</string>
     <string name="number">Numero della carta</string>
     <string name="security_code">Codice di sicurezza (CVC/CVV)</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">Carta</string>
     <string name="type_identity">Identità</string>
     <string name="type_login">Login</string>
@@ -302,7 +308,7 @@
     <string name="organization">Organizzazione</string>
     <string name="try_again">Riprova</string>
     <string name="created">Creazione: %1$s</string>
-    <string name="password_last_updated">Ultimo aggiornamento della password: %1$s</string>
+    <string name="password_updated">Ultimo aggiornamento della password: %1$s</string>
     <string name="last_edited">Ultima modifica: %1$s</string>
     <string name="invalid_email">Indirizzo email non valido</string>
     <string name="cards">Carte</string>
@@ -376,6 +382,7 @@
     <string name="capitalize">Iniziale maiuscola</string>
     <string name="include_number">Numero casuale</string>
     <string name="download">Scarica</string>
+    <string name="download_file">Download file</string>
     <string name="login_expired">Sessione scaduta</string>
     <string name="biometrics_direction">Autenticazione biometrica</string>
     <string name="device_verification">Verifica del dispositivo</string>
@@ -447,13 +454,13 @@
     <string name="deletion_date">Eliminazione programmata</string>
     <string name="deletion_time">Orario</string>
     <string name="deletion_date_info">Il Send verrà eliminato definitivamente dopo il periodo di tempo specificato</string>
-    <string name="who_can_view">Who can view</string>
-    <string name="anyone_with_the_link">Anyone with the link</string>
-    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
-    <string name="specific_people">Specific people</string>
-    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
-    <string name="anyone_with_password">Anyone with a password set by you</string>
-    <string name="add_email">Add email</string>
+    <string name="who_can_view">Chi può visualizzare</string>
+    <string name="anyone_with_the_link">Chiunque abbia il link</string>
+    <string name="anyone_with_link_can_view_send">Chiunque riceva il link può visualizzare il Send</string>
+    <string name="specific_people">Persone specifiche</string>
+    <string name="specific_people_verification_info">I destinatari dovranno verificare il loro indirizzo email con un codice per poter visualizzare il Send.</string>
+    <string name="anyone_with_password">Chiunque abbia la password</string>
+    <string name="add_email">Aggiungi email</string>
     <string name="pending_delete">Eliminazione in attesa</string>
     <string name="expired">Scaduto</string>
     <string name="expires_at">Scade alle %s</string>
@@ -495,6 +502,7 @@
     <string name="hide_email">Nascondi l\'indirizzo email</string>
     <string name="send_options_policy_in_effect">Le opzioni di Send sono limitate dalle politiche dell\'organizzazione</string>
     <string name="send_file_premium_required">Passa a un abbonamento Premium per condividere file in modo sicuro con Send</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Condividere con persone specifiche è una funzionalità Premium, non disponibile per il tuo piano.</string>
     <string name="password_prompt">Richiesta per conferma della password principale</string>
     <string name="password_confirmation">Conferma la password principale</string>
     <string name="password_confirmation_desc">Questa azione è protetta. Inserisci la password principale.</string>
@@ -505,10 +513,10 @@ Tutte le sessioni attive verranno terminate entro un\'ora.</string>
     <string name="remove_master_password">Rimuovi la password principale</string>
     <string name="leave_organization">Abbandona l\'organizzazione</string>
     <string name="leave_organization_name">Vuoi davvero abbandonare %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Vuoi davvero abbandonare \'%1$s\'?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Vuoi davvero abbandonare \'[%1$s]\'?</string>
     <string name="leave_organization_button">Abbandona %1$s</string>
     <string name="leave_organization_warning">Se rifiuti, tutti gli elementi esistenti resteranno nel tuo account, ma perderai l\'accesso agli oggetti condivisi e alle funzioni organizzative.</string>
-    <string name="how_to_manage_my_vault">Come si gestisce la cassaforte?</string>
+    <string name="contact_your_admin_to_regain_access">Contatta il tuo amministratore per recuperare l\'accesso.</string>
     <string name="fido2_authenticate_web_authn">Autenticazione WebAuthn</string>
     <string name="fido2_return_to_app">Torna all\'app</string>
     <string name="reset_password_auto_enroll_invite_warning">Questa organizzazione ha una politica che consente agli amministratori dell\'organizzazione di cambiare la tua password principale</string>
@@ -834,6 +842,7 @@ Vuoi passare a questo account?</string>
     <string name="fill_out_the_form_and_import_your_saved_password_file">Compila i campi richiesti e <annotation emphasis="bold">importa il tuo file delle password.</annotation></string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Per la tua sicurezza, ricorda di <annotation emphasis="bold">eliminare il file delle password</annotation> dopo l\'importazione</string>
     <string name="need_help_check_out_import_help">Hai bisogno di aiuto? Scopri la <annotation link="importHelp">guida all\'importazione</annotation>.</string>
+    <string name="import_help">guida all\'importazione</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Salva il file esportato</annotation> in un percorso del tuo computer dove puoi raggiungerlo facilmente.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Questo non è un server Bitwarden riconosciuto. Potrebbe essere necessario controllare con il tuo provider o aggiornare il server.</string>
     <string name="syncing_logins_loading_message">Sincronizzazione…</string>
@@ -858,6 +867,10 @@ Vuoi passare a questo account?</string>
     <string name="copy_public_key">Copia chiave pubblica</string>
     <string name="copy_fingerprint">Copia impronta</string>
     <string name="enable_notifications">Abilita le notifiche</string>
+    <plurals name="notifications_content_description">
+        <item quantity="one">%d notifica</item>
+        <item quantity="other">%d notifiche</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">Accedi rapidamente e facilmente su più dispositivi</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden può inviarti una notifica ogni volta che ricevi una richiesta di accesso da un nuovo dispositivo.</string>
     <string name="skip_for_now">Salta per ora</string>
@@ -931,6 +944,7 @@ Vuoi passare a questo account?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Operazione chiave d\'accesso non riuscita perché nessun elemento è stato selezionato.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operazione passkey non riuscita perché la richiesta non è supportata.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operazione password non riuscita: l\'elemento selezionato non esiste.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Operazione password non riuscita: non è stato selezionato un elemento.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Operazione non riuscita: richiesta non valida.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Operazione non riuscita: richiesta non supportata.</string>
@@ -942,7 +956,7 @@ Vuoi passare a questo account?</string>
     <string name="use_brave_autofill_integration">Usa l\'integrazione di riempimento automatico di Brave</string>
     <string name="use_chrome_autofill_integration">Usa l\'integrazione di riempimento automatico Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Usa l\'integrazione di Chrome Beta</string>
-    <string name="use_vivaldi_autofill_integration">Use Vivaldi autofill integration</string>
+    <string name="use_vivaldi_autofill_integration">Usa il riempimento automatico integrato di Vivaldi/Brave</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Migliora il riempimento dei campi di accesso per i siti supportati sui browser con integrazione. Se abiliti questa opzione, dovrai attivare l\'integrazione del riempimento automatico nelle impostazioni del browser.</string>
     <string name="show_more">Mostra di più</string>
     <string name="no_folder">Nessuna cartella</string>
@@ -1145,7 +1159,6 @@ Vuoi passare a questo account?</string>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Abilita il riempimento automatico nel browser per mantenere la funzionalità</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Il tuo browser è stato aggiornato di recente, e il riempimento automatico di Bitwarden è stato disattivato. Per continuare a riempire le password con Bitwarden, abilita il riempimento automatico del browser.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">I tuoi browser sono stati aggiornati di recente, e il riempimento automatico di Bitwarden è stato disattivato. Per continuare a riempire le password con Bitwarden, abilita il riempimento automatico dei browser.</string>
     <string name="not_now">Non adesso</string>
     <string name="import_from_bitwarden">Importa da Bitwarden</string>
     <string name="select_account">Scegli un account</string>
@@ -1196,6 +1209,8 @@ Vuoi passare a questo account?</string>
     <string name="archive_unavailable">Archivio non disponibile</string>
     <string name="archiving_items_is_a_premium_feature">L\'archiviazione è una funzionalità Premium. Il tuo piano attuale non include questa funzionalità.</string>
     <string name="upgrade_to_premium">Passa a Premium</string>
+    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">Questo elemento è archiviato.</string>
     <string name="introducing_archive">Introduzione all\'archivio</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Conserva al sicuro, ma non visualizzati, gli elementi che non ti servono di frequente.</string>
@@ -1206,4 +1221,40 @@ Vuoi passare a questo account?</string>
     <string name="restart_premium">Riavvia Premium</string>
     <string name="items_transferred">Elementi trasferiti</string>
     <string name="updated_master_password">Password principale aggiornata</string>
+    <string name="invalid_email_addresses">Indirizzo email non valido</string>
+    <string name="one_or_more_email_addresses_are_incorrect">Uno o più indirizzi email non sono corretti. Verificali e riprova.</string>
+    <string name="no_email_addresses_entered">Nessuna email inserita</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Inserisci almeno un indirizzo email valido per condividere questo Send.</string>
+    <string name="sync_with_browser">Sincronizza con il browser</string>
+    <string name="sync_with_browser_description">Per connetterti a %1$s, sincronizza il tuo browser predefinito con l\'applicazione mobile Bitwarden. All\'avvio del browser, se richiesto, completa l\'accesso.\nUna volta completata la sincronizzazione, tornerai a questa app.</string>
+    <string name="launch_browser">Avvia il browser</string>
+    <string name="continue_without_syncing">Continua senza sincronizzare</string>
+    <string name="external_link">Link esterno</string>
+    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Link esterno</string>
+    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
+    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
+    <string name="preview_unavailable">Preview unavailable</string>
+    <string name="download_attachment">Download Attachment</string>
+    <string name="upgraded_to_premium">Upgraded to premium</string>
+    <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
+    <string name="per_month">/ month</string>
+    <string name="built_in_authenticator">Built-in authenticator</string>
+    <string name="emergency_access">Emergency access</string>
+    <string name="secure_file_storage">Secure file storage</string>
+    <string name="breach_monitoring">Breach monitoring</string>
+    <string name="upgrade_now">Upgrade now</string>
+    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="opening_checkout">Opening checkout…</string>
+    <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
+    <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
+    <string name="payment_not_received_yet">Payment not received yet</string>
+    <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
+    <string name="go_back">Go back</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
+    <string name="show_next_code">Show next code</string>
+    <string name="see_upcoming_codes_in_the_list">See upcoming codes in the list</string>
+    <string name="next_code_x">Next code, %1$s</string>
 </resources>

@@ -16,7 +16,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -96,9 +95,7 @@ fun LoginScreen(
 
     LoginDialogs(
         dialogState = state.dialogState,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(LoginAction.ErrorDialogDismiss) }
-        },
+        onDismissRequest = { viewModel.trySendAction(LoginAction.ErrorDialogDismiss) },
     )
 
     val isAccountButtonVisible = state.accountSummaries.isNotEmpty()
@@ -114,9 +111,7 @@ fun LoginScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(LoginAction.CloseButtonClick) }
-                },
+                onNavigationIconClick = { viewModel.trySendAction(LoginAction.CloseButtonClick) },
                 actions = {
                     if (isAccountButtonVisible) {
                         BitwardenPlaceholderAccountActionItem(
@@ -124,12 +119,11 @@ fun LoginScreen(
                         )
                     }
                     BitwardenOverflowActionItem(
-                        contentDescription = stringResource(BitwardenString.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.get_password_hint),
-                                onClick = remember(viewModel) {
-                                    { viewModel.trySendAction(LoginAction.MasterPasswordHintClick) }
+                                onClick = {
+                                    viewModel.trySendAction(LoginAction.MasterPasswordHintClick)
                                 },
                             ),
                         ),
@@ -141,18 +135,14 @@ fun LoginScreen(
             BitwardenAccountSwitcher(
                 isVisible = isAccountMenuVisible,
                 accountSummaries = state.accountSummaries.toImmutableList(),
-                onSwitchAccountClick = remember(viewModel) {
-                    { viewModel.trySendAction(LoginAction.SwitchAccountClick(it)) }
+                onSwitchAccountClick = {
+                    viewModel.trySendAction(LoginAction.SwitchAccountClick(it))
                 },
-                onLockAccountClick = remember(viewModel) {
-                    { viewModel.trySendAction(LoginAction.LockAccountClick(it)) }
+                onLockAccountClick = { viewModel.trySendAction(LoginAction.LockAccountClick(it)) },
+                onLogoutAccountClick = {
+                    viewModel.trySendAction(LoginAction.LogoutAccountClick(it))
                 },
-                onLogoutAccountClick = remember(viewModel) {
-                    { viewModel.trySendAction(LoginAction.LogoutAccountClick(it)) }
-                },
-                onAddAccountClick = remember(viewModel) {
-                    { viewModel.trySendAction(LoginAction.AddAccountClick) }
-                },
+                onAddAccountClick = { viewModel.trySendAction(LoginAction.AddAccountClick) },
                 onDismissRequest = { isAccountMenuVisible = false },
                 topAppBarScrollBehavior = scrollBehavior,
                 modifier = Modifier.fillMaxSize(),
@@ -161,27 +151,21 @@ fun LoginScreen(
     ) {
         LoginScreenContent(
             state = state,
-            onPasswordInputChanged = remember(viewModel) {
-                { viewModel.trySendAction(LoginAction.PasswordInputChanged(it)) }
+            onPasswordInputChanged = {
+                viewModel.trySendAction(LoginAction.PasswordInputChanged(it))
             },
-            onMasterPasswordClick = remember(viewModel) {
-                { viewModel.trySendAction(LoginAction.MasterPasswordHintClick) }
+            onMasterPasswordClick = {
+                viewModel.trySendAction(LoginAction.MasterPasswordHintClick)
             },
-            onLoginButtonClick = remember(viewModel) {
-                {
-                    keyboardController?.hide()
-                    viewModel.trySendAction(LoginAction.LoginButtonClick)
-                }
+            onLoginButtonClick = {
+                keyboardController?.hide()
+                viewModel.trySendAction(LoginAction.LoginButtonClick)
             },
-            onLoginWithDeviceClick = remember(viewModel) {
-                { viewModel.trySendAction(LoginAction.LoginWithDeviceButtonClick) }
+            onLoginWithDeviceClick = {
+                viewModel.trySendAction(LoginAction.LoginWithDeviceButtonClick)
             },
-            onSingleSignOnClick = remember(viewModel) {
-                { viewModel.trySendAction(LoginAction.SingleSignOnClick) }
-            },
-            onNotYouButtonClick = remember(viewModel) {
-                { viewModel.trySendAction(LoginAction.NotYouButtonClick) }
-            },
+            onSingleSignOnClick = { viewModel.trySendAction(LoginAction.SingleSignOnClick) },
+            onNotYouButtonClick = { viewModel.trySendAction(LoginAction.NotYouButtonClick) },
             modifier = Modifier.fillMaxSize(),
         )
     }

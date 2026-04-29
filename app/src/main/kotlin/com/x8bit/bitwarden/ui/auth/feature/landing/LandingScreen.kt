@@ -21,7 +21,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -91,21 +90,13 @@ fun LandingScreen(
                 ),
                 confirmButtonText = stringResource(id = BitwardenString.yes),
                 dismissButtonText = stringResource(id = BitwardenString.cancel),
-                onConfirmClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            LandingAction.ConfirmSwitchToMatchingAccountClick(
-                                accountSummary = dialog.accountSummary,
-                            ),
-                        )
-                    }
+                onConfirmClick = {
+                    viewModel.trySendAction(
+                        LandingAction.ConfirmSwitchToMatchingAccountClick(dialog.accountSummary),
+                    )
                 },
-                onDismissClick = remember(viewModel) {
-                    { viewModel.trySendAction(LandingAction.DialogDismiss) }
-                },
-                onDismissRequest = remember(viewModel) {
-                    { viewModel.trySendAction(LandingAction.DialogDismiss) }
-                },
+                onDismissClick = { viewModel.trySendAction(LandingAction.DialogDismiss) },
+                onDismissRequest = { viewModel.trySendAction(LandingAction.DialogDismiss) },
             )
         }
 
@@ -113,9 +104,7 @@ fun LandingScreen(
             BitwardenBasicDialog(
                 title = stringResource(id = BitwardenString.an_error_has_occurred),
                 message = dialog.message(),
-                onDismissRequest = remember(viewModel) {
-                    { viewModel.trySendAction(LandingAction.DialogDismiss) }
-                },
+                onDismissRequest = { viewModel.trySendAction(LandingAction.DialogDismiss) },
             )
         }
 
@@ -150,14 +139,14 @@ fun LandingScreen(
             BitwardenAccountSwitcher(
                 isVisible = isAccountMenuVisible,
                 accountSummaries = state.accountSummaries.toImmutableList(),
-                onSwitchAccountClick = remember(viewModel) {
-                    { viewModel.trySendAction(LandingAction.SwitchAccountClick(it)) }
+                onSwitchAccountClick = {
+                    viewModel.trySendAction(LandingAction.SwitchAccountClick(it))
                 },
-                onLockAccountClick = remember(viewModel) {
-                    { viewModel.trySendAction(LandingAction.LockAccountClick(it)) }
+                onLockAccountClick = {
+                    viewModel.trySendAction(LandingAction.LockAccountClick(it))
                 },
-                onLogoutAccountClick = remember(viewModel) {
-                    { viewModel.trySendAction(LandingAction.LogoutAccountClick(it)) }
+                onLogoutAccountClick = {
+                    viewModel.trySendAction(LandingAction.LogoutAccountClick(it))
                 },
                 onAddAccountClick = {
                     // Not available
@@ -174,24 +163,14 @@ fun LandingScreen(
     ) {
         LandingScreenContent(
             state = state,
-            onEmailInputChange = remember(viewModel) {
-                { viewModel.trySendAction(LandingAction.EmailInputChanged(it)) }
+            onEmailInputChange = { viewModel.trySendAction(LandingAction.EmailInputChanged(it)) },
+            onEnvironmentTypeSelect = {
+                viewModel.trySendAction(LandingAction.EnvironmentTypeSelect(it))
             },
-            onEnvironmentTypeSelect = remember(viewModel) {
-                { viewModel.trySendAction(LandingAction.EnvironmentTypeSelect(it)) }
-            },
-            onRememberMeToggle = remember(viewModel) {
-                { viewModel.trySendAction(LandingAction.RememberMeToggle(it)) }
-            },
-            onContinueClick = remember(viewModel) {
-                { viewModel.trySendAction(LandingAction.ContinueButtonClick) }
-            },
-            onCreateAccountClick = remember(viewModel) {
-                { viewModel.trySendAction(LandingAction.CreateAccountClick) }
-            },
-            onAppSettingsClick = remember(viewModel) {
-                { viewModel.trySendAction(LandingAction.AppSettingsClick) }
-            },
+            onRememberMeToggle = { viewModel.trySendAction(LandingAction.RememberMeToggle(it)) },
+            onContinueClick = { viewModel.trySendAction(LandingAction.ContinueButtonClick) },
+            onCreateAccountClick = { viewModel.trySendAction(LandingAction.CreateAccountClick) },
+            onAppSettingsClick = { viewModel.trySendAction(LandingAction.AppSettingsClick) },
         )
     }
 }

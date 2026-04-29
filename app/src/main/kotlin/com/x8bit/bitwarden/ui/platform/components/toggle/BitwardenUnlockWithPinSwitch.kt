@@ -17,8 +17,8 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.PinInput
 /**
  * Displays a switch for enabling or disabling unlock with pin functionality.
  *
- * @param isUnlockWithPasswordEnabled Indicates whether or not the password unlocking is enabled.
- * @param isUnlockWithPinEnabled Indicates whether or not the pin unlocking is enabled.
+ * @param isUnlockWithPasswordEnabled Indicates whether the password unlocking is enabled.
+ * @param isUnlockWithPinEnabled Indicates whether the pin unlocking is enabled.
  * @param onUnlockWithPinToggleAction Callback that is invoked when the current state of the switch
  * changes.
  * @param cardStyle Indicates the type of card style to be applied.
@@ -136,7 +136,7 @@ fun BitwardenUnlockWithPinSwitch(
  */
 sealed class UnlockWithPinState {
     /**
-     * Whether or not the action represents PIN unlocking being enabled.
+     * Whether the action represents PIN unlocking being enabled.
      */
     abstract val isUnlockWithPinEnabled: Boolean
 

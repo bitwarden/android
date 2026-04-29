@@ -66,7 +66,7 @@ fun VaultAddEditUriItem(
         actions = {
             BitwardenStandardIconButton(
                 vectorIconRes = BitwardenDrawable.ic_cog,
-                contentDescription = stringResource(id = BitwardenString.options),
+                contentDescription = stringResource(id = BitwardenString.more_options),
                 onClick = { shouldShowOptionsDialog = true },
                 modifier = Modifier.testTag(tag = "LoginUriOptionsButton"),
             )

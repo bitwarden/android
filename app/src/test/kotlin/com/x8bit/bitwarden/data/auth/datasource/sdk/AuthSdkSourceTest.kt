@@ -1,5 +1,8 @@
 package com.x8bit.bitwarden.data.auth.datasource.sdk
 
+import com.bitwarden.auth.JitMasterPasswordRegistrationRequest
+import com.bitwarden.auth.JitMasterPasswordRegistrationResponse
+import com.bitwarden.auth.KeyConnectorRegistrationResult
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.FingerprintRequest
 import com.bitwarden.core.KeyConnectorResponse
@@ -12,6 +15,7 @@ import com.bitwarden.crypto.Kdf
 import com.bitwarden.sdk.AuthClient
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.PlatformClient
+import com.bitwarden.sdk.RegistrationClient
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import io.mockk.coEvery
@@ -20,12 +24,16 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.slot
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class AuthSdkSourceTest {
-    private val clientAuth = mockk<AuthClient>()
+    private val clientRegistration = mockk<RegistrationClient>()
+    private val clientAuth = mockk<AuthClient> {
+        every { registration() } returns clientRegistration
+    }
     private val clientPlatform = mockk<PlatformClient> {
         coEvery { loadFlags(any()) } just runs
     }
@@ -34,15 +42,119 @@ class AuthSdkSourceTest {
         every { platform() } returns clientPlatform
     }
     private val sdkClientManager = mockk<SdkClientManager> {
-        coEvery { getOrCreateClient(userId = null) } returns client
+        coEvery { getOrCreateClient(userId = any()) } returns client
     }
 
     private val authSkdSource: AuthSdkSource = AuthSdkSourceImpl(
         sdkClientManager = sdkClientManager,
     )
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `postKeysForJitPasswordRegistration should call SDK and return a Result with correct data`() =
+        runBlocking {
+            val userId = "userId"
+            val organizationId = "organizationId"
+            val organizationPublicKey = "organizationPublicKey"
+            val organizationSsoIdentifier = "organizationSsoIdentifier"
+            val salt = "salt"
+            val masterPassword = "masterPassword"
+            val masterPasswordHint = "masterPasswordHint"
+            val shouldResetPasswordEnroll = false
+            val expectedResult = mockk<JitMasterPasswordRegistrationResponse>()
+            coEvery { sdkClientManager.getOrCreateClient(userId = userId) } returns client
+            coEvery {
+                clientRegistration.postKeysForJitPasswordRegistration(
+                    request = JitMasterPasswordRegistrationRequest(
+                        orgId = organizationId,
+                        orgPublicKey = organizationPublicKey,
+                        organizationSsoIdentifier = organizationSsoIdentifier,
+                        userId = userId,
+                        salt = salt,
+                        masterPassword = masterPassword,
+                        masterPasswordHint = masterPasswordHint,
+                        resetPasswordEnroll = shouldResetPasswordEnroll,
+                    ),
+                )
+            } returns expectedResult
+
+            val result = authSkdSource.postKeysForJitPasswordRegistration(
+                organizationId = organizationId,
+                organizationPublicKey = organizationPublicKey,
+                organizationSsoIdentifier = organizationSsoIdentifier,
+                userId = userId,
+                salt = salt,
+                masterPassword = masterPassword,
+                masterPasswordHint = masterPasswordHint,
+                shouldResetPasswordEnroll = shouldResetPasswordEnroll,
+            )
+
+            assertEquals(expectedResult, result.getOrThrow())
+            coVerify(exactly = 1) {
+                clientRegistration.postKeysForJitPasswordRegistration(
+                    request = JitMasterPasswordRegistrationRequest(
+                        orgId = organizationId,
+                        orgPublicKey = organizationPublicKey,
+                        organizationSsoIdentifier = organizationSsoIdentifier,
+                        userId = userId,
+                        salt = salt,
+                        masterPassword = masterPassword,
+                        masterPasswordHint = masterPasswordHint,
+                        resetPasswordEnroll = shouldResetPasswordEnroll,
+                    ),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `postKeysForKeyConnectorRegistration should call SDK and return a Result with correct data`() =
+        runBlocking {
+            val userId = "userId"
+            val accessToken = "accessToken"
+            val keyConnectorUrl = "keyConnectorUrl"
+            val ssoOrgIdentifier = "ssoOrgIdentifier"
+            val expectedResult = mockk<KeyConnectorRegistrationResult>()
+            val slot = slot<suspend Client.() -> KeyConnectorRegistrationResult>()
+            coEvery {
+                sdkClientManager.singleUseClient(
+                    userId = userId,
+                    accessToken = accessToken,
+                    block = capture(slot),
+                )
+            } coAnswers { slot.captured(client) }
+            coEvery {
+                clientRegistration.postKeysForKeyConnectorRegistration(
+                    keyConnectorUrl = keyConnectorUrl,
+                    ssoOrgIdentifier = ssoOrgIdentifier,
+                )
+            } returns expectedResult
+
+            val result = authSkdSource.postKeysForKeyConnectorRegistration(
+                userId = userId,
+                accessToken = accessToken,
+                keyConnectorUrl = keyConnectorUrl,
+                ssoOrganizationIdentifier = ssoOrgIdentifier,
+            )
+
+            assertEquals(
+                expectedResult.asSuccess(),
+                result,
+            )
+            coVerify(exactly = 1) {
+                clientRegistration.postKeysForKeyConnectorRegistration(
+                    keyConnectorUrl = keyConnectorUrl,
+                    ssoOrgIdentifier = ssoOrgIdentifier,
+                )
+            }
+        }
+
     @Test
     fun `getNewAuthRequest should call SDK and return a Result with correct data`() = runBlocking {
+        val slot = slot<suspend Client.() -> AuthRequestResponse>()
+        coEvery {
+            sdkClientManager.singleUseClient(block = capture(slot))
+        } coAnswers { slot.captured(client) }
         val email = "test@gmail.com"
         val expectedResult = mockk<AuthRequestResponse>()
         coEvery {
@@ -62,6 +174,10 @@ class AuthSdkSourceTest {
 
     @Test
     fun `getUserFingerprint should call SDK and return a Result with correct data`() = runBlocking {
+        val slot = slot<suspend Client.() -> String>()
+        coEvery {
+            sdkClientManager.singleUseClient(block = capture(slot))
+        } coAnswers { slot.captured(client) }
         val email = "email@gmail.com"
         val publicKey = "publicKey"
         val expectedResult = "fingerprint"
@@ -91,6 +207,10 @@ class AuthSdkSourceTest {
 
     @Test
     fun `hashPassword should call SDK and return a Result with the correct data`() = runBlocking {
+        val slot = slot<suspend Client.() -> String>()
+        coEvery {
+            sdkClientManager.singleUseClient(block = capture(slot))
+        } coAnswers { slot.captured(client) }
         val email = "email"
         val password = "password"
         val kdf = mockk<Kdf>()
@@ -128,6 +248,10 @@ class AuthSdkSourceTest {
     @Test
     fun `makeKeyConnectorKeys should call SDK and return a Result with the correct data`() =
         runBlocking {
+            val slot = slot<suspend Client.() -> KeyConnectorResponse>()
+            coEvery {
+                sdkClientManager.singleUseClient(block = capture(slot))
+            } coAnswers { slot.captured(client) }
             val expectedResult = mockk<KeyConnectorResponse>()
             coEvery { clientAuth.makeKeyConnectorKeys() } returns expectedResult
 
@@ -142,6 +266,10 @@ class AuthSdkSourceTest {
     @Test
     fun `makeRegisterKeys should call SDK and return a Result with the correct data`() =
         runBlocking {
+            val slot = slot<suspend Client.() -> RegisterKeyResponse>()
+            coEvery {
+                sdkClientManager.singleUseClient(block = capture(slot))
+            } coAnswers { slot.captured(client) }
             val email = "email"
             val password = "password"
             val kdf = mockk<Kdf>()
@@ -181,7 +309,6 @@ class AuthSdkSourceTest {
             val orgPublicKey = "orgPublicKey"
             val rememberDevice = true
             val expectedResult = mockk<RegisterTdeKeyResponse>()
-            coEvery { sdkClientManager.getOrCreateClient(userId = userId) } returns client
             coEvery {
                 clientAuth.makeRegisterTdeKeys(
                     email = email,
@@ -209,6 +336,10 @@ class AuthSdkSourceTest {
     @Test
     fun `passwordStrength should call SDK and return a Result with the correct data`() =
         runBlocking {
+            val slot = slot<suspend Client.() -> PasswordStrength>()
+            coEvery {
+                sdkClientManager.singleUseClient(block = capture(slot))
+            } coAnswers { slot.captured(client) }
             val email = "email"
             val password = "password"
             val additionalInputs = listOf("test1", "test2")
@@ -243,6 +374,10 @@ class AuthSdkSourceTest {
     @Test
     fun `satisfiesPolicy should call SDK and return a Result with the correct data`() =
         runBlocking {
+            val slot = slot<suspend Client.() -> Boolean>()
+            coEvery {
+                sdkClientManager.singleUseClient(block = capture(slot))
+            } coAnswers { slot.captured(client) }
             val password = "password"
             val passwordStrength = PasswordStrength.LEVEL_3
             val rawStrength = 3.toUByte()

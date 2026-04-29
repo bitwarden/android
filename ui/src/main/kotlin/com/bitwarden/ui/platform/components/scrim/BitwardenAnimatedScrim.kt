@@ -15,7 +15,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 /**
  * A scrim that animates its visibility.
  *
- * @param isVisible Whether or not the scrim should be visible. This controls the animation.
+ * @param isVisible Whether the scrim should be visible. This controls the animation.
  * @param onClick A callback that is triggered when the scrim is clicked. No ripple will be
  * performed.
  * @param modifier A [Modifier] for the scrim's content.

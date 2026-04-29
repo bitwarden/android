@@ -11,8 +11,9 @@
     <string name="copy_password">复制密码</string>
     <string name="copy_username">复制用户名</string>
     <string name="delete">删除</string>
+    <string name="preview">预览</string>
     <string name="deleting">正在删除…</string>
-    <string name="do_you_really_want_to_delete">您确定要删除吗？这个操作无法撤消。</string>
+    <string name="do_you_really_want_to_delete">确定要删除吗？此操作无法撤消。</string>
     <string name="edit">编辑</string>
     <string name="edit_folder">编辑文件夹</string>
     <string name="email">电子邮箱</string>
@@ -42,7 +43,7 @@
     <string name="master_password">主密码</string>
     <string name="master_password_required">主密码（必填）</string>
     <string name="new_master_password_required">新主密码（必填）</string>
-    <string name="more">更多</string>
+    <string name="more_options">更多选项</string>
     <string name="my_vault">我的密码库</string>
     <string name="name">名称</string>
     <string name="item_name_required">项目名称 （必填）</string>
@@ -102,7 +103,7 @@
     <string name="four_hours">4 小时</string>
     <string name="immediately">立即</string>
     <string name="vault_timeout_log_out_confirmation_title">将会话超时设置为「注销」吗？</string>
-    <string name="vault_timeout_log_out_confirmation_message">超时后您将被注销。您需要连接到互联网才能再次登录并访问您的密码库。您在此设备上保存的设置和 PIN 不会更改。</string>
+    <string name="vault_timeout_log_out_confirmation_message">超时后您将被注销。您需要连接到互联网才能再次登录并访问您的密码库。您在此设备上保存的设置和 PIN 码不会更改。</string>
     <string name="logging_in">正在登录…</string>
     <string name="login_to_bitwarden">登录到 Bitwarden</string>
     <string name="master_password_confirmation_val_message">两次填写的密码不一致。</string>
@@ -169,7 +170,7 @@
     <string name="autofill_noun">自动填充</string>
     <string name="autofill_verb">自动填充</string>
     <string name="autofill_or_view">您想自动填充还是查看此项目？</string>
-    <string name="search">搜索</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">搜索 %1$s</string>
     <string name="learn_org">了解组织</string>
     <string name="authenticator_app_title">验证器 App</string>
     <string name="enter_verification_code_app">请输入您的验证器 App 中的 6 位数验证码。</string>
@@ -180,28 +181,31 @@
     <string name="remember_email">记住电子邮箱</string>
     <string name="send_verification_code_again">重新发送代码</string>
     <string name="verification_email_not_sent">无法发送验证电子邮件。请重试。</string>
-    <string name="verification_email_sent">验证邮件已发送</string>
+    <string name="verification_email_sent">验证电子邮件已发送</string>
     <string name="yubi_key_instruction">要继续，请将您的 Yubico 安全密钥靠在设备背面或者将其插入设备的 USB 端口，然后触摸其按钮。</string>
     <string name="yubi_key_title">Yubico 安全密钥</string>
     <string name="add_new_attachment">添加新附件</string>
     <string name="attachments">附件</string>
     <string name="unable_to_download_file">无法下载文件。</string>
     <string name="downloading">正在下载…</string>
-    <string name="attachment_large_warning">此附件大小为 %1$s 。确定要将其下载到您的设备上吗？</string>
+    <string name="attachment_large_warning">此文件大小为 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>。您想要下载它吗？</string>
     <string name="authenticator_key">验证器密钥</string>
     <string name="verification_code_totp">验证码 (TOTP)</string>
     <string name="authenticator_key_added">已添加验证器密钥。</string>
     <string name="authenticator_key_read_error">无法读取验证器密钥。</string>
-    <string name="point_your_camera_at_the_qr_code">将您的摄像头对准二维码。
-扫描将自动完成。</string>
+    <string name="point_your_camera_at_the_qr_code">将您的相机对准二维码。
+扫描将自动进行。</string>
     <string name="copy_totp">复制 TOTP</string>
     <string name="copy_totp_automatically_description">如果登录项目包含验证器密钥，当自动填充此登录时，TOTP 验证码将复制到剪贴板。</string>
     <string name="copy_totp_automatically">自动复制 TOTP</string>
-    <string name="premium_required">使用此功能需要高级会员资格。</string>
+    <string name="premium_required">需要高级版成员资格才能使用此功能。</string>
     <string name="attachment_deleted">附件已删除</string>
+    <string name="attachments_unavailable">附件功能不可用</string>
+    <string name="attachments_are_a_premium_feature">附件是高级版功能。您的当前方案不包含对此功能的访问权限。</string>
     <string name="choose_file">选择文件</string>
     <string name="file">文件</string>
     <string name="no_file_chosen">未选择文件</string>
+    <string name="file_name">文件名称</string>
     <string name="no_attachments">没有附件。</string>
     <string name="file_source">文件来源</string>
     <string name="max_file_size">文件最大为 100 MB。</string>
@@ -223,6 +227,8 @@
     <string name="copy_security_code">复制安全码</string>
     <string name="number">号码</string>
     <string name="security_code">安全码</string>
+    <string name="scan_card">扫描支付卡</string>
+    <string name="scan_card_instruction">将您的支付卡置于取景框内进行扫描。</string>
     <string name="type_card">支付卡</string>
     <string name="type_identity">身份</string>
     <string name="type_login">登录</string>
@@ -273,7 +279,7 @@
     <string name="show_website_icons_description">在每个登录项目旁边显示一个可识别的图像</string>
     <string name="icons_url">图标服务器 URL</string>
     <string name="vault_is_locked">密码库已锁定</string>
-    <string name="go_to_my_vault">转到我的密码库</string>
+    <string name="go_to_my_vault">前往我的密码库</string>
     <string name="collections">集合</string>
     <string name="no_items_collection">此集合中没有项目。</string>
     <string name="no_items_folder">此文件夹中没有项目。</string>
@@ -302,7 +308,7 @@
     <string name="organization">组织</string>
     <string name="try_again">重试</string>
     <string name="created">创建于：%1$s</string>
-    <string name="password_last_updated">密码最后更新于：%1$s</string>
+    <string name="password_updated">密码更新于：%1$s</string>
     <string name="last_edited">最后编辑于：%1$s</string>
     <string name="invalid_email">无效的电子邮箱地址。</string>
     <string name="cards">支付卡</string>
@@ -375,6 +381,7 @@
     <string name="capitalize">首字母大写</string>
     <string name="include_number">包含数字</string>
     <string name="download">下载</string>
+    <string name="download_file">下载文件</string>
     <string name="login_expired">您的登录会话已过期。</string>
     <string name="biometrics_direction">生物识别验证</string>
     <string name="device_verification">设备验证</string>
@@ -404,9 +411,9 @@
     <string name="restoring">正在恢复…</string>
     <string name="item_restored">项目已恢复</string>
     <string name="trash">回收站</string>
-    <string name="do_you_really_want_to_permanently_delete_cipher">您确定要永久删除吗？此操作无法撤销。</string>
-    <string name="do_you_really_want_to_restore_cipher">您确定要恢复此项目吗？</string>
-    <string name="do_you_really_want_to_soft_delete_cipher">您确定要将其发送到回收站吗？</string>
+    <string name="do_you_really_want_to_permanently_delete_cipher">确定要永久删除吗？此操作无法撤销。</string>
+    <string name="do_you_really_want_to_restore_cipher">确定要恢复此项目吗？</string>
+    <string name="do_you_really_want_to_soft_delete_cipher">确定要将其发送到回收站吗？</string>
     <string name="account_biometric_invalidated">在验证主密码之前，此账户的生物识别解锁将禁用。</string>
     <string name="enable_sync_on_refresh">启用刷新时同步</string>
     <string name="enable_sync_on_refresh_description">使用下拉手势同步密码库。</string>
@@ -447,9 +454,9 @@
     <string name="deletion_time">删除时间</string>
     <string name="deletion_date_info">此 Send 将在指定的日期和时间后被永久删除。</string>
     <string name="who_can_view">谁可以查看</string>
-    <string name="anyone_with_the_link">拥有此链接的任何人</string>
+    <string name="anyone_with_the_link">拥有链接的任何人</string>
     <string name="anyone_with_link_can_view_send">拥有此链接的任何人都可以查看此 Send</string>
-    <string name="specific_people">指定人员</string>
+    <string name="specific_people">指定的人员</string>
     <string name="specific_people_verification_info">分享此 Send 链接后，个人需要使用验证码验证他们的电子邮箱才能查看此 Send</string>
     <string name="anyone_with_password">拥有您设置的密码的任何人</string>
     <string name="add_email">添加电子邮箱</string>
@@ -493,7 +500,8 @@
     <string name="about_send">关于 Send</string>
     <string name="hide_email">对接收者隐藏我的电子邮箱地址</string>
     <string name="send_options_policy_in_effect">一个或多个组织策略正在影响您的 Send 设置。</string>
-    <string name="send_file_premium_required">免费账户仅限于共享文本。要使用文件 Send，需要高级会员。</string>
+    <string name="send_file_premium_required">免费账户仅限于共享文本。需要高级版成员资格才能使用文件 Send。</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">与指定人员共享是高级版功能。您的当前方案不包含对此功能的访问权限。</string>
     <string name="password_prompt">主密码重新提示</string>
     <string name="password_confirmation">确认主密码</string>
     <string name="password_confirmation_desc">此操作受到保护，要继续，请重新输入主密码以验证您的身份。</string>
@@ -503,10 +511,10 @@
     <string name="remove_master_password">移除主密码</string>
     <string name="leave_organization">退出组织</string>
     <string name="leave_organization_name">退出 %1$s？</string>
-    <string name="are_you_sure_you_want_to_leave_organization">确定要退出 %1$s 吗？</string>
+    <string name="are_you_sure_you_want_to_leave_organization">确定要退出吗？</string>
     <string name="leave_organization_button">退出 %1$s</string>
-    <string name="leave_organization_warning">拒绝后，您的个人项目将保留在您的账户中，但您将失去对共享项目和组织功能的访问权限。\n\n联系您的管理员以重新获取访问权限。</string>
-    <string name="how_to_manage_my_vault">如何管理我的密码库</string>
+    <string name="leave_organization_warning">拒绝后，您的个人项目将保留在您的账户中，但您将失去对共享项目和组织功能的访问权限。<annotation link="learnMore">进一步了解</annotation></string>
+    <string name="contact_your_admin_to_regain_access">联系您的管理员以重新获取访问权限。</string>
     <string name="fido2_authenticate_web_authn">验证 WebAuthn</string>
     <string name="fido2_return_to_app">返回 App</string>
     <string name="reset_password_auto_enroll_invite_warning">此组织有一个企业策略，将为您自动注册密码重置。注册后将允许组织管理员更改您的主密码。</string>
@@ -607,7 +615,7 @@
     <string name="login_request_has_already_expired">登录请求已过期。</string>
     <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">登录尝试来自：
 %1$s
-您想要切换到此账户吗？</string>
+要切换到此账户吗？</string>
     <string name="new_to_bitwarden">Bitwarden 新手吗？</string>
     <string name="get_master_passwordword_hint">获取主密码提示</string>
     <string name="logging_in_as_x_on_y">正在 %2$s 上以 %1$s 身份登录</string>
@@ -678,8 +686,8 @@
     <string name="session_timeout_action">会话超时动作</string>
     <string name="account_fingerprint_phrase">账户指纹短语</string>
     <string name="passkey_management_explanation_long">使用 Bitwarden 保存新的通行密钥并使用存储在密码库中的通行密钥登录。</string>
-    <string name="autofill_services_explanation_long">允许 Bitwarden 使用您保存的登录信息来登录设备上的其他 App。</string>
-    <string name="use_inline_autofill_explanation_long">选择在登录您的设备上的其他 App 时，自动填充建议的显示方式。</string>
+    <string name="autofill_services_explanation_long">允许 Bitwarden 使用您保存的登录信息来登录您设备上的其他 App。</string>
+    <string name="use_inline_autofill_explanation_long">选择当您登录到您设备上的其他 App 时，自动填充建议的显示方式。</string>
     <string name="additional_options">附加选项</string>
     <string name="continue_to_web_app">前往网页 App 吗？</string>
     <string name="continue_to_x">前往 %1$s 吗？</string>
@@ -728,7 +736,7 @@
     <string name="check_your_email">检查您的电子邮箱</string>
     <string name="open_email_app">打开电子邮箱 App</string>
     <string name="email_verified">电子邮箱已验证</string>
-    <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">获取来自 Bitwarden 的建议、公告和调研电子邮件。随时 <annotation link="unsubscribe">取消订阅</annotation>。</string>
+    <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">获取来自 Bitwarden 的建议、公告和调研电子邮件。随时<annotation link="unsubscribe">取消订阅</annotation>。</string>
     <string name="security_prioritized">以安全为首要</string>
     <string name="welcome_message_1">将登录、支付卡和身份保存到您的安全密码库。Bitwarden 使用零知识、端到端的加密来保护您的重要信息。</string>
     <string name="welcome_message_2">设置生物识别解锁和自动填充，无需输入任何字符即可登录您的账户。</string>
@@ -747,7 +755,7 @@
     <string name="set_up_unlock_later">稍后设置解锁吗？</string>
     <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">您可以随时回到「设置」中的「账户安全」来完成此步骤。</string>
     <string name="confirm">确认</string>
-    <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">设置生物识别或选择一个 PIN 码，以快速访问您的密码库并自动填充您的登录信息。</string>
+    <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">设置生物识别或选择一个 PIN 码，以快速访问您的密码库以及自动填充您的登录。</string>
     <string name="never_lose_access_to_your_vault">千万不要失去对密码库的访问权限</string>
     <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">确保您始终可以访问您的密码库的最佳方法就是从一开始就设置好安全防护措施。</string>
     <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">创建安全且难忘的密码的最佳方法之一是使用密码短语。\n具体方法如下：</string>
@@ -761,7 +769,7 @@
     <string name="write_this_password_down_and_keep_it_somewhere_safe">写下此密码并将其保存在安全的地方。</string>
     <string name="learn_about_other_ways_to_prevent_account_lockout">了解其他防止账户被锁住的方法</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">了解防止账户被锁住的方法</annotation></string>
-    <string name="help_with_server_geolocations">帮助确定服务器位置。</string>
+    <string name="help_with_server_geolocations">帮助确定服务器位置</string>
     <string name="email_address_required">电子邮箱地址（必填）</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">选择电子邮件中的链接以验证您的电子邮箱地址并继续创建您的账户。</string>
     <string name="change_email_address">更改电子邮箱地址</string>
@@ -786,7 +794,7 @@
     <string name="browser_requires_special_permissions_for_bitwarden_plural">您正在使用的浏览器需要特殊权限才能让 Bitwarden 自动填充密码。</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">您正在使用的浏览器需要特殊权限才能让 Bitwarden 自动填充密码。请在下方启用您首选的自动填充集成。</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_plural">您正在使用的浏览器需要特殊权限才能让 Bitwarden 自动填充密码。请为所有已安装的浏览器启用自动填充功能。</string>
-    <string name="use_autofill_to_log_into_your_accounts">使用自动填充功能，只需点击一次即可登录您的账户。</string>
+    <string name="use_autofill_to_log_into_your_accounts">使用自动填充，只需点击一下即可登录您的账户。</string>
     <string name="turn_on_later">稍后启用</string>
     <string name="turn_on_autofill_later">稍后启用自动填充吗？</string>
     <string name="turn_on_browser_autofill_integration_later">稍后启用浏览器自动填充集成吗？</string>
@@ -798,7 +806,7 @@
     <string name="new_master_password_hint">新主密码提示</string>
     <string name="get_started">开始使用</string>
     <string name="save_and_protect_your_data">保存和保护您的数据</string>
-    <string name="the_vault_protects_more_than_just_passwords">密码库不仅保护密码。在这里可以安全地存储登录、ID、支付卡和笔记。</string>
+    <string name="the_vault_protects_more_than_just_passwords">密码库不仅保护密码。在这里还可以安全地存储登录、ID、支付卡和笔记。</string>
     <string name="new_login">新增登录</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">在任何平台上安全地与任何人共享文件和数据。您的信息将在限制曝光的同时保持端到端加密。</string>
     <string name="send_sensitive_information_safely">安全地发送敏感信息</string>
@@ -830,6 +838,7 @@
     <string name="fill_out_the_form_and_import_your_saved_password_file">填写表单然后<annotation emphasis="bold">导入已保存的密码文件</annotation>。</string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">为了您的安全，请务必<annotation emphasis="bold">删除已保存的密码文件</annotation>。</string>
     <string name="need_help_check_out_import_help">需要帮助吗？请查看 <annotation link="importHelp">导入帮助</annotation>。</string>
+    <string name="import_help">导入帮助</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">保存导出的文件</annotation>到计算机上您可以轻松找到的某个位置。</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">这是一个无法识别的 Bitwarden 服务器。您可能需要向您的提供商查询或更新您的服务器。</string>
     <string name="syncing_logins_loading_message">正在同步登录…</string>
@@ -838,7 +847,7 @@
     <string name="use_the_web_app">使用网页 App</string>
     <string name="log_in_at_bitwarden_com_to_easily_manage_your_account">登录到 bitwarden.com 以轻松管理您的账户和更新设置。</string>
     <string name="autofill_passwords">自动填充密码</string>
-    <string name="set_up_autofill_on_all_your_devices">在所有设备上设置自动填充，随时随地轻点一下即可登录。</string>
+    <string name="set_up_autofill_on_all_your_devices">在所有设备上设置自动填充，随时随地只需点击一下即可登录。</string>
     <string name="import_successful">导入成功！</string>
     <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">使用 Bitwarden 网络和桌面工具，随时随地管理您的登录信息。</string>
     <string name="bitwarden_tools">Bitwarden 工具</string>
@@ -854,6 +863,9 @@
     <string name="copy_public_key">复制公钥</string>
     <string name="copy_fingerprint">复制指纹</string>
     <string name="enable_notifications">启用通知</string>
+    <plurals name="notifications_content_description">
+        <item quantity="other">%d 个通知</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">快速和轻松地跨设备登录</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden 可以在每次收到来自其他设备的新登录请求时通知您。</string>
     <string name="skip_for_now">暂时跳过</string>
@@ -927,6 +939,7 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">由于没有选择任何项目，通行密钥操作失败。</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">由于请求不受支持，通行密钥操作失败。</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">由于所选项目不存在，密码操作失败。</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">由于所选项目没有有效的密码，密码操作失败。</string>
     <string name="password_operation_failed_because_no_item_was_selected">由于没有选中项目，密码操作失败。</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">由于请求无效，凭据操作失败。</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">由于请求不受支持，凭据操作失败。</string>
@@ -946,7 +959,7 @@
     <string name="add_field">添加字段</string>
     <string name="share_error_details">分享错误详细信息</string>
     <string name="flight_recorder">飞行记录器</string>
-    <string name="flight_recorder_help">飞行记录器帮助</string>
+    <string name="flight_recorder_help">Flight Recorder 帮助</string>
     <string name="view_recorded_logs">查看记录的日志</string>
     <string name="enable_flight_recorder_title">启用飞行记录器</string>
     <string name="recorded_logs_title">记录的日志</string>
@@ -968,9 +981,9 @@
     <string name="please_try_again_or_select_a_different_log">请重试或选择其他日志。</string>
     <string name="the_log_file_you_are_trying_to_share_has_been_removed">您尝试分享的日志文件已被移除。</string>
     <string name="delete_log">删除日志</string>
-    <string name="do_you_really_want_to_delete_this_log">您确定要删除此日志吗？</string>
+    <string name="do_you_really_want_to_delete_this_log">确定要删除此日志吗？</string>
     <string name="delete_logs">删除日志</string>
-    <string name="do_you_really_want_to_delete_all_recorded_logs">您确定要删除所有记录的日志吗？</string>
+    <string name="do_you_really_want_to_delete_all_recorded_logs">确定要删除所有记录的日志吗？</string>
     <string name="confirm_key_connector_domain">确认 Key Connector 域名</string>
     <string name="key_connector_domain">Key Connector 域名：</string>
     <string name="key_connector_organization">组织：</string>
@@ -978,12 +991,12 @@
     <string name="please_confirm_domain_with_admin">请与您的组织管理员确认下面的域名。\n\nKey Connector 域名：\n%1$s</string>
     <string name="flight_recorder_banner_title">飞行记录器已开启</string>
     <string name="flight_recorder_banner_message">飞行记录器将持续激活至 %1$s %2$s。返回设置以立即停用。</string>
-    <string name="go_to_settings">转到设置</string>
+    <string name="go_to_settings">前往设置</string>
     <string name="all_logs_deleted">所有日志已删除</string>
     <string name="log_deleted">日志已删除</string>
     <string name="app_settings">App 设置</string>
     <string name="replace_existing_certificate">替换现有证书吗？</string>
-    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">别名为「%s」的证书已经存在。您要替换它吗？\n替换该证书可能会影响您与当前使用该证书的任何环境的连接。</string>
+    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">别名为「%s」的证书已存在。要替换它吗？\n替换该证书可能会影响与当前使用该证书的任何环境的连接。</string>
     <string name="replace_certificate">替换证书</string>
     <string name="unable_to_read_certificate">无法读取证书。</string>
     <string name="cannot_delete_your_account">无法删除您的账户</string>
@@ -1005,7 +1018,7 @@
     <string name="trusted_by_you">被您信任</string>
     <string name="trusted_by_the_community">被社区信任</string>
     <string name="trusted_by_google">被 Google 信任</string>
-    <string name="privileged_apps_description">为保护用户免遭钓鱼攻击，默认情况下，Bitwarden 仅使用被 Google 或 Bitwarden 社区信任的应用程序或网页浏览器完成通行密钥操作。</string>
+    <string name="privileged_apps_description">为保护用户免遭网络钓鱼攻击，默认情况下，Bitwarden 仅使用被 Google 或 Bitwarden 社区信任的应用程序或网页浏览器完成通行密钥操作。</string>
     <string name="about_privileged_applications">关于特权 App</string>
     <string name="learn_more_about_privileged_apps">进一步了解特权 App</string>
     <string name="privileged_apps">特权 App</string>
@@ -1047,7 +1060,7 @@
     <string name="help">帮助</string>
     <string name="launch_tutorial">打开教程</string>
     <string name="delete_item">删除项目</string>
-    <string name="do_you_really_want_to_permanently_delete_this_cannot_be_undone">您确定要永久删除吗？此操作无法撤销。</string>
+    <string name="do_you_really_want_to_permanently_delete_this_cannot_be_undone">确定要永久删除吗？此操作无法撤销。</string>
     <string name="data">数据</string>
     <string name="export">导出</string>
     <string name="export_confirmation_title">确认导出</string>
@@ -1139,7 +1152,6 @@
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">启用浏览器自动填充以继续使用密码填充功能</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">您的浏览器最近已更新，其禁用了 Bitwarden 自动填充功能。要继续使用 Bitwarden 填充密码，请在自动填充设置中启用浏览器自动填充功能。</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">您的浏览器最近已更新，其禁用了 Bitwarden 自动填充功能。要继续使用 Bitwarden 填充密码，请在自动填充设置中为所有已安装的浏览器启用浏览器自动填充功能。</string>
     <string name="not_now">以后再说</string>
     <string name="import_from_bitwarden">从 Bitwarden 导入</string>
     <string name="select_account">选择账户</string>
@@ -1170,7 +1182,7 @@
     <string name="resending">正在重新发送</string>
     <string name="you_left_the_organization">您已退出该组织</string>
     <string name="transfer_items_to_org">转移项目到 %1$s</string>
-    <string name="transfer_items_description">出于安全和合规考虑，%1$s 要求所有项目归组织所有。点击「接受」以转移您的项目的所有权。</string>
+    <string name="transfer_items_description">为确保安全性和合规性，<annotation arg="0">%1$s</annotation> 要求所有项目由组织拥有。点击「接受」以转移您的项目的所有权。<annotation link="learnMore">进一步了解</annotation></string>
     <string name="decline_and_leave">拒绝并退出</string>
     <string name="why_am_i_seeing_this">为什么我会看到这个？</string>
     <string name="migrating_items_to_x">正在迁移项目到 %s</string>
@@ -1187,17 +1199,55 @@
     <string name="unarchiving">正在取消存档</string>
     <string name="item_moved_to_archived">项目已移动到归档</string>
     <string name="item_moved_to_vault">项目已移动到密码库</string>
-    <string name="archive_unavailable">归档不可用</string>
-    <string name="archiving_items_is_a_premium_feature">归档项目是一项高级版功能。您的当前方案不包含对此功能的访问权限。</string>
+    <string name="archive_unavailable">归档功能不可用</string>
+    <string name="archiving_items_is_a_premium_feature">归档项目是高级版功能。您的当前方案不包含对此功能的访问权限。</string>
     <string name="upgrade_to_premium">升级到高级版</string>
+    <string name="unlock_advanced_security_features">解锁高级安全功能</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">高级版方案为您提供更多工具，助您保持安全并掌控一切。</string>
     <string name="this_item_is_archived">此项目已归档。</string>
     <string name="introducing_archive">归档介绍</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">将您暂时不需要的项目安全地存放在视线之外。</string>
     <string name="go_to_archive">前往归档</string>
-    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">此项目已归档。保存更改会将其恢复到您的密码库。</string>
+    <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">此项目已归档。保存更改会将其恢复到您的密码库中。</string>
     <string name="your_premium_subscription_ended">您的高级版订阅已结束</string>
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">要重新获取归档内容的访问权限，请重启您的高级版订阅。如果您在重启前编辑了某个已归档项目的详细信息，它将被移回您的密码库中。</string>
     <string name="restart_premium">重启高级版</string>
     <string name="items_transferred">项目已转移</string>
     <string name="updated_master_password">已更新主密码</string>
+    <string name="invalid_email_addresses">无效的电子邮箱地址</string>
+    <string name="one_or_more_email_addresses_are_incorrect">一个或多个电子邮箱地址不正确。请检查然后重试。</string>
+    <string name="no_email_addresses_entered">未输入电子邮箱地址</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">输入至少一个有效的电子邮箱地址以分享此 Send。</string>
+    <string name="sync_with_browser">与浏览器同步</string>
+    <string name="sync_with_browser_description">要连接到 %1$s，请将您的默认浏览器与 Bitwarden 移动 App 同步。浏览器打开后，如果提示登录，请完成登录。\n同步完成后，您将返回此 App。</string>
+    <string name="launch_browser">启动浏览器</string>
+    <string name="continue_without_syncing">继续而不同步</string>
+    <string name="external_link">外部链接</string>
+    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s，外部链接</string>
+    <string name="preview_not_available_for_files">%1$s 个文件的预览不可用。您仍然可以将其下载到您的设备上查看。</string>
+    <string name="this_file_is_too_large_to_preview">此文件太大，无法预览。您仍然可以将其下载到您的设备上查看。</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden 无法解密此文件，因此无法显示预览。</string>
+    <string name="preview_unavailable_for_this_file">此文件的预览不可用。您仍然可以将其下载到您的设备上查看。</string>
+    <string name="preview_unavailable">预览不可用</string>
+    <string name="download_attachment">下载附件</string>
+    <string name="upgraded_to_premium">升级到高级版</string>
+    <string name="unlock_premium_features">使用高级版方案解锁更多高级功能。</string>
+    <string name="per_month">/月</string>
+    <string name="built_in_authenticator">内置身份验证器</string>
+    <string name="emergency_access">紧急访问</string>
+    <string name="secure_file_storage">安全文件存储</string>
+    <string name="breach_monitoring">数据泄露监测</string>
+    <string name="upgrade_now">立即升级</string>
+    <string name="stripe_checkout_footer">您将前往 Stripe 的安全结账页面完成购买。</string>
+    <string name="opening_checkout">正在打开结账页面…</string>
+    <string name="secure_checkout_didnt_load">安全结账页面未能加载</string>
+    <string name="trouble_opening_payment_page">我们无法打开付款页面，请重试。</string>
+    <string name="payment_not_received_yet">尚未收到付款</string>
+    <string name="return_to_stripe_to_finish">返回浏览器中的 Stripe 以完成升级。</string>
+    <string name="go_back">返回</string>
+    <string name="allow_camera_access">允许相机访问权限</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">要扫描您的支付卡，我们需要您的相机访问权限。您可以随时在您的设备设置中更改此设置。</string>
+    <string name="show_next_code">显示下一个代码</string>
+    <string name="see_upcoming_codes_in_the_list">查看列表中的后续代码</string>
+    <string name="next_code_x">下一个代码，%1$s</string>
 </resources>

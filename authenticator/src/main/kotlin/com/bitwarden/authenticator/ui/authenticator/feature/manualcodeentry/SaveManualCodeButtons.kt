@@ -48,6 +48,7 @@ fun SaveManualCodeButtons(
                 BitwardenOutlinedButton(
                     label = stringResource(BitwardenString.save_to_bitwarden),
                     onClick = onSaveToBitwardenClick,
+                    isExternalLink = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
@@ -57,6 +58,7 @@ fun SaveManualCodeButtons(
             Column(modifier = modifier) {
                 BitwardenFilledButton(
                     label = stringResource(id = BitwardenString.save_to_bitwarden),
+                    isExternalLink = true,
                     onClick = onSaveToBitwardenClick,
                     modifier = Modifier.fillMaxWidth(),
                 )

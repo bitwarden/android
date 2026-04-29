@@ -1,22 +1,34 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.tutorial
 
 import app.cash.turbine.test
+import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialAction
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialEvent
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialState
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialViewModel
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class TutorialViewModelTest : BaseViewModelTest() {
+    private val settingsRepository: SettingsRepository = mockk {
+        every { hasSeenWelcomeTutorial = true } just runs
+    }
+
     private lateinit var viewModel: TutorialViewModel
 
     @BeforeEach
     fun setUp() {
-        viewModel = TutorialViewModel()
+        viewModel = TutorialViewModel(
+            settingsRepository = settingsRepository,
+        )
     }
 
     @Test
@@ -94,6 +106,9 @@ class TutorialViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
         }
+        verify(exactly = 1) {
+            settingsRepository.hasSeenWelcomeTutorial = true
+        }
     }
 
     @Test
@@ -105,6 +120,9 @@ class TutorialViewModelTest : BaseViewModelTest() {
                 TutorialEvent.NavigateToAuthenticator,
                 awaitItem(),
             )
+        }
+        verify(exactly = 1) {
+            settingsRepository.hasSeenWelcomeTutorial = true
         }
     }
 }

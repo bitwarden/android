@@ -10,10 +10,9 @@ import kotlinx.serialization.json.JsonNames
  *
  * @property encryptedPrivateKey The user's encrypted private key.
  * @property encryptedUserKey The user's encrypted key.
- * @property hasAdminApproval Whether or not the user has admin approval.
- * @property hasLoginApprovingDevice Whether or not the user has a login approving device.
- * @property hasManageResetPasswordPermission Whether or not the user has manage reset password
- * permission.
+ * @property hasAdminApproval Whether the user has admin approval.
+ * @property hasLoginApprovingDevice Whether the user has a login approving device.
+ * @property hasManageResetPasswordPermission Whether the user has manage reset password permission.
  */
 @OptIn(ExperimentalSerializationApi::class)
 @Serializable

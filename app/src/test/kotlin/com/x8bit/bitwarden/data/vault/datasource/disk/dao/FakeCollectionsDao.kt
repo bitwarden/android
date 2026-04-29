@@ -33,7 +33,7 @@ class FakeCollectionsDao : CollectionsDao {
         collectionsFlow.tryEmit(storedCollections.toList())
     }
 
-    override fun getAllCollections(userId: String): Flow<List<CollectionEntity>> =
+    override fun getAllCollectionsFlow(userId: String): Flow<List<CollectionEntity>> =
         collectionsFlow.map { ciphers -> ciphers.filter { it.userId == userId } }
 
     override suspend fun insertCollections(collections: List<CollectionEntity>) {

@@ -17,6 +17,9 @@ import com.bitwarden.core.data.util.concurrentMapOf
 import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
+import com.bitwarden.data.manager.appstate.AppStateManager
+import com.bitwarden.data.manager.appstate.model.AppCreationState
+import com.bitwarden.data.manager.appstate.model.AppForegroundState
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.KdfManager
@@ -25,13 +28,11 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
+import com.x8bit.bitwarden.data.auth.repository.util.toAccountCryptographicState
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
-import com.x8bit.bitwarden.data.platform.manager.AppStateManager
-import com.x8bit.bitwarden.data.platform.manager.model.AppCreationState
-import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -40,7 +41,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResul
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
-import com.x8bit.bitwarden.data.vault.repository.util.createWrappedAccountCryptographicState
 import com.x8bit.bitwarden.data.vault.repository.util.logTag
 import com.x8bit.bitwarden.data.vault.repository.util.statusFor
 import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
@@ -98,6 +98,7 @@ class VaultLockManagerImpl(
     context: Context,
 ) : VaultLockManager {
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
+    private val ioScope = CoroutineScope(dispatcherManager.io)
 
     /**
      * This [Map] tracks all active timeout [Job]s that are running and their associated data using
@@ -192,6 +193,7 @@ class VaultLockManagerImpl(
                             email = email,
                             method = initUserCryptoMethod,
                             userId = userId,
+                            upgradeToken = null,
                         ),
                     )
                     .flatMap { result ->
@@ -477,7 +479,7 @@ class VaultLockManagerImpl(
                     .map { userId -> vaultTimeoutChangesForUserFlow(userId = userId) }
                     .merge()
             }
-            .launchIn(unconfinedScope)
+            .launchIn(ioScope)
     }
 
     private fun observeUserLogoutResults() {
@@ -679,16 +681,10 @@ class VaultLockManagerImpl(
             ?: return VaultUnlockResult.InvalidStateError(
                 error = MissingPropertyException("Private key"),
             )
-        val signingKey = accountKeys?.signatureKeyPair?.wrappedSigningKey
-        val securityState = accountKeys?.securityState?.securityState
-        val signedPublicKey = accountKeys?.publicKeyEncryptionKeyPair?.signedPublicKey
         val organizationKeys = authDiskSource.getOrganizationKeys(userId = userId)
         return unlockVault(
-            accountCryptographicState = createWrappedAccountCryptographicState(
+            accountCryptographicState = accountKeys.toAccountCryptographicState(
                 privateKey = privateKey,
-                securityState = securityState,
-                signingKey = signingKey,
-                signedPublicKey = signedPublicKey,
             ),
             userId = userId,
             email = account.profile.email,
@@ -710,6 +706,7 @@ class VaultLockManagerImpl(
             is InitUserCryptoMethod.DecryptedKey,
             is InitUserCryptoMethod.DeviceKey,
             is InitUserCryptoMethod.KeyConnector,
+            is InitUserCryptoMethod.KeyConnectorUrl,
             is InitUserCryptoMethod.Pin,
             is InitUserCryptoMethod.PinEnvelope,
                 -> return

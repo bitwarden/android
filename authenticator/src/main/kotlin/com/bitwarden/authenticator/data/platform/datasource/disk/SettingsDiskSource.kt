@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Primary access point for general settings-related disk information.
  */
+@Suppress("TooManyFunctions")
 interface SettingsDiskSource : FlightRecorderDiskSource {
 
     /**
@@ -77,12 +78,22 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     val isCrashLoggingEnabledFlow: Flow<Boolean?>
 
     /**
-     * Whether or not the user has previously dismissed the download Bitwarden action card.
+     * The current setting for showing the next TOTP code.
+     */
+    var isShowNextCodeEnabled: Boolean?
+
+    /**
+     * Emits updates that track the [isShowNextCodeEnabled] value.
+     */
+    val isShowNextCodeEnabledFlow: Flow<Boolean?>
+
+    /**
+     * Whether the user has previously dismissed the download Bitwarden action card.
      */
     var hasUserDismissedDownloadBitwardenCard: Boolean?
 
     /**
-     * Whether or not the user has previously dismissed the sync with Bitwarden action card.
+     * Whether the user has previously dismissed the sync with Bitwarden action card.
      */
     var hasUserDismissedSyncWithBitwardenCard: Boolean?
 
@@ -105,6 +116,17 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     fun getAlertThresholdSecondsFlow(): Flow<Int>
 
     /**
+     * Gets or sets the app timeout in minutes.
+     */
+    var appTimeoutInMinutes: Int?
+
+    /**
+     * Emits updates that track [appTimeoutInMinutes]. This will replay the last known value,
+     * if any.
+     */
+    val appTimeoutInMinutesFlow: Flow<Int?>
+
+    /**
      * Retrieves the biometric integrity validity for the given [systemBioIntegrityState].
      */
     fun getAccountBiometricIntegrityValidity(
@@ -120,7 +142,7 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     )
 
     /**
-     * Gets whether or not the user has enabled screen capture.
+     * Gets whether the user has enabled screen capture.
      */
     fun getScreenCaptureAllowed(): Boolean?
 
@@ -130,7 +152,7 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     fun getScreenCaptureAllowedFlow(): Flow<Boolean?>
 
     /**
-     * Stores whether or not [isScreenCaptureAllowed].
+     * Stores whether [isScreenCaptureAllowed].
      */
     fun storeScreenCaptureAllowed(isScreenCaptureAllowed: Boolean?)
 }

@@ -16,7 +16,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -94,9 +93,7 @@ fun ManualCodeEntryScreen(
             ),
             confirmButtonText = stringResource(id = BitwardenString.settings),
             dismissButtonText = stringResource(id = BitwardenString.no_thanks),
-            onConfirmClick = remember(viewModel) {
-                { viewModel.trySendAction(ManualCodeEntryAction.SettingsClick) }
-            },
+            onConfirmClick = { viewModel.trySendAction(ManualCodeEntryAction.SettingsClick) },
             onDismissClick = { shouldShowPermissionDialog = false },
             onDismissRequest = { shouldShowPermissionDialog = false },
             title = null,
@@ -105,9 +102,7 @@ fun ManualCodeEntryScreen(
 
     ManualCodeEntryDialogs(
         state = state.dialog,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(ManualCodeEntryAction.DialogDismiss) }
-        },
+        onDismissRequest = { viewModel.trySendAction(ManualCodeEntryAction.DialogDismiss) },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -120,8 +115,8 @@ fun ManualCodeEntryScreen(
                 title = stringResource(id = BitwardenString.authenticator_key_scanner),
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(ManualCodeEntryAction.CloseClick) }
+                onNavigationIconClick = {
+                    viewModel.trySendAction(ManualCodeEntryAction.CloseClick)
                 },
                 scrollBehavior = scrollBehavior,
             )
@@ -158,8 +153,8 @@ fun ManualCodeEntryScreen(
                 singleLine = false,
                 label = stringResource(id = BitwardenString.authenticator_key_scanner),
                 value = state.code,
-                onValueChange = remember(viewModel) {
-                    { viewModel.trySendAction(ManualCodeEntryAction.CodeTextChange(it)) }
+                onValueChange = {
+                    viewModel.trySendAction(ManualCodeEntryAction.CodeTextChange(it))
                 },
                 textFieldTestTag = "AddManualTOTPField",
                 cardStyle = CardStyle.Full,
@@ -171,9 +166,7 @@ fun ManualCodeEntryScreen(
             Spacer(modifier = Modifier.height(height = 24.dp))
             BitwardenFilledButton(
                 label = stringResource(id = BitwardenString.add_totp),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(ManualCodeEntryAction.CodeSubmit) }
-                },
+                onClick = { viewModel.trySendAction(ManualCodeEntryAction.CodeSubmit) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
@@ -185,13 +178,11 @@ fun ManualCodeEntryScreen(
                 annotatedResId = BitwardenString.cannot_add_authenticator_key_scan_qr_code,
                 annotationKey = "scanQrCode",
                 accessibilityString = stringResource(id = BitwardenString.scan_qr_code),
-                onClick = remember(viewModel) {
-                    {
-                        if (permissionsManager.checkPermission(Manifest.permission.CAMERA)) {
-                            viewModel.trySendAction(ManualCodeEntryAction.ScanQrCodeTextClick)
-                        } else {
-                            launcher.launch(Manifest.permission.CAMERA)
-                        }
+                onClick = {
+                    if (permissionsManager.checkPermission(Manifest.permission.CAMERA)) {
+                        viewModel.trySendAction(ManualCodeEntryAction.ScanQrCodeTextClick)
+                    } else {
+                        launcher.launch(Manifest.permission.CAMERA)
                     }
                 },
                 modifier = Modifier

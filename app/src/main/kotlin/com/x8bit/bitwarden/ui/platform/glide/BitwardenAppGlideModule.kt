@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.glide
 
 import android.content.Context
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.network.ssl.createMtlsOkHttpClient
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Registry
@@ -9,6 +10,7 @@ import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
 import com.x8bit.bitwarden.data.platform.manager.CertificateManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManager
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
@@ -24,6 +26,7 @@ import java.io.InputStream
  *
  * The configuration mirrors the SSL setup used in RetrofitsImpl for API calls.
  */
+@OmitFromCoverage
 @GlideModule
 class BitwardenAppGlideModule : AppGlideModule() {
 
@@ -37,6 +40,11 @@ class BitwardenAppGlideModule : AppGlideModule() {
          * Provides access to the [CertificateManager] for mTLS certificate management.
          */
         fun certificateManager(): CertificateManager
+
+        /**
+         * Provides access to the [NetworkCookieManager] for cookie-based authentication.
+         */
+        fun networkCookieManager(): NetworkCookieManager
     }
 
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
@@ -46,12 +54,20 @@ class BitwardenAppGlideModule : AppGlideModule() {
             entryPoint = BitwardenGlideEntryPoint::class.java,
         )
         val certificateManager = entryPoint.certificateManager()
+        val networkCookieManager = entryPoint.networkCookieManager()
 
-        // Register OkHttpUrlLoader that uses our mTLS OkHttpClient
+        // Build OkHttpClient with mTLS and cookie support
+        val client = certificateManager
+            .createMtlsOkHttpClient()
+            .newBuilder()
+            .addNetworkInterceptor(GlideCookieInterceptor(networkCookieManager))
+            .build()
+
+        // Register OkHttpUrlLoader that uses our mTLS + cookie OkHttpClient
         registry.replace(
             GlideUrl::class.java,
             InputStream::class.java,
-            OkHttpUrlLoader.Factory(certificateManager.createMtlsOkHttpClient()),
+            OkHttpUrlLoader.Factory(client),
         )
     }
 

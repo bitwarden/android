@@ -27,8 +27,7 @@ fun UserState.toActiveAccountSummary(): AccountSummary =
 
 /**
  * Converts the given [UserState.Account] to an [AccountSummary] with the correct
- * [AccountSummary.Status]. The status will take into account whether or not the given account
- * [isActive].
+ * [AccountSummary.Status]. The status will take into account whether the given account [isActive].
  */
 fun UserState.Account.toAccountSummary(
     isActive: Boolean,

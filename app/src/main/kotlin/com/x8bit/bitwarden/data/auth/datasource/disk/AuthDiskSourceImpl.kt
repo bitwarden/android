@@ -35,6 +35,7 @@ private const val REMEMBERED_ORG_IDENTIFIER_KEY = "rememberedOrgIdentifier"
 private const val STATE_KEY = "state"
 private const val INVALID_UNLOCK_ATTEMPTS_KEY = "invalidUnlockAttempts"
 private const val MASTER_KEY_ENCRYPTION_USER_KEY = "masterKeyEncryptedUserKey"
+private const val LOCAL_USER_DATA_KEY = "localUserDataKey"
 private const val MASTER_KEY_ENCRYPTION_PRIVATE_KEY = "encPrivateKey"
 private const val PIN_PROTECTED_USER_KEY_KEY = "pinKeyEncryptedUserKey"
 private const val PIN_PROTECTED_USER_KEY_KEY_ENVELOPE = "pinKeyEncryptedUserKeyEnvelope"
@@ -144,6 +145,7 @@ class AuthDiskSourceImpl(
     override fun clearData(userId: String) {
         storeInvalidUnlockAttempts(userId = userId, invalidUnlockAttempts = null)
         storeUserKey(userId = userId, userKey = null)
+        storeLocalUserDataKey(userId = userId, wrappedKey = null)
         storeUserAutoUnlockKey(userId = userId, userAutoUnlockKey = null)
         storePrivateKey(userId = userId, privateKey = null)
         storeAccountKeys(userId = userId, accountKeys = null)
@@ -235,6 +237,13 @@ class AuthDiskSourceImpl(
             key = MASTER_KEY_ENCRYPTION_USER_KEY.appendIdentifier(userId),
             value = userKey,
         )
+    }
+
+    override fun getLocalUserDataKey(userId: String): String? =
+        getString(key = LOCAL_USER_DATA_KEY.appendIdentifier(userId))
+
+    override fun storeLocalUserDataKey(userId: String, wrappedKey: String?) {
+        putString(key = LOCAL_USER_DATA_KEY.appendIdentifier(userId), value = wrappedKey)
     }
 
     @Deprecated("Use getAccountKeys instead.", replaceWith = ReplaceWith("getAccountKeys"))

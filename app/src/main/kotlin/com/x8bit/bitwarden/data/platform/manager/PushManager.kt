@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.manager
 
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
+import com.x8bit.bitwarden.data.platform.manager.model.PremiumStatusChangedData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderDeleteData
@@ -28,6 +29,11 @@ interface PushManager {
      * Flow that represents requests intended to trigger a passwordless request.
      */
     val passwordlessRequestFlow: Flow<PasswordlessRequestData>
+
+    /**
+     * Flow that represents Premium status change notifications.
+     */
+    val premiumStatusChangedFlow: Flow<PremiumStatusChangedData>
 
     /**
      * Flow that represents requests intended to trigger a sync cipher delete.

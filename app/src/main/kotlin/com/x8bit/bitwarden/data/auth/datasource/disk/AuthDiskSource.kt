@@ -125,6 +125,16 @@ interface AuthDiskSource : AppIdProvider {
     fun storeUserKey(userId: String, userKey: String?)
 
     /**
+     * Retrieves the local user data key for the given [userId].
+     */
+    fun getLocalUserDataKey(userId: String): String?
+
+    /**
+     * Stores the local user data key for a given [userId].
+     */
+    fun storeLocalUserDataKey(userId: String, wrappedKey: String?)
+
+    /**
      * Retrieves a private key using a [userId].
      */
     @Deprecated(

@@ -10,17 +10,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
@@ -34,6 +39,9 @@ import kotlinx.collections.immutable.toImmutableList
 @Suppress("LongMethod")
 fun LazyListScope.vaultAddEditCardItems(
     cardState: VaultAddEditState.ViewState.Content.ItemType.Card,
+    isCardScannerEnabled: Boolean,
+    cardHolderNameFocusRequester: FocusRequester,
+    onScanCardClick: () -> Unit,
     cardHandlers: VaultAddEditCardTypeHandlers,
 ) {
     item {
@@ -47,6 +55,21 @@ fun LazyListScope.vaultAddEditCardItems(
         )
     }
 
+    if (isCardScannerEnabled) {
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+            BitwardenOutlinedButton(
+                label = stringResource(id = BitwardenString.scan_card),
+                onClick = onScanCardClick,
+                icon = rememberVectorPainter(id = BitwardenDrawable.ic_camera_small),
+                modifier = Modifier
+                    .testTag("ScanCardButton")
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+        }
+    }
+
     item {
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
@@ -57,7 +80,8 @@ fun LazyListScope.vaultAddEditCardItems(
             cardStyle = CardStyle.Top(),
             modifier = Modifier
                 .fillMaxWidth()
-                .standardHorizontalMargin(),
+                .standardHorizontalMargin()
+                .focusRequester(cardHolderNameFocusRequester),
         )
     }
     item {

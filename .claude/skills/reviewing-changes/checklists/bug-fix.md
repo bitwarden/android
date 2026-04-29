@@ -4,15 +4,6 @@
 
 ### First Pass: Understand the Bug
 
-<thinking>
-Before evaluating the fix:
-1. What was the original bug/broken behavior?
-2. What is the expected correct behavior?
-3. What was the root cause?
-4. How was the bug discovered? (user report, test, production)
-5. What's the severity? (crash, data loss, UI glitch, minor annoyance)
-</thinking>
-
 **1. Understand root cause:**
 - What was the broken behavior?
 - What caused it?
@@ -28,15 +19,6 @@ Before evaluating the fix:
 - Are there edge cases not considered?
 
 ### Second Pass: Verify the Fix
-
-<thinking>
-Evaluate the fix systematically:
-1. Does this fix address the root cause or just symptoms?
-2. Are there edge cases not covered?
-3. Could this break other functionality?
-4. Is the fix localized or does it ripple through the codebase?
-5. How do we prevent this bug from returning?
-</thinking>
 
 **4. Code changes:**
 - Does the fix make sense?
@@ -101,16 +83,7 @@ Use `reference/priority-framework.md` to classify findings as Critical/Important
 
 ## Output Format
 
-Follow the format guidance from `SKILL.md` Step 5 (concise summary with critical issues only, detailed inline comments with `<details>` tags).
-
-```markdown
-**Overall Assessment:** APPROVE / REQUEST CHANGES
-
-**Critical Issues** (if any):
-- [One-line summary of each critical blocking issue with file:line reference]
-
-See inline comments for all issue details.
-```
+See `examples/review-outputs.md` for the required output format and inline comment structure.
 
 ## Example Review
 

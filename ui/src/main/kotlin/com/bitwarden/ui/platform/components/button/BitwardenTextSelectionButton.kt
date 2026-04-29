@@ -31,11 +31,11 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.nullableTestTag
+import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldButtonColors
 import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -53,7 +53,7 @@ fun BitwardenTextSelectionButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     supportingText: String? = null,
-    tooltip: TooltipData? = null,
+    helpData: BitwardenHelpButtonData? = null,
     insets: PaddingValues = PaddingValues(),
     textFieldTestTag: String? = null,
     semanticRole: Role = Role.Button,
@@ -67,7 +67,7 @@ fun BitwardenTextSelectionButton(
         cardStyle = cardStyle,
         modifier = modifier,
         enabled = enabled,
-        tooltip = tooltip,
+        helpData = helpData,
         insets = insets,
         textFieldTestTag = textFieldTestTag,
         semanticRole = semanticRole,
@@ -100,7 +100,7 @@ fun BitwardenTextSelectionButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     showChevron: Boolean = true,
-    tooltip: TooltipData? = null,
+    helpData: BitwardenHelpButtonData? = null,
     insets: PaddingValues = PaddingValues(),
     textFieldTestTag: String? = null,
     semanticRole: Role = Role.Button,
@@ -115,7 +115,7 @@ fun BitwardenTextSelectionButton(
                 role = semanticRole
                 contentDescription = "$selectedOption. $label"
                 customActions = persistentListOfNotNull(
-                    tooltip?.let {
+                    helpData?.let {
                         CustomAccessibilityAction(
                             label = it.contentDescription,
                             action = {
@@ -146,14 +146,11 @@ fun BitwardenTextSelectionButton(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
-                    tooltip?.let {
+                    helpData?.let {
                         Spacer(modifier = Modifier.width(8.dp))
-                        BitwardenStandardIconButton(
-                            vectorIconRes = BitwardenDrawable.ic_question_circle_small,
-                            contentDescription = it.contentDescription,
-                            onClick = it.onClick,
-                            contentColor = BitwardenTheme.colorScheme.icon.secondary,
-                            modifier = Modifier.size(16.dp),
+                        BitwardenHelpIconButton(
+                            helpData = it,
+                            modifier = Modifier.size(size = 16.dp),
                         )
                     }
                 }

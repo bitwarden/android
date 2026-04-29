@@ -5,25 +5,19 @@ import android.net.Uri
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNull
 
 class CookieUtilsTest {
 
-    private lateinit var mockUri: Uri
-    private lateinit var mockIntent: Intent
+    private val mockUri: Uri = mockk(relaxed = true) {
+        every { scheme } returns "bitwarden"
+        every { host } returns "sso-cookie-vendor"
+    }
 
-    @BeforeEach
-    fun setUp() {
-        mockUri = mockk(relaxed = true) {
-            every { scheme } returns "bitwarden"
-            every { host } returns "sso_cookie_vendor"
-        }
-        mockIntent = mockk(relaxed = true) {
-            every { action } returns Intent.ACTION_VIEW
-            every { data } returns mockUri
-        }
+    private val mockIntent: Intent = mockk(relaxed = true) {
+        every { action } returns Intent.ACTION_VIEW
+        every { data } returns mockUri
     }
 
     @Test
@@ -55,40 +49,62 @@ class CookieUtilsTest {
     }
 
     @Test
-    fun `getCookieCallbackResultOrNull should return MissingCookie when no query parameters`() {
-        every { mockUri.queryParameterNames } returns emptySet()
-        val result = mockIntent.getCookieCallbackResultOrNull()
-        assertEquals(CookieCallbackResult.MissingCookie, result)
-    }
-
-    @Test
-    fun `getCookieCallbackResultOrNull should return MissingCookie with only d parameter`() {
-        every { mockUri.queryParameterNames } returns setOf("d")
-        every { mockUri.getQueryParameter("d") } returns "1"
-        val result = mockIntent.getCookieCallbackResultOrNull()
-        assertEquals(CookieCallbackResult.MissingCookie, result)
-    }
-
-    @Test
-    fun `getCookieCallbackResultOrNull should parse single cookie correctly`() {
+    fun `getCookieCallbackResultOrNull should delegate cookie parsing to Uri`() {
         every { mockUri.queryParameterNames } returns setOf("AWSELB")
-        every { mockUri.getQueryParameter("AWSELB") } returns "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+        every { mockUri.getQueryParameter("AWSELB") } returns "abc123"
         val result = mockIntent.getCookieCallbackResultOrNull()
         assertEquals(
             CookieCallbackResult.Success(
-                cookies = mapOf("AWSELB" to "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"),
+                cookies = mapOf("AWSELB" to "abc123"),
             ),
             result,
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `getCookieCallbackResultOrNull should parse sharded cookies correctly`() {
-        every { mockUri.queryParameterNames } returns setOf("AWSELB-0", "AWSELB-1", "AWSELB-2")
+    fun `getCookieCallbackResultOrNull should return MissingCookie when no query parameters`() {
+        every { mockUri.queryParameterNames } returns emptySet()
+        assertEquals(
+            CookieCallbackResult.MissingCookie,
+            mockIntent.getCookieCallbackResultOrNull(),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getCookieCallbackResultOrNull should return MissingCookie when only d parameter is present`() {
+        every { mockUri.queryParameterNames } returns setOf("d")
+        every { mockUri.getQueryParameter("d") } returns "1"
+        assertEquals(
+            CookieCallbackResult.MissingCookie,
+            mockIntent.getCookieCallbackResultOrNull(),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getCookieCallbackResultOrNull should extract dynamic cookie parameter name`() {
+        every { mockUri.queryParameterNames } returns setOf("sessionToken")
+        every { mockUri.getQueryParameter("sessionToken") } returns "abc123"
+        assertEquals(
+            CookieCallbackResult.Success(
+                cookies = mapOf("sessionToken" to "abc123"),
+            ),
+            mockIntent.getCookieCallbackResultOrNull(),
+        )
+    }
+
+    @Test
+    fun `getCookieCallbackResultOrNull should extract multiple cookie parameters`() {
+        every { mockUri.queryParameterNames } returns setOf(
+            "AWSELB-0",
+            "AWSELB-1",
+            "AWSELB-2",
+        )
         every { mockUri.getQueryParameter("AWSELB-0") } returns "part0"
         every { mockUri.getQueryParameter("AWSELB-1") } returns "part1"
         every { mockUri.getQueryParameter("AWSELB-2") } returns "part2"
-        val result = mockIntent.getCookieCallbackResultOrNull()
         assertEquals(
             CookieCallbackResult.Success(
                 cookies = mapOf(
@@ -97,74 +113,60 @@ class CookieUtilsTest {
                     "AWSELB-2" to "part2",
                 ),
             ),
-            result,
+            mockIntent.getCookieCallbackResultOrNull(),
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `getCookieCallbackResultOrNull should filter out d parameter from sharded cookies`() {
-        every { mockUri.queryParameterNames } returns setOf("AWSELB-0", "AWSELB-1", "d")
-        every { mockUri.getQueryParameter("AWSELB-0") } returns "part0"
-        every { mockUri.getQueryParameter("AWSELB-1") } returns "part1"
+    fun `getCookieCallbackResultOrNull should filter out d parameter from cookies`() {
+        every { mockUri.queryParameterNames } returns setOf("sessionToken", "d")
+        every { mockUri.getQueryParameter("sessionToken") } returns "abc123"
         every { mockUri.getQueryParameter("d") } returns "1"
-        val result = mockIntent.getCookieCallbackResultOrNull()
         assertEquals(
             CookieCallbackResult.Success(
-                cookies = mapOf(
-                    "AWSELB-0" to "part0",
-                    "AWSELB-1" to "part1",
-                ),
+                cookies = mapOf("sessionToken" to "abc123"),
             ),
-            result,
+            mockIntent.getCookieCallbackResultOrNull(),
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `getCookieCallbackResultOrNull should handle empty cookie value as missing`() {
-        every { mockUri.queryParameterNames } returns setOf("AWSELB")
-        every { mockUri.getQueryParameter("AWSELB") } returns ""
-        val result = mockIntent.getCookieCallbackResultOrNull()
-        assertEquals(CookieCallbackResult.MissingCookie, result)
-    }
-
-    @Test
-    fun `getCookieCallbackResultOrNull should handle null cookie value as missing`() {
-        every { mockUri.queryParameterNames } returns setOf("AWSELB")
-        every { mockUri.getQueryParameter("AWSELB") } returns null
-        val result = mockIntent.getCookieCallbackResultOrNull()
-        assertEquals(CookieCallbackResult.MissingCookie, result)
-    }
-
-    @Test
-    fun `getCookieCallbackResultOrNull should handle multiple different cookies`() {
-        every { mockUri.queryParameterNames } returns setOf("AWSELB", "SESSION_ID", "XSRF_TOKEN")
-        every { mockUri.getQueryParameter("AWSELB") } returns "cookie1"
-        every { mockUri.getQueryParameter("SESSION_ID") } returns "cookie2"
-        every { mockUri.getQueryParameter("XSRF_TOKEN") } returns "cookie3"
-        val result = mockIntent.getCookieCallbackResultOrNull()
+    fun `getCookieCallbackResultOrNull should return MissingCookie when cookie value is empty`() {
+        every { mockUri.queryParameterNames } returns setOf("sessionToken")
+        every { mockUri.getQueryParameter("sessionToken") } returns ""
         assertEquals(
-            CookieCallbackResult.Success(
-                cookies = mapOf(
-                    "AWSELB" to "cookie1",
-                    "SESSION_ID" to "cookie2",
-                    "XSRF_TOKEN" to "cookie3",
-                ),
-            ),
-            result,
+            CookieCallbackResult.MissingCookie,
+            mockIntent.getCookieCallbackResultOrNull(),
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getCookieCallbackResultOrNull should return MissingCookie when cookie value is null`() {
+        every { mockUri.queryParameterNames } returns setOf("sessionToken")
+        every { mockUri.getQueryParameter("sessionToken") } returns null
+        assertEquals(
+            CookieCallbackResult.MissingCookie,
+            mockIntent.getCookieCallbackResultOrNull(),
+        )
+    }
+
+    @Suppress("MaxLineLength")
     @Test
     fun `getCookieCallbackResultOrNull should handle mixed valid and empty cookies`() {
-        every { mockUri.queryParameterNames } returns setOf("AWSELB", "EMPTY_COOKIE")
-        every { mockUri.getQueryParameter("AWSELB") } returns "validValue"
-        every { mockUri.getQueryParameter("EMPTY_COOKIE") } returns ""
-        val result = mockIntent.getCookieCallbackResultOrNull()
+        every { mockUri.queryParameterNames } returns setOf(
+            "validCookie",
+            "emptyCookie",
+        )
+        every { mockUri.getQueryParameter("validCookie") } returns "value"
+        every { mockUri.getQueryParameter("emptyCookie") } returns ""
         assertEquals(
             CookieCallbackResult.Success(
-                cookies = mapOf("AWSELB" to "validValue"),
+                cookies = mapOf("validCookie" to "value"),
             ),
-            result,
+            mockIntent.getCookieCallbackResultOrNull(),
         )
     }
 }

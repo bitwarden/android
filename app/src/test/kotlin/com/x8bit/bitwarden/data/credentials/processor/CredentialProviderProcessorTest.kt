@@ -706,6 +706,7 @@ private fun createMockAccounts(number: Int): List<UserState.Account> {
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
                 isExportable = true,
+                creationDate = null,
             ),
         )
     }

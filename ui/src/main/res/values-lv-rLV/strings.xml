@@ -11,6 +11,7 @@
     <string name="copy_password">Ievietot paroli starpliktuvē</string>
     <string name="copy_username">Ievietot lietotājvārdu starpliktuvē</string>
     <string name="delete">Izdzēst</string>
+    <string name="preview">Preview</string>
     <string name="deleting">Izdzēš…</string>
     <string name="do_you_really_want_to_delete">Vai tiešām izdzēst? To nevar atsaukt.</string>
     <string name="edit">Labot</string>
@@ -42,7 +43,7 @@
     <string name="master_password">Galvenā parole</string>
     <string name="master_password_required">Galvenā parole (nepieciešama)</string>
     <string name="new_master_password_required">Jaunā galvenā parole (nepieciešama)</string>
-    <string name="more">Vairāk</string>
+    <string name="more_options">More options</string>
     <string name="my_vault">Mana glabātava</string>
     <string name="name">Nosaukums</string>
     <string name="item_name_required">Vienuma nosaukums (nepieciešams)</string>
@@ -171,7 +172,7 @@
     <string name="autofill_noun">Automātiskā aizpilde</string>
     <string name="autofill_verb">Automātiskā aizpilde</string>
     <string name="autofill_or_view">Automātiski aizpildīt vai apskatīt šo vienumu?</string>
-    <string name="search">Meklēt</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Meklēt %1$s</string>
     <string name="learn_org">Uzzināt par apvienībām</string>
     <string name="authenticator_app_title">Autentificētāja lietotne</string>
     <string name="enter_verification_code_app">Jāievada 6 ciparu apliecinājuma kods no autentificētāja lietotnes.</string>
@@ -201,9 +202,12 @@ Nolasīšana notiks automātiski.</string>
     <string name="copy_totp_automatically">Automātiski ievietot TOTP starpliktuvē</string>
     <string name="premium_required">Ir nepieciešama Premium dalība, lai izmantotu šo iespēju.</string>
     <string name="attachment_deleted">Pielikums izdzēsts</string>
+    <string name="attachments_unavailable">Attachments unavailable</string>
+    <string name="attachments_are_a_premium_feature">Attachments are a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="choose_file">Izvēlies datni</string>
     <string name="file">Datne</string>
     <string name="no_file_chosen">Nav izvēlēta neviena datne</string>
+    <string name="file_name">File name</string>
     <string name="no_attachments">Nav pielikumu.</string>
     <string name="file_source">Datnes avots</string>
     <string name="max_file_size">Lielākais pieļaujamais datnes izmērs ir 100 MB.</string>
@@ -225,6 +229,8 @@ Nolasīšana notiks automātiski.</string>
     <string name="copy_security_code">Ievietot drošības kodu starpliktuvē</string>
     <string name="number">Numurs</string>
     <string name="security_code">Drošības kods</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">Karte</string>
     <string name="type_identity">Identitāte</string>
     <string name="type_login">Pieteikšanās vienums</string>
@@ -304,7 +310,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="organization">Apvienība</string>
     <string name="try_again">Mēģini vēlreiz</string>
     <string name="created">Izveidots: %1$s</string>
-    <string name="password_last_updated">Parole pēdējoreiz atjaunināta: %1$s</string>
+    <string name="password_updated">Parole atjaunināta: %1$s</string>
     <string name="last_edited">Pēdējoreiz labots: %1$s</string>
     <string name="invalid_email">Nederīga e-pasta adrese.</string>
     <string name="cards">Kartes</string>
@@ -379,6 +385,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="capitalize">Izmantot lielos sākumburtus</string>
     <string name="include_number">Iekļaut ciparu</string>
     <string name="download">Lejupielādēt</string>
+    <string name="download_file">Download file</string>
     <string name="login_expired">Pieteikšanās sesija ir beigusies.</string>
     <string name="biometrics_direction">Apliecināšana ar biometriju</string>
     <string name="device_verification">Ierīces apliecināšana</string>
@@ -498,6 +505,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="hide_email">Slēpt e-pasta adresi no saņēmējiem.</string>
     <string name="send_options_policy_in_effect">Viens vai vairāki apvienības nosacījumi ietekmē Send iespējas.</string>
     <string name="send_file_premium_required">Ar bezmaksas kontu ir iespējams kopīgot tikai tekstu. Ir nepieciešama Premium dalība, lai Send izmantotu datnes.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">Galvenās paroles pārvaicāšana</string>
     <string name="password_confirmation">Galvenās paroles apstiprināšana</string>
     <string name="password_confirmation_desc">Šī darbība ir aizsargāta, lai turpinātu, ir jāievada galvenā parole, lai apstiprinātu identitāti.</string>
@@ -507,10 +515,10 @@ Nolasīšana notiks automātiski.</string>
     <string name="remove_master_password">Noņemt galveno paroli</string>
     <string name="leave_organization">Pamest apvienību</string>
     <string name="leave_organization_name">Pamest %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Vai tiešām pamest %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Vai tiešām pamest [%1$s]?</string>
     <string name="leave_organization_button">Pamest %1$s</string>
     <string name="leave_organization_warning">Pēc noraidīšanas personīgie vienumi paliks Tavā kontā, bet Tu zaudēsi piekļuvi kopīgotajiem vienumiem un apvienību iespējām.\n\nJāsazinās ar savu pārvaldītāju, lai atgūdu piekļuvi.</string>
-    <string name="how_to_manage_my_vault">Kā pārvaldīt savu glabātavu</string>
+    <string name="contact_your_admin_to_regain_access">Jāsazinās ar savu pārvaldītāju, lai atgūtu piekļuvi.</string>
     <string name="fido2_authenticate_web_authn">Autentificēt WebAuthn</string>
     <string name="fido2_return_to_app">Atgriezties uz lietotni</string>
     <string name="reset_password_auto_enroll_invite_warning">Šajā apvienībā ir uzņēmuma nosacījums, kas automātiski ievieto lietotājus paroles atiestatīšanas sarakstā. Tas ļauj apvienības pārvaldniekiem mainīt lietotāju galveno paroli.</string>
@@ -840,6 +848,7 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="fill_out_the_form_and_import_your_saved_password_file">Jāaizpilda veidlapa un jāievieto saglabātā paroļu datne.</string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Drošības dēļ jānodrošina, ka paroļu datne tiek izdzēsta.</string>
     <string name="need_help_check_out_import_help">Nepieciešama palīdzība? Ir vērts ieskatīties ievietošanas palīdzībā.</string>
+    <string name="import_help">import help</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Izgūtā datne jāsaglabā kaut kur viegli atrodamā vietā datorā.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Šis nav atzīts Bitwarden serveris. Var būt nepieciešams vērsties pie nodrošinātāja, lai pārbaudītu, vai atjaunināt savu serveri.</string>
     <string name="syncing_logins_loading_message">Sinhronizē pieteikšanās vienumus...</string>
@@ -864,6 +873,11 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="copy_public_key">Ievietot starpliktuvē publisko atslēgu</string>
     <string name="copy_fingerprint">Ievietot starpliktuvē pirkstu nospiedumu</string>
     <string name="enable_notifications">Iespējot paziņojumus</string>
+    <plurals name="notifications_content_description">
+        <item quantity="zero">%d notifications</item>
+        <item quantity="one">%d notification</item>
+        <item quantity="other">%d notifications</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">Ātra un viegla pieteikšanās dažādās ierīcēs</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden var paziņot par katru reizi, kad tiek saņemts jauns pieteikšanās pieprasījums no citas ierīces.</string>
     <string name="skip_for_now">Pagaidām izlaist</string>
@@ -937,6 +951,7 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Darbība ar piekļuves atslēgu neizdevās, jo netika atlasīts neviens vienums.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Darbība ar piekļuves atslēgu neizdevās, jo pieprasījums netiek atbalstīts.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Darbība ar paroli neizdevās, jo atlasītais vienums nepastāv.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Darbība ar paroli neizdevās, jo netika atlasīts neviens vienums.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Darbība ar piekļuves datiem neizdevās, jo pieprasījums ir nederīgs.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Darbība ar piekļuves datiem neizdevās, jo tika izmantots neatbalstīts pieprasījums.</string>
@@ -1154,7 +1169,6 @@ Vai pārslēgties uz šo kontu?</string>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Jāiespējo pārlūka automātiskā aizpilde, lai turpinātu aizpildīt paroles</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Tavs pārlūks nesen ir atjaunināts, un tas atspējoja Bitwarden automātisko aizpildi. Lai turpinātu paroļu aizpildīšanu ar Bitwarden, pārlūka automātiskās aizpildes iestatījumos jāiespējo automātiskā aizpilde.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Tavi pārlūki nesen ir atjaunināti, un tas atspējoja Bitwarden automātisko aizpildi. Lai turpinātu paroļu aizpildīšanu ar Bitwarden, visos uzstādītajos pārlūkos automātiskās aizpildes iestatījumos jāiespējo automātiskā aizpilde.</string>
     <string name="not_now">Ne tagad</string>
     <string name="import_from_bitwarden">Ievietot no Bitwarden</string>
     <string name="select_account">Atlasīt kontu</string>
@@ -1205,6 +1219,8 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="archive_unavailable">Arhīvs nav pieejams</string>
     <string name="archiving_items_is_a_premium_feature">Vienumu ievietošana arhīvā ir Premium iespēja. Pašreizējais plāns neiekļauj piekļuvi tai.</string>
     <string name="upgrade_to_premium">Uzlabot uz Premium</string>
+    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">Šis vienums ir ievietots arhīvā.</string>
     <string name="introducing_archive">Introducing archive</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>
@@ -1215,4 +1231,40 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="restart_premium">Restart Premium</string>
     <string name="items_transferred">Vienumi pārcelti</string>
     <string name="updated_master_password">Galvenā parole atjaunināta</string>
+    <string name="invalid_email_addresses">Invalid email addresses</string>
+    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
+    <string name="no_email_addresses_entered">No email addresses entered</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="sync_with_browser">Vienādot ar pārlūku</string>
+    <string name="sync_with_browser_description">Lai savienotos ar %1$s, noklusējuma pārlūks jāvienādo ar Bitwarden viedierīces lietotni. Kad atvērsies pārlūks, jāpabeidz pieteikšajās, ja vaicāta.\nTiklīdz vienādošana būs pabeigta, notiks pārvirzīšana atpakaļ uz šo lietotni.</string>
+    <string name="launch_browser">Palaist pārlūku</string>
+    <string name="continue_without_syncing">Turpināt bez vienādošanas</string>
+    <string name="external_link">External link</string>
+    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
+    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
+    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
+    <string name="preview_unavailable">Preview unavailable</string>
+    <string name="download_attachment">Download Attachment</string>
+    <string name="upgraded_to_premium">Uzlabots uz Premium</string>
+    <string name="unlock_premium_features">Atslēdz vairāk papildu iespēju ar Premium plānu!</string>
+    <string name="per_month">/ mēnesī</string>
+    <string name="built_in_authenticator">Iebūvēts autentificētājs</string>
+    <string name="emergency_access">Ārkārtas piekļuve</string>
+    <string name="secure_file_storage">Droša datņu krātuve</string>
+    <string name="breach_monitoring">Noplūžu pārraudzīšana</string>
+    <string name="upgrade_now">Uzlabot tagad</string>
+    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="opening_checkout">Opening checkout…</string>
+    <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
+    <string name="trouble_opening_payment_page">Mums bija sarežģījumi ar maksājumu lapas atvēršanu, tādēļ jāmēģina vēlreiz.</string>
+    <string name="payment_not_received_yet">Maksājums vēl nav saņemts</string>
+    <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
+    <string name="go_back">Doties atpakaļ</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
+    <string name="show_next_code">Show next code</string>
+    <string name="see_upcoming_codes_in_the_list">See upcoming codes in the list</string>
+    <string name="next_code_x">Next code, %1$s</string>
 </resources>

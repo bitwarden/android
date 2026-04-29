@@ -14,9 +14,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -63,8 +63,8 @@ fun CreatePasswordScreen(
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                     navigationIconContentDescription = stringResource(BitwardenString.back),
-                    onNavigationIconClick = remember(viewModel) {
-                        { viewModel.trySendAction(CreatePasswordAction.BackClick) }
+                    onNavigationIconClick = {
+                        viewModel.trySendAction(CreatePasswordAction.BackClick)
                     },
                 ),
             )
@@ -81,13 +81,14 @@ fun CreatePasswordScreen(
             BitwardenTextField(
                 label = stringResource(R.string.username),
                 value = state.username,
-                onValueChange = remember(viewModel) {
-                    { viewModel.trySendAction(CreatePasswordAction.UsernameChanged(it)) }
+                onValueChange = {
+                    viewModel.trySendAction(CreatePasswordAction.UsernameChanged(it))
                 },
                 cardStyle = null,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .standardHorizontalMargin(),
+                    .standardHorizontalMargin()
+                    .testTag("PasswordUsernameField"),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -95,39 +96,38 @@ fun CreatePasswordScreen(
             BitwardenTextField(
                 label = stringResource(R.string.password),
                 value = state.password,
-                onValueChange = remember(viewModel) {
-                    { viewModel.trySendAction(CreatePasswordAction.PasswordChanged(it)) }
+                onValueChange = {
+                    viewModel.trySendAction(CreatePasswordAction.PasswordChanged(it))
                 },
                 cardStyle = null,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .standardHorizontalMargin(),
+                    .standardHorizontalMargin()
+                    .testTag("PasswordField"),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             BitwardenFilledButton(
                 label = stringResource(R.string.execute),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(CreatePasswordAction.ExecuteClick) }
-                },
+                onClick = { viewModel.trySendAction(CreatePasswordAction.ExecuteClick) },
                 isEnabled = !state.isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .standardHorizontalMargin(),
+                    .standardHorizontalMargin()
+                    .testTag("PasswordExecuteButton"),
             )
 
             Spacer(modifier = Modifier.height(12.dp))
 
             BitwardenTextButton(
                 label = stringResource(BitwardenString.clear),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(CreatePasswordAction.ClearResultClick) }
-                },
+                onClick = { viewModel.trySendAction(CreatePasswordAction.ClearResultClick) },
                 isEnabled = !state.isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .standardHorizontalMargin(),
+                    .standardHorizontalMargin()
+                    .testTag("PasswordClearButton"),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -141,7 +141,8 @@ fun CreatePasswordScreen(
                 singleLine = false,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .standardHorizontalMargin(),
+                    .standardHorizontalMargin()
+                    .testTag("PasswordResultTextField"),
             )
 
             Spacer(modifier = Modifier.height(16.dp))

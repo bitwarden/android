@@ -50,21 +50,34 @@ Reference: [docs link if applicable]
 - ⚠️ **IMPORTANT** - Should fix (missing tests, quality issues)
 - ♻️ **DEBT** - Technical debt (duplication, convention violations, future rework needed)
 - 🎨 **SUGGESTED** - Nice to have (refactoring, improvements)
-- 💭 **QUESTION** - Seeking clarification (requirements, design decisions)
+- ❓ **QUESTION** - Seeking clarification (requirements, design decisions)
 
 ### Summary Comment Format
 
-**Required format for ALL PRs:**
+Uses the agent's `posting-review-summary` skill format. Surface ❌ CRITICAL issues at the top level for immediate visibility, wrap the full findings list in `<details>` for scannability.
+
 ```
 **Overall Assessment:** APPROVE / REQUEST CHANGES
 
-**Critical Issues** (if any):
-- [issue with file:line]
+[1-2 neutral sentences describing what was reviewed]
 
-See inline comments for details.
+**Critical Issues** (if any):
+- ❌ [One-line summary with file:line]
+
+<details>
+<summary>All findings</summary>
+
+- ❌ **CRITICAL**: [description] (`file:line`)
+- ⚠️ **IMPORTANT**: [description] (`file:line`)
+- ♻️ **DEBT**: [description] (`file:line`)
+- 🎨 **SUGGESTED**: [description] (`file:line`)
+- ❓ **QUESTION**: [description] (`file:line`)
+</details>
 ```
 
-All PRs use the same minimal format - no exceptions for size or complexity. Summary must be 5-10 lines maximum.
+For clean PRs with no findings, omit both sections entirely — verdict + 1-2 sentences is sufficient.
+
+**GitHub pitfall**: Never use `#` followed by a number in comment text (e.g., `#42`, `#PR123`). GitHub autolinks these to issues/PRs. Use `Finding 1:` or `item 42` instead.
 
 ---
 
@@ -268,7 +281,7 @@ Would add security layer against brute force. Consider discussing threat model w
 
 **Inline Comment 5** (on `app/vault/unlock/UnlockScreen.kt:134`):
 ```markdown
-💭 **QUESTION**: Can we use BitwardenTextField?
+❓ **QUESTION**: Can we use BitwardenTextField?
 
 <details>
 <summary>Details</summary>

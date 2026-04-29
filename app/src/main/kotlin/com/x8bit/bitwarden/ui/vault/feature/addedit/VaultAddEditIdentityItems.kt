@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
+import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
@@ -124,11 +125,12 @@ fun LazyListScope.vaultAddEditIdentityItems(
         Spacer(modifier = Modifier.height(height = 8.dp))
     }
     item {
-        BitwardenTextField(
+        BitwardenPasswordField(
             label = stringResource(id = BitwardenString.ssn),
             value = identityState.ssn,
             onValueChange = identityItemTypeHandlers.onSsnTextChange,
-            textFieldTestTag = "IdentitySsnEntry",
+            showPasswordTestTag = "IdentityShowSsnNumberButton",
+            passwordFieldTestTag = "IdentitySsnEntry",
             cardStyle = CardStyle.Top(),
             modifier = Modifier
                 .fillMaxWidth()

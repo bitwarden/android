@@ -2,6 +2,7 @@ package com.bitwarden.authenticator.data.platform.repository
 
 import com.bitwarden.authenticator.BuildConfig
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
+import com.bitwarden.authenticator.data.platform.manager.lock.model.AppTimeout
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
@@ -131,6 +132,22 @@ class SettingsRepositoryImpl(
                 initialValue = isCrashLoggingEnabled,
             )
 
+    override var isShowNextCodeEnabled: Boolean
+        get() = settingsDiskSource.isShowNextCodeEnabled ?: false
+        set(value) {
+            settingsDiskSource.isShowNextCodeEnabled = value
+        }
+
+    override val isShowNextCodeEnabledFlow: Flow<Boolean>
+        get() = settingsDiskSource
+            .isShowNextCodeEnabledFlow
+            .map { it ?: isShowNextCodeEnabled }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = isShowNextCodeEnabled,
+            )
+
     override var hasUserDismissedDownloadBitwardenCard: Boolean
         get() = settingsDiskSource.hasUserDismissedDownloadBitwardenCard ?: false
         set(value) {
@@ -142,4 +159,36 @@ class SettingsRepositoryImpl(
         set(value) {
             settingsDiskSource.hasUserDismissedSyncWithBitwardenCard = value
         }
+
+    override var appTimeoutState: AppTimeout
+        get() = settingsDiskSource.appTimeoutInMinutes.toAppTimeout()
+        set(value) {
+            settingsDiskSource.appTimeoutInMinutes = value.timeoutInMinutes
+        }
+
+    override val appTimeoutStateFlow: StateFlow<AppTimeout> = settingsDiskSource
+        .appTimeoutInMinutesFlow
+        .map { it.toAppTimeout() }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = settingsDiskSource.appTimeoutInMinutes.toAppTimeout(),
+        )
 }
+
+/**
+ * Converts a stored [Int] representing an app timeout in minutes to a [AppTimeout].
+ */
+private fun Int?.toAppTimeout(): AppTimeout =
+    when (this) {
+        AppTimeout.Immediately.timeoutInMinutes -> AppTimeout.Immediately
+        AppTimeout.OneMinute.timeoutInMinutes -> AppTimeout.OneMinute
+        AppTimeout.FiveMinutes.timeoutInMinutes -> AppTimeout.FiveMinutes
+        AppTimeout.FifteenMinutes.timeoutInMinutes -> AppTimeout.FifteenMinutes
+        AppTimeout.ThirtyMinutes.timeoutInMinutes -> AppTimeout.ThirtyMinutes
+        AppTimeout.OneHour.timeoutInMinutes -> AppTimeout.OneHour
+        AppTimeout.FourHours.timeoutInMinutes -> AppTimeout.FourHours
+        AppTimeout.OnAppRestart.timeoutInMinutes -> AppTimeout.OnAppRestart
+        null -> AppTimeout.Never
+        else -> AppTimeout.Never
+    }

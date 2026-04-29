@@ -32,11 +32,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
-import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
@@ -146,12 +146,14 @@ private fun MigrateToMyItemsContent(
                 .size(100.dp),
         )
         Spacer(modifier = Modifier.height(24.dp))
-        MigrateToMyItemsTextContent(organizationName = state.organizationName)
+        MigrateToMyItemsTextContent(
+            organizationName = state.organizationName,
+            onLearnMoreClick = onHelpClick,
+        )
         Spacer(modifier = Modifier.height(24.dp))
         MigrateToMyItemsActions(
             onContinueClick = onAcceptClick,
             onDeclineClick = onDeclineClick,
-            onHelpClick = onHelpClick,
         )
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
@@ -160,6 +162,7 @@ private fun MigrateToMyItemsContent(
 @Composable
 private fun MigrateToMyItemsTextContent(
     organizationName: String,
+    onLearnMoreClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -176,14 +179,15 @@ private fun MigrateToMyItemsTextContent(
                 .standardHorizontalMargin(),
         )
         Spacer(modifier = Modifier.height(12.dp))
-        Text(
-            text = stringResource(
-                id = BitwardenString.transfer_items_description,
-                organizationName,
-            ),
+        BitwardenHyperTextLink(
+            annotatedResId = BitwardenString.transfer_items_description,
+            args = arrayOf(organizationName),
+            annotationKey = "learnMore",
+            accessibilityString = stringResource(BitwardenString.learn_more),
+            onClick = onLearnMoreClick,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
-            textAlign = TextAlign.Center,
+            isExternalLink = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -195,7 +199,6 @@ private fun MigrateToMyItemsTextContent(
 private fun MigrateToMyItemsActions(
     onContinueClick: () -> Unit,
     onDeclineClick: () -> Unit,
-    onHelpClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -207,17 +210,9 @@ private fun MigrateToMyItemsActions(
                 .standardHorizontalMargin(),
         )
         Spacer(modifier = Modifier.height(12.dp))
-        BitwardenOutlinedButton(
+        BitwardenTextButton(
             label = stringResource(id = BitwardenString.decline_and_leave),
             onClick = onDeclineClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
-        Spacer(modifier = Modifier.height(12.dp))
-        BitwardenTextButton(
-            label = stringResource(id = BitwardenString.why_am_i_seeing_this),
-            onClick = onHelpClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),

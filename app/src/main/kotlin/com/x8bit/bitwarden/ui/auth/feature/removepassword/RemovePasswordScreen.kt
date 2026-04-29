@@ -14,7 +14,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
@@ -48,13 +47,9 @@ fun RemovePasswordScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     RemovePasswordDialogs(
         dialogState = state.dialogState,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(RemovePasswordAction.DialogDismiss) }
-        },
-        onConfirmLeaveClick = remember(viewModel) {
-            {
-                viewModel.trySendAction(RemovePasswordAction.ConfirmLeaveOrganizationClick)
-            }
+        onDismissRequest = { viewModel.trySendAction(RemovePasswordAction.DialogDismiss) },
+        onConfirmLeaveClick = {
+            viewModel.trySendAction(RemovePasswordAction.ConfirmLeaveOrganizationClick)
         },
     )
 
@@ -73,14 +68,10 @@ fun RemovePasswordScreen(
     ) {
         RemovePasswordScreenContent(
             state = state,
-            onContinueClick = remember(viewModel) {
-                { viewModel.trySendAction(RemovePasswordAction.ContinueClick) }
-            },
-            onInputChanged = remember(viewModel) {
-                { viewModel.trySendAction(RemovePasswordAction.InputChanged(it)) }
-            },
-            onLeaveOrganizationClick = remember(viewModel) {
-                { viewModel.trySendAction(RemovePasswordAction.LeaveOrganizationClick) }
+            onContinueClick = { viewModel.trySendAction(RemovePasswordAction.ContinueClick) },
+            onInputChanged = { viewModel.trySendAction(RemovePasswordAction.InputChanged(it)) },
+            onLeaveOrganizationClick = {
+                viewModel.trySendAction(RemovePasswordAction.LeaveOrganizationClick)
             },
             modifier = Modifier.fillMaxSize(),
         )

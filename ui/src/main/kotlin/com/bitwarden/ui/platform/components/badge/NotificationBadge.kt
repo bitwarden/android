@@ -14,8 +14,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -38,10 +42,17 @@ fun NotificationBadge(
     ) {
         Badge(
             content = {
+                val description = pluralStringResource(
+                    id = BitwardenPlurals.notifications_content_description,
+                    count = notificationCount,
+                    formatArgs = arrayOf(notificationCount),
+                )
                 Text(
                     text = notificationCount.toString(),
                     style = BitwardenTheme.typography.labelSmall,
-                    modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp),
+                    modifier = Modifier
+                        .semantics { contentDescription = description }
+                        .padding(horizontal = 5.dp, vertical = 2.dp),
                 )
             },
             modifier = modifier,

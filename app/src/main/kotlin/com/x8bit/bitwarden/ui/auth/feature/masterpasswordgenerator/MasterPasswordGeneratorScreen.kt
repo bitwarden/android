@@ -18,7 +18,6 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -83,17 +82,11 @@ fun MasterPasswordGeneratorScreen(
         topBar = {
             MasterPasswordGeneratorTopBar(
                 scrollBehavior = scrollBehavior,
-                onBackClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(MasterPasswordGeneratorAction.BackClickAction)
-                    }
+                onBackClick = {
+                    viewModel.trySendAction(MasterPasswordGeneratorAction.BackClickAction)
                 },
-                onSaveClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            MasterPasswordGeneratorAction.SavePasswordClickAction,
-                        )
-                    }
+                onSaveClick = {
+                    viewModel.trySendAction(MasterPasswordGeneratorAction.SavePasswordClickAction)
                 },
             )
         },
@@ -108,19 +101,13 @@ fun MasterPasswordGeneratorScreen(
         ) {
             MasterPasswordGeneratorContent(
                 generatedPassword = state.generatedPassword,
-                onGenerateNewPassword = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            MasterPasswordGeneratorAction.GeneratePasswordClickAction,
-                        )
-                    }
+                onGenerateNewPassword = {
+                    viewModel.trySendAction(
+                        MasterPasswordGeneratorAction.GeneratePasswordClickAction,
+                    )
                 },
-                onLearnToPreventLockout = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            MasterPasswordGeneratorAction.PreventLockoutClickAction,
-                        )
-                    }
+                onLearnToPreventLockout = {
+                    viewModel.trySendAction(MasterPasswordGeneratorAction.PreventLockoutClickAction)
                 },
                 modifier = Modifier.standardHorizontalMargin(),
             )

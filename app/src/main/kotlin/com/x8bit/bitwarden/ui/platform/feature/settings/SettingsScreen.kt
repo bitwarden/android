@@ -13,7 +13,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
@@ -47,6 +46,7 @@ fun SettingsScreen(
     onNavigateToAutoFill: () -> Unit,
     onNavigateToOther: () -> Unit,
     onNavigateToVault: () -> Unit,
+    onNavigateToPlan: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -54,12 +54,13 @@ fun SettingsScreen(
         when (event) {
             SettingsEvent.NavigateBack -> onNavigateBack()
             SettingsEvent.NavigateAbout -> onNavigateToAbout()
-            SettingsEvent.NavigateAccountSecurity -> onNavigateToAccountSecurity.invoke()
+            SettingsEvent.NavigateAccountSecurity -> onNavigateToAccountSecurity()
             SettingsEvent.NavigateAppearance -> onNavigateToAppearance()
             SettingsEvent.NavigateAutoFill -> onNavigateToAutoFill()
             SettingsEvent.NavigateOther -> onNavigateToOther()
             SettingsEvent.NavigateVault -> onNavigateToVault()
             SettingsEvent.NavigateAccountSecurityShortcut -> onNavigateToAccountSecurity()
+            SettingsEvent.NavigatePlan -> onNavigateToPlan()
         }
     }
 
@@ -75,8 +76,8 @@ fun SettingsScreen(
                         navigationIconContentDescription = stringResource(
                             id = BitwardenString.close,
                         ),
-                        onNavigationIconClick = remember(viewModel) {
-                            { viewModel.trySendAction(SettingsAction.CloseClick) }
+                        onNavigationIconClick = {
+                            viewModel.trySendAction(SettingsAction.CloseClick)
                         },
                     )
                 } else {
@@ -95,8 +96,8 @@ fun SettingsScreen(
             state.settingRows.forEachIndexed { index, settingEntry ->
                 BitwardenPushRow(
                     text = settingEntry.text(),
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(SettingsAction.SettingsClick(settingEntry)) }
+                    onClick = {
+                        viewModel.trySendAction(SettingsAction.SettingsClick(settingEntry))
                     },
                     notificationCount = state.notificationBadgeCountMap.getOrDefault(
                         key = settingEntry,

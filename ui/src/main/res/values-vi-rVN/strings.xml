@@ -11,6 +11,7 @@
     <string name="copy_password">Sao chép mật khẩu</string>
     <string name="copy_username">Sao chép tên đăng nhập</string>
     <string name="delete">Xóa</string>
+    <string name="preview">Preview</string>
     <string name="deleting">Đang xóa…</string>
     <string name="do_you_really_want_to_delete">Bạn có chắc chắn muốn xóa không? Thao tác này không thể hoàn tác.</string>
     <string name="edit">Sửa</string>
@@ -42,7 +43,7 @@
     <string name="master_password">Mật khẩu chính</string>
     <string name="master_password_required">Mật khẩu chính (bắt buộc)</string>
     <string name="new_master_password_required">Mật khẩu chính mới (bắt buộc)</string>
-    <string name="more">Thêm</string>
+    <string name="more_options">More options</string>
     <string name="my_vault">Kho lưu trữ</string>
     <string name="name">Tên</string>
     <string name="item_name_required">Tên mục (bắt buộc)</string>
@@ -169,7 +170,7 @@
     <string name="autofill_noun">Tự động điền</string>
     <string name="autofill_verb">Tự động điền</string>
     <string name="autofill_or_view">Bạn muốn tự động điền hay xem mục này?</string>
-    <string name="search">Tìm kiếm</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">Tìm hiểu về tổ chức</string>
     <string name="authenticator_app_title">Ứng dụng xác thực</string>
     <string name="enter_verification_code_app">Nhập mã xác nhận 6 chữ số từ ứng dụng xác thực của bạn.</string>
@@ -199,9 +200,12 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="copy_totp_automatically">Tự động sao chép mã TOTP</string>
     <string name="premium_required">Cần là thành viên Cao cấp để sử dụng tính năng này.</string>
     <string name="attachment_deleted">Đã xóa tệp đính kèm</string>
+    <string name="attachments_unavailable">Attachments unavailable</string>
+    <string name="attachments_are_a_premium_feature">Attachments are a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="choose_file">Chọn tệp</string>
     <string name="file">Tập tin</string>
     <string name="no_file_chosen">Chưa chọn tập tin</string>
+    <string name="file_name">File name</string>
     <string name="no_attachments">Không có tệp đính kèm.</string>
     <string name="file_source">Tệp nguồn</string>
     <string name="max_file_size">Kích thước tối đa của tệp tin là 100MB.</string>
@@ -223,6 +227,8 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="copy_security_code">Sao chép mã bảo mật</string>
     <string name="number">Số thẻ</string>
     <string name="security_code">Mã bảo mật</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_instruction">Position your card within the frame to scan it.</string>
     <string name="type_card">Thẻ</string>
     <string name="type_identity">Danh tính</string>
     <string name="type_login">Đăng nhập</string>
@@ -302,7 +308,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="organization">Tổ chức</string>
     <string name="try_again">Thử lại</string>
     <string name="created">Tạo lúc: %1$s</string>
-    <string name="password_last_updated">Mật khẩu được cập nhật lần cuối: %1$s</string>
+    <string name="password_updated">Password updated: %1$s</string>
     <string name="last_edited">Lần sửa đổi cuối cùng: %1$s</string>
     <string name="invalid_email">Địa chỉ email không hợp lệ.</string>
     <string name="cards">Thẻ</string>
@@ -375,6 +381,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="capitalize">Viết hoa</string>
     <string name="include_number">Bao gồm cả số</string>
     <string name="download">Tải xuống</string>
+    <string name="download_file">Download file</string>
     <string name="login_expired">Phiên đăng nhập của bạn đã hết hạn.</string>
     <string name="biometrics_direction">Xác minh sinh trắc học</string>
     <string name="device_verification">Xác minh thiết bị</string>
@@ -494,6 +501,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="hide_email">Ẩn địa chỉ email của tôi với người nhận</string>
     <string name="send_options_policy_in_effect">Các chính sách của tổ chức đang ảnh hưởng đến tùy chọn Send của bạn.</string>
     <string name="send_file_premium_required">Tài khoản miễn phí chỉ được gửi văn bản. Nâng cấp lên gói Cao Cấp để gửi các tập tin.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">Nhập lại mật khẩu chính</string>
     <string name="password_confirmation">Xác nhận mật khẩu chính</string>
     <string name="password_confirmation_desc">Hành động này được bảo vệ. Để tiếp tục, hãy nhập lại mật khẩu chính của bạn để xác minh danh tính.</string>
@@ -503,10 +511,10 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="remove_master_password">Xóa mật khẩu chính</string>
     <string name="leave_organization">Rời khỏi tổ chức</string>
     <string name="leave_organization_name">Rời khỏi %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Bạn có chắc chắn muốn rời khỏi %1$s không?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Bạn có chắc chắn muốn rời khỏi [%1$s] không?</string>
     <string name="leave_organization_button">Rời khỏi %1$s</string>
     <string name="leave_organization_warning">Bằng cách từ chối, các mục cá nhân sẽ ở lại trong tài khoản của bạn, nhưng bạn sẽ mất quyền truy cập vào các mục được chia sẻ và tính năng tổ chức.\n\nLiên hệ với quản trị viên của bạn để lấy lại quyền truy cập.</string>
-    <string name="how_to_manage_my_vault">Cách quản lý Kho lưu trữ</string>
+    <string name="contact_your_admin_to_regain_access">Liên hệ quản trị viên của bạn để lấy lại quyền truy cập.</string>
     <string name="fido2_authenticate_web_authn">Xác thực WebAuthn</string>
     <string name="fido2_return_to_app">Quay lại ứng dụng</string>
     <string name="reset_password_auto_enroll_invite_warning">Tổ chức này có chính sách doanh nghiệp sẽ tự động đặt lại mật khẩu chính cho bạn. Đăng ký sẽ cho phép quản trị viên tổ chức thay đổi mật khẩu chính của bạn.</string>
@@ -830,6 +838,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="fill_out_the_form_and_import_your_saved_password_file">Điền vào biểu mẫu và <annotation emphasis="bold">nhập tệp mật khẩu đã lưu của bạn.</annotation></string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Để đảm bảo an toàn cho bạn, hãy chắc chắn rằng bạn đã <annotation emphasis="bold">xóa tệp mật khẩu đã lưu của mình.</annotation></string>
     <string name="need_help_check_out_import_help">Cần trợ giúp? Hãy xem <annotation link="importHelp">hướng dẫn nhập dữ liệu</annotation>.</string>
+    <string name="import_help">import help</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Lưu tệp đã xuất</annotation> ở một vị trí trên máy tính của bạn mà bạn có thể dễ dàng tìm thấy.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Đây không phải là máy chủ Bitwarden được công nhận. Bạn có thể cần liên hệ với nhà cung cấp dịch vụ hoặc cập nhật máy chủ của mình.</string>
     <string name="syncing_logins_loading_message">Đang đồng bộ đăng nhập…</string>
@@ -854,6 +863,9 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="copy_public_key">Sao chép khóa công khai</string>
     <string name="copy_fingerprint">Sao chép vân tay</string>
     <string name="enable_notifications">Bật thông báo</string>
+    <plurals name="notifications_content_description">
+        <item quantity="other">%d notifications</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">Đăng nhập nhanh và dễ dàng trên mọi thiết bị</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden có thể thông báo cho bạn mỗi khi nhận được yêu cầu đăng nhập mới từ một thiết bị khác.</string>
     <string name="skip_for_now">Bỏ qua bây giờ</string>
@@ -927,6 +939,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Vận hành mã khóa không thành công vì không có mục nào được chọn.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Vận hành mã khóa không thành công vì yêu cầu không được hỗ trợ.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Thay đổi mật khẩu thất bại vì mục đã chọn không tồn tại.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Nhập mật khẩu thất bại vì không có mục nào được chọn.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Thao tác thông tin đăng nhập thất bại vì yêu cầu không hợp lệ.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Thao tác thông tin đăng nhập thất bại vì yêu cầu không được hỗ trợ.</string>
@@ -1142,7 +1155,6 @@ các vấn đề.</string>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Bật Tự động điền trình duyệt để tiếp tục điền mật khẩu</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Trình duyệt của bạn vừa được cập nhật, điều này đã vô hiệu hóa tính năng tự động điền của Bitwarden. Để tiếp tục tự động điền bằng Bitwarden, hãy bật tính năng tự động điền của trình duyệt trong cài đặt tự động điền.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Trình duyệt của bạn đã được cập nhật gần đây, điều này đã vô hiệu hóa tính năng tự động điền của Bitwarden. Để tiếp tục điền mật khẩu bằng Bitwarden, hãy bật tính năng tự động điền trình duyệt cho tất cả các trình duyệt đã cài đặt trong cài đặt tự động điền.</string>
     <string name="not_now">Để sau</string>
     <string name="import_from_bitwarden">Nhập từ Bitwarden</string>
     <string name="select_account">Chọn tài khoản</string>
@@ -1193,6 +1205,8 @@ các vấn đề.</string>
     <string name="archive_unavailable">Lưu trữ không khả dụng</string>
     <string name="archiving_items_is_a_premium_feature">Lưu trữ mục là một tính năng Cao cấp. Gói hiện tại của bạn không bao gồm quyền truy cập tính năng này.</string>
     <string name="upgrade_to_premium">Nâng cấp lên bản cao cấp</string>
+    <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">Mục này đã được lưu trữ.</string>
     <string name="introducing_archive">Introducing archive</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>
@@ -1203,4 +1217,40 @@ các vấn đề.</string>
     <string name="restart_premium">Restart Premium</string>
     <string name="items_transferred">Các mục đã chuyển</string>
     <string name="updated_master_password">Mật khẩu chính đã được cập nhật</string>
+    <string name="invalid_email_addresses">Invalid email addresses</string>
+    <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
+    <string name="no_email_addresses_entered">No email addresses entered</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="sync_with_browser">Sync with browser</string>
+    <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
+    <string name="launch_browser">Launch browser</string>
+    <string name="continue_without_syncing">Continue without syncing</string>
+    <string name="external_link">External link</string>
+    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
+    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
+    <string name="preview_unavailable_for_this_file">Preview unavailable for this file. You can still download it to view on your device.</string>
+    <string name="preview_unavailable">Preview unavailable</string>
+    <string name="download_attachment">Download Attachment</string>
+    <string name="upgraded_to_premium">Upgraded to premium</string>
+    <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
+    <string name="per_month">/ month</string>
+    <string name="built_in_authenticator">Built-in authenticator</string>
+    <string name="emergency_access">Emergency access</string>
+    <string name="secure_file_storage">Secure file storage</string>
+    <string name="breach_monitoring">Breach monitoring</string>
+    <string name="upgrade_now">Upgrade now</string>
+    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="opening_checkout">Opening checkout…</string>
+    <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
+    <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
+    <string name="payment_not_received_yet">Payment not received yet</string>
+    <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
+    <string name="go_back">Go back</string>
+    <string name="allow_camera_access">Allow camera access</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
+    <string name="show_next_code">Show next code</string>
+    <string name="see_upcoming_codes_in_the_list">See upcoming codes in the list</string>
+    <string name="next_code_x">Next code, %1$s</string>
 </resources>

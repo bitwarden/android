@@ -1128,7 +1128,7 @@ class VaultRepositoryTest {
             } returns flowOf(listOf(userCipher, deletedCipher, orgCipher))
 
             coEvery {
-                vaultDiskSource.getFolders(userId)
+                vaultDiskSource.getFoldersFlow(userId)
             } returns flowOf(listOf(createMockFolder(1)))
 
             coEvery {
@@ -1181,7 +1181,7 @@ class VaultRepositoryTest {
             } returns flowOf(listOf(userCipher, userCipherCard, deletedCipher, orgCipher))
 
             coEvery {
-                vaultDiskSource.getFolders(userId)
+                vaultDiskSource.getFoldersFlow(userId)
             } returns flowOf(listOf(createMockFolder(1)))
 
             coEvery {
@@ -1221,7 +1221,7 @@ class VaultRepositoryTest {
             } returns flowOf(listOf(createMockCipher(1)))
 
             coEvery {
-                vaultDiskSource.getFolders(userId)
+                vaultDiskSource.getFoldersFlow(userId)
             } returns flowOf(listOf(createMockFolder(1)))
             val error = Throwable("Fail")
             coEvery {

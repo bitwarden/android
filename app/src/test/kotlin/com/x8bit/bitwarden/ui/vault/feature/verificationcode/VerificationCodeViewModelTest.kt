@@ -540,7 +540,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `AuthCodeState Loaded with non premium user and no org TOTP enabled should cause navigate back`() =
+    fun `AuthCodeState Loaded with non Premium user and no org TOTP enabled should cause navigate back`() =
         runTest {
             setupMockUri()
             every { mockUserAccount.isPremium } returns false
@@ -561,7 +561,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `AuthCodeState Loaded with non premium user and one org TOTP enabled should return correct state`() =
+    fun `AuthCodeState Loaded with non Premium user and one org TOTP enabled should return correct state`() =
         runTest {
             setupMockUri()
             every { mockUserAccount.isPremium } returns false

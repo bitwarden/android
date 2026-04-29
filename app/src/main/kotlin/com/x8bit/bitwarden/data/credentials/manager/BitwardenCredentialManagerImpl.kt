@@ -20,6 +20,7 @@ import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.Origin
 import com.bitwarden.fido.UnverifiedAssetLink
 import com.bitwarden.sdk.Fido2CredentialStore
+import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessary
 import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessaryOrNull
 import com.bitwarden.ui.platform.base.util.toAndroidAppUriString
 import com.bitwarden.vault.CipherListView
@@ -343,7 +344,16 @@ class BitwardenCredentialManagerImpl(
             ?.let { ClientData.DefaultWithCustomHash(hash = it) }
             ?: return Fido2RegisterCredentialResult.Error.InvalidAppSignature
 
-        val sdkOrigin = createPublicKeyCredentialRequest.origin
+        val requestedOrigin = this
+            .getPasskeyAttestationOptionsOrNull(createPublicKeyCredentialRequest.requestJson)
+            ?.relyingParty
+            ?.id
+            ?.prefixHttpsIfNecessary()
+
+        // PM-35130: We use the requested relying party for the basis of the origin for privileged
+        // apps to ensure that related-origin requests are processed successfully. In the future,
+        // the SDK should handle this for us and we will be able to send in the real origin.
+        val sdkOrigin = (requestedOrigin ?: createPublicKeyCredentialRequest.origin)
             ?.let { Origin.Web(it) }
             ?: return Fido2RegisterCredentialResult.Error.MissingHostUrl
 

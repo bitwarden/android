@@ -34,7 +34,6 @@ import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
-import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -44,8 +43,10 @@ import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.platform.composition.LocalAuthTabLaunchers
 import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.handlers.CookieAcquisitionHandler
 import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.handlers.rememberCookieAcquisitionHandler
+import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 
 /**
  * Top-level composable for the Cookie Acquisition screen.
@@ -54,6 +55,7 @@ import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.handlers.rememb
 fun CookieAcquisitionScreen(
     onDismiss: () -> Unit,
     viewModel: CookieAcquisitionViewModel = hiltViewModel(),
+    authTabLaunchers: AuthTabLaunchers = LocalAuthTabLaunchers.current,
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -61,11 +63,11 @@ fun CookieAcquisitionScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is CookieAcquisitionEvent.LaunchBrowser -> {
-                intentManager.startCustomTabsActivity(event.uri.toUri())
-            }
-
-            is CookieAcquisitionEvent.NavigateToHelp -> {
-                intentManager.launchUri(event.uri.toUri())
+                intentManager.startAuthTab(
+                    uri = event.uri.toUri(),
+                    authTabData = event.authTabData,
+                    launcher = authTabLaunchers.cookie,
+                )
             }
 
             CookieAcquisitionEvent.NavigateBack -> onDismiss()
@@ -175,6 +177,7 @@ private fun CookieAcquisitionContent(
             label = stringResource(id = BitwardenString.launch_browser),
             onClick = handler.onLaunchBrowserClick,
             icon = rememberVectorPainter(id = BitwardenDrawable.ic_external_link),
+            isExternalLink = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -185,16 +188,6 @@ private fun CookieAcquisitionContent(
         BitwardenOutlinedButton(
             label = stringResource(id = BitwardenString.continue_without_syncing),
             onClick = handler.onContinueWithoutSyncingClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        BitwardenTextButton(
-            label = stringResource(id = BitwardenString.why_am_i_seeing_this),
-            onClick = handler.onWhyAmISeeingThisClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -212,12 +205,12 @@ private fun CookieAcquisitionScreen_preview() {
             CookieAcquisitionContent(
                 state = CookieAcquisitionState(
                     environmentUrl = "vault.bitwarden.com",
+                    hostname = "",
                     dialogState = null,
                 ),
                 handler = CookieAcquisitionHandler(
                     onLaunchBrowserClick = {},
                     onContinueWithoutSyncingClick = {},
-                    onWhyAmISeeingThisClick = {},
                     onDismissDialogClick = {},
                 ),
                 modifier = Modifier.fillMaxSize(),
@@ -234,12 +227,12 @@ private fun CookieAcquisitionScreen_darkPreview() {
             CookieAcquisitionContent(
                 state = CookieAcquisitionState(
                     environmentUrl = "vault.bitwarden.com",
+                    hostname = "",
                     dialogState = null,
                 ),
                 handler = CookieAcquisitionHandler(
                     onLaunchBrowserClick = {},
                     onContinueWithoutSyncingClick = {},
-                    onWhyAmISeeingThisClick = {},
                     onDismissDialogClick = {},
                 ),
                 modifier = Modifier.fillMaxSize(),

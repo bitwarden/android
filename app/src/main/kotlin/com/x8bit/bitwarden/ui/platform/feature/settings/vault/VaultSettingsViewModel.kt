@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BackgroundEvent
@@ -26,6 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class VaultSettingsViewModel @Inject constructor(
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
+    private val buildInfoManager: BuildInfoManager,
     private val firstTimeActionManager: FirstTimeActionManager,
     private val featureFlagManager: FeatureFlagManager,
     private val policyManager: PolicyManager,
@@ -34,9 +36,10 @@ class VaultSettingsViewModel @Inject constructor(
         val firstTimeState = firstTimeActionManager.currentOrDefaultUserFirstTimeState
         VaultSettingsState(
             showImportActionCard = firstTimeState.showImportLoginsCardInSettings,
-            showImportItemsChevron = featureFlagManager.getFeatureFlag(
-                key = FlagKey.CredentialExchangeProtocolImport,
-            ),
+            showImportItemsChevron = !buildInfoManager.isFdroid &&
+                featureFlagManager.getFeatureFlag(
+                    key = FlagKey.CredentialExchangeProtocolImport,
+                ),
         )
     },
 ) {
@@ -63,7 +66,9 @@ class VaultSettingsViewModel @Inject constructor(
                 policyManager.getActivePoliciesFlow(type = PolicyTypeJson.PERSONAL_OWNERSHIP),
             ) { isEnabled, policies ->
                 VaultSettingsAction.Internal.CredentialExchangeAvailabilityChanged(
-                    isEnabled = isEnabled && policies.isEmpty(),
+                    isEnabled = isEnabled &&
+                        !buildInfoManager.isFdroid &&
+                        policies.isEmpty(),
                 )
             }
             .onEach(::sendAction)
@@ -138,7 +143,8 @@ class VaultSettingsViewModel @Inject constructor(
     }
 
     private fun handleImportItemsClicked() {
-        if (featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport) &&
+        if (!buildInfoManager.isFdroid &&
+            featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport) &&
             policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP).isEmpty()
         ) {
             sendEvent(VaultSettingsEvent.NavigateToImportItems)

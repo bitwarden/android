@@ -129,9 +129,6 @@ enum class OrganizationEventType {
 
     @SerialName("1618")
     ORGANIZATION_ITEM_ORGANIZATION_ACCEPTED,
-
-    @SerialName("1619")
-    ORGANIZATION_ITEM_ORGANIZATION_DECLINED,
 }
 
 @Keep

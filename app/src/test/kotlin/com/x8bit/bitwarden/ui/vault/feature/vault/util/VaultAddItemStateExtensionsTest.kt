@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
+import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -90,6 +91,7 @@ class VaultAddItemStateExtensionsTest {
                 identity = null,
                 card = null,
                 secureNote = null,
+                bankAccount = null,
                 favorite = false,
                 reprompt = CipherRepromptType.NONE,
                 organizationUseTotp = false,
@@ -201,11 +203,11 @@ class VaultAddItemStateExtensionsTest {
                 ),
                 passwordHistory = listOf(
                     PasswordHistoryView(
-                        password = "old_password",
+                        password = "password",
                         lastUsedDate = FIXED_CLOCK.instant(),
                     ),
                     PasswordHistoryView(
-                        password = "password",
+                        password = "old_password",
                         lastUsedDate = FIXED_CLOCK.instant(),
                     ),
                     PasswordHistoryView(
@@ -253,6 +255,7 @@ class VaultAddItemStateExtensionsTest {
                 login = null,
                 identity = null,
                 card = null,
+                bankAccount = null,
                 secureNote = SecureNoteView(SecureNoteType.GENERIC),
                 favorite = false,
                 reprompt = CipherRepromptType.NONE,
@@ -382,6 +385,7 @@ class VaultAddItemStateExtensionsTest {
                 notes = "mockNotes-1",
                 type = CipherType.IDENTITY,
                 login = null,
+                bankAccount = null,
                 identity = IdentityView(
                     title = "MR",
                     firstName = "mockFirstName",
@@ -589,6 +593,7 @@ class VaultAddItemStateExtensionsTest {
                     number = "1234567",
                 ),
                 secureNote = null,
+                bankAccount = null,
                 favorite = false,
                 reprompt = CipherRepromptType.NONE,
                 organizationUseTotp = false,
@@ -730,6 +735,7 @@ class VaultAddItemStateExtensionsTest {
                 identity = null,
                 card = null,
                 secureNote = null,
+                bankAccount = null,
                 favorite = false,
                 reprompt = CipherRepromptType.NONE,
                 organizationUseTotp = false,
@@ -757,7 +763,7 @@ class VaultAddItemStateExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toCipherView without premium should delete the archive date from the original cipher`() {
+    fun `toCipherView without Premium should delete the archive date from the original cipher`() {
         val cipherView = DEFAULT_BASE_CIPHER_VIEW.copy(
             notes = null,
             fields = emptyList(),
@@ -963,6 +969,163 @@ class VaultAddItemStateExtensionsTest {
             result.login?.passwordRevisionDate,
         )
     }
+
+    @Test
+    fun `toCipherView should use selected collection IDs when originalCipher is null`() {
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
+                name = "mockName-1",
+                selectedOwnerId = "mockOwnerId-1",
+                availableOwners = listOf(
+                    VaultAddEditState.Owner(
+                        id = "mockOwnerId-1",
+                        name = "Mock Organization",
+                        collections = listOf(
+                            VaultCollection(
+                                id = "collection-1",
+                                name = "Collection 1",
+                                isSelected = true,
+                                isDefaultUserCollection = true,
+                            ),
+                            VaultCollection(
+                                id = "collection-2",
+                                name = "Collection 2",
+                                isSelected = false,
+                                isDefaultUserCollection = false,
+                            ),
+                            VaultCollection(
+                                id = "collection-3",
+                                name = "Collection 3",
+                                isSelected = true,
+                                isDefaultUserCollection = false,
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            isIndividualVaultDisabled = true,
+            type = VaultAddEditState.ViewState.Content.ItemType.Login(
+                username = "mockUsername-1",
+                password = "mockPassword-1",
+            ),
+        )
+
+        val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
+
+        assertEquals(
+            CipherView(
+                id = null,
+                organizationId = "mockOwnerId-1",
+                folderId = null,
+                collectionIds = listOf("collection-1", "collection-3"),
+                key = null,
+                name = "mockName-1",
+                notes = null,
+                type = CipherType.LOGIN,
+                login = LoginView(
+                    username = "mockUsername-1",
+                    password = "mockPassword-1",
+                    passwordRevisionDate = null,
+                    uris = null,
+                    totp = null,
+                    autofillOnPageLoad = null,
+                    fido2Credentials = null,
+                ),
+                identity = null,
+                card = null,
+                secureNote = null,
+                bankAccount = null,
+                favorite = false,
+                reprompt = CipherRepromptType.NONE,
+                organizationUseTotp = false,
+                edit = true,
+                viewPassword = true,
+                localData = null,
+                attachments = null,
+                fields = emptyList(),
+                passwordHistory = null,
+                permissions = null,
+                creationDate = FIXED_CLOCK.instant(),
+                deletedDate = null,
+                revisionDate = FIXED_CLOCK.instant(),
+                archivedDate = null,
+                sshKey = null,
+                attachmentDecryptionFailures = null,
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toCipherView should use originalCipher collectionIds when originalCipher is present`() {
+        val cipherView = DEFAULT_LOGIN_CIPHER_VIEW.copy(
+            collectionIds = listOf("original-collection-1", "original-collection-2"),
+        )
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
+                originalCipher = cipherView,
+                name = "mockName-1",
+                selectedOwnerId = "mockOwnerId-1",
+                availableOwners = listOf(
+                    VaultAddEditState.Owner(
+                        id = "mockOwnerId-1",
+                        name = "Mock Organization",
+                        collections = listOf(
+                            VaultCollection(
+                                id = "collection-1",
+                                name = "Collection 1",
+                                isSelected = true,
+                                isDefaultUserCollection = true,
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            isIndividualVaultDisabled = true,
+            type = VaultAddEditState.ViewState.Content.ItemType.Login(
+                username = "mockUsername-1",
+                password = "mockPassword-1",
+            ),
+        )
+
+        val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
+
+        assertEquals(
+            cipherView.copy(
+                name = "mockName-1",
+                notes = null,
+                organizationId = "mockOwnerId-1",
+                folderId = null,
+                login = LoginView(
+                    username = "mockUsername-1",
+                    password = "mockPassword-1",
+                    passwordRevisionDate = FIXED_CLOCK.instant(),
+                    uris = null,
+                    totp = null,
+                    autofillOnPageLoad = false,
+                    fido2Credentials = null,
+                ),
+                favorite = false,
+                reprompt = CipherRepromptType.NONE,
+                fields = emptyList(),
+                passwordHistory = listOf(
+                    PasswordHistoryView(
+                        password = "password",
+                        lastUsedDate = FIXED_CLOCK.instant(),
+                    ),
+                    PasswordHistoryView(
+                        password = "old_password",
+                        lastUsedDate = FIXED_CLOCK.instant(),
+                    ),
+                    PasswordHistoryView(
+                        password = "hidden: value",
+                        lastUsedDate = FIXED_CLOCK.instant(),
+                    ),
+                ),
+            ),
+            result,
+        )
+    }
 }
 
 private val FIXED_CLOCK: Clock = Clock.fixed(
@@ -983,6 +1146,7 @@ private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     identity = null,
     card = null,
     secureNote = null,
+    bankAccount = null,
     favorite = false,
     reprompt = CipherRepromptType.PASSWORD,
     organizationUseTotp = false,

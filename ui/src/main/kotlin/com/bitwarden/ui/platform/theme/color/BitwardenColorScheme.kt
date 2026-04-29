@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.Color
  */
 @Immutable
 data class BitwardenColorScheme(
+    val isDarkTheme: Boolean,
     val text: TextColors,
     val background: BackgroundColors,
     val stroke: StrokeColors,
@@ -17,6 +18,7 @@ data class BitwardenColorScheme(
     val toggleButton: ToggleButtonColors,
     val sliderButton: SliderButtonColors,
     val status: StatusColors,
+    val statusBadge: StatusBadgeColors,
     val illustration: IllustrationColors,
 ) {
     /**
@@ -125,6 +127,26 @@ data class BitwardenColorScheme(
         val weak1: Color,
         val weak2: Color,
         val error: Color,
+    )
+
+    /**
+     * Defines all the status badge colors for the app.
+     */
+    @Immutable
+    data class StatusBadgeColors(
+        val success: StatusBadgeVariantColors,
+        val error: StatusBadgeVariantColors,
+        val warning: StatusBadgeVariantColors,
+    )
+
+    /**
+     * Defines the border, background, and text colors for a status badge variant.
+     */
+    @Immutable
+    data class StatusBadgeVariantColors(
+        val border: Color,
+        val background: Color,
+        val text: Color,
     )
 
     /**

@@ -11,6 +11,7 @@
     <string name="copy_password">Kopírovať heslo</string>
     <string name="copy_username">Kopírovať používateľské meno</string>
     <string name="delete">Odstrániť</string>
+    <string name="preview">Náhľad</string>
     <string name="deleting">Odstraňuje sa…</string>
     <string name="do_you_really_want_to_delete">Naozaj chcete odstrániť? Nedá sa to vrátiť späť.</string>
     <string name="edit">Upraviť</string>
@@ -42,7 +43,7 @@
     <string name="master_password">Hlavné heslo</string>
     <string name="master_password_required">Hlavné heslo (povinné)</string>
     <string name="new_master_password_required">Nové hlavné heslo (povinné)</string>
-    <string name="more">Viac</string>
+    <string name="more_options">Ďalšie možnosti</string>
     <string name="my_vault">Môj trezor</string>
     <string name="name">Meno</string>
     <string name="item_name_required">Názov položky (povinné)</string>
@@ -172,7 +173,7 @@
     <string name="autofill_noun">Automatické vypĺňanie</string>
     <string name="autofill_verb">Automatické vypĺňanie</string>
     <string name="autofill_or_view">Chcete automaticky vyplniť alebo zobraziť toto prihlásenie?</string>
-    <string name="search">Hladať</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Hľadať %1$s</string>
     <string name="learn_org">Zistiť viac o organizáciách</string>
     <string name="authenticator_app_title">Overovacia aplikácia</string>
     <string name="enter_verification_code_app">Zadajte 6-miestny verifikačný kód z vašej overovacej aplikácie.</string>
@@ -198,13 +199,16 @@
     <string name="point_your_camera_at_the_qr_code">Namierte fotoaparát na QR kód.
 Skenovanie prebehne automaticky.</string>
     <string name="copy_totp">Kopírovať TOTP</string>
-    <string name="copy_totp_automatically_description">Ak má prihlásenie nastavený kľúč overovateľa, TOTP verifikačný kód bude automaticky skopírovaný do schránky vždy, keď použijete automatické vypĺňanie.</string>
+    <string name="copy_totp_automatically_description">Ak má prihlásenie nastavený kľúč overovateľa, TOTP overovací kód bude automaticky skopírovaný do schránky vždy, keď použijete automatické vypĺňanie.</string>
     <string name="copy_totp_automatically">Automaticky kopírovať TOTP</string>
     <string name="premium_required">Pre použitie tejto funkcie je potrebné prémiové členstvo.</string>
     <string name="attachment_deleted">Príloha odstránená</string>
+    <string name="attachments_unavailable">Prílohy nie sú k dispozícii</string>
+    <string name="attachments_are_a_premium_feature">Prílohy sú prémiová funkcia. Váš aktuálny plán nezahŕňa prístup k tejto funkcii.</string>
     <string name="choose_file">Vybrať súbor</string>
     <string name="file">Súbor</string>
     <string name="no_file_chosen">Nebol vybratý žiadny súbor</string>
+    <string name="file_name">Názov súboru</string>
     <string name="no_attachments">Nie sú žiadne prílohy.</string>
     <string name="file_source">Zdroj súboru</string>
     <string name="max_file_size">Maximálna veľkosť súboru je 100 MB.</string>
@@ -226,6 +230,8 @@ Skenovanie prebehne automaticky.</string>
     <string name="copy_security_code">Kopírovať bezpečnostný kód</string>
     <string name="number">Číslo</string>
     <string name="security_code">Bezpečnostný kód</string>
+    <string name="scan_card">Nasnímať kartu</string>
+    <string name="scan_card_instruction">Umiestnite kartu do rámčeka a nasnímajte ju.</string>
     <string name="type_card">Karta</string>
     <string name="type_identity">Identita</string>
     <string name="type_login">Prihlásenie</string>
@@ -305,7 +311,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="organization">Organizácia</string>
     <string name="try_again">Skúsiť Znovu</string>
     <string name="created">Vytvorené: %1$s</string>
-    <string name="password_last_updated">Naposledy upravené heslo: %1$s</string>
+    <string name="password_updated">Aktualizované heslo: %1$s</string>
     <string name="last_edited">Naposledy upravené: %1$s</string>
     <string name="invalid_email">Neplatná e-mailová adresa.</string>
     <string name="cards">Karty</string>
@@ -381,13 +387,14 @@ Skenovanie prebehne automaticky.</string>
     <string name="capitalize">Prvé písmeno veľkým</string>
     <string name="include_number">Zahrnúť číslo</string>
     <string name="download">Stiahnuť</string>
+    <string name="download_file">Stiahnuť súbor</string>
     <string name="login_expired">Platnosť relácie prihlásenia vypršala.</string>
     <string name="biometrics_direction">Na overenie použiť biometrické údaje.</string>
     <string name="device_verification">Overenie zariadenia</string>
     <string name="biometrics_failed">Biometria zlyhala</string>
     <string name="biometrics_decoding_failure">Prihláste sa hlavným heslom alebo PIN kódom, a potom znova zapnite prihlásenie biometrickými údajmi v nastaveniach.</string>
     <string name="use_biometrics_to_unlock">Použiť biometrické údaje na odomknutie</string>
-    <string name="file_format">Formát Súboru</string>
+    <string name="file_format">Formát súboru</string>
     <string name="export_vault_master_password_description">Zadajte vaše hlavné heslo pre export údajov trezoru.</string>
     <string name="send_verification_code_to_email">Poslať overovací kód na váš e-mail</string>
     <string name="code_sent">Kód bol odoslaný!</string>
@@ -500,6 +507,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="hide_email">Skryť moju e-mailovú adresu pred príjemcami</string>
     <string name="send_options_policy_in_effect">Jedno alebo viac pravidiel organizácie ovplyvňujú vaše možnosti funkcie Send.</string>
     <string name="send_file_premium_required">Bezplatné účty sú obmedzené len na zdieľanie textu. Na odosielanie súborov cez Send sa vyžaduje prémiové členstvo.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Zdieľanie s konkrétnymi osobami je prémiová funkcia. Váš aktuálny plán nezahŕňa prístup k tejto funkcii.</string>
     <string name="password_prompt">Znova zadajte hlavné heslo</string>
     <string name="password_confirmation">Potvrdenie hlavného hesla</string>
     <string name="password_confirmation_desc">Táto akcia je chránená. Ak chcete pokračovať, znova zadajte hlavné heslo a overte svoju totožnosť.</string>
@@ -509,10 +517,10 @@ Skenovanie prebehne automaticky.</string>
     <string name="remove_master_password">Odstrániť hlavné heslo</string>
     <string name="leave_organization">Opustiť organizáciu</string>
     <string name="leave_organization_name">Opustiť %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Naozaj chcete opustiť %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Naozaj chcete opustiť [%1$s]?</string>
     <string name="leave_organization_button">Opustiť %1$s</string>
     <string name="leave_organization_warning">Ak odmietnete, vaše osobné položky zostanú vo vašom účte, ale stratíte prístup k zdieľaným položkám a funkciám organizácie.\n\nAk chcete prístup obnoviť, obráťte sa na správcu.</string>
-    <string name="how_to_manage_my_vault">Ako spravovať môj trezor</string>
+    <string name="contact_your_admin_to_regain_access">Ak chcete obnoviť prístup, obráťte sa na správcu.</string>
     <string name="fido2_authenticate_web_authn">Overiť cez WebAuthn</string>
     <string name="fido2_return_to_app">Vrátiť sa do aplikácie</string>
     <string name="reset_password_auto_enroll_invite_warning">Táto organizácia má podnikovú politiku, ktorá vás automaticky zaregistruje na obnovenia hesla. Registrácia umožní správcom organizácie zmeniť vaše hlavné heslo.</string>
@@ -773,7 +781,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="write_this_password_down_and_keep_it_somewhere_safe">Toto heslo si zapíšte a uložte na bezpečné miesto.</string>
     <string name="learn_about_other_ways_to_prevent_account_lockout">Prečítajte si o ďalších spôsoboch, ako zabrániť zablokovaniu účtu</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Prečítajte si o spôsoboch, ako zabrániť zablokovaniu účtu</annotation></string>
-    <string name="help_with_server_geolocations">Pomoc pri určovaní geolokácie servera.</string>
+    <string name="help_with_server_geolocations">Pomoc pri určovaní geolokácie servera</string>
     <string name="email_address_required">E-mailová adresa (povinná)</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Vyberte odkaz v e-maile, aby ste overili e-mailovú adresu a pokračujte vo vytváraní účtu.</string>
     <string name="change_email_address">Zmeniť e-mailovú adresu</string>
@@ -811,7 +819,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Chyba pri pripájaní k službe Duo. Použite inú metódu dvojstupňového prihlásenia alebo kontaktujte Duo a požiadajte o pomoc.</string>
     <string name="master_password_hint_not_specified">Nápoveď k hlavnému heslu</string>
     <string name="new_master_password_hint">Nová nápoveď pre hlavné heslo</string>
-    <string name="get_started">Začnite</string>
+    <string name="get_started">Začať</string>
     <string name="save_and_protect_your_data">Uložiť a ochrániť vaše údaje</string>
     <string name="the_vault_protects_more_than_just_passwords">Trezor chráni viac ako len heslá. Tu môžete bezpečne ukladať prihlasovacie údaje, identifikačné údaje, karty a poznámky.</string>
     <string name="new_login">Nové prihlasovacie údaje</string>
@@ -845,6 +853,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="fill_out_the_form_and_import_your_saved_password_file">Vyplňte formulár a <annotation emphasis="bold">importujte súbor s uloženými heslami.</annotation></string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">V záujme vašej bezpečnosti nezabudnite <annotation emphasis="bold">odstrániť súbor s uloženými heslami.</annotation></string>
     <string name="need_help_check_out_import_help">Potrebujete pomoc? Pozrite si <annotation link="importHelp">pomoc pre importovanie</annotation>.</string>
+    <string name="import_help">importovať pomoc</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Uložte exportovaný súbor</annotation> na miesto v počítači, ktoré ľahko nájdete.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Toto nie je známy Bitwarden server. Možno bude potrebné overiť si to u svojho poskytovateľa alebo aktualizovať server.</string>
     <string name="syncing_logins_loading_message">Synchronizujú sa prihlásenia…</string>
@@ -869,6 +878,12 @@ Chcete prepnúť na tento účet?</string>
     <string name="copy_public_key">Kopírovať verejný kľúč</string>
     <string name="copy_fingerprint">Kopírovať odtlačok prsta</string>
     <string name="enable_notifications">Povoliť upozornenia</string>
+    <plurals name="notifications_content_description">
+        <item quantity="one">%d upozornenie</item>
+        <item quantity="few">%d upozornenia</item>
+        <item quantity="many">%d upozornení</item>
+        <item quantity="other">%d upozornení</item>
+    </plurals>
     <string name="log_in_quickly_and_easily_across_devices">Rýchle a jednoduché prihlásenie v rôznych zariadeniach</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden vás môže upozorniť vždy, keď dostanete novú žiadosť o prihlásenie z iného zariadenia.</string>
     <string name="skip_for_now">Teraz preskočiť</string>
@@ -942,6 +957,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Operácia prístupového kľúča zlyhala, pretože nebola vybraná žiadna položka.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operácia prístupového kľúča zlyhala, pretože požiadavka nie podporovaná.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operácia s heslom zlyhala, pretože vybraná položka neexistuje.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Operácia s heslom zlyhala, pretože vybraná položka nemá platné heslo.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Operácia s heslom zlyhala, pretože nebola vybraná žiadna položka.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Operácia s poverením zlyhala, pretože požiadavka je neplatná.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Operácia s poverením zlyhala, pretože požiadavka nie je podporovaná.</string>
@@ -951,9 +967,9 @@ Chcete prepnúť na tento účet?</string>
     <string name="credential_operation_failed_because_user_verification_was_cancelled">Operácia s poverením zlyhala, pretože overenie používateľa bolo zrušené.</string>
     <string name="self_host_server_url">Adresa URL vlastného hostingu</string>
     <string name="use_brave_autofill_integration">Použiť integráciu automatického vypĺňania Brave</string>
-    <string name="use_chrome_autofill_integration">Použite integráciu automatického vypĺňania Chromu</string>
-    <string name="use_chrome_beta_autofill_integration">Použite integráciu automatického vypĺňania Chrome Beta</string>
-    <string name="use_vivaldi_autofill_integration">Použite integráciu automatického vypĺňania Vivaldi</string>
+    <string name="use_chrome_autofill_integration">Použiť integráciu automatického vyplňovania Chromu</string>
+    <string name="use_chrome_beta_autofill_integration">Použiť integráciu automatického vyplňovania Chrome Beta</string>
+    <string name="use_vivaldi_autofill_integration">Použiť integráciu automatického vypĺňania Brave</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Vylepšuje vypĺňanie prihlasovacích údajov pre podporované webové stránky vo vybraných prehliadačoch. Po zapnutí budete presmerovaní do nastavení prehliadača na povolenie automatického vypĺňania od tretích strán.</string>
     <string name="show_more">Zobraziť viac</string>
     <string name="no_folder">Žiadny priečinok</string>
@@ -1162,7 +1178,6 @@ Chcete prepnúť na tento účet?</string>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Povolenie funkcie automatického vypĺňania v prehliadači na ponechanie vypĺňania hesiel</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Váš prehliadač bol nedávno aktualizovaný, čo vyplo funkciu automatického vypĺňania. Ak chcete naďalej vypĺňať heslá pomocou Bitwarden, povoľte automatické vypĺňanie v prehliadači v nastaveniach automatického vypĺňania.</string>
-    <string name="your_browser_recently_updated_how_autofill_works_plural">Vaše prehliadače boli nedávno aktualizované, čo vyplo funkciu automatického vypĺňania. Ak chcete naďalej vypĺňať heslá pomocou Bitwarden, povoľte automatické vypĺňanie v prehliadačoch v nastaveniach automatického vypĺňania.</string>
     <string name="not_now">Teraz nie</string>
     <string name="import_from_bitwarden">Importovať z Bitwardenu</string>
     <string name="select_account">Vyberte účet</string>
@@ -1213,6 +1228,8 @@ Chcete prepnúť na tento účet?</string>
     <string name="archive_unavailable">Archív je nedostupný</string>
     <string name="archiving_items_is_a_premium_feature">Archivovanie položiek je prémiová funkcia. Váš aktuálny plán nezahŕňa prístup k tejto funkcii.</string>
     <string name="upgrade_to_premium">Upgradovať na Prémium</string>
+    <string name="unlock_advanced_security_features">Odomknutie pokročilých funkcií zabezpečenia</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Plán Prémium vám poskytne viac nástrojov na zabezpečenie a kontrolu.</string>
     <string name="this_item_is_archived">Táto položka je archivovaná.</string>
     <string name="introducing_archive">Predstavujeme archív</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Položky, ktoré momentálne nepotrebujete, uchovávajte na bezpečnom mieste, ale mimo dohľadu.</string>
@@ -1221,6 +1238,42 @@ Chcete prepnúť na tento účet?</string>
     <string name="your_premium_subscription_ended">Vaše predplatné Prémium skončilo</string>
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Ak chcete obnoviť prístup k svojmu archívu, reštartujte predplatné Prémium. Ak pred reštartom upravíte podrobnosti archivovanej položky, bude presunutá späť do trezoru.</string>
     <string name="restart_premium">Reštartovať Prémium</string>
-    <string name="items_transferred">Items transferred</string>
+    <string name="items_transferred">Položky boli prenesené</string>
     <string name="updated_master_password">Hlavné heslo bolo aktualizované</string>
+    <string name="invalid_email_addresses">Neplatná e-mailová adresa</string>
+    <string name="one_or_more_email_addresses_are_incorrect">Jedna alebo viaceré e-mailové adresy sú nesprávne. Skontrolujte ich a skúste to znovu.</string>
+    <string name="no_email_addresses_entered">Nezadali ste žiadne e-mailové adresy</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Zadajte aspoň jednu platnú e-mailovú adresu, aby ste mohli zdieľať tento Send.</string>
+    <string name="sync_with_browser">Synchronizácia s prehliadačom</string>
+    <string name="sync_with_browser_description">Ak sa chcete pripojiť k %1$s, synchronizujte svoj predvolený prehliadač s mobilnou aplikáciou Bitwarden. Po otvorení prehliadača sa prihláste, ak budete vyzvaní.\nPo dokončení synchronizácie sa vrátite do tejto aplikácie.</string>
+    <string name="launch_browser">Spustiť prehliadač</string>
+    <string name="continue_without_syncing">Pokračovať bez synchronizácie</string>
+    <string name="external_link">Externý odkaz</string>
+    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Externý odkaz</string>
+    <string name="preview_not_available_for_files">Pre súbory (%1$s) nie je k dispozícii náhľad. Stále si ich môžete stiahnuť a zobraziť na zariadení.</string>
+    <string name="this_file_is_too_large_to_preview">Tento súbor je príliš veľký na náhľad. Stále si ho môžete stiahnuť a zobraziť na zariadení.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden nedokázal tento súbor dešifrovať, preto nie je možné zobraziť náhľad.</string>
+    <string name="preview_unavailable_for_this_file">Pre tento súbor nie je k dispozícii náhľad. Stále si ho môžete stiahnuť a zobraziť na zariadení.</string>
+    <string name="preview_unavailable">Náhľad nie je k dispozícii</string>
+    <string name="download_attachment">Stiahnuť prílohu</string>
+    <string name="upgraded_to_premium">Upgradované na Prémium</string>
+    <string name="unlock_premium_features">S balíkom Prémium získate prístup k pokročilejším funkciám.</string>
+    <string name="per_month">/mesiac</string>
+    <string name="built_in_authenticator">Zabudovaný autentifikátor</string>
+    <string name="emergency_access">Núdzový prístup</string>
+    <string name="secure_file_storage">Bezpečné ukladanie súborov</string>
+    <string name="breach_monitoring">Sledovanie únikov</string>
+    <string name="upgrade_now">Upgradovať teraz</string>
+    <string name="stripe_checkout_footer">Budete presmerovaní na zabezpečenú platobnú stránku služby Stripe, kde dokončíte nákup.</string>
+    <string name="opening_checkout">Otvára sa pokladňa…</string>
+    <string name="secure_checkout_didnt_load">Bezpečná platba sa nenačítala</string>
+    <string name="trouble_opening_payment_page">Mali sme problémy s otvorením platobnej stránky, skúste to znova.</string>
+    <string name="payment_not_received_yet">Platba ešte nebola prijatá</string>
+    <string name="return_to_stripe_to_finish">Vráťte sa do Stripe v prehliadači a dokončite upgrade.</string>
+    <string name="go_back">Prejsť späť</string>
+    <string name="allow_camera_access">Povoliť prístup k fotoaparátu</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">Na naskenovanie vašej karty budeme potrebovať prístup k vášmu fotoaparátu. Toto nastavenie môžete kedykoľvek zmeniť v nastaveniach zariadenia.</string>
+    <string name="show_next_code">Zobraziť ďalší kód</string>
+    <string name="see_upcoming_codes_in_the_list">Pozrite si nadchádzajúce kódy v zozname</string>
+    <string name="next_code_x">Ďalší kód, %1$s</string>
 </resources>

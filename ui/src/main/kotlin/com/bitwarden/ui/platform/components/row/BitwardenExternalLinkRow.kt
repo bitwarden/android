@@ -61,7 +61,7 @@ fun BitwardenExternalLinkRow(
         Icon(
             modifier = Modifier.mirrorIfRtl(),
             painter = rememberVectorPainter(id = BitwardenDrawable.ic_external_link),
-            contentDescription = null,
+            contentDescription = stringResource(id = BitwardenString.external_link),
             tint = BitwardenTheme.colorScheme.icon.primary,
         )
     }

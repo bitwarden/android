@@ -59,12 +59,14 @@ fun NavGraphBuilder.addEditSendDestination(
     onNavigateBack: () -> Unit,
     onNavigateUpToSearchOrRoot: () -> Unit,
     onNavigateToGeneratorModal: (GeneratorMode.Modal) -> Unit,
+    onNavigateToPlan: () -> Unit,
 ) {
     composableWithSlideTransitions<AddEditSendRoute> {
         AddEditSendScreen(
             onNavigateBack = onNavigateBack,
             onNavigateUpToSearchOrRoot = onNavigateUpToSearchOrRoot,
             onNavigateToGeneratorModal = onNavigateToGeneratorModal,
+            onNavigateToPlan = onNavigateToPlan,
         )
     }
 }

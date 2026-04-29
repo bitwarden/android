@@ -22,6 +22,7 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -90,6 +91,7 @@ class AddEditSendViewModel @Inject constructor(
     private val networkConnectionManager: NetworkConnectionManager,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val featureFlagManager: FeatureFlagManager,
+    private val premiumStateManager: PremiumStateManager,
 ) : BaseViewModel<AddEditSendState, AddEditSendEvent, AddEditSendAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -323,7 +325,10 @@ class AddEditSendViewModel @Inject constructor(
                     it.copy(
                         dialogState = AddEditSendState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = BitwardenString.generic_error_message.asText(),
+                            message = result
+                                .errorMessage
+                                ?.asText()
+                                ?: BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -561,7 +566,7 @@ class AddEditSendViewModel @Inject constructor(
     }
 
     private fun handleAuthTypeSelect(action: AddEditSendAction.AuthTypeSelect) {
-        // Check if user is trying to select Email auth without premium
+        // Check if user is trying to select Email auth without Premium
         if (action.sendAuth is SendAuth.Email && !state.isPremium) {
             mutableStateFlow.update {
                 it.copy(dialogState = AddEditSendState.DialogState.EmailAuthRequiresPremium)
@@ -645,15 +650,19 @@ class AddEditSendViewModel @Inject constructor(
     }
 
     private fun handleUpgradeToPremiumClick() {
-        val baseUrl = environmentRepo
-            .environment
-            .environmentUrlData
-            .baseWebVaultUrlOrDefault
-        sendEvent(
-            AddEditSendEvent.NavigateToPremium(
-                uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium",
-            ),
-        )
+        if (premiumStateManager.isInAppUpgradeAvailable()) {
+            sendEvent(AddEditSendEvent.NavigateToPlanModal)
+        } else {
+            val baseUrl = environmentRepo
+                .environment
+                .environmentUrlData
+                .baseWebVaultUrlOrDefault
+            sendEvent(
+                AddEditSendEvent.NavigateToPremium(
+                    uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium",
+                ),
+            )
+        }
     }
 
     @Suppress("LongMethod")
@@ -709,7 +718,7 @@ class AddEditSendViewModel @Inject constructor(
             (content.selectedType as? AddEditSendState.ViewState.Content.SendType.File)
                 ?.let { fileType ->
                     if (!state.isPremium) {
-                        // We should never get here without a premium account, but we do one last
+                        // We should never get here without a Premium account, but we do one last
                         // check just in case.
                         mutableStateFlow.update {
                             it.copy(
@@ -1054,7 +1063,7 @@ data class AddEditSendState(
 
         /**
          * Displays a dialog to the user indicating that email authentication requires
-         * a premium account.
+         * a Premium account.
          */
         @Parcelize
         data object EmailAuthRequiresPremium : DialogState()
@@ -1107,9 +1116,14 @@ sealed class AddEditSendEvent {
     ) : AddEditSendEvent()
 
     /**
-     * Navigate to the premium upgrade page.
+     * Navigate to the Premium upgrade page.
      */
     data class NavigateToPremium(val uri: String) : AddEditSendEvent()
+
+    /**
+     * Navigates to the in-app plan modal for premium upgrade.
+     */
+    data object NavigateToPlanModal : AddEditSendEvent()
 }
 
 /**
@@ -1247,7 +1261,7 @@ sealed class AddEditSendAction {
     data class AuthEmailRemove(val authEmail: AuthEmail) : AddEditSendAction()
 
     /**
-     * User clicked upgrade to premium from the email auth premium dialog.
+     * User clicked upgrade to Premium from the email auth Premium dialog.
      */
     data object UpgradeToPremiumClick : AddEditSendAction()
 

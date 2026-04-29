@@ -1,14 +1,16 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Parcelable
+import androidx.browser.auth.AuthTabIntent
 import kotlinx.parcelize.Parcelize
 
 /** URI scheme for cookie vendor callback. */
 private const val COOKIE_CALLBACK_SCHEME: String = "bitwarden"
 
 /** URI host for cookie vendor callback. */
-private const val COOKIE_CALLBACK_HOST: String = "sso_cookie_vendor"
+private const val COOKIE_CALLBACK_HOST: String = "sso-cookie-vendor"
 
 /** Completeness marker parameter name (filtered from cookie extraction). */
 private const val COMPLETENESS_MARKER_PARAM = "d"
@@ -25,15 +27,36 @@ fun Intent.getCookieCallbackResultOrNull(): CookieCallbackResult? {
     val uri = data ?: return null
     if (uri.scheme != COOKIE_CALLBACK_SCHEME) return null
     if (uri.host != COOKIE_CALLBACK_HOST) return null
+    return uri.getCookieCallbackResult()
+}
 
-    val cookies = uri.queryParameterNames
+/**
+ * Retrieves a [CookieCallbackResult] from an [AuthTabIntent.AuthResult]. There are two possible
+ * cases.
+ *
+ * - [CookieCallbackResult.Success]: The URI is the cookie callback with correct data.
+ * - [CookieCallbackResult.MissingCookie]: The URI is the cookie callback with incorrect data or a
+ * failure has occurred.
+ */
+fun AuthTabIntent.AuthResult.getCookieCallbackResult(): CookieCallbackResult =
+    when (this.resultCode) {
+        AuthTabIntent.RESULT_OK -> this.resultUri.getCookieCallbackResult()
+        AuthTabIntent.RESULT_CANCELED -> CookieCallbackResult.MissingCookie
+        AuthTabIntent.RESULT_UNKNOWN_CODE -> CookieCallbackResult.MissingCookie
+        AuthTabIntent.RESULT_VERIFICATION_FAILED -> CookieCallbackResult.MissingCookie
+        AuthTabIntent.RESULT_VERIFICATION_TIMED_OUT -> CookieCallbackResult.MissingCookie
+        else -> CookieCallbackResult.MissingCookie
+    }
+
+private fun Uri?.getCookieCallbackResult(): CookieCallbackResult {
+    if (this == null) return CookieCallbackResult.MissingCookie
+    val cookies = queryParameterNames
         .asSequence()
         .filter { it != COMPLETENESS_MARKER_PARAM }
         .mapNotNull { name ->
-            uri.getQueryParameter(name)?.takeIf { it.isNotEmpty() }?.let { name to it }
+            getQueryParameter(name)?.takeIf { it.isNotEmpty() }?.let { name to it }
         }
         .toMap()
-
     return if (cookies.isEmpty()) {
         CookieCallbackResult.MissingCookie
     } else {

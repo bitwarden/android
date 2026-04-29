@@ -183,7 +183,10 @@ class SendViewModel @Inject constructor(
                     it.copy(
                         dialogState = SendState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = BitwardenString.generic_error_message.asText(),
+                            message = result
+                                .errorMessage
+                                ?.asText()
+                                ?: BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -473,6 +476,11 @@ data class SendState(
     val isRefreshing: Boolean,
     val isPremiumUser: Boolean,
 ) : Parcelable {
+    /**
+     * Whether the search icon should be shown.
+     */
+    val shouldShowSearchIcon: Boolean
+        get() = viewState is ViewState.Content
 
     /**
      * Indicates that the pull-to-refresh should be enabled in the UI.

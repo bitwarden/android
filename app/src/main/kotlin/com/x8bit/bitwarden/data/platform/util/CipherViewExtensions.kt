@@ -16,6 +16,12 @@ private const val AMEX_DIGITS_DISPLAYED: Int = 5
 private const val CARD_DIGITS_DISPLAYED: Int = 4
 
 /**
+ * Indicates if this [CipherView] is active based on its deleted or archived status.
+ */
+val CipherView.isActive: Boolean
+    get() = this.archivedDate == null && this.deletedDate == null
+
+/**
  * The subtitle for a [CipherView] used to give extra information about a particular instance.
  */
 val CipherView.subtitle: String?
@@ -48,6 +54,8 @@ val CipherView.subtitle: String?
         CipherType.SECURE_NOTE,
         CipherType.SSH_KEY,
             -> null
+
+        CipherType.BANK_ACCOUNT -> TODO("PM-32810: Add Bank Account Type")
     }
 
 /**

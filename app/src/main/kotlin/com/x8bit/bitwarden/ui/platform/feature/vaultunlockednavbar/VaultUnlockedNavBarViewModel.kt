@@ -2,8 +2,8 @@ package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -28,7 +28,6 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
 ) : BaseViewModel<VaultUnlockedNavBarState, VaultUnlockedNavBarEvent, VaultUnlockedNavBarAction>(
     initialState = VaultUnlockedNavBarState(
         vaultNavBarLabelRes = BitwardenString.my_vault,
-        vaultNavBarContentDescriptionRes = BitwardenString.my_vault,
         notificationState = VaultUnlockedNavBarNotificationState(
             settingsTabNotificationCount = firstTimeActionManager.allSettingsBadgeCountFlow.value,
         ),
@@ -59,7 +58,6 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
                 sendEvent(
                     VaultUnlockedNavBarEvent.Shortcut.NavigateToVaultScreen(
                         labelRes = state.vaultNavBarLabelRes,
-                        contentDescRes = state.vaultNavBarContentDescriptionRes,
                     ),
                 )
                 specialCircumstancesManager.specialCircumstance = null
@@ -78,7 +76,6 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
                 sendEvent(
                     VaultUnlockedNavBarEvent.Shortcut.NavigateToVaultScreen(
                         labelRes = state.vaultNavBarLabelRes,
-                        contentDescRes = state.vaultNavBarContentDescriptionRes,
                     ),
                 )
             }
@@ -87,7 +84,6 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
                 sendEvent(
                     VaultUnlockedNavBarEvent.Shortcut.NavigateToVaultScreen(
                         labelRes = state.vaultNavBarLabelRes,
-                        contentDescRes = state.vaultNavBarContentDescriptionRes,
                     ),
                 )
             }
@@ -139,7 +135,6 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
         sendEvent(
             VaultUnlockedNavBarEvent.NavigateToVaultScreen(
                 labelRes = state.vaultNavBarLabelRes,
-                contentDescRes = state.vaultNavBarContentDescriptionRes,
             ),
         )
     }
@@ -165,10 +160,7 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
             ?: false
         val vaultRes = if (hasOrganizations) BitwardenString.vaults else BitwardenString.my_vault
         mutableStateFlow.update {
-            it.copy(
-                vaultNavBarLabelRes = vaultRes,
-                vaultNavBarContentDescriptionRes = vaultRes,
-            )
+            it.copy(vaultNavBarLabelRes = vaultRes)
         }
     }
 
@@ -191,7 +183,6 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
  */
 data class VaultUnlockedNavBarState(
     @field:StringRes val vaultNavBarLabelRes: Int,
-    @field:StringRes val vaultNavBarContentDescriptionRes: Int,
     val notificationState: VaultUnlockedNavBarNotificationState,
 )
 
@@ -271,11 +262,9 @@ sealed class VaultUnlockedNavBarEvent {
      */
     data class NavigateToVaultScreen(
         val labelRes: Int,
-        val contentDescRes: Int,
     ) : VaultUnlockedNavBarEvent() {
         override val tab: VaultUnlockedNavBarTab = VaultUnlockedNavBarTab.Vault(
             labelRes = labelRes,
-            contentDescriptionRes = contentDescRes,
         )
     }
 
@@ -287,10 +276,10 @@ sealed class VaultUnlockedNavBarEvent {
     }
 
     /**
-     * Shortcut events should to be considered [BackgroundEvent] as they are fired
-     * outside of normal lifecycle aware events and should not be ignored by filter.
+     * Shortcut events should to be considered [DeferredBackgroundEvent] as they are fired
+     * outside normal lifecycle aware events and should not be ignored by filter.
      */
-    sealed class Shortcut : VaultUnlockedNavBarEvent(), BackgroundEvent {
+    sealed class Shortcut : VaultUnlockedNavBarEvent(), DeferredBackgroundEvent {
         /**
          * Navigate to the Generator screen via a shortcut.
          */
@@ -303,11 +292,9 @@ sealed class VaultUnlockedNavBarEvent {
          */
         data class NavigateToVaultScreen(
             val labelRes: Int,
-            val contentDescRes: Int,
         ) : Shortcut() {
             override val tab: VaultUnlockedNavBarTab = VaultUnlockedNavBarTab.Vault(
                 labelRes = labelRes,
-                contentDescriptionRes = contentDescRes,
             )
         }
 
