@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.managed
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
@@ -15,11 +14,6 @@ class DeviceLastActivityExtensionsTest {
         Instant.parse("2024-03-15T12:00:00Z"),
         ZoneOffset.UTC,
     )
-
-    @Test
-    fun `null activity date returns null`() {
-        assertNull((null as Instant?).toLastActivityLabel(fixedClock))
-    }
 
     @Test
     fun `same day returns today`() {

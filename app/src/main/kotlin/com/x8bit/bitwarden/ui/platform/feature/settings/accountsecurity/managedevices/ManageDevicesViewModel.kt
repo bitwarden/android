@@ -260,7 +260,7 @@ class ManageDevicesViewModel @Inject constructor(
                         timeStyle = FormatStyle.MEDIUM,
                         clock = clock,
                     ),
-                    lastActivityLabel = device.lastActivityDate.toLastActivityLabel(
+                    lastActivityLabel = device.lastActivityDate?.toLastActivityLabel(
                         clock = clock,
                     ),
                     status = status,

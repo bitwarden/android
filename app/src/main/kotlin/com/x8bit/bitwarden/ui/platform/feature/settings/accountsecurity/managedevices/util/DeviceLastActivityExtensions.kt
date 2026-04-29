@@ -16,8 +16,7 @@ import java.time.temporal.ChronoUnit
  * requiring rounding (unlike the JavaScript equivalent).
  */
 @Suppress("MagicNumber")
-fun Instant?.toLastActivityLabel(clock: Clock): Text? {
-    this ?: return null
+fun Instant.toLastActivityLabel(clock: Clock): Text {
     val nowDate = clock.instant().atZone(clock.zone).toLocalDate()
     val activityDate = this.atZone(clock.zone).toLocalDate()
     val daysAgo = ChronoUnit.DAYS.between(activityDate, nowDate)

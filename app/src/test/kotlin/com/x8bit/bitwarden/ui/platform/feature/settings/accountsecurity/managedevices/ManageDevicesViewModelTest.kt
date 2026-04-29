@@ -278,7 +278,7 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
                                 isTrusted = currentDevice.isTrusted,
                                 firstLoginDate = "Oct 27, 2023, 12:00:00\u202FPM",
                                 lastActivityLabel = currentDevice.lastActivityDate
-                                    .toLastActivityLabel(clock = fixedClock),
+                                    ?.toLastActivityLabel(clock = fixedClock),
                                 status = DeviceSessionStatus.Current,
                                 fingerprintPhrase = null,
                             ),
@@ -289,7 +289,7 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
                                 isTrusted = pendingDevice.isTrusted,
                                 firstLoginDate = "Oct 27, 2023, 12:00:00\u202FPM",
                                 lastActivityLabel = pendingDevice.lastActivityDate
-                                    .toLastActivityLabel(clock = fixedClock),
+                                    ?.toLastActivityLabel(clock = fixedClock),
                                 status = DeviceSessionStatus.Pending,
                                 fingerprintPhrase = validAuthRequest.fingerprint,
                             ),
@@ -300,7 +300,7 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
                                 isTrusted = otherDevice.isTrusted,
                                 firstLoginDate = "Oct 27, 2023, 12:00:00\u202FPM",
                                 lastActivityLabel = otherDevice.lastActivityDate
-                                    .toLastActivityLabel(clock = fixedClock),
+                                    ?.toLastActivityLabel(clock = fixedClock),
                                 status = DeviceSessionStatus.None,
                                 fingerprintPhrase = null,
                             ),
