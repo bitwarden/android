@@ -89,6 +89,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     private var onNavigateToSearchScreen = false
     private var onNavigateToAddFolderCalled = false
     private var onNavigateToAddFolderParentFolderName: String? = null
+    private var onNavigateToItemTypeSelectionCalled = false
     private val intentManager = mockk<IntentManager>(relaxed = true)
     private val appReviewManager: AppReviewManager = mockk {
         every { promptForReview() } just runs
@@ -115,6 +116,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                 onDimBottomNavBarRequest = { onDimBottomNavBarRequestCalled = true },
                 onNavigateToVerificationCodeScreen = { onNavigateToVerificationCodeScreen = true },
                 onNavigateToSearchVault = { onNavigateToSearchScreen = true },
+                onNavigateToItemTypeSelection = { onNavigateToItemTypeSelectionCalled = true },
                 onNavigateToImportLogins = { onNavigateToImportLoginsCalled = true },
                 onNavigateToAddFolderScreen = { folderName ->
                     onNavigateToAddFolderCalled = true
@@ -1047,6 +1049,12 @@ class VaultScreenTest : BitwardenComposeTest() {
     fun `NavigateToVaultSearchScreen event should call onNavigateToSearchScreen`() {
         mutableEventFlow.tryEmit(VaultEvent.NavigateToVaultSearchScreen)
         assertTrue(onNavigateToSearchScreen)
+    }
+
+    @Test
+    fun `NavigateToItemTypeSelection event should call onNavigateToItemTypeSelection`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToItemTypeSelection)
+        assertTrue(onNavigateToItemTypeSelectionCalled)
     }
 
     @Test

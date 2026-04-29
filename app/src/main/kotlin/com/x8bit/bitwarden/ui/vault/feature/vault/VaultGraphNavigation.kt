@@ -9,8 +9,11 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListing
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.vaultItemListingDestination
+import com.x8bit.bitwarden.ui.vault.feature.itemtypeselection.itemTypeSelectionDestination
+import com.x8bit.bitwarden.ui.vault.feature.itemtypeselection.navigateToItemTypeSelection
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.navigateToVerificationCodeScreen
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.vaultVerificationCodeDestination
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import kotlinx.serialization.Serializable
 
 /**
@@ -48,6 +51,9 @@ fun NavGraphBuilder.vaultGraph(
                 navController.navigateToVerificationCodeScreen()
             },
             onNavigateToSearchVault = onNavigateToSearchVault,
+            onNavigateToItemTypeSelection = {
+                navController.navigateToItemTypeSelection()
+            },
             onDimBottomNavBarRequest = onDimBottomNavBarRequest,
             onNavigateToImportLogins = onNavigateToImportLogins,
             onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
@@ -64,6 +70,18 @@ fun NavGraphBuilder.vaultGraph(
             onNavigateToVaultItemListing = { navController.navigateToVaultItemListing(it) },
             onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
             onNavigateToPlan = onNavigateToPlan,
+        )
+
+        itemTypeSelectionDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToAddItem = { cipherType ->
+                onNavigateToVaultAddItemScreen(
+                    VaultAddEditArgs(
+                        vaultAddEditType = VaultAddEditType.AddItem,
+                        vaultItemCipherType = cipherType,
+                    ),
+                )
+            },
         )
 
         vaultVerificationCodeDestination(

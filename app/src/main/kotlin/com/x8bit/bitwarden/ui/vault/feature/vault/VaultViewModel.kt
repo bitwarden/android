@@ -436,15 +436,23 @@ class VaultViewModel @Inject constructor(
     private fun handleSelectAddItemType() {
         val isNewItemTypesEnabled = featureFlagManager
             .getFeatureFlag(FlagKey.NewItemTypes)
+
+        // When the new item types flag is enabled the legacy dropdown is replaced with a
+        // dedicated selection screen that lists all eight cipher types.
+        if (isNewItemTypesEnabled) {
+            sendEvent(VaultEvent.NavigateToItemTypeSelection)
+            return
+        }
+
         // If policy is enable for any organization, exclude the card option
         val excludedOptions = persistentListOfNotNull(
             CreateVaultItemType.SSH_KEY,
             CreateVaultItemType.CARD.takeUnless {
                 state.restrictItemTypesPolicyOrgIds.isEmpty()
             },
-            CreateVaultItemType.BANK_ACCOUNT.takeUnless { isNewItemTypesEnabled },
-            CreateVaultItemType.DRIVERS_LICENSE.takeUnless { isNewItemTypesEnabled },
-            CreateVaultItemType.PASSPORT.takeUnless { isNewItemTypesEnabled },
+            CreateVaultItemType.BANK_ACCOUNT,
+            CreateVaultItemType.DRIVERS_LICENSE,
+            CreateVaultItemType.PASSPORT,
         )
 
         mutableStateFlow.update {
@@ -2052,6 +2060,11 @@ sealed class VaultEvent {
      * Navigate to the Vault Search screen.
      */
     data object NavigateToVaultSearchScreen : VaultEvent()
+
+    /**
+     * Navigate to the item type selection screen.
+     */
+    data object NavigateToItemTypeSelection : VaultEvent()
 
     /**
      * Navigate to the Add Item screen.

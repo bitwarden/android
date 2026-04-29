@@ -3621,22 +3621,42 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `SelectAddItemType action should not exclude bank account, drivers license, or passport when NewItemTypes flag is enabled`() {
-        mutableNewItemTypesFlagFlow.value = true
-        val viewModel = createViewModel()
+    fun `SelectAddItemType action should send NavigateToItemTypeSelection event when NewItemTypes flag is enabled`() =
+        runTest {
+            mutableNewItemTypesFlagFlow.value = true
+            val viewModel = createViewModel()
 
-        viewModel.trySendAction(VaultAction.SelectAddItemType)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.SelectAddItemType)
+                assertEquals(VaultEvent.NavigateToItemTypeSelection, awaitItem())
+            }
+            // No dialog should be shown when navigating to the dedicated selection screen.
+            assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+        }
 
-        val expectedState = DEFAULT_STATE.copy(
-            dialog = VaultState.DialogState.SelectVaultAddItemType(
-                excludedOptions = persistentListOf(CreateVaultItemType.SSH_KEY),
-            ),
-        )
-        assertEquals(
-            expectedState,
-            viewModel.stateFlow.value,
-        )
-    }
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SelectAddItemType action should send NavigateToItemTypeSelection event when NewItemTypes flag is enabled even when RESTRICT_ITEM_TYPES policy is active`() =
+        runTest {
+            mutableNewItemTypesFlagFlow.value = true
+            val viewModel = createViewModel()
+            mutableActivePoliciesFlow.emit(
+                listOf(
+                    createMockPolicy(
+                        organizationId = "Test Organization",
+                        id = "testId",
+                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                        isEnabled = true,
+                        data = null,
+                    ),
+                ),
+            )
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.SelectAddItemType)
+                assertEquals(VaultEvent.NavigateToItemTypeSelection, awaitItem())
+            }
+        }
 
     @Test
     fun `InternetConnectionErrorReceived should show network error if no internet connection`() =
