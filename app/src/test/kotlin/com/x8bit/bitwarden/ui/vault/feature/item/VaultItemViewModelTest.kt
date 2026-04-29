@@ -2708,6 +2708,50 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
+    inner class DriversLicenseActions {
+        private lateinit var viewModel: VaultItemViewModel
+
+        @BeforeEach
+        fun setup() {
+            viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(viewState = DRIVERS_LICENSE_VIEW_STATE),
+            )
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canRestore = false,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
+                    hasOrganizations = true,
+                )
+            } returns DRIVERS_LICENSE_VIEW_STATE
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+        }
+
+        @Test
+        fun `on CopyLicenseNumberClick should copy license number to clipboard`() = runTest {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.DriversLicense.CopyLicenseNumberClick,
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "K123-456-789",
+                    toastDescriptorOverride = BitwardenString.license_number.asText(),
+                )
+            }
+        }
+    }
+
+    @Nested
     inner class VaultItemFlow {
         @BeforeEach
         fun setup() {
@@ -3345,6 +3389,27 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             VaultItemState.ViewState.Content(
                 common = DEFAULT_COMMON,
                 type = DEFAULT_BANK_ACCOUNT_TYPE,
+            )
+
+        private val DEFAULT_DRIVERS_LICENSE_TYPE:
+            VaultItemState.ViewState.Content.ItemType.DriversLicense =
+            VaultItemState.ViewState.Content.ItemType.DriversLicense(
+                firstName = "Missy",
+                middleName = "Anne",
+                lastName = "Katner",
+                licenseNumber = "K123-456-789",
+                issuingCountry = "USA",
+                issuingState = "Wisconsin",
+                expirationMonth = "6",
+                expirationDay = "15",
+                expirationYear = "2030",
+                licenseClass = "Class D",
+            )
+
+        private val DRIVERS_LICENSE_VIEW_STATE: VaultItemState.ViewState.Content =
+            VaultItemState.ViewState.Content(
+                common = DEFAULT_COMMON,
+                type = DEFAULT_DRIVERS_LICENSE_TYPE,
             )
     }
 }

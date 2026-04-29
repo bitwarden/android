@@ -85,6 +85,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditBankAccountTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditDriversLicenseTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
@@ -239,6 +240,10 @@ fun VaultAddEditScreen(
 
     val bankAccountItemTypeHandlers = remember(viewModel) {
         VaultAddEditBankAccountTypeHandlers.create(viewModel = viewModel)
+    }
+
+    val driversLicenseItemTypeHandlers = remember(viewModel) {
+        VaultAddEditDriversLicenseTypeHandlers.create(viewModel = viewModel)
     }
 
     val archiveClickAction = { viewModel.trySendAction(VaultAddEditAction.Common.ArchiveClick) }
@@ -423,6 +428,7 @@ fun VaultAddEditScreen(
                         cardItemTypeHandlers = cardItemTypeHandlers,
                         sshKeyItemTypeHandlers = sshKeyItemTypeHandlers,
                         bankAccountItemTypeHandlers = bankAccountItemTypeHandlers,
+                        driversLicenseItemTypeHandlers = driversLicenseItemTypeHandlers,
                         isCardScannerEnabled = state.isCardScannerEnabled,
                         cardHolderNameFocusRequester = cardHolderNameFocusRequester,
                         lazyListState = lazyListState,

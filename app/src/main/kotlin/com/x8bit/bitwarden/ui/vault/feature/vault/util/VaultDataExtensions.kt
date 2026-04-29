@@ -149,6 +149,11 @@ fun VaultData.toViewState(
                 .count { it.type is CipherListViewType.SshKey },
             bankAccountItemsCount = activeCipherViews
                 .count { it.type is CipherListViewType.BankAccount },
+            driversLicenseItemsCount =
+                // TODO(PM-32009): Count Driver's License ciphers via
+                //  `activeCipherViews.count { it.type is CipherListViewType.DriversLicense }`
+                //  once the SDK ships the corresponding `CipherListViewType` variant.
+                0,
             favoriteItems = activeDecryptedCipherViews
                 .filter { it.favorite }
                 .mapNotNull {

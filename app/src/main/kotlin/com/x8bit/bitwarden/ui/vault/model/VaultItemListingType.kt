@@ -41,6 +41,11 @@ sealed class VaultItemListingType {
     data object BankAccount : VaultItemListingType()
 
     /**
+     * A Driver's License listing.
+     */
+    data object DriversLicense : VaultItemListingType()
+
+    /**
      * A Trash listing.
      */
     data object Trash : VaultItemListingType()

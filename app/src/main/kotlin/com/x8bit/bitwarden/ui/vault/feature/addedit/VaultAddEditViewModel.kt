@@ -311,6 +311,10 @@ class VaultAddEditViewModel @Inject constructor(
                 handleBankAccountTypeActions(action)
             }
 
+            is VaultAddEditAction.ItemType.DriversLicenseType -> {
+                handleDriversLicenseTypeActions(action)
+            }
+
             is VaultAddEditAction.Internal -> handleInternalActions(action)
         }
     }
@@ -1747,6 +1751,57 @@ class VaultAddEditViewModel @Inject constructor(
 
     //endregion Bank Account Type Handlers
 
+    //region Driver's License Type Handlers
+
+    @Suppress("LongMethod")
+    private fun handleDriversLicenseTypeActions(
+        action: VaultAddEditAction.ItemType.DriversLicenseType,
+    ) {
+        when (action) {
+            is VaultAddEditAction.ItemType.DriversLicenseType.FirstNameTextChange -> {
+                updateDriversLicenseContent { it.copy(firstName = action.firstName) }
+            }
+
+            is VaultAddEditAction.ItemType.DriversLicenseType.MiddleNameTextChange -> {
+                updateDriversLicenseContent { it.copy(middleName = action.middleName) }
+            }
+
+            is VaultAddEditAction.ItemType.DriversLicenseType.LastNameTextChange -> {
+                updateDriversLicenseContent { it.copy(lastName = action.lastName) }
+            }
+
+            is VaultAddEditAction.ItemType.DriversLicenseType.LicenseNumberTextChange -> {
+                updateDriversLicenseContent { it.copy(licenseNumber = action.licenseNumber) }
+            }
+
+            is VaultAddEditAction.ItemType.DriversLicenseType.IssuingCountryTextChange -> {
+                updateDriversLicenseContent { it.copy(issuingCountry = action.country) }
+            }
+
+            is VaultAddEditAction.ItemType.DriversLicenseType.IssuingStateTextChange -> {
+                updateDriversLicenseContent { it.copy(issuingState = action.state) }
+            }
+
+            is VaultAddEditAction.ItemType.DriversLicenseType.ExpirationMonthSelect -> {
+                updateDriversLicenseContent { it.copy(expirationMonth = action.month.number) }
+            }
+
+            is VaultAddEditAction.ItemType.DriversLicenseType.ExpirationDayTextChange -> {
+                updateDriversLicenseContent { it.copy(expirationDay = action.day) }
+            }
+
+            is VaultAddEditAction.ItemType.DriversLicenseType.ExpirationYearTextChange -> {
+                updateDriversLicenseContent { it.copy(expirationYear = action.year) }
+            }
+
+            is VaultAddEditAction.ItemType.DriversLicenseType.LicenseClassTextChange -> {
+                updateDriversLicenseContent { it.copy(licenseClass = action.licenseClass) }
+            }
+        }
+    }
+
+    //endregion Driver's License Type Handlers
+
     //region Internal Type Handlers
 
     private fun handleInternalActions(action: VaultAddEditAction.Internal) {
@@ -2512,6 +2567,16 @@ class VaultAddEditViewModel @Inject constructor(
     ) {
         updateContent { currentContent ->
             (currentContent.type as? VaultAddEditState.ViewState.Content.ItemType.BankAccount)
+                ?.let { currentContent.copy(type = block(it)) }
+        }
+    }
+
+    private inline fun updateDriversLicenseContent(
+        crossinline block: (VaultAddEditState.ViewState.Content.ItemType.DriversLicense) ->
+        VaultAddEditState.ViewState.Content.ItemType.DriversLicense,
+    ) {
+        updateContent { currentContent ->
+            (currentContent.type as? VaultAddEditState.ViewState.Content.ItemType.DriversLicense)
                 ?.let { currentContent.copy(type = block(it)) }
         }
     }
@@ -4087,6 +4152,66 @@ sealed class VaultAddEditAction {
              * Fired when the bank contact phone text input is changed.
              */
             data class BankContactPhoneTextChange(val phone: String) : BankAccountType()
+        }
+
+        /**
+         * Represents actions specific to the Driver's License type.
+         */
+        sealed class DriversLicenseType : ItemType() {
+
+            /**
+             * Fired when the first name text input is changed.
+             */
+            data class FirstNameTextChange(val firstName: String) : DriversLicenseType()
+
+            /**
+             * Fired when the middle name text input is changed.
+             */
+            data class MiddleNameTextChange(val middleName: String) : DriversLicenseType()
+
+            /**
+             * Fired when the last name text input is changed.
+             */
+            data class LastNameTextChange(val lastName: String) : DriversLicenseType()
+
+            /**
+             * Fired when the license number text input is changed.
+             */
+            data class LicenseNumberTextChange(val licenseNumber: String) : DriversLicenseType()
+
+            /**
+             * Fired when the issuing country text input is changed.
+             */
+            data class IssuingCountryTextChange(val country: String) : DriversLicenseType()
+
+            /**
+             * Fired when the issuing state/province text input is changed.
+             */
+            data class IssuingStateTextChange(val state: String) : DriversLicenseType()
+
+            /**
+             * Fired when the expiration month is selected. The selected
+             * [VaultCardExpirationMonth] is reused for visual parity with the Card item type;
+             * the canonical state model stores the numeric month as a string.
+             */
+            data class ExpirationMonthSelect(
+                val month: VaultCardExpirationMonth,
+            ) : DriversLicenseType()
+
+            /**
+             * Fired when the expiration day text input is changed.
+             */
+            data class ExpirationDayTextChange(val day: String) : DriversLicenseType()
+
+            /**
+             * Fired when the expiration year text input is changed.
+             */
+            data class ExpirationYearTextChange(val year: String) : DriversLicenseType()
+
+            /**
+             * Fired when the license class text input is changed.
+             */
+            data class LicenseClassTextChange(val licenseClass: String) : DriversLicenseType()
         }
     }
 

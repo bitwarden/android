@@ -717,6 +717,10 @@ class VaultViewModel @Inject constructor(
                 handleCopyRoutingNumberClick(overflowAction)
             }
 
+            is ListingItemOverflowAction.VaultAction.CopyLicenseNumberClick -> {
+                handleCopyLicenseNumberClick(overflowAction)
+            }
+
             is ListingItemOverflowAction.VaultAction.CopyPasswordClick -> {
                 handleCopyPasswordClick(overflowAction)
             }
@@ -839,6 +843,17 @@ class VaultViewModel @Inject constructor(
                     )
                 }
         }
+    }
+
+    @Suppress("UnusedParameter")
+    private fun handleCopyLicenseNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyLicenseNumberClick,
+    ) {
+        // TODO(PM-32009): Read the license number from
+        //  `getCipherForCopyOrNull(action.cipherId)?.driversLicense?.licenseNumber` and copy it
+        //  with the `BitwardenString.license_number` toast descriptor once the SDK exposes a
+        //  `DriversLicenseView` on `CipherView`. The action is wired through today so the
+        //  overflow plumbing is verified end-to-end before the SDK lands.
     }
 
     private fun handleCopyPasswordClick(
@@ -1676,6 +1691,7 @@ data class VaultState(
          * @property loginItemsCount The count of Login type items.
          * @property cardItemsCount The count of Card type items.
          * @property bankAccountItemsCount The count of Bank Account type items.
+         * @property driversLicenseItemsCount The count of Driver's License type items.
          * @property identityItemsCount The count of Identity type items.
          * @property secureNoteItemsCount The count of Secure Notes type items.
          * @property favoriteItems The list of favorites to be displayed.
@@ -1698,6 +1714,7 @@ data class VaultState(
             val secureNoteItemsCount: Int,
             val sshKeyItemsCount: Int,
             val bankAccountItemsCount: Int,
+            val driversLicenseItemsCount: Int,
             val favoriteItems: List<VaultItem>,
             val folderItems: List<FolderItem>,
             val noFolderItems: List<VaultItem>,

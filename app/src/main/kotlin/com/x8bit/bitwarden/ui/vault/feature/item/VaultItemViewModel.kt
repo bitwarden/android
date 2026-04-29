@@ -239,6 +239,10 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.ItemType.SshKey -> handleSshKeyTypeActions(action)
             is VaultItemAction.ItemType.Identity -> handleIdentityTypeActions(action)
             is VaultItemAction.ItemType.BankAccount -> handleBankAccountTypeActions(action)
+            is VaultItemAction.ItemType.DriversLicense -> {
+                handleDriversLicenseTypeActions(action)
+            }
+
             is VaultItemAction.Common -> handleCommonActions(action)
             is VaultItemAction.Internal -> handleInternalAction(action)
         }
@@ -1117,6 +1121,33 @@ class VaultItemViewModel @Inject constructor(
 
     //endregion Bank Account Type Handlers
 
+    //region Driver's License Type Handlers
+
+    private fun handleDriversLicenseTypeActions(
+        action: VaultItemAction.ItemType.DriversLicense,
+    ) {
+        when (action) {
+            VaultItemAction.ItemType.DriversLicense.CopyLicenseNumberClick -> {
+                handleCopyDriversLicenseNumberClick()
+            }
+        }
+    }
+
+    private fun handleCopyDriversLicenseNumberClick() {
+        onDriversLicenseContent { _, driversLicense ->
+            driversLicense.licenseNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let { licenseNumber ->
+                    clipboardManager.setText(
+                        text = licenseNumber,
+                        toastDescriptorOverride = BitwardenString.license_number.asText(),
+                    )
+                }
+        }
+    }
+
+    //endregion Driver's License Type Handlers
+
     //region Internal Type Handlers
 
     private fun handleInternalAction(action: VaultItemAction.Internal) {
@@ -1511,6 +1542,21 @@ class VaultItemViewModel @Inject constructor(
                 (content.type as? VaultItemState.ViewState.Content.ItemType.BankAccount)
                     ?.let { bankAccountContent ->
                         block(content, bankAccountContent)
+                    }
+            }
+    }
+
+    private inline fun onDriversLicenseContent(
+        crossinline block: (
+            VaultItemState.ViewState.Content,
+            VaultItemState.ViewState.Content.ItemType.DriversLicense,
+        ) -> Unit,
+    ) {
+        state.viewState.asContentOrNull()
+            ?.let { content ->
+                (content.type as? VaultItemState.ViewState.Content.ItemType.DriversLicense)
+                    ?.let { driversLicenseContent ->
+                        block(content, driversLicenseContent)
                     }
             }
     }
@@ -2519,6 +2565,17 @@ sealed class VaultItemAction {
              * The user has toggled the PIN visibility.
              */
             data class PinVisibilityClick(val isVisible: Boolean) : BankAccount()
+        }
+
+        /**
+         * Represents actions specific to the Driver's License type.
+         */
+        sealed class DriversLicense : ItemType() {
+
+            /**
+             * The user has clicked the copy button for the license number.
+             */
+            data object CopyLicenseNumberClick : DriversLicense()
         }
     }
 

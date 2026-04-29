@@ -95,6 +95,12 @@ fun CipherListView.toOverflowActions(
                                 CopyableCipherFields.BANK_ACCOUNT_ROUTING_NUMBER,
                             )
                     },
+                // TODO(PM-32009): Emit
+                //  `ListingItemOverflowAction.VaultAction.CopyLicenseNumberClick` for ciphers
+                //  whose `type is CipherListViewType.DriversLicense` and whose `copyableFields`
+                //  contain the SDK's forthcoming `DRIVERS_LICENSE_*` flag. The dispatcher,
+                //  ViewModel handlers, and overflow data class are wired in this slice so only
+                //  the emission needs to land when the SDK ships.
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = cipherId,
                     cipherType = this.type.toSdkCipherType(),

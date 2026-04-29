@@ -4207,6 +4207,187 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Nested
+    inner class VaultAddEditDriversLicenseTypeItemActions {
+        private lateinit var viewModel: VaultAddEditViewModel
+        private lateinit var vaultAddItemInitialState: VaultAddEditState
+        private lateinit var driversLicenseInitialSavedStateHandle: SavedStateHandle
+
+        @BeforeEach
+        fun setup() {
+            mutableVaultDataFlow.value = DataState.Loaded(
+                createVaultData(cipherListView = createMockCipherListView(1)),
+            )
+            vaultAddItemInitialState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
+                typeContentViewState =
+                    VaultAddEditState.ViewState.Content.ItemType.DriversLicense(),
+            )
+            driversLicenseInitialSavedStateHandle = createSavedStateHandleWithState(
+                state = vaultAddItemInitialState,
+                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
+            )
+            viewModel = createAddVaultItemViewModel(
+                savedStateHandle = driversLicenseInitialSavedStateHandle,
+            )
+        }
+
+        private fun expectedDriversLicense(
+            block: VaultAddEditState.ViewState.Content.ItemType.DriversLicense.() ->
+            VaultAddEditState.ViewState.Content.ItemType.DriversLicense,
+        ): VaultAddEditState =
+            createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
+                typeContentViewState = VaultAddEditState
+                    .ViewState
+                    .Content
+                    .ItemType
+                    .DriversLicense()
+                    .block(),
+            )
+
+        @Test
+        fun `FirstNameTextChange should update first name`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.DriversLicenseType.FirstNameTextChange(
+                    firstName = "Missy",
+                ),
+            )
+
+            assertEquals(
+                expectedDriversLicense { copy(firstName = "Missy") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `MiddleNameTextChange should update middle name`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.DriversLicenseType.MiddleNameTextChange(
+                    middleName = "Anne",
+                ),
+            )
+
+            assertEquals(
+                expectedDriversLicense { copy(middleName = "Anne") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `LastNameTextChange should update last name`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.DriversLicenseType.LastNameTextChange(
+                    lastName = "Katner",
+                ),
+            )
+
+            assertEquals(
+                expectedDriversLicense { copy(lastName = "Katner") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `LicenseNumberTextChange should update license number`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.DriversLicenseType.LicenseNumberTextChange(
+                    licenseNumber = "K123-456-789",
+                ),
+            )
+
+            assertEquals(
+                expectedDriversLicense { copy(licenseNumber = "K123-456-789") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssuingCountryTextChange should update issuing country`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.DriversLicenseType.IssuingCountryTextChange(
+                    country = "USA",
+                ),
+            )
+
+            assertEquals(
+                expectedDriversLicense { copy(issuingCountry = "USA") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssuingStateTextChange should update issuing state`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.DriversLicenseType.IssuingStateTextChange(
+                    state = "Wisconsin",
+                ),
+            )
+
+            assertEquals(
+                expectedDriversLicense { copy(issuingState = "Wisconsin") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `ExpirationMonthSelect should store the selected month number`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.DriversLicenseType.ExpirationMonthSelect(
+                    month = VaultCardExpirationMonth.JUNE,
+                ),
+            )
+
+            assertEquals(
+                expectedDriversLicense { copy(expirationMonth = "6") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `ExpirationDayTextChange should update expiration day`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.DriversLicenseType.ExpirationDayTextChange(
+                    day = "15",
+                ),
+            )
+
+            assertEquals(
+                expectedDriversLicense { copy(expirationDay = "15") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `ExpirationYearTextChange should update expiration year`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.DriversLicenseType.ExpirationYearTextChange(
+                    year = "2030",
+                ),
+            )
+
+            assertEquals(
+                expectedDriversLicense { copy(expirationYear = "2030") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `LicenseClassTextChange should update license class`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.DriversLicenseType.LicenseClassTextChange(
+                    licenseClass = "Class D",
+                ),
+            )
+
+            assertEquals(
+                expectedDriversLicense { copy(licenseClass = "Class D") },
+                viewModel.stateFlow.value,
+            )
+        }
+    }
+
     @Test
     fun `NumberVisibilityChange should log an event when in edit mode and password is visible`() =
         runTest {

@@ -1309,6 +1309,17 @@ class VaultItemListingViewModel @Inject constructor(
         }
     }
 
+    @Suppress("UnusedParameter")
+    private fun handleCopyLicenseNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyLicenseNumberClick,
+    ) {
+        // TODO(PM-32009): Read the license number from
+        //  `getCipherViewOrNull(action.cipherId)?.driversLicense?.licenseNumber` and copy it with
+        //  the `BitwardenString.license_number` toast descriptor once the SDK exposes a
+        //  `DriversLicenseView` on `CipherView`. The action is wired through today so the
+        //  overflow plumbing is verified end-to-end before the SDK lands.
+    }
+
     private fun handleCopyPasswordClick(
         action: ListingItemOverflowAction.VaultAction.CopyPasswordClick,
     ) {
@@ -1604,6 +1615,10 @@ class VaultItemListingViewModel @Inject constructor(
 
             is ListingItemOverflowAction.VaultAction.CopyRoutingNumberClick -> {
                 handleCopyRoutingNumberClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyLicenseNumberClick -> {
+                handleCopyLicenseNumberClick(overflowAction)
             }
 
             is ListingItemOverflowAction.VaultAction.CopyPasswordClick -> {
@@ -2928,6 +2943,7 @@ data class VaultItemListingState(
             ItemListingType.Vault.SecureNote,
             ItemListingType.Vault.SshKey,
             ItemListingType.Vault.BankAccount,
+            ItemListingType.Vault.DriversLicense,
             ItemListingType.Vault.Trash,
             ItemListingType.Send.SendFile,
             ItemListingType.Send.SendText,
@@ -3375,6 +3391,14 @@ data class VaultItemListingState(
              */
             data object BankAccount : Vault() {
                 override val titleText: Text get() = BitwardenString.bank_accounts.asText()
+                override val hasFab: Boolean get() = true
+            }
+
+            /**
+             * A Driver's License item listing.
+             */
+            data object DriversLicense : Vault() {
+                override val titleText: Text get() = BitwardenString.drivers_licenses.asText()
                 override val hasFab: Boolean get() = true
             }
 

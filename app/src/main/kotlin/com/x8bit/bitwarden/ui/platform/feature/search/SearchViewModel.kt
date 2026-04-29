@@ -322,6 +322,7 @@ class SearchViewModel @Inject constructor(
         }
     }
 
+    @Suppress("LongMethod")
     private fun handleOverflowItemClick(action: SearchAction.OverflowOptionClick) {
         when (val overflowAction = action.overflowAction) {
             is ListingItemOverflowAction.SendAction.CopyUrlClick -> {
@@ -356,6 +357,10 @@ class SearchViewModel @Inject constructor(
 
             is ListingItemOverflowAction.VaultAction.CopyRoutingNumberClick -> {
                 handleCopyRoutingNumberClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyLicenseNumberClick -> {
+                handleCopyLicenseNumberClick(overflowAction)
             }
 
             is ListingItemOverflowAction.VaultAction.CopyPasswordClick -> {
@@ -570,6 +575,17 @@ class SearchViewModel @Inject constructor(
                     )
                 }
         }
+    }
+
+    @Suppress("UnusedParameter")
+    private fun handleCopyLicenseNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyLicenseNumberClick,
+    ) {
+        // TODO(PM-32009): Read the license number from
+        //  `decryptCipherViewOrNull(action.cipherId)?.driversLicense?.licenseNumber` and copy it
+        //  with the `BitwardenString.license_number` toast descriptor once the SDK exposes a
+        //  `DriversLicenseView` on `CipherView`. The action is wired through today so the
+        //  overflow plumbing is verified end-to-end before the SDK lands.
     }
 
     private fun handleCopyPasswordClick(
@@ -1344,6 +1360,16 @@ sealed class SearchTypeData : Parcelable {
         data object BankAccounts : Vault() {
             override val title: Text
                 get() = BitwardenString.search_x.asText(BitwardenString.bank_accounts.asText())
+        }
+
+        /**
+         * Indicates that we should be searching only driver's license ciphers.
+         */
+        data object DriversLicenses : Vault() {
+            override val title: Text
+                get() = BitwardenString
+                    .search_x
+                    .asText(BitwardenString.drivers_licenses.asText())
         }
 
         /**

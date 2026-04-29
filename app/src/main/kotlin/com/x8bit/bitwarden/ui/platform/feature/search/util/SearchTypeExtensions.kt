@@ -24,4 +24,5 @@ fun SearchType.toSearchTypeData(): SearchTypeData =
         SearchType.Vault.VerificationCodes -> SearchTypeData.Vault.VerificationCodes
         SearchType.Vault.SshKeys -> SearchTypeData.Vault.SshKeys
         SearchType.Vault.BankAccounts -> SearchTypeData.Vault.BankAccounts
+        SearchType.Vault.DriversLicenses -> SearchTypeData.Vault.DriversLicenses
     }

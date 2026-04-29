@@ -98,6 +98,7 @@ enum class ItemListingType {
     CARD,
     SSH_KEY,
     BANK_ACCOUNT,
+    DRIVERS_LICENSE,
     TRASH,
     FOLDER,
     COLLECTION,
@@ -127,6 +128,7 @@ fun SavedStateHandle.toVaultItemListingArgs(): VaultItemListingArgs {
             ItemListingType.SECURE_NOTE -> VaultItemListingType.SecureNote
             ItemListingType.SSH_KEY -> VaultItemListingType.SshKey
             ItemListingType.BANK_ACCOUNT -> VaultItemListingType.BankAccount
+            ItemListingType.DRIVERS_LICENSE -> VaultItemListingType.DriversLicense
             ItemListingType.TRASH -> VaultItemListingType.Trash
             ItemListingType.SEND_FILE -> VaultItemListingType.SendFile
             ItemListingType.SEND_TEXT -> VaultItemListingType.SendText
@@ -313,6 +315,7 @@ private fun VaultItemListingType.toItemListingType(): ItemListingType {
         is VaultItemListingType.SendText -> ItemListingType.SEND_TEXT
         is VaultItemListingType.SshKey -> ItemListingType.SSH_KEY
         is VaultItemListingType.BankAccount -> ItemListingType.BANK_ACCOUNT
+        is VaultItemListingType.DriversLicense -> ItemListingType.DRIVERS_LICENSE
     }
 }
 
@@ -330,4 +333,5 @@ private fun VaultItemListingType.toIdOrNull(): String? =
         is VaultItemListingType.SendText -> null
         is VaultItemListingType.SshKey -> null
         is VaultItemListingType.BankAccount -> null
+        is VaultItemListingType.DriversLicense -> null
     }
