@@ -16,6 +16,8 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
+import com.x8bit.bitwarden.data.billing.manager.UPGRADED_TO_PREMIUM_LEARN_MORE_URL
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
@@ -81,6 +83,7 @@ class GeneratorViewModel @Inject constructor(
     private val policyManager: PolicyManager,
     private val reviewPromptManager: ReviewPromptManager,
     private val firstTimeActionManager: FirstTimeActionManager,
+    private val premiumStateManager: PremiumStateManager,
 ) : BaseViewModel<GeneratorState, GeneratorEvent, GeneratorAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val generatorMode = savedStateHandle.toGeneratorArgs().type
@@ -110,6 +113,7 @@ class GeneratorViewModel @Inject constructor(
                 .any(),
             website = (generatorMode as? GeneratorMode.Modal.Username)?.website,
             shouldShowCoachMarkTour = false,
+            isUpgradedToPremiumCardEligible = false,
         )
     },
 ) {
@@ -136,6 +140,14 @@ class GeneratorViewModel @Inject constructor(
             }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        premiumStateManager
+            .isUpgradedToPremiumCardEligibleFlow
+            .map {
+                GeneratorAction.Internal.UpgradedToPremiumCardEligibilityReceive(isEligible = it)
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: GeneratorAction) {
@@ -151,7 +163,18 @@ class GeneratorViewModel @Inject constructor(
             GeneratorAction.LifecycleResume -> handleOnResumed()
             GeneratorAction.ExploreGeneratorCardDismissed -> handleExploreCardDismissed()
             GeneratorAction.StartExploreGeneratorTour -> handleStartExploreGeneratorTour()
+            GeneratorAction.UpgradedToPremiumCardClick -> handleUpgradedToPremiumCardClick()
+            GeneratorAction.UpgradedToPremiumCardDismiss -> handleUpgradedToPremiumCardDismiss()
         }
+    }
+
+    private fun handleUpgradedToPremiumCardClick() {
+        premiumStateManager.dismissUpgradedToPremiumCard()
+        sendEvent(GeneratorEvent.NavigateToUrl(url = UPGRADED_TO_PREMIUM_LEARN_MORE_URL))
+    }
+
+    private fun handleUpgradedToPremiumCardDismiss() {
+        premiumStateManager.dismissUpgradedToPremiumCard()
     }
 
     private fun handleExploreCardDismissed() {
@@ -273,6 +296,18 @@ class GeneratorViewModel @Inject constructor(
             is GeneratorAction.Internal.ShouldShowGeneratorCoachMarkValueChangeReceive -> {
                 handleShouldShowCoachMarkValueChange(action)
             }
+
+            is GeneratorAction.Internal.UpgradedToPremiumCardEligibilityReceive -> {
+                handleUpgradedToPremiumCardEligibilityReceive(action)
+            }
+        }
+    }
+
+    private fun handleUpgradedToPremiumCardEligibilityReceive(
+        action: GeneratorAction.Internal.UpgradedToPremiumCardEligibilityReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isUpgradedToPremiumCardEligible = action.isEligible)
         }
     }
 
@@ -1892,6 +1927,7 @@ data class GeneratorState(
     val website: String? = null,
     var passcodePolicyOverride: PasscodePolicyOverride? = null,
     private val shouldShowCoachMarkTour: Boolean,
+    val isUpgradedToPremiumCardEligible: Boolean = false,
 ) : Parcelable {
 
     /**
@@ -2370,6 +2406,16 @@ sealed class GeneratorAction {
     data object StartExploreGeneratorTour : GeneratorAction()
 
     /**
+     * User clicked the "Learn more" CTA on the "Upgraded to Premium" action card.
+     */
+    data object UpgradedToPremiumCardClick : GeneratorAction()
+
+    /**
+     * User clicked the dismiss icon on the "Upgraded to Premium" action card.
+     */
+    data object UpgradedToPremiumCardDismiss : GeneratorAction()
+
+    /**
      * Represents actions related to the [GeneratorState.MainType] in the generator feature.
      */
     sealed class MainType : GeneratorAction() {
@@ -2762,6 +2808,13 @@ sealed class GeneratorAction {
         data class ShouldShowGeneratorCoachMarkValueChangeReceive(
             val shouldShowCoachMarkTour: Boolean,
         ) : Internal()
+
+        /**
+         * Indicates that the "Upgraded to Premium" action card eligibility has been updated.
+         */
+        data class UpgradedToPremiumCardEligibilityReceive(
+            val isEligible: Boolean,
+        ) : Internal()
     }
 }
 
@@ -2799,6 +2852,13 @@ sealed class GeneratorEvent {
      * Triggers the start of showing the coach mark tour.
      */
     data object StartCoachMarkTour : GeneratorEvent()
+
+    /**
+     * Navigates the user to the given external [url].
+     */
+    data class NavigateToUrl(
+        val url: String,
+    ) : GeneratorEvent()
 }
 
 @Suppress("ComplexCondition", "MaxLineLength")

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -18,6 +19,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -25,12 +27,16 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
+import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.row.BitwardenPushRow
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Displays the settings screen.
@@ -48,6 +54,7 @@ fun SettingsScreen(
     onNavigateToVault: () -> Unit,
     onNavigateToPlan: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel(),
+    intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     EventsEffect(viewModel = viewModel) { event ->
@@ -61,6 +68,7 @@ fun SettingsScreen(
             SettingsEvent.NavigateVault -> onNavigateToVault()
             SettingsEvent.NavigateAccountSecurityShortcut -> onNavigateToAccountSecurity()
             SettingsEvent.NavigatePlan -> onNavigateToPlan()
+            is SettingsEvent.NavigateToUrl -> intentManager.launchUri(event.url.toUri())
         }
     }
 
@@ -93,6 +101,32 @@ fun SettingsScreen(
                 .verticalScroll(state = rememberScrollState()),
         ) {
             Spacer(modifier = Modifier.height(height = 12.dp))
+            if (state.shouldShowUpgradedToPremiumCard) {
+                BitwardenActionCard(
+                    cardTitle = stringResource(id = BitwardenString.upgraded_to_premium),
+                    cardSubtitle = stringResource(
+                        id = BitwardenString.you_now_have_access_to_all_advanced_security_features,
+                    ),
+                    actionText = stringResource(id = BitwardenString.learn_more),
+                    leadingContent = {
+                        Icon(
+                            painter = rememberVectorPainter(id = BitwardenDrawable.ic_star),
+                            contentDescription = null,
+                            tint = BitwardenTheme.colorScheme.icon.secondary,
+                        )
+                    },
+                    onActionClick = {
+                        viewModel.trySendAction(SettingsAction.UpgradedToPremiumCardClick)
+                    },
+                    onDismissClick = {
+                        viewModel.trySendAction(SettingsAction.UpgradedToPremiumCardDismiss)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin(),
+                )
+                Spacer(modifier = Modifier.height(height = 12.dp))
+            }
             state.settingRows.forEachIndexed { index, settingEntry ->
                 BitwardenPushRow(
                     text = settingEntry.text(),
