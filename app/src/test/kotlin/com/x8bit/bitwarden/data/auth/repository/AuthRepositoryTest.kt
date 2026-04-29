@@ -101,6 +101,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
+import com.x8bit.bitwarden.data.auth.repository.model.DeviceInfo
 import com.x8bit.bitwarden.data.auth.repository.model.GetDevicesResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
@@ -6908,12 +6909,25 @@ class AuthRepositoryTest {
         val result = repository.getDevices()
 
         coVerify(exactly = 1) { devicesService.getDevices() }
-        assertTrue(result is GetDevicesResult.Success)
-        assertEquals(1, (result as GetDevicesResult.Success).devices.size)
-        val device = result.devices.first()
-        assertEquals("deviceId", device.id)
-        // identifier "deviceIdentifier" != uniqueAppId "testUniqueAppId", so not current device
-        assertFalse(device.isCurrentDevice)
+        assertEquals(
+            GetDevicesResult.Success(
+                devices = listOf(
+                    DeviceInfo(
+                        id = "deviceId",
+                        name = "Test Device",
+                        // identifier "deviceIdentifier" != uniqueAppId "testUniqueAppId"
+                        identifier = "deviceIdentifier",
+                        type = 0,
+                        isTrusted = false,
+                        creationDate = Instant.parse("2023-10-27T12:00:00Z"),
+                        lastActivityDate = null,
+                        pendingAuthRequest = null,
+                        isCurrentDevice = false,
+                    ),
+                ),
+            ),
+            result,
+        )
     }
 
     @Test
