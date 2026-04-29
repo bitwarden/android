@@ -73,6 +73,7 @@ fun SearchTypeData.updateWithAdditionalDataIfNecessary(
         SearchTypeData.Vault.SshKeys -> this
         SearchTypeData.Vault.BankAccounts -> this
         SearchTypeData.Vault.DriversLicenses -> this
+        SearchTypeData.Vault.Passports -> this
     }
 
 /**
@@ -133,6 +134,13 @@ private fun CipherListView.filterBySearchType(
 
         is SearchTypeData.Vault.DriversLicenses -> {
             // TODO(PM-32009): Replace with `type is CipherListViewType.DriversLicense && isActive`
+            //  once the SDK ships the corresponding `CipherListViewType` variant. Until then no
+            //  list rows can match this filter.
+            false
+        }
+
+        is SearchTypeData.Vault.Passports -> {
+            // TODO(PM-32009): Replace with `type is CipherListViewType.Passport && isActive`
             //  once the SDK ships the corresponding `CipherListViewType` variant. Until then no
             //  list rows can match this filter.
             false

@@ -4388,6 +4388,271 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Nested
+    inner class VaultAddEditPassportTypeItemActions {
+        private lateinit var viewModel: VaultAddEditViewModel
+        private lateinit var vaultAddItemInitialState: VaultAddEditState
+        private lateinit var passportInitialSavedStateHandle: SavedStateHandle
+
+        @BeforeEach
+        fun setup() {
+            mutableVaultDataFlow.value = DataState.Loaded(
+                createVaultData(cipherListView = createMockCipherListView(1)),
+            )
+            vaultAddItemInitialState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.PASSPORT,
+                typeContentViewState =
+                    VaultAddEditState.ViewState.Content.ItemType.Passport(),
+            )
+            passportInitialSavedStateHandle = createSavedStateHandleWithState(
+                state = vaultAddItemInitialState,
+                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultItemCipherType = VaultItemCipherType.PASSPORT,
+            )
+            viewModel = createAddVaultItemViewModel(
+                savedStateHandle = passportInitialSavedStateHandle,
+            )
+        }
+
+        private fun expectedPassport(
+            block: VaultAddEditState.ViewState.Content.ItemType.Passport.() ->
+            VaultAddEditState.ViewState.Content.ItemType.Passport,
+        ): VaultAddEditState =
+            createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.PASSPORT,
+                typeContentViewState = VaultAddEditState
+                    .ViewState
+                    .Content
+                    .ItemType
+                    .Passport()
+                    .block(),
+            )
+
+        @Test
+        fun `SurnameTextChange should update surname`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.SurnameTextChange(
+                    surname = "Katner",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(surname = "Katner") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `GivenNameTextChange should update given name`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.GivenNameTextChange(
+                    givenName = "Missy",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(givenName = "Missy") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `DateOfBirthMonthSelect should store the selected month number`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.DateOfBirthMonthSelect(
+                    month = VaultCardExpirationMonth.MARCH,
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(dobMonth = "3") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `DateOfBirthDayTextChange should update dob day`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.DateOfBirthDayTextChange(
+                    day = "21",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(dobDay = "21") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `DateOfBirthYearTextChange should update dob year`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.DateOfBirthYearTextChange(
+                    year = "1985",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(dobYear = "1985") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `NationalityTextChange should update nationality`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.NationalityTextChange(
+                    nationality = "American",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(nationality = "American") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `PassportNumberTextChange should update passport number`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.PassportNumberTextChange(
+                    passportNumber = "P12345678",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(passportNumber = "P12345678") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `PassportTypeTextChange should update passport type`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.PassportTypeTextChange(
+                    passportType = "Diplomatic",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(passportType = "Diplomatic") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssuingCountryTextChange should update issuing country`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.IssuingCountryTextChange(
+                    country = "USA",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(issuingCountry = "USA") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssuingAuthorityTextChange should update issuing authority`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.IssuingAuthorityTextChange(
+                    authority = "Department of State",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(issuingAuthority = "Department of State") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssueMonthSelect should store the selected month number`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.IssueMonthSelect(
+                    month = VaultCardExpirationMonth.JULY,
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(issueMonth = "7") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssueDayTextChange should update issue day`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.IssueDayTextChange(
+                    day = "4",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(issueDay = "4") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssueYearTextChange should update issue year`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.IssueYearTextChange(
+                    year = "2020",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(issueYear = "2020") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `ExpirationMonthSelect should store the selected month number`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.ExpirationMonthSelect(
+                    month = VaultCardExpirationMonth.JUNE,
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(expirationMonth = "6") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `ExpirationDayTextChange should update expiration day`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.ExpirationDayTextChange(
+                    day = "15",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(expirationDay = "15") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `ExpirationYearTextChange should update expiration year`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.ExpirationYearTextChange(
+                    year = "2030",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(expirationYear = "2030") },
+                viewModel.stateFlow.value,
+            )
+        }
+    }
+
     @Test
     fun `NumberVisibilityChange should log an event when in edit mode and password is visible`() =
         runTest {

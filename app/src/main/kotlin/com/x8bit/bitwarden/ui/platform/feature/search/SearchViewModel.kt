@@ -363,6 +363,10 @@ class SearchViewModel @Inject constructor(
                 handleCopyLicenseNumberClick(overflowAction)
             }
 
+            is ListingItemOverflowAction.VaultAction.CopyPassportNumberClick -> {
+                handleCopyPassportNumberClick(overflowAction)
+            }
+
             is ListingItemOverflowAction.VaultAction.CopyPasswordClick -> {
                 handleCopyPasswordClick(overflowAction)
             }
@@ -586,6 +590,17 @@ class SearchViewModel @Inject constructor(
         //  with the `BitwardenString.license_number` toast descriptor once the SDK exposes a
         //  `DriversLicenseView` on `CipherView`. The action is wired through today so the
         //  overflow plumbing is verified end-to-end before the SDK lands.
+    }
+
+    @Suppress("UnusedParameter")
+    private fun handleCopyPassportNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyPassportNumberClick,
+    ) {
+        // TODO(PM-32009): Read the passport number from
+        //  `decryptCipherViewOrNull(action.cipherId)?.passport?.passportNumber` and copy it with
+        //  the `BitwardenString.passport_number` toast descriptor once the SDK exposes a
+        //  `PassportView` on `CipherView`. The action is wired through today so the overflow
+        //  plumbing is verified end-to-end before the SDK lands.
     }
 
     private fun handleCopyPasswordClick(
@@ -1370,6 +1385,14 @@ sealed class SearchTypeData : Parcelable {
                 get() = BitwardenString
                     .search_x
                     .asText(BitwardenString.drivers_licenses.asText())
+        }
+
+        /**
+         * Indicates that we should be searching only passport ciphers.
+         */
+        data object Passports : Vault() {
+            override val title: Text
+                get() = BitwardenString.search_x.asText(BitwardenString.passports.asText())
         }
 
         /**

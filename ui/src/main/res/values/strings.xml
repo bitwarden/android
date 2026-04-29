@@ -1345,4 +1345,12 @@ Do you want to switch to this account?</string>
     <string name="drivers_license_details">Driver’s license details</string>
     <string name="expiration_day">Expiration day</string>
     <string name="no_drivers_licenses">There are no driver’s licenses in your vault.</string>
+    <string name="passport_details">Passport details</string>
+    <string name="no_passports">There are no passports in your vault.</string>
+    <string name="date_of_birth_month">Date of birth month</string>
+    <string name="date_of_birth_day">Date of birth day</string>
+    <string name="date_of_birth_year">Date of birth year</string>
+    <string name="issue_month">Issue month</string>
+    <string name="issue_day">Issue day</string>
+    <string name="issue_year">Issue year</string>
 </resources>

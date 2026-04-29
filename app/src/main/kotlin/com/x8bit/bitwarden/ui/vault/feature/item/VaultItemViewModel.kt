@@ -243,6 +243,7 @@ class VaultItemViewModel @Inject constructor(
                 handleDriversLicenseTypeActions(action)
             }
 
+            is VaultItemAction.ItemType.Passport -> handlePassportTypeActions(action)
             is VaultItemAction.Common -> handleCommonActions(action)
             is VaultItemAction.Internal -> handleInternalAction(action)
         }
@@ -1148,6 +1149,33 @@ class VaultItemViewModel @Inject constructor(
 
     //endregion Driver's License Type Handlers
 
+    //region Passport Type Handlers
+
+    private fun handlePassportTypeActions(
+        action: VaultItemAction.ItemType.Passport,
+    ) {
+        when (action) {
+            VaultItemAction.ItemType.Passport.CopyPassportNumberClick -> {
+                handleCopyPassportItemNumberClick()
+            }
+        }
+    }
+
+    private fun handleCopyPassportItemNumberClick() {
+        onPassportContent { _, passport ->
+            passport.passportNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let { passportNumber ->
+                    clipboardManager.setText(
+                        text = passportNumber,
+                        toastDescriptorOverride = BitwardenString.passport_number.asText(),
+                    )
+                }
+        }
+    }
+
+    //endregion Passport Type Handlers
+
     //region Internal Type Handlers
 
     private fun handleInternalAction(action: VaultItemAction.Internal) {
@@ -1557,6 +1585,21 @@ class VaultItemViewModel @Inject constructor(
                 (content.type as? VaultItemState.ViewState.Content.ItemType.DriversLicense)
                     ?.let { driversLicenseContent ->
                         block(content, driversLicenseContent)
+                    }
+            }
+    }
+
+    private inline fun onPassportContent(
+        crossinline block: (
+            VaultItemState.ViewState.Content,
+            VaultItemState.ViewState.Content.ItemType.Passport,
+        ) -> Unit,
+    ) {
+        state.viewState.asContentOrNull()
+            ?.let { content ->
+                (content.type as? VaultItemState.ViewState.Content.ItemType.Passport)
+                    ?.let { passportContent ->
+                        block(content, passportContent)
                     }
             }
     }
@@ -2576,6 +2619,17 @@ sealed class VaultItemAction {
              * The user has clicked the copy button for the license number.
              */
             data object CopyLicenseNumberClick : DriversLicense()
+        }
+
+        /**
+         * Represents actions specific to the Passport type.
+         */
+        sealed class Passport : ItemType() {
+
+            /**
+             * The user has clicked the copy button for the passport number.
+             */
+            data object CopyPassportNumberClick : Passport()
         }
     }
 

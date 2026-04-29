@@ -154,6 +154,11 @@ fun VaultData.toViewState(
                 //  `activeCipherViews.count { it.type is CipherListViewType.DriversLicense }`
                 //  once the SDK ships the corresponding `CipherListViewType` variant.
                 0,
+            passportItemsCount =
+                // TODO(PM-32009): Count Passport ciphers via
+                //  `activeCipherViews.count { it.type is CipherListViewType.Passport }` once the
+                //  SDK ships the corresponding `CipherListViewType` variant.
+                0,
             favoriteItems = activeDecryptedCipherViews
                 .filter { it.favorite }
                 .mapNotNull {

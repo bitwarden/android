@@ -87,6 +87,7 @@ class VaultStateExtensionsTest {
             sshKeyItemsCount = 0,
             bankAccountItemsCount = 0,
             driversLicenseItemsCount = 0,
+            passportItemsCount = 0,
             archivedItemsCount = 0,
             archiveSubText = null,
             archiveEndIcon = null,

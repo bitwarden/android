@@ -101,6 +101,12 @@ fun CipherListView.toOverflowActions(
                 //  contain the SDK's forthcoming `DRIVERS_LICENSE_*` flag. The dispatcher,
                 //  ViewModel handlers, and overflow data class are wired in this slice so only
                 //  the emission needs to land when the SDK ships.
+                // TODO(PM-32009): Emit
+                //  `ListingItemOverflowAction.VaultAction.CopyPassportNumberClick` for ciphers
+                //  whose `type is CipherListViewType.Passport` and whose `copyableFields`
+                //  contain the SDK's forthcoming `PASSPORT_*` flag. The dispatcher, ViewModel
+                //  handlers, and overflow data class are wired in this slice so only the
+                //  emission needs to land when the SDK ships.
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = cipherId,
                     cipherType = this.type.toSdkCipherType(),

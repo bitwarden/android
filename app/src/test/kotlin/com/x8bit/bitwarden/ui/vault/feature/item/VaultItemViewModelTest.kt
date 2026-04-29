@@ -2752,6 +2752,50 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
+    inner class PassportActions {
+        private lateinit var viewModel: VaultItemViewModel
+
+        @BeforeEach
+        fun setup() {
+            viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(viewState = PASSPORT_VIEW_STATE),
+            )
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canRestore = false,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
+                    hasOrganizations = true,
+                )
+            } returns PASSPORT_VIEW_STATE
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+        }
+
+        @Test
+        fun `on CopyPassportNumberClick should copy passport number to clipboard`() = runTest {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.Passport.CopyPassportNumberClick,
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "P12345678",
+                    toastDescriptorOverride = BitwardenString.passport_number.asText(),
+                )
+            }
+        }
+    }
+
+    @Nested
     inner class VaultItemFlow {
         @BeforeEach
         fun setup() {
@@ -3410,6 +3454,33 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             VaultItemState.ViewState.Content(
                 common = DEFAULT_COMMON,
                 type = DEFAULT_DRIVERS_LICENSE_TYPE,
+            )
+
+        private val DEFAULT_PASSPORT_TYPE:
+            VaultItemState.ViewState.Content.ItemType.Passport =
+            VaultItemState.ViewState.Content.ItemType.Passport(
+                surname = "Katner",
+                givenName = "Missy",
+                dobMonth = "3",
+                dobDay = "21",
+                dobYear = "1985",
+                nationality = "American",
+                passportNumber = "P12345678",
+                passportType = "Diplomatic",
+                issuingCountry = "USA",
+                issuingAuthority = "Department of State",
+                issueMonth = "7",
+                issueDay = "4",
+                issueYear = "2020",
+                expirationMonth = "6",
+                expirationDay = "15",
+                expirationYear = "2030",
+            )
+
+        private val PASSPORT_VIEW_STATE: VaultItemState.ViewState.Content =
+            VaultItemState.ViewState.Content(
+                common = DEFAULT_COMMON,
+                type = DEFAULT_PASSPORT_TYPE,
             )
     }
 }

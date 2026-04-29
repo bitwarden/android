@@ -2411,6 +2411,28 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `OverflowOptionClick Vault CopyPassportNumberClick should not call setText until SDK ships PassportView`() =
+        runTest {
+            // The dispatcher and overflow data class are wired in PM-32806 but the actual
+            // passportNumber lookup blocks on a SDK update that exposes a PassportView on
+            // CipherView. Until then the handler is intentionally a no-op so the action stays
+            // dispatchable end-to-end without crashing.
+            val viewModel = createVaultItemListingViewModel()
+
+            viewModel.trySendAction(
+                VaultItemListingsAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyPassportNumberClick(
+                        cipherId = "mockId-1",
+                        requiresPasswordReprompt = false,
+                    ),
+                ),
+            )
+
+            verify(exactly = 0) { clipboardManager.setText(text = any<String>()) }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `OverflowOptionClick Vault CopyTotpClick with GenerateTotpCode success should call setText on the ClipboardManager`() =
         runTest {
             val totpCode = "totpCode"
@@ -3034,6 +3056,44 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         message = BitwardenString.no_drivers_licenses.asText(),
                         shouldShowAddButton = true,
                         buttonText = BitwardenString.new_drivers_license.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Loaded with empty items should update ViewState to NoItems content for Passport ItemListingType`() =
+        runTest {
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = emptyList(),
+                    ),
+                    folderViewList = emptyList(),
+                    collectionViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val viewModel = createVaultItemListingViewModel(
+                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                    vaultItemListingType = VaultItemListingType.Passport,
+                ),
+            )
+
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+
+            assertEquals(
+                createVaultItemListingState(
+                    itemListingType =
+                        VaultItemListingState.ItemListingType.Vault.Passport,
+                    viewState = VaultItemListingState.ViewState.NoItems(
+                        header = null,
+                        message = BitwardenString.no_passports.asText(),
+                        shouldShowAddButton = true,
+                        buttonText = BitwardenString.new_passport.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,

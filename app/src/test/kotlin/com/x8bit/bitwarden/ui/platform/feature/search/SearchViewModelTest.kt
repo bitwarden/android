@@ -1267,6 +1267,28 @@ class SearchViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `OverflowOptionClick Vault CopyPassportNumberClick should not call setText until SDK ships PassportView`() =
+        runTest {
+            // The dispatcher and overflow data class are wired in PM-32806 but the actual
+            // passportNumber lookup blocks on a SDK update that exposes a PassportView on
+            // CipherView. Until then the handler is intentionally a no-op so the action stays
+            // dispatchable end-to-end without crashing.
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyPassportNumberClick(
+                        cipherId = "mockId-1",
+                        requiresPasswordReprompt = false,
+                    ),
+                ),
+            )
+
+            verify(exactly = 0) { clipboardManager.setText(text = any<String>()) }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `OverflowOptionClick Vault CopyTotpClick with GenerateTotpCode success should call setText on the ClipboardManager`() =
         runTest {
             val totpCode = "totpCode"
@@ -2028,6 +2050,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                     SearchTypeData.Vault.SshKeys -> SearchType.Vault.SshKeys
                     SearchTypeData.Vault.BankAccounts -> SearchType.Vault.BankAccounts
                     SearchTypeData.Vault.DriversLicenses -> SearchType.Vault.DriversLicenses
+                    SearchTypeData.Vault.Passports -> SearchType.Vault.Passports
                     SearchTypeData.Vault.Trash -> SearchType.Vault.Trash
                     SearchTypeData.Vault.VerificationCodes -> SearchType.Vault.VerificationCodes
                     null -> SearchType.Vault.All

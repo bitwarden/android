@@ -315,6 +315,10 @@ class VaultAddEditViewModel @Inject constructor(
                 handleDriversLicenseTypeActions(action)
             }
 
+            is VaultAddEditAction.ItemType.PassportType -> {
+                handlePassportTypeActions(action)
+            }
+
             is VaultAddEditAction.Internal -> handleInternalActions(action)
         }
     }
@@ -1802,6 +1806,81 @@ class VaultAddEditViewModel @Inject constructor(
 
     //endregion Driver's License Type Handlers
 
+    //region Passport Type Handlers
+
+    @Suppress("LongMethod")
+    private fun handlePassportTypeActions(
+        action: VaultAddEditAction.ItemType.PassportType,
+    ) {
+        when (action) {
+            is VaultAddEditAction.ItemType.PassportType.SurnameTextChange -> {
+                updatePassportContent { it.copy(surname = action.surname) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.GivenNameTextChange -> {
+                updatePassportContent { it.copy(givenName = action.givenName) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.DateOfBirthMonthSelect -> {
+                updatePassportContent { it.copy(dobMonth = action.month.number) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.DateOfBirthDayTextChange -> {
+                updatePassportContent { it.copy(dobDay = action.day) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.DateOfBirthYearTextChange -> {
+                updatePassportContent { it.copy(dobYear = action.year) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.NationalityTextChange -> {
+                updatePassportContent { it.copy(nationality = action.nationality) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.PassportNumberTextChange -> {
+                updatePassportContent { it.copy(passportNumber = action.passportNumber) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.PassportTypeTextChange -> {
+                updatePassportContent { it.copy(passportType = action.passportType) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.IssuingCountryTextChange -> {
+                updatePassportContent { it.copy(issuingCountry = action.country) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.IssuingAuthorityTextChange -> {
+                updatePassportContent { it.copy(issuingAuthority = action.authority) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.IssueMonthSelect -> {
+                updatePassportContent { it.copy(issueMonth = action.month.number) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.IssueDayTextChange -> {
+                updatePassportContent { it.copy(issueDay = action.day) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.IssueYearTextChange -> {
+                updatePassportContent { it.copy(issueYear = action.year) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.ExpirationMonthSelect -> {
+                updatePassportContent { it.copy(expirationMonth = action.month.number) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.ExpirationDayTextChange -> {
+                updatePassportContent { it.copy(expirationDay = action.day) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.ExpirationYearTextChange -> {
+                updatePassportContent { it.copy(expirationYear = action.year) }
+            }
+        }
+    }
+
+    //endregion Passport Type Handlers
+
     //region Internal Type Handlers
 
     private fun handleInternalActions(action: VaultAddEditAction.Internal) {
@@ -2577,6 +2656,16 @@ class VaultAddEditViewModel @Inject constructor(
     ) {
         updateContent { currentContent ->
             (currentContent.type as? VaultAddEditState.ViewState.Content.ItemType.DriversLicense)
+                ?.let { currentContent.copy(type = block(it)) }
+        }
+    }
+
+    private inline fun updatePassportContent(
+        crossinline block: (VaultAddEditState.ViewState.Content.ItemType.Passport) ->
+        VaultAddEditState.ViewState.Content.ItemType.Passport,
+    ) {
+        updateContent { currentContent ->
+            (currentContent.type as? VaultAddEditState.ViewState.Content.ItemType.Passport)
                 ?.let { currentContent.copy(type = block(it)) }
         }
     }
@@ -4212,6 +4301,98 @@ sealed class VaultAddEditAction {
              * Fired when the license class text input is changed.
              */
             data class LicenseClassTextChange(val licenseClass: String) : DriversLicenseType()
+        }
+
+        /**
+         * Represents actions specific to the Passport type.
+         */
+        sealed class PassportType : ItemType() {
+
+            /**
+             * Fired when the surname text input is changed.
+             */
+            data class SurnameTextChange(val surname: String) : PassportType()
+
+            /**
+             * Fired when the given name text input is changed.
+             */
+            data class GivenNameTextChange(val givenName: String) : PassportType()
+
+            /**
+             * Fired when the date of birth month is selected. The selected
+             * [VaultCardExpirationMonth] is reused for visual parity with the Card item type;
+             * the canonical state model stores the numeric month as a string.
+             */
+            data class DateOfBirthMonthSelect(
+                val month: VaultCardExpirationMonth,
+            ) : PassportType()
+
+            /**
+             * Fired when the date of birth day text input is changed.
+             */
+            data class DateOfBirthDayTextChange(val day: String) : PassportType()
+
+            /**
+             * Fired when the date of birth year text input is changed.
+             */
+            data class DateOfBirthYearTextChange(val year: String) : PassportType()
+
+            /**
+             * Fired when the nationality text input is changed.
+             */
+            data class NationalityTextChange(val nationality: String) : PassportType()
+
+            /**
+             * Fired when the passport number text input is changed.
+             */
+            data class PassportNumberTextChange(val passportNumber: String) : PassportType()
+
+            /**
+             * Fired when the passport type text input is changed.
+             */
+            data class PassportTypeTextChange(val passportType: String) : PassportType()
+
+            /**
+             * Fired when the issuing country text input is changed.
+             */
+            data class IssuingCountryTextChange(val country: String) : PassportType()
+
+            /**
+             * Fired when the issuing authority text input is changed.
+             */
+            data class IssuingAuthorityTextChange(val authority: String) : PassportType()
+
+            /**
+             * Fired when the issue month is selected.
+             */
+            data class IssueMonthSelect(val month: VaultCardExpirationMonth) : PassportType()
+
+            /**
+             * Fired when the issue day text input is changed.
+             */
+            data class IssueDayTextChange(val day: String) : PassportType()
+
+            /**
+             * Fired when the issue year text input is changed.
+             */
+            data class IssueYearTextChange(val year: String) : PassportType()
+
+            /**
+             * Fired when the expiration month is selected.
+             */
+            data class ExpirationMonthSelect(
+                val month: VaultCardExpirationMonth,
+            ) : PassportType()
+
+            /**
+             * Fired when the expiration day text input is changed.
+             */
+            data class ExpirationDayTextChange(val day: String) : PassportType()
+
+            /**
+             * Fired when the expiration year text input is changed.
+             */
+            data class ExpirationYearTextChange(val year: String) : PassportType()
         }
     }
 

@@ -1320,6 +1320,17 @@ class VaultItemListingViewModel @Inject constructor(
         //  overflow plumbing is verified end-to-end before the SDK lands.
     }
 
+    @Suppress("UnusedParameter")
+    private fun handleCopyPassportNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyPassportNumberClick,
+    ) {
+        // TODO(PM-32009): Read the passport number from
+        //  `getCipherViewOrNull(action.cipherId)?.passport?.passportNumber` and copy it with the
+        //  `BitwardenString.passport_number` toast descriptor once the SDK exposes a
+        //  `PassportView` on `CipherView`. The action is wired through today so the overflow
+        //  plumbing is verified end-to-end before the SDK lands.
+    }
+
     private fun handleCopyPasswordClick(
         action: ListingItemOverflowAction.VaultAction.CopyPasswordClick,
     ) {
@@ -1619,6 +1630,10 @@ class VaultItemListingViewModel @Inject constructor(
 
             is ListingItemOverflowAction.VaultAction.CopyLicenseNumberClick -> {
                 handleCopyLicenseNumberClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyPassportNumberClick -> {
+                handleCopyPassportNumberClick(overflowAction)
             }
 
             is ListingItemOverflowAction.VaultAction.CopyPasswordClick -> {
@@ -2944,6 +2959,7 @@ data class VaultItemListingState(
             ItemListingType.Vault.SshKey,
             ItemListingType.Vault.BankAccount,
             ItemListingType.Vault.DriversLicense,
+            ItemListingType.Vault.Passport,
             ItemListingType.Vault.Trash,
             ItemListingType.Send.SendFile,
             ItemListingType.Send.SendText,
@@ -3399,6 +3415,14 @@ data class VaultItemListingState(
              */
             data object DriversLicense : Vault() {
                 override val titleText: Text get() = BitwardenString.drivers_licenses.asText()
+                override val hasFab: Boolean get() = true
+            }
+
+            /**
+             * A Passport item listing.
+             */
+            data object Passport : Vault() {
+                override val titleText: Text get() = BitwardenString.passports.asText()
                 override val hasFab: Boolean get() = true
             }
 

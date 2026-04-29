@@ -251,6 +251,19 @@ sealed class ListingItemOverflowAction : Parcelable {
         }
 
         /**
+         * Click on the copy passport number overflow option.
+         */
+        @Parcelize
+        data class CopyPassportNumberClick(
+            val cipherId: String,
+            override val requiresPasswordReprompt: Boolean,
+        ) : VaultAction() {
+            override val title: Text get() = BitwardenString.copy_passport_number.asText()
+            override val contentDescription: Text get() = title
+            override val speedBump: BitwardenTwoButtonDialogData? get() = null
+        }
+
+        /**
          * Click on the copy secure note overflow option.
          */
         @Parcelize

@@ -30,6 +30,10 @@ fun VaultItemListingState.ItemListingType.toSearchType(): SearchType =
             SearchType.Vault.DriversLicenses
         }
 
+        is VaultItemListingState.ItemListingType.Vault.Passport -> {
+            SearchType.Vault.Passports
+        }
+
         is VaultItemListingState.ItemListingType.Vault.Trash -> SearchType.Vault.Trash
         is VaultItemListingState.ItemListingType.Vault.Collection -> {
             SearchType.Vault.Collection(collectionId = collectionId)
@@ -63,6 +67,10 @@ fun VaultItemListingState.ItemListingType.Vault.toVaultItemCipherType(): VaultIt
 
         is VaultItemListingState.ItemListingType.Vault.DriversLicense -> {
             VaultItemCipherType.DRIVERS_LICENSE
+        }
+
+        is VaultItemListingState.ItemListingType.Vault.Passport -> {
+            VaultItemCipherType.PASSPORT
         }
 
         is VaultItemListingState.ItemListingType.Vault.Login -> VaultItemCipherType.LOGIN
