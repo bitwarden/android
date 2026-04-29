@@ -86,7 +86,6 @@ class VaultStateExtensionsTest {
             itemTypesCount = 4,
             sshKeyItemsCount = 0,
             archivedItemsCount = 0,
-            archiveEnabled = true,
             archiveSubText = null,
             archiveEndIcon = null,
             showCardGroup = true,

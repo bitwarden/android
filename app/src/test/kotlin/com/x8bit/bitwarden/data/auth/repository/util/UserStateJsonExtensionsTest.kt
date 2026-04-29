@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
+import com.bitwarden.core.MasterPasswordUnlockData
+import com.bitwarden.crypto.Kdf
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.KdfJson
@@ -18,6 +20,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
+import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfRequestModel
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
@@ -29,12 +32,26 @@ import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
 @Suppress("LargeClass")
 class UserStateJsonExtensionsTest {
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(Kdf::toKdfRequestModel)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(Kdf::toKdfRequestModel)
+    }
 
     @Suppress("MaxLineLength")
     @Test
@@ -288,7 +305,73 @@ class UserStateJsonExtensionsTest {
                     "activeUserId" to originalAccount,
                 ),
             )
-                .toUserStateJsonWithPassword(),
+                .toUserStateJsonWithPassword(masterPasswordUnlock = null),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toUserStateJsonWithPassword with masterPasswordUnlock should update active account to set hasMasterPassword and masterPasswordUnlock`() {
+        val originalProfile = AccountJson.Profile(
+            userId = "activeUserId",
+            email = "email",
+            isEmailVerified = true,
+            name = "name",
+            stamp = null,
+            organizationId = null,
+            avatarColorHex = null,
+            hasPremium = true,
+            forcePasswordResetReason = ForcePasswordResetReason
+                .TDE_USER_WITHOUT_PASSWORD_HAS_PASSWORD_RESET_PERMISSION,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 600000,
+            kdfMemory = 16,
+            kdfParallelism = 4,
+            userDecryptionOptions = null,
+            isTwoFactorEnabled = false,
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
+        )
+        val originalAccount = AccountJson(
+            profile = originalProfile,
+            tokens = mockk(),
+            settings = mockk(),
+        )
+        val kdf = mockk<KdfJson>()
+        val masterKeyWrappedUserKey = "masterKeyWrappedUserKey"
+        val salt = "salt"
+        val masterPasswordUnlock = MasterPasswordUnlockData(
+            kdf = mockk<Kdf> { every { toKdfRequestModel() } returns kdf },
+            masterKeyWrappedUserKey = masterKeyWrappedUserKey,
+            salt = salt,
+        )
+        assertEquals(
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to originalAccount.copy(
+                        profile = originalProfile.copy(
+                            forcePasswordResetReason = null,
+                            userDecryptionOptions = UserDecryptionOptionsJson(
+                                hasMasterPassword = true,
+                                keyConnectorUserDecryptionOptions = null,
+                                trustedDeviceUserDecryptionOptions = null,
+                                masterPasswordUnlock = MasterPasswordUnlockDataJson(
+                                    kdf = kdf,
+                                    masterKeyWrappedUserKey = masterKeyWrappedUserKey,
+                                    salt = salt,
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to originalAccount,
+                ),
+            )
+                .toUserStateJsonWithPassword(masterPasswordUnlock = masterPasswordUnlock),
         )
     }
 
@@ -352,7 +435,7 @@ class UserStateJsonExtensionsTest {
                     "activeUserId" to originalAccount,
                 ),
             )
-                .toUserStateJsonWithPassword(),
+                .toUserStateJsonWithPassword(masterPasswordUnlock = null),
         )
     }
 

@@ -19,6 +19,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
 import java.time.Clock
 import javax.inject.Singleton
 
@@ -77,7 +78,9 @@ object PlatformNetworkModule {
     @Singleton
     fun provideBitwardenServiceClient(
         serviceClientConfig: BitwardenServiceClientConfig,
+        json: Json,
     ): BitwardenServiceClient = bitwardenServiceClient(
         config = serviceClientConfig,
+        json = json,
     )
 }

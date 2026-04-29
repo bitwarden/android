@@ -36,6 +36,7 @@ data class SyncResponseJson(
     @JsonNames("Profile")
     val profile: Profile,
 
+    @Contextual
     @SerialName("ciphers")
     val ciphers: List<Cipher>?,
 

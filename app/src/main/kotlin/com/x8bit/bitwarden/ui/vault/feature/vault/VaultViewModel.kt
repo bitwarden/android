@@ -145,7 +145,6 @@ class VaultViewModel @Inject constructor(
             viewState = VaultState.ViewState.Loading,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             isPremium = activeAccount.isPremium,
-            isArchiveEnabled = featureFlagManager.getFeatureFlag(FlagKey.ArchiveItems),
             isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
             baseIconUrl = activeAccount.environment.environmentUrlData.baseIconUrl,
             hasMasterPassword = activeAccount.hasMasterPassword,
@@ -277,11 +276,6 @@ class VaultViewModel @Inject constructor(
 
         featureFlagManager.getFeatureFlagFlow(FlagKey.CredentialExchangeProtocolExport)
             .map { VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-        featureFlagManager
-            .getFeatureFlagFlow(FlagKey.ArchiveItems)
-            .map { VaultAction.Internal.ArchiveItemsFlagUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -996,10 +990,6 @@ class VaultViewModel @Inject constructor(
                 handleCredentialExchangeProtocolExportFlagUpdateReceive(action)
             }
 
-            is VaultAction.Internal.ArchiveItemsFlagUpdateReceive -> {
-                handleArchiveItemsFlagUpdateReceive(action)
-            }
-
             is VaultAction.Internal.ArchiveCipherReceive -> handleArchiveCipherReceive(action)
             is VaultAction.Internal.UnarchiveCipherReceive -> handleUnarchiveCipherReceive(action)
             is VaultAction.Internal.IntroducingArchiveActionCardDismissedFlowReceive -> {
@@ -1078,12 +1068,6 @@ class VaultViewModel @Inject constructor(
                 credentialExchangeRegistryManager.unregister()
             }
         }
-    }
-
-    private fun handleArchiveItemsFlagUpdateReceive(
-        action: VaultAction.Internal.ArchiveItemsFlagUpdateReceive,
-    ) {
-        mutableStateFlow.update { it.copy(isArchiveEnabled = action.isEnabled) }
     }
 
     private fun handleArchiveCipherReceive(action: VaultAction.Internal.ArchiveCipherReceive) {
@@ -1297,7 +1281,6 @@ class VaultViewModel @Inject constructor(
                 ?: BitwardenString.generic_error_message.asText(),
             isRefreshing = false,
             restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
-            isArchiveEnabled = state.isArchiveEnabled,
         )
     }
 
@@ -1362,7 +1345,6 @@ class VaultViewModel @Inject constructor(
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
-                    isArchiveEnabled = state.isArchiveEnabled,
                     totpItemsCount = state.totpCodesCount,
                 ),
                 dialog = dialog,
@@ -1408,7 +1390,6 @@ class VaultViewModel @Inject constructor(
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
-                    isArchiveEnabled = state.isArchiveEnabled,
                     totpItemsCount = state.totpCodesCount,
                 ),
             )
@@ -1561,7 +1542,6 @@ data class VaultState(
     val flightRecorderSnackBar: BitwardenSnackbarData?,
     // Internal-use properties
     val isSwitchingAccounts: Boolean = false,
-    val isArchiveEnabled: Boolean,
     val isPremium: Boolean,
     val hasMasterPassword: Boolean,
     private val isPullToRefreshSettingEnabled: Boolean,
@@ -1584,9 +1564,7 @@ data class VaultState(
             ActionCardState.UpgradePremium
                 .takeIf { isPremiumUpgradeBannerEligible }
                 ?: ActionCardState.IntroducingArchive.takeIf {
-                    isPremium &&
-                        !isIntroducingArchiveActionCardDismissed &&
-                        isArchiveEnabled
+                    isPremium && !isIntroducingArchiveActionCardDismissed
                 }
         }
 
@@ -1673,7 +1651,6 @@ data class VaultState(
          * @property collectionItems The list of collections to be displayed.
          * @property trashItemsCount The number of items present in the trash.
          * @property archivedItemsCount The number of items present in archive.
-         * @property archiveEnabled Is the archive feature enabled.
          * @property archiveSubText The subtext to be displayed on the archive item.
          * @property archiveEndIcon The end icon to be displayed on the archive item.
          * @property showCardGroup Is the card group available for display.
@@ -1693,7 +1670,6 @@ data class VaultState(
             val collectionItems: List<CollectionItem>,
             val trashItemsCount: Int,
             val archivedItemsCount: Int?,
-            val archiveEnabled: Boolean,
             val archiveSubText: Text?,
             @field:DrawableRes val archiveEndIcon: Int?,
             val showCardGroup: Boolean,
@@ -2457,13 +2433,6 @@ sealed class VaultAction {
         ) : Internal()
 
         /**
-         * Indicates that the Archive Items flag has been updated.
-         */
-        data class ArchiveItemsFlagUpdateReceive(
-            val isEnabled: Boolean,
-        ) : Internal()
-
-        /**
          * Indicates that the archive cipher result has been received.
          */
         data class ArchiveCipherReceive(
@@ -2506,7 +2475,6 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
     errorMessage: Text,
     isRefreshing: Boolean,
     restrictItemTypesPolicyOrgIds: List<String>,
-    isArchiveEnabled: Boolean,
 ) {
     this.update {
         if (vaultData != null) {
@@ -2518,7 +2486,6 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                     vaultFilterType = vaultFilterType,
                     isIconLoadingDisabled = isIconLoadingDisabled,
                     restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
-                    isArchiveEnabled = isArchiveEnabled,
                 ),
                 dialog = VaultState.DialogState.Error(
                     title = errorTitle,

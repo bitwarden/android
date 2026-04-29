@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository
 
 import app.cash.turbine.test
+import com.bitwarden.auth.JitMasterPasswordRegistrationResponse
 import com.bitwarden.core.AuthRequestMethod
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.InitUserCryptoMethod
@@ -13,6 +14,7 @@ import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
@@ -124,6 +126,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.CookieCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
+import com.x8bit.bitwarden.data.auth.repository.util.accountKeysJson
 import com.x8bit.bitwarden.data.auth.repository.util.toRemovedPasswordUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
@@ -131,6 +134,7 @@ import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -289,6 +293,9 @@ class AuthRepositoryTest {
     private val toastManager: ToastManager = mockk {
         every { show(messageId = any(), duration = any()) } just runs
     }
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every { getFeatureFlag(FlagKey.V2EncryptionJitPassword) } returns true
+    }
 
     private val repository: AuthRepository = AuthRepositoryImpl(
         clock = FIXED_CLOCK,
@@ -317,6 +324,7 @@ class AuthRepositoryTest {
         userStateManager = userStateManager,
         kdfManager = kdfManager,
         toastManager = toastManager,
+        featureFlagManager = featureFlagManager,
     )
 
     @BeforeEach
@@ -5682,73 +5690,331 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `setPassword with authSdkSource hashPassword failure should return Error`() = runTest {
-        val password = "password"
-        val error = Throwable("Fail")
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        coEvery {
-            authSdkSource.hashPassword(
-                email = EMAIL,
+    fun `setPassword with authSdkSource makeRegisterKeys failure should return Error for v1`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.V2EncryptionJitPassword)
+            } returns false
+            val password = "password"
+            val error = Throwable("Fail")
+            val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            coEvery {
+                authSdkSource.makeRegisterKeys(
+                    email = EMAIL,
+                    password = password,
+                    kdf = kdf,
+                )
+            } returns error.asFailure()
+
+            val result = repository.setPassword(
+                organizationIdentifier = "organizationId",
                 password = password,
-                kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
+                passwordHint = "passwordHint",
             )
-        } returns error.asFailure()
 
-        val result = repository.setPassword(
-            organizationIdentifier = "organizationId",
-            password = password,
-            passwordHint = "passwordHint",
-        )
-
-        assertEquals(SetPasswordResult.Error(error = error), result)
-        fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
-        fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
-        fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
-    }
+            assertEquals(SetPasswordResult.Error(error = error), result)
+            fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
+            fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
+            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
+        }
 
     @Test
-    fun `setPassword with authSdkSource makeRegisterKeys failure should return Error`() = runTest {
-        val password = "password"
-        val passwordHash = "passwordHash"
-        val error = Throwable("Fail")
-        val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        coEvery {
-            authSdkSource.hashPassword(
-                email = EMAIL,
-                password = password,
-                kdf = kdf,
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
-            )
-        } returns passwordHash.asSuccess()
-        coEvery {
-            authSdkSource.makeRegisterKeys(
-                email = EMAIL,
-                password = password,
-                kdf = kdf,
-            )
-        } returns error.asFailure()
+    fun `setPassword with getOrganizationAutoEnrollStatus failure should return Error`() =
+        runTest {
+            val error = Throwable("Fail")
+            val organizationIdentifier = "organizationIdentifier"
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            coEvery {
+                organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
+            } returns error.asFailure()
 
-        val result = repository.setPassword(
-            organizationIdentifier = "organizationId",
-            password = password,
-            passwordHint = "passwordHint",
-        )
+            val result = repository.setPassword(
+                organizationIdentifier = organizationIdentifier,
+                password = "password",
+                passwordHint = "passwordHint",
+            )
 
-        assertEquals(SetPasswordResult.Error(error = error), result)
-        fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
-        fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
-        fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
-        fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
-    }
+            assertEquals(SetPasswordResult.Error(error = error), result)
+            coVerify(exactly = 1) {
+                organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
+            }
+            fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
+            fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
+        }
+
+    @Test
+    fun `setPassword with getOrganizationKeys failure should return Error`() =
+        runTest {
+            val error = Throwable("Fail")
+            val organizationIdentifier = "organizationIdentifier"
+            val organizationId = "organizationId"
+            val enrollResponse = OrganizationAutoEnrollStatusResponseJson(
+                organizationId = organizationId,
+                isResetPasswordEnabled = true,
+            )
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            coEvery {
+                organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
+            } returns enrollResponse.asSuccess()
+            coEvery {
+                organizationService.getOrganizationKeys(organizationId)
+            } returns error.asFailure()
+
+            val result = repository.setPassword(
+                organizationIdentifier = organizationIdentifier,
+                password = "password",
+                passwordHint = "passwordHint",
+            )
+
+            assertEquals(SetPasswordResult.Error(error = error), result)
+            coVerify(exactly = 1) {
+                organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
+                organizationService.getOrganizationKeys(organizationId)
+            }
+            fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
+            fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
+        }
+
+    @Test
+    fun `setPassword with postKeysForJitPasswordRegistration failure should return Error`() =
+        runTest {
+            val error = Throwable("Fail")
+            val password = "password"
+            val passwordHint = "passwordHint"
+            val organizationIdentifier = "organizationIdentifier"
+            val organizationId = "organizationId"
+            val isResetPasswordEnabled = true
+            val enrollResponse = OrganizationAutoEnrollStatusResponseJson(
+                organizationId = organizationId,
+                isResetPasswordEnabled = isResetPasswordEnabled,
+            )
+            val orgPublicKey = "orgPublicKey"
+            val orgKeysResponse = OrganizationKeysResponseJson(
+                privateKey = "orgPrivateKey",
+                publicKey = orgPublicKey,
+            )
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            coEvery {
+                organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
+            } returns enrollResponse.asSuccess()
+            coEvery {
+                organizationService.getOrganizationKeys(organizationId)
+            } returns orgKeysResponse.asSuccess()
+            coEvery {
+                authSdkSource.postKeysForJitPasswordRegistration(
+                    userId = USER_ID_1,
+                    organizationId = organizationId,
+                    organizationPublicKey = orgPublicKey,
+                    organizationSsoIdentifier = organizationIdentifier,
+                    salt = EMAIL,
+                    masterPassword = password,
+                    masterPasswordHint = passwordHint,
+                    shouldResetPasswordEnroll = isResetPasswordEnabled,
+                )
+            } returns error.asFailure()
+
+            val result = repository.setPassword(
+                organizationIdentifier = organizationIdentifier,
+                password = password,
+                passwordHint = passwordHint,
+            )
+
+            assertEquals(SetPasswordResult.Error(error = error), result)
+            coVerify(exactly = 1) {
+                organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
+                organizationService.getOrganizationKeys(organizationId)
+                authSdkSource.postKeysForJitPasswordRegistration(
+                    userId = USER_ID_1,
+                    organizationId = organizationId,
+                    organizationPublicKey = orgPublicKey,
+                    organizationSsoIdentifier = organizationIdentifier,
+                    salt = EMAIL,
+                    masterPassword = password,
+                    masterPasswordHint = passwordHint,
+                    shouldResetPasswordEnroll = isResetPasswordEnabled,
+                )
+            }
+            fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
+            fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
+        }
+
+    @Test
+    fun `setPassword with unlockVaultWithMasterPassword failure should return Error`() =
+        runTest {
+            val error = Throwable("Fail")
+            val unlockError = VaultUnlockResult.GenericError(error = error)
+            val password = "password"
+            val passwordHint = "passwordHint"
+            val organizationIdentifier = "organizationIdentifier"
+            val organizationId = "organizationId"
+            val isResetPasswordEnabled = true
+            val enrollResponse = OrganizationAutoEnrollStatusResponseJson(
+                organizationId = organizationId,
+                isResetPasswordEnabled = isResetPasswordEnabled,
+            )
+            val orgPublicKey = "orgPublicKey"
+            val orgKeysResponse = OrganizationKeysResponseJson(
+                privateKey = "orgPrivateKey",
+                publicKey = orgPublicKey,
+            )
+            val privateKey = "privateKey"
+            val accountCryptographicState = WrappedAccountCryptographicState.V2(
+                privateKey = privateKey,
+                securityState = "securityState",
+                signedPublicKey = "signedPublicKey",
+                signingKey = "signingKey",
+            )
+            val jitMasterPasswordResponse = JitMasterPasswordRegistrationResponse(
+                accountCryptographicState = accountCryptographicState,
+                masterPasswordUnlock = MasterPasswordUnlockData(
+                    kdf = Kdf.Pbkdf2(iterations = 1u),
+                    masterKeyWrappedUserKey = "masterKeyWrappedUserKey",
+                    salt = EMAIL,
+                ),
+                userKey = "userKey",
+            )
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            coEvery {
+                organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
+            } returns enrollResponse.asSuccess()
+            coEvery {
+                organizationService.getOrganizationKeys(organizationId)
+            } returns orgKeysResponse.asSuccess()
+            coEvery {
+                authSdkSource.postKeysForJitPasswordRegistration(
+                    userId = USER_ID_1,
+                    organizationId = organizationId,
+                    organizationPublicKey = orgPublicKey,
+                    organizationSsoIdentifier = organizationIdentifier,
+                    salt = EMAIL,
+                    masterPassword = password,
+                    masterPasswordHint = passwordHint,
+                    shouldResetPasswordEnroll = isResetPasswordEnabled,
+                )
+            } returns jitMasterPasswordResponse.asSuccess()
+            coEvery {
+                vaultRepository.unlockVaultWithMasterPassword(password)
+            } returns unlockError
+
+            val result = repository.setPassword(
+                organizationIdentifier = organizationIdentifier,
+                password = password,
+                passwordHint = passwordHint,
+            )
+
+            assertEquals(SetPasswordResult.Error(error = error), result)
+            coVerify(exactly = 1) {
+                organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
+                organizationService.getOrganizationKeys(organizationId)
+                authSdkSource.postKeysForJitPasswordRegistration(
+                    userId = USER_ID_1,
+                    organizationId = organizationId,
+                    organizationPublicKey = orgPublicKey,
+                    organizationSsoIdentifier = organizationIdentifier,
+                    salt = EMAIL,
+                    masterPassword = password,
+                    masterPasswordHint = passwordHint,
+                    shouldResetPasswordEnroll = isResetPasswordEnabled,
+                )
+                vaultRepository.unlockVaultWithMasterPassword(password)
+            }
+            fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = privateKey)
+            fakeAuthDiskSource.assertAccountKeys(
+                userId = USER_ID_1,
+                accountKeys = accountCryptographicState.accountKeysJson,
+            )
+        }
+
+    @Test
+    fun `setPassword with no failures should return Success`() =
+        runTest {
+            val password = "password"
+            val passwordHint = "passwordHint"
+            val organizationIdentifier = "organizationIdentifier"
+            val organizationId = "organizationId"
+            val isResetPasswordEnabled = true
+            val enrollResponse = OrganizationAutoEnrollStatusResponseJson(
+                organizationId = organizationId,
+                isResetPasswordEnabled = isResetPasswordEnabled,
+            )
+            val orgPublicKey = "orgPublicKey"
+            val orgKeysResponse = OrganizationKeysResponseJson(
+                privateKey = "orgPrivateKey",
+                publicKey = orgPublicKey,
+            )
+            val privateKey = "privateKey"
+            val accountCryptographicState = WrappedAccountCryptographicState.V2(
+                privateKey = privateKey,
+                securityState = "securityState",
+                signedPublicKey = "signedPublicKey",
+                signingKey = "signingKey",
+            )
+            val jitMasterPasswordResponse = JitMasterPasswordRegistrationResponse(
+                accountCryptographicState = accountCryptographicState,
+                masterPasswordUnlock = MasterPasswordUnlockData(
+                    kdf = Kdf.Pbkdf2(iterations = 1u),
+                    masterKeyWrappedUserKey = "masterKeyWrappedUserKey",
+                    salt = EMAIL,
+                ),
+                userKey = "userKey",
+            )
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            coEvery {
+                organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
+            } returns enrollResponse.asSuccess()
+            coEvery {
+                organizationService.getOrganizationKeys(organizationId)
+            } returns orgKeysResponse.asSuccess()
+            coEvery {
+                authSdkSource.postKeysForJitPasswordRegistration(
+                    userId = USER_ID_1,
+                    organizationId = organizationId,
+                    organizationPublicKey = orgPublicKey,
+                    organizationSsoIdentifier = organizationIdentifier,
+                    salt = EMAIL,
+                    masterPassword = password,
+                    masterPasswordHint = passwordHint,
+                    shouldResetPasswordEnroll = isResetPasswordEnabled,
+                )
+            } returns jitMasterPasswordResponse.asSuccess()
+            coEvery {
+                vaultRepository.unlockVaultWithMasterPassword(password)
+            } returns VaultUnlockResult.Success
+
+            val result = repository.setPassword(
+                organizationIdentifier = organizationIdentifier,
+                password = password,
+                passwordHint = passwordHint,
+            )
+
+            assertEquals(SetPasswordResult.Success, result)
+            coVerify(exactly = 1) {
+                organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
+                organizationService.getOrganizationKeys(organizationId)
+                authSdkSource.postKeysForJitPasswordRegistration(
+                    userId = USER_ID_1,
+                    organizationId = organizationId,
+                    organizationPublicKey = orgPublicKey,
+                    organizationSsoIdentifier = organizationIdentifier,
+                    salt = EMAIL,
+                    masterPassword = password,
+                    masterPasswordHint = passwordHint,
+                    shouldResetPasswordEnroll = isResetPasswordEnabled,
+                )
+                vaultRepository.unlockVaultWithMasterPassword(password)
+            }
+            fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = privateKey)
+            fakeAuthDiskSource.assertAccountKeys(
+                userId = USER_ID_1,
+                accountKeys = accountCryptographicState.accountKeysJson,
+            )
+        }
 
     @Test
     fun `setPassword with vaultSdkSource updatePassword failure should return Error`() = runTest {
         val password = "password"
-        val passwordHash = "passwordHash"
         val error = Throwable("Fail")
-        val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1.copy(
             accounts = mapOf(
                 USER_ID_1 to ACCOUNT_1.copy(
@@ -5760,14 +6026,6 @@ class AuthRepositoryTest {
             ),
         )
         coEvery {
-            authSdkSource.hashPassword(
-                email = EMAIL,
-                password = password,
-                kdf = kdf,
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
-            )
-        } returns passwordHash.asSuccess()
-        coEvery {
             vaultSdkSource.updatePassword(userId = USER_ID_1, newPassword = password)
         } returns error.asFailure()
 
@@ -5778,187 +6036,170 @@ class AuthRepositoryTest {
         )
 
         assertEquals(SetPasswordResult.Error(error = error), result)
-        fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
         fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
         fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
     }
 
     @Test
-    fun `setPassword with accountsService setPassword failure should return Error`() = runTest {
-        val password = "password"
-        val passwordHash = "passwordHash"
-        val passwordHint = "passwordHint"
-        val organizationId = ORGANIZATION_IDENTIFIER
-        val encryptedUserKey = "encryptedUserKey"
-        val privateRsaKey = "privateRsaKey"
-        val publicRsaKey = "publicRsaKey"
-        val profile = SINGLE_USER_STATE_1.activeAccount.profile
-        val kdf = profile.toSdkParams()
-        val error = Throwable("Fail")
-        val registerKeyResponse = RegisterKeyResponse(
-            masterPasswordHash = passwordHash,
-            encryptedUserKey = encryptedUserKey,
-            keys = RsaKeyPair(public = publicRsaKey, private = privateRsaKey),
-        )
-        val setPasswordRequestJson = SetPasswordRequestJson(
-            passwordHash = passwordHash,
-            passwordHint = passwordHint,
-            organizationIdentifier = organizationId,
-            kdfIterations = profile.kdfIterations,
-            kdfMemory = profile.kdfMemory,
-            kdfParallelism = profile.kdfParallelism,
-            kdfType = profile.kdfType,
-            key = encryptedUserKey,
-            keys = RegisterRequestJson.Keys(
-                publicKey = publicRsaKey,
-                encryptedPrivateKey = privateRsaKey,
-            ),
-        )
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        coEvery {
-            authSdkSource.hashPassword(
-                email = EMAIL,
-                password = password,
-                kdf = kdf,
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
+    fun `setPassword with accountsService setPassword failure should return Error for v1`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.V2EncryptionJitPassword)
+            } returns false
+            val password = "password"
+            val passwordHash = "passwordHash"
+            val passwordHint = "passwordHint"
+            val organizationId = ORGANIZATION_IDENTIFIER
+            val encryptedUserKey = "encryptedUserKey"
+            val privateRsaKey = "privateRsaKey"
+            val publicRsaKey = "publicRsaKey"
+            val profile = SINGLE_USER_STATE_1.activeAccount.profile
+            val kdf = profile.toSdkParams()
+            val error = Throwable("Fail")
+            val registerKeyResponse = RegisterKeyResponse(
+                masterPasswordHash = passwordHash,
+                encryptedUserKey = encryptedUserKey,
+                keys = RsaKeyPair(public = publicRsaKey, private = privateRsaKey),
             )
-        } returns passwordHash.asSuccess()
-        coEvery {
-            authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
-        } returns registerKeyResponse.asSuccess()
-        coEvery {
-            accountsService.setPassword(body = setPasswordRequestJson)
-        } returns error.asFailure()
-
-        val result = repository.setPassword(
-            organizationIdentifier = organizationId,
-            password = password,
-            passwordHint = passwordHint,
-        )
-
-        assertEquals(SetPasswordResult.Error(error = error), result)
-        fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
-        fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
-        fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
-        fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
-    }
-
-    @Test
-    fun `setPassword with accountsService setPassword success should return Success`() = runTest {
-        val password = "password"
-        val passwordHash = "passwordHash"
-        val passwordHint = "passwordHint"
-        val organizationIdentifier = ORGANIZATION_IDENTIFIER
-        val organizationId = "orgId"
-        val encryptedUserKey = "encryptedUserKey"
-        val privateRsaKey = "privateRsaKey"
-        val publicRsaKey = "publicRsaKey"
-        val publicOrgKey = "publicOrgKey"
-        val resetPasswordKey = "resetPasswordKey"
-        val profile = SINGLE_USER_STATE_1.activeAccount.profile
-        val kdf = profile.toSdkParams()
-        val registerKeyResponse = RegisterKeyResponse(
-            masterPasswordHash = passwordHash,
-            encryptedUserKey = encryptedUserKey,
-            keys = RsaKeyPair(public = publicRsaKey, private = privateRsaKey),
-        )
-        val setPasswordRequestJson = SetPasswordRequestJson(
-            passwordHash = passwordHash,
-            passwordHint = passwordHint,
-            organizationIdentifier = organizationIdentifier,
-            kdfIterations = profile.kdfIterations,
-            kdfMemory = profile.kdfMemory,
-            kdfParallelism = profile.kdfParallelism,
-            kdfType = profile.kdfType,
-            key = encryptedUserKey,
-            keys = RegisterRequestJson.Keys(
-                publicKey = publicRsaKey,
-                encryptedPrivateKey = privateRsaKey,
-            ),
-        )
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        coEvery {
-            authSdkSource.hashPassword(
-                email = EMAIL,
-                password = password,
-                kdf = kdf,
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
-            )
-        } returns passwordHash.asSuccess()
-        coEvery {
-            authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
-        } returns registerKeyResponse.asSuccess()
-        coEvery {
-            accountsService.setPassword(body = setPasswordRequestJson)
-        } returns Unit.asSuccess()
-        coEvery {
-            organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
-        } returns OrganizationAutoEnrollStatusResponseJson(
-            organizationId = organizationId,
-            isResetPasswordEnabled = true,
-        )
-            .asSuccess()
-        coEvery {
-            organizationService.getOrganizationKeys(organizationId)
-        } returns OrganizationKeysResponseJson(
-            privateKey = "",
-            publicKey = publicOrgKey,
-        )
-            .asSuccess()
-        coEvery {
-            organizationService.organizationResetPasswordEnroll(
-                organizationId = organizationId,
-                userId = profile.userId,
+            val setPasswordRequestJson = SetPasswordRequestJson(
                 passwordHash = passwordHash,
-                resetPasswordKey = resetPasswordKey,
+                passwordHint = passwordHint,
+                organizationIdentifier = organizationId,
+                kdfIterations = profile.kdfIterations,
+                kdfMemory = profile.kdfMemory,
+                kdfParallelism = profile.kdfParallelism,
+                kdfType = profile.kdfType,
+                key = encryptedUserKey,
+                keys = RegisterRequestJson.Keys(
+                    publicKey = publicRsaKey,
+                    encryptedPrivateKey = privateRsaKey,
+                ),
             )
-        } returns Unit.asSuccess()
-        coEvery {
-            vaultSdkSource.getResetPasswordKey(
-                orgPublicKey = publicOrgKey,
-                userId = profile.userId,
-            )
-        } returns resetPasswordKey.asSuccess()
-        coEvery {
-            vaultRepository.unlockVaultWithMasterPassword(password)
-        } returns VaultUnlockResult.Success
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            coEvery {
+                authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
+            } returns registerKeyResponse.asSuccess()
+            coEvery {
+                accountsService.setPassword(body = setPasswordRequestJson)
+            } returns error.asFailure()
 
-        val result = repository.setPassword(
-            organizationIdentifier = organizationIdentifier,
-            password = password,
-            passwordHint = passwordHint,
-        )
-
-        assertEquals(SetPasswordResult.Success, result)
-        fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = passwordHash)
-        fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = privateRsaKey)
-        fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = encryptedUserKey)
-        fakeAuthDiskSource.assertUserState(SINGLE_USER_STATE_1_WITH_PASS)
-        coVerify {
-            authSdkSource.hashPassword(
-                email = EMAIL,
+            val result = repository.setPassword(
+                organizationIdentifier = organizationId,
                 password = password,
-                kdf = kdf,
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
+                passwordHint = passwordHint,
             )
-            authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
-            accountsService.setPassword(body = setPasswordRequestJson)
-            organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
-            organizationService.getOrganizationKeys(organizationId)
-            organizationService.organizationResetPasswordEnroll(
-                organizationId = organizationId,
-                userId = profile.userId,
-                passwordHash = passwordHash,
-                resetPasswordKey = resetPasswordKey,
-            )
-            vaultRepository.unlockVaultWithMasterPassword(password)
-            vaultSdkSource.getResetPasswordKey(
-                orgPublicKey = publicOrgKey,
-                userId = profile.userId,
-            )
+
+            assertEquals(SetPasswordResult.Error(error = error), result)
+            fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
+            fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
+            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
         }
-    }
+
+    @Test
+    fun `setPassword with accountsService setPassword success should return Success for v1`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.V2EncryptionJitPassword)
+            } returns false
+            val password = "password"
+            val passwordHash = "passwordHash"
+            val passwordHint = "passwordHint"
+            val organizationIdentifier = ORGANIZATION_IDENTIFIER
+            val organizationId = "orgId"
+            val encryptedUserKey = "encryptedUserKey"
+            val privateRsaKey = "privateRsaKey"
+            val publicRsaKey = "publicRsaKey"
+            val publicOrgKey = "publicOrgKey"
+            val resetPasswordKey = "resetPasswordKey"
+            val profile = SINGLE_USER_STATE_1.activeAccount.profile
+            val kdf = profile.toSdkParams()
+            val registerKeyResponse = RegisterKeyResponse(
+                masterPasswordHash = passwordHash,
+                encryptedUserKey = encryptedUserKey,
+                keys = RsaKeyPair(public = publicRsaKey, private = privateRsaKey),
+            )
+            val setPasswordRequestJson = SetPasswordRequestJson(
+                passwordHash = passwordHash,
+                passwordHint = passwordHint,
+                organizationIdentifier = organizationIdentifier,
+                kdfIterations = profile.kdfIterations,
+                kdfMemory = profile.kdfMemory,
+                kdfParallelism = profile.kdfParallelism,
+                kdfType = profile.kdfType,
+                key = encryptedUserKey,
+                keys = RegisterRequestJson.Keys(
+                    publicKey = publicRsaKey,
+                    encryptedPrivateKey = privateRsaKey,
+                ),
+            )
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            coEvery {
+                authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
+            } returns registerKeyResponse.asSuccess()
+            coEvery {
+                accountsService.setPassword(body = setPasswordRequestJson)
+            } returns Unit.asSuccess()
+            coEvery {
+                organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
+            } returns OrganizationAutoEnrollStatusResponseJson(
+                organizationId = organizationId,
+                isResetPasswordEnabled = true,
+            )
+                .asSuccess()
+            coEvery {
+                organizationService.getOrganizationKeys(organizationId)
+            } returns OrganizationKeysResponseJson(
+                privateKey = "",
+                publicKey = publicOrgKey,
+            )
+                .asSuccess()
+            coEvery {
+                organizationService.organizationResetPasswordEnroll(
+                    organizationId = organizationId,
+                    userId = profile.userId,
+                    passwordHash = passwordHash,
+                    resetPasswordKey = resetPasswordKey,
+                )
+            } returns Unit.asSuccess()
+            coEvery {
+                vaultSdkSource.getResetPasswordKey(
+                    orgPublicKey = publicOrgKey,
+                    userId = profile.userId,
+                )
+            } returns resetPasswordKey.asSuccess()
+            coEvery {
+                vaultRepository.unlockVaultWithMasterPassword(password)
+            } returns VaultUnlockResult.Success
+
+            val result = repository.setPassword(
+                organizationIdentifier = organizationIdentifier,
+                password = password,
+                passwordHint = passwordHint,
+            )
+
+            assertEquals(SetPasswordResult.Success, result)
+            fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = privateRsaKey)
+            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = encryptedUserKey)
+            fakeAuthDiskSource.assertUserState(SINGLE_USER_STATE_1_WITH_PASS)
+            coVerify(exactly = 1) {
+                authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
+                accountsService.setPassword(body = setPasswordRequestJson)
+                organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
+                organizationService.getOrganizationKeys(organizationId)
+                organizationService.organizationResetPasswordEnroll(
+                    organizationId = organizationId,
+                    userId = profile.userId,
+                    passwordHash = passwordHash,
+                    resetPasswordKey = resetPasswordKey,
+                )
+                vaultRepository.unlockVaultWithMasterPassword(password)
+                vaultSdkSource.getResetPasswordKey(
+                    orgPublicKey = publicOrgKey,
+                    userId = profile.userId,
+                )
+            }
+        }
 
     @Test
     fun `setPassword with updatePassword success should return Success`() = runTest {
@@ -5981,7 +6222,6 @@ class AuthRepositoryTest {
             ),
         )
         val profile = userState.activeAccount.profile
-        val kdf = profile.toSdkParams()
         val updatePasswordResponse = UpdatePasswordResponse(
             passwordHash = passwordHash,
             newKey = encryptedUserKey,
@@ -5998,14 +6238,6 @@ class AuthRepositoryTest {
             keys = null,
         )
         fakeAuthDiskSource.userState = userState
-        coEvery {
-            authSdkSource.hashPassword(
-                email = EMAIL,
-                password = password,
-                kdf = kdf,
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
-            )
-        } returns passwordHash.asSuccess()
         coEvery {
             vaultSdkSource.updatePassword(userId = USER_ID_1, newPassword = password)
         } returns updatePasswordResponse.asSuccess()
@@ -6051,21 +6283,11 @@ class AuthRepositoryTest {
         )
 
         assertEquals(SetPasswordResult.Success, result)
-        fakeAuthDiskSource.assertMasterPasswordHash(
-            userId = USER_ID_1,
-            passwordHash = passwordHash,
-        )
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
         fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
         fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = encryptedUserKey)
         fakeAuthDiskSource.assertUserState(SINGLE_USER_STATE_1_WITH_PASS)
         coVerify(exactly = 1) {
-            authSdkSource.hashPassword(
-                email = EMAIL,
-                password = password,
-                kdf = kdf,
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
-            )
             vaultSdkSource.updatePassword(userId = USER_ID_1, newPassword = password)
             accountsService.setPassword(body = setPasswordRequestJson)
             organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
@@ -6085,95 +6307,84 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `setPassword with unlockVaultWithMasterPassword error should return Failure`() = runTest {
-        val password = "password"
-        val passwordHash = "passwordHash"
-        val passwordHint = "passwordHint"
-        val organizationIdentifier = ORGANIZATION_IDENTIFIER
-        val organizationId = "orgId"
-        val encryptedUserKey = "encryptedUserKey"
-        val privateRsaKey = "privateRsaKey"
-        val publicRsaKey = "publicRsaKey"
-        val publicOrgKey = "publicOrgKey"
-        val resetPasswordKey = "resetPasswordKey"
-        val profile = SINGLE_USER_STATE_1.activeAccount.profile
-        val kdf = profile.toSdkParams()
-        val registerKeyResponse = RegisterKeyResponse(
-            masterPasswordHash = passwordHash,
-            encryptedUserKey = encryptedUserKey,
-            keys = RsaKeyPair(public = publicRsaKey, private = privateRsaKey),
-        )
-        val setPasswordRequestJson = SetPasswordRequestJson(
-            passwordHash = passwordHash,
-            passwordHint = passwordHint,
-            organizationIdentifier = organizationIdentifier,
-            kdfIterations = profile.kdfIterations,
-            kdfMemory = profile.kdfMemory,
-            kdfParallelism = profile.kdfParallelism,
-            kdfType = profile.kdfType,
-            key = encryptedUserKey,
-            keys = RegisterRequestJson.Keys(
-                publicKey = publicRsaKey,
-                encryptedPrivateKey = privateRsaKey,
-            ),
-        )
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        coEvery {
-            authSdkSource.hashPassword(
-                email = EMAIL,
-                password = password,
-                kdf = kdf,
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
+    fun `setPassword with unlockVaultWithMasterPassword error should return Failure for v1`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.V2EncryptionJitPassword)
+            } returns false
+            val password = "password"
+            val passwordHash = "passwordHash"
+            val passwordHint = "passwordHint"
+            val organizationIdentifier = ORGANIZATION_IDENTIFIER
+            val organizationId = "orgId"
+            val encryptedUserKey = "encryptedUserKey"
+            val privateRsaKey = "privateRsaKey"
+            val publicRsaKey = "publicRsaKey"
+            val publicOrgKey = "publicOrgKey"
+            val resetPasswordKey = "resetPasswordKey"
+            val profile = SINGLE_USER_STATE_1.activeAccount.profile
+            val kdf = profile.toSdkParams()
+            val registerKeyResponse = RegisterKeyResponse(
+                masterPasswordHash = passwordHash,
+                encryptedUserKey = encryptedUserKey,
+                keys = RsaKeyPair(public = publicRsaKey, private = privateRsaKey),
             )
-        } returns passwordHash.asSuccess()
-        coEvery {
-            authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
-        } returns registerKeyResponse.asSuccess()
-        coEvery {
-            accountsService.setPassword(body = setPasswordRequestJson)
-        } returns Unit.asSuccess()
-        val error = Throwable("Fail")
-        coEvery {
-            vaultRepository.unlockVaultWithMasterPassword(password)
-        } returns VaultUnlockResult.GenericError(error = error)
-
-        val result = repository.setPassword(
-            organizationIdentifier = organizationIdentifier,
-            password = password,
-            passwordHint = passwordHint,
-        )
-
-        assertEquals(SetPasswordResult.Error(error = error), result)
-        fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
-        fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = privateRsaKey)
-        fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = encryptedUserKey)
-        fakeAuthDiskSource.assertUserState(SINGLE_USER_STATE_1)
-        coVerify {
-            authSdkSource.hashPassword(
-                email = EMAIL,
-                password = password,
-                kdf = kdf,
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
-            )
-            authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
-            accountsService.setPassword(body = setPasswordRequestJson)
-            vaultRepository.unlockVaultWithMasterPassword(password)
-        }
-        coVerify(exactly = 0) {
-            organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
-            organizationService.getOrganizationKeys(organizationId)
-            organizationService.organizationResetPasswordEnroll(
-                organizationId = organizationId,
-                userId = profile.userId,
+            val setPasswordRequestJson = SetPasswordRequestJson(
                 passwordHash = passwordHash,
-                resetPasswordKey = resetPasswordKey,
+                passwordHint = passwordHint,
+                organizationIdentifier = organizationIdentifier,
+                kdfIterations = profile.kdfIterations,
+                kdfMemory = profile.kdfMemory,
+                kdfParallelism = profile.kdfParallelism,
+                kdfType = profile.kdfType,
+                key = encryptedUserKey,
+                keys = RegisterRequestJson.Keys(
+                    publicKey = publicRsaKey,
+                    encryptedPrivateKey = privateRsaKey,
+                ),
             )
-            vaultSdkSource.getResetPasswordKey(
-                orgPublicKey = publicOrgKey,
-                userId = profile.userId,
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            coEvery {
+                authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
+            } returns registerKeyResponse.asSuccess()
+            coEvery {
+                accountsService.setPassword(body = setPasswordRequestJson)
+            } returns Unit.asSuccess()
+            val error = Throwable("Fail")
+            coEvery {
+                vaultRepository.unlockVaultWithMasterPassword(password)
+            } returns VaultUnlockResult.GenericError(error = error)
+
+            val result = repository.setPassword(
+                organizationIdentifier = organizationIdentifier,
+                password = password,
+                passwordHint = passwordHint,
             )
+
+            assertEquals(SetPasswordResult.Error(error = error), result)
+            fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = privateRsaKey)
+            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = encryptedUserKey)
+            fakeAuthDiskSource.assertUserState(SINGLE_USER_STATE_1)
+            coVerify(exactly = 1) {
+                authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
+                accountsService.setPassword(body = setPasswordRequestJson)
+                vaultRepository.unlockVaultWithMasterPassword(password)
+            }
+            coVerify(exactly = 0) {
+                organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
+                organizationService.getOrganizationKeys(organizationId)
+                organizationService.organizationResetPasswordEnroll(
+                    organizationId = organizationId,
+                    userId = profile.userId,
+                    passwordHash = passwordHash,
+                    resetPasswordKey = resetPasswordKey,
+                )
+                vaultSdkSource.getResetPasswordKey(
+                    orgPublicKey = publicOrgKey,
+                    userId = profile.userId,
+                )
+            }
         }
-    }
 
     @Test
     fun `passwordHintRequest with valid email should return Success`() = runTest {

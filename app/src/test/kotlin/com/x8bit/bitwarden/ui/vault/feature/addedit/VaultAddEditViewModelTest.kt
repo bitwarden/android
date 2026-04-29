@@ -34,7 +34,6 @@ import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
@@ -43,6 +42,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
@@ -230,16 +230,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val premiumStateManager: PremiumStateManager = mockk {
         every { isInAppUpgradeAvailable() } returns false
     }
-    private val mutableArchiveItemsFlow = MutableStateFlow(true)
     private val mutableCardScannerFlow = MutableStateFlow(false)
-    private val mutableCardScanResultFlow =
-        bufferedMutableSharedFlow<CardScanResult>()
+    private val mutableCardScanResultFlow = bufferedMutableSharedFlow<CardScanResult>()
     private val cardScanManager: CardScanManager = mockk {
         every { cardScanResultFlow } returns mutableCardScanResultFlow
     }
     private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(FlagKey.ArchiveItems) } answers { mutableArchiveItemsFlow.value }
-        every { getFeatureFlagFlow(FlagKey.ArchiveItems) } returns mutableArchiveItemsFlow
         every { getFeatureFlag(FlagKey.CardScanner) } answers { mutableCardScannerFlow.value }
         every { getFeatureFlagFlow(FlagKey.CardScanner) } returns mutableCardScannerFlow
     }
@@ -283,7 +279,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = true,
-            isArchiveEnabled = true,
             isCardScannerEnabled = false,
         )
         val viewModel = createAddVaultItemViewModel(
@@ -373,7 +368,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 shouldShowCoachMarkTour = false,
                 defaultUriMatchType = UriMatchTypeModel.EXACT,
                 hasPremium = true,
-                isArchiveEnabled = true,
                 isCardScannerEnabled = false,
             ),
             viewModel.stateFlow.value,
@@ -5456,7 +5450,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             createCredentialRequest = createCredentialRequest,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = hasPremium,
-            isArchiveEnabled = true,
             isCardScannerEnabled = false,
         )
 

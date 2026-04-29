@@ -24,6 +24,7 @@ import com.bitwarden.network.service.OrganizationService
 import com.bitwarden.network.service.PushService
 import com.bitwarden.network.service.SendsService
 import com.bitwarden.network.service.SyncService
+import kotlinx.serialization.json.Json
 
 /**
  * Provides access to Bitwarden services.
@@ -176,4 +177,8 @@ interface BitwardenServiceClient {
  */
 fun bitwardenServiceClient(
     config: BitwardenServiceClientConfig,
-): BitwardenServiceClient = BitwardenServiceClientImpl(config)
+    json: Json,
+): BitwardenServiceClient = BitwardenServiceClientImpl(
+    bitwardenServiceClientConfig = config,
+    clientJson = json,
+)

@@ -513,6 +513,39 @@ class CipherViewExtensionsTest {
             }
     }
 
+    @Test
+    fun `toViewState should format card number when transforming card content`() {
+        val cipherView = createCipherView(type = CipherType.CARD, isEmpty = false)
+            .copy(
+                card = createMockCardView(
+                    number = 1,
+                    cardNumber = "4111111111111111",
+                    brand = VaultCardBrand.VISA.name,
+                ),
+            )
+        val viewState = cipherView.toViewState(
+            previousState = null,
+            isPremiumUser = true,
+            totpCodeItemData = null,
+            clock = fixedClock,
+            canDelete = true,
+            canRestore = true,
+            canAssignToCollections = true,
+            canEdit = true,
+            baseIconUrl = "https://example.com/",
+            isIconLoadingDisabled = true,
+            relatedLocations = persistentListOf(),
+            hasOrganizations = true,
+        )
+
+        assertEquals(
+            "4111 1111 1111 1111",
+            (viewState.asContentOrNull()?.type as? VaultItemState.ViewState.Content.ItemType.Card)
+                ?.number
+                ?.number,
+        )
+    }
+
     private fun setupMockUri() {
         mockkStatic(Uri::class)
         val uriMock = mockk<Uri>()

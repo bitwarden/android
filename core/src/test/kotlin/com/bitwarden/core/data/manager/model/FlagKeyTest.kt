@@ -29,10 +29,6 @@ class FlagKeyTest {
             "pm-20558-migrate-myvault-to-myitems",
         )
         assertEquals(
-            FlagKey.ArchiveItems.keyName,
-            "pm-19148-innovation-archive",
-        )
-        assertEquals(
             FlagKey.SendEmailVerification.keyName,
             "pm-19051-send-email-verification",
         )
@@ -71,7 +67,6 @@ class FlagKeyTest {
                 FlagKey.BitwardenAuthenticationEnabled,
                 FlagKey.ForceUpdateKdfSettings,
                 FlagKey.MigrateMyVaultToMyItems,
-                FlagKey.ArchiveItems,
                 FlagKey.SendEmailVerification,
                 FlagKey.MobilePremiumUpgrade,
                 FlagKey.AttachmentUpdates,

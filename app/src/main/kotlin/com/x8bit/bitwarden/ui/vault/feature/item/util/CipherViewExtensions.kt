@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
+import com.x8bit.bitwarden.ui.vault.util.formatCardNumber
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import java.time.Clock
@@ -162,7 +163,7 @@ fun CipherView.toViewState(
                     cardholderName = card?.cardholderName,
                     number = card?.number?.let {
                         VaultItemState.ViewState.Content.ItemType.Card.NumberData(
-                            number = it,
+                            number = it.formatCardNumber(),
                             isVisible = (previousState?.type
                                 as? VaultItemState.ViewState.Content.ItemType.Card)
                                 ?.number
