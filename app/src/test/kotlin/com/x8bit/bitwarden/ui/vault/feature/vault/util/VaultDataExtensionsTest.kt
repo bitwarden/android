@@ -87,6 +87,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            totpItemsCount = 1,
         )
 
         assertEquals(
@@ -174,6 +175,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.MyVault,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            totpItemsCount = 1,
         )
 
         assertEquals(
@@ -237,6 +239,7 @@ class VaultDataExtensionsTest {
             ),
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            totpItemsCount = 1,
         )
 
         assertEquals(
@@ -298,6 +301,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            totpItemsCount = 0,
         )
 
         assertEquals(
@@ -325,6 +329,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            totpItemsCount = 0,
         )
 
         assertEquals(
@@ -353,6 +358,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            totpItemsCount = 1,
         )
 
         assertEquals(
@@ -398,6 +404,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            totpItemsCount = 0,
         )
 
         assertEquals(
@@ -445,6 +452,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            totpItemsCount = 1,
         )
 
         assertEquals(
@@ -492,6 +500,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            totpItemsCount = 1,
         )
 
         assertEquals(
@@ -723,6 +732,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            totpItemsCount = 1,
         )
 
         assertEquals(
@@ -770,6 +780,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            totpItemsCount = 0,
         )
 
         assertEquals(
@@ -820,6 +831,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            totpItemsCount = 100,
         )
 
         assertEquals(
@@ -877,6 +889,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            totpItemsCount = 1,
         )
 
         assertEquals(
@@ -952,6 +965,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            totpItemsCount = 1,
         )
 
         assertEquals(
@@ -1049,6 +1063,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),
+            totpItemsCount = 0,
         )
 
         assertEquals(
@@ -1110,6 +1125,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),
+            totpItemsCount = 1,
         )
 
         assertEquals(
@@ -1157,6 +1173,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            totpItemsCount = 1,
         )
 
         assertEquals(
@@ -1220,6 +1237,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            totpItemsCount = 0,
         )
 
         assertEquals(

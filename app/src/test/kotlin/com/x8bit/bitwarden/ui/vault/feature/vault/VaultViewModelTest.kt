@@ -1285,6 +1285,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                 hasMasterPassword = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
+                totpItemsCount = 0,
             ),
         )
             .copy(
@@ -1310,6 +1311,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                     hasMasterPassword = true,
                     restrictItemTypesPolicyOrgIds = emptyList(),
+                    totpItemsCount = 0,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1441,7 +1443,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     ),
                     noFolderItems = listOf(),
                     trashItemsCount = 0,
-                    totpItemsCount = 1,
+                    totpItemsCount = 0,
                     itemTypesCount = CipherType.entries.size,
                     sshKeyItemsCount = 1,
                     archivedItemsCount = 0,
@@ -1478,7 +1480,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                     archiveEndIcon = null,
                     showCardGroup = true,
                 ),
-                totpCodesCount = 0,
             )
             val viewModel = createViewModel()
             viewModel.trySendAction(VaultAction.SyncClick)
@@ -1536,7 +1537,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         runTest {
             val expectedState = createMockVaultState(
                 viewState = VaultState.ViewState.NoItems,
-                totpCodesCount = 0,
             )
             val viewModel = createViewModel()
             viewModel.trySendAction(VaultAction.SyncClick)
@@ -1610,7 +1610,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     ),
                     noFolderItems = listOf(),
                     trashItemsCount = 0,
-                    totpItemsCount = 1,
+                    totpItemsCount = 0,
                     itemTypesCount = 6,
                     sshKeyItemsCount = 0,
                     archivedItemsCount = 0,
@@ -1750,7 +1750,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         ),
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
-                        totpItemsCount = 1,
+                        totpItemsCount = 0,
                         itemTypesCount = 6,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = 0,
@@ -1817,7 +1817,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         ),
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
-                        totpItemsCount = 1,
+                        totpItemsCount = 0,
                         itemTypesCount = 6,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = 0,
@@ -1932,7 +1932,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         ),
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
-                        totpItemsCount = 1,
+                        totpItemsCount = 0,
                         itemTypesCount = 6,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = 0,
@@ -2021,7 +2021,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         collectionItems = listOf(),
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
-                        totpItemsCount = 1,
+                        totpItemsCount = 0,
                         itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 1,
                         archivedItemsCount = 0,
@@ -2443,7 +2443,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                         showCardGroup = true,
                     ),
                     dialog = null,
-                    totpCodesCount = 0,
                 ).copy(
                     hasShownDecryptionFailureAlert = true,
                     cipherDecryptionFailureIds = persistentListOf(
@@ -3734,7 +3733,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         collectionItems = listOf(),
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
-                        totpItemsCount = 2,
+                        totpItemsCount = 0,
                         itemTypesCount = 6,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = 0,
@@ -3744,7 +3743,9 @@ class VaultViewModelTest : BaseViewModelTest() {
                     ),
                     dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
                         title = BitwardenString.update_your_encryption_settings.asText(),
-                        message = BitwardenString.the_new_recommended_encryption_settings_will_improve_your_account_desc_long.asText(),
+                        message = BitwardenString
+                            .the_new_recommended_encryption_settings_will_improve_your_account_desc_long
+                            .asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -3795,7 +3796,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         collectionItems = listOf(),
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
-                        totpItemsCount = 2,
+                        totpItemsCount = 0,
                         itemTypesCount = 6,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = 0,
@@ -3895,9 +3896,10 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `vault data loaded with premium user should set totpItemsCount to countValidTotpCiphers`() =
         runTest {
+            val totpItemsCount = 2
             coEvery {
-                vaultRepository.countValidTotpCiphers(isPremium = true, time = any())
-            } returns 2
+                vaultRepository.countValidTotpCiphers(isPremium = true, time = clock.instant())
+            } returns totpItemsCount
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
@@ -3917,18 +3919,17 @@ class VaultViewModelTest : BaseViewModelTest() {
                     ),
                 )
 
-                // Content state with default totpItemsCount (null → 0 from toViewState)
+                // Content state with default totpItemsCount (0 from toViewState)
                 awaitItem()
 
                 val contentViewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     itemTypesCount = 6,
-                    totpItemsCount = 2,
+                    totpItemsCount = totpItemsCount,
                     loginItemsCount = 1,
                     archivedItemsCount = 0,
-                    archiveEnabled = true,
                 )
                 assertEquals(
-                    createMockVaultState(viewState = contentViewState, totpCodesCount = 2),
+                    createMockVaultState(viewState = contentViewState),
                     awaitItem(),
                 )
             }
@@ -3949,9 +3950,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                     },
                 )
             }
+            val totpItemsCount = 1
             coEvery {
-                vaultRepository.countValidTotpCiphers(isPremium = false, time = any())
-            } returns 1
+                vaultRepository.countValidTotpCiphers(isPremium = false, time = clock.instant())
+            } returns totpItemsCount
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
@@ -3971,23 +3973,19 @@ class VaultViewModelTest : BaseViewModelTest() {
                     ),
                 )
 
-                // Content state with default totpItemsCount (null → 0 from toViewState)
+                // Content state with default totpItemsCount (0 from toViewState)
                 awaitItem()
 
                 val contentViewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     itemTypesCount = 6,
-                    totpItemsCount = 1,
                     loginItemsCount = 1,
+                    totpItemsCount = totpItemsCount,
                     archivedItemsCount = null,
-                    archiveEnabled = true,
                     archiveSubText = BitwardenString.premium_subscription_required.asText(),
                     archiveEndIcon = BitwardenDrawable.ic_locked,
                 )
                 assertEquals(
-                    createMockVaultState(
-                        viewState = contentViewState,
-                        totpCodesCount = 1,
-                    ).copy(isPremium = false),
+                    createMockVaultState(viewState = contentViewState).copy(isPremium = false),
                     awaitItem(),
                 )
             }
@@ -4092,7 +4090,7 @@ private val DEFAULT_USER_STATE = UserState(
 private fun createMockVaultState(
     viewState: VaultState.ViewState,
     dialog: VaultState.DialogState? = null,
-    totpCodesCount: Int? = null,
+    totpItemsCount: Int = (viewState as? VaultState.ViewState.Content)?.totpItemsCount ?: 0,
 ): VaultState =
     VaultState(
         appBarTitle = BitwardenString.my_vault.asText(),
@@ -4136,7 +4134,7 @@ private fun createMockVaultState(
         restrictItemTypesPolicyOrgIds = emptyList(),
         isIntroducingArchiveActionCardDismissed = false,
         isPremiumUpgradeBannerEligible = false,
-        totpCodesCount = totpCodesCount,
+        totpItemsCount = totpItemsCount,
     )
 
 private val DEFAULT_CONTENT_VIEW_STATE = VaultState.ViewState.Content(

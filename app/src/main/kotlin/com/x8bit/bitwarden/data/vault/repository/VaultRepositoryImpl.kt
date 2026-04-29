@@ -452,16 +452,16 @@ class VaultRepositoryImpl(
             ?.toFilteredList(vaultFilterType)
             ?: return 0
 
-        return decryptedCipherList
-            .count { cipher ->
-                (isPremium || cipher.organizationUseTotp) &&
-                    vaultSdkSource.generateTotpForCipherListView(
+        return decryptedCipherList.count { cipher ->
+            (isPremium || cipher.organizationUseTotp) &&
+                vaultSdkSource
+                    .generateTotpForCipherListView(
                         userId = userId,
                         cipherListView = cipher,
                         time = time,
                     )
-                        .isSuccess
-            }
+                    .isSuccess
+        }
     }
 
     override suspend fun exportVaultDataToString(
