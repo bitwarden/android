@@ -1,6 +1,6 @@
 ---
 name: implementing-android-code
-version: 0.1.2
+version: 0.1.3
 description: This skill should be used when implementing Android code in Bitwarden. Covers critical patterns, gotchas, and anti-patterns unique to this codebase. Triggered by "How do I implement a ViewModel?", "Create a new screen", "Add navigation", "Write a repository", "BaseViewModel pattern", "State-Action-Event", "type-safe navigation", "@Serializable route", "SavedStateHandle persistence", "process death recovery", "handleAction", "sendAction", "Hilt module", "Repository pattern", "implementing a screen", "adding a data source", "handling navigation", "encrypted storage", "security patterns", "Clock injection", "DataState", or any questions about implementing features, screens, ViewModels, data sources, or navigation in the Bitwarden Android app.
 ---
 
@@ -437,6 +437,42 @@ val FIXED_CLOCK = Clock.fixed(
 
 ---
 
+### I. Kotlin Style Rules
+
+Project-specific style conventions enforced in code review. These supplement (not replace) `docs/STYLE_AND_BEST_PRACTICES.md`.
+
+**`when` branches with wrapped right-hand side require curly braces.**
+
+When a `when` branch's expression is too long to fit on the same line as the arrow and is wrapped to the next line, wrap the body in `{ }`. A bare `->` followed by an indented expression on its own line is rejected in review.
+
+❌ **Wrong** — wrapped body without braces:
+```kotlin
+when (type) {
+    VaultItemCipherType.LOGIN -> VaultAddEditState.ViewState.Content.ItemType.Login()
+    VaultItemCipherType.BANK_ACCOUNT ->
+        VaultAddEditState.ViewState.Content.ItemType.BankAccount()
+    VaultItemCipherType.DRIVERS_LICENSE ->
+        VaultAddEditState.ViewState.Content.ItemType.DriversLicense()
+}
+```
+
+✅ **Right** — wrapped body with braces:
+```kotlin
+when (type) {
+    VaultItemCipherType.LOGIN -> VaultAddEditState.ViewState.Content.ItemType.Login()
+    VaultItemCipherType.BANK_ACCOUNT -> {
+        VaultAddEditState.ViewState.Content.ItemType.BankAccount()
+    }
+    VaultItemCipherType.DRIVERS_LICENSE -> {
+        VaultAddEditState.ViewState.Content.ItemType.DriversLicense()
+    }
+}
+```
+
+Single-line branches (body fits on the same line as `->`) do **not** need braces.
+
+---
+
 ## Bitwarden-Specific Anti-Patterns
 
 **General anti-patterns are documented in CLAUDE.md.** This section covers violations specific to Bitwarden's State-Action-Event, navigation, and data layer patterns:
@@ -478,4 +514,3 @@ For build, test, and codebase discovery commands, use the **`build-test-verify`*
 When pointing to specific code, use: `file_path:line_number`
 
 Example: `ui/src/main/kotlin/com/bitwarden/ui/platform/base/BaseViewModel.kt` (see `handleAction` method)
-
