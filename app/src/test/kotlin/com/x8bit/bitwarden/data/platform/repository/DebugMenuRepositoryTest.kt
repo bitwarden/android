@@ -220,6 +220,58 @@ class DebugMenuRepositoryTest {
             )
         }
     }
+
+    @Test
+    fun `showUpgradedToPremiumCard should clear consumed and mark pending for the current user`() {
+        val userId = "testUserId"
+        val mockUserStateJson = mockk<UserStateJson>(relaxed = true) {
+            every { activeUserId } returns userId
+        }
+        every { mockAuthDiskSource.userState } returns mockUserStateJson
+        every {
+            mockSettingsDiskSource.storeUpgradedToPremiumCardConsumed(
+                userId = any(),
+                isConsumed = any(),
+            )
+        } just runs
+        every {
+            mockSettingsDiskSource.storeUpgradedToPremiumCardPending(
+                userId = any(),
+                isPending = any(),
+            )
+        } just runs
+
+        debugMenuRepository.showUpgradedToPremiumCard()
+
+        verify(exactly = 1) {
+            mockSettingsDiskSource.storeUpgradedToPremiumCardConsumed(
+                userId = userId,
+                isConsumed = false,
+            )
+            mockSettingsDiskSource.storeUpgradedToPremiumCardPending(
+                userId = userId,
+                isPending = true,
+            )
+        }
+    }
+
+    @Test
+    fun `showUpgradedToPremiumCard should do nothing if no active user`() {
+        every { mockAuthDiskSource.userState } returns null
+
+        debugMenuRepository.showUpgradedToPremiumCard()
+
+        verify(exactly = 0) {
+            mockSettingsDiskSource.storeUpgradedToPremiumCardConsumed(
+                userId = any(),
+                isConsumed = any(),
+            )
+            mockSettingsDiskSource.storeUpgradedToPremiumCardPending(
+                userId = any(),
+                isPending = any(),
+            )
+        }
+    }
 }
 
 private const val TEST_STRING_VALUE = "test"

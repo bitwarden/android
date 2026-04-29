@@ -31,6 +31,7 @@ import com.x8bit.bitwarden.data.billing.util.getPremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.credentials.manager.CredentialProviderRequestManager
 import com.x8bit.bitwarden.data.credentials.manager.model.CredentialProviderRequest
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
@@ -80,6 +81,7 @@ class MainViewModel @Inject constructor(
     accessibilitySelectionManager: AccessibilitySelectionManager,
     autofillSelectionManager: AutofillSelectionManager,
     cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
+    premiumStateManager: PremiumStateManager,
     private val addTotpItemFromAuthenticatorManager: AddTotpItemFromAuthenticatorManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val garbageCollectionManager: GarbageCollectionManager,
@@ -174,6 +176,13 @@ class MainViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        premiumStateManager
+            .isUpgradedToPremiumCardEligibleFlow
+            .filter { it }
+            .map { MainAction.Internal.UpgradedToPremiumCardReady }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         // On app launch, mark all active users as having previously logged in.
         // This covers any users who are active prior to this value being recorded.
         viewModelScope.launch {
@@ -222,6 +231,9 @@ class MainViewModel @Inject constructor(
             is MainAction.Internal.ThemeUpdate -> handleAppThemeUpdated(action)
             is MainAction.Internal.DynamicColorsUpdate -> handleDynamicColorsUpdate(action)
             is MainAction.Internal.CookieAcquisitionReady -> handleCookieAcquisitionReady()
+            is MainAction.Internal.UpgradedToPremiumCardReady -> {
+                handleUpgradedToPremiumCardReady()
+            }
         }
     }
 
@@ -300,6 +312,10 @@ class MainViewModel @Inject constructor(
 
     private fun handleCookieAcquisitionReady() {
         sendEvent(MainEvent.NavigateToCookieAcquisition)
+    }
+
+    private fun handleUpgradedToPremiumCardReady() {
+        sendEvent(MainEvent.NavigateToUpgradedToPremium)
     }
 
     private fun handleFirstIntentReceived(action: MainAction.ReceiveFirstIntent) {
@@ -648,6 +664,12 @@ sealed class MainAction {
          * should proceed.
          */
         data object CookieAcquisitionReady : Internal()
+
+        /**
+         * Indicates that the active user is eligible to see the "Upgraded to Premium" screen
+         * and navigation should proceed.
+         */
+        data object UpgradedToPremiumCardReady : Internal()
     }
 }
 
@@ -681,6 +703,11 @@ sealed class MainEvent {
      * Navigate to the cookie acquisition screen.
      */
     data object NavigateToCookieAcquisition : MainEvent()
+
+    /**
+     * Navigate to the "Upgraded to Premium" screen.
+     */
+    data object NavigateToUpgradedToPremium : MainEvent()
 
     /**
      * Indicates that the app language has been updated.

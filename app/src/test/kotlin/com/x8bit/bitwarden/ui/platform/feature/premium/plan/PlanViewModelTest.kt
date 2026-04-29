@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.platform.feature.premium.plan
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
-import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
@@ -157,14 +156,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                         callbackResult = PremiumCheckoutCallbackResult.Success,
                     )
 
-                assertEquals(
-                    PlanEvent.ShowSnackbar(
-                        data = BitwardenSnackbarData(
-                            message = BitwardenString.upgraded_to_premium.asText(),
-                        ),
-                    ),
-                    awaitItem(),
-                )
+                assertEquals(PlanEvent.NavigateBack, awaitItem())
             }
 
             verify {
@@ -436,14 +428,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                     ),
                 )
 
-                assertEquals(
-                    PlanEvent.ShowSnackbar(
-                        data = BitwardenSnackbarData(
-                            message = BitwardenString.upgraded_to_premium.asText(),
-                        ),
-                    ),
-                    awaitItem(),
-                )
+                assertEquals(PlanEvent.NavigateBack, awaitItem())
             }
         }
 
@@ -487,14 +472,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                     stateFlow.awaitItem(),
                 )
 
-                assertEquals(
-                    PlanEvent.ShowSnackbar(
-                        data = BitwardenSnackbarData(
-                            message = BitwardenString.upgraded_to_premium.asText(),
-                        ),
-                    ),
-                    eventFlow.awaitItem(),
-                )
+                assertEquals(PlanEvent.NavigateBack, eventFlow.awaitItem())
             }
         }
 
@@ -561,14 +539,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                     ),
                 )
 
-                assertEquals(
-                    PlanEvent.ShowSnackbar(
-                        data = BitwardenSnackbarData(
-                            message = BitwardenString.upgraded_to_premium.asText(),
-                        ),
-                    ),
-                    awaitItem(),
-                )
+                assertEquals(PlanEvent.NavigateBack, awaitItem())
             }
         }
 

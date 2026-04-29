@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -48,13 +47,6 @@ class SettingsViewModelTest : BaseViewModelTest() {
     }
     private val specialCircumstanceManager: SpecialCircumstanceManager = mockk {
         every { specialCircumstance } returns null
-    }
-
-    private val mutableUpgradedToPremiumCardEligibleFlow = MutableStateFlow(false)
-    private val premiumStateManager: PremiumStateManager = mockk(relaxed = true) {
-        every {
-            isUpgradedToPremiumCardEligibleFlow
-        } returns mutableUpgradedToPremiumCardEligibleFlow
     }
 
     @BeforeEach
@@ -294,64 +286,10 @@ class SettingsViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Test
-    fun `Upgraded to Premium card eligibility flow updates state`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.stateFlow.test {
-            assertEquals(DEFAULT_STATE, awaitItem())
-            mutableUpgradedToPremiumCardEligibleFlow.value = true
-            assertEquals(
-                DEFAULT_STATE.copy(isUpgradedToPremiumCardEligible = true),
-                awaitItem(),
-            )
-        }
-    }
-
-    @Test
-    fun `shouldShowUpgradedToPremiumCard is false in pre-auth even when eligible`() = runTest {
-        mutableUpgradedToPremiumCardEligibleFlow.value = true
-        val viewModel = createViewModel(isPreAuth = true)
-        assertFalse(viewModel.stateFlow.value.shouldShowUpgradedToPremiumCard)
-    }
-
-    @Test
-    fun `shouldShowUpgradedToPremiumCard is true post-auth when eligible`() = runTest {
-        mutableUpgradedToPremiumCardEligibleFlow.value = true
-        val viewModel = createViewModel(isPreAuth = false)
-        assertTrue(viewModel.stateFlow.value.shouldShowUpgradedToPremiumCard)
-    }
-
-    @Test
-    fun `UpgradedToPremiumCardClick dismisses card and emits NavigateToUrl`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(SettingsAction.UpgradedToPremiumCardClick)
-            assertEquals(
-                SettingsEvent.NavigateToUrl(
-                    url = "https://bitwarden.com/help/password-manager-plans/",
-                ),
-                awaitItem(),
-            )
-        }
-        verify(exactly = 1) {
-            premiumStateManager.dismissUpgradedToPremiumCard()
-        }
-    }
-
-    @Test
-    fun `UpgradedToPremiumCardDismiss dismisses card without navigating`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.trySendAction(SettingsAction.UpgradedToPremiumCardDismiss)
-        verify(exactly = 1) {
-            premiumStateManager.dismissUpgradedToPremiumCard()
-        }
-    }
-
     private fun createViewModel(isPreAuth: Boolean = false) = SettingsViewModel(
         firstTimeActionManager = firstTimeManager,
         featureFlagManager = featureFlagManager,
         specialCircumstanceManager = specialCircumstanceManager,
-        premiumStateManager = premiumStateManager,
         savedStateHandle = SavedStateHandle().apply {
             every { toSettingsArgs() } returns SettingsArgs(isPreAuth = isPreAuth)
         },

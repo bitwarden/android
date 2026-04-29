@@ -35,7 +35,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
-import com.x8bit.bitwarden.data.billing.manager.UPGRADED_TO_PREMIUM_LEARN_MORE_URL
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
@@ -262,14 +261,6 @@ class VaultViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        premiumStateManager
-            .isUpgradedToPremiumCardEligibleFlow
-            .map {
-                VaultAction.Internal.UpgradedToPremiumCardEligibilityReceive(isEligible = it)
-            }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
         policyManager
             .getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
             .map { policies -> policies.map { it.organizationId } }
@@ -417,10 +408,6 @@ class VaultViewModel @Inject constructor(
 
     private fun handleDismissActionCardClick(action: VaultAction.DismissActionCardClick) {
         when (action.actionCard) {
-            VaultState.ActionCardState.UpgradedToPremium -> {
-                premiumStateManager.dismissUpgradedToPremiumCard()
-            }
-
             VaultState.ActionCardState.UpgradePremium -> {
                 premiumStateManager.dismissPremiumUpgradeBanner()
             }
@@ -433,11 +420,6 @@ class VaultViewModel @Inject constructor(
 
     private fun handleActionCardClick(action: VaultAction.ActionCardClick) {
         when (action.actionCard) {
-            VaultState.ActionCardState.UpgradedToPremium -> {
-                premiumStateManager.dismissUpgradedToPremiumCard()
-                sendEvent(VaultEvent.NavigateToUrl(url = UPGRADED_TO_PREMIUM_LEARN_MORE_URL))
-            }
-
             VaultState.ActionCardState.UpgradePremium -> {
                 sendEvent(VaultEvent.NavigateToUpgradePremium)
             }
@@ -1011,10 +993,6 @@ class VaultViewModel @Inject constructor(
             is VaultAction.Internal.PremiumUpgradeBannerEligibilityReceive -> {
                 handlePremiumUpgradeBannerEligibilityReceive(action)
             }
-
-            is VaultAction.Internal.UpgradedToPremiumCardEligibilityReceive -> {
-                handleUpgradedToPremiumCardEligibilityReceive(action)
-            }
         }
     }
 
@@ -1143,14 +1121,6 @@ class VaultViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(isPremiumUpgradeBannerEligible = action.isEligible)
-        }
-    }
-
-    private fun handleUpgradedToPremiumCardEligibilityReceive(
-        action: VaultAction.Internal.UpgradedToPremiumCardEligibilityReceive,
-    ) {
-        mutableStateFlow.update {
-            it.copy(isUpgradedToPremiumCardEligible = action.isEligible)
         }
     }
 
@@ -1565,7 +1535,6 @@ data class VaultState(
     val restrictItemTypesPolicyOrgIds: List<String>,
     val isIntroducingArchiveActionCardDismissed: Boolean,
     val isPremiumUpgradeBannerEligible: Boolean = false,
-    val isUpgradedToPremiumCardEligible: Boolean = false,
     val isAwaitingKdfSync: Boolean = false,
 ) : Parcelable {
 
@@ -1574,10 +1543,8 @@ data class VaultState(
      */
     val actionCard: ActionCardState?
         get() = (viewState as? ViewState.Content)?.let {
-            ActionCardState.UpgradedToPremium
-                .takeIf { isUpgradedToPremiumCardEligible }
-                ?: ActionCardState.UpgradePremium
-                    .takeIf { isPremiumUpgradeBannerEligible }
+            ActionCardState.UpgradePremium
+                .takeIf { isPremiumUpgradeBannerEligible }
                 ?: ActionCardState.IntroducingArchive.takeIf {
                     isPremium && !isIntroducingArchiveActionCardDismissed
                 }
@@ -1901,12 +1868,6 @@ data class VaultState(
      * Represents an action card to be displayed.
      */
     sealed class ActionCardState {
-        /**
-         * Indicates that the user has been upgraded to Premium and should be congratulated with
-         * a link to learn more about Premium features.
-         */
-        data object UpgradedToPremium : ActionCardState()
-
         /**
          * Indicates that the user is eligible for a Premium upgrade.
          */
@@ -2478,13 +2439,6 @@ sealed class VaultAction {
          * updated.
          */
         data class PremiumUpgradeBannerEligibilityReceive(
-            val isEligible: Boolean,
-        ) : Internal()
-
-        /**
-         * Indicates that the "Upgraded to Premium" action card eligibility has been updated.
-         */
-        data class UpgradedToPremiumCardEligibilityReceive(
             val isEligible: Boolean,
         ) : Internal()
     }

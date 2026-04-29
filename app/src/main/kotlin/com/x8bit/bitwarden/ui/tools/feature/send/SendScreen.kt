@@ -3,13 +3,8 @@ package com.x8bit.bitwarden.ui.tools.feature.send
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -19,18 +14,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
-import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
-import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -47,7 +39,6 @@ import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
@@ -65,7 +56,7 @@ import kotlinx.collections.immutable.persistentListOf
 /**
  * UI for the send screen.
  */
-@Suppress("LongMethod", "CyclomaticComplexMethod")
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SendScreen(
@@ -126,7 +117,6 @@ fun SendScreen(
             is SendEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
             SendEvent.NavigateToFileSends -> onNavigateToSendFilesList()
             SendEvent.NavigateToTextSends -> onNavigateToSendTextList()
-            is SendEvent.NavigateToUrl -> intentManager.launchUri(event.url.toUri())
         }
     }
 
@@ -189,61 +179,32 @@ fun SendScreen(
         pullToRefreshState = pullToRefreshState,
         snackbarHost = { BitwardenSnackbarHost(bitwardenHostState = snackbarHostState) },
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            if (state.isUpgradedToPremiumCardEligible) {
-                Spacer(modifier = Modifier.height(height = 12.dp))
-                BitwardenActionCard(
-                    cardTitle = stringResource(id = BitwardenString.upgraded_to_premium),
-                    cardSubtitle = stringResource(
-                        id = BitwardenString.you_now_have_access_to_all_advanced_security_features,
-                    ),
-                    actionText = stringResource(id = BitwardenString.learn_more),
-                    leadingContent = {
-                        Icon(
-                            painter = rememberVectorPainter(id = BitwardenDrawable.ic_star),
-                            contentDescription = null,
-                            tint = BitwardenTheme.colorScheme.icon.secondary,
-                        )
-                    },
-                    onActionClick = {
-                        viewModel.trySendAction(SendAction.UpgradedToPremiumCardClick)
-                    },
-                    onDismissClick = {
-                        viewModel.trySendAction(SendAction.UpgradedToPremiumCardDismiss)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin(),
-                )
-            }
-            val contentModifier = Modifier.fillMaxSize()
-            when (val viewState = state.viewState) {
-                is SendState.ViewState.Content -> SendContent(
-                    policyDisablesSend = state.policyDisablesSend,
-                    state = viewState,
-                    sendHandlers = sendHandlers,
-                    modifier = contentModifier,
-                )
+        val modifier = Modifier
+            .fillMaxSize()
+        when (val viewState = state.viewState) {
+            is SendState.ViewState.Content -> SendContent(
+                policyDisablesSend = state.policyDisablesSend,
+                state = viewState,
+                sendHandlers = sendHandlers,
+                modifier = modifier,
+            )
 
-                SendState.ViewState.Empty -> SendEmpty(
-                    policyDisablesSend = state.policyDisablesSend,
-                    onAddItemClick = { viewModel.trySendAction(SendAction.AddSendClick) },
-                    modifier = contentModifier,
-                )
+            SendState.ViewState.Empty -> SendEmpty(
+                policyDisablesSend = state.policyDisablesSend,
+                onAddItemClick = { viewModel.trySendAction(SendAction.AddSendClick) },
+                modifier = modifier,
+            )
 
-                is SendState.ViewState.Error -> BitwardenErrorContent(
-                    message = viewState.message(),
-                    buttonData = BitwardenButtonData(
-                        label = BitwardenString.try_again.asText(),
-                        onClick = { viewModel.trySendAction(SendAction.RefreshClick) },
-                    ),
-                    modifier = contentModifier,
-                )
+            is SendState.ViewState.Error -> BitwardenErrorContent(
+                message = viewState.message(),
+                buttonData = BitwardenButtonData(
+                    label = BitwardenString.try_again.asText(),
+                    onClick = { viewModel.trySendAction(SendAction.RefreshClick) },
+                ),
+                modifier = modifier,
+            )
 
-                SendState.ViewState.Loading -> BitwardenLoadingContent(
-                    modifier = contentModifier,
-                )
-            }
+            SendState.ViewState.Loading -> BitwardenLoadingContent(modifier = modifier)
         }
     }
 }

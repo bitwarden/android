@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.browser.auth.AuthTabIntent
 import androidx.credentials.GetPublicKeyCredentialOption
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.billing.util.getPremiumCheckoutCallbackResult
 import androidx.credentials.provider.BiometricPromptResult
@@ -181,6 +182,12 @@ class MainViewModelTest : BaseViewModelTest() {
         MutableStateFlow<CookieAcquisitionRequest?>(null)
     private val cookieAcquisitionRequestManager: CookieAcquisitionRequestManager = mockk {
         every { cookieAcquisitionRequestFlow } returns mutableCookieAcquisitionRequestFlow
+    }
+    private val mutableUpgradedToPremiumCardEligibleFlow = MutableStateFlow(false)
+    private val premiumStateManager: PremiumStateManager = mockk {
+        every {
+            isUpgradedToPremiumCardEligibleFlow
+        } returns mutableUpgradedToPremiumCardEligibleFlow
     }
     private val credentialProviderRequestManager: CredentialProviderRequestManager = mockk {
         every { getPendingCredentialRequest() } returns null
@@ -1325,6 +1332,30 @@ class MainViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    fun `Upgraded to Premium eligibility flips true should emit NavigateToUpgradedToPremium`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                // Skip init events (appLanguage + appTheme)
+                skipItems(2)
+                mutableUpgradedToPremiumCardEligibleFlow.value = true
+                assertEquals(MainEvent.NavigateToUpgradedToPremium, awaitItem())
+            }
+        }
+
+    @Test
+    fun `Upgraded to Premium eligibility false should not emit NavigateToUpgradedToPremium`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                // Skip init events (appLanguage + appTheme)
+                skipItems(2)
+                mutableUpgradedToPremiumCardEligibleFlow.value = false
+                expectNoEvents()
+            }
+        }
+
     private fun createViewModel(
         initialSpecialCircumstance: SpecialCircumstance? = null,
     ) = MainViewModel(
@@ -1332,6 +1363,7 @@ class MainViewModelTest : BaseViewModelTest() {
         addTotpItemFromAuthenticatorManager = addTotpItemAuthenticatorManager,
         autofillSelectionManager = autofillSelectionManager,
         cookieAcquisitionRequestManager = cookieAcquisitionRequestManager,
+        premiumStateManager = premiumStateManager,
         specialCircumstanceManager = specialCircumstanceManager,
         garbageCollectionManager = garbageCollectionManager,
         credentialProviderRequestManager = credentialProviderRequestManager,

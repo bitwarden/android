@@ -11,8 +11,6 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
-import com.x8bit.bitwarden.data.billing.manager.UPGRADED_TO_PREMIUM_LEARN_MORE_URL
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -35,7 +33,6 @@ class SettingsViewModel @Inject constructor(
     specialCircumstanceManager: SpecialCircumstanceManager,
     firstTimeActionManager: FirstTimeActionManager,
     featureFlagManager: FeatureFlagManager,
-    private val premiumStateManager: PremiumStateManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SettingsState, SettingsEvent, SettingsAction>(
     initialState = SettingsState(
@@ -45,9 +42,6 @@ class SettingsViewModel @Inject constructor(
         vaultCount = firstTimeActionManager.allVaultSettingsBadgeCountFlow.value,
         isMobilePremiumUpgradeEnabled = featureFlagManager
             .getFeatureFlag(FlagKey.MobilePremiumUpgrade),
-        isUpgradedToPremiumCardEligible = premiumStateManager
-            .isUpgradedToPremiumCardEligibleFlow
-            .value,
     ),
 ) {
 
@@ -76,14 +70,6 @@ class SettingsViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        premiumStateManager
-            .isUpgradedToPremiumCardEligibleFlow
-            .map {
-                SettingsAction.Internal.UpgradedToPremiumCardEligibilityReceive(isEligible = it)
-            }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
         when (specialCircumstanceManager.specialCircumstance) {
             SpecialCircumstance.AccountSecurityShortcut -> {
                 sendEvent(SettingsEvent.NavigateAccountSecurityShortcut)
@@ -97,35 +83,12 @@ class SettingsViewModel @Inject constructor(
     override fun handleAction(action: SettingsAction): Unit = when (action) {
         is SettingsAction.CloseClick -> handleCloseClick()
         is SettingsAction.SettingsClick -> handleSettingsClick(action)
-        SettingsAction.UpgradedToPremiumCardClick -> handleUpgradedToPremiumCardClick()
-        SettingsAction.UpgradedToPremiumCardDismiss -> handleUpgradedToPremiumCardDismiss()
         is SettingsAction.Internal.SettingsNotificationCountUpdate -> {
             handleSettingsNotificationCountUpdate(action)
         }
 
         is SettingsAction.Internal.MobilePremiumUpgradeFlagUpdate -> {
             handleMobilePremiumUpgradeFlagUpdate(action)
-        }
-
-        is SettingsAction.Internal.UpgradedToPremiumCardEligibilityReceive -> {
-            handleUpgradedToPremiumCardEligibilityReceive(action)
-        }
-    }
-
-    private fun handleUpgradedToPremiumCardClick() {
-        premiumStateManager.dismissUpgradedToPremiumCard()
-        sendEvent(SettingsEvent.NavigateToUrl(url = UPGRADED_TO_PREMIUM_LEARN_MORE_URL))
-    }
-
-    private fun handleUpgradedToPremiumCardDismiss() {
-        premiumStateManager.dismissUpgradedToPremiumCard()
-    }
-
-    private fun handleUpgradedToPremiumCardEligibilityReceive(
-        action: SettingsAction.Internal.UpgradedToPremiumCardEligibilityReceive,
-    ) {
-        mutableStateFlow.update {
-            it.copy(isUpgradedToPremiumCardEligible = action.isEligible)
         }
     }
 
@@ -198,15 +161,8 @@ data class SettingsState(
     private val securityCount: Int,
     private val vaultCount: Int,
     private val isMobilePremiumUpgradeEnabled: Boolean = false,
-    private val isUpgradedToPremiumCardEligible: Boolean = false,
 ) {
     val shouldShowCloseButton: Boolean = isPreAuth
-
-    /**
-     * Whether the "Upgraded to Premium" action card should be shown. The card is only visible
-     * post-authentication.
-     */
-    val shouldShowUpgradedToPremiumCard: Boolean = !isPreAuth && isUpgradedToPremiumCardEligible
 
     /**
      * Whether the plan row should be shown. The row is visible when the
@@ -286,13 +242,6 @@ sealed class SettingsEvent {
      * Navigate to the plan screen.
      */
     data object NavigatePlan : SettingsEvent()
-
-    /**
-     * Navigate the user to the given external [url].
-     */
-    data class NavigateToUrl(
-        val url: String,
-    ) : SettingsEvent()
 }
 
 /**
@@ -312,16 +261,6 @@ sealed class SettingsAction {
     ) : SettingsAction()
 
     /**
-     * User clicked the "Learn more" CTA on the "Upgraded to Premium" action card.
-     */
-    data object UpgradedToPremiumCardClick : SettingsAction()
-
-    /**
-     * User clicked the dismiss icon on the "Upgraded to Premium" action card.
-     */
-    data object UpgradedToPremiumCardDismiss : SettingsAction()
-
-    /**
      * Models internal actions for the settings screen.
      */
     sealed class Internal : SettingsAction() {
@@ -339,13 +278,6 @@ sealed class SettingsAction {
          */
         data class MobilePremiumUpgradeFlagUpdate(
             val isMobilePremiumUpgradeEnabled: Boolean,
-        ) : Internal()
-
-        /**
-         * Indicates that the "Upgraded to Premium" action card eligibility has been updated.
-         */
-        data class UpgradedToPremiumCardEligibilityReceive(
-            val isEligible: Boolean,
         ) : Internal()
     }
 }

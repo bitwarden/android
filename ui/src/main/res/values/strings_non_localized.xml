@@ -33,6 +33,7 @@
     <string name="cookies">Cookies</string>
     <string name="premium">Premium</string>
     <string name="reset_premium_upgrade_banner">Reset Premium upgrade banner</string>
+    <string name="show_upgraded_to_premium_card">Show \"Upgraded to Premium\" card</string>
     <string name="bitwarden_authentication_enabled">Bitwarden authentication enabled</string>
     <string name="import_format_label_bitwarden_json">Bitwarden (.json)</string>
     <string name="import_format_label_2fas_json">2FAS (no password)</string>

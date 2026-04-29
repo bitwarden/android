@@ -163,6 +163,15 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `ShowUpgradedToPremiumCard should call showUpgradedToPremiumCard on DebugMenuRepository`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(DebugMenuAction.ShowUpgradedToPremiumCard)
+        verify(exactly = 1) {
+            mockDebugMenuRepository.showUpgradedToPremiumCard()
+        }
+    }
+
+    @Test
     fun `TriggerCookieAcquisition should set pending cookie acquisition`() =
         runTest {
             val viewModel = createViewModel()

@@ -7,7 +7,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.util.toFormattedDateStyle
 import com.bitwarden.ui.platform.base.BaseViewModel
-import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -484,13 +483,7 @@ class PlanViewModel @Inject constructor(
                 )
             }
         }
-        sendEvent(
-            PlanEvent.ShowSnackbar(
-                data = BitwardenSnackbarData(
-                    message = BitwardenString.upgraded_to_premium.asText(),
-                ),
-            ),
-        )
+        sendEvent(PlanEvent.NavigateBack)
     }
 
     private fun handlePricingResultReceive(
@@ -822,13 +815,6 @@ sealed class PlanEvent {
      * Navigate back to the previous screen.
      */
     data object NavigateBack : PlanEvent()
-
-    /**
-     * Show a snackbar with the given [data].
-     */
-    data class ShowSnackbar(
-        val data: BitwardenSnackbarData,
-    ) : PlanEvent()
 }
 
 /**
