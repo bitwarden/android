@@ -35,13 +35,13 @@ Invoke `Skill(build-test-verify)` to run tests, lint, and detekt. Ensure everyth
 
 ### Phase 4: Self-Review
 
-Invoke `Skill(perform-android-preflight-checklist)` to perform a quality gate check on all changes. Address any issues found.
+Invoke `Skill(bitwarden-delivery-tools:perform-preflight)` to perform a quality gate check on all changes. Address any issues found.
 
 **Before advancing**: Share the self-review results and confirm readiness to commit.
 
 ### Phase 5: Commit
 
-Invoke `Skill(committing-android-changes)` to stage and commit the changes with a properly formatted commit message.
+Invoke `Skill(bitwarden-delivery-tools:committing-changes)` to stage and commit the changes with a properly formatted commit message.
 
 **Before advancing**: Confirm the commit was successful and ask if the user wants to proceed to review and PR creation, or stop here.
 
@@ -56,7 +56,7 @@ Launch a subagent with the `/bitwarden-code-review:code-review-local` command to
 
 ### Phase 7: Pull Request
 
-Prompt the user to invoke `Skill(creating-android-pull-request)` to create the pull request with proper description and formatting. **Create as a draft PR by default** unless the user has explicitly requested a ready-for-review PR.
+Prompt the user to invoke `Skill(bitwarden-delivery-tools:creating-pull-request)` to create the pull request with proper description and formatting. **Create as a draft PR by default** unless the user has explicitly requested a ready-for-review PR.
 
 ## Guidelines
 

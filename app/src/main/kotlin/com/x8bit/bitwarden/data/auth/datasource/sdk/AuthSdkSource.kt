@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.sdk
 
+import com.bitwarden.auth.JitMasterPasswordRegistrationResponse
 import com.bitwarden.auth.KeyConnectorRegistrationResult
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.KeyConnectorResponse
@@ -14,6 +15,21 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
  * Source of authentication information and functionality from the Bitwarden SDK.
  */
 interface AuthSdkSource {
+    /**
+     * Enrolls the user to master password unlock.
+     */
+    @Suppress("LongParameterList")
+    suspend fun postKeysForJitPasswordRegistration(
+        userId: String,
+        organizationId: String,
+        organizationPublicKey: String,
+        organizationSsoIdentifier: String,
+        salt: String,
+        masterPassword: String,
+        masterPasswordHint: String?,
+        shouldResetPasswordEnroll: Boolean,
+    ): Result<JitMasterPasswordRegistrationResponse>
+
     /**
      * Enrolls the user to key connector unlock.
      */

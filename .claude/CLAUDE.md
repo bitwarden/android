@@ -58,22 +58,27 @@ User Request (UI Action)
 
 ### Workflow Skills
 
-> **Quick start**: Use the `android-architect` agent (or `/plan-android-work <task>`) to refine requirements and plan,
-> then the `android-implementer` agent (or `/work-on-android <task>`) for implementation,
+> **Quick start**: Use the `bitwarden-tech-lead:bitwarden-tech-lead` agent (or `/plan-android-work <task>`) to refine
+> requirements and plan,
+> then the `bitwarden-software-engineer:bitwarden-software-engineer` agent (or `/work-on-android <task>`) for implementation,
 > then `/review-android <PR#>` to review the result.
 
-Planning: 1–2 | Implementation: 3–7 | Review & PR: 8–10
+## Skills & Commands
 
-1. `refining-android-requirements` - Gap analysis and structured spec from any input source
-2. `planning-android-implementation` - Architecture design and phased task breakdown
-3. `implementing-android-code` - Patterns, gotchas, and templates for writing code
-4. `testing-android-code` - Test patterns and templates for verifying code
-5. `build-test-verify` - Build, test, lint, and deploy commands
-6. `perform-android-preflight-checklist` - Quality gate before committing
-7. `committing-android-changes` - Commit message format and pre-commit workflow
-8. `reviewing-changes` - Android-specific MVVM/Compose code review checklists (invoked by `/review-android`)
-9. `/review-android` - Full review workflow: PR context gathering → Android checklist → output
-10. `creating-android-pull-request` - PR creation workflow and templates
+| Skill | Triggers |
+|-------|---------|
+| `build-test-verify` | "build", "run tests", "lint", "format", "verify build" |
+| `implementing-android-code` | "implement", "write code", "add screen", "create feature" |
+| `planning-android-implementation` | "plan implementation", "architecture design", "phased task breakdown" |
+| `refining-android-requirements` | "refine requirements", "analyze ticket", "gap analysis" |
+| `reviewing-changes` | "review", "code review", "check PR" |
+| `testing-android-code` | "write tests", "add test coverage", "unit test" |
+
+| Command | Usage |
+|---------|-------|
+| `/plan-android-work <task>` | Fetch ticket → refine requirements → design implementation approach |
+| `/work-on-android <task>` | Full workflow: implement → test → verify → preflight → commit → review → PR |
+| `/review-android <PR#>` | Full review workflow: PR context gathering → Android checklist → output |
 
 ---
 
@@ -125,8 +130,8 @@ In addition to the Key Principles above, follow these rules:
 - **Before writing code**: Use `implementing-android-code` skill for Bitwarden-specific patterns, gotchas, and templates
 - **Before writing tests**: Use `testing-android-code` skill for test patterns and templates
 - **Building/testing**: Use `build-test-verify` skill | App tests: `./gradlew app:testStandardDebugUnitTest`
-- **Before committing**: Use `perform-android-preflight-checklist` skill, then `committing-android-changes` skill for message format
+- **Before committing**: Use `bitwarden-delivery-tools:perform-preflight` skill, then `bitwarden-delivery-tools:committing-changes` skill for message format
 - **Code review**: Use `/review-android` for the full review workflow; `reviewing-changes` skill for checklist-only
-- **Creating PRs**: Use `creating-android-pull-request` skill for PR workflow and templates
+- **Creating PRs**: Use `bitwarden-delivery-tools:creating-pull-request` skill for PR workflow and templates
 - **Troubleshooting**: See `docs/TROUBLESHOOTING.md`
 - **Architecture**: `docs/ARCHITECTURE.md` | [Bitwarden SDK](https://github.com/bitwarden/sdk) | [Jetpack Compose](https://developer.android.com/jetpack/compose) | [Hilt DI](https://dagger.dev/hilt/)

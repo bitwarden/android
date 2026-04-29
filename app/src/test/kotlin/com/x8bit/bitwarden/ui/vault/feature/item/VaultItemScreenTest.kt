@@ -71,6 +71,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     private var onNavigateToAttachmentsId: String? = null
     private var onNavigateToPasswordHistoryId: String? = null
     private var onNavigateToPreviewAttachment: PreviewAttachmentRoute? = null
+    private var onNavigateToPlanCalled = false
 
     private val intentManager = mockk<IntentManager>(relaxed = true)
 
@@ -96,6 +97,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                 onNavigateToAttachments = { onNavigateToAttachmentsId = it },
                 onNavigateToPasswordHistory = { onNavigateToPasswordHistoryId = it },
                 onNavigateToPreviewAttachment = { onNavigateToPreviewAttachment = it },
+                onNavigateToPlan = { onNavigateToPlanCalled = true },
             )
         }
     }
@@ -197,6 +199,12 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         verify(exactly = 1) {
             intentManager.launchUri(uri)
         }
+    }
+
+    @Test
+    fun `NavigateToPlanModal event should invoke onNavigateToPlan`() {
+        mutableEventFlow.tryEmit(VaultItemEvent.NavigateToPlanModal)
+        assertTrue(onNavigateToPlanCalled)
     }
 
     @Test
@@ -3343,7 +3351,6 @@ private val DEFAULT_STATE: VaultItemState = VaultItemState(
     baseIconUrl = "https://example.com/",
     isIconLoadingDisabled = true,
     hasPremium = false,
-    isArchiveEnabled = true,
 )
 
 private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =

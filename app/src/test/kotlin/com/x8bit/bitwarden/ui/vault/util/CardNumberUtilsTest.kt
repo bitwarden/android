@@ -104,4 +104,79 @@ class CardNumberUtilsTest {
         )
         assertEquals(VaultCardBrand.OTHER, "".detectCardBrand())
     }
+
+    @Test
+    fun `formatCardNumber should format Amex correctly`() {
+        assertEquals("3782 822463 10005", "378282246310005".formatCardNumber())
+        assertEquals("3411 111111 11111", "341111111111111".formatCardNumber())
+    }
+
+    @Test
+    fun `formatCardNumber should format Diners Club 14 digits correctly`() {
+        assertEquals("3056 930902 5904", "30569309025904".formatCardNumber())
+    }
+
+    @Test
+    fun `formatCardNumber should format Diners Club with non 14 digits as default`() {
+        assertEquals("3600 0000 0000 0084", "3600000000000084".formatCardNumber())
+    }
+
+    @Test
+    fun `formatCardNumber should format Maestro 13 digits correctly`() {
+        assertEquals("5018 5753 94858", "5018575394858".formatCardNumber())
+    }
+
+    @Test
+    fun `formatCardNumber should format Maestro 15 digits correctly`() {
+        assertEquals("5018 575394 85843", "501857539485843".formatCardNumber())
+    }
+
+    @Test
+    fun `formatCardNumber should format Maestro 19 digits correctly`() {
+        assertEquals("5018 5753 9485 8437 306", "5018575394858437306".formatCardNumber())
+    }
+
+    @Test
+    fun `formatCardNumber should format Maestro other digits as default`() {
+        assertEquals("5018 5753 9485 8437", "5018575394858437".formatCardNumber())
+    }
+
+    @Test
+    fun `formatCardNumber should format UnionPay 19 digits correctly`() {
+        assertEquals("622795 5237950556428", "6227955237950556428".formatCardNumber())
+    }
+
+    @Test
+    fun `formatCardNumber should format UnionPay with non 19 digits as default`() {
+        assertEquals("6227 9552 3795 0556", "6227955237950556".formatCardNumber())
+    }
+
+    @Test
+    fun `formatCardNumber should format standard card numbers in groups of 4`() {
+        assertEquals("4111 1111 1111 1111", "4111111111111111".formatCardNumber())
+        assertEquals("5500 0000 0000 0004", "5500000000000004".formatCardNumber())
+        assertEquals("6011 1111 1111 1117", "6011111111111117".formatCardNumber())
+    }
+
+    @Test
+    fun `formatCardNumber should format card numbers in 4 groups of 4 and append remainder`() {
+        assertEquals("4111 1111 1111 1111 1", "41111111111111111".formatCardNumber())
+        assertEquals("5500 0000 0000 0004 0000", "55000000000000040000".formatCardNumber())
+        assertEquals("6011 1111 1111 1117 11111", "601111111111111711111".formatCardNumber())
+    }
+
+    @Test
+    fun `formatCardNumber should keep short standard card numbers unchanged`() {
+        assertEquals("123", "123".formatCardNumber())
+    }
+
+    @Test
+    fun `formatCardNumber should return empty string for empty input`() {
+        assertEquals("", "".formatCardNumber())
+    }
+
+    @Test
+    fun `formatCardNumber should sanitize and return empty when input has no digits`() {
+        assertEquals("----", "----".formatCardNumber())
+    }
 }

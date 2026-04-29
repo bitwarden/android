@@ -245,6 +245,8 @@ fun createMockDisplayItemForCipher(
                 itemType = SearchState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
+
+        CipherType.BANK_ACCOUNT -> TODO("PM-32810: Add Bank Account Type")
     }
 
 /**

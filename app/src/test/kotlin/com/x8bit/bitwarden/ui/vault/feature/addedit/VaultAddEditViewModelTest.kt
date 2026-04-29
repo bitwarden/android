@@ -42,6 +42,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
@@ -226,16 +227,15 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         every { show(message = any(), duration = any()) } just runs
     }
     private val environmentRepository = FakeEnvironmentRepository()
-    private val mutableArchiveItemsFlow = MutableStateFlow(true)
+    private val premiumStateManager: PremiumStateManager = mockk {
+        every { isInAppUpgradeAvailable() } returns false
+    }
     private val mutableCardScannerFlow = MutableStateFlow(false)
-    private val mutableCardScanResultFlow =
-        bufferedMutableSharedFlow<CardScanResult>()
+    private val mutableCardScanResultFlow = bufferedMutableSharedFlow<CardScanResult>()
     private val cardScanManager: CardScanManager = mockk {
         every { cardScanResultFlow } returns mutableCardScanResultFlow
     }
     private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(FlagKey.ArchiveItems) } answers { mutableArchiveItemsFlow.value }
-        every { getFeatureFlagFlow(FlagKey.ArchiveItems) } returns mutableArchiveItemsFlow
         every { getFeatureFlag(FlagKey.CardScanner) } answers { mutableCardScannerFlow.value }
         every { getFeatureFlagFlow(FlagKey.CardScanner) } returns mutableCardScannerFlow
     }
@@ -279,7 +279,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = true,
-            isArchiveEnabled = true,
             isCardScannerEnabled = false,
         )
         val viewModel = createAddVaultItemViewModel(
@@ -369,7 +368,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 shouldShowCoachMarkTour = false,
                 defaultUriMatchType = UriMatchTypeModel.EXACT,
                 hasPremium = true,
-                isArchiveEnabled = true,
                 isCardScannerEnabled = false,
             ),
             viewModel.stateFlow.value,
@@ -552,20 +550,35 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `UpgradeToPremiumClick should emit NavigateToPremium`() = runTest {
-        val viewModel = createAddVaultItemViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultAddEditAction.Common.UpgradeToPremiumClick)
-            assertEquals(
-                VaultAddEditEvent.NavigateToPremium(
-                    uri = "https://vault.bitwarden.com/#/" +
-                        "settings/subscription/premium" +
-                        "?callToAction=upgradeToPremium",
-                ),
-                awaitItem(),
-            )
+    fun `UpgradeToPremiumClick should emit NavigateToPremium when in-app upgrade not available`() =
+        runTest {
+            val viewModel = createAddVaultItemViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.UpgradeToPremiumClick)
+                assertEquals(
+                    VaultAddEditEvent.NavigateToPremium(
+                        uri = "https://vault.bitwarden.com/#/" +
+                            "settings/subscription/premium" +
+                            "?callToAction=upgradeToPremium",
+                    ),
+                    awaitItem(),
+                )
+            }
         }
-    }
+
+    @Test
+    fun `UpgradeToPremiumClick should emit NavigateToPlanModal when in-app upgrade available`() =
+        runTest {
+            every { premiumStateManager.isInAppUpgradeAvailable() } returns true
+            val viewModel = createAddVaultItemViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.UpgradeToPremiumClick)
+                assertEquals(
+                    VaultAddEditEvent.NavigateToPlanModal,
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `snackbar relay emission should send ShowSnackbar`() = runTest {
@@ -5437,7 +5450,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             createCredentialRequest = createCredentialRequest,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = hasPremium,
-            isArchiveEnabled = true,
             isCardScannerEnabled = false,
         )
 
@@ -5539,6 +5551,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             networkConnectionManager = networkConnectionManager,
             firstTimeActionManager = firstTimeActionManager,
             environmentRepository = environmentRepository,
+            premiumStateManager = premiumStateManager,
         )
 
     private fun createVaultData(

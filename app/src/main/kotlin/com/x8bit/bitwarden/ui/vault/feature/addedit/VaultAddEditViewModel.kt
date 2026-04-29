@@ -33,6 +33,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
@@ -141,6 +142,7 @@ class VaultAddEditViewModel @Inject constructor(
     private val networkConnectionManager: NetworkConnectionManager,
     private val firstTimeActionManager: FirstTimeActionManager,
     private val environmentRepository: EnvironmentRepository,
+    private val premiumStateManager: PremiumStateManager,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -182,7 +184,6 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             VaultAddEditState(
-                isArchiveEnabled = featureFlagManager.getFeatureFlag(FlagKey.ArchiveItems),
                 isCardScannerEnabled = featureFlagManager.getFeatureFlag(FlagKey.CardScanner),
                 vaultAddEditType = vaultAddEditType,
                 cipherType = vaultCipherType,
@@ -276,12 +277,6 @@ class VaultAddEditViewModel @Inject constructor(
                     shouldShowCoachMarkTour = shouldShowTour,
                 )
             }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        featureFlagManager
-            .getFeatureFlagFlow(FlagKey.ArchiveItems)
-            .map { VaultAddEditAction.Internal.ArchiveItemsFlagUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -652,12 +647,19 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleUpgradeToPremiumClick() {
-        val baseUrl = environmentRepository.environment.environmentUrlData.baseWebVaultUrlOrDefault
-        sendEvent(
-            VaultAddEditEvent.NavigateToPremium(
-                uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium",
-            ),
-        )
+        if (premiumStateManager.isInAppUpgradeAvailable()) {
+            sendEvent(VaultAddEditEvent.NavigateToPlanModal)
+        } else {
+            val baseUrl = environmentRepository
+                .environment
+                .environmentUrlData
+                .baseWebVaultUrlOrDefault
+            sendEvent(
+                VaultAddEditEvent.NavigateToPremium(
+                    uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium",
+                ),
+            )
+        }
     }
 
     private fun handleConfirmDeleteClick() {
@@ -1697,10 +1699,6 @@ class VaultAddEditViewModel @Inject constructor(
                 handleUnarchiveCipherReceive(action)
             }
 
-            is VaultAddEditAction.Internal.ArchiveItemsFlagUpdateReceive -> {
-                handleArchiveItemsFlagUpdateReceive(action)
-            }
-
             is VaultAddEditAction.Internal.CardScannerFlagUpdateReceive -> {
                 handleCardScannerFlagUpdateReceive(action)
             }
@@ -1918,12 +1916,6 @@ class VaultAddEditViewModel @Inject constructor(
                 sendEvent(VaultAddEditEvent.NavigateBack)
             }
         }
-    }
-
-    private fun handleArchiveItemsFlagUpdateReceive(
-        action: VaultAddEditAction.Internal.ArchiveItemsFlagUpdateReceive,
-    ) {
-        mutableStateFlow.update { it.copy(isArchiveEnabled = action.isEnabled) }
     }
 
     private fun handleCardScannerFlagUpdateReceive(
@@ -2535,7 +2527,6 @@ data class VaultAddEditState(
     val createCredentialRequest: CreateCredentialRequest? = null,
     val defaultUriMatchType: UriMatchType,
     private val shouldShowCoachMarkTour: Boolean,
-    private val isArchiveEnabled: Boolean,
     val isCardScannerEnabled: Boolean,
 ) : Parcelable {
 
@@ -2593,8 +2584,7 @@ data class VaultAddEditState(
      * Helper to determine if the UI should display the archive button.
      */
     val displayArchiveButton: Boolean
-        get() = isArchiveEnabled &&
-            isEditItemMode &&
+        get() = isEditItemMode &&
             (viewState as? ViewState.Content)
                 ?.common
                 ?.originalCipher
@@ -2604,8 +2594,7 @@ data class VaultAddEditState(
      * Helper to determine if the UI should display the unarchive button.
      */
     val displayUnarchiveButton: Boolean
-        get() = isArchiveEnabled &&
-            isEditItemMode &&
+        get() = isEditItemMode &&
             (viewState as? ViewState.Content)
                 ?.common
                 ?.originalCipher
@@ -3196,6 +3185,11 @@ sealed class VaultAddEditEvent {
     data class NavigateToPremium(
         val uri: String,
     ) : VaultAddEditEvent()
+
+    /**
+     * Navigates to the in-app plan modal for premium upgrade.
+     */
+    data object NavigateToPlanModal : VaultAddEditEvent()
 
     /**
      * Navigates to the collections screen.
@@ -3976,13 +3970,6 @@ sealed class VaultAddEditAction {
          */
         data class AvailableFoldersReceive(
             val folderData: DataState<List<FolderView>>,
-        ) : Internal()
-
-        /**
-         * Indicates that the Archive Items flag has been updated.
-         */
-        data class ArchiveItemsFlagUpdateReceive(
-            val isEnabled: Boolean,
         ) : Internal()
 
         /**

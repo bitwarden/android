@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.collections.CollectionView
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.manager.file.FileManager
@@ -29,7 +28,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -132,10 +131,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         } returns mutableSnackbarDataFlow
         every { sendSnackbarData(data = any(), relay = any()) } just runs
     }
-    private val mutableArchiveItemsFlow = MutableStateFlow(true)
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(FlagKey.ArchiveItems) } answers { mutableArchiveItemsFlow.value }
-        every { getFeatureFlagFlow(FlagKey.ArchiveItems) } returns mutableArchiveItemsFlow
+    private val premiumStateManager: PremiumStateManager = mockk {
+        every { isInAppUpgradeAvailable() } returns false
     }
 
     @BeforeEach
@@ -232,20 +229,40 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         }
 
         @Test
-        fun `UpgradeToPremiumClick should emit NavigateToPremium`() = runTest {
-            val viewModel = createViewModel(state = null)
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(VaultItemAction.Common.UpgradeToPremiumClick)
-                assertEquals(
-                    VaultItemEvent.NavigateToUri(
-                        uri = "https://vault.bitwarden.com/#/" +
-                            "settings/subscription/premium" +
-                            "?callToAction=upgradeToPremium",
-                    ),
-                    awaitItem(),
-                )
+        fun `UpgradeToPremiumClick should emit NavigateToUri when in-app upgrade not available`() =
+            runTest {
+                val viewModel = createViewModel(state = null)
+                viewModel.eventFlow.test {
+                    viewModel.trySendAction(
+                        VaultItemAction.Common.UpgradeToPremiumClick,
+                    )
+                    assertEquals(
+                        VaultItemEvent.NavigateToUri(
+                            uri = "https://vault.bitwarden.com/#/" +
+                                "settings/subscription/premium" +
+                                "?callToAction=upgradeToPremium",
+                        ),
+                        awaitItem(),
+                    )
+                }
             }
-        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `UpgradeToPremiumClick should emit NavigateToPlanModal when in-app upgrade available`() =
+            runTest {
+                every { premiumStateManager.isInAppUpgradeAvailable() } returns true
+                val viewModel = createViewModel(state = null)
+                viewModel.eventFlow.test {
+                    viewModel.trySendAction(
+                        VaultItemAction.Common.UpgradeToPremiumClick,
+                    )
+                    assertEquals(
+                        VaultItemEvent.NavigateToPlanModal,
+                        awaitItem(),
+                    )
+                }
+            }
 
         @Test
         fun `ArchiveClick without Premium should show ArchiveRequiresPremium dialog`() = runTest {
@@ -2078,6 +2095,17 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `on CopyNumberClick should call setText on the ClipboardManager`() = runTest {
+            val cardTypeWithFormattedNumber = DEFAULT_CARD_TYPE.copy(
+                number = VaultItemState.ViewState.Content.ItemType.Card.NumberData(
+                    number = "1234 5436",
+                    isVisible = false,
+                ),
+            )
+            viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(
+                    viewState = createViewState(type = cardTypeWithFormattedNumber),
+                ),
+            )
             every {
                 mockCipherView.toViewState(
                     previousState = null,
@@ -2092,7 +2120,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
                 )
-            } returns createViewState(type = DEFAULT_CARD_TYPE)
+            } returns createViewState(type = cardTypeWithFormattedNumber)
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
@@ -2105,6 +2133,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     text = "12345436",
                     toastDescriptorOverride = BitwardenString.number.asText(),
                 )
+            }
+            verify(atLeast = 1) {
                 mockCipherView.toViewState(
                     previousState = null,
                     isPremiumUser = true,
@@ -2963,7 +2993,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         environmentRepository = environmentRepository,
         settingsRepository = settingsRepository,
         snackbarRelayManager = snackbarRelayManager,
-        featureFlagManager = featureFlagManager,
+        premiumStateManager = premiumStateManager,
     )
 
     private fun createViewState(
@@ -3002,7 +3032,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = false,
             hasPremium = true,
-            isArchiveEnabled = true,
         )
 
         private val DEFAULT_USER_ACCOUNT = UserState.Account(

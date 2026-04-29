@@ -1,5 +1,6 @@
 package com.bitwarden.network.service
 
+import com.bitwarden.network.model.BitwardenSubscriptionResponseJson
 import com.bitwarden.network.model.CheckoutSessionResponseJson
 import com.bitwarden.network.model.PortalUrlResponseJson
 import com.bitwarden.network.model.PremiumPlanResponseJson
@@ -23,4 +24,9 @@ interface BillingService {
      * Retrieves the premium plan pricing information.
      */
     suspend fun getPremiumPlan(): Result<PremiumPlanResponseJson>
+
+    /**
+     * Retrieves the user's premium subscription details.
+     */
+    suspend fun getSubscription(): Result<BitwardenSubscriptionResponseJson>
 }

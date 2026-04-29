@@ -215,6 +215,7 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToAddEditSend = onNavigateToAddEditSend,
                 onNavigateToViewSend = onNavigateToViewSend,
                 onNavigateToSearchSend = onNavigateToSearchSend,
+                onNavigateToPlan = onNavigateToPlan,
             )
             generatorGraph(
                 onNavigateToPasswordHistory = { navigateToPasswordHistory() },

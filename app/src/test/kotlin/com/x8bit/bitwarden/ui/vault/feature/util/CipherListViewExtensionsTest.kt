@@ -12,7 +12,6 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflo
 import com.x8bit.bitwarden.ui.vault.model.VaultTrailingIcon
 import com.x8bit.bitwarden.ui.vault.util.toSdkCipherType
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
@@ -40,7 +39,6 @@ class CipherListViewExtensionsTest {
         val result = cipher.toOverflowActions(
             hasMasterPassword = false,
             isPremiumUser = true,
-            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -89,7 +87,6 @@ class CipherListViewExtensionsTest {
         val result = cipher.toOverflowActions(
             hasMasterPassword = false,
             isPremiumUser = false,
-            isArchiveEnabled = true,
         )
 
         assertTrue(
@@ -114,7 +111,6 @@ class CipherListViewExtensionsTest {
         val result = cipher.toOverflowActions(
             hasMasterPassword = true,
             isPremiumUser = false,
-            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -157,7 +153,6 @@ class CipherListViewExtensionsTest {
         val result = cipher.toOverflowActions(
             hasMasterPassword = true,
             isPremiumUser = false,
-            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -189,7 +184,6 @@ class CipherListViewExtensionsTest {
         val result = cipher.toOverflowActions(
             hasMasterPassword = true,
             isPremiumUser = false,
-            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -231,7 +225,6 @@ class CipherListViewExtensionsTest {
         val result = cipher.toOverflowActions(
             hasMasterPassword = false,
             isPremiumUser = false,
-            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -257,7 +250,6 @@ class CipherListViewExtensionsTest {
         val result = cipher.toOverflowActions(
             hasMasterPassword = false,
             isPremiumUser = false,
-            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -291,7 +283,6 @@ class CipherListViewExtensionsTest {
         val result = cipher.toOverflowActions(
             hasMasterPassword = true,
             isPremiumUser = false,
-            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -318,7 +309,6 @@ class CipherListViewExtensionsTest {
         val result = cipher.toOverflowActions(
             hasMasterPassword = true,
             isPremiumUser = false,
-            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -356,7 +346,6 @@ class CipherListViewExtensionsTest {
         val result = cipher.toOverflowActions(
             hasMasterPassword = false,
             isPremiumUser = false,
-            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -384,7 +373,6 @@ class CipherListViewExtensionsTest {
         val result = cipher.toOverflowActions(
             hasMasterPassword = true,
             isPremiumUser = false,
-            isArchiveEnabled = true,
         )
 
         assertTrue(
@@ -411,7 +399,6 @@ class CipherListViewExtensionsTest {
         val result = cipher.toOverflowActions(
             hasMasterPassword = true,
             isPremiumUser = false,
-            isArchiveEnabled = true,
         )
 
         assertTrue(
@@ -446,36 +433,9 @@ class CipherListViewExtensionsTest {
         val result = cipher.toOverflowActions(
             hasMasterPassword = true,
             isPremiumUser = false,
-            isArchiveEnabled = true,
         )
 
         assertTrue(result.contains(ListingItemOverflowAction.VaultAction.UnarchiveClick(id)))
-    }
-
-    @Test
-    fun `toOverflowActions should not return Archive action when Archive is disabled`() {
-        val loginListView = createMockLoginListView(
-            number = 1,
-            username = "",
-            uris = emptyList(),
-            totp = null,
-        )
-        val cipher = createMockCipherListView(
-            number = 1,
-            id = id,
-            isArchived = false,
-            isDeleted = false,
-            edit = true,
-            type = CipherListViewType.Login(loginListView),
-        )
-
-        val result = cipher.toOverflowActions(
-            hasMasterPassword = true,
-            isPremiumUser = false,
-            isArchiveEnabled = false,
-        )
-
-        assertFalse(result.contains(ListingItemOverflowAction.VaultAction.ArchiveClick(id)))
     }
 
     @Test

@@ -2,14 +2,24 @@ package com.x8bit.bitwarden.data.billing.repository
 
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.network.model.BitwardenSubscriptionResponseJson
+import com.bitwarden.network.model.CadenceTypeJson
+import com.bitwarden.network.model.CartItemJson
+import com.bitwarden.network.model.CartJson
 import com.bitwarden.network.model.CheckoutSessionResponseJson
+import com.bitwarden.network.model.PasswordManagerCartItemsJson
 import com.bitwarden.network.model.PortalUrlResponseJson
 import com.bitwarden.network.model.PremiumPlanResponseJson
+import com.bitwarden.network.model.SubscriptionStatusJson
 import com.bitwarden.network.service.BillingService
 import com.x8bit.bitwarden.data.billing.manager.PlayBillingManager
 import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
 import com.x8bit.bitwarden.data.billing.repository.model.CustomerPortalResult
+import com.x8bit.bitwarden.data.billing.repository.model.PlanCadence
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResult
+import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStatus
+import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionInfo
+import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionResult
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -19,6 +29,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
 
 class BillingRepositoryTest {
 
@@ -150,6 +161,76 @@ class BillingRepositoryTest {
                 result,
             )
         }
+
+    @Test
+    fun `getSubscription when service returns success should return Success`() =
+        runTest {
+            coEvery {
+                billingService.getSubscription()
+            } returns ACTIVE_SUBSCRIPTION_RESPONSE.asSuccess()
+
+            val result = repository.getSubscription()
+
+            assertEquals(
+                SubscriptionResult.Success(
+                    subscription = SubscriptionInfo(
+                        status = PremiumSubscriptionStatus.ACTIVE,
+                        cadence = PlanCadence.ANNUALLY,
+                        seatsCost = BigDecimal("19.80"),
+                        storageCost = null,
+                        discountAmount = null,
+                        estimatedTax = BigDecimal.ZERO,
+                        nextChargeTotal = BigDecimal("19.80"),
+                        nextCharge = null,
+                        canceledDate = null,
+                        suspensionDate = null,
+                        gracePeriodDays = null,
+                    ),
+                ),
+                result,
+            )
+        }
+
+    @Test
+    fun `getSubscription when service returns failure should return Error`() =
+        runTest {
+            val exception = RuntimeException("Network error")
+            coEvery {
+                billingService.getSubscription()
+            } returns exception.asFailure()
+
+            val result = repository.getSubscription()
+
+            assertEquals(
+                SubscriptionResult.Error(error = exception),
+                result,
+            )
+        }
 }
 
 private const val ANNUAL_PRICE = 19.99
+
+private val ACTIVE_SUBSCRIPTION_RESPONSE = BitwardenSubscriptionResponseJson(
+    status = SubscriptionStatusJson.ACTIVE,
+    cart = CartJson(
+        passwordManager = PasswordManagerCartItemsJson(
+            seats = CartItemJson(
+                translationKey = "premiumMembership",
+                quantity = 1,
+                cost = BigDecimal("19.80"),
+                discount = null,
+            ),
+            additionalStorage = null,
+        ),
+        secretsManager = null,
+        cadence = CadenceTypeJson.ANNUALLY,
+        discount = null,
+        estimatedTax = BigDecimal.ZERO,
+    ),
+    storage = null,
+    cancelAt = null,
+    canceled = null,
+    nextCharge = null,
+    suspension = null,
+    gracePeriod = null,
+)

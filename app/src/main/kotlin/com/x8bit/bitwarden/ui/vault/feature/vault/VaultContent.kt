@@ -35,7 +35,6 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 
 private const val TOTP_TYPES_COUNT: Int = 1
 private const val HIDDEN_TYPES_COUNT: Int = 2
-private const val TRASH_TYPES_COUNT: Int = 1
 
 /**
  * Content view for the [VaultScreen].
@@ -454,11 +453,7 @@ fun VaultContent(
         item(key = "hidden_items_header") {
             BitwardenListHeaderText(
                 label = stringResource(id = BitwardenString.hidden_items),
-                supportingLabel = if (state.archiveEnabled) {
-                    HIDDEN_TYPES_COUNT.toString()
-                } else {
-                    TRASH_TYPES_COUNT.toString()
-                },
+                supportingLabel = HIDDEN_TYPES_COUNT.toString(),
                 modifier = Modifier
                     .animateItem()
                     .fillMaxWidth()
@@ -468,23 +463,21 @@ fun VaultContent(
             Spacer(modifier = Modifier.height(height = 8.dp))
         }
 
-        if (state.archiveEnabled) {
-            item(key = "archive_group") {
-                BitwardenGroupItem(
-                    startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_archive),
-                    endIcon = state.archiveEndIcon?.let { IconData.Local(iconRes = it) },
-                    label = stringResource(id = BitwardenString.archive_noun),
-                    subLabel = state.archiveSubText?.invoke(),
-                    supportingLabel = state.archivedItemsCount?.toString().orEmpty(),
-                    onClick = vaultHandlers.archiveClick,
-                    cardStyle = CardStyle.Top(dividerPadding = 56.dp),
-                    modifier = Modifier
-                        .animateItem()
-                        .fillMaxWidth()
-                        .testTag(tag = "ArchiveFilter")
-                        .standardHorizontalMargin(),
-                )
-            }
+        item(key = "archive_group") {
+            BitwardenGroupItem(
+                startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_archive),
+                endIcon = state.archiveEndIcon?.let { IconData.Local(iconRes = it) },
+                label = stringResource(id = BitwardenString.archive_noun),
+                subLabel = state.archiveSubText?.invoke(),
+                supportingLabel = state.archivedItemsCount?.toString().orEmpty(),
+                onClick = vaultHandlers.archiveClick,
+                cardStyle = CardStyle.Top(dividerPadding = 56.dp),
+                modifier = Modifier
+                    .animateItem()
+                    .fillMaxWidth()
+                    .testTag(tag = "ArchiveFilter")
+                    .standardHorizontalMargin(),
+            )
         }
 
         item(key = "trash_group") {
@@ -493,7 +486,7 @@ fun VaultContent(
                 label = stringResource(id = BitwardenString.trash),
                 supportingLabel = state.trashItemsCount.toString(),
                 onClick = vaultHandlers.trashClick,
-                cardStyle = if (state.archiveEnabled) CardStyle.Bottom else CardStyle.Full,
+                cardStyle = CardStyle.Bottom,
                 modifier = Modifier
                     .animateItem()
                     .fillMaxWidth()
