@@ -238,6 +238,7 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.ItemType.Card -> handleCardTypeActions(action)
             is VaultItemAction.ItemType.SshKey -> handleSshKeyTypeActions(action)
             is VaultItemAction.ItemType.Identity -> handleIdentityTypeActions(action)
+            is VaultItemAction.ItemType.BankAccount -> handleBankAccountTypeActions(action)
             is VaultItemAction.Common -> handleCommonActions(action)
             is VaultItemAction.Internal -> handleInternalAction(action)
         }
@@ -1041,6 +1042,81 @@ class VaultItemViewModel @Inject constructor(
 
     //endregion Identity Type Handlers
 
+    //region Bank Account Type Handlers
+
+    private fun handleBankAccountTypeActions(action: VaultItemAction.ItemType.BankAccount) {
+        when (action) {
+            VaultItemAction.ItemType.BankAccount.CopyAccountNumberClick -> {
+                handleCopyBankAccountNumberClick()
+            }
+
+            VaultItemAction.ItemType.BankAccount.CopyRoutingNumberClick -> {
+                handleCopyBankRoutingNumberClick()
+            }
+
+            VaultItemAction.ItemType.BankAccount.CopySwiftCodeClick -> {
+                handleCopyBankSwiftCodeClick()
+            }
+
+            VaultItemAction.ItemType.BankAccount.CopyIbanClick -> {
+                handleCopyBankIbanClick()
+            }
+
+            is VaultItemAction.ItemType.BankAccount.AccountNumberVisibilityClick,
+            is VaultItemAction.ItemType.BankAccount.PinVisibilityClick,
+                -> {
+                // Visibility is managed locally by VaultItemBankAccountContent via
+                // rememberSaveable. The action remains so future telemetry can hook in.
+            }
+        }
+    }
+
+    private fun handleCopyBankAccountNumberClick() {
+        onBankAccountContent { _, bankAccount ->
+            bankAccount.accountNumber?.let { accountNumber ->
+                clipboardManager.setText(
+                    text = accountNumber,
+                    toastDescriptorOverride = BitwardenString.account_number.asText(),
+                )
+            }
+        }
+    }
+
+    private fun handleCopyBankRoutingNumberClick() {
+        onBankAccountContent { _, bankAccount ->
+            bankAccount.routingNumber?.let { routingNumber ->
+                clipboardManager.setText(
+                    text = routingNumber,
+                    toastDescriptorOverride = BitwardenString.routing_number.asText(),
+                )
+            }
+        }
+    }
+
+    private fun handleCopyBankSwiftCodeClick() {
+        onBankAccountContent { _, bankAccount ->
+            bankAccount.swiftCode?.let { swiftCode ->
+                clipboardManager.setText(
+                    text = swiftCode,
+                    toastDescriptorOverride = BitwardenString.swift_code.asText(),
+                )
+            }
+        }
+    }
+
+    private fun handleCopyBankIbanClick() {
+        onBankAccountContent { _, bankAccount ->
+            bankAccount.iban?.let { iban ->
+                clipboardManager.setText(
+                    text = iban,
+                    toastDescriptorOverride = BitwardenString.iban.asText(),
+                )
+            }
+        }
+    }
+
+    //endregion Bank Account Type Handlers
+
     //region Internal Type Handlers
 
     private fun handleInternalAction(action: VaultItemAction.Internal) {
@@ -1420,6 +1496,21 @@ class VaultItemViewModel @Inject constructor(
                 (content.type as? VaultItemState.ViewState.Content.ItemType.Identity)
                     ?.let { identityContent ->
                         block(content, identityContent)
+                    }
+            }
+    }
+
+    private inline fun onBankAccountContent(
+        crossinline block: (
+            VaultItemState.ViewState.Content,
+            VaultItemState.ViewState.Content.ItemType.BankAccount,
+        ) -> Unit,
+    ) {
+        state.viewState.asContentOrNull()
+            ?.let { content ->
+                (content.type as? VaultItemState.ViewState.Content.ItemType.BankAccount)
+                    ?.let { bankAccountContent ->
+                        block(content, bankAccountContent)
                     }
             }
     }
@@ -2392,6 +2483,42 @@ sealed class VaultItemAction {
              * The user has clicked the copy button for the address.
              */
             data object CopyAddressClick : Identity()
+        }
+
+        /**
+         * Represents actions specific to the Bank Account type.
+         */
+        sealed class BankAccount : ItemType() {
+
+            /**
+             * The user has clicked the copy button for the account number.
+             */
+            data object CopyAccountNumberClick : BankAccount()
+
+            /**
+             * The user has clicked the copy button for the routing number.
+             */
+            data object CopyRoutingNumberClick : BankAccount()
+
+            /**
+             * The user has clicked the copy button for the SWIFT code.
+             */
+            data object CopySwiftCodeClick : BankAccount()
+
+            /**
+             * The user has clicked the copy button for the IBAN.
+             */
+            data object CopyIbanClick : BankAccount()
+
+            /**
+             * The user has toggled the account number visibility.
+             */
+            data class AccountNumberVisibilityClick(val isVisible: Boolean) : BankAccount()
+
+            /**
+             * The user has toggled the PIN visibility.
+             */
+            data class PinVisibilityClick(val isVisible: Boolean) : BankAccount()
         }
     }
 

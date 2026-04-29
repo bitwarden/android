@@ -147,6 +147,8 @@ fun VaultData.toViewState(
                 .count { it.type is CipherListViewType.SecureNote },
             sshKeyItemsCount = activeCipherViews
                 .count { it.type is CipherListViewType.SshKey },
+            bankAccountItemsCount = activeCipherViews
+                .count { it.type is CipherListViewType.BankAccount },
             favoriteItems = activeDecryptedCipherViews
                 .filter { it.favorite }
                 .mapNotNull {

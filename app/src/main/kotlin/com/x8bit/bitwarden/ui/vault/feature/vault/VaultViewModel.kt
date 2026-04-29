@@ -709,6 +709,14 @@ class VaultViewModel @Inject constructor(
                 handleCopyNumberClick(overflowAction)
             }
 
+            is ListingItemOverflowAction.VaultAction.CopyAccountNumberClick -> {
+                handleCopyAccountNumberClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyRoutingNumberClick -> {
+                handleCopyRoutingNumberClick(overflowAction)
+            }
+
             is ListingItemOverflowAction.VaultAction.CopyPasswordClick -> {
                 handleCopyPasswordClick(overflowAction)
             }
@@ -796,6 +804,40 @@ class VaultViewModel @Inject constructor(
                     toastDescriptorOverride = BitwardenString.number.asText(),
                 )
             }
+        }
+    }
+
+    private fun handleCopyAccountNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyAccountNumberClick,
+    ) {
+        viewModelScope.launch {
+            getCipherForCopyOrNull(cipherId = action.cipherId)
+                ?.bankAccount
+                ?.accountNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    clipboardManager.setText(
+                        text = it,
+                        toastDescriptorOverride = BitwardenString.account_number.asText(),
+                    )
+                }
+        }
+    }
+
+    private fun handleCopyRoutingNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyRoutingNumberClick,
+    ) {
+        viewModelScope.launch {
+            getCipherForCopyOrNull(cipherId = action.cipherId)
+                ?.bankAccount
+                ?.routingNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    clipboardManager.setText(
+                        text = it,
+                        toastDescriptorOverride = BitwardenString.routing_number.asText(),
+                    )
+                }
         }
     }
 
@@ -1633,6 +1675,7 @@ data class VaultState(
          * @property totpItemsCount The count of totp code items.
          * @property loginItemsCount The count of Login type items.
          * @property cardItemsCount The count of Card type items.
+         * @property bankAccountItemsCount The count of Bank Account type items.
          * @property identityItemsCount The count of Identity type items.
          * @property secureNoteItemsCount The count of Secure Notes type items.
          * @property favoriteItems The list of favorites to be displayed.
@@ -1654,6 +1697,7 @@ data class VaultState(
             val identityItemsCount: Int,
             val secureNoteItemsCount: Int,
             val sshKeyItemsCount: Int,
+            val bankAccountItemsCount: Int,
             val favoriteItems: List<VaultItem>,
             val folderItems: List<FolderItem>,
             val noFolderItems: List<VaultItem>,

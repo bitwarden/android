@@ -142,6 +142,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 6,
                 sshKeyItemsCount = 0,
+                bankAccountItemsCount = 0,
                 archivedItemsCount = 1,
                 archiveSubText = null,
                 archiveEndIcon = null,
@@ -196,6 +197,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 6,
                 sshKeyItemsCount = 0,
+                bankAccountItemsCount = 0,
                 archivedItemsCount = 0,
                 archiveSubText = null,
                 archiveEndIcon = null,
@@ -270,6 +272,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 6,
                 sshKeyItemsCount = 0,
+                bankAccountItemsCount = 0,
                 archivedItemsCount = 0,
                 archiveSubText = null,
                 archiveEndIcon = null,
@@ -369,6 +372,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 6,
                 sshKeyItemsCount = 0,
+                bankAccountItemsCount = 0,
                 archivedItemsCount = 0,
                 archiveSubText = null,
                 archiveEndIcon = null,
@@ -414,6 +418,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 0,
                 itemTypesCount = 6,
                 sshKeyItemsCount = 0,
+                bankAccountItemsCount = 0,
                 archivedItemsCount = null,
                 archiveSubText = BitwardenString.premium_subscription_required.asText(),
                 archiveEndIcon = BitwardenDrawable.ic_locked,
@@ -461,6 +466,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 6,
                 sshKeyItemsCount = 0,
+                bankAccountItemsCount = 0,
                 archivedItemsCount = null,
                 archiveSubText = BitwardenString.premium_subscription_required.asText(),
                 archiveEndIcon = BitwardenDrawable.ic_locked,
@@ -508,6 +514,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 6,
                 sshKeyItemsCount = 0,
+                bankAccountItemsCount = 0,
                 archivedItemsCount = null,
                 archiveSubText = BitwardenString.premium_subscription_required.asText(),
                 archiveEndIcon = BitwardenDrawable.ic_locked,
@@ -739,6 +746,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 6,
                 sshKeyItemsCount = 0,
+                bankAccountItemsCount = 0,
                 archivedItemsCount = 0,
                 archiveSubText = null,
                 archiveEndIcon = null,
@@ -786,6 +794,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 0,
                 itemTypesCount = 6,
                 sshKeyItemsCount = 0,
+                bankAccountItemsCount = 0,
                 archivedItemsCount = 0,
                 archiveSubText = null,
                 archiveEndIcon = null,
@@ -842,6 +851,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 100,
                 itemTypesCount = 6,
                 sshKeyItemsCount = 0,
+                bankAccountItemsCount = 0,
                 archivedItemsCount = 0,
                 archiveSubText = null,
                 archiveEndIcon = null,
@@ -911,6 +921,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 6,
                 sshKeyItemsCount = 0,
+                bankAccountItemsCount = 0,
                 archivedItemsCount = 0,
                 archiveSubText = null,
                 archiveEndIcon = null,
@@ -1000,6 +1011,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 6,
                 sshKeyItemsCount = 0,
+                bankAccountItemsCount = 0,
                 archivedItemsCount = 0,
                 archiveSubText = null,
                 archiveEndIcon = null,
@@ -1058,6 +1070,7 @@ class VaultDataExtensionsTest {
                 identityItemsCount = 0,
                 secureNoteItemsCount = 0,
                 sshKeyItemsCount = 0,
+                bankAccountItemsCount = 0,
                 favoriteItems = listOf(),
                 collectionItems = listOf(),
                 folderItems = listOf(),
@@ -1119,6 +1132,7 @@ class VaultDataExtensionsTest {
                 identityItemsCount = 0,
                 secureNoteItemsCount = 0,
                 sshKeyItemsCount = 0,
+                bankAccountItemsCount = 0,
                 favoriteItems = listOf(),
                 collectionItems = listOf(),
                 folderItems = listOf(),
@@ -1167,6 +1181,7 @@ class VaultDataExtensionsTest {
                 secureNoteItemsCount = 0,
                 // Verify SSH key vault items are counted
                 sshKeyItemsCount = 1,
+                bankAccountItemsCount = 0,
                 favoriteItems = listOf(),
                 collectionItems = listOf(),
                 folderItems = listOf(),
@@ -1229,6 +1244,7 @@ class VaultDataExtensionsTest {
                 identityItemsCount = 0,
                 secureNoteItemsCount = 0,
                 sshKeyItemsCount = 3,
+                bankAccountItemsCount = 0,
                 favoriteItems = listOf(createMockSshKeyVaultItem(number = 1)),
                 collectionItems = listOf(),
                 folderItems = listOf(),
@@ -1248,6 +1264,35 @@ class VaultDataExtensionsTest {
             ),
             actual,
         )
+    }
+
+    @Test
+    fun `toViewState should count bank account vault items in bankAccountItemsCount`() {
+        val vaultData = VaultData(
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(number = 1),
+                    createMockCipherListView(number = 2, type = CipherListViewType.BankAccount),
+                    createMockCipherListView(number = 3, type = CipherListViewType.BankAccount),
+                ),
+            ),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+        )
+
+        val actual = vaultData.toViewState(
+            isPremium = true,
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = emptyList(),
+        )
+
+        val content = actual as VaultState.ViewState.Content
+        assertEquals(2, content.bankAccountItemsCount)
     }
 }
 

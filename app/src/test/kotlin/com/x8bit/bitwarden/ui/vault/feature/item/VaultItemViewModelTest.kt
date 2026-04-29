@@ -2603,6 +2603,111 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
+    inner class BankAccountActions {
+        private lateinit var viewModel: VaultItemViewModel
+
+        @BeforeEach
+        fun setup() {
+            viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(viewState = BANK_ACCOUNT_VIEW_STATE),
+            )
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canRestore = false,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
+                    hasOrganizations = true,
+                )
+            } returns BANK_ACCOUNT_VIEW_STATE
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+        }
+
+        @Test
+        fun `on CopyAccountNumberClick should copy account number to clipboard`() = runTest {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.BankAccount.CopyAccountNumberClick,
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "12345678",
+                    toastDescriptorOverride = BitwardenString.account_number.asText(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopyRoutingNumberClick should copy routing number to clipboard`() = runTest {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.BankAccount.CopyRoutingNumberClick,
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "021000021",
+                    toastDescriptorOverride = BitwardenString.routing_number.asText(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopySwiftCodeClick should copy SWIFT code to clipboard`() = runTest {
+            viewModel.trySendAction(VaultItemAction.ItemType.BankAccount.CopySwiftCodeClick)
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "BOFAUS3N",
+                    toastDescriptorOverride = BitwardenString.swift_code.asText(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopyIbanClick should copy IBAN to clipboard`() = runTest {
+            viewModel.trySendAction(VaultItemAction.ItemType.BankAccount.CopyIbanClick)
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "GB29NWBK60161331926819",
+                    toastDescriptorOverride = BitwardenString.iban.asText(),
+                )
+            }
+        }
+
+        @Test
+        fun `on AccountNumberVisibilityClick should not copy or update state`() = runTest {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.BankAccount.AccountNumberVisibilityClick(
+                    isVisible = true,
+                ),
+            )
+            verify(exactly = 0) { clipboardManager.setText(text = any<String>()) }
+            assertEquals(
+                DEFAULT_STATE.copy(viewState = BANK_ACCOUNT_VIEW_STATE),
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `on PinVisibilityClick should not copy or update state`() = runTest {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.BankAccount.PinVisibilityClick(isVisible = true),
+            )
+            verify(exactly = 0) { clipboardManager.setText(text = any<String>()) }
+            assertEquals(
+                DEFAULT_STATE.copy(viewState = BANK_ACCOUNT_VIEW_STATE),
+                viewModel.stateFlow.value,
+            )
+        }
+    }
+
+    @Nested
     inner class VaultItemFlow {
         @BeforeEach
         fun setup() {
@@ -3219,6 +3324,27 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             VaultItemState.ViewState.Content(
                 common = DEFAULT_COMMON,
                 type = DEFAULT_IDENTITY_TYPE,
+            )
+
+        private val DEFAULT_BANK_ACCOUNT_TYPE:
+            VaultItemState.ViewState.Content.ItemType.BankAccount =
+            VaultItemState.ViewState.Content.ItemType.BankAccount(
+                bankName = "First National",
+                nameOnAccount = "John Doe",
+                accountType = "Checking",
+                accountNumber = "12345678",
+                routingNumber = "021000021",
+                branchNumber = "001",
+                pin = "4242",
+                swiftCode = "BOFAUS3N",
+                iban = "GB29NWBK60161331926819",
+                bankContactPhone = "555-0100",
+            )
+
+        private val BANK_ACCOUNT_VIEW_STATE: VaultItemState.ViewState.Content =
+            VaultItemState.ViewState.Content(
+                common = DEFAULT_COMMON,
+                type = DEFAULT_BANK_ACCOUNT_TYPE,
             )
     }
 }

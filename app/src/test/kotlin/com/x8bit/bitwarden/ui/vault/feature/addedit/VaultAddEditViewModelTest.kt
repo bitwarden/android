@@ -95,6 +95,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttest
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDefaultAddTypeContent
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import com.x8bit.bitwarden.ui.vault.model.VaultBankAccountType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
@@ -4002,6 +4003,207 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+    }
+
+    @Nested
+    inner class VaultAddEditBankAccountTypeItemActions {
+        private lateinit var viewModel: VaultAddEditViewModel
+        private lateinit var vaultAddItemInitialState: VaultAddEditState
+        private lateinit var bankAccountInitialSavedStateHandle: SavedStateHandle
+
+        @BeforeEach
+        fun setup() {
+            mutableVaultDataFlow.value = DataState.Loaded(
+                createVaultData(cipherListView = createMockCipherListView(1)),
+            )
+            vaultAddItemInitialState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.BANK_ACCOUNT,
+                typeContentViewState =
+                    VaultAddEditState.ViewState.Content.ItemType.BankAccount(),
+            )
+            bankAccountInitialSavedStateHandle = createSavedStateHandleWithState(
+                state = vaultAddItemInitialState,
+                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultItemCipherType = VaultItemCipherType.BANK_ACCOUNT,
+            )
+            viewModel = createAddVaultItemViewModel(
+                savedStateHandle = bankAccountInitialSavedStateHandle,
+            )
+        }
+
+        private fun expectedBankAccount(
+            block: VaultAddEditState.ViewState.Content.ItemType.BankAccount.() ->
+            VaultAddEditState.ViewState.Content.ItemType.BankAccount,
+        ): VaultAddEditState =
+            createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.BANK_ACCOUNT,
+                typeContentViewState = VaultAddEditState
+                    .ViewState
+                    .Content
+                    .ItemType
+                    .BankAccount()
+                    .block(),
+            )
+
+        @Test
+        fun `BankNameTextChange should update bank name`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.BankNameTextChange(
+                    bankName = "First National",
+                ),
+            )
+
+            assertEquals(
+                expectedBankAccount { copy(bankName = "First National") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `NameOnAccountTextChange should update name on account`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.NameOnAccountTextChange(
+                    nameOnAccount = "John Doe",
+                ),
+            )
+
+            assertEquals(
+                expectedBankAccount { copy(nameOnAccount = "John Doe") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `AccountTypeSelect should update account type`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.AccountTypeSelect(
+                    accountType = VaultBankAccountType.CHECKING,
+                ),
+            )
+
+            assertEquals(
+                expectedBankAccount { copy(accountType = VaultBankAccountType.CHECKING) },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `AccountNumberTextChange should update account number`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.AccountNumberTextChange(
+                    accountNumber = "12345",
+                ),
+            )
+
+            assertEquals(
+                expectedBankAccount { copy(accountNumber = "12345") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `AccountNumberVisibilityChange should not change state`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.AccountNumberVisibilityChange(
+                    isVisible = true,
+                ),
+            )
+
+            assertEquals(vaultAddItemInitialState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `RoutingNumberTextChange should update routing number`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.RoutingNumberTextChange(
+                    routingNumber = "021000021",
+                ),
+            )
+
+            assertEquals(
+                expectedBankAccount { copy(routingNumber = "021000021") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `BranchNumberTextChange should update branch number`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.BranchNumberTextChange(
+                    branchNumber = "001",
+                ),
+            )
+
+            assertEquals(
+                expectedBankAccount { copy(branchNumber = "001") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `PinTextChange should update PIN`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.PinTextChange(pin = "1234"),
+            )
+
+            assertEquals(
+                expectedBankAccount { copy(pin = "1234") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `PinVisibilityChange should not change state`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.PinVisibilityChange(
+                    isVisible = true,
+                ),
+            )
+
+            assertEquals(vaultAddItemInitialState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `SwiftCodeTextChange should update SWIFT code`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.SwiftCodeTextChange(
+                    swiftCode = "BOFAUS3N",
+                ),
+            )
+
+            assertEquals(
+                expectedBankAccount { copy(swiftCode = "BOFAUS3N") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IbanTextChange should update IBAN`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.IbanTextChange(
+                    iban = "GB29NWBK60161331926819",
+                ),
+            )
+
+            assertEquals(
+                expectedBankAccount { copy(iban = "GB29NWBK60161331926819") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `BankContactPhoneTextChange should update bank contact phone`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.BankContactPhoneTextChange(
+                    phone = "555-0100",
+                ),
+            )
+
+            assertEquals(
+                expectedBankAccount { copy(bankContactPhone = "555-0100") },
+                viewModel.stateFlow.value,
+            )
         }
     }
 
