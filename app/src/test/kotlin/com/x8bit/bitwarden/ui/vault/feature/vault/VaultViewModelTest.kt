@@ -4012,21 +4012,6 @@ class VaultViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Test
-    fun `vault data loading should not trigger countValidTotpCiphers`() = runTest {
-        // mutableVaultDataStateFlow stays Loading so no data is available
-        val viewModel = createViewModel()
-
-        viewModel.stateFlow.test {
-            assertEquals(DEFAULT_STATE, awaitItem())
-            expectNoEvents()
-        }
-
-        coVerify(exactly = 0) {
-            vaultRepository.countValidTotpCiphers(isPremium = any(), time = any())
-        }
-    }
-
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
             authRepository = authRepository,

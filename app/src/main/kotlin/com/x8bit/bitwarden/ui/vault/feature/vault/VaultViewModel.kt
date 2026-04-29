@@ -199,7 +199,13 @@ class VaultViewModel @Inject constructor(
 
         vaultRepository
             .vaultDataStateFlow
-            .map { VaultAction.Internal.VaultDataReceive(it) }
+            .map {
+                vaultRepository.countValidTotpCiphers(
+                    isPremium = state.isPremium,
+                    time = clock.instant(),
+                ) to it
+            }
+            .map { (count, vaultData) -> VaultAction.Internal.VaultDataReceive(count, vaultData) }
             .onEach {
                 // When the vault data is received, the current activity is about to
                 // be recreated. Adding this delay prevents the dialogs from disappearing.
@@ -1249,17 +1255,7 @@ class VaultViewModel @Inject constructor(
         if (state.isSwitchingAccounts) return
 
         updateViewState(vaultData = action.vaultData)
-
-        if (action.vaultData.data != null) {
-            viewModelScope.launch {
-                updateTotpCodesCount(
-                    vaultRepository.countValidTotpCiphers(
-                        isPremium = state.isPremium,
-                        time = clock.instant(),
-                    ),
-                )
-            }
-        }
+        updateTotpCodesCount(count = action.count)
     }
 
     private fun updateTotpCodesCount(count: Int) {
@@ -2391,6 +2387,7 @@ sealed class VaultAction {
          * Indicates a vault data was received.
          */
         data class VaultDataReceive(
+            val count: Int,
             val vaultData: DataState<VaultData>,
         ) : Internal()
 

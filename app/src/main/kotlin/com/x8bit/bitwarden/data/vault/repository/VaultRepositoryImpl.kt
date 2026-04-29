@@ -459,7 +459,8 @@ class VaultRepositoryImpl(
                         userId = userId,
                         cipherListView = cipher,
                         time = time,
-                    ).isSuccess
+                    )
+                        .isSuccess
             }
     }
 
