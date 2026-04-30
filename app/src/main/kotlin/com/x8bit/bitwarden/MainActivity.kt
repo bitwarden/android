@@ -26,6 +26,7 @@ import androidx.navigation.compose.NavHost
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.platform.util.setHorizonOSAppLayout
 import com.bitwarden.ui.platform.util.setupEdgeToEdge
 import com.bitwarden.ui.platform.util.validate
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityCompletionManager
@@ -216,7 +217,9 @@ class MainActivity : AppCompatActivity() {
         super.onPostCreate(savedInstanceState)
         // resize only one time at the start
         if (!mainViewModel.stateFlow.value.hasResizeBeenRequested) {
-            setHorizonOSAppLayout()
+            setHorizonOSAppLayout {
+                mainViewModel.trySendAction(MainAction.Internal.ResizeHasBeenRequested)
+            }
         }
     }
 
@@ -273,33 +276,6 @@ class MainActivity : AppCompatActivity() {
             window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         } else {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
-        }
-    }
-
-    private fun isHorizonOSDevice(): Boolean {
-        return Build.MANUFACTURER.equals("Oculus", ignoreCase = true) ||
-            Build.MANUFACTURER.equals("Meta", ignoreCase = true)
-    }
-
-    @Suppress("MagicNumber", "TooGenericExceptionCaught")
-    private fun setHorizonOSAppLayout() {
-        if (!isHorizonOSDevice()) {
-            return
-        }
-        window.decorView.post {
-            try {
-                val clazz = Class.forName("horizonos.view.WindowExt")
-                val method = clazz.getMethod(
-                    "requestWindowResize",
-                    android.view.Window::class.java,
-                    Int::class.javaPrimitiveType,
-                    Int::class.javaPrimitiveType,
-                )
-                method.invoke(null, window, 1024, 640)
-                mainViewModel.trySendAction(MainAction.Internal.ResizeHasBeenRequested)
-            } catch (t: Throwable) {
-                // Not Horizon OS / API not present / request ignored by system
-            }
         }
     }
 }
