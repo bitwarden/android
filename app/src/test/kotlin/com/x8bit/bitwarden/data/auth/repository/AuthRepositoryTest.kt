@@ -102,6 +102,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeviceInfo
+import com.x8bit.bitwarden.data.auth.repository.model.DeviceType
 import com.x8bit.bitwarden.data.auth.repository.model.GetDevicesResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
@@ -6917,7 +6918,7 @@ class AuthRepositoryTest {
                         name = "Test Device",
                         // identifier "deviceIdentifier" != uniqueAppId "testUniqueAppId"
                         identifier = "deviceIdentifier",
-                        type = 0,
+                        type = DeviceType.ANDROID,
                         isTrusted = false,
                         creationDate = Instant.parse("2023-10-27T12:00:00Z"),
                         lastActivityDate = null,

@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.repository.util
 import com.bitwarden.network.model.DeviceResponseJson
 import com.x8bit.bitwarden.data.auth.repository.model.DeviceInfo
 import com.x8bit.bitwarden.data.auth.repository.model.DevicePendingAuthRequest
+import com.x8bit.bitwarden.data.auth.repository.model.DeviceType
 
 /**
  * Maps the given [DeviceResponseJson] to a [DeviceInfo].
@@ -12,7 +13,7 @@ fun DeviceResponseJson.toDeviceInfo(currentDeviceIdentifier: String): DeviceInfo
         id = id,
         name = name,
         identifier = identifier,
-        type = type,
+        type = DeviceType.entries.firstOrNull { it.value == type } ?: DeviceType.UNKNOWN,
         isTrusted = isTrusted,
         creationDate = creationDate,
         lastActivityDate = lastActivityDate,

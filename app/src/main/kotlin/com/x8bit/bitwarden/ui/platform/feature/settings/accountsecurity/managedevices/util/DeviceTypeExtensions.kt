@@ -3,40 +3,41 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.managed
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.auth.repository.model.DeviceType
 
 /**
- * Converts a device type integer to a human-readable display name.
+ * Converts a [DeviceType] to a human-readable display name.
  * Returns e.g. "Mobile - Android", "Extension - Chrome", "Desktop - Windows".
  */
-@Suppress("CyclomaticComplexMethod", "MagicNumber")
-val Int.readableDeviceTypeName: Text
+@Suppress("CyclomaticComplexMethod")
+val DeviceType.readableDeviceTypeName: Text
     get() = when (this) {
-        0 -> BitwardenString.mobile_platform.asText("Android")
-        1 -> BitwardenString.mobile_platform.asText("iOS")
-        2 -> BitwardenString.extension_platform.asText("Chrome")
-        3 -> BitwardenString.extension_platform.asText("Firefox")
-        4 -> BitwardenString.extension_platform.asText("Opera")
-        5 -> BitwardenString.extension_platform.asText("Edge")
-        6 -> BitwardenString.desktop_platform.asText("Windows")
-        7 -> BitwardenString.desktop_platform.asText("MacOS")
-        8 -> BitwardenString.desktop_platform.asText("Linux")
-        9 -> BitwardenString.web_platform.asText("Chrome")
-        10 -> BitwardenString.web_platform.asText("Firefox")
-        11 -> BitwardenString.web_platform.asText("Opera")
-        12 -> BitwardenString.web_platform.asText("Edge")
-        13 -> BitwardenString.web_platform.asText("IE")
-        14 -> BitwardenString.web_platform.asText("Unknown")
-        15 -> BitwardenString.mobile_platform.asText("Amazon")
-        16 -> BitwardenString.desktop_platform.asText("Windows UWP")
-        17 -> BitwardenString.web_platform.asText("Safari")
-        18 -> BitwardenString.web_platform.asText("Vivaldi")
-        19 -> BitwardenString.extension_platform.asText("Vivaldi")
-        20 -> BitwardenString.extension_platform.asText("Safari")
-        21 -> BitwardenString.sdk.asText()
-        22 -> BitwardenString.server.asText()
-        23 -> BitwardenString.cli_platform.asText("Windows")
-        24 -> BitwardenString.cli_platform.asText("MacOS")
-        25 -> BitwardenString.cli_platform.asText("Linux")
-        26 -> BitwardenString.extension_platform.asText("DuckDuckGo")
-        else -> BitwardenString.unknown_device.asText()
+        DeviceType.ANDROID -> BitwardenString.mobile_platform.asText("Android")
+        DeviceType.IOS -> BitwardenString.mobile_platform.asText("iOS")
+        DeviceType.CHROME_EXTENSION -> BitwardenString.extension_platform.asText("Chrome")
+        DeviceType.FIREFOX_EXTENSION -> BitwardenString.extension_platform.asText("Firefox")
+        DeviceType.OPERA_EXTENSION -> BitwardenString.extension_platform.asText("Opera")
+        DeviceType.EDGE_EXTENSION -> BitwardenString.extension_platform.asText("Edge")
+        DeviceType.WINDOWS_DESKTOP -> BitwardenString.desktop_platform.asText("Windows")
+        DeviceType.MAC_OS_DESKTOP -> BitwardenString.desktop_platform.asText("MacOS")
+        DeviceType.LINUX_DESKTOP -> BitwardenString.desktop_platform.asText("Linux")
+        DeviceType.CHROME_BROWSER -> BitwardenString.web_platform.asText("Chrome")
+        DeviceType.FIREFOX_BROWSER -> BitwardenString.web_platform.asText("Firefox")
+        DeviceType.OPERA_BROWSER -> BitwardenString.web_platform.asText("Opera")
+        DeviceType.EDGE_BROWSER -> BitwardenString.web_platform.asText("Edge")
+        DeviceType.IE_BROWSER -> BitwardenString.web_platform.asText("IE")
+        DeviceType.UNKNOWN_BROWSER -> BitwardenString.web_platform.asText("Unknown")
+        DeviceType.ANDROID_AMAZON -> BitwardenString.mobile_platform.asText("Amazon")
+        DeviceType.UWP -> BitwardenString.desktop_platform.asText("Windows UWP")
+        DeviceType.SAFARI_BROWSER -> BitwardenString.web_platform.asText("Safari")
+        DeviceType.VIVALDI_BROWSER -> BitwardenString.web_platform.asText("Vivaldi")
+        DeviceType.VIVALDI_EXTENSION -> BitwardenString.extension_platform.asText("Vivaldi")
+        DeviceType.SAFARI_EXTENSION -> BitwardenString.extension_platform.asText("Safari")
+        DeviceType.SDK -> BitwardenString.sdk.asText()
+        DeviceType.SERVER -> BitwardenString.server.asText()
+        DeviceType.WINDOWS_CLI -> BitwardenString.cli_platform.asText("Windows")
+        DeviceType.MAC_OS_CLI -> BitwardenString.cli_platform.asText("MacOS")
+        DeviceType.LINUX_CLI -> BitwardenString.cli_platform.asText("Linux")
+        DeviceType.DUCK_DUCK_GO_BROWSER -> BitwardenString.extension_platform.asText("DuckDuckGo")
+        DeviceType.UNKNOWN -> BitwardenString.unknown_device.asText()
     }

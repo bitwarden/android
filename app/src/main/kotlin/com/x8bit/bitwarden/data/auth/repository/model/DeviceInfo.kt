@@ -22,7 +22,7 @@ data class DeviceInfo(
     val id: String,
     val name: String,
     val identifier: String,
-    val type: Int,
+    val type: DeviceType,
     val isTrusted: Boolean,
     val creationDate: Instant,
     val lastActivityDate: Instant?,

@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.DeviceInfo
 import com.x8bit.bitwarden.data.auth.repository.model.DevicePendingAuthRequest
+import com.x8bit.bitwarden.data.auth.repository.model.DeviceType
 import com.x8bit.bitwarden.data.auth.repository.model.GetDevicesResult
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.managedevices.util.readableDeviceTypeName
@@ -332,7 +333,7 @@ private val DEFAULT_DEVICE = DeviceInfo(
     id = "device-current",
     name = "Test Device",
     identifier = "identifier-current",
-    type = 0,
+    type = DeviceType.ANDROID,
     isTrusted = false,
     creationDate = Instant.parse("2023-10-27T12:00:00Z"),
     lastActivityDate = Instant.parse("2023-10-27T12:00:00Z"),
