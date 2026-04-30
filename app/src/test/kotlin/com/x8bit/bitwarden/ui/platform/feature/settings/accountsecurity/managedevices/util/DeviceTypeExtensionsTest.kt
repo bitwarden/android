@@ -3,159 +3,54 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.managed
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestFactory
 
 class DeviceTypeExtensionsTest {
-
-    @Test
-    fun `type 0 should return Mobile - Android`() {
-        assertEquals(
-            BitwardenString.mobile_platform.asText("Android"),
-            0.readableDeviceTypeName,
-        )
-    }
-
-    @Test
-    fun `type 1 should return Mobile - iOS`() {
-        assertEquals(
-            BitwardenString.mobile_platform.asText("iOS"),
-            1.readableDeviceTypeName,
-        )
-    }
-
-    @Test
-    fun `type 2 should return Extension - Chrome`() {
-        assertEquals(
-            BitwardenString.extension_platform.asText("Chrome"),
-            2.readableDeviceTypeName,
-        )
-    }
-
-    @Test
-    fun `type 3 should return Extension - Firefox`() {
-        assertEquals(
-            BitwardenString.extension_platform.asText("Firefox"),
-            3.readableDeviceTypeName,
-        )
-    }
-
-    @Test
-    fun `type 5 should return Extension - Edge`() {
-        assertEquals(
-            BitwardenString.extension_platform.asText("Edge"),
-            5.readableDeviceTypeName,
-        )
-    }
-
-    @Test
-    fun `type 6 should return Desktop - Windows`() {
-        assertEquals(
-            BitwardenString.desktop_platform.asText("Windows"),
-            6.readableDeviceTypeName,
-        )
-    }
-
-    @Test
-    fun `type 7 should return Desktop - MacOS`() {
-        assertEquals(
-            BitwardenString.desktop_platform.asText("MacOS"),
-            7.readableDeviceTypeName,
-        )
-    }
-
-    @Test
-    fun `type 9 should return Web - Chrome`() {
-        assertEquals(
-            BitwardenString.web_platform.asText("Chrome"),
-            9.readableDeviceTypeName,
-        )
-    }
-
-    @Test
-    fun `type 15 should return Mobile - Amazon`() {
-        assertEquals(
-            BitwardenString.mobile_platform.asText("Amazon"),
-            15.readableDeviceTypeName,
-        )
-    }
-
-    @Test
-    fun `type 16 should return Desktop - Windows UWP`() {
-        assertEquals(
-            BitwardenString.desktop_platform.asText("Windows UWP"),
-            16.readableDeviceTypeName,
-        )
-    }
-
-    @Test
-    fun `type 20 should return Extension - Safari`() {
-        assertEquals(
-            BitwardenString.extension_platform.asText("Safari"),
-            20.readableDeviceTypeName,
-        )
-    }
-
-    @Test
-    fun `type 21 should return SDK category only with no platform suffix`() {
-        assertEquals(
-            BitwardenString.sdk.asText(),
-            21.readableDeviceTypeName,
-        )
-    }
-
-    @Test
-    fun `type 22 should return Server category only with no platform suffix`() {
-        assertEquals(
-            BitwardenString.server.asText(),
-            22.readableDeviceTypeName,
-        )
-    }
-
-    @Test
-    fun `type 23 should return CLI - Windows`() {
-        assertEquals(
-            BitwardenString.cli_platform.asText("Windows"),
-            23.readableDeviceTypeName,
-        )
-    }
-
-    @Test
-    fun `type 24 should return CLI - MacOS`() {
-        assertEquals(
-            BitwardenString.cli_platform.asText("MacOS"),
-            24.readableDeviceTypeName,
-        )
-    }
-
-    @Test
-    fun `type 25 should return CLI - Linux`() {
-        assertEquals(
-            BitwardenString.cli_platform.asText("Linux"),
-            25.readableDeviceTypeName,
-        )
-    }
-
-    @Test
-    fun `type 26 should return Extension - DuckDuckGo`() {
-        assertEquals(
-            BitwardenString.extension_platform.asText("DuckDuckGo"),
-            26.readableDeviceTypeName,
-        )
-    }
+    @TestFactory
+    fun `readableDeviceTypeName returns correct value for each known device type`() =
+        listOf(
+            0 to BitwardenString.mobile_platform.asText("Android"),
+            1 to BitwardenString.mobile_platform.asText("iOS"),
+            2 to BitwardenString.extension_platform.asText("Chrome"),
+            3 to BitwardenString.extension_platform.asText("Firefox"),
+            4 to BitwardenString.extension_platform.asText("Opera"),
+            5 to BitwardenString.extension_platform.asText("Edge"),
+            6 to BitwardenString.desktop_platform.asText("Windows"),
+            7 to BitwardenString.desktop_platform.asText("MacOS"),
+            8 to BitwardenString.desktop_platform.asText("Linux"),
+            9 to BitwardenString.web_platform.asText("Chrome"),
+            10 to BitwardenString.web_platform.asText("Firefox"),
+            11 to BitwardenString.web_platform.asText("Opera"),
+            12 to BitwardenString.web_platform.asText("Edge"),
+            13 to BitwardenString.web_platform.asText("IE"),
+            14 to BitwardenString.web_platform.asText("Unknown"),
+            15 to BitwardenString.mobile_platform.asText("Amazon"),
+            16 to BitwardenString.desktop_platform.asText("Windows UWP"),
+            17 to BitwardenString.web_platform.asText("Safari"),
+            18 to BitwardenString.web_platform.asText("Vivaldi"),
+            19 to BitwardenString.extension_platform.asText("Vivaldi"),
+            20 to BitwardenString.extension_platform.asText("Safari"),
+            21 to BitwardenString.sdk.asText(),
+            22 to BitwardenString.server.asText(),
+            23 to BitwardenString.cli_platform.asText("Windows"),
+            24 to BitwardenString.cli_platform.asText("MacOS"),
+            25 to BitwardenString.cli_platform.asText("Linux"),
+            26 to BitwardenString.extension_platform.asText("DuckDuckGo"),
+        ).map { (type, expected) ->
+            dynamicTest("type $type should return $expected") {
+                assertEquals(expected, type.readableDeviceTypeName)
+            }
+        }
 
     @Test
     fun `unknown type should return unknown device string`() {
-        assertEquals(
-            BitwardenString.unknown_device.asText(),
-            999.readableDeviceTypeName,
-        )
+        assertEquals(BitwardenString.unknown_device.asText(), 999.readableDeviceTypeName)
     }
 
     @Test
     fun `negative type should return unknown device string`() {
-        assertEquals(
-            BitwardenString.unknown_device.asText(),
-            (-1).readableDeviceTypeName,
-        )
+        assertEquals(BitwardenString.unknown_device.asText(), (-1).readableDeviceTypeName)
     }
 }
