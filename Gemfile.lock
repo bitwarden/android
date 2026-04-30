@@ -27,7 +27,7 @@ GEM
     aws-sigv4 (1.12.1)
       aws-eventstream (~> 1, >= 1.0.2)
     babosa (1.0.4)
-    base64 (0.3.0)
+    base64 (0.2.0)
     bigdecimal (4.1.2)
     claide (1.1.0)
     colored (1.2)
@@ -72,13 +72,14 @@ GEM
     faraday_middleware (1.2.1)
       faraday (~> 1.0)
     fastimage (2.4.1)
-    fastlane (2.229.0)
+    fastlane (2.229.1)
       CFPropertyList (>= 2.3, < 4.0.0)
       abbrev (~> 0.1.2)
       addressable (>= 2.8, < 3.0.0)
       artifactory (~> 3.0)
       aws-sdk-s3 (~> 1.0)
       babosa (>= 1.0.3, < 2.0.0)
+      base64 (~> 0.2.0)
       bundler (>= 1.12.0, < 3.0.0)
       colored (~> 1.2)
       commander (~> 4.6)
@@ -104,6 +105,7 @@ GEM
       multipart-post (>= 2.0.0, < 3.0.0)
       mutex_m (~> 0.3.0)
       naturally (~> 2.2)
+      nkf (~> 0.2.0)
       optparse (>= 0.1.1, < 1.0.0)
       plist (>= 3.1.0, < 4.0.0)
       rubyzip (>= 2.0.0, < 3.0.0)
@@ -233,15 +235,15 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  abbrev
-  csv
-  fastlane
+  abbrev (= 0.1.2)
+  csv (= 3.3.5)
+  fastlane (= 2.229.1)
   fastlane-plugin-firebase_app_distribution
-  logger
-  mutex_m
-  nkf
-  ostruct
-  time
+  logger (= 1.7.0)
+  mutex_m (= 0.3.0)
+  nkf (= 0.2.0)
+  ostruct (= 0.6.3)
+  time (= 0.4.2)
 
 RUBY VERSION
    ruby 3.4.2p28
