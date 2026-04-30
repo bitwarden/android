@@ -168,7 +168,7 @@ jobs:
         uses: bitwarden/gh-actions/get-keyvault-secrets@main
         with:
           keyvault: gh-android
-          secrets: "JIRA-API-EMAIL,JIRA-API-TOKEN"
+          secrets: "JIRA-API-EMAIL,JIRA-API-TOKEN,JIRA-CLOUD-ID"
 
       - name: Log out from Azure
         uses: bitwarden/gh-actions/azure-logout@main
@@ -180,13 +180,14 @@ jobs:
           ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
           _VERSION_NAME: ${{ steps.get_release_info.outputs.version_name }}
           _RELEASE_TICKET_ID: ${{ inputs.release-ticket-id }}
+          _JIRA_CLOUD_ID: ${{ steps.get-kv-secrets.outputs.JIRA-CLOUD-ID }}
           _JIRA_API_EMAIL: ${{ steps.get-kv-secrets.outputs.JIRA-API-EMAIL }}
           _JIRA_API_TOKEN: ${{ steps.get-kv-secrets.outputs.JIRA-API-TOKEN }}
         run: |
           echo "Getting product release notes..."
           # capture output and exit code so this step continues even if we can't retrieve release notes.
           script_exit_code=0
-          product_release_notes=$(python .github/scripts/jira-get-release-notes/jira_release_notes.py "$_RELEASE_TICKET_ID" "$_JIRA_API_EMAIL" "$_JIRA_API_TOKEN") || script_exit_code=$?
+          product_release_notes=$(python3 .github/scripts/jira-get-release-notes/jira_release_notes.py "$_RELEASE_TICKET_ID" "$_JIRA_CLOUD_ID" "$_JIRA_API_EMAIL" "$_JIRA_API_TOKEN") || script_exit_code=$?
           echo "--------------------------------"
 
           if [[ $script_exit_code -ne 0 || -z "$product_release_notes" ]]; then
