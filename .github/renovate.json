@@ -32,16 +32,6 @@
         "/org.jetbrains.kotlin.*/",
         "/com.google.devtools.ksp/"
       ]
-    },
-    {
-      "groupName": "bundler minor",
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "matchManagers": [
-        "bundler"
-      ]
     }
   ]
 }
