@@ -120,6 +120,7 @@ fun NavGraphBuilder.settingsGraph(
     onNavigateToImportLogins: () -> Unit,
     onNavigateToImportItems: () -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
+    onNavigateToUpgradedToPremium: () -> Unit,
 ) {
     navigation<SettingsGraphRoute>(
         startDestination = SettingsRoute.Standard,
@@ -177,7 +178,10 @@ fun NavGraphBuilder.settingsGraph(
         )
         blockAutoFillDestination(onNavigateBack = { navController.popBackStack() })
         privilegedAppsListDestination(onNavigateBack = { navController.popBackStack() })
-        planDestination(onNavigateBack = { navController.popBackStack() })
+        planDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToCelebration = onNavigateToUpgradedToPremium,
+        )
     }
 }
 

@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import java.text.NumberFormat
 import java.time.Clock
@@ -473,17 +474,24 @@ class PlanViewModel @Inject constructor(
     }
 
     private fun onPremiumUpgradeSuccess() {
-        onFreeContent { freeState ->
+        onFreeContent {
             mutableStateFlow.update {
                 it.copy(
-                    viewState = freeState.copy(
-                        isAwaitingPremiumStatus = false,
+                    viewState = PlanState.ViewState.Premium(),
+                    dialogState = PlanState.DialogState.Loading(
+                        message = BitwardenString.loading_subscription.asText(),
                     ),
-                    dialogState = null,
+                )
+            }
+            viewModelScope.launch {
+                sendAction(
+                    PlanAction.Internal.SubscriptionResultReceive(
+                        result = billingRepository.getSubscription(),
+                    ),
                 )
             }
         }
-        sendEvent(PlanEvent.NavigateBack)
+        sendEvent(PlanEvent.NavigateToCelebration)
     }
 
     private fun handlePricingResultReceive(
@@ -634,6 +642,7 @@ class PlanViewModel @Inject constructor(
 /**
  * Determines how the Plan screen was reached.
  */
+@Serializable
 enum class PlanMode {
     /** Back arrow, bottom nav visible (push sub-screen from Settings). */
     Standard,
@@ -815,6 +824,13 @@ sealed class PlanEvent {
      * Navigate back to the previous screen.
      */
     data object NavigateBack : PlanEvent()
+
+    /**
+     * Navigate to the full-screen "Upgraded to Premium" celebration. The destination registrant
+     * encodes the originating [PlanMode] when issuing the navigation; the celebration's dismiss
+     * uses that mode to choose pop semantics.
+     */
+    data object NavigateToCelebration : PlanEvent()
 }
 
 /**

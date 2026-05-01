@@ -16,6 +16,7 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -48,6 +49,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+@Suppress("LargeClass")
 class SendViewModelTest : BaseViewModelTest() {
 
     private val mutablePullToRefreshEnabledFlow = MutableStateFlow(false)
@@ -83,6 +85,12 @@ class SendViewModelTest : BaseViewModelTest() {
         every {
             getSnackbarDataFlow(relay = any(), relays = anyVararg())
         } returns mutableSnackbarDataFlow
+    }
+    private val mutableUpgradedToPremiumCardEligibleFlow = MutableStateFlow(false)
+    private val premiumStateManager: PremiumStateManager = mockk(relaxed = true) {
+        every {
+            isUpgradedToPremiumCardEligibleFlow
+        } returns mutableUpgradedToPremiumCardEligibleFlow
     }
 
     @BeforeEach
@@ -694,6 +702,45 @@ class SendViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `Upgraded to Premium card eligibility flow updates state`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+            mutableUpgradedToPremiumCardEligibleFlow.value = true
+            assertEquals(
+                DEFAULT_STATE.copy(isUpgradedToPremiumCardEligible = true),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `UpgradedToPremiumCardClick dismisses card and emits NavigateToUrl`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(SendAction.UpgradedToPremiumCardClick)
+            assertEquals(
+                SendEvent.NavigateToUrl(
+                    url = "https://bitwarden.com/help/password-manager-plans/",
+                ),
+                awaitItem(),
+            )
+        }
+        verify(exactly = 1) {
+            premiumStateManager.dismissUpgradedToPremiumCard()
+        }
+    }
+
+    @Test
+    fun `UpgradedToPremiumCardDismiss dismisses card without navigating`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(SendAction.UpgradedToPremiumCardDismiss)
+        verify(exactly = 1) {
+            premiumStateManager.dismissUpgradedToPremiumCard()
+        }
+    }
+
     @Suppress("LongParameterList")
     private fun createViewModel(
         state: SendState? = null,
@@ -715,6 +762,7 @@ class SendViewModelTest : BaseViewModelTest() {
         policyManager = policyManager,
         networkConnectionManager = networkConnectionManager,
         snackbarRelayManager = snackbarRelayManager,
+        premiumStateManager = premiumStateManager,
     )
 }
 

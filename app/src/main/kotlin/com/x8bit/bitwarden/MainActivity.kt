@@ -36,8 +36,6 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.composition.LocalManagerProvider
 import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.cookieAcquisitionDestination
-import com.x8bit.bitwarden.ui.platform.feature.premium.upgraded.navigateToUpgradedToPremium
-import com.x8bit.bitwarden.ui.platform.feature.premium.upgraded.upgradedToPremiumDestination
 import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.navigateToCookieAcquisition
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.debugMenuDestination
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.manager.DebugMenuLaunchManager
@@ -152,9 +150,6 @@ class MainActivity : AppCompatActivity() {
                             onDismiss = { navController.popBackStack() },
                             onSplashScreenRemoved = { shouldShowSplashScreen = false },
                         )
-                        upgradedToPremiumDestination(
-                            onDismiss = { navController.popBackStack() },
-                        )
                     }
                 }
             }
@@ -229,7 +224,6 @@ class MainActivity : AppCompatActivity() {
                 MainEvent.Recreate -> handleRecreate()
                 MainEvent.NavigateToDebugMenu -> navController.navigateToDebugMenuScreen()
                 MainEvent.NavigateToCookieAcquisition -> navController.navigateToCookieAcquisition()
-                MainEvent.NavigateToUpgradedToPremium -> navController.navigateToUpgradedToPremium()
 
                 is MainEvent.UpdateAppLocale -> {
                     AppCompatDelegate.setApplicationLocales(

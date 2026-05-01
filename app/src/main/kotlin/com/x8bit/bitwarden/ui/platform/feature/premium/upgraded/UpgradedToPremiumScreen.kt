@@ -3,21 +3,23 @@ package com.x8bit.bitwarden.ui.platform.feature.premium.upgraded
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -27,9 +29,8 @@ import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
-import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
@@ -40,9 +41,8 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
- * Top-level composable for the "Upgraded to Premium" screen.
+ * Top-level composable for the "Upgraded to Premium" celebration screen.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UpgradedToPremiumScreen(
     onDismiss: () -> Unit,
@@ -58,28 +58,18 @@ fun UpgradedToPremiumScreen(
         }
     }
 
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            BitwardenTopAppBar(
-                title = "",
-                scrollBehavior = scrollBehavior,
-                navigationIcon = NavigationIcon(
-                    navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                    navigationIconContentDescription = stringResource(
-                        id = BitwardenString.close,
-                    ),
-                    onNavigationIconClick = {
-                        viewModel.trySendAction(UpgradedToPremiumAction.CloseClick)
-                    },
-                ),
-            )
-        },
+        contentWindowInsets = ScaffoldDefaults
+            .contentWindowInsets
+            .union(WindowInsets.displayCutout)
+            .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
     ) {
         UpgradedToPremiumContent(
             onLearnMoreClick = {
                 viewModel.trySendAction(UpgradedToPremiumAction.LearnMoreClick)
+            },
+            onCloseClick = {
+                viewModel.trySendAction(UpgradedToPremiumAction.CloseClick)
             },
             modifier = Modifier.fillMaxSize(),
         )
@@ -89,6 +79,7 @@ fun UpgradedToPremiumScreen(
 @Composable
 private fun UpgradedToPremiumContent(
     onLearnMoreClick: () -> Unit,
+    onCloseClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -98,12 +89,12 @@ private fun UpgradedToPremiumContent(
         Spacer(modifier = Modifier.height(48.dp))
 
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.ic_star),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ill_celebration),
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .standardHorizontalMargin()
-                .size(96.dp),
+                .size(100.dp),
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -122,7 +113,8 @@ private fun UpgradedToPremiumContent(
 
         Text(
             text = stringResource(
-                id = BitwardenString.you_now_have_access_to_all_advanced_security_features,
+                id = BitwardenString
+                    .you_now_have_access_to_advanced_security_features_learn_more_about_premium,
             ),
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.secondary,
@@ -137,6 +129,18 @@ private fun UpgradedToPremiumContent(
         BitwardenFilledButton(
             label = stringResource(id = BitwardenString.learn_more),
             onClick = onLearnMoreClick,
+            icon = rememberVectorPainter(id = BitwardenDrawable.ic_external_link),
+            isExternalLink = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        BitwardenOutlinedButton(
+            label = stringResource(id = BitwardenString.close),
+            onClick = onCloseClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -153,6 +157,7 @@ private fun UpgradedToPremiumContent_preview() {
         BitwardenScaffold {
             UpgradedToPremiumContent(
                 onLearnMoreClick = {},
+                onCloseClick = {},
                 modifier = Modifier.fillMaxSize(),
             )
         }
@@ -166,6 +171,7 @@ private fun UpgradedToPremiumContent_darkPreview() {
         BitwardenScaffold {
             UpgradedToPremiumContent(
                 onLearnMoreClick = {},
+                onCloseClick = {},
                 modifier = Modifier.fillMaxSize(),
             )
         }

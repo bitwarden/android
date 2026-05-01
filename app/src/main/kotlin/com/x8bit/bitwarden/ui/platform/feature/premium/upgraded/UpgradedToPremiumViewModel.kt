@@ -62,7 +62,7 @@ sealed class UpgradedToPremiumAction {
     data object LearnMoreClick : UpgradedToPremiumAction()
 
     /**
-     * User clicked the close icon.
+     * User clicked the "Close" CTA.
      */
     data object CloseClick : UpgradedToPremiumAction()
 }

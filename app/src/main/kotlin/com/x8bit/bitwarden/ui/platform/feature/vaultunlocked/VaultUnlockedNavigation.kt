@@ -13,8 +13,12 @@ import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupUnlockScr
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupAutoFillDestination
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupBrowserAutofillDestination
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupUnlockDestination
+import com.x8bit.bitwarden.ui.platform.feature.premium.plan.PlanMode
+import com.x8bit.bitwarden.ui.platform.feature.premium.plan.PlanRoute
 import com.x8bit.bitwarden.ui.platform.feature.premium.plan.navigateToPlanModal
 import com.x8bit.bitwarden.ui.platform.feature.premium.plan.planModalDestination
+import com.x8bit.bitwarden.ui.platform.feature.premium.upgraded.navigateToUpgradedToPremium
+import com.x8bit.bitwarden.ui.platform.feature.premium.upgraded.upgradedToPremiumDestination
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchRoute
 import com.x8bit.bitwarden.ui.platform.feature.search.navigateToSearch
 import com.x8bit.bitwarden.ui.platform.feature.search.searchDestination
@@ -145,6 +149,9 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                 navController.navigateToAboutPrivilegedAppsScreen()
             },
             onNavigateToPlan = { navController.navigateToPlanModal() },
+            onNavigateToUpgradedToPremium = {
+                navController.navigateToUpgradedToPremium(planMode = PlanMode.Standard)
+            },
         )
         flightRecorderDestination(
             isPreAuth = false,
@@ -289,6 +296,17 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
         planModalDestination(
             onNavigateBack = { navController.popBackStack() },
+            onNavigateToCelebration = {
+                navController.navigateToUpgradedToPremium(planMode = PlanMode.Modal)
+            },
+        )
+        upgradedToPremiumDestination(
+            onDismiss = { planMode ->
+                when (planMode) {
+                    PlanMode.Modal -> navController.popBackStack<PlanRoute.Modal>(inclusive = true)
+                    PlanMode.Standard -> navController.popBackStack()
+                }
+            },
         )
     }
 }

@@ -233,12 +233,17 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     private val mutablePremiumUpgradeBannerEligibleFlow = MutableStateFlow(false)
+    private val mutableUpgradedToPremiumCardEligibleFlow = MutableStateFlow(false)
     private val premiumStateManager: PremiumStateManager = mockk {
         every {
             isPremiumUpgradeBannerEligibleFlow
         } returns mutablePremiumUpgradeBannerEligibleFlow
+        every {
+            isUpgradedToPremiumCardEligibleFlow
+        } returns mutableUpgradedToPremiumCardEligibleFlow
         every { isInAppUpgradeAvailable() } returns false
         every { dismissPremiumUpgradeBanner() } just runs
+        every { dismissUpgradedToPremiumCard() } just runs
     }
 
     @AfterEach
@@ -455,6 +460,61 @@ class VaultViewModelTest : BaseViewModelTest() {
             state.actionCard,
         )
     }
+
+    @Test
+    fun `actionCard should return UpgradedToPremium when eligible and content is showing`() {
+        val contentViewState = DEFAULT_CONTENT_VIEW_STATE
+        val state = createMockVaultState(viewState = contentViewState).copy(
+            isUpgradedToPremiumCardEligible = true,
+            isPremiumUpgradeBannerEligible = true,
+            isPremium = true,
+            isIntroducingArchiveActionCardDismissed = false,
+        )
+
+        assertEquals(
+            VaultState.ActionCardState.UpgradedToPremium,
+            state.actionCard,
+        )
+    }
+
+    @Test
+    fun `DismissActionCardClick with UpgradedToPremium should call dismissUpgradedToPremiumCard`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                VaultAction.DismissActionCardClick(
+                    VaultState.ActionCardState.UpgradedToPremium,
+                ),
+            )
+
+            verify(exactly = 1) {
+                premiumStateManager.dismissUpgradedToPremiumCard()
+            }
+        }
+
+    @Test
+    fun `ActionCardClick with UpgradedToPremium dismisses card and emits NavigateToUrl`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultAction.ActionCardClick(
+                        VaultState.ActionCardState.UpgradedToPremium,
+                    ),
+                )
+                assertEquals(
+                    VaultEvent.NavigateToUrl(
+                        url = "https://bitwarden.com/help/password-manager-plans/",
+                    ),
+                    awaitItem(),
+                )
+            }
+            verify(exactly = 1) {
+                premiumStateManager.dismissUpgradedToPremiumCard()
+            }
+        }
 
     @Test
     fun `actionCard should return IntroducingArchive when not eligible for Premium upgrade`() {
