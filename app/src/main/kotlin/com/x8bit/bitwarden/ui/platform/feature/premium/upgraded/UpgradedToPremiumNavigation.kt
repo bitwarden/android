@@ -18,6 +18,7 @@ import kotlinx.serialization.Serializable
  * how the user reached the originating Plan screen and drives the dismiss semantics at the nav
  * root.
  */
+@OmitFromCoverage
 @Parcelize
 @Serializable(with = UpgradedToPremiumRoute.Serializer::class)
 data class UpgradedToPremiumRoute(val planMode: PlanMode) : Parcelable {

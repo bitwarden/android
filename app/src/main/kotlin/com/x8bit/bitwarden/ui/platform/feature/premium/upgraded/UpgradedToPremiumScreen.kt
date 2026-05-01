@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.premium.upgraded
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -56,6 +57,13 @@ fun UpgradedToPremiumScreen(
                 intentManager.launchUri(event.url.toUri())
             }
         }
+    }
+
+    // Route system back through the close handler so the acknowledgment is consumed before
+    // the destination pops. A default Navigation Compose pop would leave pending=true on disk
+    // and the action card would still surface on the next root-nav visit.
+    BackHandler {
+        viewModel.trySendAction(UpgradedToPremiumAction.CloseClick)
     }
 
     BitwardenScaffold(

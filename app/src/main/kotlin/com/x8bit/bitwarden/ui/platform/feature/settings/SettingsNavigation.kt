@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.settings
 
 import android.os.Parcelable
@@ -9,6 +11,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
 import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.bitwarden.ui.platform.util.ParcelableRouteSerializer
@@ -41,12 +44,14 @@ import kotlinx.serialization.Serializable
 /**
  * The type-safe route for the settings graph.
  */
+@OmitFromCoverage
 @Serializable
 data object SettingsGraphRoute
 
 /**
  * The type-safe route for the settings screen.
  */
+@OmitFromCoverage
 @Parcelize
 @Serializable(with = SettingsRoute.Serializer::class)
 sealed class SettingsRoute : Parcelable {

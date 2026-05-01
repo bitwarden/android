@@ -944,6 +944,44 @@ class SendScreenTest : BitwardenComposeTest() {
             viewModel.trySendAction(SendAction.AddSendSelected(sendType = SendItemType.TEXT))
         }
     }
+
+    @Test
+    fun `UpgradedToPremium action card should display when eligible`() {
+        mutableStateFlow.update { it.copy(isUpgradedToPremiumCardEligible = true) }
+
+        composeTestRule
+            .onNodeWithText(text = "Upgraded to Premium")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Learn more")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `UpgradedToPremium action card CTA click should send UpgradedToPremiumCardClick`() {
+        mutableStateFlow.update { it.copy(isUpgradedToPremiumCardEligible = true) }
+
+        composeTestRule
+            .onNodeWithText(text = "Learn more")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(SendAction.UpgradedToPremiumCardClick)
+        }
+    }
+
+    @Test
+    fun `UpgradedToPremium action card dismiss click should send UpgradedToPremiumCardDismiss`() {
+        mutableStateFlow.update { it.copy(isUpgradedToPremiumCardEligible = true) }
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(SendAction.UpgradedToPremiumCardDismiss)
+        }
+    }
 }
 
 private val DEFAULT_STATE: SendState = SendState(

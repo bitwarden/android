@@ -490,8 +490,11 @@ class PlanViewModel @Inject constructor(
                     ),
                 )
             }
-            sendEvent(PlanEvent.NavigateToCelebration)
         }
+        // The celebration route uses `launchSingleTop = true` so a duplicate event is a no-op
+        // for the user. The event itself is harmless to re-emit; the state mutation above is
+        // what's guarded by `onFreeContent`.
+        sendEvent(PlanEvent.NavigateToCelebration)
     }
 
     private fun handlePricingResultReceive(
