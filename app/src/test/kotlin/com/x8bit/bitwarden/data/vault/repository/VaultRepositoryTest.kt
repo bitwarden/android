@@ -1024,36 +1024,41 @@ class VaultRepositoryTest {
     }
 
     @Test
-    fun `countValidTotpCiphers with no active user should return 0`() = runTest {
+    fun `getValidTotpCipherIds with no active user should return empty set`() = runTest {
         fakeAuthDiskSource.userState = null
 
-        val result = vaultRepository.countValidTotpCiphers(
+        val result = vaultRepository.getValidTotpCipherIds(
             isPremium = true,
             time = Instant.parse("2023-10-27T12:00:00Z"),
         )
 
-        assertEquals(0, result)
+        assertEquals(emptySet<String>(), result)
     }
 
     @Test
-    fun `countValidTotpCiphers with no decrypted data should return 0`() = runTest {
+    fun `getValidTotpCipherIds with no decrypted data should return empty set`() = runTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         mutableDecryptCipherListResultStateFlow.value = DataState.Loading
 
-        val result = vaultRepository.countValidTotpCiphers(
+        val result = vaultRepository.getValidTotpCipherIds(
             isPremium = true,
             time = Instant.parse("2023-10-27T12:00:00Z"),
         )
 
-        assertEquals(0, result)
+        assertEquals(emptySet<String>(), result)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `countValidTotpCiphers with premium user should count all ciphers where SDK succeeds`() =
+    fun `getValidTotpCipherIds with premium user should return ids for all ciphers where SDK succeeds`() =
         runTest {
             val totpResponse = TotpResponse("Testcode", 30u)
             coEvery {
-                vaultSdkSource.generateTotpForCipherListView(any(), any(), any())
+                vaultSdkSource.generateTotpForCipherListView(
+                    userId = any(),
+                    cipherListView = any(),
+                    time = any(),
+                )
             } returns totpResponse.asSuccess()
             mutableDecryptCipherListResultStateFlow.value = DataState.Loaded(
                 DecryptCipherListResult(
@@ -1066,17 +1071,17 @@ class VaultRepositoryTest {
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
 
-            val result = vaultRepository.countValidTotpCiphers(
+            val result = vaultRepository.getValidTotpCipherIds(
                 isPremium = true,
                 time = Instant.parse("2023-10-27T12:00:00Z"),
             )
 
-            assertEquals(2, result)
+            assertEquals(setOf("mockId-1", "mockId-2"), result)
         }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `countValidTotpCiphers with non-premium user should count only organizationUseTotp ciphers`() =
+    fun `getValidTotpCipherIds with non-premium user should return ids for only organizationUseTotp ciphers`() =
         runTest {
             val totpResponse = TotpResponse("Testcode", 30u)
             coEvery {
@@ -1093,16 +1098,16 @@ class VaultRepositoryTest {
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
 
-            val result = vaultRepository.countValidTotpCiphers(
+            val result = vaultRepository.getValidTotpCipherIds(
                 isPremium = false,
                 time = Instant.parse("2023-10-27T12:00:00Z"),
             )
 
-            assertEquals(1, result)
+            assertEquals(setOf("mockId-1"), result)
         }
 
     @Test
-    fun `countValidTotpCiphers should exclude ciphers where SDK generateTotp fails`() = runTest {
+    fun `getValidTotpCipherIds should exclude ciphers where SDK generateTotp fails`() = runTest {
         val cipher1 = createMockCipherListView(number = 1)
         val cipher2 = createMockCipherListView(number = 2)
         coEvery {
@@ -1127,16 +1132,16 @@ class VaultRepositoryTest {
         )
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
-        val result = vaultRepository.countValidTotpCiphers(
+        val result = vaultRepository.getValidTotpCipherIds(
             isPremium = true,
             time = Instant.parse("2023-10-27T12:00:00Z"),
         )
 
-        assertEquals(1, result)
+        assertEquals(setOf("mockId-1"), result)
     }
 
     @Test
-    fun `countValidTotpCiphers should exclude non-Login type ciphers`() = runTest {
+    fun `getValidTotpCipherIds should exclude non-Login type ciphers`() = runTest {
         coEvery {
             vaultSdkSource.generateTotpForCipherListView(any(), any(), any())
         } returns TotpResponse("Testcode", 30u).asSuccess()
@@ -1154,16 +1159,16 @@ class VaultRepositoryTest {
         )
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
-        val result = vaultRepository.countValidTotpCiphers(
+        val result = vaultRepository.getValidTotpCipherIds(
             isPremium = true,
             time = Instant.parse("2023-10-27T12:00:00Z"),
         )
 
-        assertEquals(1, result)
+        assertEquals(setOf("mockId-1"), result)
     }
 
     @Test
-    fun `countValidTotpCiphers should exclude Login ciphers with null TOTP`() = runTest {
+    fun `getValidTotpCipherIds should exclude Login ciphers with null TOTP`() = runTest {
         coEvery {
             vaultSdkSource.generateTotpForCipherListView(any(), any(), any())
         } returns TotpResponse("Testcode", 30u).asSuccess()
@@ -1183,16 +1188,16 @@ class VaultRepositoryTest {
         )
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
-        val result = vaultRepository.countValidTotpCiphers(
+        val result = vaultRepository.getValidTotpCipherIds(
             isPremium = true,
             time = Instant.parse("2023-10-27T12:00:00Z"),
         )
 
-        assertEquals(1, result)
+        assertEquals(setOf("mockId-1"), result)
     }
 
     @Test
-    fun `countValidTotpCiphers should exclude deleted and archived ciphers`() = runTest {
+    fun `getValidTotpCipherIds should exclude deleted and archived ciphers`() = runTest {
         coEvery {
             vaultSdkSource.generateTotpForCipherListView(any(), any(), any())
         } returns TotpResponse("Testcode", 30u).asSuccess()
@@ -1208,12 +1213,12 @@ class VaultRepositoryTest {
         )
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
-        val result = vaultRepository.countValidTotpCiphers(
+        val result = vaultRepository.getValidTotpCipherIds(
             isPremium = true,
             time = Instant.parse("2023-10-27T12:00:00Z"),
         )
 
-        assertEquals(1, result)
+        assertEquals(setOf("mockId-1"), result)
     }
 
     @Test

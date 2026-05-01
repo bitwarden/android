@@ -186,7 +186,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     private val vaultRepository: VaultRepository = mockk {
         every { vaultFilterType = any() } just runs
         every { vaultDataStateFlow } returns mutableVaultDataStateFlow
-        coEvery { countValidTotpCiphers(isPremium = any(), time = any()) } returns 0
+        coEvery { getValidTotpCipherIds(isPremium = any(), time = any()) } returns emptySet()
         every { sync(forced = any()) } just runs
         coEvery { syncForResult(forced = any()) } returns SyncVaultDataResult.Success(
             itemsAvailable = true,
@@ -1285,7 +1285,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                 hasMasterPassword = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
-                totpItemsCount = 0,
+                validTotpIds = emptySet(),
             ),
         )
             .copy(
@@ -1311,7 +1311,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                     hasMasterPassword = true,
                     restrictItemTypesPolicyOrgIds = emptyList(),
-                    totpItemsCount = 0,
+                    validTotpIds = emptySet(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -3894,12 +3894,12 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `vault data loaded with premium user should set totpItemsCount to countValidTotpCiphers`() =
+    fun `vault data loaded with premium user should set validTotpIds from getValidTotpCipherIds`() =
         runTest {
-            val totpItemsCount = 2
+            val validTotpIds = setOf("mockId-1")
             coEvery {
-                vaultRepository.countValidTotpCiphers(isPremium = true, time = clock.instant())
-            } returns totpItemsCount
+                vaultRepository.getValidTotpCipherIds(isPremium = true, time = clock.instant())
+            } returns validTotpIds
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
@@ -3924,12 +3924,15 @@ class VaultViewModelTest : BaseViewModelTest() {
 
                 val contentViewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     itemTypesCount = 6,
-                    totpItemsCount = totpItemsCount,
+                    totpItemsCount = validTotpIds.size,
                     loginItemsCount = 1,
                     archivedItemsCount = 0,
                 )
                 assertEquals(
-                    createMockVaultState(viewState = contentViewState),
+                    createMockVaultState(
+                        viewState = contentViewState,
+                        validTotpIds = validTotpIds,
+                    ),
                     awaitItem(),
                 )
             }
@@ -3937,7 +3940,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `vault data loaded with non-premium user should set totpItemsCount to countValidTotpCiphers`() =
+    fun `vault data loaded with non-premium user should set validTotpIds from getValidTotpCipherIds`() =
         runTest {
             mutableUserStateFlow.update {
                 it?.copy(
@@ -3950,10 +3953,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                     },
                 )
             }
-            val totpItemsCount = 1
+            val validTotpIds = setOf("mockId-1")
             coEvery {
-                vaultRepository.countValidTotpCiphers(isPremium = false, time = clock.instant())
-            } returns totpItemsCount
+                vaultRepository.getValidTotpCipherIds(isPremium = false, time = clock.instant())
+            } returns validTotpIds
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
@@ -3979,13 +3982,16 @@ class VaultViewModelTest : BaseViewModelTest() {
                 val contentViewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     itemTypesCount = 6,
                     loginItemsCount = 1,
-                    totpItemsCount = totpItemsCount,
+                    totpItemsCount = validTotpIds.size,
                     archivedItemsCount = null,
                     archiveSubText = BitwardenString.premium_subscription_required.asText(),
                     archiveEndIcon = BitwardenDrawable.ic_locked,
                 )
                 assertEquals(
-                    createMockVaultState(viewState = contentViewState).copy(isPremium = false),
+                    createMockVaultState(
+                        viewState = contentViewState,
+                        validTotpIds = validTotpIds,
+                    ).copy(isPremium = false),
                     awaitItem(),
                 )
             }
@@ -4090,7 +4096,7 @@ private val DEFAULT_USER_STATE = UserState(
 private fun createMockVaultState(
     viewState: VaultState.ViewState,
     dialog: VaultState.DialogState? = null,
-    totpItemsCount: Int = (viewState as? VaultState.ViewState.Content)?.totpItemsCount ?: 0,
+    validTotpIds: Set<String> = emptySet(),
 ): VaultState =
     VaultState(
         appBarTitle = BitwardenString.my_vault.asText(),
@@ -4134,7 +4140,7 @@ private fun createMockVaultState(
         restrictItemTypesPolicyOrgIds = emptyList(),
         isIntroducingArchiveActionCardDismissed = false,
         isPremiumUpgradeBannerEligible = false,
-        totpItemsCount = totpItemsCount,
+        validTotpIds = validTotpIds,
     )
 
 private val DEFAULT_CONTENT_VIEW_STATE = VaultState.ViewState.Content(

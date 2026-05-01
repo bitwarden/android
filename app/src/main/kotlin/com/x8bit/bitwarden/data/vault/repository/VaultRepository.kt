@@ -138,11 +138,12 @@ interface VaultRepository :
     suspend fun generateTotp(cipherId: String, time: Instant): GenerateTotpResult
 
     /**
-     * Returns the count of ciphers with a valid TOTP secret for the active user,
-     * respecting the current vault filter. For non-premium users only org-TOTP ciphers
-     * are counted.
+     * Returns the IDs of ciphers with a valid TOTP secret for the active user. The vault filter
+     * is intentionally not applied here; callers intersect the result with their already-filtered
+     * cipher list so the count stays correct when the filter changes. For non-premium users only
+     * org-TOTP ciphers are included.
      */
-    suspend fun countValidTotpCiphers(isPremium: Boolean, time: Instant): Int
+    suspend fun getValidTotpCipherIds(isPremium: Boolean, time: Instant): Set<String>
 
     /**
      * Attempt to get the user's vault data for export.

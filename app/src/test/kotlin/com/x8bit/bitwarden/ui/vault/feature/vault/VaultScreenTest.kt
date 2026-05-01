@@ -73,6 +73,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import kotlin.collections.emptyList
 
 @Suppress("LargeClass")
 class VaultScreenTest : BitwardenComposeTest() {
@@ -2651,7 +2652,7 @@ private val DEFAULT_STATE: VaultState = VaultState(
     hasShownDecryptionFailureAlert = false,
     restrictItemTypesPolicyOrgIds = emptyList(),
     isIntroducingArchiveActionCardDismissed = false,
-    totpItemsCount = 0,
+    validTotpIds = emptySet(),
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(
