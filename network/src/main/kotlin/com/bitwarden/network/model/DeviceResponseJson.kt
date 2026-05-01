@@ -23,7 +23,7 @@ data class DeviceResponseJson(
     @SerialName("id") val id: String,
     @SerialName("name") val name: String,
     @SerialName("identifier") val identifier: String,
-    @SerialName("type") val type: Int,
+    @SerialName("type") val type: DeviceType,
     @Contextual @SerialName("creationDate") val creationDate: Instant,
     @Contextual @SerialName("lastActivityDate") val lastActivityDate: Instant?,
     @SerialName("isTrusted") val isTrusted: Boolean,

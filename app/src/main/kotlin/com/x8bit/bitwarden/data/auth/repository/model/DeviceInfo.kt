@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.model
 
 import android.os.Parcelable
+import com.bitwarden.network.model.DeviceType
 import kotlinx.parcelize.Parcelize
 import java.time.Instant
 

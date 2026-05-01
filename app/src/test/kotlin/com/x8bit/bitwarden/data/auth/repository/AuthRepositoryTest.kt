@@ -32,6 +32,7 @@ import com.bitwarden.network.model.ConfigResponseJson
 import com.bitwarden.network.model.CreateAccountKeysResponseJson
 import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.DeviceResponseJson
+import com.bitwarden.network.model.DeviceType
 import com.bitwarden.network.model.DevicesResponseJson
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
@@ -100,9 +101,8 @@ import com.x8bit.bitwarden.data.auth.manager.model.MigrateNewUserToKeyConnectorR
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
-import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeviceInfo
-import com.x8bit.bitwarden.data.auth.repository.model.DeviceType
+import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.GetDevicesResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
@@ -6896,7 +6896,7 @@ class AuthRepositoryTest {
             id = "deviceId",
             name = "Test Device",
             identifier = "deviceIdentifier",
-            type = 0,
+            type = DeviceType.ANDROID,
             creationDate = Instant.parse("2023-10-27T12:00:00Z"),
             lastActivityDate = null,
             isTrusted = false,

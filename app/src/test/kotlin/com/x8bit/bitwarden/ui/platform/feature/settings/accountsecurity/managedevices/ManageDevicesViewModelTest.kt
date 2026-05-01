@@ -6,6 +6,7 @@ import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.bitwarden.network.model.DeviceType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -15,7 +16,6 @@ import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.DeviceInfo
 import com.x8bit.bitwarden.data.auth.repository.model.DevicePendingAuthRequest
-import com.x8bit.bitwarden.data.auth.repository.model.DeviceType
 import com.x8bit.bitwarden.data.auth.repository.model.GetDevicesResult
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.managedevices.util.readableDeviceTypeName
@@ -233,91 +233,95 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
     @Test
     fun `content state should sort devices with current first, pending second, others last`() =
         runTest {
-        val pendingRequest = DevicePendingAuthRequest(
-            id = "auth-req-1",
-            creationDate = fixedClock.instant(),
-        )
-        val validAuthRequest = AuthRequest(
-            id = "auth-req-1",
-            publicKey = "publicKey",
-            platform = "Android",
-            ipAddress = "192.168.0.1",
-            key = null,
-            masterPasswordHash = null,
-            creationDate = fixedClock.instant(),
-            responseDate = null,
-            requestApproved = false,
-            originUrl = "www.bitwarden.com",
-            fingerprint = "fingerprint-phrase",
-        )
-        val currentDevice = DEFAULT_DEVICE.copy(isCurrentDevice = true)
-        val pendingDevice = DEFAULT_DEVICE.copy(
-            id = "device-pending",
-            pendingAuthRequest = pendingRequest,
-        )
-        val otherDevice = DEFAULT_DEVICE.copy(id = "device-other")
+            val pendingRequest = DevicePendingAuthRequest(
+                id = "auth-req-1",
+                creationDate = fixedClock.instant(),
+            )
+            val validAuthRequest = AuthRequest(
+                id = "auth-req-1",
+                publicKey = "publicKey",
+                platform = "Android",
+                ipAddress = "192.168.0.1",
+                key = null,
+                masterPasswordHash = null,
+                creationDate = fixedClock.instant(),
+                responseDate = null,
+                requestApproved = false,
+                originUrl = "www.bitwarden.com",
+                fingerprint = "fingerprint-phrase",
+            )
+            val currentDevice = DEFAULT_DEVICE.copy(isCurrentDevice = true)
+            val pendingDevice = DEFAULT_DEVICE.copy(
+                id = "device-pending",
+                pendingAuthRequest = pendingRequest,
+            )
+            val otherDevice = DEFAULT_DEVICE.copy(id = "device-other")
 
-        coEvery { authRepository.getDevices() } returns GetDevicesResult.Success(
-            devices = listOf(otherDevice, pendingDevice, currentDevice),
-        )
+            coEvery { authRepository.getDevices() } returns GetDevicesResult.Success(
+                devices = listOf(otherDevice, pendingDevice, currentDevice),
+            )
 
-        val viewModel = createViewModel()
-        mutableAuthRequestsWithUpdatesFlow.tryEmit(
-            AuthRequestsUpdatesResult.Update(authRequests = listOf(validAuthRequest)),
-        )
-        viewModel.stateFlow.test {
-            assertEquals(
-                ManageDevicesState(
-                    authRequests = listOf(validAuthRequest).toImmutableList(),
-                    devices = listOf(otherDevice, pendingDevice, currentDevice).toImmutableList(),
-                    viewState = ManageDevicesState.ViewState.Content(
-                        items = listOf(
-                            ManageDevicesState.ViewState.Content.DeviceItem(
-                                id = currentDevice.id,
-                                name = currentDevice.name,
-                                typeName = currentDevice.type.readableDeviceTypeName,
-                                isTrusted = currentDevice.isTrusted,
-                                firstLoginDate = "Oct 27, 2023, 12:00:00\u202FPM",
-                                lastActivityLabel = currentDevice.lastActivityDate
-                                    ?.toLastActivityLabel(clock = fixedClock),
-                                status = DeviceSessionStatus.Current,
-                                fingerprintPhrase = null,
-                            ),
-                            ManageDevicesState.ViewState.Content.DeviceItem(
-                                id = pendingDevice.id,
-                                name = pendingDevice.name,
-                                typeName = pendingDevice.type.readableDeviceTypeName,
-                                isTrusted = pendingDevice.isTrusted,
-                                firstLoginDate = "Oct 27, 2023, 12:00:00\u202FPM",
-                                lastActivityLabel = pendingDevice.lastActivityDate
-                                    ?.toLastActivityLabel(clock = fixedClock),
-                                status = DeviceSessionStatus.Pending,
-                                fingerprintPhrase = validAuthRequest.fingerprint,
-                            ),
-                            ManageDevicesState.ViewState.Content.DeviceItem(
-                                id = otherDevice.id,
-                                name = otherDevice.name,
-                                typeName = otherDevice.type.readableDeviceTypeName,
-                                isTrusted = otherDevice.isTrusted,
-                                firstLoginDate = "Oct 27, 2023, 12:00:00\u202FPM",
-                                lastActivityLabel = otherDevice.lastActivityDate
-                                    ?.toLastActivityLabel(clock = fixedClock),
-                                status = DeviceSessionStatus.None,
-                                fingerprintPhrase = null,
+            val viewModel = createViewModel()
+            mutableAuthRequestsWithUpdatesFlow.tryEmit(
+                AuthRequestsUpdatesResult.Update(authRequests = listOf(validAuthRequest)),
+            )
+            viewModel.stateFlow.test {
+                assertEquals(
+                    ManageDevicesState(
+                        authRequests = listOf(validAuthRequest).toImmutableList(),
+                        devices = listOf(
+                            otherDevice,
+                            pendingDevice,
+                            currentDevice,
+                        ).toImmutableList(),
+                        viewState = ManageDevicesState.ViewState.Content(
+                            items = listOf(
+                                ManageDevicesState.ViewState.Content.DeviceItem(
+                                    id = currentDevice.id,
+                                    name = currentDevice.name,
+                                    typeName = currentDevice.type.readableDeviceTypeName,
+                                    isTrusted = currentDevice.isTrusted,
+                                    firstLoginDate = "Oct 27, 2023, 12:00:00\u202FPM",
+                                    lastActivityLabel = currentDevice.lastActivityDate
+                                        ?.toLastActivityLabel(clock = fixedClock),
+                                    status = DeviceSessionStatus.Current,
+                                    fingerprintPhrase = null,
+                                ),
+                                ManageDevicesState.ViewState.Content.DeviceItem(
+                                    id = pendingDevice.id,
+                                    name = pendingDevice.name,
+                                    typeName = pendingDevice.type.readableDeviceTypeName,
+                                    isTrusted = pendingDevice.isTrusted,
+                                    firstLoginDate = "Oct 27, 2023, 12:00:00\u202FPM",
+                                    lastActivityLabel = pendingDevice.lastActivityDate
+                                        ?.toLastActivityLabel(clock = fixedClock),
+                                    status = DeviceSessionStatus.Pending,
+                                    fingerprintPhrase = validAuthRequest.fingerprint,
+                                ),
+                                ManageDevicesState.ViewState.Content.DeviceItem(
+                                    id = otherDevice.id,
+                                    name = otherDevice.name,
+                                    typeName = otherDevice.type.readableDeviceTypeName,
+                                    isTrusted = otherDevice.isTrusted,
+                                    firstLoginDate = "Oct 27, 2023, 12:00:00\u202FPM",
+                                    lastActivityLabel = otherDevice.lastActivityDate
+                                        ?.toLastActivityLabel(clock = fixedClock),
+                                    status = DeviceSessionStatus.None,
+                                    fingerprintPhrase = null,
+                                ),
                             ),
                         ),
+                        isPullToRefreshSettingEnabled = false,
+                        isRefreshing = false,
+                        internalHideBottomSheet = false,
+                        isFdroid = false,
+                        devicesLoaded = true,
+                        authRequestsLoaded = true,
                     ),
-                    isPullToRefreshSettingEnabled = false,
-                    isRefreshing = false,
-                    internalHideBottomSheet = false,
-                    isFdroid = false,
-                    devicesLoaded = true,
-                    authRequestsLoaded = true,
-                ),
-                awaitItem(),
-            )
+                    awaitItem(),
+                )
+            }
         }
-    }
 
     private fun createViewModel(state: ManageDevicesState? = null) = ManageDevicesViewModel(
         clock = fixedClock,

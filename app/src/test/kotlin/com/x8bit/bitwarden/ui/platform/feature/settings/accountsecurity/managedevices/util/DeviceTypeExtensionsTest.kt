@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.managedevices.util
 
+import com.bitwarden.network.model.DeviceType
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.data.auth.repository.model.DeviceType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
