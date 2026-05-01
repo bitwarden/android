@@ -490,8 +490,8 @@ class PlanViewModel @Inject constructor(
                     ),
                 )
             }
+            sendEvent(PlanEvent.NavigateToCelebration)
         }
-        sendEvent(PlanEvent.NavigateToCelebration)
     }
 
     private fun handlePricingResultReceive(
