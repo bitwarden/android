@@ -5,6 +5,7 @@ import com.bitwarden.network.api.AuthenticatedDevicesApi
 import com.bitwarden.network.api.UnauthenticatedDevicesApi
 import com.bitwarden.network.base.BaseServiceTest
 import com.bitwarden.network.model.DeviceResponseJson
+import com.bitwarden.network.model.DeviceType
 import com.bitwarden.network.model.DevicesResponseJson
 import com.bitwarden.network.model.TrustedDeviceKeysResponseJson
 import kotlinx.coroutines.test.runTest
@@ -89,7 +90,7 @@ private val GET_DEVICES_RESPONSE: DevicesResponseJson = DevicesResponseJson(
             id = "0d31b6fb-d282-43c7-b614-b13e0129dbd7",
             name = "Pixel 8",
             identifier = "ea7c0a13-5ce4-4f96-8e17-4fc7fa54f464",
-            type = 0,
+            type = DeviceType.ANDROID,
             creationDate = Instant.parse("2024-03-25T18:04:28.23Z"),
             lastActivityDate = Instant.parse("2024-03-26T10:00:00.00Z"),
             isTrusted = true,
