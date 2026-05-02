@@ -101,6 +101,7 @@ fun CardScanScreen(
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
+                        .testTag("CardScanFrame")
                         .fillMaxSize()
                         .navigationBarsPadding(),
                 ) {

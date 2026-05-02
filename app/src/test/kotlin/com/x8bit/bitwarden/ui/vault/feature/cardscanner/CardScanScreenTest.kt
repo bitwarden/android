@@ -87,11 +87,12 @@ class CardScanScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
             .getUnclippedBoundsInRoot()
             .bottom
-        val closeButtonBottom = composeTestRule
-            .onNodeWithContentDescription("Close")
+        val scanFrameTop = composeTestRule
+            .onNodeWithTag("CardScanFrame")
             .getUnclippedBoundsInRoot()
-            .bottom
-        // The instruction must sit beneath the top app bar yet above the scan-frame region.
-        assertTrue(instructionBottom > closeButtonBottom)
+            .top
+        // The instruction's bottom edge must sit at or above the scan-frame's top edge so
+        // the instruction never visually overlaps or sits below the scan-frame region.
+        assertTrue(instructionBottom <= scanFrameTop)
     }
 }
