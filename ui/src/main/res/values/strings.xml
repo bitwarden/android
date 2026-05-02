@@ -241,6 +241,7 @@ Scanning will happen automatically.</string>
     <string name="august">August</string>
     <string name="brand">Brand</string>
     <string name="card_details">Card Details</string>
+    <string name="card_scanned">Card scanned</string>
     <string name="cardholder_name">Cardholder name</string>
     <string name="city_town">City / Town</string>
     <string name="company">Company</string>

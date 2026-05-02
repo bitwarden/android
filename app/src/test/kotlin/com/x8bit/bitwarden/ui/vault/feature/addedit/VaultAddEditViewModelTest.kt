@@ -5198,6 +5198,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     as VaultAddEditState.ViewState.Content
                 assertEquals(expectedCard, content.type)
                 assertEquals(
+                    VaultAddEditEvent.ShowSnackbar(BitwardenString.card_scanned.asText()),
+                    awaitItem(),
+                )
+                assertEquals(
                     VaultAddEditEvent.FocusCardHolderName,
                     awaitItem(),
                 )
@@ -5485,6 +5489,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 val card = content.type as VaultAddEditState.ViewState.Content.ItemType.Card
                 assertEquals("999", card.securityCode)
                 assertEquals(
+                    VaultAddEditEvent.ShowSnackbar(BitwardenString.card_scanned.asText()),
+                    awaitItem(),
+                )
+                assertEquals(
                     VaultAddEditEvent.FocusCardHolderName,
                     awaitItem(),
                 )
@@ -5534,6 +5542,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 val content = viewModel.stateFlow.value.viewState
                     as VaultAddEditState.ViewState.Content
                 assertEquals(expectedCard, content.type)
+                assertEquals(
+                    VaultAddEditEvent.ShowSnackbar(BitwardenString.card_scanned.asText()),
+                    awaitItem(),
+                )
                 assertEquals(
                     VaultAddEditEvent.FocusCardHolderName,
                     awaitItem(),
@@ -5585,6 +5597,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     as VaultAddEditState.ViewState.Content
                 assertEquals(expectedCard, content.type)
                 assertEquals(
+                    VaultAddEditEvent.ShowSnackbar(BitwardenString.card_scanned.asText()),
+                    awaitItem(),
+                )
+                assertEquals(
                     VaultAddEditEvent.FocusCardHolderName,
                     awaitItem(),
                 )
@@ -5631,6 +5647,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 val content = viewModel.stateFlow.value.viewState
                     as VaultAddEditState.ViewState.Content
                 assertEquals(expectedCard, content.type)
+                assertEquals(
+                    VaultAddEditEvent.ShowSnackbar(BitwardenString.card_scanned.asText()),
+                    awaitItem(),
+                )
                 assertEquals(
                     VaultAddEditEvent.FocusCardHolderName,
                     awaitItem(),

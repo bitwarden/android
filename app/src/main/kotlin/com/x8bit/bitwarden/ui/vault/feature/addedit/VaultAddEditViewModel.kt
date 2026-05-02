@@ -1940,6 +1940,9 @@ class VaultAddEditViewModel @Inject constructor(
                         expirationYear = data.expirationYear ?: cardType.expirationYear,
                     )
                 }
+                sendEvent(
+                    VaultAddEditEvent.ShowSnackbar(BitwardenString.card_scanned.asText()),
+                )
                 sendEvent(VaultAddEditEvent.FocusCardHolderName)
             }
 
