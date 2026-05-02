@@ -5183,6 +5183,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         ),
                     ),
                 )
+                // CVV is intentionally dropped from the apply path to match iOS.
                 val expectedCard = VaultAddEditState
                     .ViewState
                     .Content
@@ -5191,7 +5192,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         number = "4111111111111111",
                         expirationYear = "2025",
                         expirationMonth = VaultCardExpirationMonth.DECEMBER,
-                        securityCode = "123",
                         brand = VaultCardBrand.VISA,
                     )
                 val content = viewModel.stateFlow.value.viewState
@@ -5367,7 +5367,48 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `CardScanResultReceive with partial scan should preserve existing fields`() =
+    fun `CardScanResultReceive with null number should not update state or focus`() =
+        runTest {
+            val initialCard = VaultAddEditState
+                .ViewState
+                .Content
+                .ItemType
+                .Card(
+                    cardHolderName = "EXISTING NAME",
+                    expirationMonth = VaultCardExpirationMonth.JUNE,
+                    expirationYear = "2030",
+                    securityCode = "999",
+                )
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = initialCard,
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                mutableCardScanResultFlow.tryEmit(
+                    CardScanResult.Success(
+                        cardScanData = CardScanData(
+                            number = null,
+                            expirationMonth = "12",
+                            expirationYear = "2025",
+                            securityCode = "123",
+                        ),
+                    ),
+                )
+                val content = viewModel.stateFlow.value.viewState
+                    as VaultAddEditState.ViewState.Content
+                assertEquals(initialCard, content.type)
+                expectNoEvents()
+            }
+        }
+
+    @Test
+    fun `CardScanResultReceive with null month should not update state or focus`() =
         runTest {
             val initialCard = VaultAddEditState
                 .ViewState
@@ -5395,6 +5436,187 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         cardScanData = CardScanData(
                             number = "4111111111111111",
                             expirationMonth = null,
+                            expirationYear = "2025",
+                            securityCode = "123",
+                        ),
+                    ),
+                )
+                val content = viewModel.stateFlow.value.viewState
+                    as VaultAddEditState.ViewState.Content
+                assertEquals(initialCard, content.type)
+                expectNoEvents()
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `CardScanResultReceive with number and month present should not modify CVV when scan carries securityCode`() =
+        runTest {
+            val initialCard = VaultAddEditState
+                .ViewState
+                .Content
+                .ItemType
+                .Card(
+                    securityCode = "999",
+                )
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = initialCard,
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                mutableCardScanResultFlow.tryEmit(
+                    CardScanResult.Success(
+                        cardScanData = CardScanData(
+                            number = "4111111111111111",
+                            expirationMonth = "12",
+                            expirationYear = "2025",
+                            securityCode = "123",
+                        ),
+                    ),
+                )
+                val content = viewModel.stateFlow.value.viewState
+                    as VaultAddEditState.ViewState.Content
+                val card = content.type as VaultAddEditState.ViewState.Content.ItemType.Card
+                assertEquals("999", card.securityCode)
+                assertEquals(
+                    VaultAddEditEvent.FocusCardHolderName,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `CardScanResultReceive should overwrite manually-typed values`() =
+        runTest {
+            val typedCard = VaultAddEditState
+                .ViewState
+                .Content
+                .ItemType
+                .Card(
+                    number = "5555555555554444",
+                    brand = VaultCardBrand.MASTERCARD,
+                    expirationMonth = VaultCardExpirationMonth.JUNE,
+                    expirationYear = "2030",
+                )
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = typedCard,
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                mutableCardScanResultFlow.tryEmit(
+                    CardScanResult.Success(
+                        cardScanData = CardScanData(
+                            number = "4111111111111111",
+                            expirationMonth = "12",
+                            expirationYear = "2025",
+                            securityCode = null,
+                        ),
+                    ),
+                )
+                val expectedCard = typedCard.copy(
+                    number = "4111111111111111",
+                    brand = VaultCardBrand.VISA,
+                    expirationMonth = VaultCardExpirationMonth.DECEMBER,
+                    expirationYear = "2025",
+                )
+                val content = viewModel.stateFlow.value.viewState
+                    as VaultAddEditState.ViewState.Content
+                assertEquals(expectedCard, content.type)
+                assertEquals(
+                    VaultAddEditEvent.FocusCardHolderName,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `CardScanResultReceive should refresh all four fields when re-scanned`() =
+        runTest {
+            val firstScanCard = VaultAddEditState
+                .ViewState
+                .Content
+                .ItemType
+                .Card(
+                    number = "5555555555554444",
+                    brand = VaultCardBrand.MASTERCARD,
+                    expirationMonth = VaultCardExpirationMonth.JUNE,
+                    expirationYear = "2030",
+                )
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = firstScanCard,
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                mutableCardScanResultFlow.tryEmit(
+                    CardScanResult.Success(
+                        cardScanData = CardScanData(
+                            number = "4111111111111111",
+                            expirationMonth = "12",
+                            expirationYear = "2025",
+                            securityCode = null,
+                        ),
+                    ),
+                )
+                val expectedCard = firstScanCard.copy(
+                    number = "4111111111111111",
+                    brand = VaultCardBrand.VISA,
+                    expirationMonth = VaultCardExpirationMonth.DECEMBER,
+                    expirationYear = "2025",
+                )
+                val content = viewModel.stateFlow.value.viewState
+                    as VaultAddEditState.ViewState.Content
+                assertEquals(expectedCard, content.type)
+                assertEquals(
+                    VaultAddEditEvent.FocusCardHolderName,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `CardScanResultReceive with null year should preserve existing year`() =
+        runTest {
+            val initialCard = VaultAddEditState
+                .ViewState
+                .Content
+                .ItemType
+                .Card(
+                    expirationYear = "2030",
+                )
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = initialCard,
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                mutableCardScanResultFlow.tryEmit(
+                    CardScanResult.Success(
+                        cardScanData = CardScanData(
+                            number = "4111111111111111",
+                            expirationMonth = "12",
                             expirationYear = null,
                             securityCode = null,
                         ),
@@ -5403,6 +5625,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 val expectedCard = initialCard.copy(
                     number = "4111111111111111",
                     brand = VaultCardBrand.VISA,
+                    expirationMonth = VaultCardExpirationMonth.DECEMBER,
+                    // expirationYear unchanged at "2030".
                 )
                 val content = viewModel.stateFlow.value.viewState
                     as VaultAddEditState.ViewState.Content
