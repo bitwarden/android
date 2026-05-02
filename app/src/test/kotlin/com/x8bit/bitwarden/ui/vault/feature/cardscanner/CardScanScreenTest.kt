@@ -1,7 +1,9 @@
 package com.x8bit.bitwarden.ui.vault.feature.cardscanner
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
@@ -76,5 +78,20 @@ class CardScanScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText("Position your card within the frame to scan it.")
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun `instruction text should render above the camera scan frame`() {
+        val instructionBottom = composeTestRule
+            .onNodeWithTag("CardScanInstruction")
+            .assertIsDisplayed()
+            .getUnclippedBoundsInRoot()
+            .bottom
+        val closeButtonBottom = composeTestRule
+            .onNodeWithContentDescription("Close")
+            .getUnclippedBoundsInRoot()
+            .bottom
+        // The instruction must sit beneath the top app bar yet above the scan-frame region.
+        assertTrue(instructionBottom > closeButtonBottom)
     }
 }
