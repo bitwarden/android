@@ -1,20 +1,45 @@
+@file:OmitFromCoverage
+
 package com.bitwarden.ui.platform.feature.cardscanner.util
 
+import android.graphics.Rect
 import androidx.annotation.OptIn
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageProxy
 import com.bitwarden.annotation.OmitFromCoverage
 import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
- * [CardTextAnalyzer] implementation that uses ML Kit Text Recognition
- * to detect credit card details from camera frames.
+ * The maximum number of recent frames whose Luhn-valid PAN candidates are tracked for temporal
+ * voting.
+ */
+internal const val TEMPORAL_VOTE_WINDOW_SIZE: Int = 3
+
+/**
+ * The minimum number of times the same PAN must appear in the temporal window before it is
+ * emitted to the caller. Two-of-three voting eliminates one-frame OCR flukes (a Luhn-valid PAN
+ * that briefly appears in the corner of the viewport, for example) without unduly delaying
+ * legitimate scans.
+ */
+internal const val TEMPORAL_VOTE_THRESHOLD: Int = 2
+
+/**
+ * [CardTextAnalyzer] implementation that uses ML Kit Text Recognition to detect credit card
+ * details from camera frames.
  *
- * @property cardDataParser The parser used to extract card data from
- * recognized text.
+ * The analyzer applies three layered defenses to prevent committing the wrong card data when
+ * multiple cards are visible or a card is held off-axis:
+ *  1. **Frame gating** — text outside the on-screen scan rectangle is discarded.
+ *  2. **Orientation gating** — text whose baseline is more than ±10° from horizontal in display
+ *     space is discarded (rejecting sideways and upside-down cards).
+ *  3. **Temporal voting** — a PAN is only emitted once it has been observed in at least
+ *     [TEMPORAL_VOTE_THRESHOLD] of the last [TEMPORAL_VOTE_WINDOW_SIZE] frames.
+ *
+ * @property cardDataParser The parser used to extract card data from recognized text.
  */
 @OmitFromCoverage
 class CardTextAnalyzerImpl(
@@ -27,6 +52,8 @@ class CardTextAnalyzerImpl(
         TextRecognizerOptions.DEFAULT_OPTIONS,
     )
 
+    private val voteBuffer = PanVoteBuffer()
+
     override lateinit var onCardScanned: (CardScanData) -> Unit
 
     @OptIn(ExperimentalGetImage::class)
@@ -36,28 +63,71 @@ class CardTextAnalyzerImpl(
             return
         }
 
-        val inputImage = image.image
-            ?.let {
-                InputImage.fromMediaImage(
-                    it,
-                    image.imageInfo.rotationDegrees,
-                )
-            }
-            ?: run {
-                image.close()
-                isInAnalysis.set(false)
-                return
-            }
+        val mediaImage = image.image
+        if (mediaImage == null) {
+            image.close()
+            isInAnalysis.set(false)
+            return
+        }
+
+        val rotationDegrees = image.imageInfo.rotationDegrees
+        val rawImageWidth = mediaImage.width
+        val rawImageHeight = mediaImage.height
+        val inputImage = InputImage.fromMediaImage(mediaImage, rotationDegrees)
 
         recognizer.process(inputImage)
             .addOnSuccessListener { result ->
-                cardDataParser.parseCardData(result.text)
+                val filteredText = filterScannedText(
+                    recognized = result.toRecognizedText(),
+                    rawImageWidth = rawImageWidth,
+                    rawImageHeight = rawImageHeight,
+                    rotationDegrees = rotationDegrees,
+                )
+                val parsed = filteredText
+                    .takeIf { it.isNotEmpty() }
+                    ?.let { cardDataParser.parseCardData(it) }
                     ?.takeIf { it.number != null }
-                    ?.let(onCardScanned)
+
+                voteAndMaybeEmit(parsed)
             }
             .addOnCompleteListener {
                 image.close()
                 isInAnalysis.set(false)
             }
     }
+
+    /**
+     * Records the latest frame's parse result in the temporal window and emits the parsed data
+     * only when its PAN has been confirmed by [PanVoteBuffer].
+     */
+    private fun voteAndMaybeEmit(parsed: CardScanData?) {
+        val confirmedPan = voteBuffer.record(parsed?.number)
+        if (confirmedPan != null && parsed != null) {
+            onCardScanned(parsed)
+        }
+    }
 }
+
+/**
+ * Adapts ML Kit's [Text] result into the analyzer's internal [RecognizedText] abstraction so the
+ * geometric filtering logic can be unit-tested without mocking final ML Kit classes.
+ */
+private fun Text.toRecognizedText(): RecognizedText = object : RecognizedText {
+    override val textBlocks: List<RecognizedTextBlock> =
+        this@toRecognizedText.textBlocks.map { block ->
+            object : RecognizedTextBlock {
+                override val boundingBox: ImageRect? = block.boundingBox?.toImageRect()
+                override val lines: List<RecognizedTextLine> = block.lines.map { line ->
+                    object : RecognizedTextLine {
+                        override val text: String = line.text
+                        override val boundingBox: ImageRect? = line.boundingBox?.toImageRect()
+                        override val cornerPoints: List<ImagePoint>? =
+                            line.cornerPoints?.map { ImagePoint(x = it.x, y = it.y) }
+                    }
+                }
+            }
+        }
+}
+
+private fun Rect.toImageRect(): ImageRect =
+    ImageRect(left = left, top = top, right = right, bottom = bottom)
