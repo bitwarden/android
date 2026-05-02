@@ -1,24 +1,31 @@
 package com.x8bit.bitwarden.ui.vault.feature.cardscanner
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.StatusBarsAppearanceAffect
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -47,6 +54,8 @@ fun CardScanScreen(
     viewModel: CardScanViewModel = hiltViewModel(),
     cardTextAnalyzer: CardTextAnalyzer = LocalCardTextAnalyzer.current,
 ) {
+    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+
     cardTextAnalyzer.onCardScanned = { cardScanData ->
         viewModel.trySendAction(
             CardScanAction.CardScanReceive(cardScanData = cardScanData),
@@ -121,8 +130,42 @@ fun CardScanScreen(
                         },
                         modifier = Modifier.fillMaxSize(),
                     )
+                    if (state.showHint) {
+                        ScanHintBanner(
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 16.dp),
+                        )
+                    }
                 }
             }
         }
     }
+}
+
+/**
+ * A timeout-driven hint shown over the camera preview when no successful card scan has been
+ * received within the expected window. Wrapped in a polite live region so TalkBack announces it
+ * to users when it appears.
+ */
+@Composable
+private fun ScanHintBanner(
+    modifier: Modifier = Modifier,
+) {
+    Text(
+        text = stringResource(
+            id = BitwardenString.hold_steady_and_ensure_all_card_details_are_visible,
+        ),
+        textAlign = TextAlign.Center,
+        color = BitwardenTheme.colorScheme.text.primary,
+        style = BitwardenTheme.typography.bodyMedium,
+        modifier = modifier
+            .semantics { liveRegion = LiveRegionMode.Polite }
+            .background(
+                color = BitwardenTheme.colorScheme.background.scrim,
+                shape = RoundedCornerShape(size = 8.dp),
+            )
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+    )
 }
