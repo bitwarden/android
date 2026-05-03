@@ -295,7 +295,6 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="field_type_text">Metin</string>
     <string name="select_type_field">Ne tür bir özel alan eklemek istiyorsunuz?</string>
     <string name="remove">Kaldır</string>
-    <string name="new_uri">Yeni URI</string>
     <string name="add_website">Web sitesi ekle</string>
     <string name="base_domain">Ana alan adı</string>
     <string name="default_text">Varsayılan (%1$s)</string>
@@ -666,7 +665,9 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="you_will_be_notified_once_approved">Onaylandıktan sonra bilgilendirileceksiniz.</string>
     <string name="trouble_logging_in">Giriş yaparken sorun mu yaşıyorsunuz?</string>
     <string name="block_auto_fill">Otomatik doldurmayı engelle</string>
+    <string name="no_uris_blocked">Hiç URI engellenmedi</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Aşağıdaki adresler için otomatik doldurma önerilmeyecektir.</string>
+    <string name="edit_blocked_uri">Engellenmiş URI\'yi düzenle</string>
     <string name="new_blocked_uri">Yeni engelli URI</string>
     <string name="invalid_format_use_https_http_or_android_app">Geçersiz biçim. https://, http:// veya androidapp:// kullanın</string>
     <string name="enter_uri">URl girin</string>
@@ -1075,6 +1076,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="security">Güvenlik</string>
     <string name="too_many_failed_biometric_attempts">Çok fazla başarısız biyometri denemesi yapıldı.</string>
     <string name="version">Sürüm</string>
+    <string name="version_x" comment="%1$s is the version string (e.g. 2025.1.0 (1234)).">Sürüm: %1$s</string>
     <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">Bitwarden Authenticator\'ı kullanmayı Yardım Merkezi\'nden öğrenin.</string>
     <string name="key">Anahtar</string>
     <string name="create_verification_code">Doğrulama kodu oluştur</string>
@@ -1209,6 +1211,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="archive_unavailable">Arşiv kullanılamıyor</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Premium’a yükselt</string>
+    <string name="plan">Paket</string>
     <string name="unlock_advanced_security_features">Gelişmiş güvenlik özelliklerinin kilidini açın</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Premium paket size daha fazla güvenlik ve kontrol olanağı sunan ek araçlara erişmenizi sağlar.</string>
     <string name="this_item_is_archived">Bu kayıt arşivlendi.</string>
@@ -1238,6 +1241,9 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="preview_unavailable">Ön izleme kullanılamıyor</string>
     <string name="download_attachment">Ek dosyayı indir</string>
     <string name="upgraded_to_premium">Upgraded to premium</string>
+    <string name="confirming_your_upgrade">Confirming your upgrade…</string>
+    <string name="upgrade_pending">Upgrade pending</string>
+    <string name="upgrade_pending_message">Your upgrade is being processed. You’ll remain on the free plan until it’s complete. Sync now to check, or continue and it will update automatically.</string>
     <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
     <string name="per_month">/ month</string>
     <string name="built_in_authenticator">Built-in authenticator</string>
@@ -1257,4 +1263,35 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="show_next_code">Sonraki kodu göster</string>
     <string name="see_upcoming_codes_in_the_list">Listede yaklaşan kodları göster</string>
     <string name="next_code_x">Sonraki kod, %1$s</string>
+    <string name="archive_item">Kaydı arşivle</string>
+    <string name="once_archived_this_item_will_be_excluded">Once archived, this item will be excluded from search results and autofill suggestions.</string>
+    <string name="pricing_unavailable">Pricing unavailable</string>
+    <string name="current_plan">Current plan</string>
+    <string name="premium_plan_name">Premium</string>
+    <string name="billing_amount">Fatura tutarı</string>
+    <string name="storage_cost">Depolama maliyeti</string>
+    <string name="discount">İndirim</string>
+    <string name="estimated_tax">Tahmini vergi</string>
+    <string name="billing_rate_per_year">%1$s / year</string>
+    <string name="billing_rate_per_month">%1$s / month</string>
+    <string name="manage_plan">Paketi yönet</string>
+    <string name="cancel_premium">Premium\'u iptal et</string>
+    <string name="cancel_now">Şimdi iptal et</string>
+    <string name="cancel_premium_confirmation">You’ll continue to have Premium access until %1$s.</string>
+    <string name="subscription_status_active">Aktif</string>
+    <string name="subscription_status_canceled">İptal edildi</string>
+    <string name="subscription_status_overdue_payment">Overdue payment</string>
+    <string name="subscription_status_past_due">Gecikme</string>
+    <string name="subscription_status_paused">Duraklatıldı</string>
+    <string name="premium_next_charge_summary">Your next charge is for %1$s USD due on %2$s.</string>
+    <string name="subscription_canceled_description">Your subscription was canceled on %1$s. Resubscribe to continue using premium features.</string>
+    <string name="subscription_overdue_description">We couldn’t process your payment. Update your payment before your subscription ends on %1$s.</string>
+    <string name="subscription_past_due_description">You have a grace period of %1$d days from your subscription expiration date. Please resolve the past due amount by %2$s.</string>
+    <string name="subscription_paused_description">Your subscription is paused. Resume to continue using premium features.</string>
+    <string name="loading_subscription">Loading subscription…</string>
+    <string name="loading_portal">Loading portal…</string>
+    <string name="portal_error">Bir sorun oluştu</string>
+    <string name="trouble_loading_portal">We had trouble loading the management portal, so try again.</string>
+    <string name="subscription_error">Subscription error</string>
+    <string name="trouble_loading_subscription">We couldn’t load your subscription details. Please try again.</string>
 </resources>

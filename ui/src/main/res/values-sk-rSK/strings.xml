@@ -297,7 +297,6 @@ Skenovanie prebehne automaticky.</string>
     <string name="field_type_text">Text</string>
     <string name="select_type_field">Aký typ poľa chcete pridať?</string>
     <string name="remove">Odstrániť</string>
-    <string name="new_uri">Nový URI</string>
     <string name="add_website">Pridať webovú stránku</string>
     <string name="base_domain">Základná doména</string>
     <string name="default_text">Predvolené (%1$s)</string>
@@ -675,7 +674,9 @@ Chcete prepnúť na tento účet?</string>
     <string name="you_will_be_notified_once_approved">Po schválení budete informovaný.</string>
     <string name="trouble_logging_in">Máte problémy s prihlásením?</string>
     <string name="block_auto_fill">Blokovať automatické vypĺňanie</string>
+    <string name="no_uris_blocked">Žiadne URI nie sú blokované</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Pre tieto URI nebude automatické vypĺňanie ponukané.</string>
+    <string name="edit_blocked_uri">Upraviť blokované URI</string>
     <string name="new_blocked_uri">Nové blokované URI</string>
     <string name="invalid_format_use_https_http_or_android_app">Neplatný formát. Použite https://, http://, alebo androidapp://</string>
     <string name="enter_uri">Zadať URI</string>
@@ -1090,6 +1091,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="security">Zabezpečenie</string>
     <string name="too_many_failed_biometric_attempts">Príliš veľa neúspešných pokusov o prihlásenie pomocou biometrických údajov.</string>
     <string name="version">Verzia</string>
+    <string name="version_x" comment="%1$s is the version string (e.g. 2025.1.0 (1234)).">Verzia %1$s</string>
     <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">Viac informácií o používaní Bitwarden Authenticator nájdete v centre pomoci.</string>
     <string name="key">Kľúč</string>
     <string name="create_verification_code">Vytvoriť overovací kód</string>
@@ -1228,6 +1230,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="archive_unavailable">Archív je nedostupný</string>
     <string name="archiving_items_is_a_premium_feature">Archivovanie položiek je prémiová funkcia. Váš aktuálny plán nezahŕňa prístup k tejto funkcii.</string>
     <string name="upgrade_to_premium">Upgradovať na Prémium</string>
+    <string name="plan">Plán</string>
     <string name="unlock_advanced_security_features">Odomknutie pokročilých funkcií zabezpečenia</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Plán Prémium vám poskytne viac nástrojov na zabezpečenie a kontrolu.</string>
     <string name="this_item_is_archived">Táto položka je archivovaná.</string>
@@ -1257,6 +1260,9 @@ Chcete prepnúť na tento účet?</string>
     <string name="preview_unavailable">Náhľad nie je k dispozícii</string>
     <string name="download_attachment">Stiahnuť prílohu</string>
     <string name="upgraded_to_premium">Upgradované na Prémium</string>
+    <string name="confirming_your_upgrade">Potvrdenie upgradu…</string>
+    <string name="upgrade_pending">Čaká sa na upgrade</string>
+    <string name="upgrade_pending_message">Váš upgrade sa práve spracúva. Do dokončenia tohto procesu budete naďalej využívať bezplatný plán. Synchronizujte teraz, aby ste to skontrolovali, alebo pokračujte a aktualizácia prebehne automaticky.</string>
     <string name="unlock_premium_features">S balíkom Prémium získate prístup k pokročilejším funkciám.</string>
     <string name="per_month">/mesiac</string>
     <string name="built_in_authenticator">Zabudovaný autentifikátor</string>
@@ -1276,4 +1282,35 @@ Chcete prepnúť na tento účet?</string>
     <string name="show_next_code">Zobraziť ďalší kód</string>
     <string name="see_upcoming_codes_in_the_list">Pozrite si nadchádzajúce kódy v zozname</string>
     <string name="next_code_x">Ďalší kód, %1$s</string>
+    <string name="archive_item">Archivovať položku</string>
+    <string name="once_archived_this_item_will_be_excluded">Po archivácii bude táto položka vylúčená z výsledkov vyhľadávania a návrhov automatického vypĺňania.</string>
+    <string name="pricing_unavailable">Cena nie je k dispozícii</string>
+    <string name="current_plan">Aktuálny plán</string>
+    <string name="premium_plan_name">Prémium</string>
+    <string name="billing_amount">Fakturačná suma</string>
+    <string name="storage_cost">Náklady na skladovanie</string>
+    <string name="discount">Zľava</string>
+    <string name="estimated_tax">Odhadovaná daň</string>
+    <string name="billing_rate_per_year">%1$s/year</string>
+    <string name="billing_rate_per_month">%1$s/month</string>
+    <string name="manage_plan">Spravovať plán</string>
+    <string name="cancel_premium">Zrušiť Prémium</string>
+    <string name="cancel_now">Zrušiť teraz</string>
+    <string name="cancel_premium_confirmation">Prémiový prístup budete mať až do %1$s.</string>
+    <string name="subscription_status_active">Aktívne</string>
+    <string name="subscription_status_canceled">Zrušené</string>
+    <string name="subscription_status_overdue_payment">Po splatnosti</string>
+    <string name="subscription_status_past_due">Po splatnosti</string>
+    <string name="subscription_status_paused">Pozastavené</string>
+    <string name="premium_next_charge_summary">Vaša ďalšia platba vo výške %1$s USD je splatná dňa %2$s.</string>
+    <string name="subscription_canceled_description">Vaše predplatné bolo zrušené dňa %1$s. Obnovte si predplatné, ak chcete naďalej využívať prémiové funkcie.</string>
+    <string name="subscription_overdue_description">Vašu platbu sa nám nepodarilo spracovať. Aktualizujte si spôsob platby ešte pred uplynutím platnosti vášho predplatného dňa %1$s.</string>
+    <string name="subscription_past_due_description">Od exspirácie predplatného máte k dispozícii %1$d d. Prosím, uhraďte nezaplatené faktúry do %2$s.</string>
+    <string name="subscription_paused_description">Vaše predplatné bolo pozastavené. Obnovte si predplatné, ak chcete naďalej využívať prémiové funkcie.</string>
+    <string name="loading_subscription">Načítava sa predplatné…</string>
+    <string name="loading_portal">Načítava sa portál…</string>
+    <string name="portal_error">Niečo sa pokazilo</string>
+    <string name="trouble_loading_portal">Mali sme problémy s načítaním portálu pre správu, skúste to znova.</string>
+    <string name="subscription_error">Chyba predplatného</string>
+    <string name="trouble_loading_subscription">Nepodarilo sa nám načítať údaje o vašom predplatnom. Skúste to znova.</string>
 </resources>

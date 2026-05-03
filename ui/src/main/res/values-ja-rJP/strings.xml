@@ -294,7 +294,6 @@
     <string name="field_type_text">テキスト</string>
     <string name="select_type_field">どのタイプのカスタムフィールドを追加しますか？</string>
     <string name="remove">削除</string>
-    <string name="new_uri">新しい URI</string>
     <string name="add_website">ウェブサイトを追加</string>
     <string name="base_domain">ベースドメイン</string>
     <string name="default_text">デフォルト (%1$s)</string>
@@ -663,7 +662,9 @@
     <string name="you_will_be_notified_once_approved">承認されると通知されます。</string>
     <string name="trouble_logging_in">ログインできない場合</string>
     <string name="block_auto_fill">自動入力をブロック</string>
+    <string name="no_uris_blocked">ブロック済みの URI なし</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">これらの URI に対しては自動入力しません。</string>
+    <string name="edit_blocked_uri">ブロック済みの URI を編集</string>
     <string name="new_blocked_uri">新しくブロックする URI</string>
     <string name="invalid_format_use_https_http_or_android_app">無効な形式です。https://、http://、androidapp:// を使用してください</string>
     <string name="enter_uri">URI を入力</string>
@@ -1069,6 +1070,7 @@
     <string name="security">セキュリティ</string>
     <string name="too_many_failed_biometric_attempts">生体認証の失敗回数が多すぎます。</string>
     <string name="version">バージョン</string>
+    <string name="version_x" comment="%1$s is the version string (e.g. 2025.1.0 (1234)).">バージョン: %1$s</string>
     <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">ヘルプセンターでBitwarden Authenticatorの詳しい利用方法をご覧ください。</string>
     <string name="key">キー</string>
     <string name="create_verification_code">認証コードを生成</string>
@@ -1201,6 +1203,7 @@
     <string name="archive_unavailable">アーカイブは利用できません</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Upgrade to Premium</string>
+    <string name="plan">プラン</string>
     <string name="unlock_advanced_security_features">Unlock advanced security features</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">This item is archived.</string>
@@ -1230,6 +1233,9 @@
     <string name="preview_unavailable">プレビューできません</string>
     <string name="download_attachment">添付ファイルをダウンロード</string>
     <string name="upgraded_to_premium">プレミアムにアップグレード済み</string>
+    <string name="confirming_your_upgrade">アップグレードを確認中…</string>
+    <string name="upgrade_pending">アップグレードを保留中</string>
+    <string name="upgrade_pending_message">アップグレードは現在処理中です。完了するまで無料プランのままになります。今すぐ同期して確認するか、続行して自動的に更新させてください。</string>
     <string name="unlock_premium_features">プレミアムプランでより高度な機能をアンロックしましょう。</string>
     <string name="per_month">/ 月</string>
     <string name="built_in_authenticator">認証機能を内蔵</string>
@@ -1249,4 +1255,35 @@
     <string name="show_next_code">次のコードを表示</string>
     <string name="see_upcoming_codes_in_the_list">リスト内の次のコードを表示</string>
     <string name="next_code_x">次のコード %1$s</string>
+    <string name="archive_item">アイテムをアーカイブ</string>
+    <string name="once_archived_this_item_will_be_excluded">アーカイブすると、このアイテムは検索結果と自動入力の候補から除外されます。</string>
+    <string name="pricing_unavailable">料金が利用できません</string>
+    <string name="current_plan">Current plan</string>
+    <string name="premium_plan_name">プレミアム</string>
+    <string name="billing_amount">請求額</string>
+    <string name="storage_cost">ストレージコスト</string>
+    <string name="discount">割引</string>
+    <string name="estimated_tax">推定税額</string>
+    <string name="billing_rate_per_year">%1$s / year</string>
+    <string name="billing_rate_per_month">%1$s / month</string>
+    <string name="manage_plan">プランの管理</string>
+    <string name="cancel_premium">プレミアムをキャンセル</string>
+    <string name="cancel_now">今すぐキャンセル</string>
+    <string name="cancel_premium_confirmation">You’ll continue to have Premium access until %1$s.</string>
+    <string name="subscription_status_active">有効</string>
+    <string name="subscription_status_canceled">キャンセル済み</string>
+    <string name="subscription_status_overdue_payment">Overdue payment</string>
+    <string name="subscription_status_past_due">期限切れ</string>
+    <string name="subscription_status_paused">Paused</string>
+    <string name="premium_next_charge_summary">Your next charge is for %1$s USD due on %2$s.</string>
+    <string name="subscription_canceled_description">Your subscription was canceled on %1$s. Resubscribe to continue using premium features.</string>
+    <string name="subscription_overdue_description">We couldn’t process your payment. Update your payment before your subscription ends on %1$s.</string>
+    <string name="subscription_past_due_description">You have a grace period of %1$d days from your subscription expiration date. Please resolve the past due amount by %2$s.</string>
+    <string name="subscription_paused_description">Your subscription is paused. Resume to continue using premium features.</string>
+    <string name="loading_subscription">Loading subscription…</string>
+    <string name="loading_portal">Loading portal…</string>
+    <string name="portal_error">何らかのエラーが発生しました</string>
+    <string name="trouble_loading_portal">We had trouble loading the management portal, so try again.</string>
+    <string name="subscription_error">Subscription error</string>
+    <string name="trouble_loading_subscription">We couldn’t load your subscription details. Please try again.</string>
 </resources>

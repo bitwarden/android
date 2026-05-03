@@ -294,7 +294,6 @@
     <string name="field_type_text">文本型</string>
     <string name="select_type_field">您想添加什么类型的自定义字段？</string>
     <string name="remove">移除</string>
-    <string name="new_uri">新增 URI</string>
     <string name="add_website">添加网站</string>
     <string name="base_domain">基础域名</string>
     <string name="default_text">默认（%1$s）</string>
@@ -643,7 +642,7 @@
     <string name="exposed_master_password">已暴露的主密码</string>
     <string name="password_found_in_a_data_breach_alert_description">密码在数据泄露中被发现。请使用一个唯一的密码以保护您的账户。确定要使用已暴露的密码吗？</string>
     <string name="weak_and_exposed_master_password">主密码弱且曾经暴露</string>
-    <string name="weak_password_identified_and_found_in_a_data_breach_alert_description">识别到弱密码且其出现在数据泄露中。请使用一个强且唯一的密码以保护您的账户。确定要使用这个密码吗？</string>
+    <string name="weak_password_identified_and_found_in_a_data_breach_alert_description">识别到弱密码且其出现在数据泄露中。请使用一个强大且唯一的密码以保护您的账户。确定要使用这个密码吗？</string>
     <string name="there_are_no_items_that_match_the_search">没有匹配搜索条件的项目</string>
     <string name="self_hosted">自托管</string>
     <string name="region">区域</string>
@@ -663,7 +662,9 @@
     <string name="you_will_be_notified_once_approved">批准后，您将收到通知。</string>
     <string name="trouble_logging_in">登录遇到问题吗？</string>
     <string name="block_auto_fill">屏蔽自动填充</string>
+    <string name="no_uris_blocked">没有屏蔽的 URI</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">不会为这些 URI 提供自动填充。</string>
+    <string name="edit_blocked_uri">编辑屏蔽的 URI</string>
     <string name="new_blocked_uri">新增屏蔽的 URI</string>
     <string name="invalid_format_use_https_http_or_android_app">无效格式。请使用 https://、http:// 或 androidapp://</string>
     <string name="enter_uri">输入 URI</string>
@@ -1070,6 +1071,7 @@
     <string name="security">安全</string>
     <string name="too_many_failed_biometric_attempts">失败的生物识别尝试次数过多。</string>
     <string name="version">版本</string>
+    <string name="version_x" comment="%1$s is the version string (e.g. 2025.1.0 (1234)).">版本：%1$s</string>
     <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">访问帮助中心进一步了解如何使用 Bitwarden Authenticator。</string>
     <string name="key">密钥</string>
     <string name="create_verification_code">创建验证码</string>
@@ -1202,6 +1204,7 @@
     <string name="archive_unavailable">归档功能不可用</string>
     <string name="archiving_items_is_a_premium_feature">归档项目是高级版功能。您的当前方案不包含对此功能的访问权限。</string>
     <string name="upgrade_to_premium">升级到高级版</string>
+    <string name="plan">方案</string>
     <string name="unlock_advanced_security_features">解锁高级安全功能</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">高级版方案为您提供更多工具，助您保持安全并掌控一切。</string>
     <string name="this_item_is_archived">此项目已归档。</string>
@@ -1231,6 +1234,9 @@
     <string name="preview_unavailable">预览不可用</string>
     <string name="download_attachment">下载附件</string>
     <string name="upgraded_to_premium">升级到高级版</string>
+    <string name="confirming_your_upgrade">正在确认您的升级…</string>
+    <string name="upgrade_pending">升级待处理</string>
+    <string name="upgrade_pending_message">您的升级正在处理中。完成之前，您将继续使用免费版方案。立即同步以检查升级进度，或继续操作，它将自动更新。</string>
     <string name="unlock_premium_features">使用高级版方案解锁更多高级功能。</string>
     <string name="per_month">/月</string>
     <string name="built_in_authenticator">内置身份验证器</string>
@@ -1241,7 +1247,7 @@
     <string name="stripe_checkout_footer">您将前往 Stripe 的安全结账页面完成购买。</string>
     <string name="opening_checkout">正在打开结账页面…</string>
     <string name="secure_checkout_didnt_load">安全结账页面未能加载</string>
-    <string name="trouble_opening_payment_page">我们无法打开付款页面，请重试。</string>
+    <string name="trouble_opening_payment_page">打开付款页面时出现问题，请重试。</string>
     <string name="payment_not_received_yet">尚未收到付款</string>
     <string name="return_to_stripe_to_finish">返回浏览器中的 Stripe 以完成升级。</string>
     <string name="go_back">返回</string>
@@ -1250,4 +1256,35 @@
     <string name="show_next_code">显示下一个代码</string>
     <string name="see_upcoming_codes_in_the_list">查看列表中的后续代码</string>
     <string name="next_code_x">下一个代码，%1$s</string>
+    <string name="archive_item">归档项目</string>
+    <string name="once_archived_this_item_will_be_excluded">归档后，此项目将被排除在一般搜索结果和自动填充建议之外。</string>
+    <string name="pricing_unavailable">定价不可用</string>
+    <string name="current_plan">当前方案</string>
+    <string name="premium_plan_name">高级版</string>
+    <string name="billing_amount">计费金额</string>
+    <string name="storage_cost">存储空间成本</string>
+    <string name="discount">折扣</string>
+    <string name="estimated_tax">预估税额</string>
+    <string name="billing_rate_per_year">%1$s /年</string>
+    <string name="billing_rate_per_month">%1$s /月</string>
+    <string name="manage_plan">管理方案</string>
+    <string name="cancel_premium">取消高级版</string>
+    <string name="cancel_now">立即取消</string>
+    <string name="cancel_premium_confirmation">在 %1$s 之前，您将继续拥有高级版访问权限。</string>
+    <string name="subscription_status_active">启用</string>
+    <string name="subscription_status_canceled">已取消</string>
+    <string name="subscription_status_overdue_payment">逾期款项</string>
+    <string name="subscription_status_past_due">逾期未支付</string>
+    <string name="subscription_status_paused">已暂停</string>
+    <string name="premium_next_charge_summary">您的下一笔费用为 %1$s，到期日期为 %2$s。</string>
+    <string name="subscription_canceled_description">您的订阅被取消于 %1$s。重新订阅以继续使用高级版功能。</string>
+    <string name="subscription_overdue_description">我们无法处理您的付款。请在 %1$s 您的订阅结束前更新您的付款方式。</string>
+    <string name="subscription_past_due_description">从您的订阅到期之日起，您有 %1$d 天的宽限期。请在 %2$s 之前处理逾期未支付的款项。</string>
+    <string name="subscription_paused_description">您的订阅已暂停。恢复订阅以继续使用高级版功能。</string>
+    <string name="loading_subscription">正在加载订阅…</string>
+    <string name="loading_portal">正在加载门户…</string>
+    <string name="portal_error">出错了</string>
+    <string name="trouble_loading_portal">加载管理门户时出现问题，请重试。</string>
+    <string name="subscription_error">订阅错误</string>
+    <string name="trouble_loading_subscription">我们无法加载您的订阅详细信息。请重试。</string>
 </resources>

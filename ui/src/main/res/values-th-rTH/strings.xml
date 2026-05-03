@@ -294,7 +294,6 @@
     <string name="field_type_text">ข้อความ</string>
     <string name="select_type_field">คุณต้องการเพิ่มเขตข้อมูลแบบกำหนดเองชนิดใด</string>
     <string name="remove">เอาออก</string>
-    <string name="new_uri">URI ใหม่</string>
     <string name="add_website">เพิ่มเว็บไซต์</string>
     <string name="base_domain">โดเมนพื้นฐาน</string>
     <string name="default_text">ค่าเริ่มต้น (%1$s)</string>
@@ -663,7 +662,9 @@
     <string name="you_will_be_notified_once_approved">คุณจะได้รับการแจ้งเตือนเมื่อได้รับการอนุมัติ</string>
     <string name="trouble_logging_in">พบปัญหาในการเข้าสู่ระบบหรือไม่</string>
     <string name="block_auto_fill">ปิดกั้นการป้อนอัตโนมัติ</string>
+    <string name="no_uris_blocked">No URIs blocked</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">จะไม่เสนอป้อนอัตโนมัติสำหรับ URI เหล่านี้</string>
+    <string name="edit_blocked_uri">Edit blocked URI</string>
     <string name="new_blocked_uri">URI ที่ถูกปิดกั้นใหม่</string>
     <string name="invalid_format_use_https_http_or_android_app">รูปแบบไม่ถูกต้อง ใช้ https://, http:// หรือ androidapp://</string>
     <string name="enter_uri">ป้อน URI</string>
@@ -1069,6 +1070,7 @@
     <string name="security">ความปลอดภัย</string>
     <string name="too_many_failed_biometric_attempts">พยายามใช้ไบโอเมตริกไม่สำเร็จมากเกินไป</string>
     <string name="version">เวอร์ชัน</string>
+    <string name="version_x" comment="%1$s is the version string (e.g. 2025.1.0 (1234)).">Version: %1$s</string>
     <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">เรียนรู้เพิ่มเติมเกี่ยวกับวิธีใช้ Bitwarden Authenticator ได้ที่ศูนย์ช่วยเหลือ</string>
     <string name="key">คีย์</string>
     <string name="create_verification_code">สร้างรหัสยืนยัน</string>
@@ -1201,6 +1203,7 @@
     <string name="archive_unavailable">รายการเก็บถาวรไม่พร้อมใช้งาน</string>
     <string name="archiving_items_is_a_premium_feature">การเก็บถาวรรายการเป็นฟีเจอร์พรีเมียม แผนปัจจุบันของคุณไม่สามารถใช้งานฟีเจอร์นี้ได้</string>
     <string name="upgrade_to_premium">อัปเกรดเป็นพรีเมียม</string>
+    <string name="plan">Plan</string>
     <string name="unlock_advanced_security_features">Unlock advanced security features</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">รายการนี้เก็บถาวรอยู่</string>
@@ -1230,6 +1233,9 @@
     <string name="preview_unavailable">Preview unavailable</string>
     <string name="download_attachment">Download Attachment</string>
     <string name="upgraded_to_premium">Upgraded to premium</string>
+    <string name="confirming_your_upgrade">Confirming your upgrade…</string>
+    <string name="upgrade_pending">Upgrade pending</string>
+    <string name="upgrade_pending_message">Your upgrade is being processed. You’ll remain on the free plan until it’s complete. Sync now to check, or continue and it will update automatically.</string>
     <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
     <string name="per_month">/ month</string>
     <string name="built_in_authenticator">Built-in authenticator</string>
@@ -1249,4 +1255,35 @@
     <string name="show_next_code">Show next code</string>
     <string name="see_upcoming_codes_in_the_list">See upcoming codes in the list</string>
     <string name="next_code_x">Next code, %1$s</string>
+    <string name="archive_item">Archive item</string>
+    <string name="once_archived_this_item_will_be_excluded">Once archived, this item will be excluded from search results and autofill suggestions.</string>
+    <string name="pricing_unavailable">Pricing unavailable</string>
+    <string name="current_plan">Current plan</string>
+    <string name="premium_plan_name">Premium</string>
+    <string name="billing_amount">Billing amount</string>
+    <string name="storage_cost">Storage cost</string>
+    <string name="discount">Discount</string>
+    <string name="estimated_tax">Estimated tax</string>
+    <string name="billing_rate_per_year">%1$s / year</string>
+    <string name="billing_rate_per_month">%1$s / month</string>
+    <string name="manage_plan">Manage plan</string>
+    <string name="cancel_premium">Cancel Premium</string>
+    <string name="cancel_now">Cancel now</string>
+    <string name="cancel_premium_confirmation">You’ll continue to have Premium access until %1$s.</string>
+    <string name="subscription_status_active">Active</string>
+    <string name="subscription_status_canceled">Canceled</string>
+    <string name="subscription_status_overdue_payment">Overdue payment</string>
+    <string name="subscription_status_past_due">Past due</string>
+    <string name="subscription_status_paused">Paused</string>
+    <string name="premium_next_charge_summary">Your next charge is for %1$s USD due on %2$s.</string>
+    <string name="subscription_canceled_description">Your subscription was canceled on %1$s. Resubscribe to continue using premium features.</string>
+    <string name="subscription_overdue_description">We couldn’t process your payment. Update your payment before your subscription ends on %1$s.</string>
+    <string name="subscription_past_due_description">You have a grace period of %1$d days from your subscription expiration date. Please resolve the past due amount by %2$s.</string>
+    <string name="subscription_paused_description">Your subscription is paused. Resume to continue using premium features.</string>
+    <string name="loading_subscription">Loading subscription…</string>
+    <string name="loading_portal">Loading portal…</string>
+    <string name="portal_error">มีบางอย่างผิดปกติ</string>
+    <string name="trouble_loading_portal">We had trouble loading the management portal, so try again.</string>
+    <string name="subscription_error">Subscription error</string>
+    <string name="trouble_loading_subscription">We couldn’t load your subscription details. Please try again.</string>
 </resources>

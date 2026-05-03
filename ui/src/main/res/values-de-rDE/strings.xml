@@ -295,7 +295,6 @@ Das Scannen erfolgt automatisch.</string>
     <string name="field_type_text">Text</string>
     <string name="select_type_field">Welche Art Eintrag möchtest du hinzufügen?</string>
     <string name="remove">Entfernen</string>
-    <string name="new_uri">Neue URI</string>
     <string name="add_website">Website hinzufügen</string>
     <string name="base_domain">Basis-Domäne</string>
     <string name="default_text">Standard (%1$s)</string>
@@ -666,7 +665,9 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="you_will_be_notified_once_approved">Du wirst benachrichtigt, sobald sie genehmigt wurde.</string>
     <string name="trouble_logging_in">Probleme beim Einloggen?</string>
     <string name="block_auto_fill">Automatisches Ausfüllen blockieren</string>
+    <string name="no_uris_blocked">Keine URIs blockiert</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Automatisches Ausfüllen wird für diese URIs nicht angeboten.</string>
+    <string name="edit_blocked_uri">Blockierte URI bearbeiten</string>
     <string name="new_blocked_uri">Neue gesperrte URI</string>
     <string name="invalid_format_use_https_http_or_android_app">Ungültiges Format. Verwende https://, http://, oder androidapp://</string>
     <string name="enter_uri">URI eingeben</string>
@@ -1075,6 +1076,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="security">Sicherheit</string>
     <string name="too_many_failed_biometric_attempts">Zu viele fehlgeschlagene biometrische Versuche.</string>
     <string name="version">Version</string>
+    <string name="version_x" comment="%1$s is the version string (e.g. 2025.1.0 (1234)).">Version: %1$s</string>
     <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">Erfahre mehr über die Verwendung des Bitwarden Authenticators im Hilfezentrum.</string>
     <string name="key">Schlüssel</string>
     <string name="create_verification_code">Verifizierungscode erstellen</string>
@@ -1209,6 +1211,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="archive_unavailable">Archiv nicht verfügbar</string>
     <string name="archiving_items_is_a_premium_feature">Das Archivieren von Einträgen ist eine Premium-Funktion. Dein aktueller Tarif umfasst keinen Zugriff auf diese Funktion.</string>
     <string name="upgrade_to_premium">Auf Premium upgraden</string>
+    <string name="plan">Tarif</string>
     <string name="unlock_advanced_security_features">Erweiterte Sicherheitsfunktionen freischalten</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Mit einem Premium-Tarif stehen dir mehr Werkzeuge zur Verfügung, um sicher zu bleiben und die Kontrolle zu behalten.</string>
     <string name="this_item_is_archived">Dieser Eintrag ist archiviert.</string>
@@ -1238,6 +1241,9 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="preview_unavailable">Vorschau nicht verfügbar</string>
     <string name="download_attachment">Anhang herunterladen</string>
     <string name="upgraded_to_premium">Auf Premium upgraden</string>
+    <string name="confirming_your_upgrade">Dein Upgrade wird bestätigt…</string>
+    <string name="upgrade_pending">Upgrade ausstehend</string>
+    <string name="upgrade_pending_message">Dein Upgrade wird gerade bearbeitet. Bis zum Abschluss des Vorgangs bleibst du im kostenlosen Tarif. Führe jetzt eine Synchronisierung durch, um den Status zu überprüfen, oder fahre fort und die Aktualisierung erfolgt dann automatisch.</string>
     <string name="unlock_premium_features">Schalte mehr erweiterte Funktionen mit einem Premium-Tarif frei.</string>
     <string name="per_month">/ Monat</string>
     <string name="built_in_authenticator">Integrierter Authenticator</string>
@@ -1257,4 +1263,35 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="show_next_code">Nächsten Code anzeigen</string>
     <string name="see_upcoming_codes_in_the_list">Die nächsten Codes sind in der Liste zu sehen</string>
     <string name="next_code_x">Nächster Code, %1$s</string>
+    <string name="archive_item">Eintrag archivieren</string>
+    <string name="once_archived_this_item_will_be_excluded">Nach der Archivierung wird dieser Eintrag aus den Suchergebnissen und Auto-Ausfüllen-Vorschlägen ausgeschlossen.</string>
+    <string name="pricing_unavailable">Preise nicht verfügbar</string>
+    <string name="current_plan">Aktueller Tarif</string>
+    <string name="premium_plan_name">Premium</string>
+    <string name="billing_amount">Rechnungsbetrag</string>
+    <string name="storage_cost">Speicherkosten</string>
+    <string name="discount">Rabatt</string>
+    <string name="estimated_tax">Voraussichtliche Steuern</string>
+    <string name="billing_rate_per_year">%1$s / Jahr</string>
+    <string name="billing_rate_per_month">%1$s / Monat</string>
+    <string name="manage_plan">Tarif verwalten</string>
+    <string name="cancel_premium">Premium kündigen</string>
+    <string name="cancel_now">Jetzt kündigen</string>
+    <string name="cancel_premium_confirmation">Du hast weiterhin Premium-Zugriff bis zum %1$s.</string>
+    <string name="subscription_status_active">Aktiv</string>
+    <string name="subscription_status_canceled">Gekündigt</string>
+    <string name="subscription_status_overdue_payment">Überfällige Zahlung</string>
+    <string name="subscription_status_past_due">Überfällig</string>
+    <string name="subscription_status_paused">Pausiert</string>
+    <string name="premium_next_charge_summary">Deine nächste Abbuchung in Höhe von %1$s USD ist am %2$s fällig.</string>
+    <string name="subscription_canceled_description">Dein Abonnement wurde am %1$s gekündigt. Abonniere erneut, um die Premium-Funktionen weiterhin nutzen zu können.</string>
+    <string name="subscription_overdue_description">Wir konnten deine Zahlung nicht bearbeiten. Aktualisiere deine Zahlungsdaten, bevor dein Abonnement am %1$s endet.</string>
+    <string name="subscription_past_due_description">Du hast eine Nachfrist von %1$d Tagen ab dem Ablaufdatum deines Abonnements. Bitte begleiche den ausstehenden Betrag bis zum %2$s.</string>
+    <string name="subscription_paused_description">Dein Abonnement ist pausiert. Setze es fort, um die Premium-Funktionen weiterhin nutzen zu können.</string>
+    <string name="loading_subscription">Abonnements werden geladen…</string>
+    <string name="loading_portal">Portal wird geladen…</string>
+    <string name="portal_error">Etwas ist schiefgelaufen</string>
+    <string name="trouble_loading_portal">Wir hatten Probleme beim Laden des Verwaltungsportals. Bitte versuche es erneut.</string>
+    <string name="subscription_error">Abonnement-Fehler</string>
+    <string name="trouble_loading_subscription">Wir konnten deine Abonnementdetails nicht laden. Bitte versuche es erneut.</string>
 </resources>

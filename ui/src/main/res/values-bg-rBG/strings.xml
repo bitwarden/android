@@ -295,7 +295,6 @@
     <string name="field_type_text">Текст</string>
     <string name="select_type_field">Вид на допълнителното поле.</string>
     <string name="remove">Премахване</string>
-    <string name="new_uri">Нов адрес</string>
     <string name="add_website">Добавяне на уеб сайт</string>
     <string name="base_domain">Основен домейн</string>
     <string name="default_text">По подразбиране (%1$s)</string>
@@ -667,7 +666,9 @@
     <string name="you_will_be_notified_once_approved">Ще получите известие, когато тя бъде одобрена.</string>
     <string name="trouble_logging_in">Имате проблем с вписването?</string>
     <string name="block_auto_fill">Блокиране на авт. попълване</string>
+    <string name="no_uris_blocked">Няма блокирани адреси</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Автоматичното попълване няма да бъде предлагано за тези адреси.</string>
+    <string name="edit_blocked_uri">Редактиране на блокирания адрес</string>
     <string name="new_blocked_uri">Нов блокиран адрес</string>
     <string name="invalid_format_use_https_http_or_android_app">Неправилен формат. Използвайте https://, http:// или androidapp://</string>
     <string name="enter_uri">Въведете адрес</string>
@@ -1078,6 +1079,7 @@
     <string name="security">Сигурност</string>
     <string name="too_many_failed_biometric_attempts">Твърде много неуспешни опити с биометрични данни.</string>
     <string name="version">Версия</string>
+    <string name="version_x" comment="%1$s is the version string (e.g. 2025.1.0 (1234)).">Версия: %1$s</string>
     <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">Научете повече относно това как да използвате Удостоверителя на Битуорден в помощния център.</string>
     <string name="key">Ключ</string>
     <string name="create_verification_code">Създаване на код за потвърждаване</string>
@@ -1212,6 +1214,7 @@
     <string name="archive_unavailable">Архивирането не е налично</string>
     <string name="archiving_items_is_a_premium_feature">Архивирането на елементи е платена функционалност. Текущият Ви план не включва достъп до нея.</string>
     <string name="upgrade_to_premium">Надградете до Платения план</string>
+    <string name="plan">План</string>
     <string name="unlock_advanced_security_features">Отключване на разширените функционалности по сигурността</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Платеният план предоставя повече инструменти за защита и управление.</string>
     <string name="this_item_is_archived">Този елемент е архивиран.</string>
@@ -1241,6 +1244,9 @@
     <string name="preview_unavailable">Преглед не е възможен</string>
     <string name="download_attachment">Сваляне на прикачения файл</string>
     <string name="upgraded_to_premium">Надградено до Платения план</string>
+    <string name="confirming_your_upgrade">Потвърждаване на надграждането…</string>
+    <string name="upgrade_pending">Има чакащо надграждане</string>
+    <string name="upgrade_pending_message">Надграждането се обработва. Докато не бъде завършено, ще останете на безплатния план. Синхронизирайте сега, ако искате да направите проверка, или продължите и ще се опресни автоматично.</string>
     <string name="unlock_premium_features">Отключете още разширени функционалности с Платения план.</string>
     <string name="per_month">/ месец</string>
     <string name="built_in_authenticator">Вграден удостоверител</string>
@@ -1260,4 +1266,35 @@
     <string name="show_next_code">Показване на следващия код</string>
     <string name="see_upcoming_codes_in_the_list">Вижте следващите кодове в списъка</string>
     <string name="next_code_x">Следващ код, %1$s</string>
+    <string name="archive_item">Архивиране на елемента</string>
+    <string name="once_archived_this_item_will_be_excluded">След като бъде архивиран, този елемент няма да се показва в резултатите при търсене, нито в предложенията за автоматично попълване.</string>
+    <string name="pricing_unavailable">Няма налично таксуване</string>
+    <string name="current_plan">Текущ план</string>
+    <string name="premium_plan_name">Платен</string>
+    <string name="billing_amount">Сума за плащане</string>
+    <string name="storage_cost">Цена за съхранение</string>
+    <string name="discount">Отстъпка</string>
+    <string name="estimated_tax">Приблизителен данък</string>
+    <string name="billing_rate_per_year">%1$s / година</string>
+    <string name="billing_rate_per_month">%1$s / месец</string>
+    <string name="manage_plan">Управление на плана</string>
+    <string name="cancel_premium">Отказване от платения план</string>
+    <string name="cancel_now">Прекратяване сега</string>
+    <string name="cancel_premium_confirmation">Ще продължите да имате достъп до функционалностите на Платения план до %1$s.</string>
+    <string name="subscription_status_active">Активно</string>
+    <string name="subscription_status_canceled">Отказано</string>
+    <string name="subscription_status_overdue_payment">Плащането е просрочено</string>
+    <string name="subscription_status_past_due">Просрочено</string>
+    <string name="subscription_status_paused">На пауза</string>
+    <string name="premium_next_charge_summary">Следващото плащане ще бъде %1$s USD, на дата %2$s.</string>
+    <string name="subscription_canceled_description">Абонаментът беше прекратен на %1$s. Ако искате да продължите да ползвате предимствата на платения план, ще трябва да се абонирате отново.</string>
+    <string name="subscription_overdue_description">Плащането не беше успешно. Обновете плащането си, преди абонаментът да бъде прекратен на %1$s.</string>
+    <string name="subscription_past_due_description">След като просрочите периода на абонамента си, разполагате с още %1$d дни,. Моля, заплатете старите фактури до %2$s.</string>
+    <string name="subscription_paused_description">Абонаментът беше спрян на пауза. Можете да го стартирате отново, ако искате да продължите да ползвате функционалностите на платения план.</string>
+    <string name="loading_subscription">Зареждане на абонамента…</string>
+    <string name="loading_portal">Зареждане на портала…</string>
+    <string name="portal_error">Нещо се обърка</string>
+    <string name="trouble_loading_portal">Имаше проблем при зареждането на портала за управление. Опитайте отново.</string>
+    <string name="subscription_error">Грешка в абонамента</string>
+    <string name="trouble_loading_subscription">Зареждането на подробностите за абонамента на беше успешно. Опитайте отново.</string>
 </resources>
