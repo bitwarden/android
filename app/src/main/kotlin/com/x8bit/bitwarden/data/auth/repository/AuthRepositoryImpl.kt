@@ -31,7 +31,6 @@ import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
 import com.bitwarden.network.model.RefreshTokenResponseJson
 import com.bitwarden.network.model.RegisterFinishRequestJson
-import com.bitwarden.network.model.RegisterRequestJson
 import com.bitwarden.network.model.RegisterResponseJson
 import com.bitwarden.network.model.ResendEmailRequestJson
 import com.bitwarden.network.model.ResendNewDeviceOtpRequestJson
@@ -947,12 +946,11 @@ class AuthRepositoryImpl(
         return SwitchAccountResult.AccountSwitched
     }
 
-    @Suppress("LongMethod")
     override suspend fun register(
         email: String,
         masterPassword: String,
         masterPasswordHint: String?,
-        emailVerificationToken: String?,
+        emailVerificationToken: String,
         shouldCheckDataBreaches: Boolean,
         isMasterPasswordStrong: Boolean,
     ): RegisterResult {
@@ -980,39 +978,21 @@ class AuthRepositoryImpl(
                 kdf = kdf,
             )
             .flatMap { registerKeyResponse ->
-                if (emailVerificationToken == null) {
-                    // TODO PM-6675: Remove register call and service implementation
-                    identityService.register(
-                        body = RegisterRequestJson(
-                            email = email,
-                            masterPasswordHash = registerKeyResponse.masterPasswordHash,
-                            masterPasswordHint = masterPasswordHint,
-                            key = registerKeyResponse.encryptedUserKey,
-                            keys = RegisterRequestJson.Keys(
-                                publicKey = registerKeyResponse.keys.public,
-                                encryptedPrivateKey = registerKeyResponse.keys.private,
-                            ),
-                            kdfType = kdf.toKdfTypeJson(),
-                            kdfIterations = kdf.iterations,
+                identityService.registerFinish(
+                    body = RegisterFinishRequestJson(
+                        email = email,
+                        masterPasswordHash = registerKeyResponse.masterPasswordHash,
+                        masterPasswordHint = masterPasswordHint,
+                        emailVerificationToken = emailVerificationToken,
+                        userSymmetricKey = registerKeyResponse.encryptedUserKey,
+                        userAsymmetricKeys = RegisterFinishRequestJson.Keys(
+                            publicKey = registerKeyResponse.keys.public,
+                            encryptedPrivateKey = registerKeyResponse.keys.private,
                         ),
-                    )
-                } else {
-                    identityService.registerFinish(
-                        body = RegisterFinishRequestJson(
-                            email = email,
-                            masterPasswordHash = registerKeyResponse.masterPasswordHash,
-                            masterPasswordHint = masterPasswordHint,
-                            emailVerificationToken = emailVerificationToken,
-                            userSymmetricKey = registerKeyResponse.encryptedUserKey,
-                            userAsymmetricKeys = RegisterFinishRequestJson.Keys(
-                                publicKey = registerKeyResponse.keys.public,
-                                encryptedPrivateKey = registerKeyResponse.keys.private,
-                            ),
-                            kdfType = kdf.toKdfTypeJson(),
-                            kdfIterations = kdf.iterations,
-                        ),
-                    )
-                }
+                        kdfType = kdf.toKdfTypeJson(),
+                        kdfIterations = kdf.iterations,
+                    ),
+                )
             }
             .fold(
                 onSuccess = {
@@ -1354,7 +1334,7 @@ class AuthRepositoryImpl(
                             kdfParallelism = profile.kdfParallelism,
                             kdfType = profile.kdfType,
                             key = response.encryptedUserKey,
-                            keys = RegisterRequestJson.Keys(
+                            keys = SetPasswordRequestJson.Keys(
                                 publicKey = response.keys.public,
                                 encryptedPrivateKey = response.keys.private,
                             ),

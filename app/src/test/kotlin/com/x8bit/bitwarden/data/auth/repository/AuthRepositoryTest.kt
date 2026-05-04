@@ -47,7 +47,6 @@ import com.bitwarden.network.model.PreLoginResponseJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
 import com.bitwarden.network.model.RefreshTokenResponseJson
 import com.bitwarden.network.model.RegisterFinishRequestJson
-import com.bitwarden.network.model.RegisterRequestJson
 import com.bitwarden.network.model.RegisterResponseJson
 import com.bitwarden.network.model.ResendEmailRequestJson
 import com.bitwarden.network.model.ResetPasswordRequestJson
@@ -5229,38 +5228,6 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `register check data breaches error should still return register success`() = runTest {
-        coEvery {
-            haveIBeenPwnedService.hasPasswordBeenBreached(PASSWORD)
-        } returns Throwable().asFailure()
-        coEvery {
-            identityService.register(
-                body = RegisterRequestJson(
-                    email = EMAIL,
-                    masterPasswordHash = PASSWORD_HASH,
-                    masterPasswordHint = null,
-                    key = ENCRYPTED_USER_KEY,
-                    keys = RegisterRequestJson.Keys(
-                        publicKey = PUBLIC_KEY,
-                        encryptedPrivateKey = PRIVATE_KEY,
-                    ),
-                    kdfType = KdfTypeJson.PBKDF2_SHA256,
-                    kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
-                ),
-            )
-        } returns RegisterResponseJson.Success.asSuccess()
-
-        val result = repository.register(
-            email = EMAIL,
-            masterPassword = PASSWORD,
-            masterPasswordHint = null,
-            shouldCheckDataBreaches = true,
-            isMasterPasswordStrong = true,
-        )
-        assertEquals(RegisterResult.Success, result)
-    }
-
-    @Test
     fun `register check data breaches found and strong password should return DataBreachFound`() =
         runTest {
             coEvery {
@@ -5271,6 +5238,7 @@ class AuthRepositoryTest {
                 email = EMAIL,
                 masterPassword = PASSWORD,
                 masterPasswordHint = null,
+                emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
                 shouldCheckDataBreaches = true,
                 isMasterPasswordStrong = true,
             )
@@ -5288,6 +5256,7 @@ class AuthRepositoryTest {
                 email = EMAIL,
                 masterPassword = PASSWORD,
                 masterPasswordHint = null,
+                emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
                 shouldCheckDataBreaches = true,
                 isMasterPasswordStrong = false,
             )
@@ -5305,172 +5274,12 @@ class AuthRepositoryTest {
                 email = EMAIL,
                 masterPassword = PASSWORD,
                 masterPasswordHint = null,
+                emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
                 shouldCheckDataBreaches = true,
                 isMasterPasswordStrong = false,
             )
             assertEquals(RegisterResult.WeakPassword, result)
         }
-
-    @Test
-    fun `register check data breaches Success should return Success`() = runTest {
-        coEvery {
-            haveIBeenPwnedService.hasPasswordBeenBreached(PASSWORD)
-        } returns false.asSuccess()
-        coEvery {
-            identityService.register(
-                body = RegisterRequestJson(
-                    email = EMAIL,
-                    masterPasswordHash = PASSWORD_HASH,
-                    masterPasswordHint = null,
-                    key = ENCRYPTED_USER_KEY,
-                    keys = RegisterRequestJson.Keys(
-                        publicKey = PUBLIC_KEY,
-                        encryptedPrivateKey = PRIVATE_KEY,
-                    ),
-                    kdfType = KdfTypeJson.PBKDF2_SHA256,
-                    kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
-                ),
-            )
-        } returns RegisterResponseJson.Success.asSuccess()
-
-        val result = repository.register(
-            email = EMAIL,
-            masterPassword = PASSWORD,
-            masterPasswordHint = null,
-            shouldCheckDataBreaches = true,
-            isMasterPasswordStrong = true,
-        )
-        assertEquals(RegisterResult.Success, result)
-        coVerify { haveIBeenPwnedService.hasPasswordBeenBreached(PASSWORD) }
-    }
-
-    @Test
-    fun `register Success should return Success`() = runTest {
-        coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
-        coEvery {
-            identityService.register(
-                body = RegisterRequestJson(
-                    email = EMAIL,
-                    masterPasswordHash = PASSWORD_HASH,
-                    masterPasswordHint = null,
-                    key = ENCRYPTED_USER_KEY,
-                    keys = RegisterRequestJson.Keys(
-                        publicKey = PUBLIC_KEY,
-                        encryptedPrivateKey = PRIVATE_KEY,
-                    ),
-                    kdfType = KdfTypeJson.PBKDF2_SHA256,
-                    kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
-                ),
-            )
-        } returns RegisterResponseJson.Success.asSuccess()
-
-        val result = repository.register(
-            email = EMAIL,
-            masterPassword = PASSWORD,
-            masterPasswordHint = null,
-            shouldCheckDataBreaches = false,
-            isMasterPasswordStrong = true,
-        )
-        assertEquals(RegisterResult.Success, result)
-    }
-
-    @Test
-    fun `register Failure should return Error with no message`() = runTest {
-        val error = RuntimeException()
-        coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
-        coEvery {
-            identityService.register(
-                body = RegisterRequestJson(
-                    email = EMAIL,
-                    masterPasswordHash = PASSWORD_HASH,
-                    masterPasswordHint = null,
-                    key = ENCRYPTED_USER_KEY,
-                    keys = RegisterRequestJson.Keys(
-                        publicKey = PUBLIC_KEY,
-                        encryptedPrivateKey = PRIVATE_KEY,
-                    ),
-                    kdfType = KdfTypeJson.PBKDF2_SHA256,
-                    kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
-                ),
-            )
-        } returns error.asFailure()
-
-        val result = repository.register(
-            email = EMAIL,
-            masterPassword = PASSWORD,
-            masterPasswordHint = null,
-            shouldCheckDataBreaches = false,
-            isMasterPasswordStrong = true,
-        )
-        assertEquals(RegisterResult.Error(errorMessage = null, error = error), result)
-    }
-
-    @Test
-    fun `register returns Invalid should return Error with invalid message`() = runTest {
-        coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
-        coEvery {
-            identityService.register(
-                body = RegisterRequestJson(
-                    email = EMAIL,
-                    masterPasswordHash = PASSWORD_HASH,
-                    masterPasswordHint = null,
-                    key = ENCRYPTED_USER_KEY,
-                    keys = RegisterRequestJson.Keys(
-                        publicKey = PUBLIC_KEY,
-                        encryptedPrivateKey = PRIVATE_KEY,
-                    ),
-                    kdfType = KdfTypeJson.PBKDF2_SHA256,
-                    kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
-                ),
-            )
-        } returns RegisterResponseJson
-            .Invalid(invalidMessage = "message", validationErrors = mapOf())
-            .asSuccess()
-
-        val result = repository.register(
-            email = EMAIL,
-            masterPassword = PASSWORD,
-            masterPasswordHint = null,
-            shouldCheckDataBreaches = false,
-            isMasterPasswordStrong = true,
-        )
-        assertEquals(RegisterResult.Error(errorMessage = "message", error = null), result)
-    }
-
-    @Test
-    fun `register returns Invalid should return Error with first message in map`() = runTest {
-        coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
-        coEvery {
-            identityService.register(
-                body = RegisterRequestJson(
-                    email = EMAIL,
-                    masterPasswordHash = PASSWORD_HASH,
-                    masterPasswordHint = null,
-                    key = ENCRYPTED_USER_KEY,
-                    keys = RegisterRequestJson.Keys(
-                        publicKey = PUBLIC_KEY,
-                        encryptedPrivateKey = PRIVATE_KEY,
-                    ),
-                    kdfType = KdfTypeJson.PBKDF2_SHA256,
-                    kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
-                ),
-            )
-        } returns RegisterResponseJson
-            .Invalid(
-                invalidMessage = "message",
-                validationErrors = mapOf("" to listOf("expected")),
-            )
-            .asSuccess()
-
-        val result = repository.register(
-            email = EMAIL,
-            masterPassword = PASSWORD,
-            masterPasswordHint = null,
-            shouldCheckDataBreaches = false,
-            isMasterPasswordStrong = true,
-        )
-        assertEquals(RegisterResult.Error(errorMessage = "expected", error = null), result)
-    }
 
     @Test
     fun `register with email token Success should return Success`() = runTest {
@@ -6227,7 +6036,7 @@ class AuthRepositoryTest {
                 kdfParallelism = profile.kdfParallelism,
                 kdfType = profile.kdfType,
                 key = encryptedUserKey,
-                keys = RegisterRequestJson.Keys(
+                keys = SetPasswordRequestJson.Keys(
                     publicKey = publicRsaKey,
                     encryptedPrivateKey = privateRsaKey,
                 ),
@@ -6284,7 +6093,7 @@ class AuthRepositoryTest {
                 kdfParallelism = profile.kdfParallelism,
                 kdfType = profile.kdfType,
                 key = encryptedUserKey,
-                keys = RegisterRequestJson.Keys(
+                keys = SetPasswordRequestJson.Keys(
                     publicKey = publicRsaKey,
                     encryptedPrivateKey = privateRsaKey,
                 ),
@@ -6494,7 +6303,7 @@ class AuthRepositoryTest {
                 kdfParallelism = profile.kdfParallelism,
                 kdfType = profile.kdfType,
                 key = encryptedUserKey,
-                keys = RegisterRequestJson.Keys(
+                keys = SetPasswordRequestJson.Keys(
                     publicKey = publicRsaKey,
                     encryptedPrivateKey = privateRsaKey,
                 ),

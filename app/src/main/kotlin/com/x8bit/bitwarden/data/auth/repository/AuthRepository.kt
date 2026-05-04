@@ -280,7 +280,7 @@ interface AuthRepository :
         email: String,
         masterPassword: String,
         masterPasswordHint: String?,
-        emailVerificationToken: String? = null,
+        emailVerificationToken: String,
         shouldCheckDataBreaches: Boolean,
         isMasterPasswordStrong: Boolean,
     ): RegisterResult

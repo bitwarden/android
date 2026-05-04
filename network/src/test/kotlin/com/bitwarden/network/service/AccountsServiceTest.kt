@@ -13,7 +13,6 @@ import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
 import com.bitwarden.network.model.MasterPasswordAuthenticationDataJson
 import com.bitwarden.network.model.MasterPasswordUnlockDataJson
 import com.bitwarden.network.model.PasswordHintResponseJson
-import com.bitwarden.network.model.RegisterRequestJson
 import com.bitwarden.network.model.ResendEmailRequestJson
 import com.bitwarden.network.model.ResendNewDeviceOtpRequestJson
 import com.bitwarden.network.model.ResetPasswordRequestJson
@@ -211,7 +210,7 @@ class AccountsServiceTest : BaseServiceTest() {
                 kdfParallelism = 2,
                 kdfType = null,
                 key = "encryptedUserKey",
-                keys = RegisterRequestJson.Keys(
+                keys = SetPasswordRequestJson.Keys(
                     publicKey = "public",
                     encryptedPrivateKey = "private",
                 ),
