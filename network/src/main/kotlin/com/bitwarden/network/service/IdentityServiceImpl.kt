@@ -8,7 +8,6 @@ import com.bitwarden.network.model.PreLoginResponseJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
 import com.bitwarden.network.model.RefreshTokenResponseJson
 import com.bitwarden.network.model.RegisterFinishRequestJson
-import com.bitwarden.network.model.RegisterRequestJson
 import com.bitwarden.network.model.RegisterResponseJson
 import com.bitwarden.network.model.SendVerificationEmailRequestJson
 import com.bitwarden.network.model.SendVerificationEmailResponseJson
@@ -34,23 +33,6 @@ internal class IdentityServiceImpl(
         unauthenticatedIdentityApi
             .preLogin(PreLoginRequestJson(email = email))
             .toResult()
-
-    override suspend fun register(body: RegisterRequestJson): Result<RegisterResponseJson> =
-        unauthenticatedIdentityApi
-            .register(body)
-            .toResult()
-            .recoverCatching { throwable ->
-                val bitwardenError = throwable.toBitwardenError()
-                bitwardenError
-                    .parseErrorBodyOrNull<RegisterResponseJson.Invalid>(
-                        codes = listOf(
-                            NetworkErrorCode.BAD_REQUEST,
-                            NetworkErrorCode.TOO_MANY_REQUESTS,
-                        ),
-                        json = json,
-                    )
-                    ?: throw throwable
-            }
 
     override suspend fun getToken(
         uniqueAppId: String,

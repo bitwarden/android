@@ -6,7 +6,6 @@ import com.bitwarden.network.model.PreLoginResponseJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
 import com.bitwarden.network.model.RefreshTokenResponseJson
 import com.bitwarden.network.model.RegisterFinishRequestJson
-import com.bitwarden.network.model.RegisterRequestJson
 import com.bitwarden.network.model.RegisterResponseJson
 import com.bitwarden.network.model.SendVerificationEmailRequestJson
 import com.bitwarden.network.model.SendVerificationEmailResponseJson
@@ -23,11 +22,6 @@ interface IdentityService {
      * Make pre login request to get KDF params.
      */
     suspend fun preLogin(email: String): Result<PreLoginResponseJson>
-
-    /**
-     * Register a new account to Bitwarden.
-     */
-    suspend fun register(body: RegisterRequestJson): Result<RegisterResponseJson>
 
     /**
      * Make request to get an access token.

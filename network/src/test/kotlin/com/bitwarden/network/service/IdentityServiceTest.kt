@@ -12,7 +12,6 @@ import com.bitwarden.network.model.PreLoginResponseJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
 import com.bitwarden.network.model.RefreshTokenResponseJson
 import com.bitwarden.network.model.RegisterFinishRequestJson
-import com.bitwarden.network.model.RegisterRequestJson
 import com.bitwarden.network.model.RegisterResponseJson
 import com.bitwarden.network.model.SendVerificationEmailRequestJson
 import com.bitwarden.network.model.SendVerificationEmailResponseJson
@@ -130,47 +129,6 @@ class IdentityServiceTest : BaseServiceTest() {
         assertEquals(
             expectedResponse.asSuccess(),
             identityService.preLogin(EMAIL),
-        )
-    }
-
-    @Test
-    fun `register success json should be Success`() = runTest {
-        val expectedResponse = RegisterResponseJson.Success
-        val response = MockResponse().setBody(LOGIN_SUCCESS_JSON)
-        server.enqueue(response)
-        assertEquals(
-            expectedResponse.asSuccess(),
-            identityService.register(registerRequestBody),
-        )
-    }
-
-    @Test
-    fun `register failure with Invalid json should be Invalid`() = runTest {
-        val response = MockResponse().setResponseCode(400).setBody(
-            INVALID_MODEL_STATE_EMAIL_TAKEN_ERROR_JSON,
-        )
-        server.enqueue(response)
-        val result = identityService.register(registerRequestBody)
-        assertEquals(
-            RegisterResponseJson.Invalid(
-                invalidMessage = "The model state is invalid.",
-                validationErrors = mapOf("" to listOf("Email '' is already taken.")),
-            ),
-            result.getOrThrow(),
-        )
-    }
-
-    @Test
-    fun `register failure with Error json should return Error`() = runTest {
-        val response = MockResponse().setResponseCode(429).setBody(TOO_MANY_REQUEST_ERROR_JSON)
-        server.enqueue(response)
-        val result = identityService.register(registerRequestBody)
-        assertEquals(
-            RegisterResponseJson.Invalid(
-                invalidMessage = "Slow down! Too many requests. Try again soon.",
-                validationErrors = null,
-            ),
-            result.getOrThrow(),
         )
     }
 
@@ -449,18 +407,6 @@ class IdentityServiceTest : BaseServiceTest() {
         private const val EMAIL_TOKEN = "emailToken"
         private const val EMAIL = "email"
         private const val PASSWORD_HASH = "passwordHash"
-        private val registerRequestBody = RegisterRequestJson(
-            email = EMAIL,
-            masterPasswordHash = "mockk_masterPasswordHash",
-            masterPasswordHint = "mockk_masterPasswordHint",
-            key = "mockk_key",
-            keys = RegisterRequestJson.Keys(
-                publicKey = "mockk_publicKey",
-                encryptedPrivateKey = "mockk_encryptedPrivateKey",
-            ),
-            kdfType = KdfTypeJson.PBKDF2_SHA256,
-            kdfIterations = 600000U,
-        )
         private val registerFinishRequestBody = RegisterFinishRequestJson(
             email = EMAIL,
             masterPasswordHash = "mockk_masterPasswordHash",
