@@ -42,7 +42,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
- * Top-level composable for the "Upgraded to Premium" celebration screen.
+ * Top-level composable for the "Upgraded to Premium" screen.
  */
 @Composable
 fun UpgradedToPremiumScreen(

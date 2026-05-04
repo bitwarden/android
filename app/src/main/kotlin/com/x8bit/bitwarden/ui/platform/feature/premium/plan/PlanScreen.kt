@@ -72,7 +72,7 @@ import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 @Composable
 fun PlanScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToCelebration: () -> Unit,
+    onNavigateToUpgradedToPremium: () -> Unit,
     viewModel: PlanViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
     authTabLaunchers: AuthTabLaunchers = LocalAuthTabLaunchers.current,
@@ -92,7 +92,7 @@ fun PlanScreen(
 
             is PlanEvent.LaunchPortal -> intentManager.launchUri(event.url.toUri())
             PlanEvent.NavigateBack -> onNavigateBack()
-            PlanEvent.NavigateToCelebration -> onNavigateToCelebration()
+            PlanEvent.NavigateToUpgradedToPremium -> onNavigateToUpgradedToPremium()
         }
     }
 

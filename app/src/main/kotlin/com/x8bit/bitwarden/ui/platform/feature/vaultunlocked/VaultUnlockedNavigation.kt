@@ -296,7 +296,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
         planModalDestination(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateToCelebration = {
+            onNavigateToUpgradedToPremium = {
                 navController.navigateToUpgradedToPremium(planMode = PlanMode.Modal)
             },
         )

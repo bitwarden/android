@@ -185,7 +185,7 @@ fun NavGraphBuilder.settingsGraph(
         privilegedAppsListDestination(onNavigateBack = { navController.popBackStack() })
         planDestination(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateToCelebration = onNavigateToUpgradedToPremium,
+            onNavigateToUpgradedToPremium = onNavigateToUpgradedToPremium,
         )
     }
 }

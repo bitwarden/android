@@ -77,12 +77,12 @@ fun SavedStateHandle.toPlanArgs(): PlanArgs {
  */
 fun NavGraphBuilder.planDestination(
     onNavigateBack: () -> Unit,
-    onNavigateToCelebration: () -> Unit,
+    onNavigateToUpgradedToPremium: () -> Unit,
 ) {
     composableWithPushTransitions<PlanRoute.Standard> {
         PlanScreen(
             onNavigateBack = onNavigateBack,
-            onNavigateToCelebration = onNavigateToCelebration,
+            onNavigateToUpgradedToPremium = onNavigateToUpgradedToPremium,
         )
     }
 }
@@ -92,12 +92,12 @@ fun NavGraphBuilder.planDestination(
  */
 fun NavGraphBuilder.planModalDestination(
     onNavigateBack: () -> Unit,
-    onNavigateToCelebration: () -> Unit,
+    onNavigateToUpgradedToPremium: () -> Unit,
 ) {
     composableWithSlideTransitions<PlanRoute.Modal> {
         PlanScreen(
             onNavigateBack = onNavigateBack,
-            onNavigateToCelebration = onNavigateToCelebration,
+            onNavigateToUpgradedToPremium = onNavigateToUpgradedToPremium,
         )
     }
 }

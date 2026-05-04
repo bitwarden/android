@@ -491,10 +491,10 @@ class PlanViewModel @Inject constructor(
                 )
             }
         }
-        // The celebration route uses `launchSingleTop = true` so a duplicate event is a no-op
-        // for the user. The event itself is harmless to re-emit; the state mutation above is
-        // what's guarded by `onFreeContent`.
-        sendEvent(PlanEvent.NavigateToCelebration)
+        // The Upgraded to Premium route uses `launchSingleTop = true` so a duplicate event is a
+        // no-op for the user. The event itself is harmless to re-emit; the state mutation above
+        // is what's guarded by `onFreeContent`.
+        sendEvent(PlanEvent.NavigateToUpgradedToPremium)
     }
 
     private fun handlePricingResultReceive(
@@ -829,11 +829,11 @@ sealed class PlanEvent {
     data object NavigateBack : PlanEvent()
 
     /**
-     * Navigate to the full-screen "Upgraded to Premium" celebration. The destination registrant
-     * encodes the originating [PlanMode] when issuing the navigation; the celebration's dismiss
+     * Navigate to the full-screen "Upgraded to Premium" screen. The destination registrant
+     * encodes the originating [PlanMode] when issuing the navigation; the screen's dismiss
      * uses that mode to choose pop semantics.
      */
-    data object NavigateToCelebration : PlanEvent()
+    data object NavigateToUpgradedToPremium : PlanEvent()
 }
 
 /**

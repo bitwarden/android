@@ -947,7 +947,12 @@ class SendScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `UpgradedToPremium action card should display when eligible`() {
-        mutableStateFlow.update { it.copy(isUpgradedToPremiumCardEligible = true) }
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE,
+                isUpgradedToPremiumCardEligible = true,
+            )
+        }
 
         composeTestRule
             .onNodeWithText(text = "Upgraded to Premium")
@@ -959,7 +964,12 @@ class SendScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `UpgradedToPremium action card CTA click should send UpgradedToPremiumCardClick`() {
-        mutableStateFlow.update { it.copy(isUpgradedToPremiumCardEligible = true) }
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE,
+                isUpgradedToPremiumCardEligible = true,
+            )
+        }
 
         composeTestRule
             .onNodeWithText(text = "Learn more")
@@ -972,7 +982,12 @@ class SendScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `UpgradedToPremium action card dismiss click should send UpgradedToPremiumCardDismiss`() {
-        mutableStateFlow.update { it.copy(isUpgradedToPremiumCardEligible = true) }
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE,
+                isUpgradedToPremiumCardEligible = true,
+            )
+        }
 
         composeTestRule
             .onNodeWithContentDescription(label = "Close")

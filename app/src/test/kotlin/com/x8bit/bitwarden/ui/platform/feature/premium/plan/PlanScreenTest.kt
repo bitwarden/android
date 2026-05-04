@@ -37,7 +37,7 @@ import org.junit.Test
 class PlanScreenTest : BitwardenComposeTest() {
 
     private var onNavigateBackCalled = false
-    private var onNavigateToCelebrationCalled = false
+    private var onNavigateToUpgradedToPremiumCalled = false
     private val premiumCheckoutLauncher: ActivityResultLauncher<Intent> = mockk()
 
     private val mutableEventFlow = bufferedMutableSharedFlow<PlanEvent>()
@@ -67,7 +67,7 @@ class PlanScreenTest : BitwardenComposeTest() {
         ) {
             PlanScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
-                onNavigateToCelebration = { onNavigateToCelebrationCalled = true },
+                onNavigateToUpgradedToPremium = { onNavigateToUpgradedToPremiumCalled = true },
                 viewModel = viewModel,
             )
         }
@@ -82,9 +82,9 @@ class PlanScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `NavigateToCelebration event should call onNavigateToCelebration`() {
-        mutableEventFlow.tryEmit(PlanEvent.NavigateToCelebration)
-        assertTrue(onNavigateToCelebrationCalled)
+    fun `NavigateToUpgradedToPremium event should call onNavigateToUpgradedToPremium`() {
+        mutableEventFlow.tryEmit(PlanEvent.NavigateToUpgradedToPremium)
+        assertTrue(onNavigateToUpgradedToPremiumCalled)
     }
 
     @Test

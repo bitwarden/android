@@ -140,7 +140,7 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `PremiumCheckoutResult with isSuccess true should navigate to celebration when premium`() =
+    fun `PremiumCheckoutResult success should navigate to UpgradedToPremium when premium`() =
         runTest {
             mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
                 accounts = listOf(
@@ -157,7 +157,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                     )
 
                 assertEquals(
-                    PlanEvent.NavigateToCelebration,
+                    PlanEvent.NavigateToUpgradedToPremium,
                     awaitItem(),
                 )
             }
@@ -432,14 +432,14 @@ class PlanViewModelTest : BaseViewModelTest() {
                 )
 
                 assertEquals(
-                    PlanEvent.NavigateToCelebration,
+                    PlanEvent.NavigateToUpgradedToPremium,
                     awaitItem(),
                 )
             }
         }
 
     @Test
-    fun `premium status flip via canceled special circumstance should navigate to celebration`() =
+    fun `premium flip via canceled special circumstance should navigate to UpgradedToPremium`() =
         runTest {
             val viewModel = createViewModel()
 
@@ -484,7 +484,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 )
 
                 assertEquals(
-                    PlanEvent.NavigateToCelebration,
+                    PlanEvent.NavigateToUpgradedToPremium,
                     eventFlow.awaitItem(),
                 )
             }
@@ -530,7 +530,7 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `UserStateUpdateReceive with premium during Loading should navigate to celebration`() =
+    fun `UserStateUpdateReceive premium during Loading should navigate to UpgradedToPremium`() =
         runTest {
             val viewModel = createViewModel(
                 initialState = DEFAULT_FREE_STATE.copy(
@@ -554,7 +554,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 )
 
                 assertEquals(
-                    PlanEvent.NavigateToCelebration,
+                    PlanEvent.NavigateToUpgradedToPremium,
                     awaitItem(),
                 )
             }
