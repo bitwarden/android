@@ -6,6 +6,7 @@ import com.bitwarden.authenticator.data.authenticator.datasource.disk.util.FakeA
 import com.bitwarden.authenticator.data.authenticator.datasource.entity.createMockAuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
+import com.bitwarden.authenticator.data.authenticator.manager.util.createMockAuthenticatorItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.DeleteItemResult
@@ -157,7 +158,7 @@ class AuthenticatorRepositoryTest {
     fun `sharedCodesStateFlow should emit Success when authenticatorBridgeManager emits Success`() =
         runTest {
             val sharedAccounts = emptyList<SharedAccountData.Account>()
-            val authenticatorItems = mockk<List<AuthenticatorItem>>()
+            val authenticatorItems = emptyList<AuthenticatorItem>()
             val verificationCodes = mockk<List<VerificationCodeItem>>()
             every { sharedAccounts.toAuthenticatorItems() } returns authenticatorItems
             every {
@@ -167,6 +168,36 @@ class AuthenticatorRepositoryTest {
                 assertEquals(SharedVerificationCodesState.Loading, awaitItem())
                 mutableAccountSyncStateFlow.value = AccountSyncState.Success(sharedAccounts)
                 assertEquals(SharedVerificationCodesState.Success(verificationCodes), awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `sharedCodesStateFlow should filter out items with empty otpUri when authenticatorBridgeManager emits Success`() =
+        runTest {
+            val sharedAccounts = emptyList<SharedAccountData.Account>()
+            val itemWithUri = createMockAuthenticatorItem(number = 1)
+            val itemWithEmptyUri = createMockAuthenticatorItem(
+                number = 2,
+                otpUri = "",
+            )
+            val allItems = listOf(itemWithUri, itemWithEmptyUri)
+            val filteredItems = listOf(itemWithUri)
+            val verificationCodes = mockk<List<VerificationCodeItem>>()
+            every { sharedAccounts.toAuthenticatorItems() } returns allItems
+            every {
+                mockTotpCodeManager.getTotpCodesFlow(filteredItems)
+            } returns MutableStateFlow(verificationCodes)
+            authenticatorRepository.sharedCodesStateFlow.test {
+                assertEquals(
+                    SharedVerificationCodesState.Loading,
+                    awaitItem(),
+                )
+                mutableAccountSyncStateFlow.value = AccountSyncState.Success(sharedAccounts)
+                assertEquals(
+                    SharedVerificationCodesState.Success(verificationCodes),
+                    awaitItem(),
+                )
             }
         }
 
