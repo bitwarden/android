@@ -267,6 +267,8 @@ private val CipherListViewType.iconRes: Int
         CipherListViewType.Identity -> BitwardenDrawable.ic_id_card
         CipherListViewType.SshKey -> BitwardenDrawable.ic_ssh_key
         CipherListViewType.BankAccount -> BitwardenDrawable.ic_note
+        CipherListViewType.DriversLicense -> BitwardenDrawable.ic_note
+        CipherListViewType.Passport -> BitwardenDrawable.ic_note
     }
 
 /**

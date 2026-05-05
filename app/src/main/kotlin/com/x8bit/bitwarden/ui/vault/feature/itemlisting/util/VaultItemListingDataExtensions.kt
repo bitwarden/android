@@ -526,6 +526,8 @@ private fun CipherListView.toIconTestTag(): String =
         CipherListViewType.Identity -> "IdentityCipherIcon"
         CipherListViewType.SshKey -> "SshKeyCipherIcon"
         CipherListViewType.BankAccount -> "BankAccountCipherIcon"
+        CipherListViewType.DriversLicense -> "DriversLicenseCipherIcon"
+        CipherListViewType.Passport -> "PassportCipherIcon"
     }
 
 private fun CipherListView.toIconData(
@@ -589,6 +591,8 @@ private val CipherListViewType.iconRes: Int
         CipherListViewType.Identity -> BitwardenDrawable.ic_id_card
         CipherListViewType.SshKey -> BitwardenDrawable.ic_ssh_key
         CipherListViewType.BankAccount -> BitwardenDrawable.ic_note
+        CipherListViewType.DriversLicense -> BitwardenDrawable.ic_note
+        CipherListViewType.Passport -> BitwardenDrawable.ic_note
     }
 
 private fun List<CipherListView>.applyFilters(

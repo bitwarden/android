@@ -7,12 +7,14 @@ import com.bitwarden.vault.CardView
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.DriversLicenseView
 import com.bitwarden.vault.Fido2Credential
 import com.bitwarden.vault.FieldType
 import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.IdentityView
 import com.bitwarden.vault.LoginUriView
 import com.bitwarden.vault.LoginView
+import com.bitwarden.vault.PassportView
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SecureNoteView
@@ -61,6 +63,8 @@ fun createMockCipherView(
     ),
     card: CardView? = createMockCardView(number = number).takeIf { cipherType == CipherType.CARD },
     bankAccount: BankAccountView? = createMockBankAccountView(number = number),
+    driversLicense: DriversLicenseView? = createMockDriversLicenseView(number = 1),
+    passport: PassportView? = createMockPassportView(number = 1),
     attachments: List<AttachmentView> = listOf(createMockAttachmentView(number = number)),
     isArchived: Boolean = false,
     passwordHistory: List<PasswordHistoryView> = listOf(
@@ -97,6 +101,8 @@ fun createMockCipherView(
         },
         sshKey = sshKey.takeIf { cipherType == CipherType.SSH_KEY },
         bankAccount = bankAccount.takeIf { cipherType == CipherType.BANK_ACCOUNT },
+        driversLicense = driversLicense.takeIf { cipherType == CipherType.DRIVERS_LICENSE },
+        passport = passport.takeIf { cipherType == CipherType.PASSPORT },
         favorite = false,
         passwordHistory = passwordHistory,
         permissions = createMockSdkCipherPermissions(),
@@ -254,6 +260,74 @@ fun createMockBankAccountView(
         swiftCode = swiftCode,
         iban = iban,
         bankContactPhone = bankContactPhone,
+    )
+
+/**
+ * Create a mock [DriversLicenseView] with a given [number].
+ */
+@Suppress("LongParameterList")
+fun createMockDriversLicenseView(
+    number: Int,
+    firstName: String? = "mockFirstName-$number",
+    middleName: String? = "mockMiddleName-$number",
+    lastName: String? = "mockLastName-$number",
+    dateOfBirth: String? = "mockDateOfBirth-$number",
+    licenseNumber: String? = "mockLicenseNumber-$number",
+    issuingCountry: String? = "mockIssuingCountry-$number",
+    issuingState: String? = "mockIssuingState-$number",
+    issuingAuthority: String? = "mockIssuingAuthority-$number",
+    issueDate: String? = "mockIssueDate-$number",
+    expirationDate: String? = "mockExpirationDate-$number",
+    licenseClass: String? = "mockLicenseClass-$number",
+): DriversLicenseView =
+    DriversLicenseView(
+        firstName = firstName,
+        middleName = middleName,
+        lastName = lastName,
+        dateOfBirth = dateOfBirth,
+        licenseNumber = licenseNumber,
+        issuingCountry = issuingCountry,
+        issuingState = issuingState,
+        issuingAuthority = issuingAuthority,
+        issueDate = issueDate,
+        expirationDate = expirationDate,
+        licenseClass = licenseClass,
+    )
+
+/**
+ * Create a mock [PassportView] with a given [number].
+ */
+@Suppress("LongParameterList")
+fun createMockPassportView(
+    number: Int,
+    surname: String? = "mockSurname-$number",
+    givenName: String? = "mockGivenName-$number",
+    dateOfBirth: String? = "mockDateOfBirth-$number",
+    birthPlace: String? = "mockBirthPlace-$number",
+    sex: String? = "mockSex-$number",
+    nationality: String? = "mockNationality-$number",
+    passportNumber: String? = "mockPassportNumber-$number",
+    passportType: String? = "mockPassportType-$number",
+    issuingCountry: String? = "mockIssuingCountry-$number",
+    issuingAuthority: String? = "mockIssuingAuthority-$number",
+    issueDate: String? = "mockIssueDate-$number",
+    expirationDate: String? = "mockExpirationDate-$number",
+    nationalIdentificationNumber: String? = "mockNationalIdentificationNumber-$number",
+): PassportView =
+    PassportView(
+        surname = surname,
+        givenName = givenName,
+        dateOfBirth = dateOfBirth,
+        birthPlace = birthPlace,
+        sex = sex,
+        nationality = nationality,
+        passportNumber = passportNumber,
+        passportType = passportType,
+        issuingCountry = issuingCountry,
+        issuingAuthority = issuingAuthority,
+        issueDate = issueDate,
+        expirationDate = expirationDate,
+        nationalIdentificationNumber = nationalIdentificationNumber,
     )
 
 /**

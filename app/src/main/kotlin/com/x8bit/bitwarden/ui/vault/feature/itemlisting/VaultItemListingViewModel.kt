@@ -1344,6 +1344,8 @@ class VaultItemListingViewModel @Inject constructor(
                     CipherType.IDENTITY -> VaultItemCipherType.IDENTITY
                     CipherType.SSH_KEY -> VaultItemCipherType.SSH_KEY
                     CipherType.BANK_ACCOUNT -> VaultItemCipherType.BANK_ACCOUNT
+                    CipherType.DRIVERS_LICENSE -> VaultItemCipherType.DRIVERS_LICENSE
+                    CipherType.PASSPORT -> VaultItemCipherType.PASSPORT
                 },
             ),
         )
@@ -1366,6 +1368,8 @@ class VaultItemListingViewModel @Inject constructor(
                     CipherType.IDENTITY -> VaultItemCipherType.IDENTITY
                     CipherType.SSH_KEY -> VaultItemCipherType.SSH_KEY
                     CipherType.BANK_ACCOUNT -> VaultItemCipherType.BANK_ACCOUNT
+                    CipherType.DRIVERS_LICENSE -> VaultItemCipherType.DRIVERS_LICENSE
+                    CipherType.PASSPORT -> VaultItemCipherType.PASSPORT
                 },
             ),
         )

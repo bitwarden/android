@@ -851,11 +851,12 @@ data class SyncResponseJson(
          * @property middleName The middle name (nullable).
          * @property lastName The last name (nullable).
          * @property licenseNumber The license number (nullable).
+         * @property dateOfBirth The date of birth (nullable).
          * @property issuingCountry The issuing country (nullable).
          * @property issuingState The issuing state/province (nullable).
-         * @property expirationMonth The expiration month (nullable).
-         * @property expirationDay The expiration day of month (nullable).
-         * @property expirationYear The expiration year (nullable).
+         * @property issuingAuthority The issuing authority (nullable).
+         * @property issueDate The issue date (nullable).
+         * @property expirationDate The expiration date (nullable).
          * @property licenseClass The license class (nullable).
          */
         @Serializable
@@ -872,20 +873,23 @@ data class SyncResponseJson(
             @SerialName("licenseNumber")
             val licenseNumber: String?,
 
+            @SerialName("dateOfBirth")
+            val dateOfBirth: String?,
+
             @SerialName("issuingCountry")
             val issuingCountry: String?,
+
+            @SerialName("issuingAuthority")
+            val issuingAuthority: String?,
 
             @SerialName("issuingState")
             val issuingState: String?,
 
-            @SerialName("expirationMonth")
-            val expirationMonth: String?,
+            @SerialName("issueDate")
+            val issueDate: String?,
 
-            @SerialName("expirationDay")
-            val expirationDay: String?,
-
-            @SerialName("expirationYear")
-            val expirationYear: String?,
+            @SerialName("expirationDate")
+            val expirationDate: String?,
 
             @SerialName("licenseClass")
             val licenseClass: String?,
@@ -896,20 +900,17 @@ data class SyncResponseJson(
          *
          * @property surname The surname (nullable).
          * @property givenName The given name (nullable).
-         * @property dobMonth The month of birth (nullable).
-         * @property dobDay The day of month of birth (nullable).
-         * @property dobYear The year of birth (nullable).
+         * @property dateOfBirth The date of birth (nullable).
+         * @property birthPlace The place of birth (nullable).
+         * @property sex The sex of the individual (nullable).
          * @property nationality The nationality (nullable).
          * @property passportNumber The passport number (nullable).
          * @property passportType The passport type (nullable).
          * @property issuingCountry The issuing country (nullable).
          * @property issuingAuthority The issuing authority/office (nullable).
-         * @property issueMonth The issue month (nullable).
-         * @property issueDay The issue day of month (nullable).
-         * @property issueYear The issue year (nullable).
-         * @property expirationMonth The expiration month (nullable).
-         * @property expirationDay The expiration day of month (nullable).
-         * @property expirationYear The expiration year (nullable).
+         * @property issueDate The issue date (nullable).
+         * @property expirationDate The expiration date (nullable).
+         * @property nationalIdentificationNumber The nation ID (nullable).
          */
         @Serializable
         data class Passport(
@@ -919,14 +920,14 @@ data class SyncResponseJson(
             @SerialName("givenName")
             val givenName: String?,
 
-            @SerialName("dobMonth")
-            val dobMonth: String?,
+            @SerialName("dateOfBirth")
+            val dateOfBirth: String?,
 
-            @SerialName("dobDay")
-            val dobDay: String?,
+            @SerialName("birthPlace")
+            val birthPlace: String?,
 
-            @SerialName("dobYear")
-            val dobYear: String?,
+            @SerialName("sex")
+            val sex: String?,
 
             @SerialName("nationality")
             val nationality: String?,
@@ -943,23 +944,14 @@ data class SyncResponseJson(
             @SerialName("issuingAuthority")
             val issuingAuthority: String?,
 
-            @SerialName("issueMonth")
-            val issueMonth: String?,
+            @SerialName("issueDate")
+            val issueDate: String?,
 
-            @SerialName("issueDay")
-            val issueDay: String?,
+            @SerialName("expirationDate")
+            val expirationDate: String?,
 
-            @SerialName("issueYear")
-            val issueYear: String?,
-
-            @SerialName("expirationMonth")
-            val expirationMonth: String?,
-
-            @SerialName("expirationDay")
-            val expirationDay: String?,
-
-            @SerialName("expirationYear")
-            val expirationYear: String?,
+            @SerialName("nationalIdentificationNumber")
+            val nationalIdentificationNumber: String?,
         )
 
         /**

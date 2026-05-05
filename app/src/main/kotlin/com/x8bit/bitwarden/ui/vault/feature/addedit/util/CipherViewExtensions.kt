@@ -112,6 +112,33 @@ fun CipherView.toViewState(
                 iban = bankAccount?.iban.orEmpty(),
                 bankContactPhone = bankAccount?.bankContactPhone.orEmpty(),
             )
+
+
+            CipherType.DRIVERS_LICENSE -> {
+                VaultAddEditState.ViewState.Content.ItemType.DriversLicense(
+                    firstName = driversLicense?.firstName.orEmpty(),
+                    middleName = driversLicense?.middleName.orEmpty(),
+                    lastName = driversLicense?.lastName.orEmpty(),
+                    licenseNumber = driversLicense?.licenseNumber.orEmpty(),
+                    issuingCountry = driversLicense?.issuingCountry.orEmpty(),
+                    issuingState = driversLicense?.issuingState.orEmpty(),
+                    expirationDate = driversLicense?.expirationDate.orEmpty(),
+                    licenseClass = driversLicense?.licenseClass.orEmpty(),
+                )
+            }
+
+            CipherType.PASSPORT -> VaultAddEditState.ViewState.Content.ItemType.Passport(
+                surname = passport?.surname.orEmpty(),
+                givenName = passport?.givenName.orEmpty(),
+                dateOfBirth = passport?.dateOfBirth.orEmpty(),
+                nationality = passport?.nationality.orEmpty(),
+                passportNumber = passport?.passportNumber.orEmpty(),
+                passportType = passport?.passportType.orEmpty(),
+                issuingCountry = passport?.issuingCountry.orEmpty(),
+                issuingAuthority = passport?.issuingAuthority.orEmpty(),
+                issueDate = passport?.issueDate.orEmpty(),
+                expirationDate = passport?.expirationDate.orEmpty(),
+            )
         },
         common = VaultAddEditState.ViewState.Content.Common(
             originalCipher = this,
@@ -274,7 +301,7 @@ private fun UserState.Account.toAvailableOwners(
         *organizations
             .map {
                 VaultAddEditState.Owner(
-                    name = it.name.orEmpty(),
+                    name = it.name,
                     id = it.id,
                     collections = collectionViewList
                         .filter { collection ->
