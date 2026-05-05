@@ -198,6 +198,9 @@ class AuthenticatorRepositoryTest {
                     SharedVerificationCodesState.Success(verificationCodes),
                     awaitItem(),
                 )
+                verify(exactly = 1) {
+                    mockTotpCodeManager.getTotpCodesFlow(filteredItems)
+                }
             }
         }
 
