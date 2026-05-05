@@ -4,7 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
+import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -896,9 +898,9 @@ class PlanViewModelTest : BaseViewModelTest() {
                     DEFAULT_PREMIUM_LOADED_STATE.copy(
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
                             status = PremiumSubscriptionStatus.PAST_DUE,
-                            descriptionText = BitwardenString
+                            descriptionText = BitwardenPlurals
                                 .subscription_past_due_description
-                                .asText(7, "April 21, 2026"),
+                                .asPluralsText(7, 7, "April 21, 2026"),
                         ),
                     ),
                     awaitItem(),
@@ -926,9 +928,9 @@ class PlanViewModelTest : BaseViewModelTest() {
                     DEFAULT_PREMIUM_LOADED_STATE.copy(
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
                             status = PremiumSubscriptionStatus.PAST_DUE,
-                            descriptionText = BitwardenString
+                            descriptionText = BitwardenPlurals
                                 .subscription_past_due_description
-                                .asText(0, "April 21, 2026"),
+                                .asPluralsText(0, 0, "April 21, 2026"),
                         ),
                     ),
                     awaitItem(),
