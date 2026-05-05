@@ -59,4 +59,10 @@ interface DebugMenuRepository {
      * Resets the Premium upgrade banner dismiss status for the current user.
      */
     fun resetPremiumUpgradeBannerDismiss()
+
+    /**
+     * Forces the "Upgraded to Premium" action card to be displayed for the current user by
+     * marking the card pending and clearing any prior consumed state.
+     */
+    fun showUpgradedToPremiumCard()
 }

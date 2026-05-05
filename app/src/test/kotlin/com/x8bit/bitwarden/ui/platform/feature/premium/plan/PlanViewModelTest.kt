@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.platform.feature.premium.plan
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
-import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
@@ -141,7 +140,7 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `PremiumCheckoutResult with isSuccess true should show snackbar when premium`() =
+    fun `PremiumCheckoutResult success should navigate to UpgradedToPremium when premium`() =
         runTest {
             mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
                 accounts = listOf(
@@ -158,11 +157,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                     )
 
                 assertEquals(
-                    PlanEvent.ShowSnackbar(
-                        data = BitwardenSnackbarData(
-                            message = BitwardenString.upgraded_to_premium.asText(),
-                        ),
-                    ),
+                    PlanEvent.NavigateToUpgradedToPremium,
                     awaitItem(),
                 )
             }
@@ -437,18 +432,14 @@ class PlanViewModelTest : BaseViewModelTest() {
                 )
 
                 assertEquals(
-                    PlanEvent.ShowSnackbar(
-                        data = BitwardenSnackbarData(
-                            message = BitwardenString.upgraded_to_premium.asText(),
-                        ),
-                    ),
+                    PlanEvent.NavigateToUpgradedToPremium,
                     awaitItem(),
                 )
             }
         }
 
     @Test
-    fun `premium status flip via canceled special circumstance should show snackbar`() =
+    fun `premium flip via canceled special circumstance should navigate to UpgradedToPremium`() =
         runTest {
             val viewModel = createViewModel()
 
@@ -481,18 +472,19 @@ class PlanViewModelTest : BaseViewModelTest() {
                     ),
                 )
 
-                // State clears dialog and isAwaitingPremiumStatus.
+                // State transitions to Premium with subscription Loading.
                 assertEquals(
-                    DEFAULT_FREE_STATE,
+                    DEFAULT_FREE_STATE.copy(
+                        viewState = PlanState.ViewState.Premium(),
+                        dialogState = PlanState.DialogState.Loading(
+                            message = BitwardenString.loading_subscription.asText(),
+                        ),
+                    ),
                     stateFlow.awaitItem(),
                 )
 
                 assertEquals(
-                    PlanEvent.ShowSnackbar(
-                        data = BitwardenSnackbarData(
-                            message = BitwardenString.upgraded_to_premium.asText(),
-                        ),
-                    ),
+                    PlanEvent.NavigateToUpgradedToPremium,
                     eventFlow.awaitItem(),
                 )
             }
@@ -538,7 +530,7 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `UserStateUpdateReceive with premium during Loading should show snackbar`() =
+    fun `UserStateUpdateReceive premium during Loading should navigate to UpgradedToPremium`() =
         runTest {
             val viewModel = createViewModel(
                 initialState = DEFAULT_FREE_STATE.copy(
@@ -562,11 +554,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 )
 
                 assertEquals(
-                    PlanEvent.ShowSnackbar(
-                        data = BitwardenSnackbarData(
-                            message = BitwardenString.upgraded_to_premium.asText(),
-                        ),
-                    ),
+                    PlanEvent.NavigateToUpgradedToPremium,
                     awaitItem(),
                 )
             }
