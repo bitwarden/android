@@ -9,8 +9,10 @@ import com.bitwarden.core.data.util.toFormattedDateStyle
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -623,7 +625,8 @@ class PlanViewModel @Inject constructor(
                 )
 
             PremiumSubscriptionStatus.PAST_DUE ->
-                BitwardenString.subscription_past_due_description.asText(
+                BitwardenPlurals.subscription_past_due_description.asPluralsText(
+                    gracePeriodDays ?: 0,
                     gracePeriodDays ?: 0,
                     suspensionDate ?: PLACEHOLDER_TEXT,
                 )

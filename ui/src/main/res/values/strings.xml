@@ -1289,7 +1289,10 @@ Do you want to switch to this account?</string>
     <string name="premium_next_charge_summary">Your next charge is for %1$s USD due on %2$s.</string>
     <string name="subscription_canceled_description">Your subscription was canceled on %1$s. Resubscribe to continue using premium features.</string>
     <string name="subscription_overdue_description">We couldn’t process your payment. Update your payment before your subscription ends on %1$s.</string>
-    <string name="subscription_past_due_description">You have a grace period of %1$d days from your subscription expiration date. Please resolve the past due amount by %2$s.</string>
+    <plurals name="subscription_past_due_description">
+        <item quantity="one">You have a grace period of %1$d day from your subscription expiration date. Please resolve the past due amount by %2$s.</item>
+        <item quantity="other">You have a grace period of %1$d days from your subscription expiration date. Please resolve the past due amount by %2$s.</item>
+    </plurals>
     <string name="subscription_paused_description">Your subscription is paused. Resume to continue using premium features.</string>
     <string name="loading_subscription">Loading subscription…</string>
     <string name="loading_portal">Loading portal…</string>
