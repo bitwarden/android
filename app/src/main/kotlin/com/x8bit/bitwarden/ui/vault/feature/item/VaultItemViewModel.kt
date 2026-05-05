@@ -1619,9 +1619,7 @@ data class VaultItemState(
     val isFabVisible: Boolean
         get() = viewState is ViewState.Content &&
             !isCipherDeleted &&
-            isCipherEditable &&
-            // TODO: [PM-32810] Re-enable once Bank Account add/edit is wired.
-            viewState.asContentOrNull()?.type !is ViewState.Content.ItemType.BankAccount
+            isCipherEditable
 
     /**
      * Whether the cipher is in a collection.

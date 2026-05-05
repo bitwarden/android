@@ -32,6 +32,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.vault.components.collectionItemsSelector
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditBankAccountTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
@@ -52,6 +53,7 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
     identityItemTypeHandlers: VaultAddEditIdentityTypeHandlers,
     cardItemTypeHandlers: VaultAddEditCardTypeHandlers,
     sshKeyItemTypeHandlers: VaultAddEditSshKeyTypeHandlers,
+    bankAccountItemTypeHandlers: VaultAddEditBankAccountTypeHandlers,
     isCardScannerEnabled: Boolean,
     cardHolderNameFocusRequester: FocusRequester,
     modifier: Modifier = Modifier,
@@ -279,7 +281,13 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
                 )
             }
 
-            is VaultAddEditState.ViewState.Content.ItemType.BankAccount -> Unit
+            is VaultAddEditState.ViewState.Content.ItemType.BankAccount -> {
+                vaultAddEditBankAccountItems(
+                    bankAccountState = state.type,
+                    bankAccountHandlers = bankAccountItemTypeHandlers,
+                )
+            }
+
             is VaultAddEditState.ViewState.Content.ItemType.DriversLicense -> Unit
             is VaultAddEditState.ViewState.Content.ItemType.Passport -> Unit
         }

@@ -68,6 +68,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import com.x8bit.bitwarden.ui.vault.model.VaultBankAccountType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
@@ -2609,6 +2610,176 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `in ItemType_BankAccount changing bank name should trigger BankNameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Bank name")
+            .performTextInput(text = "TestBank")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.BankNameTextChange(
+                    bankName = "TestBank",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_BankAccount changing the name on account text field should trigger NameOnAccountTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Name on account")
+            .performTextInput(text = "TestNameOnAccount")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.NameOnAccountTextChange(
+                    nameOnAccount = "TestNameOnAccount",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_BankAccount selecting an account type should trigger AccountTypeSelect`() {
+        mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
+        // Opens the menu
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Account type")
+            .performClick()
+
+        // Choose the option from the menu
+        composeTestRule
+            .onAllNodesWithText(text = "Checking")
+            .onLast()
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.AccountTypeSelect(
+                    accountType = VaultBankAccountType.CHECKING,
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_BankAccount changing the account number text field should trigger AccountNumberTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Account number")
+            .performTextInput(text = "TestAccountNumber")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.AccountNumberTextChange(
+                    accountNumber = "TestAccountNumber",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_BankAccount changing the routing number text field should trigger RoutingNumberTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Routing number")
+            .performTextInput(text = "TestRoutingNumber")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.RoutingNumberTextChange(
+                    routingNumber = "TestRoutingNumber",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_BankAccount changing the branch number text field should trigger BranchNumberTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Branch number")
+            .performTextInput(text = "TestBranchNumber")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.BranchNumberTextChange(
+                    branchNumber = "TestBranchNumber",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_BankAccount changing the PIN text field should trigger PinTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "PIN")
+            .performTextInput(text = "1234")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.PinTextChange(pin = "1234"),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_BankAccount changing the SWIFT code text field should trigger SwiftCodeTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "SWIFT code")
+            .performTextInput(text = "TestSwiftCode")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.SwiftCodeTextChange(
+                    swiftCode = "TestSwiftCode",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_BankAccount changing the IBAN text field should trigger IbanTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "IBAN")
+            .performTextInput(text = "TestIban")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.IbanTextChange(iban = "TestIban"),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_BankAccount changing the bank contact phone text field should trigger BankContactPhoneTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Bank contact phone")
+            .performTextInput(text = "555-1234")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.BankContactPhoneTextChange(
+                    phone = "555-1234",
+                ),
+            )
+        }
+    }
+
+    @Test
     fun `clicking Add field button should allow creation of Linked type`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN
 
@@ -4692,6 +4863,22 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.Card(),
+                isIndividualVaultDisabled = false,
+            ),
+            dialog = null,
+            bottomSheetState = null,
+            shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isCardScannerEnabled = false,
+        )
+
+        private val DEFAULT_STATE_BANK_ACCOUNT = VaultAddEditState(
+            vaultAddEditType = VaultAddEditType.AddItem,
+            cipherType = VaultItemCipherType.BANK_ACCOUNT,
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.BankAccount(),
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,

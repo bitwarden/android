@@ -913,7 +913,7 @@ class VaultItemListingDataExtensionsTest {
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
                 message = BitwardenString.no_bank_accounts.asText(),
-                shouldShowAddButton = false,
+                shouldShowAddButton = true,
                 buttonText = BitwardenString.new_bank_account.asText(),
             ),
             vaultData.toViewState(

@@ -12,6 +12,8 @@ import androidx.compose.ui.test.filter
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasScrollToNodeAction
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithContentDescription
@@ -23,6 +25,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onSiblings
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
@@ -3455,8 +3458,11 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     fun `in bank account state, on copy name on account click should send CopyNameOnAccountClick`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll("Copy name on account")
-            .performClick()
+            .onNode(hasScrollToNodeAction())
+            .performScrollToNode(hasTestTag("BankAccountCopyNameOnAccountButton"))
+        composeTestRule
+            .onNodeWithTag("BankAccountCopyNameOnAccountButton")
+            .performSemanticsAction(SemanticsActions.OnClick)
 
         verify(exactly = 1) {
             viewModel.trySendAction(
@@ -3507,10 +3513,10 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `in bank account state, edit fab should not be displayed`() {
+    fun `in bank account state, edit fab should be displayed`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
 
-        composeTestRule.onNodeWithContentDescription("Edit item").assertDoesNotExist()
+        composeTestRule.onNodeWithContentDescription("Edit item").assertIsDisplayed()
     }
 
     //endregion bank account

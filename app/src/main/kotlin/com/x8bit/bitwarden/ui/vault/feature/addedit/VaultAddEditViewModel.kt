@@ -310,6 +310,10 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.ItemType.IdentityType -> handleIdentityTypeActions(action)
             is VaultAddEditAction.ItemType.CardType -> handleCardTypeActions(action)
             is VaultAddEditAction.ItemType.SshKeyType -> handleSshKeyTypeActions(action)
+            is VaultAddEditAction.ItemType.BankAccountType -> {
+                handleBankAccountTypeActions(action)
+            }
+
             is VaultAddEditAction.Internal -> handleInternalActions(action)
         }
     }
@@ -1691,6 +1695,57 @@ class VaultAddEditViewModel @Inject constructor(
 
     //endregion SSH Key Type Handlers
 
+    //region Bank Account Type Handlers
+
+    @Suppress("LongMethod")
+    private fun handleBankAccountTypeActions(
+        action: VaultAddEditAction.ItemType.BankAccountType,
+    ) {
+        when (action) {
+            is VaultAddEditAction.ItemType.BankAccountType.BankNameTextChange -> {
+                updateBankAccountContent { it.copy(bankName = action.bankName) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.NameOnAccountTextChange -> {
+                updateBankAccountContent { it.copy(nameOnAccount = action.nameOnAccount) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.AccountTypeSelect -> {
+                updateBankAccountContent { it.copy(accountType = action.accountType) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.AccountNumberTextChange -> {
+                updateBankAccountContent { it.copy(accountNumber = action.accountNumber) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.RoutingNumberTextChange -> {
+                updateBankAccountContent { it.copy(routingNumber = action.routingNumber) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.BranchNumberTextChange -> {
+                updateBankAccountContent { it.copy(branchNumber = action.branchNumber) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.PinTextChange -> {
+                updateBankAccountContent { it.copy(pin = action.pin) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.SwiftCodeTextChange -> {
+                updateBankAccountContent { it.copy(swiftCode = action.swiftCode) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.IbanTextChange -> {
+                updateBankAccountContent { it.copy(iban = action.iban) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.BankContactPhoneTextChange -> {
+                updateBankAccountContent { it.copy(bankContactPhone = action.phone) }
+            }
+        }
+    }
+
+    //endregion Bank Account Type Handlers
+
     //region Internal Type Handlers
 
     private fun handleInternalActions(action: VaultAddEditAction.Internal) {
@@ -2448,6 +2503,16 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
+    private inline fun updateBankAccountContent(
+        crossinline block: (VaultAddEditState.ViewState.Content.ItemType.BankAccount) ->
+        VaultAddEditState.ViewState.Content.ItemType.BankAccount,
+    ) {
+        updateContent { currentContent ->
+            (currentContent.type as? VaultAddEditState.ViewState.Content.ItemType.BankAccount)
+                ?.let { currentContent.copy(type = block(it)) }
+        }
+    }
+
     @Suppress("MaxLineLength")
     private suspend fun VaultAddEditState.ViewState.Content.createCipherForAddAndCloneItemStates(): CreateCipherResult {
         return common.selectedOwner?.collections
@@ -2952,6 +3017,17 @@ data class VaultAddEditState(
 
                 /**
                  * Represents the bank account item information.
+                 *
+                 * @property bankName The name of the bank.
+                 * @property nameOnAccount The name on the bank account.
+                 * @property accountType The selected bank account type.
+                 * @property accountNumber The bank account number.
+                 * @property routingNumber The bank routing number.
+                 * @property branchNumber The bank branch number.
+                 * @property pin The bank account PIN.
+                 * @property swiftCode The bank SWIFT code.
+                 * @property iban The bank IBAN.
+                 * @property bankContactPhone The bank contact phone number.
                  */
                 @Parcelize
                 data class BankAccount(
@@ -3947,6 +4023,64 @@ sealed class VaultAddEditAction {
              * Fired when the private key's visibility has changed.
              */
             data class PrivateKeyVisibilityChange(val isVisible: Boolean) : SshKeyType()
+        }
+
+        /**
+         * Represents actions specific to the Bank Account type.
+         */
+        sealed class BankAccountType : ItemType() {
+
+            /**
+             * Fired when the bank name text input is changed.
+             */
+            data class BankNameTextChange(val bankName: String) : BankAccountType()
+
+            /**
+             * Fired when the name on account text input is changed.
+             */
+            data class NameOnAccountTextChange(val nameOnAccount: String) : BankAccountType()
+
+            /**
+             * Fired when the account type is selected.
+             */
+            data class AccountTypeSelect(
+                val accountType: VaultBankAccountType,
+            ) : BankAccountType()
+
+            /**
+             * Fired when the account number text input is changed.
+             */
+            data class AccountNumberTextChange(val accountNumber: String) : BankAccountType()
+
+            /**
+             * Fired when the routing number text input is changed.
+             */
+            data class RoutingNumberTextChange(val routingNumber: String) : BankAccountType()
+
+            /**
+             * Fired when the branch number text input is changed.
+             */
+            data class BranchNumberTextChange(val branchNumber: String) : BankAccountType()
+
+            /**
+             * Fired when the PIN text input is changed.
+             */
+            data class PinTextChange(val pin: String) : BankAccountType()
+
+            /**
+             * Fired when the SWIFT code text input is changed.
+             */
+            data class SwiftCodeTextChange(val swiftCode: String) : BankAccountType()
+
+            /**
+             * Fired when the IBAN text input is changed.
+             */
+            data class IbanTextChange(val iban: String) : BankAccountType()
+
+            /**
+             * Fired when the bank contact phone text input is changed.
+             */
+            data class BankContactPhoneTextChange(val phone: String) : BankAccountType()
         }
     }
 
