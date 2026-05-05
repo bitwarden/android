@@ -3,6 +3,7 @@
   "extends": [
     "github>bitwarden/renovate-config"
   ],
+  "labels": ["t:deps"],
   "ignoreDeps": ["com.bitwarden:sdk-android"],
   "enabledManagers": [
     "github-actions",
