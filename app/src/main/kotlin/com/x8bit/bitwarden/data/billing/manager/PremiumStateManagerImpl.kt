@@ -11,17 +11,16 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.util.isActive
+import com.x8bit.bitwarden.data.platform.util.scanPairs
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -149,7 +148,7 @@ class PremiumStateManagerImpl(
                 val (currentUserId, currentIsPremium) = current
                 if (!currentIsPremium) return@onEach
                 // Same user transitioning from non-premium to premium counts as an upgrade.
-                if (previous?.first == currentUserId && previous.second == false) {
+                if (previous?.first == currentUserId && !previous.second) {
                     markUpgradedToPremiumCardPending(userId = currentUserId)
                 }
             }
@@ -213,18 +212,6 @@ private fun DataState<VaultData>.activeVaultItemCount(): Int =
         ?.successes
         ?.count { it.isActive }
         ?: 0
-
-/**
- * Emits successive (previous, current) pairs from the upstream flow, starting with
- * (`null`, first-emission).
- */
-private fun <T : Any> Flow<T?>.scanPairs(): Flow<Pair<T?, T?>> = flow {
-    var previous: T? = null
-    collect { current ->
-        emit(previous to current)
-        previous = current
-    }
-}
 
 private const val PREMIUM_UPGRADE_MINIMUM_VAULT_ITEMS: Int = 5
 private const val PREMIUM_UPGRADE_MINIMUM_ACCOUNT_AGE_DAYS: Long = 7L
