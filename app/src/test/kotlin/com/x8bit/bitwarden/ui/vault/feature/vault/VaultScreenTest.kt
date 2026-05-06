@@ -64,6 +64,7 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
@@ -2706,6 +2707,7 @@ private val DEFAULT_STATE: VaultState = VaultState(
     hasShownDecryptionFailureAlert = false,
     restrictItemTypesPolicyOrgIds = emptyList(),
     isIntroducingArchiveActionCardDismissed = false,
+    validTotpIds = persistentSetOf(),
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(

@@ -34,6 +34,7 @@ import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.PasswordHistoryView
+import com.bitwarden.vault.TotpException
 import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.platform.datasource.sdk.BaseSdkSource
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
@@ -50,6 +51,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.io.File
 import java.time.Instant
 
@@ -432,7 +434,7 @@ class VaultSdkSourceImpl(
         userId: String,
         cipherListView: CipherListView,
         time: Instant?,
-    ): Result<TotpResponse> = runCatchingWithLogs {
+    ): Result<TotpResponse> = runCatching {
         getClient(userId = userId)
             .vault()
             .generateTotpCipherView(
@@ -440,6 +442,15 @@ class VaultSdkSourceImpl(
                 time = time,
             )
     }
+        .onFailure { throwable ->
+            val isMissingSecret = throwable is BitwardenException.Totp &&
+                throwable.v1 is TotpException.MissingSecret
+            if (isMissingSecret) {
+                Timber.w("TOTP generation skipped: missing secret")
+            } else {
+                Timber.w(throwable)
+            }
+        }
 
     override suspend fun moveToOrganization(
         userId: String,

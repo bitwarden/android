@@ -87,6 +87,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            validTotpIds = setOf("mockId-1"),
         )
 
         assertEquals(
@@ -174,6 +175,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.MyVault,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            validTotpIds = setOf("mockId-1"),
         )
 
         assertEquals(
@@ -237,6 +239,7 @@ class VaultDataExtensionsTest {
             ),
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            validTotpIds = setOf("mockId-1", "mockId-2"),
         )
 
         assertEquals(
@@ -298,6 +301,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            validTotpIds = emptySet(),
         )
 
         assertEquals(
@@ -325,6 +329,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            validTotpIds = emptySet(),
         )
 
         assertEquals(
@@ -335,7 +340,7 @@ class VaultDataExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toViewState should return 1 for totpItemsCount if user has Premium and has one totp item`() {
+    fun `toViewState should return 1 for totpItemsCount when validTotpIds contains the cipher id`() {
         val vaultData = VaultData(
             decryptCipherListResult = createMockDecryptCipherListResult(
                 number = 1,
@@ -353,6 +358,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            validTotpIds = setOf("mockId-1"),
         )
 
         assertEquals(
@@ -380,7 +386,7 @@ class VaultDataExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toViewState should return 0 for totpItemsCount if user does not have Premium and has any totp items`() {
+    fun `toViewState should return 0 for totpItemsCount when validTotpIds is empty`() {
         val vaultData = VaultData(
             decryptCipherListResult = createMockDecryptCipherListResult(
                 number = 1,
@@ -398,6 +404,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            validTotpIds = emptySet(),
         )
 
         assertEquals(
@@ -425,7 +432,7 @@ class VaultDataExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toViewState should return 1 for totpItemsCount if user does not have Premium and has at least 1 totp items with org TOTP true`() {
+    fun `toViewState should return 1 for totpItemsCount when validTotpIds contains the cipher id for an org TOTP cipher`() {
         val vaultData = VaultData(
             decryptCipherListResult = createMockDecryptCipherListResult(
                 number = 1,
@@ -445,6 +452,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            validTotpIds = setOf("mockId-1"),
         )
 
         assertEquals(
@@ -492,6 +500,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            validTotpIds = setOf("mockId-1"),
         )
 
         assertEquals(
@@ -723,6 +732,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            validTotpIds = setOf("mockId-3"),
         )
 
         assertEquals(
@@ -770,6 +780,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            validTotpIds = emptySet(),
         )
 
         assertEquals(
@@ -820,6 +831,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            validTotpIds = (0..99).map { "mockId-$it" }.toSet(),
         )
 
         assertEquals(
@@ -877,6 +889,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            validTotpIds = setOf("mockId-1"),
         )
 
         assertEquals(
@@ -952,6 +965,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            validTotpIds = setOf("mockId-1"),
         )
 
         assertEquals(
@@ -1049,6 +1063,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),
+            validTotpIds = emptySet(),
         )
 
         assertEquals(
@@ -1110,6 +1125,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),
+            validTotpIds = setOf("mockId-1"),
         )
 
         assertEquals(
@@ -1157,6 +1173,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            validTotpIds = setOf("mockId-1"),
         )
 
         assertEquals(
@@ -1220,6 +1237,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            validTotpIds = emptySet(),
         )
 
         assertEquals(

@@ -77,8 +77,11 @@ import com.x8bit.bitwarden.ui.vault.util.shortName
 import com.x8bit.bitwarden.ui.vault.util.toVaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -160,6 +163,7 @@ class VaultViewModel @Inject constructor(
             isIntroducingArchiveActionCardDismissed = settingsRepository
                 .getIntroducingArchiveActionCardDismissedFlow()
                 .value,
+            validTotpIds = persistentSetOf(),
         )
     },
 ) {
@@ -199,7 +203,18 @@ class VaultViewModel @Inject constructor(
 
         vaultRepository
             .vaultDataStateFlow
-            .map { VaultAction.Internal.VaultDataReceive(it) }
+            .map {
+                vaultRepository.getValidTotpCipherIds(
+                    isPremium = state.isPremium,
+                    time = clock.instant(),
+                ) to it
+            }
+            .map { (ids, vaultData) ->
+                VaultAction.Internal.VaultDataReceive(
+                    validTotpIds = ids,
+                    vaultData = vaultData,
+                )
+            }
             .onEach {
                 // When the vault data is received, the current activity is about to
                 // be recreated. Adding this delay prevents the dialogs from disappearing.
@@ -513,6 +528,7 @@ class VaultViewModel @Inject constructor(
 
         updateViewState(
             vaultData = vaultRepository.vaultDataStateFlow.value,
+            validTotpIds = state.validTotpIds,
         )
     }
 
@@ -650,6 +666,7 @@ class VaultViewModel @Inject constructor(
         // Re-process the current vault data with the new filter
         updateViewState(
             vaultData = vaultRepository.vaultDataStateFlow.value,
+            validTotpIds = state.validTotpIds,
         )
     }
 
@@ -1183,6 +1200,7 @@ class VaultViewModel @Inject constructor(
             updateVaultState(
                 vaultData = vaultData,
                 dialog = state.dialog,
+                validTotpIds = state.validTotpIds,
             )
         }
     }
@@ -1272,26 +1290,42 @@ class VaultViewModel @Inject constructor(
 
         updateViewState(
             vaultData = action.vaultData,
+            validTotpIds = action.validTotpIds,
         )
     }
 
-    private fun updateViewState(vaultData: DataState<VaultData>) {
+    private fun updateViewState(
+        vaultData: DataState<VaultData>,
+        validTotpIds: Set<String>,
+    ) {
         when (vaultData) {
-            is DataState.Error -> vaultErrorReceive(vaultData = vaultData)
+            is DataState.Error -> vaultErrorReceive(
+                vaultData = vaultData,
+                validTotpIds = validTotpIds,
+            )
+
             is DataState.Loaded -> vaultLoadedReceive(
                 vaultData = vaultData,
+                validTotpIds = validTotpIds,
             )
 
-            is DataState.Loading -> vaultLoadingReceive()
+            is DataState.Loading -> vaultLoadingReceive(validTotpIds = validTotpIds)
             is DataState.NoNetwork -> vaultNoNetworkReceive(
                 vaultData = vaultData,
+                validTotpIds = validTotpIds,
             )
 
-            is DataState.Pending -> vaultPendingReceive(vaultData = vaultData)
+            is DataState.Pending -> vaultPendingReceive(
+                vaultData = vaultData,
+                validTotpIds = validTotpIds,
+            )
         }
     }
 
-    private fun vaultErrorReceive(vaultData: DataState.Error<VaultData>) {
+    private fun vaultErrorReceive(
+        vaultData: DataState.Error<VaultData>,
+        validTotpIds: Set<String>,
+    ) {
         mutableStateFlow.updateToErrorStateOrDialog(
             baseIconUrl = state.baseIconUrl,
             vaultData = vaultData.data,
@@ -1304,10 +1338,14 @@ class VaultViewModel @Inject constructor(
                 ?: BitwardenString.generic_error_message.asText(),
             isRefreshing = false,
             restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
+            validTotpIds = validTotpIds,
         )
     }
 
-    private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
+    private fun vaultLoadedReceive(
+        vaultData: DataState.Loaded<VaultData>,
+        validTotpIds: Set<String>,
+    ) {
         if (state.dialog == VaultState.DialogState.Syncing) {
             sendEvent(VaultEvent.ShowSnackbar(message = BitwardenString.syncing_complete.asText()))
         }
@@ -1322,6 +1360,7 @@ class VaultViewModel @Inject constructor(
                 shouldShowDecryptionAlert = shouldShowDecryptionAlert,
                 vaultData = vaultData,
             ),
+            validTotpIds = validTotpIds,
             hasShownDecryptionFailureAlert = if (shouldShowDecryptionAlert) {
                 true
             } else {
@@ -1356,6 +1395,7 @@ class VaultViewModel @Inject constructor(
 
     private fun updateVaultState(
         vaultData: VaultData,
+        validTotpIds: Set<String>,
         dialog: VaultState.DialogState? = null,
         hasShownDecryptionFailureAlert: Boolean = state.hasShownDecryptionFailureAlert,
     ) {
@@ -1368,6 +1408,7 @@ class VaultViewModel @Inject constructor(
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
+                    validTotpIds = validTotpIds,
                 ),
                 dialog = dialog,
                 isRefreshing = false,
@@ -1377,16 +1418,23 @@ class VaultViewModel @Inject constructor(
                     .mapNotNull { cipher -> cipher.id }
                     .toImmutableList(),
                 hasShownDecryptionFailureAlert = hasShownDecryptionFailureAlert,
+                validTotpIds = validTotpIds.toImmutableSet(),
             )
         }
     }
 
-    private fun vaultLoadingReceive() {
-        mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.Loading) }
+    private fun vaultLoadingReceive(validTotpIds: Set<String>) {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultState.ViewState.Loading,
+                validTotpIds = validTotpIds.toImmutableSet(),
+            )
+        }
     }
 
     private fun vaultNoNetworkReceive(
         vaultData: DataState.NoNetwork<VaultData>,
+        validTotpIds: Set<String>,
     ) {
         val data = vaultData.data ?: VaultData(
             decryptCipherListResult = DecryptCipherListResult(
@@ -1399,10 +1447,14 @@ class VaultViewModel @Inject constructor(
         )
         updateVaultState(
             vaultData = data,
+            validTotpIds = validTotpIds,
         )
     }
 
-    private fun vaultPendingReceive(vaultData: DataState.Pending<VaultData>) {
+    private fun vaultPendingReceive(
+        vaultData: DataState.Pending<VaultData>,
+        validTotpIds: Set<String>,
+    ) {
         mutableStateFlow.update {
             it.copy(
                 viewState = vaultData.data.toViewState(
@@ -1412,7 +1464,9 @@ class VaultViewModel @Inject constructor(
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
+                    validTotpIds = validTotpIds,
                 ),
+                validTotpIds = validTotpIds.toImmutableSet(),
             )
         }
     }
@@ -1575,6 +1629,7 @@ data class VaultState(
     val isPremiumUpgradeBannerEligible: Boolean = false,
     val isUpgradedToPremiumCardEligible: Boolean = false,
     val isAwaitingKdfSync: Boolean = false,
+    val validTotpIds: ImmutableSet<String>,
 ) : Parcelable {
 
     /**
@@ -2392,6 +2447,7 @@ sealed class VaultAction {
          * Indicates a vault data was received.
          */
         data class VaultDataReceive(
+            val validTotpIds: Set<String>,
             val vaultData: DataState<VaultData>,
         ) : Internal()
 
@@ -2510,6 +2566,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
     errorMessage: Text,
     isRefreshing: Boolean,
     restrictItemTypesPolicyOrgIds: List<String>,
+    validTotpIds: Set<String>,
 ) {
     this.update {
         if (vaultData != null) {
@@ -2521,12 +2578,14 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                     vaultFilterType = vaultFilterType,
                     isIconLoadingDisabled = isIconLoadingDisabled,
                     restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
+                    validTotpIds = validTotpIds,
                 ),
                 dialog = VaultState.DialogState.Error(
                     title = errorTitle,
                     message = errorMessage,
                 ),
                 isRefreshing = isRefreshing,
+                validTotpIds = validTotpIds.toImmutableSet(),
             )
         } else {
             it.copy(
@@ -2535,6 +2594,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                 ),
                 dialog = null,
                 isRefreshing = isRefreshing,
+                validTotpIds = validTotpIds.toImmutableSet(),
             )
         }
     }
