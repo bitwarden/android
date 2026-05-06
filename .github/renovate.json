@@ -3,6 +3,7 @@
   "extends": [
     "github>bitwarden/renovate-config"
   ],
+  "labels": ["t:deps"],
   "ignoreDeps": ["com.bitwarden:sdk-android"],
   "enabledManagers": [
     "github-actions",
@@ -31,16 +32,6 @@
         "/androidx.lifecycle:*/",
         "/org.jetbrains.kotlin.*/",
         "/com.google.devtools.ksp/"
-      ]
-    },
-    {
-      "groupName": "bundler minor",
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "matchManagers": [
-        "bundler"
       ]
     }
   ]
