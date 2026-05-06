@@ -1687,6 +1687,61 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `UpgradedToPremium action card should display when eligible`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isUpgradedToPremiumCardEligible = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Upgraded to Premium")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Learn more")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `UpgradedToPremium action card CTA click should send ActionCardClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isUpgradedToPremiumCardEligible = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Learn more")
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAction.ActionCardClick(
+                    actionCard = VaultState.ActionCardState.UpgradedToPremium,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `UpgradedToPremium action card dismiss click should send DismissActionCardClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isUpgradedToPremiumCardEligible = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAction.DismissActionCardClick(VaultState.ActionCardState.UpgradedToPremium),
+            )
+        }
+    }
+
+    @Test
     fun `collection data should update according to the state`() {
         val collectionsHeader = "COLLECTIONS (1)"
         val collectionName = "Test Collection"

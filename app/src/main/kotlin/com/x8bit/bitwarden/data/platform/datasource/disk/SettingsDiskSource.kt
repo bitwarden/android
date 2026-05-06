@@ -142,6 +142,47 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     fun getPremiumUpgradeBannerDismissedFlow(userId: String): Flow<Boolean?>
 
     /**
+     * Retrieves the stored value of whether the "Upgraded to Premium" action card has been
+     * consumed (either dismissed via the close icon or actioned via the Learn more CTA).
+     */
+    fun getUpgradedToPremiumCardConsumed(userId: String): Boolean?
+
+    /**
+     * Stores whether the "Upgraded to Premium" action card has been consumed for the given
+     * [userId].
+     */
+    fun storeUpgradedToPremiumCardConsumed(
+        userId: String,
+        isConsumed: Boolean?,
+    )
+
+    /**
+     * Emits updates that track [getUpgradedToPremiumCardConsumed] for the given [userId].
+     */
+    fun getUpgradedToPremiumCardConsumedFlow(userId: String): Flow<Boolean?>
+
+    /**
+     * Retrieves the stored value of whether a Free → Premium upgrade has been observed for the
+     * given [userId] but the resulting "Upgraded to Premium" action card has not yet been
+     * consumed.
+     */
+    fun getUpgradedToPremiumCardPending(userId: String): Boolean?
+
+    /**
+     * Stores whether a Free → Premium upgrade has been observed for the given [userId] and is
+     * awaiting consumption of the resulting "Upgraded to Premium" action card.
+     */
+    fun storeUpgradedToPremiumCardPending(
+        userId: String,
+        isPending: Boolean?,
+    )
+
+    /**
+     * Emits updates that track [getUpgradedToPremiumCardPending] for the given [userId].
+     */
+    fun getUpgradedToPremiumCardPendingFlow(userId: String): Flow<Boolean?>
+
+    /**
      * Retrieves the biometric integrity validity for the given [userId] and
      * [systemBioIntegrityState].
      */

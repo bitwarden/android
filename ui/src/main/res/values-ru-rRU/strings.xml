@@ -297,7 +297,6 @@
     <string name="field_type_text">Текстовое</string>
     <string name="select_type_field">Какой тип пользовательского поля вы хотите добавить?</string>
     <string name="remove">Удалить</string>
-    <string name="new_uri">Новый URI</string>
     <string name="add_website">Добавить сайт</string>
     <string name="base_domain">Основной домен</string>
     <string name="default_text">По умолчанию (%1$s)</string>
@@ -675,7 +674,9 @@
     <string name="you_will_be_notified_once_approved">Вас уведомят об одобрении.</string>
     <string name="trouble_logging_in">Не удалось войти?</string>
     <string name="block_auto_fill">Блокировать автозаполнение</string>
+    <string name="no_uris_blocked">Нет блокированных URI</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Автозаполнение для этих URI предлагаться не будет.</string>
+    <string name="edit_blocked_uri">Изменить блокируемый URI</string>
     <string name="new_blocked_uri">Новый блокируемый URI</string>
     <string name="invalid_format_use_https_http_or_android_app">Недопустимый формат. Используйте https://, http:// или androidapp://</string>
     <string name="enter_uri">Ввести URI</string>
@@ -1090,6 +1091,7 @@
     <string name="security">Безопасность</string>
     <string name="too_many_failed_biometric_attempts">Слишком много неудачных попыток биометрической идентификации.</string>
     <string name="version">Версия</string>
+    <string name="version_x" comment="%1$s is the version string (e.g. 2025.1.0 (1234)).">Версия: %1$s</string>
     <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">Подробнее о том, как использовать Bitwarden Authenticator, можно узнать в справочном центре.</string>
     <string name="key">Ключ</string>
     <string name="create_verification_code">Создать код подтверждения</string>
@@ -1228,6 +1230,7 @@
     <string name="archive_unavailable">Архив недоступен</string>
     <string name="archiving_items_is_a_premium_feature">Архивирование элементов является Премиум функцией. Она не входит в ваш текущий тарифный план.</string>
     <string name="upgrade_to_premium">Обновить до Премиум</string>
+    <string name="plan">План</string>
     <string name="unlock_advanced_security_features">Разблокировать дополнительные функции безопасности</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">План Премиум дает вам больше возможностей по обеспечения безопасности и контроля.</string>
     <string name="this_item_is_archived">Этот элемент архивирован.</string>
@@ -1257,6 +1260,9 @@
     <string name="preview_unavailable">Предпросмотр недоступен</string>
     <string name="download_attachment">Скачать вложение</string>
     <string name="upgraded_to_premium">Обновлено до Премиум</string>
+    <string name="confirming_your_upgrade">Подтверждение перехода…</string>
+    <string name="upgrade_pending">Ожидание перехода</string>
+    <string name="upgrade_pending_message">Ваш переход на платный тарифный план находится в процессе обработки. До завершения перехода вы будете пользоваться бесплатным тарифным планом. Вы можете синхронизировать данные прямо сейчас, чтобы проверить, или продолжить — обновление произойдет автоматически.</string>
     <string name="unlock_premium_features">Разблокировать дополнительные возможности с Премиум.</string>
     <string name="per_month">/ месяц</string>
     <string name="built_in_authenticator">Встроенный аутентификатор</string>
@@ -1276,4 +1282,35 @@
     <string name="show_next_code">Показать следующий код</string>
     <string name="see_upcoming_codes_in_the_list">Просмотр будущих кодов в списке</string>
     <string name="next_code_x">Следующий код, %1$s</string>
+    <string name="archive_item">Архивировать элемент</string>
+    <string name="once_archived_this_item_will_be_excluded">После архивации этот элемент будет исключен из результатов поиска и предложений по автозаполнению.</string>
+    <string name="pricing_unavailable">Цены недоступны</string>
+    <string name="current_plan">Текущий план</string>
+    <string name="premium_plan_name">Премиум</string>
+    <string name="billing_amount">Сумма счета</string>
+    <string name="storage_cost">Стоимость хранилища</string>
+    <string name="discount">Скидка</string>
+    <string name="estimated_tax">Предполагаемый налог</string>
+    <string name="billing_rate_per_year">%1$s / год</string>
+    <string name="billing_rate_per_month">%1$s / месяц</string>
+    <string name="manage_plan">Управление планом</string>
+    <string name="cancel_premium">Отменить Премиум</string>
+    <string name="cancel_now">Отменить сейчас</string>
+    <string name="cancel_premium_confirmation">У вас будет доступ к Премиум до %1$s.</string>
+    <string name="subscription_status_active">Активен</string>
+    <string name="subscription_status_canceled">Отменен</string>
+    <string name="subscription_status_overdue_payment">Просроченный платеж</string>
+    <string name="subscription_status_past_due">Просрочен</string>
+    <string name="subscription_status_paused">Приостановлена</string>
+    <string name="premium_next_charge_summary">Следующий платеж на сумму %1$s USD должен быть выполнен %2$s.</string>
+    <string name="subscription_canceled_description">Ваша подписка была отменена %1$s. Подпишитесь заново, чтобы продолжить пользоваться возможностями Премиум.</string>
+    <string name="subscription_overdue_description">Нам не удалось обработать ваш платеж. Обновите способ оплаты до истечения срока подписки %1$s.</string>
+    <string name="subscription_past_due_description">У вас есть льготный период продолжительностью %1$d с даты истечения срока действия подписки. Просим вас оплатить просроченную сумму до %2$s.</string>
+    <string name="subscription_paused_description">Ваша подписка приостановлена. Возобновите ее, чтобы продолжить пользоваться возможностями Премиум.</string>
+    <string name="loading_subscription">Загрузка подписки…</string>
+    <string name="loading_portal">Загрузка портала…</string>
+    <string name="portal_error">Что-то пошло не так</string>
+    <string name="trouble_loading_portal">У нас возникли проблемы с загрузкой портала управления, поэтому попробуйте еще раз.</string>
+    <string name="subscription_error">Ошибка подписки</string>
+    <string name="trouble_loading_subscription">Не удалось загрузить данные вашей подписки. Попробуйте еще раз.</string>
 </resources>

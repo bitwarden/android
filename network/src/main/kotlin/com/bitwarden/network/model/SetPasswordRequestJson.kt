@@ -1,6 +1,5 @@
 package com.bitwarden.network.model
 
-import com.bitwarden.network.model.RegisterRequestJson.Keys
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -45,4 +44,19 @@ data class SetPasswordRequestJson(
 
     @SerialName("masterPasswordHint")
     val passwordHint: String?,
-)
+) {
+    /**
+     * A keys object containing public and private keys.
+     *
+     * @param publicKey the public key (encrypted).
+     * @param encryptedPrivateKey the private key (encrypted).
+     */
+    @Serializable
+    data class Keys(
+        @SerialName("publicKey")
+        val publicKey: String,
+
+        @SerialName("encryptedPrivateKey")
+        val encryptedPrivateKey: String,
+    )
+}

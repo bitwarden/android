@@ -170,7 +170,7 @@
     <string name="autofill_noun">自動填入</string>
     <string name="autofill_verb">自動填入</string>
     <string name="autofill_or_view">您想自動填入還是檢視此項目？</string>
-    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">搜尋 %1$s</string>
     <string name="learn_org">了解組織</string>
     <string name="authenticator_app_title">驗證器應用程式</string>
     <string name="enter_verification_code_app">輸入驗證器應用程式提供的 6 位數驗證碼。</string>
@@ -294,7 +294,6 @@
     <string name="field_type_text">文字型</string>
     <string name="select_type_field">您要新增哪種類型的自訂欄位？</string>
     <string name="remove">移除</string>
-    <string name="new_uri">新增 URI</string>
     <string name="add_website">新增網站</string>
     <string name="base_domain">基底網域</string>
     <string name="default_text">預設（%1$s）</string>
@@ -664,7 +663,9 @@
     <string name="you_will_be_notified_once_approved">核准後將通知您。</string>
     <string name="trouble_logging_in">登入時遇到困難？</string>
     <string name="block_auto_fill">封鎖表單自動填入功能</string>
+    <string name="no_uris_blocked">沒有封鎖任何 URI</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">不對下列 URI 提供自動填寫功能。</string>
+    <string name="edit_blocked_uri">編輯已封鎖的 URI</string>
     <string name="new_blocked_uri">新增要封鎖的 URI</string>
     <string name="invalid_format_use_https_http_or_android_app">格式無效，請用 https://、http:// 或 androidapp:// 開頭</string>
     <string name="enter_uri">輸入 URI</string>
@@ -1070,6 +1071,7 @@
     <string name="security">安全性</string>
     <string name="too_many_failed_biometric_attempts">生物辨識嘗試次數過多。</string>
     <string name="version">版本</string>
+    <string name="version_x" comment="%1$s is the version string (e.g. 2025.1.0 (1234)).">版本：%1$s</string>
     <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">在說明中心了解有關如何使用 Bitwarden Authenticato的更多資訊。</string>
     <string name="key">金鑰</string>
     <string name="create_verification_code">建立驗證碼</string>
@@ -1202,6 +1204,7 @@
     <string name="archive_unavailable">封存不可用</string>
     <string name="archiving_items_is_a_premium_feature">封存項目為進階版功能。您目前的方案不包含此功能。</string>
     <string name="upgrade_to_premium">升級到 Premium</string>
+    <string name="plan">方案</string>
     <string name="unlock_advanced_security_features">解鎖進階安全功能</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Premium 方案可提供更多工具，讓您保持安全並掌控一切。</string>
     <string name="this_item_is_archived">此項目已被封存。</string>
@@ -1231,6 +1234,9 @@
     <string name="preview_unavailable">無法預覽</string>
     <string name="download_attachment">下載附件</string>
     <string name="upgraded_to_premium">升級到 Premium</string>
+    <string name="confirming_your_upgrade">正在確認您的升級…</string>
+    <string name="upgrade_pending">升級處理中</string>
+    <string name="upgrade_pending_message">您的升級正在處理中。在完成之前，您將維持免費方案。立即同步以進行檢查，或繼續操作，系統將自動更新。</string>
     <string name="unlock_premium_features">透過 Premium 方案解鎖更多進階功能。</string>
     <string name="per_month">/ 月</string>
     <string name="built_in_authenticator">內建驗證器</string>
@@ -1245,9 +1251,40 @@
     <string name="payment_not_received_yet">尚未收到付款</string>
     <string name="return_to_stripe_to_finish">請在瀏覽器中返回 Stripe 完成升級流程。</string>
     <string name="go_back">返回</string>
-    <string name="allow_camera_access">Allow camera access</string>
-    <string name="to_scan_your_card_we_need_access_to_your_camera">To scan your card, we’ll need access to your camera. You can change this anytime in your device settings.</string>
-    <string name="show_next_code">Show next code</string>
-    <string name="see_upcoming_codes_in_the_list">See upcoming codes in the list</string>
-    <string name="next_code_x">Next code, %1$s</string>
+    <string name="allow_camera_access">允許相機存取</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">為了掃描您的卡片，需要存取您的相機。您可以隨時在裝置設定中變更。</string>
+    <string name="show_next_code">顯示下一個驗證碼</string>
+    <string name="see_upcoming_codes_in_the_list">在清單中查看即將產生的驗證碼</string>
+    <string name="next_code_x">下一個驗證碼 %1$s</string>
+    <string name="archive_item">封存項目</string>
+    <string name="once_archived_this_item_will_be_excluded">封存後，此項目將不會顯示在搜尋結果與自動填入建議中。</string>
+    <string name="pricing_unavailable">無法取得價格資訊</string>
+    <string name="current_plan">Current plan</string>
+    <string name="premium_plan_name">進階版</string>
+    <string name="billing_amount">帳單金額</string>
+    <string name="storage_cost">儲存空間費用</string>
+    <string name="discount">折扣</string>
+    <string name="estimated_tax">Estimated tax</string>
+    <string name="billing_rate_per_year">%1$s / year</string>
+    <string name="billing_rate_per_month">%1$s / month</string>
+    <string name="manage_plan">管理方案</string>
+    <string name="cancel_premium">取消 Premium</string>
+    <string name="cancel_now">Cancel now</string>
+    <string name="cancel_premium_confirmation">You’ll continue to have Premium access until %1$s.</string>
+    <string name="subscription_status_active">生效中</string>
+    <string name="subscription_status_canceled">已取消</string>
+    <string name="subscription_status_overdue_payment">Overdue payment</string>
+    <string name="subscription_status_past_due">逾期</string>
+    <string name="subscription_status_paused">Paused</string>
+    <string name="premium_next_charge_summary">Your next charge is for %1$s USD due on %2$s.</string>
+    <string name="subscription_canceled_description">Your subscription was canceled on %1$s. Resubscribe to continue using premium features.</string>
+    <string name="subscription_overdue_description">We couldn’t process your payment. Update your payment before your subscription ends on %1$s.</string>
+    <string name="subscription_past_due_description">You have a grace period of %1$d days from your subscription expiration date. Please resolve the past due amount by %2$s.</string>
+    <string name="subscription_paused_description">Your subscription is paused. Resume to continue using premium features.</string>
+    <string name="loading_subscription">Loading subscription…</string>
+    <string name="loading_portal">Loading portal…</string>
+    <string name="portal_error">出了點問題</string>
+    <string name="trouble_loading_portal">We had trouble loading the management portal, so try again.</string>
+    <string name="subscription_error">Subscription error</string>
+    <string name="trouble_loading_subscription">We couldn’t load your subscription details. Please try again.</string>
 </resources>

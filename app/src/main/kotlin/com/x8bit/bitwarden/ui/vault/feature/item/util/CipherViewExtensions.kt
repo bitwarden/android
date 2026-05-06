@@ -214,7 +214,46 @@ fun CipherView.toViewState(
                 )
             }
 
-            CipherType.BANK_ACCOUNT -> TODO("PM-32810: Add Bank Account Type")
+            CipherType.BANK_ACCOUNT -> {
+                VaultItemState.ViewState.Content.ItemType.BankAccount(
+                    bankName = bankAccount?.bankName,
+                    nameOnAccount = bankAccount?.nameOnAccount,
+                    accountType = bankAccount?.accountType,
+                    accountNumber = bankAccount?.accountNumber,
+                    routingNumber = bankAccount?.routingNumber,
+                    branchNumber = bankAccount?.branchNumber,
+                    pin = bankAccount?.pin,
+                    swiftCode = bankAccount?.swiftCode,
+                    iban = bankAccount?.iban,
+                    bankContactPhone = bankAccount?.bankContactPhone,
+                )
+            }
+
+            CipherType.DRIVERS_LICENSE -> {
+                VaultItemState.ViewState.Content.ItemType.DriversLicense(
+                    firstName = driversLicense?.firstName.orEmpty(),
+                    middleName = driversLicense?.middleName.orEmpty(),
+                    lastName = driversLicense?.lastName.orEmpty(),
+                    licenseNumber = driversLicense?.licenseNumber.orEmpty(),
+                    issuingCountry = driversLicense?.issuingCountry.orEmpty(),
+                    issuingState = driversLicense?.issuingState.orEmpty(),
+                    expirationDate = driversLicense?.expirationDate.orEmpty(),
+                    licenseClass = driversLicense?.licenseClass.orEmpty(),
+                )
+            }
+
+            CipherType.PASSPORT -> VaultItemState.ViewState.Content.ItemType.Passport(
+                surname = passport?.surname.orEmpty(),
+                givenName = passport?.givenName.orEmpty(),
+                dateOfBirth = passport?.dateOfBirth.orEmpty(),
+                nationality = passport?.nationality.orEmpty(),
+                passportNumber = passport?.passportNumber.orEmpty(),
+                passportType = passport?.passportType.orEmpty(),
+                issuingCountry = passport?.issuingCountry.orEmpty(),
+                issuingAuthority = passport?.issuingAuthority.orEmpty(),
+                issueDate = passport?.issueDate.orEmpty(),
+                expirationDate = passport?.expirationDate.orEmpty(),
+            )
         },
     )
 
@@ -305,7 +344,9 @@ private val CipherType.iconRes: Int
         CipherType.IDENTITY -> BitwardenDrawable.ic_id_card
         CipherType.SSH_KEY -> BitwardenDrawable.ic_ssh_key
         CipherType.LOGIN -> BitwardenDrawable.ic_globe
-        CipherType.BANK_ACCOUNT -> TODO("PM-32810: Add Bank Account Type")
+        CipherType.BANK_ACCOUNT -> BitwardenDrawable.ic_note
+        CipherType.DRIVERS_LICENSE -> BitwardenDrawable.ic_note
+        CipherType.PASSPORT -> BitwardenDrawable.ic_note
     }
 
 @get:DrawableRes

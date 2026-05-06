@@ -56,6 +56,10 @@ class FlagKeyTest {
             FlagKey.V2EncryptionTde.keyName,
             "pm-27279-v2-registration-tde-jit",
         )
+        assertEquals(
+            FlagKey.NewItemTypes.keyName,
+            "pm-32009-new-item-types",
+        )
     }
 
     @Test
@@ -74,6 +78,7 @@ class FlagKeyTest {
                 FlagKey.V2EncryptionKeyConnector,
                 FlagKey.V2EncryptionPassword,
                 FlagKey.V2EncryptionTde,
+                FlagKey.NewItemTypes,
             ).all {
                 !it.defaultValue
             },

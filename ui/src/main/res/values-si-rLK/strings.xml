@@ -295,7 +295,6 @@ Scanning will happen automatically.</string>
     <string name="field_type_text">Text</string>
     <string name="select_type_field">What type of custom field do you want to add?</string>
     <string name="remove">Remove</string>
-    <string name="new_uri">New URI</string>
     <string name="add_website">Add website</string>
     <string name="base_domain">Base domain</string>
     <string name="default_text">Default (%1$s)</string>
@@ -667,7 +666,9 @@ Do you want to switch to this account?</string>
     <string name="you_will_be_notified_once_approved">You will be notified once approved.</string>
     <string name="trouble_logging_in">Trouble logging in?</string>
     <string name="block_auto_fill">Block autofill</string>
+    <string name="no_uris_blocked">No URIs blocked</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Autofill will not be offered for these URIs.</string>
+    <string name="edit_blocked_uri">Edit blocked URI</string>
     <string name="new_blocked_uri">New blocked URI</string>
     <string name="invalid_format_use_https_http_or_android_app">Invalid format. Use https://, http://, or androidapp://</string>
     <string name="enter_uri">Enter URI</string>
@@ -1076,6 +1077,7 @@ Do you want to switch to this account?</string>
     <string name="security">ආරක්ෂාව</string>
     <string name="too_many_failed_biometric_attempts">Too many failed biometrics attempts.</string>
     <string name="version">අනුවාදය</string>
+    <string name="version_x" comment="%1$s is the version string (e.g. 2025.1.0 (1234)).">Version: %1$s</string>
     <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">Learn more about how to use Bitwarden Authenticator on the Help Center.</string>
     <string name="key">Key</string>
     <string name="create_verification_code">Create Verification code</string>
@@ -1210,6 +1212,7 @@ Do you want to switch to this account?</string>
     <string name="archive_unavailable">Archive unavailable</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Upgrade to Premium</string>
+    <string name="plan">Plan</string>
     <string name="unlock_advanced_security_features">Unlock advanced security features</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">This item is archived.</string>
@@ -1239,6 +1242,9 @@ Do you want to switch to this account?</string>
     <string name="preview_unavailable">Preview unavailable</string>
     <string name="download_attachment">Download Attachment</string>
     <string name="upgraded_to_premium">Upgraded to premium</string>
+    <string name="confirming_your_upgrade">Confirming your upgrade…</string>
+    <string name="upgrade_pending">Upgrade pending</string>
+    <string name="upgrade_pending_message">Your upgrade is being processed. You’ll remain on the free plan until it’s complete. Sync now to check, or continue and it will update automatically.</string>
     <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
     <string name="per_month">/ month</string>
     <string name="built_in_authenticator">Built-in authenticator</string>
@@ -1258,4 +1264,35 @@ Do you want to switch to this account?</string>
     <string name="show_next_code">Show next code</string>
     <string name="see_upcoming_codes_in_the_list">See upcoming codes in the list</string>
     <string name="next_code_x">Next code, %1$s</string>
+    <string name="archive_item">Archive item</string>
+    <string name="once_archived_this_item_will_be_excluded">Once archived, this item will be excluded from search results and autofill suggestions.</string>
+    <string name="pricing_unavailable">Pricing unavailable</string>
+    <string name="current_plan">Current plan</string>
+    <string name="premium_plan_name">Premium</string>
+    <string name="billing_amount">Billing amount</string>
+    <string name="storage_cost">Storage cost</string>
+    <string name="discount">Discount</string>
+    <string name="estimated_tax">Estimated tax</string>
+    <string name="billing_rate_per_year">%1$s / year</string>
+    <string name="billing_rate_per_month">%1$s / month</string>
+    <string name="manage_plan">Manage plan</string>
+    <string name="cancel_premium">Cancel Premium</string>
+    <string name="cancel_now">Cancel now</string>
+    <string name="cancel_premium_confirmation">You’ll continue to have Premium access until %1$s.</string>
+    <string name="subscription_status_active">Active</string>
+    <string name="subscription_status_canceled">Canceled</string>
+    <string name="subscription_status_overdue_payment">Overdue payment</string>
+    <string name="subscription_status_past_due">Past due</string>
+    <string name="subscription_status_paused">Paused</string>
+    <string name="premium_next_charge_summary">Your next charge is for %1$s USD due on %2$s.</string>
+    <string name="subscription_canceled_description">Your subscription was canceled on %1$s. Resubscribe to continue using premium features.</string>
+    <string name="subscription_overdue_description">We couldn’t process your payment. Update your payment before your subscription ends on %1$s.</string>
+    <string name="subscription_past_due_description">You have a grace period of %1$d days from your subscription expiration date. Please resolve the past due amount by %2$s.</string>
+    <string name="subscription_paused_description">Your subscription is paused. Resume to continue using premium features.</string>
+    <string name="loading_subscription">Loading subscription…</string>
+    <string name="loading_portal">Loading portal…</string>
+    <string name="portal_error">Something went wrong</string>
+    <string name="trouble_loading_portal">We had trouble loading the management portal, so try again.</string>
+    <string name="subscription_error">Subscription error</string>
+    <string name="trouble_loading_subscription">We couldn’t load your subscription details. Please try again.</string>
 </resources>

@@ -68,7 +68,8 @@ Load reference files only when needed for specific questions:
 - **Security questions (comprehensive)** → `docs/ARCHITECTURE.md#security` (full zero-knowledge architecture)
 - **Testing questions** → `reference/testing-patterns.md` (unit tests, mocking, null safety)
 - **UI questions** → `reference/ui-patterns.md` (Compose patterns, theming)
-- **Style questions** → `docs/STYLE_AND_BEST_PRACTICES.md`
+- **Style questions (project-specific)** → `reference/style-patterns.md` (Kotlin rules enforced in review)
+- **Style questions (general)** → `docs/STYLE_AND_BEST_PRACTICES.md`
 
 ## Core Principles
 

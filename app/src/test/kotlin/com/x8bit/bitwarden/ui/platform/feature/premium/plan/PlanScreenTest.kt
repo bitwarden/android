@@ -15,7 +15,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -38,6 +37,7 @@ import org.junit.Test
 class PlanScreenTest : BitwardenComposeTest() {
 
     private var onNavigateBackCalled = false
+    private var onNavigateToUpgradedToPremiumCalled = false
     private val premiumCheckoutLauncher: ActivityResultLauncher<Intent> = mockk()
 
     private val mutableEventFlow = bufferedMutableSharedFlow<PlanEvent>()
@@ -67,6 +67,7 @@ class PlanScreenTest : BitwardenComposeTest() {
         ) {
             PlanScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToUpgradedToPremium = { onNavigateToUpgradedToPremiumCalled = true },
                 viewModel = viewModel,
             )
         }
@@ -78,6 +79,12 @@ class PlanScreenTest : BitwardenComposeTest() {
     fun `NavigateBack event should call onNavigateBack`() {
         mutableEventFlow.tryEmit(PlanEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `NavigateToUpgradedToPremium event should call onNavigateToUpgradedToPremium`() {
+        mutableEventFlow.tryEmit(PlanEvent.NavigateToUpgradedToPremium)
+        assertTrue(onNavigateToUpgradedToPremiumCalled)
     }
 
     @Test
@@ -99,15 +106,6 @@ class PlanScreenTest : BitwardenComposeTest() {
                 launcher = premiumCheckoutLauncher,
             )
         }
-    }
-
-    @Test
-    fun `ShowSnackbar event should display snackbar`() {
-        val data = BitwardenSnackbarData("Upgraded to premium".asText())
-        mutableEventFlow.tryEmit(PlanEvent.ShowSnackbar(data))
-        composeTestRule
-            .onNodeWithText("Upgraded to premium")
-            .assertIsDisplayed()
     }
 
     // endregion Events

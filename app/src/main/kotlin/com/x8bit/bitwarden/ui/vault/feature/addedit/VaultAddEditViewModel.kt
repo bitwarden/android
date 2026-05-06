@@ -85,6 +85,7 @@ import com.x8bit.bitwarden.ui.vault.feature.util.canAssignToCollections
 import com.x8bit.bitwarden.ui.vault.feature.util.hasDeletePermissionInAtLeastOneCollection
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import com.x8bit.bitwarden.ui.vault.model.VaultBankAccountType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
@@ -434,6 +435,14 @@ class VaultAddEditViewModel @Inject constructor(
 
     @Suppress("LongMethod")
     private fun handleSaveClick() = onContent { content ->
+        if (!content.type.isSdkSupported) {
+            sendEvent(
+                VaultAddEditEvent.ShowSnackbar(
+                    message = BitwardenString.an_error_has_occurred.asText(),
+                ),
+            )
+            return@onContent
+        }
         if (hasValidationErrors(content)) return@onContent
 
         mutableStateFlow.update {
@@ -2543,6 +2552,9 @@ data class VaultAddEditState(
                 VaultItemCipherType.IDENTITY -> BitwardenString.new_identity.asText()
                 VaultItemCipherType.SECURE_NOTE -> BitwardenString.new_note.asText()
                 VaultItemCipherType.SSH_KEY -> BitwardenString.new_ssh_key.asText()
+                VaultItemCipherType.BANK_ACCOUNT -> BitwardenString.new_bank_account.asText()
+                VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.new_drivers_license.asText()
+                VaultItemCipherType.PASSPORT -> BitwardenString.new_passport.asText()
             }
 
             is VaultAddEditType.EditItem -> when (cipherType) {
@@ -2551,6 +2563,9 @@ data class VaultAddEditState(
                 VaultItemCipherType.IDENTITY -> BitwardenString.edit_identity.asText()
                 VaultItemCipherType.SECURE_NOTE -> BitwardenString.edit_note.asText()
                 VaultItemCipherType.SSH_KEY -> BitwardenString.edit_ssh_key.asText()
+                VaultItemCipherType.BANK_ACCOUNT -> BitwardenString.edit_bank_account.asText()
+                VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.edit_drivers_license.asText()
+                VaultItemCipherType.PASSPORT -> BitwardenString.edit_passport.asText()
             }
         }
 
@@ -2642,6 +2657,9 @@ data class VaultAddEditState(
         IDENTITY(BitwardenString.type_identity),
         SECURE_NOTES(BitwardenString.type_secure_note),
         SSH_KEYS(BitwardenString.type_ssh_key),
+        BANK_ACCOUNT(BitwardenString.type_bank_account),
+        DRIVERS_LICENSE(BitwardenString.type_drivers_license),
+        PASSPORT(BitwardenString.type_passport),
     }
 
     /**
@@ -2749,6 +2767,11 @@ data class VaultAddEditState(
                  * A list of all the linked field types supported by this [ItemType].
                  */
                 abstract val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+
+                /**
+                 * Whether this item type has SDK support for save operations.
+                 */
+                open val isSdkSupported: Boolean get() = true
 
                 /**
                  * Represents the login item information.
@@ -2922,6 +2945,83 @@ data class VaultAddEditState(
                     val showFingerprint: Boolean = false,
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.SSH_KEYS
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf()
+                }
+
+                /**
+                 * Represents the bank account item information.
+                 */
+                @Parcelize
+                data class BankAccount(
+                    val bankName: String = "",
+                    val nameOnAccount: String = "",
+                    val accountType: VaultBankAccountType = VaultBankAccountType.SELECT,
+                    val accountNumber: String = "",
+                    val routingNumber: String = "",
+                    val branchNumber: String = "",
+                    val pin: String = "",
+                    val swiftCode: String = "",
+                    val iban: String = "",
+                    val bankContactPhone: String = "",
+                ) : ItemType() {
+                    override val itemTypeOption: ItemTypeOption
+                        get() = ItemTypeOption.BANK_ACCOUNT
+
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf()
+                }
+
+                /**
+                 * Represents the driver's license item information.
+                 */
+                @Parcelize
+                data class DriversLicense(
+                    val firstName: String = "",
+                    val middleName: String = "",
+                    val lastName: String = "",
+                    val dateOfBirth: String = "",
+                    val licenseNumber: String = "",
+                    val issuingCountry: String = "",
+                    val issuingState: String = "",
+                    val issuingAuthority: String = "",
+                    val issueDate: String = "",
+                    val expirationDate: String = "",
+                    val licenseClass: String = "",
+                ) : ItemType() {
+                    override val itemTypeOption: ItemTypeOption
+                        get() = ItemTypeOption.DRIVERS_LICENSE
+
+                    override val isSdkSupported: Boolean get() = false
+
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf()
+                }
+
+                /**
+                 * Represents the passport item information.
+                 */
+                @Parcelize
+                data class Passport(
+                    val surname: String = "",
+                    val givenName: String = "",
+                    val dateOfBirth: String = "",
+                    val birthPlace: String = "",
+                    val sex: String = "",
+                    val nationality: String = "",
+                    val passportNumber: String = "",
+                    val passportType: String = "",
+                    val issuingCountry: String = "",
+                    val issuingAuthority: String = "",
+                    val issueDate: String = "",
+                    val expirationDate: String = "",
+                    val nationalIdentificationNumber: String = "",
+                ) : ItemType() {
+                    override val itemTypeOption: ItemTypeOption
+                        get() = ItemTypeOption.PASSPORT
+
+                    override val isSdkSupported: Boolean get() = false
+
                     override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
                         get() = persistentListOf()
                 }

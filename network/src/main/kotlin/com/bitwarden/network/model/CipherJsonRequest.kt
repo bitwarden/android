@@ -56,6 +56,15 @@ data class CipherJsonRequest(
     @SerialName("sshKey")
     val sshKey: SyncResponseJson.Cipher.SshKey?,
 
+    @SerialName("bankAccount")
+    val bankAccount: SyncResponseJson.Cipher.BankAccount?,
+
+    @SerialName("driversLicense")
+    val driversLicense: SyncResponseJson.Cipher.DriversLicense?,
+
+    @SerialName("passport")
+    val passport: SyncResponseJson.Cipher.Passport?,
+
     @SerialName("folderId")
     val folderId: String?,
 

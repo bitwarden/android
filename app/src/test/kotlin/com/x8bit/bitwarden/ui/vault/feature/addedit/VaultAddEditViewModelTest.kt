@@ -2403,6 +2403,201 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in add mode, SaveClick with a Drivers License item should emit ShowSnackbar without saving`() =
+        runTest {
+            mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
+            val driversLicenseState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
+                commonContentViewState = createCommonContentViewState(name = "mockName-1"),
+                typeContentViewState =
+                    VaultAddEditState.ViewState.Content.ItemType.DriversLicense(),
+            )
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = driversLicenseState,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
+                ),
+            )
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+                assertEquals(
+                    VaultAddEditEvent.ShowSnackbar(
+                        message = BitwardenString.an_error_has_occurred.asText(),
+                    ),
+                    awaitItem(),
+                )
+            }
+            assertEquals(driversLicenseState, viewModel.stateFlow.value)
+            coVerify(exactly = 0) {
+                vaultRepository.createCipher(any())
+                vaultRepository.createCipherInOrganization(any(), any())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in add mode, SaveClick with a Passport item should emit ShowSnackbar without saving`() =
+        runTest {
+            mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
+            val passportState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.PASSPORT,
+                commonContentViewState = createCommonContentViewState(name = "mockName-1"),
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Passport(),
+            )
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = passportState,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.PASSPORT,
+                ),
+            )
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+                assertEquals(
+                    VaultAddEditEvent.ShowSnackbar(
+                        message = BitwardenString.an_error_has_occurred.asText(),
+                    ),
+                    awaitItem(),
+                )
+            }
+            assertEquals(passportState, viewModel.stateFlow.value)
+            coVerify(exactly = 0) {
+                vaultRepository.createCipher(any())
+                vaultRepository.createCipherInOrganization(any(), any())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in add mode, SaveClick with a Bank Account item should not short-circuit and should run validation`() =
+        runTest {
+            mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
+            val bankAccountState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.BANK_ACCOUNT,
+                commonContentViewState = createCommonContentViewState(name = ""),
+                typeContentViewState =
+                    VaultAddEditState.ViewState.Content.ItemType.BankAccount(),
+            )
+            val expectedValidationDialogState = bankAccountState.copy(
+                dialog = VaultAddEditState.DialogState.Generic(
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.validation_field_required
+                        .asText(BitwardenString.name.asText()),
+                ),
+            )
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = bankAccountState,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.BANK_ACCOUNT,
+                ),
+            )
+
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+                assertEquals(bankAccountState, stateFlow.awaitItem())
+                assertEquals(expectedValidationDialogState, stateFlow.awaitItem())
+                eventFlow.expectNoEvents()
+            }
+        }
+
+    @Test
+    fun `ItemType BankAccount should expose BANK_ACCOUNT itemTypeOption and be SDK supported`() {
+        val itemType = VaultAddEditState.ViewState.Content.ItemType.BankAccount()
+        assertEquals(
+            VaultAddEditState.ItemTypeOption.BANK_ACCOUNT,
+            itemType.itemTypeOption,
+        )
+        assertTrue(itemType.isSdkSupported)
+        assertTrue(itemType.vaultLinkedFieldTypes.isEmpty())
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ItemType DriversLicense should expose DRIVERS_LICENSE itemTypeOption and not be SDK supported`() {
+        val itemType = VaultAddEditState.ViewState.Content.ItemType.DriversLicense()
+        assertEquals(
+            VaultAddEditState.ItemTypeOption.DRIVERS_LICENSE,
+            itemType.itemTypeOption,
+        )
+        assertFalse(itemType.isSdkSupported)
+        assertTrue(itemType.vaultLinkedFieldTypes.isEmpty())
+    }
+
+    @Test
+    fun `ItemType Passport should expose PASSPORT itemTypeOption and not be SDK supported`() {
+        val itemType = VaultAddEditState.ViewState.Content.ItemType.Passport()
+        assertEquals(
+            VaultAddEditState.ItemTypeOption.PASSPORT,
+            itemType.itemTypeOption,
+        )
+        assertFalse(itemType.isSdkSupported)
+        assertTrue(itemType.vaultLinkedFieldTypes.isEmpty())
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `screenDisplayName should resolve new title strings for new vault item types in add mode`() {
+        val baseAddState = createVaultAddItemState(vaultAddEditType = VaultAddEditType.AddItem)
+        assertEquals(
+            BitwardenString.new_bank_account.asText(),
+            baseAddState.copy(cipherType = VaultItemCipherType.BANK_ACCOUNT).screenDisplayName,
+        )
+        assertEquals(
+            BitwardenString.new_drivers_license.asText(),
+            baseAddState.copy(cipherType = VaultItemCipherType.DRIVERS_LICENSE).screenDisplayName,
+        )
+        assertEquals(
+            BitwardenString.new_passport.asText(),
+            baseAddState.copy(cipherType = VaultItemCipherType.PASSPORT).screenDisplayName,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `screenDisplayName should resolve new title strings for new vault item types in edit mode`() {
+        val baseEditState = createVaultAddItemState(
+            vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+        )
+        assertEquals(
+            BitwardenString.edit_bank_account.asText(),
+            baseEditState.copy(cipherType = VaultItemCipherType.BANK_ACCOUNT).screenDisplayName,
+        )
+        assertEquals(
+            BitwardenString.edit_drivers_license.asText(),
+            baseEditState.copy(cipherType = VaultItemCipherType.DRIVERS_LICENSE).screenDisplayName,
+        )
+        assertEquals(
+            BitwardenString.edit_passport.asText(),
+            baseEditState.copy(cipherType = VaultItemCipherType.PASSPORT).screenDisplayName,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `screenDisplayName should resolve new title strings for new vault item types in clone mode`() {
+        val baseCloneState = createVaultAddItemState(
+            vaultAddEditType = VaultAddEditType.CloneItem(DEFAULT_EDIT_ITEM_ID),
+        )
+        assertEquals(
+            BitwardenString.new_bank_account.asText(),
+            baseCloneState.copy(cipherType = VaultItemCipherType.BANK_ACCOUNT).screenDisplayName,
+        )
+        assertEquals(
+            BitwardenString.new_drivers_license.asText(),
+            baseCloneState.copy(cipherType = VaultItemCipherType.DRIVERS_LICENSE).screenDisplayName,
+        )
+        assertEquals(
+            BitwardenString.new_passport.asText(),
+            baseCloneState.copy(cipherType = VaultItemCipherType.PASSPORT).screenDisplayName,
+        )
+    }
+
     @Test
     fun `ArchiveClick without Premium should show ArchiveRequiresPremium dialog`() = runTest {
         val cipherListView = createMockCipherListView(number = 1, isArchived = false)

@@ -294,7 +294,6 @@
     <string name="field_type_text">Szöveg</string>
     <string name="select_type_field">Milyen típusú egyéni mező legyen hozzáadva?</string>
     <string name="remove">Eltávolítás</string>
-    <string name="new_uri">Új URI</string>
     <string name="add_website">Webhely hozzáadása</string>
     <string name="base_domain">Alap domain</string>
     <string name="default_text">Alapértelmezett (%1$s)</string>
@@ -666,7 +665,9 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="you_will_be_notified_once_approved">A jóváhagyás után értesítés érkezik.</string>
     <string name="trouble_logging_in">Probléma van a bejelentkezéssel?</string>
     <string name="block_auto_fill">Automatikus kitöltés blokkolása</string>
+    <string name="no_uris_blocked">Nincs blokkolt URI.</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Az automatikus kitöltés nem kerül felajánlásra ezeknél a webcímeknél.</string>
+    <string name="edit_blocked_uri">Blokkolt URI szerkesztése</string>
     <string name="new_blocked_uri">Új blokkolt URI</string>
     <string name="invalid_format_use_https_http_or_android_app">A formátum érvénytelen. Használjuk a https://, http:// vagy androidapp:// elemet.</string>
     <string name="enter_uri">URI megadása</string>
@@ -1075,6 +1076,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="security">Biztonság</string>
     <string name="too_many_failed_biometric_attempts">Túl sok sikertelen biometrikus kísérlet történt.</string>
     <string name="version">Verzió</string>
+    <string name="version_x" comment="%1$s is the version string (e.g. 2025.1.0 (1234)).">Verzió: %1$s</string>
     <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">További információ a Bitwarden Authenticator használatáról a Súgóban.</string>
     <string name="key">Kulcs</string>
     <string name="create_verification_code">Ellenőrző kód létrehozása</string>
@@ -1209,6 +1211,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="archive_unavailable">Az archívum nem elérhető.</string>
     <string name="archiving_items_is_a_premium_feature">Az elemek archiválása prémium funkció. A jelenlegi csomag nem tartalmazza a hozzáférést ehhez a funkcióhoz.</string>
     <string name="upgrade_to_premium">Áttérés Prémium csomagra</string>
+    <string name="plan">Csomag</string>
     <string name="unlock_advanced_security_features">Fejlett biztonsági funkciók feloldása</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Prémium előfizetés több eszközt biztosít a biztonság és az irányítás megőrzéséhez.</string>
     <string name="this_item_is_archived">Ez az elem archiválva van.</string>
@@ -1238,6 +1241,9 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="preview_unavailable">Az előnézet nem érhető el.</string>
     <string name="download_attachment">Melléklet letöltése</string>
     <string name="upgraded_to_premium">Áttérés Prémium csomagra</string>
+    <string name="confirming_your_upgrade">A frissítés megerősítése...</string>
+    <string name="upgrade_pending">Függő áttérés</string>
+    <string name="upgrade_pending_message">Az áttérés feldolgozása folyamatban van. Az ingyenes csomag marad, amíg az be nem fejeződik. Szinkronizáljunk most az ellenőrzéshez vagy a folytatáshoz, és az áttérés automatikus.</string>
     <string name="unlock_premium_features">Fejlettebb funkciók feloldása Prémium csomaggal.</string>
     <string name="per_month">/ hónap</string>
     <string name="built_in_authenticator">Beépített hitelesítő</string>
@@ -1257,4 +1263,35 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="show_next_code">Következő kód megjelenítése</string>
     <string name="see_upcoming_codes_in_the_list">Lásd a következő kódokat a listában</string>
     <string name="next_code_x">Következő kód, %1$s</string>
+    <string name="archive_item">Elem archiválása</string>
+    <string name="once_archived_this_item_will_be_excluded">Az archiválás után ez az elem kizárásra kerül a keresési eredményekből és az automatikus kitöltési javaslatokból.</string>
+    <string name="pricing_unavailable">Az árazás nem érhető el.</string>
+    <string name="current_plan">Jelenlegi csomag</string>
+    <string name="premium_plan_name">Prémium</string>
+    <string name="billing_amount">Számlázott összeg</string>
+    <string name="storage_cost">Tárolási költség</string>
+    <string name="discount">Kedvezmény</string>
+    <string name="estimated_tax">Becsült adó</string>
+    <string name="billing_rate_per_year">%1$s / év</string>
+    <string name="billing_rate_per_month">%1$s / hónap</string>
+    <string name="manage_plan">Csomag kezelés</string>
+    <string name="cancel_premium">Prémium lemondása</string>
+    <string name="cancel_now">Lemondás most</string>
+    <string name="cancel_premium_confirmation">Továbbra is prémium hozzáféréssel rendelkezünkk %1$s időpontig.</string>
+    <string name="subscription_status_active">Bekapcsolva</string>
+    <string name="subscription_status_canceled">Megszakítva</string>
+    <string name="subscription_status_overdue_payment">Késedelmes fizetés</string>
+    <string name="subscription_status_past_due">Határidőn túl</string>
+    <string name="subscription_status_paused">Felfüggesztve</string>
+    <string name="premium_next_charge_summary">A következő %1$s USD díj esedékessége: %2$s.</string>
+    <string name="subscription_canceled_description">Az előfizetés %1$s időponttal törlésre került. Iratkozzunk fel újra a prémium funkciók használatának folytatásához.</string>
+    <string name="subscription_overdue_description">Nem lehetett feldolgozni a fizetést. Frissítsük a fizetési módot, mielőtt az előfizetés lejár: %1$s.</string>
+    <string name="subscription_past_due_description">Az előfizetés lejárati dátumától számítva %1$d türelmi idő áll rendelkezésre. Rendezzük a múltbeli esedékes számlákat %2$s határidőig.</string>
+    <string name="subscription_paused_description">Az előfizetés szünetel. Összefoglaló a prémium funkciók használatának folytatásához.</string>
+    <string name="loading_subscription">Előfizetés betöltése…</string>
+    <string name="loading_portal">Portál betöltése…</string>
+    <string name="portal_error">Valami hiba lépett fel</string>
+    <string name="trouble_loading_portal">Problémák adódtak a fizetési oldal megnyitásával, úgyhogy próbáljuk újra.</string>
+    <string name="subscription_error">Előfizetési hiba</string>
+    <string name="trouble_loading_subscription">Nem lehetett betölteni az előfizetési adatokat. Próbáljuk újra.</string>
 </resources>

@@ -53,6 +53,10 @@ private const val INTRODUCING_ARCHIVE_ACTION_CARD_DISMISSED =
     "introducingArchiveActionCardDismissed"
 private const val PREMIUM_UPGRADE_BANNER_DISMISSED =
     "premiumUpgradeBannerDismissed"
+private const val UPGRADED_TO_PREMIUM_CARD_CONSUMED =
+    "upgradedToPremiumCardConsumed"
+private const val UPGRADED_TO_PREMIUM_CARD_PENDING =
+    "upgradedToPremiumCardPending"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -95,6 +99,12 @@ class SettingsDiskSourceImpl(
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutablePremiumUpgradeBannerDismissedFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableUpgradedToPremiumCardConsumedFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableUpgradedToPremiumCardPendingFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutableIsIconLoadingDisabledFlow = bufferedMutableSharedFlow<Boolean?>()
@@ -252,6 +262,8 @@ class SettingsDiskSourceImpl(
         // - should show generator coach mark
         // - should show introducing archive action card dismissed
         // - Premium upgrade banner dismissed
+        // - Upgraded to Premium action card consumed
+        // - Upgraded to Premium action card pending
     }
 
     override fun getIntroducingArchiveActionCardDismissed(userId: String): Boolean? =
@@ -293,6 +305,46 @@ class SettingsDiskSourceImpl(
     override fun getPremiumUpgradeBannerDismissedFlow(userId: String): Flow<Boolean?> =
         getMutablePremiumUpgradeBannerDismissedFlow(userId = userId)
             .onSubscription { emit(getPremiumUpgradeBannerDismissed(userId = userId)) }
+
+    override fun getUpgradedToPremiumCardConsumed(userId: String): Boolean? =
+        getBoolean(
+            key = UPGRADED_TO_PREMIUM_CARD_CONSUMED.appendIdentifier(identifier = userId),
+        )
+
+    override fun storeUpgradedToPremiumCardConsumed(
+        userId: String,
+        isConsumed: Boolean?,
+    ) {
+        putBoolean(
+            key = UPGRADED_TO_PREMIUM_CARD_CONSUMED.appendIdentifier(identifier = userId),
+            value = isConsumed,
+        )
+        getMutableUpgradedToPremiumCardConsumedFlow(userId = userId).tryEmit(isConsumed)
+    }
+
+    override fun getUpgradedToPremiumCardConsumedFlow(userId: String): Flow<Boolean?> =
+        getMutableUpgradedToPremiumCardConsumedFlow(userId = userId)
+            .onSubscription { emit(getUpgradedToPremiumCardConsumed(userId = userId)) }
+
+    override fun getUpgradedToPremiumCardPending(userId: String): Boolean? =
+        getBoolean(
+            key = UPGRADED_TO_PREMIUM_CARD_PENDING.appendIdentifier(identifier = userId),
+        )
+
+    override fun storeUpgradedToPremiumCardPending(
+        userId: String,
+        isPending: Boolean?,
+    ) {
+        putBoolean(
+            key = UPGRADED_TO_PREMIUM_CARD_PENDING.appendIdentifier(identifier = userId),
+            value = isPending,
+        )
+        getMutableUpgradedToPremiumCardPendingFlow(userId = userId).tryEmit(isPending)
+    }
+
+    override fun getUpgradedToPremiumCardPendingFlow(userId: String): Flow<Boolean?> =
+        getMutableUpgradedToPremiumCardPendingFlow(userId = userId)
+            .onSubscription { emit(getUpgradedToPremiumCardPending(userId = userId)) }
 
     override fun getAccountBiometricIntegrityValidity(
         userId: String,
@@ -642,6 +694,20 @@ class SettingsDiskSourceImpl(
         userId: String,
     ): MutableSharedFlow<Boolean?> =
         mutablePremiumUpgradeBannerDismissedFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableUpgradedToPremiumCardConsumedFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutableUpgradedToPremiumCardConsumedFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableUpgradedToPremiumCardPendingFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutableUpgradedToPremiumCardPendingFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 

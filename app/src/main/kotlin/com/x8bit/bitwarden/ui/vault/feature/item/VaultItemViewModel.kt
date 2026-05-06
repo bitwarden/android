@@ -1449,6 +1449,9 @@ data class VaultItemState(
             VaultItemCipherType.IDENTITY -> BitwardenString.view_identity.asText()
             VaultItemCipherType.SECURE_NOTE -> BitwardenString.view_note.asText()
             VaultItemCipherType.SSH_KEY -> BitwardenString.view_ssh_key.asText()
+            VaultItemCipherType.BANK_ACCOUNT -> BitwardenString.view_bank_account.asText()
+            VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.view_drivers_license.asText()
+            VaultItemCipherType.PASSPORT -> BitwardenString.view_passport.asText()
         }
 
     /**
@@ -1868,6 +1871,52 @@ data class VaultItemState(
                     val privateKey: String,
                     val fingerprint: String,
                     val showPrivateKey: Boolean,
+                ) : ItemType()
+
+                /**
+                 * Represents the `BankAccount` item type.
+                 */
+                data class BankAccount(
+                    val bankName: String?,
+                    val nameOnAccount: String?,
+                    val accountType: String?,
+                    val accountNumber: String?,
+                    val routingNumber: String?,
+                    val branchNumber: String?,
+                    val pin: String?,
+                    val swiftCode: String?,
+                    val iban: String?,
+                    val bankContactPhone: String?,
+                ) : ItemType()
+
+                /**
+                 * Represents the `DriversLicense` item type.
+                 */
+                data class DriversLicense(
+                    val firstName: String?,
+                    val middleName: String?,
+                    val lastName: String?,
+                    val licenseNumber: String?,
+                    val issuingCountry: String?,
+                    val issuingState: String?,
+                    val expirationDate: String?,
+                    val licenseClass: String?,
+                ) : ItemType()
+
+                /**
+                 * Represents the `Passport` item type.
+                 */
+                data class Passport(
+                    val surname: String?,
+                    val givenName: String?,
+                    val dateOfBirth: String?,
+                    val nationality: String?,
+                    val passportNumber: String?,
+                    val passportType: String?,
+                    val issuingCountry: String?,
+                    val issuingAuthority: String?,
+                    val issueDate: String?,
+                    val expirationDate: String?,
                 ) : ItemType()
             }
         }

@@ -26,6 +26,7 @@ import androidx.navigation.compose.NavHost
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.platform.util.setHorizonOSAppLayout
 import com.bitwarden.ui.platform.util.setupEdgeToEdge
 import com.bitwarden.ui.platform.util.validate
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityCompletionManager
@@ -211,6 +212,16 @@ class MainActivity : AppCompatActivity() {
         .actionOnInputEvent(event = event, action = ::sendOpenDebugMenuEvent)
         .takeIf { it }
         ?: super.dispatchKeyEvent(event)
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        // resize only one time at the start
+        if (!mainViewModel.stateFlow.value.hasResizeBeenRequested) {
+            setHorizonOSAppLayout {
+                mainViewModel.trySendAction(MainAction.Internal.ResizeHasBeenRequested)
+            }
+        }
+    }
 
     @Composable
     private fun SetupEventsEffect(navController: NavController) {

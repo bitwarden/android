@@ -26,4 +26,13 @@ fun VaultItemCipherType.toItemType(): VaultAddEditState.ViewState.Content.ItemTy
         VaultItemCipherType.IDENTITY -> VaultAddEditState.ViewState.Content.ItemType.Identity()
         VaultItemCipherType.SECURE_NOTE -> VaultAddEditState.ViewState.Content.ItemType.SecureNotes
         VaultItemCipherType.SSH_KEY -> VaultAddEditState.ViewState.Content.ItemType.SshKey()
+        VaultItemCipherType.BANK_ACCOUNT -> {
+            VaultAddEditState.ViewState.Content.ItemType.BankAccount()
+        }
+        VaultItemCipherType.DRIVERS_LICENSE -> {
+            VaultAddEditState.ViewState.Content.ItemType.DriversLicense()
+        }
+        VaultItemCipherType.PASSPORT -> {
+            VaultAddEditState.ViewState.Content.ItemType.Passport()
+        }
     }

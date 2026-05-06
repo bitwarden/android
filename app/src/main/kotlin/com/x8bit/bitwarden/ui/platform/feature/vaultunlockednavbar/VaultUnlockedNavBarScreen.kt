@@ -70,6 +70,7 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
     onNavigateToPlan: () -> Unit,
+    onNavigateToUpgradedToPremium: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -111,6 +112,7 @@ fun VaultUnlockedNavBarScreen(
         onNavigateToRecordedLogs = onNavigateToRecordedLogs,
         onNavigateToAboutPrivilegedApps = onNavigateToAboutPrivilegedApps,
         onNavigateToPlan = onNavigateToPlan,
+        onNavigateToUpgradedToPremium = onNavigateToUpgradedToPremium,
     )
 }
 
@@ -147,6 +149,7 @@ private fun VaultUnlockedNavBarScaffold(
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
     onNavigateToPlan: () -> Unit,
+    onNavigateToUpgradedToPremium: () -> Unit,
 ) {
     var shouldDimNavBar by rememberSaveable { mutableStateOf(value = false) }
 
@@ -232,6 +235,7 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToFlightRecorder = onNavigateToFlightRecorder,
                 onNavigateToRecordedLogs = onNavigateToRecordedLogs,
                 onNavigateToAboutPrivilegedApps = onNavigateToAboutPrivilegedApps,
+                onNavigateToUpgradedToPremium = onNavigateToUpgradedToPremium,
             )
         }
     }

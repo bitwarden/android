@@ -56,7 +56,7 @@ import kotlinx.collections.immutable.persistentListOf
 /**
  * UI for the send screen.
  */
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SendScreen(
@@ -117,6 +117,7 @@ fun SendScreen(
             is SendEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
             SendEvent.NavigateToFileSends -> onNavigateToSendFilesList()
             SendEvent.NavigateToTextSends -> onNavigateToSendTextList()
+            is SendEvent.NavigateToUrl -> intentManager.launchUri(event.url.toUri())
         }
     }
 
@@ -179,20 +180,26 @@ fun SendScreen(
         pullToRefreshState = pullToRefreshState,
         snackbarHost = { BitwardenSnackbarHost(bitwardenHostState = snackbarHostState) },
     ) {
-        val modifier = Modifier
-            .fillMaxSize()
+        val contentModifier = Modifier.fillMaxSize()
         when (val viewState = state.viewState) {
             is SendState.ViewState.Content -> SendContent(
                 policyDisablesSend = state.policyDisablesSend,
                 state = viewState,
+                isUpgradedToPremiumCardEligible = state.isUpgradedToPremiumCardEligible,
                 sendHandlers = sendHandlers,
-                modifier = modifier,
+                onUpgradedToPremiumCardClick = {
+                    viewModel.trySendAction(SendAction.UpgradedToPremiumCardClick)
+                },
+                onUpgradedToPremiumCardDismiss = {
+                    viewModel.trySendAction(SendAction.UpgradedToPremiumCardDismiss)
+                },
+                modifier = contentModifier,
             )
 
             SendState.ViewState.Empty -> SendEmpty(
                 policyDisablesSend = state.policyDisablesSend,
                 onAddItemClick = { viewModel.trySendAction(SendAction.AddSendClick) },
-                modifier = modifier,
+                modifier = contentModifier,
             )
 
             is SendState.ViewState.Error -> BitwardenErrorContent(
@@ -201,10 +208,12 @@ fun SendScreen(
                     label = BitwardenString.try_again.asText(),
                     onClick = { viewModel.trySendAction(SendAction.RefreshClick) },
                 ),
-                modifier = modifier,
+                modifier = contentModifier,
             )
 
-            SendState.ViewState.Loading -> BitwardenLoadingContent(modifier = modifier)
+            SendState.ViewState.Loading -> BitwardenLoadingContent(
+                modifier = contentModifier,
+            )
         }
     }
 }

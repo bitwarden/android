@@ -230,19 +230,26 @@ class VaultViewModelTest : BaseViewModelTest() {
         coEvery { unregister() } returns UnregisterExportResult.Success
     }
     private val mutableCxpExportFeatureFlagFlow = MutableStateFlow(false)
+    private val mutableNewItemTypesFlagFlow = MutableStateFlow(false)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every {
             getFeatureFlagFlow(FlagKey.CredentialExchangeProtocolExport)
         } returns mutableCxpExportFeatureFlagFlow
+        every { getFeatureFlag(FlagKey.NewItemTypes) } answers { mutableNewItemTypesFlagFlow.value }
     }
 
     private val mutablePremiumUpgradeBannerEligibleFlow = MutableStateFlow(false)
+    private val mutableUpgradedToPremiumCardEligibleFlow = MutableStateFlow(false)
     private val premiumStateManager: PremiumStateManager = mockk {
         every {
             isPremiumUpgradeBannerEligibleFlow
         } returns mutablePremiumUpgradeBannerEligibleFlow
+        every {
+            isUpgradedToPremiumCardEligibleFlow
+        } returns mutableUpgradedToPremiumCardEligibleFlow
         every { isInAppUpgradeAvailable() } returns false
         every { dismissPremiumUpgradeBanner() } just runs
+        every { dismissUpgradedToPremiumCard() } just runs
     }
 
     @AfterEach
@@ -459,6 +466,61 @@ class VaultViewModelTest : BaseViewModelTest() {
             state.actionCard,
         )
     }
+
+    @Test
+    fun `actionCard should return UpgradedToPremium when eligible and content is showing`() {
+        val contentViewState = DEFAULT_CONTENT_VIEW_STATE
+        val state = createMockVaultState(viewState = contentViewState).copy(
+            isUpgradedToPremiumCardEligible = true,
+            isPremiumUpgradeBannerEligible = true,
+            isPremium = true,
+            isIntroducingArchiveActionCardDismissed = false,
+        )
+
+        assertEquals(
+            VaultState.ActionCardState.UpgradedToPremium,
+            state.actionCard,
+        )
+    }
+
+    @Test
+    fun `DismissActionCardClick with UpgradedToPremium should call dismissUpgradedToPremiumCard`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                VaultAction.DismissActionCardClick(
+                    VaultState.ActionCardState.UpgradedToPremium,
+                ),
+            )
+
+            verify(exactly = 1) {
+                premiumStateManager.dismissUpgradedToPremiumCard()
+            }
+        }
+
+    @Test
+    fun `ActionCardClick with UpgradedToPremium dismisses card and emits NavigateToUrl`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultAction.ActionCardClick(
+                        VaultState.ActionCardState.UpgradedToPremium,
+                    ),
+                )
+                assertEquals(
+                    VaultEvent.NavigateToUrl(
+                        url = "https://bitwarden.com/help/password-manager-plans/",
+                    ),
+                    awaitItem(),
+                )
+            }
+            verify(exactly = 1) {
+                premiumStateManager.dismissUpgradedToPremiumCard()
+            }
+        }
 
     @Test
     fun `actionCard should return IntroducingArchive when not eligible for Premium upgrade`() {
@@ -1476,7 +1538,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     noFolderItems = listOf(),
                     trashItemsCount = 0,
                     totpItemsCount = 0,
-                    itemTypesCount = 6,
+                    itemTypesCount = CipherType.entries.size,
                     sshKeyItemsCount = 0,
                     archivedItemsCount = 0,
                     archiveSubText = null,
@@ -1614,7 +1676,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     noFolderItems = listOf(),
                     trashItemsCount = 0,
                     totpItemsCount = 0,
-                    itemTypesCount = 6,
+                    itemTypesCount = CipherType.entries.size,
                     sshKeyItemsCount = 0,
                     archivedItemsCount = 0,
                     archiveSubText = null,
@@ -1754,7 +1816,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
                         totpItemsCount = 0,
-                        itemTypesCount = 6,
+                        itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = 0,
                         archiveSubText = null,
@@ -1821,7 +1883,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
                         totpItemsCount = 0,
-                        itemTypesCount = 6,
+                        itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = 0,
                         archiveSubText = null,
@@ -1936,7 +1998,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
                         totpItemsCount = 0,
-                        itemTypesCount = 6,
+                        itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = 0,
                         archiveSubText = null,
@@ -2260,7 +2322,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
                         totpItemsCount = 0,
-                        itemTypesCount = 6,
+                        itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = null,
                         archiveSubText = BitwardenString.premium_subscription_required.asText(),
@@ -2366,7 +2428,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
                         totpItemsCount = 0,
-                        itemTypesCount = 6,
+                        itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = 1,
                         archiveSubText = null,
@@ -2438,7 +2500,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
                         totpItemsCount = 0,
-                        itemTypesCount = 6,
+                        itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = 0,
                         archiveSubText = null,
@@ -3543,7 +3605,12 @@ class VaultViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultAction.SelectAddItemType)
         val expectedState = DEFAULT_STATE.copy(
             dialog = VaultState.DialogState.SelectVaultAddItemType(
-                excludedOptions = persistentListOf(CreateVaultItemType.SSH_KEY),
+                excludedOptions = persistentListOf(
+                    CreateVaultItemType.SSH_KEY,
+                    CreateVaultItemType.BANK_ACCOUNT,
+                    CreateVaultItemType.DRIVERS_LICENSE,
+                    CreateVaultItemType.PASSPORT,
+                ),
             ),
         )
         assertEquals(
@@ -3575,6 +3642,9 @@ class VaultViewModelTest : BaseViewModelTest() {
                     excludedOptions = persistentListOf(
                         CreateVaultItemType.SSH_KEY,
                         CreateVaultItemType.CARD,
+                        CreateVaultItemType.BANK_ACCOUNT,
+                        CreateVaultItemType.DRIVERS_LICENSE,
+                        CreateVaultItemType.PASSPORT,
                     ),
                 ),
                 restrictItemTypesPolicyOrgIds = listOf("Test Organization"),
@@ -3584,6 +3654,25 @@ class VaultViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value,
             )
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SelectAddItemType action should not exclude bank account, drivers license, or passport when NewItemTypes flag is enabled`() {
+        mutableNewItemTypesFlagFlow.value = true
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(VaultAction.SelectAddItemType)
+
+        val expectedState = DEFAULT_STATE.copy(
+            dialog = VaultState.DialogState.SelectVaultAddItemType(
+                excludedOptions = persistentListOf(CreateVaultItemType.SSH_KEY),
+            ),
+        )
+        assertEquals(
+            expectedState,
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Test
     fun `InternetConnectionErrorReceived should show network error if no internet connection`() =
@@ -3737,7 +3826,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
                         totpItemsCount = 0,
-                        itemTypesCount = 6,
+                        itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = 0,
                         archiveSubText = null,
@@ -3800,7 +3889,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
                         totpItemsCount = 0,
-                        itemTypesCount = 6,
+                        itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 0,
                         archivedItemsCount = 0,
                         archiveSubText = null,
@@ -3926,7 +4015,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 awaitItem()
 
                 val contentViewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                    itemTypesCount = 6,
+                    itemTypesCount = 8,
                     totpItemsCount = validTotpIds.size,
                     loginItemsCount = 1,
                     archivedItemsCount = 0,
@@ -3960,6 +4049,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             coEvery {
                 vaultRepository.getValidTotpCipherIds(isPremium = false, time = clock.instant())
             } returns validTotpIds
+
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
@@ -3983,7 +4073,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 awaitItem()
 
                 val contentViewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                    itemTypesCount = 6,
+                    itemTypesCount = 8,
                     loginItemsCount = 1,
                     totpItemsCount = validTotpIds.size,
                     archivedItemsCount = null,

@@ -16,6 +16,7 @@ import androidx.credentials.provider.PublicKeyCredentialEntry
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
@@ -71,6 +72,7 @@ import com.x8bit.bitwarden.data.credentials.model.createMockGetCredentialsReques
 import com.x8bit.bitwarden.data.credentials.model.createMockProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
@@ -299,6 +301,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
     private val premiumStateManager: PremiumStateManager = mockk {
         every { isInAppUpgradeAvailable() } returns false
+    }
+    private val mutableNewItemTypesFlow = MutableStateFlow(false)
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every { getFeatureFlag(FlagKey.NewItemTypes) } answers { mutableNewItemTypesFlow.value }
     }
 
     @BeforeEach
@@ -1622,8 +1628,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
                 dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
                     excludedOptions = persistentListOf(
-                        CreateVaultItemType.SSH_KEY,
                         CreateVaultItemType.FOLDER,
+                        CreateVaultItemType.SSH_KEY,
+                        CreateVaultItemType.BANK_ACCOUNT,
+                        CreateVaultItemType.DRIVERS_LICENSE,
+                        CreateVaultItemType.PASSPORT,
                     ),
                 ),
             ),
@@ -1646,8 +1655,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
                 dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
                     excludedOptions = persistentListOf(
-                        CreateVaultItemType.SSH_KEY,
                         CreateVaultItemType.FOLDER,
+                        CreateVaultItemType.SSH_KEY,
+                        CreateVaultItemType.BANK_ACCOUNT,
+                        CreateVaultItemType.DRIVERS_LICENSE,
+                        CreateVaultItemType.PASSPORT,
                     ),
                 ),
             ),
@@ -1686,6 +1698,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                             CreateVaultItemType.CARD,
                             CreateVaultItemType.FOLDER,
                             CreateVaultItemType.SSH_KEY,
+                            CreateVaultItemType.BANK_ACCOUNT,
+                            CreateVaultItemType.DRIVERS_LICENSE,
+                            CreateVaultItemType.PASSPORT,
                         ),
                     ),
                 ).copy(restrictItemTypesPolicyOrgIds = persistentListOf("Test Organization")),
@@ -1724,12 +1739,43 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                             CreateVaultItemType.CARD,
                             CreateVaultItemType.FOLDER,
                             CreateVaultItemType.SSH_KEY,
+                            CreateVaultItemType.BANK_ACCOUNT,
+                            CreateVaultItemType.DRIVERS_LICENSE,
+                            CreateVaultItemType.PASSPORT,
                         ),
                     ),
                 ).copy(restrictItemTypesPolicyOrgIds = persistentListOf("Test Organization")),
                 viewModel.stateFlow.value,
             )
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `AddVaultItemClick should not exclude bank account, drivers license, or passport when NewItemTypes flag is enabled`() {
+        mutableNewItemTypesFlow.value = true
+        val viewModel = createVaultItemListingViewModel(
+            savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                vaultItemListingType = VaultItemListingType.Folder(folderId = "id"),
+            ),
+        )
+
+        viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
+
+        assertEquals(
+            createVaultItemListingState(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Folder(
+                    folderId = "id",
+                ),
+                dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
+                    excludedOptions = persistentListOf(
+                        CreateVaultItemType.FOLDER,
+                        CreateVaultItemType.SSH_KEY,
+                    ),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Test
     fun `AddVaultItemClick for vault item should emit NavigateToAddVaultItem`() = runTest {
@@ -6192,6 +6238,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             toastManager = toastManager,
             premiumStateManager = premiumStateManager,
             relyingPartyParser = relyingPartyParser,
+            featureFlagManager = featureFlagManager,
         )
 
     @Suppress("MaxLineLength")

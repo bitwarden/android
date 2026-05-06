@@ -7,7 +7,6 @@ import com.bitwarden.network.model.PreLoginResponseJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
 import com.bitwarden.network.model.RefreshTokenResponseJson
 import com.bitwarden.network.model.RegisterFinishRequestJson
-import com.bitwarden.network.model.RegisterRequestJson
 import com.bitwarden.network.model.RegisterResponseJson
 import com.bitwarden.network.model.SendVerificationEmailRequestJson
 import com.bitwarden.network.model.VerifyEmailTokenRequestJson
@@ -67,11 +66,6 @@ internal interface UnauthenticatedIdentityApi {
 
     @POST("/accounts/prelogin")
     suspend fun preLogin(@Body body: PreLoginRequestJson): NetworkResult<PreLoginResponseJson>
-
-    @POST("/accounts/register")
-    suspend fun register(
-        @Body body: RegisterRequestJson,
-    ): NetworkResult<RegisterResponseJson.Success>
 
     @POST("/accounts/register/finish")
     suspend fun registerFinish(

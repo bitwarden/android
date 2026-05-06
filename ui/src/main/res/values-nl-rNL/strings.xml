@@ -295,7 +295,6 @@ Het scannen gebeurt automatisch.</string>
     <string name="field_type_text">Tekst</string>
     <string name="select_type_field">Welk type aangepast veld wil je toevoegen?</string>
     <string name="remove">Verwijderen</string>
-    <string name="new_uri">Nieuwe URI</string>
     <string name="add_website">Website toevoegen</string>
     <string name="base_domain">Basisdomein</string>
     <string name="default_text">Standaard (%1$s)</string>
@@ -667,7 +666,9 @@ Wilt u naar dit account wisselen?</string>
     <string name="you_will_be_notified_once_approved">Je krijgt een melding zodra je bent goedgekeurd.</string>
     <string name="trouble_logging_in">Problemen met inloggen?</string>
     <string name="block_auto_fill">Automatisch aanvullen blokkeren</string>
+    <string name="no_uris_blocked">Geen URI\'s geblokkeerd</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Automatisch is uitgeschakeld voor deze URIs.</string>
+    <string name="edit_blocked_uri">Geblokkeerde URI bewerken</string>
     <string name="new_blocked_uri">Nieuwe geblokkeerde URI</string>
     <string name="invalid_format_use_https_http_or_android_app">Ongeldig formaat. Gebruik https://, http://, or androidapp://</string>
     <string name="enter_uri">URI invoeren</string>
@@ -1076,6 +1077,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="security">Beveiliging</string>
     <string name="too_many_failed_biometric_attempts">Te veel mislukte biometriepogingen.</string>
     <string name="version">Versie</string>
+    <string name="version_x" comment="%1$s is the version string (e.g. 2025.1.0 (1234)).">Versie: %1$s</string>
     <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">Lees meer over het gebruik van Bitwarden Authenticator in het Helpcentrum.</string>
     <string name="key">Sleutel</string>
     <string name="create_verification_code">Verificatiecode aanmaken</string>
@@ -1210,6 +1212,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="archive_unavailable">Archief niet beschikbaar</string>
     <string name="archiving_items_is_a_premium_feature">Het archiveren van items is een Premium-functie. Toegang tot deze functie is niet inbegrepen in je huidige abonnement.</string>
     <string name="upgrade_to_premium">Naar Premium upgraden</string>
+    <string name="plan">Abonnement</string>
     <string name="unlock_advanced_security_features">Geavanceerde beveiligingsfuncties ontgrendelen</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Een Premium-abonnement geeft je meer tools om veilig en in controle te blijven.</string>
     <string name="this_item_is_archived">Dit item is gearchiveerd.</string>
@@ -1239,6 +1242,9 @@ Wilt u naar dit account wisselen?</string>
     <string name="preview_unavailable">Voorbeeld niet beschikbaar</string>
     <string name="download_attachment">Bijlage downloaden</string>
     <string name="upgraded_to_premium">Naar Premium opgewaardeerd</string>
+    <string name="confirming_your_upgrade">Je upgrade aan het bevestigen…</string>
+    <string name="upgrade_pending">Upgrade in behandeling</string>
+    <string name="upgrade_pending_message">Je upgrade wordt verwerkt. Je werkt met het gratis abonnement totdat het is afgerond. Synchroniseer nu om te controleren, of ga door waarna de upgrade automatisch zal worden verwerkt.</string>
     <string name="unlock_premium_features">Ontgrendel meer geavanceerde functies met een Premium-abonnement.</string>
     <string name="per_month">/ maand</string>
     <string name="built_in_authenticator">Ingebouwde authenticator</string>
@@ -1258,4 +1264,35 @@ Wilt u naar dit account wisselen?</string>
     <string name="show_next_code">Volgende code tonen</string>
     <string name="see_upcoming_codes_in_the_list">Bekijk volgende codes in de lijst</string>
     <string name="next_code_x">Volgende code, %1$s</string>
+    <string name="archive_item">Item archiveren</string>
+    <string name="once_archived_this_item_will_be_excluded">Eenmaal gearchiveerd wordt dit item uitgesloten van zoekresultaten en suggesties voor automatisch invullen.</string>
+    <string name="pricing_unavailable">Prijzen niet beschikbaar</string>
+    <string name="current_plan">Current plan</string>
+    <string name="premium_plan_name">Premium</string>
+    <string name="billing_amount">Factuurbedrag</string>
+    <string name="storage_cost">Kosten voor opslag</string>
+    <string name="discount">Korting</string>
+    <string name="estimated_tax">Geschatte belasting</string>
+    <string name="billing_rate_per_year">%1$s / year</string>
+    <string name="billing_rate_per_month">%1$s / month</string>
+    <string name="manage_plan">Abonnement beheren</string>
+    <string name="cancel_premium">Premium annuleren</string>
+    <string name="cancel_now">Nu annuleren</string>
+    <string name="cancel_premium_confirmation">You’ll continue to have Premium access until %1$s.</string>
+    <string name="subscription_status_active">Actief</string>
+    <string name="subscription_status_canceled">Geannuleerd</string>
+    <string name="subscription_status_overdue_payment">Overdue payment</string>
+    <string name="subscription_status_past_due">Verlopen</string>
+    <string name="subscription_status_paused">Paused</string>
+    <string name="premium_next_charge_summary">Your next charge is for %1$s USD due on %2$s.</string>
+    <string name="subscription_canceled_description">Your subscription was canceled on %1$s. Resubscribe to continue using premium features.</string>
+    <string name="subscription_overdue_description">We couldn’t process your payment. Update your payment before your subscription ends on %1$s.</string>
+    <string name="subscription_past_due_description">You have a grace period of %1$d days from your subscription expiration date. Please resolve the past due amount by %2$s.</string>
+    <string name="subscription_paused_description">Your subscription is paused. Resume to continue using premium features.</string>
+    <string name="loading_subscription">Loading subscription…</string>
+    <string name="loading_portal">Loading portal…</string>
+    <string name="portal_error">Er is iets fout gegaan</string>
+    <string name="trouble_loading_portal">We had trouble loading the management portal, so try again.</string>
+    <string name="subscription_error">Subscription error</string>
+    <string name="trouble_loading_subscription">We couldn’t load your subscription details. Please try again.</string>
 </resources>
