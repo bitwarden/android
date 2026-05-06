@@ -1,5 +1,8 @@
 package com.x8bit.bitwarden.ui.vault.feature.cardscanner
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -111,8 +114,7 @@ fun CardScanScreen(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .testTag("CardScanFrame")
-                        .fillMaxSize()
-                        .navigationBarsPadding(),
+                        .fillMaxSize(),
                 ) {
                     CameraPreview(
                         cameraErrorReceive = {
@@ -130,17 +132,37 @@ fun CardScanScreen(
                         },
                         modifier = Modifier.fillMaxSize(),
                     )
-                    if (state.showHint) {
-                        ScanHintBanner(
-                            modifier = Modifier
-                                .align(Alignment.BottomCenter)
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 16.dp),
-                        )
-                    }
+                    AnimatedScanHintBanner(
+                        visible = state.showHint,
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                    )
                 }
             }
         }
+    }
+}
+
+/**
+ * Wraps [ScanHintBanner] in a fade-in/fade-out so the hint doesn't snap into place when the
+ * timeout elapses or vanish abruptly once a scan succeeds.
+ */
+@Composable
+private fun AnimatedScanHintBanner(
+    visible: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn(),
+        exit = fadeOut(),
+        modifier = modifier,
+    ) {
+        ScanHintBanner(
+            modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
+                .padding(horizontal = 16.dp, vertical = 16.dp),
+        )
     }
 }
 
