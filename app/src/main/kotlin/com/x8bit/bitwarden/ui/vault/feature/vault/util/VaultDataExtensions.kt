@@ -144,6 +144,8 @@ fun VaultData.toViewState(
                 .count { it.type is CipherListViewType.SecureNote },
             sshKeyItemsCount = activeCipherViews
                 .count { it.type is CipherListViewType.SshKey },
+            bankAccountItemsCount = activeCipherViews
+                .count { it.type is CipherListViewType.BankAccount },
             favoriteItems = activeDecryptedCipherViews
                 .filter { it.favorite }
                 .mapNotNull {
@@ -362,8 +364,20 @@ private fun CipherListView.toVaultItemOrNull(
             hasDecryptionError = hasDecryptionError,
         )
 
-        // TODO: [PM-32009] Map BankAccount to its own VaultItem subclass when the UI is wired.
-        CipherListViewType.BankAccount -> null
+        CipherListViewType.BankAccount -> VaultState.ViewState.VaultItem.BankAccount(
+            id = id,
+            name = name.asText(),
+            overflowOptions = toOverflowActions(
+                hasMasterPassword = hasMasterPassword,
+                isPremiumUser = isPremiumUser,
+            ),
+            extraIconList = toLabelIcons(),
+            shouldShowMasterPasswordReprompt = hasMasterPassword &&
+                reprompt == CipherRepromptType.PASSWORD,
+            hasDecryptionError = hasDecryptionError,
+        )
+
+        // TODO: [PM-32009] Map DriversLicense/Passport when their UIs are wired.
         CipherListViewType.DriversLicense -> null
         CipherListViewType.Passport -> null
     }

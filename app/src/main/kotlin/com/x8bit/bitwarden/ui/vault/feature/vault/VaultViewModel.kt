@@ -332,6 +332,7 @@ class VaultViewModel @Inject constructor(
             is VaultAction.VaultFilterTypeSelect -> handleVaultFilterTypeSelect(action)
             is VaultAction.SecureNoteGroupClick -> handleSecureNoteClick()
             is VaultAction.SshKeyGroupClick -> handleSshKeyClick()
+            is VaultAction.BankAccountGroupClick -> handleBankAccountClick()
             is VaultAction.ArchiveClick -> handleArchiveClick()
             is VaultAction.TrashClick -> handleTrashClick()
             is VaultAction.VaultItemClick -> handleVaultItemClick(action)
@@ -697,6 +698,10 @@ class VaultViewModel @Inject constructor(
         sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.SshKey))
     }
 
+    private fun handleBankAccountClick() {
+        sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.BankAccount))
+    }
+
     private fun handleVaultItemClick(action: VaultAction.VaultItemClick) {
         if (action.vaultItem.hasDecryptionError) {
             showCipherDecryptionErrorItemClick(itemId = action.vaultItem.id)
@@ -742,6 +747,14 @@ class VaultViewModel @Inject constructor(
 
             is ListingItemOverflowAction.VaultAction.CopyNumberClick -> {
                 handleCopyNumberClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyAccountNumberClick -> {
+                handleCopyAccountNumberClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyRoutingNumberClick -> {
+                handleCopyRoutingNumberClick(overflowAction)
             }
 
             is ListingItemOverflowAction.VaultAction.CopyPasswordClick -> {
@@ -831,6 +844,40 @@ class VaultViewModel @Inject constructor(
                     toastDescriptorOverride = BitwardenString.number.asText(),
                 )
             }
+        }
+    }
+
+    private fun handleCopyAccountNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyAccountNumberClick,
+    ) {
+        viewModelScope.launch {
+            getCipherForCopyOrNull(cipherId = action.cipherId)
+                ?.bankAccount
+                ?.accountNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    clipboardManager.setText(
+                        text = it,
+                        toastDescriptorOverride = BitwardenString.account_number.asText(),
+                    )
+                }
+        }
+    }
+
+    private fun handleCopyRoutingNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyRoutingNumberClick,
+    ) {
+        viewModelScope.launch {
+            getCipherForCopyOrNull(cipherId = action.cipherId)
+                ?.bankAccount
+                ?.routingNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    clipboardManager.setText(
+                        text = it,
+                        toastDescriptorOverride = BitwardenString.routing_number.asText(),
+                    )
+                }
         }
     }
 
@@ -1721,6 +1768,7 @@ data class VaultState(
          * @property totpItemsCount The count of totp code items.
          * @property loginItemsCount The count of Login type items.
          * @property cardItemsCount The count of Card type items.
+         * @property bankAccountItemsCount The count of Bank Account type items.
          * @property identityItemsCount The count of Identity type items.
          * @property secureNoteItemsCount The count of Secure Notes type items.
          * @property favoriteItems The list of favorites to be displayed.
@@ -1742,6 +1790,7 @@ data class VaultState(
             val identityItemsCount: Int,
             val secureNoteItemsCount: Int,
             val sshKeyItemsCount: Int,
+            val bankAccountItemsCount: Int,
             val favoriteItems: List<VaultItem>,
             val folderItems: List<FolderItem>,
             val noFolderItems: List<VaultItem>,
@@ -1956,6 +2005,26 @@ data class VaultState(
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = null
                 override val type: VaultItemCipherType get() = VaultItemCipherType.SSH_KEY
+            }
+
+            /**
+             * Represents a Bank Account item within the vault.
+             */
+            @Parcelize
+            data class BankAccount(
+                override val id: String,
+                override val name: Text,
+                override val startIcon: IconData = IconData.Local(
+                    BitwardenDrawable.ic_payment_card,
+                ),
+                override val startIconTestTag: String = "BankAccountCipherIcon",
+                override val extraIconList: ImmutableList<IconData> = persistentListOf(),
+                override val overflowOptions: ImmutableList<ListingItemOverflowAction.VaultAction>,
+                override val shouldShowMasterPasswordReprompt: Boolean,
+                override val hasDecryptionError: Boolean,
+            ) : VaultItem() {
+                override val supportingLabel: Text? get() = null
+                override val type: VaultItemCipherType get() = VaultItemCipherType.BANK_ACCOUNT
             }
         }
     }
@@ -2322,6 +2391,11 @@ sealed class VaultAction {
      * User clicked the SSH key types button.
      */
     data object SshKeyGroupClick : VaultAction()
+
+    /**
+     * User clicked the bank account types button.
+     */
+    data object BankAccountGroupClick : VaultAction()
 
     /**
      * User clicked the archive button.

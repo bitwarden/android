@@ -998,6 +998,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                     identityItemsCount = 0,
                     secureNoteItemsCount = 0,
                     sshKeyItemsCount = 0,
+                    bankAccountItemsCount = 0,
                     favoriteItems = emptyList(),
                     folderItems = emptyList(),
                     noFolderItems = emptyList(),
@@ -2494,6 +2495,40 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `Bank account group header should display correctly based on state`() {
+        val count = 2
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    bankAccountItemsCount = count,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithTextAfterScroll("Bank account")
+            .assertTextEquals("Bank account", count.toString())
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `clicking a bank account group should send BankAccountGroupClick action`() {
+        val rowText = "Bank account"
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    bankAccountItemsCount = 1,
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onNodeWithText(rowText).performClick()
+        verify {
+            viewModel.trySendAction(VaultAction.BankAccountGroupClick)
+        }
+    }
+
+    @Test
     fun `LifecycleResumed action is sent when the screen is resumed`() {
         verify { viewModel.trySendAction(VaultAction.LifecycleResumed) }
     }
@@ -2723,6 +2758,7 @@ private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultStat
     totpItemsCount = 0,
     itemTypesCount = 4,
     sshKeyItemsCount = 0,
+    bankAccountItemsCount = 0,
     archivedItemsCount = 0,
     archiveSubText = null,
     archiveEndIcon = null,

@@ -286,7 +286,7 @@ fun createMockDisplayItemForCipher(
                 secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
                 subtitleTestTag = "CipherSubTitleLabel",
-                iconData = IconData.Local(BitwardenDrawable.ic_note),
+                iconData = IconData.Local(BitwardenDrawable.ic_payment_card),
                 extraIconList = persistentListOf(
                     IconData.Local(
                         iconRes = BitwardenDrawable.ic_collections,

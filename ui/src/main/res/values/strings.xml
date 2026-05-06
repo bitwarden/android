@@ -1350,4 +1350,5 @@ Do you want to switch to this account?</string>
     <string name="issue_date">Issue date</string>
     <string name="expiration_date">Expiration date</string>
     <string name="details">Details</string>
+    <string name="no_bank_accounts">There are no bank accounts in your vault.</string>
 </resources>
