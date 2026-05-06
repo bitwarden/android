@@ -64,6 +64,7 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
@@ -73,7 +74,6 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import kotlin.collections.emptyList
 
 @Suppress("LargeClass")
 class VaultScreenTest : BitwardenComposeTest() {
@@ -2652,7 +2652,7 @@ private val DEFAULT_STATE: VaultState = VaultState(
     hasShownDecryptionFailureAlert = false,
     restrictItemTypesPolicyOrgIds = emptyList(),
     isIntroducingArchiveActionCardDismissed = false,
-    validTotpIds = emptySet(),
+    validTotpIds = persistentSetOf(),
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(

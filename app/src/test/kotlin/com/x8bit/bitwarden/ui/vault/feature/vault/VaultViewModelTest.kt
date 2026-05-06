@@ -85,7 +85,10 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
@@ -3931,7 +3934,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     createMockVaultState(
                         viewState = contentViewState,
-                        validTotpIds = validTotpIds,
+                        validTotpIds = validTotpIds.toImmutableSet(),
                     ),
                     awaitItem(),
                 )
@@ -3990,7 +3993,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     createMockVaultState(
                         viewState = contentViewState,
-                        validTotpIds = validTotpIds,
+                        validTotpIds = validTotpIds.toImmutableSet(),
                     ).copy(isPremium = false),
                     awaitItem(),
                 )
@@ -4096,7 +4099,7 @@ private val DEFAULT_USER_STATE = UserState(
 private fun createMockVaultState(
     viewState: VaultState.ViewState,
     dialog: VaultState.DialogState? = null,
-    validTotpIds: Set<String> = emptySet(),
+    validTotpIds: ImmutableSet<String> = persistentSetOf(),
 ): VaultState =
     VaultState(
         appBarTitle = BitwardenString.my_vault.asText(),
@@ -4140,7 +4143,7 @@ private fun createMockVaultState(
         restrictItemTypesPolicyOrgIds = emptyList(),
         isIntroducingArchiveActionCardDismissed = false,
         isPremiumUpgradeBannerEligible = false,
-        validTotpIds = validTotpIds,
+        validTotpIds = validTotpIds.toImmutableSet(),
     )
 
 private val DEFAULT_CONTENT_VIEW_STATE = VaultState.ViewState.Content(

@@ -76,8 +76,11 @@ import com.x8bit.bitwarden.ui.vault.util.shortName
 import com.x8bit.bitwarden.ui.vault.util.toVaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -159,7 +162,7 @@ class VaultViewModel @Inject constructor(
             isIntroducingArchiveActionCardDismissed = settingsRepository
                 .getIntroducingArchiveActionCardDismissedFlow()
                 .value,
-            validTotpIds = emptySet(),
+            validTotpIds = persistentSetOf(),
         )
     },
 ) {
@@ -1377,7 +1380,7 @@ class VaultViewModel @Inject constructor(
                     .mapNotNull { cipher -> cipher.id }
                     .toImmutableList(),
                 hasShownDecryptionFailureAlert = hasShownDecryptionFailureAlert,
-                validTotpIds = validTotpIds,
+                validTotpIds = validTotpIds.toImmutableSet(),
             )
         }
     }
@@ -1386,7 +1389,7 @@ class VaultViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 viewState = VaultState.ViewState.Loading,
-                validTotpIds = validTotpIds,
+                validTotpIds = validTotpIds.toImmutableSet(),
             )
         }
     }
@@ -1425,7 +1428,7 @@ class VaultViewModel @Inject constructor(
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                     validTotpIds = validTotpIds,
                 ),
-                validTotpIds = validTotpIds,
+                validTotpIds = validTotpIds.toImmutableSet(),
             )
         }
     }
@@ -1587,7 +1590,7 @@ data class VaultState(
     val isIntroducingArchiveActionCardDismissed: Boolean,
     val isPremiumUpgradeBannerEligible: Boolean = false,
     val isAwaitingKdfSync: Boolean = false,
-    val validTotpIds: Set<String>,
+    val validTotpIds: ImmutableSet<String>,
 ) : Parcelable {
 
     /**
@@ -2528,7 +2531,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                     message = errorMessage,
                 ),
                 isRefreshing = isRefreshing,
-                validTotpIds = validTotpIds,
+                validTotpIds = validTotpIds.toImmutableSet(),
             )
         } else {
             it.copy(
@@ -2537,7 +2540,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                 ),
                 dialog = null,
                 isRefreshing = isRefreshing,
-                validTotpIds = validTotpIds,
+                validTotpIds = validTotpIds.toImmutableSet(),
             )
         }
     }
