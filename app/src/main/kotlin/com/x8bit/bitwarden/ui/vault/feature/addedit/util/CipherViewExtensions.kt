@@ -113,7 +113,6 @@ fun CipherView.toViewState(
                 bankContactPhone = bankAccount?.bankContactPhone.orEmpty(),
             )
 
-
             CipherType.DRIVERS_LICENSE -> {
                 VaultAddEditState.ViewState.Content.ItemType.DriversLicense(
                     firstName = driversLicense?.firstName.orEmpty(),
