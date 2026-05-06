@@ -2980,12 +2980,13 @@ data class VaultAddEditState(
                     val firstName: String = "",
                     val middleName: String = "",
                     val lastName: String = "",
+                    val dateOfBirth: String = "",
                     val licenseNumber: String = "",
                     val issuingCountry: String = "",
                     val issuingState: String = "",
-                    val expirationMonth: String = "",
-                    val expirationDay: String = "",
-                    val expirationYear: String = "",
+                    val issuingAuthority: String = "",
+                    val issueDate: String = "",
+                    val expirationDate: String = "",
                     val licenseClass: String = "",
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption
@@ -3004,20 +3005,17 @@ data class VaultAddEditState(
                 data class Passport(
                     val surname: String = "",
                     val givenName: String = "",
-                    val dobMonth: String = "",
-                    val dobDay: String = "",
-                    val dobYear: String = "",
+                    val dateOfBirth: String = "",
+                    val birthPlace: String = "",
+                    val sex: String = "",
                     val nationality: String = "",
                     val passportNumber: String = "",
                     val passportType: String = "",
                     val issuingCountry: String = "",
                     val issuingAuthority: String = "",
-                    val issueMonth: String = "",
-                    val issueDay: String = "",
-                    val issueYear: String = "",
-                    val expirationMonth: String = "",
-                    val expirationDay: String = "",
-                    val expirationYear: String = "",
+                    val issueDate: String = "",
+                    val expirationDate: String = "",
+                    val nationalIdentificationNumber: String = "",
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption
                         get() = ItemTypeOption.PASSPORT

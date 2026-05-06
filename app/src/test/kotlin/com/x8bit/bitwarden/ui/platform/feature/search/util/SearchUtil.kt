@@ -280,6 +280,76 @@ fun createMockDisplayItemForCipher(
                 itemType = SearchState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
+
+        CipherType.DRIVERS_LICENSE -> {
+            SearchState.DisplayItem(
+                id = "mockId-$number",
+                title = "mockName-$number",
+                titleTestTag = "CipherNameLabel",
+                subtitle = null,
+                subtitleTestTag = "CipherSubTitleLabel",
+                iconData = IconData.Local(BitwardenDrawable.ic_note),
+                extraIconList = persistentListOf(
+                    IconData.Local(
+                        iconRes = BitwardenDrawable.ic_collections,
+                        contentDescription = BitwardenString.collections.asText(),
+                        testTag = "CipherInCollectionIcon",
+                    ),
+                ),
+                overflowOptions = persistentListOf(
+                    ListingItemOverflowAction.VaultAction.ViewClick(
+                        cipherId = "mockId-$number",
+                        cipherType = CipherType.DRIVERS_LICENSE,
+                        requiresPasswordReprompt = true,
+                    ),
+                    ListingItemOverflowAction.VaultAction.EditClick(
+                        cipherId = "mockId-$number",
+                        cipherType = CipherType.DRIVERS_LICENSE,
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+                overflowTestTag = "CipherOptionsButton",
+                totpCode = null,
+                autofillSelectionOptions = persistentListOf(),
+                shouldDisplayMasterPasswordReprompt = false,
+                itemType = SearchState.DisplayItem.ItemType.Vault(type = cipherType),
+            )
+        }
+
+        CipherType.PASSPORT -> {
+            SearchState.DisplayItem(
+                id = "mockId-$number",
+                title = "mockName-$number",
+                titleTestTag = "CipherNameLabel",
+                subtitle = null,
+                subtitleTestTag = "CipherSubTitleLabel",
+                iconData = IconData.Local(BitwardenDrawable.ic_note),
+                extraIconList = persistentListOf(
+                    IconData.Local(
+                        iconRes = BitwardenDrawable.ic_collections,
+                        contentDescription = BitwardenString.collections.asText(),
+                        testTag = "CipherInCollectionIcon",
+                    ),
+                ),
+                overflowOptions = persistentListOf(
+                    ListingItemOverflowAction.VaultAction.ViewClick(
+                        cipherId = "mockId-$number",
+                        cipherType = CipherType.PASSPORT,
+                        requiresPasswordReprompt = true,
+                    ),
+                    ListingItemOverflowAction.VaultAction.EditClick(
+                        cipherId = "mockId-$number",
+                        cipherType = CipherType.PASSPORT,
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+                overflowTestTag = "CipherOptionsButton",
+                totpCode = null,
+                autofillSelectionOptions = persistentListOf(),
+                shouldDisplayMasterPasswordReprompt = false,
+                itemType = SearchState.DisplayItem.ItemType.Vault(type = cipherType),
+            )
+        }
     }
 
 /**

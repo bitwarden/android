@@ -1899,9 +1899,7 @@ data class VaultItemState(
                     val licenseNumber: String?,
                     val issuingCountry: String?,
                     val issuingState: String?,
-                    val expirationMonth: String?,
-                    val expirationDay: String?,
-                    val expirationYear: String?,
+                    val expirationDate: String?,
                     val licenseClass: String?,
                 ) : ItemType()
 
@@ -1911,20 +1909,14 @@ data class VaultItemState(
                 data class Passport(
                     val surname: String?,
                     val givenName: String?,
-                    val dobMonth: String?,
-                    val dobDay: String?,
-                    val dobYear: String?,
+                    val dateOfBirth: String?,
                     val nationality: String?,
                     val passportNumber: String?,
                     val passportType: String?,
                     val issuingCountry: String?,
                     val issuingAuthority: String?,
-                    val issueMonth: String?,
-                    val issueDay: String?,
-                    val issueYear: String?,
-                    val expirationMonth: String?,
-                    val expirationDay: String?,
-                    val expirationYear: String?,
+                    val issueDate: String?,
+                    val expirationDate: String?,
                 ) : ItemType()
             }
         }
