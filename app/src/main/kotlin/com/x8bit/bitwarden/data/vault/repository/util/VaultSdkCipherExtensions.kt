@@ -39,6 +39,7 @@ import com.bitwarden.vault.SecureNote
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SshKey
 import com.bitwarden.vault.UriMatchType
+import java.time.LocalDate
 
 /**
  * Converts a Bitwarden SDK [Cipher] object to a corresponding
@@ -190,9 +191,9 @@ private fun DriversLicense.toEncryptedNetworkDriversLicense():
         issuingCountry = issuingCountry,
         issuingState = issuingState,
         issuingAuthority = issuingAuthority,
-        expirationDate = expirationDate,
-        dateOfBirth = dateOfBirth,
-        issueDate = issueDate,
+        expirationDate = expirationDate?.let(LocalDate::parse),
+        dateOfBirth = dateOfBirth?.let(LocalDate::parse),
+        issueDate = issueDate?.let(LocalDate::parse),
         licenseClass = licenseClass,
     )
 
@@ -204,7 +205,7 @@ private fun Passport.toEncryptedNetworkPassport(): SyncResponseJson.Cipher.Passp
     SyncResponseJson.Cipher.Passport(
         surname = surname,
         givenName = givenName,
-        dateOfBirth = dateOfBirth,
+        dateOfBirth = dateOfBirth?.let(LocalDate::parse),
         birthPlace = birthPlace,
         sex = sex,
         nationality = nationality,
@@ -213,8 +214,8 @@ private fun Passport.toEncryptedNetworkPassport(): SyncResponseJson.Cipher.Passp
         nationalIdentificationNumber = nationalIdentificationNumber,
         issuingCountry = issuingCountry,
         issuingAuthority = issuingAuthority,
-        issueDate = issueDate,
-        expirationDate = expirationDate,
+        issueDate = issueDate?.let(LocalDate::parse),
+        expirationDate = expirationDate?.let(LocalDate::parse),
     )
 
 private fun SshKey.toEncryptedNetworkSshKey(): SyncResponseJson.Cipher.SshKey =
@@ -594,9 +595,9 @@ fun SyncResponseJson.Cipher.DriversLicense.toSdkDriversLicense(): DriversLicense
         issuingCountry = issuingCountry,
         issuingState = issuingState,
         issuingAuthority = issuingAuthority,
-        expirationDate = expirationDate,
-        dateOfBirth = dateOfBirth,
-        issueDate = issueDate,
+        expirationDate = expirationDate?.toString(),
+        dateOfBirth = dateOfBirth?.toString(),
+        issueDate = issueDate?.toString(),
         licenseClass = licenseClass,
     )
 
@@ -607,7 +608,7 @@ fun SyncResponseJson.Cipher.Passport.toSdkPassport(): Passport =
     Passport(
         surname = surname,
         givenName = givenName,
-        dateOfBirth = dateOfBirth,
+        dateOfBirth = dateOfBirth?.toString(),
         birthPlace = birthPlace,
         sex = sex,
         nationality = nationality,
@@ -616,8 +617,8 @@ fun SyncResponseJson.Cipher.Passport.toSdkPassport(): Passport =
         nationalIdentificationNumber = nationalIdentificationNumber,
         issuingCountry = issuingCountry,
         issuingAuthority = issuingAuthority,
-        issueDate = issueDate,
-        expirationDate = expirationDate,
+        issueDate = issueDate?.toString(),
+        expirationDate = expirationDate?.toString(),
     )
 
 /**

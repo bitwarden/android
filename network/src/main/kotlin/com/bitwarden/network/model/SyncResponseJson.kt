@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonNames
 import kotlinx.serialization.json.JsonObject
 import java.time.Instant
+import java.time.LocalDate
 
 private const val DEFAULT_FIDO_2_KEY_TYPE = "public-key"
 private const val DEFAULT_FIDO_2_KEY_ALGORITHM = "ECDSA"
@@ -260,7 +261,7 @@ data class SyncResponseJson(
          * @property userId The user id (nullable).
          * @property shouldUseEvents If the organization should use events.
          * @property familySponsorshipFriendlyName If the family sponsorship is a friendly name.
-         * @property shouldUseTotp If he organization should use TOTP.
+         * @property shouldUseTotp If the organization should use TOTP.
          * @property familySponsorshipLastSyncDate The last date the family sponsorship
          * was synced (nullable).
          * @property name The name of the organization (nullable).
@@ -873,8 +874,9 @@ data class SyncResponseJson(
             @SerialName("licenseNumber")
             val licenseNumber: String?,
 
+            @Contextual
             @SerialName("dateOfBirth")
-            val dateOfBirth: String?,
+            val dateOfBirth: LocalDate?,
 
             @SerialName("issuingCountry")
             val issuingCountry: String?,
@@ -885,11 +887,13 @@ data class SyncResponseJson(
             @SerialName("issuingState")
             val issuingState: String?,
 
+            @Contextual
             @SerialName("issueDate")
-            val issueDate: String?,
+            val issueDate: LocalDate?,
 
+            @Contextual
             @SerialName("expirationDate")
-            val expirationDate: String?,
+            val expirationDate: LocalDate?,
 
             @SerialName("licenseClass")
             val licenseClass: String?,
@@ -920,8 +924,9 @@ data class SyncResponseJson(
             @SerialName("givenName")
             val givenName: String?,
 
+            @Contextual
             @SerialName("dateOfBirth")
-            val dateOfBirth: String?,
+            val dateOfBirth: LocalDate?,
 
             @SerialName("birthPlace")
             val birthPlace: String?,
@@ -944,11 +949,13 @@ data class SyncResponseJson(
             @SerialName("issuingAuthority")
             val issuingAuthority: String?,
 
+            @Contextual
             @SerialName("issueDate")
-            val issueDate: String?,
+            val issueDate: LocalDate?,
 
+            @Contextual
             @SerialName("expirationDate")
-            val expirationDate: String?,
+            val expirationDate: LocalDate?,
 
             @SerialName("nationalIdentificationNumber")
             val nationalIdentificationNumber: String?,

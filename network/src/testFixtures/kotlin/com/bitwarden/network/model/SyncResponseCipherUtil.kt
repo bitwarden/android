@@ -3,6 +3,7 @@
 package com.bitwarden.network.model
 
 import java.time.Instant
+import java.time.LocalDate
 
 /**
  * Constant date time used for [Instant] properties of mock objects.
@@ -297,18 +298,19 @@ fun createMockBankAccount(
 /**
  * Create a mock [SyncResponseJson.Cipher.DriversLicense] with a given [number].
  */
+@Suppress("MagicNumber")
 fun createMockDriversLicense(
     number: Int,
     firstName: String? = "mockFirstName-$number",
     middleName: String? = "mockMiddleName-$number",
     lastName: String? = "mockLastName-$number",
-    dateOfBirth: String? = "mockDateOfBirth-$number",
+    dateOfBirth: LocalDate? = LocalDate.of(2026, 5, 6),
     licenseNumber: String? = "mockLicenseNumber-$number",
     issuingCountry: String? = "mockIssuingCountry-$number",
     issuingState: String? = "mockIssuingState-$number",
     issuingAuthority: String? = "mockIssuingAuthority-$number",
-    issueDate: String? = "mockIssueDate-$number",
-    expirationDate: String? = "mockExpirationDate-$number",
+    issueDate: LocalDate? = LocalDate.of(2026, 5, 6),
+    expirationDate: LocalDate? = LocalDate.of(2026, 5, 6),
     licenseClass: String? = "mockLicenseClass-$number",
 ): SyncResponseJson.Cipher.DriversLicense =
     SyncResponseJson.Cipher.DriversLicense(
@@ -328,11 +330,12 @@ fun createMockDriversLicense(
 /**
  * Create a mock [SyncResponseJson.Cipher.Passport] with a given [number].
  */
+@Suppress("MagicNumber")
 fun createMockPassport(
     number: Int,
     surname: String? = "mockSurname-$number",
     givenName: String? = "mockGivenName-$number",
-    dateOfBirth: String? = "mockDateOfBirth-$number",
+    dateOfBirth: LocalDate? = LocalDate.of(2026, 5, 6),
     birthPlace: String? = "mockBirthPlace-$number",
     sex: String? = "mockSex-$number",
     nationality: String? = "mockNationality-$number",
@@ -340,8 +343,8 @@ fun createMockPassport(
     passportType: String? = "mockPassportType-$number",
     issuingCountry: String? = "mockIssuingCountry-$number",
     issuingAuthority: String? = "mockIssuingAuthority-$number",
-    issueDate: String? = "mockIssueDate-$number",
-    expirationDate: String? = "mockExpirationDate-$number",
+    issueDate: LocalDate? = LocalDate.of(2026, 5, 6),
+    expirationDate: LocalDate? = LocalDate.of(2026, 5, 6),
     nationalIdentificationNumber: String? = "mockNationalIdentificationNumber-$number",
 ): SyncResponseJson.Cipher.Passport =
     SyncResponseJson.Cipher.Passport(

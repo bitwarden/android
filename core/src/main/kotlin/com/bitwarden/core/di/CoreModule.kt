@@ -3,6 +3,7 @@ package com.bitwarden.core.di
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.serializer.BigDecimalSerializer
 import com.bitwarden.core.data.serializer.InstantSerializer
+import com.bitwarden.core.data.serializer.LocalDateSerializer
 import com.bitwarden.core.data.serializer.SafeListSerializer
 import dagger.Module
 import dagger.Provides
@@ -36,6 +37,7 @@ object CoreModule {
         explicitNulls = false
         serializersModule = SerializersModule {
             contextual(InstantSerializer())
+            contextual(LocalDateSerializer())
             contextual(BigDecimalSerializer())
             contextual(List::class) { args -> SafeListSerializer(args.first()) }
         }

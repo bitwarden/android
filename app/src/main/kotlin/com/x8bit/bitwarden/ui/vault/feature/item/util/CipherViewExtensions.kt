@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.util
 
 import androidx.annotation.DrawableRes
+import com.bitwarden.core.data.util.toFormattedDateStyle
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.ui.platform.base.util.nullIfAllEqual
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
@@ -32,6 +33,7 @@ import com.x8bit.bitwarden.ui.vault.util.formatCardNumber
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import java.time.Clock
+import java.time.LocalDate
 import java.time.format.FormatStyle
 import java.util.Locale
 
@@ -238,7 +240,7 @@ fun CipherView.toViewState(
                     licenseNumber = driversLicense?.licenseNumber.orEmpty(),
                     issuingCountry = driversLicense?.issuingCountry.orEmpty(),
                     issuingState = driversLicense?.issuingState.orEmpty(),
-                    expirationDate = driversLicense?.expirationDate.orEmpty(),
+                    expirationDate = driversLicense?.expirationDate.toFormattedDate(clock = clock),
                     licenseClass = driversLicense?.licenseClass.orEmpty(),
                 )
             }
@@ -246,14 +248,14 @@ fun CipherView.toViewState(
             CipherType.PASSPORT -> VaultItemState.ViewState.Content.ItemType.Passport(
                 surname = passport?.surname.orEmpty(),
                 givenName = passport?.givenName.orEmpty(),
-                dateOfBirth = passport?.dateOfBirth.orEmpty(),
+                dateOfBirth = passport?.dateOfBirth.toFormattedDate(clock = clock),
                 nationality = passport?.nationality.orEmpty(),
                 passportNumber = passport?.passportNumber.orEmpty(),
                 passportType = passport?.passportType.orEmpty(),
                 issuingCountry = passport?.issuingCountry.orEmpty(),
                 issuingAuthority = passport?.issuingAuthority.orEmpty(),
-                issueDate = passport?.issueDate.orEmpty(),
-                expirationDate = passport?.expirationDate.orEmpty(),
+                issueDate = passport?.issueDate.toFormattedDate(clock = clock),
+                expirationDate = passport?.expirationDate.toFormattedDate(clock = clock),
             )
         },
     )
@@ -295,6 +297,17 @@ fun FieldView.toCustomField(
             name = name.orEmpty(),
         )
     }
+
+/**
+ * Takes a string date that is formatted in the default ISO-8601 format (uuuu-MM-dd) and converts
+ * it to appropriate human-readable format.
+ */
+private fun String?.toFormattedDate(
+    clock: Clock,
+): String = this
+    ?.let { LocalDate.parse(it) }
+    ?.toFormattedDateStyle(dateStyle = FormatStyle.LONG, clock = clock)
+    .orEmpty()
 
 private fun LoginUriView.toUriData() =
     VaultItemState.ViewState.Content.ItemType.Login.UriData(

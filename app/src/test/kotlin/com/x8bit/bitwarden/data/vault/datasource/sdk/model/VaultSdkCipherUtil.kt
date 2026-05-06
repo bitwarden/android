@@ -166,9 +166,9 @@ fun createMockSdkDriversLicense(number: Int): DriversLicense =
         issuingCountry = "mockIssuingCountry-$number",
         issuingState = "mockIssuingState-$number",
         issuingAuthority = "mockIssuingAuthority-$number",
-        expirationDate = "mockExpirationDate-$number",
-        dateOfBirth = "mockDateOfBirth-$number",
-        issueDate = "mockIssueDate-$number",
+        expirationDate = "2026-05-06",
+        dateOfBirth = "2026-05-06",
+        issueDate = "2026-05-06",
         licenseClass = "mockLicenseClass-$number",
     )
 
@@ -179,7 +179,7 @@ fun createMockSdkPassport(number: Int): Passport =
     Passport(
         surname = "mockSurname-$number",
         givenName = "mockGivenName-$number",
-        dateOfBirth = "mockDateOfBirth-$number",
+        dateOfBirth = "2026-05-06",
         birthPlace = "mockBirthPlace-$number",
         sex = "mockSex-$number",
         nationality = "mockNationality-$number",
@@ -188,8 +188,8 @@ fun createMockSdkPassport(number: Int): Passport =
         nationalIdentificationNumber = "mockNationalIdentificationNumber-$number",
         issuingCountry = "mockIssuingCountry-$number",
         issuingAuthority = "mockIssuingAuthority-$number",
-        issueDate = "mockIssueDate-$number",
-        expirationDate = "mockExpirationDate-$number",
+        issueDate = "2026-05-06",
+        expirationDate = "2026-05-06",
     )
 
 /**
