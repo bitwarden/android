@@ -37,7 +37,8 @@ internal const val TEMPORAL_VOTE_THRESHOLD: Int = 2
  *  2. **Orientation gating** — text whose baseline is more than ±10° from horizontal in display
  *     space is discarded (rejecting sideways and upside-down cards).
  *  3. **Temporal voting** — a PAN is only emitted once it has been observed in at least
- *     [TEMPORAL_VOTE_THRESHOLD] of the last [TEMPORAL_VOTE_WINDOW_SIZE] frames.
+ *     [TEMPORAL_VOTE_THRESHOLD] of the last [TEMPORAL_VOTE_WINDOW_SIZE] frames, and the emission
+ *     is held until an expiration month has also been observed somewhere in that window.
  *
  * @property cardDataParser The parser used to extract card data from recognized text.
  */
@@ -53,6 +54,8 @@ class CardTextAnalyzerImpl(
     )
 
     private val voteBuffer = PanVoteBuffer()
+
+    private val expiryBuffer = ExpiryBuffer()
 
     override lateinit var onCardScanned: (CardScanData) -> Unit
 
@@ -86,7 +89,6 @@ class CardTextAnalyzerImpl(
                 val parsed = filteredText
                     .takeIf { it.isNotEmpty() }
                     ?.let { cardDataParser.parseCardData(it) }
-                    ?.takeIf { it.number != null }
 
                 voteAndMaybeEmit(parsed)
             }
@@ -98,12 +100,25 @@ class CardTextAnalyzerImpl(
 
     /**
      * Records the latest frame's parse result in the temporal window and emits the parsed data
-     * only when its PAN has been confirmed by [PanVoteBuffer].
+     * only when its PAN has been confirmed by [PanVoteBuffer] and an expiration month has been
+     * observed somewhere in the same window via [ExpiryBuffer]. The PAN-confirming frame and the
+     * expiry-bearing frame may differ, so the emission composes the confirmed PAN with the most
+     * recent buffered expiry.
      */
     private fun voteAndMaybeEmit(parsed: CardScanData?) {
         val confirmedPan = voteBuffer.record(parsed?.number)
-        if (confirmedPan != null && parsed != null) {
-            onCardScanned(parsed)
+        val latestExpiry = expiryBuffer.record(
+            month = parsed?.expirationMonth,
+            year = parsed?.expirationYear,
+        )
+        if (confirmedPan != null && latestExpiry != null && parsed != null) {
+            onCardScanned(
+                parsed.copy(
+                    number = confirmedPan,
+                    expirationMonth = latestExpiry.month,
+                    expirationYear = latestExpiry.year,
+                ),
+            )
         }
     }
 }

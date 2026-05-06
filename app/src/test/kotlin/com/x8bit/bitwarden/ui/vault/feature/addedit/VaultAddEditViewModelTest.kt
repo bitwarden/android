@@ -5411,47 +5411,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Test
-    fun `CardScanResultReceive with null month should not update state or focus`() =
-        runTest {
-            val initialCard = VaultAddEditState
-                .ViewState
-                .Content
-                .ItemType
-                .Card(
-                    cardHolderName = "EXISTING NAME",
-                    expirationMonth = VaultCardExpirationMonth.JUNE,
-                    expirationYear = "2030",
-                    securityCode = "999",
-                )
-            val viewModel = createAddVaultItemViewModel(
-                savedStateHandle = createSavedStateHandleWithState(
-                    state = createVaultAddItemState(
-                        vaultItemCipherType = VaultItemCipherType.CARD,
-                        typeContentViewState = initialCard,
-                    ),
-                    vaultAddEditType = VaultAddEditType.AddItem,
-                    vaultItemCipherType = VaultItemCipherType.CARD,
-                ),
-            )
-            viewModel.eventFlow.test {
-                mutableCardScanResultFlow.tryEmit(
-                    CardScanResult.Success(
-                        cardScanData = CardScanData(
-                            number = "4111111111111111",
-                            expirationMonth = null,
-                            expirationYear = "2025",
-                            securityCode = "123",
-                        ),
-                    ),
-                )
-                val content = viewModel.stateFlow.value.viewState
-                    as VaultAddEditState.ViewState.Content
-                assertEquals(initialCard, content.type)
-                expectNoEvents()
-            }
-        }
-
     @Suppress("MaxLineLength")
     @Test
     fun `CardScanResultReceive with number and month present should not modify CVV when scan carries securityCode`() =

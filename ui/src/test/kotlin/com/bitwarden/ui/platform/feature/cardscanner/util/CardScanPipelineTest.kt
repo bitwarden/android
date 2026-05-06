@@ -17,12 +17,15 @@ class CardScanPipelineTest {
     @Test
     fun `pipeline ignores Luhn-valid PAN positioned outside the scan rectangle`() {
         // The PAN is in the top-left corner, far outside the centered scan rectangle.
-        val recognized = singleHorizontalLine(
-            text = "4111 1111 1111 1111",
-            lineBounds = ImageRect(0, 0, 200, 30),
+        val recognized = horizontalLines(
+            "4111 1111 1111 1111" at ImageRect(0, 0, 200, 30),
         )
 
-        val emission = runFrame(recognized = recognized, voteBuffer = PanVoteBuffer())
+        val emission = runFrame(
+            recognized = recognized,
+            voteBuffer = PanVoteBuffer(),
+            expiryBuffer = ExpiryBuffer(),
+        )
         assertNull(emission)
     }
 
@@ -46,38 +49,55 @@ class CardScanPipelineTest {
             ),
         )
 
-        val emission = runFrame(recognized = recognized, voteBuffer = PanVoteBuffer())
+        val emission = runFrame(
+            recognized = recognized,
+            voteBuffer = PanVoteBuffer(),
+            expiryBuffer = ExpiryBuffer(),
+        )
         assertNull(emission)
     }
 
     @Test
     fun `pipeline does not emit a Luhn-valid PAN seen for the first time`() {
-        val recognized = singleHorizontalLine(
-            text = "4111 1111 1111 1111",
-            lineBounds = ImageRect(400, 480, 700, 510),
+        val recognized = horizontalLines(
+            "4111 1111 1111 1111" at ImageRect(400, 480, 700, 510),
+            "12/28" at ImageRect(400, 540, 500, 570),
         )
 
-        val emission = runFrame(recognized = recognized, voteBuffer = PanVoteBuffer())
+        val emission = runFrame(
+            recognized = recognized,
+            voteBuffer = PanVoteBuffer(),
+            expiryBuffer = ExpiryBuffer(),
+        )
         assertNull(emission)
     }
 
     @Test
-    fun `pipeline emits a Luhn-valid PAN seen in two frames`() {
-        val recognized = singleHorizontalLine(
-            text = "4111 1111 1111 1111",
-            lineBounds = ImageRect(400, 480, 700, 510),
+    fun `pipeline emits when both PAN and expiry are seen in two frames`() {
+        val recognized = horizontalLines(
+            "4111 1111 1111 1111" at ImageRect(400, 480, 700, 510),
+            "12/28" at ImageRect(400, 540, 500, 570),
         )
         val voteBuffer = PanVoteBuffer()
+        val expiryBuffer = ExpiryBuffer()
 
-        val firstEmission = runFrame(recognized = recognized, voteBuffer = voteBuffer)
-        val secondEmission = runFrame(recognized = recognized, voteBuffer = voteBuffer)
+        val firstEmission = runFrame(
+            recognized = recognized,
+            voteBuffer = voteBuffer,
+            expiryBuffer = expiryBuffer,
+        )
+        val secondEmission = runFrame(
+            recognized = recognized,
+            voteBuffer = voteBuffer,
+            expiryBuffer = expiryBuffer,
+        )
 
         assertNull(firstEmission)
         assertEquals(
             CardScanData(
                 number = "4111111111111111",
-                expirationMonth = null,
-                expirationYear = null,
+                expirationMonth = "12",
+                expirationYear = "2028",
                 securityCode = null,
             ),
             secondEmission,
@@ -85,17 +105,74 @@ class CardScanPipelineTest {
     }
 
     @Test
+    fun `pipeline does not emit when PAN is confirmed but expiry has never been seen`() {
+        val voteBuffer = PanVoteBuffer()
+        val expiryBuffer = ExpiryBuffer()
+        val panOnly = horizontalLines(
+            "4111 1111 1111 1111" at ImageRect(400, 480, 700, 510),
+        )
+
+        assertNull(
+            runFrame(recognized = panOnly, voteBuffer = voteBuffer, expiryBuffer = expiryBuffer),
+        )
+        assertNull(
+            runFrame(recognized = panOnly, voteBuffer = voteBuffer, expiryBuffer = expiryBuffer),
+        )
+        assertNull(
+            runFrame(recognized = panOnly, voteBuffer = voteBuffer, expiryBuffer = expiryBuffer),
+        )
+    }
+
+    @Test
+    fun `pipeline emits using an expiry observed in an earlier frame within the window`() {
+        val voteBuffer = PanVoteBuffer()
+        val expiryBuffer = ExpiryBuffer()
+        val expiryOnly = horizontalLines(
+            "12/28" at ImageRect(400, 540, 500, 570),
+        )
+        val panOnly = horizontalLines(
+            "4111 1111 1111 1111" at ImageRect(400, 480, 700, 510),
+        )
+
+        // Frame 1: expiry observed, no PAN.
+        assertNull(
+            runFrame(recognized = expiryOnly, voteBuffer = voteBuffer, expiryBuffer = expiryBuffer),
+        )
+        // Frame 2: PAN seen for the first time, expiry not in this frame's parse.
+        assertNull(
+            runFrame(recognized = panOnly, voteBuffer = voteBuffer, expiryBuffer = expiryBuffer),
+        )
+        // Frame 3: PAN seen again — confirmed. Buffered expiry from frame 1 composes the emission.
+        assertEquals(
+            CardScanData(
+                number = "4111111111111111",
+                expirationMonth = "12",
+                expirationYear = "2028",
+                securityCode = null,
+            ),
+            runFrame(recognized = panOnly, voteBuffer = voteBuffer, expiryBuffer = expiryBuffer),
+        )
+    }
+
+    @Test
     fun `pipeline does not emit a Luhn-valid PAN that briefly appears in a single frame`() {
         val voteBuffer = PanVoteBuffer()
-        val withPan = singleHorizontalLine(
-            text = "4111 1111 1111 1111",
-            lineBounds = ImageRect(400, 480, 700, 510),
+        val expiryBuffer = ExpiryBuffer()
+        val withPan = horizontalLines(
+            "4111 1111 1111 1111" at ImageRect(400, 480, 700, 510),
+            "12/28" at ImageRect(400, 540, 500, 570),
         )
         val withoutPan = recognizedText()
 
-        assertNull(runFrame(recognized = withPan, voteBuffer = voteBuffer))
-        assertNull(runFrame(recognized = withoutPan, voteBuffer = voteBuffer))
-        assertNull(runFrame(recognized = withoutPan, voteBuffer = voteBuffer))
+        assertNull(
+            runFrame(recognized = withPan, voteBuffer = voteBuffer, expiryBuffer = expiryBuffer),
+        )
+        assertNull(
+            runFrame(recognized = withoutPan, voteBuffer = voteBuffer, expiryBuffer = expiryBuffer),
+        )
+        assertNull(
+            runFrame(recognized = withoutPan, voteBuffer = voteBuffer, expiryBuffer = expiryBuffer),
+        )
     }
 
     /**
@@ -105,6 +182,7 @@ class CardScanPipelineTest {
     private fun runFrame(
         recognized: RecognizedText,
         voteBuffer: PanVoteBuffer,
+        expiryBuffer: ExpiryBuffer,
     ): CardScanData? {
         val filteredText = filterScannedText(
             recognized = recognized,
@@ -115,29 +193,39 @@ class CardScanPipelineTest {
         val parsed = filteredText
             .takeIf { it.isNotEmpty() }
             ?.let { parser.parseCardData(it) }
-            ?.takeIf { it.number != null }
-        val confirmed = voteBuffer.record(pan = parsed?.number)
-        return parsed?.takeIf { confirmed != null }
+        val confirmedPan = voteBuffer.record(pan = parsed?.number)
+        val latestExpiry = expiryBuffer.record(
+            month = parsed?.expirationMonth,
+            year = parsed?.expirationYear,
+        )
+        if (confirmedPan == null || latestExpiry == null || parsed == null) return null
+        return parsed.copy(
+            number = confirmedPan,
+            expirationMonth = latestExpiry.month,
+            expirationYear = latestExpiry.year,
+        )
     }
 
-    private fun singleHorizontalLine(
-        text: String,
-        lineBounds: ImageRect,
-    ): RecognizedText = recognizedText(
-        block(
-            bounds = lineBounds,
-            line(
-                text = text,
-                bounds = lineBounds,
-                corners = listOf(
-                    ImagePoint(lineBounds.left, lineBounds.top),
-                    ImagePoint(lineBounds.right, lineBounds.top),
-                    ImagePoint(lineBounds.right, lineBounds.bottom),
-                    ImagePoint(lineBounds.left, lineBounds.bottom),
-                ),
-            ),
-        ),
-    )
+    private infix fun String.at(bounds: ImageRect): Pair<String, ImageRect> = this to bounds
+
+    private fun horizontalLines(vararg lines: Pair<String, ImageRect>): RecognizedText =
+        recognizedText(
+            *lines.map { (text, bounds) ->
+                block(
+                    bounds = bounds,
+                    line(
+                        text = text,
+                        bounds = bounds,
+                        corners = listOf(
+                            ImagePoint(bounds.left, bounds.top),
+                            ImagePoint(bounds.right, bounds.top),
+                            ImagePoint(bounds.right, bounds.bottom),
+                            ImagePoint(bounds.left, bounds.bottom),
+                        ),
+                    ),
+                )
+            }.toTypedArray(),
+        )
 
     private fun line(
         text: String,
