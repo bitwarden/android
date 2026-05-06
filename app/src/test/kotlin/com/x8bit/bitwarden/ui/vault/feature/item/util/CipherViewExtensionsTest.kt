@@ -458,6 +458,7 @@ class CipherViewExtensionsTest {
             CipherType.CARD to BitwardenDrawable.ic_payment_card,
             CipherType.SECURE_NOTE to BitwardenDrawable.ic_note,
             CipherType.SSH_KEY to BitwardenDrawable.ic_ssh_key,
+            CipherType.BANK_ACCOUNT to BitwardenDrawable.ic_payment_card,
         )
             .forEach {
                 val cipherView = createCipherView(type = it.key, isEmpty = false)

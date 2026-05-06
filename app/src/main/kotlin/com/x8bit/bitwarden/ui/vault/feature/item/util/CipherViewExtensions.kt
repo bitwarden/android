@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
+import com.x8bit.bitwarden.ui.vault.model.VaultBankAccountType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
@@ -218,7 +219,7 @@ fun CipherView.toViewState(
                 VaultItemState.ViewState.Content.ItemType.BankAccount(
                     bankName = bankAccount?.bankName,
                     nameOnAccount = bankAccount?.nameOnAccount,
-                    accountType = bankAccount?.accountType,
+                    accountType = bankAccount?.accountType?.let(VaultBankAccountType::parse),
                     accountNumber = bankAccount?.accountNumber,
                     routingNumber = bankAccount?.routingNumber,
                     branchNumber = bankAccount?.branchNumber,
@@ -344,7 +345,7 @@ private val CipherType.iconRes: Int
         CipherType.IDENTITY -> BitwardenDrawable.ic_id_card
         CipherType.SSH_KEY -> BitwardenDrawable.ic_ssh_key
         CipherType.LOGIN -> BitwardenDrawable.ic_globe
-        CipherType.BANK_ACCOUNT -> BitwardenDrawable.ic_note
+        CipherType.BANK_ACCOUNT -> BitwardenDrawable.ic_payment_card
         CipherType.DRIVERS_LICENSE -> BitwardenDrawable.ic_note
         CipherType.PASSPORT -> BitwardenDrawable.ic_note
     }

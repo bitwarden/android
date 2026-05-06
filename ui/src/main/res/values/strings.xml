@@ -1319,15 +1319,19 @@ Do you want to switch to this account?</string>
     <string name="name_on_account">Name on account</string>
     <string name="account_type">Account type</string>
     <string name="account_number">Account number</string>
-    <string name="routing_number">Routing/transit number</string>
-    <string name="branch_number">Branch/institution number</string>
+    <string name="routing_number">Routing number</string>
+    <string name="branch_number">Branch number</string>
     <string name="swift_code">SWIFT code</string>
     <string name="iban">IBAN</string>
     <string name="bank_contact_phone">Bank contact phone</string>
+    <string name="copy_name_on_account">Copy name on account</string>
     <string name="copy_account_number">Copy account number</string>
     <string name="copy_routing_number">Copy routing number</string>
+    <string name="copy_branch_number">Copy branch number</string>
+    <string name="copy_pin">Copy PIN</string>
     <string name="copy_swift_code">Copy SWIFT code</string>
     <string name="copy_iban">Copy IBAN</string>
+    <string name="copy_bank_contact_phone">Copy bank contact phone</string>
     <string name="checking">Checking</string>
     <string name="savings">Savings</string>
     <string name="certificate_of_deposit">Certificate of deposit</string>
@@ -1345,4 +1349,5 @@ Do you want to switch to this account?</string>
     <string name="issuing_authority">Issuing authority/office</string>
     <string name="issue_date">Issue date</string>
     <string name="expiration_date">Expiration date</string>
+    <string name="details">Details</string>
 </resources>

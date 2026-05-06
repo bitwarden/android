@@ -43,6 +43,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmentRoute
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultBankAccountItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
@@ -284,6 +285,9 @@ fun VaultItemScreen(
             vaultIdentityItemTypeHandlers = remember(viewModel) {
                 VaultIdentityItemTypeHandlers.create(viewModel = viewModel)
             },
+            vaultBankAccountItemTypeHandlers = remember(viewModel) {
+                VaultBankAccountItemTypeHandlers.create(viewModel = viewModel)
+            },
         )
     }
 }
@@ -368,6 +372,7 @@ private fun VaultItemContent(
     vaultCardItemTypeHandlers: VaultCardItemTypeHandlers,
     vaultSshKeyItemTypeHandlers: VaultSshKeyItemTypeHandlers,
     vaultIdentityItemTypeHandlers: VaultIdentityItemTypeHandlers,
+    vaultBankAccountItemTypeHandlers: VaultBankAccountItemTypeHandlers,
     modifier: Modifier = Modifier,
 ) {
     when (viewState) {
@@ -430,13 +435,23 @@ private fun VaultItemContent(
                     )
                 }
 
-                is VaultItemState.ViewState.Content.ItemType.BankAccount,
+                is VaultItemState.ViewState.Content.ItemType.BankAccount -> {
+                    VaultItemBankAccountContent(
+                        commonState = viewState.common,
+                        bankAccountState = viewState.type,
+                        vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+                        vaultBankAccountItemTypeHandlers = vaultBankAccountItemTypeHandlers,
+                        modifier = modifier,
+                    )
+                }
+
                 is VaultItemState.ViewState.Content.ItemType.DriversLicense,
                 is VaultItemState.ViewState.Content.ItemType.Passport,
                     -> {
-                    // TODO(PM-32810): Render dedicated content for new item types once the UI
-                    //  ships in the phase-05-07 PR. Until then these are gated behind the
-                    //  pm-32009-new-item-types feature flag and cannot be received.
+                    // TODO(PM-32810): Render dedicated content for the remaining new item types
+                    //  once the UI ships in their respective Story slices. Until then these
+                    //  branches are gated behind the pm-32009-new-item-types feature flag and
+                    //  cannot be received.
                     VaultItemSecureNoteContent(
                         commonState = viewState.common,
                         vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,

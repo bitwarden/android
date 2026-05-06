@@ -54,6 +54,7 @@ import com.x8bit.bitwarden.ui.vault.feature.item.util.createCommonContent
 import com.x8bit.bitwarden.ui.vault.feature.item.util.createLoginContent
 import com.x8bit.bitwarden.ui.vault.feature.item.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.util.createVerificationCodeItem
+import com.x8bit.bitwarden.ui.vault.model.VaultBankAccountType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
@@ -2603,6 +2604,321 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
+    inner class BankAccountActions {
+        private lateinit var viewModel: VaultItemViewModel
+
+        @BeforeEach
+        fun setup() {
+            viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(viewState = BANK_ACCOUNT_VIEW_STATE),
+            )
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canRestore = false,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
+                    hasOrganizations = true,
+                )
+            } returns BANK_ACCOUNT_VIEW_STATE
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+        }
+
+        @Test
+        fun `on CopyAccountNumberClick should copy account number to clipboard`() = runTest {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.BankAccount.CopyAccountNumberClick,
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "12345678",
+                    toastDescriptorOverride = BitwardenString.account_number.asText(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopyRoutingNumberClick should copy routing number to clipboard`() = runTest {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.BankAccount.CopyRoutingNumberClick,
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "021000021",
+                    toastDescriptorOverride = BitwardenString.routing_number.asText(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopySwiftCodeClick should copy SWIFT code to clipboard`() = runTest {
+            viewModel.trySendAction(VaultItemAction.ItemType.BankAccount.CopySwiftCodeClick)
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "BOFAUS3N",
+                    toastDescriptorOverride = BitwardenString.swift_code.asText(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopyIbanClick should copy IBAN to clipboard`() = runTest {
+            viewModel.trySendAction(VaultItemAction.ItemType.BankAccount.CopyIbanClick)
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "GB29NWBK60161331926819",
+                    toastDescriptorOverride = BitwardenString.iban.asText(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopyNameOnAccountClick should copy name on account to clipboard`() = runTest {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.BankAccount.CopyNameOnAccountClick,
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "John Doe",
+                    toastDescriptorOverride = BitwardenString.name_on_account.asText(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopyBranchNumberClick should copy branch number to clipboard`() = runTest {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.BankAccount.CopyBranchNumberClick,
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "001",
+                    toastDescriptorOverride = BitwardenString.branch_number.asText(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopyPinClick should copy pin to clipboard`() = runTest {
+            viewModel.trySendAction(VaultItemAction.ItemType.BankAccount.CopyPinClick)
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "4242",
+                    toastDescriptorOverride = BitwardenString.pin.asText(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopyBankContactPhoneClick should copy bank contact phone to clipboard`() =
+            runTest {
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.BankAccount.CopyBankContactPhoneClick,
+                )
+                verify(exactly = 1) {
+                    clipboardManager.setText(
+                        text = "555-0100",
+                        toastDescriptorOverride = BitwardenString.bank_contact_phone.asText(),
+                    )
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on CopyAccountNumberClick with null account number should not copy to clipboard`() =
+            runTest {
+                val emptyState = BANK_ACCOUNT_VIEW_STATE.copy(
+                    type = DEFAULT_BANK_ACCOUNT_TYPE.copy(accountNumber = null),
+                )
+                viewModel = createViewModelWithBankAccountState(emptyState)
+
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.BankAccount.CopyAccountNumberClick,
+                )
+
+                verify(exactly = 0) {
+                    clipboardManager.setText(
+                        text = any<String>(),
+                        toastDescriptorOverride = any<Text>(),
+                    )
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on CopyRoutingNumberClick with null routing number should not copy to clipboard`() =
+            runTest {
+                val emptyState = BANK_ACCOUNT_VIEW_STATE.copy(
+                    type = DEFAULT_BANK_ACCOUNT_TYPE.copy(routingNumber = null),
+                )
+                viewModel = createViewModelWithBankAccountState(emptyState)
+
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.BankAccount.CopyRoutingNumberClick,
+                )
+
+                verify(exactly = 0) {
+                    clipboardManager.setText(
+                        text = any<String>(),
+                        toastDescriptorOverride = any<Text>(),
+                    )
+                }
+            }
+
+        @Test
+        fun `on CopySwiftCodeClick with null swift code should not copy to clipboard`() = runTest {
+            val emptyState = BANK_ACCOUNT_VIEW_STATE.copy(
+                type = DEFAULT_BANK_ACCOUNT_TYPE.copy(swiftCode = null),
+            )
+            viewModel = createViewModelWithBankAccountState(emptyState)
+
+            viewModel.trySendAction(VaultItemAction.ItemType.BankAccount.CopySwiftCodeClick)
+
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopyIbanClick with null iban should not copy to clipboard`() = runTest {
+            val emptyState = BANK_ACCOUNT_VIEW_STATE.copy(
+                type = DEFAULT_BANK_ACCOUNT_TYPE.copy(iban = null),
+            )
+            viewModel = createViewModelWithBankAccountState(emptyState)
+
+            viewModel.trySendAction(VaultItemAction.ItemType.BankAccount.CopyIbanClick)
+
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on CopyNameOnAccountClick with null name on account should not copy to clipboard`() =
+            runTest {
+                val emptyState = BANK_ACCOUNT_VIEW_STATE.copy(
+                    type = DEFAULT_BANK_ACCOUNT_TYPE.copy(nameOnAccount = null),
+                )
+                viewModel = createViewModelWithBankAccountState(emptyState)
+
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.BankAccount.CopyNameOnAccountClick,
+                )
+
+                verify(exactly = 0) {
+                    clipboardManager.setText(
+                        text = any<String>(),
+                        toastDescriptorOverride = any<Text>(),
+                    )
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on CopyBranchNumberClick with null branch number should not copy to clipboard`() =
+            runTest {
+                val emptyState = BANK_ACCOUNT_VIEW_STATE.copy(
+                    type = DEFAULT_BANK_ACCOUNT_TYPE.copy(branchNumber = null),
+                )
+                viewModel = createViewModelWithBankAccountState(emptyState)
+
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.BankAccount.CopyBranchNumberClick,
+                )
+
+                verify(exactly = 0) {
+                    clipboardManager.setText(
+                        text = any<String>(),
+                        toastDescriptorOverride = any<Text>(),
+                    )
+                }
+            }
+
+        @Test
+        fun `on CopyPinClick with null pin should not copy to clipboard`() = runTest {
+            val emptyState = BANK_ACCOUNT_VIEW_STATE.copy(
+                type = DEFAULT_BANK_ACCOUNT_TYPE.copy(pin = null),
+            )
+            viewModel = createViewModelWithBankAccountState(emptyState)
+
+            viewModel.trySendAction(VaultItemAction.ItemType.BankAccount.CopyPinClick)
+
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on CopyBankContactPhoneClick with null bank contact phone should not copy to clipboard`() =
+            runTest {
+                val emptyState = BANK_ACCOUNT_VIEW_STATE.copy(
+                    type = DEFAULT_BANK_ACCOUNT_TYPE.copy(bankContactPhone = null),
+                )
+                viewModel = createViewModelWithBankAccountState(emptyState)
+
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.BankAccount.CopyBankContactPhoneClick,
+                )
+
+                verify(exactly = 0) {
+                    clipboardManager.setText(
+                        text = any<String>(),
+                        toastDescriptorOverride = any<Text>(),
+                    )
+                }
+            }
+
+        private fun createViewModelWithBankAccountState(
+            viewState: VaultItemState.ViewState.Content,
+        ): VaultItemViewModel {
+            // Override toViewState to return the requested null-field state.
+            every {
+                mockCipherView.toViewState(
+                    previousState = any(),
+                    isPremiumUser = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canRestore = false,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
+                    hasOrganizations = true,
+                )
+            } returns viewState
+            val newViewModel = createViewModel(
+                state = DEFAULT_STATE.copy(viewState = viewState),
+            )
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+            return newViewModel
+        }
+    }
+
+    @Nested
     inner class VaultItemFlow {
         @BeforeEach
         fun setup() {
@@ -3219,6 +3535,27 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             VaultItemState.ViewState.Content(
                 common = DEFAULT_COMMON,
                 type = DEFAULT_IDENTITY_TYPE,
+            )
+
+        private val DEFAULT_BANK_ACCOUNT_TYPE:
+            VaultItemState.ViewState.Content.ItemType.BankAccount =
+            VaultItemState.ViewState.Content.ItemType.BankAccount(
+                bankName = "First National",
+                nameOnAccount = "John Doe",
+                accountType = VaultBankAccountType.CHECKING,
+                accountNumber = "12345678",
+                routingNumber = "021000021",
+                branchNumber = "001",
+                pin = "4242",
+                swiftCode = "BOFAUS3N",
+                iban = "GB29NWBK60161331926819",
+                bankContactPhone = "555-0100",
+            )
+
+        private val BANK_ACCOUNT_VIEW_STATE: VaultItemState.ViewState.Content =
+            VaultItemState.ViewState.Content(
+                common = DEFAULT_COMMON,
+                type = DEFAULT_BANK_ACCOUNT_TYPE,
             )
     }
 }

@@ -46,6 +46,7 @@ import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemStateData
 import com.x8bit.bitwarden.ui.vault.feature.item.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.util.canAssignToCollections
 import com.x8bit.bitwarden.ui.vault.feature.util.hasDeletePermissionInAtLeastOneCollection
+import com.x8bit.bitwarden.ui.vault.model.VaultBankAccountType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
@@ -238,6 +239,7 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.ItemType.Card -> handleCardTypeActions(action)
             is VaultItemAction.ItemType.SshKey -> handleSshKeyTypeActions(action)
             is VaultItemAction.ItemType.Identity -> handleIdentityTypeActions(action)
+            is VaultItemAction.ItemType.BankAccount -> handleBankAccountTypeActions(action)
             is VaultItemAction.Common -> handleCommonActions(action)
             is VaultItemAction.Internal -> handleInternalAction(action)
         }
@@ -1041,6 +1043,134 @@ class VaultItemViewModel @Inject constructor(
 
     //endregion Identity Type Handlers
 
+    //region Bank Account Type Handlers
+
+    private fun handleBankAccountTypeActions(action: VaultItemAction.ItemType.BankAccount) {
+        when (action) {
+            VaultItemAction.ItemType.BankAccount.CopyNameOnAccountClick -> {
+                handleCopyBankNameOnAccountClick()
+            }
+
+            VaultItemAction.ItemType.BankAccount.CopyAccountNumberClick -> {
+                handleCopyBankAccountNumberClick()
+            }
+
+            VaultItemAction.ItemType.BankAccount.CopyRoutingNumberClick -> {
+                handleCopyBankRoutingNumberClick()
+            }
+
+            VaultItemAction.ItemType.BankAccount.CopyBranchNumberClick -> {
+                handleCopyBankBranchNumberClick()
+            }
+
+            VaultItemAction.ItemType.BankAccount.CopyPinClick -> {
+                handleCopyBankPinClick()
+            }
+
+            VaultItemAction.ItemType.BankAccount.CopySwiftCodeClick -> {
+                handleCopyBankSwiftCodeClick()
+            }
+
+            VaultItemAction.ItemType.BankAccount.CopyIbanClick -> {
+                handleCopyBankIbanClick()
+            }
+
+            VaultItemAction.ItemType.BankAccount.CopyBankContactPhoneClick -> {
+                handleCopyBankContactPhoneClick()
+            }
+        }
+    }
+
+    private fun handleCopyBankNameOnAccountClick() {
+        onBankAccountContent { _, bankAccount ->
+            bankAccount.nameOnAccount?.let { nameOnAccount ->
+                clipboardManager.setText(
+                    text = nameOnAccount,
+                    toastDescriptorOverride = BitwardenString.name_on_account.asText(),
+                )
+            }
+        }
+    }
+
+    private fun handleCopyBankAccountNumberClick() {
+        onBankAccountContent { _, bankAccount ->
+            bankAccount.accountNumber?.let { accountNumber ->
+                clipboardManager.setText(
+                    text = accountNumber,
+                    toastDescriptorOverride = BitwardenString.account_number.asText(),
+                )
+            }
+        }
+    }
+
+    private fun handleCopyBankRoutingNumberClick() {
+        onBankAccountContent { _, bankAccount ->
+            bankAccount.routingNumber?.let { routingNumber ->
+                clipboardManager.setText(
+                    text = routingNumber,
+                    toastDescriptorOverride = BitwardenString.routing_number.asText(),
+                )
+            }
+        }
+    }
+
+    private fun handleCopyBankBranchNumberClick() {
+        onBankAccountContent { _, bankAccount ->
+            bankAccount.branchNumber?.let { branchNumber ->
+                clipboardManager.setText(
+                    text = branchNumber,
+                    toastDescriptorOverride = BitwardenString.branch_number.asText(),
+                )
+            }
+        }
+    }
+
+    private fun handleCopyBankPinClick() {
+        onBankAccountContent { _, bankAccount ->
+            bankAccount.pin?.let { pin ->
+                clipboardManager.setText(
+                    text = pin,
+                    toastDescriptorOverride = BitwardenString.pin.asText(),
+                )
+            }
+        }
+    }
+
+    private fun handleCopyBankSwiftCodeClick() {
+        onBankAccountContent { _, bankAccount ->
+            bankAccount.swiftCode?.let { swiftCode ->
+                clipboardManager.setText(
+                    text = swiftCode,
+                    toastDescriptorOverride = BitwardenString.swift_code.asText(),
+                )
+            }
+        }
+    }
+
+    private fun handleCopyBankIbanClick() {
+        onBankAccountContent { _, bankAccount ->
+            bankAccount.iban?.let { iban ->
+                clipboardManager.setText(
+                    text = iban,
+                    toastDescriptorOverride = BitwardenString.iban.asText(),
+                )
+            }
+        }
+    }
+
+    private fun handleCopyBankContactPhoneClick() {
+        onBankAccountContent { _, bankAccount ->
+            bankAccount.bankContactPhone?.let { bankContactPhone ->
+                clipboardManager.setText(
+                    text = bankContactPhone,
+                    toastDescriptorOverride = BitwardenString.bank_contact_phone.asText(),
+                )
+            }
+        }
+    }
+
+    //endregion Bank Account Type Handlers
+
     //region Internal Type Handlers
 
     private fun handleInternalAction(action: VaultItemAction.Internal) {
@@ -1423,6 +1553,21 @@ class VaultItemViewModel @Inject constructor(
                     }
             }
     }
+
+    private inline fun onBankAccountContent(
+        crossinline block: (
+            VaultItemState.ViewState.Content,
+            VaultItemState.ViewState.Content.ItemType.BankAccount,
+        ) -> Unit,
+    ) {
+        state.viewState.asContentOrNull()
+            ?.let { content ->
+                (content.type as? VaultItemState.ViewState.Content.ItemType.BankAccount)
+                    ?.let { bankAccountContent ->
+                        block(content, bankAccountContent)
+                    }
+            }
+    }
 }
 
 /**
@@ -1472,7 +1617,11 @@ data class VaultItemState(
      * Whether the fab is visible.
      */
     val isFabVisible: Boolean
-        get() = viewState is ViewState.Content && !isCipherDeleted && isCipherEditable
+        get() = viewState is ViewState.Content &&
+            !isCipherDeleted &&
+            isCipherEditable &&
+            // TODO: [PM-32810] Re-enable once Bank Account add/edit is wired.
+            viewState.asContentOrNull()?.type !is ViewState.Content.ItemType.BankAccount
 
     /**
      * Whether the cipher is in a collection.
@@ -1879,7 +2028,7 @@ data class VaultItemState(
                 data class BankAccount(
                     val bankName: String?,
                     val nameOnAccount: String?,
-                    val accountType: String?,
+                    val accountType: VaultBankAccountType?,
                     val accountNumber: String?,
                     val routingNumber: String?,
                     val branchNumber: String?,
@@ -1887,7 +2036,25 @@ data class VaultItemState(
                     val swiftCode: String?,
                     val iban: String?,
                     val bankContactPhone: String?,
-                ) : ItemType()
+                ) : ItemType() {
+
+                    /**
+                     * An ordered list of Bank Account specific elements.
+                     */
+                    val propertyList: ImmutableList<Any>
+                        get() = persistentListOfNotNull(
+                            bankName,
+                            nameOnAccount,
+                            accountType,
+                            accountNumber,
+                            routingNumber,
+                            branchNumber,
+                            pin,
+                            swiftCode,
+                            iban,
+                            bankContactPhone,
+                        )
+                }
 
                 /**
                  * Represents the `DriversLicense` item type.
@@ -2384,6 +2551,52 @@ sealed class VaultItemAction {
              * The user has clicked the copy button for the address.
              */
             data object CopyAddressClick : Identity()
+        }
+
+        /**
+         * Represents actions specific to the Bank Account type.
+         */
+        sealed class BankAccount : ItemType() {
+
+            /**
+             * The user has clicked the copy button for the name on account.
+             */
+            data object CopyNameOnAccountClick : BankAccount()
+
+            /**
+             * The user has clicked the copy button for the account number.
+             */
+            data object CopyAccountNumberClick : BankAccount()
+
+            /**
+             * The user has clicked the copy button for the routing number.
+             */
+            data object CopyRoutingNumberClick : BankAccount()
+
+            /**
+             * The user has clicked the copy button for the branch number.
+             */
+            data object CopyBranchNumberClick : BankAccount()
+
+            /**
+             * The user has clicked the copy button for the PIN.
+             */
+            data object CopyPinClick : BankAccount()
+
+            /**
+             * The user has clicked the copy button for the SWIFT code.
+             */
+            data object CopySwiftCodeClick : BankAccount()
+
+            /**
+             * The user has clicked the copy button for the IBAN.
+             */
+            data object CopyIbanClick : BankAccount()
+
+            /**
+             * The user has clicked the copy button for the bank contact phone.
+             */
+            data object CopyBankContactPhoneClick : BankAccount()
         }
     }
 

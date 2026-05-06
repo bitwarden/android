@@ -45,6 +45,7 @@ import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmen
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import com.x8bit.bitwarden.ui.vault.model.VaultBankAccountType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
@@ -3252,6 +3253,267 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     }
 
     //endregion ssh key
+
+    //region bank account
+
+    @Test
+    fun `in bank account state, all fields should be displayed when populated`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+
+        composeTestRule.onNodeWithTextAfterScroll("the bank name").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the name on account").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("Checking").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("Account number").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the routing number").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the branch number").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("PIN").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the swift code").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the iban").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the bank contact phone").assertIsDisplayed()
+    }
+
+    @Test
+    fun `in bank account state, on copy account number click should send CopyAccountNumberClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy account number")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemAction.ItemType.BankAccount.CopyAccountNumberClick)
+        }
+    }
+
+    @Test
+    fun `in bank account state, on copy routing number click should send CopyRoutingNumberClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy routing number")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemAction.ItemType.BankAccount.CopyRoutingNumberClick)
+        }
+    }
+
+    @Test
+    fun `in bank account state, on copy swift code click should send CopySwiftCodeClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy SWIFT code")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemAction.ItemType.BankAccount.CopySwiftCodeClick)
+        }
+    }
+
+    @Test
+    fun `in bank account state, on copy iban click should send CopyIbanClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy IBAN")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemAction.ItemType.BankAccount.CopyIbanClick)
+        }
+    }
+
+    @Test
+    fun `in bank account state, bankName should be displayed according to state`() {
+        val bankName = "the bank name"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(bankName).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateBankAccountType(currentState) { copy(bankName = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(bankName)
+    }
+
+    @Test
+    fun `in bank account state, nameOnAccount should be displayed according to state`() {
+        val nameOnAccount = "the name on account"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(nameOnAccount).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateBankAccountType(currentState) { copy(nameOnAccount = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(nameOnAccount)
+    }
+
+    @Test
+    fun `in bank account state, accountType should be displayed according to state`() {
+        val accountTypeText = "Checking"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(accountTypeText).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateBankAccountType(currentState) { copy(accountType = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(accountTypeText)
+    }
+
+    @Test
+    fun `in bank account state, accountNumber should be displayed according to state`() {
+        val accountNumberLabel = "Account number"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(accountNumberLabel).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateBankAccountType(currentState) { copy(accountNumber = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(accountNumberLabel)
+    }
+
+    @Test
+    fun `in bank account state, routingNumber should be displayed according to state`() {
+        val routingNumber = "the routing number"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(routingNumber).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateBankAccountType(currentState) { copy(routingNumber = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(routingNumber)
+    }
+
+    @Test
+    fun `in bank account state, branchNumber should be displayed according to state`() {
+        val branchNumber = "the branch number"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(branchNumber).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateBankAccountType(currentState) { copy(branchNumber = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(branchNumber)
+    }
+
+    @Test
+    fun `in bank account state, pin should be displayed according to state`() {
+        val pinLabel = "PIN"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(pinLabel).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateBankAccountType(currentState) { copy(pin = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(pinLabel)
+    }
+
+    @Test
+    fun `in bank account state, swiftCode should be displayed according to state`() {
+        val swiftCode = "the swift code"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(swiftCode).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateBankAccountType(currentState) { copy(swiftCode = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(swiftCode)
+    }
+
+    @Test
+    fun `in bank account state, iban should be displayed according to state`() {
+        val iban = "the iban"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(iban).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateBankAccountType(currentState) { copy(iban = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(iban)
+    }
+
+    @Test
+    fun `in bank account state, bankContactPhone should be displayed according to state`() {
+        val bankContactPhone = "the bank contact phone"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(bankContactPhone).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateBankAccountType(currentState) { copy(bankContactPhone = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(bankContactPhone)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in bank account state, on copy name on account click should send CopyNameOnAccountClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy name on account")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.BankAccount.CopyNameOnAccountClick,
+            )
+        }
+    }
+
+    @Test
+    fun `in bank account state, on copy branch number click should send CopyBranchNumberClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy branch number")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.BankAccount.CopyBranchNumberClick,
+            )
+        }
+    }
+
+    @Test
+    fun `in bank account state, on copy pin click should send CopyPinClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy PIN")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemAction.ItemType.BankAccount.CopyPinClick)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in bank account state, on copy bank contact phone click should send CopyBankContactPhoneClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy bank contact phone")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.BankAccount.CopyBankContactPhoneClick,
+            )
+        }
+    }
+
+    @Test
+    fun `in bank account state, edit fab should not be displayed`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+
+        composeTestRule.onNodeWithContentDescription("Edit item").assertDoesNotExist()
+    }
+
+    //endregion bank account
 }
 
 //region Helper functions
@@ -3311,6 +3573,29 @@ private fun updateCardType(
         is VaultItemState.ViewState.Content -> {
             when (val type = viewState.type) {
                 is VaultItemState.ViewState.Content.ItemType.Card -> {
+                    viewState.copy(
+                        type = type.transform(),
+                    )
+                }
+
+                else -> viewState
+            }
+        }
+
+        else -> viewState
+    }
+    return currentState.copy(viewState = updatedType)
+}
+
+private fun updateBankAccountType(
+    currentState: VaultItemState,
+    transform: VaultItemState.ViewState.Content.ItemType.BankAccount.() ->
+    VaultItemState.ViewState.Content.ItemType.BankAccount,
+): VaultItemState {
+    val updatedType = when (val viewState = currentState.viewState) {
+        is VaultItemState.ViewState.Content -> {
+            when (val type = viewState.type) {
+                is VaultItemState.ViewState.Content.ItemType.BankAccount -> {
                     viewState.copy(
                         type = type.transform(),
                     )
@@ -3468,6 +3753,20 @@ private val DEFAULT_SSH_KEY: VaultItemState.ViewState.Content.ItemType.SshKey =
         showPrivateKey = false,
     )
 
+private val DEFAULT_BANK_ACCOUNT: VaultItemState.ViewState.Content.ItemType.BankAccount =
+    VaultItemState.ViewState.Content.ItemType.BankAccount(
+        bankName = "the bank name",
+        nameOnAccount = "the name on account",
+        accountType = VaultBankAccountType.CHECKING,
+        accountNumber = "the account number",
+        routingNumber = "the routing number",
+        branchNumber = "the branch number",
+        pin = "the pin",
+        swiftCode = "the swift code",
+        iban = "the iban",
+        bankContactPhone = "the bank contact phone",
+    )
+
 private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
     VaultItemState.ViewState.Content.Common(
         name = "cipher",
@@ -3597,6 +3896,12 @@ private val DEFAULT_SSH_KEY_VIEW_STATE: VaultItemState.ViewState.Content =
     VaultItemState.ViewState.Content(
         common = DEFAULT_COMMON.copy(iconData = IconData.Local(BitwardenDrawable.ic_ssh_key)),
         type = DEFAULT_SSH_KEY,
+    )
+
+private val DEFAULT_BANK_ACCOUNT_VIEW_STATE: VaultItemState.ViewState.Content =
+    VaultItemState.ViewState.Content(
+        common = DEFAULT_COMMON.copy(iconData = IconData.Local(BitwardenDrawable.ic_globe)),
+        type = DEFAULT_BANK_ACCOUNT,
     )
 
 private val EMPTY_VIEW_STATES = listOf(
