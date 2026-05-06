@@ -27,21 +27,4 @@ class VaultBankAccountTypeExtensionsTest {
                 assertEquals(label, type.longName)
             }
     }
-
-    @Test
-    fun `stringNameOrNull should return the correct value for each VaultBankAccountType`() {
-        mapOf(
-            VaultBankAccountType.SELECT to null,
-            VaultBankAccountType.CHECKING to "Checking",
-            VaultBankAccountType.SAVINGS to "Savings",
-            VaultBankAccountType.CERTIFICATE_OF_DEPOSIT to "Certificate of deposit",
-            VaultBankAccountType.LINE_OF_CREDIT to "Line of credit",
-            VaultBankAccountType.INVESTMENT_BROKERAGE to "Investment/brokerage",
-            VaultBankAccountType.MONEY_MARKET to "Money market",
-            VaultBankAccountType.OTHER to "Other",
-        )
-            .forEach { (type, label) ->
-                assertEquals(label, type.stringNameOrNull)
-            }
-    }
 }

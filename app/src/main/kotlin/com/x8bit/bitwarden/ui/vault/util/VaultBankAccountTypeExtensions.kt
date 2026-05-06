@@ -26,18 +26,3 @@ val VaultBankAccountType.longName: Text
         VaultBankAccountType.MONEY_MARKET -> BitwardenString.money_market.asText()
         VaultBankAccountType.OTHER -> BitwardenString.other.asText()
     }
-
-/**
- * Helper that exposes the display name string or null for a [VaultBankAccountType].
- */
-val VaultBankAccountType.stringNameOrNull: String?
-    get() = when (this) {
-        VaultBankAccountType.SELECT -> null
-        VaultBankAccountType.CHECKING -> "Checking"
-        VaultBankAccountType.SAVINGS -> "Savings"
-        VaultBankAccountType.CERTIFICATE_OF_DEPOSIT -> "Certificate of deposit"
-        VaultBankAccountType.LINE_OF_CREDIT -> "Line of credit"
-        VaultBankAccountType.INVESTMENT_BROKERAGE -> "Investment/brokerage"
-        VaultBankAccountType.MONEY_MARKET -> "Money market"
-        VaultBankAccountType.OTHER -> "Other"
-    }
