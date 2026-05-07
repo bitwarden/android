@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build output
+build/
+dist/
+*.js
+*.js.map
+*.d.ts
+*.d.ts.map
+
+# Keep source TypeScript files
+!src/**/*.ts
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+
+# Testing
+coverage/
+
+# Temporary files
+tmp/
+temp/
