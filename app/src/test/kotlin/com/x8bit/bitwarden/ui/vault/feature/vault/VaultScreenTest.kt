@@ -2504,6 +2504,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     bankAccountItemsCount = count,
+                    showBankAccountGroup = true,
                 ),
             )
         }
@@ -2520,6 +2521,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     bankAccountItemsCount = 1,
+                    showBankAccountGroup = true,
                 ),
             )
         }

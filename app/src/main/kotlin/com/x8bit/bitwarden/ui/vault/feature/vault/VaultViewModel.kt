@@ -297,6 +297,11 @@ class VaultViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        featureFlagManager.getFeatureFlagFlow(FlagKey.NewItemTypes)
+            .map { VaultAction.Internal.NewItemTypesFlagUpdateReceive(isEnabled = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         viewModelScope.launch {
             delay(timeMillis = BROWSER_AUTOFILL_DIALOG_DELAY)
             mutableStateFlow.update { vaultState ->
@@ -468,8 +473,7 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleSelectAddItemType() {
-        val isNewItemTypesEnabled = featureFlagManager
-            .getFeatureFlag(FlagKey.NewItemTypes)
+        val isNewItemTypesEnabled = state.isNewItemTypesEnabled
         // If policy is enable for any organization, exclude the card option
         val excludedOptions = persistentListOfNotNull(
             CreateVaultItemType.SSH_KEY,
@@ -1070,6 +1074,10 @@ class VaultViewModel @Inject constructor(
                 handleKdfSyncCompletedReceive()
             }
 
+            is VaultAction.Internal.NewItemTypesFlagUpdateReceive -> {
+                handleNewItemTypesFlagUpdateReceive(action)
+            }
+
             is VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive -> {
                 handleCredentialExchangeProtocolExportFlagUpdateReceive(action)
             }
@@ -1141,6 +1149,22 @@ class VaultViewModel @Inject constructor(
                     ),
                 )
             }
+        }
+    }
+
+    private fun handleNewItemTypesFlagUpdateReceive(
+        action: VaultAction.Internal.NewItemTypesFlagUpdateReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isNewItemTypesEnabled = action.isEnabled)
+        }
+
+        vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
+            updateVaultState(
+                vaultData = vaultData,
+                dialog = state.dialog,
+                validTotpIds = state.validTotpIds,
+            )
         }
     }
 
@@ -1386,7 +1410,7 @@ class VaultViewModel @Inject constructor(
             isRefreshing = false,
             restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
             validTotpIds = validTotpIds,
-            isNewItemTypesEnabled = featureFlagManager.getFeatureFlag(FlagKey.NewItemTypes),
+            isNewItemTypesEnabled = state.isNewItemTypesEnabled,
         )
     }
 
@@ -1457,8 +1481,7 @@ class VaultViewModel @Inject constructor(
                     vaultFilterType = vaultFilterTypeOrDefault,
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                     validTotpIds = validTotpIds,
-                    isNewItemTypesEnabled = featureFlagManager
-                        .getFeatureFlag(FlagKey.NewItemTypes),
+                    isNewItemTypesEnabled = state.isNewItemTypesEnabled,
                 ),
                 dialog = dialog,
                 isRefreshing = false,
@@ -1515,8 +1538,7 @@ class VaultViewModel @Inject constructor(
                     vaultFilterType = vaultFilterTypeOrDefault,
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                     validTotpIds = validTotpIds,
-                    isNewItemTypesEnabled = featureFlagManager
-                        .getFeatureFlag(FlagKey.NewItemTypes),
+                    isNewItemTypesEnabled = state.isNewItemTypesEnabled,
                 ),
                 validTotpIds = validTotpIds.toImmutableSet(),
             )
@@ -1682,6 +1704,7 @@ data class VaultState(
     val isUpgradedToPremiumCardEligible: Boolean = false,
     val isAwaitingKdfSync: Boolean = false,
     val validTotpIds: ImmutableSet<String>,
+    val isNewItemTypesEnabled: Boolean = false,
 ) : Parcelable {
 
     /**
@@ -2595,6 +2618,13 @@ sealed class VaultAction {
          */
         data class CredentialExchangeProtocolExportFlagUpdateReceive(
             val isCredentialExchangeProtocolExportEnabled: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that the New Item Types feature flag has been updated.
+         */
+        data class NewItemTypesFlagUpdateReceive(
+            val isEnabled: Boolean,
         ) : Internal()
 
         /**

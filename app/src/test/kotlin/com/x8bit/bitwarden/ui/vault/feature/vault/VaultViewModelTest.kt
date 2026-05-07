@@ -236,7 +236,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         every {
             getFeatureFlagFlow(FlagKey.CredentialExchangeProtocolExport)
         } returns mutableCxpExportFeatureFlagFlow
-        every { getFeatureFlag(FlagKey.NewItemTypes) } answers { mutableNewItemTypesFlagFlow.value }
+        every { getFeatureFlagFlow(FlagKey.NewItemTypes) } returns mutableNewItemTypesFlagFlow
     }
 
     private val mutablePremiumUpgradeBannerEligibleFlow = MutableStateFlow(false)
@@ -3841,6 +3841,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             dialog = VaultState.DialogState.SelectVaultAddItemType(
                 excludedOptions = persistentListOf(CreateVaultItemType.SSH_KEY),
             ),
+            isNewItemTypesEnabled = true,
         )
         assertEquals(
             expectedState,
