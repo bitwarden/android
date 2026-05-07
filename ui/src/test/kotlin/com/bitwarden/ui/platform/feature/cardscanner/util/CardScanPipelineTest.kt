@@ -210,21 +210,23 @@ class CardScanPipelineTest {
 
     private fun horizontalLines(vararg lines: Pair<String, ImageRect>): RecognizedText =
         recognizedText(
-            *lines.map { (text, bounds) ->
-                block(
-                    bounds = bounds,
-                    line(
-                        text = text,
+            *lines
+                .map { (text, bounds) ->
+                    block(
                         bounds = bounds,
-                        corners = listOf(
-                            ImagePoint(bounds.left, bounds.top),
-                            ImagePoint(bounds.right, bounds.top),
-                            ImagePoint(bounds.right, bounds.bottom),
-                            ImagePoint(bounds.left, bounds.bottom),
+                        line(
+                            text = text,
+                            bounds = bounds,
+                            corners = listOf(
+                                ImagePoint(bounds.left, bounds.top),
+                                ImagePoint(bounds.right, bounds.top),
+                                ImagePoint(bounds.right, bounds.bottom),
+                                ImagePoint(bounds.left, bounds.bottom),
+                            ),
                         ),
-                    ),
-                )
-            }.toTypedArray(),
+                    )
+                }
+                .toTypedArray(),
         )
 
     private fun line(
