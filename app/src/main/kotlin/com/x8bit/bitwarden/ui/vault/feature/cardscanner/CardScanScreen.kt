@@ -1,27 +1,34 @@
 package com.x8bit.bitwarden.ui.vault.feature.cardscanner
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.StatusBarsAppearanceAffect
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -50,6 +57,8 @@ fun CardScanScreen(
     viewModel: CardScanViewModel = hiltViewModel(),
     cardTextAnalyzer: CardTextAnalyzer = LocalCardTextAnalyzer.current,
 ) {
+    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+
     cardTextAnalyzer.onCardScanned = { cardScanData ->
         viewModel.trySendAction(
             CardScanAction.CardScanReceive(cardScanData = cardScanData),
@@ -87,97 +96,98 @@ fun CardScanScreen(
                 )
             },
         ) {
-            CameraPreview(
-                cameraErrorReceive = {
-                    viewModel.trySendAction(
-                        CardScanAction.CameraSetupErrorReceive,
-                    )
-                },
-                analyzer = cardTextAnalyzer,
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxSize(),
-            )
-            when (rememberWindowSize()) {
-                WindowSize.Compact -> {
-                    CardScanContentCompact()
-                }
-
-                WindowSize.Medium -> {
-                    CardScanContentMedium()
+            ) {
+                Text(
+                    text = stringResource(id = BitwardenString.scan_card_instruction),
+                    textAlign = TextAlign.Center,
+                    color = BitwardenTheme.colorScheme.text.primary,
+                    style = BitwardenTheme.typography.bodyMedium,
+                    modifier = Modifier
+                        .testTag("CardScanInstruction")
+                        .fillMaxWidth()
+                        .padding(all = 12.dp),
+                )
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .testTag("CardScanFrame")
+                        .fillMaxSize(),
+                ) {
+                    CameraPreview(
+                        cameraErrorReceive = {
+                            viewModel.trySendAction(
+                                CardScanAction.CameraSetupErrorReceive,
+                            )
+                        },
+                        analyzer = cardTextAnalyzer,
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                    CardScanOverlay(
+                        overlayWidth = when (rememberWindowSize()) {
+                            WindowSize.Compact -> 300.dp
+                            WindowSize.Medium -> 250.dp
+                        },
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                    AnimatedScanHintBanner(
+                        visible = state.showHint,
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                    )
                 }
             }
         }
     }
 }
 
+/**
+ * Wraps [ScanHintBanner] in a fade-in/fade-out so the hint doesn't snap into place when the
+ * timeout elapses or vanish abruptly once a scan succeeds.
+ */
 @Composable
-private fun CardScanContentCompact(
+private fun AnimatedScanHintBanner(
+    visible: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn(),
+        exit = fadeOut(),
         modifier = modifier,
     ) {
-        CardScanOverlay(
-            overlayWidth = 300.dp,
-            modifier = Modifier.weight(2f),
-        )
-
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceAround,
+        ScanHintBanner(
             modifier = Modifier
-                .weight(1f)
-                .fillMaxSize()
-                .background(color = BitwardenTheme.colorScheme.background.scrim)
-                .padding(horizontal = 16.dp)
-                .verticalScroll(rememberScrollState()),
-        ) {
-            Text(
-                text = stringResource(
-                    id = BitwardenString.scan_card_instruction,
-                ),
-                textAlign = TextAlign.Center,
-                color = BitwardenTheme.colorScheme.text.primary,
-                style = BitwardenTheme.typography.bodyMedium,
-                modifier = Modifier.padding(horizontal = 16.dp),
-            )
-            Spacer(modifier = Modifier.navigationBarsPadding())
-        }
+                .fillMaxWidth()
+                .navigationBarsPadding()
+                .padding(horizontal = 16.dp, vertical = 16.dp),
+        )
     }
 }
 
+/**
+ * A timeout-driven hint shown over the camera preview when no successful card scan has been
+ * received within the expected window. Wrapped in a polite live region so TalkBack announces it
+ * to users when it appears.
+ */
 @Composable
-private fun CardScanContentMedium(
+private fun ScanHintBanner(
     modifier: Modifier = Modifier,
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier,
-    ) {
-        CardScanOverlay(
-            overlayWidth = 250.dp,
-            modifier = Modifier.weight(2f),
-        )
-
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceAround,
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxSize()
-                .background(color = BitwardenTheme.colorScheme.background.scrim)
-                .padding(horizontal = 16.dp)
-                .navigationBarsPadding()
-                .verticalScroll(rememberScrollState()),
-        ) {
-            Text(
-                text = stringResource(
-                    id = BitwardenString.scan_card_instruction,
-                ),
-                textAlign = TextAlign.Center,
-                color = BitwardenTheme.colorScheme.text.primary,
-                style = BitwardenTheme.typography.bodySmall,
+    Text(
+        text = stringResource(
+            id = BitwardenString.hold_steady_and_ensure_all_card_details_are_visible,
+        ),
+        textAlign = TextAlign.Center,
+        color = BitwardenTheme.colorScheme.text.primary,
+        style = BitwardenTheme.typography.bodyMedium,
+        modifier = modifier
+            .semantics { liveRegion = LiveRegionMode.Polite }
+            .background(
+                color = BitwardenTheme.colorScheme.background.scrim,
+                shape = RoundedCornerShape(size = 8.dp),
             )
-        }
-    }
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+    )
 }

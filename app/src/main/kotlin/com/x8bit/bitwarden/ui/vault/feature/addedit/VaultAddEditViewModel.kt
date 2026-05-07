@@ -1941,19 +1941,15 @@ class VaultAddEditViewModel @Inject constructor(
                 val data = result.cardScanData
                 updateCardContent { cardType ->
                     cardType.copy(
-                        number = data.number ?: cardType.number,
-                        expirationYear = data.expirationYear
-                            ?: cardType.expirationYear,
-                        expirationMonth = data.expirationMonth
-                            ?.toExpirationMonth()
-                            ?: cardType.expirationMonth,
-                        securityCode = data.securityCode
-                            ?: cardType.securityCode,
-                        brand = data.number
-                            ?.detectCardBrand()
-                            ?: cardType.brand,
+                        number = data.number,
+                        brand = data.number.detectCardBrand(),
+                        expirationMonth = data.expirationMonth.toExpirationMonth(),
+                        expirationYear = data.expirationYear ?: cardType.expirationYear,
                     )
                 }
+                sendEvent(
+                    VaultAddEditEvent.ShowSnackbar(BitwardenString.card_scanned.asText()),
+                )
                 sendEvent(VaultAddEditEvent.FocusCardHolderName)
             }
 
