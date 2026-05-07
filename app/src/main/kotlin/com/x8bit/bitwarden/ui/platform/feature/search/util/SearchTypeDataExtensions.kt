@@ -71,6 +71,7 @@ fun SearchTypeData.updateWithAdditionalDataIfNecessary(
         SearchTypeData.Vault.Trash -> this
         SearchTypeData.Vault.VerificationCodes -> this
         SearchTypeData.Vault.SshKeys -> this
+        SearchTypeData.Vault.BankAccounts -> this
     }
 
 /**
@@ -125,6 +126,10 @@ private fun CipherListView.filterBySearchType(
         is SearchTypeData.Vault.Logins -> type is CipherListViewType.Login && isActive
         is SearchTypeData.Vault.SecureNotes -> type is CipherListViewType.SecureNote && isActive
         is SearchTypeData.Vault.SshKeys -> type is CipherListViewType.SshKey && isActive
+        is SearchTypeData.Vault.BankAccounts -> {
+            type is CipherListViewType.BankAccount && isActive
+        }
+
         is SearchTypeData.Vault.VerificationCodes -> login?.totp != null && isActive
         is SearchTypeData.Vault.Trash -> deletedDate != null
     }
@@ -266,7 +271,7 @@ private val CipherListViewType.iconRes: Int
         is CipherListViewType.Card -> BitwardenDrawable.ic_payment_card
         CipherListViewType.Identity -> BitwardenDrawable.ic_id_card
         CipherListViewType.SshKey -> BitwardenDrawable.ic_ssh_key
-        CipherListViewType.BankAccount -> BitwardenDrawable.ic_note
+        CipherListViewType.BankAccount -> BitwardenDrawable.ic_payment_card
         CipherListViewType.DriversLicense -> BitwardenDrawable.ic_note
         CipherListViewType.Passport -> BitwardenDrawable.ic_note
     }

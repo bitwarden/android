@@ -1279,6 +1279,36 @@ class VaultItemListingViewModel @Inject constructor(
         }
     }
 
+    private fun handleCopyAccountNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyAccountNumberClick,
+    ) {
+        viewModelScope.launch {
+            getCipherViewOrNull(action.cipherId)?.bankAccount?.accountNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    clipboardManager.setText(
+                        text = it,
+                        toastDescriptorOverride = BitwardenString.account_number.asText(),
+                    )
+                }
+        }
+    }
+
+    private fun handleCopyRoutingNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyRoutingNumberClick,
+    ) {
+        viewModelScope.launch {
+            getCipherViewOrNull(action.cipherId)?.bankAccount?.routingNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    clipboardManager.setText(
+                        text = it,
+                        toastDescriptorOverride = BitwardenString.routing_number.asText(),
+                    )
+                }
+        }
+    }
+
     private fun handleCopyPasswordClick(
         action: ListingItemOverflowAction.VaultAction.CopyPasswordClick,
     ) {
@@ -1537,6 +1567,7 @@ class VaultItemListingViewModel @Inject constructor(
         )
     }
 
+    @Suppress("LongMethod")
     private fun handleOverflowOptionClick(action: VaultItemListingsAction.OverflowOptionClick) {
         when (val overflowAction = action.action) {
             is ListingItemOverflowAction.SendAction.CopyUrlClick -> {
@@ -1569,6 +1600,14 @@ class VaultItemListingViewModel @Inject constructor(
 
             is ListingItemOverflowAction.VaultAction.CopyNumberClick -> {
                 handleCopyNumberClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyAccountNumberClick -> {
+                handleCopyAccountNumberClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyRoutingNumberClick -> {
+                handleCopyRoutingNumberClick(overflowAction)
             }
 
             is ListingItemOverflowAction.VaultAction.CopyPasswordClick -> {
@@ -2892,6 +2931,7 @@ data class VaultItemListingState(
             ItemListingType.Vault.Login,
             ItemListingType.Vault.SecureNote,
             ItemListingType.Vault.SshKey,
+            ItemListingType.Vault.BankAccount,
             ItemListingType.Vault.Trash,
             ItemListingType.Send.SendFile,
             ItemListingType.Send.SendText,
@@ -3334,6 +3374,16 @@ data class VaultItemListingState(
              */
             data object SshKey : Vault() {
                 override val titleText: Text get() = BitwardenString.ssh_keys.asText()
+                override val hasFab: Boolean get() = false
+            }
+
+            /**
+             * A Bank Account item listing.
+             */
+            data object BankAccount : Vault() {
+                override val titleText: Text get() = BitwardenString.bank_accounts.asText()
+
+                // TODO: [PM-32810] Re-enable once Bank Account add/edit is wired.
                 override val hasFab: Boolean get() = false
             }
 

@@ -47,6 +47,7 @@ fun VaultData.toViewState(
     vaultFilterType: VaultFilterType,
     restrictItemTypesPolicyOrgIds: List<String>,
     validTotpIds: Set<String>,
+    isNewItemTypesEnabled: Boolean,
 ): VaultState.ViewState {
     val allCipherViews =
         decryptCipherListResult
@@ -144,6 +145,8 @@ fun VaultData.toViewState(
                 .count { it.type is CipherListViewType.SecureNote },
             sshKeyItemsCount = activeCipherViews
                 .count { it.type is CipherListViewType.SshKey },
+            bankAccountItemsCount = activeCipherViews
+                .count { it.type is CipherListViewType.BankAccount },
             favoriteItems = activeDecryptedCipherViews
                 .filter { it.favorite }
                 .mapNotNull {
@@ -217,6 +220,7 @@ fun VaultData.toViewState(
                 .asText()
                 .takeIf { !isPremium && archiveCount == 0 },
             showCardGroup = cardCount != 0 || restrictItemTypesPolicyOrgIds.isEmpty(),
+            showBankAccountGroup = isNewItemTypesEnabled,
         )
     }
 }
@@ -362,8 +366,20 @@ private fun CipherListView.toVaultItemOrNull(
             hasDecryptionError = hasDecryptionError,
         )
 
-        // TODO: [PM-32009] Map BankAccount to its own VaultItem subclass when the UI is wired.
-        CipherListViewType.BankAccount -> null
+        CipherListViewType.BankAccount -> VaultState.ViewState.VaultItem.BankAccount(
+            id = id,
+            name = name.asText(),
+            overflowOptions = toOverflowActions(
+                hasMasterPassword = hasMasterPassword,
+                isPremiumUser = isPremiumUser,
+            ),
+            extraIconList = toLabelIcons(),
+            shouldShowMasterPasswordReprompt = hasMasterPassword &&
+                reprompt == CipherRepromptType.PASSWORD,
+            hasDecryptionError = hasDecryptionError,
+        )
+
+        // TODO: [PM-32009] Map DriversLicense/Passport when their UIs are wired.
         CipherListViewType.DriversLicense -> null
         CipherListViewType.Passport -> null
     }

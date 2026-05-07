@@ -43,6 +43,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockBankAccountView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
@@ -1245,6 +1246,144 @@ class SearchViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `OverflowOptionClick Vault CopyAccountNumberClick should call setText on the ClipboardManager`() =
+        runTest {
+            val accountNumber = "12345678"
+            val viewModel = createViewModel()
+            coEvery {
+                vaultRepository.getCipher(CIPHER_ID)
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    cipherType = CipherType.BANK_ACCOUNT,
+                    bankAccount = createMockBankAccountView(
+                        number = 1,
+                        accountNumber = accountNumber,
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyAccountNumberClick(
+                        cipherId = "mockId-1",
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = accountNumber,
+                    toastDescriptorOverride = BitwardenString.account_number.asText(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyAccountNumberClick should not copy when account number is blank`() =
+        runTest {
+            val viewModel = createViewModel()
+            coEvery {
+                vaultRepository.getCipher(CIPHER_ID)
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    cipherType = CipherType.BANK_ACCOUNT,
+                    bankAccount = createMockBankAccountView(
+                        number = 1,
+                        accountNumber = "",
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyAccountNumberClick(
+                        cipherId = "mockId-1",
+                        requiresPasswordReprompt = false,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyRoutingNumberClick should call setText on the ClipboardManager`() =
+        runTest {
+            val routingNumber = "021000021"
+            val viewModel = createViewModel()
+            coEvery {
+                vaultRepository.getCipher(CIPHER_ID)
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    cipherType = CipherType.BANK_ACCOUNT,
+                    bankAccount = createMockBankAccountView(
+                        number = 1,
+                        routingNumber = routingNumber,
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyRoutingNumberClick(
+                        cipherId = "mockId-1",
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = routingNumber,
+                    toastDescriptorOverride = BitwardenString.routing_number.asText(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyRoutingNumberClick should not copy when routing number is null`() =
+        runTest {
+            val viewModel = createViewModel()
+            coEvery {
+                vaultRepository.getCipher(CIPHER_ID)
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    cipherType = CipherType.BANK_ACCOUNT,
+                    bankAccount = createMockBankAccountView(
+                        number = 1,
+                        routingNumber = null,
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyRoutingNumberClick(
+                        cipherId = "mockId-1",
+                        requiresPasswordReprompt = false,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `OverflowOptionClick Vault CopyTotpClick with GenerateTotpCode success should call setText on the ClipboardManager`() =
         runTest {
             val totpCode = "totpCode"
@@ -2004,6 +2143,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                     SearchTypeData.Vault.NoFolder -> SearchType.Vault.NoFolder
                     SearchTypeData.Vault.SecureNotes -> SearchType.Vault.SecureNotes
                     SearchTypeData.Vault.SshKeys -> SearchType.Vault.SshKeys
+                    SearchTypeData.Vault.BankAccounts -> SearchType.Vault.BankAccounts
                     SearchTypeData.Vault.Trash -> SearchType.Vault.Trash
                     SearchTypeData.Vault.VerificationCodes -> SearchType.Vault.VerificationCodes
                     null -> SearchType.Vault.All
