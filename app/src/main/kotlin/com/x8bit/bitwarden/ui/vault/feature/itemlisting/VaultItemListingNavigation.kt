@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 
 import android.os.Parcelable
@@ -6,6 +8,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.toRoute
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
 import com.bitwarden.ui.platform.base.util.composableWithStayTransitions
 import com.bitwarden.ui.platform.util.ParcelableRouteSerializer
