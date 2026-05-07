@@ -1008,6 +1008,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                     archiveSubText = null,
                     archiveEndIcon = null,
                     showCardGroup = false,
+                    showBankAccountGroup = false,
                 ),
             )
         }
@@ -2134,6 +2135,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     cardItemsCount = 1,
                     showCardGroup = true,
+                    showBankAccountGroup = false,
                 ),
             )
         }
@@ -2148,6 +2150,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     cardItemsCount = 0,
                     showCardGroup = false,
+                    showBankAccountGroup = false,
                 ),
             )
         }
@@ -2763,4 +2766,5 @@ private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultStat
     archiveSubText = null,
     archiveEndIcon = null,
     showCardGroup = true,
+    showBankAccountGroup = false,
 )

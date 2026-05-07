@@ -259,22 +259,24 @@ fun VaultContent(
             }
         }
 
-        item(key = "bank_accounts_group") {
-            BitwardenGroupItem(
-                startIcon = IconData.Local(
-                    iconRes = BitwardenDrawable.ic_payment_card,
-                    testTag = "BankAccountCipherIcon",
-                ),
-                label = stringResource(id = BitwardenString.type_bank_account),
-                supportingLabel = state.bankAccountItemsCount.toString(),
-                onClick = vaultHandlers.bankAccountGroupClick,
-                cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
-                modifier = Modifier
-                    .animateItem()
-                    .fillMaxWidth()
-                    .testTag("BankAccountFilter")
-                    .standardHorizontalMargin(),
-            )
+        if (state.showBankAccountGroup) {
+            item(key = "bank_accounts_group") {
+                BitwardenGroupItem(
+                    startIcon = IconData.Local(
+                        iconRes = BitwardenDrawable.ic_payment_card,
+                        testTag = "BankAccountCipherIcon",
+                    ),
+                    label = stringResource(id = BitwardenString.type_bank_account),
+                    supportingLabel = state.bankAccountItemsCount.toString(),
+                    onClick = vaultHandlers.bankAccountGroupClick,
+                    cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
+                    modifier = Modifier
+                        .animateItem()
+                        .fillMaxWidth()
+                        .testTag("BankAccountFilter")
+                        .standardHorizontalMargin(),
+                )
+            }
         }
 
         item(key = "identities_group") {

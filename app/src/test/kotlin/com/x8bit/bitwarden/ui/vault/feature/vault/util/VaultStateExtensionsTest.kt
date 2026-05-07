@@ -90,5 +90,6 @@ class VaultStateExtensionsTest {
             archiveSubText = null,
             archiveEndIcon = null,
             showCardGroup = true,
+            showBankAccountGroup = false,
         )
 }

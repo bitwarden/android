@@ -1386,6 +1386,7 @@ class VaultViewModel @Inject constructor(
             isRefreshing = false,
             restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
             validTotpIds = validTotpIds,
+            isNewItemTypesEnabled = featureFlagManager.getFeatureFlag(FlagKey.NewItemTypes),
         )
     }
 
@@ -1456,6 +1457,8 @@ class VaultViewModel @Inject constructor(
                     vaultFilterType = vaultFilterTypeOrDefault,
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                     validTotpIds = validTotpIds,
+                    isNewItemTypesEnabled = featureFlagManager
+                        .getFeatureFlag(FlagKey.NewItemTypes),
                 ),
                 dialog = dialog,
                 isRefreshing = false,
@@ -1512,6 +1515,8 @@ class VaultViewModel @Inject constructor(
                     vaultFilterType = vaultFilterTypeOrDefault,
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                     validTotpIds = validTotpIds,
+                    isNewItemTypesEnabled = featureFlagManager
+                        .getFeatureFlag(FlagKey.NewItemTypes),
                 ),
                 validTotpIds = validTotpIds.toImmutableSet(),
             )
@@ -1780,6 +1785,7 @@ data class VaultState(
          * @property archiveSubText The subtext to be displayed on the archive item.
          * @property archiveEndIcon The end icon to be displayed on the archive item.
          * @property showCardGroup Is the card group available for display.
+         * @property showBankAccountGroup Is the bank account group available for display.
          */
         @Parcelize
         data class Content(
@@ -1800,6 +1806,7 @@ data class VaultState(
             val archiveSubText: Text?,
             @field:DrawableRes val archiveEndIcon: Int?,
             val showCardGroup: Boolean,
+            val showBankAccountGroup: Boolean,
         ) : ViewState() {
             override val hasFab: Boolean get() = true
             override val isPullToRefreshEnabled: Boolean get() = true
@@ -2015,7 +2022,7 @@ data class VaultState(
                 override val id: String,
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(
-                    BitwardenDrawable.ic_payment_card,
+                    iconRes = BitwardenDrawable.ic_payment_card,
                 ),
                 override val startIconTestTag: String = "BankAccountCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
@@ -2641,6 +2648,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
     isRefreshing: Boolean,
     restrictItemTypesPolicyOrgIds: List<String>,
     validTotpIds: Set<String>,
+    isNewItemTypesEnabled: Boolean,
 ) {
     this.update {
         if (vaultData != null) {
@@ -2653,6 +2661,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                     isIconLoadingDisabled = isIconLoadingDisabled,
                     restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
                     validTotpIds = validTotpIds,
+                    isNewItemTypesEnabled = isNewItemTypesEnabled,
                 ),
                 dialog = VaultState.DialogState.Error(
                     title = errorTitle,

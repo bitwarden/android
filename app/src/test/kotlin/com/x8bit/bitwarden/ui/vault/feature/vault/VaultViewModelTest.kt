@@ -1352,6 +1352,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 hasMasterPassword = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
                 validTotpIds = emptySet(),
+                isNewItemTypesEnabled = false,
             ),
         )
             .copy(
@@ -1378,6 +1379,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     hasMasterPassword = true,
                     restrictItemTypesPolicyOrgIds = emptyList(),
                     validTotpIds = emptySet(),
+                    isNewItemTypesEnabled = false,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1517,6 +1519,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     archiveSubText = null,
                     archiveEndIcon = null,
                     showCardGroup = true,
+                    showBankAccountGroup = false,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1547,6 +1550,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     archiveSubText = null,
                     archiveEndIcon = null,
                     showCardGroup = true,
+                    showBankAccountGroup = false,
                 ),
             )
             val viewModel = createViewModel()
@@ -1686,6 +1690,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     archiveSubText = null,
                     archiveEndIcon = null,
                     showCardGroup = true,
+                    showBankAccountGroup = false,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1827,6 +1832,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
+                        showBankAccountGroup = false,
                     ),
                     dialog = VaultState.DialogState.Error(
                         title = BitwardenString.an_error_has_occurred.asText(),
@@ -1895,6 +1901,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
+                        showBankAccountGroup = false,
                     ),
                     dialog = VaultState.DialogState.Error(
                         title = BitwardenString.an_error_has_occurred.asText(),
@@ -2011,6 +2018,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
+                        showBankAccountGroup = false,
                     ),
                     dialog = null,
                 ),
@@ -2101,6 +2109,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
+                        showBankAccountGroup = false,
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -2350,6 +2359,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         archiveSubText = BitwardenString.premium_subscription_required.asText(),
                         archiveEndIcon = BitwardenDrawable.ic_locked,
                         showCardGroup = true,
+                        showBankAccountGroup = false,
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -2457,6 +2467,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
+                        showBankAccountGroup = false,
                     ),
                     dialog = VaultState.DialogState.VaultLoadCipherDecryptionError(
                         title = BitwardenString.decryption_error.asText(),
@@ -2530,6 +2541,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
+                        showBankAccountGroup = false,
                     ),
                     dialog = null,
                 ).copy(
@@ -3995,6 +4007,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
+                        showBankAccountGroup = false,
                     ),
                     dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
                         title = BitwardenString.update_your_encryption_settings.asText(),
@@ -4059,6 +4072,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
+                        showBankAccountGroup = false,
                     ),
                     dialog = null,
                 ),
@@ -4418,4 +4432,5 @@ private val DEFAULT_CONTENT_VIEW_STATE = VaultState.ViewState.Content(
     archiveSubText = null,
     archiveEndIcon = null,
     showCardGroup = true,
+    showBankAccountGroup = false,
 )

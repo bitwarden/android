@@ -47,6 +47,7 @@ fun VaultData.toViewState(
     vaultFilterType: VaultFilterType,
     restrictItemTypesPolicyOrgIds: List<String>,
     validTotpIds: Set<String>,
+    isNewItemTypesEnabled: Boolean,
 ): VaultState.ViewState {
     val allCipherViews =
         decryptCipherListResult
@@ -219,6 +220,7 @@ fun VaultData.toViewState(
                 .asText()
                 .takeIf { !isPremium && archiveCount == 0 },
             showCardGroup = cardCount != 0 || restrictItemTypesPolicyOrgIds.isEmpty(),
+            showBankAccountGroup = isNewItemTypesEnabled,
         )
     }
 }
