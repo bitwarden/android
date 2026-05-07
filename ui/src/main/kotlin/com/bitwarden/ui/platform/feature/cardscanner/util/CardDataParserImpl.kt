@@ -13,7 +13,7 @@ private val CVV4_REGEX = Regex("""\b\d{4}\b""")
  */
 class CardDataParserImpl : CardDataParser {
 
-    override fun parseCardData(text: String): CardScanData? {
+    override fun parseCardData(text: String): ParsedCardFields? {
         val panMatch = PAN_REGEX.find(text)
         val number = panMatch
             ?.value
@@ -55,7 +55,7 @@ class CardDataParserImpl : CardDataParser {
         )
             .takeIf { it.isNotEmpty() }
             ?.let {
-                CardScanData(
+                ParsedCardFields(
                     number = number,
                     expirationMonth = expirationMonth,
                     expirationYear = expirationYear,

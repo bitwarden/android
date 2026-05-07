@@ -1930,13 +1930,11 @@ class VaultAddEditViewModel @Inject constructor(
         when (val result = action.cardScanResult) {
             is CardScanResult.Success -> {
                 val data = result.cardScanData
-                val number = requireNotNull(data.number)
-                val expirationMonth = requireNotNull(data.expirationMonth).toExpirationMonth()
                 updateCardContent { cardType ->
                     cardType.copy(
-                        number = number,
-                        brand = number.detectCardBrand(),
-                        expirationMonth = expirationMonth,
+                        number = data.number,
+                        brand = data.number.detectCardBrand(),
+                        expirationMonth = data.expirationMonth.toExpirationMonth(),
                         expirationYear = data.expirationYear ?: cardType.expirationYear,
                     )
                 }

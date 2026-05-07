@@ -198,11 +198,12 @@ class CardScanPipelineTest {
             month = parsed?.expirationMonth,
             year = parsed?.expirationYear,
         )
-        if (confirmedPan == null || latestExpiry == null || parsed == null) return null
-        return parsed.copy(
+        if (confirmedPan == null || latestExpiry == null) return null
+        return CardScanData(
             number = confirmedPan,
             expirationMonth = latestExpiry.month,
             expirationYear = latestExpiry.year,
+            securityCode = parsed?.securityCode,
         )
     }
 

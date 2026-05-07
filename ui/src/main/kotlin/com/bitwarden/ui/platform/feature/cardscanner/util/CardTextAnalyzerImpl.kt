@@ -105,18 +105,19 @@ class CardTextAnalyzerImpl(
      * expiry-bearing frame may differ, so the emission composes the confirmed PAN with the most
      * recent buffered expiry.
      */
-    private fun voteAndMaybeEmit(parsed: CardScanData?) {
+    private fun voteAndMaybeEmit(parsed: ParsedCardFields?) {
         val confirmedPan = voteBuffer.record(parsed?.number)
         val latestExpiry = expiryBuffer.record(
             month = parsed?.expirationMonth,
             year = parsed?.expirationYear,
         )
-        if (confirmedPan != null && latestExpiry != null && parsed != null) {
+        if (confirmedPan != null && latestExpiry != null) {
             onCardScanned(
-                parsed.copy(
+                CardScanData(
                     number = confirmedPan,
                     expirationMonth = latestExpiry.month,
                     expirationYear = latestExpiry.year,
+                    securityCode = parsed?.securityCode,
                 ),
             )
         }
