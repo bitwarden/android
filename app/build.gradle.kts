@@ -299,6 +299,7 @@ dependencies {
     standardImplementation(libs.google.firebase.crashlytics)
     standardImplementation(libs.google.billing)
     standardImplementation(libs.google.play.review)
+    standardImplementation(libs.google.mlkit.text.recognition)
 
     // Pull in test fixtures from other modules
     testImplementation(testFixtures(project(":core")))
