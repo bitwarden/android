@@ -366,6 +366,7 @@ jobs:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: mobile
         run: |
+          mkdir -p ${{ github.workspace }}/keystores
           az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
           --name app_fdroid-keystore.jks --file ${{ github.workspace }}/keystores/app_fdroid-keystore.jks --output none
           az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
