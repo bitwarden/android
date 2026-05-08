@@ -5,6 +5,7 @@ import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.provider.CallingAppInfo
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
@@ -126,6 +127,7 @@ class VaultAddEditViewModel @Inject constructor(
     featureFlagManager: FeatureFlagManager,
     generatorRepository: GeneratorRepository,
     cardScanManager: CardScanManager,
+    private val buildInfoManager: BuildInfoManager,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val toastManager: ToastManager,
     private val authRepository: AuthRepository,
@@ -183,7 +185,8 @@ class VaultAddEditViewModel @Inject constructor(
 
             VaultAddEditState(
                 isArchiveEnabled = featureFlagManager.getFeatureFlag(FlagKey.ArchiveItems),
-                isCardScannerEnabled = featureFlagManager.getFeatureFlag(FlagKey.CardScanner),
+                isCardScannerEnabled = featureFlagManager
+                    .getFeatureFlag(FlagKey.CardScanner) && !buildInfoManager.isFdroid,
                 vaultAddEditType = vaultAddEditType,
                 cipherType = vaultCipherType,
                 viewState = when (vaultAddEditType) {
@@ -1929,7 +1932,9 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleCardScannerFlagUpdateReceive(
         action: VaultAddEditAction.Internal.CardScannerFlagUpdateReceive,
     ) {
-        mutableStateFlow.update { it.copy(isCardScannerEnabled = action.isEnabled) }
+        mutableStateFlow.update {
+            it.copy(isCardScannerEnabled = action.isEnabled && !buildInfoManager.isFdroid)
+        }
     }
 
     private fun handleCardScanResultReceive(

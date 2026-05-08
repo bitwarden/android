@@ -13,6 +13,9 @@ import java.util.concurrent.atomic.AtomicBoolean
  * [CardTextAnalyzer] implementation that uses ML Kit Text Recognition
  * to detect credit card details from camera frames.
  *
+ * Only used in the standard build flavor. The F-Droid flavor provides a no-op
+ * stub because Google ML Kit is not permitted in F-Droid builds.
+ *
  * @property cardDataParser The parser used to extract card data from
  * recognized text.
  */
@@ -23,9 +26,10 @@ class CardTextAnalyzerImpl(
 
     private val isInAnalysis = AtomicBoolean(false)
 
-    private val recognizer = TextRecognition.getClient(
-        TextRecognizerOptions.DEFAULT_OPTIONS,
-    )
+    // Lazy so ML Kit is only touched once a scan begins, never during construction.
+    private val recognizer by lazy {
+        TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+    }
 
     override lateinit var onCardScanned: (CardScanData) -> Unit
 
