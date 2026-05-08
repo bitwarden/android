@@ -3382,9 +3382,7 @@ data class VaultItemListingState(
              */
             data object BankAccount : Vault() {
                 override val titleText: Text get() = BitwardenString.bank_accounts.asText()
-
-                // TODO: [PM-32810] Re-enable once Bank Account add/edit is wired.
-                override val hasFab: Boolean get() = false
+                override val hasFab: Boolean get() = true
             }
 
             /**

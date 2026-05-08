@@ -2972,7 +2972,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     viewState = VaultItemListingState.ViewState.NoItems(
                         header = null,
                         message = BitwardenString.no_bank_accounts.asText(),
-                        shouldShowAddButton = false,
+                        shouldShowAddButton = true,
                         buttonText = BitwardenString.new_bank_account.asText(),
                     ),
                 ),
@@ -6352,6 +6352,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             mutableSnackbarDataFlow.tryEmit(snackbarData)
             assertEquals(VaultItemListingEvent.ShowSnackbar(data = snackbarData), awaitItem())
         }
+    }
+
+    @Test
+    fun `BankAccount listing type should display the FAB`() {
+        assertTrue(VaultItemListingState.ItemListingType.Vault.BankAccount.hasFab)
     }
 
     private fun setupFido2CreateRequest(
