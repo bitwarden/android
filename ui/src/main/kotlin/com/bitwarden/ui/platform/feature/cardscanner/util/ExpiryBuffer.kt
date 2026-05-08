@@ -12,7 +12,7 @@ package com.bitwarden.ui.platform.feature.cardscanner.util
  *
  * @property windowSize The maximum number of recent frames retained.
  */
-internal class ExpiryBuffer(
+class ExpiryBuffer(
     private val windowSize: Int = TEMPORAL_VOTE_WINDOW_SIZE,
 ) {
     private val recent = ArrayDeque<Expiry?>(windowSize)

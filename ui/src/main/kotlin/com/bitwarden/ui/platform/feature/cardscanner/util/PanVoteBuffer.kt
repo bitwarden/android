@@ -1,6 +1,20 @@
 package com.bitwarden.ui.platform.feature.cardscanner.util
 
 /**
+ * The maximum number of recent frames whose Luhn-valid PAN candidates are tracked for temporal
+ * voting.
+ */
+internal const val TEMPORAL_VOTE_WINDOW_SIZE: Int = 3
+
+/**
+ * The minimum number of times the same PAN must appear in the temporal window before it is
+ * emitted to the caller. Two-of-three voting eliminates one-frame OCR flukes (a Luhn-valid PAN
+ * that briefly appears in the corner of the viewport, for example) without unduly delaying
+ * legitimate scans.
+ */
+internal const val TEMPORAL_VOTE_THRESHOLD: Int = 2
+
+/**
  * A small rolling buffer that records the Luhn-valid PAN parsed from each recent frame and
  * answers "should we emit this PAN now?" using a temporal voting threshold.
  *
@@ -12,7 +26,7 @@ package com.bitwarden.ui.platform.feature.cardscanner.util
  * @property windowSize The maximum number of recent frames retained.
  * @property voteThreshold The minimum number of matching observations required to emit a PAN.
  */
-internal class PanVoteBuffer(
+class PanVoteBuffer(
     private val windowSize: Int = TEMPORAL_VOTE_WINDOW_SIZE,
     private val voteThreshold: Int = TEMPORAL_VOTE_THRESHOLD,
 ) {

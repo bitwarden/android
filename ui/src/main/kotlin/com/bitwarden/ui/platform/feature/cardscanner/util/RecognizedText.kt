@@ -9,7 +9,7 @@ package com.bitwarden.ui.platform.feature.cardscanner.util
  * pulling in `android.graphics` (whose stub `Rect`/`Point` types would yield zeros under the
  * `isReturnDefaultValues = true` JVM unit test configuration).
  */
-internal interface RecognizedText {
+interface RecognizedText {
     /**
      * The text blocks in the recognized image.
      */
@@ -19,7 +19,7 @@ internal interface RecognizedText {
 /**
  * A single block of recognized text.
  */
-internal interface RecognizedTextBlock {
+interface RecognizedTextBlock {
     /**
      * The axis-aligned bounding box of the block in unrotated image coordinates, or `null` if
      * unavailable.
@@ -35,7 +35,7 @@ internal interface RecognizedTextBlock {
 /**
  * A single line of recognized text.
  */
-internal interface RecognizedTextLine {
+interface RecognizedTextLine {
     /**
      * The recognized text for this line.
      */
@@ -59,14 +59,14 @@ internal interface RecognizedTextLine {
  * but does not depend on the Android stub `android.jar` so the geometry filter can be exercised
  * in pure JVM unit tests.
  */
-internal data class ImagePoint(val x: Int, val y: Int)
+data class ImagePoint(val x: Int, val y: Int)
 
 /**
  * An immutable, framework-free axis-aligned rectangle in image coordinates. Mirrors
  * `android.graphics.Rect`'s `(left, top, right, bottom)` semantics — `right` and `bottom` are
  * exclusive.
  */
-internal data class ImageRect(
+data class ImageRect(
     val left: Int,
     val top: Int,
     val right: Int,
