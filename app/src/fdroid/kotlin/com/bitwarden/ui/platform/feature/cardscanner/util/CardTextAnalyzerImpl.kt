@@ -9,15 +9,14 @@ import com.bitwarden.annotation.OmitFromCoverage
  * Google ML Kit is not permitted in F-Droid releases, so this stub replaces the
  * standard analyzer at build time. The Scan Card UI is hidden via
  * `BuildInfoManager.isFdroid`; this implementation exists solely to satisfy the
- * flavor-uniform construction path used by `LocalManagerProvider`.
- *
- * @property cardDataParser Unused; retained so the constructor signature
+ * flavor-uniform construction path used by `LocalManagerProvider`. The
+ * `cardDataParser` argument is unused, retained so the constructor signature
  * matches the standard flavor and call sites remain identical.
  */
 @OmitFromCoverage
-@Suppress("UnusedPrivateProperty")
+@Suppress("UnusedParameter")
 class CardTextAnalyzerImpl(
-    private val cardDataParser: CardDataParser,
+    cardDataParser: CardDataParser,
 ) : CardTextAnalyzer {
 
     override lateinit var onCardScanned: (CardScanData) -> Unit
