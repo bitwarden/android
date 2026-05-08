@@ -413,6 +413,31 @@ jobs:
           keyAlias:bitwarden \
           keyPassword:$FDROID_STORE_PASSWORD
 
+      - name: Truncate F-Droid changelogs
+        run: |
+          # F-Droid has a 500-character limit on changelog/"What's New" text
+          MAX_LENGTH=500
+          shopt -s nullglob globstar
+          for file in fastlane/metadata/android/**/changelogs/*.txt; do
+            char_count=$(python3 -c "import sys; print(len(open(sys.argv[1], encoding='utf-8').read()))" "$file")
+            if [ "$char_count" -gt "$MAX_LENGTH" ]; then
+              echo "Truncating $file ($char_count -> $MAX_LENGTH chars)"
+              python3 - "$file" "$MAX_LENGTH" <<'EOF'
+          import sys
+          path, max_len = sys.argv[1], int(sys.argv[2])
+          text = open(path, encoding='utf-8').read()
+          # Truncate at a word boundary if possible, leave room for ellipsis
+          cutoff = max_len - 1  # 1 char for ellipsis "…"
+          truncated = text[:cutoff]
+          last_space = truncated.rfind(' ')
+          if last_space > cutoff - 50:  # only break on word if reasonably close to end
+              truncated = truncated[:last_space]
+          truncated = truncated.rstrip() + '…'
+          open(path, 'w', encoding='utf-8').write(truncated)
+          EOF
+            fi
+          done
+
       - name: Generate F-Droid Beta Artifacts
         env:
           FDROID_BETA_KEYSTORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.FDROID-BETA-KEYSTORE-PASSWORD }}
