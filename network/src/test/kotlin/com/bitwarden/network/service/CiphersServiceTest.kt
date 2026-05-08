@@ -10,6 +10,7 @@ import com.bitwarden.network.model.BulkShareCiphersJsonRequest
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.CreateCipherResponseJson
 import com.bitwarden.network.model.FileUploadType
+import com.bitwarden.network.model.GetCipherResponse
 import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.ImportCiphersResponseJson
 import com.bitwarden.network.model.ShareCipherJsonRequest
@@ -35,6 +36,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertInstanceOf
 import retrofit2.create
 import java.io.File
 import java.time.Clock
@@ -440,13 +442,20 @@ class CiphersServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `getCipher should return the correct response`() = runTest {
+    fun `getCipher with success should return the correct response`() = runTest {
         server.enqueue(MockResponse().setBody(CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON))
         val result = ciphersService.getCipher(cipherId = "mockId-1")
         assertEquals(
-            createMockCipher(number = 1),
+            GetCipherResponse.Success(cipher = createMockCipher(number = 1)),
             result.getOrThrow(),
         )
+    }
+
+    @Test
+    fun `getSend with 404 should return the NotFound response`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(404))
+        val result = ciphersService.getCipher("mockId-1")
+        assertInstanceOf<GetCipherResponse.NotFound>(result.getOrThrow())
     }
 
     @Test
