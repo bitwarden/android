@@ -5,6 +5,8 @@ import com.bitwarden.auth.JitMasterPasswordRegistrationResponse
 import com.bitwarden.auth.KeyConnectorRegistrationResult
 import com.bitwarden.auth.TdeRegistrationRequest
 import com.bitwarden.auth.TdeRegistrationResponse
+import com.bitwarden.auth.UserMasterPasswordRegistrationRequest
+import com.bitwarden.auth.UserMasterPasswordRegistrationResponse
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.FingerprintRequest
 import com.bitwarden.core.KeyConnectorResponse
@@ -192,6 +194,68 @@ class AuthSdkSourceTest {
                         userId = userId,
                         deviceIdentifier = deviceIdentifier,
                         trustDevice = shouldTrustDevice,
+                    ),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `postKeysForUserPasswordRegistration should call SDK and return a Result with correct data`() =
+        runBlocking {
+            val email = "email@example.com"
+            val salt = "salt"
+            val masterPassword = "masterPassword"
+            val masterPasswordHint = "masterPasswordHint"
+            val emailVerificationToken = "emailVerificationToken"
+            val expectedResult = mockk<UserMasterPasswordRegistrationResponse>()
+            val slot = slot<suspend Client.() -> UserMasterPasswordRegistrationResponse>()
+            coEvery {
+                sdkClientManager.singleUseClient(block = capture(slot))
+            } coAnswers { slot.captured(client) }
+            coEvery {
+                clientRegistration.postKeysForUserPasswordRegistration(
+                    request = UserMasterPasswordRegistrationRequest(
+                        email = email,
+                        salt = salt,
+                        masterPassword = masterPassword,
+                        masterPasswordHint = masterPasswordHint,
+                        emailVerificationToken = emailVerificationToken,
+                        organizationUserId = null,
+                        orgInviteToken = null,
+                        orgSponsoredFreeFamilyPlanToken = null,
+                        acceptEmergencyAccessInviteToken = null,
+                        acceptEmergencyAccessId = null,
+                        providerInviteToken = null,
+                        providerUserId = null,
+                    ),
+                )
+            } returns expectedResult
+
+            val result = authSkdSource.postKeysForUserPasswordRegistration(
+                email = email,
+                salt = salt,
+                masterPassword = masterPassword,
+                masterPasswordHint = masterPasswordHint,
+                emailVerificationToken = emailVerificationToken,
+            )
+
+            assertEquals(expectedResult.asSuccess(), result)
+            coVerify(exactly = 1) {
+                clientRegistration.postKeysForUserPasswordRegistration(
+                    request = UserMasterPasswordRegistrationRequest(
+                        email = email,
+                        salt = salt,
+                        masterPassword = masterPassword,
+                        masterPasswordHint = masterPasswordHint,
+                        emailVerificationToken = emailVerificationToken,
+                        organizationUserId = null,
+                        orgInviteToken = null,
+                        orgSponsoredFreeFamilyPlanToken = null,
+                        acceptEmergencyAccessInviteToken = null,
+                        acceptEmergencyAccessId = null,
+                        providerInviteToken = null,
+                        providerUserId = null,
                     ),
                 )
             }
