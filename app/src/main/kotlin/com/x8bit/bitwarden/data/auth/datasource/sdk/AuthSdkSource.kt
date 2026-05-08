@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.datasource.sdk
 import com.bitwarden.auth.JitMasterPasswordRegistrationResponse
 import com.bitwarden.auth.KeyConnectorRegistrationResult
 import com.bitwarden.auth.TdeRegistrationResponse
+import com.bitwarden.auth.UserMasterPasswordRegistrationResponse
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.KeyConnectorResponse
 import com.bitwarden.core.MasterPasswordPolicyOptions
@@ -52,6 +53,17 @@ interface AuthSdkSource {
         deviceIdentifier: String,
         shouldTrustDevice: Boolean,
     ): Result<TdeRegistrationResponse>
+
+    /**
+     * Enrolls the user for password unlock.
+     */
+    suspend fun postKeysForUserPasswordRegistration(
+        email: String,
+        salt: String,
+        masterPassword: String,
+        masterPasswordHint: String?,
+        emailVerificationToken: String,
+    ): Result<UserMasterPasswordRegistrationResponse>
 
     /**
      * Gets the data needed to create a new auth request.

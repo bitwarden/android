@@ -946,6 +946,7 @@ class AuthRepositoryImpl(
         return SwitchAccountResult.AccountSwitched
     }
 
+    @Suppress("LongMethod")
     override suspend fun register(
         email: String,
         masterPassword: String,
@@ -970,6 +971,22 @@ class AuthRepositoryImpl(
         if (!isMasterPasswordStrong) {
             return RegisterResult.WeakPassword
         }
+        if (featureFlagManager.getFeatureFlag(key = FlagKey.V2EncryptionPassword)) {
+            return withContext(dispatcherManager.io) {
+                authSdkSource.postKeysForUserPasswordRegistration(
+                    email = email,
+                    salt = email,
+                    masterPassword = masterPassword,
+                    masterPasswordHint = masterPasswordHint,
+                    emailVerificationToken = emailVerificationToken,
+                )
+            }
+                .fold(
+                    onSuccess = { RegisterResult.Success },
+                    onFailure = { RegisterResult.Error(errorMessage = null, error = it) },
+                )
+        }
+
         val kdf = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt())
         return authSdkSource
             .makeRegisterKeys(

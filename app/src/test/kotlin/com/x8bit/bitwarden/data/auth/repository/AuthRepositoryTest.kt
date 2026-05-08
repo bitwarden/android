@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.repository
 import app.cash.turbine.test
 import com.bitwarden.auth.JitMasterPasswordRegistrationResponse
 import com.bitwarden.auth.TdeRegistrationResponse
+import com.bitwarden.auth.UserMasterPasswordRegistrationResponse
 import com.bitwarden.core.AuthRequestMethod
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.InitUserCryptoMethod
@@ -296,6 +297,7 @@ class AuthRepositoryTest {
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlag(FlagKey.V2EncryptionJitPassword) } returns true
         every { getFeatureFlag(FlagKey.V2EncryptionTde) } returns true
+        every { getFeatureFlag(FlagKey.V2EncryptionPassword) } returns true
     }
 
     private val repository: AuthRepository = AuthRepositoryImpl(
@@ -5283,6 +5285,40 @@ class AuthRepositoryTest {
 
     @Test
     fun `register with email token Success should return Success`() = runTest {
+        coEvery {
+            authSdkSource.postKeysForUserPasswordRegistration(
+                email = EMAIL,
+                salt = EMAIL,
+                masterPassword = PASSWORD,
+                masterPasswordHint = null,
+                emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
+            )
+        } returns mockk<UserMasterPasswordRegistrationResponse>().asSuccess()
+
+        val result = repository.register(
+            email = EMAIL,
+            masterPassword = PASSWORD,
+            masterPasswordHint = null,
+            emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
+            shouldCheckDataBreaches = false,
+            isMasterPasswordStrong = true,
+        )
+
+        assertEquals(RegisterResult.Success, result)
+        coVerify(exactly = 1) {
+            authSdkSource.postKeysForUserPasswordRegistration(
+                email = EMAIL,
+                salt = EMAIL,
+                masterPassword = PASSWORD,
+                masterPasswordHint = null,
+                emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
+            )
+        }
+    }
+
+    @Test
+    fun `register with email token Success should return Success with v1 encryption`() = runTest {
+        every { featureFlagManager.getFeatureFlag(FlagKey.V2EncryptionPassword) } returns false
         coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
             identityService.registerFinish(
