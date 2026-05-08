@@ -5,10 +5,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
@@ -98,13 +94,10 @@ fun LazyListScope.vaultAddEditBankAccountItems(
     }
 
     item {
-        var showAccountNumber by rememberSaveable { mutableStateOf(value = false) }
         BitwardenPasswordField(
             label = stringResource(id = BitwardenString.account_number),
             value = bankAccountState.accountNumber,
             onValueChange = bankAccountHandlers.onAccountNumberTextChange,
-            showPassword = showAccountNumber,
-            showPasswordChange = { showAccountNumber = it },
             showPasswordTestTag = "ShowAccountNumberButton",
             passwordFieldTestTag = "AccountNumberEntry",
             cardStyle = CardStyle.Middle(),
@@ -141,13 +134,10 @@ fun LazyListScope.vaultAddEditBankAccountItems(
     }
 
     item {
-        var showPin by rememberSaveable { mutableStateOf(value = false) }
         BitwardenPasswordField(
             label = stringResource(id = BitwardenString.pin),
             value = bankAccountState.pin,
             onValueChange = bankAccountHandlers.onPinTextChange,
-            showPassword = showPin,
-            showPasswordChange = { showPin = it },
             keyboardType = KeyboardType.NumberPassword,
             showPasswordTestTag = "ShowPinButton",
             passwordFieldTestTag = "PinEntry",
@@ -172,13 +162,10 @@ fun LazyListScope.vaultAddEditBankAccountItems(
     }
 
     item {
-        var showIban by rememberSaveable { mutableStateOf(value = false) }
         BitwardenPasswordField(
             label = stringResource(id = BitwardenString.iban),
             value = bankAccountState.iban,
             onValueChange = bankAccountHandlers.onIbanTextChange,
-            showPassword = showIban,
-            showPasswordChange = { showIban = it },
             showPasswordTestTag = "ShowIbanButton",
             passwordFieldTestTag = "IbanEntry",
             cardStyle = CardStyle.Middle(),
