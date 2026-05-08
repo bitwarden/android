@@ -294,10 +294,11 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     // Standard-specific flavor dependencies
-    standardImplementation(libs.google.firebase.cloud.messaging)
-    standardImplementation(platform(libs.google.firebase.bom))
-    standardImplementation(libs.google.firebase.crashlytics)
     standardImplementation(libs.google.billing)
+    standardImplementation(platform(libs.google.firebase.bom))
+    standardImplementation(libs.google.firebase.cloud.messaging)
+    standardImplementation(libs.google.firebase.crashlytics)
+    standardImplementation(libs.google.mlkit.text.recognition)
     standardImplementation(libs.google.play.review)
 
     // Pull in test fixtures from other modules

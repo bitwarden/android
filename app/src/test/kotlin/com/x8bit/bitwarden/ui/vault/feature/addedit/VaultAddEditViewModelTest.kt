@@ -7,6 +7,7 @@ import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.collections.CollectionView
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
@@ -238,6 +239,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlag(FlagKey.CardScanner) } answers { mutableCardScannerFlow.value }
         every { getFeatureFlagFlow(FlagKey.CardScanner) } returns mutableCardScannerFlow
+    }
+    private val buildInfoManager: BuildInfoManager = mockk {
+        every { isFdroid } returns false
     }
 
     @BeforeEach
@@ -5351,6 +5355,25 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
     @Test
+    fun `isCardScannerEnabled should remain false on F-Droid even when flag is on`() =
+        runTest {
+            every { buildInfoManager.isFdroid } returns true
+            mutableCardScannerFlow.value = true
+            val initState = createVaultAddItemState()
+            val viewModel = createAddVaultItemViewModel()
+            assertEquals(
+                initState.copy(isCardScannerEnabled = false),
+                viewModel.stateFlow.value,
+            )
+            mutableCardScannerFlow.value = false
+            mutableCardScannerFlow.value = true
+            assertEquals(
+                initState.copy(isCardScannerEnabled = false),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
     fun `CardScanResultReceive with Success should update card fields and focus name`() =
         runTest {
             val viewModel = createAddVaultItemViewModel(
@@ -5892,6 +5915,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             savedStateHandle = savedStateHandle,
             featureFlagManager = featureFlagManager,
             authRepository = authRepository,
+            buildInfoManager = buildInfoManager,
             clipboardManager = bitwardenClipboardManager,
             cardScanManager = cardScanManager,
             policyManager = policyManager,

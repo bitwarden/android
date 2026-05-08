@@ -162,7 +162,7 @@ internal fun RecognizedTextLine.isApproximatelyHorizontal(
  * @param rawImageHeight The height of the raw camera image (before rotation is applied).
  * @param rotationDegrees The rotation that should be applied to display the image upright.
  */
-internal fun filterScannedText(
+fun filterScannedText(
     recognized: RecognizedText,
     rawImageWidth: Int,
     rawImageHeight: Int,

@@ -14,22 +14,11 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
- * The maximum number of recent frames whose Luhn-valid PAN candidates are tracked for temporal
- * voting.
- */
-internal const val TEMPORAL_VOTE_WINDOW_SIZE: Int = 3
-
-/**
- * The minimum number of times the same PAN must appear in the temporal window before it is
- * emitted to the caller. Two-of-three voting eliminates one-frame OCR flukes (a Luhn-valid PAN
- * that briefly appears in the corner of the viewport, for example) without unduly delaying
- * legitimate scans.
- */
-internal const val TEMPORAL_VOTE_THRESHOLD: Int = 2
-
-/**
  * [CardTextAnalyzer] implementation that uses ML Kit Text Recognition to detect credit card
  * details from camera frames.
+ *
+ * Only used in the standard build flavor. The F-Droid flavor provides a no-op stub because
+ * Google ML Kit is not permitted in F-Droid builds.
  *
  * The analyzer applies three layered defenses to prevent committing the wrong card data when
  * multiple cards are visible or a card is held off-axis:
@@ -49,9 +38,10 @@ class CardTextAnalyzerImpl(
 
     private val isInAnalysis = AtomicBoolean(false)
 
-    private val recognizer = TextRecognition.getClient(
-        TextRecognizerOptions.DEFAULT_OPTIONS,
-    )
+    // Lazy so ML Kit is only touched once a scan begins, never during construction.
+    private val recognizer by lazy {
+        TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+    }
 
     private val voteBuffer = PanVoteBuffer()
 
