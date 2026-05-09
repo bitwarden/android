@@ -812,7 +812,7 @@ Do you want to switch to this account?</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance.</string>
     <string name="master_password_hint_not_specified">Master password hint</string>
     <string name="new_master_password_hint">New master password hint</string>
-    <string name="get_started">Get started</string>
+    <string name="get_started">Get Started</string>
     <string name="save_and_protect_your_data">Save and protect your data</string>
     <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
     <string name="new_login">New login</string>
