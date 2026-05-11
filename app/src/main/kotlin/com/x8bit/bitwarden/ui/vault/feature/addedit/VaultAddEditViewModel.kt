@@ -314,6 +314,10 @@ class VaultAddEditViewModel @Inject constructor(
                 handleBankAccountTypeActions(action)
             }
 
+            is VaultAddEditAction.ItemType.LicenseType -> {
+                handleLicenseTypeActions(action)
+            }
+
             is VaultAddEditAction.Internal -> handleInternalActions(action)
         }
     }
@@ -1746,6 +1750,49 @@ class VaultAddEditViewModel @Inject constructor(
 
     //endregion Bank Account Type Handlers
 
+    //region License Type Handlers
+
+    @Suppress("LongMethod")
+    private fun handleLicenseTypeActions(
+        action: VaultAddEditAction.ItemType.LicenseType,
+    ) {
+        when (action) {
+            is VaultAddEditAction.ItemType.LicenseType.FirstNameTextChange -> {
+                updateLicenseContent { it.copy(firstName = action.firstName) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.MiddleNameTextChange -> {
+                updateLicenseContent { it.copy(middleName = action.middleName) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.LastNameTextChange -> {
+                updateLicenseContent { it.copy(lastName = action.lastName) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.LicenseNumberTextChange -> {
+                updateLicenseContent { it.copy(licenseNumber = action.licenseNumber) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.IssuingCountryTextChange -> {
+                updateLicenseContent { it.copy(issuingCountry = action.country) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.IssuingStateTextChange -> {
+                updateLicenseContent { it.copy(issuingState = action.state) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.IssuingAuthorityTextChange -> {
+                updateLicenseContent { it.copy(issuingAuthority = action.authority) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.LicenseClassTextChange -> {
+                updateLicenseContent { it.copy(licenseClass = action.licenseClass) }
+            }
+        }
+    }
+
+    //endregion License Type Handlers
+
     //region Internal Type Handlers
 
     private fun handleInternalActions(action: VaultAddEditAction.Internal) {
@@ -2513,6 +2560,16 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
+    private inline fun updateLicenseContent(
+        crossinline block: (VaultAddEditState.ViewState.Content.ItemType.License) ->
+        VaultAddEditState.ViewState.Content.ItemType.License,
+    ) {
+        updateContent { currentContent ->
+            (currentContent.type as? VaultAddEditState.ViewState.Content.ItemType.License)
+                ?.let { currentContent.copy(type = block(it)) }
+        }
+    }
+
     @Suppress("MaxLineLength")
     private suspend fun VaultAddEditState.ViewState.Content.createCipherForAddAndCloneItemStates(): CreateCipherResult {
         return common.selectedOwner?.collections
@@ -2619,7 +2676,7 @@ data class VaultAddEditState(
                 VaultItemCipherType.SECURE_NOTE -> BitwardenString.new_note.asText()
                 VaultItemCipherType.SSH_KEY -> BitwardenString.new_ssh_key.asText()
                 VaultItemCipherType.BANK_ACCOUNT -> BitwardenString.new_bank_account.asText()
-                VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.new_drivers_license.asText()
+                VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.new_license.asText()
                 VaultItemCipherType.PASSPORT -> BitwardenString.new_passport.asText()
             }
 
@@ -2630,7 +2687,7 @@ data class VaultAddEditState(
                 VaultItemCipherType.SECURE_NOTE -> BitwardenString.edit_note.asText()
                 VaultItemCipherType.SSH_KEY -> BitwardenString.edit_ssh_key.asText()
                 VaultItemCipherType.BANK_ACCOUNT -> BitwardenString.edit_bank_account.asText()
-                VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.edit_drivers_license.asText()
+                VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.edit_license.asText()
                 VaultItemCipherType.PASSPORT -> BitwardenString.edit_passport.asText()
             }
         }
@@ -2724,7 +2781,7 @@ data class VaultAddEditState(
         SECURE_NOTES(BitwardenString.type_secure_note),
         SSH_KEYS(BitwardenString.type_ssh_key),
         BANK_ACCOUNT(BitwardenString.type_bank_account),
-        DRIVERS_LICENSE(BitwardenString.type_license),
+        LICENSE(BitwardenString.type_license),
         PASSPORT(BitwardenString.type_passport),
     }
 
@@ -3067,7 +3124,7 @@ data class VaultAddEditState(
                     val licenseClass: String = "",
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption
-                        get() = ItemTypeOption.DRIVERS_LICENSE
+                        get() = ItemTypeOption.LICENSE
 
                     override val isSdkSupported: Boolean get() = false
 
@@ -4081,6 +4138,52 @@ sealed class VaultAddEditAction {
              * Fired when the bank contact phone text input is changed.
              */
             data class BankContactPhoneTextChange(val phone: String) : BankAccountType()
+        }
+
+        /**
+         * Represents actions specific to the License type.
+         */
+        sealed class LicenseType : ItemType() {
+
+            /**
+             * Fired when the first name text input is changed.
+             */
+            data class FirstNameTextChange(val firstName: String) : LicenseType()
+
+            /**
+             * Fired when the middle name text input is changed.
+             */
+            data class MiddleNameTextChange(val middleName: String) : LicenseType()
+
+            /**
+             * Fired when the last name text input is changed.
+             */
+            data class LastNameTextChange(val lastName: String) : LicenseType()
+
+            /**
+             * Fired when the license number text input is changed.
+             */
+            data class LicenseNumberTextChange(val licenseNumber: String) : LicenseType()
+
+            /**
+             * Fired when the issuing country text input is changed.
+             */
+            data class IssuingCountryTextChange(val country: String) : LicenseType()
+
+            /**
+             * Fired when the issuing state/province text input is changed.
+             */
+            data class IssuingStateTextChange(val state: String) : LicenseType()
+
+            /**
+             * Fired when the issuing authority text input is changed.
+             */
+            data class IssuingAuthorityTextChange(val authority: String) : LicenseType()
+
+            /**
+             * Fired when the license class text input is changed.
+             */
+            data class LicenseClassTextChange(val licenseClass: String) : LicenseType()
         }
     }
 

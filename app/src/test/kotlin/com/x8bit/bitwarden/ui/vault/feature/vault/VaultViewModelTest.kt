@@ -3831,7 +3831,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `SelectAddItemType action should not exclude bank account, drivers license, or passport when NewItemTypes flag is enabled`() {
+    fun `SelectAddItemType action should not exclude bank account, license, or passport when NewItemTypes flag is enabled`() {
         mutableNewItemTypesFlagFlow.value = true
         val viewModel = createViewModel()
 

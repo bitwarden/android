@@ -1692,7 +1692,7 @@ data class VaultItemState(
             VaultItemCipherType.SECURE_NOTE -> BitwardenString.view_note.asText()
             VaultItemCipherType.SSH_KEY -> BitwardenString.view_ssh_key.asText()
             VaultItemCipherType.BANK_ACCOUNT -> BitwardenString.view_bank_account.asText()
-            VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.view_drivers_license.asText()
+            VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.view_license.asText()
             VaultItemCipherType.PASSPORT -> BitwardenString.view_passport.asText()
         }
 
