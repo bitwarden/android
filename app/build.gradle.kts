@@ -121,7 +121,7 @@ configure<ApplicationExtension> {
                 "proguard-rules.pro",
             )
 
-            buildConfigField(type = "boolean", name = "HAS_DEBUG_MENU", value = "false")
+            buildConfigField(type = "boolean", name = "HAS_DEBUG_MENU", value = "true")
             buildConfigField(type = "boolean", name = "HAS_LOGS_ENABLED", value = "false")
         }
         release {
