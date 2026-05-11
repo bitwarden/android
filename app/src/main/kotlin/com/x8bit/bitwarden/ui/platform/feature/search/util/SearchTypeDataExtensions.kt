@@ -72,6 +72,7 @@ fun SearchTypeData.updateWithAdditionalDataIfNecessary(
         SearchTypeData.Vault.VerificationCodes -> this
         SearchTypeData.Vault.SshKeys -> this
         SearchTypeData.Vault.BankAccounts -> this
+        SearchTypeData.Vault.Licenses -> this
     }
 
 /**
@@ -128,6 +129,10 @@ private fun CipherListView.filterBySearchType(
         is SearchTypeData.Vault.SshKeys -> type is CipherListViewType.SshKey && isActive
         is SearchTypeData.Vault.BankAccounts -> {
             type is CipherListViewType.BankAccount && isActive
+        }
+
+        is SearchTypeData.Vault.Licenses -> {
+            type is CipherListViewType.DriversLicense && isActive
         }
 
         is SearchTypeData.Vault.VerificationCodes -> login?.totp != null && isActive

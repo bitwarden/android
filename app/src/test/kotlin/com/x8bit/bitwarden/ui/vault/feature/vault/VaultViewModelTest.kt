@@ -1515,11 +1515,13 @@ class VaultViewModelTest : BaseViewModelTest() {
                     itemTypesCount = CipherType.entries.size,
                     sshKeyItemsCount = 1,
                     bankAccountItemsCount = 0,
+                    licenseItemsCount = 0,
                     archivedItemsCount = 0,
                     archiveSubText = null,
                     archiveEndIcon = null,
                     showCardGroup = true,
                     showBankAccountGroup = false,
+                    showLicenseGroup = false,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1546,11 +1548,13 @@ class VaultViewModelTest : BaseViewModelTest() {
                     itemTypesCount = CipherType.entries.size,
                     sshKeyItemsCount = 0,
                     bankAccountItemsCount = 0,
+                    licenseItemsCount = 0,
                     archivedItemsCount = 0,
                     archiveSubText = null,
                     archiveEndIcon = null,
                     showCardGroup = true,
                     showBankAccountGroup = false,
+                    showLicenseGroup = false,
                 ),
             )
             val viewModel = createViewModel()
@@ -1686,11 +1690,13 @@ class VaultViewModelTest : BaseViewModelTest() {
                     itemTypesCount = CipherType.entries.size,
                     sshKeyItemsCount = 0,
                     bankAccountItemsCount = 0,
+                    licenseItemsCount = 0,
                     archivedItemsCount = 0,
                     archiveSubText = null,
                     archiveEndIcon = null,
                     showCardGroup = true,
                     showBankAccountGroup = false,
+                    showLicenseGroup = false,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1828,11 +1834,13 @@ class VaultViewModelTest : BaseViewModelTest() {
                         itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 0,
                         bankAccountItemsCount = 0,
+                        licenseItemsCount = 0,
                         archivedItemsCount = 0,
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
                         showBankAccountGroup = false,
+                        showLicenseGroup = false,
                     ),
                     dialog = VaultState.DialogState.Error(
                         title = BitwardenString.an_error_has_occurred.asText(),
@@ -1897,11 +1905,13 @@ class VaultViewModelTest : BaseViewModelTest() {
                         itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 0,
                         bankAccountItemsCount = 0,
+                        licenseItemsCount = 0,
                         archivedItemsCount = 0,
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
                         showBankAccountGroup = false,
+                        showLicenseGroup = false,
                     ),
                     dialog = VaultState.DialogState.Error(
                         title = BitwardenString.an_error_has_occurred.asText(),
@@ -2014,11 +2024,13 @@ class VaultViewModelTest : BaseViewModelTest() {
                         itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 0,
                         bankAccountItemsCount = 0,
+                        licenseItemsCount = 0,
                         archivedItemsCount = 0,
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
                         showBankAccountGroup = false,
+                        showLicenseGroup = false,
                     ),
                     dialog = null,
                 ),
@@ -2105,11 +2117,13 @@ class VaultViewModelTest : BaseViewModelTest() {
                         itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 1,
                         bankAccountItemsCount = 0,
+                        licenseItemsCount = 0,
                         archivedItemsCount = 0,
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
                         showBankAccountGroup = false,
+                        showLicenseGroup = false,
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -2256,6 +2270,19 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
 
     @Test
+    fun `LicenseGroupClick should emit NavigateToItemListing event with License type`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.LicenseGroupClick)
+                assertEquals(
+                    VaultEvent.NavigateToItemListing(VaultItemListingType.License),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
     fun `ArchiveClick with Premium should emit NavigateToItemListing event with Archive type`() =
         runTest {
             val viewModel = createViewModel()
@@ -2355,11 +2382,13 @@ class VaultViewModelTest : BaseViewModelTest() {
                         itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 0,
                         bankAccountItemsCount = 0,
+                        licenseItemsCount = 0,
                         archivedItemsCount = null,
                         archiveSubText = BitwardenString.premium_subscription_required.asText(),
                         archiveEndIcon = BitwardenDrawable.ic_locked,
                         showCardGroup = true,
                         showBankAccountGroup = false,
+                        showLicenseGroup = false,
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -2463,11 +2492,13 @@ class VaultViewModelTest : BaseViewModelTest() {
                         itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 0,
                         bankAccountItemsCount = 0,
+                        licenseItemsCount = 0,
                         archivedItemsCount = 1,
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
                         showBankAccountGroup = false,
+                        showLicenseGroup = false,
                     ),
                     dialog = VaultState.DialogState.VaultLoadCipherDecryptionError(
                         title = BitwardenString.decryption_error.asText(),
@@ -2537,11 +2568,13 @@ class VaultViewModelTest : BaseViewModelTest() {
                         itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 0,
                         bankAccountItemsCount = 0,
+                        licenseItemsCount = 0,
                         archivedItemsCount = 0,
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
                         showBankAccountGroup = false,
+                        showLicenseGroup = false,
                     ),
                     dialog = null,
                 ).copy(
@@ -4004,11 +4037,13 @@ class VaultViewModelTest : BaseViewModelTest() {
                         itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 0,
                         bankAccountItemsCount = 0,
+                        licenseItemsCount = 0,
                         archivedItemsCount = 0,
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
                         showBankAccountGroup = false,
+                        showLicenseGroup = false,
                     ),
                     dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
                         title = BitwardenString.update_your_encryption_settings.asText(),
@@ -4069,11 +4104,13 @@ class VaultViewModelTest : BaseViewModelTest() {
                         itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 0,
                         bankAccountItemsCount = 0,
+                        licenseItemsCount = 0,
                         archivedItemsCount = 0,
                         archiveSubText = null,
                         archiveEndIcon = null,
                         showCardGroup = true,
                         showBankAccountGroup = false,
+                        showLicenseGroup = false,
                     ),
                     dialog = null,
                 ),
@@ -4423,6 +4460,7 @@ private val DEFAULT_CONTENT_VIEW_STATE = VaultState.ViewState.Content(
     secureNoteItemsCount = 0,
     sshKeyItemsCount = 0,
     bankAccountItemsCount = 0,
+    licenseItemsCount = 0,
     totpItemsCount = 0,
     favoriteItems = emptyList(),
     folderItems = emptyList(),
@@ -4434,4 +4472,5 @@ private val DEFAULT_CONTENT_VIEW_STATE = VaultState.ViewState.Content(
     archiveEndIcon = null,
     showCardGroup = true,
     showBankAccountGroup = false,
+    showLicenseGroup = false,
 )

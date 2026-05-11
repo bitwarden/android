@@ -5,7 +5,7 @@ import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemViewModel
 
 /**
  * A collection of handler functions for managing actions within the context of viewing
- * driver's license items in a vault.
+ * license items in a vault.
  *
  * @property onCopyFirstNameClick Handles the user clicking the copy button next to the first
  *  name.

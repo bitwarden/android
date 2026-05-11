@@ -15,6 +15,7 @@ import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -999,6 +1000,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                     secureNoteItemsCount = 0,
                     sshKeyItemsCount = 0,
                     bankAccountItemsCount = 0,
+                    licenseItemsCount = 0,
                     favoriteItems = emptyList(),
                     folderItems = emptyList(),
                     noFolderItems = emptyList(),
@@ -1009,6 +1011,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                     archiveEndIcon = null,
                     showCardGroup = false,
                     showBankAccountGroup = false,
+                    showLicenseGroup = false,
                 ),
             )
         }
@@ -2136,6 +2139,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                     cardItemsCount = 1,
                     showCardGroup = true,
                     showBankAccountGroup = false,
+                    showLicenseGroup = false,
                 ),
             )
         }
@@ -2151,6 +2155,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                     cardItemsCount = 0,
                     showCardGroup = false,
                     showBankAccountGroup = false,
+                    showLicenseGroup = false,
                 ),
             )
         }
@@ -2505,6 +2510,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     bankAccountItemsCount = count,
                     showBankAccountGroup = true,
+                    showLicenseGroup = true,
                 ),
             )
         }
@@ -2522,6 +2528,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     bankAccountItemsCount = 1,
                     showBankAccountGroup = true,
+                    showLicenseGroup = true,
                 ),
             )
         }
@@ -2530,6 +2537,57 @@ class VaultScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText(rowText).performClick()
         verify {
             viewModel.trySendAction(VaultAction.BankAccountGroupClick)
+        }
+    }
+
+    @Test
+    fun `License group header should display correctly based on state`() {
+        val count = 3
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    licenseItemsCount = count,
+                    showLicenseGroup = true,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithTextAfterScroll("License")
+            .assertTextEquals("License", count.toString())
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `License group should not display when showLicenseGroup is false`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    licenseItemsCount = 0,
+                    showLicenseGroup = false,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithTag("LicenseFilter")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `clicking a license group should send LicenseGroupClick action`() {
+        val rowText = "License"
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    licenseItemsCount = 1,
+                    showLicenseGroup = true,
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onNodeWithText(rowText).performClick()
+        verify {
+            viewModel.trySendAction(VaultAction.LicenseGroupClick)
         }
     }
 
@@ -2764,9 +2822,11 @@ private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultStat
     itemTypesCount = 4,
     sshKeyItemsCount = 0,
     bankAccountItemsCount = 0,
+    licenseItemsCount = 0,
     archivedItemsCount = 0,
     archiveSubText = null,
     archiveEndIcon = null,
     showCardGroup = true,
     showBankAccountGroup = false,
+    showLicenseGroup = false,
 )

@@ -147,6 +147,8 @@ fun VaultData.toViewState(
                 .count { it.type is CipherListViewType.SshKey },
             bankAccountItemsCount = activeCipherViews
                 .count { it.type is CipherListViewType.BankAccount },
+            licenseItemsCount = activeCipherViews
+                .count { it.type is CipherListViewType.DriversLicense },
             favoriteItems = activeDecryptedCipherViews
                 .filter { it.favorite }
                 .mapNotNull {
@@ -221,6 +223,7 @@ fun VaultData.toViewState(
                 .takeIf { !isPremium && archiveCount == 0 },
             showCardGroup = cardCount != 0 || restrictItemTypesPolicyOrgIds.isEmpty(),
             showBankAccountGroup = isNewItemTypesEnabled,
+            showLicenseGroup = isNewItemTypesEnabled,
         )
     }
 }
