@@ -5,6 +5,7 @@ import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDriversLicenseView
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
@@ -444,6 +445,97 @@ class CipherViewExtensionsTest {
                     ),
                 ),
                 type = createSshKeyContent(isEmpty = false),
+            ),
+            viewState,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState should transform full CipherView into ViewState Drivers License Content`() {
+        val cipherView = createCipherView(type = CipherType.DRIVERS_LICENSE, isEmpty = false)
+            .copy(driversLicense = createMockDriversLicenseView(number = 1))
+        val viewState = cipherView.toViewState(
+            previousState = null,
+            isPremiumUser = true,
+            totpCodeItemData = null,
+            clock = fixedClock,
+            canDelete = true,
+            canRestore = true,
+            canAssignToCollections = true,
+            canEdit = true,
+            baseIconUrl = "https://example.com/",
+            isIconLoadingDisabled = true,
+            relatedLocations = persistentListOf(),
+            hasOrganizations = true,
+        )
+
+        assertEquals(
+            VaultItemState.ViewState.Content(
+                common = createCommonContent(
+                    isEmpty = false,
+                    isPremiumUser = true,
+                    iconResId = BitwardenDrawable.ic_note,
+                )
+                    .copy(currentCipher = cipherView),
+                type = VaultItemState.ViewState.Content.ItemType.DriversLicense(
+                    firstName = "mockFirstName-1",
+                    middleName = "mockMiddleName-1",
+                    lastName = "mockLastName-1",
+                    licenseNumber = "mockLicenseNumber-1",
+                    dateOfBirth = "mockDateOfBirth-1",
+                    issuingCountry = "mockIssuingCountry-1",
+                    issuingState = "mockIssuingState-1",
+                    issuingAuthority = "mockIssuingAuthority-1",
+                    issueDate = "mockIssueDate-1",
+                    expirationDate = "mockExpirationDate-1",
+                    licenseClass = "mockLicenseClass-1",
+                ),
+            ),
+            viewState,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState should transform empty CipherView into ViewState Drivers License Content`() {
+        val cipherView = createCipherView(type = CipherType.DRIVERS_LICENSE, isEmpty = true)
+        val viewState = cipherView.toViewState(
+            previousState = null,
+            isPremiumUser = true,
+            totpCodeItemData = null,
+            clock = fixedClock,
+            canDelete = true,
+            canRestore = true,
+            canAssignToCollections = true,
+            canEdit = true,
+            baseIconUrl = "https://example.com/",
+            isIconLoadingDisabled = true,
+            relatedLocations = persistentListOf(),
+            hasOrganizations = true,
+        )
+
+        assertEquals(
+            VaultItemState.ViewState.Content(
+                common = createCommonContent(
+                    isEmpty = true,
+                    isPremiumUser = true,
+                    iconResId = BitwardenDrawable.ic_note,
+                )
+                    .copy(currentCipher = cipherView),
+                type = VaultItemState.ViewState.Content.ItemType.DriversLicense(
+                    firstName = null,
+                    middleName = null,
+                    lastName = null,
+                    licenseNumber = null,
+                    dateOfBirth = null,
+                    issuingCountry = null,
+                    issuingState = null,
+                    issuingAuthority = null,
+                    issueDate = null,
+                    expirationDate = null,
+                    licenseClass = null,
+                ),
             ),
             viewState,
         )

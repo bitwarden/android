@@ -884,7 +884,10 @@ Do you want to switch to this account?</string>
     <string name="copy_company">Copy company</string>
     <string name="copy_ssn">Copy social security number</string>
     <string name="copy_passport_number">Copy passport number</string>
+    <string name="copy_first_name">Copy first name</string>
+    <string name="copy_last_name">Copy last name</string>
     <string name="copy_license_number">Copy license number</string>
+    <string name="copy_middle_name">Copy middle name</string>
     <string name="copy_email">Copy email</string>
     <string name="copy_phone">Copy phone number</string>
     <string name="copy_address">Copy address</string>
@@ -1303,7 +1306,7 @@ Do you want to switch to this account?</string>
     <string name="subscription_error">Subscription error</string>
     <string name="trouble_loading_subscription">We couldn’t load your subscription details. Please try again.</string>
     <string name="view_bank_account">View bank account</string>
-    <string name="view_drivers_license">View driver’s license</string>
+    <string name="view_drivers_license">View license</string>
     <string name="view_passport">View passport</string>
     <string name="new_bank_account">New bank account</string>
     <string name="new_drivers_license">New driver’s license</string>
@@ -1341,17 +1344,18 @@ Do you want to switch to this account?</string>
     <string name="investment_brokerage">Investment/brokerage</string>
     <string name="money_market">Money market</string>
     <string name="issuing_country">Issuing country</string>
-    <string name="issuing_state">Issuing state/province</string>
+    <string name="issuing_state">Issuing state / province</string>
     <string name="license_class">License class</string>
     <string name="surname">Surname</string>
     <string name="given_name">Given name</string>
     <string name="date_of_birth">Date of birth</string>
     <string name="nationality">Nationality</string>
     <string name="passport_type">Passport type</string>
-    <string name="issuing_authority">Issuing authority/office</string>
+    <string name="issuing_authority">Issuing authority</string>
     <string name="issue_date">Issue date</string>
     <string name="expiration_date">Expiration date</string>
     <string name="details">Details</string>
     <string name="account_details">Account details</string>
     <string name="no_bank_accounts">There are no bank accounts in your vault.</string>
+    <string name="license_details">License details</string>
 </resources>
