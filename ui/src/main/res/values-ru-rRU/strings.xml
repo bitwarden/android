@@ -191,7 +191,7 @@
     <string name="attachments">Вложения</string>
     <string name="unable_to_download_file">Не удается загрузить файл.</string>
     <string name="downloading">Загрузка…</string>
-    <string name="attachment_large_warning">Размер этого вложения - %1$s. Вы действительно хотите загрузить его на устройство?</string>
+    <string name="attachment_large_warning">Этот файл — %1$s. Хотите скачать его?</string>
     <string name="authenticator_key">Ключ аутентификатора</string>
     <string name="verification_code_totp">Код подтверждения (TOTP)</string>
     <string name="authenticator_key_added">Ключ аутентификатора добавлен.</string>
@@ -232,6 +232,7 @@
     <string name="security_code">Код безопасности</string>
     <string name="scan_card">Сканировать карту</string>
     <string name="scan_card_instruction">Поместите карту в рамку для сканирования.</string>
+    <string name="hold_steady_and_ensure_all_card_details_are_visible">Держите неподвижно и убедитесь, что видны все данные карты</string>
     <string name="type_card">Карта</string>
     <string name="type_identity">Личная информация</string>
     <string name="type_login">Логин</string>
@@ -243,6 +244,7 @@
     <string name="august">Август</string>
     <string name="brand">Тип карты</string>
     <string name="card_details">Реквизиты карты</string>
+    <string name="card_scanned">Карта сосканирована</string>
     <string name="cardholder_name">Имя владельца карты</string>
     <string name="city_town">Город / Поселок</string>
     <string name="company">Компания</string>
@@ -516,9 +518,9 @@
     <string name="remove_master_password">Удалить мастер-пароль</string>
     <string name="leave_organization">Покинуть организацию</string>
     <string name="leave_organization_name">Покинуть %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Вы уверены, что хотите покинуть [%1$s]?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Вы уверены, что хотите покинуть?</string>
     <string name="leave_organization_button">Покинуть %1$s</string>
-    <string name="leave_organization_warning">В случае отказа ваши личные данные останутся в вашем аккаунте, но вы потеряете доступ к общим элементам и возможностям организации.\n\nОбратитесь к своему администратору, чтобы восстановить доступ.</string>
+    <string name="leave_organization_warning">В случае отказа ваши личные данные останутся в вашем аккаунте, но вы потеряете доступ к общим элементам и возможностям организации. <annotation link="learnMore">Подробнее</annotation></string>
     <string name="contact_your_admin_to_regain_access">Свяжитесь с вашим администратором для восстановления доступа.</string>
     <string name="fido2_authenticate_web_authn">Аутентификация WebAutn</string>
     <string name="fido2_return_to_app">Вернуться в приложение</string>
@@ -782,7 +784,7 @@
     <string name="write_this_password_down_and_keep_it_somewhere_safe">Запишите этот пароль и храните его в надежном месте.</string>
     <string name="learn_about_other_ways_to_prevent_account_lockout">Узнайте о других способах предотвращения блокировки аккаунта</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Узнайте о способах предотвращения блокировки аккаунта</annotation></string>
-    <string name="help_with_server_geolocations">Справка по геолокации сервера.</string>
+    <string name="help_with_server_geolocations">Справка по геолокации сервера</string>
     <string name="email_address_required">Email (обязательно)</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Кликните ссылку в письме, чтобы подтвердить свой адрес email и продолжить создание у аккаунта.</string>
     <string name="change_email_address">Изменить адрес email</string>
@@ -1210,7 +1212,7 @@
     <string name="resending">Повторная отправка</string>
     <string name="you_left_the_organization">Вы покинули организацию</string>
     <string name="transfer_items_to_org">Переместить элементы в %1$s</string>
-    <string name="transfer_items_description">%1$s требует, чтобы все элементы принадлежали организации для обеспечения безопасности и соответствия требованиям. Нажмите Принять, чтобы передать собственность на ваши элементы.</string>
+    <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> требует, чтобы все элементы принадлежали организации для обеспечения безопасности и соответствия требованиям. Нажмите Принять, чтобы передать собственность на ваши элементы. <annotation link="learnMore">Подробнее</annotation></string>
     <string name="decline_and_leave">Отклонить и покинуть</string>
     <string name="why_am_i_seeing_this">Почему я это вижу?</string>
     <string name="migrating_items_to_x">Перенос элементов в %s</string>
@@ -1260,6 +1262,8 @@
     <string name="preview_unavailable">Предпросмотр недоступен</string>
     <string name="download_attachment">Скачать вложение</string>
     <string name="upgraded_to_premium">Обновлено до Премиум</string>
+    <string name="you_now_have_access_to_all_advanced_security_features">Теперь у вас есть доступ ко всем расширенным функциям безопасности.</string>
+    <string name="you_now_have_access_to_advanced_security_features_learn_more_about_premium">Теперь у вас есть доступ к расширенным функциям безопасности. Узнайте больше о том, что включено в Премиум.</string>
     <string name="confirming_your_upgrade">Подтверждение перехода…</string>
     <string name="upgrade_pending">Ожидание перехода</string>
     <string name="upgrade_pending_message">Ваш переход на платный тарифный план находится в процессе обработки. До завершения перехода вы будете пользоваться бесплатным тарифным планом. Вы можете синхронизировать данные прямо сейчас, чтобы проверить, или продолжить — обновление произойдет автоматически.</string>
@@ -1305,7 +1309,12 @@
     <string name="premium_next_charge_summary">Следующий платеж на сумму %1$s USD должен быть выполнен %2$s.</string>
     <string name="subscription_canceled_description">Ваша подписка была отменена %1$s. Подпишитесь заново, чтобы продолжить пользоваться возможностями Премиум.</string>
     <string name="subscription_overdue_description">Нам не удалось обработать ваш платеж. Обновите способ оплаты до истечения срока подписки %1$s.</string>
-    <string name="subscription_past_due_description">У вас есть льготный период продолжительностью %1$d с даты истечения срока действия подписки. Просим вас оплатить просроченную сумму до %2$s.</string>
+    <plurals name="subscription_past_due_description">
+        <item quantity="one">У вас есть льготный период продолжительностью %1$d день с даты истечения срока действия подписки. Просим вас оплатить просроченную сумму до %2$s.</item>
+        <item quantity="few">У вас есть льготный период продолжительностью %1$d дня с даты истечения срока действия подписки. Просим вас оплатить просроченную сумму до %2$s.</item>
+        <item quantity="many">У вас есть льготный период продолжительностью %1$d дней с даты истечения срока действия подписки. Просим вас оплатить просроченную сумму до %2$s.</item>
+        <item quantity="other">У вас есть льготный период продолжительностью %1$d дня с даты истечения срока действия подписки. Просим вас оплатить просроченную сумму до %2$s.</item>
+    </plurals>
     <string name="subscription_paused_description">Ваша подписка приостановлена. Возобновите ее, чтобы продолжить пользоваться возможностями Премиум.</string>
     <string name="loading_subscription">Загрузка подписки…</string>
     <string name="loading_portal">Загрузка портала…</string>
@@ -1313,4 +1322,56 @@
     <string name="trouble_loading_portal">У нас возникли проблемы с загрузкой портала управления, поэтому попробуйте еще раз.</string>
     <string name="subscription_error">Ошибка подписки</string>
     <string name="trouble_loading_subscription">Не удалось загрузить данные вашей подписки. Попробуйте еще раз.</string>
+    <string name="view_bank_account">Просмотреть банковский счет</string>
+    <string name="view_drivers_license">Просмотреть данные водительского удостоверения</string>
+    <string name="view_passport">Просмотреть паспорт</string>
+    <string name="new_bank_account">Новый банковский счет</string>
+    <string name="new_drivers_license">Новое водительское удостоверение</string>
+    <string name="new_passport">Новый паспорт</string>
+    <string name="edit_bank_account">Изменить банковский счет</string>
+    <string name="edit_drivers_license">Изменить данные водительского удостоверения</string>
+    <string name="edit_passport">Изменить паспорт</string>
+    <string name="type_bank_account">Банковский счет</string>
+    <string name="type_drivers_license">Водительское удостоверение</string>
+    <string name="type_passport">Паспорт</string>
+    <string name="bank_accounts">Банковские счета</string>
+    <string name="drivers_licenses">Водительские удостоверения</string>
+    <string name="passports">Паспорта</string>
+    <string name="bank_name">Название банка</string>
+    <string name="name_on_account">Имя держателя счета</string>
+    <string name="account_type">Тип счета</string>
+    <string name="account_number">Номер счета</string>
+    <string name="routing_number">Номер маршрута</string>
+    <string name="branch_number">Номер филиала</string>
+    <string name="swift_code">Код SWIFT</string>
+    <string name="iban">IBAN</string>
+    <string name="bank_contact_phone">Контактный телефон банка</string>
+    <string name="copy_name_on_account">Скопировать имя держателя счета</string>
+    <string name="copy_account_number">Скопировать номер счета</string>
+    <string name="copy_routing_number">Скопировать номер маршрута</string>
+    <string name="copy_branch_number">Скопировать номер филиала</string>
+    <string name="copy_pin">Скопировать PIN</string>
+    <string name="copy_swift_code">Скопировать код SWIFT</string>
+    <string name="copy_iban">Скопировать IBAN</string>
+    <string name="copy_bank_contact_phone">Скопировать контактный телефон банка</string>
+    <string name="checking">Проверка</string>
+    <string name="savings">Сбережения</string>
+    <string name="certificate_of_deposit">Справка о пополнении</string>
+    <string name="line_of_credit">Кредитная линия</string>
+    <string name="investment_brokerage">Инвестиции/брокерство</string>
+    <string name="money_market">Денежный рынок</string>
+    <string name="issuing_country">Страна выдачи</string>
+    <string name="issuing_state">Республика/область выдачи</string>
+    <string name="license_class">Категории водительского удостоверения</string>
+    <string name="surname">Фамилия</string>
+    <string name="given_name">Имя</string>
+    <string name="date_of_birth">Дата рождения</string>
+    <string name="nationality">Гражданство</string>
+    <string name="passport_type">Тип паспорта</string>
+    <string name="issuing_authority">Выдавший орган/учреждение</string>
+    <string name="issue_date">Дата выдачи</string>
+    <string name="expiration_date">Дата истечения</string>
+    <string name="details">Подробности</string>
+    <string name="account_details">Реквизиты счета</string>
+    <string name="no_bank_accounts">В вашем хранилище нет банковских счетов.</string>
 </resources>
