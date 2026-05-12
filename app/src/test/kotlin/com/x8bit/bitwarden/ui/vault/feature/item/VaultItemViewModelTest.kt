@@ -2999,6 +2999,136 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 )
             }
         }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on CopyFirstNameClick with null first name should not copy to clipboard`() = runTest {
+            val emptyState = DRIVERS_LICENSE_VIEW_STATE.copy(
+                type = DEFAULT_DRIVERS_LICENSE_TYPE.copy(firstName = null),
+            )
+            viewModel = createViewModelWithDriversLicenseState(emptyState)
+
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.DriversLicense.CopyFirstNameClick,
+            )
+
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on CopyFirstNameClick with blank first name should not copy to clipboard`() = runTest {
+            val emptyState = DRIVERS_LICENSE_VIEW_STATE.copy(
+                type = DEFAULT_DRIVERS_LICENSE_TYPE.copy(firstName = "   "),
+            )
+            viewModel = createViewModelWithDriversLicenseState(emptyState)
+
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.DriversLicense.CopyFirstNameClick,
+            )
+
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on CopyMiddleNameClick with null middle name should not copy to clipboard`() =
+            runTest {
+                val emptyState = DRIVERS_LICENSE_VIEW_STATE.copy(
+                    type = DEFAULT_DRIVERS_LICENSE_TYPE.copy(middleName = null),
+                )
+                viewModel = createViewModelWithDriversLicenseState(emptyState)
+
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.DriversLicense.CopyMiddleNameClick,
+                )
+
+                verify(exactly = 0) {
+                    clipboardManager.setText(
+                        text = any<String>(),
+                        toastDescriptorOverride = any<Text>(),
+                    )
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on CopyLastNameClick with null last name should not copy to clipboard`() = runTest {
+            val emptyState = DRIVERS_LICENSE_VIEW_STATE.copy(
+                type = DEFAULT_DRIVERS_LICENSE_TYPE.copy(lastName = null),
+            )
+            viewModel = createViewModelWithDriversLicenseState(emptyState)
+
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.DriversLicense.CopyLastNameClick,
+            )
+
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on CopyLicenseNumberClick with null license number should not copy to clipboard`() =
+            runTest {
+                val emptyState = DRIVERS_LICENSE_VIEW_STATE.copy(
+                    type = DEFAULT_DRIVERS_LICENSE_TYPE.copy(licenseNumber = null),
+                )
+                viewModel = createViewModelWithDriversLicenseState(emptyState)
+
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.DriversLicense.CopyLicenseNumberClick,
+                )
+
+                verify(exactly = 0) {
+                    clipboardManager.setText(
+                        text = any<String>(),
+                        toastDescriptorOverride = any<Text>(),
+                    )
+                }
+            }
+
+        private fun createViewModelWithDriversLicenseState(
+            viewState: VaultItemState.ViewState.Content,
+        ): VaultItemViewModel {
+            every {
+                mockCipherView.toViewState(
+                    previousState = any(),
+                    isPremiumUser = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canRestore = false,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
+                    hasOrganizations = true,
+                )
+            } returns viewState
+            val newViewModel = createViewModel(
+                state = DEFAULT_STATE.copy(viewState = viewState),
+            )
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+            return newViewModel
+        }
     }
 
     @Nested
