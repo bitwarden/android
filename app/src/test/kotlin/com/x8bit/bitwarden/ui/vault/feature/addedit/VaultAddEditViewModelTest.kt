@@ -2413,15 +2413,15 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     fun `in add mode, SaveClick with a Drivers License item should emit ShowSnackbar without saving`() =
         runTest {
             mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
-            val driversLicenseState = createVaultAddItemState(
+            val licenseState = createVaultAddItemState(
                 vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
                 commonContentViewState = createCommonContentViewState(name = "mockName-1"),
                 typeContentViewState =
-                    VaultAddEditState.ViewState.Content.ItemType.DriversLicense(),
+                    VaultAddEditState.ViewState.Content.ItemType.License(),
             )
             val viewModel = createAddVaultItemViewModel(
                 createSavedStateHandleWithState(
-                    state = driversLicenseState,
+                    state = licenseState,
                     vaultAddEditType = VaultAddEditType.AddItem,
                     vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
                 ),
@@ -2436,7 +2436,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     awaitItem(),
                 )
             }
-            assertEquals(driversLicenseState, viewModel.stateFlow.value)
+            assertEquals(licenseState, viewModel.stateFlow.value)
             coVerify(exactly = 0) {
                 vaultRepository.createCipher(any())
                 vaultRepository.createCipherInOrganization(any(), any())
@@ -2525,7 +2525,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `ItemType DriversLicense should expose DRIVERS_LICENSE itemTypeOption and not be SDK supported`() {
-        val itemType = VaultAddEditState.ViewState.Content.ItemType.DriversLicense()
+        val itemType = VaultAddEditState.ViewState.Content.ItemType.License()
         assertEquals(
             VaultAddEditState.ItemTypeOption.DRIVERS_LICENSE,
             itemType.itemTypeOption,

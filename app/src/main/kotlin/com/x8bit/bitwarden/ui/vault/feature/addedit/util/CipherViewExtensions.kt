@@ -114,7 +114,7 @@ fun CipherView.toViewState(
             )
 
             CipherType.DRIVERS_LICENSE -> {
-                VaultAddEditState.ViewState.Content.ItemType.DriversLicense(
+                VaultAddEditState.ViewState.Content.ItemType.License(
                     firstName = driversLicense?.firstName.orEmpty(),
                     middleName = driversLicense?.middleName.orEmpty(),
                     lastName = driversLicense?.lastName.orEmpty(),

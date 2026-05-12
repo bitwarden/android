@@ -232,14 +232,17 @@ fun CipherView.toViewState(
 
             CipherType.DRIVERS_LICENSE -> {
                 VaultItemState.ViewState.Content.ItemType.DriversLicense(
-                    firstName = driversLicense?.firstName.orEmpty(),
-                    middleName = driversLicense?.middleName.orEmpty(),
-                    lastName = driversLicense?.lastName.orEmpty(),
-                    licenseNumber = driversLicense?.licenseNumber.orEmpty(),
-                    issuingCountry = driversLicense?.issuingCountry.orEmpty(),
-                    issuingState = driversLicense?.issuingState.orEmpty(),
-                    expirationDate = driversLicense?.expirationDate.orEmpty(),
-                    licenseClass = driversLicense?.licenseClass.orEmpty(),
+                    firstName = driversLicense?.firstName,
+                    middleName = driversLicense?.middleName,
+                    lastName = driversLicense?.lastName,
+                    licenseNumber = driversLicense?.licenseNumber,
+                    dateOfBirth = driversLicense?.dateOfBirth,
+                    issuingCountry = driversLicense?.issuingCountry,
+                    issuingState = driversLicense?.issuingState,
+                    issuingAuthority = driversLicense?.issuingAuthority,
+                    issueDate = driversLicense?.issueDate,
+                    expirationDate = driversLicense?.expirationDate,
+                    licenseClass = driversLicense?.licenseClass,
                 )
             }
 

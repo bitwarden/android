@@ -43,7 +43,7 @@ class CreateVaultItemTypeExtensionsTest {
                     actualResult,
                 )
 
-                CreateVaultItemType.DRIVERS_LICENSE -> assertEquals(
+                CreateVaultItemType.LICENSE -> assertEquals(
                     VaultItemCipherType.DRIVERS_LICENSE,
                     actualResult,
                 )

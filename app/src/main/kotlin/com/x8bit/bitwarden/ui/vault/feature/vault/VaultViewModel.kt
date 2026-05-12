@@ -481,7 +481,7 @@ class VaultViewModel @Inject constructor(
                 state.restrictItemTypesPolicyOrgIds.isEmpty()
             },
             CreateVaultItemType.BANK_ACCOUNT.takeUnless { isNewItemTypesEnabled },
-            CreateVaultItemType.DRIVERS_LICENSE.takeUnless { isNewItemTypesEnabled },
+            CreateVaultItemType.LICENSE.takeUnless { isNewItemTypesEnabled },
             CreateVaultItemType.PASSPORT.takeUnless { isNewItemTypesEnabled },
         )
 
@@ -545,7 +545,7 @@ class VaultViewModel @Inject constructor(
             CreateVaultItemType.SECURE_NOTE,
             CreateVaultItemType.SSH_KEY,
             CreateVaultItemType.BANK_ACCOUNT,
-            CreateVaultItemType.DRIVERS_LICENSE,
+            CreateVaultItemType.LICENSE,
             CreateVaultItemType.PASSPORT,
                 -> {
                 vaultItemType
