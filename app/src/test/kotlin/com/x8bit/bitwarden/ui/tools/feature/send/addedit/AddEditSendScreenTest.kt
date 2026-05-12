@@ -1222,7 +1222,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTag("SendEmailEntry")
+            .onNodeWithTag("SendRecipientEmailEntry")
             .performTextInput("test@example.com")
 
         verify {
