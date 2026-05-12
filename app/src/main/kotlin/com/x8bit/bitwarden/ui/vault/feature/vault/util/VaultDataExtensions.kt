@@ -379,7 +379,7 @@ private fun CipherListView.toVaultItemOrNull(
             hasDecryptionError = hasDecryptionError,
         )
 
-        // TODO: [PM-32009] Map DriversLicense/Passport when their UIs are wired.
+        // TODO: [PM-32009] Map License/Passport when their UIs are wired.
         CipherListViewType.DriversLicense -> null
         CipherListViewType.Passport -> null
     }

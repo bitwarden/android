@@ -48,8 +48,8 @@ import com.x8bit.bitwarden.data.platform.manager.model.UnregisterExportResult
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockBankAccountView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
@@ -3782,7 +3782,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 excludedOptions = persistentListOf(
                     CreateVaultItemType.SSH_KEY,
                     CreateVaultItemType.BANK_ACCOUNT,
-                    CreateVaultItemType.DRIVERS_LICENSE,
+                    CreateVaultItemType.LICENSE,
                     CreateVaultItemType.PASSPORT,
                 ),
             ),
@@ -3817,7 +3817,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         CreateVaultItemType.SSH_KEY,
                         CreateVaultItemType.CARD,
                         CreateVaultItemType.BANK_ACCOUNT,
-                        CreateVaultItemType.DRIVERS_LICENSE,
+                        CreateVaultItemType.LICENSE,
                         CreateVaultItemType.PASSPORT,
                     ),
                 ),

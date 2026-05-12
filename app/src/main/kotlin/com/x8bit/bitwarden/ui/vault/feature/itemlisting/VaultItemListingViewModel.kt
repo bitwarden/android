@@ -710,7 +710,7 @@ class VaultItemListingViewModel @Inject constructor(
             CreateVaultItemType.SECURE_NOTE,
             CreateVaultItemType.SSH_KEY,
             CreateVaultItemType.BANK_ACCOUNT,
-            CreateVaultItemType.DRIVERS_LICENSE,
+            CreateVaultItemType.LICENSE,
             CreateVaultItemType.PASSPORT,
                 -> {
                 vaultItemType
@@ -855,7 +855,7 @@ class VaultItemListingViewModel @Inject constructor(
             CreateVaultItemType.FOLDER,
             CreateVaultItemType.SSH_KEY,
             CreateVaultItemType.BANK_ACCOUNT.takeUnless { isNewItemTypesEnabled },
-            CreateVaultItemType.DRIVERS_LICENSE.takeUnless { isNewItemTypesEnabled },
+            CreateVaultItemType.LICENSE.takeUnless { isNewItemTypesEnabled },
             CreateVaultItemType.PASSPORT.takeUnless { isNewItemTypesEnabled },
         )
     }

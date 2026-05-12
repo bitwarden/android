@@ -2152,7 +2152,7 @@ data class VaultItemState(
                 }
 
                 /**
-                 * Represents the `DriversLicense` item type.
+                 * Represents the `License` item type.
                  */
                 data class DriversLicense(
                     val firstName: String?,

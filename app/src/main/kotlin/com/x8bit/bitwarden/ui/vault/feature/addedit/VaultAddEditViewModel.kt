@@ -2724,7 +2724,7 @@ data class VaultAddEditState(
         SECURE_NOTES(BitwardenString.type_secure_note),
         SSH_KEYS(BitwardenString.type_ssh_key),
         BANK_ACCOUNT(BitwardenString.type_bank_account),
-        DRIVERS_LICENSE(BitwardenString.type_drivers_license),
+        DRIVERS_LICENSE(BitwardenString.type_license),
         PASSPORT(BitwardenString.type_passport),
     }
 
@@ -3053,7 +3053,7 @@ data class VaultAddEditState(
                  * Represents the driver's license item information.
                  */
                 @Parcelize
-                data class DriversLicense(
+                data class License(
                     val firstName: String = "",
                     val middleName: String = "",
                     val lastName: String = "",

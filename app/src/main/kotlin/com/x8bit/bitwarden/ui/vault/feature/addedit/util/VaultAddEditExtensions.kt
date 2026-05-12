@@ -30,7 +30,7 @@ fun VaultItemCipherType.toItemType(): VaultAddEditState.ViewState.Content.ItemTy
             VaultAddEditState.ViewState.Content.ItemType.BankAccount()
         }
         VaultItemCipherType.DRIVERS_LICENSE -> {
-            VaultAddEditState.ViewState.Content.ItemType.DriversLicense()
+            VaultAddEditState.ViewState.Content.ItemType.License()
         }
         VaultItemCipherType.PASSPORT -> {
             VaultAddEditState.ViewState.Content.ItemType.Passport()

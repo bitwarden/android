@@ -2919,7 +2919,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
-    inner class DriversLicenseActions {
+    inner class LicenseActions {
         private lateinit var viewModel: VaultItemViewModel
 
         @BeforeEach

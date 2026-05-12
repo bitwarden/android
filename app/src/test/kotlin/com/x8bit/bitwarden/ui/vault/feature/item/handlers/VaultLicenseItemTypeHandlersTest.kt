@@ -7,7 +7,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 
-class VaultDriversLicenseItemTypeHandlersTest {
+class VaultLicenseItemTypeHandlersTest {
 
     private val viewModel = mockk<VaultItemViewModel> {
         every { trySendAction(any()) } returns Unit
