@@ -285,8 +285,6 @@ dependencies {
     implementation(libs.kotlinx.serialization)
     implementation(platform(libs.square.okhttp.bom))
     implementation(libs.square.okhttp)
-    implementation(platform(libs.square.retrofit.bom))
-    implementation(libs.square.retrofit)
     implementation(libs.timber)
 
     // For now we are restricted to running Compose tests for debug builds only

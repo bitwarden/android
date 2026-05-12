@@ -13,6 +13,7 @@ import com.bitwarden.network.model.ArchiveCipherResponseJson
 import com.bitwarden.network.model.AttachmentJsonRequest
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.CreateCipherResponseJson
+import com.bitwarden.network.model.GetCipherResponse
 import com.bitwarden.network.model.ShareCipherJsonRequest
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UnarchiveCipherResponseJson
@@ -80,7 +81,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import retrofit2.HttpException
 import java.io.File
 import java.time.Clock
 import java.time.Instant
@@ -2610,6 +2610,7 @@ class CipherManagerTest {
                 revisionDate = clock.instant().minus(5, ChronoUnit.MINUTES),
             )
             val updatedCipher = mockk<SyncResponseJson.Cipher>()
+            val updatedCipherResponse = GetCipherResponse.Success(cipher = updatedCipher)
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery {
@@ -2620,7 +2621,7 @@ class CipherManagerTest {
             } returns MutableStateFlow(listOf(collection))
             coEvery {
                 ciphersService.getCipher(cipherId = cipherId)
-            } returns updatedCipher.asSuccess()
+            } returns updatedCipherResponse.asSuccess()
             coEvery {
                 vaultDiskSource.saveCipher(userId = userId, cipher = updatedCipher)
             } just runs
@@ -2655,6 +2656,7 @@ class CipherManagerTest {
                 revisionDate = clock.instant().minus(5, ChronoUnit.MINUTES),
             )
             val updatedCipher = mockk<SyncResponseJson.Cipher>()
+            val updatedCipherResponse = GetCipherResponse.Success(cipher = updatedCipher)
             val collection = createMockCollection(number = number)
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -2663,7 +2665,7 @@ class CipherManagerTest {
                 vaultDiskSource.getCollectionsFlow(userId = userId)
             } returns MutableStateFlow(listOf(collection))
 
-            coEvery { ciphersService.getCipher(cipherId) } returns updatedCipher.asSuccess()
+            coEvery { ciphersService.getCipher(cipherId) } returns updatedCipherResponse.asSuccess()
             coEvery {
                 vaultDiskSource.saveCipher(userId = userId, cipher = updatedCipher)
             } just runs
@@ -2761,10 +2763,9 @@ class CipherManagerTest {
             coEvery {
                 vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
             } returns createMockCipher(number = number)
-            val response: HttpException = mockk {
-                every { code() } returns 404
-            }
-            coEvery { ciphersService.getCipher(cipherId = cipherId) } returns response.asFailure()
+            val response = GetCipherResponse.NotFound(throwable = Throwable("Fail"))
+
+            coEvery { ciphersService.getCipher(cipherId = cipherId) } returns response.asSuccess()
             coEvery { vaultDiskSource.deleteCipher(userId = userId, cipherId = cipherId) } just runs
             fakeAuthDiskSource.userState = MOCK_USER_STATE
 
@@ -2794,10 +2795,8 @@ class CipherManagerTest {
             val cipherId = "mockId-1"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val response: HttpException = mockk {
-                every { code() } returns 404
-            }
-            coEvery { ciphersService.getCipher(cipherId = cipherId) } returns response.asFailure()
+            val response = GetCipherResponse.NotFound(throwable = Throwable("Fail"))
+            coEvery { ciphersService.getCipher(cipherId = cipherId) } returns response.asSuccess()
             coEvery { vaultDiskSource.getCipher(userId = userId, cipherId = cipherId) } returns null
 
             mutableSyncCipherUpsertFlow.tryEmit(
@@ -2828,6 +2827,7 @@ class CipherManagerTest {
             val userId = MOCK_USER_STATE.activeUserId
             val cipherId = "mockId-$number"
             val updatedCipher = mockk<SyncResponseJson.Cipher>()
+            val updatedCipherResponse = GetCipherResponse.Success(cipher = updatedCipher)
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery {
@@ -2835,7 +2835,7 @@ class CipherManagerTest {
             } returns null
             coEvery {
                 ciphersService.getCipher(cipherId = cipherId)
-            } returns updatedCipher.asSuccess()
+            } returns updatedCipherResponse.asSuccess()
             coEvery {
                 vaultDiskSource.saveCipher(userId = userId, cipher = updatedCipher)
             } just runs
@@ -2869,12 +2869,13 @@ class CipherManagerTest {
                 every { revisionDate } returns clock.instant().minus(5, ChronoUnit.MINUTES)
             }
             val updatedCipher = mockk<SyncResponseJson.Cipher>()
+            val updatedCipherResponse = GetCipherResponse.Success(cipher = updatedCipher)
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery {
                 vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
             } returns originalCipher
-            coEvery { ciphersService.getCipher(cipherId) } returns updatedCipher.asSuccess()
+            coEvery { ciphersService.getCipher(cipherId) } returns updatedCipherResponse.asSuccess()
             coEvery {
                 vaultDiskSource.saveCipher(userId = userId, cipher = updatedCipher)
             } just runs
