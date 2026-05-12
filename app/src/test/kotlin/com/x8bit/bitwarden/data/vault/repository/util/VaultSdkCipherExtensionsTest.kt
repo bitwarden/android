@@ -363,7 +363,7 @@ class VaultSdkCipherExtensionsTest {
         val error = assertThrows(IllegalArgumentException::class.java) {
             CipherTypeJson.DRIVERS_LICENSE.toSdkCipherType()
         }
-        assertEquals("SDK mapping not yet available for LICENSE", error.message)
+        assertEquals("SDK mapping not yet available for DRIVERS_LICENSE", error.message)
     }
 
     @Test

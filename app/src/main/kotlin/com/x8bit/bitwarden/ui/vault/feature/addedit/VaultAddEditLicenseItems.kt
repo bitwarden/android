@@ -18,7 +18,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLicenseTypeHandlers
 
 /**
- * The UI for adding and editing a driver's license cipher.
+ * The UI for adding and editing a license cipher.
  */
 @Suppress("LongMethod")
 fun LazyListScope.vaultAddEditLicenseItems(
