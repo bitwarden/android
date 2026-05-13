@@ -1760,9 +1760,11 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `vaultDataStateFlow Error with CookieRedirectException should show user-friendly message`() =
         runTest {
+            val message = "Your request was interrupted because " +
+                "the app needed to re-authenticate. Please try again."
             mutableVaultDataStateFlow.tryEmit(
                 value = DataState.Error(
-                    error = CookieRedirectException(hostname = "example.com"),
+                    error = CookieRedirectException(hostname = "example.com", message = message),
                 ),
             )
 
@@ -1771,10 +1773,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             assertEquals(
                 createMockVaultState(
                     viewState = VaultState.ViewState.Error(
-                        message = (
-                            "Your request was interrupted because the app needed to " +
-                                "re-authenticate. Please try again."
-                            ).asText(),
+                        message = message.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -1856,9 +1855,11 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `vaultDataStateFlow Error with CookieRedirectException with items should show user-friendly error dialog`() =
         runTest {
+            val message = "Your request was interrupted because " +
+                "the app needed to re-authenticate. Please try again."
             mutableVaultDataStateFlow.tryEmit(
                 value = DataState.Error(
-                    error = CookieRedirectException(hostname = "example.com"),
+                    error = CookieRedirectException(hostname = "example.com", message = message),
                     data = VaultData(
                         decryptCipherListResult = createMockDecryptCipherListResult(
                             number = 1,
