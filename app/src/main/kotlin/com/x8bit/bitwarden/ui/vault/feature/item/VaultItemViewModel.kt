@@ -244,6 +244,7 @@ class VaultItemViewModel @Inject constructor(
                 handleDriversLicenseTypeActions(action)
             }
 
+            is VaultItemAction.ItemType.Passport -> handlePassportTypeActions(action)
             is VaultItemAction.Common -> handleCommonActions(action)
             is VaultItemAction.Internal -> handleInternalAction(action)
         }
@@ -1253,6 +1254,41 @@ class VaultItemViewModel @Inject constructor(
 
     //endregion Driver's License Type Handlers
 
+    //region Passport Type Handlers
+
+    private fun handlePassportTypeActions(action: VaultItemAction.ItemType.Passport) {
+        when (action) {
+            VaultItemAction.ItemType.Passport.CopyPassportNumberClick -> {
+                handleCopyPassportItemNumberClick()
+            }
+
+            is VaultItemAction.ItemType.Passport.PassportNumberVisibilityClick -> {
+                // Visibility is managed locally in the composable via rememberSaveable;
+                // this branch exists for telemetry parity with other sensitive-field flows.
+            }
+
+            is VaultItemAction.ItemType.Passport.NationalIdentificationNumberVisibilityClick -> {
+                // Visibility is managed locally in the composable via rememberSaveable;
+                // this branch exists for telemetry parity with other sensitive-field flows.
+            }
+        }
+    }
+
+    private fun handleCopyPassportItemNumberClick() {
+        onPassportContent { _, passport ->
+            passport.passportNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let { passportNumber ->
+                    clipboardManager.setText(
+                        text = passportNumber,
+                        toastDescriptorOverride = BitwardenString.passport_number.asText(),
+                    )
+                }
+        }
+    }
+
+    //endregion Passport Type Handlers
+
     //region Internal Type Handlers
 
     private fun handleInternalAction(action: VaultItemAction.Internal) {
@@ -1662,6 +1698,21 @@ class VaultItemViewModel @Inject constructor(
                 (content.type as? VaultItemState.ViewState.Content.ItemType.DriversLicense)
                     ?.let { driversLicenseContent ->
                         block(content, driversLicenseContent)
+                    }
+            }
+    }
+
+    private inline fun onPassportContent(
+        crossinline block: (
+            VaultItemState.ViewState.Content,
+            VaultItemState.ViewState.Content.ItemType.Passport,
+        ) -> Unit,
+    ) {
+        state.viewState.asContentOrNull()
+            ?.let { content ->
+                (content.type as? VaultItemState.ViewState.Content.ItemType.Passport)
+                    ?.let { passportContent ->
+                        block(content, passportContent)
                     }
             }
     }
@@ -2189,19 +2240,50 @@ data class VaultItemState(
 
                 /**
                  * Represents the `Passport` item type.
+                 *
+                 * Field ordering matches the Figma View layout: identity (first/last name),
+                 * biographical (date of birth, sex, birth place, nationality), passport
+                 * details (number, type, national ID), and issuance metadata (country,
+                 * authority, dates).
                  */
                 data class Passport(
-                    val surname: String?,
-                    val givenName: String?,
+                    val firstName: String?,
+                    val lastName: String?,
                     val dateOfBirth: String?,
+                    val sex: String?,
+                    val birthPlace: String?,
                     val nationality: String?,
                     val passportNumber: String?,
                     val passportType: String?,
+                    val nationalIdentificationNumber: String?,
                     val issuingCountry: String?,
                     val issuingAuthority: String?,
                     val issueDate: String?,
                     val expirationDate: String?,
-                ) : ItemType()
+                ) : ItemType() {
+
+                    /**
+                     * An ordered list of populated Passport elements. Drives card-style
+                     * grouping (rounded top / divider / rounded bottom) in the Compose
+                     * layer via [com.bitwarden.ui.platform.base.util.toListItemCardStyle].
+                     */
+                    val propertyList: ImmutableList<String>
+                        get() = persistentListOfNotNull(
+                            firstName,
+                            lastName,
+                            dateOfBirth,
+                            sex,
+                            birthPlace,
+                            nationality,
+                            passportNumber,
+                            passportType,
+                            nationalIdentificationNumber,
+                            issuingCountry,
+                            issuingAuthority,
+                            issueDate,
+                            expirationDate,
+                        )
+                }
             }
         }
 
@@ -2740,6 +2822,32 @@ sealed class VaultItemAction {
              * The user has clicked the copy button for the license number.
              */
             data object CopyLicenseNumberClick : DriversLicense()
+        }
+
+        /**
+         * Represents actions specific to the Passport type. Visibility actions are
+         * retained alongside the local [rememberSaveable] reveal state so future
+         * telemetry hooks can subscribe without further UI rework.
+         */
+        sealed class Passport : ItemType() {
+
+            /**
+             * The user has clicked the copy button for the passport number.
+             */
+            data object CopyPassportNumberClick : Passport()
+
+            /**
+             * The user has toggled the passport number reveal state to [isVisible].
+             */
+            data class PassportNumberVisibilityClick(val isVisible: Boolean) : Passport()
+
+            /**
+             * The user has toggled the national identification number reveal state
+             * to [isVisible].
+             */
+            data class NationalIdentificationNumberVisibilityClick(
+                val isVisible: Boolean,
+            ) : Passport()
         }
     }
 

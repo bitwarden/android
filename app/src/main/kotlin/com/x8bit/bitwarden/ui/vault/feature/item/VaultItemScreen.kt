@@ -47,6 +47,7 @@ import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultBankAccountItemTy
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultDriversLicenseItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultPassportItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultSshKeyItemTypeHandlers
@@ -292,6 +293,9 @@ fun VaultItemScreen(
             vaultDriversLicenseItemTypeHandlers = remember(viewModel) {
                 VaultDriversLicenseItemTypeHandlers.create(viewModel = viewModel)
             },
+            vaultPassportItemTypeHandlers = remember(viewModel) {
+                VaultPassportItemTypeHandlers.create(viewModel = viewModel)
+            },
         )
     }
 }
@@ -378,6 +382,7 @@ private fun VaultItemContent(
     vaultIdentityItemTypeHandlers: VaultIdentityItemTypeHandlers,
     vaultBankAccountItemTypeHandlers: VaultBankAccountItemTypeHandlers,
     vaultDriversLicenseItemTypeHandlers: VaultDriversLicenseItemTypeHandlers,
+    vaultPassportItemTypeHandlers: VaultPassportItemTypeHandlers,
     modifier: Modifier = Modifier,
 ) {
     when (viewState) {
@@ -462,12 +467,11 @@ private fun VaultItemContent(
                 }
 
                 is VaultItemState.ViewState.Content.ItemType.Passport -> {
-                    // TODO(PM-32806): Render dedicated content for Passport once the UI ships
-                    //  in its Story slice. Until then this branch is gated behind the
-                    //  pm-32009-new-item-types feature flag and cannot be received.
-                    VaultItemSecureNoteContent(
+                    VaultItemPassportContent(
                         commonState = viewState.common,
+                        passportState = viewState.type,
                         vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+                        vaultPassportItemTypeHandlers = vaultPassportItemTypeHandlers,
                         modifier = modifier,
                     )
                 }

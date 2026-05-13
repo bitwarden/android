@@ -127,12 +127,15 @@ fun CipherView.toViewState(
             }
 
             CipherType.PASSPORT -> VaultAddEditState.ViewState.Content.ItemType.Passport(
-                surname = passport?.surname.orEmpty(),
-                givenName = passport?.givenName.orEmpty(),
+                firstName = passport?.givenName.orEmpty(),
+                lastName = passport?.surname.orEmpty(),
                 dateOfBirth = passport?.dateOfBirth.orEmpty(),
+                sex = passport?.sex.orEmpty(),
+                birthPlace = passport?.birthPlace.orEmpty(),
                 nationality = passport?.nationality.orEmpty(),
                 passportNumber = passport?.passportNumber.orEmpty(),
                 passportType = passport?.passportType.orEmpty(),
+                nationalIdentificationNumber = passport?.nationalIdentificationNumber.orEmpty(),
                 issuingCountry = passport?.issuingCountry.orEmpty(),
                 issuingAuthority = passport?.issuingAuthority.orEmpty(),
                 issueDate = passport?.issueDate.orEmpty(),

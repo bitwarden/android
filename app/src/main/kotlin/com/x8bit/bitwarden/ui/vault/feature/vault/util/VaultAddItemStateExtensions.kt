@@ -141,10 +141,10 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toDriversLicense(): Dri
 private fun VaultAddEditState.ViewState.Content.ItemType.toPassport(): PassportView? =
     (this as? VaultAddEditState.ViewState.Content.ItemType.Passport)?.let {
         PassportView(
-            surname = it.surname.orNullIfBlank(),
-            givenName = it.givenName.orNullIfBlank(),
+            surname = it.lastName.orNullIfBlank(),
+            givenName = it.firstName.orNullIfBlank(),
             dateOfBirth = it.dateOfBirth.orNullIfBlank(),
-            birthPlace = it.dateOfBirth.orNullIfBlank(),
+            birthPlace = it.birthPlace.orNullIfBlank(),
             sex = it.sex.orNullIfBlank(),
             nationality = it.nationality.orNullIfBlank(),
             passportNumber = it.passportNumber.orNullIfBlank(),
