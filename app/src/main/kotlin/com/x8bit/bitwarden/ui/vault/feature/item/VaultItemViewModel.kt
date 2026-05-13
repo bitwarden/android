@@ -1262,6 +1262,10 @@ class VaultItemViewModel @Inject constructor(
                 handleCopyPassportItemNumberClick()
             }
 
+            VaultItemAction.ItemType.Passport.CopyNationalIdentificationNumberClick -> {
+                handleCopyNationalIdentificationNumberClick()
+            }
+
             is VaultItemAction.ItemType.Passport.PassportNumberVisibilityClick -> {
                 // Visibility is managed locally in the composable via rememberSaveable;
                 // this branch exists for telemetry parity with other sensitive-field flows.
@@ -1282,6 +1286,20 @@ class VaultItemViewModel @Inject constructor(
                     clipboardManager.setText(
                         text = passportNumber,
                         toastDescriptorOverride = BitwardenString.passport_number.asText(),
+                    )
+                }
+        }
+    }
+
+    private fun handleCopyNationalIdentificationNumberClick() {
+        onPassportContent { _, passport ->
+            passport.nationalIdentificationNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let { nationalIdentificationNumber ->
+                    clipboardManager.setText(
+                        text = nationalIdentificationNumber,
+                        toastDescriptorOverride =
+                            BitwardenString.national_identification_number.asText(),
                     )
                 }
         }
@@ -2835,6 +2853,12 @@ sealed class VaultItemAction {
              * The user has clicked the copy button for the passport number.
              */
             data object CopyPassportNumberClick : Passport()
+
+            /**
+             * The user has clicked the copy button for the national identification
+             * number.
+             */
+            data object CopyNationalIdentificationNumberClick : Passport()
 
             /**
              * The user has toggled the passport number reveal state to [isVisible].

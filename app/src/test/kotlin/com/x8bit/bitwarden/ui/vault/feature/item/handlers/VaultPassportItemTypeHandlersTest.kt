@@ -24,6 +24,17 @@ class VaultPassportItemTypeHandlersTest {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `onCopyNationalIdentificationNumberClick should send the matching action`() {
+        handlers.onCopyNationalIdentificationNumberClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.Passport.CopyNationalIdentificationNumberClick,
+            )
+        }
+    }
+
     @Test
     fun `onPassportNumberVisibilityClick should send PassportNumberVisibilityClick action`() {
         handlers.onPassportNumberVisibilityClick(true)

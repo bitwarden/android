@@ -303,6 +303,19 @@ fun VaultItemPassportContent(
                     onValueChange = {},
                     readOnly = true,
                     supportingContent = null,
+                    actions = {
+                        BitwardenStandardIconButton(
+                            vectorIconRes = BitwardenDrawable.ic_copy,
+                            contentDescription = stringResource(
+                                id = BitwardenString.copy_national_identification_number,
+                            ),
+                            onClick = vaultPassportItemTypeHandlers
+                                .onCopyNationalIdentificationNumberClick,
+                            modifier = Modifier.testTag(
+                                tag = "PassportCopyNationalIdentificationNumberButton",
+                            ),
+                        )
+                    },
                     passwordFieldTestTag = "PassportItemNationalIdentificationNumberEntry",
                     showPasswordTestTag = "PassportViewNationalIdentificationNumberButton",
                     cardStyle = passportState

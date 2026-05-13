@@ -3218,6 +3218,64 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
+        fun `on CopyNationalIdentificationNumberClick should copy the value to clipboard`() =
+            runTest {
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.Passport.CopyNationalIdentificationNumberClick,
+                )
+                verify(exactly = 1) {
+                    clipboardManager.setText(
+                        text = "N-987-654-321",
+                        toastDescriptorOverride =
+                            BitwardenString.national_identification_number.asText(),
+                    )
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on CopyNationalIdentificationNumberClick with null value should not copy to clipboard`() =
+            runTest {
+                val emptyState = PASSPORT_VIEW_STATE.copy(
+                    type = DEFAULT_PASSPORT_TYPE.copy(nationalIdentificationNumber = null),
+                )
+                viewModel = createViewModelWithPassportState(emptyState)
+
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.Passport.CopyNationalIdentificationNumberClick,
+                )
+
+                verify(exactly = 0) {
+                    clipboardManager.setText(
+                        text = any<String>(),
+                        toastDescriptorOverride = any<Text>(),
+                    )
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on CopyNationalIdentificationNumberClick with blank value should not copy to clipboard`() =
+            runTest {
+                val emptyState = PASSPORT_VIEW_STATE.copy(
+                    type = DEFAULT_PASSPORT_TYPE.copy(nationalIdentificationNumber = "   "),
+                )
+                viewModel = createViewModelWithPassportState(emptyState)
+
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.Passport.CopyNationalIdentificationNumberClick,
+                )
+
+                verify(exactly = 0) {
+                    clipboardManager.setText(
+                        text = any<String>(),
+                        toastDescriptorOverride = any<Text>(),
+                    )
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
         fun `on PassportNumberVisibilityClick should be a no-op for clipboard and state`() =
             runTest {
                 val initialState = viewModel.stateFlow.value

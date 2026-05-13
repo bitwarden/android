@@ -9,6 +9,8 @@ import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemViewModel
  *
  * @property onCopyPassportNumberClick Handles the user clicking the copy button next to the
  *  passport number.
+ * @property onCopyNationalIdentificationNumberClick Handles the user clicking the copy button
+ *  next to the national identification number.
  * @property onPassportNumberVisibilityClick Handles the user toggling the passport number
  *  reveal state. Retained for telemetry parity with other sensitive-field reveal patterns;
  *  the actual reveal is managed locally in the composable via [rememberSaveable].
@@ -18,6 +20,7 @@ import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemViewModel
  */
 data class VaultPassportItemTypeHandlers(
     val onCopyPassportNumberClick: () -> Unit,
+    val onCopyNationalIdentificationNumberClick: () -> Unit,
     val onPassportNumberVisibilityClick: (Boolean) -> Unit,
     val onNationalIdentificationNumberVisibilityClick: (Boolean) -> Unit,
 ) {
@@ -33,6 +36,12 @@ data class VaultPassportItemTypeHandlers(
                 onCopyPassportNumberClick = {
                     viewModel.trySendAction(
                         VaultItemAction.ItemType.Passport.CopyPassportNumberClick,
+                    )
+                },
+                onCopyNationalIdentificationNumberClick = {
+                    viewModel.trySendAction(
+                        VaultItemAction.ItemType.Passport
+                            .CopyNationalIdentificationNumberClick,
                     )
                 },
                 onPassportNumberVisibilityClick = { isVisible ->
