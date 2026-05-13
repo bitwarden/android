@@ -10,10 +10,14 @@ class ThrowableExtensionsTest {
 
     @Test
     fun `userFriendlyMessage should return message for CookieRedirectException`() {
-        val exception = CookieRedirectException(hostname = "example.com")
+        val message = "Your request was interrupted because the app needed to " +
+            "re-authenticate. Please try again."
+        val exception = CookieRedirectException(
+            hostname = "example.com",
+            message = message,
+        )
         assertEquals(
-            "Your request was interrupted because the app needed to " +
-                "re-authenticate. Please try again.",
+            message,
             exception.userFriendlyMessage,
         )
     }

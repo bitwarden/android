@@ -20,29 +20,19 @@ enum class CreateVaultItemType(
     CARD(BitwardenString.type_card),
 
     /**
-     * A identity cipher.
-     */
-    IDENTITY(BitwardenString.type_identity),
-
-    /**
-     * A secure note cipher.
-     */
-    SECURE_NOTE(BitwardenString.type_secure_note),
-
-    /**
-     * A SSH key cipher.
-     */
-    SSH_KEY(BitwardenString.type_ssh_key),
-
-    /**
      * A bank account cipher.
      */
     BANK_ACCOUNT(BitwardenString.type_bank_account),
 
     /**
-     * A driver's license cipher.
+     * An identity cipher.
      */
-    DRIVERS_LICENSE(BitwardenString.type_drivers_license),
+    IDENTITY(BitwardenString.type_identity),
+
+    /**
+     * A license cipher.
+     */
+    LICENSE(BitwardenString.type_license),
 
     /**
      * A passport cipher.
@@ -50,7 +40,17 @@ enum class CreateVaultItemType(
     PASSPORT(BitwardenString.type_passport),
 
     /**
+     * A secure note cipher.
+     */
+    SECURE_NOTE(BitwardenString.type_secure_note),
+
+    /**
      * A cipher item folder
      */
     FOLDER(BitwardenString.folder),
+
+    /**
+     * A SSH key cipher.
+     */
+    SSH_KEY(BitwardenString.type_ssh_key),
 }

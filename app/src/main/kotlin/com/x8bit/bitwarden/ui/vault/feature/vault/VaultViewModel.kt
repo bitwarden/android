@@ -338,6 +338,7 @@ class VaultViewModel @Inject constructor(
             is VaultAction.SecureNoteGroupClick -> handleSecureNoteClick()
             is VaultAction.SshKeyGroupClick -> handleSshKeyClick()
             is VaultAction.BankAccountGroupClick -> handleBankAccountClick()
+            is VaultAction.LicenseGroupClick -> handleLicenseClick()
             is VaultAction.ArchiveClick -> handleArchiveClick()
             is VaultAction.TrashClick -> handleTrashClick()
             is VaultAction.VaultItemClick -> handleVaultItemClick(action)
@@ -481,7 +482,7 @@ class VaultViewModel @Inject constructor(
                 state.restrictItemTypesPolicyOrgIds.isEmpty()
             },
             CreateVaultItemType.BANK_ACCOUNT.takeUnless { isNewItemTypesEnabled },
-            CreateVaultItemType.DRIVERS_LICENSE.takeUnless { isNewItemTypesEnabled },
+            CreateVaultItemType.LICENSE.takeUnless { isNewItemTypesEnabled },
             CreateVaultItemType.PASSPORT.takeUnless { isNewItemTypesEnabled },
         )
 
@@ -545,7 +546,7 @@ class VaultViewModel @Inject constructor(
             CreateVaultItemType.SECURE_NOTE,
             CreateVaultItemType.SSH_KEY,
             CreateVaultItemType.BANK_ACCOUNT,
-            CreateVaultItemType.DRIVERS_LICENSE,
+            CreateVaultItemType.LICENSE,
             CreateVaultItemType.PASSPORT,
                 -> {
                 vaultItemType
@@ -702,6 +703,10 @@ class VaultViewModel @Inject constructor(
         sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.SshKey))
     }
 
+    private fun handleLicenseClick() {
+        sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.License))
+    }
+
     private fun handleBankAccountClick() {
         sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.BankAccount))
     }
@@ -759,6 +764,10 @@ class VaultViewModel @Inject constructor(
 
             is ListingItemOverflowAction.VaultAction.CopyRoutingNumberClick -> {
                 handleCopyRoutingNumberClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyLicenseNumberClick -> {
+                handleCopyLicenseNumberClick(overflowAction)
             }
 
             is ListingItemOverflowAction.VaultAction.CopyPasswordClick -> {
@@ -880,6 +889,23 @@ class VaultViewModel @Inject constructor(
                     clipboardManager.setText(
                         text = it,
                         toastDescriptorOverride = BitwardenString.routing_number.asText(),
+                    )
+                }
+        }
+    }
+
+    private fun handleCopyLicenseNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyLicenseNumberClick,
+    ) {
+        viewModelScope.launch {
+            getCipherForCopyOrNull(action.cipherId)
+                ?.driversLicense
+                ?.licenseNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    clipboardManager.setText(
+                        text = it,
+                        toastDescriptorOverride = BitwardenString.license_number.asText(),
                     )
                 }
         }
@@ -1797,6 +1823,7 @@ data class VaultState(
          * @property loginItemsCount The count of Login type items.
          * @property cardItemsCount The count of Card type items.
          * @property bankAccountItemsCount The count of Bank Account type items.
+         * @property licenseItemsCount The count of License type items.
          * @property identityItemsCount The count of Identity type items.
          * @property secureNoteItemsCount The count of Secure Notes type items.
          * @property favoriteItems The list of favorites to be displayed.
@@ -1809,6 +1836,7 @@ data class VaultState(
          * @property archiveEndIcon The end icon to be displayed on the archive item.
          * @property showCardGroup Is the card group available for display.
          * @property showBankAccountGroup Is the bank account group available for display.
+         * @property showLicenseGroup Is the license group available for display.
          */
         @Parcelize
         data class Content(
@@ -1820,6 +1848,7 @@ data class VaultState(
             val secureNoteItemsCount: Int,
             val sshKeyItemsCount: Int,
             val bankAccountItemsCount: Int,
+            val licenseItemsCount: Int,
             val favoriteItems: List<VaultItem>,
             val folderItems: List<FolderItem>,
             val noFolderItems: List<VaultItem>,
@@ -1830,6 +1859,7 @@ data class VaultState(
             @field:DrawableRes val archiveEndIcon: Int?,
             val showCardGroup: Boolean,
             val showBankAccountGroup: Boolean,
+            val showLicenseGroup: Boolean,
         ) : ViewState() {
             override val hasFab: Boolean get() = true
             override val isPullToRefreshEnabled: Boolean get() = true
@@ -2426,6 +2456,11 @@ sealed class VaultAction {
      * User clicked the bank account types button.
      */
     data object BankAccountGroupClick : VaultAction()
+
+    /**
+     * User clicked the license types button.
+     */
+    data object LicenseGroupClick : VaultAction()
 
     /**
      * User clicked the archive button.

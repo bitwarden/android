@@ -75,6 +75,8 @@ object PlatformNetworkModule {
                 override fun getPrivateKey(alias: String?): PrivateKey? = null
             },
             cookieProvider = object : CookieProvider {
+                override val errorMessageString: String get() = "Error"
+
                 override fun needsBootstrap(hostname: String): Boolean = false
 
                 override fun getCookies(hostname: String): List<NetworkCookie> = emptyList()

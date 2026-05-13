@@ -102,6 +102,7 @@ class GlideCookieInterceptorTest {
         every {
             mockCookieProvider.getCookies("vault.bitwarden.com")
         } returns emptyList()
+        every { mockCookieProvider.errorMessageString } returns "Error"
 
         val exception = assertThrows<CookieRedirectException> {
             interceptor.intercept(chain)
@@ -134,6 +135,7 @@ class GlideCookieInterceptorTest {
         } returns listOf(
             NetworkCookie(name = "awselb", value = "session123"),
         )
+        every { mockCookieProvider.errorMessageString } returns "Error"
 
         val exception = assertThrows<CookieRedirectException> {
             interceptor.intercept(chain)

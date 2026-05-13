@@ -3520,6 +3520,236 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     }
 
     //endregion bank account
+
+    //region drivers license
+
+    @Test
+    fun `in drivers license state, all fields should be displayed when populated`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+
+        composeTestRule.onNodeWithTextAfterScroll("the first name").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the middle name").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the last name").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the date of birth").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the issuing country").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the issuing state").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the issuing authority").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the issue date").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the expiration date").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the license class").assertIsDisplayed()
+    }
+
+    @Test
+    fun `in drivers license state, on copy first name click should send CopyFirstNameClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy first name")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.DriversLicense.CopyFirstNameClick,
+            )
+        }
+    }
+
+    @Test
+    fun `in drivers license state, on copy middle name click should send CopyMiddleNameClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule
+            .onNode(hasScrollToNodeAction())
+            .performScrollToNode(hasTestTag("DriversLicenseCopyMiddleNameButton"))
+        composeTestRule
+            .onNodeWithTag("DriversLicenseCopyMiddleNameButton")
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.DriversLicense.CopyMiddleNameClick,
+            )
+        }
+    }
+
+    @Test
+    fun `in drivers license state, on copy last name click should send CopyLastNameClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy last name")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.DriversLicense.CopyLastNameClick,
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in drivers license state, on copy license number click should send CopyLicenseNumberClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy license number")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.DriversLicense.CopyLicenseNumberClick,
+            )
+        }
+    }
+
+    @Test
+    fun `in drivers license state, firstName should be displayed according to state`() {
+        val firstName = "the first name"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(firstName).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(firstName = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(firstName)
+    }
+
+    @Test
+    fun `in drivers license state, middleName should be displayed according to state`() {
+        val middleName = "the middle name"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(middleName).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(middleName = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(middleName)
+    }
+
+    @Test
+    fun `in drivers license state, lastName should be displayed according to state`() {
+        val lastName = "the last name"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(lastName).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(lastName = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(lastName)
+    }
+
+    @Test
+    fun `in drivers license state, licenseNumber should be displayed according to state`() {
+        val licenseNumberLabel = "License number"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(licenseNumberLabel).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(licenseNumber = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(licenseNumberLabel)
+    }
+
+    @Test
+    fun `in drivers license state, dateOfBirth should be displayed according to state`() {
+        val dateOfBirth = "the date of birth"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(dateOfBirth).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(dateOfBirth = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(dateOfBirth)
+    }
+
+    @Test
+    fun `in drivers license state, issuingCountry should be displayed according to state`() {
+        val issuingCountry = "the issuing country"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(issuingCountry).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(issuingCountry = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(issuingCountry)
+    }
+
+    @Test
+    fun `in drivers license state, issuingState should be displayed according to state`() {
+        val issuingState = "the issuing state"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(issuingState).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(issuingState = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(issuingState)
+    }
+
+    @Test
+    fun `in drivers license state, issuingAuthority should be displayed according to state`() {
+        val issuingAuthority = "the issuing authority"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(issuingAuthority).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(issuingAuthority = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(issuingAuthority)
+    }
+
+    @Test
+    fun `in drivers license state, issueDate should be displayed according to state`() {
+        val issueDate = "the issue date"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(issueDate).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(issueDate = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(issueDate)
+    }
+
+    @Test
+    fun `in drivers license state, expirationDate should be displayed according to state`() {
+        val expirationDate = "the expiration date"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(expirationDate).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(expirationDate = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(expirationDate)
+    }
+
+    @Test
+    fun `in drivers license state, licenseClass should be displayed according to state`() {
+        val licenseClass = "the license class"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(licenseClass).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(licenseClass = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(licenseClass)
+    }
+
+    @Test
+    fun `in drivers license state, edit fab should be displayed`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+
+        composeTestRule.onNodeWithContentDescription("Edit item").assertIsDisplayed()
+    }
+
+    //endregion drivers license
 }
 
 //region Helper functions
@@ -3602,6 +3832,29 @@ private fun updateBankAccountType(
         is VaultItemState.ViewState.Content -> {
             when (val type = viewState.type) {
                 is VaultItemState.ViewState.Content.ItemType.BankAccount -> {
+                    viewState.copy(
+                        type = type.transform(),
+                    )
+                }
+
+                else -> viewState
+            }
+        }
+
+        else -> viewState
+    }
+    return currentState.copy(viewState = updatedType)
+}
+
+private fun updateDriversLicenseType(
+    currentState: VaultItemState,
+    transform: VaultItemState.ViewState.Content.ItemType.DriversLicense.() ->
+    VaultItemState.ViewState.Content.ItemType.DriversLicense,
+): VaultItemState {
+    val updatedType = when (val viewState = currentState.viewState) {
+        is VaultItemState.ViewState.Content -> {
+            when (val type = viewState.type) {
+                is VaultItemState.ViewState.Content.ItemType.DriversLicense -> {
                     viewState.copy(
                         type = type.transform(),
                     )
@@ -3908,6 +4161,27 @@ private val DEFAULT_BANK_ACCOUNT_VIEW_STATE: VaultItemState.ViewState.Content =
     VaultItemState.ViewState.Content(
         common = DEFAULT_COMMON.copy(iconData = IconData.Local(BitwardenDrawable.ic_globe)),
         type = DEFAULT_BANK_ACCOUNT,
+    )
+
+private val DEFAULT_DRIVERS_LICENSE: VaultItemState.ViewState.Content.ItemType.DriversLicense =
+    VaultItemState.ViewState.Content.ItemType.DriversLicense(
+        firstName = "the first name",
+        middleName = "the middle name",
+        lastName = "the last name",
+        licenseNumber = "the license number",
+        dateOfBirth = "the date of birth",
+        issuingCountry = "the issuing country",
+        issuingState = "the issuing state",
+        issuingAuthority = "the issuing authority",
+        issueDate = "the issue date",
+        expirationDate = "the expiration date",
+        licenseClass = "the license class",
+    )
+
+private val DEFAULT_DRIVERS_LICENSE_VIEW_STATE: VaultItemState.ViewState.Content =
+    VaultItemState.ViewState.Content(
+        common = DEFAULT_COMMON.copy(iconData = IconData.Local(BitwardenDrawable.ic_globe)),
+        type = DEFAULT_DRIVERS_LICENSE,
     )
 
 private val EMPTY_VIEW_STATES = listOf(

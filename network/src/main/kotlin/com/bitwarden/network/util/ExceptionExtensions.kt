@@ -14,6 +14,13 @@ internal fun BitwardenError.getNetworkErrorCodeOrNull(): NetworkErrorCode? =
     }
 
 /**
+ * Returns the `true` if the underlying error is from the [code] provided.
+ */
+internal fun BitwardenError.isErrorCode(
+    code: NetworkErrorCode,
+): Boolean = (this as? BitwardenError.Http)?.let { code.code == this.code } == true
+
+/**
  * Attempt to parse the error body to serializable type [T].
  *
  * Useful in service layer for parsing non-200 response bodies.

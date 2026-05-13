@@ -2780,6 +2780,138 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `in ItemType_License changing first name should trigger FirstNameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "First name")
+            .performTextInput(text = "Missy")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.FirstNameTextChange(
+                    firstName = "Missy",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_License changing middle name should trigger MiddleNameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Middle name")
+            .performTextInput(text = "Anne")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.MiddleNameTextChange(
+                    middleName = "Anne",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_License changing last name should trigger LastNameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Last name")
+            .performTextInput(text = "Katner")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.LastNameTextChange(
+                    lastName = "Katner",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_License changing the license number text field should trigger LicenseNumberTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "License number")
+            .performTextInput(text = "K123-456-789")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.LicenseNumberTextChange(
+                    licenseNumber = "K123-456-789",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_License changing the issuing country text field should trigger IssuingCountryTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Issuing country")
+            .performTextInput(text = "USA")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssuingCountryTextChange(
+                    country = "USA",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_License changing the issuing state text field should trigger IssuingStateTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Issuing state / province")
+            .performTextInput(text = "Wisconsin")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssuingStateTextChange(
+                    state = "Wisconsin",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_License changing the issuing authority text field should trigger IssuingAuthorityTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Issuing authority")
+            .performTextInput(text = "DMV")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssuingAuthorityTextChange(
+                    authority = "DMV",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_License changing license class should trigger LicenseClassTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "License class")
+            .performTextInput(text = "Class D")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.LicenseClassTextChange(
+                    licenseClass = "Class D",
+                ),
+            )
+        }
+    }
+
+    @Test
     fun `clicking Add field button should allow creation of Linked type`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN
 
@@ -4879,6 +5011,22 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.BankAccount(),
+                isIndividualVaultDisabled = false,
+            ),
+            dialog = null,
+            bottomSheetState = null,
+            shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isCardScannerEnabled = false,
+        )
+
+        private val DEFAULT_STATE_LICENSE = VaultAddEditState(
+            vaultAddEditType = VaultAddEditType.AddItem,
+            cipherType = VaultItemCipherType.DRIVERS_LICENSE,
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.License(),
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,

@@ -121,6 +121,7 @@ internal class IdentityServiceImpl(
                         }
 
                         NetworkErrorCode.BAD_REQUEST,
+                        NetworkErrorCode.NOT_FOUND,
                         NetworkErrorCode.TOO_MANY_REQUESTS,
                         null,
                             -> throw throwable

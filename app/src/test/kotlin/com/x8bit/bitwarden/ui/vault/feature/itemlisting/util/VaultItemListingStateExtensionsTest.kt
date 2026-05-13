@@ -143,6 +143,16 @@ class VaultItemListingStateExtensionsTest {
     }
 
     @Test
+    fun `toSearchType should return Licenses when item type is License`() {
+        val expected = SearchType.Vault.Licenses
+        val itemType = VaultItemListingState.ItemListingType.Vault.License
+
+        val result = itemType.toSearchType()
+
+        assertEquals(expected, result)
+    }
+
+    @Test
     fun `toVaultItemCipherType should return the correct response`() {
         val itemListingTypes = listOf(
             VaultItemListingState.ItemListingType.Vault.Card,
@@ -152,6 +162,7 @@ class VaultItemListingStateExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId"),
             VaultItemListingState.ItemListingType.Vault.SshKey,
             VaultItemListingState.ItemListingType.Vault.BankAccount,
+            VaultItemListingState.ItemListingType.Vault.License,
             VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId"),
         )
 
@@ -166,6 +177,7 @@ class VaultItemListingStateExtensionsTest {
                 VaultItemCipherType.LOGIN,
                 VaultItemCipherType.SSH_KEY,
                 VaultItemCipherType.BANK_ACCOUNT,
+                VaultItemCipherType.DRIVERS_LICENSE,
                 VaultItemCipherType.LOGIN,
             ),
             result,
