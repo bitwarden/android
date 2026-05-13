@@ -238,7 +238,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         }
 
         /**
-         * Click on the copy driver's license number overflow option.
+         * Click on the copy license number overflow option.
          */
         @Parcelize
         data class CopyLicenseNumberClick(
