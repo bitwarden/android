@@ -2941,7 +2941,9 @@ class CipherManagerTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val cipherId = "mockId-1"
-            val error = CookieRedirectException("test.host")
+            val message = "Your request was interrupted because " +
+                "the app needed to re-authenticate. Please try again."
+            val error = CookieRedirectException(hostname = "test.host", message = message)
             coEvery {
                 ciphersService.hardDeleteCipher(cipherId = cipherId)
             } returns error.asFailure()
@@ -2950,8 +2952,7 @@ class CipherManagerTest {
 
             assertEquals(
                 DeleteCipherResult.Error(
-                    errorMessage = "Your request was interrupted because " +
-                        "the app needed to re-authenticate. Please try again.",
+                    errorMessage = message,
                     error = error,
                 ),
                 result,
@@ -2967,7 +2968,9 @@ class CipherManagerTest {
             val cipherId = "mockId-1"
             val cipherView = createMockCipherView(number = 1)
             val encryptionContext = createMockEncryptionContext(number = 1)
-            val error = CookieRedirectException("test.host")
+            val message = "Your request was interrupted because " +
+                "the app needed to re-authenticate. Please try again."
+            val error = CookieRedirectException(hostname = "test.host", message = message)
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = cipherView)
             } returns encryptionContext.asSuccess()
@@ -2982,8 +2985,7 @@ class CipherManagerTest {
 
             assertEquals(
                 DeleteCipherResult.Error(
-                    errorMessage = "Your request was interrupted because " +
-                        "the app needed to re-authenticate. Please try again.",
+                    errorMessage = message,
                     error = error,
                 ),
                 result,
@@ -2997,7 +2999,9 @@ class CipherManagerTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val cipherId = "mockId-1"
             val cipherView = createMockCipherView(number = 1)
-            val error = CookieRedirectException("test.host")
+            val message = "Your request was interrupted because " +
+                "the app needed to re-authenticate. Please try again."
+            val error = CookieRedirectException(hostname = "test.host", message = message)
             coEvery {
                 ciphersService.restoreCipher(cipherId = cipherId)
             } returns error.asFailure()
@@ -3009,8 +3013,7 @@ class CipherManagerTest {
 
             assertEquals(
                 RestoreCipherResult.Error(
-                    errorMessage = "Your request was interrupted because " +
-                        "the app needed to re-authenticate. Please try again.",
+                    errorMessage = message,
                     error = error,
                 ),
                 result,
@@ -3023,7 +3026,9 @@ class CipherManagerTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val cipherId = "mockId-1"
-            val error = CookieRedirectException("test.host")
+            val message = "Your request was interrupted because " +
+                "the app needed to re-authenticate. Please try again."
+            val error = CookieRedirectException(hostname = "test.host", message = message)
             coEvery {
                 ciphersService.archiveCipher(cipherId = cipherId)
             } returns error.asFailure()
@@ -3035,8 +3040,7 @@ class CipherManagerTest {
 
             assertEquals(
                 ArchiveCipherResult.Error(
-                    errorMessage = "Your request was interrupted because " +
-                        "the app needed to re-authenticate. Please try again.",
+                    errorMessage = message,
                     error = error,
                 ),
                 result,

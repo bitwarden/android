@@ -89,6 +89,7 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -439,10 +440,12 @@ object PlatformManagerModule {
     @Provides
     @Singleton
     fun provideNetworkCookieManager(
+        resourceManager: ResourceManager,
         configDiskSource: ConfigDiskSource,
         cookieDiskSource: CookieDiskSource,
         cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
     ): NetworkCookieManager = NetworkCookieManagerImpl(
+        resourceManager = resourceManager,
         configDiskSource = configDiskSource,
         cookieDiskSource = cookieDiskSource,
         cookieAcquisitionRequestManager = cookieAcquisitionRequestManager,

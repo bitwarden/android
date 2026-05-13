@@ -2,11 +2,13 @@ package com.x8bit.bitwarden.data.platform.manager.network
 
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.network.model.NetworkCookie
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.CookieConfigurationData
 import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
 import com.x8bit.bitwarden.data.platform.manager.util.toNetworkCookieList
+import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import timber.log.Timber
 
 private const val BOOTSTRAP_TYPE_SSO_COOKIE_VENDOR = "ssoCookieVendor"
@@ -15,6 +17,7 @@ private const val BOOTSTRAP_TYPE_SSO_COOKIE_VENDOR = "ssoCookieVendor"
  * Default implementation of [NetworkCookieManager].
  */
 class NetworkCookieManagerImpl(
+    private val resourceManager: ResourceManager,
     private val configDiskSource: ConfigDiskSource,
     private val cookieDiskSource: CookieDiskSource,
     private val cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
@@ -31,6 +34,12 @@ class NetworkCookieManagerImpl(
             ?.bootstrap
             ?.takeIf { it.type == BOOTSTRAP_TYPE_SSO_COOKIE_VENDOR }
             ?.cookieDomain
+
+    override val errorMessageString: String
+        get() = resourceManager.getString(
+            resId = BitwardenString
+                .your_request_was_interrupted_because_the_app_needed_to_reauthenticate,
+        )
 
     override fun needsBootstrap(hostname: String): Boolean {
         val result = configDiskSource

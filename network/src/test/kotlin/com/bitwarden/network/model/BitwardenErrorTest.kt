@@ -13,7 +13,7 @@ class BitwardenErrorTest {
 
     @Test
     fun `toBitwardenError with CookieRedirectException should return Http with status 400`() {
-        val exception = CookieRedirectException(hostname = "example.com")
+        val exception = CookieRedirectException(hostname = "example.com", message = "Fail!")
 
         val result = exception.toBitwardenError()
 
@@ -24,13 +24,15 @@ class BitwardenErrorTest {
 
     @Test
     fun `toBitwardenError with CookieRedirectException should include message in body`() {
-        val exception = CookieRedirectException(hostname = "example.com")
+        val message = "Your request was interrupted because " +
+            "the app needed to re-authenticate. Please try again."
+        val exception = CookieRedirectException(hostname = "example.com", message = message)
 
         val result = exception.toBitwardenError()
 
         val httpError = result as BitwardenError.Http
         val body = httpError.responseBodyString
-        assertTrue(body?.contains(exception.message.orEmpty()) == true)
+        assertTrue(body?.contains(message) == true)
     }
 
     @Test

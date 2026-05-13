@@ -66,6 +66,7 @@ class CookieInterceptorTest {
         val chain = FakeInterceptorChain(originalRequest)
 
         every { mockCookieProvider.needsBootstrap("vault.bitwarden.com") } returns true
+        every { mockCookieProvider.errorMessageString } returns "Error"
 
         val exception = assertThrows<CookieRedirectException> {
             interceptor.intercept(chain)
@@ -159,6 +160,7 @@ class CookieInterceptorTest {
 
         every { mockCookieProvider.needsBootstrap("vault.bitwarden.com") } returns false
         every { mockCookieProvider.getCookies("vault.bitwarden.com") } returns emptyList()
+        every { mockCookieProvider.errorMessageString } returns "Error"
 
         val exception = assertThrows<CookieRedirectException> {
             interceptor.intercept(chain)
@@ -224,6 +226,7 @@ class CookieInterceptorTest {
 
         every { mockCookieProvider.needsBootstrap("vault.bitwarden.com") } returns false
         every { mockCookieProvider.getCookies("vault.bitwarden.com") } returns cookies
+        every { mockCookieProvider.errorMessageString } returns "Error"
 
         val exception = assertThrows<CookieRedirectException> {
             interceptor.intercept(chain)
