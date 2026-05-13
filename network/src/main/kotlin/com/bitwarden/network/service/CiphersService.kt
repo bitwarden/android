@@ -9,6 +9,7 @@ import com.bitwarden.network.model.CipherJsonRequest
 import com.bitwarden.network.model.CipherMiniResponseJson
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.CreateCipherResponseJson
+import com.bitwarden.network.model.GetCipherResponse
 import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.ImportCiphersResponseJson
 import com.bitwarden.network.model.ShareCipherJsonRequest
@@ -128,7 +129,7 @@ interface CiphersService {
     /**
      * Attempt to retrieve a cipher.
      */
-    suspend fun getCipher(cipherId: String): Result<SyncResponseJson.Cipher>
+    suspend fun getCipher(cipherId: String): Result<GetCipherResponse>
 
     /**
      * Attempt to retrieve a cipher's attachment data.

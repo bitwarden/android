@@ -32,6 +32,7 @@ data class VaultHandlers(
     val secureNoteGroupClick: () -> Unit,
     val sshKeyGroupClick: () -> Unit,
     val bankAccountGroupClick: () -> Unit,
+    val licenseGroupClick: () -> Unit,
     val archiveClick: () -> Unit,
     val trashClick: () -> Unit,
     val tryAgainClick: () -> Unit,
@@ -99,6 +100,9 @@ data class VaultHandlers(
                 sshKeyGroupClick = { viewModel.trySendAction(VaultAction.SshKeyGroupClick) },
                 bankAccountGroupClick = {
                     viewModel.trySendAction(VaultAction.BankAccountGroupClick)
+                },
+                licenseGroupClick = {
+                    viewModel.trySendAction(VaultAction.LicenseGroupClick)
                 },
                 archiveClick = { viewModel.trySendAction(VaultAction.ArchiveClick) },
                 trashClick = { viewModel.trySendAction(VaultAction.TrashClick) },

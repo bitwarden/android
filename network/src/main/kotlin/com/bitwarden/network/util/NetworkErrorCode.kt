@@ -9,5 +9,6 @@ internal enum class NetworkErrorCode(
     BAD_REQUEST(code = 400),
     UNAUTHORIZED(code = 401),
     FORBIDDEN(code = 403),
+    NOT_FOUND(code = 404),
     TOO_MANY_REQUESTS(code = 429),
 }

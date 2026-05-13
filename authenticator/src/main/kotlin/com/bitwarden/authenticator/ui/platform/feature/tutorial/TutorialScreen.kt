@@ -156,7 +156,7 @@ private fun TutorialScreenContent(
         )
 
         BitwardenFilledButton(
-            label = state.actionButtonText,
+            label = stringResource(id = state.actionButtonText),
             onClick = { continueClick(state.index) },
             modifier = Modifier
                 .standardHorizontalMargin()

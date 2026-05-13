@@ -22,6 +22,7 @@ class VaultItemListingTypeExtensionsTest {
             VaultItemListingType.Identity,
             VaultItemListingType.Login,
             VaultItemListingType.SecureNote,
+            VaultItemListingType.License,
         )
 
         val result = itemListingTypeList.map { it.toItemListingType() }
@@ -41,6 +42,7 @@ class VaultItemListingTypeExtensionsTest {
                 VaultItemListingState.ItemListingType.Vault.Identity,
                 VaultItemListingState.ItemListingType.Vault.Login,
                 VaultItemListingState.ItemListingType.Vault.SecureNote,
+                VaultItemListingState.ItemListingType.Vault.License,
             ),
             result,
         )

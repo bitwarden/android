@@ -710,7 +710,7 @@ class VaultItemListingViewModel @Inject constructor(
             CreateVaultItemType.SECURE_NOTE,
             CreateVaultItemType.SSH_KEY,
             CreateVaultItemType.BANK_ACCOUNT,
-            CreateVaultItemType.DRIVERS_LICENSE,
+            CreateVaultItemType.LICENSE,
             CreateVaultItemType.PASSPORT,
                 -> {
                 vaultItemType
@@ -855,7 +855,7 @@ class VaultItemListingViewModel @Inject constructor(
             CreateVaultItemType.FOLDER,
             CreateVaultItemType.SSH_KEY,
             CreateVaultItemType.BANK_ACCOUNT.takeUnless { isNewItemTypesEnabled },
-            CreateVaultItemType.DRIVERS_LICENSE.takeUnless { isNewItemTypesEnabled },
+            CreateVaultItemType.LICENSE.takeUnless { isNewItemTypesEnabled },
             CreateVaultItemType.PASSPORT.takeUnless { isNewItemTypesEnabled },
         )
     }
@@ -1309,6 +1309,23 @@ class VaultItemListingViewModel @Inject constructor(
         }
     }
 
+    private fun handleCopyLicenseNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyLicenseNumberClick,
+    ) {
+        viewModelScope.launch {
+            getCipherViewOrNull(action.cipherId)
+                ?.driversLicense
+                ?.licenseNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    clipboardManager.setText(
+                        text = it,
+                        toastDescriptorOverride = BitwardenString.license_number.asText(),
+                    )
+                }
+        }
+    }
+
     private fun handleCopyPasswordClick(
         action: ListingItemOverflowAction.VaultAction.CopyPasswordClick,
     ) {
@@ -1608,6 +1625,10 @@ class VaultItemListingViewModel @Inject constructor(
 
             is ListingItemOverflowAction.VaultAction.CopyRoutingNumberClick -> {
                 handleCopyRoutingNumberClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyLicenseNumberClick -> {
+                handleCopyLicenseNumberClick(overflowAction)
             }
 
             is ListingItemOverflowAction.VaultAction.CopyPasswordClick -> {
@@ -2932,6 +2953,7 @@ data class VaultItemListingState(
             ItemListingType.Vault.SecureNote,
             ItemListingType.Vault.SshKey,
             ItemListingType.Vault.BankAccount,
+            ItemListingType.Vault.License,
             ItemListingType.Vault.Trash,
             ItemListingType.Send.SendFile,
             ItemListingType.Send.SendText,
@@ -3382,6 +3404,14 @@ data class VaultItemListingState(
              */
             data object BankAccount : Vault() {
                 override val titleText: Text get() = BitwardenString.bank_accounts.asText()
+                override val hasFab: Boolean get() = true
+            }
+
+            /**
+             * A License item listing.
+             */
+            data object License : Vault() {
+                override val titleText: Text get() = BitwardenString.licenses.asText()
                 override val hasFab: Boolean get() = true
             }
 

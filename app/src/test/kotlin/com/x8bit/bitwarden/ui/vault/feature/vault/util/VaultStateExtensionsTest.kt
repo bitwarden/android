@@ -86,10 +86,12 @@ class VaultStateExtensionsTest {
             itemTypesCount = 4,
             sshKeyItemsCount = 0,
             bankAccountItemsCount = 0,
+            licenseItemsCount = 0,
             archivedItemsCount = 0,
             archiveSubText = null,
             archiveEndIcon = null,
             showCardGroup = true,
             showBankAccountGroup = false,
+            showLicenseGroup = false,
         )
 }

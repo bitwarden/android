@@ -79,7 +79,7 @@ class TutorialScreenTest : AuthenticatorComposeTest() {
             it.copy(pages = listOf(TutorialState.TutorialSlide.UniqueCodesSlide))
         }
         composeTestRule
-            .onNodeWithText("Get Started")
+            .onNodeWithText("Get started")
             .assertExists()
             .assertIsDisplayed()
     }
@@ -106,7 +106,7 @@ class TutorialScreenTest : AuthenticatorComposeTest() {
             it.copy(pages = listOf(TutorialState.TutorialSlide.UniqueCodesSlide))
         }
         composeTestRule
-            .onNodeWithText("Get Started")
+            .onNodeWithText("Get started")
             .performClick()
         verify {
             viewModel.trySendAction(TutorialAction.ContinueClick(mutableStateFlow.value.index))

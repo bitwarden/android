@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
+@Suppress("LargeClass")
 class CipherListViewExtensionsTest {
 
     @Test
@@ -461,6 +462,103 @@ class CipherListViewExtensionsTest {
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = id,
                     cipherType = CipherType.BANK_ACCOUNT,
+                    requiresPasswordReprompt = false,
+                ),
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toOverflowActions should return all copy actions for a license cipher`() {
+        val cipher = createMockCipherListView(
+            number = 1,
+            type = CipherListViewType.DriversLicense,
+            id = id,
+            copyableFields = listOf(
+                CopyableCipherFields.DRIVERS_LICENSE_LICENSE_NUMBER,
+            ),
+        )
+
+        val result = cipher.toOverflowActions(
+            hasMasterPassword = true,
+            isPremiumUser = false,
+        )
+
+        assertEquals(
+            listOf(
+                ListingItemOverflowAction.VaultAction.CopyLicenseNumberClick(
+                    cipherId = id,
+                    requiresPasswordReprompt = true,
+                ),
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = id,
+                    cipherType = CipherType.DRIVERS_LICENSE,
+                    requiresPasswordReprompt = true,
+                ),
+                ListingItemOverflowAction.VaultAction.EditClick(
+                    cipherId = id,
+                    cipherType = CipherType.DRIVERS_LICENSE,
+                    requiresPasswordReprompt = true,
+                ),
+                ListingItemOverflowAction.VaultAction.ArchiveClick(cipherId = id),
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toOverflowActions should omit license copy action when copyable fields are empty`() {
+        val cipher = createMockCipherListView(
+            number = 1,
+            type = CipherListViewType.DriversLicense,
+            id = id,
+            copyableFields = emptyList(),
+        )
+
+        val result = cipher.toOverflowActions(
+            hasMasterPassword = false,
+            isPremiumUser = false,
+        )
+
+        assertEquals(
+            listOf(
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = id,
+                    cipherType = CipherType.DRIVERS_LICENSE,
+                    requiresPasswordReprompt = false,
+                ),
+                ListingItemOverflowAction.VaultAction.EditClick(
+                    cipherId = id,
+                    cipherType = CipherType.DRIVERS_LICENSE,
+                    requiresPasswordReprompt = false,
+                ),
+                ListingItemOverflowAction.VaultAction.ArchiveClick(cipherId = id),
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toOverflowActions should return minimum actions for a license cipher`() {
+        val cipher = createMockCipherListView(
+            number = 1,
+            id = id,
+            isDeleted = true,
+            isArchived = true,
+            type = CipherListViewType.DriversLicense,
+        )
+
+        val result = cipher.toOverflowActions(
+            hasMasterPassword = false,
+            isPremiumUser = false,
+        )
+
+        assertEquals(
+            listOf(
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = id,
+                    cipherType = CipherType.DRIVERS_LICENSE,
                     requiresPasswordReprompt = false,
                 ),
             ),

@@ -7,11 +7,13 @@ import com.bitwarden.network.model.CreateFileSendResponse
 import com.bitwarden.network.model.CreateFileSendResponseJson
 import com.bitwarden.network.model.CreateSendJsonResponse
 import com.bitwarden.network.model.FileUploadType
+import com.bitwarden.network.model.GetSendResponse
 import com.bitwarden.network.model.SendJsonRequest
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UpdateSendResponseJson
 import com.bitwarden.network.model.toBitwardenError
 import com.bitwarden.network.util.NetworkErrorCode
+import com.bitwarden.network.util.isErrorCode
 import com.bitwarden.network.util.parseErrorBodyOrNull
 import com.bitwarden.network.util.toResult
 import kotlinx.serialization.json.Json
@@ -152,8 +154,17 @@ internal class SendsServiceImpl(
 
     override suspend fun getSend(
         sendId: String,
-    ): Result<SyncResponseJson.Send> =
+    ): Result<GetSendResponse> =
         sendsApi
             .getSend(sendId = sendId)
             .toResult()
+            .map { GetSendResponse.Success(send = it) }
+            .recoverCatching { throwable ->
+                val bitwardenError = throwable.toBitwardenError()
+                if (bitwardenError.isErrorCode(code = NetworkErrorCode.NOT_FOUND)) {
+                    GetSendResponse.NotFound(throwable = throwable)
+                } else {
+                    throw throwable
+                }
+            }
 }

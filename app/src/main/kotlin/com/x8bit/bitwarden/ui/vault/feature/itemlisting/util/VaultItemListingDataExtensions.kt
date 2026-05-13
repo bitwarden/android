@@ -82,6 +82,10 @@ fun CipherListView.determineListingPredicate(
             type is CipherListViewType.BankAccount && isActive
         }
 
+        is VaultItemListingState.ItemListingType.Vault.License -> {
+            type is CipherListViewType.DriversLicense && isActive
+        }
+
         is VaultItemListingState.ItemListingType.Vault.Trash -> {
             deletedDate != null
         }
@@ -248,6 +252,10 @@ fun VaultData.toViewState(
                         BitwardenString.no_bank_accounts
                     }
 
+                    VaultItemListingState.ItemListingType.Vault.License -> {
+                        BitwardenString.no_licenses
+                    }
+
                     VaultItemListingState.ItemListingType.Vault.Archive -> {
                         BitwardenString.no_archives_message
                     }
@@ -277,6 +285,7 @@ fun VaultData.toViewState(
                         VaultItemListingState.ItemListingType.Vault.SecureNote,
                         VaultItemListingState.ItemListingType.Vault.SshKey,
                         VaultItemListingState.ItemListingType.Vault.BankAccount,
+                        VaultItemListingState.ItemListingType.Vault.License,
                             -> null
 
                         VaultItemListingState.ItemListingType.Vault.Archive -> {
@@ -314,6 +323,10 @@ fun VaultData.toViewState(
                             BitwardenString.new_bank_account
                         }
 
+                        VaultItemListingState.ItemListingType.Vault.License -> {
+                            BitwardenString.new_license
+                        }
+
                         else -> BitwardenString.new_item
                     }
                         .asText()
@@ -331,6 +344,7 @@ fun VaultData.toViewState(
                         VaultItemListingState.ItemListingType.Vault.SecureNote,
                         VaultItemListingState.ItemListingType.Vault.SshKey,
                         VaultItemListingState.ItemListingType.Vault.BankAccount,
+                        VaultItemListingState.ItemListingType.Vault.License,
                             -> null
 
                         VaultItemListingState.ItemListingType.Vault.Archive -> {
@@ -412,6 +426,7 @@ fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
         is VaultItemListingState.ItemListingType.Send.SendText -> this
         is VaultItemListingState.ItemListingType.Vault.SshKey -> this
         is VaultItemListingState.ItemListingType.Vault.BankAccount -> this
+        is VaultItemListingState.ItemListingType.Vault.License -> this
         is VaultItemListingState.ItemListingType.Vault.Archive -> this
     }
 
@@ -541,7 +556,7 @@ private fun CipherListView.toIconTestTag(): String =
         CipherListViewType.Identity -> "IdentityCipherIcon"
         CipherListViewType.SshKey -> "SshKeyCipherIcon"
         CipherListViewType.BankAccount -> "BankAccountCipherIcon"
-        CipherListViewType.DriversLicense -> "DriversLicenseCipherIcon"
+        CipherListViewType.DriversLicense -> "LicenseCipherIcon"
         CipherListViewType.Passport -> "PassportCipherIcon"
     }
 
