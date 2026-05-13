@@ -32,9 +32,11 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.vault.components.collectionItemsSelector
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditBankAccountTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLicenseTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
 
@@ -52,6 +54,8 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
     identityItemTypeHandlers: VaultAddEditIdentityTypeHandlers,
     cardItemTypeHandlers: VaultAddEditCardTypeHandlers,
     sshKeyItemTypeHandlers: VaultAddEditSshKeyTypeHandlers,
+    bankAccountItemTypeHandlers: VaultAddEditBankAccountTypeHandlers,
+    licenseItemTypeHandlers: VaultAddEditLicenseTypeHandlers,
     isCardScannerEnabled: Boolean,
     cardHolderNameFocusRequester: FocusRequester,
     modifier: Modifier = Modifier,
@@ -73,6 +77,9 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
 
                 is VaultAddEditState.ViewState.Content.ItemType.Identity -> Unit
                 is VaultAddEditState.ViewState.Content.ItemType.SshKey -> Unit
+                is VaultAddEditState.ViewState.Content.ItemType.BankAccount -> Unit
+                is VaultAddEditState.ViewState.Content.ItemType.License -> Unit
+                is VaultAddEditState.ViewState.Content.ItemType.Passport -> Unit
                 is VaultAddEditState.ViewState.Content.ItemType.Login -> {
                     loginItemTypeHandlers.onSetupTotpClick(isGranted)
                 }
@@ -275,6 +282,21 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
                     sshKeyTypeHandlers = sshKeyItemTypeHandlers,
                 )
             }
+
+            is VaultAddEditState.ViewState.Content.ItemType.BankAccount -> {
+                vaultAddEditBankAccountItems(
+                    bankAccountState = state.type,
+                    bankAccountHandlers = bankAccountItemTypeHandlers,
+                )
+            }
+
+            is VaultAddEditState.ViewState.Content.ItemType.License -> {
+                vaultAddEditLicenseItems(
+                    licenseState = state.type,
+                    licenseHandlers = licenseItemTypeHandlers,
+                )
+            }
+            is VaultAddEditState.ViewState.Content.ItemType.Passport -> Unit
         }
 
         vaultAddEditAdditionalOptions(

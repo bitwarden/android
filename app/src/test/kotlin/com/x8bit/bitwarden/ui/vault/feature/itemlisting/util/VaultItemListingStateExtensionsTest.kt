@@ -133,6 +133,16 @@ class VaultItemListingStateExtensionsTest {
     }
 
     @Test
+    fun `toSearchType should return BankAccounts when item type is BankAccount`() {
+        val expected = SearchType.Vault.BankAccounts
+        val itemType = VaultItemListingState.ItemListingType.Vault.BankAccount
+
+        val result = itemType.toSearchType()
+
+        assertEquals(expected, result)
+    }
+
+    @Test
     fun `toVaultItemCipherType should return the correct response`() {
         val itemListingTypes = listOf(
             VaultItemListingState.ItemListingType.Vault.Card,
@@ -141,6 +151,7 @@ class VaultItemListingStateExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.Login,
             VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId"),
             VaultItemListingState.ItemListingType.Vault.SshKey,
+            VaultItemListingState.ItemListingType.Vault.BankAccount,
             VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId"),
         )
 
@@ -154,6 +165,7 @@ class VaultItemListingStateExtensionsTest {
                 VaultItemCipherType.LOGIN,
                 VaultItemCipherType.LOGIN,
                 VaultItemCipherType.SSH_KEY,
+                VaultItemCipherType.BANK_ACCOUNT,
                 VaultItemCipherType.LOGIN,
             ),
             result,

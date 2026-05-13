@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
+import com.x8bit.bitwarden.ui.vault.model.VaultBankAccountType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
@@ -214,7 +215,49 @@ fun CipherView.toViewState(
                 )
             }
 
-            CipherType.BANK_ACCOUNT -> TODO("PM-32810: Add Bank Account Type")
+            CipherType.BANK_ACCOUNT -> {
+                VaultItemState.ViewState.Content.ItemType.BankAccount(
+                    bankName = bankAccount?.bankName,
+                    nameOnAccount = bankAccount?.nameOnAccount,
+                    accountType = bankAccount?.accountType?.let(VaultBankAccountType::parse),
+                    accountNumber = bankAccount?.accountNumber,
+                    routingNumber = bankAccount?.routingNumber,
+                    branchNumber = bankAccount?.branchNumber,
+                    pin = bankAccount?.pin,
+                    swiftCode = bankAccount?.swiftCode,
+                    iban = bankAccount?.iban,
+                    bankContactPhone = bankAccount?.bankContactPhone,
+                )
+            }
+
+            CipherType.DRIVERS_LICENSE -> {
+                VaultItemState.ViewState.Content.ItemType.DriversLicense(
+                    firstName = driversLicense?.firstName,
+                    middleName = driversLicense?.middleName,
+                    lastName = driversLicense?.lastName,
+                    licenseNumber = driversLicense?.licenseNumber,
+                    dateOfBirth = driversLicense?.dateOfBirth,
+                    issuingCountry = driversLicense?.issuingCountry,
+                    issuingState = driversLicense?.issuingState,
+                    issuingAuthority = driversLicense?.issuingAuthority,
+                    issueDate = driversLicense?.issueDate,
+                    expirationDate = driversLicense?.expirationDate,
+                    licenseClass = driversLicense?.licenseClass,
+                )
+            }
+
+            CipherType.PASSPORT -> VaultItemState.ViewState.Content.ItemType.Passport(
+                surname = passport?.surname.orEmpty(),
+                givenName = passport?.givenName.orEmpty(),
+                dateOfBirth = passport?.dateOfBirth.orEmpty(),
+                nationality = passport?.nationality.orEmpty(),
+                passportNumber = passport?.passportNumber.orEmpty(),
+                passportType = passport?.passportType.orEmpty(),
+                issuingCountry = passport?.issuingCountry.orEmpty(),
+                issuingAuthority = passport?.issuingAuthority.orEmpty(),
+                issueDate = passport?.issueDate.orEmpty(),
+                expirationDate = passport?.expirationDate.orEmpty(),
+            )
         },
     )
 
@@ -305,7 +348,9 @@ private val CipherType.iconRes: Int
         CipherType.IDENTITY -> BitwardenDrawable.ic_id_card
         CipherType.SSH_KEY -> BitwardenDrawable.ic_ssh_key
         CipherType.LOGIN -> BitwardenDrawable.ic_globe
-        CipherType.BANK_ACCOUNT -> TODO("PM-32810: Add Bank Account Type")
+        CipherType.BANK_ACCOUNT -> BitwardenDrawable.ic_payment_card
+        CipherType.DRIVERS_LICENSE -> BitwardenDrawable.ic_note
+        CipherType.PASSPORT -> BitwardenDrawable.ic_note
     }
 
 @get:DrawableRes

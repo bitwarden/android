@@ -438,6 +438,34 @@ class VaultRepositoryImpl(
             )
     }
 
+    override suspend fun getValidTotpCipherIds(isPremium: Boolean, time: Instant): Set<String> {
+        val userId = activeUserId ?: return emptySet()
+        val candidates = decryptCipherListResultStateFlow
+            .value
+            .data
+            ?.successes
+            ?.filter {
+                it.type is CipherListViewType.Login &&
+                    !it.login?.totp.isNullOrBlank() &&
+                    it.isActive
+            }
+            ?: return emptySet()
+
+        return candidates
+            .filter { cipher ->
+                (isPremium || cipher.organizationUseTotp) &&
+                    vaultSdkSource
+                        .generateTotpForCipherListView(
+                            userId = userId,
+                            cipherListView = cipher,
+                            time = time,
+                        )
+                        .isSuccess
+            }
+            .mapNotNull { it.id }
+            .toSet()
+    }
+
     override suspend fun exportVaultDataToString(
         format: ExportFormat,
         restrictedTypes: List<CipherType>,

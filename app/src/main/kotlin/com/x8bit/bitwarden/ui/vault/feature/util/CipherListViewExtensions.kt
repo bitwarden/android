@@ -73,6 +73,28 @@ fun CipherListView.toOverflowActions(
                         this.type is CipherListViewType.SecureNote &&
                             this.copyableFields.contains(CopyableCipherFields.SECURE_NOTES)
                     },
+                ListingItemOverflowAction.VaultAction
+                    .CopyAccountNumberClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = hasMasterPassword,
+                    )
+                    .takeIf {
+                        this.type is CipherListViewType.BankAccount &&
+                            this.copyableFields.contains(
+                                CopyableCipherFields.BANK_ACCOUNT_ACCOUNT_NUMBER,
+                            )
+                    },
+                ListingItemOverflowAction.VaultAction
+                    .CopyRoutingNumberClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = hasMasterPassword,
+                    )
+                    .takeIf {
+                        this.type is CipherListViewType.BankAccount &&
+                            this.copyableFields.contains(
+                                CopyableCipherFields.BANK_ACCOUNT_ROUTING_NUMBER,
+                            )
+                    },
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = cipherId,
                     cipherType = this.type.toSdkCipherType(),

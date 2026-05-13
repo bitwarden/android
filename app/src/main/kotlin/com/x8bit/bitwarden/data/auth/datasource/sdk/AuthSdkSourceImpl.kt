@@ -3,6 +3,10 @@ package com.x8bit.bitwarden.data.auth.datasource.sdk
 import com.bitwarden.auth.JitMasterPasswordRegistrationRequest
 import com.bitwarden.auth.JitMasterPasswordRegistrationResponse
 import com.bitwarden.auth.KeyConnectorRegistrationResult
+import com.bitwarden.auth.TdeRegistrationRequest
+import com.bitwarden.auth.TdeRegistrationResponse
+import com.bitwarden.auth.UserMasterPasswordRegistrationRequest
+import com.bitwarden.auth.UserMasterPasswordRegistrationResponse
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.FingerprintRequest
 import com.bitwarden.core.KeyConnectorResponse
@@ -22,6 +26,7 @@ import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
  * Primary implementation of [AuthSdkSource] that serves as a convenience wrapper around a
  * [AuthClient].
  */
+@Suppress("TooManyFunctions")
 class AuthSdkSourceImpl(
     sdkClientManager: SdkClientManager,
 ) : BaseSdkSource(sdkClientManager = sdkClientManager),
@@ -64,6 +69,54 @@ class AuthSdkSourceImpl(
             auth().registration().postKeysForKeyConnectorRegistration(
                 keyConnectorUrl = keyConnectorUrl,
                 ssoOrgIdentifier = ssoOrganizationIdentifier,
+            )
+        }
+    }
+
+    override suspend fun postKeysForTdeRegistration(
+        userId: String,
+        organizationId: String,
+        organizationPublicKey: String,
+        deviceIdentifier: String,
+        shouldTrustDevice: Boolean,
+    ): Result<TdeRegistrationResponse> = runCatchingWithLogs {
+        getClient(userId = userId)
+            .auth()
+            .registration()
+            .postKeysForTdeRegistration(
+                request = TdeRegistrationRequest(
+                    orgId = organizationId,
+                    orgPublicKey = organizationPublicKey,
+                    userId = userId,
+                    deviceIdentifier = deviceIdentifier,
+                    trustDevice = shouldTrustDevice,
+                ),
+            )
+    }
+
+    override suspend fun postKeysForUserPasswordRegistration(
+        email: String,
+        salt: String,
+        masterPassword: String,
+        masterPasswordHint: String?,
+        emailVerificationToken: String,
+    ): Result<UserMasterPasswordRegistrationResponse> = runCatchingWithLogs {
+        useClient {
+            auth().registration().postKeysForUserPasswordRegistration(
+                request = UserMasterPasswordRegistrationRequest(
+                    email = email,
+                    salt = salt,
+                    masterPassword = masterPassword,
+                    masterPasswordHint = masterPasswordHint,
+                    emailVerificationToken = emailVerificationToken,
+                    organizationUserId = null,
+                    orgInviteToken = null,
+                    orgSponsoredFreeFamilyPlanToken = null,
+                    acceptEmergencyAccessInviteToken = null,
+                    acceptEmergencyAccessId = null,
+                    providerInviteToken = null,
+                    providerUserId = null,
+                ),
             )
         }
     }

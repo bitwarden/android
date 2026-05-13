@@ -71,6 +71,7 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToAboutPrivilegedApps: () -> Unit,
     onNavigateToManageDevices: () -> Unit,
     onNavigateToPlan: () -> Unit,
+    onNavigateToUpgradedToPremium: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -113,6 +114,7 @@ fun VaultUnlockedNavBarScreen(
         onNavigateToAboutPrivilegedApps = onNavigateToAboutPrivilegedApps,
         onNavigateToManageDevices = onNavigateToManageDevices,
         onNavigateToPlan = onNavigateToPlan,
+        onNavigateToUpgradedToPremium = onNavigateToUpgradedToPremium,
     )
 }
 
@@ -150,6 +152,7 @@ private fun VaultUnlockedNavBarScaffold(
     onNavigateToAboutPrivilegedApps: () -> Unit,
     onNavigateToManageDevices: () -> Unit,
     onNavigateToPlan: () -> Unit,
+    onNavigateToUpgradedToPremium: () -> Unit,
 ) {
     var shouldDimNavBar by rememberSaveable { mutableStateOf(value = false) }
 
@@ -236,6 +239,7 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToRecordedLogs = onNavigateToRecordedLogs,
                 onNavigateToAboutPrivilegedApps = onNavigateToAboutPrivilegedApps,
                 onNavigateToManageDevices = onNavigateToManageDevices,
+                onNavigateToUpgradedToPremium = onNavigateToUpgradedToPremium,
             )
         }
     }

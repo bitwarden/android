@@ -583,6 +583,18 @@
     {
       "type": "android",
       "info": {
+        "package_name": "com.talonsec.intune.talon",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "09:0C:4C:E6:20:65:9B:04:00:35:8F:C8:3F:DC:9F:02:D2:AB:77:C3:7F:4C:80:14:30:8E:FF:96:BA:54:49:55"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
         "package_name": "com.duckduckgo.mobile.android.debug",
         "signatures": [
           {
@@ -824,6 +836,22 @@
           {
             "build": "release",
             "cert_fingerprint_sha256": "A9:D6:D0:A2:AF:DB:15:84:9B:8C:D3:1D:51:FE:73:B8:E1:B1:70:BA:A5:70:C2:F8:F2:A3:F8:65:28:29:CB:BD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "ai.perplexity.comet",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "89:58:A4:05:40:1F:69:F5:B0:FB:54:44:24:74:6C:40:DE:C3:0C:09:1F:40:1F:95:1F:61:3C:48:35:C3:E5:EC"
+          },
+          {
+            "build": "userdebug",
+            "cert_fingerprint_sha256": "68:75:3A:54:59:93:C1:34:D3:BD:A3:72:2A:30:53:BF:4D:48:AD:23:63:2C:4E:27:8B:B3:BF:C1:FB:F6:52:8C"
           }
         ]
       }

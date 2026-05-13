@@ -1836,6 +1836,48 @@ class GeneratorScreenTest : BitwardenComposeTest() {
 
     //endregion Random Word Tests
 
+    //region Upgraded To Premium Action Card Tests
+
+    @Test
+    fun `UpgradedToPremium action card should display when eligible and mode is Default`() {
+        updateState(DEFAULT_STATE.copy(isUpgradedToPremiumCardEligible = true))
+
+        composeTestRule
+            .onNodeWithText(text = "Upgraded to Premium")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Learn more")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `UpgradedToPremium action card CTA click should send UpgradedToPremiumCardClick`() {
+        updateState(DEFAULT_STATE.copy(isUpgradedToPremiumCardEligible = true))
+
+        composeTestRule
+            .onNodeWithText(text = "Learn more")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(GeneratorAction.UpgradedToPremiumCardClick)
+        }
+    }
+
+    @Test
+    fun `UpgradedToPremium action card dismiss click should send UpgradedToPremiumCardDismiss`() {
+        updateState(DEFAULT_STATE.copy(isUpgradedToPremiumCardEligible = true))
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(GeneratorAction.UpgradedToPremiumCardDismiss)
+        }
+    }
+
+    //endregion Upgraded To Premium Action Card Tests
+
     private fun updateState(state: GeneratorState) {
         mutableStateFlow.value = state
     }

@@ -46,6 +46,8 @@ fun VaultData.toViewState(
     baseIconUrl: String,
     vaultFilterType: VaultFilterType,
     restrictItemTypesPolicyOrgIds: List<String>,
+    validTotpIds: Set<String>,
+    isNewItemTypesEnabled: Boolean,
 ): VaultState.ViewState {
     val allCipherViews =
         decryptCipherListResult
@@ -127,18 +129,14 @@ fun VaultData.toViewState(
             )
         val shouldShowUnGroupedItems = filteredCollectionViewList.isEmpty() &&
             noFolderItems.size < NO_FOLDER_ITEM_THRESHOLD
-        val totpItems = activeCipherViews.filter { it.login?.totp != null }
         val cardCount = activeCipherViews.count { it.type is CipherListViewType.Card }
         val archiveCount = allCipherViews.count {
             it.archivedDate != null && it.deletedDate == null
         }
+
         VaultState.ViewState.Content(
             itemTypesCount = itemTypesCount,
-            totpItemsCount = if (isPremium) {
-                totpItems.count()
-            } else {
-                totpItems.count { it.organizationUseTotp }
-            },
+            totpItemsCount = activeCipherViews.count { it.id in validTotpIds },
             loginItemsCount = activeCipherViews.count { it.type is CipherListViewType.Login },
             cardItemsCount = cardCount,
             identityItemsCount = activeCipherViews
@@ -147,6 +145,8 @@ fun VaultData.toViewState(
                 .count { it.type is CipherListViewType.SecureNote },
             sshKeyItemsCount = activeCipherViews
                 .count { it.type is CipherListViewType.SshKey },
+            bankAccountItemsCount = activeCipherViews
+                .count { it.type is CipherListViewType.BankAccount },
             favoriteItems = activeDecryptedCipherViews
                 .filter { it.favorite }
                 .mapNotNull {
@@ -220,6 +220,7 @@ fun VaultData.toViewState(
                 .asText()
                 .takeIf { !isPremium && archiveCount == 0 },
             showCardGroup = cardCount != 0 || restrictItemTypesPolicyOrgIds.isEmpty(),
+            showBankAccountGroup = isNewItemTypesEnabled,
         )
     }
 }
@@ -365,7 +366,22 @@ private fun CipherListView.toVaultItemOrNull(
             hasDecryptionError = hasDecryptionError,
         )
 
-        CipherListViewType.BankAccount -> TODO("PM-32810: Add Bank Account Type")
+        CipherListViewType.BankAccount -> VaultState.ViewState.VaultItem.BankAccount(
+            id = id,
+            name = name.asText(),
+            overflowOptions = toOverflowActions(
+                hasMasterPassword = hasMasterPassword,
+                isPremiumUser = isPremiumUser,
+            ),
+            extraIconList = toLabelIcons(),
+            shouldShowMasterPasswordReprompt = hasMasterPassword &&
+                reprompt == CipherRepromptType.PASSWORD,
+            hasDecryptionError = hasDecryptionError,
+        )
+
+        // TODO: [PM-32009] Map License/Passport when their UIs are wired.
+        CipherListViewType.DriversLicense -> null
+        CipherListViewType.Passport -> null
     }
 }
 

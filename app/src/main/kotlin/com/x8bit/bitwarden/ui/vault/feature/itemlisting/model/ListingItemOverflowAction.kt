@@ -212,6 +212,32 @@ sealed class ListingItemOverflowAction : Parcelable {
         }
 
         /**
+         * Click on the copy bank account number overflow option.
+         */
+        @Parcelize
+        data class CopyAccountNumberClick(
+            val cipherId: String,
+            override val requiresPasswordReprompt: Boolean,
+        ) : VaultAction() {
+            override val title: Text get() = BitwardenString.copy_account_number.asText()
+            override val contentDescription: Text get() = title
+            override val speedBump: BitwardenTwoButtonDialogData? get() = null
+        }
+
+        /**
+         * Click on the copy bank routing number overflow option.
+         */
+        @Parcelize
+        data class CopyRoutingNumberClick(
+            val cipherId: String,
+            override val requiresPasswordReprompt: Boolean,
+        ) : VaultAction() {
+            override val title: Text get() = BitwardenString.copy_routing_number.asText()
+            override val contentDescription: Text get() = title
+            override val speedBump: BitwardenTwoButtonDialogData? get() = null
+        }
+
+        /**
          * Click on the copy secure note overflow option.
          */
         @Parcelize

@@ -259,6 +259,26 @@ fun VaultContent(
             }
         }
 
+        if (state.showBankAccountGroup) {
+            item(key = "bank_accounts_group") {
+                BitwardenGroupItem(
+                    startIcon = IconData.Local(
+                        iconRes = BitwardenDrawable.ic_payment_card,
+                        testTag = "BankAccountCipherIcon",
+                    ),
+                    label = stringResource(id = BitwardenString.type_bank_account),
+                    supportingLabel = state.bankAccountItemsCount.toString(),
+                    onClick = vaultHandlers.bankAccountGroupClick,
+                    cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
+                    modifier = Modifier
+                        .animateItem()
+                        .fillMaxWidth()
+                        .testTag("BankAccountFilter")
+                        .standardHorizontalMargin(),
+                )
+            }
+        }
+
         item(key = "identities_group") {
             BitwardenGroupItem(
                 startIcon = IconData.Local(
@@ -509,6 +529,26 @@ private fun ActionCard(
     modifier: Modifier = Modifier,
 ) {
     when (actionCardState) {
+        VaultState.ActionCardState.UpgradedToPremium -> {
+            BitwardenActionCard(
+                cardTitle = stringResource(id = BitwardenString.upgraded_to_premium),
+                cardSubtitle = stringResource(
+                    id = BitwardenString.you_now_have_access_to_all_advanced_security_features,
+                ),
+                actionText = stringResource(id = BitwardenString.learn_more),
+                leadingContent = {
+                    Icon(
+                        painter = rememberVectorPainter(id = BitwardenDrawable.ic_star),
+                        contentDescription = null,
+                        tint = BitwardenTheme.colorScheme.icon.secondary,
+                    )
+                },
+                onActionClick = { vaultHandlers.actionCardClick(actionCardState) },
+                onDismissClick = { vaultHandlers.dismissActionCardClick(actionCardState) },
+                modifier = modifier,
+            )
+        }
+
         VaultState.ActionCardState.UpgradePremium -> {
             BitwardenActionCard(
                 cardTitle = stringResource(

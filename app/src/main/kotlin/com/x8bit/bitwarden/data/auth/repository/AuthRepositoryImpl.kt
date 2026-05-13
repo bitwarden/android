@@ -23,13 +23,14 @@ import com.bitwarden.network.model.CreateAccountKeysResponseJson
 import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
+import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
+import com.bitwarden.network.model.OrganizationKeysResponseJson
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PasswordHintResponseJson
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
 import com.bitwarden.network.model.RefreshTokenResponseJson
 import com.bitwarden.network.model.RegisterFinishRequestJson
-import com.bitwarden.network.model.RegisterRequestJson
 import com.bitwarden.network.model.RegisterResponseJson
 import com.bitwarden.network.model.ResendEmailRequestJson
 import com.bitwarden.network.model.ResendNewDeviceOtpRequestJson
@@ -470,84 +471,140 @@ class AuthRepositoryImpl(
             ?: return NewSsoUserResult.Failure(error = NoActiveUserException())
         val orgIdentifier = rememberedOrgIdentifier
             ?: return NewSsoUserResult.Failure(error = MissingPropertyException("OrgIdentifier"))
-        val userId = account.profile.userId
-        return organizationService
-            .getOrganizationAutoEnrollStatus(orgIdentifier)
-            .flatMap { orgAutoEnrollStatus ->
-                organizationService
-                    .getOrganizationKeys(orgAutoEnrollStatus.organizationId)
-                    .flatMap { organizationKeys ->
-                        authSdkSource.makeRegisterTdeKeysAndUnlockVault(
-                            userId = userId,
-                            email = account.profile.email,
-                            orgPublicKey = organizationKeys.publicKey,
-                            rememberDevice = authDiskSource
-                                .getShouldTrustDevice(userId = userId) == true,
-                        )
-                    }
-                    .flatMap { registerTdeKeyResponse ->
-                        accountsService
-                            .createAccountKeys(
-                                publicKey = registerTdeKeyResponse.publicKey,
-                                encryptedPrivateKey = registerTdeKeyResponse.privateKey,
-                            )
-                            .map { createAccountKeysResponse ->
-                                registerTdeKeyResponse to createAccountKeysResponse
+        return userStateManager.userStateTransaction {
+            organizationService
+                .getOrganizationAutoEnrollStatus(organizationIdentifier = orgIdentifier)
+                .flatMap { orgAutoEnrollStatus ->
+                    organizationService
+                        .getOrganizationKeys(organizationId = orgAutoEnrollStatus.organizationId)
+                        .flatMap { organizationKeys ->
+                            if (featureFlagManager.getFeatureFlag(FlagKey.V2EncryptionTde)) {
+                                registerUserForTdeV2(
+                                    profile = account.profile,
+                                    orgAutoEnrollStatus = orgAutoEnrollStatus,
+                                    orgKeys = organizationKeys,
+                                )
+                            } else {
+                                registerUserForTdeV1(
+                                    profile = account.profile,
+                                    orgAutoEnrollStatus = orgAutoEnrollStatus,
+                                    orgKeys = organizationKeys,
+                                )
                             }
-                    }
-                    .flatMap { (registerTdeKeyResponse, createAccountKeysResponse) ->
-                        organizationService
-                            .organizationResetPasswordEnroll(
-                                organizationId = orgAutoEnrollStatus.organizationId,
-                                userId = userId,
-                                passwordHash = null,
-                                resetPasswordKey = registerTdeKeyResponse.adminReset,
-                            )
-                            .map { registerTdeKeyResponse to createAccountKeysResponse }
-                    }
-                    .onSuccess { (registerTdeKeyResponse, createAccountKeysResponse) ->
-                        createNewSsoUserSuccess(
-                            userId = userId,
-                            createAccountKeysResponse = createAccountKeysResponse,
-                            registerTdeKeyResponse = registerTdeKeyResponse,
-                        )
-                    }
-            }
-            .fold(
-                onSuccess = { NewSsoUserResult.Success },
-                onFailure = { NewSsoUserResult.Failure(error = it) },
-            )
+                        }
+                }
+                .fold(
+                    onSuccess = { NewSsoUserResult.Success },
+                    onFailure = { NewSsoUserResult.Failure(error = it) },
+                )
+        }
     }
 
-    /**
-     * Stores all the relevant data from a successful creation of an SSO user. The data is stored
-     * while in an [UserStateManager.userStateTransaction] to ensure the `UserState` is only
-     * updated once after data stored.
-     */
-    private suspend fun createNewSsoUserSuccess(
-        userId: String,
-        createAccountKeysResponse: CreateAccountKeysResponseJson,
-        registerTdeKeyResponse: RegisterTdeKeyResponse,
-    ): Unit = userStateManager.userStateTransaction {
-        authDiskSource.storeAccountKeys(
-            userId = userId,
-            accountKeys = createAccountKeysResponse.accountKeys,
-        )
-        // TDE and SSO user creation still uses crypto-v1. These users are not
-        // expected to have the AEAD keys so we only store the private key for now.
-        // See https://github.com/bitwarden/android/pull/5682#discussion_r2273940332
-        // for more details.
-        authDiskSource.storePrivateKey(
-            userId = userId,
-            privateKey = registerTdeKeyResponse.privateKey,
-        )
-        vaultRepository.syncVaultState(userId = userId)
-        registerTdeKeyResponse.deviceKey?.let { trustDeviceResponse ->
-            trustedDeviceManager.trustThisDevice(
+    private suspend fun registerUserForTdeV1(
+        profile: AccountJson.Profile,
+        orgAutoEnrollStatus: OrganizationAutoEnrollStatusResponseJson,
+        orgKeys: OrganizationKeysResponseJson,
+    ): Result<Pair<RegisterTdeKeyResponse, CreateAccountKeysResponseJson>> {
+        val userId = profile.userId
+        return authSdkSource
+            .makeRegisterTdeKeysAndUnlockVault(
                 userId = userId,
-                trustDeviceResponse = trustDeviceResponse,
+                email = profile.email,
+                orgPublicKey = orgKeys.publicKey,
+                rememberDevice = authDiskSource.getShouldTrustDevice(userId = userId) == true,
+            )
+            .flatMap { registerTdeKeyResponse ->
+                accountsService
+                    .createAccountKeys(
+                        publicKey = registerTdeKeyResponse.publicKey,
+                        encryptedPrivateKey = registerTdeKeyResponse.privateKey,
+                    )
+                    .map { createAccountKeysResponse ->
+                        registerTdeKeyResponse to createAccountKeysResponse
+                    }
+            }
+            .flatMap { (registerTdeKeyResponse, createAccountKeysResponse) ->
+                organizationService
+                    .organizationResetPasswordEnroll(
+                        organizationId = orgAutoEnrollStatus.organizationId,
+                        userId = userId,
+                        passwordHash = null,
+                        resetPasswordKey = registerTdeKeyResponse.adminReset,
+                    )
+                    .map { registerTdeKeyResponse to createAccountKeysResponse }
+            }
+            .onSuccess { (registerTdeKeyResponse, createAccountKeysResponse) ->
+                authDiskSource.storeAccountKeys(
+                    userId = userId,
+                    accountKeys = createAccountKeysResponse.accountKeys,
+                )
+                // TDE and SSO user creation still uses crypto-v1. These users are not expected to
+                // have the AEAD keys so we only store the private key for now.
+                // See https://github.com/bitwarden/android/pull/5682#discussion_r2273940332
+                // for more details.
+                authDiskSource.storePrivateKey(
+                    userId = userId,
+                    privateKey = registerTdeKeyResponse.privateKey,
+                )
+                vaultRepository.syncVaultState(userId = userId)
+                registerTdeKeyResponse.deviceKey?.let { response ->
+                    trustedDeviceManager.trustThisDevice(
+                        userId = userId,
+                        trustDeviceResponse = response,
+                    )
+                }
+            }
+    }
+
+    private suspend fun registerUserForTdeV2(
+        profile: AccountJson.Profile,
+        orgAutoEnrollStatus: OrganizationAutoEnrollStatusResponseJson,
+        orgKeys: OrganizationKeysResponseJson,
+    ): Result<VaultUnlockResult> {
+        val userId = profile.userId
+        val shouldTrustDevice = authDiskSource.getShouldTrustDevice(userId = userId) == true
+        return withContext(dispatcherManager.io) {
+            authSdkSource.postKeysForTdeRegistration(
+                userId = userId,
+                organizationId = orgAutoEnrollStatus.organizationId,
+                organizationPublicKey = orgKeys.publicKey,
+                deviceIdentifier = authDiskSource.uniqueAppId,
+                shouldTrustDevice = shouldTrustDevice,
             )
         }
+            .map { response ->
+                // Clear the 'should trust device' flag, since the SDK trusted the device above.
+                authDiskSource.storeShouldTrustDevice(userId = userId, shouldTrustDevice = null)
+                this
+                    .unlockVault(
+                        accountCryptographicState = response.accountCryptographicState,
+                        accountProfile = profile,
+                        initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                            decryptedUserKey = response.userKey,
+                        ),
+                    )
+                    .also { result ->
+                        if (result is VaultUnlockResult.Success) {
+                            authDiskSource.storeAccountKeys(
+                                userId = userId,
+                                accountKeys = response.accountCryptographicState.accountKeysJson,
+                            )
+
+                            // Storing the private key here for legacy purposes, the
+                            // `accountKeysJson` stored above will be used for most purposes.
+                            authDiskSource.storePrivateKey(
+                                userId = userId,
+                                privateKey = response.accountCryptographicState.privateKey,
+                            )
+                            if (shouldTrustDevice) {
+                                authDiskSource.storeDeviceKey(
+                                    userId = userId,
+                                    deviceKey = response.deviceKey,
+                                )
+                            }
+                        }
+                    }
+            }
     }
 
     override suspend fun completeTdeLogin(
@@ -896,7 +953,7 @@ class AuthRepositoryImpl(
         email: String,
         masterPassword: String,
         masterPasswordHint: String?,
-        emailVerificationToken: String?,
+        emailVerificationToken: String,
         shouldCheckDataBreaches: Boolean,
         isMasterPasswordStrong: Boolean,
     ): RegisterResult {
@@ -916,6 +973,22 @@ class AuthRepositoryImpl(
         if (!isMasterPasswordStrong) {
             return RegisterResult.WeakPassword
         }
+        if (featureFlagManager.getFeatureFlag(key = FlagKey.V2EncryptionPassword)) {
+            return withContext(dispatcherManager.io) {
+                authSdkSource.postKeysForUserPasswordRegistration(
+                    email = email,
+                    salt = email,
+                    masterPassword = masterPassword,
+                    masterPasswordHint = masterPasswordHint,
+                    emailVerificationToken = emailVerificationToken,
+                )
+            }
+                .fold(
+                    onSuccess = { RegisterResult.Success },
+                    onFailure = { RegisterResult.Error(errorMessage = null, error = it) },
+                )
+        }
+
         val kdf = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt())
         return authSdkSource
             .makeRegisterKeys(
@@ -924,39 +997,21 @@ class AuthRepositoryImpl(
                 kdf = kdf,
             )
             .flatMap { registerKeyResponse ->
-                if (emailVerificationToken == null) {
-                    // TODO PM-6675: Remove register call and service implementation
-                    identityService.register(
-                        body = RegisterRequestJson(
-                            email = email,
-                            masterPasswordHash = registerKeyResponse.masterPasswordHash,
-                            masterPasswordHint = masterPasswordHint,
-                            key = registerKeyResponse.encryptedUserKey,
-                            keys = RegisterRequestJson.Keys(
-                                publicKey = registerKeyResponse.keys.public,
-                                encryptedPrivateKey = registerKeyResponse.keys.private,
-                            ),
-                            kdfType = kdf.toKdfTypeJson(),
-                            kdfIterations = kdf.iterations,
+                identityService.registerFinish(
+                    body = RegisterFinishRequestJson(
+                        email = email,
+                        masterPasswordHash = registerKeyResponse.masterPasswordHash,
+                        masterPasswordHint = masterPasswordHint,
+                        emailVerificationToken = emailVerificationToken,
+                        userSymmetricKey = registerKeyResponse.encryptedUserKey,
+                        userAsymmetricKeys = RegisterFinishRequestJson.Keys(
+                            publicKey = registerKeyResponse.keys.public,
+                            encryptedPrivateKey = registerKeyResponse.keys.private,
                         ),
-                    )
-                } else {
-                    identityService.registerFinish(
-                        body = RegisterFinishRequestJson(
-                            email = email,
-                            masterPasswordHash = registerKeyResponse.masterPasswordHash,
-                            masterPasswordHint = masterPasswordHint,
-                            emailVerificationToken = emailVerificationToken,
-                            userSymmetricKey = registerKeyResponse.encryptedUserKey,
-                            userAsymmetricKeys = RegisterFinishRequestJson.Keys(
-                                publicKey = registerKeyResponse.keys.public,
-                                encryptedPrivateKey = registerKeyResponse.keys.private,
-                            ),
-                            kdfType = kdf.toKdfTypeJson(),
-                            kdfIterations = kdf.iterations,
-                        ),
-                    )
-                }
+                        kdfType = kdf.toKdfTypeJson(),
+                        kdfIterations = kdf.iterations,
+                    ),
+                )
             }
             .fold(
                 onSuccess = {
@@ -1298,7 +1353,7 @@ class AuthRepositoryImpl(
                             kdfParallelism = profile.kdfParallelism,
                             kdfType = profile.kdfType,
                             key = response.encryptedUserKey,
-                            keys = RegisterRequestJson.Keys(
+                            keys = SetPasswordRequestJson.Keys(
                                 publicKey = response.keys.public,
                                 encryptedPrivateKey = response.keys.private,
                             ),

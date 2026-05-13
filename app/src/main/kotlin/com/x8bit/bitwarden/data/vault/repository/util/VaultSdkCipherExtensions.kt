@@ -14,6 +14,7 @@ import com.bitwarden.network.model.SecureNoteTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UriMatchTypeJson
 import com.bitwarden.vault.Attachment
+import com.bitwarden.vault.BankAccount
 import com.bitwarden.vault.Card
 import com.bitwarden.vault.CardListView
 import com.bitwarden.vault.Cipher
@@ -23,6 +24,7 @@ import com.bitwarden.vault.CipherPermissions
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.DriversLicense
 import com.bitwarden.vault.EncryptionContext
 import com.bitwarden.vault.Fido2Credential
 import com.bitwarden.vault.Field
@@ -31,6 +33,7 @@ import com.bitwarden.vault.Identity
 import com.bitwarden.vault.Login
 import com.bitwarden.vault.LoginListView
 import com.bitwarden.vault.LoginUri
+import com.bitwarden.vault.Passport
 import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.SecureNote
 import com.bitwarden.vault.SecureNoteType
@@ -66,6 +69,9 @@ fun Cipher.toEncryptedNetworkCipher(
         card = card?.toEncryptedNetworkCard(),
         key = key,
         sshKey = sshKey?.toEncryptedNetworkSshKey(),
+        bankAccount = bankAccount?.toEncryptedNetworkBankAccount(),
+        driversLicense = null,
+        passport = null,
         archivedDate = archivedDate,
         encryptedFor = encryptedFor,
     )
@@ -96,6 +102,9 @@ fun Cipher.toEncryptedNetworkCipherResponse(
         card = card?.toEncryptedNetworkCard(),
         attachments = attachments?.toNetworkAttachmentList(),
         sshKey = sshKey?.toEncryptedNetworkSshKey(),
+        bankAccount = bankAccount?.toEncryptedNetworkBankAccount(),
+        driversLicense = driversLicense?.toEncryptedNetworkDriversLicense(),
+        passport = passport?.toEncryptedNetworkPassport(),
         shouldOrganizationUseTotp = organizationUseTotp,
         shouldEdit = edit,
         revisionDate = revisionDate,
@@ -147,6 +156,65 @@ private fun Card.toEncryptedNetworkCard(): SyncResponseJson.Cipher.Card =
         expirationYear = expYear,
         cardholderName = cardholderName,
         brand = brand,
+    )
+
+/**
+ * Converts a Bitwarden SDK [BankAccount] object to a corresponding
+ * [SyncResponseJson.Cipher.BankAccount] object.
+ */
+private fun BankAccount.toEncryptedNetworkBankAccount(): SyncResponseJson.Cipher.BankAccount =
+    SyncResponseJson.Cipher.BankAccount(
+        bankName = bankName,
+        nameOnAccount = nameOnAccount,
+        accountType = accountType,
+        accountNumber = accountNumber,
+        routingNumber = routingNumber,
+        branchNumber = branchNumber,
+        pin = pin,
+        swiftCode = swiftCode,
+        iban = iban,
+        bankContactPhone = bankContactPhone,
+    )
+
+/**
+ * Converts a Bitwarden SDK [DriversLicense] object to a corresponding
+ * [SyncResponseJson.Cipher.DriversLicense] object.
+ */
+private fun DriversLicense.toEncryptedNetworkDriversLicense():
+    SyncResponseJson.Cipher.DriversLicense =
+    SyncResponseJson.Cipher.DriversLicense(
+        firstName = firstName,
+        middleName = middleName,
+        lastName = lastName,
+        licenseNumber = licenseNumber,
+        issuingCountry = issuingCountry,
+        issuingState = issuingState,
+        issuingAuthority = issuingAuthority,
+        expirationDate = expirationDate,
+        dateOfBirth = dateOfBirth,
+        issueDate = issueDate,
+        licenseClass = licenseClass,
+    )
+
+/**
+ * Converts a Bitwarden SDK [Passport] object to a corresponding
+ * [SyncResponseJson.Cipher.Passport] object.
+ */
+private fun Passport.toEncryptedNetworkPassport(): SyncResponseJson.Cipher.Passport =
+    SyncResponseJson.Cipher.Passport(
+        surname = surname,
+        givenName = givenName,
+        dateOfBirth = dateOfBirth,
+        birthPlace = birthPlace,
+        sex = sex,
+        nationality = nationality,
+        passportNumber = passportNumber,
+        passportType = passportType,
+        nationalIdentificationNumber = nationalIdentificationNumber,
+        issuingCountry = issuingCountry,
+        issuingAuthority = issuingAuthority,
+        issueDate = issueDate,
+        expirationDate = expirationDate,
     )
 
 private fun SshKey.toEncryptedNetworkSshKey(): SyncResponseJson.Cipher.SshKey =
@@ -373,7 +441,9 @@ private fun CipherType.toNetworkCipherType(): CipherTypeJson =
         CipherType.CARD -> CipherTypeJson.CARD
         CipherType.IDENTITY -> CipherTypeJson.IDENTITY
         CipherType.SSH_KEY -> CipherTypeJson.SSH_KEY
-        CipherType.BANK_ACCOUNT -> TODO("PM-32810: Add Bank Account Type")
+        CipherType.BANK_ACCOUNT -> CipherTypeJson.BANK_ACCOUNT
+        CipherType.DRIVERS_LICENSE -> CipherTypeJson.DRIVERS_LICENSE
+        CipherType.PASSPORT -> CipherTypeJson.PASSPORT
     }
 
 /**
@@ -401,9 +471,10 @@ fun SyncResponseJson.Cipher.toEncryptedSdkCipher(): Cipher =
         identity = identity?.toSdkIdentity(),
         sshKey = sshKey?.toSdkSshKey(),
         card = card?.toSdkCard(),
+        bankAccount = bankAccount?.toSdkBankAccount(),
+        driversLicense = driversLicense?.toSdkDriversLicense(),
+        passport = passport?.toSdkPassport(),
         secureNote = secureNote?.toSdkSecureNote(),
-        // TODO: PM-32810: Add Bank Account Type
-        bankAccount = null,
         favorite = isFavorite,
         reprompt = reprompt.toSdkRepromptType(),
         organizationUseTotp = shouldOrganizationUseTotp,
@@ -490,6 +561,63 @@ fun SyncResponseJson.Cipher.Card.toSdkCard(): Card =
         code = code,
         brand = brand,
         number = number,
+    )
+
+/**
+ * Transforms a [SyncResponseJson.Cipher.BankAccount] into the corresponding Bitwarden SDK
+ * [BankAccount].
+ */
+fun SyncResponseJson.Cipher.BankAccount.toSdkBankAccount(): BankAccount =
+    BankAccount(
+        bankName = bankName,
+        nameOnAccount = nameOnAccount,
+        accountType = accountType,
+        accountNumber = accountNumber,
+        routingNumber = routingNumber,
+        branchNumber = branchNumber,
+        pin = pin,
+        swiftCode = swiftCode,
+        iban = iban,
+        bankContactPhone = bankContactPhone,
+    )
+
+/**
+ * Transforms a [SyncResponseJson.Cipher.DriversLicense] into the corresponding Bitwarden SDK
+ * [DriversLicense].
+ */
+fun SyncResponseJson.Cipher.DriversLicense.toSdkDriversLicense(): DriversLicense =
+    DriversLicense(
+        firstName = firstName,
+        middleName = middleName,
+        lastName = lastName,
+        licenseNumber = licenseNumber,
+        issuingCountry = issuingCountry,
+        issuingState = issuingState,
+        issuingAuthority = issuingAuthority,
+        expirationDate = expirationDate,
+        dateOfBirth = dateOfBirth,
+        issueDate = issueDate,
+        licenseClass = licenseClass,
+    )
+
+/**
+ * Transforms a [SyncResponseJson.Cipher.Passport] into the corresponding Bitwarden SDK [Passport].
+ */
+fun SyncResponseJson.Cipher.Passport.toSdkPassport(): Passport =
+    Passport(
+        surname = surname,
+        givenName = givenName,
+        dateOfBirth = dateOfBirth,
+        birthPlace = birthPlace,
+        sex = sex,
+        nationality = nationality,
+        passportNumber = passportNumber,
+        passportType = passportType,
+        nationalIdentificationNumber = nationalIdentificationNumber,
+        issuingCountry = issuingCountry,
+        issuingAuthority = issuingAuthority,
+        issueDate = issueDate,
+        expirationDate = expirationDate,
     )
 
 /**
@@ -610,6 +738,10 @@ fun CipherTypeJson.toSdkCipherType(): CipherType =
         CipherTypeJson.CARD -> CipherType.CARD
         CipherTypeJson.IDENTITY -> CipherType.IDENTITY
         CipherTypeJson.SSH_KEY -> CipherType.SSH_KEY
+        CipherTypeJson.BANK_ACCOUNT -> CipherType.BANK_ACCOUNT
+        CipherTypeJson.DRIVERS_LICENSE,
+        CipherTypeJson.PASSPORT,
+            -> throw IllegalArgumentException("SDK mapping not yet available for $this")
     }
 
 /**
@@ -721,6 +853,8 @@ fun Cipher.toFailureCipherListView(): CipherListView =
             CipherType.IDENTITY -> CipherListViewType.Identity
             CipherType.SSH_KEY -> CipherListViewType.SshKey
             CipherType.BANK_ACCOUNT -> CipherListViewType.BankAccount
+            CipherType.DRIVERS_LICENSE -> CipherListViewType.DriversLicense
+            CipherType.PASSPORT -> CipherListViewType.Passport
         },
         favorite = favorite,
         reprompt = reprompt,

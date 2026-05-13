@@ -66,6 +66,7 @@ class VaultUnlockedNavBarScreenTest : BitwardenComposeTest() {
                 onNavigateToAboutPrivilegedApps = {},
                 onNavigateToManageDevices = {},
                 onNavigateToPlan = {},
+                onNavigateToUpgradedToPremium = {},
             )
         }
     }

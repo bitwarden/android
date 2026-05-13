@@ -48,8 +48,6 @@ import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
-import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
@@ -74,13 +72,13 @@ import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 @Composable
 fun PlanScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToUpgradedToPremium: () -> Unit,
     viewModel: PlanViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
     authTabLaunchers: AuthTabLaunchers = LocalAuthTabLaunchers.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val handlers = remember(viewModel) { PlanHandlers.create(viewModel) }
-    val snackbarHostState = rememberBitwardenSnackbarHostState()
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -94,7 +92,7 @@ fun PlanScreen(
 
             is PlanEvent.LaunchPortal -> intentManager.launchUri(event.url.toUri())
             PlanEvent.NavigateBack -> onNavigateBack()
-            is PlanEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
+            PlanEvent.NavigateToUpgradedToPremium -> onNavigateToUpgradedToPremium()
         }
     }
 
@@ -108,9 +106,6 @@ fun PlanScreen(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
-        snackbarHost = {
-            BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
-        },
         topBar = {
             BitwardenTopAppBar(
                 title = stringResource(id = state.title),

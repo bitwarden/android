@@ -10,6 +10,7 @@ import com.bitwarden.network.model.BulkShareCiphersJsonRequest
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.CreateCipherResponseJson
 import com.bitwarden.network.model.FileUploadType
+import com.bitwarden.network.model.GetCipherResponse
 import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.ImportCiphersResponseJson
 import com.bitwarden.network.model.ShareCipherJsonRequest
@@ -35,6 +36,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertInstanceOf
 import retrofit2.create
 import java.io.File
 import java.time.Clock
@@ -440,13 +442,20 @@ class CiphersServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `getCipher should return the correct response`() = runTest {
+    fun `getCipher with success should return the correct response`() = runTest {
         server.enqueue(MockResponse().setBody(CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON))
         val result = ciphersService.getCipher(cipherId = "mockId-1")
         assertEquals(
-            createMockCipher(number = 1),
+            GetCipherResponse.Success(cipher = createMockCipher(number = 1)),
             result.getOrThrow(),
         )
+    }
+
+    @Test
+    fun `getSend with 404 should return the NotFound response`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(404))
+        val result = ciphersService.getCipher("mockId-1")
+        assertInstanceOf<GetCipherResponse.NotFound>(result.getOrThrow())
     }
 
     @Test
@@ -629,6 +638,46 @@ private const val CREATE_ATTACHMENT_SUCCESS_JSON = """
       "privateKey": "mockPrivateKey-1",
       "keyFingerprint": "mockKeyFingerprint-1"
     },
+    "bankAccount": {
+      "bankName": "mockBankName-1",
+      "nameOnAccount": "mockNameOnAccount-1",
+      "accountType": "mockAccountType-1",
+      "accountNumber": "mockAccountNumber-1",
+      "routingNumber": "mockRoutingNumber-1",
+      "branchNumber": "mockBranchNumber-1",
+      "pin": "mockPin-1",
+      "swiftCode": "mockSwiftCode-1",
+      "iban": "mockIban-1",
+      "bankContactPhone": "mockBankContactPhone-1"
+    },
+    "driversLicense": {
+      "firstName": "mockFirstName-1",
+      "middleName": "mockMiddleName-1",
+      "lastName": "mockLastName-1",
+      "licenseNumber": "mockLicenseNumber-1",
+      "issuingCountry": "mockIssuingCountry-1",
+      "issuingState": "mockIssuingState-1",
+      "issuingAuthority": "mockIssuingAuthority-1",
+      "expirationDate": "mockExpirationDate-1",
+      "dateOfBirth": "mockDateOfBirth-1",
+      "issueDate": "mockIssueDate-1",
+      "licenseClass": "mockLicenseClass-1",
+    },
+    "passport": {
+      "surname": "mockSurname-1",
+      "givenName": "mockGivenName-1",
+      "dateOfBirth": "mockDateOfBirth-1",
+      "birthPlace": "mockBirthPlace-1",
+      "sex": "mockSex-1",
+      "nationality": "mockNationality-1",
+      "passportNumber": "mockPassportNumber-1",
+      "passportType": "mockPassportType-1",
+      "nationalIdentificationNumber": "mockNationalIdentificationNumber-1",
+      "issuingCountry": "mockIssuingCountry-1",
+      "issuingAuthority": "mockIssuingAuthority-1",
+      "issueDate": "mockIssueDate-1",
+      "expirationDate": "mockExpirationDate-1",
+    },
     "encryptedFor": "mockEncryptedFor-1",
     "archivedDate": "2023-10-27T12:00:00.00Z"
   }
@@ -757,6 +806,46 @@ private const val CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON = """
     "publicKey": "mockPublicKey-1",
     "privateKey": "mockPrivateKey-1",
     "keyFingerprint": "mockKeyFingerprint-1"
+  },
+  "bankAccount": {
+    "bankName": "mockBankName-1",
+    "nameOnAccount": "mockNameOnAccount-1",
+    "accountType": "mockAccountType-1",
+    "accountNumber": "mockAccountNumber-1",
+    "routingNumber": "mockRoutingNumber-1",
+    "branchNumber": "mockBranchNumber-1",
+    "pin": "mockPin-1",
+    "swiftCode": "mockSwiftCode-1",
+    "iban": "mockIban-1",
+    "bankContactPhone": "mockBankContactPhone-1"
+  },
+  "driversLicense": {
+    "firstName": "mockFirstName-1",
+    "middleName": "mockMiddleName-1",
+    "lastName": "mockLastName-1",
+    "licenseNumber": "mockLicenseNumber-1",
+    "issuingCountry": "mockIssuingCountry-1",
+    "issuingState": "mockIssuingState-1",
+    "issuingAuthority": "mockIssuingAuthority-1",
+    "expirationDate": "mockExpirationDate-1",
+    "dateOfBirth": "mockDateOfBirth-1",
+    "issueDate": "mockIssueDate-1",
+    "licenseClass": "mockLicenseClass-1",
+  },
+  "passport": {
+    "surname": "mockSurname-1",
+    "givenName": "mockGivenName-1",
+    "dateOfBirth": "mockDateOfBirth-1",
+    "birthPlace": "mockBirthPlace-1",
+    "sex": "mockSex-1",
+    "nationality": "mockNationality-1",
+    "passportNumber": "mockPassportNumber-1",
+    "passportType": "mockPassportType-1",
+    "nationalIdentificationNumber": "mockNationalIdentificationNumber-1",
+    "issuingCountry": "mockIssuingCountry-1",
+    "issuingAuthority": "mockIssuingAuthority-1",
+    "issueDate": "mockIssueDate-1",
+    "expirationDate": "mockExpirationDate-1",
   },
   "encryptedFor": "mockEncryptedFor-1",
   "archivedDate": "2023-10-27T12:00:00.00Z"

@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
+# Requires Python 3.9+
+"""Fetch release notes from a Jira issue."""
 
-import sys
+import argparse
 import base64
 import json
-import requests
+import sys
+from pathlib import Path
+from urllib.error import HTTPError
+from urllib.request import Request, urlopen
 
-SCRIPT_NAME = "jira_release_notes.py"
+SCRIPT_NAME = Path(__file__).name
 
 def extract_text_from_content(content):
     if isinstance(content, list):
@@ -63,32 +68,43 @@ def parse_release_notes(response_json):
         print(f"[{SCRIPT_NAME}] Error parsing release notes: {str(e)}", file=sys.stderr)
         return ''
 
-def main():
-    if len(sys.argv) != 4:
-        print(f"Usage: {sys.argv[0]} <issue_id> <jira_email> <jira_api_token>")
-        sys.exit(1)
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+    )
+    parser.add_argument("issue_id", help="RELEASE issue ID to fetch release notes from")
+    parser.add_argument("jira_cloud_id", help="Atlassian Cloud ID - Can be retrieved from the `tenant_info` endpoint, e.g.: `https://<my-site-name>.atlassian.net/_edge/tenant_info`")
+    parser.add_argument("jira_email", help="Email used to create the API token")
+    parser.add_argument("jira_api_token", help="Jira API token - Generate one at: https://id.atlassian.com/manage-profile/security/api-tokens")
+    return parser.parse_args()
 
-    jira_issue_id = sys.argv[1]
-    jira_email = sys.argv[2]
-    jira_api_token = sys.argv[3]
-    jira_base_url = "https://bitwarden.atlassian.net"
+def main():
+    args = parse_args()
+
+    jira_issue_id = args.issue_id
+    jira_cloud_id = args.jira_cloud_id
+    jira_email = args.jira_email
+    jira_api_token = args.jira_api_token
+    jira_base_url = "https://api.atlassian.com/ex/jira"
 
     auth = base64.b64encode(f"{jira_email}:{jira_api_token}".encode()).decode()
-    headers = {
-        "Authorization": f"Basic {auth}",
-        "Content-Type": "application/json"
-    }
-
-    response = requests.get(
-        f"{jira_base_url}/rest/api/3/issue/{jira_issue_id}",
-        headers=headers
+    request = Request(
+        f"{jira_base_url}/{jira_cloud_id}/rest/api/3/issue/{jira_issue_id}",
+        headers={
+            "Authorization": f"Basic {auth}",
+            "Content-Type": "application/json"
+        }
     )
 
-    if response.status_code != 200:
-        print(f"[{SCRIPT_NAME}] Error fetching Jira issue ({jira_issue_id}). Status code: {response.status_code}. Msg: {response.text}", file=sys.stderr)
+    try:
+        with urlopen(request) as response:
+            response_json = json.loads(response.read().decode())
+    except HTTPError as error:
+        error_text = error.read().decode().replace(jira_cloud_id, "[REDACTED]")
+        print(f"[{SCRIPT_NAME}] Error fetching Jira issue ({jira_issue_id}). Status code: {error.code}. Msg: {error_text}", file=sys.stderr)
         sys.exit(1)
 
-    release_notes = parse_release_notes(response.json())
+    release_notes = parse_release_notes(response_json)
     print(release_notes)
 
 if __name__ == "__main__":

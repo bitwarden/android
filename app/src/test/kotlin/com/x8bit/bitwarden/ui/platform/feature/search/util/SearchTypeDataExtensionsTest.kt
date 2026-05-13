@@ -35,6 +35,7 @@ import java.time.temporal.TemporalAccessor
 
 private const val DEFAULT_FORMATTED_DATE_TIME = "Oct 27, 2023, 12:00 PM"
 
+@Suppress("LargeClass")
 class SearchTypeDataExtensionsTest {
 
     private val clock: Clock = Clock.fixed(
@@ -242,6 +243,19 @@ class SearchTypeDataExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `updateWithAdditionalDataIfNecessary should return the searchTypeData unchanged for Vault BankAccounts`() {
+        val searchTypeData = SearchTypeData.Vault.BankAccounts
+        assertEquals(
+            searchTypeData,
+            searchTypeData.updateWithAdditionalDataIfNecessary(
+                folderList = listOf(),
+                collectionList = emptyList(),
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `updateWithAdditionalDataIfNecessary should return the searchTypeData unchanged for Vault VerificationCodes`() {
         val searchTypeData = SearchTypeData.Vault.VerificationCodes
         assertEquals(
@@ -355,6 +369,27 @@ class SearchTypeDataExtensionsTest {
         val ciphers = listOf(match1, match2, match3)
         val result = ciphers.filterAndOrganize(
             searchTypeData = SearchTypeData.Vault.Trash,
+            searchTerm = "match",
+        )
+        assertEquals(listOf(match1, match3), result)
+    }
+
+    @Test
+    fun `CipherViews filterAndOrganize should return list with only bank account items`() {
+        val match1 = createMockCipherListView(
+            number = 1,
+            type = CipherListViewType.BankAccount,
+            name = "match1",
+        )
+        val match2 = createMockCipherListView(number = 2, name = "match2")
+        val match3 = createMockCipherListView(
+            number = 3,
+            type = CipherListViewType.BankAccount,
+            name = "match3",
+        )
+        val ciphers = listOf(match1, match2, match3)
+        val result = ciphers.filterAndOrganize(
+            searchTypeData = SearchTypeData.Vault.BankAccounts,
             searchTerm = "match",
         )
         assertEquals(listOf(match1, match3), result)

@@ -5,6 +5,7 @@ import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.provider.CallingAppInfo
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
@@ -85,6 +86,7 @@ import com.x8bit.bitwarden.ui.vault.feature.util.canAssignToCollections
 import com.x8bit.bitwarden.ui.vault.feature.util.hasDeletePermissionInAtLeastOneCollection
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import com.x8bit.bitwarden.ui.vault.model.VaultBankAccountType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
@@ -127,6 +129,7 @@ class VaultAddEditViewModel @Inject constructor(
     featureFlagManager: FeatureFlagManager,
     generatorRepository: GeneratorRepository,
     cardScanManager: CardScanManager,
+    private val buildInfoManager: BuildInfoManager,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val toastManager: ToastManager,
     private val authRepository: AuthRepository,
@@ -184,7 +187,8 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             VaultAddEditState(
-                isCardScannerEnabled = featureFlagManager.getFeatureFlag(FlagKey.CardScanner),
+                isCardScannerEnabled = featureFlagManager
+                    .getFeatureFlag(FlagKey.CardScanner) && !buildInfoManager.isFdroid,
                 vaultAddEditType = vaultAddEditType,
                 cipherType = vaultCipherType,
                 viewState = when (vaultAddEditType) {
@@ -306,6 +310,14 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.ItemType.IdentityType -> handleIdentityTypeActions(action)
             is VaultAddEditAction.ItemType.CardType -> handleCardTypeActions(action)
             is VaultAddEditAction.ItemType.SshKeyType -> handleSshKeyTypeActions(action)
+            is VaultAddEditAction.ItemType.BankAccountType -> {
+                handleBankAccountTypeActions(action)
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType -> {
+                handleLicenseTypeActions(action)
+            }
+
             is VaultAddEditAction.Internal -> handleInternalActions(action)
         }
     }
@@ -434,6 +446,14 @@ class VaultAddEditViewModel @Inject constructor(
 
     @Suppress("LongMethod")
     private fun handleSaveClick() = onContent { content ->
+        if (!content.type.isSdkSupported) {
+            sendEvent(
+                VaultAddEditEvent.ShowSnackbar(
+                    message = BitwardenString.an_error_has_occurred.asText(),
+                ),
+            )
+            return@onContent
+        }
         if (hasValidationErrors(content)) return@onContent
 
         mutableStateFlow.update {
@@ -1679,6 +1699,100 @@ class VaultAddEditViewModel @Inject constructor(
 
     //endregion SSH Key Type Handlers
 
+    //region Bank Account Type Handlers
+
+    @Suppress("LongMethod")
+    private fun handleBankAccountTypeActions(
+        action: VaultAddEditAction.ItemType.BankAccountType,
+    ) {
+        when (action) {
+            is VaultAddEditAction.ItemType.BankAccountType.BankNameTextChange -> {
+                updateBankAccountContent { it.copy(bankName = action.bankName) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.NameOnAccountTextChange -> {
+                updateBankAccountContent { it.copy(nameOnAccount = action.nameOnAccount) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.AccountTypeSelect -> {
+                updateBankAccountContent { it.copy(accountType = action.accountType) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.AccountNumberTextChange -> {
+                updateBankAccountContent { it.copy(accountNumber = action.accountNumber) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.RoutingNumberTextChange -> {
+                updateBankAccountContent { it.copy(routingNumber = action.routingNumber) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.BranchNumberTextChange -> {
+                updateBankAccountContent { it.copy(branchNumber = action.branchNumber) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.PinTextChange -> {
+                updateBankAccountContent { it.copy(pin = action.pin) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.SwiftCodeTextChange -> {
+                updateBankAccountContent { it.copy(swiftCode = action.swiftCode) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.IbanTextChange -> {
+                updateBankAccountContent { it.copy(iban = action.iban) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.BankContactPhoneTextChange -> {
+                updateBankAccountContent { it.copy(bankContactPhone = action.phone) }
+            }
+        }
+    }
+
+    //endregion Bank Account Type Handlers
+
+    //region License Type Handlers
+
+    @Suppress("LongMethod")
+    private fun handleLicenseTypeActions(
+        action: VaultAddEditAction.ItemType.LicenseType,
+    ) {
+        when (action) {
+            is VaultAddEditAction.ItemType.LicenseType.FirstNameTextChange -> {
+                updateLicenseContent { it.copy(firstName = action.firstName) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.MiddleNameTextChange -> {
+                updateLicenseContent { it.copy(middleName = action.middleName) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.LastNameTextChange -> {
+                updateLicenseContent { it.copy(lastName = action.lastName) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.LicenseNumberTextChange -> {
+                updateLicenseContent { it.copy(licenseNumber = action.licenseNumber) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.IssuingCountryTextChange -> {
+                updateLicenseContent { it.copy(issuingCountry = action.country) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.IssuingStateTextChange -> {
+                updateLicenseContent { it.copy(issuingState = action.state) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.IssuingAuthorityTextChange -> {
+                updateLicenseContent { it.copy(issuingAuthority = action.authority) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.LicenseClassTextChange -> {
+                updateLicenseContent { it.copy(licenseClass = action.licenseClass) }
+            }
+        }
+    }
+
+    //endregion License Type Handlers
+
     //region Internal Type Handlers
 
     private fun handleInternalActions(action: VaultAddEditAction.Internal) {
@@ -1921,7 +2035,9 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleCardScannerFlagUpdateReceive(
         action: VaultAddEditAction.Internal.CardScannerFlagUpdateReceive,
     ) {
-        mutableStateFlow.update { it.copy(isCardScannerEnabled = action.isEnabled) }
+        mutableStateFlow.update {
+            it.copy(isCardScannerEnabled = action.isEnabled && !buildInfoManager.isFdroid)
+        }
     }
 
     private fun handleCardScanResultReceive(
@@ -1932,19 +2048,15 @@ class VaultAddEditViewModel @Inject constructor(
                 val data = result.cardScanData
                 updateCardContent { cardType ->
                     cardType.copy(
-                        number = data.number ?: cardType.number,
-                        expirationYear = data.expirationYear
-                            ?: cardType.expirationYear,
-                        expirationMonth = data.expirationMonth
-                            ?.toExpirationMonth()
-                            ?: cardType.expirationMonth,
-                        securityCode = data.securityCode
-                            ?: cardType.securityCode,
-                        brand = data.number
-                            ?.detectCardBrand()
-                            ?: cardType.brand,
+                        number = data.number,
+                        brand = data.number.detectCardBrand(),
+                        expirationMonth = data.expirationMonth.toExpirationMonth(),
+                        expirationYear = data.expirationYear ?: cardType.expirationYear,
                     )
                 }
+                sendEvent(
+                    VaultAddEditEvent.ShowSnackbar(BitwardenString.card_scanned.asText()),
+                )
                 sendEvent(VaultAddEditEvent.FocusCardHolderName)
             }
 
@@ -2438,6 +2550,26 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
+    private inline fun updateBankAccountContent(
+        crossinline block: (VaultAddEditState.ViewState.Content.ItemType.BankAccount) ->
+        VaultAddEditState.ViewState.Content.ItemType.BankAccount,
+    ) {
+        updateContent { currentContent ->
+            (currentContent.type as? VaultAddEditState.ViewState.Content.ItemType.BankAccount)
+                ?.let { currentContent.copy(type = block(it)) }
+        }
+    }
+
+    private inline fun updateLicenseContent(
+        crossinline block: (VaultAddEditState.ViewState.Content.ItemType.License) ->
+        VaultAddEditState.ViewState.Content.ItemType.License,
+    ) {
+        updateContent { currentContent ->
+            (currentContent.type as? VaultAddEditState.ViewState.Content.ItemType.License)
+                ?.let { currentContent.copy(type = block(it)) }
+        }
+    }
+
     @Suppress("MaxLineLength")
     private suspend fun VaultAddEditState.ViewState.Content.createCipherForAddAndCloneItemStates(): CreateCipherResult {
         return common.selectedOwner?.collections
@@ -2543,6 +2675,9 @@ data class VaultAddEditState(
                 VaultItemCipherType.IDENTITY -> BitwardenString.new_identity.asText()
                 VaultItemCipherType.SECURE_NOTE -> BitwardenString.new_note.asText()
                 VaultItemCipherType.SSH_KEY -> BitwardenString.new_ssh_key.asText()
+                VaultItemCipherType.BANK_ACCOUNT -> BitwardenString.new_bank_account.asText()
+                VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.new_license.asText()
+                VaultItemCipherType.PASSPORT -> BitwardenString.new_passport.asText()
             }
 
             is VaultAddEditType.EditItem -> when (cipherType) {
@@ -2551,6 +2686,9 @@ data class VaultAddEditState(
                 VaultItemCipherType.IDENTITY -> BitwardenString.edit_identity.asText()
                 VaultItemCipherType.SECURE_NOTE -> BitwardenString.edit_note.asText()
                 VaultItemCipherType.SSH_KEY -> BitwardenString.edit_ssh_key.asText()
+                VaultItemCipherType.BANK_ACCOUNT -> BitwardenString.edit_bank_account.asText()
+                VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.edit_license.asText()
+                VaultItemCipherType.PASSPORT -> BitwardenString.edit_passport.asText()
             }
         }
 
@@ -2642,6 +2780,9 @@ data class VaultAddEditState(
         IDENTITY(BitwardenString.type_identity),
         SECURE_NOTES(BitwardenString.type_secure_note),
         SSH_KEYS(BitwardenString.type_ssh_key),
+        BANK_ACCOUNT(BitwardenString.type_bank_account),
+        LICENSE(BitwardenString.type_license),
+        PASSPORT(BitwardenString.type_passport),
     }
 
     /**
@@ -2749,6 +2890,11 @@ data class VaultAddEditState(
                  * A list of all the linked field types supported by this [ItemType].
                  */
                 abstract val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+
+                /**
+                 * Whether this item type has SDK support for save operations.
+                 */
+                open val isSdkSupported: Boolean get() = true
 
                 /**
                  * Represents the login item information.
@@ -2922,6 +3068,94 @@ data class VaultAddEditState(
                     val showFingerprint: Boolean = false,
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.SSH_KEYS
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf()
+                }
+
+                /**
+                 * Represents the bank account item information.
+                 *
+                 * @property bankName The name of the bank.
+                 * @property nameOnAccount The name on the bank account.
+                 * @property accountType The selected bank account type.
+                 * @property accountNumber The bank account number.
+                 * @property routingNumber The bank routing number.
+                 * @property branchNumber The bank branch number.
+                 * @property pin The bank account PIN.
+                 * @property swiftCode The bank SWIFT code.
+                 * @property iban The bank IBAN.
+                 * @property bankContactPhone The bank contact phone number.
+                 */
+                @Parcelize
+                data class BankAccount(
+                    val bankName: String = "",
+                    val nameOnAccount: String = "",
+                    val accountType: VaultBankAccountType = VaultBankAccountType.SELECT,
+                    val accountNumber: String = "",
+                    val routingNumber: String = "",
+                    val branchNumber: String = "",
+                    val pin: String = "",
+                    val swiftCode: String = "",
+                    val iban: String = "",
+                    val bankContactPhone: String = "",
+                ) : ItemType() {
+                    override val itemTypeOption: ItemTypeOption
+                        get() = ItemTypeOption.BANK_ACCOUNT
+
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf()
+                }
+
+                /**
+                 * Represents the driver's license item information.
+                 */
+                @Parcelize
+                data class License(
+                    val firstName: String = "",
+                    val middleName: String = "",
+                    val lastName: String = "",
+                    val dateOfBirth: String = "",
+                    val licenseNumber: String = "",
+                    val issuingCountry: String = "",
+                    val issuingState: String = "",
+                    val issuingAuthority: String = "",
+                    val issueDate: String = "",
+                    val expirationDate: String = "",
+                    val licenseClass: String = "",
+                ) : ItemType() {
+                    override val itemTypeOption: ItemTypeOption
+                        get() = ItemTypeOption.LICENSE
+
+                    override val isSdkSupported: Boolean get() = false
+
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf()
+                }
+
+                /**
+                 * Represents the passport item information.
+                 */
+                @Parcelize
+                data class Passport(
+                    val surname: String = "",
+                    val givenName: String = "",
+                    val dateOfBirth: String = "",
+                    val birthPlace: String = "",
+                    val sex: String = "",
+                    val nationality: String = "",
+                    val passportNumber: String = "",
+                    val passportType: String = "",
+                    val issuingCountry: String = "",
+                    val issuingAuthority: String = "",
+                    val issueDate: String = "",
+                    val expirationDate: String = "",
+                    val nationalIdentificationNumber: String = "",
+                ) : ItemType() {
+                    override val itemTypeOption: ItemTypeOption
+                        get() = ItemTypeOption.PASSPORT
+
+                    override val isSdkSupported: Boolean get() = false
+
                     override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
                         get() = persistentListOf()
                 }
@@ -3846,6 +4080,110 @@ sealed class VaultAddEditAction {
              * Fired when the private key's visibility has changed.
              */
             data class PrivateKeyVisibilityChange(val isVisible: Boolean) : SshKeyType()
+        }
+
+        /**
+         * Represents actions specific to the Bank Account type.
+         */
+        sealed class BankAccountType : ItemType() {
+
+            /**
+             * Fired when the bank name text input is changed.
+             */
+            data class BankNameTextChange(val bankName: String) : BankAccountType()
+
+            /**
+             * Fired when the name on account text input is changed.
+             */
+            data class NameOnAccountTextChange(val nameOnAccount: String) : BankAccountType()
+
+            /**
+             * Fired when the account type is selected.
+             */
+            data class AccountTypeSelect(
+                val accountType: VaultBankAccountType,
+            ) : BankAccountType()
+
+            /**
+             * Fired when the account number text input is changed.
+             */
+            data class AccountNumberTextChange(val accountNumber: String) : BankAccountType()
+
+            /**
+             * Fired when the routing number text input is changed.
+             */
+            data class RoutingNumberTextChange(val routingNumber: String) : BankAccountType()
+
+            /**
+             * Fired when the branch number text input is changed.
+             */
+            data class BranchNumberTextChange(val branchNumber: String) : BankAccountType()
+
+            /**
+             * Fired when the PIN text input is changed.
+             */
+            data class PinTextChange(val pin: String) : BankAccountType()
+
+            /**
+             * Fired when the SWIFT code text input is changed.
+             */
+            data class SwiftCodeTextChange(val swiftCode: String) : BankAccountType()
+
+            /**
+             * Fired when the IBAN text input is changed.
+             */
+            data class IbanTextChange(val iban: String) : BankAccountType()
+
+            /**
+             * Fired when the bank contact phone text input is changed.
+             */
+            data class BankContactPhoneTextChange(val phone: String) : BankAccountType()
+        }
+
+        /**
+         * Represents actions specific to the License type.
+         */
+        sealed class LicenseType : ItemType() {
+
+            /**
+             * Fired when the first name text input is changed.
+             */
+            data class FirstNameTextChange(val firstName: String) : LicenseType()
+
+            /**
+             * Fired when the middle name text input is changed.
+             */
+            data class MiddleNameTextChange(val middleName: String) : LicenseType()
+
+            /**
+             * Fired when the last name text input is changed.
+             */
+            data class LastNameTextChange(val lastName: String) : LicenseType()
+
+            /**
+             * Fired when the license number text input is changed.
+             */
+            data class LicenseNumberTextChange(val licenseNumber: String) : LicenseType()
+
+            /**
+             * Fired when the issuing country text input is changed.
+             */
+            data class IssuingCountryTextChange(val country: String) : LicenseType()
+
+            /**
+             * Fired when the issuing state/province text input is changed.
+             */
+            data class IssuingStateTextChange(val state: String) : LicenseType()
+
+            /**
+             * Fired when the issuing authority text input is changed.
+             */
+            data class IssuingAuthorityTextChange(val authority: String) : LicenseType()
+
+            /**
+             * Fired when the license class text input is changed.
+             */
+            data class LicenseClassTextChange(val licenseClass: String) : LicenseType()
         }
     }
 

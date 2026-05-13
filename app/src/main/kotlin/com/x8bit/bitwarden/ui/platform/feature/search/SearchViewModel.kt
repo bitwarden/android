@@ -24,12 +24,12 @@ import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.login
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -350,6 +350,14 @@ class SearchViewModel @Inject constructor(
                 handleCopyNumberClick(overflowAction)
             }
 
+            is ListingItemOverflowAction.VaultAction.CopyAccountNumberClick -> {
+                handleCopyAccountNumberClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyRoutingNumberClick -> {
+                handleCopyRoutingNumberClick(overflowAction)
+            }
+
             is ListingItemOverflowAction.VaultAction.CopyPasswordClick -> {
                 handleCopyPasswordClick(overflowAction)
             }
@@ -525,6 +533,40 @@ class SearchViewModel @Inject constructor(
                     clipboardManager.setText(
                         text = it.card?.number.orEmpty(),
                         toastDescriptorOverride = BitwardenString.number.asText(),
+                    )
+                }
+        }
+    }
+
+    private fun handleCopyAccountNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyAccountNumberClick,
+    ) {
+        viewModelScope.launch {
+            decryptCipherViewOrNull(action.cipherId)
+                ?.bankAccount
+                ?.accountNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    clipboardManager.setText(
+                        text = it,
+                        toastDescriptorOverride = BitwardenString.account_number.asText(),
+                    )
+                }
+        }
+    }
+
+    private fun handleCopyRoutingNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyRoutingNumberClick,
+    ) {
+        viewModelScope.launch {
+            decryptCipherViewOrNull(action.cipherId)
+                ?.bankAccount
+                ?.routingNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    clipboardManager.setText(
+                        text = it,
+                        toastDescriptorOverride = BitwardenString.routing_number.asText(),
                     )
                 }
         }
@@ -1294,6 +1336,14 @@ sealed class SearchTypeData : Parcelable {
         data object SshKeys : Vault() {
             override val title: Text
                 get() = BitwardenString.search_x.asText(BitwardenString.ssh_keys.asText())
+        }
+
+        /**
+         * Indicates that we should be searching only bank account ciphers.
+         */
+        data object BankAccounts : Vault() {
+            override val title: Text
+                get() = BitwardenString.search_x.asText(BitwardenString.bank_accounts.asText())
         }
 
         /**

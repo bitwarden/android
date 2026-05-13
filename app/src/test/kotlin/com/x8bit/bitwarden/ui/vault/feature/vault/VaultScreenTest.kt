@@ -64,6 +64,7 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
@@ -997,6 +998,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                     identityItemsCount = 0,
                     secureNoteItemsCount = 0,
                     sshKeyItemsCount = 0,
+                    bankAccountItemsCount = 0,
                     favoriteItems = emptyList(),
                     folderItems = emptyList(),
                     noFolderItems = emptyList(),
@@ -1006,6 +1008,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                     archiveSubText = null,
                     archiveEndIcon = null,
                     showCardGroup = false,
+                    showBankAccountGroup = false,
                 ),
             )
         }
@@ -1686,6 +1689,61 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `UpgradedToPremium action card should display when eligible`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isUpgradedToPremiumCardEligible = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Upgraded to Premium")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Learn more")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `UpgradedToPremium action card CTA click should send ActionCardClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isUpgradedToPremiumCardEligible = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Learn more")
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAction.ActionCardClick(
+                    actionCard = VaultState.ActionCardState.UpgradedToPremium,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `UpgradedToPremium action card dismiss click should send DismissActionCardClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isUpgradedToPremiumCardEligible = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAction.DismissActionCardClick(VaultState.ActionCardState.UpgradedToPremium),
+            )
+        }
+    }
+
+    @Test
     fun `collection data should update according to the state`() {
         val collectionsHeader = "COLLECTIONS (1)"
         val collectionName = "Test Collection"
@@ -2077,6 +2135,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     cardItemsCount = 1,
                     showCardGroup = true,
+                    showBankAccountGroup = false,
                 ),
             )
         }
@@ -2091,6 +2150,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     cardItemsCount = 0,
                     showCardGroup = false,
+                    showBankAccountGroup = false,
                 ),
             )
         }
@@ -2438,6 +2498,42 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `Bank account group header should display correctly based on state`() {
+        val count = 2
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    bankAccountItemsCount = count,
+                    showBankAccountGroup = true,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithTextAfterScroll("Bank account")
+            .assertTextEquals("Bank account", count.toString())
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `clicking a bank account group should send BankAccountGroupClick action`() {
+        val rowText = "Bank account"
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    bankAccountItemsCount = 1,
+                    showBankAccountGroup = true,
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onNodeWithText(rowText).performClick()
+        verify {
+            viewModel.trySendAction(VaultAction.BankAccountGroupClick)
+        }
+    }
+
+    @Test
     fun `LifecycleResumed action is sent when the screen is resumed`() {
         verify { viewModel.trySendAction(VaultAction.LifecycleResumed) }
     }
@@ -2651,6 +2747,7 @@ private val DEFAULT_STATE: VaultState = VaultState(
     hasShownDecryptionFailureAlert = false,
     restrictItemTypesPolicyOrgIds = emptyList(),
     isIntroducingArchiveActionCardDismissed = false,
+    validTotpIds = persistentSetOf(),
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(
@@ -2666,8 +2763,10 @@ private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultStat
     totpItemsCount = 0,
     itemTypesCount = 4,
     sshKeyItemsCount = 0,
+    bankAccountItemsCount = 0,
     archivedItemsCount = 0,
     archiveSubText = null,
     archiveEndIcon = null,
     showCardGroup = true,
+    showBankAccountGroup = false,
 )

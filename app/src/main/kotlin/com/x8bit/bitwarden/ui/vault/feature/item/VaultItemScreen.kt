@@ -43,8 +43,10 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmentRoute
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultBankAccountItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultDriversLicenseItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultSshKeyItemTypeHandlers
@@ -284,6 +286,12 @@ fun VaultItemScreen(
             vaultIdentityItemTypeHandlers = remember(viewModel) {
                 VaultIdentityItemTypeHandlers.create(viewModel = viewModel)
             },
+            vaultBankAccountItemTypeHandlers = remember(viewModel) {
+                VaultBankAccountItemTypeHandlers.create(viewModel = viewModel)
+            },
+            vaultDriversLicenseItemTypeHandlers = remember(viewModel) {
+                VaultDriversLicenseItemTypeHandlers.create(viewModel = viewModel)
+            },
         )
     }
 }
@@ -368,6 +376,8 @@ private fun VaultItemContent(
     vaultCardItemTypeHandlers: VaultCardItemTypeHandlers,
     vaultSshKeyItemTypeHandlers: VaultSshKeyItemTypeHandlers,
     vaultIdentityItemTypeHandlers: VaultIdentityItemTypeHandlers,
+    vaultBankAccountItemTypeHandlers: VaultBankAccountItemTypeHandlers,
+    vaultDriversLicenseItemTypeHandlers: VaultDriversLicenseItemTypeHandlers,
     modifier: Modifier = Modifier,
 ) {
     when (viewState) {
@@ -426,6 +436,38 @@ private fun VaultItemContent(
                         sshKeyItemState = viewState.type,
                         vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
                         vaultSshKeyItemTypeHandlers = vaultSshKeyItemTypeHandlers,
+                        modifier = modifier,
+                    )
+                }
+
+                is VaultItemState.ViewState.Content.ItemType.BankAccount -> {
+                    VaultItemBankAccountContent(
+                        commonState = viewState.common,
+                        bankAccountState = viewState.type,
+                        vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+                        vaultBankAccountItemTypeHandlers = vaultBankAccountItemTypeHandlers,
+                        modifier = modifier,
+                    )
+                }
+
+                is VaultItemState.ViewState.Content.ItemType.DriversLicense -> {
+                    VaultItemDriversLicenseContent(
+                        commonState = viewState.common,
+                        driversLicenseState = viewState.type,
+                        vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+                        vaultDriversLicenseItemTypeHandlers =
+                            vaultDriversLicenseItemTypeHandlers,
+                        modifier = modifier,
+                    )
+                }
+
+                is VaultItemState.ViewState.Content.ItemType.Passport -> {
+                    // TODO(PM-32806): Render dedicated content for Passport once the UI ships
+                    //  in its Story slice. Until then this branch is gated behind the
+                    //  pm-32009-new-item-types feature flag and cannot be received.
+                    VaultItemSecureNoteContent(
+                        commonState = viewState.common,
+                        vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
                         modifier = modifier,
                     )
                 }

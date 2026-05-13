@@ -32,6 +32,11 @@ fun createMockCipher(
     card: SyncResponseJson.Cipher.Card? = createMockCard(number = number),
     identity: SyncResponseJson.Cipher.Identity? = createMockIdentity(number = number),
     sshKey: SyncResponseJson.Cipher.SshKey? = createMockSshKey(number = number),
+    bankAccount: SyncResponseJson.Cipher.BankAccount? = createMockBankAccount(number = number),
+    driversLicense: SyncResponseJson.Cipher.DriversLicense? = createMockDriversLicense(
+        number = number,
+    ),
+    passport: SyncResponseJson.Cipher.Passport? = createMockPassport(number = number),
     secureNote: SyncResponseJson.Cipher.SecureNote? = createMockSecureNote(),
     fields: List<SyncResponseJson.Cipher.Field>? = listOf(createMockField(number = number)),
     isFavorite: Boolean = false,
@@ -59,6 +64,9 @@ fun createMockCipher(
         identity = identity,
         secureNote = secureNote,
         sshKey = sshKey,
+        bankAccount = bankAccount,
+        driversLicense = driversLicense,
+        passport = passport,
         creationDate = creationDate,
         revisionDate = revisionDate,
         deletedDate = deletedDate,
@@ -255,6 +263,101 @@ fun createMockSshKey(
         publicKey = publicKey,
         privateKey = privateKey,
         keyFingerprint = keyFingerprint,
+    )
+
+/**
+ * Create a mock [SyncResponseJson.Cipher.BankAccount] with a given [number].
+ */
+fun createMockBankAccount(
+    number: Int,
+    bankName: String? = "mockBankName-$number",
+    nameOnAccount: String? = "mockNameOnAccount-$number",
+    accountType: String? = "mockAccountType-$number",
+    accountNumber: String? = "mockAccountNumber-$number",
+    routingNumber: String? = "mockRoutingNumber-$number",
+    branchNumber: String? = "mockBranchNumber-$number",
+    pin: String? = "mockPin-$number",
+    swiftCode: String? = "mockSwiftCode-$number",
+    iban: String? = "mockIban-$number",
+    bankContactPhone: String? = "mockBankContactPhone-$number",
+): SyncResponseJson.Cipher.BankAccount =
+    SyncResponseJson.Cipher.BankAccount(
+        bankName = bankName,
+        nameOnAccount = nameOnAccount,
+        accountType = accountType,
+        accountNumber = accountNumber,
+        routingNumber = routingNumber,
+        branchNumber = branchNumber,
+        pin = pin,
+        swiftCode = swiftCode,
+        iban = iban,
+        bankContactPhone = bankContactPhone,
+    )
+
+/**
+ * Create a mock [SyncResponseJson.Cipher.DriversLicense] with a given [number].
+ */
+fun createMockDriversLicense(
+    number: Int,
+    firstName: String? = "mockFirstName-$number",
+    middleName: String? = "mockMiddleName-$number",
+    lastName: String? = "mockLastName-$number",
+    dateOfBirth: String? = "mockDateOfBirth-$number",
+    licenseNumber: String? = "mockLicenseNumber-$number",
+    issuingCountry: String? = "mockIssuingCountry-$number",
+    issuingState: String? = "mockIssuingState-$number",
+    issuingAuthority: String? = "mockIssuingAuthority-$number",
+    issueDate: String? = "mockIssueDate-$number",
+    expirationDate: String? = "mockExpirationDate-$number",
+    licenseClass: String? = "mockLicenseClass-$number",
+): SyncResponseJson.Cipher.DriversLicense =
+    SyncResponseJson.Cipher.DriversLicense(
+        firstName = firstName,
+        middleName = middleName,
+        lastName = lastName,
+        dateOfBirth = dateOfBirth,
+        licenseNumber = licenseNumber,
+        issuingCountry = issuingCountry,
+        issuingState = issuingState,
+        issuingAuthority = issuingAuthority,
+        issueDate = issueDate,
+        expirationDate = expirationDate,
+        licenseClass = licenseClass,
+    )
+
+/**
+ * Create a mock [SyncResponseJson.Cipher.Passport] with a given [number].
+ */
+fun createMockPassport(
+    number: Int,
+    surname: String? = "mockSurname-$number",
+    givenName: String? = "mockGivenName-$number",
+    dateOfBirth: String? = "mockDateOfBirth-$number",
+    birthPlace: String? = "mockBirthPlace-$number",
+    sex: String? = "mockSex-$number",
+    nationality: String? = "mockNationality-$number",
+    passportNumber: String? = "mockPassportNumber-$number",
+    passportType: String? = "mockPassportType-$number",
+    issuingCountry: String? = "mockIssuingCountry-$number",
+    issuingAuthority: String? = "mockIssuingAuthority-$number",
+    issueDate: String? = "mockIssueDate-$number",
+    expirationDate: String? = "mockExpirationDate-$number",
+    nationalIdentificationNumber: String? = "mockNationalIdentificationNumber-$number",
+): SyncResponseJson.Cipher.Passport =
+    SyncResponseJson.Cipher.Passport(
+        surname = surname,
+        givenName = givenName,
+        dateOfBirth = dateOfBirth,
+        birthPlace = birthPlace,
+        sex = sex,
+        nationality = nationality,
+        passportNumber = passportNumber,
+        passportType = passportType,
+        issuingCountry = issuingCountry,
+        issuingAuthority = issuingAuthority,
+        issueDate = issueDate,
+        expirationDate = expirationDate,
+        nationalIdentificationNumber = nationalIdentificationNumber,
     )
 
 /**

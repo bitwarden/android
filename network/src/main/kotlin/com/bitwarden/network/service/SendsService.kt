@@ -3,6 +3,7 @@ package com.bitwarden.network.service
 import com.bitwarden.network.model.CreateFileSendResponse
 import com.bitwarden.network.model.CreateFileSendResponseJson
 import com.bitwarden.network.model.CreateSendJsonResponse
+import com.bitwarden.network.model.GetSendResponse
 import com.bitwarden.network.model.SendJsonRequest
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UpdateSendResponseJson
@@ -43,7 +44,7 @@ interface SendsService {
     ): Result<UpdateSendResponseJson>
 
     /**
-     * Attempt to delete a send.
+     * Attempt to delete a Send.
      */
     suspend fun deleteSend(
         sendId: String,
@@ -57,7 +58,7 @@ interface SendsService {
     ): Result<UpdateSendResponseJson>
 
     /**
-     * Attempt to retrieve a send.
+     * Attempt to retrieve a Send.
      */
-    suspend fun getSend(sendId: String): Result<SyncResponseJson.Send>
+    suspend fun getSend(sendId: String): Result<GetSendResponse>
 }

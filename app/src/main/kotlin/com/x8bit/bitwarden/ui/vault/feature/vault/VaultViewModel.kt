@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
+import com.x8bit.bitwarden.data.billing.manager.UPGRADED_TO_PREMIUM_LEARN_MORE_URL
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
@@ -76,8 +77,11 @@ import com.x8bit.bitwarden.ui.vault.util.shortName
 import com.x8bit.bitwarden.ui.vault.util.toVaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -117,7 +121,7 @@ class VaultViewModel @Inject constructor(
     private val browserAutofillDialogManager: BrowserAutofillDialogManager,
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager,
     private val buildInfoManager: BuildInfoManager,
-    featureFlagManager: FeatureFlagManager,
+    private val featureFlagManager: FeatureFlagManager,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
@@ -159,6 +163,7 @@ class VaultViewModel @Inject constructor(
             isIntroducingArchiveActionCardDismissed = settingsRepository
                 .getIntroducingArchiveActionCardDismissedFlow()
                 .value,
+            validTotpIds = persistentSetOf(),
         )
     },
 ) {
@@ -198,7 +203,18 @@ class VaultViewModel @Inject constructor(
 
         vaultRepository
             .vaultDataStateFlow
-            .map { VaultAction.Internal.VaultDataReceive(it) }
+            .map {
+                vaultRepository.getValidTotpCipherIds(
+                    isPremium = state.isPremium,
+                    time = clock.instant(),
+                ) to it
+            }
+            .map { (ids, vaultData) ->
+                VaultAction.Internal.VaultDataReceive(
+                    validTotpIds = ids,
+                    vaultData = vaultData,
+                )
+            }
             .onEach {
                 // When the vault data is received, the current activity is about to
                 // be recreated. Adding this delay prevents the dialogs from disappearing.
@@ -261,6 +277,14 @@ class VaultViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        premiumStateManager
+            .isUpgradedToPremiumCardEligibleFlow
+            .map {
+                VaultAction.Internal.UpgradedToPremiumCardEligibilityReceive(isEligible = it)
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         policyManager
             .getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
             .map { policies -> policies.map { it.organizationId } }
@@ -270,6 +294,11 @@ class VaultViewModel @Inject constructor(
 
         featureFlagManager.getFeatureFlagFlow(FlagKey.CredentialExchangeProtocolExport)
             .map { VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        featureFlagManager.getFeatureFlagFlow(FlagKey.NewItemTypes)
+            .map { VaultAction.Internal.NewItemTypesFlagUpdateReceive(isEnabled = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -308,6 +337,7 @@ class VaultViewModel @Inject constructor(
             is VaultAction.VaultFilterTypeSelect -> handleVaultFilterTypeSelect(action)
             is VaultAction.SecureNoteGroupClick -> handleSecureNoteClick()
             is VaultAction.SshKeyGroupClick -> handleSshKeyClick()
+            is VaultAction.BankAccountGroupClick -> handleBankAccountClick()
             is VaultAction.ArchiveClick -> handleArchiveClick()
             is VaultAction.TrashClick -> handleTrashClick()
             is VaultAction.VaultItemClick -> handleVaultItemClick(action)
@@ -408,6 +438,10 @@ class VaultViewModel @Inject constructor(
 
     private fun handleDismissActionCardClick(action: VaultAction.DismissActionCardClick) {
         when (action.actionCard) {
+            VaultState.ActionCardState.UpgradedToPremium -> {
+                premiumStateManager.dismissUpgradedToPremiumCard()
+            }
+
             VaultState.ActionCardState.UpgradePremium -> {
                 premiumStateManager.dismissPremiumUpgradeBanner()
             }
@@ -420,6 +454,11 @@ class VaultViewModel @Inject constructor(
 
     private fun handleActionCardClick(action: VaultAction.ActionCardClick) {
         when (action.actionCard) {
+            VaultState.ActionCardState.UpgradedToPremium -> {
+                premiumStateManager.dismissUpgradedToPremiumCard()
+                sendEvent(VaultEvent.NavigateToUrl(url = UPGRADED_TO_PREMIUM_LEARN_MORE_URL))
+            }
+
             VaultState.ActionCardState.UpgradePremium -> {
                 sendEvent(VaultEvent.NavigateToUpgradePremium)
             }
@@ -434,12 +473,16 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleSelectAddItemType() {
+        val isNewItemTypesEnabled = state.isNewItemTypesEnabled
         // If policy is enable for any organization, exclude the card option
         val excludedOptions = persistentListOfNotNull(
             CreateVaultItemType.SSH_KEY,
             CreateVaultItemType.CARD.takeUnless {
                 state.restrictItemTypesPolicyOrgIds.isEmpty()
             },
+            CreateVaultItemType.BANK_ACCOUNT.takeUnless { isNewItemTypesEnabled },
+            CreateVaultItemType.LICENSE.takeUnless { isNewItemTypesEnabled },
+            CreateVaultItemType.PASSPORT.takeUnless { isNewItemTypesEnabled },
         )
 
         mutableStateFlow.update {
@@ -490,6 +533,7 @@ class VaultViewModel @Inject constructor(
 
         updateViewState(
             vaultData = vaultRepository.vaultDataStateFlow.value,
+            validTotpIds = state.validTotpIds,
         )
     }
 
@@ -500,6 +544,9 @@ class VaultViewModel @Inject constructor(
             CreateVaultItemType.IDENTITY,
             CreateVaultItemType.SECURE_NOTE,
             CreateVaultItemType.SSH_KEY,
+            CreateVaultItemType.BANK_ACCOUNT,
+            CreateVaultItemType.LICENSE,
+            CreateVaultItemType.PASSPORT,
                 -> {
                 vaultItemType
                     .toVaultItemCipherTypeOrNull()
@@ -624,6 +671,7 @@ class VaultViewModel @Inject constructor(
         // Re-process the current vault data with the new filter
         updateViewState(
             vaultData = vaultRepository.vaultDataStateFlow.value,
+            validTotpIds = state.validTotpIds,
         )
     }
 
@@ -652,6 +700,10 @@ class VaultViewModel @Inject constructor(
 
     private fun handleSshKeyClick() {
         sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.SshKey))
+    }
+
+    private fun handleBankAccountClick() {
+        sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.BankAccount))
     }
 
     private fun handleVaultItemClick(action: VaultAction.VaultItemClick) {
@@ -699,6 +751,14 @@ class VaultViewModel @Inject constructor(
 
             is ListingItemOverflowAction.VaultAction.CopyNumberClick -> {
                 handleCopyNumberClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyAccountNumberClick -> {
+                handleCopyAccountNumberClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyRoutingNumberClick -> {
+                handleCopyRoutingNumberClick(overflowAction)
             }
 
             is ListingItemOverflowAction.VaultAction.CopyPasswordClick -> {
@@ -788,6 +848,40 @@ class VaultViewModel @Inject constructor(
                     toastDescriptorOverride = BitwardenString.number.asText(),
                 )
             }
+        }
+    }
+
+    private fun handleCopyAccountNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyAccountNumberClick,
+    ) {
+        viewModelScope.launch {
+            getCipherForCopyOrNull(cipherId = action.cipherId)
+                ?.bankAccount
+                ?.accountNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    clipboardManager.setText(
+                        text = it,
+                        toastDescriptorOverride = BitwardenString.account_number.asText(),
+                    )
+                }
+        }
+    }
+
+    private fun handleCopyRoutingNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyRoutingNumberClick,
+    ) {
+        viewModelScope.launch {
+            getCipherForCopyOrNull(cipherId = action.cipherId)
+                ?.bankAccount
+                ?.routingNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    clipboardManager.setText(
+                        text = it,
+                        toastDescriptorOverride = BitwardenString.routing_number.asText(),
+                    )
+                }
         }
     }
 
@@ -980,6 +1074,10 @@ class VaultViewModel @Inject constructor(
                 handleKdfSyncCompletedReceive()
             }
 
+            is VaultAction.Internal.NewItemTypesFlagUpdateReceive -> {
+                handleNewItemTypesFlagUpdateReceive(action)
+            }
+
             is VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive -> {
                 handleCredentialExchangeProtocolExportFlagUpdateReceive(action)
             }
@@ -992,6 +1090,10 @@ class VaultViewModel @Inject constructor(
 
             is VaultAction.Internal.PremiumUpgradeBannerEligibilityReceive -> {
                 handlePremiumUpgradeBannerEligibilityReceive(action)
+            }
+
+            is VaultAction.Internal.UpgradedToPremiumCardEligibilityReceive -> {
+                handleUpgradedToPremiumCardEligibilityReceive(action)
             }
         }
     }
@@ -1047,6 +1149,22 @@ class VaultViewModel @Inject constructor(
                     ),
                 )
             }
+        }
+    }
+
+    private fun handleNewItemTypesFlagUpdateReceive(
+        action: VaultAction.Internal.NewItemTypesFlagUpdateReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isNewItemTypesEnabled = action.isEnabled)
+        }
+
+        vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
+            updateVaultState(
+                vaultData = vaultData,
+                dialog = state.dialog,
+                validTotpIds = state.validTotpIds,
+            )
         }
     }
 
@@ -1124,6 +1242,14 @@ class VaultViewModel @Inject constructor(
         }
     }
 
+    private fun handleUpgradedToPremiumCardEligibilityReceive(
+        action: VaultAction.Internal.UpgradedToPremiumCardEligibilityReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isUpgradedToPremiumCardEligible = action.isEligible)
+        }
+    }
+
     private fun handleDecryptionErrorReceive(action: VaultAction.Internal.DecryptionErrorReceive) {
         mutableStateFlow.update {
             it.copy(
@@ -1145,6 +1271,7 @@ class VaultViewModel @Inject constructor(
             updateVaultState(
                 vaultData = vaultData,
                 dialog = state.dialog,
+                validTotpIds = state.validTotpIds,
             )
         }
     }
@@ -1234,26 +1361,42 @@ class VaultViewModel @Inject constructor(
 
         updateViewState(
             vaultData = action.vaultData,
+            validTotpIds = action.validTotpIds,
         )
     }
 
-    private fun updateViewState(vaultData: DataState<VaultData>) {
+    private fun updateViewState(
+        vaultData: DataState<VaultData>,
+        validTotpIds: Set<String>,
+    ) {
         when (vaultData) {
-            is DataState.Error -> vaultErrorReceive(vaultData = vaultData)
+            is DataState.Error -> vaultErrorReceive(
+                vaultData = vaultData,
+                validTotpIds = validTotpIds,
+            )
+
             is DataState.Loaded -> vaultLoadedReceive(
                 vaultData = vaultData,
+                validTotpIds = validTotpIds,
             )
 
-            is DataState.Loading -> vaultLoadingReceive()
+            is DataState.Loading -> vaultLoadingReceive(validTotpIds = validTotpIds)
             is DataState.NoNetwork -> vaultNoNetworkReceive(
                 vaultData = vaultData,
+                validTotpIds = validTotpIds,
             )
 
-            is DataState.Pending -> vaultPendingReceive(vaultData = vaultData)
+            is DataState.Pending -> vaultPendingReceive(
+                vaultData = vaultData,
+                validTotpIds = validTotpIds,
+            )
         }
     }
 
-    private fun vaultErrorReceive(vaultData: DataState.Error<VaultData>) {
+    private fun vaultErrorReceive(
+        vaultData: DataState.Error<VaultData>,
+        validTotpIds: Set<String>,
+    ) {
         mutableStateFlow.updateToErrorStateOrDialog(
             baseIconUrl = state.baseIconUrl,
             vaultData = vaultData.data,
@@ -1266,10 +1409,15 @@ class VaultViewModel @Inject constructor(
                 ?: BitwardenString.generic_error_message.asText(),
             isRefreshing = false,
             restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
+            validTotpIds = validTotpIds,
+            isNewItemTypesEnabled = state.isNewItemTypesEnabled,
         )
     }
 
-    private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
+    private fun vaultLoadedReceive(
+        vaultData: DataState.Loaded<VaultData>,
+        validTotpIds: Set<String>,
+    ) {
         if (state.dialog == VaultState.DialogState.Syncing) {
             sendEvent(VaultEvent.ShowSnackbar(message = BitwardenString.syncing_complete.asText()))
         }
@@ -1284,6 +1432,7 @@ class VaultViewModel @Inject constructor(
                 shouldShowDecryptionAlert = shouldShowDecryptionAlert,
                 vaultData = vaultData,
             ),
+            validTotpIds = validTotpIds,
             hasShownDecryptionFailureAlert = if (shouldShowDecryptionAlert) {
                 true
             } else {
@@ -1318,6 +1467,7 @@ class VaultViewModel @Inject constructor(
 
     private fun updateVaultState(
         vaultData: VaultData,
+        validTotpIds: Set<String>,
         dialog: VaultState.DialogState? = null,
         hasShownDecryptionFailureAlert: Boolean = state.hasShownDecryptionFailureAlert,
     ) {
@@ -1330,6 +1480,8 @@ class VaultViewModel @Inject constructor(
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
+                    validTotpIds = validTotpIds,
+                    isNewItemTypesEnabled = state.isNewItemTypesEnabled,
                 ),
                 dialog = dialog,
                 isRefreshing = false,
@@ -1339,16 +1491,23 @@ class VaultViewModel @Inject constructor(
                     .mapNotNull { cipher -> cipher.id }
                     .toImmutableList(),
                 hasShownDecryptionFailureAlert = hasShownDecryptionFailureAlert,
+                validTotpIds = validTotpIds.toImmutableSet(),
             )
         }
     }
 
-    private fun vaultLoadingReceive() {
-        mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.Loading) }
+    private fun vaultLoadingReceive(validTotpIds: Set<String>) {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultState.ViewState.Loading,
+                validTotpIds = validTotpIds.toImmutableSet(),
+            )
+        }
     }
 
     private fun vaultNoNetworkReceive(
         vaultData: DataState.NoNetwork<VaultData>,
+        validTotpIds: Set<String>,
     ) {
         val data = vaultData.data ?: VaultData(
             decryptCipherListResult = DecryptCipherListResult(
@@ -1361,10 +1520,14 @@ class VaultViewModel @Inject constructor(
         )
         updateVaultState(
             vaultData = data,
+            validTotpIds = validTotpIds,
         )
     }
 
-    private fun vaultPendingReceive(vaultData: DataState.Pending<VaultData>) {
+    private fun vaultPendingReceive(
+        vaultData: DataState.Pending<VaultData>,
+        validTotpIds: Set<String>,
+    ) {
         mutableStateFlow.update {
             it.copy(
                 viewState = vaultData.data.toViewState(
@@ -1374,7 +1537,10 @@ class VaultViewModel @Inject constructor(
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
+                    validTotpIds = validTotpIds,
+                    isNewItemTypesEnabled = state.isNewItemTypesEnabled,
                 ),
+                validTotpIds = validTotpIds.toImmutableSet(),
             )
         }
     }
@@ -1535,7 +1701,10 @@ data class VaultState(
     val restrictItemTypesPolicyOrgIds: List<String>,
     val isIntroducingArchiveActionCardDismissed: Boolean,
     val isPremiumUpgradeBannerEligible: Boolean = false,
+    val isUpgradedToPremiumCardEligible: Boolean = false,
     val isAwaitingKdfSync: Boolean = false,
+    val validTotpIds: ImmutableSet<String>,
+    val isNewItemTypesEnabled: Boolean = false,
 ) : Parcelable {
 
     /**
@@ -1543,8 +1712,10 @@ data class VaultState(
      */
     val actionCard: ActionCardState?
         get() = (viewState as? ViewState.Content)?.let {
-            ActionCardState.UpgradePremium
-                .takeIf { isPremiumUpgradeBannerEligible }
+            ActionCardState.UpgradedToPremium
+                .takeIf { isUpgradedToPremiumCardEligible }
+                ?: ActionCardState.UpgradePremium
+                    .takeIf { isPremiumUpgradeBannerEligible }
                 ?: ActionCardState.IntroducingArchive.takeIf {
                     isPremium && !isIntroducingArchiveActionCardDismissed
                 }
@@ -1625,6 +1796,7 @@ data class VaultState(
          * @property totpItemsCount The count of totp code items.
          * @property loginItemsCount The count of Login type items.
          * @property cardItemsCount The count of Card type items.
+         * @property bankAccountItemsCount The count of Bank Account type items.
          * @property identityItemsCount The count of Identity type items.
          * @property secureNoteItemsCount The count of Secure Notes type items.
          * @property favoriteItems The list of favorites to be displayed.
@@ -1636,6 +1808,7 @@ data class VaultState(
          * @property archiveSubText The subtext to be displayed on the archive item.
          * @property archiveEndIcon The end icon to be displayed on the archive item.
          * @property showCardGroup Is the card group available for display.
+         * @property showBankAccountGroup Is the bank account group available for display.
          */
         @Parcelize
         data class Content(
@@ -1646,6 +1819,7 @@ data class VaultState(
             val identityItemsCount: Int,
             val secureNoteItemsCount: Int,
             val sshKeyItemsCount: Int,
+            val bankAccountItemsCount: Int,
             val favoriteItems: List<VaultItem>,
             val folderItems: List<FolderItem>,
             val noFolderItems: List<VaultItem>,
@@ -1655,6 +1829,7 @@ data class VaultState(
             val archiveSubText: Text?,
             @field:DrawableRes val archiveEndIcon: Int?,
             val showCardGroup: Boolean,
+            val showBankAccountGroup: Boolean,
         ) : ViewState() {
             override val hasFab: Boolean get() = true
             override val isPullToRefreshEnabled: Boolean get() = true
@@ -1861,6 +2036,26 @@ data class VaultState(
                 override val supportingLabel: Text? get() = null
                 override val type: VaultItemCipherType get() = VaultItemCipherType.SSH_KEY
             }
+
+            /**
+             * Represents a Bank Account item within the vault.
+             */
+            @Parcelize
+            data class BankAccount(
+                override val id: String,
+                override val name: Text,
+                override val startIcon: IconData = IconData.Local(
+                    iconRes = BitwardenDrawable.ic_payment_card,
+                ),
+                override val startIconTestTag: String = "BankAccountCipherIcon",
+                override val extraIconList: ImmutableList<IconData> = persistentListOf(),
+                override val overflowOptions: ImmutableList<ListingItemOverflowAction.VaultAction>,
+                override val shouldShowMasterPasswordReprompt: Boolean,
+                override val hasDecryptionError: Boolean,
+            ) : VaultItem() {
+                override val supportingLabel: Text? get() = null
+                override val type: VaultItemCipherType get() = VaultItemCipherType.BANK_ACCOUNT
+            }
         }
     }
 
@@ -1868,6 +2063,12 @@ data class VaultState(
      * Represents an action card to be displayed.
      */
     sealed class ActionCardState {
+        /**
+         * Indicates that the user has been upgraded to Premium and should be congratulated with
+         * a link to learn more about Premium features.
+         */
+        data object UpgradedToPremium : ActionCardState()
+
         /**
          * Indicates that the user is eligible for a Premium upgrade.
          */
@@ -2222,6 +2423,11 @@ sealed class VaultAction {
     data object SshKeyGroupClick : VaultAction()
 
     /**
+     * User clicked the bank account types button.
+     */
+    data object BankAccountGroupClick : VaultAction()
+
+    /**
      * User clicked the archive button.
      */
     data object ArchiveClick : VaultAction()
@@ -2345,6 +2551,7 @@ sealed class VaultAction {
          * Indicates a vault data was received.
          */
         data class VaultDataReceive(
+            val validTotpIds: Set<String>,
             val vaultData: DataState<VaultData>,
         ) : Internal()
 
@@ -2414,6 +2621,13 @@ sealed class VaultAction {
         ) : Internal()
 
         /**
+         * Indicates that the New Item Types feature flag has been updated.
+         */
+        data class NewItemTypesFlagUpdateReceive(
+            val isEnabled: Boolean,
+        ) : Internal()
+
+        /**
          * Indicates that the archive cipher result has been received.
          */
         data class ArchiveCipherReceive(
@@ -2441,6 +2655,13 @@ sealed class VaultAction {
         data class PremiumUpgradeBannerEligibilityReceive(
             val isEligible: Boolean,
         ) : Internal()
+
+        /**
+         * Indicates that the "Upgraded to Premium" action card eligibility has been updated.
+         */
+        data class UpgradedToPremiumCardEligibilityReceive(
+            val isEligible: Boolean,
+        ) : Internal()
     }
 }
 
@@ -2456,6 +2677,8 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
     errorMessage: Text,
     isRefreshing: Boolean,
     restrictItemTypesPolicyOrgIds: List<String>,
+    validTotpIds: Set<String>,
+    isNewItemTypesEnabled: Boolean,
 ) {
     this.update {
         if (vaultData != null) {
@@ -2467,12 +2690,15 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                     vaultFilterType = vaultFilterType,
                     isIconLoadingDisabled = isIconLoadingDisabled,
                     restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
+                    validTotpIds = validTotpIds,
+                    isNewItemTypesEnabled = isNewItemTypesEnabled,
                 ),
                 dialog = VaultState.DialogState.Error(
                     title = errorTitle,
                     message = errorMessage,
                 ),
                 isRefreshing = isRefreshing,
+                validTotpIds = validTotpIds.toImmutableSet(),
             )
         } else {
             it.copy(
@@ -2481,6 +2707,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                 ),
                 dialog = null,
                 isRefreshing = isRefreshing,
+                validTotpIds = validTotpIds.toImmutableSet(),
             )
         }
     }

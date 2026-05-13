@@ -7,11 +7,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.util.toFormattedDateStyle
 import com.bitwarden.ui.platform.base.BaseViewModel
-import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -35,6 +36,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import java.text.NumberFormat
 import java.time.Clock
@@ -474,23 +476,27 @@ class PlanViewModel @Inject constructor(
     }
 
     private fun onPremiumUpgradeSuccess() {
-        onFreeContent { freeState ->
+        onFreeContent {
             mutableStateFlow.update {
                 it.copy(
-                    viewState = freeState.copy(
-                        isAwaitingPremiumStatus = false,
+                    viewState = PlanState.ViewState.Premium(),
+                    dialogState = PlanState.DialogState.Loading(
+                        message = BitwardenString.loading_subscription.asText(),
                     ),
-                    dialogState = null,
+                )
+            }
+            viewModelScope.launch {
+                sendAction(
+                    PlanAction.Internal.SubscriptionResultReceive(
+                        result = billingRepository.getSubscription(),
+                    ),
                 )
             }
         }
-        sendEvent(
-            PlanEvent.ShowSnackbar(
-                data = BitwardenSnackbarData(
-                    message = BitwardenString.upgraded_to_premium.asText(),
-                ),
-            ),
-        )
+        // The Upgraded to Premium route uses `launchSingleTop = true` so a duplicate event is a
+        // no-op for the user. The event itself is harmless to re-emit; the state mutation above
+        // is what's guarded by `onFreeContent`.
+        sendEvent(PlanEvent.NavigateToUpgradedToPremium)
     }
 
     private fun handlePricingResultReceive(
@@ -619,7 +625,8 @@ class PlanViewModel @Inject constructor(
                 )
 
             PremiumSubscriptionStatus.PAST_DUE ->
-                BitwardenString.subscription_past_due_description.asText(
+                BitwardenPlurals.subscription_past_due_description.asPluralsText(
+                    gracePeriodDays ?: 0,
                     gracePeriodDays ?: 0,
                     suspensionDate ?: PLACEHOLDER_TEXT,
                 )
@@ -641,6 +648,7 @@ class PlanViewModel @Inject constructor(
 /**
  * Determines how the Plan screen was reached.
  */
+@Serializable
 enum class PlanMode {
     /** Back arrow, bottom nav visible (push sub-screen from Settings). */
     Standard,
@@ -824,11 +832,11 @@ sealed class PlanEvent {
     data object NavigateBack : PlanEvent()
 
     /**
-     * Show a snackbar with the given [data].
+     * Navigate to the full-screen "Upgraded to Premium" screen. The destination registrant
+     * encodes the originating [PlanMode] when issuing the navigation; the screen's dismiss
+     * uses that mode to choose pop semantics.
      */
-    data class ShowSnackbar(
-        val data: BitwardenSnackbarData,
-    ) : PlanEvent()
+    data object NavigateToUpgradedToPremium : PlanEvent()
 }
 
 /**

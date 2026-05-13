@@ -6,6 +6,7 @@ import com.bitwarden.network.api.SendsApi
 import com.bitwarden.network.base.BaseServiceTest
 import com.bitwarden.network.model.CreateFileSendResponse
 import com.bitwarden.network.model.CreateSendJsonResponse
+import com.bitwarden.network.model.GetSendResponse
 import com.bitwarden.network.model.SendTypeJson
 import com.bitwarden.network.model.UpdateSendResponseJson
 import com.bitwarden.network.model.createMockFileSendResponseJson
@@ -21,6 +22,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertInstanceOf
 import retrofit2.create
 import java.io.File
 import java.time.Clock
@@ -180,11 +182,18 @@ class SendsServiceTest : BaseServiceTest() {
         }
 
     @Test
-    fun `getSend should return the correct response`() = runTest {
+    fun `getSend with success should return the success response`() = runTest {
         val response = createMockSend(number = 1)
         server.enqueue(MockResponse().setBody(CREATE_UPDATE_SEND_SUCCESS_JSON))
         val result = sendsService.getSend("mockId-1")
-        assertEquals(response, result.getOrThrow())
+        assertEquals(GetSendResponse.Success(send = response), result.getOrThrow())
+    }
+
+    @Test
+    fun `getSend with 404 should return the NotFound response`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(404))
+        val result = sendsService.getSend("mockId-1")
+        assertInstanceOf<GetSendResponse.NotFound>(result.getOrThrow())
     }
 
     private fun setupMockUri(

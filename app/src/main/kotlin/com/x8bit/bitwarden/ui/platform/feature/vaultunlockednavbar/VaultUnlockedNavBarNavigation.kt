@@ -54,6 +54,7 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
     onNavigateToAboutPrivilegedApps: () -> Unit,
     onNavigateToManageDevices: () -> Unit,
     onNavigateToPlan: () -> Unit,
+    onNavigateToUpgradedToPremium: () -> Unit,
 ) {
     composableWithStayTransitions<VaultUnlockedNavbarRoute> {
         VaultUnlockedNavBarScreen(
@@ -79,6 +80,7 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
             onNavigateToAboutPrivilegedApps = onNavigateToAboutPrivilegedApps,
             onNavigateToManageDevices = onNavigateToManageDevices,
             onNavigateToPlan = onNavigateToPlan,
+            onNavigateToUpgradedToPremium = onNavigateToUpgradedToPremium,
         )
     }
 }

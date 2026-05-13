@@ -33,6 +33,7 @@
     <string name="cookies">Cookies</string>
     <string name="premium">Premium</string>
     <string name="reset_premium_upgrade_banner">Reset Premium upgrade banner</string>
+    <string name="show_upgraded_to_premium_card">Show \"Upgraded to Premium\" card</string>
     <string name="bitwarden_authentication_enabled">Bitwarden authentication enabled</string>
     <string name="import_format_label_bitwarden_json">Bitwarden (.json)</string>
     <string name="import_format_label_2fas_json">2FAS (no password)</string>
@@ -51,6 +52,7 @@
     <string name="v2_encryption_jit_password">V2 Encryption - JIT Password</string>
     <string name="v2_encryption_password">V2 Encryption - Password</string>
     <string name="manage_devices_flag">Manage devices</string>
+    <string name="new_item_types">New Item Types</string>
 
     <!-- endregion Debug Menu -->
 </resources>

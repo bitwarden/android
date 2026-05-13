@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import com.x8bit.bitwarden.ui.vault.model.VaultBankAccountType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
@@ -99,7 +100,44 @@ fun CipherView.toViewState(
                 fingerprint = sshKey?.fingerprint.orEmpty(),
             )
 
-            CipherType.BANK_ACCOUNT -> TODO("PM-32810: Add Bank Account Type")
+            CipherType.BANK_ACCOUNT -> VaultAddEditState.ViewState.Content.ItemType.BankAccount(
+                bankName = bankAccount?.bankName.orEmpty(),
+                nameOnAccount = bankAccount?.nameOnAccount.orEmpty(),
+                accountType = bankAccount?.accountType.toBankAccountTypeOrDefault(),
+                accountNumber = bankAccount?.accountNumber.orEmpty(),
+                routingNumber = bankAccount?.routingNumber.orEmpty(),
+                branchNumber = bankAccount?.branchNumber.orEmpty(),
+                pin = bankAccount?.pin.orEmpty(),
+                swiftCode = bankAccount?.swiftCode.orEmpty(),
+                iban = bankAccount?.iban.orEmpty(),
+                bankContactPhone = bankAccount?.bankContactPhone.orEmpty(),
+            )
+
+            CipherType.DRIVERS_LICENSE -> {
+                VaultAddEditState.ViewState.Content.ItemType.License(
+                    firstName = driversLicense?.firstName.orEmpty(),
+                    middleName = driversLicense?.middleName.orEmpty(),
+                    lastName = driversLicense?.lastName.orEmpty(),
+                    licenseNumber = driversLicense?.licenseNumber.orEmpty(),
+                    issuingCountry = driversLicense?.issuingCountry.orEmpty(),
+                    issuingState = driversLicense?.issuingState.orEmpty(),
+                    expirationDate = driversLicense?.expirationDate.orEmpty(),
+                    licenseClass = driversLicense?.licenseClass.orEmpty(),
+                )
+            }
+
+            CipherType.PASSPORT -> VaultAddEditState.ViewState.Content.ItemType.Passport(
+                surname = passport?.surname.orEmpty(),
+                givenName = passport?.givenName.orEmpty(),
+                dateOfBirth = passport?.dateOfBirth.orEmpty(),
+                nationality = passport?.nationality.orEmpty(),
+                passportNumber = passport?.passportNumber.orEmpty(),
+                passportType = passport?.passportType.orEmpty(),
+                issuingCountry = passport?.issuingCountry.orEmpty(),
+                issuingAuthority = passport?.issuingAuthority.orEmpty(),
+                issueDate = passport?.issueDate.orEmpty(),
+                expirationDate = passport?.expirationDate.orEmpty(),
+            )
         },
         common = VaultAddEditState.ViewState.Content.Common(
             originalCipher = this,
@@ -262,7 +300,7 @@ private fun UserState.Account.toAvailableOwners(
         *organizations
             .map {
                 VaultAddEditState.Owner(
-                    name = it.name.orEmpty(),
+                    name = it.name,
                     id = it.id,
                     collections = collectionViewList
                         .filter { collection ->
@@ -330,6 +368,9 @@ private fun String?.toExpirationMonthOrDefault(): VaultCardExpirationMonth =
         .entries
         .find { it.number == this }
         ?: VaultCardExpirationMonth.SELECT
+
+private fun String?.toBankAccountTypeOrDefault(): VaultBankAccountType =
+    this?.let { VaultBankAccountType.parse(it) } ?: VaultBankAccountType.SELECT
 
 private fun String.appendCloneTextIfRequired(
     isClone: Boolean,

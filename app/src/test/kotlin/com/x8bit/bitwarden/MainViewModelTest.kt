@@ -1325,6 +1325,30 @@ class MainViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    fun `on handleResizeHasBeenRequested should set hasResizeBeenRequested as true`() = runTest {
+        val viewModel = createViewModel()
+        val initialState = MainState(
+            theme = settingsRepository.appTheme,
+            isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
+            isDynamicColorsEnabled = settingsRepository.isDynamicColorsEnabled,
+            hasResizeBeenRequested = false,
+        )
+        viewModel.stateFlow.test {
+            assertEquals(
+                initialState,
+                awaitItem(),
+            )
+            viewModel.trySendAction(MainAction.Internal.ResizeHasBeenRequested)
+            assertEquals(
+                initialState.copy(
+                    hasResizeBeenRequested = true,
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
     private fun createViewModel(
         initialSpecialCircumstance: SpecialCircumstance? = null,
     ) = MainViewModel(
@@ -1353,6 +1377,7 @@ private val DEFAULT_STATE: MainState = MainState(
     theme = AppTheme.DEFAULT,
     isScreenCaptureAllowed = true,
     isDynamicColorsEnabled = false,
+    hasResizeBeenRequested = false,
 )
 
 private val DEFAULT_FIRST_TIME_STATE = FirstTimeState(

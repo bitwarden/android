@@ -121,7 +121,7 @@ configure<ApplicationExtension> {
                 "proguard-rules.pro",
             )
 
-            buildConfigField(type = "boolean", name = "HAS_DEBUG_MENU", value = "false")
+            buildConfigField(type = "boolean", name = "HAS_DEBUG_MENU", value = "true")
             buildConfigField(type = "boolean", name = "HAS_LOGS_ENABLED", value = "false")
         }
         release {
@@ -285,8 +285,6 @@ dependencies {
     implementation(libs.kotlinx.serialization)
     implementation(platform(libs.square.okhttp.bom))
     implementation(libs.square.okhttp)
-    implementation(platform(libs.square.retrofit.bom))
-    implementation(libs.square.retrofit)
     implementation(libs.timber)
 
     // For now we are restricted to running Compose tests for debug builds only
@@ -294,10 +292,11 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     // Standard-specific flavor dependencies
-    standardImplementation(libs.google.firebase.cloud.messaging)
-    standardImplementation(platform(libs.google.firebase.bom))
-    standardImplementation(libs.google.firebase.crashlytics)
     standardImplementation(libs.google.billing)
+    standardImplementation(platform(libs.google.firebase.bom))
+    standardImplementation(libs.google.firebase.cloud.messaging)
+    standardImplementation(libs.google.firebase.crashlytics)
+    standardImplementation(libs.google.mlkit.text.recognition)
     standardImplementation(libs.google.play.review)
 
     // Pull in test fixtures from other modules

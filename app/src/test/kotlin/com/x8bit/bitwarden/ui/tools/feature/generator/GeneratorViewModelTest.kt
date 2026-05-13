@@ -16,6 +16,7 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
@@ -122,6 +123,13 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     private val firstTimeActionManager: FirstTimeActionManager = mockk {
         every { markCoachMarkTourCompleted(CoachMarkTourType.GENERATOR) } just runs
         every { shouldShowGeneratorCoachMarkFlow } returns mutableShouldShowGeneratorCoachMarkFlow
+    }
+
+    private val mutableUpgradedToPremiumCardEligibleFlow = MutableStateFlow(false)
+    private val premiumStateManager: PremiumStateManager = mockk(relaxed = true) {
+        every {
+            isUpgradedToPremiumCardEligibleFlow
+        } returns mutableUpgradedToPremiumCardEligibleFlow
     }
 
     @BeforeEach
@@ -2369,6 +2377,45 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         }
 
     @Test
+    fun `UpgradedToPremiumCardEligibilityReceive updates state with eligibility flag`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            val initialState = awaitItem()
+            assertEquals(initialState.copy(isUpgradedToPremiumCardEligible = false), initialState)
+
+            mutableUpgradedToPremiumCardEligibleFlow.value = true
+            assertEquals(initialState.copy(isUpgradedToPremiumCardEligible = true), awaitItem())
+        }
+    }
+
+    @Test
+    fun `UpgradedToPremiumCardClick dismisses card and emits NavigateToUrl`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(GeneratorAction.UpgradedToPremiumCardClick)
+            assertEquals(
+                GeneratorEvent.NavigateToUrl(
+                    url = "https://bitwarden.com/help/password-manager-plans/",
+                ),
+                awaitItem(),
+            )
+        }
+        verify(exactly = 1) {
+            premiumStateManager.dismissUpgradedToPremiumCard()
+        }
+    }
+
+    @Test
+    fun `UpgradedToPremiumCardDismiss dismisses card without navigating`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(GeneratorAction.UpgradedToPremiumCardDismiss)
+
+        verify(exactly = 1) {
+            premiumStateManager.dismissUpgradedToPremiumCard()
+        }
+    }
+
+    @Test
     fun `WordSeparatorTextChange action with null separator falls back to empty string`() =
         runTest {
             val defaultNumWords = 3
@@ -2624,6 +2671,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         policyManager = policyManager,
         reviewPromptManager = reviewPromptManager,
         firstTimeActionManager = firstTimeActionManager,
+        premiumStateManager = premiumStateManager,
     )
 
     private fun createViewModel(

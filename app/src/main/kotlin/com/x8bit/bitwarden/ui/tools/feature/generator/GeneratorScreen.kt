@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -168,6 +169,10 @@ fun GeneratorScreen(
                 )
             }
 
+            is GeneratorEvent.NavigateToUrl -> {
+                intentManager.launchUri(event.url.toUri())
+            }
+
             GeneratorEvent.NavigateBack -> onNavigateBack.invoke()
             GeneratorEvent.StartCoachMarkTour -> {
                 scope.launch {
@@ -271,6 +276,12 @@ fun GeneratorScreen(
                         onComplete = onDismissCoachMark,
                     )
                 },
+                onUpgradedToPremiumCardClick = {
+                    viewModel.trySendAction(GeneratorAction.UpgradedToPremiumCardClick)
+                },
+                onUpgradedToPremiumCardDismiss = {
+                    viewModel.trySendAction(GeneratorAction.UpgradedToPremiumCardDismiss)
+                },
                 lazyListState = lazyListState,
             )
         }
@@ -363,6 +374,8 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
     onShowPreviousCoachMark: () -> Unit,
     onDismissCoachMark: () -> Unit,
     onCoachMarkComplete: () -> Unit,
+    onUpgradedToPremiumCardClick: () -> Unit,
+    onUpgradedToPremiumCardDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val windowAdaptiveInfo = currentWindowAdaptiveInfo()
@@ -373,6 +386,33 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
     ) {
         item {
             Spacer(modifier = Modifier.height(12.dp))
+        }
+
+        if (state.isUpgradedToPremiumCardEligible &&
+            state.generatorMode is GeneratorMode.Default
+        ) {
+            item {
+                BitwardenActionCard(
+                    cardTitle = stringResource(id = BitwardenString.upgraded_to_premium),
+                    cardSubtitle = stringResource(
+                        id = BitwardenString.you_now_have_access_to_all_advanced_security_features,
+                    ),
+                    actionText = stringResource(id = BitwardenString.learn_more),
+                    leadingContent = {
+                        Icon(
+                            painter = rememberVectorPainter(id = BitwardenDrawable.ic_star),
+                            contentDescription = null,
+                            tint = BitwardenTheme.colorScheme.icon.secondary,
+                        )
+                    },
+                    onActionClick = onUpgradedToPremiumCardClick,
+                    onDismissClick = onUpgradedToPremiumCardDismiss,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin(),
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
         }
 
         if (state.isUnderPolicy) {

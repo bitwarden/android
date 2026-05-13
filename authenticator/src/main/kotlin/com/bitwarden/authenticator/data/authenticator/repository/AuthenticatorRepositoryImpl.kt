@@ -187,7 +187,8 @@ class AuthenticatorRepositoryImpl @Inject constructor(
                     is DataState.Error -> flowOf(DataState.Error(authenticatorItems.error))
                     is DataState.NoNetwork -> flowOf(DataState.NoNetwork())
                     DataState.Loading -> flowOf(DataState.Loading)
-                    is DataState.Loaded -> totpCodeManager.getTotpCodesFlow(authenticatorItems.data)
+                    is DataState.Loaded -> totpCodeManager
+                        .getTotpCodesFlow(authenticatorItems.data)
                         .map { DataState.Loaded(it) }
 
                     is DataState.Pending -> totpCodeManager
@@ -287,7 +288,12 @@ class AuthenticatorRepositoryImpl @Inject constructor(
             is AccountSyncState.Success -> {
                 val verificationCodesList = accounts.toAuthenticatorItems()
                 totpCodeManager
-                    .getTotpCodesFlow(verificationCodesList)
+                    .getTotpCodesFlow(
+                        itemList = verificationCodesList
+                            .filter {
+                                it.otpUri.isNotEmpty()
+                            },
+                    )
                     .map { SharedVerificationCodesState.Success(it) }
             }
         }

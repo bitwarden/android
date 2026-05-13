@@ -12,6 +12,8 @@ import androidx.compose.ui.test.filter
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasScrollToNodeAction
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithContentDescription
@@ -23,6 +25,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onSiblings
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
@@ -45,6 +48,7 @@ import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmen
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import com.x8bit.bitwarden.ui.vault.model.VaultBankAccountType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
@@ -3252,6 +3256,500 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     }
 
     //endregion ssh key
+
+    //region bank account
+
+    @Test
+    fun `in bank account state, all fields should be displayed when populated`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+
+        composeTestRule.onNodeWithTextAfterScroll("the bank name").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the name on account").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("Checking").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("Account number").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the routing number").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the branch number").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("PIN").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the swift code").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the iban").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the bank contact phone").assertIsDisplayed()
+    }
+
+    @Test
+    fun `in bank account state, on copy account number click should send CopyAccountNumberClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy account number")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemAction.ItemType.BankAccount.CopyAccountNumberClick)
+        }
+    }
+
+    @Test
+    fun `in bank account state, on copy routing number click should send CopyRoutingNumberClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy routing number")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemAction.ItemType.BankAccount.CopyRoutingNumberClick)
+        }
+    }
+
+    @Test
+    fun `in bank account state, on copy swift code click should send CopySwiftCodeClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy SWIFT code")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemAction.ItemType.BankAccount.CopySwiftCodeClick)
+        }
+    }
+
+    @Test
+    fun `in bank account state, on copy iban click should send CopyIbanClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy IBAN")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemAction.ItemType.BankAccount.CopyIbanClick)
+        }
+    }
+
+    @Test
+    fun `in bank account state, bankName should be displayed according to state`() {
+        val bankName = "the bank name"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(bankName).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateBankAccountType(currentState) { copy(bankName = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(bankName)
+    }
+
+    @Test
+    fun `in bank account state, nameOnAccount should be displayed according to state`() {
+        val nameOnAccount = "the name on account"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(nameOnAccount).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateBankAccountType(currentState) { copy(nameOnAccount = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(nameOnAccount)
+    }
+
+    @Test
+    fun `in bank account state, accountType should be displayed according to state`() {
+        val accountTypeText = "Checking"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(accountTypeText).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateBankAccountType(currentState) { copy(accountType = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(accountTypeText)
+    }
+
+    @Test
+    fun `in bank account state, accountNumber should be displayed according to state`() {
+        val accountNumberLabel = "Account number"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(accountNumberLabel).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateBankAccountType(currentState) { copy(accountNumber = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(accountNumberLabel)
+    }
+
+    @Test
+    fun `in bank account state, routingNumber should be displayed according to state`() {
+        val routingNumber = "the routing number"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(routingNumber).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateBankAccountType(currentState) { copy(routingNumber = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(routingNumber)
+    }
+
+    @Test
+    fun `in bank account state, branchNumber should be displayed according to state`() {
+        val branchNumber = "the branch number"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(branchNumber).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateBankAccountType(currentState) { copy(branchNumber = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(branchNumber)
+    }
+
+    @Test
+    fun `in bank account state, pin should be displayed according to state`() {
+        val pinLabel = "PIN"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(pinLabel).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateBankAccountType(currentState) { copy(pin = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(pinLabel)
+    }
+
+    @Test
+    fun `in bank account state, swiftCode should be displayed according to state`() {
+        val swiftCode = "the swift code"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(swiftCode).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateBankAccountType(currentState) { copy(swiftCode = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(swiftCode)
+    }
+
+    @Test
+    fun `in bank account state, iban should be displayed according to state`() {
+        val iban = "the iban"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(iban).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateBankAccountType(currentState) { copy(iban = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(iban)
+    }
+
+    @Test
+    fun `in bank account state, bankContactPhone should be displayed according to state`() {
+        val bankContactPhone = "the bank contact phone"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(bankContactPhone).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateBankAccountType(currentState) { copy(bankContactPhone = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(bankContactPhone)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in bank account state, on copy name on account click should send CopyNameOnAccountClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule
+            .onNode(hasScrollToNodeAction())
+            .performScrollToNode(hasTestTag("BankAccountCopyNameOnAccountButton"))
+        composeTestRule
+            .onNodeWithTag("BankAccountCopyNameOnAccountButton")
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.BankAccount.CopyNameOnAccountClick,
+            )
+        }
+    }
+
+    @Test
+    fun `in bank account state, on copy branch number click should send CopyBranchNumberClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy branch number")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.BankAccount.CopyBranchNumberClick,
+            )
+        }
+    }
+
+    @Test
+    fun `in bank account state, on copy pin click should send CopyPinClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy PIN")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemAction.ItemType.BankAccount.CopyPinClick)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in bank account state, on copy bank contact phone click should send CopyBankContactPhoneClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy bank contact phone")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.BankAccount.CopyBankContactPhoneClick,
+            )
+        }
+    }
+
+    @Test
+    fun `in bank account state, edit fab should be displayed`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_BANK_ACCOUNT_VIEW_STATE) }
+
+        composeTestRule.onNodeWithContentDescription("Edit item").assertIsDisplayed()
+    }
+
+    //endregion bank account
+
+    //region drivers license
+
+    @Test
+    fun `in drivers license state, all fields should be displayed when populated`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+
+        composeTestRule.onNodeWithTextAfterScroll("the first name").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the middle name").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the last name").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the date of birth").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the issuing country").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the issuing state").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the issuing authority").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the issue date").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the expiration date").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("the license class").assertIsDisplayed()
+    }
+
+    @Test
+    fun `in drivers license state, on copy first name click should send CopyFirstNameClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy first name")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.DriversLicense.CopyFirstNameClick,
+            )
+        }
+    }
+
+    @Test
+    fun `in drivers license state, on copy middle name click should send CopyMiddleNameClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule
+            .onNode(hasScrollToNodeAction())
+            .performScrollToNode(hasTestTag("DriversLicenseCopyMiddleNameButton"))
+        composeTestRule
+            .onNodeWithTag("DriversLicenseCopyMiddleNameButton")
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.DriversLicense.CopyMiddleNameClick,
+            )
+        }
+    }
+
+    @Test
+    fun `in drivers license state, on copy last name click should send CopyLastNameClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy last name")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.DriversLicense.CopyLastNameClick,
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in drivers license state, on copy license number click should send CopyLicenseNumberClick`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy license number")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.DriversLicense.CopyLicenseNumberClick,
+            )
+        }
+    }
+
+    @Test
+    fun `in drivers license state, firstName should be displayed according to state`() {
+        val firstName = "the first name"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(firstName).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(firstName = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(firstName)
+    }
+
+    @Test
+    fun `in drivers license state, middleName should be displayed according to state`() {
+        val middleName = "the middle name"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(middleName).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(middleName = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(middleName)
+    }
+
+    @Test
+    fun `in drivers license state, lastName should be displayed according to state`() {
+        val lastName = "the last name"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(lastName).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(lastName = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(lastName)
+    }
+
+    @Test
+    fun `in drivers license state, licenseNumber should be displayed according to state`() {
+        val licenseNumberLabel = "License number"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(licenseNumberLabel).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(licenseNumber = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(licenseNumberLabel)
+    }
+
+    @Test
+    fun `in drivers license state, dateOfBirth should be displayed according to state`() {
+        val dateOfBirth = "the date of birth"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(dateOfBirth).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(dateOfBirth = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(dateOfBirth)
+    }
+
+    @Test
+    fun `in drivers license state, issuingCountry should be displayed according to state`() {
+        val issuingCountry = "the issuing country"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(issuingCountry).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(issuingCountry = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(issuingCountry)
+    }
+
+    @Test
+    fun `in drivers license state, issuingState should be displayed according to state`() {
+        val issuingState = "the issuing state"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(issuingState).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(issuingState = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(issuingState)
+    }
+
+    @Test
+    fun `in drivers license state, issuingAuthority should be displayed according to state`() {
+        val issuingAuthority = "the issuing authority"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(issuingAuthority).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(issuingAuthority = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(issuingAuthority)
+    }
+
+    @Test
+    fun `in drivers license state, issueDate should be displayed according to state`() {
+        val issueDate = "the issue date"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(issueDate).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(issueDate = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(issueDate)
+    }
+
+    @Test
+    fun `in drivers license state, expirationDate should be displayed according to state`() {
+        val expirationDate = "the expiration date"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(expirationDate).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(expirationDate = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(expirationDate)
+    }
+
+    @Test
+    fun `in drivers license state, licenseClass should be displayed according to state`() {
+        val licenseClass = "the license class"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(licenseClass).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateDriversLicenseType(currentState) { copy(licenseClass = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(licenseClass)
+    }
+
+    @Test
+    fun `in drivers license state, edit fab should be displayed`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_DRIVERS_LICENSE_VIEW_STATE) }
+
+        composeTestRule.onNodeWithContentDescription("Edit item").assertIsDisplayed()
+    }
+
+    //endregion drivers license
 }
 
 //region Helper functions
@@ -3311,6 +3809,52 @@ private fun updateCardType(
         is VaultItemState.ViewState.Content -> {
             when (val type = viewState.type) {
                 is VaultItemState.ViewState.Content.ItemType.Card -> {
+                    viewState.copy(
+                        type = type.transform(),
+                    )
+                }
+
+                else -> viewState
+            }
+        }
+
+        else -> viewState
+    }
+    return currentState.copy(viewState = updatedType)
+}
+
+private fun updateBankAccountType(
+    currentState: VaultItemState,
+    transform: VaultItemState.ViewState.Content.ItemType.BankAccount.() ->
+    VaultItemState.ViewState.Content.ItemType.BankAccount,
+): VaultItemState {
+    val updatedType = when (val viewState = currentState.viewState) {
+        is VaultItemState.ViewState.Content -> {
+            when (val type = viewState.type) {
+                is VaultItemState.ViewState.Content.ItemType.BankAccount -> {
+                    viewState.copy(
+                        type = type.transform(),
+                    )
+                }
+
+                else -> viewState
+            }
+        }
+
+        else -> viewState
+    }
+    return currentState.copy(viewState = updatedType)
+}
+
+private fun updateDriversLicenseType(
+    currentState: VaultItemState,
+    transform: VaultItemState.ViewState.Content.ItemType.DriversLicense.() ->
+    VaultItemState.ViewState.Content.ItemType.DriversLicense,
+): VaultItemState {
+    val updatedType = when (val viewState = currentState.viewState) {
+        is VaultItemState.ViewState.Content -> {
+            when (val type = viewState.type) {
+                is VaultItemState.ViewState.Content.ItemType.DriversLicense -> {
                     viewState.copy(
                         type = type.transform(),
                     )
@@ -3468,6 +4012,20 @@ private val DEFAULT_SSH_KEY: VaultItemState.ViewState.Content.ItemType.SshKey =
         showPrivateKey = false,
     )
 
+private val DEFAULT_BANK_ACCOUNT: VaultItemState.ViewState.Content.ItemType.BankAccount =
+    VaultItemState.ViewState.Content.ItemType.BankAccount(
+        bankName = "the bank name",
+        nameOnAccount = "the name on account",
+        accountType = VaultBankAccountType.CHECKING,
+        accountNumber = "the account number",
+        routingNumber = "the routing number",
+        branchNumber = "the branch number",
+        pin = "the pin",
+        swiftCode = "the swift code",
+        iban = "the iban",
+        bankContactPhone = "the bank contact phone",
+    )
+
 private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
     VaultItemState.ViewState.Content.Common(
         name = "cipher",
@@ -3597,6 +4155,33 @@ private val DEFAULT_SSH_KEY_VIEW_STATE: VaultItemState.ViewState.Content =
     VaultItemState.ViewState.Content(
         common = DEFAULT_COMMON.copy(iconData = IconData.Local(BitwardenDrawable.ic_ssh_key)),
         type = DEFAULT_SSH_KEY,
+    )
+
+private val DEFAULT_BANK_ACCOUNT_VIEW_STATE: VaultItemState.ViewState.Content =
+    VaultItemState.ViewState.Content(
+        common = DEFAULT_COMMON.copy(iconData = IconData.Local(BitwardenDrawable.ic_globe)),
+        type = DEFAULT_BANK_ACCOUNT,
+    )
+
+private val DEFAULT_DRIVERS_LICENSE: VaultItemState.ViewState.Content.ItemType.DriversLicense =
+    VaultItemState.ViewState.Content.ItemType.DriversLicense(
+        firstName = "the first name",
+        middleName = "the middle name",
+        lastName = "the last name",
+        licenseNumber = "the license number",
+        dateOfBirth = "the date of birth",
+        issuingCountry = "the issuing country",
+        issuingState = "the issuing state",
+        issuingAuthority = "the issuing authority",
+        issueDate = "the issue date",
+        expirationDate = "the expiration date",
+        licenseClass = "the license class",
+    )
+
+private val DEFAULT_DRIVERS_LICENSE_VIEW_STATE: VaultItemState.ViewState.Content =
+    VaultItemState.ViewState.Content(
+        common = DEFAULT_COMMON.copy(iconData = IconData.Local(BitwardenDrawable.ic_globe)),
+        type = DEFAULT_DRIVERS_LICENSE,
     )
 
 private val EMPTY_VIEW_STATES = listOf(
