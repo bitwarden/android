@@ -99,4 +99,12 @@ class SearchTypeExtensionsTest {
     fun `toSearchTypeData should return Vault SshKeys when SearchType is Vault SshKeys`() {
         assertEquals(SearchTypeData.Vault.SshKeys, SearchType.Vault.SshKeys.toSearchTypeData())
     }
+
+    @Test
+    fun `toSearchTypeData should return Vault Licenses when SearchType is Vault Licenses`() {
+        assertEquals(
+            SearchTypeData.Vault.Licenses,
+            SearchType.Vault.Licenses.toSearchTypeData(),
+        )
+    }
 }

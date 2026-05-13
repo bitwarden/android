@@ -256,6 +256,19 @@ class SearchTypeDataExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `updateWithAdditionalDataIfNecessary should return the searchTypeData unchanged for Vault Licenses`() {
+        val searchTypeData = SearchTypeData.Vault.Licenses
+        assertEquals(
+            searchTypeData,
+            searchTypeData.updateWithAdditionalDataIfNecessary(
+                folderList = listOf(),
+                collectionList = emptyList(),
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `updateWithAdditionalDataIfNecessary should return the searchTypeData unchanged for Vault VerificationCodes`() {
         val searchTypeData = SearchTypeData.Vault.VerificationCodes
         assertEquals(
@@ -390,6 +403,27 @@ class SearchTypeDataExtensionsTest {
         val ciphers = listOf(match1, match2, match3)
         val result = ciphers.filterAndOrganize(
             searchTypeData = SearchTypeData.Vault.BankAccounts,
+            searchTerm = "match",
+        )
+        assertEquals(listOf(match1, match3), result)
+    }
+
+    @Test
+    fun `CipherViews filterAndOrganize should return list with only license items`() {
+        val match1 = createMockCipherListView(
+            number = 1,
+            type = CipherListViewType.DriversLicense,
+            name = "match1",
+        )
+        val match2 = createMockCipherListView(number = 2, name = "match2")
+        val match3 = createMockCipherListView(
+            number = 3,
+            type = CipherListViewType.DriversLicense,
+            name = "match3",
+        )
+        val ciphers = listOf(match1, match2, match3)
+        val result = ciphers.filterAndOrganize(
+            searchTypeData = SearchTypeData.Vault.Licenses,
             searchTerm = "match",
         )
         assertEquals(listOf(match1, match3), result)

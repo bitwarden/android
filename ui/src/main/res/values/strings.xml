@@ -1357,4 +1357,6 @@ Do you want to switch to this account?</string>
     <string name="account_details">Account details</string>
     <string name="no_bank_accounts">There are no bank accounts in your vault.</string>
     <string name="license_details">License details</string>
+    <string name="licenses">Licenses</string>
+    <string name="no_licenses">There are no licenses in your vault.</string>
 </resources>
