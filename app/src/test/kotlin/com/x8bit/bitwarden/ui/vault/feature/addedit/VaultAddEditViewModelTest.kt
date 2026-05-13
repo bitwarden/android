@@ -2408,9 +2408,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `in add mode, SaveClick with a Drivers License item should emit ShowSnackbar without saving`() =
+    fun `in add mode, SaveClick with a License item should emit ShowSnackbar without saving`() =
         runTest {
             mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
             val licenseState = createVaultAddItemState(
@@ -2522,12 +2521,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         assertTrue(itemType.vaultLinkedFieldTypes.isEmpty())
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `ItemType DriversLicense should expose DRIVERS_LICENSE itemTypeOption and not be SDK supported`() {
+    fun `ItemType License should expose DRIVERS_LICENSE itemTypeOption and not be SDK supported`() {
         val itemType = VaultAddEditState.ViewState.Content.ItemType.License()
         assertEquals(
-            VaultAddEditState.ItemTypeOption.DRIVERS_LICENSE,
+            VaultAddEditState.ItemTypeOption.LICENSE,
             itemType.itemTypeOption,
         )
         assertFalse(itemType.isSdkSupported)
@@ -2554,7 +2552,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             baseAddState.copy(cipherType = VaultItemCipherType.BANK_ACCOUNT).screenDisplayName,
         )
         assertEquals(
-            BitwardenString.new_drivers_license.asText(),
+            BitwardenString.new_license.asText(),
             baseAddState.copy(cipherType = VaultItemCipherType.DRIVERS_LICENSE).screenDisplayName,
         )
         assertEquals(
@@ -2574,7 +2572,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             baseEditState.copy(cipherType = VaultItemCipherType.BANK_ACCOUNT).screenDisplayName,
         )
         assertEquals(
-            BitwardenString.edit_drivers_license.asText(),
+            BitwardenString.edit_license.asText(),
             baseEditState.copy(cipherType = VaultItemCipherType.DRIVERS_LICENSE).screenDisplayName,
         )
         assertEquals(
@@ -2594,7 +2592,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             baseCloneState.copy(cipherType = VaultItemCipherType.BANK_ACCOUNT).screenDisplayName,
         )
         assertEquals(
-            BitwardenString.new_drivers_license.asText(),
+            BitwardenString.new_license.asText(),
             baseCloneState.copy(cipherType = VaultItemCipherType.DRIVERS_LICENSE).screenDisplayName,
         )
         assertEquals(
@@ -4184,6 +4182,159 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 expectedBankAccount { copy(bankContactPhone = "555-0100") },
+                viewModel.stateFlow.value,
+            )
+        }
+    }
+
+    @Nested
+    inner class VaultAddEditLicenseTypeItemActions {
+        private lateinit var viewModel: VaultAddEditViewModel
+        private lateinit var vaultAddItemInitialState: VaultAddEditState
+        private lateinit var licenseInitialSavedStateHandle: SavedStateHandle
+
+        @BeforeEach
+        fun setup() {
+            mutableVaultDataFlow.value = DataState.Loaded(
+                createVaultData(cipherListView = createMockCipherListView(1)),
+            )
+            vaultAddItemInitialState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
+                typeContentViewState =
+                    VaultAddEditState.ViewState.Content.ItemType.License(),
+            )
+            licenseInitialSavedStateHandle = createSavedStateHandleWithState(
+                state = vaultAddItemInitialState,
+                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
+            )
+            viewModel = createAddVaultItemViewModel(
+                savedStateHandle = licenseInitialSavedStateHandle,
+            )
+        }
+
+        private fun expectedLicense(
+            block: VaultAddEditState.ViewState.Content.ItemType.License.() ->
+            VaultAddEditState.ViewState.Content.ItemType.License,
+        ): VaultAddEditState =
+            createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
+                typeContentViewState = VaultAddEditState
+                    .ViewState
+                    .Content
+                    .ItemType
+                    .License()
+                    .block(),
+            )
+
+        @Test
+        fun `FirstNameTextChange should update first name`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.FirstNameTextChange(
+                    firstName = "Missy",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(firstName = "Missy") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `MiddleNameTextChange should update middle name`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.MiddleNameTextChange(
+                    middleName = "Anne",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(middleName = "Anne") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `LastNameTextChange should update last name`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.LastNameTextChange(
+                    lastName = "Katner",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(lastName = "Katner") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `LicenseNumberTextChange should update license number`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.LicenseNumberTextChange(
+                    licenseNumber = "K123-456-789",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(licenseNumber = "K123-456-789") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssuingCountryTextChange should update issuing country`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssuingCountryTextChange(
+                    country = "USA",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(issuingCountry = "USA") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssuingStateTextChange should update issuing state`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssuingStateTextChange(
+                    state = "Wisconsin",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(issuingState = "Wisconsin") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssuingAuthorityTextChange should update issuing authority`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssuingAuthorityTextChange(
+                    authority = "DMV",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(issuingAuthority = "DMV") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `LicenseClassTextChange should update license class`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.LicenseClassTextChange(
+                    licenseClass = "Class D",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(licenseClass = "Class D") },
                 viewModel.stateFlow.value,
             )
         }
