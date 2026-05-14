@@ -1258,6 +1258,14 @@ class VaultItemViewModel @Inject constructor(
 
     private fun handlePassportTypeActions(action: VaultItemAction.ItemType.Passport) {
         when (action) {
+            VaultItemAction.ItemType.Passport.CopyGivenNameClick -> {
+                handleCopyPassportGivenNameClick()
+            }
+
+            VaultItemAction.ItemType.Passport.CopySurnameClick -> {
+                handleCopyPassportSurnameClick()
+            }
+
             VaultItemAction.ItemType.Passport.CopyPassportNumberClick -> {
                 handleCopyPassportItemNumberClick()
             }
@@ -1265,6 +1273,32 @@ class VaultItemViewModel @Inject constructor(
             VaultItemAction.ItemType.Passport.CopyNationalIdentificationNumberClick -> {
                 handleCopyNationalIdentificationNumberClick()
             }
+        }
+    }
+
+    private fun handleCopyPassportGivenNameClick() {
+        onPassportContent { _, passport ->
+            passport.givenName
+                ?.takeIf { it.isNotBlank() }
+                ?.let { givenName ->
+                    clipboardManager.setText(
+                        text = givenName,
+                        toastDescriptorOverride = BitwardenString.first_name.asText(),
+                    )
+                }
+        }
+    }
+
+    private fun handleCopyPassportSurnameClick() {
+        onPassportContent { _, passport ->
+            passport.surname
+                ?.takeIf { it.isNotBlank() }
+                ?.let { surname ->
+                    clipboardManager.setText(
+                        text = surname,
+                        toastDescriptorOverride = BitwardenString.last_name.asText(),
+                    )
+                }
         }
     }
 
@@ -2829,6 +2863,16 @@ sealed class VaultItemAction {
          * Represents actions specific to the Passport type.
          */
         sealed class Passport : ItemType() {
+
+            /**
+             * The user has clicked the copy button for the given name.
+             */
+            data object CopyGivenNameClick : Passport()
+
+            /**
+             * The user has clicked the copy button for the surname.
+             */
+            data object CopySurnameClick : Passport()
 
             /**
              * The user has clicked the copy button for the passport number.

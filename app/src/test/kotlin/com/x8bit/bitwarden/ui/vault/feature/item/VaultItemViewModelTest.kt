@@ -3162,6 +3162,110 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         }
 
         @Test
+        fun `on CopyGivenNameClick should copy given name to clipboard`() = runTest {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.Passport.CopyGivenNameClick,
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "Missy",
+                    toastDescriptorOverride = BitwardenString.first_name.asText(),
+                )
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on CopyGivenNameClick with null given name should not copy to clipboard`() = runTest {
+            val emptyState = PASSPORT_VIEW_STATE.copy(
+                type = DEFAULT_PASSPORT_TYPE.copy(givenName = null),
+            )
+            viewModel = createViewModelWithPassportState(emptyState)
+
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.Passport.CopyGivenNameClick,
+            )
+
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on CopyGivenNameClick with blank given name should not copy to clipboard`() = runTest {
+            val emptyState = PASSPORT_VIEW_STATE.copy(
+                type = DEFAULT_PASSPORT_TYPE.copy(givenName = "   "),
+            )
+            viewModel = createViewModelWithPassportState(emptyState)
+
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.Passport.CopyGivenNameClick,
+            )
+
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopySurnameClick should copy surname to clipboard`() = runTest {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.Passport.CopySurnameClick,
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "Katner",
+                    toastDescriptorOverride = BitwardenString.last_name.asText(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopySurnameClick with null surname should not copy to clipboard`() = runTest {
+            val emptyState = PASSPORT_VIEW_STATE.copy(
+                type = DEFAULT_PASSPORT_TYPE.copy(surname = null),
+            )
+            viewModel = createViewModelWithPassportState(emptyState)
+
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.Passport.CopySurnameClick,
+            )
+
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopySurnameClick with blank surname should not copy to clipboard`() = runTest {
+            val emptyState = PASSPORT_VIEW_STATE.copy(
+                type = DEFAULT_PASSPORT_TYPE.copy(surname = "   "),
+            )
+            viewModel = createViewModelWithPassportState(emptyState)
+
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.Passport.CopySurnameClick,
+            )
+
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+        }
+
+        @Test
         fun `on CopyPassportNumberClick should copy passport number to clipboard`() = runTest {
             viewModel.trySendAction(
                 VaultItemAction.ItemType.Passport.CopyPassportNumberClick,

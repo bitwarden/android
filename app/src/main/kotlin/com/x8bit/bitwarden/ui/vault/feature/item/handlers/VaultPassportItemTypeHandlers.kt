@@ -7,12 +7,18 @@ import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemViewModel
  * A collection of handler functions for managing actions within the context of viewing
  * passport items in a vault.
  *
+ * @property onCopyGivenNameClick Handles the user clicking the copy button next to the
+ *  given name.
+ * @property onCopySurnameClick Handles the user clicking the copy button next to the
+ *  surname.
  * @property onCopyPassportNumberClick Handles the user clicking the copy button next to the
  *  passport number.
  * @property onCopyNationalIdentificationNumberClick Handles the user clicking the copy button
  *  next to the national identification number.
  */
 data class VaultPassportItemTypeHandlers(
+    val onCopyGivenNameClick: () -> Unit,
+    val onCopySurnameClick: () -> Unit,
     val onCopyPassportNumberClick: () -> Unit,
     val onCopyNationalIdentificationNumberClick: () -> Unit,
 ) {
@@ -25,6 +31,16 @@ data class VaultPassportItemTypeHandlers(
          */
         fun create(viewModel: VaultItemViewModel): VaultPassportItemTypeHandlers =
             VaultPassportItemTypeHandlers(
+                onCopyGivenNameClick = {
+                    viewModel.trySendAction(
+                        VaultItemAction.ItemType.Passport.CopyGivenNameClick,
+                    )
+                },
+                onCopySurnameClick = {
+                    viewModel.trySendAction(
+                        VaultItemAction.ItemType.Passport.CopySurnameClick,
+                    )
+                },
                 onCopyPassportNumberClick = {
                     viewModel.trySendAction(
                         VaultItemAction.ItemType.Passport.CopyPassportNumberClick,

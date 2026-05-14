@@ -22,6 +22,7 @@ import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.vault.feature.item.component.itemHeader
@@ -79,13 +80,13 @@ fun VaultItemPassportContent(
 
         passportState.givenName?.let { givenName ->
             item(key = "givenName") {
-                BitwardenTextField(
+                PassportCopyField(
                     label = stringResource(id = BitwardenString.first_name),
                     value = givenName,
-                    onValueChange = {},
-                    readOnly = true,
-                    singleLine = false,
+                    copyContentDescription = stringResource(id = BitwardenString.copy_first_name),
                     textFieldTestTag = "PassportItemGivenNameEntry",
+                    copyActionTestTag = "PassportCopyGivenNameButton",
+                    onCopyClick = vaultPassportItemTypeHandlers.onCopyGivenNameClick,
                     cardStyle = passportState
                         .propertyList
                         .toListItemCardStyle(
@@ -102,13 +103,13 @@ fun VaultItemPassportContent(
 
         passportState.surname?.let { surname ->
             item(key = "surname") {
-                BitwardenTextField(
+                PassportCopyField(
                     label = stringResource(id = BitwardenString.last_name),
                     value = surname,
-                    onValueChange = {},
-                    readOnly = true,
-                    singleLine = false,
+                    copyContentDescription = stringResource(id = BitwardenString.copy_last_name),
                     textFieldTestTag = "PassportItemSurnameEntry",
+                    copyActionTestTag = "PassportCopySurnameButton",
+                    onCopyClick = vaultPassportItemTypeHandlers.onCopySurnameClick,
                     cardStyle = passportState
                         .propertyList
                         .toListItemCardStyle(
@@ -437,4 +438,35 @@ fun VaultItemPassportContent(
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
+}
+
+@Composable
+private fun PassportCopyField(
+    label: String,
+    value: String,
+    copyContentDescription: String,
+    textFieldTestTag: String,
+    copyActionTestTag: String,
+    onCopyClick: () -> Unit,
+    cardStyle: CardStyle,
+    modifier: Modifier = Modifier,
+) {
+    BitwardenTextField(
+        label = label,
+        value = value,
+        onValueChange = {},
+        readOnly = true,
+        singleLine = false,
+        actions = {
+            BitwardenStandardIconButton(
+                vectorIconRes = BitwardenDrawable.ic_copy,
+                contentDescription = copyContentDescription,
+                onClick = onCopyClick,
+                modifier = Modifier.testTag(tag = copyActionTestTag),
+            )
+        },
+        textFieldTestTag = textFieldTestTag,
+        cardStyle = cardStyle,
+        modifier = modifier,
+    )
 }

@@ -15,6 +15,26 @@ class VaultPassportItemTypeHandlersTest {
     private val handlers = VaultPassportItemTypeHandlers.create(viewModel = viewModel)
 
     @Test
+    fun `onCopyGivenNameClick should send CopyGivenNameClick action`() {
+        handlers.onCopyGivenNameClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.Passport.CopyGivenNameClick,
+            )
+        }
+    }
+
+    @Test
+    fun `onCopySurnameClick should send CopySurnameClick action`() {
+        handlers.onCopySurnameClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.Passport.CopySurnameClick,
+            )
+        }
+    }
+
+    @Test
     fun `onCopyPassportNumberClick should send CopyPassportNumberClick action`() {
         handlers.onCopyPassportNumberClick()
         verify(exactly = 1) {
