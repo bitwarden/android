@@ -739,9 +739,8 @@ fun CipherTypeJson.toSdkCipherType(): CipherType =
         CipherTypeJson.IDENTITY -> CipherType.IDENTITY
         CipherTypeJson.SSH_KEY -> CipherType.SSH_KEY
         CipherTypeJson.BANK_ACCOUNT -> CipherType.BANK_ACCOUNT
-        CipherTypeJson.DRIVERS_LICENSE,
-        CipherTypeJson.PASSPORT,
-            -> throw IllegalArgumentException("SDK mapping not yet available for $this")
+        CipherTypeJson.DRIVERS_LICENSE -> CipherType.DRIVERS_LICENSE
+        CipherTypeJson.PASSPORT -> CipherType.PASSPORT
     }
 
 /**
