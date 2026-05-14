@@ -30,7 +30,7 @@ androidxRoom = "2.8.4"
 androidxSecurityCrypto = "1.1.0"
 androidxSplash = "1.2.0"
 androidxWork = "2.11.2"
-bitwardenSdk = "2.0.0-6074-f373e7f3"
+bitwardenSdk = "2.0.0-6825-release-hotfix-v2026.4.1-bwpm"
 crashlytics = "3.0.6"
 detekt = "1.23.8"
 firebaseBom = "34.11.0"
@@ -100,7 +100,7 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "androidxSecurityCrypto" }
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxSplash" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWork" }
-bitwarden-sdk = { module = "com.bitwarden:sdk-android", version.ref = "bitwardenSdk" }
+bitwarden-sdk = { module = "com.bitwarden:sdk-android.dev", version.ref = "bitwardenSdk" }
 bumptech-glide = { module = "com.github.bumptech.glide:compose", version.ref = "glideCompose" }
 bumptech-glide-okhttp = { module = "com.github.bumptech.glide:okhttp3-integration", version.ref = "glide" }
 bumptech-glide-compiler = { module = "com.github.bumptech.glide:ksp", version.ref = "glide" }
