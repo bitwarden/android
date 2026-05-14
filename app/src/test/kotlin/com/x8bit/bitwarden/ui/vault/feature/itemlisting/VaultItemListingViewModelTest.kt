@@ -88,6 +88,7 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.getSignatureFingerprintAsHexString
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockBankAccountView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDriversLicenseView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPassportView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
@@ -2458,6 +2459,74 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `OverflowOptionClick Vault CopyPassportNumberClick should call setText on the ClipboardManager`() =
+        runTest {
+            val passportNumber = "P12345678"
+            val cipherId = "mockId-1"
+            val viewModel = createVaultItemListingViewModel()
+            coEvery {
+                vaultRepository.getCipher(cipherId)
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    cipherType = CipherType.PASSPORT,
+                    passport = createMockPassportView(
+                        number = 1,
+                        passportNumber = passportNumber,
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(
+                VaultItemListingsAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyPassportNumberClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+            )
+
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = passportNumber,
+                    toastDescriptorOverride = BitwardenString.passport_number.asText(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyPassportNumberClick should not copy when passport number is null`() =
+        runTest {
+            val cipherId = "mockId-1"
+            val viewModel = createVaultItemListingViewModel()
+            coEvery {
+                vaultRepository.getCipher(cipherId)
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    cipherType = CipherType.PASSPORT,
+                    passport = createMockPassportView(
+                        number = 1,
+                        passportNumber = null,
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(
+                VaultItemListingsAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyPassportNumberClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = false,
+                    ),
+                ),
+            )
+
+            verify(exactly = 0) { clipboardManager.setText(text = any<String>()) }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `OverflowOptionClick Vault CopyTotpClick with GenerateTotpCode success should call setText on the ClipboardManager`() =
         runTest {
             val totpCode = "totpCode"
@@ -3081,6 +3150,44 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         message = BitwardenString.no_licenses.asText(),
                         shouldShowAddButton = true,
                         buttonText = BitwardenString.new_license.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Loaded with empty items should update ViewState to NoItems content for Passport ItemListingType`() =
+        runTest {
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = emptyList(),
+                    ),
+                    folderViewList = emptyList(),
+                    collectionViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val viewModel = createVaultItemListingViewModel(
+                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                    vaultItemListingType = VaultItemListingType.Passport,
+                ),
+            )
+
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+
+            assertEquals(
+                createVaultItemListingState(
+                    itemListingType =
+                        VaultItemListingState.ItemListingType.Vault.Passport,
+                    viewState = VaultItemListingState.ViewState.NoItems(
+                        header = null,
+                        message = BitwardenString.no_passports.asText(),
+                        shouldShowAddButton = true,
+                        buttonText = BitwardenString.new_passport.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,

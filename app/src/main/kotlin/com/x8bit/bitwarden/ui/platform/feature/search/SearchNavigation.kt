@@ -47,6 +47,7 @@ enum class SearchableItemType {
     VAULT_VERIFICATION_CODES,
     VAULT_BANK_ACCOUNTS,
     VAULT_LICENSES,
+    VAULT_PASSPORTS,
 }
 
 /**
@@ -79,6 +80,7 @@ fun SavedStateHandle.toSearchArgs(): SearchArgs {
             SearchableItemType.VAULT_VERIFICATION_CODES -> SearchType.Vault.VerificationCodes
             SearchableItemType.VAULT_BANK_ACCOUNTS -> SearchType.Vault.BankAccounts
             SearchableItemType.VAULT_LICENSES -> SearchType.Vault.Licenses
+            SearchableItemType.VAULT_PASSPORTS -> SearchType.Vault.Passports
             SearchableItemType.VAULT_FOLDER -> SearchType.Vault.Folder(
                 folderId = requireNotNull(route.id),
             )
@@ -149,6 +151,7 @@ private fun SearchType.toSearchableItemType(): SearchableItemType =
         SearchType.Vault.Archive -> SearchableItemType.VAULT_ARCHIVE
         SearchType.Vault.BankAccounts -> SearchableItemType.VAULT_BANK_ACCOUNTS
         SearchType.Vault.Licenses -> SearchableItemType.VAULT_LICENSES
+        SearchType.Vault.Passports -> SearchableItemType.VAULT_PASSPORTS
     }
 
 private fun SearchType.toIdOrNull(): String? =
@@ -170,4 +173,5 @@ private fun SearchType.toIdOrNull(): String? =
         SearchType.Vault.Archive -> null
         SearchType.Vault.BankAccounts -> null
         SearchType.Vault.Licenses -> null
+        SearchType.Vault.Passports -> null
     }

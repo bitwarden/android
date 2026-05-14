@@ -363,6 +363,10 @@ class SearchViewModel @Inject constructor(
                 handleCopyLicenseNumberClick(overflowAction)
             }
 
+            is ListingItemOverflowAction.VaultAction.CopyPassportNumberClick -> {
+                handleCopyPassportNumberClick(overflowAction)
+            }
+
             is ListingItemOverflowAction.VaultAction.CopyPasswordClick -> {
                 handleCopyPasswordClick(overflowAction)
             }
@@ -589,6 +593,23 @@ class SearchViewModel @Inject constructor(
                     clipboardManager.setText(
                         text = it,
                         toastDescriptorOverride = BitwardenString.license_number.asText(),
+                    )
+                }
+        }
+    }
+
+    private fun handleCopyPassportNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyPassportNumberClick,
+    ) {
+        viewModelScope.launch {
+            decryptCipherViewOrNull(action.cipherId)
+                ?.passport
+                ?.passportNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    clipboardManager.setText(
+                        text = it,
+                        toastDescriptorOverride = BitwardenString.passport_number.asText(),
                     )
                 }
         }
@@ -1376,6 +1397,16 @@ sealed class SearchTypeData : Parcelable {
                 get() = BitwardenString
                     .search_x
                     .asText(BitwardenString.licenses.asText())
+        }
+
+        /**
+         * Indicates that we should be searching only passport ciphers.
+         */
+        data object Passports : Vault() {
+            override val title: Text
+                get() = BitwardenString
+                    .search_x
+                    .asText(BitwardenString.passports.asText())
         }
 
         /**
