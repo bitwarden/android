@@ -23,6 +23,7 @@ import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeRequestValidator
 import com.bitwarden.cxf.validator.CredentialExchangeRequestValidator
 import com.bitwarden.cxf.validator.dsl.credentialExchangeRequestValidator
 import com.bitwarden.ui.platform.composition.LocalCardTextAnalyzer
+import com.bitwarden.ui.platform.composition.LocalClock
 import com.bitwarden.ui.platform.composition.LocalExitManager
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.composition.LocalQrCodeAnalyzer
@@ -133,11 +134,6 @@ private fun createCredentialProviderCompletionManager(
 val LocalBiometricsManager: ProvidableCompositionLocal<BiometricsManager> = compositionLocalOf {
     error("CompositionLocal BiometricsManager not present")
 }
-
-/**
- * Provides access to the clock throughout the app.
- */
-val LocalClock: ProvidableCompositionLocal<Clock> = compositionLocalOf { Clock.systemDefaultZone() }
 
 /**
  * Provides access to the Auth Tab launchers throughout the app.
