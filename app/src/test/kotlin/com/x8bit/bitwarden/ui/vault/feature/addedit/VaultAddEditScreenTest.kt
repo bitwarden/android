@@ -2912,6 +2912,171 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `in ItemType_Passport changing first name should trigger GivenNameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "First name")
+            .performTextInput(text = "Bruce")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.GivenNameTextChange(
+                    givenName = "Bruce",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Passport changing last name should trigger SurnameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Last name")
+            .performTextInput(text = "Wayne")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.SurnameTextChange(
+                    surname = "Wayne",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Passport changing sex should trigger SexTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Sex")
+            .performTextInput(text = "M")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.SexTextChange(sex = "M"),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Passport changing birth place should trigger BirthPlaceTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Birth place")
+            .performTextInput(text = "Gotham City")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.BirthPlaceTextChange(
+                    birthPlace = "Gotham City",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Passport changing nationality should trigger NationalityTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Nationality")
+            .performTextInput(text = "American")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.NationalityTextChange(
+                    nationality = "American",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport changing the passport number text field should trigger PassportNumberTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Passport number")
+            .performTextInput(text = "X12345678")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.PassportNumberTextChange(
+                    passportNumber = "X12345678",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Passport changing passport type should trigger PassportTypeTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Passport type")
+            .performTextInput(text = "Regular")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.PassportTypeTextChange(
+                    passportType = "Regular",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport changing the national identification number text field should trigger NationalIdentificationNumberTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "National identification number")
+            .performTextInput(text = "987-65-4321")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction
+                    .ItemType
+                    .PassportType
+                    .NationalIdentificationNumberTextChange(
+                        nationalIdentificationNumber = "987-65-4321",
+                    ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport changing the issuing country text field should trigger IssuingCountryTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Issuing country")
+            .performTextInput(text = "USA")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.IssuingCountryTextChange(
+                    country = "USA",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport changing the issuing authority text field should trigger IssuingAuthorityTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Issuing authority")
+            .performTextInput(text = "U.S. Department of State")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.IssuingAuthorityTextChange(
+                    authority = "U.S. Department of State",
+                ),
+            )
+        }
+    }
+
+    @Test
     fun `clicking Add field button should allow creation of Linked type`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN
 
@@ -5027,6 +5192,22 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.License(),
+                isIndividualVaultDisabled = false,
+            ),
+            dialog = null,
+            bottomSheetState = null,
+            shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isCardScannerEnabled = false,
+        )
+
+        private val DEFAULT_STATE_PASSPORT = VaultAddEditState(
+            vaultAddEditType = VaultAddEditType.AddItem,
+            cipherType = VaultItemCipherType.PASSPORT,
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.Passport(),
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
