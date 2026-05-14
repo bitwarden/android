@@ -48,6 +48,7 @@ import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandl
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultDriversLicenseItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultPassportItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.rememberVaultPassportItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultSshKeyItemTypeHandlers
@@ -293,9 +294,9 @@ fun VaultItemScreen(
             vaultDriversLicenseItemTypeHandlers = remember(viewModel) {
                 VaultDriversLicenseItemTypeHandlers.create(viewModel = viewModel)
             },
-            vaultPassportItemTypeHandlers = remember(viewModel) {
-                VaultPassportItemTypeHandlers.create(viewModel = viewModel)
-            },
+            vaultPassportItemTypeHandlers = rememberVaultPassportItemTypeHandlers(
+                viewModel = viewModel,
+            ),
         )
     }
 }

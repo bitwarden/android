@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.handlers
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemAction
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemViewModel
 
@@ -55,3 +57,15 @@ data class VaultPassportItemTypeHandlers(
             )
     }
 }
+
+/**
+ * Helper function to remember a [VaultPassportItemTypeHandlers] instance in a [Composable]
+ * scope.
+ */
+@Composable
+fun rememberVaultPassportItemTypeHandlers(
+    viewModel: VaultItemViewModel,
+): VaultPassportItemTypeHandlers =
+    remember(viewModel) {
+        VaultPassportItemTypeHandlers.create(viewModel = viewModel)
+    }

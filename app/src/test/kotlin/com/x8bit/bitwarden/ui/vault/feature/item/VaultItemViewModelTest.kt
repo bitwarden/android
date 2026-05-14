@@ -3174,7 +3174,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             }
         }
 
-        @Suppress("MaxLineLength")
         @Test
         fun `on CopyGivenNameClick with null given name should not copy to clipboard`() = runTest {
             val emptyState = PASSPORT_VIEW_STATE.copy(
@@ -3194,7 +3193,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             }
         }
 
-        @Suppress("MaxLineLength")
         @Test
         fun `on CopyGivenNameClick with blank given name should not copy to clipboard`() = runTest {
             val emptyState = PASSPORT_VIEW_STATE.copy(
@@ -3278,7 +3276,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             }
         }
 
-        @Suppress("MaxLineLength")
         @Test
         fun `on CopyPassportNumberClick with null passport number should not copy to clipboard`() =
             runTest {
@@ -3299,7 +3296,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 }
             }
 
-        @Suppress("MaxLineLength")
         @Test
         fun `on CopyPassportNumberClick with blank passport number should not copy to clipboard`() =
             runTest {
@@ -3320,7 +3316,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 }
             }
 
-        @Suppress("MaxLineLength")
         @Test
         fun `on CopyNationalIdentificationNumberClick should copy the value to clipboard`() =
             runTest {
@@ -3336,9 +3331,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 }
             }
 
-        @Suppress("MaxLineLength")
         @Test
-        fun `on CopyNationalIdentificationNumberClick with null value should not copy to clipboard`() =
+        fun `on CopyNationalIdentificationNumberClick with null value should not copy`() =
             runTest {
                 val emptyState = PASSPORT_VIEW_STATE.copy(
                     type = DEFAULT_PASSPORT_TYPE.copy(nationalIdentificationNumber = null),
@@ -3357,9 +3351,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 }
             }
 
-        @Suppress("MaxLineLength")
         @Test
-        fun `on CopyNationalIdentificationNumberClick with blank value should not copy to clipboard`() =
+        fun `on CopyNationalIdentificationNumberClick with blank value should not copy`() =
             runTest {
                 val emptyState = PASSPORT_VIEW_STATE.copy(
                     type = DEFAULT_PASSPORT_TYPE.copy(nationalIdentificationNumber = "   "),

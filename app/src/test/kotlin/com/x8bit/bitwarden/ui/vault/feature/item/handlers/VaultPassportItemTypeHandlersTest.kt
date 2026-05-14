@@ -44,7 +44,6 @@ class VaultPassportItemTypeHandlersTest {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `onCopyNationalIdentificationNumberClick should send the matching action`() {
         handlers.onCopyNationalIdentificationNumberClick()
