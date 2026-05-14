@@ -318,6 +318,10 @@ class VaultAddEditViewModel @Inject constructor(
                 handleLicenseTypeActions(action)
             }
 
+            is VaultAddEditAction.ItemType.PassportType -> {
+                handlePassportTypeActions(action)
+            }
+
             is VaultAddEditAction.Internal -> handleInternalActions(action)
         }
     }
@@ -1793,6 +1797,71 @@ class VaultAddEditViewModel @Inject constructor(
 
     //endregion License Type Handlers
 
+    //region Passport Type Handlers
+
+    @Suppress("LongMethod")
+    private fun handlePassportTypeActions(
+        action: VaultAddEditAction.ItemType.PassportType,
+    ) {
+        when (action) {
+            is VaultAddEditAction.ItemType.PassportType.GivenNameTextChange -> {
+                updatePassportContent { it.copy(givenName = action.givenName) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.SurnameTextChange -> {
+                updatePassportContent { it.copy(surname = action.surname) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.DateOfBirthTextChange -> {
+                updatePassportContent { it.copy(dateOfBirth = action.dateOfBirth) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.SexTextChange -> {
+                updatePassportContent { it.copy(sex = action.sex) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.BirthPlaceTextChange -> {
+                updatePassportContent { it.copy(birthPlace = action.birthPlace) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.NationalityTextChange -> {
+                updatePassportContent { it.copy(nationality = action.nationality) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.PassportNumberTextChange -> {
+                updatePassportContent { it.copy(passportNumber = action.passportNumber) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.PassportTypeTextChange -> {
+                updatePassportContent { it.copy(passportType = action.passportType) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.NationalIdentificationNumberTextChange -> {
+                updatePassportContent {
+                    it.copy(nationalIdentificationNumber = action.nationalIdentificationNumber)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.IssuingCountryTextChange -> {
+                updatePassportContent { it.copy(issuingCountry = action.country) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.IssuingAuthorityTextChange -> {
+                updatePassportContent { it.copy(issuingAuthority = action.authority) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.IssueDateTextChange -> {
+                updatePassportContent { it.copy(issueDate = action.issueDate) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.ExpirationDateTextChange -> {
+                updatePassportContent { it.copy(expirationDate = action.expirationDate) }
+            }
+        }
+    }
+
+    //endregion Passport Type Handlers
+
     //region Internal Type Handlers
 
     private fun handleInternalActions(action: VaultAddEditAction.Internal) {
@@ -2570,6 +2639,16 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
+    private inline fun updatePassportContent(
+        crossinline block: (VaultAddEditState.ViewState.Content.ItemType.Passport) ->
+        VaultAddEditState.ViewState.Content.ItemType.Passport,
+    ) {
+        updateContent { currentContent ->
+            (currentContent.type as? VaultAddEditState.ViewState.Content.ItemType.Passport)
+                ?.let { currentContent.copy(type = block(it)) }
+        }
+    }
+
     @Suppress("MaxLineLength")
     private suspend fun VaultAddEditState.ViewState.Content.createCipherForAddAndCloneItemStates(): CreateCipherResult {
         return common.selectedOwner?.collections
@@ -3153,8 +3232,6 @@ data class VaultAddEditState(
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption
                         get() = ItemTypeOption.PASSPORT
-
-                    override val isSdkSupported: Boolean get() = false
 
                     override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
                         get() = persistentListOf()
@@ -4138,6 +4215,79 @@ sealed class VaultAddEditAction {
              * Fired when the bank contact phone text input is changed.
              */
             data class BankContactPhoneTextChange(val phone: String) : BankAccountType()
+        }
+
+        /**
+         * Represents actions specific to the Passport type.
+         */
+        sealed class PassportType : ItemType() {
+
+            /**
+             * Fired when the given name text input is changed.
+             */
+            data class GivenNameTextChange(val givenName: String) : PassportType()
+
+            /**
+             * Fired when the surname text input is changed.
+             */
+            data class SurnameTextChange(val surname: String) : PassportType()
+
+            /**
+             * Fired when the date of birth text input is changed.
+             */
+            data class DateOfBirthTextChange(val dateOfBirth: String) : PassportType()
+
+            /**
+             * Fired when the sex text input is changed.
+             */
+            data class SexTextChange(val sex: String) : PassportType()
+
+            /**
+             * Fired when the birth place text input is changed.
+             */
+            data class BirthPlaceTextChange(val birthPlace: String) : PassportType()
+
+            /**
+             * Fired when the nationality text input is changed.
+             */
+            data class NationalityTextChange(val nationality: String) : PassportType()
+
+            /**
+             * Fired when the passport number text input is changed.
+             */
+            data class PassportNumberTextChange(val passportNumber: String) : PassportType()
+
+            /**
+             * Fired when the passport type text input is changed.
+             */
+            data class PassportTypeTextChange(val passportType: String) : PassportType()
+
+            /**
+             * Fired when the national identification number text input is changed.
+             */
+            data class NationalIdentificationNumberTextChange(
+                val nationalIdentificationNumber: String,
+            ) : PassportType()
+
+            /**
+             * Fired when the issuing country text input is changed.
+             */
+            data class IssuingCountryTextChange(val country: String) : PassportType()
+
+            /**
+             * Fired when the issuing authority text input is changed.
+             */
+            data class IssuingAuthorityTextChange(val authority: String) : PassportType()
+
+            /**
+             * Fired when the issue date text input is changed.
+             */
+            data class IssueDateTextChange(val issueDate: String) : PassportType()
+
+            /**
+             * Fired when the expiration date text input is changed.
+             */
+            data class ExpirationDateTextChange(val expirationDate: String) : PassportType()
         }
 
         /**

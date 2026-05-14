@@ -38,6 +38,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonH
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLicenseTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditPassportTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
 
 /**
@@ -56,6 +57,7 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
     sshKeyItemTypeHandlers: VaultAddEditSshKeyTypeHandlers,
     bankAccountItemTypeHandlers: VaultAddEditBankAccountTypeHandlers,
     licenseItemTypeHandlers: VaultAddEditLicenseTypeHandlers,
+    passportItemTypeHandlers: VaultAddEditPassportTypeHandlers,
     isCardScannerEnabled: Boolean,
     cardHolderNameFocusRequester: FocusRequester,
     modifier: Modifier = Modifier,
@@ -296,7 +298,13 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
                     licenseHandlers = licenseItemTypeHandlers,
                 )
             }
-            is VaultAddEditState.ViewState.Content.ItemType.Passport -> Unit
+
+            is VaultAddEditState.ViewState.Content.ItemType.Passport -> {
+                vaultAddEditPassportItems(
+                    passportState = state.type,
+                    passportHandlers = passportItemTypeHandlers,
+                )
+            }
         }
 
         vaultAddEditAdditionalOptions(
