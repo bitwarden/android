@@ -144,7 +144,7 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toPassport(): PassportV
             surname = it.surname.orNullIfBlank(),
             givenName = it.givenName.orNullIfBlank(),
             dateOfBirth = it.dateOfBirth.orNullIfBlank(),
-            birthPlace = it.dateOfBirth.orNullIfBlank(),
+            birthPlace = it.birthPlace.orNullIfBlank(),
             sex = it.sex.orNullIfBlank(),
             nationality = it.nationality.orNullIfBlank(),
             passportNumber = it.passportNumber.orNullIfBlank(),

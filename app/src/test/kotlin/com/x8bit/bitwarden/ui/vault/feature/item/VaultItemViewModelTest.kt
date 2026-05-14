@@ -3132,6 +3132,275 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
+    inner class PassportActions {
+        private lateinit var viewModel: VaultItemViewModel
+
+        @BeforeEach
+        fun setup() {
+            viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(viewState = PASSPORT_VIEW_STATE),
+            )
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canRestore = false,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
+                    hasOrganizations = true,
+                )
+            } returns PASSPORT_VIEW_STATE
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+        }
+
+        @Test
+        fun `on CopyGivenNameClick should copy given name to clipboard`() = runTest {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.Passport.CopyGivenNameClick,
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "Missy",
+                    toastDescriptorOverride = BitwardenString.first_name.asText(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopyGivenNameClick with null given name should not copy to clipboard`() = runTest {
+            val emptyState = PASSPORT_VIEW_STATE.copy(
+                type = DEFAULT_PASSPORT_TYPE.copy(givenName = null),
+            )
+            viewModel = createViewModelWithPassportState(emptyState)
+
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.Passport.CopyGivenNameClick,
+            )
+
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopyGivenNameClick with blank given name should not copy to clipboard`() = runTest {
+            val emptyState = PASSPORT_VIEW_STATE.copy(
+                type = DEFAULT_PASSPORT_TYPE.copy(givenName = "   "),
+            )
+            viewModel = createViewModelWithPassportState(emptyState)
+
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.Passport.CopyGivenNameClick,
+            )
+
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopySurnameClick should copy surname to clipboard`() = runTest {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.Passport.CopySurnameClick,
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "Katner",
+                    toastDescriptorOverride = BitwardenString.last_name.asText(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopySurnameClick with null surname should not copy to clipboard`() = runTest {
+            val emptyState = PASSPORT_VIEW_STATE.copy(
+                type = DEFAULT_PASSPORT_TYPE.copy(surname = null),
+            )
+            viewModel = createViewModelWithPassportState(emptyState)
+
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.Passport.CopySurnameClick,
+            )
+
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopySurnameClick with blank surname should not copy to clipboard`() = runTest {
+            val emptyState = PASSPORT_VIEW_STATE.copy(
+                type = DEFAULT_PASSPORT_TYPE.copy(surname = "   "),
+            )
+            viewModel = createViewModelWithPassportState(emptyState)
+
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.Passport.CopySurnameClick,
+            )
+
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopyPassportNumberClick should copy passport number to clipboard`() = runTest {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.Passport.CopyPassportNumberClick,
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = "P12345678",
+                    toastDescriptorOverride = BitwardenString.passport_number.asText(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CopyPassportNumberClick with null passport number should not copy to clipboard`() =
+            runTest {
+                val emptyState = PASSPORT_VIEW_STATE.copy(
+                    type = DEFAULT_PASSPORT_TYPE.copy(passportNumber = null),
+                )
+                viewModel = createViewModelWithPassportState(emptyState)
+
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.Passport.CopyPassportNumberClick,
+                )
+
+                verify(exactly = 0) {
+                    clipboardManager.setText(
+                        text = any<String>(),
+                        toastDescriptorOverride = any<Text>(),
+                    )
+                }
+            }
+
+        @Test
+        fun `on CopyPassportNumberClick with blank passport number should not copy to clipboard`() =
+            runTest {
+                val emptyState = PASSPORT_VIEW_STATE.copy(
+                    type = DEFAULT_PASSPORT_TYPE.copy(passportNumber = "   "),
+                )
+                viewModel = createViewModelWithPassportState(emptyState)
+
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.Passport.CopyPassportNumberClick,
+                )
+
+                verify(exactly = 0) {
+                    clipboardManager.setText(
+                        text = any<String>(),
+                        toastDescriptorOverride = any<Text>(),
+                    )
+                }
+            }
+
+        @Test
+        fun `on CopyNationalIdentificationNumberClick should copy the value to clipboard`() =
+            runTest {
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.Passport.CopyNationalIdentificationNumberClick,
+                )
+                verify(exactly = 1) {
+                    clipboardManager.setText(
+                        text = "N-987-654-321",
+                        toastDescriptorOverride =
+                            BitwardenString.national_identification_number.asText(),
+                    )
+                }
+            }
+
+        @Test
+        fun `on CopyNationalIdentificationNumberClick with null value should not copy`() =
+            runTest {
+                val emptyState = PASSPORT_VIEW_STATE.copy(
+                    type = DEFAULT_PASSPORT_TYPE.copy(nationalIdentificationNumber = null),
+                )
+                viewModel = createViewModelWithPassportState(emptyState)
+
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.Passport.CopyNationalIdentificationNumberClick,
+                )
+
+                verify(exactly = 0) {
+                    clipboardManager.setText(
+                        text = any<String>(),
+                        toastDescriptorOverride = any<Text>(),
+                    )
+                }
+            }
+
+        @Test
+        fun `on CopyNationalIdentificationNumberClick with blank value should not copy`() =
+            runTest {
+                val emptyState = PASSPORT_VIEW_STATE.copy(
+                    type = DEFAULT_PASSPORT_TYPE.copy(nationalIdentificationNumber = "   "),
+                )
+                viewModel = createViewModelWithPassportState(emptyState)
+
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.Passport.CopyNationalIdentificationNumberClick,
+                )
+
+                verify(exactly = 0) {
+                    clipboardManager.setText(
+                        text = any<String>(),
+                        toastDescriptorOverride = any<Text>(),
+                    )
+                }
+            }
+
+        private fun createViewModelWithPassportState(
+            viewState: VaultItemState.ViewState.Content,
+        ): VaultItemViewModel {
+            every {
+                mockCipherView.toViewState(
+                    previousState = any(),
+                    isPremiumUser = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canRestore = false,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
+                    hasOrganizations = true,
+                )
+            } returns viewState
+            val newViewModel = createViewModel(
+                state = DEFAULT_STATE.copy(viewState = viewState),
+            )
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+            return newViewModel
+        }
+    }
+
+    @Nested
     inner class VaultItemFlow {
         @BeforeEach
         fun setup() {
@@ -3791,6 +4060,30 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             VaultItemState.ViewState.Content(
                 common = DEFAULT_COMMON,
                 type = DEFAULT_DRIVERS_LICENSE_TYPE,
+            )
+
+        private val DEFAULT_PASSPORT_TYPE:
+            VaultItemState.ViewState.Content.ItemType.Passport =
+            VaultItemState.ViewState.Content.ItemType.Passport(
+                givenName = "Missy",
+                surname = "Katner",
+                dateOfBirth = "August 10, 1990",
+                sex = "Female",
+                birthPlace = "Madison, WI",
+                nationality = "USA",
+                passportNumber = "P12345678",
+                passportType = "Regular",
+                nationalIdentificationNumber = "N-987-654-321",
+                issuingCountry = "USA",
+                issuingAuthority = "Department of State",
+                issueDate = "August 10, 2021",
+                expirationDate = "August 10, 2031",
+            )
+
+        private val PASSPORT_VIEW_STATE: VaultItemState.ViewState.Content =
+            VaultItemState.ViewState.Content(
+                common = DEFAULT_COMMON,
+                type = DEFAULT_PASSPORT_TYPE,
             )
     }
 }

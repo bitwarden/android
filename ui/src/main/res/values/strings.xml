@@ -1360,4 +1360,9 @@ Do you want to switch to this account?</string>
     <string name="licenses">Licenses</string>
     <string name="no_licenses">There are no licenses in your vault.</string>
     <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">Your request was interrupted because the app needed to re-authenticate. Please try again.</string>
+    <string name="passport_details">Passport details</string>
+    <string name="sex">Sex</string>
+    <string name="birth_place">Birth place</string>
+    <string name="national_identification_number">National identification number</string>
+    <string name="copy_national_identification_number">Copy national identification number</string>
 </resources>

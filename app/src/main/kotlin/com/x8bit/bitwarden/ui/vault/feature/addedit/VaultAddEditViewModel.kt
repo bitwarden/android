@@ -3137,19 +3137,19 @@ data class VaultAddEditState(
                  */
                 @Parcelize
                 data class Passport(
-                    val surname: String = "",
                     val givenName: String = "",
+                    val surname: String = "",
                     val dateOfBirth: String = "",
-                    val birthPlace: String = "",
                     val sex: String = "",
+                    val birthPlace: String = "",
                     val nationality: String = "",
                     val passportNumber: String = "",
                     val passportType: String = "",
+                    val nationalIdentificationNumber: String = "",
                     val issuingCountry: String = "",
                     val issuingAuthority: String = "",
                     val issueDate: String = "",
                     val expirationDate: String = "",
-                    val nationalIdentificationNumber: String = "",
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption
                         get() = ItemTypeOption.PASSPORT
