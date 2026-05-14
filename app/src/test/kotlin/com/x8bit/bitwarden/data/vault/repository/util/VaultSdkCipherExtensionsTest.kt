@@ -39,7 +39,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSshKey
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkUri
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.jupiter.api.assertNull
@@ -357,21 +356,20 @@ class VaultSdkCipherExtensionsTest {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `toSdkCipherType should throw for DRIVERS_LICENSE since SDK mapping is not yet available`() {
-        val error = assertThrows(IllegalArgumentException::class.java) {
-            CipherTypeJson.DRIVERS_LICENSE.toSdkCipherType()
-        }
-        assertEquals("SDK mapping not yet available for DRIVERS_LICENSE", error.message)
+    fun `toSdkCipherType should map LICENSE to the SDK LICENSE type`() {
+        assertEquals(
+            CipherType.DRIVERS_LICENSE,
+            CipherTypeJson.DRIVERS_LICENSE.toSdkCipherType(),
+        )
     }
 
     @Test
-    fun `toSdkCipherType should throw for PASSPORT since SDK mapping is not yet available`() {
-        val error = assertThrows(IllegalArgumentException::class.java) {
-            CipherTypeJson.PASSPORT.toSdkCipherType()
-        }
-        assertEquals("SDK mapping not yet available for PASSPORT", error.message)
+    fun `toSdkCipherType should map PASSPORT to the SDK PASSPORT type`() {
+        assertEquals(
+            CipherType.PASSPORT,
+            CipherTypeJson.PASSPORT.toSdkCipherType(),
+        )
     }
 
     @Test
