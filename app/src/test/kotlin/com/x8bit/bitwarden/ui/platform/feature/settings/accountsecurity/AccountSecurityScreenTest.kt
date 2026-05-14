@@ -1757,7 +1757,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
     fun `manage devices row should be visible when isManageDevicesEnabled is true`() {
         mutableStateFlow.update { it.copy(isManageDevicesEnabled = true) }
         composeTestRule
-            .onNodeWithText("Manage devices")
+            .onNodeWithText("Devices")
             .performScrollTo()
             .assertIsDisplayed()
     }
@@ -1789,7 +1789,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
     fun `on manage devices click should send ManageDevicesClick action`() {
         mutableStateFlow.update { it.copy(isManageDevicesEnabled = true) }
         composeTestRule
-            .onNodeWithText("Manage devices")
+            .onNodeWithText("Devices")
             .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(AccountSecurityAction.ManageDevicesClick) }

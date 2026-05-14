@@ -1240,7 +1240,7 @@ Do you want to switch to this account?</string>
     <string name="continue_without_syncing">Continue without syncing</string>
     <string name="external_link">External link</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
-    <string name="manage_devices">Manage devices</string>
+    <string name="devices">Devices</string>
     <string name="mobile_platform">Mobile - %1$s</string>
     <string name="extension_platform">Extension - %1$s</string>
     <string name="web_platform">Web - %1$s</string>

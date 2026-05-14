@@ -342,29 +342,12 @@ fun AccountSecurityScreen(
                     .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(height = 8.dp))
-            if (state.isManageDevicesEnabled) {
-                BitwardenTextRow(
-                    text = stringResource(id = BitwardenString.manage_devices),
-                    onClick = {
-                        viewModel.trySendAction(AccountSecurityAction.ManageDevicesClick)
-                    },
-                    cardStyle = CardStyle.Top(),
-                    modifier = Modifier
-                        .testTag("ManageDevicesLabel")
-                        .standardHorizontalMargin()
-                        .fillMaxWidth(),
-                )
-            }
             BitwardenTextRow(
                 text = stringResource(id = BitwardenString.account_fingerprint_phrase),
                 onClick = {
                     viewModel.trySendAction(AccountSecurityAction.AccountFingerprintPhraseClick)
                 },
-                cardStyle = if (state.isManageDevicesEnabled) {
-                    CardStyle.Middle()
-                } else {
-                    CardStyle.Top()
-                },
+                cardStyle = CardStyle.Top(),
                 modifier = Modifier
                     .testTag("AccountFingerprintPhraseLabel")
                     .standardHorizontalMargin()
@@ -386,6 +369,19 @@ fun AccountSecurityScreen(
                     .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
+            if (state.isManageDevicesEnabled) {
+                BitwardenTextRow(
+                    text = stringResource(id = BitwardenString.devices),
+                    onClick = {
+                        viewModel.trySendAction(AccountSecurityAction.ManageDevicesClick)
+                    },
+                    cardStyle = CardStyle.Top(),
+                    modifier = Modifier
+                        .testTag("ManageDevicesLabel")
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
+            }
             if (state.isUnlockWithPasswordEnabled) {
                 BitwardenExternalLinkRow(
                     text = stringResource(id = BitwardenString.change_master_password),

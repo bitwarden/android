@@ -4,8 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,11 +14,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -32,8 +28,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -52,6 +46,7 @@ import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.badge.BitwardenStatusBadge
 import com.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
@@ -136,7 +131,7 @@ fun ManageDevicesScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = BitwardenString.manage_devices),
+                title = stringResource(id = BitwardenString.devices),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
@@ -265,6 +260,11 @@ private fun PendingRequestItem(
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.Start,
         ) {
+            BitwardenStatusBadge(
+                label = stringResource(id = BitwardenString.pending_request),
+                colors = BitwardenTheme.colorScheme.statusBadge.warning,
+            )
+            Spacer(Modifier.height(height = 8.dp))
             Text(
                 text = platform,
                 style = BitwardenTheme.typography.titleMedium,
@@ -279,11 +279,6 @@ private fun PendingRequestItem(
                     textAlign = TextAlign.Start,
                 )
             }
-            Spacer(Modifier.height(height = 8.dp))
-            DeviceStatusIndicatorRow(
-                label = stringResource(id = BitwardenString.pending_request),
-                color = BitwardenTheme.colorScheme.status.weak2,
-            )
             DeviceInfoAnnotatedLabel(
                 id = BitwardenString.first_login_date,
                 arg = firstLoginDate,
@@ -322,6 +317,13 @@ private fun SessionItem(
             ),
         horizontalAlignment = Alignment.Start,
     ) {
+        if (status == DeviceSessionStatus.Current) {
+            BitwardenStatusBadge(
+                label = stringResource(id = BitwardenString.current_session),
+                colors = BitwardenTheme.colorScheme.statusBadge.primary,
+            )
+            Spacer(Modifier.height(height = 8.dp))
+        }
         Text(
             text = platform,
             style = BitwardenTheme.typography.titleMedium,
@@ -336,13 +338,7 @@ private fun SessionItem(
                 textAlign = TextAlign.Start,
             )
         }
-        Spacer(Modifier.height(height = 8.dp))
-        if (status == DeviceSessionStatus.Current) {
-            DeviceStatusIndicatorRow(
-                label = stringResource(id = BitwardenString.current_session),
-                color = BitwardenTheme.colorScheme.status.strong,
-            )
-        } else {
+        if (status != DeviceSessionStatus.Current) {
             lastActivityLabel?.let {
                 DeviceInfoAnnotatedLabel(
                     id = BitwardenString.recently_active,
@@ -353,34 +349,6 @@ private fun SessionItem(
         DeviceInfoAnnotatedLabel(
             id = BitwardenString.first_login_date,
             arg = firstLoginDate,
-        )
-    }
-}
-
-/**
- * Displays a colored dot followed by [label] in a horizontal row, used to indicate device status.
- */
-@Composable
-private fun DeviceStatusIndicatorRow(
-    label: String,
-    color: Color,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier,
-    ) {
-        Box(
-            modifier = Modifier
-                .size(8.dp)
-                .clip(CircleShape)
-                .background(color),
-        )
-        Spacer(modifier = Modifier.width(6.dp))
-        Text(
-            text = label,
-            style = BitwardenTheme.typography.bodySmall,
-            color = color,
         )
     }
 }
