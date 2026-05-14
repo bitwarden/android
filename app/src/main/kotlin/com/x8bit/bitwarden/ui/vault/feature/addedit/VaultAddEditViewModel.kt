@@ -1812,10 +1812,6 @@ class VaultAddEditViewModel @Inject constructor(
                 updatePassportContent { it.copy(surname = action.surname) }
             }
 
-            is VaultAddEditAction.ItemType.PassportType.DateOfBirthTextChange -> {
-                updatePassportContent { it.copy(dateOfBirth = action.dateOfBirth) }
-            }
-
             is VaultAddEditAction.ItemType.PassportType.SexTextChange -> {
                 updatePassportContent { it.copy(sex = action.sex) }
             }
@@ -1848,14 +1844,6 @@ class VaultAddEditViewModel @Inject constructor(
 
             is VaultAddEditAction.ItemType.PassportType.IssuingAuthorityTextChange -> {
                 updatePassportContent { it.copy(issuingAuthority = action.authority) }
-            }
-
-            is VaultAddEditAction.ItemType.PassportType.IssueDateTextChange -> {
-                updatePassportContent { it.copy(issueDate = action.issueDate) }
-            }
-
-            is VaultAddEditAction.ItemType.PassportType.ExpirationDateTextChange -> {
-                updatePassportContent { it.copy(expirationDate = action.expirationDate) }
             }
         }
     }
@@ -4233,11 +4221,6 @@ sealed class VaultAddEditAction {
             data class SurnameTextChange(val surname: String) : PassportType()
 
             /**
-             * Fired when the date of birth text input is changed.
-             */
-            data class DateOfBirthTextChange(val dateOfBirth: String) : PassportType()
-
-            /**
              * Fired when the sex text input is changed.
              */
             data class SexTextChange(val sex: String) : PassportType()
@@ -4278,16 +4261,6 @@ sealed class VaultAddEditAction {
              * Fired when the issuing authority text input is changed.
              */
             data class IssuingAuthorityTextChange(val authority: String) : PassportType()
-
-            /**
-             * Fired when the issue date text input is changed.
-             */
-            data class IssueDateTextChange(val issueDate: String) : PassportType()
-
-            /**
-             * Fired when the expiration date text input is changed.
-             */
-            data class ExpirationDateTextChange(val expirationDate: String) : PassportType()
         }
 
         /**

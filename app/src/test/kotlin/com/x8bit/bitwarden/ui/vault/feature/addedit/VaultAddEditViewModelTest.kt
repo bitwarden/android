@@ -4408,20 +4408,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
         @Test
-        fun `DateOfBirthTextChange should update date of birth`() = runTest {
-            viewModel.trySendAction(
-                VaultAddEditAction.ItemType.PassportType.DateOfBirthTextChange(
-                    dateOfBirth = "1939-05-27",
-                ),
-            )
-
-            assertEquals(
-                expectedPassport { copy(dateOfBirth = "1939-05-27") },
-                viewModel.stateFlow.value,
-            )
-        }
-
-        @Test
         fun `SexTextChange should update sex`() = runTest {
             viewModel.trySendAction(
                 VaultAddEditAction.ItemType.PassportType.SexTextChange(sex = "M"),
@@ -4530,34 +4516,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 expectedPassport { copy(issuingAuthority = "U.S. Department of State") },
-                viewModel.stateFlow.value,
-            )
-        }
-
-        @Test
-        fun `IssueDateTextChange should update issue date`() = runTest {
-            viewModel.trySendAction(
-                VaultAddEditAction.ItemType.PassportType.IssueDateTextChange(
-                    issueDate = "2020-01-15",
-                ),
-            )
-
-            assertEquals(
-                expectedPassport { copy(issueDate = "2020-01-15") },
-                viewModel.stateFlow.value,
-            )
-        }
-
-        @Test
-        fun `ExpirationDateTextChange should update expiration date`() = runTest {
-            viewModel.trySendAction(
-                VaultAddEditAction.ItemType.PassportType.ExpirationDateTextChange(
-                    expirationDate = "2030-01-15",
-                ),
-            )
-
-            assertEquals(
-                expectedPassport { copy(expirationDate = "2030-01-15") },
                 viewModel.stateFlow.value,
             )
         }

@@ -9,7 +9,6 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditViewModel
  *
  * @property onGivenNameTextChange Handles changes to the given name (first name) text input.
  * @property onSurnameTextChange Handles changes to the surname (last name) text input.
- * @property onDateOfBirthTextChange Handles changes to the date of birth text input.
  * @property onSexTextChange Handles changes to the sex text input.
  * @property onBirthPlaceTextChange Handles changes to the birth place text input.
  * @property onNationalityTextChange Handles changes to the nationality text input.
@@ -19,14 +18,11 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditViewModel
  * number text input.
  * @property onIssuingCountryTextChange Handles changes to the issuing country text input.
  * @property onIssuingAuthorityTextChange Handles changes to the issuing authority text input.
- * @property onIssueDateTextChange Handles changes to the issue date text input.
- * @property onExpirationDateTextChange Handles changes to the expiration date text input.
  */
 @Suppress("LongParameterList")
 data class VaultAddEditPassportTypeHandlers(
     val onGivenNameTextChange: (String) -> Unit,
     val onSurnameTextChange: (String) -> Unit,
-    val onDateOfBirthTextChange: (String) -> Unit,
     val onSexTextChange: (String) -> Unit,
     val onBirthPlaceTextChange: (String) -> Unit,
     val onNationalityTextChange: (String) -> Unit,
@@ -35,8 +31,6 @@ data class VaultAddEditPassportTypeHandlers(
     val onNationalIdentificationNumberTextChange: (String) -> Unit,
     val onIssuingCountryTextChange: (String) -> Unit,
     val onIssuingAuthorityTextChange: (String) -> Unit,
-    val onIssueDateTextChange: (String) -> Unit,
-    val onExpirationDateTextChange: (String) -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -61,13 +55,6 @@ data class VaultAddEditPassportTypeHandlers(
                     viewModel.trySendAction(
                         VaultAddEditAction.ItemType.PassportType.SurnameTextChange(
                             surname = it,
-                        ),
-                    )
-                },
-                onDateOfBirthTextChange = {
-                    viewModel.trySendAction(
-                        VaultAddEditAction.ItemType.PassportType.DateOfBirthTextChange(
-                            dateOfBirth = it,
                         ),
                     )
                 },
@@ -125,20 +112,6 @@ data class VaultAddEditPassportTypeHandlers(
                     viewModel.trySendAction(
                         VaultAddEditAction.ItemType.PassportType.IssuingAuthorityTextChange(
                             authority = it,
-                        ),
-                    )
-                },
-                onIssueDateTextChange = {
-                    viewModel.trySendAction(
-                        VaultAddEditAction.ItemType.PassportType.IssueDateTextChange(
-                            issueDate = it,
-                        ),
-                    )
-                },
-                onExpirationDateTextChange = {
-                    viewModel.trySendAction(
-                        VaultAddEditAction.ItemType.PassportType.ExpirationDateTextChange(
-                            expirationDate = it,
                         ),
                     )
                 },
