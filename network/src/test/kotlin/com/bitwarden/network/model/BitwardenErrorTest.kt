@@ -1,6 +1,7 @@
 package com.bitwarden.network.model
 
 import com.bitwarden.network.exception.CookieRedirectException
+import com.bitwarden.network.exception.LocalNetworkAccessException
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -27,6 +28,29 @@ class BitwardenErrorTest {
         val message = "Your request was interrupted because " +
             "the app needed to re-authenticate. Please try again."
         val exception = CookieRedirectException(hostname = "example.com", message = message)
+
+        val result = exception.toBitwardenError()
+
+        val httpError = result as BitwardenError.Http
+        val body = httpError.responseBodyString
+        assertTrue(body?.contains(message) == true)
+    }
+
+    @Test
+    fun `toBitwardenError with LocalNetworkAccessException should return Http with status 400`() {
+        val exception = LocalNetworkAccessException(message = "Fail!")
+
+        val result = exception.toBitwardenError()
+
+        assertTrue(result is BitwardenError.Http)
+        val httpError = result as BitwardenError.Http
+        assertEquals(400, httpError.code)
+    }
+
+    @Test
+    fun `toBitwardenError with LocalNetworkAccessException should include message in body`() {
+        val message = "Fail!"
+        val exception = LocalNetworkAccessException(message = message)
 
         val result = exception.toBitwardenError()
 

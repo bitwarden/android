@@ -41,6 +41,8 @@ import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.navigateToCooki
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.debugMenuDestination
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.manager.DebugMenuLaunchManager
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.navigateToDebugMenuScreen
+import com.x8bit.bitwarden.ui.platform.feature.localnetworkaccess.localNetworkAccessDestination
+import com.x8bit.bitwarden.ui.platform.feature.localnetworkaccess.navigateToLocalNetworkAccess
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavigationRoute
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.rootNavDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
@@ -151,6 +153,10 @@ class MainActivity : AppCompatActivity() {
                             onDismiss = { navController.popBackStack() },
                             onSplashScreenRemoved = { shouldShowSplashScreen = false },
                         )
+                        localNetworkAccessDestination(
+                            onDismiss = { navController.popBackStack() },
+                            onSplashScreenRemoved = { shouldShowSplashScreen = false },
+                        )
                     }
                 }
             }
@@ -235,6 +241,9 @@ class MainActivity : AppCompatActivity() {
                 MainEvent.Recreate -> handleRecreate()
                 MainEvent.NavigateToDebugMenu -> navController.navigateToDebugMenuScreen()
                 MainEvent.NavigateToCookieAcquisition -> navController.navigateToCookieAcquisition()
+                MainEvent.NavigateToLocalNetworkAccess -> {
+                    navController.navigateToLocalNetworkAccess()
+                }
 
                 is MainEvent.UpdateAppLocale -> {
                     AppCompatDelegate.setApplicationLocales(

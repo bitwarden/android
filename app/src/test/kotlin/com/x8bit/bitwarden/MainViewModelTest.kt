@@ -4,8 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.browser.auth.AuthTabIntent
 import androidx.credentials.GetPublicKeyCredentialOption
-import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
-import com.x8bit.bitwarden.data.billing.util.getPremiumCheckoutCallbackResult
 import androidx.credentials.provider.BiometricPromptResult
 import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
@@ -48,6 +46,8 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
+import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
+import com.x8bit.bitwarden.data.billing.util.getPremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.credentials.manager.CredentialProviderRequestManager
 import com.x8bit.bitwarden.data.credentials.manager.model.CredentialProviderRequest
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
@@ -65,6 +65,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.isAddTotpLoginItemFromAuthenticator
@@ -181,6 +182,12 @@ class MainViewModelTest : BaseViewModelTest() {
         MutableStateFlow<CookieAcquisitionRequest?>(null)
     private val cookieAcquisitionRequestManager: CookieAcquisitionRequestManager = mockk {
         every { cookieAcquisitionRequestFlow } returns mutableCookieAcquisitionRequestFlow
+    }
+    private val mutableIsLocalNetworkAccessRequiredStateFlow = MutableStateFlow(false)
+    private val networkPermissionManager: NetworkPermissionManager = mockk {
+        every {
+            isLocalNetworkAccessRequiredStateFlow
+        } returns mutableIsLocalNetworkAccessRequiredStateFlow
     }
     private val credentialProviderRequestManager: CredentialProviderRequestManager = mockk {
         every { getPendingCredentialRequest() } returns null
@@ -1312,6 +1319,20 @@ class MainViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `local network access required should emit NavigateToLocalNetworkAccess when stateflow emits`() =
+        runTest {
+            mutableIsLocalNetworkAccessRequiredStateFlow.value = true
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                // Skip init events (appLanguage + appTheme)
+                skipItems(2)
+                assertEquals(MainEvent.NavigateToLocalNetworkAccess, awaitItem())
+            }
+        }
+
     @Test
     fun `cookie acquisition should not emit event when conditions are false`() =
         runTest {
@@ -1351,11 +1372,12 @@ class MainViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(
         initialSpecialCircumstance: SpecialCircumstance? = null,
-    ) = MainViewModel(
+    ): MainViewModel = MainViewModel(
         accessibilitySelectionManager = accessibilitySelectionManager,
         addTotpItemFromAuthenticatorManager = addTotpItemAuthenticatorManager,
         autofillSelectionManager = autofillSelectionManager,
         cookieAcquisitionRequestManager = cookieAcquisitionRequestManager,
+        networkPermissionManager = networkPermissionManager,
         specialCircumstanceManager = specialCircumstanceManager,
         garbageCollectionManager = garbageCollectionManager,
         credentialProviderRequestManager = credentialProviderRequestManager,

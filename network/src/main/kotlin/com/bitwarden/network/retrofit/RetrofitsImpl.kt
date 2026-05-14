@@ -6,6 +6,7 @@ import com.bitwarden.network.interceptor.BaseUrlInterceptor
 import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.network.interceptor.CookieInterceptor
 import com.bitwarden.network.interceptor.HeadersInterceptor
+import com.bitwarden.network.interceptor.PermissionInterceptor
 import com.bitwarden.network.ssl.CertificateProvider
 import com.bitwarden.network.ssl.configureSsl
 import com.bitwarden.network.util.HEADER_KEY_AUTHORIZATION
@@ -27,6 +28,7 @@ internal class RetrofitsImpl(
     cookieInterceptor: CookieInterceptor,
     headersInterceptor: HeadersInterceptor,
     json: Json,
+    private val permissionInterceptor: PermissionInterceptor,
     private val certificateProvider: CertificateProvider,
     private val logHttpBody: Boolean = false,
 ) : Retrofits {
@@ -72,6 +74,7 @@ internal class RetrofitsImpl(
                 baseClient
                     .newBuilder()
                     .addInterceptor(loggingInterceptor)
+                    .addInterceptor(permissionInterceptor)
                     .build(),
             )
             .build()
@@ -129,6 +132,7 @@ internal class RetrofitsImpl(
                     .newBuilder()
                     .addInterceptor(baseUrlInterceptor)
                     .addInterceptor(loggingInterceptor)
+                    .addInterceptor(permissionInterceptor)
                     .build(),
             )
             .build()
@@ -143,6 +147,7 @@ internal class RetrofitsImpl(
                     .newBuilder()
                     .addInterceptor(baseUrlInterceptor)
                     .addInterceptor(loggingInterceptor)
+                    .addInterceptor(permissionInterceptor)
                     .build(),
             )
             .build()

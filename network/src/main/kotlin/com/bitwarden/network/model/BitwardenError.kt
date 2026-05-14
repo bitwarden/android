@@ -1,6 +1,7 @@
 package com.bitwarden.network.model
 
 import com.bitwarden.network.exception.CookieRedirectException
+import com.bitwarden.network.exception.LocalNetworkAccessException
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.HttpException
 import retrofit2.Response
@@ -48,12 +49,14 @@ sealed class BitwardenError {
  */
 fun Throwable.toBitwardenError(): BitwardenError {
     return when (this) {
-        // CookieRedirectException is a subclass of IOException thrown when SSO cookies
-        // expire in a load-balanced environment. It must be checked before IOException to
-        // avoid being classified as a generic Network error. We synthesize an Http error
-        // with a JSON body so the exception's message propagates through the existing
+        // The LocalNetworkAccessException and CookieRedirectException are subclasses of
+        // IOException thrown when specific conditions are met. They must be checked before
+        // IOException to avoid being classified as a generic Network error. We synthesize an
+        // Http error with a JSON body so the exception's message propagates through the existing
         // parseErrorBodyOrNull pipeline used by service-layer recoverCatching blocks.
-        is CookieRedirectException -> {
+        is LocalNetworkAccessException,
+        is CookieRedirectException,
+            -> {
             BitwardenError.Http(
                 throwable = HttpException(
                     Response.error<Any>(
