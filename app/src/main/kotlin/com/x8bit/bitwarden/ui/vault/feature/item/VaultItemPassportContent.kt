@@ -82,19 +82,19 @@ fun VaultItemPassportContent(
             Spacer(modifier = Modifier.height(height = 8.dp))
         }
 
-        passportState.firstName?.let { firstName ->
-            item(key = "firstName") {
+        passportState.givenName?.let { givenName ->
+            item(key = "givenName") {
                 BitwardenTextField(
                     label = stringResource(id = BitwardenString.first_name),
-                    value = firstName,
+                    value = givenName,
                     onValueChange = {},
                     readOnly = true,
                     singleLine = false,
-                    textFieldTestTag = "PassportItemFirstNameEntry",
+                    textFieldTestTag = "PassportItemGivenNameEntry",
                     cardStyle = passportState
                         .propertyList
                         .toListItemCardStyle(
-                            index = passportState.propertyList.indexOf(element = firstName),
+                            index = passportState.propertyList.indexOf(element = givenName),
                             dividerPadding = 0.dp,
                         ),
                     modifier = Modifier
@@ -105,19 +105,19 @@ fun VaultItemPassportContent(
             }
         }
 
-        passportState.lastName?.let { lastName ->
-            item(key = "lastName") {
+        passportState.surname?.let { surname ->
+            item(key = "surname") {
                 BitwardenTextField(
                     label = stringResource(id = BitwardenString.last_name),
-                    value = lastName,
+                    value = surname,
                     onValueChange = {},
                     readOnly = true,
                     singleLine = false,
-                    textFieldTestTag = "PassportItemLastNameEntry",
+                    textFieldTestTag = "PassportItemSurnameEntry",
                     cardStyle = passportState
                         .propertyList
                         .toListItemCardStyle(
-                            index = passportState.propertyList.indexOf(element = lastName),
+                            index = passportState.propertyList.indexOf(element = surname),
                             dividerPadding = 0.dp,
                         ),
                     modifier = Modifier

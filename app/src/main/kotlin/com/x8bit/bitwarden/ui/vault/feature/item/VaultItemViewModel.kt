@@ -2258,15 +2258,10 @@ data class VaultItemState(
 
                 /**
                  * Represents the `Passport` item type.
-                 *
-                 * Field ordering matches the Figma View layout: identity (first/last name),
-                 * biographical (date of birth, sex, birth place, nationality), passport
-                 * details (number, type, national ID), and issuance metadata (country,
-                 * authority, dates).
                  */
                 data class Passport(
-                    val firstName: String?,
-                    val lastName: String?,
+                    val givenName: String?,
+                    val surname: String?,
                     val dateOfBirth: String?,
                     val sex: String?,
                     val birthPlace: String?,
@@ -2281,14 +2276,12 @@ data class VaultItemState(
                 ) : ItemType() {
 
                     /**
-                     * An ordered list of populated Passport elements. Drives card-style
-                     * grouping (rounded top / divider / rounded bottom) in the Compose
-                     * layer via [com.bitwarden.ui.platform.base.util.toListItemCardStyle].
+                     * An ordered list of populated Passport elements.
                      */
                     val propertyList: ImmutableList<String>
                         get() = persistentListOfNotNull(
-                            firstName,
-                            lastName,
+                            givenName,
+                            surname,
                             dateOfBirth,
                             sex,
                             birthPlace,

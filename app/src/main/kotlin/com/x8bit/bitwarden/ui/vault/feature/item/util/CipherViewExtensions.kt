@@ -247,8 +247,8 @@ fun CipherView.toViewState(
             }
 
             CipherType.PASSPORT -> VaultItemState.ViewState.Content.ItemType.Passport(
-                firstName = passport?.givenName,
-                lastName = passport?.surname,
+                givenName = passport?.givenName,
+                surname = passport?.surname,
                 dateOfBirth = passport?.dateOfBirth,
                 sex = passport?.sex,
                 birthPlace = passport?.birthPlace,

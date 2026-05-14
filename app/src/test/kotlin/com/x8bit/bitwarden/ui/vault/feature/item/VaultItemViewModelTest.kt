@@ -4009,8 +4009,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         private val DEFAULT_PASSPORT_TYPE:
             VaultItemState.ViewState.Content.ItemType.Passport =
             VaultItemState.ViewState.Content.ItemType.Passport(
-                firstName = "Missy",
-                lastName = "Katner",
+                givenName = "Missy",
+                surname = "Katner",
                 dateOfBirth = "August 10, 1990",
                 sex = "Female",
                 birthPlace = "Madison, WI",

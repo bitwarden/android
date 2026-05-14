@@ -898,15 +898,8 @@ data class SyncResponseJson(
         /**
          * Represents a passport in the vault response.
          *
-         * The Kotlin field names `lastName` and `firstName` map to the JSON wire keys
-         * `surname` and `givenName` via [SerialName] to preserve the server contract while
-         * aligning with the [Figma](https://www.figma.com)-mandated UI labeling. The
-         * companion [LinkedIdTypeJson.PASSPORT_SURNAME] and
-         * [LinkedIdTypeJson.PASSPORT_GIVEN_NAME] constants remain on the legacy names
-         * because they are wire-protocol enum values exchanged with the server.
-         *
-         * @property lastName The surname / last name (nullable; wire key `surname`).
-         * @property firstName The given name / first name (nullable; wire key `givenName`).
+         * @property surname The surname (nullable).
+         * @property givenName The given name (nullable).
          * @property dateOfBirth The date of birth (nullable).
          * @property birthPlace The place of birth (nullable).
          * @property sex The sex of the individual (nullable).
@@ -922,10 +915,10 @@ data class SyncResponseJson(
         @Serializable
         data class Passport(
             @SerialName("surname")
-            val lastName: String?,
+            val surname: String?,
 
             @SerialName("givenName")
-            val firstName: String?,
+            val givenName: String?,
 
             @SerialName("dateOfBirth")
             val dateOfBirth: String?,

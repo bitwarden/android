@@ -3137,8 +3137,8 @@ data class VaultAddEditState(
                  */
                 @Parcelize
                 data class Passport(
-                    val firstName: String = "",
-                    val lastName: String = "",
+                    val givenName: String = "",
+                    val surname: String = "",
                     val dateOfBirth: String = "",
                     val sex: String = "",
                     val birthPlace: String = "",

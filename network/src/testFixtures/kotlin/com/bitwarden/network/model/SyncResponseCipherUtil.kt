@@ -330,8 +330,8 @@ fun createMockDriversLicense(
  */
 fun createMockPassport(
     number: Int,
-    lastName: String? = "mockSurname-$number",
-    firstName: String? = "mockGivenName-$number",
+    surname: String? = "mockSurname-$number",
+    givenName: String? = "mockGivenName-$number",
     dateOfBirth: String? = "mockDateOfBirth-$number",
     birthPlace: String? = "mockBirthPlace-$number",
     sex: String? = "mockSex-$number",
@@ -345,8 +345,8 @@ fun createMockPassport(
     nationalIdentificationNumber: String? = "mockNationalIdentificationNumber-$number",
 ): SyncResponseJson.Cipher.Passport =
     SyncResponseJson.Cipher.Passport(
-        lastName = lastName,
-        firstName = firstName,
+        surname = surname,
+        givenName = givenName,
         dateOfBirth = dateOfBirth,
         birthPlace = birthPlace,
         sex = sex,

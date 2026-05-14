@@ -202,8 +202,8 @@ private fun DriversLicense.toEncryptedNetworkDriversLicense():
  */
 private fun Passport.toEncryptedNetworkPassport(): SyncResponseJson.Cipher.Passport =
     SyncResponseJson.Cipher.Passport(
-        lastName = surname,
-        firstName = givenName,
+        surname = surname,
+        givenName = givenName,
         dateOfBirth = dateOfBirth,
         birthPlace = birthPlace,
         sex = sex,
@@ -605,8 +605,8 @@ fun SyncResponseJson.Cipher.DriversLicense.toSdkDriversLicense(): DriversLicense
  */
 fun SyncResponseJson.Cipher.Passport.toSdkPassport(): Passport =
     Passport(
-        surname = lastName,
-        givenName = firstName,
+        surname = surname,
+        givenName = givenName,
         dateOfBirth = dateOfBirth,
         birthPlace = birthPlace,
         sex = sex,
