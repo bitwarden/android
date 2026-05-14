@@ -353,7 +353,7 @@ private val CipherType.iconRes: Int
         CipherType.LOGIN -> BitwardenDrawable.ic_globe
         CipherType.BANK_ACCOUNT -> BitwardenDrawable.ic_payment_card
         CipherType.DRIVERS_LICENSE -> BitwardenDrawable.ic_note
-        CipherType.PASSPORT -> BitwardenDrawable.ic_note
+        CipherType.PASSPORT -> BitwardenDrawable.ic_passport
     }
 
 @get:DrawableRes
