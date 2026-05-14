@@ -3274,47 +3274,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 }
             }
 
-        @Suppress("MaxLineLength")
-        @Test
-        fun `on PassportNumberVisibilityClick should be a no-op for clipboard and state`() =
-            runTest {
-                val initialState = viewModel.stateFlow.value
-
-                viewModel.trySendAction(
-                    VaultItemAction.ItemType.Passport.PassportNumberVisibilityClick(
-                        isVisible = true,
-                    ),
-                )
-
-                assertEquals(initialState, viewModel.stateFlow.value)
-                verify(exactly = 0) {
-                    clipboardManager.setText(
-                        text = any<String>(),
-                        toastDescriptorOverride = any<Text>(),
-                    )
-                }
-            }
-
-        @Suppress("MaxLineLength")
-        @Test
-        fun `on NationalIdentificationNumberVisibilityClick should be a no-op for clipboard and state`() =
-            runTest {
-                val initialState = viewModel.stateFlow.value
-
-                viewModel.trySendAction(
-                    VaultItemAction.ItemType.Passport
-                        .NationalIdentificationNumberVisibilityClick(isVisible = true),
-                )
-
-                assertEquals(initialState, viewModel.stateFlow.value)
-                verify(exactly = 0) {
-                    clipboardManager.setText(
-                        text = any<String>(),
-                        toastDescriptorOverride = any<Text>(),
-                    )
-                }
-            }
-
         private fun createViewModelWithPassportState(
             viewState: VaultItemState.ViewState.Content,
         ): VaultItemViewModel {

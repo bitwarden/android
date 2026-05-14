@@ -1265,16 +1265,6 @@ class VaultItemViewModel @Inject constructor(
             VaultItemAction.ItemType.Passport.CopyNationalIdentificationNumberClick -> {
                 handleCopyNationalIdentificationNumberClick()
             }
-
-            is VaultItemAction.ItemType.Passport.PassportNumberVisibilityClick -> {
-                // Visibility is managed locally in the composable via rememberSaveable;
-                // this branch exists for telemetry parity with other sensitive-field flows.
-            }
-
-            is VaultItemAction.ItemType.Passport.NationalIdentificationNumberVisibilityClick -> {
-                // Visibility is managed locally in the composable via rememberSaveable;
-                // this branch exists for telemetry parity with other sensitive-field flows.
-            }
         }
     }
 
@@ -2836,9 +2826,7 @@ sealed class VaultItemAction {
         }
 
         /**
-         * Represents actions specific to the Passport type. Visibility actions are
-         * retained alongside the local [rememberSaveable] reveal state so future
-         * telemetry hooks can subscribe without further UI rework.
+         * Represents actions specific to the Passport type.
          */
         sealed class Passport : ItemType() {
 
@@ -2852,19 +2840,6 @@ sealed class VaultItemAction {
              * number.
              */
             data object CopyNationalIdentificationNumberClick : Passport()
-
-            /**
-             * The user has toggled the passport number reveal state to [isVisible].
-             */
-            data class PassportNumberVisibilityClick(val isVisible: Boolean) : Passport()
-
-            /**
-             * The user has toggled the national identification number reveal state
-             * to [isVisible].
-             */
-            data class NationalIdentificationNumberVisibilityClick(
-                val isVisible: Boolean,
-            ) : Passport()
         }
     }
 

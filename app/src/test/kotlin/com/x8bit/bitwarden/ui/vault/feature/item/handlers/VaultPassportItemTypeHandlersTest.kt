@@ -34,27 +34,4 @@ class VaultPassportItemTypeHandlersTest {
             )
         }
     }
-
-    @Test
-    fun `onPassportNumberVisibilityClick should send PassportNumberVisibilityClick action`() {
-        handlers.onPassportNumberVisibilityClick(true)
-        verify(exactly = 1) {
-            viewModel.trySendAction(
-                VaultItemAction.ItemType.Passport.PassportNumberVisibilityClick(
-                    isVisible = true,
-                ),
-            )
-        }
-    }
-
-    @Test
-    fun `onNationalIdentificationNumberVisibilityClick should send the matching action`() {
-        handlers.onNationalIdentificationNumberVisibilityClick(false)
-        verify(exactly = 1) {
-            viewModel.trySendAction(
-                VaultItemAction.ItemType.Passport
-                    .NationalIdentificationNumberVisibilityClick(isVisible = false),
-            )
-        }
-    }
 }

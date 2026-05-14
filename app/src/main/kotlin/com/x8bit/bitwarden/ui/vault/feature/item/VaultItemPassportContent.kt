@@ -34,12 +34,9 @@ import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultPassportItemTypeH
 
 /**
  * The top level content UI state for the [VaultItemScreen] when viewing a passport
- * cipher. Each populated field renders as a separate read-only row, matching the
- * Figma View layout. The passport number is rendered with a reveal toggle and an
- * inline copy affordance; the national identification number is rendered with a
- * reveal toggle only. Reveal state is hoisted into [rememberSaveable] so it survives
- * configuration changes and process death, while a visibility action is still
- * dispatched to the ViewModel for telemetry parity with other sensitive-field flows.
+ * cipher. Each populated field renders as a separate read-only row. The passport
+ * number and national identification number render with a reveal toggle and an
+ * inline copy affordance.
  */
 @Suppress("LongMethod")
 @Composable
@@ -51,8 +48,6 @@ fun VaultItemPassportContent(
     modifier: Modifier = Modifier,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(value = false) }
-    var isPassportNumberVisible by rememberSaveable { mutableStateOf(value = false) }
-    var isNationalIdentificationNumberVisible by rememberSaveable { mutableStateOf(value = false) }
     LazyColumn(modifier = modifier.fillMaxWidth()) {
         item {
             Spacer(Modifier.height(height = 12.dp))
@@ -225,12 +220,6 @@ fun VaultItemPassportContent(
                 BitwardenPasswordField(
                     label = stringResource(id = BitwardenString.passport_number),
                     value = passportNumber,
-                    showPassword = isPassportNumberVisible,
-                    showPasswordChange = { shouldShow ->
-                        isPassportNumberVisible = shouldShow
-                        vaultPassportItemTypeHandlers
-                            .onPassportNumberVisibilityClick(shouldShow)
-                    },
                     onValueChange = {},
                     readOnly = true,
                     supportingContent = null,
@@ -294,12 +283,6 @@ fun VaultItemPassportContent(
                         id = BitwardenString.national_identification_number,
                     ),
                     value = nationalIdentificationNumber,
-                    showPassword = isNationalIdentificationNumberVisible,
-                    showPasswordChange = { shouldShow ->
-                        isNationalIdentificationNumberVisible = shouldShow
-                        vaultPassportItemTypeHandlers
-                            .onNationalIdentificationNumberVisibilityClick(shouldShow)
-                    },
                     onValueChange = {},
                     readOnly = true,
                     supportingContent = null,
