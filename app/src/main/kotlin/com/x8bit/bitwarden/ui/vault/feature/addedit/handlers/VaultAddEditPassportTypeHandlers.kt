@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.handlers
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditViewModel
 
@@ -118,3 +120,15 @@ data class VaultAddEditPassportTypeHandlers(
             )
     }
 }
+
+/**
+ * Helper function to remember a [VaultAddEditPassportTypeHandlers] instance in a [Composable]
+ * scope.
+ */
+@Composable
+fun rememberVaultAddEditPassportTypeHandlers(
+    viewModel: VaultAddEditViewModel,
+): VaultAddEditPassportTypeHandlers =
+    remember(viewModel) {
+        VaultAddEditPassportTypeHandlers.create(viewModel = viewModel)
+    }
