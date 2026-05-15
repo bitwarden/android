@@ -55,6 +55,7 @@ fun SendContent(
                         id = BitwardenString.you_now_have_access_to_all_advanced_security_features,
                     ),
                     actionText = stringResource(id = BitwardenString.learn_more),
+                    isExternalLink = true,
                     leadingContent = {
                         Icon(
                             painter = rememberVectorPainter(id = BitwardenDrawable.ic_star),

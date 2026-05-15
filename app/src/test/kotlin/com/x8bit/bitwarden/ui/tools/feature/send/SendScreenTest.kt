@@ -960,6 +960,9 @@ class SendScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(text = "Learn more")
             .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription(label = "Learn more, External link")
+            .assertIsDisplayed()
     }
 
     @Test

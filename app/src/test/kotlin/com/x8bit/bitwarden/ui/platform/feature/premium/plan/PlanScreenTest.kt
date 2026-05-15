@@ -648,6 +648,15 @@ class PlanScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `manage plan button should announce external-link affordance`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_PREMIUM_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescription(label = "Manage plan, External link")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
     fun `cancel premium button should render when showCancelButton is true`() {
         mutableStateFlow.update {
             it.copy(
@@ -657,6 +666,19 @@ class PlanScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTag("CancelPremiumButton")
             .assertExists()
+    }
+
+    @Test
+    fun `cancel premium button should announce external-link affordance`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(showCancelButton = true),
+            )
+        }
+        composeTestRule
+            .onNodeWithContentDescription(label = "Cancel Premium, External link")
+            .performScrollTo()
+            .assertIsDisplayed()
     }
 
     @Test
