@@ -1302,59 +1302,45 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `ManagePlanClick should show LoadingPortal then emit LaunchPortal on success`() =
-        runTest {
-            markUserPremium()
-
-            val viewModel = createViewModel(
-                subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE,
-                portalResult = CustomerPortalResult.Success(url = "https://portal"),
-            )
-
-            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
-                assertEquals(DEFAULT_PREMIUM_LOADED_STATE, stateFlow.awaitItem())
-
-                viewModel.trySendAction(PlanAction.ManagePlanClick)
-
-                assertEquals(
-                    DEFAULT_PREMIUM_LOADED_STATE.copy(
-                        dialogState = PlanState.DialogState.LoadingPortal,
-                    ),
-                    stateFlow.awaitItem(),
-                )
-                assertEquals(
-                    PlanEvent.LaunchPortal(url = "https://portal"),
-                    eventFlow.awaitItem(),
-                )
-                assertEquals(DEFAULT_PREMIUM_LOADED_STATE, stateFlow.awaitItem())
-            }
-        }
-
-    @Test
-    fun `ManagePlanClick should show PortalError on failure`() = runTest {
+    fun `ManagePlanClick should emit LaunchUri with web vault subscription URL`() = runTest {
         markUserPremium()
 
-        val viewModel = createViewModel(
-            subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE,
-            portalResult = CustomerPortalResult.Error(error = RuntimeException("boom")),
-        )
+        val viewModel = createViewModel(subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE)
 
-        viewModel.stateFlow.test {
-            assertEquals(DEFAULT_PREMIUM_LOADED_STATE, awaitItem())
+        viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+            assertEquals(DEFAULT_PREMIUM_LOADED_STATE, stateFlow.awaitItem())
 
             viewModel.trySendAction(PlanAction.ManagePlanClick)
 
             assertEquals(
-                DEFAULT_PREMIUM_LOADED_STATE.copy(
-                    dialogState = PlanState.DialogState.LoadingPortal,
+                PlanEvent.LaunchUri(
+                    url = "https://vault.bitwarden.com/#/settings/subscription/premium",
                 ),
-                awaitItem(),
+                eventFlow.awaitItem(),
             )
+        }
+        coVerify(exactly = 0) { mockBillingRepository.getPortalUrl() }
+    }
+
+    @Test
+    fun `ManagePlanClick should fall back to base URL when webVault is null`() = runTest {
+        markUserPremium()
+        every { mockEnvironmentRepository.environment } returns Environment.SelfHosted(
+            environmentUrlData = EnvironmentUrlDataJson(base = "https://self-hosted.example"),
+        )
+
+        val viewModel = createViewModel(subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE)
+
+        viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+            assertEquals(DEFAULT_PREMIUM_LOADED_STATE, stateFlow.awaitItem())
+
+            viewModel.trySendAction(PlanAction.ManagePlanClick)
+
             assertEquals(
-                DEFAULT_PREMIUM_LOADED_STATE.copy(
-                    dialogState = PlanState.DialogState.PortalError,
+                PlanEvent.LaunchUri(
+                    url = "https://self-hosted.example/#/settings/subscription/premium",
                 ),
-                awaitItem(),
+                eventFlow.awaitItem(),
             )
         }
     }
@@ -1450,9 +1436,9 @@ class PlanViewModelTest : BaseViewModelTest() {
             authRepository = mockAuthRepository,
             billingRepository = mockBillingRepository,
             premiumStateManager = mockPremiumStateManager,
-            environmentRepository = mockEnvironmentRepository,
             specialCircumstanceManager = mockSpecialCircumstanceManager,
             vaultRepository = mockVaultRepository,
+            environmentRepository = mockEnvironmentRepository,
             clock = clock,
         )
     }

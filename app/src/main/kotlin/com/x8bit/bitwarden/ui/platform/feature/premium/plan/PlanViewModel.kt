@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.util.toFormattedDateStyle
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -67,9 +68,9 @@ class PlanViewModel @Inject constructor(
     private val billingRepository: BillingRepository,
     private val authRepository: AuthRepository,
     private val premiumStateManager: PremiumStateManager,
-    private val environmentRepository: EnvironmentRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val vaultRepository: VaultRepository,
+    private val environmentRepository: EnvironmentRepository,
     private val clock: Clock,
 ) : BaseViewModel<PlanState, PlanEvent, PlanAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -298,7 +299,11 @@ class PlanViewModel @Inject constructor(
     // region Premium user handlers
 
     private fun handleManagePlanClick() {
-        launchPortalFetch()
+        val webVaultBaseUrl = environmentRepository
+            .environment
+            .environmentUrlData
+            .baseWebVaultUrlOrDefault
+        sendEvent(PlanEvent.LaunchUri(url = "$webVaultBaseUrl/#/settings/subscription/premium"))
     }
 
     private fun handleCancelPremiumClick() {
@@ -873,6 +878,13 @@ sealed class PlanEvent {
      * Launch the user's browser with the given portal [url].
      */
     data class LaunchPortal(
+        val url: String,
+    ) : PlanEvent()
+
+    /**
+     * Launch the user's browser with the given web vault [url].
+     */
+    data class LaunchUri(
         val url: String,
     ) : PlanEvent()
 

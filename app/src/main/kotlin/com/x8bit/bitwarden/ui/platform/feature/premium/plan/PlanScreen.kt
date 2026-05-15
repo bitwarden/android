@@ -20,7 +20,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -99,6 +102,7 @@ fun PlanScreen(
             }
 
             is PlanEvent.LaunchPortal -> intentManager.launchUri(event.url.toUri())
+            is PlanEvent.LaunchUri -> intentManager.launchUri(event.url.toUri())
             PlanEvent.NavigateBack -> onNavigateBack()
             PlanEvent.NavigateToUpgradedToPremium -> onNavigateToUpgradedToPremium()
         }
@@ -226,7 +230,7 @@ private fun PlanDialogs(
                 message = stringResource(id = BitwardenString.trouble_loading_portal),
                 confirmButtonText = stringResource(id = BitwardenString.try_again),
                 dismissButtonText = stringResource(id = BitwardenString.close),
-                onConfirmClick = handlers.onManagePlanClick,
+                onConfirmClick = handlers.onConfirmCancelClick,
                 onDismissClick = handlers.onDismissPortalError,
                 onDismissRequest = handlers.onDismissPortalError,
             )
@@ -469,6 +473,7 @@ private fun PremiumContent(
     handlers: PlanHandlers,
     modifier: Modifier = Modifier,
 ) {
+    var shouldShowManagePlanDialog by rememberSaveable { mutableStateOf(false) }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -484,7 +489,7 @@ private fun PremiumContent(
 
         BitwardenFilledButton(
             label = stringResource(id = BitwardenString.manage_plan),
-            onClick = handlers.onManagePlanClick,
+            onClick = { shouldShowManagePlanDialog = true },
             icon = rememberVectorPainter(id = BitwardenDrawable.ic_external_link),
             isExternalLink = true,
             modifier = Modifier
@@ -509,6 +514,23 @@ private fun PremiumContent(
 
         Spacer(modifier = Modifier.height(16.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
+    }
+
+    if (shouldShowManagePlanDialog) {
+        BitwardenTwoButtonDialog(
+            title = stringResource(id = BitwardenString.continue_to_web_app),
+            message = stringResource(
+                id = BitwardenString.manage_your_subscription_plan_in_the_bitwarden_web_app,
+            ),
+            confirmButtonText = stringResource(id = BitwardenString.continue_text),
+            dismissButtonText = stringResource(id = BitwardenString.cancel),
+            onConfirmClick = {
+                shouldShowManagePlanDialog = false
+                handlers.onManagePlanClick()
+            },
+            onDismissClick = { shouldShowManagePlanDialog = false },
+            onDismissRequest = { shouldShowManagePlanDialog = false },
+        )
     }
 }
 
