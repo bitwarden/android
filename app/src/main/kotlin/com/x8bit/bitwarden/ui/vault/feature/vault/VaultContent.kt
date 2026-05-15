@@ -321,7 +321,7 @@ fun VaultContent(
             item(key = "passports_group") {
                 BitwardenGroupItem(
                     startIcon = IconData.Local(
-                        iconRes = BitwardenDrawable.ic_id_card,
+                        iconRes = BitwardenDrawable.ic_passport,
                         testTag = "PassportCipherIcon",
                     ),
                     label = stringResource(id = BitwardenString.type_passport),
