@@ -9,6 +9,7 @@ import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.IdentityView
 import com.bitwarden.vault.LoginUriView
 import com.bitwarden.vault.LoginView
+import com.bitwarden.vault.PassportView
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SecureNoteView
@@ -549,6 +550,89 @@ class VaultAddItemStateExtensionsTest {
                         lastUsedDate = FIXED_CLOCK.instant(),
                     ),
                 ),
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toCipherView should transform Passport ItemType to CipherView`() {
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
+                name = "mockName-1",
+                selectedFolderId = "mockId-1",
+                favorite = false,
+                masterPasswordReprompt = false,
+                notes = "mockNotes-1",
+                selectedOwnerId = "mockOwnerId-1",
+            ),
+            isIndividualVaultDisabled = false,
+            type = VaultAddEditState.ViewState.Content.ItemType.Passport(
+                givenName = "Bruce",
+                surname = "Wayne",
+                dateOfBirth = "1939-05-27",
+                sex = "M",
+                birthPlace = "Gotham City",
+                nationality = "American",
+                passportNumber = "X12345678",
+                passportType = "Regular",
+                nationalIdentificationNumber = "987-65-4321",
+                issuingCountry = "USA",
+                issuingAuthority = "U.S. Department of State",
+                issueDate = "2020-01-15",
+                expirationDate = "2030-01-15",
+            ),
+        )
+
+        val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
+
+        assertEquals(
+            CipherView(
+                id = null,
+                organizationId = "mockOwnerId-1",
+                folderId = "mockId-1",
+                collectionIds = emptyList(),
+                key = null,
+                name = "mockName-1",
+                notes = "mockNotes-1",
+                type = CipherType.PASSPORT,
+                login = null,
+                identity = null,
+                card = null,
+                secureNote = null,
+                bankAccount = null,
+                driversLicense = null,
+                passport = PassportView(
+                    surname = "Wayne",
+                    givenName = "Bruce",
+                    dateOfBirth = "1939-05-27",
+                    birthPlace = "Gotham City",
+                    sex = "M",
+                    nationality = "American",
+                    passportNumber = "X12345678",
+                    passportType = "Regular",
+                    issuingCountry = "USA",
+                    issuingAuthority = "U.S. Department of State",
+                    issueDate = "2020-01-15",
+                    expirationDate = "2030-01-15",
+                    nationalIdentificationNumber = "987-65-4321",
+                ),
+                favorite = false,
+                reprompt = CipherRepromptType.NONE,
+                organizationUseTotp = false,
+                edit = true,
+                viewPassword = true,
+                localData = null,
+                attachments = null,
+                fields = emptyList(),
+                passwordHistory = null,
+                permissions = null,
+                creationDate = FIXED_CLOCK.instant(),
+                deletedDate = null,
+                revisionDate = FIXED_CLOCK.instant(),
+                archivedDate = null,
+                sshKey = null,
+                attachmentDecryptionFailures = null,
             ),
             result,
         )
