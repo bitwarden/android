@@ -42,8 +42,8 @@ data class AccountJson(
      * @property name The user's name (if applicable).
      * @property stamp The account's security stamp (if applicable).
      * @property organizationId The ID of the associated organization (if applicable).
-     * @property hasPremium True if the user has personal Premium (i.e., a personal subscription
-     * not derived from any organization membership).
+     * @property hasPremiumPersonally True if the user has personal Premium (i.e., a personal
+     * subscription not derived from any organization membership).
      * @property hasPremiumFromOrganization True if any organization the user is a member of grants
      * Premium features. `null` when the value has not yet been synced (e.g., immediately after
      * token-based login before the first sync completes).
@@ -84,10 +84,10 @@ data class AccountJson(
         val avatarColorHex: String?,
 
         @SerialName("hasPremiumPersonally")
-        val hasPremium: Boolean?,
+        val hasPremiumPersonally: Boolean?,
 
         @SerialName("hasPremiumFromOrganization")
-        val hasPremiumFromOrganization: Boolean? = null,
+        val hasPremiumFromOrganization: Boolean?,
 
         @SerialName("forcePasswordResetReason")
         val forcePasswordResetReason: ForcePasswordResetReason?,

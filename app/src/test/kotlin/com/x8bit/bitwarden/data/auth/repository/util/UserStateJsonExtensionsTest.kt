@@ -79,7 +79,8 @@ class UserStateJsonExtensionsTest {
             stamp = null,
             organizationId = null,
             avatarColorHex = null,
-            hasPremium = true,
+            hasPremiumPersonally = true,
+            hasPremiumFromOrganization = null,
             forcePasswordResetReason = null,
             kdfType = KdfTypeJson.ARGON2_ID,
             kdfIterations = 600000,
@@ -129,7 +130,8 @@ class UserStateJsonExtensionsTest {
             stamp = null,
             organizationId = null,
             avatarColorHex = null,
-            hasPremium = true,
+            hasPremiumPersonally = true,
+            hasPremiumFromOrganization = null,
             forcePasswordResetReason = null,
             kdfType = KdfTypeJson.ARGON2_ID,
             kdfIterations = 600000,
@@ -206,7 +208,7 @@ class UserStateJsonExtensionsTest {
             stamp = "stamp",
             organizationId = null,
             avatarColorHex = "color",
-            hasPremium = false,
+            hasPremiumPersonally = false,
             hasPremiumFromOrganization = false,
             forcePasswordResetReason = null,
             kdfType = KdfTypeJson.ARGON2_ID,
@@ -242,7 +244,7 @@ class UserStateJsonExtensionsTest {
             },
         )
         val orgOnlyProfile = orgOnlyResult.accounts.getValue("activeUserId").profile
-        assertEquals(false, orgOnlyProfile.hasPremium)
+        assertEquals(false, orgOnlyProfile.hasPremiumPersonally)
         assertEquals(true, orgOnlyProfile.hasPremiumFromOrganization)
 
         val personalOnlyResult = originalState.toUpdatedUserStateJson(
@@ -260,7 +262,7 @@ class UserStateJsonExtensionsTest {
             },
         )
         val personalOnlyProfile = personalOnlyResult.accounts.getValue("activeUserId").profile
-        assertEquals(true, personalOnlyProfile.hasPremium)
+        assertEquals(true, personalOnlyProfile.hasPremiumPersonally)
         assertEquals(false, personalOnlyProfile.hasPremiumFromOrganization)
     }
 
@@ -275,7 +277,7 @@ class UserStateJsonExtensionsTest {
             stamp = "stamp",
             organizationId = null,
             avatarColorHex = "color",
-            hasPremium = false,
+            hasPremiumPersonally = false,
             hasPremiumFromOrganization = false,
             forcePasswordResetReason = null,
             kdfType = KdfTypeJson.ARGON2_ID,
@@ -287,13 +289,13 @@ class UserStateJsonExtensionsTest {
             creationDate = null,
         )
 
-        fun stateWith(hasPremium: Boolean?, hasPremiumFromOrg: Boolean?): UserStateJson =
+        fun stateWith(hasPremiumPersonally: Boolean?, hasPremiumFromOrg: Boolean?): UserStateJson =
             UserStateJson(
                 activeUserId = "activeUserId",
                 accounts = mapOf(
                     "activeUserId" to AccountJson(
                         profile = baseProfile.copy(
-                            hasPremium = hasPremium,
+                            hasPremiumPersonally = hasPremiumPersonally,
                             hasPremiumFromOrganization = hasPremiumFromOrg,
                         ),
                         tokens = null,
@@ -319,19 +321,19 @@ class UserStateJsonExtensionsTest {
             .accounts
             .first()
 
-        val freeAccount = toAccount(stateWith(hasPremium = false, hasPremiumFromOrg = false))
+        val freeAccount = toAccount(stateWith(hasPremiumPersonally = false, hasPremiumFromOrg = false))
         assertFalse(freeAccount.isPremium)
         assertFalse(freeAccount.isPremiumFromSelf)
 
-        val personalAccount = toAccount(stateWith(hasPremium = true, hasPremiumFromOrg = false))
+        val personalAccount = toAccount(stateWith(hasPremiumPersonally = true, hasPremiumFromOrg = false))
         assertTrue(personalAccount.isPremium)
         assertTrue(personalAccount.isPremiumFromSelf)
 
-        val orgOnlyAccount = toAccount(stateWith(hasPremium = false, hasPremiumFromOrg = true))
+        val orgOnlyAccount = toAccount(stateWith(hasPremiumPersonally = false, hasPremiumFromOrg = true))
         assertTrue(orgOnlyAccount.isPremium)
         assertFalse(orgOnlyAccount.isPremiumFromSelf)
 
-        val bothAccount = toAccount(stateWith(hasPremium = true, hasPremiumFromOrg = true))
+        val bothAccount = toAccount(stateWith(hasPremiumPersonally = true, hasPremiumFromOrg = true))
         assertTrue(bothAccount.isPremium)
         assertTrue(bothAccount.isPremiumFromSelf)
     }
@@ -346,7 +348,8 @@ class UserStateJsonExtensionsTest {
             stamp = null,
             organizationId = null,
             avatarColorHex = null,
-            hasPremium = true,
+            hasPremiumPersonally = true,
+            hasPremiumFromOrganization = null,
             forcePasswordResetReason = null,
             kdfType = KdfTypeJson.ARGON2_ID,
             kdfIterations = 600000,
@@ -410,7 +413,8 @@ class UserStateJsonExtensionsTest {
             stamp = null,
             organizationId = null,
             avatarColorHex = null,
-            hasPremium = true,
+            hasPremiumPersonally = true,
+            hasPremiumFromOrganization = null,
             forcePasswordResetReason = ForcePasswordResetReason
                 .TDE_USER_WITHOUT_PASSWORD_HAS_PASSWORD_RESET_PERMISSION,
             kdfType = KdfTypeJson.ARGON2_ID,
@@ -464,7 +468,8 @@ class UserStateJsonExtensionsTest {
             stamp = null,
             organizationId = null,
             avatarColorHex = null,
-            hasPremium = true,
+            hasPremiumPersonally = true,
+            hasPremiumFromOrganization = null,
             forcePasswordResetReason = ForcePasswordResetReason
                 .TDE_USER_WITHOUT_PASSWORD_HAS_PASSWORD_RESET_PERMISSION,
             kdfType = KdfTypeJson.ARGON2_ID,
@@ -537,7 +542,8 @@ class UserStateJsonExtensionsTest {
             stamp = null,
             organizationId = null,
             avatarColorHex = null,
-            hasPremium = true,
+            hasPremiumPersonally = true,
+            hasPremiumFromOrganization = null,
             forcePasswordResetReason = null,
             kdfType = KdfTypeJson.ARGON2_ID,
             kdfIterations = 600000,
@@ -631,7 +637,7 @@ class UserStateJsonExtensionsTest {
                             every { name } returns "activeName"
                             every { email } returns "activeEmail"
                             every { avatarColorHex } returns "activeAvatarColorHex"
-                            every { hasPremium } returns null
+                            every { hasPremiumPersonally } returns null
                             every { hasPremiumFromOrganization } returns null
                             every { forcePasswordResetReason } returns null
                             every { userDecryptionOptions } returns UserDecryptionOptionsJson(
@@ -745,7 +751,7 @@ class UserStateJsonExtensionsTest {
                             every { name } returns "activeName"
                             every { email } returns "activeEmail"
                             every { avatarColorHex } returns null
-                            every { hasPremium } returns true
+                            every { hasPremiumPersonally } returns true
                             every { hasPremiumFromOrganization } returns null
                             every { forcePasswordResetReason } returns null
                             every { userDecryptionOptions } returns UserDecryptionOptionsJson(
@@ -860,7 +866,7 @@ class UserStateJsonExtensionsTest {
                             every { name } returns "activeName"
                             every { email } returns "activeEmail"
                             every { avatarColorHex } returns null
-                            every { hasPremium } returns true
+                            every { hasPremiumPersonally } returns true
                             every { hasPremiumFromOrganization } returns null
                             every { forcePasswordResetReason } returns null
                             every { userDecryptionOptions } returns UserDecryptionOptionsJson(
@@ -978,7 +984,7 @@ class UserStateJsonExtensionsTest {
                             every { name } returns "activeName"
                             every { email } returns "activeEmail"
                             every { avatarColorHex } returns null
-                            every { hasPremium } returns true
+                            every { hasPremiumPersonally } returns true
                             every { hasPremiumFromOrganization } returns null
                             every { forcePasswordResetReason } returns null
                             every { userDecryptionOptions } returns UserDecryptionOptionsJson(
@@ -1096,7 +1102,7 @@ class UserStateJsonExtensionsTest {
                             every { name } returns "activeName"
                             every { email } returns "activeEmail"
                             every { avatarColorHex } returns null
-                            every { hasPremium } returns true
+                            every { hasPremiumPersonally } returns true
                             every { hasPremiumFromOrganization } returns null
                             every { forcePasswordResetReason } returns null
                             every { userDecryptionOptions } returns UserDecryptionOptionsJson(
@@ -1221,7 +1227,7 @@ class UserStateJsonExtensionsTest {
                             every { name } returns "activeName"
                             every { email } returns "activeEmail"
                             every { avatarColorHex } returns null
-                            every { hasPremium } returns true
+                            every { hasPremiumPersonally } returns true
                             every { hasPremiumFromOrganization } returns null
                             every { forcePasswordResetReason } returns null
                             every { userDecryptionOptions } returns UserDecryptionOptionsJson(
@@ -1327,7 +1333,7 @@ class UserStateJsonExtensionsTest {
                             every { name } returns "activeName"
                             every { email } returns "activeEmail"
                             every { avatarColorHex } returns null
-                            every { hasPremium } returns false
+                            every { hasPremiumPersonally } returns false
                             every { hasPremiumFromOrganization } returns null
                             every { forcePasswordResetReason } returns null
                             // The decryption options are what are determining the result
@@ -1412,7 +1418,7 @@ class UserStateJsonExtensionsTest {
                             every { name } returns "activeName"
                             every { email } returns "activeEmail"
                             every { avatarColorHex } returns null
-                            every { hasPremium } returns false
+                            every { hasPremiumPersonally } returns false
                             every { hasPremiumFromOrganization } returns null
                             every { forcePasswordResetReason } returns null
                             // The decryption options are what are determining the result
@@ -1513,7 +1519,7 @@ class UserStateJsonExtensionsTest {
                             every { name } returns "activeName"
                             every { email } returns "activeEmail"
                             every { avatarColorHex } returns null
-                            every { hasPremium } returns false
+                            every { hasPremiumPersonally } returns false
                             every { hasPremiumFromOrganization } returns null
                             every { forcePasswordResetReason } returns null
                             // The decryption options are what are determining the result
@@ -1636,7 +1642,7 @@ class UserStateJsonExtensionsTest {
                             every { name } returns "activeName"
                             every { email } returns "activeEmail"
                             every { avatarColorHex } returns null
-                            every { hasPremium } returns true
+                            every { hasPremiumPersonally } returns true
                             every { hasPremiumFromOrganization } returns null
                             every { forcePasswordResetReason } returns null
                             every { userDecryptionOptions } returns UserDecryptionOptionsJson(
@@ -1748,7 +1754,7 @@ class UserStateJsonExtensionsTest {
                             every { name } returns "activeName"
                             every { email } returns "activeEmail"
                             every { avatarColorHex } returns "activeAvatarColorHex"
-                            every { hasPremium } returns null
+                            every { hasPremiumPersonally } returns null
                             every { hasPremiumFromOrganization } returns null
                             every { forcePasswordResetReason } returns null
                             every { userDecryptionOptions } returns UserDecryptionOptionsJson(
@@ -1870,7 +1876,7 @@ class UserStateJsonExtensionsTest {
                             every { name } returns "activeName"
                             every { email } returns "activeEmail"
                             every { avatarColorHex } returns "activeAvatarColorHex"
-                            every { hasPremium } returns null
+                            every { hasPremiumPersonally } returns null
                             every { hasPremiumFromOrganization } returns null
                             every { forcePasswordResetReason } returns null
                             every { userDecryptionOptions } returns UserDecryptionOptionsJson(
@@ -1956,7 +1962,8 @@ class UserStateJsonExtensionsTest {
             stamp = null,
             organizationId = null,
             avatarColorHex = null,
-            hasPremium = true,
+            hasPremiumPersonally = true,
+            hasPremiumFromOrganization = null,
             forcePasswordResetReason = null,
             kdfType = KdfTypeJson.ARGON2_ID,
             kdfIterations = 600000,
@@ -1999,7 +2006,7 @@ class UserStateJsonExtensionsTest {
                         profile = originalProfile.copy(
                             avatarColorHex = "avatarColor",
                             stamp = "securityStamp",
-                            hasPremium = false,
+                            hasPremiumPersonally = false,
                             hasPremiumFromOrganization = false,
                             isTwoFactorEnabled = true,
                             creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
@@ -2039,7 +2046,8 @@ class UserStateJsonExtensionsTest {
             stamp = null,
             organizationId = null,
             avatarColorHex = null,
-            hasPremium = true,
+            hasPremiumPersonally = true,
+            hasPremiumFromOrganization = null,
             forcePasswordResetReason = null,
             kdfType = KdfTypeJson.ARGON2_ID,
             kdfIterations = 600000,
@@ -2087,7 +2095,7 @@ class UserStateJsonExtensionsTest {
                         profile = originalProfile.copy(
                             avatarColorHex = "newAvatarColor",
                             stamp = "newSecurityStamp",
-                            hasPremium = true,
+                            hasPremiumPersonally = true,
                             hasPremiumFromOrganization = false,
                             isTwoFactorEnabled = true,
                             creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
@@ -2121,7 +2129,8 @@ class UserStateJsonExtensionsTest {
             stamp = null,
             organizationId = null,
             avatarColorHex = null,
-            hasPremium = true,
+            hasPremiumPersonally = true,
+            hasPremiumFromOrganization = null,
             forcePasswordResetReason = null,
             kdfType = KdfTypeJson.ARGON2_ID,
             kdfIterations = 600000,
@@ -2167,7 +2176,7 @@ class UserStateJsonExtensionsTest {
                         profile = originalProfile.copy(
                             avatarColorHex = "updatedAvatarColor",
                             stamp = "updatedSecurityStamp",
-                            hasPremium = false,
+                            hasPremiumPersonally = false,
                             hasPremiumFromOrganization = true,
                             isTwoFactorEnabled = false,
                             creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
@@ -2196,7 +2205,8 @@ class UserStateJsonExtensionsTest {
             stamp = null,
             organizationId = null,
             avatarColorHex = null,
-            hasPremium = false,
+            hasPremiumPersonally = false,
+            hasPremiumFromOrganization = null,
             forcePasswordResetReason = null,
             kdfType = KdfTypeJson.PBKDF2_SHA256,
             kdfIterations = 100_000,
@@ -2283,7 +2293,8 @@ class UserStateJsonExtensionsTest {
             stamp = "stamp",
             organizationId = null,
             avatarColorHex = "avatarColorHex",
-            hasPremium = true,
+            hasPremiumPersonally = true,
+            hasPremiumFromOrganization = null,
             forcePasswordResetReason = null,
             kdfType = KdfTypeJson.ARGON2_ID,
             kdfIterations = 600000,
@@ -2340,7 +2351,8 @@ class UserStateJsonExtensionsTest {
             stamp = "securityStamp",
             organizationId = "orgId",
             avatarColorHex = "#FF0000",
-            hasPremium = false,
+            hasPremiumPersonally = false,
+            hasPremiumFromOrganization = null,
             forcePasswordResetReason = null,
             kdfType = KdfTypeJson.ARGON2_ID,
             kdfIterations = 100000,
@@ -2392,7 +2404,8 @@ class UserStateJsonExtensionsTest {
             stamp = null,
             organizationId = null,
             avatarColorHex = null,
-            hasPremium = true,
+            hasPremiumPersonally = true,
+            hasPremiumFromOrganization = null,
             forcePasswordResetReason = null,
             kdfType = KdfTypeJson.ARGON2_ID,
             kdfIterations = 600000,
@@ -2410,7 +2423,8 @@ class UserStateJsonExtensionsTest {
             stamp = null,
             organizationId = null,
             avatarColorHex = null,
-            hasPremium = false,
+            hasPremiumPersonally = false,
+            hasPremiumFromOrganization = null,
             forcePasswordResetReason = null,
             kdfType = KdfTypeJson.ARGON2_ID,
             kdfIterations = 500000,
