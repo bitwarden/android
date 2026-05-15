@@ -2300,7 +2300,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `PassportGroupClick should emit NavigateToItemListing event with Passport type`() =
+    fun `PassportGroupClick should emit NavigateToItemListing for Passport types`() =
         runTest {
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
