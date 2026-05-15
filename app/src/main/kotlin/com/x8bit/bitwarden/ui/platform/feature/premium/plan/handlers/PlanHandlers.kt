@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.ui.platform.feature.premium.plan.PlanViewModel
 @Suppress("LongParameterList")
 data class PlanHandlers(
     val onBackClick: () -> Unit,
+    val onManageOnWebVaultClick: () -> Unit,
     val onUpgradeNowClick: () -> Unit,
     val onDismissError: () -> Unit,
     val onRetryClick: () -> Unit,
@@ -34,6 +35,9 @@ data class PlanHandlers(
          */
         fun create(viewModel: PlanViewModel): PlanHandlers = PlanHandlers(
             onBackClick = { viewModel.trySendAction(PlanAction.BackClick) },
+            onManageOnWebVaultClick = {
+                viewModel.trySendAction(PlanAction.ManageOnWebVaultClick)
+            },
             onUpgradeNowClick = { viewModel.trySendAction(PlanAction.UpgradeNowClick) },
             onDismissError = { viewModel.trySendAction(PlanAction.DismissError) },
             onRetryClick = { viewModel.trySendAction(PlanAction.RetryClick) },
