@@ -69,7 +69,7 @@ fun SendContent(
                         .fillMaxWidth()
                         .standardHorizontalMargin(),
                 )
-                Spacer(modifier = Modifier.height(height = 12.dp))
+                Spacer(modifier = Modifier.height(height = 16.dp))
             }
         }
         if (policyDisablesSend) {

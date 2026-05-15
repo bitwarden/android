@@ -40,12 +40,25 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 fun SendEmpty(
     policyDisablesSend: Boolean,
     onAddItemClick: () -> Unit,
+    isUpgradedToPremiumCardEligible: Boolean,
+    onUpgradedToPremiumCardClick: () -> Unit,
+    onUpgradedToPremiumCardDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.verticalScroll(rememberScrollState()),
     ) {
+        if (isUpgradedToPremiumCardEligible) {
+            Spacer(modifier = Modifier.height(height = 12.dp))
+            UpgradedToPremiumActionCard(
+                onActionClick = onUpgradedToPremiumCardClick,
+                onDismissClick = onUpgradedToPremiumCardDismiss,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+        }
         if (policyDisablesSend) {
             Spacer(modifier = Modifier.height(12.dp))
             BitwardenInfoCalloutCard(
@@ -119,6 +132,9 @@ private fun SendEmpty_preview() {
             SendEmpty(
                 policyDisablesSend = false,
                 onAddItemClick = {},
+                isUpgradedToPremiumCardEligible = false,
+                onUpgradedToPremiumCardClick = {},
+                onUpgradedToPremiumCardDismiss = {},
             )
         }
     }
@@ -135,6 +151,9 @@ private fun SendEmptyPolicyDisabled_preview() {
             SendEmpty(
                 policyDisablesSend = true,
                 onAddItemClick = {},
+                isUpgradedToPremiumCardEligible = false,
+                onUpgradedToPremiumCardClick = {},
+                onUpgradedToPremiumCardDismiss = {},
             )
         }
     }
