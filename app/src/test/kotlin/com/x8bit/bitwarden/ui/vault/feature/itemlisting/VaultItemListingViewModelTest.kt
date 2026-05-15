@@ -302,9 +302,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every { parse(any<GetPublicKeyCredentialOption>()) } returns DEFAULT_RELYING_PARTY_ID
         every { parse(any<CreatePublicKeyCredentialRequest>()) } returns DEFAULT_RELYING_PARTY_ID
     }
-    private val premiumStateManager: PremiumStateManager = mockk {
-        every { isInAppUpgradeAvailable() } returns false
-    }
+    private val premiumStateManager: PremiumStateManager = mockk()
     private val mutableNewItemTypesFlow = MutableStateFlow(false)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlag(FlagKey.NewItemTypes) } answers { mutableNewItemTypesFlow.value }
@@ -1063,35 +1061,16 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `UpgradeToPremiumClick should emit NavigateToUrl when in-app upgrade not available`() =
-        runTest {
-            val viewModel = createVaultItemListingViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(VaultItemListingsAction.UpgradeToPremiumClick)
-                assertEquals(
-                    VaultItemListingEvent.NavigateToUrl(
-                        url = "https://vault.bitwarden.com/#/" +
-                            "settings/subscription/premium" +
-                            "?callToAction=upgradeToPremium",
-                    ),
-                    awaitItem(),
-                )
-            }
+    fun `UpgradeToPremiumClick should emit NavigateToPlanModal`() = runTest {
+        val viewModel = createVaultItemListingViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultItemListingsAction.UpgradeToPremiumClick)
+            assertEquals(
+                VaultItemListingEvent.NavigateToPlanModal,
+                awaitItem(),
+            )
         }
-
-    @Test
-    fun `UpgradeToPremiumClick should emit NavigateToPlanModal when in-app upgrade available`() =
-        runTest {
-            every { premiumStateManager.isInAppUpgradeAvailable() } returns true
-            val viewModel = createVaultItemListingViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(VaultItemListingsAction.UpgradeToPremiumClick)
-                assertEquals(
-                    VaultItemListingEvent.NavigateToPlanModal,
-                    awaitItem(),
-                )
-            }
-        }
+    }
 
     @Test
     fun `ArchiveClick without Premium should show ArchiveRequiresPremium dialog`() = runTest {

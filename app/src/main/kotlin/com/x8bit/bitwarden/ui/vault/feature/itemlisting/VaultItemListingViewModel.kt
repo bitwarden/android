@@ -18,7 +18,6 @@ import com.bitwarden.core.data.repository.util.map
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
-import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BackgroundEvent
@@ -667,16 +666,7 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun handleUpgradeToPremiumClick() {
         clearDialogState()
-        if (premiumStateManager.isInAppUpgradeAvailable()) {
-            sendEvent(VaultItemListingEvent.NavigateToPlanModal)
-        } else {
-            val baseUrl = environmentRepository
-                .environment
-                .environmentUrlData
-                .baseWebVaultUrlOrDefault
-            val url = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium"
-            sendEvent(VaultItemListingEvent.NavigateToUrl(url = url))
-        }
+        sendEvent(VaultItemListingEvent.NavigateToPlanModal)
     }
 
     private fun handleRemoveSendPasswordClick(
