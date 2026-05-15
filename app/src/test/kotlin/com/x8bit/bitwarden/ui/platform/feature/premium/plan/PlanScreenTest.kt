@@ -910,7 +910,7 @@ class PlanScreenTest : BitwardenComposeTest() {
 
 private val DEFAULT_FREE_STATE = PlanState(
     planMode = PlanMode.Modal,
-    viewState = PlanState.ViewState.Free(
+    viewState = PlanState.ViewState.Free.Cloud(
         rate = "$1.65",
         checkoutUrl = null,
         isAwaitingPremiumStatus = false,
