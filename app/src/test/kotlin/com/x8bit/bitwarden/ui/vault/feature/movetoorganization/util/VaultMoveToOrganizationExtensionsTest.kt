@@ -94,6 +94,7 @@ private fun createMockUserState(hasOrganizations: Boolean = true): UserState =
                 avatarColorHex = "#aa00aa",
                 environment = Environment.Us,
                 isPremium = true,
+                isPremiumFromSelf = true,
                 isLoggedIn = true,
                 isVaultUnlocked = true,
                 needsPasswordReset = false,

@@ -83,7 +83,8 @@ fun UserStateJson.toUpdatedUserStateJson(
         .copy(
             avatarColorHex = syncProfile.avatarColor,
             stamp = syncProfile.securityStamp,
-            hasPremium = syncProfile.isPremium || syncProfile.isPremiumFromOrganization,
+            hasPremium = syncProfile.isPremium,
+            hasPremiumFromOrganization = syncProfile.isPremiumFromOrganization,
             isTwoFactorEnabled = syncProfile.isTwoFactorEnabled,
             creationDate = syncProfile.creationDate,
             userDecryptionOptions = userDecryptionOptions,
@@ -253,7 +254,9 @@ fun UserStateJson.toUserState(
                         .settings
                         .environmentUrlData
                         .toEnvironmentUrlsOrDefault(),
-                    isPremium = profile.hasPremium == true,
+                    isPremium = profile.hasPremium == true ||
+                        profile.hasPremiumFromOrganization == true,
+                    isPremiumFromSelf = profile.hasPremium == true,
                     isLoggedIn = userAccountTokens
                         .find { it.userId == userId }
                         ?.isLoggedIn == true,

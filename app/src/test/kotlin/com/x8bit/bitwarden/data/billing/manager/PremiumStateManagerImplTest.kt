@@ -393,6 +393,108 @@ class PremiumStateManagerImplTest {
     }
 
     @Test
+    fun `isPlanRowEligibleFlow emits true for a free user when feature flag is enabled`() =
+        runTest {
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(
+                    DEFAULT_ACTIVE_ACCOUNT.copy(
+                        isPremium = false,
+                        isPremiumFromSelf = false,
+                    ),
+                ),
+            )
+            val manager = createManager()
+            manager.isPlanRowEligibleFlow.test {
+                assertTrue(awaitItem())
+            }
+        }
+
+    @Test
+    fun `isPlanRowEligibleFlow emits true for a personal Premium user`() = runTest {
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(
+                DEFAULT_ACTIVE_ACCOUNT.copy(
+                    isPremium = true,
+                    isPremiumFromSelf = true,
+                ),
+            ),
+        )
+        val manager = createManager()
+        manager.isPlanRowEligibleFlow.test {
+            assertTrue(awaitItem())
+        }
+    }
+
+    @Test
+    fun `isPlanRowEligibleFlow emits false for a user with only org-granted Premium`() =
+        runTest {
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(
+                    DEFAULT_ACTIVE_ACCOUNT.copy(
+                        isPremium = true,
+                        isPremiumFromSelf = false,
+                    ),
+                ),
+            )
+            val manager = createManager()
+            manager.isPlanRowEligibleFlow.test {
+                assertFalse(awaitItem())
+            }
+        }
+
+    @Test
+    fun `isPlanRowEligibleFlow emits false when feature flag is disabled`() = runTest {
+        mutableMobilePremiumUpgradeFlagFlow.value = false
+        val manager = createManager()
+        manager.isPlanRowEligibleFlow.test {
+            assertFalse(awaitItem())
+        }
+    }
+
+    @Test
+    fun `isPlanRowEligibleFlow emits false when userState is null`() = runTest {
+        mutableUserStateFlow.value = null
+        val manager = createManager()
+        manager.isPlanRowEligibleFlow.test {
+            assertFalse(awaitItem())
+        }
+    }
+
+    @Test
+    fun `isPlanRowEligibleFlow updates as the user gains and loses org-only Premium`() = runTest {
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(
+                DEFAULT_ACTIVE_ACCOUNT.copy(
+                    isPremium = false,
+                    isPremiumFromSelf = false,
+                ),
+            ),
+        )
+        val manager = createManager()
+        manager.isPlanRowEligibleFlow.test {
+            assertTrue(awaitItem())
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(
+                    DEFAULT_ACTIVE_ACCOUNT.copy(
+                        isPremium = true,
+                        isPremiumFromSelf = false,
+                    ),
+                ),
+            )
+            assertFalse(awaitItem())
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(
+                    DEFAULT_ACTIVE_ACCOUNT.copy(
+                        isPremium = false,
+                        isPremiumFromSelf = false,
+                    ),
+                ),
+            )
+            assertTrue(awaitItem())
+        }
+    }
+
+    @Test
     fun `isUpgradedToPremiumCardEligibleFlow emits false when nothing has been observed`() =
         runTest {
             val manager = createManager()
@@ -404,6 +506,16 @@ class PremiumStateManagerImplTest {
     @Test
     fun `premium-status push with isPremium=true marks the card pending and emits true`() =
         runTest {
+            // Sync has caught up to the upgrade by the time the push lands — the active user
+            // already holds personal Premium.
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(
+                    DEFAULT_ACTIVE_ACCOUNT.copy(
+                        isPremium = true,
+                        isPremiumFromSelf = true,
+                    ),
+                ),
+            )
             val manager = createManager()
             manager.isUpgradedToPremiumCardEligibleFlow.test {
                 assertFalse(awaitItem())
@@ -418,6 +530,32 @@ class PremiumStateManagerImplTest {
                     userId = ACTIVE_USER_ID,
                     expected = true,
                 )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isUpgradedToPremiumCardEligibleFlow emits false when pending is set but the active user lacks personal Premium`() =
+        runTest {
+            // Simulates the debug-menu trigger (or a stray PREMIUM_STATUS_CHANGED push routed to
+            // an organization-granted user): pending is written directly to disk, but the active
+            // user has no personal subscription. The read-side gate must withhold the card.
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(
+                    DEFAULT_ACTIVE_ACCOUNT.copy(
+                        isPremium = true,
+                        isPremiumFromSelf = false,
+                    ),
+                ),
+            )
+            fakeSettingsDiskSource.storeUpgradedToPremiumCardPending(
+                userId = ACTIVE_USER_ID,
+                isPending = true,
+            )
+            val manager = createManager()
+            manager.isUpgradedToPremiumCardEligibleFlow.test {
+                assertFalse(awaitItem())
+                expectNoEvents()
             }
         }
 
@@ -441,24 +579,67 @@ class PremiumStateManagerImplTest {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `userState transition from non-Premium to Premium for the same user marks card pending`() =
+    fun `userState transition from non-Premium to personal Premium for the same user marks card pending`() =
         runTest {
             // Start as Free.
             mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = false)),
+                accounts = listOf(
+                    DEFAULT_ACTIVE_ACCOUNT.copy(
+                        isPremium = false,
+                        isPremiumFromSelf = false,
+                    ),
+                ),
             )
             val manager = createManager()
             manager.isUpgradedToPremiumCardEligibleFlow.test {
                 assertFalse(awaitItem())
-                // Transition to Premium for the same user.
+                // Transition to personal Premium for the same user.
                 mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                    accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+                    accounts = listOf(
+                        DEFAULT_ACTIVE_ACCOUNT.copy(
+                            isPremium = true,
+                            isPremiumFromSelf = true,
+                        ),
+                    ),
                 )
                 assertTrue(awaitItem())
                 fakeSettingsDiskSource.assertUpgradedToPremiumCardPending(
                     userId = ACTIVE_USER_ID,
                     expected = true,
+                )
+            }
+        }
+
+    @Test
+    fun `userState transition that only flips org-granted Premium should not mark card pending`() =
+        runTest {
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(
+                    DEFAULT_ACTIVE_ACCOUNT.copy(
+                        isPremium = false,
+                        isPremiumFromSelf = false,
+                    ),
+                ),
+            )
+            val manager = createManager()
+            manager.isUpgradedToPremiumCardEligibleFlow.test {
+                assertFalse(awaitItem())
+                // Aggregate isPremium becomes true via the user's organization, but personal
+                // premium stays false — the card must not arm.
+                mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                    accounts = listOf(
+                        DEFAULT_ACTIVE_ACCOUNT.copy(
+                            isPremium = true,
+                            isPremiumFromSelf = false,
+                        ),
+                    ),
+                )
+                expectNoEvents()
+                fakeSettingsDiskSource.assertUpgradedToPremiumCardPending(
+                    userId = ACTIVE_USER_ID,
+                    expected = null,
                 )
             }
         }
@@ -472,7 +653,12 @@ class PremiumStateManagerImplTest {
             manager.isUpgradedToPremiumCardEligibleFlow.test {
                 assertFalse(awaitItem())
                 mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                    accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+                    accounts = listOf(
+                        DEFAULT_ACTIVE_ACCOUNT.copy(
+                            isPremium = true,
+                            isPremiumFromSelf = true,
+                        ),
+                    ),
                 )
                 expectNoEvents()
                 fakeSettingsDiskSource.assertUpgradedToPremiumCardPending(
@@ -562,6 +748,7 @@ private val DEFAULT_ACTIVE_ACCOUNT = UserState.Account(
     avatarColorHex = "#aa00aa",
     environment = com.bitwarden.data.repository.model.Environment.Us,
     isPremium = false,
+    isPremiumFromSelf = false,
     isLoggedIn = true,
     isVaultUnlocked = true,
     needsPasswordReset = false,

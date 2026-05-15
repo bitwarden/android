@@ -27,6 +27,12 @@ interface PremiumStateManager {
     val isUpgradedToPremiumCardEligibleFlow: StateFlow<Boolean>
 
     /**
+     * Emits `true` when the active user is eligible to see the Plan row in Settings, or `false`
+     * otherwise.
+     */
+    val isPlanRowEligibleFlow: StateFlow<Boolean>
+
+    /**
      * Returns `true` when the in-app upgrade flow is available, or `false` otherwise.
      */
     fun isInAppUpgradeAvailable(): Boolean

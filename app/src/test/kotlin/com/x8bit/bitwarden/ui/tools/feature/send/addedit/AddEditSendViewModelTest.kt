@@ -1568,6 +1568,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     environment = Environment.Us,
     avatarColorHex = "#aa00aa",
     isPremium = true,
+    isPremiumFromSelf = true,
     isLoggedIn = true,
     isVaultUnlocked = true,
     needsPasswordReset = false,
