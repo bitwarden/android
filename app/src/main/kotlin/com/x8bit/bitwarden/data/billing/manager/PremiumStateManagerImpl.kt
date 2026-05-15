@@ -5,8 +5,12 @@ import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.billing.repository.BillingRepository
+import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStatus
+import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionResult
+import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionStatusState
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -16,14 +20,18 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import java.time.Clock
@@ -33,7 +41,7 @@ import java.time.Instant
 /**
  * Default implementation of [PremiumStateManager].
  */
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "LargeClass")
 class PremiumStateManagerImpl(
     private val authDiskSource: AuthDiskSource,
     authRepository: AuthRepository,
@@ -47,6 +55,28 @@ class PremiumStateManagerImpl(
 ) : PremiumStateManager {
 
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
+
+    private val subscriptionRefreshTriggerFlow =
+        MutableSharedFlow<Unit>(replay = 0, extraBufferCapacity = 1)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val subscriptionStatusStateFlow: StateFlow<SubscriptionStatusState> =
+        authRepository
+            .userStateFlow
+            .map { it?.activeAccount?.userId }
+            .distinctUntilChanged()
+            .flatMapLatest { userId ->
+                if (userId == null) {
+                    flowOf(SubscriptionStatusState.NoSubscription)
+                } else {
+                    fetchSubscriptionStatusFlow()
+                }
+            }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = SubscriptionStatusState.Loading,
+            )
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override val isPremiumUpgradeBannerEligibleFlow: StateFlow<Boolean> =
@@ -72,22 +102,32 @@ class PremiumStateManagerImpl(
                 isDismissed,
                 vaultDataState,
             ->
-            val activeAccount = userState?.activeAccount
-                ?: return@combine false
-            val isPremium = activeAccount.isPremium
-            val isAccountOldEnough = activeAccount.creationDate.isOlderThanDays(
-                days = PREMIUM_UPGRADE_MINIMUM_ACCOUNT_AGE_DAYS,
-                clock = clock,
+            BannerInputs(
+                userState = userState,
+                isInAppBillingSupported = isInAppBillingSupported,
+                featureFlagEnabled = featureFlagEnabled,
+                isDismissed = isDismissed,
+                vaultDataState = vaultDataState,
             )
-            val itemCount = vaultDataState.activeVaultItemCount()
-
-            !isPremium &&
-                isInAppBillingSupported &&
-                featureFlagEnabled &&
-                !isDismissed &&
-                isAccountOldEnough &&
-                itemCount >= PREMIUM_UPGRADE_MINIMUM_VAULT_ITEMS
         }
+            .combine(subscriptionStatusStateFlow) { inputs, subscriptionStatus ->
+                val activeAccount = inputs.userState?.activeAccount
+                    ?: return@combine false
+                val isAccountOldEnough = activeAccount.creationDate.isOlderThanDays(
+                    days = PREMIUM_UPGRADE_MINIMUM_ACCOUNT_AGE_DAYS,
+                    clock = clock,
+                )
+                val itemCount = inputs.vaultDataState.activeVaultItemCount()
+                val isEffectivelyPremium = activeAccount.isPremium &&
+                    !subscriptionStatus.isInTroubleState()
+
+                !isEffectivelyPremium &&
+                    inputs.isInAppBillingSupported &&
+                    inputs.featureFlagEnabled &&
+                    !inputs.isDismissed &&
+                    isAccountOldEnough &&
+                    itemCount >= PREMIUM_UPGRADE_MINIMUM_VAULT_ITEMS
+            }
             .stateIn(
                 scope = unconfinedScope,
                 started = SharingStarted.Eagerly,
@@ -128,6 +168,9 @@ class PremiumStateManagerImpl(
                 if (data.isPremium) {
                     markUpgradedToPremiumCardPending(userId = data.userId)
                 }
+                // Push always re-fetches: a status push can mean either "newly premium" or
+                // "subscription moved into a trouble state" (e.g. past_due → unpaid).
+                subscriptionRefreshTriggerFlow.tryEmit(Unit)
             }
             .launchIn(unconfinedScope)
 
@@ -189,7 +232,54 @@ class PremiumStateManagerImpl(
             isPending = true,
         )
     }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun fetchSubscriptionStatusFlow(): Flow<SubscriptionStatusState> =
+        merge(
+            flowOf(Unit),
+            subscriptionRefreshTriggerFlow,
+        )
+            .flatMapLatest {
+                flow {
+                    emit(SubscriptionStatusState.Loading)
+                    emit(fetchSubscriptionStatusOnce())
+                }
+            }
+
+    private suspend fun fetchSubscriptionStatusOnce(): SubscriptionStatusState =
+        when (val result = billingRepository.getSubscription()) {
+            is SubscriptionResult.Success ->
+                SubscriptionStatusState.Available(status = result.subscription.status)
+
+            SubscriptionResult.NotFound -> SubscriptionStatusState.NoSubscription
+            is SubscriptionResult.Error ->
+                SubscriptionStatusState.Error(throwable = result.error)
+        }
 }
+
+private data class BannerInputs(
+    val userState: UserState?,
+    val isInAppBillingSupported: Boolean,
+    val featureFlagEnabled: Boolean,
+    val isDismissed: Boolean,
+    val vaultDataState: DataState<VaultData>,
+)
+
+/**
+ * Returns `true` when the given [SubscriptionStatusState] represents a subscription substate
+ * that should disqualify a user from being treated as effectively premium.
+ */
+private fun SubscriptionStatusState.isInTroubleState(): Boolean = this is
+    SubscriptionStatusState.Available &&
+    when (this.status) {
+        PremiumSubscriptionStatus.CANCELED,
+        PremiumSubscriptionStatus.PAST_DUE,
+        PremiumSubscriptionStatus.PAUSED,
+        PremiumSubscriptionStatus.UPDATE_PAYMENT,
+        -> true
+
+        PremiumSubscriptionStatus.ACTIVE -> false
+    }
 
 /**
  * Returns `true` if this [Instant] is older than the given number of [days] based on

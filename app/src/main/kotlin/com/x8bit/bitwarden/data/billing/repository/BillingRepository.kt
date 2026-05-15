@@ -32,7 +32,9 @@ interface BillingRepository {
     suspend fun getPremiumPlanPricing(): PremiumPlanPricingResult
 
     /**
-     * Fetches the current user's premium subscription details.
+     * Fetches the current user's premium subscription details. The endpoint 404s when the
+     * user has no `GatewaySubscriptionId` (free user); callers receive
+     * [SubscriptionResult.NotFound] in that case instead of [SubscriptionResult.Error].
      */
     suspend fun getSubscription(): SubscriptionResult
 }
