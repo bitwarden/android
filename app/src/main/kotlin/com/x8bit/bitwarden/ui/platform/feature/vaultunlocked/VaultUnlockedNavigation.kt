@@ -282,6 +282,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         attachmentDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToPreviewAttachment = { navController.navigateToPreviewAttachment(it) },
+            onNavigateToPlan = { navController.navigateToPlanModal() },
         )
         setupUnlockDestination(
             onNavigateBack = {

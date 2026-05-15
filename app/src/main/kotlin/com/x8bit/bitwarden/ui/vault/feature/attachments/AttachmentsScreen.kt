@@ -45,6 +45,7 @@ fun AttachmentsScreen(
     intentManager: IntentManager = LocalIntentManager.current,
     onNavigateBack: () -> Unit,
     onNavigateToPreview: (route: PreviewAttachmentRoute) -> Unit,
+    onNavigateToPlan: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val attachmentsHandlers = remember(viewModel) { AttachmentsHandlers.create(viewModel) }
@@ -57,6 +58,7 @@ fun AttachmentsScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             AttachmentsEvent.NavigateBack -> onNavigateBack()
+            AttachmentsEvent.NavigateToPlanModal -> onNavigateToPlan()
             is AttachmentsEvent.NavigateToUri -> intentManager.launchUri(event.uri.toUri())
             AttachmentsEvent.ShowChooserSheet -> {
                 fileChooserLauncher.launch(
