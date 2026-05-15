@@ -63,7 +63,7 @@ private fun SubscriptionStatusJson.toPremiumSubscriptionStatus(): PremiumSubscri
 
         SubscriptionStatusJson.INCOMPLETE,
         SubscriptionStatusJson.UNPAID,
-        -> PremiumSubscriptionStatus.OVERDUE_PAYMENT
+        -> PremiumSubscriptionStatus.UPDATE_PAYMENT
 
         SubscriptionStatusJson.PAST_DUE -> PremiumSubscriptionStatus.PAST_DUE
 

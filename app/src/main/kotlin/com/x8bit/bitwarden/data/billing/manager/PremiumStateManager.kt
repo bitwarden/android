@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.billing.manager
 
+import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionStatusState
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -15,7 +16,11 @@ interface PremiumStateManager {
 
     /**
      * Emits `true` when the current user is eligible to see the Premium upgrade banner,
-     * or `false` otherwise.
+     * or `false` otherwise. A user is "effectively premium" — and therefore ineligible
+     * for the banner — only when their account is premium and their subscription is not
+     * in a recovery or terminal state. Trouble states (past due, update payment, canceled,
+     * expired, paused) flip eligibility back on even while the server still reports
+     * `isPremium=true` during the grace window.
      */
     val isPremiumUpgradeBannerEligibleFlow: StateFlow<Boolean>
 
@@ -31,6 +36,13 @@ interface PremiumStateManager {
      * otherwise.
      */
     val isPlanRowEligibleFlow: StateFlow<Boolean>
+
+    /**
+     * Emits the active user's latest [SubscriptionStatusState]. Fetches lazily when the
+     * active account is premium; emits [SubscriptionStatusState.NoSubscription] for
+     * non-premium accounts and for 404 responses (no `GatewaySubscriptionId`).
+     */
+    val subscriptionStatusStateFlow: StateFlow<SubscriptionStatusState>
 
     /**
      * Returns `true` when the in-app upgrade flow is available, or `false` otherwise.
