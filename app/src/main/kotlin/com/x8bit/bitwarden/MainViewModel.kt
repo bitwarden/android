@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManage
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.isAddTotpLoginItemFromAuthenticator
@@ -80,6 +81,7 @@ class MainViewModel @Inject constructor(
     accessibilitySelectionManager: AccessibilitySelectionManager,
     autofillSelectionManager: AutofillSelectionManager,
     cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
+    networkPermissionManager: NetworkPermissionManager,
     private val addTotpItemFromAuthenticatorManager: AddTotpItemFromAuthenticatorManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val garbageCollectionManager: GarbageCollectionManager,
@@ -168,6 +170,13 @@ class MainViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        networkPermissionManager
+            .isLocalNetworkAccessRequiredStateFlow
+            .filter { it }
+            .map { MainAction.Internal.LocalNetworkAccessRequired }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         cookieAcquisitionRequestManager
             .cookieAcquisitionRequestFlow
             .filterNotNull()
@@ -223,6 +232,7 @@ class MainViewModel @Inject constructor(
             is MainAction.Internal.ThemeUpdate -> handleAppThemeUpdated(action)
             is MainAction.Internal.DynamicColorsUpdate -> handleDynamicColorsUpdate(action)
             is MainAction.Internal.CookieAcquisitionReady -> handleCookieAcquisitionReady()
+            is MainAction.Internal.LocalNetworkAccessRequired -> handleLocalNetworkAccessRequired()
             is MainAction.Internal.ResizeHasBeenRequested -> handleResizeHasBeenRequested()
         }
     }
@@ -302,6 +312,10 @@ class MainViewModel @Inject constructor(
 
     private fun handleCookieAcquisitionReady() {
         sendEvent(MainEvent.NavigateToCookieAcquisition)
+    }
+
+    private fun handleLocalNetworkAccessRequired() {
+        sendEvent(MainEvent.NavigateToLocalNetworkAccess)
     }
 
     private fun handleResizeHasBeenRequested() {
@@ -657,6 +671,11 @@ sealed class MainAction {
         data object CookieAcquisitionReady : Internal()
 
         /**
+         * Indicates that the local network access is required.
+         */
+        data object LocalNetworkAccessRequired : Internal()
+
+        /**
          * Indicates that resize has been requested on the Activity
          */
         data object ResizeHasBeenRequested : Internal()
@@ -693,6 +712,11 @@ sealed class MainEvent {
      * Navigate to the cookie acquisition screen.
      */
     data object NavigateToCookieAcquisition : MainEvent()
+
+    /**
+     * Navigate to the local network access screen.
+     */
+    data object NavigateToLocalNetworkAccess : MainEvent()
 
     /**
      * Indicates that the app language has been updated.

@@ -74,6 +74,8 @@ import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManage
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManager
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
@@ -449,5 +451,15 @@ object PlatformManagerModule {
         configDiskSource = configDiskSource,
         cookieDiskSource = cookieDiskSource,
         cookieAcquisitionRequestManager = cookieAcquisitionRequestManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideNetworkPermissionManager(
+        @ApplicationContext context: Context,
+        resourceManager: ResourceManager,
+    ): NetworkPermissionManager = NetworkPermissionManagerImpl(
+        context = context,
+        resourceManager = resourceManager,
     )
 }

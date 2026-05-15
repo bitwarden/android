@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.util
 
 import com.bitwarden.network.exception.CookieRedirectException
+import com.bitwarden.network.exception.LocalNetworkAccessException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
@@ -20,6 +21,13 @@ class ThrowableExtensionsTest {
             message,
             exception.userFriendlyMessage,
         )
+    }
+
+    @Test
+    fun `userFriendlyMessage should return message for LocalNetworkAccessException`() {
+        val message = "Fail!"
+        val exception = LocalNetworkAccessException(message = message)
+        assertEquals(message, exception.userFriendlyMessage)
     }
 
     @Test

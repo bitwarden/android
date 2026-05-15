@@ -1365,4 +1365,11 @@ Do you want to switch to this account?</string>
     <string name="birth_place">Birth place</string>
     <string name="national_identification_number">National identification number</string>
     <string name="copy_national_identification_number">Copy national identification number</string>
+    <string name="access_your_local_network">Access your local network</string>
+    <string name="local_network_access_required">Local network access required</string>
+    <string name="ask_again_later">Ask again later</string>
+    <string name="enable_local_network_access">Enable local network access</string>
+    <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Bitwarden needs local network access to sync with your server. Without this permission, the app won’t be able to connect.</string>
+    <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Without this permission, Bitwarden won’t be able to connect and sync with your server. You can enable this in your device settings.</string>
+    <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Your request was interrupted because the app needs local network access. You can enable this in your device settings.</string>
 </resources>
