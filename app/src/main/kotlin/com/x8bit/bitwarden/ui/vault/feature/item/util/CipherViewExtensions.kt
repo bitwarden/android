@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.util
 
 import androidx.annotation.DrawableRes
+import com.bitwarden.core.data.util.toFormattedDateStyle
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.ui.platform.base.util.nullIfAllEqual
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
@@ -32,6 +33,8 @@ import com.x8bit.bitwarden.ui.vault.util.formatCardNumber
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import java.time.Clock
+import java.time.LocalDate
+import java.time.format.DateTimeParseException
 import java.time.format.FormatStyle
 import java.util.Locale
 
@@ -236,12 +239,12 @@ fun CipherView.toViewState(
                     middleName = driversLicense?.middleName,
                     lastName = driversLicense?.lastName,
                     licenseNumber = driversLicense?.licenseNumber,
-                    dateOfBirth = driversLicense?.dateOfBirth,
+                    dateOfBirth = driversLicense?.dateOfBirth?.toFormattedDate(clock = clock),
                     issuingCountry = driversLicense?.issuingCountry,
                     issuingState = driversLicense?.issuingState,
                     issuingAuthority = driversLicense?.issuingAuthority,
-                    issueDate = driversLicense?.issueDate,
-                    expirationDate = driversLicense?.expirationDate,
+                    issueDate = driversLicense?.issueDate?.toFormattedDate(clock = clock),
+                    expirationDate = driversLicense?.expirationDate?.toFormattedDate(clock = clock),
                     licenseClass = driversLicense?.licenseClass,
                 )
             }
@@ -249,7 +252,7 @@ fun CipherView.toViewState(
             CipherType.PASSPORT -> VaultItemState.ViewState.Content.ItemType.Passport(
                 givenName = passport?.givenName,
                 surname = passport?.surname,
-                dateOfBirth = passport?.dateOfBirth,
+                dateOfBirth = passport?.dateOfBirth?.toFormattedDate(clock = clock),
                 sex = passport?.sex,
                 birthPlace = passport?.birthPlace,
                 nationality = passport?.nationality,
@@ -258,8 +261,8 @@ fun CipherView.toViewState(
                 nationalIdentificationNumber = passport?.nationalIdentificationNumber,
                 issuingCountry = passport?.issuingCountry,
                 issuingAuthority = passport?.issuingAuthority,
-                issueDate = passport?.issueDate,
-                expirationDate = passport?.expirationDate,
+                issueDate = passport?.issueDate?.toFormattedDate(clock = clock),
+                expirationDate = passport?.expirationDate?.toFormattedDate(clock = clock),
             )
         },
     )
@@ -301,6 +304,24 @@ fun FieldView.toCustomField(
             name = name.orEmpty(),
         )
     }
+
+/**
+ * Takes a string date that is formatted in the default ISO-8601 format (uuuu-MM-dd) and converts
+ * it to appropriate human-readable format.
+ */
+private fun String.toFormattedDate(
+    clock: Clock,
+): String? {
+    val localDate = try {
+        LocalDate.parse(this)
+    } catch (_: DateTimeParseException) {
+        null
+    }
+    return localDate?.toFormattedDateStyle(
+        dateStyle = FormatStyle.LONG,
+        clock = clock,
+    )
+}
 
 private fun LoginUriView.toUriData() =
     VaultItemState.ViewState.Content.ItemType.Login.UriData(
