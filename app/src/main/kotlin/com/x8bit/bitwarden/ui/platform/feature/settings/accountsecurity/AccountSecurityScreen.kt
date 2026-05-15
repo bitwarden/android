@@ -375,7 +375,7 @@ fun AccountSecurityScreen(
                     onClick = {
                         viewModel.trySendAction(AccountSecurityAction.ManageDevicesClick)
                     },
-                    cardStyle = CardStyle.Top(),
+                    cardStyle = CardStyle.Middle(),
                     modifier = Modifier
                         .testTag("ManageDevicesLabel")
                         .standardHorizontalMargin()
