@@ -19,7 +19,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
-import com.x8bit.bitwarden.data.platform.repository.util.sanitizeTotpUri
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.ScopedVaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
@@ -166,10 +165,6 @@ class AuthenticatorBridgeRepositoryTest {
         coEvery {
             scopedVaultSdkSource.decryptCipher(USER_2_ID, USER_2_ENCRYPTED_SDK_TOTP_CIPHER)
         } returns USER_2_DECRYPTED_TOTP_CIPHER.asSuccess()
-        mockkStatic(String::sanitizeTotpUri)
-        every {
-            any<String>().sanitizeTotpUri(any(), any())
-        } returns "totp"
     }
 
     @AfterEach
@@ -178,7 +173,6 @@ class AuthenticatorBridgeRepositoryTest {
         unmockkStatic(
             SyncResponseJson.Cipher::toEncryptedSdkCipher,
             EnvironmentUrlDataJson::toEnvironmentUrlsOrDefault,
-            String::sanitizeTotpUri,
         )
     }
 
@@ -557,7 +551,6 @@ private val USER_2_DECRYPTED_TOTP_CIPHER = mockk<CipherView> {
 private val USER_1_EXPECTED_CIPHER_LIST = listOf(
     SharedAccountData.CipherData(
         uri = "totp",
-        legacyUri = "totp",
         id = "id1",
         name = "cipher1",
         username = "username",
@@ -567,7 +560,6 @@ private val USER_1_EXPECTED_CIPHER_LIST = listOf(
 private val USER_2_EXPECTED_CIPHER_LIST = listOf(
     SharedAccountData.CipherData(
         uri = "totp",
-        legacyUri = "totp",
         id = "id2",
         name = "cipher1",
         username = "username",
