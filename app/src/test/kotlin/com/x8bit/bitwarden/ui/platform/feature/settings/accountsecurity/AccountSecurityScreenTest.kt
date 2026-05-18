@@ -1765,7 +1765,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
     @Test
     fun `manage devices row should not be visible when isManageDevicesEnabled is false`() {
         composeTestRule
-            .onNodeWithText("Manage devices")
+            .onNodeWithText("Devices")
             .assertDoesNotExist()
     }
 
