@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListV
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -557,8 +558,20 @@ class PremiumStateManagerImplTest {
         }
 
     @Test
+    fun `subscriptionStatusStateFlow emits NoSubscription for a free active user`() = runTest {
+        val manager = createManager()
+        manager.subscriptionStatusStateFlow.test {
+            assertEquals(SubscriptionStatusState.NoSubscription, awaitItem())
+        }
+        coVerify(exactly = 0) { billingRepository.getSubscription() }
+    }
+
+    @Test
     fun `subscriptionStatusStateFlow emits NoSubscription on 404 from BillingRepository`() =
         runTest {
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+            )
             coEvery { billingRepository.getSubscription() } returns SubscriptionResult.NotFound
             val manager = createManager()
             manager.subscriptionStatusStateFlow.test {
@@ -568,6 +581,9 @@ class PremiumStateManagerImplTest {
 
     @Test
     fun `subscriptionStatusStateFlow emits Available with status on Success`() = runTest {
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+        )
         coEvery {
             billingRepository.getSubscription()
         } returns SubscriptionResult.Success(
@@ -588,6 +604,9 @@ class PremiumStateManagerImplTest {
 
     @Test
     fun `subscriptionStatusStateFlow emits Error on non-404 failure`() = runTest {
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+        )
         val exception = IllegalStateException("boom")
         coEvery {
             billingRepository.getSubscription()
@@ -599,32 +618,69 @@ class PremiumStateManagerImplTest {
     }
 
     @Test
-    fun `subscriptionStatusStateFlow refetches on premium-status push`() = runTest {
-        coEvery {
-            billingRepository.getSubscription()
-        } returns SubscriptionResult.NotFound andThen
-            SubscriptionResult.Success(
+    fun `subscriptionStatusStateFlow refetches when active user transitions to premium`() =
+        runTest {
+            coEvery {
+                billingRepository.getSubscription()
+            } returns SubscriptionResult.Success(
                 subscription = createSubscriptionInfo(
                     status = PremiumSubscriptionStatus.ACTIVE,
                 ),
             )
-        val manager = createManager()
-        manager.subscriptionStatusStateFlow.test {
-            assertEquals(SubscriptionStatusState.NoSubscription, awaitItem())
-            mutablePremiumStatusChangedFlow.tryEmit(
-                PremiumStatusChangedData(
-                    userId = ACTIVE_USER_ID,
-                    isPremium = true,
-                ),
+            val manager = createManager()
+            manager.subscriptionStatusStateFlow.test {
+                assertEquals(SubscriptionStatusState.NoSubscription, awaitItem())
+                mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                    accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+                )
+                assertEquals(
+                    SubscriptionStatusState.Available(
+                        status = PremiumSubscriptionStatus.ACTIVE,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `subscriptionStatusStateFlow refetches on push when active user is premium`() =
+        runTest {
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
             )
-            assertEquals(
-                SubscriptionStatusState.Available(
+            coEvery {
+                billingRepository.getSubscription()
+            } returns SubscriptionResult.Success(
+                subscription = createSubscriptionInfo(
                     status = PremiumSubscriptionStatus.ACTIVE,
                 ),
-                awaitItem(),
+            ) andThen SubscriptionResult.Success(
+                subscription = createSubscriptionInfo(
+                    status = PremiumSubscriptionStatus.PAST_DUE,
+                ),
             )
+            val manager = createManager()
+            manager.subscriptionStatusStateFlow.test {
+                assertEquals(
+                    SubscriptionStatusState.Available(
+                        status = PremiumSubscriptionStatus.ACTIVE,
+                    ),
+                    awaitItem(),
+                )
+                mutablePremiumStatusChangedFlow.tryEmit(
+                    PremiumStatusChangedData(
+                        userId = ACTIVE_USER_ID,
+                        isPremium = true,
+                    ),
+                )
+                assertEquals(
+                    SubscriptionStatusState.Available(
+                        status = PremiumSubscriptionStatus.PAST_DUE,
+                    ),
+                    awaitItem(),
+                )
+            }
         }
-    }
 
     @Test
     fun `banner ineligible when account is premium and status is ACTIVE`() = runTest {

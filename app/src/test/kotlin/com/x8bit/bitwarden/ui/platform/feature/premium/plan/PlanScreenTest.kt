@@ -549,7 +549,6 @@ class PlanScreenTest : BitwardenComposeTest() {
         }
         composeTestRule.onNodeWithText("Active").assertDoesNotExist()
         composeTestRule.onNodeWithText("Canceled").assertDoesNotExist()
-        composeTestRule.onNodeWithText("Expired").assertDoesNotExist()
         composeTestRule.onNodeWithText("Past due").assertDoesNotExist()
         composeTestRule.onNodeWithText("Paused").assertDoesNotExist()
         composeTestRule.onNodeWithText("Update payment").assertDoesNotExist()
