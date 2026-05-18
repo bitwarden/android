@@ -6557,6 +6557,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     avatarColorHex = "#ffecbc49",
                     environment = Environment.Eu,
                     isPremium = true,
+                    isPremiumFromSelf = true,
                     isLoggedIn = false,
                     isVaultUnlocked = false,
                     needsPasswordReset = false,

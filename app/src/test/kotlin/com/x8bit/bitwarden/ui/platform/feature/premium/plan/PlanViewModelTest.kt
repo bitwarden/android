@@ -1314,6 +1314,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     avatarColorHex = "#000000",
     environment = mockk(),
     isPremium = false,
+    isPremiumFromSelf = false,
     isLoggedIn = true,
     isVaultUnlocked = true,
     needsPasswordReset = false,

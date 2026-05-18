@@ -4,7 +4,6 @@ import androidx.annotation.DrawableRes
 import androidx.compose.material3.Text
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -13,7 +12,6 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.billing.manager.UPGRADED_TO_PREMIUM_LEARN_MORE_URL
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -34,7 +32,6 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     specialCircumstanceManager: SpecialCircumstanceManager,
     firstTimeActionManager: FirstTimeActionManager,
-    featureFlagManager: FeatureFlagManager,
     private val premiumStateManager: PremiumStateManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SettingsState, SettingsEvent, SettingsAction>(
@@ -43,8 +40,7 @@ class SettingsViewModel @Inject constructor(
         securityCount = firstTimeActionManager.allSecuritySettingsBadgeCountFlow.value,
         autoFillCount = firstTimeActionManager.allAutofillSettingsBadgeCountFlow.value,
         vaultCount = firstTimeActionManager.allVaultSettingsBadgeCountFlow.value,
-        isMobilePremiumUpgradeEnabled = featureFlagManager
-            .getFeatureFlag(FlagKey.MobilePremiumUpgrade),
+        isPlanRowEligible = premiumStateManager.isPlanRowEligibleFlow.value,
         isUpgradedToPremiumCardEligible = premiumStateManager
             .isUpgradedToPremiumCardEligibleFlow
             .value,
@@ -66,13 +62,9 @@ class SettingsViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        featureFlagManager
-            .getFeatureFlagFlow(FlagKey.MobilePremiumUpgrade)
-            .map {
-                SettingsAction.Internal.MobilePremiumUpgradeFlagUpdate(
-                    isMobilePremiumUpgradeEnabled = it,
-                )
-            }
+        premiumStateManager
+            .isPlanRowEligibleFlow
+            .map { SettingsAction.Internal.PlanRowEligibilityReceive(isEligible = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -103,8 +95,8 @@ class SettingsViewModel @Inject constructor(
             handleSettingsNotificationCountUpdate(action)
         }
 
-        is SettingsAction.Internal.MobilePremiumUpgradeFlagUpdate -> {
-            handleMobilePremiumUpgradeFlagUpdate(action)
+        is SettingsAction.Internal.PlanRowEligibilityReceive -> {
+            handlePlanRowEligibilityReceive(action)
         }
 
         is SettingsAction.Internal.UpgradedToPremiumCardEligibilityReceive -> {
@@ -145,15 +137,10 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private fun handleMobilePremiumUpgradeFlagUpdate(
-        action: SettingsAction.Internal.MobilePremiumUpgradeFlagUpdate,
+    private fun handlePlanRowEligibilityReceive(
+        action: SettingsAction.Internal.PlanRowEligibilityReceive,
     ) {
-        mutableStateFlow.update {
-            it.copy(
-                isMobilePremiumUpgradeEnabled =
-                    action.isMobilePremiumUpgradeEnabled,
-            )
-        }
+        mutableStateFlow.update { it.copy(isPlanRowEligible = action.isEligible) }
     }
 
     private fun handleSettingsClick(action: SettingsAction.SettingsClick) {
@@ -197,7 +184,7 @@ data class SettingsState(
     private val autoFillCount: Int,
     private val securityCount: Int,
     private val vaultCount: Int,
-    private val isMobilePremiumUpgradeEnabled: Boolean = false,
+    private val isPlanRowEligible: Boolean,
     private val isUpgradedToPremiumCardEligible: Boolean = false,
 ) {
     val shouldShowCloseButton: Boolean = isPreAuth
@@ -209,12 +196,12 @@ data class SettingsState(
     val shouldShowUpgradedToPremiumCard: Boolean = !isPreAuth && isUpgradedToPremiumCardEligible
 
     /**
-     * Whether the plan row should be shown. The row is visible when the
-     * mobile premium upgrade feature flag is enabled and the user is
-     * authenticated.
+     * Whether the plan row should be shown. The row is visible post-authentication when the user
+     * is eligible per [PremiumStateManager.isPlanRowEligibleFlow] — currently, when the in-app
+     * upgrade feature is enabled and the user is not relying solely on organization-granted
+     * Premium.
      */
-    private val shouldShowPlanRow: Boolean =
-        !isPreAuth && isMobilePremiumUpgradeEnabled
+    private val shouldShowPlanRow: Boolean = !isPreAuth && isPlanRowEligible
 
     val settingRows: ImmutableList<Settings> = Settings
         .entries
@@ -335,10 +322,10 @@ sealed class SettingsAction {
         ) : Internal()
 
         /**
-         * Update the mobile premium upgrade feature flag state.
+         * Indicates that the Plan row eligibility has been updated.
          */
-        data class MobilePremiumUpgradeFlagUpdate(
-            val isMobilePremiumUpgradeEnabled: Boolean,
+        data class PlanRowEligibilityReceive(
+            val isEligible: Boolean,
         ) : Internal()
 
         /**
