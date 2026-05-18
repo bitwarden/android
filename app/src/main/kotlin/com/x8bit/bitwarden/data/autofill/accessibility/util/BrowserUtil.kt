@@ -77,6 +77,7 @@ private val ACCESSIBILITY_SUPPORTED_BROWSERS = listOf(
     ),
     Browser(packageName = "com.stoutner.privacybrowser.free", urlFieldId = "url_edittext"),
     Browser(packageName = "com.stoutner.privacybrowser.standard", urlFieldId = "url_edittext"),
+    Browser(packageName = "com.tencent.mtt", urlFieldId = "url_bar"),
     Browser(packageName = "com.vivaldi.browser", urlFieldId = "url_bar"),
     Browser(packageName = "com.vivaldi.browser.snapshot", urlFieldId = "url_bar"),
     Browser(packageName = "com.vivaldi.browser.sopranos", urlFieldId = "url_bar"),
