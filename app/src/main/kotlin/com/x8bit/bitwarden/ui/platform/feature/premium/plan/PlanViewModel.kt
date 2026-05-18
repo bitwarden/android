@@ -9,10 +9,8 @@ import com.bitwarden.core.data.util.toFormattedDateStyle
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
-import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -630,17 +628,15 @@ class PlanViewModel @Inject constructor(
 
         return PlanState.ViewState.Premium(
             status = status,
-            descriptionText = toDescriptionText(
-                formattedTotal = formattedTotal,
-                nextChargeDate = formattedDate,
-                canceledDate = formattedCanceled,
-                suspensionDate = formattedSuspension,
-            ),
             billingAmountText = seatsCost.toBillingAmountText(cadence),
             storageCostText = storageCost.toMoneyText(),
             discountAmountText = discountAmount.toMoneyText(negative = true),
             estimatedTaxText = estimatedTax.toMoneyText(),
+            nextChargeTotalText = formattedTotal,
             nextChargeDateText = formattedDate,
+            canceledDateText = formattedCanceled,
+            suspensionDateText = formattedSuspension,
+            gracePeriodDays = gracePeriodDays,
             showCancelButton = status.canBeCanceled(),
         )
     }
@@ -660,40 +656,6 @@ class PlanViewModel @Inject constructor(
             this == null || this.signum() == 0 -> PLACEHOLDER_TEXT
             negative -> "-${currencyFormatter.format(this)}"
             else -> currencyFormatter.format(this)
-        }
-
-    private fun SubscriptionInfo.toDescriptionText(
-        formattedTotal: String,
-        nextChargeDate: String?,
-        canceledDate: String?,
-        suspensionDate: String?,
-    ): Text =
-        when (status) {
-            PremiumSubscriptionStatus.ACTIVE ->
-                BitwardenString.premium_next_charge_summary.asText(
-                    formattedTotal,
-                    nextChargeDate ?: PLACEHOLDER_TEXT,
-                )
-
-            PremiumSubscriptionStatus.CANCELED ->
-                BitwardenString.subscription_canceled_description.asText(
-                    canceledDate ?: PLACEHOLDER_TEXT,
-                )
-
-            PremiumSubscriptionStatus.UPDATE_PAYMENT ->
-                BitwardenString.subscription_update_payment_description.asText(
-                    suspensionDate ?: PLACEHOLDER_TEXT,
-                )
-
-            PremiumSubscriptionStatus.PAST_DUE ->
-                BitwardenPlurals.subscription_past_due_description.asPluralsText(
-                    gracePeriodDays ?: 0,
-                    gracePeriodDays ?: 0,
-                    suspensionDate ?: PLACEHOLDER_TEXT,
-                )
-
-            PremiumSubscriptionStatus.PAUSED ->
-                BitwardenString.subscription_paused_description.asText()
         }
 
     private fun Instant.toLocalizedDate(): String =
@@ -784,12 +746,15 @@ data class PlanState(
         @Parcelize
         data class Premium(
             val status: PremiumSubscriptionStatus? = null,
-            val descriptionText: Text? = null,
             val billingAmountText: Text = PLACEHOLDER_TEXT.asText(),
             val storageCostText: String = PLACEHOLDER_TEXT,
             val discountAmountText: String = PLACEHOLDER_TEXT,
             val estimatedTaxText: String = PLACEHOLDER_TEXT,
+            val nextChargeTotalText: String? = null,
             val nextChargeDateText: String? = null,
+            val canceledDateText: String? = null,
+            val suspensionDateText: String? = null,
+            val gracePeriodDays: Int? = null,
             val showCancelButton: Boolean = false,
         ) : ViewState()
     }

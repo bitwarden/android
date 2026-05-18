@@ -16,11 +16,7 @@ interface PremiumStateManager {
 
     /**
      * Emits `true` when the current user is eligible to see the Premium upgrade banner,
-     * or `false` otherwise. A user is "effectively premium" — and therefore ineligible
-     * for the banner — only when their account is premium and their subscription is not
-     * in a recovery or terminal state. Trouble states (past due, update payment, canceled,
-     * paused) flip eligibility back on even while the server still reports
-     * `isPremium=true` during the grace window.
+     * or `false` otherwise.
      */
     val isPremiumUpgradeBannerEligibleFlow: StateFlow<Boolean>
 

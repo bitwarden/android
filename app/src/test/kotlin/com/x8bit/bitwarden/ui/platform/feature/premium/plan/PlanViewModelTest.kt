@@ -4,9 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
-import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -832,9 +830,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                     DEFAULT_PREMIUM_LOADED_STATE.copy(
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
                             status = PremiumSubscriptionStatus.CANCELED,
-                            descriptionText = BitwardenString
-                                .subscription_canceled_description
-                                .asText("April 21, 2026"),
+                            canceledDateText = "April 21, 2026",
                             showCancelButton = false,
                         ),
                     ),
@@ -875,9 +871,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
                         status = PremiumSubscriptionStatus.CANCELED,
-                        descriptionText = BitwardenString
-                            .subscription_canceled_description
-                            .asText("April 21, 2026"),
+                        canceledDateText = "April 21, 2026",
                         showCancelButton = false,
                     ),
                     loadedState.viewState,
@@ -932,9 +926,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                     DEFAULT_PREMIUM_LOADED_STATE.copy(
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
                             status = PremiumSubscriptionStatus.CANCELED,
-                            descriptionText = BitwardenString
-                                .subscription_canceled_description
-                                .asText("April 21, 2026"),
+                            canceledDateText = "April 21, 2026",
                             showCancelButton = false,
                         ),
                     ),
@@ -962,9 +954,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                     DEFAULT_PREMIUM_LOADED_STATE.copy(
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
                             status = PremiumSubscriptionStatus.UPDATE_PAYMENT,
-                            descriptionText = BitwardenString
-                                .subscription_update_payment_description
-                                .asText("April 21, 2026"),
+                            suspensionDateText = "April 21, 2026",
                         ),
                     ),
                     awaitItem(),
@@ -992,9 +982,8 @@ class PlanViewModelTest : BaseViewModelTest() {
                     DEFAULT_PREMIUM_LOADED_STATE.copy(
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
                             status = PremiumSubscriptionStatus.PAST_DUE,
-                            descriptionText = BitwardenPlurals
-                                .subscription_past_due_description
-                                .asPluralsText(7, 7, "April 21, 2026"),
+                            suspensionDateText = "April 21, 2026",
+                            gracePeriodDays = 7,
                         ),
                     ),
                     awaitItem(),
@@ -1022,9 +1011,8 @@ class PlanViewModelTest : BaseViewModelTest() {
                     DEFAULT_PREMIUM_LOADED_STATE.copy(
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
                             status = PremiumSubscriptionStatus.PAST_DUE,
-                            descriptionText = BitwardenPlurals
-                                .subscription_past_due_description
-                                .asPluralsText(0, 0, "April 21, 2026"),
+                            suspensionDateText = "April 21, 2026",
+                            gracePeriodDays = null,
                         ),
                     ),
                     awaitItem(),
@@ -1050,9 +1038,6 @@ class PlanViewModelTest : BaseViewModelTest() {
                     DEFAULT_PREMIUM_LOADED_STATE.copy(
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
                             status = PremiumSubscriptionStatus.PAUSED,
-                            descriptionText = BitwardenString
-                                .subscription_paused_description
-                                .asText(),
                         ),
                     ),
                     awaitItem(),
@@ -1185,9 +1170,6 @@ class PlanViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_PREMIUM_LOADED_STATE.copy(
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
-                            descriptionText = BitwardenString
-                                .premium_next_charge_summary
-                                .asText("$45.55", PLACEHOLDER),
                             nextChargeDateText = null,
                         ),
                     ),
@@ -1473,14 +1455,11 @@ private const val PLACEHOLDER = "--"
 
 private val DEFAULT_PREMIUM_ACTIVE_VIEW_STATE = PlanState.ViewState.Premium(
     status = PremiumSubscriptionStatus.ACTIVE,
-    descriptionText = BitwardenString.premium_next_charge_summary.asText(
-        "$45.55",
-        "April 2, 2026",
-    ),
     billingAmountText = BitwardenString.billing_rate_per_year.asText("$19.80"),
     storageCostText = "$24.00",
     discountAmountText = "-$2.10",
     estimatedTaxText = "$3.85",
+    nextChargeTotalText = "$45.55",
     nextChargeDateText = "April 2, 2026",
     showCancelButton = true,
 )
