@@ -34,7 +34,7 @@ class FlagKeyTest {
         )
         assertEquals(
             FlagKey.MobilePremiumUpgrade.keyName,
-            "PM-31697-premium-upgrade-path",
+            "pm-31697-premium-upgrade-path",
         )
         assertEquals(
             FlagKey.AttachmentUpdates.keyName,
