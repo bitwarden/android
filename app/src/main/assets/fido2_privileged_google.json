@@ -875,6 +875,22 @@
           }
         ]
       }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "foundation.e.browser",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "FD:8B:1E:55:5D:40:2A:47:ED:3B:72:F3:C4:73:82:5E:A7:D2:FD:9E:C7:AD:36:60:7C:2C:E0:04:C2:10:08:06"
+          },
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "FE:36:B0:0A:C2:F0:5F:2E:29:50:33:C6:DE:C2:4E:A4:52:0E:D4:39:24:59:39:74:8D:8F:03:A5:E0:C1:90:A9"
+          }
+        ]
+      }
     }
   ]
 }
