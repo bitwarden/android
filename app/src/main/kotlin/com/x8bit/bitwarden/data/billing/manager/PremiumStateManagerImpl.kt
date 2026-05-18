@@ -59,6 +59,14 @@ class PremiumStateManagerImpl(
     private val subscriptionRefreshTriggerFlow =
         MutableSharedFlow<Unit>(replay = 0, extraBufferCapacity = 1)
 
+    /**
+     * Keyed on the active user's id so a logout/switch retriggers the fetch. Runs whenever
+     * there is an active user regardless of `Account.isPremium` — users whose Stripe
+     * subscription has moved to a terminal state need their substate surfaced even though
+     * the server reports them as non-premium. Emits [SubscriptionStatusState.NoSubscription]
+     * when there is no active user or when the server returns 404 (no `GatewaySubscriptionId`,
+     * i.e. genuinely free users).
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
     override val subscriptionStatusStateFlow: StateFlow<SubscriptionStatusState> =
         authRepository

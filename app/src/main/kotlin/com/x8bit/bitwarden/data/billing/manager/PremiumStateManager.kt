@@ -38,13 +38,8 @@ interface PremiumStateManager {
     val isPlanRowEligibleFlow: StateFlow<Boolean>
 
     /**
-     * Emits the active user's latest [SubscriptionStatusState]. Fetches whenever there is
-     * an active user (regardless of `Account.isPremium`) so that users whose Stripe
-     * subscription has moved to a terminal state still surface the correct substate; emits
-     * [SubscriptionStatusState.NoSubscription] when there is no active user or when the
-     * server returns 404 (no `GatewaySubscriptionId`).
+     * Emits the active user's latest [SubscriptionStatusState].
      */
-    val subscriptionStatusStateFlow: StateFlow<SubscriptionStatusState>
     val subscriptionStatusStateFlow: StateFlow<SubscriptionStatusState>
 
     /**
