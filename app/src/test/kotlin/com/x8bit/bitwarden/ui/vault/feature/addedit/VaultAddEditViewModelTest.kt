@@ -2548,15 +2548,15 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     fun `screenDisplayName should resolve new title strings for new vault item types in add mode`() {
         val baseAddState = createVaultAddItemState(vaultAddEditType = VaultAddEditType.AddItem)
         assertEquals(
-            BitwardenString.new_bank_account.asText(),
+            BitwardenString.add_bank_account.asText(),
             baseAddState.copy(cipherType = VaultItemCipherType.BANK_ACCOUNT).screenDisplayName,
         )
         assertEquals(
-            BitwardenString.new_license.asText(),
+            BitwardenString.add_license.asText(),
             baseAddState.copy(cipherType = VaultItemCipherType.DRIVERS_LICENSE).screenDisplayName,
         )
         assertEquals(
-            BitwardenString.new_passport.asText(),
+            BitwardenString.add_passport.asText(),
             baseAddState.copy(cipherType = VaultItemCipherType.PASSPORT).screenDisplayName,
         )
     }
@@ -2588,15 +2588,15 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             vaultAddEditType = VaultAddEditType.CloneItem(DEFAULT_EDIT_ITEM_ID),
         )
         assertEquals(
-            BitwardenString.new_bank_account.asText(),
+            BitwardenString.add_bank_account.asText(),
             baseCloneState.copy(cipherType = VaultItemCipherType.BANK_ACCOUNT).screenDisplayName,
         )
         assertEquals(
-            BitwardenString.new_license.asText(),
+            BitwardenString.add_license.asText(),
             baseCloneState.copy(cipherType = VaultItemCipherType.DRIVERS_LICENSE).screenDisplayName,
         )
         assertEquals(
-            BitwardenString.new_passport.asText(),
+            BitwardenString.add_passport.asText(),
             baseCloneState.copy(cipherType = VaultItemCipherType.PASSPORT).screenDisplayName,
         )
     }

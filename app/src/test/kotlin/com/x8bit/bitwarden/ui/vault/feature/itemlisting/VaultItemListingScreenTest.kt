@@ -500,7 +500,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     @Test
     fun `floating action button click should send AddItemClick action`() {
         composeTestRule
-            .onNodeWithContentDescription("Add Item")
+            .onNodeWithContentDescription("Add item")
             .performClick()
         verify { viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick) }
     }
@@ -756,7 +756,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update { DEFAULT_STATE }
 
         composeTestRule
-            .onNodeWithContentDescription("Add Item")
+            .onNodeWithContentDescription("Add item")
             .assertIsDisplayed()
 
         mutableStateFlow.update {
@@ -777,7 +777,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithContentDescription("Add item")
-            .assertDoesNotExist()
+            .assertIsDisplayed()
 
         mutableStateFlow.update {
             it.copy(

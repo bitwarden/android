@@ -2762,14 +2762,14 @@ data class VaultAddEditState(
             is VaultAddEditType.AddItem,
             is VaultAddEditType.CloneItem,
                 -> when (cipherType) {
-                VaultItemCipherType.LOGIN -> BitwardenString.new_login.asText()
-                VaultItemCipherType.CARD -> BitwardenString.new_card.asText()
-                VaultItemCipherType.IDENTITY -> BitwardenString.new_identity.asText()
-                VaultItemCipherType.SECURE_NOTE -> BitwardenString.new_note.asText()
-                VaultItemCipherType.SSH_KEY -> BitwardenString.new_ssh_key.asText()
-                VaultItemCipherType.BANK_ACCOUNT -> BitwardenString.new_bank_account.asText()
-                VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.new_license.asText()
-                VaultItemCipherType.PASSPORT -> BitwardenString.new_passport.asText()
+                VaultItemCipherType.LOGIN -> BitwardenString.add_login.asText()
+                VaultItemCipherType.CARD -> BitwardenString.add_card.asText()
+                VaultItemCipherType.IDENTITY -> BitwardenString.add_identity.asText()
+                VaultItemCipherType.SECURE_NOTE -> BitwardenString.add_note.asText()
+                VaultItemCipherType.SSH_KEY -> BitwardenString.add_ssh_key.asText()
+                VaultItemCipherType.BANK_ACCOUNT -> BitwardenString.add_bank_account.asText()
+                VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.add_license.asText()
+                VaultItemCipherType.PASSPORT -> BitwardenString.add_passport.asText()
             }
 
             is VaultAddEditType.EditItem -> when (cipherType) {

@@ -72,7 +72,7 @@ class FoldersScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `add folder button click should send AddFolderButtonClick`() {
-        composeTestRule.onNodeWithContentDescription("Add Item").performClick()
+        composeTestRule.onNodeWithContentDescription("Add item").performClick()
         verify {
             viewModel.trySendAction(FoldersAction.AddFolderButtonClick)
         }

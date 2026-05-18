@@ -117,7 +117,7 @@ private fun VaultNoItems_preview() {
                 message = stringResource(
                     BitwardenString.the_vault_protects_more_than_just_passwords,
                 ),
-                buttonText = stringResource(BitwardenString.new_login),
+                buttonText = stringResource(id = BitwardenString.add_login),
                 addItemClickAction = {},
                 policyDisablesSend = false,
             )
@@ -137,7 +137,7 @@ private fun VaultNoItemsPolicyDisabled_preview() {
                 message = stringResource(
                     BitwardenString.the_vault_protects_more_than_just_passwords,
                 ),
-                buttonText = stringResource(BitwardenString.new_login),
+                buttonText = stringResource(id = BitwardenString.add_login),
                 addItemClickAction = {},
                 policyDisablesSend = true,
             )
