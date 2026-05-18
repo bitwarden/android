@@ -107,6 +107,7 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.time.Clock
+import java.time.LocalDate
 import java.util.Collections
 import java.util.UUID
 import javax.inject.Inject
@@ -1792,6 +1793,18 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.ItemType.LicenseType.LicenseClassTextChange -> {
                 updateLicenseContent { it.copy(licenseClass = action.licenseClass) }
             }
+
+            is VaultAddEditAction.ItemType.LicenseType.DateOfBirthChange -> {
+                updateLicenseContent { it.copy(dateOfBirth = action.dateOfBirth) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.IssueDateChange -> {
+                updateLicenseContent { it.copy(issueDate = action.issueDate) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.ExpirationDateChange -> {
+                updateLicenseContent { it.copy(expirationDate = action.expirationDate) }
+            }
         }
     }
 
@@ -1844,6 +1857,18 @@ class VaultAddEditViewModel @Inject constructor(
 
             is VaultAddEditAction.ItemType.PassportType.IssuingAuthorityTextChange -> {
                 updatePassportContent { it.copy(issuingAuthority = action.authority) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.DateOfBirthChange -> {
+                updatePassportContent { it.copy(dateOfBirth = action.dateOfBirth) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.ExpirationDateChange -> {
+                updatePassportContent { it.copy(expirationDate = action.expirationDate) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.IssueDateChange -> {
+                updatePassportContent { it.copy(issueDate = action.issueDate) }
             }
         }
     }
@@ -3181,13 +3206,13 @@ data class VaultAddEditState(
                     val firstName: String = "",
                     val middleName: String = "",
                     val lastName: String = "",
-                    val dateOfBirth: String = "",
+                    val dateOfBirth: LocalDate? = null,
                     val licenseNumber: String = "",
                     val issuingCountry: String = "",
                     val issuingState: String = "",
                     val issuingAuthority: String = "",
-                    val issueDate: String = "",
-                    val expirationDate: String = "",
+                    val issueDate: LocalDate? = null,
+                    val expirationDate: LocalDate? = null,
                     val licenseClass: String = "",
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption
@@ -3206,7 +3231,7 @@ data class VaultAddEditState(
                 data class Passport(
                     val givenName: String = "",
                     val surname: String = "",
-                    val dateOfBirth: String = "",
+                    val dateOfBirth: LocalDate? = null,
                     val sex: String = "",
                     val birthPlace: String = "",
                     val nationality: String = "",
@@ -3215,8 +3240,8 @@ data class VaultAddEditState(
                     val nationalIdentificationNumber: String = "",
                     val issuingCountry: String = "",
                     val issuingAuthority: String = "",
-                    val issueDate: String = "",
-                    val expirationDate: String = "",
+                    val issueDate: LocalDate? = null,
+                    val expirationDate: LocalDate? = null,
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption
                         get() = ItemTypeOption.PASSPORT
@@ -4261,6 +4286,21 @@ sealed class VaultAddEditAction {
              * Fired when the issuing authority text input is changed.
              */
             data class IssuingAuthorityTextChange(val authority: String) : PassportType()
+
+            /**
+             * Fired when the date of birth input is changed.
+             */
+            data class DateOfBirthChange(val dateOfBirth: LocalDate?) : PassportType()
+
+            /**
+             * Fired when the issue date input is changed.
+             */
+            data class IssueDateChange(val issueDate: LocalDate?) : PassportType()
+
+            /**
+             * Fired when the expiration date input is changed.
+             */
+            data class ExpirationDateChange(val expirationDate: LocalDate?) : PassportType()
         }
 
         /**
@@ -4307,6 +4347,27 @@ sealed class VaultAddEditAction {
              * Fired when the license class text input is changed.
              */
             data class LicenseClassTextChange(val licenseClass: String) : LicenseType()
+
+            /**
+             * Fired when the date of birth input is changed.
+             */
+            data class DateOfBirthChange(
+                val dateOfBirth: LocalDate?,
+            ) : LicenseType()
+
+            /**
+             * Fired when the issue date input is changed.
+             */
+            data class IssueDateChange(
+                val issueDate: LocalDate?,
+            ) : LicenseType()
+
+            /**
+             * Fired when the expiration date input is changed.
+             */
+            data class ExpirationDateChange(
+                val expirationDate: LocalDate?,
+            ) : LicenseType()
         }
     }
 

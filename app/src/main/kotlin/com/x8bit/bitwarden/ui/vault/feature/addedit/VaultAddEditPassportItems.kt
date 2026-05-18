@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
-import com.bitwarden.ui.platform.components.button.BitwardenTextSelectionButton
+import com.bitwarden.ui.platform.components.dropdown.BitwardenDatePickerButton
 import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
@@ -64,11 +64,10 @@ fun LazyListScope.vaultAddEditPassportItems(
     }
 
     item {
-        BitwardenTextSelectionButton(
+        BitwardenDatePickerButton(
             label = stringResource(id = BitwardenString.date_of_birth),
-            selectedOption = passportState.dateOfBirth,
-            // TODO: Open a native Material date picker (separate ticket TBD).
-            onClick = {},
+            currentDate = passportState.dateOfBirth,
+            onDateSelect = passportHandlers.onDateOfBirthChange,
             textFieldTestTag = "PassportDateOfBirthEntry",
             cardStyle = CardStyle.Middle(),
             modifier = Modifier
@@ -184,11 +183,10 @@ fun LazyListScope.vaultAddEditPassportItems(
     }
 
     item {
-        BitwardenTextSelectionButton(
+        BitwardenDatePickerButton(
             label = stringResource(id = BitwardenString.issue_date),
-            selectedOption = passportState.issueDate,
-            // TODO: Open a native Material date picker (separate ticket TBD).
-            onClick = {},
+            currentDate = passportState.issueDate,
+            onDateSelect = passportHandlers.onIssueDateChange,
             textFieldTestTag = "PassportIssueDateEntry",
             cardStyle = CardStyle.Middle(),
             modifier = Modifier
@@ -198,11 +196,10 @@ fun LazyListScope.vaultAddEditPassportItems(
     }
 
     item {
-        BitwardenTextSelectionButton(
+        BitwardenDatePickerButton(
             label = stringResource(id = BitwardenString.expiration_date),
-            selectedOption = passportState.expirationDate,
-            // TODO: Open a native Material date picker (separate ticket TBD).
-            onClick = {},
+            currentDate = passportState.expirationDate,
+            onDateSelect = passportHandlers.onExpirationDateChange,
             textFieldTestTag = "PassportExpirationDateEntry",
             cardStyle = CardStyle.Bottom,
             modifier = Modifier

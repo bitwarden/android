@@ -28,6 +28,7 @@ import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneOffset
 
 @Suppress("LargeClass")
@@ -570,7 +571,7 @@ class VaultAddItemStateExtensionsTest {
             type = VaultAddEditState.ViewState.Content.ItemType.Passport(
                 givenName = "Bruce",
                 surname = "Wayne",
-                dateOfBirth = "1939-05-27",
+                dateOfBirth = LocalDate.of(1939, 5, 27),
                 sex = "M",
                 birthPlace = "Gotham City",
                 nationality = "American",
@@ -579,8 +580,8 @@ class VaultAddItemStateExtensionsTest {
                 nationalIdentificationNumber = "987-65-4321",
                 issuingCountry = "USA",
                 issuingAuthority = "U.S. Department of State",
-                issueDate = "2020-01-15",
-                expirationDate = "2030-01-15",
+                issueDate = LocalDate.of(2020, 1, 15),
+                expirationDate = LocalDate.of(2030, 1, 15),
             ),
         )
 
