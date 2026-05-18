@@ -744,13 +744,39 @@ class PremiumStateManagerImplTest {
         }
 
     @Test
-    fun `subscriptionStatusStateFlow emits NoSubscription for a free active user`() = runTest {
-        val manager = createManager()
-        manager.subscriptionStatusStateFlow.test {
-            assertEquals(SubscriptionStatusState.NoSubscription, awaitItem())
+    fun `subscriptionStatusStateFlow emits NoSubscription on 404 for a free active user`() =
+        runTest {
+            // Default mock returns SubscriptionResult.NotFound; the fetch runs even when
+            // isPremium is false so users with canceled / expired subscriptions are routed
+            // through the Premium view rather than the Free view.
+            val manager = createManager()
+            manager.subscriptionStatusStateFlow.test {
+                assertEquals(SubscriptionStatusState.NoSubscription, awaitItem())
+            }
+            coVerify(exactly = 1) { billingRepository.getSubscription() }
         }
-        coVerify(exactly = 0) { billingRepository.getSubscription() }
-    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `subscriptionStatusStateFlow emits Available when free active user has a canceled subscription`() =
+        runTest {
+            coEvery {
+                billingRepository.getSubscription()
+            } returns SubscriptionResult.Success(
+                subscription = createSubscriptionInfo(
+                    status = PremiumSubscriptionStatus.CANCELED,
+                ),
+            )
+            val manager = createManager()
+            manager.subscriptionStatusStateFlow.test {
+                assertEquals(
+                    SubscriptionStatusState.Available(
+                        status = PremiumSubscriptionStatus.CANCELED,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `subscriptionStatusStateFlow emits NoSubscription on 404 from BillingRepository`() =
@@ -804,29 +830,40 @@ class PremiumStateManagerImplTest {
     }
 
     @Test
-    fun `subscriptionStatusStateFlow refetches when active user transitions to premium`() =
-        runTest {
-            coEvery {
-                billingRepository.getSubscription()
-            } returns SubscriptionResult.Success(
-                subscription = createSubscriptionInfo(
+    fun `subscriptionStatusStateFlow refetches when active user changes`() = runTest {
+        coEvery {
+            billingRepository.getSubscription()
+        } returns SubscriptionResult.Success(
+            subscription = createSubscriptionInfo(
+                status = PremiumSubscriptionStatus.ACTIVE,
+            ),
+        ) andThen SubscriptionResult.Success(
+            subscription = createSubscriptionInfo(
+                status = PremiumSubscriptionStatus.CANCELED,
+            ),
+        )
+        val manager = createManager()
+        manager.subscriptionStatusStateFlow.test {
+            assertEquals(
+                SubscriptionStatusState.Available(
                     status = PremiumSubscriptionStatus.ACTIVE,
                 ),
+                awaitItem(),
             )
-            val manager = createManager()
-            manager.subscriptionStatusStateFlow.test {
-                assertEquals(SubscriptionStatusState.NoSubscription, awaitItem())
-                mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                    accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
-                )
-                assertEquals(
-                    SubscriptionStatusState.Available(
-                        status = PremiumSubscriptionStatus.ACTIVE,
-                    ),
-                    awaitItem(),
-                )
-            }
+            val otherUserId = "otherUserId"
+            mutableUserStateFlow.value = UserState(
+                activeUserId = otherUserId,
+                accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(userId = otherUserId)),
+            )
+            assertEquals(
+                SubscriptionStatusState.Available(
+                    status = PremiumSubscriptionStatus.CANCELED,
+                ),
+                awaitItem(),
+            )
         }
+        coVerify(exactly = 2) { billingRepository.getSubscription() }
+    }
 
     @Test
     fun `subscriptionStatusStateFlow refetches on push when active user is premium`() =
