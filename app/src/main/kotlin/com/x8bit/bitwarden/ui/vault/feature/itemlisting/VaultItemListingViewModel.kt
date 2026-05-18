@@ -4072,7 +4072,7 @@ sealed class VaultItemListingsAction {
          */
         data class SnackbarDataReceived(
             val data: BitwardenSnackbarData,
-        ) : Internal(), BackgroundEvent
+        ) : Internal()
 
         /**
          * Indicates that an error occurred while decrypting a cipher.
