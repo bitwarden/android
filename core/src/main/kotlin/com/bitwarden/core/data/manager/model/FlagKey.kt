@@ -135,7 +135,7 @@ sealed class FlagKey<out T : Any> {
      * Data object holding the feature flag key for the Manage Devices feature.
      */
     data object ManageDevices : FlagKey<Boolean>() {
-        override val keyName: String = "pm-4516-manage-devices"
+        override val keyName: String = "pm-4516-devices-add-last-activity-date"
         override val defaultValue: Boolean = false
     }
 
