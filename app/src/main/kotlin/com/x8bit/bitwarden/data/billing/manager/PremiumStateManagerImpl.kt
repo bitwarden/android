@@ -63,13 +63,13 @@ class PremiumStateManagerImpl(
     override val subscriptionStatusStateFlow: StateFlow<SubscriptionStatusState> =
         authRepository
             .userStateFlow
-            .map { it?.activeAccount?.userId }
+            .map { state -> state?.activeAccount?.let { it.userId to it.isPremium } }
             .distinctUntilChanged()
-            .flatMapLatest { userId ->
-                if (userId == null) {
-                    flowOf(SubscriptionStatusState.NoSubscription)
-                } else {
+            .flatMapLatest { activeAccount ->
+                if (activeAccount?.second == true) {
                     fetchSubscriptionStatusFlow()
+                } else {
+                    flowOf(SubscriptionStatusState.NoSubscription)
                 }
             }
             .stateIn(
