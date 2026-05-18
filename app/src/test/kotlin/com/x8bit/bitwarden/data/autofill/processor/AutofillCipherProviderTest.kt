@@ -108,6 +108,7 @@ class AutofillCipherProviderTest {
         every { password } returns LOGIN_PASSWORD
         every { username } returns LOGIN_USERNAME
         every { totp } returns null
+        every { uris } returns listOf(com.bitwarden.vault.LoginUriView(uri = URI, match = null, uriChecksum = null))
     }
     private val loginCipherViewWithoutTotp: CipherView = mockk {
         every { archivedDate } returns null
@@ -117,11 +118,13 @@ class AutofillCipherProviderTest {
         every { name } returns LOGIN_NAME
         every { reprompt } returns CipherRepromptType.NONE
         every { type } returns CipherType.LOGIN
+        every { fields } returns null
     }
     private val loginViewWithTotp: LoginView = mockk {
         every { password } returns LOGIN_PASSWORD
         every { username } returns LOGIN_USERNAME
         every { totp } returns "TOTP-CODE"
+        every { uris } returns listOf(com.bitwarden.vault.LoginUriView(uri = URI, match = null, uriChecksum = null))
     }
     private val loginCipherViewWithTotp: CipherView = mockk {
         every { archivedDate } returns null
@@ -131,6 +134,7 @@ class AutofillCipherProviderTest {
         every { name } returns LOGIN_NAME
         every { reprompt } returns CipherRepromptType.NONE
         every { type } returns CipherType.LOGIN
+        every { fields } returns null
     }
     private val authRepository: AuthRepository = mockk {
         every { activeUserId } returns ACTIVE_USER_ID
@@ -596,6 +600,56 @@ class AutofillCipherProviderTest {
                 Timber.e("Cipher not found for autofill.")
             }
         }
+
+    @Test
+    fun `getLoginAutofillCiphers should exclude Boolean fields`() = runTest {
+        val booleanField = com.bitwarden.vault.FieldView(
+            name = "Boolean Field",
+            value = "true",
+            type = com.bitwarden.vault.FieldType.BOOLEAN,
+            linkedId = null
+        )
+        val textField = com.bitwarden.vault.FieldView(
+            name = "Text Field",
+            value = "Text Value",
+            type = com.bitwarden.vault.FieldType.TEXT,
+            linkedId = null
+        )
+
+        val cipherViewWithMixedFields: CipherView = mockk {
+            every { deletedDate } returns null
+            every { id } returns "mixed_fields_id"
+            every { login } returns loginViewWithoutTotp
+            every { name } returns "Mixed Fields Login"
+            every { reprompt } returns CipherRepromptType.NONE
+            every { type } returns CipherType.LOGIN
+            every { fields } returns listOf(booleanField, textField)
+            every { subtitle } returns "Subtitle"
+        }
+
+        val cipherListView: CipherListView = mockk {
+            every { deletedDate } returns null
+            every { id } returns "mixed_fields_id"
+            every { login } returns loginListViewWithoutTotp
+            every { name } returns "Mixed Fields Login"
+            every { reprompt } returns CipherRepromptType.NONE
+            every { type } returns CipherListViewType.Login(v1 = loginListViewWithoutTotp)
+        }
+
+        coEvery { vaultRepository.getCipher("mixed_fields_id") } returns GetCipherResult.Success(cipherViewWithMixedFields)
+        coEvery { cipherMatchingManager.filterCiphersForMatches(any(), URI) } returns listOf(cipherListView)
+        mutableCipherListViewsWithFailuresStateFlow.value = DataState.Loaded(
+            data = DecryptCipherListResult(successes = listOf(cipherListView), failures = emptyList())
+        )
+        mutableVaultStateFlow.value = listOf(VaultUnlockData(userId = ACTIVE_USER_ID, status = VaultUnlockData.Status.UNLOCKED))
+
+        val result = autofillCipherProvider.getLoginAutofillCiphers(URI)
+
+        assertEquals(1, result.size)
+        // Should only contain the Text field, boolean field should be filtered out
+        assertEquals(1, result[0].customFields.size)
+        assertEquals("Text Field", result[0].customFields[0].name)
+    }
 }
 
 private const val ACTIVE_USER_ID = "activeUserId"
@@ -637,6 +691,7 @@ private val LOGIN_AUTOFILL_CIPHER_WITH_TOTP = AutofillCipher.Login(
     subtitle = LOGIN_SUBTITLE,
     username = LOGIN_USERNAME,
     website = URI,
+    isStrictMatch = true,
 )
 private val LOGIN_AUTOFILL_CIPHER_WITHOUT_TOTP = AutofillCipher.Login(
     cipherId = LOGIN_WITHOUT_TOTP_CIPHER_ID,
@@ -646,4 +701,5 @@ private val LOGIN_AUTOFILL_CIPHER_WITHOUT_TOTP = AutofillCipher.Login(
     subtitle = LOGIN_SUBTITLE,
     username = LOGIN_USERNAME,
     website = URI,
+    isStrictMatch = true,
 )
