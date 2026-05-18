@@ -12,6 +12,11 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.billing.repository.BillingRepository
+import com.x8bit.bitwarden.data.billing.repository.model.PlanCadence
+import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStatus
+import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionInfo
+import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionResult
+import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionStatusState
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -20,11 +25,14 @@ import com.x8bit.bitwarden.data.platform.manager.model.PremiumStatusChangedData
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -52,6 +60,7 @@ class PremiumStateManagerImplTest {
     private val mutableIsInAppBillingSupportedFlow = MutableStateFlow(true)
     private val billingRepository: BillingRepository = mockk {
         every { isInAppBillingSupportedFlow } returns mutableIsInAppBillingSupportedFlow
+        coEvery { getSubscription() } returns SubscriptionResult.NotFound
     }
 
     private val fakeSettingsDiskSource = FakeSettingsDiskSource()
@@ -537,7 +546,215 @@ class PremiumStateManagerImplTest {
             expected = null,
         )
     }
+
+    @Test
+    fun `subscriptionStatusStateFlow emits NoSubscription when there is no active user`() =
+        runTest {
+            mutableUserStateFlow.value = null
+            val manager = createManager()
+            manager.subscriptionStatusStateFlow.test {
+                assertEquals(SubscriptionStatusState.NoSubscription, awaitItem())
+            }
+        }
+
+    @Test
+    fun `subscriptionStatusStateFlow emits NoSubscription for a free active user`() = runTest {
+        val manager = createManager()
+        manager.subscriptionStatusStateFlow.test {
+            assertEquals(SubscriptionStatusState.NoSubscription, awaitItem())
+        }
+        coVerify(exactly = 0) { billingRepository.getSubscription() }
+    }
+
+    @Test
+    fun `subscriptionStatusStateFlow emits NoSubscription on 404 from BillingRepository`() =
+        runTest {
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+            )
+            coEvery { billingRepository.getSubscription() } returns SubscriptionResult.NotFound
+            val manager = createManager()
+            manager.subscriptionStatusStateFlow.test {
+                assertEquals(SubscriptionStatusState.NoSubscription, awaitItem())
+            }
+        }
+
+    @Test
+    fun `subscriptionStatusStateFlow emits Available with status on Success`() = runTest {
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+        )
+        coEvery {
+            billingRepository.getSubscription()
+        } returns SubscriptionResult.Success(
+            subscription = createSubscriptionInfo(
+                status = PremiumSubscriptionStatus.CANCELED,
+            ),
+        )
+        val manager = createManager()
+        manager.subscriptionStatusStateFlow.test {
+            assertEquals(
+                SubscriptionStatusState.Available(
+                    status = PremiumSubscriptionStatus.CANCELED,
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `subscriptionStatusStateFlow emits Error on non-404 failure`() = runTest {
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+        )
+        val exception = IllegalStateException("boom")
+        coEvery {
+            billingRepository.getSubscription()
+        } returns SubscriptionResult.Error(error = exception)
+        val manager = createManager()
+        manager.subscriptionStatusStateFlow.test {
+            assertEquals(SubscriptionStatusState.Error(throwable = exception), awaitItem())
+        }
+    }
+
+    @Test
+    fun `subscriptionStatusStateFlow refetches when active user transitions to premium`() =
+        runTest {
+            coEvery {
+                billingRepository.getSubscription()
+            } returns SubscriptionResult.Success(
+                subscription = createSubscriptionInfo(
+                    status = PremiumSubscriptionStatus.ACTIVE,
+                ),
+            )
+            val manager = createManager()
+            manager.subscriptionStatusStateFlow.test {
+                assertEquals(SubscriptionStatusState.NoSubscription, awaitItem())
+                mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                    accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+                )
+                assertEquals(
+                    SubscriptionStatusState.Available(
+                        status = PremiumSubscriptionStatus.ACTIVE,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `subscriptionStatusStateFlow refetches on push when active user is premium`() =
+        runTest {
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+            )
+            coEvery {
+                billingRepository.getSubscription()
+            } returns SubscriptionResult.Success(
+                subscription = createSubscriptionInfo(
+                    status = PremiumSubscriptionStatus.ACTIVE,
+                ),
+            ) andThen SubscriptionResult.Success(
+                subscription = createSubscriptionInfo(
+                    status = PremiumSubscriptionStatus.PAST_DUE,
+                ),
+            )
+            val manager = createManager()
+            manager.subscriptionStatusStateFlow.test {
+                assertEquals(
+                    SubscriptionStatusState.Available(
+                        status = PremiumSubscriptionStatus.ACTIVE,
+                    ),
+                    awaitItem(),
+                )
+                mutablePremiumStatusChangedFlow.tryEmit(
+                    PremiumStatusChangedData(
+                        userId = ACTIVE_USER_ID,
+                        isPremium = true,
+                    ),
+                )
+                assertEquals(
+                    SubscriptionStatusState.Available(
+                        status = PremiumSubscriptionStatus.PAST_DUE,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `banner ineligible when account is premium and status is ACTIVE`() = runTest {
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+        )
+        coEvery {
+            billingRepository.getSubscription()
+        } returns SubscriptionResult.Success(
+            subscription = createSubscriptionInfo(status = PremiumSubscriptionStatus.ACTIVE),
+        )
+        val manager = createManager()
+        manager.isPremiumUpgradeBannerEligibleFlow.test {
+            assertFalse(awaitItem())
+        }
+    }
+
+    @Test
+    fun `banner eligible when account is premium but status is in a trouble state`() = runTest {
+        listOf(
+            PremiumSubscriptionStatus.CANCELED,
+            PremiumSubscriptionStatus.PAST_DUE,
+            PremiumSubscriptionStatus.PAUSED,
+            PremiumSubscriptionStatus.UPDATE_PAYMENT,
+        ).forEach { status ->
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+            )
+            coEvery {
+                billingRepository.getSubscription()
+            } returns SubscriptionResult.Success(
+                subscription = createSubscriptionInfo(status = status),
+            )
+            val manager = createManager()
+            manager.isPremiumUpgradeBannerEligibleFlow.test {
+                assertTrue(awaitItem(), "Expected banner eligible for status=$status")
+            }
+        }
+    }
+
+    @Test
+    fun `banner ineligible when account is premium and substate is still loading`() = runTest {
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+        )
+        coEvery {
+            billingRepository.getSubscription()
+        } coAnswers {
+            kotlinx.coroutines.awaitCancellation()
+        }
+        val manager = createManager()
+        manager.isPremiumUpgradeBannerEligibleFlow.test {
+            // Loading is not treated as a trouble state so a premium user is still effectively
+            // premium during the initial fetch.
+            assertFalse(awaitItem())
+        }
+    }
 }
+
+private fun createSubscriptionInfo(
+    status: PremiumSubscriptionStatus,
+): SubscriptionInfo = SubscriptionInfo(
+    status = status,
+    cadence = PlanCadence.ANNUALLY,
+    seatsCost = java.math.BigDecimal("19.80"),
+    storageCost = null,
+    discountAmount = null,
+    estimatedTax = java.math.BigDecimal.ZERO,
+    nextChargeTotal = java.math.BigDecimal("19.80"),
+    nextCharge = null,
+    canceledDate = null,
+    suspensionDate = null,
+    gracePeriodDays = null,
+)
 
 /**
  * Creates [VaultData] with the given number of non-deleted cipher items.

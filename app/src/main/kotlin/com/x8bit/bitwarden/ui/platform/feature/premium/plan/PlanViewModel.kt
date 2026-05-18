@@ -16,6 +16,7 @@ import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.billing.repository.BillingRepository
 import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
 import com.x8bit.bitwarden.data.billing.repository.model.CustomerPortalResult
@@ -24,6 +25,7 @@ import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResul
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStatus
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionInfo
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionResult
+import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionStatusState
 import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -58,12 +60,13 @@ const val PREMIUM_CHECKOUT_CALLBACK_URL = "bitwarden://premium-checkout-result"
  * View model for the plan screen, driving the upgrade flow for free users and
  * the subscription management surface for premium users.
  */
-@Suppress("TooManyFunctions", "LargeClass")
+@Suppress("TooManyFunctions", "LargeClass", "LongParameterList")
 @HiltViewModel
 class PlanViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val billingRepository: BillingRepository,
     private val authRepository: AuthRepository,
+    private val premiumStateManager: PremiumStateManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val vaultRepository: VaultRepository,
     private val clock: Clock,
@@ -75,9 +78,11 @@ class PlanViewModel @Inject constructor(
             .value
             ?.activeAccount
             ?.isPremium == true
+        val showsPremiumView = isPremium ||
+            premiumStateManager.subscriptionStatusStateFlow.value.isPremiumViewEligible()
         PlanState(
             planMode = planMode,
-            viewState = if (isPremium) {
+            viewState = if (showsPremiumView) {
                 PlanState.ViewState.Premium()
             } else {
                 PlanState.ViewState.Free(
@@ -108,6 +113,12 @@ class PlanViewModel @Inject constructor(
         specialCircumstanceManager
             .specialCircumstanceStateFlow
             .map { PlanAction.Internal.SpecialCircumstanceReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        premiumStateManager
+            .subscriptionStatusStateFlow
+            .map { PlanAction.Internal.SubscriptionStatusUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -168,6 +179,10 @@ class PlanViewModel @Inject constructor(
             is PlanAction.Internal.PortalUrlReceive -> handlePortalUrlReceive(action)
             is PlanAction.Internal.SubscriptionResultReceive -> {
                 handleSubscriptionResultReceive(action)
+            }
+
+            is PlanAction.Internal.SubscriptionStatusUpdateReceive -> {
+                handleSubscriptionStatusUpdateReceive(action)
             }
         }
     }
@@ -370,6 +385,26 @@ class PlanViewModel @Inject constructor(
                 }
             }
 
+            SubscriptionResult.NotFound -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = PlanState.ViewState.Free(
+                            rate = PLACEHOLDER_TEXT,
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = false,
+                        ),
+                        dialogState = null,
+                    )
+                }
+                viewModelScope.launch {
+                    sendAction(
+                        PlanAction.Internal.PricingResultReceive(
+                            result = billingRepository.getPremiumPlanPricing(),
+                        ),
+                    )
+                }
+            }
+
             is SubscriptionResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
@@ -381,6 +416,32 @@ class PlanViewModel @Inject constructor(
                         ),
                     )
                 }
+            }
+        }
+    }
+
+    private fun handleSubscriptionStatusUpdateReceive(
+        action: PlanAction.Internal.SubscriptionStatusUpdateReceive,
+    ) {
+        val status = (action.state as? SubscriptionStatusState.Available)?.status
+            ?: return
+        if (!status.isPremiumViewEligible()) return
+        onFreeContent { freeState ->
+            if (freeState.isAwaitingPremiumStatus) return@onFreeContent
+            mutableStateFlow.update {
+                it.copy(
+                    viewState = PlanState.ViewState.Premium(),
+                    dialogState = PlanState.DialogState.Loading(
+                        message = BitwardenString.loading_subscription.asText(),
+                    ),
+                )
+            }
+            viewModelScope.launch {
+                sendAction(
+                    PlanAction.Internal.SubscriptionResultReceive(
+                        result = billingRepository.getSubscription(),
+                    ),
+                )
             }
         }
     }
@@ -580,7 +641,7 @@ class PlanViewModel @Inject constructor(
             discountAmountText = discountAmount.toMoneyText(negative = true),
             estimatedTaxText = estimatedTax.toMoneyText(),
             nextChargeDateText = formattedDate,
-            showCancelButton = status != PremiumSubscriptionStatus.CANCELED,
+            showCancelButton = status.canBeCanceled(),
         )
     }
 
@@ -619,8 +680,8 @@ class PlanViewModel @Inject constructor(
                     canceledDate ?: PLACEHOLDER_TEXT,
                 )
 
-            PremiumSubscriptionStatus.OVERDUE_PAYMENT ->
-                BitwardenString.subscription_overdue_description.asText(
+            PremiumSubscriptionStatus.UPDATE_PAYMENT ->
+                BitwardenString.subscription_update_payment_description.asText(
                     suspensionDate ?: PLACEHOLDER_TEXT,
                 )
 
@@ -985,5 +1046,50 @@ sealed class PlanAction {
         data class SubscriptionResultReceive(
             val result: SubscriptionResult,
         ) : Internal()
+
+        /**
+         * The shared subscription status state for the active user has updated.
+         */
+        data class SubscriptionStatusUpdateReceive(
+            val state: SubscriptionStatusState,
+        ) : Internal()
     }
 }
+
+/**
+ * Returns `true` when this status corresponds to a subscription that the user can still
+ * cancel through the Stripe portal — i.e., a live or recoverable subscription. Terminal
+ * states (canceled) do not present a cancel action.
+ */
+private fun PremiumSubscriptionStatus.canBeCanceled(): Boolean = when (this) {
+    PremiumSubscriptionStatus.CANCELED -> false
+
+    PremiumSubscriptionStatus.ACTIVE,
+    PremiumSubscriptionStatus.PAST_DUE,
+    PremiumSubscriptionStatus.PAUSED,
+    PremiumSubscriptionStatus.UPDATE_PAYMENT,
+    -> true
+}
+
+/**
+ * Returns `true` when this status should route the Plan screen to the Premium view even
+ * if `Account.isPremium=false`. Trouble states (canceled, past due, paused, update payment)
+ * carry enough context to render a status badge and Manage/Resubscribe affordances, which
+ * the Free view does not surface.
+ */
+private fun PremiumSubscriptionStatus.isPremiumViewEligible(): Boolean = when (this) {
+    PremiumSubscriptionStatus.CANCELED,
+    PremiumSubscriptionStatus.PAST_DUE,
+    PremiumSubscriptionStatus.PAUSED,
+    PremiumSubscriptionStatus.UPDATE_PAYMENT,
+    -> true
+
+    PremiumSubscriptionStatus.ACTIVE -> false
+}
+
+/**
+ * Returns `true` when the current [SubscriptionStatusState] indicates that the Plan screen
+ * should render the Premium view, even if the user account's `isPremium` flag is `false`.
+ */
+private fun SubscriptionStatusState.isPremiumViewEligible(): Boolean =
+    this is SubscriptionStatusState.Available && this.status.isPremiumViewEligible()

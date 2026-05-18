@@ -499,16 +499,16 @@ class PlanScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `status badge should render with Overdue payment label for OVERDUE_PAYMENT status`() {
+    fun `status badge should render with Update payment label for UPDATE_PAYMENT status`() {
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(
-                    status = PremiumSubscriptionStatus.OVERDUE_PAYMENT,
+                    status = PremiumSubscriptionStatus.UPDATE_PAYMENT,
                 ),
             )
         }
         composeTestRule
-            .onNodeWithText("Overdue payment")
+            .onNodeWithText("Update payment")
             .assertIsDisplayed()
     }
 
@@ -549,9 +549,9 @@ class PlanScreenTest : BitwardenComposeTest() {
         }
         composeTestRule.onNodeWithText("Active").assertDoesNotExist()
         composeTestRule.onNodeWithText("Canceled").assertDoesNotExist()
-        composeTestRule.onNodeWithText("Overdue payment").assertDoesNotExist()
         composeTestRule.onNodeWithText("Past due").assertDoesNotExist()
         composeTestRule.onNodeWithText("Paused").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Update payment").assertDoesNotExist()
     }
 
     @Test

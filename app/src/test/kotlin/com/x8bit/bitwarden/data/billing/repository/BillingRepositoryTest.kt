@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.billing.repository
 
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.network.model.BitwardenError
 import com.bitwarden.network.model.BitwardenSubscriptionResponseJson
 import com.bitwarden.network.model.CadenceTypeJson
 import com.bitwarden.network.model.CartItemJson
@@ -11,6 +12,7 @@ import com.bitwarden.network.model.PasswordManagerCartItemsJson
 import com.bitwarden.network.model.PortalUrlResponseJson
 import com.bitwarden.network.model.PremiumPlanResponseJson
 import com.bitwarden.network.model.SubscriptionStatusJson
+import com.bitwarden.network.model.toBitwardenError
 import com.bitwarden.network.service.BillingService
 import com.x8bit.bitwarden.data.billing.manager.PlayBillingManager
 import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
@@ -23,11 +25,15 @@ import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionResult
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
@@ -44,6 +50,16 @@ class BillingRepositoryTest {
         playBillingManager = playBillingManager,
         billingService = billingService,
     )
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic("com.bitwarden.network.model.BitwardenErrorKt")
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic("com.bitwarden.network.model.BitwardenErrorKt")
+    }
 
     @Test
     fun `isInAppBillingSupportedFlow should delegate to PlayBillingManager`() =
@@ -206,7 +222,42 @@ class BillingRepositoryTest {
                 result,
             )
         }
+
+    @Test
+    fun `getSubscription with 404 BitwardenError Http should return NotFound`() = runTest {
+        val throwable = RuntimeException("not found")
+        val bitwardenHttpError = mockk<BitwardenError.Http> {
+            every { code } returns NOT_FOUND_CODE
+        }
+        every { throwable.toBitwardenError() } returns bitwardenHttpError
+        coEvery {
+            billingService.getSubscription()
+        } returns throwable.asFailure()
+
+        val result = repository.getSubscription()
+
+        assertEquals(SubscriptionResult.NotFound, result)
+    }
+
+    @Test
+    fun `getSubscription with non-404 BitwardenError Http should return Error`() = runTest {
+        val throwable = RuntimeException("server error")
+        val bitwardenHttpError = mockk<BitwardenError.Http> {
+            every { code } returns SERVER_ERROR_CODE
+        }
+        every { throwable.toBitwardenError() } returns bitwardenHttpError
+        coEvery {
+            billingService.getSubscription()
+        } returns throwable.asFailure()
+
+        val result = repository.getSubscription()
+
+        assertEquals(SubscriptionResult.Error(error = throwable), result)
+    }
 }
+
+private const val NOT_FOUND_CODE: Int = 404
+private const val SERVER_ERROR_CODE: Int = 500
 
 private const val ANNUAL_PRICE = 19.99
 

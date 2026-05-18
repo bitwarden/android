@@ -12,6 +12,13 @@ sealed class SubscriptionResult {
     ) : SubscriptionResult()
 
     /**
+     * The endpoint returned 404, indicating the user has no subscription on record
+     * (e.g., the active account has never had a Stripe `GatewaySubscriptionId`).
+     * Consumers should treat this as a free user.
+     */
+    data object NotFound : SubscriptionResult()
+
+    /**
      * An error occurred while fetching subscription details.
      */
     data class Error(
