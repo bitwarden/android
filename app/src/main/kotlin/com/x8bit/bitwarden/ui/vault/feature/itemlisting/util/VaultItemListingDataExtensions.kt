@@ -86,6 +86,10 @@ fun CipherListView.determineListingPredicate(
             type is CipherListViewType.DriversLicense && isActive
         }
 
+        is VaultItemListingState.ItemListingType.Vault.Passport -> {
+            type is CipherListViewType.Passport && isActive
+        }
+
         is VaultItemListingState.ItemListingType.Vault.Trash -> {
             deletedDate != null
         }
@@ -256,6 +260,10 @@ fun VaultData.toViewState(
                         BitwardenString.no_licenses
                     }
 
+                    VaultItemListingState.ItemListingType.Vault.Passport -> {
+                        BitwardenString.no_passports
+                    }
+
                     VaultItemListingState.ItemListingType.Vault.Archive -> {
                         BitwardenString.no_archives_message
                     }
@@ -286,6 +294,7 @@ fun VaultData.toViewState(
                         VaultItemListingState.ItemListingType.Vault.SshKey,
                         VaultItemListingState.ItemListingType.Vault.BankAccount,
                         VaultItemListingState.ItemListingType.Vault.License,
+                        VaultItemListingState.ItemListingType.Vault.Passport,
                             -> null
 
                         VaultItemListingState.ItemListingType.Vault.Archive -> {
@@ -327,6 +336,10 @@ fun VaultData.toViewState(
                             BitwardenString.new_license
                         }
 
+                        VaultItemListingState.ItemListingType.Vault.Passport -> {
+                            BitwardenString.new_passport
+                        }
+
                         else -> BitwardenString.new_item
                     }
                         .asText()
@@ -345,6 +358,7 @@ fun VaultData.toViewState(
                         VaultItemListingState.ItemListingType.Vault.SshKey,
                         VaultItemListingState.ItemListingType.Vault.BankAccount,
                         VaultItemListingState.ItemListingType.Vault.License,
+                        VaultItemListingState.ItemListingType.Vault.Passport,
                             -> null
 
                         VaultItemListingState.ItemListingType.Vault.Archive -> {
@@ -427,6 +441,7 @@ fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
         is VaultItemListingState.ItemListingType.Vault.SshKey -> this
         is VaultItemListingState.ItemListingType.Vault.BankAccount -> this
         is VaultItemListingState.ItemListingType.Vault.License -> this
+        is VaultItemListingState.ItemListingType.Vault.Passport -> this
         is VaultItemListingState.ItemListingType.Vault.Archive -> this
     }
 

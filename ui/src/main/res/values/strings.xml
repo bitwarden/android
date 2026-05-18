@@ -1359,6 +1359,7 @@ Do you want to switch to this account?</string>
     <string name="license_details">License details</string>
     <string name="licenses">Licenses</string>
     <string name="no_licenses">There are no licenses in your vault.</string>
+    <string name="no_passports">There are no passports in your vault.</string>
     <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">Your request was interrupted because the app needed to re-authenticate. Please try again.</string>
     <string name="passport_details">Passport details</string>
     <string name="sex">Sex</string>

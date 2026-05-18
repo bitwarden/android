@@ -149,6 +149,8 @@ fun VaultData.toViewState(
                 .count { it.type is CipherListViewType.BankAccount },
             licenseItemsCount = activeCipherViews
                 .count { it.type is CipherListViewType.DriversLicense },
+            passportItemsCount = activeCipherViews
+                .count { it.type is CipherListViewType.Passport },
             favoriteItems = activeDecryptedCipherViews
                 .filter { it.favorite }
                 .mapNotNull {
@@ -224,6 +226,7 @@ fun VaultData.toViewState(
             showCardGroup = cardCount != 0 || restrictItemTypesPolicyOrgIds.isEmpty(),
             showBankAccountGroup = isNewItemTypesEnabled,
             showLicenseGroup = isNewItemTypesEnabled,
+            showPassportGroup = isNewItemTypesEnabled,
         )
     }
 }
@@ -383,8 +386,9 @@ private fun CipherListView.toVaultItemOrNull(
         )
 
         // TODO: [PM-32009] Map License/Passport when their UIs are wired.
-        CipherListViewType.DriversLicense -> null
-        CipherListViewType.Passport -> null
+        CipherListViewType.DriversLicense,
+        CipherListViewType.Passport,
+            -> null
     }
 }
 

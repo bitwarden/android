@@ -25,6 +25,10 @@ fun VaultItemListingType.toItemListingType(): VaultItemListingState.ItemListingT
             VaultItemListingState.ItemListingType.Vault.License
         }
 
+        is VaultItemListingType.Passport -> {
+            VaultItemListingState.ItemListingType.Vault.Passport
+        }
+
         is VaultItemListingType.Archive -> VaultItemListingState.ItemListingType.Vault.Archive
         is VaultItemListingType.Trash -> VaultItemListingState.ItemListingType.Vault.Trash
         is VaultItemListingType.Collection -> {

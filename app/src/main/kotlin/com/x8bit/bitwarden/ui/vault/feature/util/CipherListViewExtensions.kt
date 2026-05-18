@@ -106,6 +106,17 @@ fun CipherListView.toOverflowActions(
                                 CopyableCipherFields.DRIVERS_LICENSE_LICENSE_NUMBER,
                             )
                     },
+                ListingItemOverflowAction.VaultAction
+                    .CopyPassportNumberClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = hasMasterPassword,
+                    )
+                    .takeIf {
+                        this.type is CipherListViewType.Passport &&
+                            this.copyableFields.contains(
+                                CopyableCipherFields.PASSPORT_PASSPORT_NUMBER,
+                            )
+                    },
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = cipherId,
                     cipherType = this.type.toSdkCipherType(),
