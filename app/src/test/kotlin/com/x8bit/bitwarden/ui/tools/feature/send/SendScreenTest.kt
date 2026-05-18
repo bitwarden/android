@@ -251,22 +251,22 @@ class SendScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(viewState = SendState.ViewState.Loading)
         }
-        composeTestRule.onNodeWithContentDescription("Add Item").assertDoesNotExist()
+        composeTestRule.onNodeWithContentDescription("Add item").assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(viewState = SendState.ViewState.Empty)
         }
-        composeTestRule.onNodeWithContentDescription("Add Item").assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("Add item").assertIsDisplayed()
 
         mutableStateFlow.update {
             it.copy(viewState = SendState.ViewState.Error("Fail".asText()))
         }
-        composeTestRule.onNodeWithContentDescription("Add Item").assertDoesNotExist()
+        composeTestRule.onNodeWithContentDescription("Add item").assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
         }
-        composeTestRule.onNodeWithContentDescription("Add Item").assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("Add item").assertIsDisplayed()
     }
 
     @Test
@@ -275,7 +275,7 @@ class SendScreenTest : BitwardenComposeTest() {
             it.copy(viewState = SendState.ViewState.Empty)
         }
         composeTestRule
-            .onNodeWithContentDescription("Add Item")
+            .onNodeWithContentDescription("Add item")
             .performClick()
         verify { viewModel.trySendAction(SendAction.AddSendClick) }
     }

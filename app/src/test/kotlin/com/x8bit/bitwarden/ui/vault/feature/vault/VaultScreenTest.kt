@@ -458,7 +458,7 @@ class VaultScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `floating action button should be shown or hidden according to the state`() {
-        val fabDescription = "Add Item"
+        val fabDescription = "Add item"
 
         mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.Loading) }
         composeTestRule.onNodeWithContentDescription(fabDescription).assertDoesNotExist()
@@ -1026,7 +1026,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     @Test
     fun `floating action button click should send SelectAddItemType action`() {
         mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.NoItems) }
-        composeTestRule.onNodeWithContentDescription("Add Item").performClick()
+        composeTestRule.onNodeWithContentDescription("Add item").performClick()
         verify { viewModel.trySendAction(VaultAction.SelectAddItemType) }
     }
 
@@ -1034,7 +1034,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     fun `add an item button click should send AddItemClick action`() {
         mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.NoItems) }
         composeTestRule
-            .onNodeWithText("New login")
+            .onNodeWithText("Add login")
             .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(VaultAction.AddItemClick(CreateVaultItemType.LOGIN)) }

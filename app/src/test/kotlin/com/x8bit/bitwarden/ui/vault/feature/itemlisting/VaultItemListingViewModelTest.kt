@@ -87,15 +87,15 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.getSignatureFingerprintAsHexString
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockBankAccountView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDriversLicenseView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPassportView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDriversLicenseView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPassportView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
@@ -2963,7 +2963,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         header = null,
                         message = BitwardenString.no_logins.asText(),
                         shouldShowAddButton = true,
-                        buttonText = BitwardenString.new_login.asText(),
+                        buttonText = BitwardenString.add_login.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -3000,7 +3000,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         header = null,
                         message = BitwardenString.no_cards.asText(),
                         shouldShowAddButton = true,
-                        buttonText = BitwardenString.new_card.asText(),
+                        buttonText = BitwardenString.add_card.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -3037,7 +3037,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         header = null,
                         message = BitwardenString.no_identities.asText(),
                         shouldShowAddButton = true,
-                        buttonText = BitwardenString.new_identity.asText(),
+                        buttonText = BitwardenString.add_identity.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -3074,7 +3074,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         header = null,
                         message = BitwardenString.no_notes.asText(),
                         shouldShowAddButton = true,
-                        buttonText = BitwardenString.new_note.asText(),
+                        buttonText = BitwardenString.add_note.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -3111,7 +3111,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         header = null,
                         message = BitwardenString.no_bank_accounts.asText(),
                         shouldShowAddButton = true,
-                        buttonText = BitwardenString.new_bank_account.asText(),
+                        buttonText = BitwardenString.add_bank_account.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -3149,7 +3149,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         header = null,
                         message = BitwardenString.no_licenses.asText(),
                         shouldShowAddButton = true,
-                        buttonText = BitwardenString.new_license.asText(),
+                        buttonText = BitwardenString.add_license.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -3187,7 +3187,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         header = null,
                         message = BitwardenString.no_passports.asText(),
                         shouldShowAddButton = true,
-                        buttonText = BitwardenString.new_passport.asText(),
+                        buttonText = BitwardenString.add_passport.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -3292,7 +3292,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         header = null,
                         message = BitwardenString.no_logins.asText(),
                         shouldShowAddButton = true,
-                        buttonText = BitwardenString.new_login.asText(),
+                        buttonText = BitwardenString.add_login.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -3373,7 +3373,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     header = null,
                     message = BitwardenString.no_logins.asText(),
                     shouldShowAddButton = true,
-                    buttonText = BitwardenString.new_login.asText(),
+                    buttonText = BitwardenString.add_login.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -3405,7 +3405,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     header = null,
                     message = BitwardenString.no_logins.asText(),
                     shouldShowAddButton = true,
-                    buttonText = BitwardenString.new_login.asText(),
+                    buttonText = BitwardenString.add_login.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -3498,7 +3498,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     header = null,
                     message = BitwardenString.no_logins.asText(),
                     shouldShowAddButton = true,
-                    buttonText = BitwardenString.new_login.asText(),
+                    buttonText = BitwardenString.add_login.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -3530,7 +3530,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     header = null,
                     message = BitwardenString.no_logins.asText(),
                     shouldShowAddButton = true,
-                    buttonText = BitwardenString.new_login.asText(),
+                    buttonText = BitwardenString.add_login.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -3624,7 +3624,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     header = null,
                     message = BitwardenString.no_logins.asText(),
                     shouldShowAddButton = true,
-                    buttonText = BitwardenString.new_login.asText(),
+                    buttonText = BitwardenString.add_login.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -3655,7 +3655,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     header = null,
                     message = BitwardenString.no_logins.asText(),
                     shouldShowAddButton = true,
-                    buttonText = BitwardenString.new_login.asText(),
+                    buttonText = BitwardenString.add_login.asText(),
                 ),
             ),
             viewModel.stateFlow.value,

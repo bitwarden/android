@@ -2,7 +2,7 @@
 <resources>
     <string name="about">About</string>
     <string name="add_folder">Add folder</string>
-    <string name="add_item">Add Item</string>
+    <string name="add_item">Add item</string>
     <string name="an_error_has_occurred">An error has occurred</string>
     <string name="apply">Apply</string>
     <string name="back">Back</string>
@@ -119,14 +119,13 @@
     <string name="never">Never</string>
     <string name="new_item_created">Item added</string>
     <string name="no_cards">There are no cards in your vault.</string>
-    <string name="new_card">New card</string>
+    <string name="add_card">Add card</string>
     <string name="no_logins">There are no logins in your vault.</string>
     <string name="no_identities">There are no identities in your vault.</string>
-    <string name="new_identity">New identity</string>
+    <string name="add_identity">Add identity</string>
     <string name="no_notes">There are no notes in your vault.</string>
-    <string name="new_note">New note</string>
-    <string name="new_item">New item</string>
-    <string name="new_ssh_key">New SSH key</string>
+    <string name="add_note">Add note</string>
+    <string name="add_ssh_key">Add SSH key</string>
     <string name="no_text_sends">There are no text Sends in your vault.</string>
     <string name="no_file_sends">There are no file Sends in your vault.</string>
     <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
@@ -815,7 +814,7 @@ Do you want to switch to this account?</string>
     <string name="get_started">Get started</string>
     <string name="save_and_protect_your_data">Save and protect your data</string>
     <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
-    <string name="new_login">New login</string>
+    <string name="add_login">Add login</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
     <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
     <string name="import_saved_logins">Import saved logins</string>
@@ -1308,9 +1307,9 @@ Do you want to switch to this account?</string>
     <string name="view_bank_account">View bank account</string>
     <string name="view_license">View license</string>
     <string name="view_passport">View passport</string>
-    <string name="new_bank_account">New bank account</string>
-    <string name="new_license">New license</string>
-    <string name="new_passport">New passport</string>
+    <string name="add_bank_account">Add bank account</string>
+    <string name="add_license">Add license</string>
+    <string name="add_passport">Add passport</string>
     <string name="edit_bank_account">Edit bank account</string>
     <string name="edit_license">Edit license</string>
     <string name="edit_passport">Edit passport</string>

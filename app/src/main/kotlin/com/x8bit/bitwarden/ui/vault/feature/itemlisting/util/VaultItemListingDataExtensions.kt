@@ -309,38 +309,38 @@ fun VaultData.toViewState(
                 ?: run {
                     when (itemListingType) {
                         VaultItemListingState.ItemListingType.Vault.Card -> {
-                            BitwardenString.new_card
+                            BitwardenString.add_card
                         }
 
                         VaultItemListingState.ItemListingType.Vault.Identity -> {
-                            BitwardenString.new_identity
+                            BitwardenString.add_identity
                         }
 
                         VaultItemListingState.ItemListingType.Vault.Login -> {
-                            BitwardenString.new_login
+                            BitwardenString.add_login
                         }
 
                         VaultItemListingState.ItemListingType.Vault.SecureNote -> {
-                            BitwardenString.new_note
+                            BitwardenString.add_note
                         }
 
                         VaultItemListingState.ItemListingType.Vault.SshKey -> {
-                            BitwardenString.new_ssh_key
+                            BitwardenString.add_ssh_key
                         }
 
                         VaultItemListingState.ItemListingType.Vault.BankAccount -> {
-                            BitwardenString.new_bank_account
+                            BitwardenString.add_bank_account
                         }
 
                         VaultItemListingState.ItemListingType.Vault.License -> {
-                            BitwardenString.new_license
+                            BitwardenString.add_license
                         }
 
                         VaultItemListingState.ItemListingType.Vault.Passport -> {
-                            BitwardenString.new_passport
+                            BitwardenString.add_passport
                         }
 
-                        else -> BitwardenString.new_item
+                        else -> BitwardenString.add_item
                     }
                         .asText()
                 },
