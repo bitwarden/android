@@ -69,6 +69,7 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToImportLogins: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
+    onNavigateToManageDevices: () -> Unit,
     onNavigateToPlan: () -> Unit,
     onNavigateToUpgradedToPremium: () -> Unit,
 ) {
@@ -111,6 +112,7 @@ fun VaultUnlockedNavBarScreen(
         onNavigateToFlightRecorder = onNavigateToFlightRecorder,
         onNavigateToRecordedLogs = onNavigateToRecordedLogs,
         onNavigateToAboutPrivilegedApps = onNavigateToAboutPrivilegedApps,
+        onNavigateToManageDevices = onNavigateToManageDevices,
         onNavigateToPlan = onNavigateToPlan,
         onNavigateToUpgradedToPremium = onNavigateToUpgradedToPremium,
     )
@@ -148,6 +150,7 @@ private fun VaultUnlockedNavBarScaffold(
     onNavigateToImportLogins: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
+    onNavigateToManageDevices: () -> Unit,
     onNavigateToPlan: () -> Unit,
     onNavigateToUpgradedToPremium: () -> Unit,
 ) {
@@ -235,6 +238,7 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToFlightRecorder = onNavigateToFlightRecorder,
                 onNavigateToRecordedLogs = onNavigateToRecordedLogs,
                 onNavigateToAboutPrivilegedApps = onNavigateToAboutPrivilegedApps,
+                onNavigateToManageDevices = onNavigateToManageDevices,
                 onNavigateToUpgradedToPremium = onNavigateToUpgradedToPremium,
             )
         }

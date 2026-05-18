@@ -38,6 +38,7 @@ sealed class FlagKey<out T : Any> {
                 SendEmailVerification,
                 CardScanner,
                 MobilePremiumUpgrade,
+                ManageDevices,
                 AttachmentUpdates,
                 V2EncryptionJitPassword,
                 V2EncryptionKeyConnector,
@@ -127,6 +128,14 @@ sealed class FlagKey<out T : Any> {
      */
     data object AttachmentUpdates : FlagKey<Boolean>() {
         override val keyName: String = "pm-34224-mobile-attachment-updates"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the Manage Devices feature.
+     */
+    data object ManageDevices : FlagKey<Boolean>() {
+        override val keyName: String = "pm-4516-devices-add-last-activity-date"
         override val defaultValue: Boolean = false
     }
 
