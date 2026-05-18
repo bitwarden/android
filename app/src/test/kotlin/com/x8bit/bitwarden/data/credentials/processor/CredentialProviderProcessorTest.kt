@@ -693,6 +693,7 @@ private fun createMockAccounts(number: Int): List<UserState.Account> {
                 avatarColorHex = "$it",
                 environment = Environment.Us,
                 isPremium = true,
+                isPremiumFromSelf = true,
                 isLoggedIn = true,
                 isVaultUnlocked = true,
                 needsPasswordReset = false,

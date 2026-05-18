@@ -94,6 +94,32 @@ class PremiumStateManagerImpl(
                 initialValue = false,
             )
 
+    /**
+     * Eligibility is keyed on the user holding personal Premium (or being eligible to purchase
+     * it). Organization-granted Premium does not surface the Plan row, since the user has no
+     * personal subscription to manage.
+     */
+    override val isPlanRowEligibleFlow: StateFlow<Boolean> =
+        combine(
+            authRepository.userStateFlow,
+            featureFlagManager.getFeatureFlagFlow(FlagKey.MobilePremiumUpgrade),
+        ) { userState, featureFlagEnabled ->
+            val activeAccount = userState?.activeAccount ?: return@combine false
+            val isOrgOnlyPremium = activeAccount.isPremium && !activeAccount.isPremiumFromSelf
+            featureFlagEnabled && !isOrgOnlyPremium
+        }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = false,
+            )
+
+    /**
+     * The card surfaces only while the active user holds personal Premium. This guards against
+     * non-personal upgrade signals (e.g., the debug menu trigger or a stray
+     * `PREMIUM_STATUS_CHANGED` push for an organization grant) marking the card pending for users
+     * with no personal subscription to celebrate.
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
     override val isUpgradedToPremiumCardEligibleFlow: StateFlow<Boolean> =
         authDiskSource
@@ -109,7 +135,12 @@ class PremiumStateManagerImpl(
                         settingsDiskSource
                             .getUpgradedToPremiumCardConsumedFlow(userId)
                             .map { it ?: false },
-                    ) { isPending, isConsumed -> isPending && !isConsumed }
+                        authRepository
+                            .userStateFlow
+                            .map { it?.activeAccount?.isPremiumFromSelf == true },
+                    ) { isPending, isConsumed, isPremiumFromSelf ->
+                        isPending && !isConsumed && isPremiumFromSelf
+                    }
                 }
             }
             .distinctUntilChanged()
@@ -131,23 +162,22 @@ class PremiumStateManagerImpl(
             }
             .launchIn(unconfinedScope)
 
-        // Sync-delta detection: observe the active user's premium flag transitioning false → true
-        // (e.g., F-Droid users without push support). NOTE: UserState.Account.isPremium is
-        // derived from `hasPremium = isPremium || isPremiumFromOrganization` so this path may
-        // also fire for organization-granted premium. The push path (above) is personal-only and
-        // takes precedence on flavors that support it.
+        // Sync-delta detection: observe the active user's personal premium flag transitioning
+        // false → true (e.g., F-Droid users without push support). Keyed on `isPremiumFromSelf`
+        // so that organization-granted premium does not trigger the personal-upgrade card.
         authRepository
             .userStateFlow
             .map { state ->
-                state?.activeAccount?.let { it.userId to it.isPremium }
+                state?.activeAccount?.let { it.userId to it.isPremiumFromSelf }
             }
             .distinctUntilChanged()
             .scanPairs()
             .onEach { (previous, current) ->
                 if (current == null) return@onEach
-                val (currentUserId, currentIsPremium) = current
-                if (!currentIsPremium) return@onEach
-                // Same user transitioning from non-premium to premium counts as an upgrade.
+                val (currentUserId, currentIsPremiumFromSelf) = current
+                if (!currentIsPremiumFromSelf) return@onEach
+                // Same user transitioning from non-personal-premium to personal-premium counts as
+                // an upgrade.
                 if (previous?.first == currentUserId && !previous.second) {
                     markUpgradedToPremiumCardPending(userId = currentUserId)
                 }

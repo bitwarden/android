@@ -232,6 +232,7 @@ private val DEFAULT_USER_STATE: UserState = UserState(
             avatarColorHex = "avatarColorHex",
             environment = Environment.Us,
             isPremium = true,
+            isPremiumFromSelf = true,
             isLoggedIn = true,
             isVaultUnlocked = true,
             needsPasswordReset = false,

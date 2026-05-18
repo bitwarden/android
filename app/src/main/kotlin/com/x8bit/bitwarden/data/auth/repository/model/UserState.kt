@@ -42,7 +42,12 @@ data class UserState(
      * @property name The user's name (if applicable).
      * @property avatarColorHex Hex color value for a user's avatar in the "#AARRGGBB" format.
      * @property environment The [Environment] associated with the user's account.
-     * @property isPremium `true` if the account has a Premium membership.
+     * @property isPremium `true` if the account has a Premium membership from any source (personal
+     * subscription or organization-granted).
+     * @property isPremiumFromSelf `true` if the account has a personal Premium subscription. This
+     * is `false` for users whose only Premium access is granted by an organization they are a
+     * member of. Use this when behavior should be gated on the user's own subscription, not on
+     * organization-granted Premium.
      * @property isLoggedIn `true` if the account is logged in, or `false` if it requires additional
      * authentication to view their vault.
      * @property isVaultUnlocked Whether the user's vault is currently unlocked.
@@ -66,6 +71,7 @@ data class UserState(
         val avatarColorHex: String,
         val environment: Environment,
         val isPremium: Boolean,
+        val isPremiumFromSelf: Boolean,
         val isLoggedIn: Boolean,
         val isVaultUnlocked: Boolean,
         val needsPasswordReset: Boolean,
@@ -113,6 +119,7 @@ data class UserState(
             avatarColorHex = "".toHexColorRepresentation(),
             environment = Environment.Us,
             isPremium = false,
+            isPremiumFromSelf = false,
             isLoggedIn = false,
             isVaultUnlocked = false,
             needsPasswordReset = false,
