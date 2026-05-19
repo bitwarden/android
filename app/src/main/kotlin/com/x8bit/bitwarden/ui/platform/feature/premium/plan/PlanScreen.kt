@@ -230,7 +230,7 @@ private fun PlanDialogs(
                 message = stringResource(id = BitwardenString.trouble_loading_portal),
                 confirmButtonText = stringResource(id = BitwardenString.try_again),
                 dismissButtonText = stringResource(id = BitwardenString.close),
-                onConfirmClick = handlers.onConfirmCancelClick,
+                onConfirmClick = handlers.onRetryPortalClick,
                 onDismissClick = handlers.onDismissPortalError,
                 onDismissRequest = handlers.onDismissPortalError,
             )
@@ -763,6 +763,7 @@ private fun PlanScreenFreeCloudAccount_preview() {
                     onConfirmCancelClick = {},
                     onDismissCancelConfirmation = {},
                     onDismissPortalError = {},
+                    onRetryPortalClick = {},
                     onRetrySubscriptionClick = {},
                 ),
             )
@@ -814,6 +815,7 @@ private fun PlanScreenPremiumAccount_preview() {
                     onConfirmCancelClick = {},
                     onDismissCancelConfirmation = {},
                     onDismissPortalError = {},
+                    onRetryPortalClick = {},
                     onRetrySubscriptionClick = {},
                 ),
             )

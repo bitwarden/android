@@ -1395,6 +1395,64 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `RetryPortalClick should show LoadingPortal then emit LaunchPortal on success`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE,
+                portalResult = CustomerPortalResult.Success(url = "https://portal"),
+            )
+
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                assertEquals(DEFAULT_PREMIUM_LOADED_STATE, stateFlow.awaitItem())
+
+                viewModel.trySendAction(PlanAction.RetryPortalClick)
+
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        dialogState = PlanState.DialogState.LoadingPortal,
+                    ),
+                    stateFlow.awaitItem(),
+                )
+                assertEquals(
+                    PlanEvent.LaunchPortal(url = "https://portal"),
+                    eventFlow.awaitItem(),
+                )
+                assertEquals(DEFAULT_PREMIUM_LOADED_STATE, stateFlow.awaitItem())
+            }
+        }
+
+    @Test
+    fun `RetryPortalClick should show PortalError on failure`() = runTest {
+        markUserPremium()
+
+        val viewModel = createViewModel(
+            subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE,
+            portalResult = CustomerPortalResult.Error(error = RuntimeException("boom")),
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_PREMIUM_LOADED_STATE, awaitItem())
+
+            viewModel.trySendAction(PlanAction.RetryPortalClick)
+
+            assertEquals(
+                DEFAULT_PREMIUM_LOADED_STATE.copy(
+                    dialogState = PlanState.DialogState.LoadingPortal,
+                ),
+                awaitItem(),
+            )
+            assertEquals(
+                DEFAULT_PREMIUM_LOADED_STATE.copy(
+                    dialogState = PlanState.DialogState.PortalError,
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
     private fun markUserPremium() {
         mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
             accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = true)),

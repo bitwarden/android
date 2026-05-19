@@ -68,9 +68,9 @@ class PlanViewModel @Inject constructor(
     private val billingRepository: BillingRepository,
     private val authRepository: AuthRepository,
     private val premiumStateManager: PremiumStateManager,
+    private val environmentRepository: EnvironmentRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val vaultRepository: VaultRepository,
-    private val environmentRepository: EnvironmentRepository,
     private val clock: Clock,
 ) : BaseViewModel<PlanState, PlanEvent, PlanAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -170,6 +170,7 @@ class PlanViewModel @Inject constructor(
             is PlanAction.ConfirmCancelClick -> handleConfirmCancelClick()
             is PlanAction.DismissCancelConfirmation -> handleDismissCancelConfirmation()
             is PlanAction.DismissPortalError -> handleDismissPortalError()
+            is PlanAction.RetryPortalClick -> handleRetryPortalClick()
             is PlanAction.RetrySubscriptionClick -> handleRetrySubscriptionClick()
             is PlanAction.Internal.CheckoutUrlReceive -> handleCheckoutUrlReceive(action)
             is PlanAction.Internal.UserStateUpdateReceive -> handleUserStateUpdateReceive(action)
@@ -325,6 +326,10 @@ class PlanViewModel @Inject constructor(
 
     private fun handleDismissCancelConfirmation() {
         mutableStateFlow.update { it.copy(dialogState = null) }
+    }
+
+    private fun handleRetryPortalClick() {
+        launchPortalFetch()
     }
 
     private fun handleDismissPortalError() {
@@ -986,6 +991,11 @@ sealed class PlanAction {
      * The user dismissed the portal error dialog.
      */
     data object DismissPortalError : PlanAction()
+
+    /**
+     * The user clicked retry on the portal error dialog.
+     */
+    data object RetryPortalClick : PlanAction()
 
     /**
      * The user clicked retry on the subscription error dialog.

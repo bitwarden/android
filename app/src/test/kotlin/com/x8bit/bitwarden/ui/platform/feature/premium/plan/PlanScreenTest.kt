@@ -1012,7 +1012,7 @@ class PlanScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `portal error dialog try again click should retry portal fetch`() {
+    fun `portal error dialog try again click should send RetryPortalClick action`() {
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_PREMIUM_VIEW_STATE,
@@ -1023,7 +1023,7 @@ class PlanScreenTest : BitwardenComposeTest() {
             .onAllNodesWithText("Try again")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
-        verify { viewModel.trySendAction(PlanAction.ConfirmCancelClick) }
+        verify { viewModel.trySendAction(PlanAction.RetryPortalClick) }
     }
 
     @Test
