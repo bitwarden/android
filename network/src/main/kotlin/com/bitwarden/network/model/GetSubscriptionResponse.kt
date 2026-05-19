@@ -14,7 +14,5 @@ sealed class GetSubscriptionResponse {
     /**
      * Models the response when the user has no subscription on file (server returns 404).
      */
-    data class NotFound(
-        val throwable: Throwable,
-    ) : GetSubscriptionResponse()
+    data object NotFound : GetSubscriptionResponse()
 }

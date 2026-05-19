@@ -45,7 +45,7 @@ internal class BillingServiceImpl(
             .recoverCatching { throwable ->
                 val bitwardenError = throwable.toBitwardenError()
                 if (bitwardenError.isErrorCode(code = NetworkErrorCode.NOT_FOUND)) {
-                    GetSubscriptionResponse.NotFound(throwable = throwable)
+                    GetSubscriptionResponse.NotFound
                 } else {
                     throw throwable
                 }

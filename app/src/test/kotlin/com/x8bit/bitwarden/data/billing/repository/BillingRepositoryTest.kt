@@ -198,9 +198,7 @@ class BillingRepositoryTest {
     fun `getSubscription when service returns NotFound should return NotFound`() = runTest {
         coEvery {
             billingService.getSubscription()
-        } returns GetSubscriptionResponse.NotFound(
-            throwable = RuntimeException("not found"),
-        ).asSuccess()
+        } returns GetSubscriptionResponse.NotFound.asSuccess()
 
         val result = repository.getSubscription()
 
