@@ -643,29 +643,6 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Test
-    fun `ManageOnWebVaultClick on self-hosted should emit LaunchWebVault with web vault URL`() =
-        runTest {
-            val customWebVault = "https://vault.example.com"
-            mutableEnvironmentFlow.value = Environment.SelfHosted(
-                environmentUrlData = EnvironmentUrlDataJson(
-                    base = "https://example.com",
-                    webVault = customWebVault,
-                ),
-            )
-            val viewModel = createViewModel(pricingResult = null)
-
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(PlanAction.ManageOnWebVaultClick)
-                assertEquals(
-                    PlanEvent.LaunchWebVault(
-                        url = "$customWebVault/#/settings/subscription/premium",
-                    ),
-                    awaitItem(),
-                )
-            }
-        }
-
     // endregion Self-hosted path
 
     // region Pricing fetch

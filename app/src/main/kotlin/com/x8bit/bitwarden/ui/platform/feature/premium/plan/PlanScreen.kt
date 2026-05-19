@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -46,12 +45,13 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.BitwardenStatusBadge
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
-import com.bitwarden.ui.platform.components.card.BitwardenActionCard
+import com.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.bitwarden.ui.platform.components.content.BitwardenContentBlock
 import com.bitwarden.ui.platform.components.content.model.ContentBlockData
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -99,7 +99,6 @@ fun PlanScreen(
             }
 
             is PlanEvent.LaunchPortal -> intentManager.launchUri(event.url.toUri())
-            is PlanEvent.LaunchWebVault -> intentManager.launchUri(event.url.toUri())
             PlanEvent.NavigateBack -> onNavigateBack()
             PlanEvent.NavigateToUpgradedToPremium -> onNavigateToUpgradedToPremium()
         }
@@ -136,7 +135,7 @@ fun PlanScreen(
             }
 
             is PlanState.ViewState.Free.SelfHosted -> {
-                SelfHostedContent(handlers = handlers)
+                SelfHostedContent()
             }
 
             is PlanState.ViewState.Premium -> {
@@ -307,9 +306,9 @@ private fun FreeContent(
     }
 }
 
+@Suppress("MaxLineLength")
 @Composable
 private fun SelfHostedContent(
-    handlers: PlanHandlers,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -318,27 +317,69 @@ private fun SelfHostedContent(
             .verticalScroll(rememberScrollState()),
     ) {
         Spacer(modifier = Modifier.height(12.dp))
-        BitwardenActionCard(
-            cardTitle = stringResource(id = BitwardenString.upgrade_to_premium),
-            cardSubtitle = stringResource(
-                id = BitwardenString.manage_your_premium_subscription_on_the_web_vault,
+        BitwardenInfoCalloutCard(
+            text = stringResource(
+                id = BitwardenString
+                    .to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer,
             ),
-            actionText = stringResource(id = BitwardenString.go_to_web_vault),
-            leadingContent = {
-                Icon(
-                    painter = rememberVectorPainter(id = BitwardenDrawable.ic_info_circle),
-                    contentDescription = null,
-                    tint = BitwardenTheme.colorScheme.icon.secondary,
-                )
-            },
-            onActionClick = handlers.onManageOnWebVaultClick,
+            startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_info_circle),
             modifier = Modifier
                 .standardHorizontalMargin()
                 .fillMaxWidth()
-                .testTag("SelfHostedManageOnWebVaultCard"),
+                .testTag("SelfHostedManageOnWebVaultCallout"),
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        PremiumFeaturesCard(
+            modifier = Modifier
+                .standardHorizontalMargin()
+                .fillMaxWidth(),
         )
         Spacer(modifier = Modifier.height(16.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
+    }
+}
+
+@Composable
+private fun PremiumFeaturesCard(
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .cardStyle(
+                cardStyle = CardStyle.Full,
+                // Override bottom padding to account for custom
+                // `BitwardenContentBlock` vertical padding, below.
+                paddingBottom = 0.dp,
+            ),
+    ) {
+        Text(
+            text = stringResource(id = BitwardenString.unlock_premium_features),
+            style = BitwardenTheme.typography.labelLarge,
+            color = BitwardenTheme.colorScheme.text.primary,
+            modifier = Modifier
+                .padding(bottom = 16.dp)
+                .standardHorizontalMargin(),
+        )
+
+        BitwardenHorizontalDivider()
+
+        val features = listOf(
+            BitwardenString.built_in_authenticator,
+            BitwardenString.emergency_access,
+            BitwardenString.secure_file_storage,
+            BitwardenString.breach_monitoring,
+        )
+        features.forEachIndexed { index, featureStringRes ->
+            BitwardenContentBlock(
+                data = ContentBlockData(
+                    headerText = stringResource(id = featureStringRes),
+                    iconVectorResource = BitwardenDrawable.ic_check_mark,
+                ),
+                headerTextStyle = BitwardenTheme.typography.titleMedium,
+                showDivider = index != features.lastIndex,
+                modifier = Modifier.padding(vertical = 8.dp),
+            )
+        }
     }
 }
 
@@ -684,7 +725,6 @@ private fun PlanScreenFreeAccount_preview() {
                 ),
                 handlers = PlanHandlers(
                     onBackClick = {},
-                    onManageOnWebVaultClick = {},
                     onUpgradeNowClick = {},
                     onDismissError = {},
                     onRetryClick = {},
@@ -712,27 +752,7 @@ private fun PlanScreenFreeAccount_preview() {
 private fun PlanScreenSelfHostedFreeAccount_preview() {
     BitwardenTheme {
         BitwardenScaffold {
-            SelfHostedContent(
-                handlers = PlanHandlers(
-                    onBackClick = {},
-                    onManageOnWebVaultClick = {},
-                    onUpgradeNowClick = {},
-                    onDismissError = {},
-                    onRetryClick = {},
-                    onRetryPricingClick = {},
-                    onClosePricingErrorClick = {},
-                    onCancelWaiting = {},
-                    onGoBackClick = {},
-                    onSyncClick = {},
-                    onContinueClick = {},
-                    onManagePlanClick = {},
-                    onCancelPremiumClick = {},
-                    onConfirmCancelClick = {},
-                    onDismissCancelConfirmation = {},
-                    onDismissPortalError = {},
-                    onRetrySubscriptionClick = {},
-                ),
-            )
+            SelfHostedContent()
         }
     }
 }
@@ -756,7 +776,6 @@ private fun PlanScreenPremiumAccount_preview() {
                 ),
                 handlers = PlanHandlers(
                     onBackClick = {},
-                    onManageOnWebVaultClick = {},
                     onUpgradeNowClick = {},
                     onDismissError = {},
                     onRetryClick = {},

@@ -1218,6 +1218,7 @@ Do you want to switch to this account?</string>
     <string name="upgrade_to_premium">Upgrade to Premium</string>
     <string name="plan">Plan</string>
     <string name="manage_your_premium_subscription_on_the_web_vault">Manage your Premium subscription on the web vault.</string>
+    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
     <string name="go_to_web_vault">Go to web vault</string>
     <string name="unlock_advanced_security_features">Unlock advanced security features</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>

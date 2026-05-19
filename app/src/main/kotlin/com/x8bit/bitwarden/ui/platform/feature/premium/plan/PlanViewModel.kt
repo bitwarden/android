@@ -7,7 +7,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.util.toFormattedDateStyle
 import com.bitwarden.data.repository.model.Environment
-import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -156,7 +155,6 @@ class PlanViewModel @Inject constructor(
     override fun handleAction(action: PlanAction) {
         when (action) {
             is PlanAction.BackClick -> handleBackClick()
-            is PlanAction.ManageOnWebVaultClick -> handleManageOnWebVaultClick()
             is PlanAction.UpgradeNowClick -> handleUpgradeNowClick()
             is PlanAction.DismissError -> handleDismissError()
             is PlanAction.ClosePricingErrorClick -> handleClosePricingErrorClick()
@@ -193,14 +191,6 @@ class PlanViewModel @Inject constructor(
 
     private fun handleBackClick() {
         sendEvent(PlanEvent.NavigateBack)
-    }
-
-    private fun handleManageOnWebVaultClick() {
-        val webVaultUrl = environmentRepository
-            .environment
-            .environmentUrlData
-            .baseWebVaultUrlOrDefault
-        sendEvent(PlanEvent.LaunchWebVault(url = "$webVaultUrl/#/settings/subscription/premium"))
     }
 
     // region Free user handlers
@@ -887,13 +877,6 @@ sealed class PlanEvent {
     ) : PlanEvent()
 
     /**
-     * Launch the user's browser with the given web vault subscription [url].
-     */
-    data class LaunchWebVault(
-        val url: String,
-    ) : PlanEvent()
-
-    /**
      * Navigate back to the previous screen.
      */
     data object NavigateBack : PlanEvent()
@@ -915,11 +898,6 @@ sealed class PlanAction {
      * The user clicked the back/close button.
      */
     data object BackClick : PlanAction()
-
-    /**
-     * The user clicked the "Go to web vault" CTA on the self-hosted variant.
-     */
-    data object ManageOnWebVaultClick : PlanAction()
 
     // region Free user actions
 
