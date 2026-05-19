@@ -183,12 +183,10 @@ class BillingServiceTest : BaseServiceTest() {
             server.enqueue(response)
             val actual = service.getSubscription()
             assertEquals(
-                DiscountTypeJson.AMOUNT_OFF,
-                (actual.getOrNull() as? GetSubscriptionResponse.Success)
-                    ?.subscription
-                    ?.cart
-                    ?.discount
-                    ?.type,
+                GetSubscriptionResponse.Success(
+                    subscription = SUBSCRIPTION_RESPONSE_AMOUNT_OFF,
+                ).asSuccess(),
+                actual,
             )
         }
 
@@ -201,12 +199,10 @@ class BillingServiceTest : BaseServiceTest() {
             server.enqueue(response)
             val actual = service.getSubscription()
             assertEquals(
-                DiscountTypeJson.PERCENT_OFF,
-                (actual.getOrNull() as? GetSubscriptionResponse.Success)
-                    ?.subscription
-                    ?.cart
-                    ?.discount
-                    ?.type,
+                GetSubscriptionResponse.Success(
+                    subscription = SUBSCRIPTION_RESPONSE_PERCENT_OFF,
+                ).asSuccess(),
+                actual,
             )
         }
 
@@ -487,6 +483,15 @@ private const val SUBSCRIPTION_RESPONSE_AMOUNT_OFF_JSON = """
 }
 """
 
+private val SUBSCRIPTION_RESPONSE_AMOUNT_OFF = SUBSCRIPTION_RESPONSE_MINIMAL.copy(
+    cart = SUBSCRIPTION_RESPONSE_MINIMAL.cart.copy(
+        discount = BitwardenDiscountJson(
+            type = DiscountTypeJson.AMOUNT_OFF,
+            value = BigDecimal("5.00"),
+        ),
+    ),
+)
+
 private const val SUBSCRIPTION_RESPONSE_PERCENT_OFF_JSON = """
 {
   "status": "active",
@@ -516,6 +521,15 @@ private const val SUBSCRIPTION_RESPONSE_PERCENT_OFF_JSON = """
   "gracePeriod": null
 }
 """
+
+private val SUBSCRIPTION_RESPONSE_PERCENT_OFF = SUBSCRIPTION_RESPONSE_MINIMAL.copy(
+    cart = SUBSCRIPTION_RESPONSE_MINIMAL.cart.copy(
+        discount = BitwardenDiscountJson(
+            type = DiscountTypeJson.PERCENT_OFF,
+            value = BigDecimal("15.00"),
+        ),
+    ),
+)
 
 private const val SUBSCRIPTION_RESPONSE_UNKNOWN_CADENCE_JSON = """
 {
