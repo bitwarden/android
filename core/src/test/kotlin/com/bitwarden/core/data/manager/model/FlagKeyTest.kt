@@ -60,6 +60,10 @@ class FlagKeyTest {
             FlagKey.NewItemTypes.keyName,
             "pm-32009-new-item-types",
         )
+        assertEquals(
+            FlagKey.FillAssistTargetingRules.keyName,
+            "fill-assist-targeting-rules",
+        )
     }
 
     @Test
@@ -79,6 +83,7 @@ class FlagKeyTest {
                 FlagKey.V2EncryptionPassword,
                 FlagKey.V2EncryptionTde,
                 FlagKey.NewItemTypes,
+                FlagKey.FillAssistTargetingRules,
             ).all {
                 !it.defaultValue
             },
