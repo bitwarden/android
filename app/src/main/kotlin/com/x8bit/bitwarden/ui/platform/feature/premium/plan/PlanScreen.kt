@@ -571,7 +571,7 @@ private fun subscriptionDescriptionText(
 
         PremiumSubscriptionStatus.CANCELED -> annotatedStringResource(
             id = BitwardenString.subscription_canceled_description,
-            args = arrayOf(canceledDateText ?: PLACEHOLDER_TEXT),
+            args = arrayOf(canceledDateText ?: suspensionDateText ?: PLACEHOLDER_TEXT),
             style = baseStyle,
         )
 

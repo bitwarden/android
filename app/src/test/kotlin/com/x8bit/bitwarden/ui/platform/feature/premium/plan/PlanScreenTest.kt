@@ -577,11 +577,12 @@ class PlanScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `ACTIVE description should bold the next charge date`() {
+    fun `ACTIVE description should bold the next charge total and date`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_PREMIUM_VIEW_STATE) }
-        composeTestRule
+        val node = composeTestRule
             .onNodeWithText("Your next charge is for $45.55 USD due on April 2, 2026.")
-            .assertTextRangeHasBoldSpan(boldSubstring = "April 2, 2026")
+        node.assertTextRangeHasBoldSpan(boldSubstring = "$45.55")
+        node.assertTextRangeHasBoldSpan(boldSubstring = "April 2, 2026")
     }
 
     @Test
@@ -600,6 +601,25 @@ class PlanScreenTest : BitwardenComposeTest() {
                     "Resubscribe to continue using premium features.",
             )
             .assertTextRangeHasBoldSpan(boldSubstring = "April 21, 2026")
+    }
+
+    @Test
+    fun `CANCELED description falls back to suspension date when canceled date is null`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(
+                    status = PremiumSubscriptionStatus.CANCELED,
+                    canceledDateText = null,
+                    suspensionDateText = "May 15, 2026",
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(
+                "Your subscription was canceled on May 15, 2026. " +
+                    "Resubscribe to continue using premium features.",
+            )
+            .assertTextRangeHasBoldSpan(boldSubstring = "May 15, 2026")
     }
 
     @Test
@@ -1012,9 +1032,8 @@ private val DEFAULT_PREMIUM_VIEW_STATE = PlanState.ViewState.Premium(
 
 /**
  * Asserts that exactly the [boldSubstring] within this node's rendered text carries a heavy
- * font-weight span style — i.e. no heavy-weight span extends beyond the substring. Fails if the
- * substring cannot be located, if no heavy span aligns with it, or if any heavy span covers
- * additional characters outside it.
+ * font-weight span style. Fails if the substring cannot be located, if no heavy span aligns with
+ * it, or if any heavy span partially overlaps it. Other heavy spans on disjoint ranges are fine.
  */
 private fun SemanticsNodeInteraction.assertTextRangeHasBoldSpan(boldSubstring: String) {
     val texts = fetchSemanticsNode().config.getOrNull(SemanticsProperties.Text)
@@ -1028,14 +1047,18 @@ private fun SemanticsNodeInteraction.assertTextRangeHasBoldSpan(boldSubstring: S
         val weight = range.item.fontWeight
         weight != null && weight.weight >= FontWeight.SemiBold.weight
     }
-    val coversSubstring = heavySpans.any { it.start == start && it.end == end }
-    require(coversSubstring) {
+    val coversExactly = heavySpans.any { it.start == start && it.end == end }
+    require(coversExactly) {
         "Expected a heavy-weight span to cover exactly \"$boldSubstring\" " +
             "(indices $start..$end) but spans were: ${match.spanStyles}"
     }
-    val overreaches = heavySpans.filter { it.start < start || it.end > end }
-    require(overreaches.isEmpty()) {
-        "Heavy-weight span(s) extended beyond \"$boldSubstring\" " +
-            "(indices $start..$end): $overreaches"
+    val partialOverlaps = heavySpans.filter { span ->
+        val overlaps = span.start < end && span.end > start
+        val matchesExactly = span.start == start && span.end == end
+        overlaps && !matchesExactly
+    }
+    require(partialOverlaps.isEmpty()) {
+        "Heavy-weight span(s) partially overlap \"$boldSubstring\" " +
+            "(indices $start..$end): $partialOverlaps"
     }
 }
