@@ -91,8 +91,9 @@ fun ManageDevicesScreen(
                 onNavigateToLoginApproval(event.fingerprint)
             }
 
-            is ManageDevicesEvent.ShowSnackbar ->
+            is ManageDevicesEvent.ShowSnackbar -> {
                 snackbarHostState.showSnackbar(event.data)
+            }
         }
     }
 
