@@ -292,12 +292,12 @@ class PremiumStateManagerImpl(
 
     private suspend fun fetchSubscriptionStatusOnce(): SubscriptionStatusState =
         when (val result = billingRepository.getSubscription()) {
-            is SubscriptionResult.Success ->
+            is SubscriptionResult.Success -> {
                 SubscriptionStatusState.Available(status = result.subscription.status)
+            }
 
             SubscriptionResult.NotFound -> SubscriptionStatusState.NoSubscription
-            is SubscriptionResult.Error ->
-                SubscriptionStatusState.Error(throwable = result.error)
+            is SubscriptionResult.Error -> SubscriptionStatusState.Error(throwable = result.error)
         }
 }
 
@@ -313,17 +313,17 @@ private data class BannerInputs(
  * Returns `true` when the given [SubscriptionStatusState] represents a subscription substate
  * that should disqualify a user from being treated as effectively premium.
  */
-private fun SubscriptionStatusState.isInTroubleState(): Boolean = this is
-    SubscriptionStatusState.Available &&
-    when (this.status) {
-        PremiumSubscriptionStatus.CANCELED,
-        PremiumSubscriptionStatus.PAST_DUE,
-        PremiumSubscriptionStatus.PAUSED,
-        PremiumSubscriptionStatus.UPDATE_PAYMENT,
-        -> true
+private fun SubscriptionStatusState.isInTroubleState(): Boolean =
+    this is SubscriptionStatusState.Available &&
+        when (this.status) {
+            PremiumSubscriptionStatus.CANCELED,
+            PremiumSubscriptionStatus.PAST_DUE,
+            PremiumSubscriptionStatus.PAUSED,
+            PremiumSubscriptionStatus.UPDATE_PAYMENT,
+                -> true
 
-        PremiumSubscriptionStatus.ACTIVE -> false
-    }
+            PremiumSubscriptionStatus.ACTIVE -> false
+        }
 
 /**
  * Returns `true` if this [Instant] is older than the given number of [days] based on
