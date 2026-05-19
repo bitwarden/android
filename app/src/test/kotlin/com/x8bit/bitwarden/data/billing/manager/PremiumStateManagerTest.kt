@@ -38,7 +38,7 @@ import java.time.Instant
 import java.time.ZoneOffset
 
 @Suppress("LargeClass")
-class PremiumStateManagerImplTest {
+class PremiumStateManagerTest {
 
     private val fixedClock: Clock = Clock.fixed(
         Instant.parse(FIXED_DATETIME),
