@@ -2939,7 +2939,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithTag(testTag = "ClearButton")
+            .onNodeWithText(text = "Clear")
             .performClick()
 
         verify {
@@ -2976,7 +2976,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithTag(testTag = "ClearButton")
+            .onNodeWithText(text = "Clear")
             .performClick()
 
         verify {
@@ -3014,7 +3014,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithTag(testTag = "ClearButton")
+            .onNodeWithText(text = "Clear")
             .performClick()
 
         verify {
@@ -3218,7 +3218,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithTag(testTag = "ClearButton")
+            .onNodeWithText(text = "Clear")
             .performClick()
 
         verify {
@@ -3256,7 +3256,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithTag(testTag = "ClearButton")
+            .onNodeWithText(text = "Clear")
             .performClick()
 
         verify {
@@ -3294,7 +3294,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithTag(testTag = "ClearButton")
+            .onNodeWithText(text = "Clear")
             .performClick()
 
         verify {
