@@ -893,6 +893,34 @@ class PlanViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SubscriptionResultReceive NotFound keeps Loading dialog up while pricing fetch is pending`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.NotFound,
+                pricingResult = null,
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_FREE_STATE.copy(
+                        viewState = PlanState.ViewState.Free(
+                            rate = "--",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = false,
+                        ),
+                        dialogState = PlanState.DialogState.Loading(
+                            message = BitwardenString.loading.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
     @Test
     fun `SubscriptionResultReceive Success should populate Premium state from SubscriptionInfo`() =
         runTest {

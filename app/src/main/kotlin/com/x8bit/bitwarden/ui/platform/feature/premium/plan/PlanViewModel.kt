@@ -391,7 +391,9 @@ class PlanViewModel @Inject constructor(
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = false,
                         ),
-                        dialogState = null,
+                        dialogState = PlanState.DialogState.Loading(
+                            message = BitwardenString.loading.asText(),
+                        ),
                     )
                 }
                 viewModelScope.launch {
