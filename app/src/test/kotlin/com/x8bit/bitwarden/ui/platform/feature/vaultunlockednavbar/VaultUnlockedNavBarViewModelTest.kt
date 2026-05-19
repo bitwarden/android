@@ -1,11 +1,15 @@
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
 import app.cash.turbine.test
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import io.mockk.every
@@ -31,6 +35,16 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
     private val mutableSettingsBadgeCountFlow = MutableStateFlow(0)
     private val firstTimeActionManager: FirstTimeActionManager = mockk {
         every { allSettingsBadgeCountFlow } returns mutableSettingsBadgeCountFlow
+    }
+    private val mutableDisableSendsPolicyFlow =
+        MutableStateFlow<List<SyncResponseJson.Policy>>(emptyList())
+    private val policyManager: PolicyManager = mockk {
+        every {
+            getActivePoliciesFlow(PolicyTypeJson.DISABLE_SEND)
+        } returns mutableDisableSendsPolicyFlow
+        every {
+            getActivePolicies(PolicyTypeJson.DISABLE_SEND)
+        } answers { mutableDisableSendsPolicyFlow.value }
     }
 
     @Suppress("MaxLineLength")
@@ -127,6 +141,7 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
         val expectedWithOrganizations = VaultUnlockedNavBarState(
             vaultNavBarLabelRes = BitwardenString.vaults,
             notificationState = DEFAULT_NOTIFICATION_STATE,
+            areSendsDisabled = false,
         )
         val accountWithoutOrganizations: UserState.Account = mockk {
             every { userId } returns activeUserId
@@ -135,6 +150,7 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
         val expectedWithoutOrganizations = VaultUnlockedNavBarState(
             vaultNavBarLabelRes = BitwardenString.my_vault,
             notificationState = DEFAULT_NOTIFICATION_STATE,
+            areSendsDisabled = false,
         )
 
         val viewModel = createViewModel()
@@ -311,11 +327,30 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `DISABLE_SEND policy flow update with disabled policy should set areSendsDisabled to false`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE.copy(areSendsDisabled = false), awaitItem())
+
+                mutableDisableSendsPolicyFlow.emit(
+                    listOf(createMockPolicy(type = PolicyTypeJson.DISABLE_SEND)),
+                )
+                assertEquals(DEFAULT_STATE.copy(areSendsDisabled = true), awaitItem())
+
+                mutableDisableSendsPolicyFlow.emit(emptyList())
+                assertEquals(DEFAULT_STATE.copy(areSendsDisabled = false), awaitItem())
+            }
+        }
+
     private fun createViewModel() =
         VaultUnlockedNavBarViewModel(
             authRepository = authRepository,
             specialCircumstancesManager = specialCircumstancesManager,
             firstTimeActionManager = firstTimeActionManager,
+            policyManager = policyManager,
         )
 }
 
@@ -326,4 +361,5 @@ private val DEFAULT_NOTIFICATION_STATE = VaultUnlockedNavBarNotificationState(
 private val DEFAULT_STATE = VaultUnlockedNavBarState(
     vaultNavBarLabelRes = BitwardenString.my_vault,
     notificationState = DEFAULT_NOTIFICATION_STATE,
+    areSendsDisabled = false,
 )
