@@ -39,6 +39,7 @@ import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.annotatedPluralsResource
 import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.cardStyle
+import com.bitwarden.ui.platform.base.util.spanStyleOf
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.BitwardenStatusBadge
@@ -553,40 +554,50 @@ private fun subscriptionDescriptionText(
     canceledDateText: String?,
     suspensionDateText: String?,
     gracePeriodDays: Int?,
-): AnnotatedString? = when (status) {
-    PremiumSubscriptionStatus.ACTIVE -> annotatedStringResource(
-        id = BitwardenString.premium_next_charge_summary,
-        args = arrayOf(
-            nextChargeTotalText ?: PLACEHOLDER_TEXT,
-            nextChargeDateText ?: PLACEHOLDER_TEXT,
-        ),
+): AnnotatedString? {
+    val baseStyle = spanStyleOf(
+        color = BitwardenTheme.colorScheme.text.secondary,
+        textStyle = BitwardenTheme.typography.bodyMedium,
     )
-
-    PremiumSubscriptionStatus.CANCELED -> annotatedStringResource(
-        id = BitwardenString.subscription_canceled_description,
-        args = arrayOf(canceledDateText ?: PLACEHOLDER_TEXT),
-    )
-
-    PremiumSubscriptionStatus.UPDATE_PAYMENT -> annotatedStringResource(
-        id = BitwardenString.subscription_update_payment_description,
-        args = arrayOf(suspensionDateText ?: PLACEHOLDER_TEXT),
-    )
-
-    PremiumSubscriptionStatus.PAST_DUE -> {
-        val days = gracePeriodDays ?: 0
-        annotatedPluralsResource(
-            id = BitwardenPlurals.subscription_past_due_description,
-            quantity = days,
-            days.toString(),
-            suspensionDateText ?: PLACEHOLDER_TEXT,
+    return when (status) {
+        PremiumSubscriptionStatus.ACTIVE -> annotatedStringResource(
+            id = BitwardenString.premium_next_charge_summary,
+            args = arrayOf(
+                nextChargeTotalText ?: PLACEHOLDER_TEXT,
+                nextChargeDateText ?: PLACEHOLDER_TEXT,
+            ),
+            style = baseStyle,
         )
+
+        PremiumSubscriptionStatus.CANCELED -> annotatedStringResource(
+            id = BitwardenString.subscription_canceled_description,
+            args = arrayOf(canceledDateText ?: PLACEHOLDER_TEXT),
+            style = baseStyle,
+        )
+
+        PremiumSubscriptionStatus.UPDATE_PAYMENT -> annotatedStringResource(
+            id = BitwardenString.subscription_update_payment_description,
+            args = arrayOf(suspensionDateText ?: PLACEHOLDER_TEXT),
+            style = baseStyle,
+        )
+
+        PremiumSubscriptionStatus.PAST_DUE -> {
+            val days = gracePeriodDays ?: 0
+            annotatedPluralsResource(
+                id = BitwardenPlurals.subscription_past_due_description,
+                quantity = days,
+                days.toString(),
+                suspensionDateText ?: PLACEHOLDER_TEXT,
+                style = baseStyle,
+            )
+        }
+
+        PremiumSubscriptionStatus.PAUSED -> AnnotatedString(
+            stringResource(id = BitwardenString.subscription_paused_description),
+        )
+
+        null -> null
     }
-
-    PremiumSubscriptionStatus.PAUSED -> AnnotatedString(
-        stringResource(id = BitwardenString.subscription_paused_description),
-    )
-
-    null -> null
 }
 
 @Composable

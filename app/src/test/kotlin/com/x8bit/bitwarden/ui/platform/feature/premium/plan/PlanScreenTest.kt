@@ -1011,8 +1011,10 @@ private val DEFAULT_PREMIUM_VIEW_STATE = PlanState.ViewState.Premium(
 )
 
 /**
- * Asserts that the [boldSubstring] within this node's rendered text carries a [FontWeight.Bold]
- * span style. Fails if the substring cannot be located or if no bold span overlaps it.
+ * Asserts that exactly the [boldSubstring] within this node's rendered text carries a heavy
+ * font-weight span style — i.e. no heavy-weight span extends beyond the substring. Fails if the
+ * substring cannot be located, if no heavy span aligns with it, or if any heavy span covers
+ * additional characters outside it.
  */
 private fun SemanticsNodeInteraction.assertTextRangeHasBoldSpan(boldSubstring: String) {
     val texts = fetchSemanticsNode().config.getOrNull(SemanticsProperties.Text)
@@ -1022,13 +1024,18 @@ private fun SemanticsNodeInteraction.assertTextRangeHasBoldSpan(boldSubstring: S
     }
     val start = match.text.indexOf(boldSubstring)
     val end = start + boldSubstring.length
-    val hasBold = match.spanStyles.any { range ->
-        range.item.fontWeight == FontWeight.Bold &&
-            range.start <= start &&
-            range.end >= end
+    val heavySpans = match.spanStyles.filter { range ->
+        val weight = range.item.fontWeight
+        weight != null && weight.weight >= FontWeight.SemiBold.weight
     }
-    require(hasBold) {
-        "Expected bold span over \"$boldSubstring\" (indices $start..$end) " +
-            "but spans were: ${match.spanStyles}"
+    val coversSubstring = heavySpans.any { it.start == start && it.end == end }
+    require(coversSubstring) {
+        "Expected a heavy-weight span to cover exactly \"$boldSubstring\" " +
+            "(indices $start..$end) but spans were: ${match.spanStyles}"
+    }
+    val overreaches = heavySpans.filter { it.start < start || it.end > end }
+    require(overreaches.isEmpty()) {
+        "Heavy-weight span(s) extended beyond \"$boldSubstring\" " +
+            "(indices $start..$end): $overreaches"
     }
 }
