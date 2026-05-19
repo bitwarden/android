@@ -10,18 +10,26 @@ package com.x8bit.bitwarden.data.billing.repository.model
  */
 sealed class SubscriptionStatusState {
 
-    /** No fetch has been attempted yet for the active user. */
+    /**
+     * No fetch has been attempted yet for the active user.
+     */
     data object Loading : SubscriptionStatusState()
 
-    /** The active user has no recorded premium subscription. */
+    /**
+     * The active user has no recorded premium subscription.
+     */
     data object NoSubscription : SubscriptionStatusState()
 
-    /** The active user has a subscription with the given [status]. */
+    /**
+     * The active user has a subscription with the given [status].
+     */
     data class Available(
         val status: PremiumSubscriptionStatus,
     ) : SubscriptionStatusState()
 
-    /** The fetch failed for a reason other than 404. */
+    /**
+     * The fetch failed for a reason other than 404.
+     */
     data class Error(
         val throwable: Throwable,
     ) : SubscriptionStatusState()
