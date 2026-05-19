@@ -4,13 +4,11 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.vault.DecryptCipherListResult
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.billing.repository.BillingRepository
 import com.x8bit.bitwarden.data.billing.repository.model.PlanCadence
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStatus
@@ -20,7 +18,6 @@ import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionStatusState
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
-import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.PremiumStatusChangedData
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -49,12 +46,7 @@ class PremiumStateManagerImplTest {
     )
 
     private val fakeAuthDiskSource = FakeAuthDiskSource().apply {
-        userState = DISK_USER_STATE
-    }
-
-    private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
-    private val authRepository: AuthRepository = mockk {
-        every { userStateFlow } returns mutableUserStateFlow
+        userState = DEFAULT_USER_STATE_JSON
     }
 
     private val mutableIsInAppBillingSupportedFlow = MutableStateFlow(true)
@@ -93,7 +85,6 @@ class PremiumStateManagerImplTest {
 
     private fun createManager(): PremiumStateManagerImpl = PremiumStateManagerImpl(
         authDiskSource = fakeAuthDiskSource,
-        authRepository = authRepository,
         billingRepository = billingRepository,
         settingsDiskSource = fakeSettingsDiskSource,
         vaultRepository = vaultRepository,
@@ -113,8 +104,8 @@ class PremiumStateManagerImplTest {
 
     @Test
     fun `ineligible when user is Premium should emit false`() = runTest {
-        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-            accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+        fakeAuthDiskSource.userState = userStateJsonWith(
+            account = createAccountJson(hasPremiumPersonally = true),
         )
         val manager = createManager()
         manager.isPremiumUpgradeBannerEligibleFlow.test {
@@ -155,11 +146,9 @@ class PremiumStateManagerImplTest {
 
     @Test
     fun `ineligible when account is too new should emit false`() = runTest {
-        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-            accounts = listOf(
-                DEFAULT_ACTIVE_ACCOUNT.copy(
-                    creationDate = Instant.parse("2023-10-25T12:00:00Z"),
-                ),
+        fakeAuthDiskSource.userState = userStateJsonWith(
+            account = createAccountJson(
+                creationDate = Instant.parse("2023-10-25T12:00:00Z"),
             ),
         )
         val manager = createManager()
@@ -170,10 +159,8 @@ class PremiumStateManagerImplTest {
 
     @Test
     fun `ineligible when creation date is null should emit false`() = runTest {
-        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-            accounts = listOf(
-                DEFAULT_ACTIVE_ACCOUNT.copy(creationDate = null),
-            ),
+        fakeAuthDiskSource.userState = userStateJsonWith(
+            account = createAccountJson(creationDate = null),
         )
         val manager = createManager()
         manager.isPremiumUpgradeBannerEligibleFlow.test {
@@ -194,7 +181,7 @@ class PremiumStateManagerImplTest {
 
     @Test
     fun `ineligible when userState is null should emit false`() = runTest {
-        mutableUserStateFlow.value = null
+        fakeAuthDiskSource.userState = null
         val manager = createManager()
         manager.isPremiumUpgradeBannerEligibleFlow.test {
             assertFalse(awaitItem())
@@ -314,11 +301,9 @@ class PremiumStateManagerImplTest {
     @Test
     fun `eligible when account age is exactly 7 days should emit true`() =
         runTest {
-            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                accounts = listOf(
-                    DEFAULT_ACTIVE_ACCOUNT.copy(
-                        creationDate = Instant.parse("2023-10-20T12:00:00Z"),
-                    ),
+            fakeAuthDiskSource.userState = userStateJsonWith(
+                account = createAccountJson(
+                    creationDate = Instant.parse("2023-10-20T12:00:00Z"),
                 ),
             )
             val manager = createManager()
@@ -404,14 +389,7 @@ class PremiumStateManagerImplTest {
     @Test
     fun `isPlanRowEligibleFlow emits true for a free user when feature flag is enabled`() =
         runTest {
-            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                accounts = listOf(
-                    DEFAULT_ACTIVE_ACCOUNT.copy(
-                        isPremium = false,
-                        isPremiumFromSelf = false,
-                    ),
-                ),
-            )
+            fakeAuthDiskSource.userState = userStateJsonWith(account = createAccountJson())
             val manager = createManager()
             manager.isPlanRowEligibleFlow.test {
                 assertTrue(awaitItem())
@@ -420,13 +398,8 @@ class PremiumStateManagerImplTest {
 
     @Test
     fun `isPlanRowEligibleFlow emits true for a personal Premium user`() = runTest {
-        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-            accounts = listOf(
-                DEFAULT_ACTIVE_ACCOUNT.copy(
-                    isPremium = true,
-                    isPremiumFromSelf = true,
-                ),
-            ),
+        fakeAuthDiskSource.userState = userStateJsonWith(
+            account = createAccountJson(hasPremiumPersonally = true),
         )
         val manager = createManager()
         manager.isPlanRowEligibleFlow.test {
@@ -437,13 +410,8 @@ class PremiumStateManagerImplTest {
     @Test
     fun `isPlanRowEligibleFlow emits false for a user with only org-granted Premium`() =
         runTest {
-            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                accounts = listOf(
-                    DEFAULT_ACTIVE_ACCOUNT.copy(
-                        isPremium = true,
-                        isPremiumFromSelf = false,
-                    ),
-                ),
+            fakeAuthDiskSource.userState = userStateJsonWith(
+                account = createAccountJson(hasPremiumFromOrganization = true),
             )
             val manager = createManager()
             manager.isPlanRowEligibleFlow.test {
@@ -462,7 +430,7 @@ class PremiumStateManagerImplTest {
 
     @Test
     fun `isPlanRowEligibleFlow emits false when userState is null`() = runTest {
-        mutableUserStateFlow.value = null
+        fakeAuthDiskSource.userState = null
         val manager = createManager()
         manager.isPlanRowEligibleFlow.test {
             assertFalse(awaitItem())
@@ -471,34 +439,15 @@ class PremiumStateManagerImplTest {
 
     @Test
     fun `isPlanRowEligibleFlow updates as the user gains and loses org-only Premium`() = runTest {
-        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-            accounts = listOf(
-                DEFAULT_ACTIVE_ACCOUNT.copy(
-                    isPremium = false,
-                    isPremiumFromSelf = false,
-                ),
-            ),
-        )
+        fakeAuthDiskSource.userState = userStateJsonWith(account = createAccountJson())
         val manager = createManager()
         manager.isPlanRowEligibleFlow.test {
             assertTrue(awaitItem())
-            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                accounts = listOf(
-                    DEFAULT_ACTIVE_ACCOUNT.copy(
-                        isPremium = true,
-                        isPremiumFromSelf = false,
-                    ),
-                ),
+            fakeAuthDiskSource.userState = userStateJsonWith(
+                account = createAccountJson(hasPremiumFromOrganization = true),
             )
             assertFalse(awaitItem())
-            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                accounts = listOf(
-                    DEFAULT_ACTIVE_ACCOUNT.copy(
-                        isPremium = false,
-                        isPremiumFromSelf = false,
-                    ),
-                ),
-            )
+            fakeAuthDiskSource.userState = userStateJsonWith(account = createAccountJson())
             assertTrue(awaitItem())
         }
     }
@@ -517,13 +466,8 @@ class PremiumStateManagerImplTest {
         runTest {
             // Sync has caught up to the upgrade by the time the push lands — the active user
             // already holds personal Premium.
-            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                accounts = listOf(
-                    DEFAULT_ACTIVE_ACCOUNT.copy(
-                        isPremium = true,
-                        isPremiumFromSelf = true,
-                    ),
-                ),
+            fakeAuthDiskSource.userState = userStateJsonWith(
+                account = createAccountJson(hasPremiumPersonally = true),
             )
             val manager = createManager()
             manager.isUpgradedToPremiumCardEligibleFlow.test {
@@ -549,13 +493,8 @@ class PremiumStateManagerImplTest {
             // Simulates the debug-menu trigger (or a stray PREMIUM_STATUS_CHANGED push routed to
             // an organization-granted user): pending is written directly to disk, but the active
             // user has no personal subscription. The read-side gate must withhold the card.
-            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                accounts = listOf(
-                    DEFAULT_ACTIVE_ACCOUNT.copy(
-                        isPremium = true,
-                        isPremiumFromSelf = false,
-                    ),
-                ),
+            fakeAuthDiskSource.userState = userStateJsonWith(
+                account = createAccountJson(hasPremiumFromOrganization = true),
             )
             fakeSettingsDiskSource.storeUpgradedToPremiumCardPending(
                 userId = ACTIVE_USER_ID,
@@ -593,25 +532,13 @@ class PremiumStateManagerImplTest {
     fun `userState transition from non-Premium to personal Premium for the same user marks card pending`() =
         runTest {
             // Start as Free.
-            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                accounts = listOf(
-                    DEFAULT_ACTIVE_ACCOUNT.copy(
-                        isPremium = false,
-                        isPremiumFromSelf = false,
-                    ),
-                ),
-            )
+            fakeAuthDiskSource.userState = userStateJsonWith(account = createAccountJson())
             val manager = createManager()
             manager.isUpgradedToPremiumCardEligibleFlow.test {
                 assertFalse(awaitItem())
                 // Transition to personal Premium for the same user.
-                mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                    accounts = listOf(
-                        DEFAULT_ACTIVE_ACCOUNT.copy(
-                            isPremium = true,
-                            isPremiumFromSelf = true,
-                        ),
-                    ),
+                fakeAuthDiskSource.userState = userStateJsonWith(
+                    account = createAccountJson(hasPremiumPersonally = true),
                 )
                 assertTrue(awaitItem())
                 fakeSettingsDiskSource.assertUpgradedToPremiumCardPending(
@@ -624,26 +551,14 @@ class PremiumStateManagerImplTest {
     @Test
     fun `userState transition that only flips org-granted Premium should not mark card pending`() =
         runTest {
-            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                accounts = listOf(
-                    DEFAULT_ACTIVE_ACCOUNT.copy(
-                        isPremium = false,
-                        isPremiumFromSelf = false,
-                    ),
-                ),
-            )
+            fakeAuthDiskSource.userState = userStateJsonWith(account = createAccountJson())
             val manager = createManager()
             manager.isUpgradedToPremiumCardEligibleFlow.test {
                 assertFalse(awaitItem())
                 // Aggregate isPremium becomes true via the user's organization, but personal
                 // premium stays false — the card must not arm.
-                mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                    accounts = listOf(
-                        DEFAULT_ACTIVE_ACCOUNT.copy(
-                            isPremium = true,
-                            isPremiumFromSelf = false,
-                        ),
-                    ),
+                fakeAuthDiskSource.userState = userStateJsonWith(
+                    account = createAccountJson(hasPremiumFromOrganization = true),
                 )
                 expectNoEvents()
                 fakeSettingsDiskSource.assertUpgradedToPremiumCardPending(
@@ -657,17 +572,12 @@ class PremiumStateManagerImplTest {
     fun `Premium account that signs in for the first time should not mark the card pending`() =
         runTest {
             // Initial userState is null, then becomes a Premium account in one step.
-            mutableUserStateFlow.value = null
+            fakeAuthDiskSource.userState = null
             val manager = createManager()
             manager.isUpgradedToPremiumCardEligibleFlow.test {
                 assertFalse(awaitItem())
-                mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                    accounts = listOf(
-                        DEFAULT_ACTIVE_ACCOUNT.copy(
-                            isPremium = true,
-                            isPremiumFromSelf = true,
-                        ),
-                    ),
+                fakeAuthDiskSource.userState = userStateJsonWith(
+                    account = createAccountJson(hasPremiumPersonally = true),
                 )
                 expectNoEvents()
                 fakeSettingsDiskSource.assertUpgradedToPremiumCardPending(
@@ -736,7 +646,7 @@ class PremiumStateManagerImplTest {
     @Test
     fun `subscriptionStatusStateFlow emits NoSubscription when there is no active user`() =
         runTest {
-            mutableUserStateFlow.value = null
+            fakeAuthDiskSource.userState = null
             val manager = createManager()
             manager.subscriptionStatusStateFlow.test {
                 assertEquals(SubscriptionStatusState.NoSubscription, awaitItem())
@@ -781,8 +691,8 @@ class PremiumStateManagerImplTest {
     @Test
     fun `subscriptionStatusStateFlow emits NoSubscription on 404 from BillingRepository`() =
         runTest {
-            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+            fakeAuthDiskSource.userState = userStateJsonWith(
+                account = createAccountJson(hasPremiumPersonally = true),
             )
             coEvery { billingRepository.getSubscription() } returns SubscriptionResult.NotFound
             val manager = createManager()
@@ -793,8 +703,8 @@ class PremiumStateManagerImplTest {
 
     @Test
     fun `subscriptionStatusStateFlow emits Available with status on Success`() = runTest {
-        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-            accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+        fakeAuthDiskSource.userState = userStateJsonWith(
+            account = createAccountJson(hasPremiumPersonally = true),
         )
         coEvery {
             billingRepository.getSubscription()
@@ -816,8 +726,8 @@ class PremiumStateManagerImplTest {
 
     @Test
     fun `subscriptionStatusStateFlow emits Error on non-404 failure`() = runTest {
-        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-            accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+        fakeAuthDiskSource.userState = userStateJsonWith(
+            account = createAccountJson(hasPremiumPersonally = true),
         )
         val exception = IllegalStateException("boom")
         coEvery {
@@ -851,9 +761,8 @@ class PremiumStateManagerImplTest {
                 awaitItem(),
             )
             val otherUserId = "otherUserId"
-            mutableUserStateFlow.value = UserState(
-                activeUserId = otherUserId,
-                accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(userId = otherUserId)),
+            fakeAuthDiskSource.userState = userStateJsonWith(
+                account = createAccountJson(userId = otherUserId),
             )
             assertEquals(
                 SubscriptionStatusState.Available(
@@ -868,8 +777,8 @@ class PremiumStateManagerImplTest {
     @Test
     fun `subscriptionStatusStateFlow refetches on push when active user is premium`() =
         runTest {
-            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+            fakeAuthDiskSource.userState = userStateJsonWith(
+                account = createAccountJson(hasPremiumPersonally = true),
             )
             coEvery {
                 billingRepository.getSubscription()
@@ -907,8 +816,8 @@ class PremiumStateManagerImplTest {
 
     @Test
     fun `banner ineligible when account is premium and status is ACTIVE`() = runTest {
-        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-            accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+        fakeAuthDiskSource.userState = userStateJsonWith(
+            account = createAccountJson(hasPremiumPersonally = true),
         )
         coEvery {
             billingRepository.getSubscription()
@@ -929,8 +838,8 @@ class PremiumStateManagerImplTest {
             PremiumSubscriptionStatus.PAUSED,
             PremiumSubscriptionStatus.UPDATE_PAYMENT,
         ).forEach { status ->
-            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+            fakeAuthDiskSource.userState = userStateJsonWith(
+                account = createAccountJson(hasPremiumPersonally = true),
             )
             coEvery {
                 billingRepository.getSubscription()
@@ -946,8 +855,8 @@ class PremiumStateManagerImplTest {
 
     @Test
     fun `banner ineligible when account is premium and substate is still loading`() = runTest {
-        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-            accounts = listOf(DEFAULT_ACTIVE_ACCOUNT.copy(isPremium = true)),
+        fakeAuthDiskSource.userState = userStateJsonWith(
+            account = createAccountJson(hasPremiumPersonally = true),
         )
         coEvery {
             billingRepository.getSubscription()
@@ -994,38 +903,48 @@ private fun createVaultDataWithItemCount(count: Int): VaultData = VaultData(
 
 private const val ACTIVE_USER_ID = "activeUserId"
 private const val FIXED_DATETIME = "2023-10-27T12:00:00Z"
+private val DEFAULT_CREATION_DATE: Instant = Instant.parse("2023-10-01T12:00:00Z")
 
-private val DEFAULT_ACTIVE_ACCOUNT = UserState.Account(
-    userId = ACTIVE_USER_ID,
-    name = "Active User",
-    email = "active@bitwarden.com",
-    avatarColorHex = "#aa00aa",
-    environment = com.bitwarden.data.repository.model.Environment.Us,
-    isPremium = false,
-    isPremiumFromSelf = false,
-    isLoggedIn = true,
-    isVaultUnlocked = true,
-    needsPasswordReset = false,
-    isBiometricsEnabled = false,
-    organizations = emptyList(),
-    needsMasterPassword = false,
-    trustedDevice = null,
-    hasMasterPassword = true,
-    isUsingKeyConnector = false,
-    onboardingStatus = OnboardingStatus.COMPLETE,
-    firstTimeState = FirstTimeState(),
-    isExportable = true,
-    creationDate = Instant.parse("2023-10-01T12:00:00Z"),
-)
-
-private val DEFAULT_USER_STATE = UserState(
-    activeUserId = ACTIVE_USER_ID,
-    accounts = listOf(DEFAULT_ACTIVE_ACCOUNT),
-)
-
-private val DISK_USER_STATE = UserStateJson(
-    activeUserId = ACTIVE_USER_ID,
-    accounts = mapOf(
-        ACTIVE_USER_ID to mockk<AccountJson>(),
+/**
+ * Builds an [AccountJson] for tests, defaulting to a non-premium account whose creation date is
+ * old enough to satisfy the banner's account-age gate.
+ */
+private fun createAccountJson(
+    userId: String = ACTIVE_USER_ID,
+    hasPremiumPersonally: Boolean = false,
+    hasPremiumFromOrganization: Boolean = false,
+    creationDate: Instant? = DEFAULT_CREATION_DATE,
+): AccountJson = AccountJson(
+    profile = AccountJson.Profile(
+        userId = userId,
+        email = "active@bitwarden.com",
+        isEmailVerified = true,
+        isTwoFactorEnabled = false,
+        name = "Active User",
+        stamp = null,
+        organizationId = null,
+        avatarColorHex = "#aa00aa",
+        hasPremiumPersonally = hasPremiumPersonally,
+        hasPremiumFromOrganization = hasPremiumFromOrganization,
+        forcePasswordResetReason = null,
+        kdfType = null,
+        kdfIterations = null,
+        kdfMemory = null,
+        kdfParallelism = null,
+        userDecryptionOptions = null,
+        creationDate = creationDate,
     ),
+    settings = AccountJson.Settings(environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US),
 )
+
+/**
+ * Builds a [UserStateJson] whose active account is [account], keyed by `userId`.
+ */
+private fun userStateJsonWith(account: AccountJson): UserStateJson = UserStateJson(
+    activeUserId = account.profile.userId,
+    accounts = mapOf(account.profile.userId to account),
+)
+
+private val DEFAULT_ACTIVE_ACCOUNT_JSON: AccountJson = createAccountJson()
+private val DEFAULT_USER_STATE_JSON: UserStateJson =
+    userStateJsonWith(account = DEFAULT_ACTIVE_ACCOUNT_JSON)

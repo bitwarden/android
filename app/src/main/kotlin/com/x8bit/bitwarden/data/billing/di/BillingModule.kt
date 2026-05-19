@@ -4,7 +4,6 @@ import android.content.Context
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.network.service.BillingService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.billing.manager.PlayBillingManager
 import com.x8bit.bitwarden.data.billing.manager.PlayBillingManagerImpl
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
@@ -54,7 +53,6 @@ object BillingModule {
     @Singleton
     fun providePremiumStateManager(
         authDiskSource: AuthDiskSource,
-        authRepository: AuthRepository,
         billingRepository: BillingRepository,
         settingsDiskSource: SettingsDiskSource,
         vaultRepository: VaultRepository,
@@ -64,7 +62,6 @@ object BillingModule {
         dispatcherManager: DispatcherManager,
     ): PremiumStateManager = PremiumStateManagerImpl(
         authDiskSource = authDiskSource,
-        authRepository = authRepository,
         billingRepository = billingRepository,
         settingsDiskSource = settingsDiskSource,
         vaultRepository = vaultRepository,

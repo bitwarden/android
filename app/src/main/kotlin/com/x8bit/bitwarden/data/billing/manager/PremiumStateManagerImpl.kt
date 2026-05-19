@@ -4,8 +4,7 @@ import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.billing.repository.BillingRepository
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStatus
@@ -44,7 +43,6 @@ import java.time.Instant
 @Suppress("LongParameterList", "LargeClass")
 class PremiumStateManagerImpl(
     private val authDiskSource: AuthDiskSource,
-    authRepository: AuthRepository,
     private val billingRepository: BillingRepository,
     private val settingsDiskSource: SettingsDiskSource,
     vaultRepository: VaultRepository,
@@ -69,10 +67,8 @@ class PremiumStateManagerImpl(
      */
     @OptIn(ExperimentalCoroutinesApi::class)
     override val subscriptionStatusStateFlow: StateFlow<SubscriptionStatusState> =
-        authRepository
-            .userStateFlow
-            .map { state -> state?.activeAccount?.userId }
-            .distinctUntilChanged()
+        authDiskSource
+            .activeUserIdChangesFlow
             .flatMapLatest { userId ->
                 if (userId != null) {
                     fetchSubscriptionStatusFlow()
@@ -89,7 +85,7 @@ class PremiumStateManagerImpl(
     @OptIn(ExperimentalCoroutinesApi::class)
     override val isPremiumUpgradeBannerEligibleFlow: StateFlow<Boolean> =
         combine(
-            authRepository.userStateFlow,
+            authDiskSource.userStateFlow,
             billingRepository.isInAppBillingSupportedFlow,
             featureFlagManager.getFeatureFlagFlow(FlagKey.MobilePremiumUpgrade),
             authDiskSource.activeUserIdChangesFlow
@@ -119,14 +115,16 @@ class PremiumStateManagerImpl(
             )
         }
             .combine(subscriptionStatusStateFlow) { inputs, subscriptionStatus ->
-                val activeAccount = inputs.userState?.activeAccount
+                val profile = inputs.userState?.activeAccount?.profile
                     ?: return@combine false
-                val isAccountOldEnough = activeAccount.creationDate.isOlderThanDays(
+                val isAccountOldEnough = profile.creationDate.isOlderThanDays(
                     days = PREMIUM_UPGRADE_MINIMUM_ACCOUNT_AGE_DAYS,
                     clock = clock,
                 )
                 val itemCount = inputs.vaultDataState.activeVaultItemCount()
-                val isEffectivelyPremium = activeAccount.isPremium &&
+                val hasPremium = profile.hasPremiumPersonally == true ||
+                    profile.hasPremiumFromOrganization == true
+                val isEffectivelyPremium = hasPremium &&
                     !subscriptionStatus.isInTroubleState()
 
                 !isEffectivelyPremium &&
@@ -149,11 +147,14 @@ class PremiumStateManagerImpl(
      */
     override val isPlanRowEligibleFlow: StateFlow<Boolean> =
         combine(
-            authRepository.userStateFlow,
+            authDiskSource.userStateFlow,
             featureFlagManager.getFeatureFlagFlow(FlagKey.MobilePremiumUpgrade),
         ) { userState, featureFlagEnabled ->
-            val activeAccount = userState?.activeAccount ?: return@combine false
-            val isOrgOnlyPremium = activeAccount.isPremium && !activeAccount.isPremiumFromSelf
+            val profile = userState?.activeAccount?.profile ?: return@combine false
+            val hasPremium = profile.hasPremiumPersonally == true ||
+                profile.hasPremiumFromOrganization == true
+            val isPremiumFromSelf = profile.hasPremiumPersonally == true
+            val isOrgOnlyPremium = hasPremium && !isPremiumFromSelf
             featureFlagEnabled && !isOrgOnlyPremium
         }
             .stateIn(
@@ -183,9 +184,11 @@ class PremiumStateManagerImpl(
                         settingsDiskSource
                             .getUpgradedToPremiumCardConsumedFlow(userId)
                             .map { it ?: false },
-                        authRepository
+                        authDiskSource
                             .userStateFlow
-                            .map { it?.activeAccount?.isPremiumFromSelf == true },
+                            .map {
+                                it?.activeAccount?.profile?.hasPremiumPersonally == true
+                            },
                     ) { isPending, isConsumed, isPremiumFromSelf ->
                         isPending && !isConsumed && isPremiumFromSelf
                     }
@@ -214,12 +217,15 @@ class PremiumStateManagerImpl(
             .launchIn(unconfinedScope)
 
         // Sync-delta detection: observe the active user's personal premium flag transitioning
-        // false → true (e.g., F-Droid users without push support). Keyed on `isPremiumFromSelf`
-        // so that organization-granted premium does not trigger the personal-upgrade card.
-        authRepository
+        // false → true (e.g., F-Droid users without push support). Keyed on
+        // `hasPremiumPersonally` so that organization-granted premium does not trigger the
+        // personal-upgrade card.
+        authDiskSource
             .userStateFlow
             .map { state ->
-                state?.activeAccount?.let { it.userId to it.isPremiumFromSelf }
+                state?.activeAccount?.profile?.let {
+                    it.userId to (it.hasPremiumPersonally == true)
+                }
             }
             .distinctUntilChanged()
             .scanPairs()
@@ -296,7 +302,7 @@ class PremiumStateManagerImpl(
 }
 
 private data class BannerInputs(
-    val userState: UserState?,
+    val userState: UserStateJson?,
     val isInAppBillingSupported: Boolean,
     val featureFlagEnabled: Boolean,
     val isDismissed: Boolean,
