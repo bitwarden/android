@@ -4,6 +4,7 @@ import android.content.res.Resources
 import android.text.Annotation
 import android.text.SpannableStringBuilder
 import android.text.SpannedString
+import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -61,13 +62,91 @@ fun @receiver:StringRes Int.toAnnotatedString(
     linkHighlightStyle,
     onAnnotationClick,
 ) {
-    // The spannableBuilder is used to help parse through the annotations in the string resource.
-    val spannableBuilder = try {
-        SpannableStringBuilder(resources.getText(this) as SpannedString)
+    val spannedString = try {
+        resources.getText(this) as SpannedString
     } catch (_: ClassCastException) {
-        // the resource did not contain and valid spans so we just return the raw string.
+        // the resource did not contain any valid spans so we just return the raw string.
         return@remember resources.getString(this, *args).toAnnotatedString()
     }
+    spannedString.buildAnnotatedString(
+        args = args,
+        style = style,
+        emphasisHighlightStyle = emphasisHighlightStyle,
+        linkHighlightStyle = linkHighlightStyle,
+        onAnnotationClick = onAnnotationClick,
+    )
+}
+
+/**
+ * Creates an [AnnotatedString] from a plurals resource allowing for optional arguments to be
+ * applied.
+ *
+ * @param quantity The quantity used to select the appropriate plural form from the resource.
+ * @param args Optional arguments to be applied to the string resource, must already be a
+ * [CharSequence]. Integer plural quantity arguments (`%1$d`) should be passed as a [CharSequence]
+ * (for example, `"$count"`).
+ * @param style Style to apply to the entire string.
+ * @param emphasisHighlightStyle Style to apply to part of the resource that has been annotated
+ * with the "emphasis" annotation.
+ * @param linkHighlightStyle Style to apply to part of the resource that has been annotated with
+ * the "link" annotation.
+ * @param resources The resources used to access the strings.
+ * @param onAnnotationClick Callback to invoke when a link annotation is clicked. Will pass back
+ * the value of the annotation as a string to allow for delineation if there are multiple callbacks
+ * to be applied.
+ *
+ * Annotation conventions match those documented on [Int.toAnnotatedString]; the resource must
+ * declare `<annotation arg="N">` wrappers around any format arguments that should be replaced.
+ */
+@Composable
+fun @receiver:PluralsRes Int.toAnnotatedPluralsString(
+    quantity: Int,
+    vararg args: CharSequence,
+    style: SpanStyle = bitwardenDefaultSpanStyle,
+    emphasisHighlightStyle: SpanStyle = bitwardenBoldSpanStyle,
+    linkHighlightStyle: SpanStyle = bitwardenClickableTextSpanStyle,
+    resources: Resources = LocalResources.current,
+    onAnnotationClick: ((annotationKey: String) -> Unit)? = null,
+): AnnotatedString = remember(
+    this,
+    quantity,
+    args,
+    style,
+    emphasisHighlightStyle,
+    linkHighlightStyle,
+    onAnnotationClick,
+) {
+    val spannedString = try {
+        resources.getQuantityText(this, quantity) as SpannedString
+    } catch (_: ClassCastException) {
+        // the resource did not contain any valid spans so we just return the raw string.
+        return@remember resources
+            .getQuantityString(this, quantity, *args)
+            .toAnnotatedString()
+    }
+    spannedString.buildAnnotatedString(
+        args = args,
+        style = style,
+        emphasisHighlightStyle = emphasisHighlightStyle,
+        linkHighlightStyle = linkHighlightStyle,
+        onAnnotationClick = onAnnotationClick,
+    )
+}
+
+/**
+ * Shared annotation-processing pipeline for both string and plurals resources. Replaces any
+ * `arg` annotations with the corresponding [args] entry then applies emphasis and link styles
+ * to the resulting [AnnotatedString].
+ */
+private fun SpannedString.buildAnnotatedString(
+    args: Array<out CharSequence>,
+    style: SpanStyle,
+    emphasisHighlightStyle: SpanStyle,
+    linkHighlightStyle: SpanStyle,
+    onAnnotationClick: ((annotationKey: String) -> Unit)?,
+): AnnotatedString {
+    // The spannableBuilder is used to help parse through the annotations in the string resource.
+    val spannableBuilder = SpannableStringBuilder(this)
     // Replace any format arguments with the provided arguments.
     spannableBuilder.applyArgAnnotations(args = args)
 
@@ -116,7 +195,7 @@ fun @receiver:StringRes Int.toAnnotatedString(
             ValidAnnotationType.ARG -> Unit
         }
     }
-    return@remember annotatedStringBuilder.toAnnotatedString()
+    return annotatedStringBuilder.toAnnotatedString()
 }
 
 /**
@@ -124,7 +203,7 @@ fun @receiver:StringRes Int.toAnnotatedString(
  * replaced with the index value in the provided [args].
  */
 private fun SpannableStringBuilder.applyArgAnnotations(
-    vararg args: CharSequence,
+    args: Array<out CharSequence>,
 ) {
     val argAnnotations = getSpans<Annotation>()
         .filter { it.isArgAnnotation() }

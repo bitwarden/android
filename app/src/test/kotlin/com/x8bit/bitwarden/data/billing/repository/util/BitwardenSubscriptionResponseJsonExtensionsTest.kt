@@ -28,21 +28,24 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
     }
 
     @Test
-    fun `toSubscriptionInfo maps CANCELED and INCOMPLETE_EXPIRED to CANCELED`() {
-        listOf(
-            SubscriptionStatusJson.CANCELED,
-            SubscriptionStatusJson.INCOMPLETE_EXPIRED,
-        ).forEach {
-            val info = buildResponse(status = it).toSubscriptionInfo()
-            assertEquals(PremiumSubscriptionStatus.CANCELED, info.status)
-        }
+    fun `toSubscriptionInfo maps CANCELED to CANCELED`() {
+        val info = buildResponse(status = SubscriptionStatusJson.CANCELED).toSubscriptionInfo()
+        assertEquals(PremiumSubscriptionStatus.CANCELED, info.status)
     }
 
     @Test
-    fun `toSubscriptionInfo maps INCOMPLETE and UNPAID to OVERDUE_PAYMENT`() {
+    fun `toSubscriptionInfo maps INCOMPLETE_EXPIRED to CANCELED`() {
+        val info = buildResponse(
+            status = SubscriptionStatusJson.INCOMPLETE_EXPIRED,
+        ).toSubscriptionInfo()
+        assertEquals(PremiumSubscriptionStatus.CANCELED, info.status)
+    }
+
+    @Test
+    fun `toSubscriptionInfo maps INCOMPLETE and UNPAID to UPDATE_PAYMENT`() {
         listOf(SubscriptionStatusJson.INCOMPLETE, SubscriptionStatusJson.UNPAID).forEach {
             val info = buildResponse(status = it).toSubscriptionInfo()
-            assertEquals(PremiumSubscriptionStatus.OVERDUE_PAYMENT, info.status)
+            assertEquals(PremiumSubscriptionStatus.UPDATE_PAYMENT, info.status)
         }
     }
 
