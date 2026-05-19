@@ -32,6 +32,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.CardScanner,
     FlagKey.SendEmailVerification,
     FlagKey.MobilePremiumUpgrade,
+    FlagKey.ManageDevices,
     FlagKey.AttachmentUpdates,
     FlagKey.V2EncryptionJitPassword,
     FlagKey.V2EncryptionKeyConnector,
@@ -91,6 +92,7 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.CardScanner -> stringResource(BitwardenString.scan_card)
     FlagKey.SendEmailVerification -> stringResource(BitwardenString.send_email_verification)
     FlagKey.MobilePremiumUpgrade -> stringResource(BitwardenString.mobile_premium_upgrade)
+    FlagKey.ManageDevices -> stringResource(BitwardenString.manage_devices)
     FlagKey.AttachmentUpdates -> stringResource(BitwardenString.attachment_updates)
     FlagKey.V2EncryptionJitPassword -> stringResource(BitwardenString.v2_encryption_jit_password)
     FlagKey.V2EncryptionKeyConnector -> stringResource(BitwardenString.v2_encryption_key_connector)
