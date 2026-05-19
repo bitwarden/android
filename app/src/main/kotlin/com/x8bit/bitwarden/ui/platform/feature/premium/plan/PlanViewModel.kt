@@ -1035,7 +1035,7 @@ private fun PremiumSubscriptionStatus.canBeCanceled(): Boolean = when (this) {
     PremiumSubscriptionStatus.PAST_DUE,
     PremiumSubscriptionStatus.PAUSED,
     PremiumSubscriptionStatus.UPDATE_PAYMENT,
-    -> true
+        -> true
 }
 
 /**
@@ -1049,7 +1049,7 @@ private fun PremiumSubscriptionStatus.isPremiumViewEligible(): Boolean = when (t
     PremiumSubscriptionStatus.PAST_DUE,
     PremiumSubscriptionStatus.PAUSED,
     PremiumSubscriptionStatus.UPDATE_PAYMENT,
-    -> true
+        -> true
 
     PremiumSubscriptionStatus.ACTIVE -> false
 }
