@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.billing.repository
 
-import com.bitwarden.network.model.BitwardenError
-import com.bitwarden.network.model.toBitwardenError
+import com.bitwarden.network.model.GetSubscriptionResponse
 import com.bitwarden.network.service.BillingService
 import com.x8bit.bitwarden.data.billing.manager.PlayBillingManager
 import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
@@ -10,8 +9,6 @@ import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResul
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionResult
 import com.x8bit.bitwarden.data.billing.repository.util.toSubscriptionInfo
 import kotlinx.coroutines.flow.StateFlow
-
-private const val HTTP_CODE_NOT_FOUND: Int = 404
 
 /**
  * The default implementation of [BillingRepository].
@@ -58,20 +55,15 @@ class BillingRepositoryImpl(
         billingService
             .getSubscription()
             .fold(
-                onSuccess = {
-                    SubscriptionResult.Success(
-                        subscription = it.toSubscriptionInfo(),
-                    )
-                },
-                onFailure = { throwable ->
-                    val bitwardenError = throwable.toBitwardenError()
-                    if (bitwardenError is BitwardenError.Http &&
-                        bitwardenError.code == HTTP_CODE_NOT_FOUND
-                    ) {
-                        SubscriptionResult.NotFound
-                    } else {
-                        SubscriptionResult.Error(error = throwable)
+                onSuccess = { response ->
+                    when (response) {
+                        is GetSubscriptionResponse.Success -> SubscriptionResult.Success(
+                            subscription = response.subscription.toSubscriptionInfo(),
+                        )
+
+                        is GetSubscriptionResponse.NotFound -> SubscriptionResult.NotFound
                     }
                 },
+                onFailure = { SubscriptionResult.Error(error = it) },
             )
 }

@@ -10,6 +10,7 @@ import com.bitwarden.network.model.CartItemJson
 import com.bitwarden.network.model.CartJson
 import com.bitwarden.network.model.CheckoutSessionResponseJson
 import com.bitwarden.network.model.DiscountTypeJson
+import com.bitwarden.network.model.GetSubscriptionResponse
 import com.bitwarden.network.model.PasswordManagerCartItemsJson
 import com.bitwarden.network.model.PortalUrlResponseJson
 import com.bitwarden.network.model.PremiumPlanResponseJson
@@ -91,12 +92,22 @@ class BillingServiceTest : BaseServiceTest() {
         }
 
     @Test
-    fun `getSubscription when response is Failure should return Failure`() =
+    fun `getSubscription when response is non-404 Failure should return Failure`() =
         runTest {
             val response = MockResponse().setResponseCode(400)
             server.enqueue(response)
             val actual = service.getSubscription()
             assertTrue(actual.isFailure)
+        }
+
+    @Test
+    fun `getSubscription when response is 404 should return NotFound`() =
+        runTest {
+            val response = MockResponse().setResponseCode(404)
+            server.enqueue(response)
+            val actual = service.getSubscription()
+            assertTrue(actual.isSuccess)
+            assertTrue(actual.getOrNull() is GetSubscriptionResponse.NotFound)
         }
 
     @Test
@@ -107,7 +118,10 @@ class BillingServiceTest : BaseServiceTest() {
                 .setResponseCode(200)
             server.enqueue(response)
             val actual = service.getSubscription()
-            assertEquals(SUBSCRIPTION_RESPONSE.asSuccess(), actual)
+            assertEquals(
+                GetSubscriptionResponse.Success(subscription = SUBSCRIPTION_RESPONSE).asSuccess(),
+                actual,
+            )
         }
 
     @Test
@@ -120,7 +134,10 @@ class BillingServiceTest : BaseServiceTest() {
             val actual = service.getSubscription()
             assertEquals(
                 CadenceTypeJson.MONTHLY,
-                actual.getOrNull()?.cart?.cadence,
+                (actual.getOrNull() as? GetSubscriptionResponse.Success)
+                    ?.subscription
+                    ?.cart
+                    ?.cadence,
             )
         }
 
@@ -134,7 +151,12 @@ class BillingServiceTest : BaseServiceTest() {
                     .setResponseCode(200)
                 server.enqueue(response)
                 val actual = service.getSubscription()
-                assertEquals(status, actual.getOrNull()?.status)
+                assertEquals(
+                    status,
+                    (actual.getOrNull() as? GetSubscriptionResponse.Success)
+                        ?.subscription
+                        ?.status,
+                )
             }
         }
 
@@ -147,6 +169,7 @@ class BillingServiceTest : BaseServiceTest() {
             server.enqueue(response)
             val actual = service.getSubscription()
             assertTrue(actual.isSuccess)
+            assertTrue(actual.getOrNull() is GetSubscriptionResponse.Success)
         }
 
     @Test
@@ -159,7 +182,11 @@ class BillingServiceTest : BaseServiceTest() {
             val actual = service.getSubscription()
             assertEquals(
                 DiscountTypeJson.AMOUNT_OFF,
-                actual.getOrNull()?.cart?.discount?.type,
+                (actual.getOrNull() as? GetSubscriptionResponse.Success)
+                    ?.subscription
+                    ?.cart
+                    ?.discount
+                    ?.type,
             )
         }
 
@@ -173,7 +200,11 @@ class BillingServiceTest : BaseServiceTest() {
             val actual = service.getSubscription()
             assertEquals(
                 DiscountTypeJson.PERCENT_OFF,
-                actual.getOrNull()?.cart?.discount?.type,
+                (actual.getOrNull() as? GetSubscriptionResponse.Success)
+                    ?.subscription
+                    ?.cart
+                    ?.discount
+                    ?.type,
             )
         }
 
