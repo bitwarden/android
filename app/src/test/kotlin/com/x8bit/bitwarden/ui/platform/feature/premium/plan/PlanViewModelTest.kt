@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.ui.platform.feature.premium.plan
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
+import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -21,6 +23,7 @@ import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionStatusState
 import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import io.mockk.coEvery
@@ -66,6 +69,11 @@ class PlanViewModelTest : BaseViewModelTest() {
         MutableStateFlow<SubscriptionStatusState>(SubscriptionStatusState.NoSubscription)
     private val mockPremiumStateManager: PremiumStateManager = mockk {
         every { subscriptionStatusStateFlow } returns mutableSubscriptionStatusStateFlow
+    }
+    private val mutableEnvironmentFlow = MutableStateFlow<Environment>(Environment.Us)
+    private val mockEnvironmentRepository: EnvironmentRepository = mockk {
+        every { environment } answers { mutableEnvironmentFlow.value }
+        every { environmentStateFlow } returns mutableEnvironmentFlow
     }
 
     @BeforeEach
@@ -130,7 +138,7 @@ class PlanViewModelTest : BaseViewModelTest() {
 
                 assertEquals(
                     DEFAULT_FREE_STATE.copy(
-                        viewState = PlanState.ViewState.Free(
+                        viewState = PlanState.ViewState.Free.Cloud(
                             rate = "$1.67",
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = true,
@@ -210,7 +218,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 )
                 assertEquals(
                     DEFAULT_FREE_STATE.copy(
-                        viewState = PlanState.ViewState.Free(
+                        viewState = PlanState.ViewState.Free.Cloud(
                             rate = "$1.67",
                             checkoutUrl = checkoutUrl,
                             isAwaitingPremiumStatus = false,
@@ -300,7 +308,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 )
                 assertEquals(
                     DEFAULT_FREE_STATE.copy(
-                        viewState = PlanState.ViewState.Free(
+                        viewState = PlanState.ViewState.Free.Cloud(
                             rate = "$1.67",
                             checkoutUrl = checkoutUrl,
                             isAwaitingPremiumStatus = false,
@@ -372,7 +380,7 @@ class PlanViewModelTest : BaseViewModelTest() {
     fun `GoBackClick should emit LaunchBrowser with checkout URL when URL is available`() =
         runTest {
             val checkoutUrl = "https://checkout.stripe.com/session123"
-            val freeState = PlanState.ViewState.Free(
+            val freeState = PlanState.ViewState.Free.Cloud(
                 rate = "$1.67",
                 checkoutUrl = checkoutUrl,
                 isAwaitingPremiumStatus = false,
@@ -420,7 +428,7 @@ class PlanViewModelTest : BaseViewModelTest() {
         runTest {
             val viewModel = createViewModel(
                 initialState = DEFAULT_FREE_STATE.copy(
-                    viewState = PlanState.ViewState.Free(
+                    viewState = PlanState.ViewState.Free.Cloud(
                         rate = "$1.67",
                         checkoutUrl = null,
                         isAwaitingPremiumStatus = true,
@@ -462,7 +470,7 @@ class PlanViewModelTest : BaseViewModelTest() {
 
                 assertEquals(
                     DEFAULT_FREE_STATE.copy(
-                        viewState = PlanState.ViewState.Free(
+                        viewState = PlanState.ViewState.Free.Cloud(
                             rate = "$1.67",
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = true,
@@ -517,7 +525,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 // Sync completes without premium — PendingUpgrade shown.
                 assertEquals(
                     DEFAULT_FREE_STATE.copy(
-                        viewState = PlanState.ViewState.Free(
+                        viewState = PlanState.ViewState.Free.Cloud(
                             rate = "$1.67",
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = true,
@@ -541,7 +549,7 @@ class PlanViewModelTest : BaseViewModelTest() {
         runTest {
             val viewModel = createViewModel(
                 initialState = DEFAULT_FREE_STATE.copy(
-                    viewState = PlanState.ViewState.Free(
+                    viewState = PlanState.ViewState.Free.Cloud(
                         rate = "$1.67",
                         checkoutUrl = null,
                         isAwaitingPremiumStatus = true,
@@ -600,6 +608,43 @@ class PlanViewModelTest : BaseViewModelTest() {
 
     // endregion Free user path
 
+    // region Self-hosted path
+
+    @Test
+    fun `initial state on self-hosted should be Free SelfHosted ViewState`() = runTest {
+        mutableEnvironmentFlow.value = Environment.SelfHosted(
+            environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+        )
+        val viewModel = createViewModel(
+            pricingResult = null,
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(
+                PlanState(
+                    planMode = PlanMode.Modal,
+                    viewState = PlanState.ViewState.Free.SelfHosted,
+                    dialogState = null,
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `initial state on self-hosted should not fetch pricing`() = runTest {
+        mutableEnvironmentFlow.value = Environment.SelfHosted(
+            environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+        )
+        createViewModel(pricingResult = null)
+
+        coVerify(exactly = 0) {
+            mockBillingRepository.getPremiumPlanPricing()
+        }
+    }
+
+    // endregion Self-hosted path
+
     // region Pricing fetch
 
     @Test
@@ -611,7 +656,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     PlanState(
                         planMode = PlanMode.Modal,
-                        viewState = PlanState.ViewState.Free(
+                        viewState = PlanState.ViewState.Free.Cloud(
                             rate = "--",
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = false,
@@ -636,7 +681,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     PlanState(
                         planMode = PlanMode.Modal,
-                        viewState = PlanState.ViewState.Free(
+                        viewState = PlanState.ViewState.Free.Cloud(
                             rate = "--",
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = false,
@@ -664,7 +709,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     PlanState(
                         planMode = PlanMode.Modal,
-                        viewState = PlanState.ViewState.Free(
+                        viewState = PlanState.ViewState.Free.Cloud(
                             rate = "--",
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = false,
@@ -687,7 +732,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     PlanState(
                         planMode = PlanMode.Modal,
-                        viewState = PlanState.ViewState.Free(
+                        viewState = PlanState.ViewState.Free.Cloud(
                             rate = "--",
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = false,
@@ -718,7 +763,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     PlanState(
                         planMode = PlanMode.Modal,
-                        viewState = PlanState.ViewState.Free(
+                        viewState = PlanState.ViewState.Free.Cloud(
                             rate = "--",
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = false,
@@ -736,7 +781,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     PlanState(
                         planMode = PlanMode.Modal,
-                        viewState = PlanState.ViewState.Free(
+                        viewState = PlanState.ViewState.Free.Cloud(
                             rate = "--",
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = false,
@@ -907,7 +952,7 @@ class PlanViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.test {
                 assertEquals(
                     DEFAULT_FREE_STATE.copy(
-                        viewState = PlanState.ViewState.Free(
+                        viewState = PlanState.ViewState.Free.Cloud(
                             rate = "--",
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = false,
@@ -1257,59 +1302,45 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `ManagePlanClick should show LoadingPortal then emit LaunchPortal on success`() =
-        runTest {
-            markUserPremium()
-
-            val viewModel = createViewModel(
-                subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE,
-                portalResult = CustomerPortalResult.Success(url = "https://portal"),
-            )
-
-            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
-                assertEquals(DEFAULT_PREMIUM_LOADED_STATE, stateFlow.awaitItem())
-
-                viewModel.trySendAction(PlanAction.ManagePlanClick)
-
-                assertEquals(
-                    DEFAULT_PREMIUM_LOADED_STATE.copy(
-                        dialogState = PlanState.DialogState.LoadingPortal,
-                    ),
-                    stateFlow.awaitItem(),
-                )
-                assertEquals(
-                    PlanEvent.LaunchPortal(url = "https://portal"),
-                    eventFlow.awaitItem(),
-                )
-                assertEquals(DEFAULT_PREMIUM_LOADED_STATE, stateFlow.awaitItem())
-            }
-        }
-
-    @Test
-    fun `ManagePlanClick should show PortalError on failure`() = runTest {
+    fun `ManagePlanClick should emit LaunchUri with web vault subscription URL`() = runTest {
         markUserPremium()
 
-        val viewModel = createViewModel(
-            subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE,
-            portalResult = CustomerPortalResult.Error(error = RuntimeException("boom")),
-        )
+        val viewModel = createViewModel(subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE)
 
-        viewModel.stateFlow.test {
-            assertEquals(DEFAULT_PREMIUM_LOADED_STATE, awaitItem())
+        viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+            assertEquals(DEFAULT_PREMIUM_LOADED_STATE, stateFlow.awaitItem())
 
             viewModel.trySendAction(PlanAction.ManagePlanClick)
 
             assertEquals(
-                DEFAULT_PREMIUM_LOADED_STATE.copy(
-                    dialogState = PlanState.DialogState.LoadingPortal,
+                PlanEvent.LaunchUri(
+                    url = "https://vault.bitwarden.com/#/settings/subscription/premium",
                 ),
-                awaitItem(),
+                eventFlow.awaitItem(),
             )
+        }
+        coVerify(exactly = 0) { mockBillingRepository.getPortalUrl() }
+    }
+
+    @Test
+    fun `ManagePlanClick should fall back to base URL when webVault is null`() = runTest {
+        markUserPremium()
+        every { mockEnvironmentRepository.environment } returns Environment.SelfHosted(
+            environmentUrlData = EnvironmentUrlDataJson(base = "https://self-hosted.example"),
+        )
+
+        val viewModel = createViewModel(subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE)
+
+        viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+            assertEquals(DEFAULT_PREMIUM_LOADED_STATE, stateFlow.awaitItem())
+
+            viewModel.trySendAction(PlanAction.ManagePlanClick)
+
             assertEquals(
-                DEFAULT_PREMIUM_LOADED_STATE.copy(
-                    dialogState = PlanState.DialogState.PortalError,
+                PlanEvent.LaunchUri(
+                    url = "https://self-hosted.example/#/settings/subscription/premium",
                 ),
-                awaitItem(),
+                eventFlow.awaitItem(),
             )
         }
     }
@@ -1364,6 +1395,64 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `RetryPortalClick should show LoadingPortal then emit LaunchPortal on success`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE,
+                portalResult = CustomerPortalResult.Success(url = "https://portal"),
+            )
+
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                assertEquals(DEFAULT_PREMIUM_LOADED_STATE, stateFlow.awaitItem())
+
+                viewModel.trySendAction(PlanAction.RetryPortalClick)
+
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        dialogState = PlanState.DialogState.LoadingPortal,
+                    ),
+                    stateFlow.awaitItem(),
+                )
+                assertEquals(
+                    PlanEvent.LaunchPortal(url = "https://portal"),
+                    eventFlow.awaitItem(),
+                )
+                assertEquals(DEFAULT_PREMIUM_LOADED_STATE, stateFlow.awaitItem())
+            }
+        }
+
+    @Test
+    fun `RetryPortalClick should show PortalError on failure`() = runTest {
+        markUserPremium()
+
+        val viewModel = createViewModel(
+            subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE,
+            portalResult = CustomerPortalResult.Error(error = RuntimeException("boom")),
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_PREMIUM_LOADED_STATE, awaitItem())
+
+            viewModel.trySendAction(PlanAction.RetryPortalClick)
+
+            assertEquals(
+                DEFAULT_PREMIUM_LOADED_STATE.copy(
+                    dialogState = PlanState.DialogState.LoadingPortal,
+                ),
+                awaitItem(),
+            )
+            assertEquals(
+                DEFAULT_PREMIUM_LOADED_STATE.copy(
+                    dialogState = PlanState.DialogState.PortalError,
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
     private fun markUserPremium() {
         mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
             accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = true)),
@@ -1407,6 +1496,7 @@ class PlanViewModelTest : BaseViewModelTest() {
             premiumStateManager = mockPremiumStateManager,
             specialCircumstanceManager = mockSpecialCircumstanceManager,
             vaultRepository = mockVaultRepository,
+            environmentRepository = mockEnvironmentRepository,
             clock = clock,
         )
     }
@@ -1443,7 +1533,7 @@ private val DEFAULT_USER_STATE = UserState(
 
 private val DEFAULT_FREE_STATE = PlanState(
     planMode = PlanMode.Modal,
-    viewState = PlanState.ViewState.Free(
+    viewState = PlanState.ViewState.Free.Cloud(
         rate = "$1.67",
         checkoutUrl = null,
         isAwaitingPremiumStatus = false,

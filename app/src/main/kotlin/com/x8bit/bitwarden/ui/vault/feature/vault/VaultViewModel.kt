@@ -1391,6 +1391,8 @@ class VaultViewModel @Inject constructor(
                 .any(),
         )
         val appBarTitle = vaultFilterData.toAppBarTitle()
+        val previousIsPremium = state.isPremium
+        val nextIsPremium = userState.activeAccount.isPremium
 
         mutableStateFlow.update {
             val accountSummaries = userState.toAccountSummaries()
@@ -1401,8 +1403,18 @@ class VaultViewModel @Inject constructor(
                 avatarColorString = activeAccountSummary.avatarColorHex,
                 accountSummaries = accountSummaries,
                 vaultFilterData = vaultFilterData,
-                isPremium = userState.activeAccount.isPremium,
+                isPremium = nextIsPremium,
                 showImportActionCard = firstTimeState.showImportLoginsCard,
+            )
+        }
+
+        // Archive UI fields (count, lock icon, "Premium required" subtext) are precomputed
+        // from isPremium when the viewState is built. Recompute when isPremium transitions
+        // so the row reflects the new entitlement immediately after upgrade.
+        if (previousIsPremium != nextIsPremium) {
+            updateViewState(
+                vaultData = vaultRepository.vaultDataStateFlow.value,
+                validTotpIds = state.validTotpIds,
             )
         }
     }

@@ -5,6 +5,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -23,6 +24,7 @@ import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActio
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
+import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -39,6 +41,7 @@ import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
@@ -49,6 +52,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
+import com.x8bit.bitwarden.ui.tools.feature.send.model.UpgradedToPremiumCardData
 import com.x8bit.bitwarden.ui.tools.feature.send.util.selectionText
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import kotlinx.collections.immutable.persistentListOf
@@ -181,24 +185,27 @@ fun SendScreen(
         snackbarHost = { BitwardenSnackbarHost(bitwardenHostState = snackbarHostState) },
     ) {
         val contentModifier = Modifier.fillMaxSize()
+        val upgradedToPremiumCardData = UpgradedToPremiumCardData(
+            onCardClick = {
+                viewModel.trySendAction(SendAction.UpgradedToPremiumCardClick)
+            },
+            onCardDismiss = {
+                viewModel.trySendAction(SendAction.UpgradedToPremiumCardDismiss)
+            },
+        ).takeIf { state.isUpgradedToPremiumCardEligible }
         when (val viewState = state.viewState) {
             is SendState.ViewState.Content -> SendContent(
                 policyDisablesSend = state.policyDisablesSend,
                 state = viewState,
-                isUpgradedToPremiumCardEligible = state.isUpgradedToPremiumCardEligible,
+                upgradedToPremiumCardData = upgradedToPremiumCardData,
                 sendHandlers = sendHandlers,
-                onUpgradedToPremiumCardClick = {
-                    viewModel.trySendAction(SendAction.UpgradedToPremiumCardClick)
-                },
-                onUpgradedToPremiumCardDismiss = {
-                    viewModel.trySendAction(SendAction.UpgradedToPremiumCardDismiss)
-                },
                 modifier = contentModifier,
             )
 
             SendState.ViewState.Empty -> SendEmpty(
                 policyDisablesSend = state.policyDisablesSend,
                 onAddItemClick = { viewModel.trySendAction(SendAction.AddSendClick) },
+                upgradedToPremiumCardData = upgradedToPremiumCardData,
                 modifier = contentModifier,
             )
 
@@ -250,4 +257,34 @@ private fun SendDialogs(
 
         null -> Unit
     }
+}
+
+/**
+ * Action card rendered at the top of the Send list when the user has just upgraded to premium.
+ * Owned by the screen so it can be hosted inside each view state's scrollable container.
+ */
+@Composable
+internal fun UpgradedToPremiumActionCard(
+    onActionClick: () -> Unit,
+    onDismissClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    BitwardenActionCard(
+        cardTitle = stringResource(id = BitwardenString.upgraded_to_premium),
+        cardSubtitle = stringResource(
+            id = BitwardenString.you_now_have_access_to_all_advanced_security_features,
+        ),
+        actionText = stringResource(id = BitwardenString.learn_more),
+        leadingContent = {
+            Icon(
+                painter = rememberVectorPainter(id = BitwardenDrawable.ic_star),
+                contentDescription = null,
+                tint = BitwardenTheme.colorScheme.icon.secondary,
+            )
+        },
+        isExternalLink = true,
+        onActionClick = onActionClick,
+        onDismissClick = onDismissClick,
+        modifier = modifier,
+    )
 }

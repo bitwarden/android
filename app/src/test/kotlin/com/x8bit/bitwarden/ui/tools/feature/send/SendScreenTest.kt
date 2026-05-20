@@ -960,6 +960,9 @@ class SendScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(text = "Learn more")
             .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription(label = "Learn more, External link")
+            .assertIsDisplayed()
     }
 
     @Test
@@ -996,6 +999,51 @@ class SendScreenTest : BitwardenComposeTest() {
         verify(exactly = 1) {
             viewModel.trySendAction(SendAction.UpgradedToPremiumCardDismiss)
         }
+    }
+
+    @Test
+    fun `UpgradedToPremium action card should display in Empty viewState when eligible`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = SendState.ViewState.Empty,
+                isUpgradedToPremiumCardEligible = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Upgraded to Premium")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Learn more")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `UpgradedToPremium action card should not display in Loading viewState`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = SendState.ViewState.Loading,
+                isUpgradedToPremiumCardEligible = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Upgraded to Premium")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `UpgradedToPremium action card should not display in Error viewState`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = SendState.ViewState.Error("Fail".asText()),
+                isUpgradedToPremiumCardEligible = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Upgraded to Premium")
+            .assertDoesNotExist()
     }
 }
 

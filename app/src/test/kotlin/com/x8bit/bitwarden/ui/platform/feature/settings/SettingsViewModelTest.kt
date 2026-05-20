@@ -2,11 +2,14 @@ package com.x8bit.bitwarden.ui.platform.feature.settings
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
+import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -46,6 +49,11 @@ class SettingsViewModelTest : BaseViewModelTest() {
         every {
             isUpgradedToPremiumCardEligibleFlow
         } returns mutableUpgradedToPremiumCardEligibleFlow
+    }
+    private val mutableEnvironmentFlow = MutableStateFlow<Environment>(Environment.Us)
+    private val environmentRepository: EnvironmentRepository = mockk {
+        every { environment } answers { mutableEnvironmentFlow.value }
+        every { environmentStateFlow } returns mutableEnvironmentFlow
     }
 
     @BeforeEach
@@ -323,9 +331,42 @@ class SettingsViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `Plan row should be hidden when environment is self-hosted`() {
+        mutablePlanRowEligibleFlow.value = true
+        mutableEnvironmentFlow.value = Environment.SelfHosted(
+            environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+        )
+        val viewModel = createViewModel()
+        assertFalse(
+            viewModel.stateFlow.value.settingRows
+                .contains(Settings.PLAN),
+        )
+    }
+
+    @Test
+    fun `Plan row should update when environment changes to self-hosted`() = runTest {
+        mutablePlanRowEligibleFlow.value = true
+        val viewModel = createViewModel()
+        assertTrue(
+            viewModel.stateFlow.value.settingRows
+                .contains(Settings.PLAN),
+        )
+
+        mutableEnvironmentFlow.value = Environment.SelfHosted(
+            environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+        )
+        viewModel.stateFlow.test {
+            assertFalse(
+                awaitItem().settingRows.contains(Settings.PLAN),
+            )
+        }
+    }
+
     private fun createViewModel(isPreAuth: Boolean = false) = SettingsViewModel(
         firstTimeActionManager = firstTimeManager,
         specialCircumstanceManager = specialCircumstanceManager,
+        environmentRepository = environmentRepository,
         premiumStateManager = premiumStateManager,
         savedStateHandle = SavedStateHandle().apply {
             every { toSettingsArgs() } returns SettingsArgs(isPreAuth = isPreAuth)
