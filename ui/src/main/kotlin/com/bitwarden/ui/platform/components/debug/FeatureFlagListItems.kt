@@ -28,7 +28,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.NoLogoutOnKdfChange,
     FlagKey.MigrateMyVaultToMyItems,
     FlagKey.CardScanner,
-    FlagKey.SendEmailVerification,
     FlagKey.MobilePremiumUpgrade,
     FlagKey.ManageDevices,
     FlagKey.AttachmentUpdates,
@@ -86,7 +85,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
 
     FlagKey.MigrateMyVaultToMyItems -> stringResource(BitwardenString.migrate_my_vault_to_my_items)
     FlagKey.CardScanner -> stringResource(BitwardenString.scan_card)
-    FlagKey.SendEmailVerification -> stringResource(BitwardenString.send_email_verification)
     FlagKey.MobilePremiumUpgrade -> stringResource(BitwardenString.mobile_premium_upgrade)
     FlagKey.ManageDevices -> stringResource(BitwardenString.manage_devices)
     FlagKey.AttachmentUpdates -> stringResource(BitwardenString.attachment_updates)

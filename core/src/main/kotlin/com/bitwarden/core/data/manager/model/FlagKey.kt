@@ -33,7 +33,6 @@ sealed class FlagKey<out T : Any> {
                 ForceUpdateKdfSettings,
                 NoLogoutOnKdfChange,
                 MigrateMyVaultToMyItems,
-                SendEmailVerification,
                 CardScanner,
                 MobilePremiumUpgrade,
                 ManageDevices,
@@ -76,14 +75,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object MigrateMyVaultToMyItems : FlagKey<Boolean>() {
         override val keyName: String = "pm-20558-migrate-myvault-to-myitems"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key for the Send Email Verification feature.
-     */
-    data object SendEmailVerification : FlagKey<Boolean>() {
-        override val keyName: String = "pm-19051-send-email-verification"
         override val defaultValue: Boolean = false
     }
 
