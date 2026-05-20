@@ -285,6 +285,7 @@ internal fun UpgradedToPremiumActionCard(
                 tint = BitwardenTheme.colorScheme.icon.secondary,
             )
         },
+        isExternalLink = true,
         onActionClick = onActionClick,
         onDismissClick = onDismissClick,
         modifier = modifier,
