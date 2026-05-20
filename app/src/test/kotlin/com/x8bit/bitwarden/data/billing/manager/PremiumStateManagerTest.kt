@@ -79,6 +79,9 @@ class PremiumStateManagerTest {
         every {
             getFeatureFlag(FlagKey.DebugDisableSelfHostPremiumCheck)
         } answers { mutableDebugDisableSelfHostPremiumCheckFlagFlow.value }
+        every {
+            getFeatureFlagFlow(FlagKey.DebugDisableSelfHostPremiumCheck)
+        } returns mutableDebugDisableSelfHostPremiumCheckFlagFlow
     }
 
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
@@ -403,6 +406,45 @@ class PremiumStateManagerTest {
         val manager = createManager()
         assertFalse(manager.isSelfHosted())
     }
+
+    @Test
+    fun `isSelfHostedFlow should emit false on cloud environment regardless of flag`() = runTest {
+        fakeEnvironmentRepository.environment = Environment.Us
+        val manager = createManager()
+        manager.isSelfHostedFlow.test {
+            assertFalse(awaitItem())
+            mutableDebugDisableSelfHostPremiumCheckFlagFlow.value = true
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `isSelfHostedFlow should emit true on self-hosted environment when flag is disabled`() =
+        runTest {
+            fakeEnvironmentRepository.environment = Environment.SelfHosted(
+                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+            )
+            val manager = createManager()
+            manager.isSelfHostedFlow.test {
+                assertTrue(awaitItem())
+            }
+        }
+
+    @Test
+    fun `isSelfHostedFlow should re-emit when debug-disable flag toggles on self-hosted env`() =
+        runTest {
+            fakeEnvironmentRepository.environment = Environment.SelfHosted(
+                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+            )
+            val manager = createManager()
+            manager.isSelfHostedFlow.test {
+                assertTrue(awaitItem())
+                mutableDebugDisableSelfHostPremiumCheckFlagFlow.value = true
+                assertFalse(awaitItem())
+                mutableDebugDisableSelfHostPremiumCheckFlagFlow.value = false
+                assertTrue(awaitItem())
+            }
+        }
 
     @Test
     fun `dismissPremiumUpgradeBanner should store dismissed state for active user`() {

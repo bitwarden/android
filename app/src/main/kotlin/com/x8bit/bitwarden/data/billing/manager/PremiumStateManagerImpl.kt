@@ -143,6 +143,20 @@ class PremiumStateManagerImpl(
                 initialValue = false,
             )
 
+    override val isSelfHostedFlow: StateFlow<Boolean> =
+        combine(
+            environmentRepository.environmentStateFlow,
+            featureFlagManager.getFeatureFlagFlow(FlagKey.DebugDisableSelfHostPremiumCheck),
+        ) { environment, isDebugBypassEnabled ->
+            environment is Environment.SelfHosted && !isDebugBypassEnabled
+        }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = environmentRepository.environment is Environment.SelfHosted &&
+                    !featureFlagManager.getFeatureFlag(FlagKey.DebugDisableSelfHostPremiumCheck),
+            )
+
     /**
      * Eligibility is keyed on the user holding personal Premium (or being eligible to purchase
      * it). Organization-granted Premium does not surface the Plan row, since the user has no

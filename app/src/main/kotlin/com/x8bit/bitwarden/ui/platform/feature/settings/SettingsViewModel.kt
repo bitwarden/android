@@ -15,7 +15,6 @@ import com.x8bit.bitwarden.data.billing.manager.UPGRADED_TO_PREMIUM_LEARN_MORE_U
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -33,7 +32,6 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     specialCircumstanceManager: SpecialCircumstanceManager,
     firstTimeActionManager: FirstTimeActionManager,
-    environmentRepository: EnvironmentRepository,
     private val premiumStateManager: PremiumStateManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SettingsState, SettingsEvent, SettingsAction>(
@@ -43,7 +41,7 @@ class SettingsViewModel @Inject constructor(
         autoFillCount = firstTimeActionManager.allAutofillSettingsBadgeCountFlow.value,
         vaultCount = firstTimeActionManager.allVaultSettingsBadgeCountFlow.value,
         isPlanRowEligible = premiumStateManager.isPlanRowEligibleFlow.value,
-        isSelfHosted = premiumStateManager.isSelfHosted(),
+        isSelfHosted = premiumStateManager.isSelfHostedFlow.value,
         isUpgradedToPremiumCardEligible = premiumStateManager
             .isUpgradedToPremiumCardEligibleFlow
             .value,
@@ -79,13 +77,9 @@ class SettingsViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        environmentRepository
-            .environmentStateFlow
-            .map {
-                SettingsAction.Internal.EnvironmentReceive(
-                    isSelfHosted = premiumStateManager.isSelfHosted(),
-                )
-            }
+        premiumStateManager
+            .isSelfHostedFlow
+            .map { SettingsAction.Internal.SelfHostedStatusReceive(isSelfHosted = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -116,13 +110,13 @@ class SettingsViewModel @Inject constructor(
             handleUpgradedToPremiumCardEligibilityReceive(action)
         }
 
-        is SettingsAction.Internal.EnvironmentReceive -> {
-            handleEnvironmentReceive(action)
+        is SettingsAction.Internal.SelfHostedStatusReceive -> {
+            handleSelfHostedStatusReceive(action)
         }
     }
 
-    private fun handleEnvironmentReceive(
-        action: SettingsAction.Internal.EnvironmentReceive,
+    private fun handleSelfHostedStatusReceive(
+        action: SettingsAction.Internal.SelfHostedStatusReceive,
     ) {
         mutableStateFlow.update {
             it.copy(isSelfHosted = action.isSelfHosted)
@@ -363,9 +357,10 @@ sealed class SettingsAction {
         ) : Internal()
 
         /**
-         * Indicates that the environment has been updated.
+         * Indicates that the effective self-hosted status for premium gating has been updated —
+         * driven by environment changes or by the debug-only self-host-bypass flag.
          */
-        data class EnvironmentReceive(
+        data class SelfHostedStatusReceive(
             val isSelfHosted: Boolean,
         ) : Internal()
     }
