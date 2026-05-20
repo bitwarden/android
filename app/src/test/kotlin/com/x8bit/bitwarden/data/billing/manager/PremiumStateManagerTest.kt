@@ -5,6 +5,7 @@ import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
+import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.vault.DecryptCipherListResult
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -19,6 +20,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSo
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.model.PremiumStatusChangedData
+import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -66,6 +68,7 @@ class PremiumStateManagerTest {
     }
 
     private val mutableMobilePremiumUpgradeFlagFlow = MutableStateFlow(true)
+    private val mutableDebugDisableSelfHostPremiumCheckFlagFlow = MutableStateFlow(false)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every {
             getFeatureFlagFlow(FlagKey.MobilePremiumUpgrade)
@@ -73,7 +76,12 @@ class PremiumStateManagerTest {
         every {
             getFeatureFlag(FlagKey.MobilePremiumUpgrade)
         } answers { mutableMobilePremiumUpgradeFlagFlow.value }
+        every {
+            getFeatureFlag(FlagKey.DebugDisableSelfHostPremiumCheck)
+        } answers { mutableDebugDisableSelfHostPremiumCheckFlagFlow.value }
     }
+
+    private val fakeEnvironmentRepository = FakeEnvironmentRepository()
 
     private val dispatcherManager = FakeDispatcherManager()
 
@@ -89,6 +97,7 @@ class PremiumStateManagerTest {
         settingsDiskSource = fakeSettingsDiskSource,
         vaultRepository = vaultRepository,
         featureFlagManager = featureFlagManager,
+        environmentRepository = fakeEnvironmentRepository,
         pushManager = pushManager,
         clock = fixedClock,
         dispatcherManager = dispatcherManager,
@@ -363,6 +372,36 @@ class PremiumStateManagerTest {
         mutableMobilePremiumUpgradeFlagFlow.value = false
         val manager = createManager()
         assertFalse(manager.isInAppUpgradeAvailable())
+    }
+
+    @Test
+    fun `isSelfHosted should return false on cloud environment regardless of flag`() {
+        fakeEnvironmentRepository.environment = Environment.Us
+        val manager = createManager()
+        mutableDebugDisableSelfHostPremiumCheckFlagFlow.value = false
+        assertFalse(manager.isSelfHosted())
+        mutableDebugDisableSelfHostPremiumCheckFlagFlow.value = true
+        assertFalse(manager.isSelfHosted())
+    }
+
+    @Test
+    fun `isSelfHosted should return true on self-hosted environment when flag is disabled`() {
+        fakeEnvironmentRepository.environment = Environment.SelfHosted(
+            environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+        )
+        mutableDebugDisableSelfHostPremiumCheckFlagFlow.value = false
+        val manager = createManager()
+        assertTrue(manager.isSelfHosted())
+    }
+
+    @Test
+    fun `isSelfHosted should return false on self-hosted environment when flag is enabled`() {
+        fakeEnvironmentRepository.environment = Environment.SelfHosted(
+            environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+        )
+        mutableDebugDisableSelfHostPremiumCheckFlagFlow.value = true
+        val manager = createManager()
+        assertFalse(manager.isSelfHosted())
     }
 
     @Test

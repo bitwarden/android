@@ -4,7 +4,6 @@ import androidx.annotation.DrawableRes
 import androidx.compose.material3.Text
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -44,7 +43,7 @@ class SettingsViewModel @Inject constructor(
         autoFillCount = firstTimeActionManager.allAutofillSettingsBadgeCountFlow.value,
         vaultCount = firstTimeActionManager.allVaultSettingsBadgeCountFlow.value,
         isPlanRowEligible = premiumStateManager.isPlanRowEligibleFlow.value,
-        isSelfHosted = environmentRepository.environment is Environment.SelfHosted,
+        isSelfHosted = premiumStateManager.isSelfHosted(),
         isUpgradedToPremiumCardEligible = premiumStateManager
             .isUpgradedToPremiumCardEligibleFlow
             .value,
@@ -84,7 +83,7 @@ class SettingsViewModel @Inject constructor(
             .environmentStateFlow
             .map {
                 SettingsAction.Internal.EnvironmentReceive(
-                    isSelfHosted = it is Environment.SelfHosted,
+                    isSelfHosted = premiumStateManager.isSelfHosted(),
                 )
             }
             .onEach(::sendAction)

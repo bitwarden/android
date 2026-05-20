@@ -44,11 +44,13 @@ class SettingsViewModelTest : BaseViewModelTest() {
 
     private val mutablePlanRowEligibleFlow = MutableStateFlow(false)
     private val mutableUpgradedToPremiumCardEligibleFlow = MutableStateFlow(false)
+    private var isSelfHosted = false
     private val premiumStateManager: PremiumStateManager = mockk(relaxed = true) {
         every { isPlanRowEligibleFlow } returns mutablePlanRowEligibleFlow
         every {
             isUpgradedToPremiumCardEligibleFlow
         } returns mutableUpgradedToPremiumCardEligibleFlow
+        every { isSelfHosted() } answers { isSelfHosted }
     }
     private val mutableEnvironmentFlow = MutableStateFlow<Environment>(Environment.Us)
     private val environmentRepository: EnvironmentRepository = mockk {
@@ -334,6 +336,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
     @Test
     fun `Plan row should be hidden when environment is self-hosted`() {
         mutablePlanRowEligibleFlow.value = true
+        isSelfHosted = true
         mutableEnvironmentFlow.value = Environment.SelfHosted(
             environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
         )
@@ -353,6 +356,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
                 .contains(Settings.PLAN),
         )
 
+        isSelfHosted = true
         mutableEnvironmentFlow.value = Environment.SelfHosted(
             environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
         )
@@ -361,6 +365,22 @@ class SettingsViewModelTest : BaseViewModelTest() {
                 awaitItem().settingRows.contains(Settings.PLAN),
             )
         }
+    }
+
+    @Test
+    fun `Plan row should be visible when self-hosted but debug disable flag is enabled`() {
+        // PremiumStateManager.isSelfHosted() returns false when the debug-disable flag is on,
+        // so the Plan row remains visible even with a self-hosted environment.
+        mutablePlanRowEligibleFlow.value = true
+        isSelfHosted = false
+        mutableEnvironmentFlow.value = Environment.SelfHosted(
+            environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+        )
+        val viewModel = createViewModel()
+        assertTrue(
+            viewModel.stateFlow.value.settingRows
+                .contains(Settings.PLAN),
+        )
     }
 
     private fun createViewModel(isPreAuth: Boolean = false) = SettingsViewModel(

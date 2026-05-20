@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.billing.manager
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.data.repository.model.Environment
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
@@ -13,6 +14,7 @@ import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionStatusState
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.util.isActive
 import com.x8bit.bitwarden.data.platform.util.scanPairs
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -47,6 +49,7 @@ class PremiumStateManagerImpl(
     private val settingsDiskSource: SettingsDiskSource,
     vaultRepository: VaultRepository,
     private val featureFlagManager: FeatureFlagManager,
+    private val environmentRepository: EnvironmentRepository,
     pushManager: PushManager,
     private val clock: Clock,
     dispatcherManager: DispatcherManager,
@@ -245,6 +248,11 @@ class PremiumStateManagerImpl(
     override fun isInAppUpgradeAvailable(): Boolean =
         billingRepository.isInAppBillingSupportedFlow.value &&
             featureFlagManager.getFeatureFlag(FlagKey.MobilePremiumUpgrade)
+
+    override fun isSelfHosted(): Boolean {
+        if (environmentRepository.environment !is Environment.SelfHosted) return false
+        return !featureFlagManager.getFeatureFlag(FlagKey.DebugDisableSelfHostPremiumCheck)
+    }
 
     override fun dismissPremiumUpgradeBanner() {
         val activeUserId = authDiskSource.userState?.activeUserId ?: return

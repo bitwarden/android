@@ -44,6 +44,14 @@ interface PremiumStateManager {
     fun isInAppUpgradeAvailable(): Boolean
 
     /**
+     * Returns `true` when the current environment is effectively self-hosted for
+     * premium upgrade gating. Returns `false` for cloud environments and for
+     * self-hosted environments when [com.bitwarden.core.data.manager.model.FlagKey.DebugDisableSelfHostPremiumCheck]
+     * is enabled (QA bypass for testing premium flows on internal self-hosted envs).
+     */
+    fun isSelfHosted(): Boolean
+
+    /**
      * Marks the Premium upgrade banner as dismissed for the current user.
      */
     fun dismissPremiumUpgradeBanner()

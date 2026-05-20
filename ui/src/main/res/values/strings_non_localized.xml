@@ -53,6 +53,7 @@
     <string name="v2_encryption_password">V2 Encryption - Password</string>
     <string name="manage_devices">Manage devices</string>
     <string name="new_item_types">New Item Types</string>
+    <string name="debug_disable_self_host_premium_check">Debug: Disable self-host premium check</string>
 
     <!-- endregion Debug Menu -->
 </resources>
