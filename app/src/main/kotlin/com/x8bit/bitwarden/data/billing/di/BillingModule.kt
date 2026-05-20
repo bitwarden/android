@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.billing.repository.BillingRepositoryImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module
 import dagger.Provides
@@ -57,6 +58,7 @@ object BillingModule {
         settingsDiskSource: SettingsDiskSource,
         vaultRepository: VaultRepository,
         featureFlagManager: FeatureFlagManager,
+        environmentRepository: EnvironmentRepository,
         pushManager: PushManager,
         clock: Clock,
         dispatcherManager: DispatcherManager,
@@ -66,6 +68,7 @@ object BillingModule {
         settingsDiskSource = settingsDiskSource,
         vaultRepository = vaultRepository,
         featureFlagManager = featureFlagManager,
+        environmentRepository = environmentRepository,
         pushManager = pushManager,
         clock = clock,
         dispatcherManager = dispatcherManager,

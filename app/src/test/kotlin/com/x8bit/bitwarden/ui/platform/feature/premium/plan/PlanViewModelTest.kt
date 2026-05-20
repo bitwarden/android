@@ -67,8 +67,10 @@ class PlanViewModelTest : BaseViewModelTest() {
     }
     private val mutableSubscriptionStatusStateFlow =
         MutableStateFlow<SubscriptionStatusState>(SubscriptionStatusState.NoSubscription)
+    private var mockIsSelfHosted = false
     private val mockPremiumStateManager: PremiumStateManager = mockk {
         every { subscriptionStatusStateFlow } returns mutableSubscriptionStatusStateFlow
+        every { isSelfHosted } answers { mockIsSelfHosted }
     }
     private val mutableEnvironmentFlow = MutableStateFlow<Environment>(Environment.Us)
     private val mockEnvironmentRepository: EnvironmentRepository = mockk {
@@ -612,6 +614,7 @@ class PlanViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state on self-hosted should be Free SelfHosted ViewState`() = runTest {
+        mockIsSelfHosted = true
         mutableEnvironmentFlow.value = Environment.SelfHosted(
             environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
         )
@@ -633,6 +636,7 @@ class PlanViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state on self-hosted should not fetch pricing`() = runTest {
+        mockIsSelfHosted = true
         mutableEnvironmentFlow.value = Environment.SelfHosted(
             environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
         )
@@ -642,6 +646,36 @@ class PlanViewModelTest : BaseViewModelTest() {
             mockBillingRepository.getPremiumPlanPricing()
         }
     }
+
+    @Test
+    fun `self-hosted with debug disable flag enabled should show Free Cloud and fetch pricing`() =
+        runTest {
+            // The PremiumStateManager helper reports false when the debug-disable flag is on,
+            // so the view model treats the self-hosted env as cloud for premium-upgrade purposes.
+            mockIsSelfHosted = false
+            mutableEnvironmentFlow.value = Environment.SelfHosted(
+                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+            )
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    PlanState(
+                        planMode = PlanMode.Modal,
+                        viewState = PlanState.ViewState.Free.Cloud(
+                            rate = "$1.67",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = false,
+                        ),
+                        dialogState = null,
+                    ),
+                    awaitItem(),
+                )
+            }
+            coVerify(exactly = 1) {
+                mockBillingRepository.getPremiumPlanPricing()
+            }
+        }
 
     // endregion Self-hosted path
 

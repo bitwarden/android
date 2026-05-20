@@ -6,7 +6,6 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.util.toFormattedDateStyle
-import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
@@ -82,7 +81,7 @@ class PlanViewModel @Inject constructor(
             ?.isPremium == true
         val showsPremiumView = isPremium ||
             premiumStateManager.subscriptionStatusStateFlow.value.isPremiumViewEligible()
-        val isSelfHosted = environmentRepository.environment is Environment.SelfHosted
+        val isSelfHosted = premiumStateManager.isSelfHosted
         PlanState(
             planMode = planMode,
             viewState = when {

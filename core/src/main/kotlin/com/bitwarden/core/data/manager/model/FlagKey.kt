@@ -45,6 +45,7 @@ sealed class FlagKey<out T : Any> {
                 V2EncryptionPassword,
                 V2EncryptionTde,
                 NewItemTypes,
+                DebugDisableSelfHostPremiumCheck,
             )
         }
     }
@@ -177,6 +178,16 @@ sealed class FlagKey<out T : Any> {
      */
     data object NewItemTypes : FlagKey<Boolean>() {
         override val keyName: String = "pm-32009-new-item-types"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Debug-only flag that, when enabled, makes self-hosted environments behave as cloud
+     * environments for premium-upgrade gating. Used by QA to test the premium upgrade flow
+     * against internal self-hosted environments.
+     */
+    data object DebugDisableSelfHostPremiumCheck : FlagKey<Boolean>() {
+        override val keyName: String = "debug-disable-self-host-premium-check"
         override val defaultValue: Boolean = false
     }
 
