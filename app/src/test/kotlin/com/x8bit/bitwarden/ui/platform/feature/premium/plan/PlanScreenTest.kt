@@ -1043,12 +1043,12 @@ class PlanScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onAllNodesWithText("Cancel Premium")
+            .onAllNodesWithText("Continue to Stripe?")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertExists()
         composeTestRule
             .onAllNodesWithText(
-                "You’ll continue to have Premium access until April 2, 2026.",
+                "You’ll be taken to Stripe to manage your subscription cancellation.",
             )
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertExists()
@@ -1065,7 +1065,7 @@ class PlanScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onAllNodesWithText("Cancel now")
+            .onAllNodesWithText("Continue")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         verify { viewModel.trySendAction(PlanAction.ConfirmCancelClick) }
@@ -1082,7 +1082,7 @@ class PlanScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onAllNodesWithText("Close")
+            .onAllNodesWithText("Cancel")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         verify { viewModel.trySendAction(PlanAction.DismissCancelConfirmation) }
