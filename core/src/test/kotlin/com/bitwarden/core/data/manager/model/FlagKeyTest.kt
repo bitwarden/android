@@ -9,10 +9,6 @@ class FlagKeyTest {
     @Test
     fun `Feature flags have the correct key name set`() {
         assertEquals(
-            FlagKey.CredentialExchangeProtocolImport.keyName,
-            "cxp-import-mobile",
-        )
-        assertEquals(
             FlagKey.CredentialExchangeProtocolExport.keyName,
             "cxp-export-mobile",
         )
@@ -70,7 +66,6 @@ class FlagKeyTest {
     fun `All feature flags have the correct default value set`() {
         assertTrue(
             listOf(
-                FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
                 FlagKey.BitwardenAuthenticationEnabled,
                 FlagKey.ForceUpdateKdfSettings,

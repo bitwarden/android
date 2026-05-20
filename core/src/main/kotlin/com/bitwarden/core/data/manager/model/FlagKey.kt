@@ -30,7 +30,6 @@ sealed class FlagKey<out T : Any> {
          */
         val activePasswordManagerFlags: List<FlagKey<*>> by lazy {
             listOf(
-                CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
                 ForceUpdateKdfSettings,
                 NoLogoutOnKdfChange,
@@ -47,15 +46,6 @@ sealed class FlagKey<out T : Any> {
                 NewItemTypes,
             )
         }
-    }
-
-    /**
-     * Data object holding hte feature flag key for the Credential Exchange Protocol (CXP) import
-     * feature.
-     */
-    data object CredentialExchangeProtocolImport : FlagKey<Boolean>() {
-        override val keyName: String = "cxp-import-mobile"
-        override val defaultValue: Boolean = false
     }
 
     /**
