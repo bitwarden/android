@@ -263,10 +263,7 @@ class PremiumStateManagerImpl(
         billingRepository.isInAppBillingSupportedFlow.value &&
             featureFlagManager.getFeatureFlag(FlagKey.MobilePremiumUpgrade)
 
-    override fun isSelfHosted(): Boolean {
-        if (environmentRepository.environment !is Environment.SelfHosted) return false
-        return !featureFlagManager.getFeatureFlag(FlagKey.DebugDisableSelfHostPremiumCheck)
-    }
+    override fun isSelfHosted(): Boolean = isSelfHostedFlow.value
 
     override fun dismissPremiumUpgradeBanner() {
         val activeUserId = authDiskSource.userState?.activeUserId ?: return

@@ -39,10 +39,8 @@ interface PremiumStateManager {
     val subscriptionStatusStateFlow: StateFlow<SubscriptionStatusState>
 
     /**
-     * Emits the latest "is the environment effectively self-hosted for premium upgrade gating"
-     * value. Mirrors [isSelfHosted] but reacts to both environment changes and toggles of the
-     * [com.bitwarden.core.data.manager.model.FlagKey.DebugDisableSelfHostPremiumCheck] debug
-     * flag, so consumers stay in sync when QA flips the override at runtime.
+     * Emits whether the current state should be treated as self-hosted for premium upgrade
+     * gating. Reactive equivalent of [isSelfHosted].
      */
     val isSelfHostedFlow: StateFlow<Boolean>
 
@@ -52,10 +50,8 @@ interface PremiumStateManager {
     fun isInAppUpgradeAvailable(): Boolean
 
     /**
-     * Returns `true` when the current environment is effectively self-hosted for
-     * premium upgrade gating. Returns `false` for cloud environments and for
-     * self-hosted environments when [com.bitwarden.core.data.manager.model.FlagKey.DebugDisableSelfHostPremiumCheck]
-     * is enabled (QA bypass for testing premium flows on internal self-hosted envs).
+     * Returns `true` when the current state should be treated as self-hosted for premium
+     * upgrade gating, or `false` otherwise.
      */
     fun isSelfHosted(): Boolean
 
