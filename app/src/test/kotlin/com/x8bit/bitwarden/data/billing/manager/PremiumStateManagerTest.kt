@@ -382,9 +382,9 @@ class PremiumStateManagerTest {
         fakeEnvironmentRepository.environment = Environment.Us
         val manager = createManager()
         mutableDebugDisableSelfHostPremiumCheckFlagFlow.value = false
-        assertFalse(manager.isSelfHosted())
+        assertFalse(manager.isSelfHosted)
         mutableDebugDisableSelfHostPremiumCheckFlagFlow.value = true
-        assertFalse(manager.isSelfHosted())
+        assertFalse(manager.isSelfHosted)
     }
 
     @Test
@@ -394,7 +394,7 @@ class PremiumStateManagerTest {
         )
         mutableDebugDisableSelfHostPremiumCheckFlagFlow.value = false
         val manager = createManager()
-        assertTrue(manager.isSelfHosted())
+        assertTrue(manager.isSelfHosted)
     }
 
     @Test
@@ -404,7 +404,7 @@ class PremiumStateManagerTest {
         )
         mutableDebugDisableSelfHostPremiumCheckFlagFlow.value = true
         val manager = createManager()
-        assertFalse(manager.isSelfHosted())
+        assertFalse(manager.isSelfHosted)
     }
 
     @Test

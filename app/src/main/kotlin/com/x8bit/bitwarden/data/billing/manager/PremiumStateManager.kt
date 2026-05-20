@@ -45,15 +45,15 @@ interface PremiumStateManager {
     val isSelfHostedFlow: StateFlow<Boolean>
 
     /**
+     * `true` when the current state should be treated as self-hosted for premium upgrade
+     * gating, or `false` otherwise.
+     */
+    val isSelfHosted: Boolean
+
+    /**
      * Returns `true` when the in-app upgrade flow is available, or `false` otherwise.
      */
     fun isInAppUpgradeAvailable(): Boolean
-
-    /**
-     * Returns `true` when the current state should be treated as self-hosted for premium
-     * upgrade gating, or `false` otherwise.
-     */
-    fun isSelfHosted(): Boolean
 
     /**
      * Marks the Premium upgrade banner as dismissed for the current user.

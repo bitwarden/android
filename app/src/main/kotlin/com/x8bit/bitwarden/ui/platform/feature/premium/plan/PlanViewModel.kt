@@ -81,7 +81,7 @@ class PlanViewModel @Inject constructor(
             ?.isPremium == true
         val showsPremiumView = isPremium ||
             premiumStateManager.subscriptionStatusStateFlow.value.isPremiumViewEligible()
-        val isSelfHosted = premiumStateManager.isSelfHosted()
+        val isSelfHosted = premiumStateManager.isSelfHosted
         PlanState(
             planMode = planMode,
             viewState = when {

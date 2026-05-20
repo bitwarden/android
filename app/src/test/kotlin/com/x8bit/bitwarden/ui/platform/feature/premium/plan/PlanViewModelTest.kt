@@ -70,7 +70,7 @@ class PlanViewModelTest : BaseViewModelTest() {
     private var mockIsSelfHosted = false
     private val mockPremiumStateManager: PremiumStateManager = mockk {
         every { subscriptionStatusStateFlow } returns mutableSubscriptionStatusStateFlow
-        every { isSelfHosted() } answers { mockIsSelfHosted }
+        every { isSelfHosted } answers { mockIsSelfHosted }
     }
     private val mutableEnvironmentFlow = MutableStateFlow<Environment>(Environment.Us)
     private val mockEnvironmentRepository: EnvironmentRepository = mockk {
