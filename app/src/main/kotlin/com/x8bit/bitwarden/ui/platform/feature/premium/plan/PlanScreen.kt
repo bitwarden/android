@@ -128,14 +128,14 @@ fun PlanScreen(
     ) {
         when (val viewState = state.viewState) {
             is PlanState.ViewState.Free.Cloud -> {
-                FreeContent(
+                FreeCloudContent(
                     viewState = viewState,
                     handlers = handlers,
                 )
             }
 
             is PlanState.ViewState.Free.SelfHosted -> {
-                SelfHostedContent()
+                FreeSelfHostedContent()
             }
 
             is PlanState.ViewState.Premium -> {
@@ -259,7 +259,7 @@ private fun PlanDialogs(
 }
 
 @Composable
-private fun FreeContent(
+private fun FreeCloudContent(
     viewState: PlanState.ViewState.Free.Cloud,
     handlers: PlanHandlers,
     modifier: Modifier = Modifier,
@@ -308,7 +308,7 @@ private fun FreeContent(
 
 @Suppress("MaxLineLength")
 @Composable
-private fun SelfHostedContent(
+private fun FreeSelfHostedContent(
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -714,10 +714,10 @@ private fun SubscriptionLineItem(
 @Preview
 @OmitFromCoverage
 @Composable
-private fun PlanScreenFreeAccount_preview() {
+private fun PlanScreenFreeCloudAccount_preview() {
     BitwardenTheme {
         BitwardenScaffold {
-            FreeContent(
+            FreeCloudContent(
                 viewState = PlanState.ViewState.Free.Cloud(
                     rate = "$1.67",
                     checkoutUrl = null,
@@ -749,10 +749,10 @@ private fun PlanScreenFreeAccount_preview() {
 @Preview
 @OmitFromCoverage
 @Composable
-private fun PlanScreenSelfHostedFreeAccount_preview() {
+private fun PlanScreenFreeSelfHostedFreeAccount_preview() {
     BitwardenTheme {
         BitwardenScaffold {
-            SelfHostedContent()
+            FreeSelfHostedContent()
         }
     }
 }
