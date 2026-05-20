@@ -24,6 +24,7 @@ data class PlanHandlers(
     val onConfirmCancelClick: () -> Unit,
     val onDismissCancelConfirmation: () -> Unit,
     val onDismissPortalError: () -> Unit,
+    val onRetryPortalClick: () -> Unit,
     val onRetrySubscriptionClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
@@ -57,6 +58,9 @@ data class PlanHandlers(
             },
             onDismissPortalError = {
                 viewModel.trySendAction(PlanAction.DismissPortalError)
+            },
+            onRetryPortalClick = {
+                viewModel.trySendAction(PlanAction.RetryPortalClick)
             },
             onRetrySubscriptionClick = {
                 viewModel.trySendAction(PlanAction.RetrySubscriptionClick)

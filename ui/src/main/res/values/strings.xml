@@ -1302,6 +1302,7 @@ Do you want to switch to this account?</string>
     <string name="billing_rate_per_year">%1$s / year</string>
     <string name="billing_rate_per_month">%1$s / month</string>
     <string name="manage_plan">Manage plan</string>
+    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Manage your subscription plan in the Bitwarden web app.</string>
     <string name="cancel_premium">Cancel Premium</string>
     <string name="cancel_now">Cancel now</string>
     <string name="cancel_premium_confirmation">You’ll continue to have Premium access until %1$s.</string>

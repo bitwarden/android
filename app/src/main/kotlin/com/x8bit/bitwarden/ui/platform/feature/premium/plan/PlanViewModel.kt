@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.util.toFormattedDateStyle
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -169,6 +170,7 @@ class PlanViewModel @Inject constructor(
             is PlanAction.ConfirmCancelClick -> handleConfirmCancelClick()
             is PlanAction.DismissCancelConfirmation -> handleDismissCancelConfirmation()
             is PlanAction.DismissPortalError -> handleDismissPortalError()
+            is PlanAction.RetryPortalClick -> handleRetryPortalClick()
             is PlanAction.RetrySubscriptionClick -> handleRetrySubscriptionClick()
             is PlanAction.Internal.CheckoutUrlReceive -> handleCheckoutUrlReceive(action)
             is PlanAction.Internal.UserStateUpdateReceive -> handleUserStateUpdateReceive(action)
@@ -298,7 +300,11 @@ class PlanViewModel @Inject constructor(
     // region Premium user handlers
 
     private fun handleManagePlanClick() {
-        launchPortalFetch()
+        val webVaultBaseUrl = environmentRepository
+            .environment
+            .environmentUrlData
+            .baseWebVaultUrlOrDefault
+        sendEvent(PlanEvent.LaunchUri(url = "$webVaultBaseUrl/#/settings/subscription/premium"))
     }
 
     private fun handleCancelPremiumClick() {
@@ -320,6 +326,10 @@ class PlanViewModel @Inject constructor(
 
     private fun handleDismissCancelConfirmation() {
         mutableStateFlow.update { it.copy(dialogState = null) }
+    }
+
+    private fun handleRetryPortalClick() {
+        launchPortalFetch()
     }
 
     private fun handleDismissPortalError() {
@@ -877,6 +887,13 @@ sealed class PlanEvent {
     ) : PlanEvent()
 
     /**
+     * Launch the user's browser with the given web vault [url].
+     */
+    data class LaunchUri(
+        val url: String,
+    ) : PlanEvent()
+
+    /**
      * Navigate back to the previous screen.
      */
     data object NavigateBack : PlanEvent()
@@ -974,6 +991,11 @@ sealed class PlanAction {
      * The user dismissed the portal error dialog.
      */
     data object DismissPortalError : PlanAction()
+
+    /**
+     * The user clicked retry on the portal error dialog.
+     */
+    data object RetryPortalClick : PlanAction()
 
     /**
      * The user clicked retry on the subscription error dialog.
