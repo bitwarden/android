@@ -153,26 +153,6 @@ class GeneratorScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `UpgradedToPremium action card should display when eligible in Default mode`() {
-        updateState(
-            DEFAULT_STATE.copy(
-                generatorMode = GeneratorMode.Default,
-                isUpgradedToPremiumCardEligible = true,
-            ),
-        )
-
-        composeTestRule
-            .onNodeWithText(text = "Upgraded to Premium")
-            .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithText(text = "Learn more")
-            .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithContentDescription(label = "Learn more, External link")
-            .assertIsDisplayed()
-    }
-
-    @Test
     fun `MainTypeOption select control should be hidden for password mode`() {
         updateState(DEFAULT_STATE.copy(generatorMode = GeneratorMode.Modal.Password))
 
@@ -1867,6 +1847,9 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithText(text = "Learn more")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription(label = "Learn more, External link")
             .assertIsDisplayed()
     }
 
