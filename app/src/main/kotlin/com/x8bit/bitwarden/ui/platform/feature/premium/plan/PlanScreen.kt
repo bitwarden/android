@@ -403,6 +403,7 @@ private fun PremiumContent(
             label = stringResource(id = BitwardenString.manage_plan),
             onClick = handlers.onManagePlanClick,
             icon = rememberVectorPainter(id = BitwardenDrawable.ic_external_link),
+            isExternalLink = true,
             modifier = Modifier
                 .standardHorizontalMargin()
                 .fillMaxWidth()
@@ -415,6 +416,7 @@ private fun PremiumContent(
                 label = stringResource(id = BitwardenString.cancel_premium),
                 onClick = handlers.onCancelPremiumClick,
                 icon = rememberVectorPainter(id = BitwardenDrawable.ic_external_link),
+                isExternalLink = true,
                 modifier = Modifier
                     .standardHorizontalMargin()
                     .fillMaxWidth()
