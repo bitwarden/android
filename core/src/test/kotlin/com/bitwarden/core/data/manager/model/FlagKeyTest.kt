@@ -9,14 +9,6 @@ class FlagKeyTest {
     @Test
     fun `Feature flags have the correct key name set`() {
         assertEquals(
-            FlagKey.CredentialExchangeProtocolImport.keyName,
-            "cxp-import-mobile",
-        )
-        assertEquals(
-            FlagKey.CredentialExchangeProtocolExport.keyName,
-            "cxp-export-mobile",
-        )
-        assertEquals(
             FlagKey.BitwardenAuthenticationEnabled.keyName,
             "bitwarden-authentication-enabled",
         )
@@ -27,10 +19,6 @@ class FlagKeyTest {
         assertEquals(
             FlagKey.MigrateMyVaultToMyItems.keyName,
             "pm-20558-migrate-myvault-to-myitems",
-        )
-        assertEquals(
-            FlagKey.SendEmailVerification.keyName,
-            "pm-19051-send-email-verification",
         )
         assertEquals(
             FlagKey.MobilePremiumUpgrade.keyName,
@@ -70,12 +58,9 @@ class FlagKeyTest {
     fun `All feature flags have the correct default value set`() {
         assertTrue(
             listOf(
-                FlagKey.CredentialExchangeProtocolImport,
-                FlagKey.CredentialExchangeProtocolExport,
                 FlagKey.BitwardenAuthenticationEnabled,
                 FlagKey.ForceUpdateKdfSettings,
                 FlagKey.MigrateMyVaultToMyItems,
-                FlagKey.SendEmailVerification,
                 FlagKey.MobilePremiumUpgrade,
                 FlagKey.AttachmentUpdates,
                 FlagKey.V2EncryptionJitPassword,

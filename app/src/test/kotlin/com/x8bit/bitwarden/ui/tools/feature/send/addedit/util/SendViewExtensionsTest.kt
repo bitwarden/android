@@ -17,7 +17,6 @@ class SendViewExtensionsTest {
         val result = sendView.toViewState(
             baseWebSendUrl = "www.test.com/",
             isHideEmailAddressEnabled = true,
-            isSendEmailVerificationEnabled = false,
         )
 
         assertEquals(
@@ -38,7 +37,6 @@ class SendViewExtensionsTest {
         val result = sendView.toViewState(
             baseWebSendUrl = "www.test.com/",
             isHideEmailAddressEnabled = true,
-            isSendEmailVerificationEnabled = false,
         )
 
         assertEquals(
@@ -68,7 +66,6 @@ private val DEFAULT_COMMON: AddEditSendState.ViewState.Content.Common =
         sendUrl = "www.test.com/mockAccessId-1/mockKey-1",
         hasPassword = true,
         isHideEmailAddressEnabled = true,
-        isSendEmailVerificationEnabled = false,
         sendAuth = SendAuth.None,
     )
 

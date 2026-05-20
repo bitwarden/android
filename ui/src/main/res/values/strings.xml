@@ -472,8 +472,6 @@ Scanning will happen automatically.</string>
     <string name="maximum_access_count_info">If set, users will no longer be able to access this Send once the maximum access count is reached.</string>
     <string name="maximum_access_count_reached">Max access count reached</string>
     <string name="current_access_count">Current access count: %s</string>
-    <string name="new_password">New password</string>
-    <string name="password_info">Require this password to view the Send.</string>
     <string name="remove_password">Remove password</string>
     <string name="removing_send_password">Removing password</string>
     <string name="password_removed">Password removed</string>
@@ -892,8 +890,6 @@ Do you want to switch to this account?</string>
     <string name="copy_address">Copy address</string>
     <string name="biometrics_no_longer_supported_title">Biometrics are no longer supported on this device</string>
     <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
-    <string name="cxp_import">CXP Import</string>
-    <string name="cxp_export">CXP Export</string>
     <string name="choose_three_or_four_random_words">Choose three or four random words</string>
     <string name="pick_three_or_four_random_unrelated_words">Pick three or four random, unrelated words that you can easily remember. Think of <annotation emphasis="bold">objects, places, or things</annotation> you like.</string>
     <string name="combine_those_words_together">Combine those words together</string>

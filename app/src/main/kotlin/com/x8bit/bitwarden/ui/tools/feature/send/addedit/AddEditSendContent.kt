@@ -37,10 +37,8 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.animation.AnimateNullableContentVisibility
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedErrorButton
-import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
@@ -161,26 +159,24 @@ fun AddEditSendContent(
             )
         }
 
-        if (state.common.isSendEmailVerificationEnabled) {
-            Spacer(modifier = Modifier.height(height = 8.dp))
-            AddEditSendAuthTypeChooser(
-                sendAuth = state.common.sendAuth,
-                onAuthTypeSelect = addSendHandlers.onAuthTypeSelect,
-                onPasswordChange = addSendHandlers.onAuthPasswordChange,
-                onEmailValueChange = addSendHandlers.onEmailValueChange,
-                onRemoveEmailClick = addSendHandlers.onEmailsRemoveClick,
-                onAddNewEmailClick = addSendHandlers.onAddNewEmailClick,
-                onOpenPasswordGeneratorClick = addSendHandlers.onOpenPasswordGeneratorClick,
-                onPasswordCopyClick = addSendHandlers.onPasswordCopyClick,
-                password = state.common.passwordInput,
-                isEnabled = !policyDisablesSend,
-                isSendsRestrictedByPolicy = policyDisablesSend,
-                modifier = Modifier
-                    .testTag("SendAuthTypeChooser")
-                    .fillMaxWidth()
-                    .standardHorizontalMargin(),
-            )
-        }
+        Spacer(modifier = Modifier.height(height = 8.dp))
+        AddEditSendAuthTypeChooser(
+            sendAuth = state.common.sendAuth,
+            onAuthTypeSelect = addSendHandlers.onAuthTypeSelect,
+            onPasswordChange = addSendHandlers.onAuthPasswordChange,
+            onEmailValueChange = addSendHandlers.onEmailValueChange,
+            onRemoveEmailClick = addSendHandlers.onEmailsRemoveClick,
+            onAddNewEmailClick = addSendHandlers.onAddNewEmailClick,
+            onOpenPasswordGeneratorClick = addSendHandlers.onOpenPasswordGeneratorClick,
+            onPasswordCopyClick = addSendHandlers.onPasswordCopyClick,
+            password = state.common.passwordInput,
+            isEnabled = !policyDisablesSend,
+            isSendsRestrictedByPolicy = policyDisablesSend,
+            modifier = Modifier
+                .testTag("SendAuthTypeChooser")
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
 
         AddEditSendOptions(
             state = state,
@@ -452,43 +448,6 @@ private fun AddEditSendOptions(
                     .standardHorizontalMargin(),
             )
 
-            if (!state.common.isSendEmailVerificationEnabled) {
-                Spacer(modifier = Modifier.height(8.dp))
-                BitwardenPasswordField(
-                    label = stringResource(id = BitwardenString.new_password),
-                    supportingText = stringResource(id = BitwardenString.password_info),
-                    readOnly = isSendsRestrictedByPolicy,
-                    value = state.common.passwordInput,
-                    onValueChange = addSendHandlers.onPasswordChange,
-                    passwordFieldTestTag = "SendNewPasswordEntry",
-                    cardStyle = CardStyle.Full,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin(),
-                ) {
-                    BitwardenStandardIconButton(
-                        vectorIconRes = BitwardenDrawable.ic_generate,
-                        contentDescription = stringResource(id = BitwardenString.generate_password),
-                        onClick = {
-                            if (state.common.passwordInput.isEmpty()) {
-                                addSendHandlers.onOpenPasswordGeneratorClick()
-                            } else {
-                                shouldShowDialog = true
-                            }
-                        },
-                        modifier = Modifier.testTag(tag = "RegeneratePasswordButton"),
-                    )
-                    BitwardenStandardIconButton(
-                        vectorIconRes = BitwardenDrawable.ic_copy,
-                        contentDescription = stringResource(id = BitwardenString.copy_password),
-                        isEnabled = state.common.passwordInput.isNotEmpty(),
-                        onClick = {
-                            addSendHandlers.onPasswordCopyClick(state.common.passwordInput)
-                        },
-                        modifier = Modifier.testTag(tag = "CopyPasswordButton"),
-                    )
-                }
-            }
             if (shouldShowDialog) {
                 BitwardenTwoButtonDialog(
                     title = stringResource(id = BitwardenString.password),

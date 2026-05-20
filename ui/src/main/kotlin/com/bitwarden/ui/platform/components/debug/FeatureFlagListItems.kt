@@ -24,13 +24,10 @@ fun <T : Any> FlagKey<T>.ListItemContent(
 
     FlagKey.DummyBoolean,
     FlagKey.BitwardenAuthenticationEnabled,
-    FlagKey.CredentialExchangeProtocolImport,
-    FlagKey.CredentialExchangeProtocolExport,
     FlagKey.ForceUpdateKdfSettings,
     FlagKey.NoLogoutOnKdfChange,
     FlagKey.MigrateMyVaultToMyItems,
     FlagKey.CardScanner,
-    FlagKey.SendEmailVerification,
     FlagKey.MobilePremiumUpgrade,
     FlagKey.ManageDevices,
     FlagKey.AttachmentUpdates,
@@ -81,8 +78,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.DummyString,
         -> this.keyName
 
-    FlagKey.CredentialExchangeProtocolImport -> stringResource(BitwardenString.cxp_import)
-    FlagKey.CredentialExchangeProtocolExport -> stringResource(BitwardenString.cxp_export)
     FlagKey.ForceUpdateKdfSettings -> stringResource(BitwardenString.force_update_kdf_settings)
     FlagKey.NoLogoutOnKdfChange -> stringResource(BitwardenString.avoid_logout_on_kdf_change)
     FlagKey.BitwardenAuthenticationEnabled -> {
@@ -91,7 +86,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
 
     FlagKey.MigrateMyVaultToMyItems -> stringResource(BitwardenString.migrate_my_vault_to_my_items)
     FlagKey.CardScanner -> stringResource(BitwardenString.scan_card)
-    FlagKey.SendEmailVerification -> stringResource(BitwardenString.send_email_verification)
     FlagKey.MobilePremiumUpgrade -> stringResource(BitwardenString.mobile_premium_upgrade)
     FlagKey.ManageDevices -> stringResource(BitwardenString.manage_devices)
     FlagKey.AttachmentUpdates -> stringResource(BitwardenString.attachment_updates)

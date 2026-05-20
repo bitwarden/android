@@ -18,7 +18,6 @@ data class AddEditSendHandlers(
     val onTextChange: (String) -> Unit,
     val onIsHideByDefaultToggle: (Boolean) -> Unit,
     val onMaxAccessCountChange: (Int) -> Unit,
-    val onPasswordChange: (String) -> Unit,
     val onNoteChange: (String) -> Unit,
     val onHideEmailToggle: (Boolean) -> Unit,
     val onDeactivateSendToggle: (Boolean) -> Unit,
@@ -53,9 +52,6 @@ data class AddEditSendHandlers(
                 },
                 onMaxAccessCountChange = {
                     viewModel.trySendAction(AddEditSendAction.MaxAccessCountChange(it))
-                },
-                onPasswordChange = {
-                    viewModel.trySendAction(AddEditSendAction.PasswordChange(it))
                 },
                 onNoteChange = { viewModel.trySendAction(AddEditSendAction.NoteChange(it)) },
                 onHideEmailToggle = {

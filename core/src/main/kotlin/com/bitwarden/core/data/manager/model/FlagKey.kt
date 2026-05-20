@@ -30,12 +30,9 @@ sealed class FlagKey<out T : Any> {
          */
         val activePasswordManagerFlags: List<FlagKey<*>> by lazy {
             listOf(
-                CredentialExchangeProtocolImport,
-                CredentialExchangeProtocolExport,
                 ForceUpdateKdfSettings,
                 NoLogoutOnKdfChange,
                 MigrateMyVaultToMyItems,
-                SendEmailVerification,
                 CardScanner,
                 MobilePremiumUpgrade,
                 ManageDevices,
@@ -48,24 +45,6 @@ sealed class FlagKey<out T : Any> {
                 DebugDisableSelfHostPremiumCheck,
             )
         }
-    }
-
-    /**
-     * Data object holding hte feature flag key for the Credential Exchange Protocol (CXP) import
-     * feature.
-     */
-    data object CredentialExchangeProtocolImport : FlagKey<Boolean>() {
-        override val keyName: String = "cxp-import-mobile"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key for the Credential Exchange Protocol (CXP) export
-     * feature.
-     */
-    data object CredentialExchangeProtocolExport : FlagKey<Boolean>() {
-        override val keyName: String = "cxp-export-mobile"
-        override val defaultValue: Boolean = false
     }
 
     /**
@@ -97,14 +76,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object MigrateMyVaultToMyItems : FlagKey<Boolean>() {
         override val keyName: String = "pm-20558-migrate-myvault-to-myitems"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key for the Send Email Verification feature.
-     */
-    data object SendEmailVerification : FlagKey<Boolean>() {
-        override val keyName: String = "pm-19051-send-email-verification"
         override val defaultValue: Boolean = false
     }
 

@@ -157,7 +157,6 @@ private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
     sendUrl = null,
     hasPassword = false,
     isHideEmailAddressEnabled = true,
-    isSendEmailVerificationEnabled = false,
     sendAuth = SendAuth.Password,
 )
 
