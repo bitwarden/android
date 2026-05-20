@@ -1019,6 +1019,55 @@ class PlanScreenTest : BitwardenComposeTest() {
 
     // endregion Premium-flow dialogs
 
+    // region Self-hosted free flow
+
+    @Test
+    fun `manage subscription info callout should render when self-hosted free`() {
+        mutableStateFlow.update {
+            it.copy(viewState = PlanState.ViewState.Free.SelfHosted)
+        }
+        composeTestRule
+            .onNodeWithText(
+                "To manage your Premium subscription, " +
+                    "you’ll need to login to your web vault on a computer.",
+            )
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithTag("SelfHostedManageOnWebVaultCallout")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `premium features header should render when self-hosted free`() {
+        mutableStateFlow.update {
+            it.copy(viewState = PlanState.ViewState.Free.SelfHosted)
+        }
+        composeTestRule
+            .onNodeWithText("Unlock more advanced features with a Premium plan.")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `premium feature list items should render when self-hosted free`() {
+        mutableStateFlow.update {
+            it.copy(viewState = PlanState.ViewState.Free.SelfHosted)
+        }
+        composeTestRule
+            .onNodeWithText("Built-in authenticator")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Emergency access")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Secure file storage")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Breach monitoring")
+            .assertIsDisplayed()
+    }
+
+    // endregion Self-hosted free flow
+
     // region LaunchPortal event
 
     @Test
@@ -1033,7 +1082,7 @@ class PlanScreenTest : BitwardenComposeTest() {
 
 private val DEFAULT_FREE_STATE = PlanState(
     planMode = PlanMode.Modal,
-    viewState = PlanState.ViewState.Free(
+    viewState = PlanState.ViewState.Free.Cloud(
         rate = "$1.65",
         checkoutUrl = null,
         isAwaitingPremiumStatus = false,

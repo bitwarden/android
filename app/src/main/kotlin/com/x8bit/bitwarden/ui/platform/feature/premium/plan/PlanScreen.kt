@@ -45,11 +45,13 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.BitwardenStatusBadge
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.bitwarden.ui.platform.components.content.BitwardenContentBlock
 import com.bitwarden.ui.platform.components.content.model.ContentBlockData
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -125,11 +127,15 @@ fun PlanScreen(
         },
     ) {
         when (val viewState = state.viewState) {
-            is PlanState.ViewState.Free -> {
-                FreeContent(
+            is PlanState.ViewState.Free.Cloud -> {
+                FreeCloudContent(
                     viewState = viewState,
                     handlers = handlers,
                 )
+            }
+
+            is PlanState.ViewState.Free.SelfHosted -> {
+                FreeSelfHostedContent()
             }
 
             is PlanState.ViewState.Premium -> {
@@ -253,8 +259,8 @@ private fun PlanDialogs(
 }
 
 @Composable
-private fun FreeContent(
-    viewState: PlanState.ViewState.Free,
+private fun FreeCloudContent(
+    viewState: PlanState.ViewState.Free.Cloud,
     handlers: PlanHandlers,
     modifier: Modifier = Modifier,
 ) {
@@ -297,6 +303,83 @@ private fun FreeContent(
 
         Spacer(modifier = Modifier.height(16.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
+    }
+}
+
+@Suppress("MaxLineLength")
+@Composable
+private fun FreeSelfHostedContent(
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
+    ) {
+        Spacer(modifier = Modifier.height(12.dp))
+        BitwardenInfoCalloutCard(
+            text = stringResource(
+                id = BitwardenString
+                    .to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer,
+            ),
+            startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_info_circle),
+            modifier = Modifier
+                .standardHorizontalMargin()
+                .fillMaxWidth()
+                .testTag("SelfHostedManageOnWebVaultCallout"),
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        PremiumFeaturesCard(
+            modifier = Modifier
+                .standardHorizontalMargin()
+                .fillMaxWidth(),
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.navigationBarsPadding())
+    }
+}
+
+@Composable
+private fun PremiumFeaturesCard(
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .cardStyle(
+                cardStyle = CardStyle.Full,
+                // Override bottom padding to account for custom
+                // `BitwardenContentBlock` vertical padding, below.
+                paddingBottom = 0.dp,
+            ),
+    ) {
+        Text(
+            text = stringResource(id = BitwardenString.unlock_premium_features),
+            style = BitwardenTheme.typography.labelLarge,
+            color = BitwardenTheme.colorScheme.text.primary,
+            modifier = Modifier
+                .padding(bottom = 16.dp)
+                .standardHorizontalMargin(),
+        )
+
+        BitwardenHorizontalDivider()
+
+        val features = listOf(
+            BitwardenString.built_in_authenticator,
+            BitwardenString.emergency_access,
+            BitwardenString.secure_file_storage,
+            BitwardenString.breach_monitoring,
+        )
+        features.forEachIndexed { index, featureStringRes ->
+            BitwardenContentBlock(
+                data = ContentBlockData(
+                    headerText = stringResource(id = featureStringRes),
+                    iconVectorResource = BitwardenDrawable.ic_check_mark,
+                ),
+                headerTextStyle = BitwardenTheme.typography.titleMedium,
+                showDivider = index != features.lastIndex,
+                modifier = Modifier.padding(vertical = 8.dp),
+            )
+        }
     }
 }
 
@@ -633,11 +716,11 @@ private fun SubscriptionLineItem(
 @Preview
 @OmitFromCoverage
 @Composable
-private fun PlanScreenFreeAccount_preview() {
+private fun PlanScreenFreeCloudAccount_preview() {
     BitwardenTheme {
         BitwardenScaffold {
-            FreeContent(
-                viewState = PlanState.ViewState.Free(
+            FreeCloudContent(
+                viewState = PlanState.ViewState.Free.Cloud(
                     rate = "$1.67",
                     checkoutUrl = null,
                     isAwaitingPremiumStatus = false,
@@ -661,6 +744,17 @@ private fun PlanScreenFreeAccount_preview() {
                     onRetrySubscriptionClick = {},
                 ),
             )
+        }
+    }
+}
+
+@Preview
+@OmitFromCoverage
+@Composable
+private fun PlanScreenFreeSelfHostedFreeAccount_preview() {
+    BitwardenTheme {
+        BitwardenScaffold {
+            FreeSelfHostedContent()
         }
     }
 }

@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.material3.Text
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -15,6 +16,7 @@ import com.x8bit.bitwarden.data.billing.manager.UPGRADED_TO_PREMIUM_LEARN_MORE_U
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -32,6 +34,7 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     specialCircumstanceManager: SpecialCircumstanceManager,
     firstTimeActionManager: FirstTimeActionManager,
+    environmentRepository: EnvironmentRepository,
     private val premiumStateManager: PremiumStateManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SettingsState, SettingsEvent, SettingsAction>(
@@ -41,6 +44,7 @@ class SettingsViewModel @Inject constructor(
         autoFillCount = firstTimeActionManager.allAutofillSettingsBadgeCountFlow.value,
         vaultCount = firstTimeActionManager.allVaultSettingsBadgeCountFlow.value,
         isPlanRowEligible = premiumStateManager.isPlanRowEligibleFlow.value,
+        isSelfHosted = environmentRepository.environment is Environment.SelfHosted,
         isUpgradedToPremiumCardEligible = premiumStateManager
             .isUpgradedToPremiumCardEligibleFlow
             .value,
@@ -76,6 +80,16 @@ class SettingsViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        environmentRepository
+            .environmentStateFlow
+            .map {
+                SettingsAction.Internal.EnvironmentReceive(
+                    isSelfHosted = it is Environment.SelfHosted,
+                )
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         when (specialCircumstanceManager.specialCircumstance) {
             SpecialCircumstance.AccountSecurityShortcut -> {
                 sendEvent(SettingsEvent.NavigateAccountSecurityShortcut)
@@ -101,6 +115,18 @@ class SettingsViewModel @Inject constructor(
 
         is SettingsAction.Internal.UpgradedToPremiumCardEligibilityReceive -> {
             handleUpgradedToPremiumCardEligibilityReceive(action)
+        }
+
+        is SettingsAction.Internal.EnvironmentReceive -> {
+            handleEnvironmentReceive(action)
+        }
+    }
+
+    private fun handleEnvironmentReceive(
+        action: SettingsAction.Internal.EnvironmentReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isSelfHosted = action.isSelfHosted)
         }
     }
 
@@ -185,6 +211,7 @@ data class SettingsState(
     private val securityCount: Int,
     private val vaultCount: Int,
     private val isPlanRowEligible: Boolean,
+    private val isSelfHosted: Boolean = false,
     private val isUpgradedToPremiumCardEligible: Boolean = false,
 ) {
     val shouldShowCloseButton: Boolean = isPreAuth
@@ -199,9 +226,10 @@ data class SettingsState(
      * Whether the plan row should be shown. The row is visible post-authentication when the user
      * is eligible per [PremiumStateManager.isPlanRowEligibleFlow] — currently, when the in-app
      * upgrade feature is enabled and the user is not relying solely on organization-granted
-     * Premium.
+     * Premium — and the account is on a cloud-hosted environment. Self-hosted users manage their
+     * subscription on the web vault.
      */
-    private val shouldShowPlanRow: Boolean = !isPreAuth && isPlanRowEligible
+    private val shouldShowPlanRow: Boolean = !isPreAuth && isPlanRowEligible && !isSelfHosted
 
     val settingRows: ImmutableList<Settings> = Settings
         .entries
@@ -333,6 +361,13 @@ sealed class SettingsAction {
          */
         data class UpgradedToPremiumCardEligibilityReceive(
             val isEligible: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that the environment has been updated.
+         */
+        data class EnvironmentReceive(
+            val isSelfHosted: Boolean,
         ) : Internal()
     }
 }
