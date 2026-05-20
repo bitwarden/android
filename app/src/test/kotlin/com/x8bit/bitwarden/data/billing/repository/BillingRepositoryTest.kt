@@ -7,6 +7,7 @@ import com.bitwarden.network.model.CadenceTypeJson
 import com.bitwarden.network.model.CartItemJson
 import com.bitwarden.network.model.CartJson
 import com.bitwarden.network.model.CheckoutSessionResponseJson
+import com.bitwarden.network.model.GetSubscriptionResponse
 import com.bitwarden.network.model.PasswordManagerCartItemsJson
 import com.bitwarden.network.model.PortalUrlResponseJson
 import com.bitwarden.network.model.PremiumPlanResponseJson
@@ -163,11 +164,13 @@ class BillingRepositoryTest {
         }
 
     @Test
-    fun `getSubscription when service returns success should return Success`() =
+    fun `getSubscription when service returns Success should return Success`() =
         runTest {
             coEvery {
                 billingService.getSubscription()
-            } returns ACTIVE_SUBSCRIPTION_RESPONSE.asSuccess()
+            } returns GetSubscriptionResponse.Success(
+                subscription = ACTIVE_SUBSCRIPTION_RESPONSE,
+            ).asSuccess()
 
             val result = repository.getSubscription()
 
@@ -190,6 +193,17 @@ class BillingRepositoryTest {
                 result,
             )
         }
+
+    @Test
+    fun `getSubscription when service returns NotFound should return NotFound`() = runTest {
+        coEvery {
+            billingService.getSubscription()
+        } returns GetSubscriptionResponse.NotFound.asSuccess()
+
+        val result = repository.getSubscription()
+
+        assertEquals(SubscriptionResult.NotFound, result)
+    }
 
     @Test
     fun `getSubscription when service returns failure should return Error`() =

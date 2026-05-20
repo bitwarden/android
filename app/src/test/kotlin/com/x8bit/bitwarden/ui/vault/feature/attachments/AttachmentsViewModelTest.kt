@@ -15,6 +15,7 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -53,6 +54,9 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         MutableStateFlow<DataState<CipherView?>>(DataState.Loading)
     private val vaultRepository: VaultRepository = mockk {
         every { getVaultItemStateFlow(any()) } returns mutableVaultItemStateFlow
+    }
+    private val premiumStateManager: PremiumStateManager = mockk {
+        every { isInAppUpgradeAvailable() } returns false
     }
     private val mutableAttachmentUpdatesFlow = MutableStateFlow(true)
     private val featureFlagManager: FeatureFlagManager = mockk {
@@ -146,22 +150,34 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `UpgradeToPremiumClick should emit NavigateToUri`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(AttachmentsAction.UpgradeToPremiumClick)
-            assertEquals(
-                AttachmentsEvent.NavigateToUri(
-                    uri = "https://vault.bitwarden.com/#/settings/subscription" +
-                        "/premium?callToAction=upgradeToPremium",
-                ),
-                awaitItem(),
-            )
+    fun `UpgradeToPremiumClick should emit NavigateToUri when in-app upgrade not available`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(AttachmentsAction.UpgradeToPremiumClick)
+                assertEquals(
+                    AttachmentsEvent.NavigateToUri(
+                        uri = "https://vault.bitwarden.com/#/settings/subscription" +
+                            "/premium?callToAction=upgradeToPremium",
+                    ),
+                    awaitItem(),
+                )
+            }
+            verify(exactly = 1) {
+                environmentRepository.environment
+            }
         }
-        verify(exactly = 1) {
-            environmentRepository.environment
+
+    @Test
+    fun `UpgradeToPremiumClick should emit NavigateToPlanModal when in-app upgrade available`() =
+        runTest {
+            every { premiumStateManager.isInAppUpgradeAvailable() } returns true
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(AttachmentsAction.UpgradeToPremiumClick)
+                assertEquals(AttachmentsEvent.NavigateToPlanModal, awaitItem())
+            }
         }
-    }
 
     @Test
     fun `FileNameChange should update the newAttachment state`() = runTest {
@@ -803,6 +819,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         authRepo = authRepository,
         environmentRepo = environmentRepository,
         vaultRepo = vaultRepository,
+        premiumStateManager = premiumStateManager,
         featureFlagManager = featureFlagManager,
         savedStateHandle = SavedStateHandle().apply {
             set("state", initialState)

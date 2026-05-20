@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.billing.manager
 
+import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionStatusState
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -31,6 +32,11 @@ interface PremiumStateManager {
      * otherwise.
      */
     val isPlanRowEligibleFlow: StateFlow<Boolean>
+
+    /**
+     * Emits the active user's latest [SubscriptionStatusState].
+     */
+    val subscriptionStatusStateFlow: StateFlow<SubscriptionStatusState>
 
     /**
      * Returns `true` when the in-app upgrade flow is available, or `false` otherwise.

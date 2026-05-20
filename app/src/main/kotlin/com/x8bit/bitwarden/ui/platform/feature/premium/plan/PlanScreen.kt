@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,7 +36,10 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.annotatedPluralsResource
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.cardStyle
+import com.bitwarden.ui.platform.base.util.spanStyleOf
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.BitwardenStatusBadge
@@ -52,9 +56,9 @@ import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStatus
 import com.x8bit.bitwarden.ui.platform.composition.LocalAuthTabLaunchers
@@ -62,6 +66,8 @@ import com.x8bit.bitwarden.ui.platform.feature.premium.plan.handlers.PlanHandler
 import com.x8bit.bitwarden.ui.platform.feature.premium.plan.util.badgeColors
 import com.x8bit.bitwarden.ui.platform.feature.premium.plan.util.labelRes
 import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
+
+private const val PLACEHOLDER_TEXT: String = "--"
 
 /**
  * The screen for the plan — shows the upgrade flow for free users and the
@@ -441,7 +447,11 @@ private fun SubscriptionCard(
     ) {
         SubscriptionHeader(
             status = viewState.status,
-            descriptionText = viewState.descriptionText,
+            nextChargeTotalText = viewState.nextChargeTotalText,
+            nextChargeDateText = viewState.nextChargeDateText,
+            canceledDateText = viewState.canceledDateText,
+            suspensionDateText = viewState.suspensionDateText,
+            gracePeriodDays = viewState.gracePeriodDays,
             modifier = Modifier
                 .padding(bottom = 16.dp)
                 .standardHorizontalMargin(),
@@ -493,7 +503,11 @@ private fun SubscriptionCard(
 @Composable
 private fun SubscriptionHeader(
     status: PremiumSubscriptionStatus?,
-    descriptionText: Text?,
+    nextChargeTotalText: String?,
+    nextChargeDateText: String?,
+    canceledDateText: String?,
+    suspensionDateText: String?,
+    gracePeriodDays: Int?,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -512,14 +526,77 @@ private fun SubscriptionHeader(
             }
         }
 
+        val descriptionText = subscriptionDescriptionText(
+            status = status,
+            nextChargeTotalText = nextChargeTotalText,
+            nextChargeDateText = nextChargeDateText,
+            canceledDateText = canceledDateText,
+            suspensionDateText = suspensionDateText,
+            gracePeriodDays = gracePeriodDays,
+        )
+
         descriptionText?.let {
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = it(),
+                text = it,
                 style = BitwardenTheme.typography.bodyMedium,
                 color = BitwardenTheme.colorScheme.text.secondary,
             )
         }
+    }
+}
+
+@Composable
+private fun subscriptionDescriptionText(
+    status: PremiumSubscriptionStatus?,
+    nextChargeTotalText: String?,
+    nextChargeDateText: String?,
+    canceledDateText: String?,
+    suspensionDateText: String?,
+    gracePeriodDays: Int?,
+): AnnotatedString? {
+    val baseStyle = spanStyleOf(
+        color = BitwardenTheme.colorScheme.text.secondary,
+        textStyle = BitwardenTheme.typography.bodyMedium,
+    )
+    return when (status) {
+        PremiumSubscriptionStatus.ACTIVE -> annotatedStringResource(
+            id = BitwardenString.premium_next_charge_summary,
+            args = arrayOf(
+                nextChargeTotalText ?: PLACEHOLDER_TEXT,
+                nextChargeDateText ?: PLACEHOLDER_TEXT,
+            ),
+            style = baseStyle,
+        )
+
+        PremiumSubscriptionStatus.CANCELED -> annotatedStringResource(
+            id = BitwardenString.subscription_canceled_description,
+            args = arrayOf(canceledDateText ?: suspensionDateText ?: PLACEHOLDER_TEXT),
+            style = baseStyle,
+        )
+
+        PremiumSubscriptionStatus.UPDATE_PAYMENT -> annotatedStringResource(
+            id = BitwardenString.subscription_update_payment_description,
+            args = arrayOf(suspensionDateText ?: PLACEHOLDER_TEXT),
+            style = baseStyle,
+        )
+
+        PremiumSubscriptionStatus.PAST_DUE -> {
+            val days = gracePeriodDays ?: 0
+            annotatedPluralsResource(
+                id = BitwardenPlurals.subscription_past_due_description,
+                quantity = days,
+                days.toString(),
+                suspensionDateText ?: PLACEHOLDER_TEXT,
+                style = baseStyle,
+            )
+        }
+
+        PremiumSubscriptionStatus.PAUSED -> AnnotatedString(
+            stringResource(id = BitwardenString.subscription_paused_description),
+        )
+
+        null -> null
     }
 }
 
@@ -595,14 +672,11 @@ private fun PlanScreenPremiumAccount_preview() {
             PremiumContent(
                 viewState = PlanState.ViewState.Premium(
                     status = PremiumSubscriptionStatus.ACTIVE,
-                    descriptionText = BitwardenString.premium_next_charge_summary.asText(
-                        "$45.55",
-                        "April 2, 2026",
-                    ),
                     billingAmountText = BitwardenString.billing_rate_per_year.asText("$19.80"),
                     storageCostText = "$24.00",
                     discountAmountText = "-$2.10",
                     estimatedTaxText = "$3.85",
+                    nextChargeTotalText = "$45.55",
                     nextChargeDateText = "April 2, 2026",
                     showCancelButton = true,
                 ),

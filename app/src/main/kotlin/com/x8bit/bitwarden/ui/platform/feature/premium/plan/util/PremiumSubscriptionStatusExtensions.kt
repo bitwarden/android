@@ -14,12 +14,9 @@ import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStat
 fun PremiumSubscriptionStatus.labelRes(): Int = when (this) {
     PremiumSubscriptionStatus.ACTIVE -> BitwardenString.subscription_status_active
     PremiumSubscriptionStatus.CANCELED -> BitwardenString.subscription_status_canceled
-    PremiumSubscriptionStatus.OVERDUE_PAYMENT -> {
-        BitwardenString.subscription_status_overdue_payment
-    }
-
     PremiumSubscriptionStatus.PAST_DUE -> BitwardenString.subscription_status_past_due
     PremiumSubscriptionStatus.PAUSED -> BitwardenString.subscription_status_paused
+    PremiumSubscriptionStatus.UPDATE_PAYMENT -> BitwardenString.subscription_status_update_payment
 }
 
 /**
@@ -31,10 +28,8 @@ fun PremiumSubscriptionStatus.badgeColors(): BitwardenColorScheme.StatusBadgeVar
     when (this) {
         PremiumSubscriptionStatus.ACTIVE -> BitwardenTheme.colorScheme.statusBadge.success
         PremiumSubscriptionStatus.CANCELED -> BitwardenTheme.colorScheme.statusBadge.error
-        PremiumSubscriptionStatus.OVERDUE_PAYMENT,
         PremiumSubscriptionStatus.PAST_DUE,
         PremiumSubscriptionStatus.PAUSED,
-            -> {
-            BitwardenTheme.colorScheme.statusBadge.warning
-        }
+        PremiumSubscriptionStatus.UPDATE_PAYMENT,
+            -> BitwardenTheme.colorScheme.statusBadge.warning
     }

@@ -11,8 +11,12 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.getOrNull
+import androidx.compose.ui.text.font.FontWeight
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.manager.IntentManager
@@ -499,16 +503,16 @@ class PlanScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `status badge should render with Overdue payment label for OVERDUE_PAYMENT status`() {
+    fun `status badge should render with Update payment label for UPDATE_PAYMENT status`() {
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(
-                    status = PremiumSubscriptionStatus.OVERDUE_PAYMENT,
+                    status = PremiumSubscriptionStatus.UPDATE_PAYMENT,
                 ),
             )
         }
         composeTestRule
-            .onNodeWithText("Overdue payment")
+            .onNodeWithText("Update payment")
             .assertIsDisplayed()
     }
 
@@ -549,13 +553,13 @@ class PlanScreenTest : BitwardenComposeTest() {
         }
         composeTestRule.onNodeWithText("Active").assertDoesNotExist()
         composeTestRule.onNodeWithText("Canceled").assertDoesNotExist()
-        composeTestRule.onNodeWithText("Overdue payment").assertDoesNotExist()
         composeTestRule.onNodeWithText("Past due").assertDoesNotExist()
         composeTestRule.onNodeWithText("Paused").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Update payment").assertDoesNotExist()
     }
 
     @Test
-    fun `description text should render when descriptionText is present`() {
+    fun `description text should render for ACTIVE status`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_PREMIUM_VIEW_STATE) }
         composeTestRule
             .onNodeWithText("Your next charge is for $45.55 USD due on April 2, 2026.")
@@ -563,15 +567,112 @@ class PlanScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `description text should not render when descriptionText is null`() {
+    fun `description text should not render when status is null`() {
         mutableStateFlow.update {
-            it.copy(
-                viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(descriptionText = null),
-            )
+            it.copy(viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(status = null))
         }
         composeTestRule
             .onNodeWithText("Your next charge is for $45.55 USD due on April 2, 2026.")
             .assertDoesNotExist()
+    }
+
+    @Test
+    fun `ACTIVE description should bold the next charge total and date`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_PREMIUM_VIEW_STATE) }
+        val node = composeTestRule
+            .onNodeWithText("Your next charge is for $45.55 USD due on April 2, 2026.")
+        node.assertTextRangeHasBoldSpan(boldSubstring = "$45.55")
+        node.assertTextRangeHasBoldSpan(boldSubstring = "April 2, 2026")
+    }
+
+    @Test
+    fun `CANCELED description should bold the canceled date`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(
+                    status = PremiumSubscriptionStatus.CANCELED,
+                    canceledDateText = "April 21, 2026",
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(
+                "Your subscription was canceled on April 21, 2026. " +
+                    "Resubscribe to continue using premium features.",
+            )
+            .assertTextRangeHasBoldSpan(boldSubstring = "April 21, 2026")
+    }
+
+    @Test
+    fun `CANCELED description falls back to suspension date when canceled date is null`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(
+                    status = PremiumSubscriptionStatus.CANCELED,
+                    canceledDateText = null,
+                    suspensionDateText = "May 15, 2026",
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(
+                "Your subscription was canceled on May 15, 2026. " +
+                    "Resubscribe to continue using premium features.",
+            )
+            .assertTextRangeHasBoldSpan(boldSubstring = "May 15, 2026")
+    }
+
+    @Test
+    fun `UPDATE_PAYMENT description should bold the suspension date`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(
+                    status = PremiumSubscriptionStatus.UPDATE_PAYMENT,
+                    suspensionDateText = "April 21, 2026",
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(
+                "We couldn’t process your payment. Update your payment before " +
+                    "your subscription ends on April 21, 2026.",
+            )
+            .assertTextRangeHasBoldSpan(boldSubstring = "April 21, 2026")
+    }
+
+    @Test
+    fun `PAST_DUE description should bold the suspension date`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(
+                    status = PremiumSubscriptionStatus.PAST_DUE,
+                    suspensionDateText = "April 21, 2026",
+                    gracePeriodDays = 7,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(
+                "You have a grace period of 7 days from your subscription expiration date. " +
+                    "Please resolve the past due amount by April 21, 2026.",
+            )
+            .assertTextRangeHasBoldSpan(boldSubstring = "April 21, 2026")
+    }
+
+    @Test
+    fun `PAUSED description should render plain text`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(
+                    status = PremiumSubscriptionStatus.PAUSED,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(
+                "Your subscription is paused. Resume to continue using premium features.",
+            )
+            .assertIsDisplayed()
     }
 
     // endregion Premium content rendering
@@ -920,14 +1021,44 @@ private val DEFAULT_FREE_STATE = PlanState(
 
 private val DEFAULT_PREMIUM_VIEW_STATE = PlanState.ViewState.Premium(
     status = PremiumSubscriptionStatus.ACTIVE,
-    descriptionText = BitwardenString.premium_next_charge_summary.asText(
-        "$45.55",
-        "April 2, 2026",
-    ),
     billingAmountText = BitwardenString.billing_rate_per_year.asText("$19.80"),
     storageCostText = "$24.00",
     discountAmountText = "-$2.10",
     estimatedTaxText = "$3.85",
+    nextChargeTotalText = "$45.55",
     nextChargeDateText = "April 2, 2026",
     showCancelButton = true,
 )
+
+/**
+ * Asserts that exactly the [boldSubstring] within this node's rendered text carries a heavy
+ * font-weight span style. Fails if the substring cannot be located, if no heavy span aligns with
+ * it, or if any heavy span partially overlaps it. Other heavy spans on disjoint ranges are fine.
+ */
+private fun SemanticsNodeInteraction.assertTextRangeHasBoldSpan(boldSubstring: String) {
+    val texts = fetchSemanticsNode().config.getOrNull(SemanticsProperties.Text)
+    val match = texts?.firstOrNull { it.text.contains(boldSubstring) }
+    requireNotNull(match) {
+        "No rendered text contained substring \"$boldSubstring\". Found: $texts"
+    }
+    val start = match.text.indexOf(boldSubstring)
+    val end = start + boldSubstring.length
+    val heavySpans = match.spanStyles.filter { range ->
+        val weight = range.item.fontWeight
+        weight != null && weight.weight >= FontWeight.SemiBold.weight
+    }
+    val coversExactly = heavySpans.any { it.start == start && it.end == end }
+    require(coversExactly) {
+        "Expected a heavy-weight span to cover exactly \"$boldSubstring\" " +
+            "(indices $start..$end) but spans were: ${match.spanStyles}"
+    }
+    val partialOverlaps = heavySpans.filter { span ->
+        val overlaps = span.start < end && span.end > start
+        val matchesExactly = span.start == start && span.end == end
+        overlaps && !matchesExactly
+    }
+    require(partialOverlaps.isEmpty()) {
+        "Heavy-weight span(s) partially overlap \"$boldSubstring\" " +
+            "(indices $start..$end): $partialOverlaps"
+    }
+}

@@ -4,12 +4,11 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
-import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.billing.repository.BillingRepository
 import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
 import com.x8bit.bitwarden.data.billing.repository.model.CustomerPortalResult
@@ -18,6 +17,7 @@ import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResul
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStatus
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionInfo
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionResult
+import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionStatusState
 import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -61,6 +61,11 @@ class PlanViewModelTest : BaseViewModelTest() {
         coEvery {
             syncForResult(any())
         } returns SyncVaultDataResult.Success(itemsAvailable = true)
+    }
+    private val mutableSubscriptionStatusStateFlow =
+        MutableStateFlow<SubscriptionStatusState>(SubscriptionStatusState.NoSubscription)
+    private val mockPremiumStateManager: PremiumStateManager = mockk {
+        every { subscriptionStatusStateFlow } returns mutableSubscriptionStatusStateFlow
     }
 
     @BeforeEach
@@ -806,6 +811,117 @@ class PlanViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `init opens Premium view when account is free but status is in a trouble state`() =
+        runTest {
+            mutableSubscriptionStatusStateFlow.value = SubscriptionStatusState.Available(
+                status = PremiumSubscriptionStatus.CANCELED,
+            )
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        status = PremiumSubscriptionStatus.CANCELED,
+                        canceledDate = Instant.parse("2026-04-21T00:00:00Z"),
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            status = PremiumSubscriptionStatus.CANCELED,
+                            canceledDateText = "April 21, 2026",
+                            showCancelButton = false,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionStatusUpdateReceive promotes Free view to Premium on trouble status`() =
+        runTest {
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        status = PremiumSubscriptionStatus.CANCELED,
+                        canceledDate = Instant.parse("2026-04-21T00:00:00Z"),
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_FREE_STATE, awaitItem())
+                mutableSubscriptionStatusStateFlow.value = SubscriptionStatusState.Available(
+                    status = PremiumSubscriptionStatus.CANCELED,
+                )
+                val loadingState = awaitItem()
+                assertEquals(
+                    PlanState.ViewState.Premium(),
+                    loadingState.viewState,
+                )
+                assertEquals(
+                    PlanState.DialogState.Loading(
+                        message = BitwardenString.loading_subscription.asText(),
+                    ),
+                    loadingState.dialogState,
+                )
+                val loadedState = awaitItem()
+                assertEquals(
+                    DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                        status = PremiumSubscriptionStatus.CANCELED,
+                        canceledDateText = "April 21, 2026",
+                        showCancelButton = false,
+                    ),
+                    loadedState.viewState,
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive NotFound falls back to Free view and fetches pricing`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.NotFound,
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_FREE_STATE, awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SubscriptionResultReceive NotFound keeps Loading dialog up while pricing fetch is pending`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.NotFound,
+                pricingResult = null,
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_FREE_STATE.copy(
+                        viewState = PlanState.ViewState.Free(
+                            rate = "--",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = false,
+                        ),
+                        dialogState = PlanState.DialogState.Loading(
+                            message = BitwardenString.loading.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
     fun `SubscriptionResultReceive Success should populate Premium state from SubscriptionInfo`() =
         runTest {
             markUserPremium()
@@ -838,9 +954,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                     DEFAULT_PREMIUM_LOADED_STATE.copy(
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
                             status = PremiumSubscriptionStatus.CANCELED,
-                            descriptionText = BitwardenString
-                                .subscription_canceled_description
-                                .asText("April 21, 2026"),
+                            canceledDateText = "April 21, 2026",
                             showCancelButton = false,
                         ),
                     ),
@@ -850,14 +964,14 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `SubscriptionResultReceive Success with OverduePayment status should describe overdue`() =
+    fun `SubscriptionResultReceive Success with UpdatePayment status should describe update`() =
         runTest {
             markUserPremium()
 
             val viewModel = createViewModel(
                 subscriptionResult = SubscriptionResult.Success(
                     subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
-                        status = PremiumSubscriptionStatus.OVERDUE_PAYMENT,
+                        status = PremiumSubscriptionStatus.UPDATE_PAYMENT,
                         suspensionDate = Instant.parse("2026-04-21T00:00:00Z"),
                     ),
                 ),
@@ -867,10 +981,8 @@ class PlanViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_PREMIUM_LOADED_STATE.copy(
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
-                            status = PremiumSubscriptionStatus.OVERDUE_PAYMENT,
-                            descriptionText = BitwardenString
-                                .subscription_overdue_description
-                                .asText("April 21, 2026"),
+                            status = PremiumSubscriptionStatus.UPDATE_PAYMENT,
+                            suspensionDateText = "April 21, 2026",
                         ),
                     ),
                     awaitItem(),
@@ -898,9 +1010,8 @@ class PlanViewModelTest : BaseViewModelTest() {
                     DEFAULT_PREMIUM_LOADED_STATE.copy(
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
                             status = PremiumSubscriptionStatus.PAST_DUE,
-                            descriptionText = BitwardenPlurals
-                                .subscription_past_due_description
-                                .asPluralsText(7, 7, "April 21, 2026"),
+                            suspensionDateText = "April 21, 2026",
+                            gracePeriodDays = 7,
                         ),
                     ),
                     awaitItem(),
@@ -928,9 +1039,8 @@ class PlanViewModelTest : BaseViewModelTest() {
                     DEFAULT_PREMIUM_LOADED_STATE.copy(
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
                             status = PremiumSubscriptionStatus.PAST_DUE,
-                            descriptionText = BitwardenPlurals
-                                .subscription_past_due_description
-                                .asPluralsText(0, 0, "April 21, 2026"),
+                            suspensionDateText = "April 21, 2026",
+                            gracePeriodDays = null,
                         ),
                     ),
                     awaitItem(),
@@ -956,9 +1066,6 @@ class PlanViewModelTest : BaseViewModelTest() {
                     DEFAULT_PREMIUM_LOADED_STATE.copy(
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
                             status = PremiumSubscriptionStatus.PAUSED,
-                            descriptionText = BitwardenString
-                                .subscription_paused_description
-                                .asText(),
                         ),
                     ),
                     awaitItem(),
@@ -1091,9 +1198,6 @@ class PlanViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_PREMIUM_LOADED_STATE.copy(
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
-                            descriptionText = BitwardenString
-                                .premium_next_charge_summary
-                                .asText("$45.55", PLACEHOLDER),
                             nextChargeDateText = null,
                         ),
                     ),
@@ -1300,6 +1404,7 @@ class PlanViewModelTest : BaseViewModelTest() {
             savedStateHandle = savedStateHandle,
             authRepository = mockAuthRepository,
             billingRepository = mockBillingRepository,
+            premiumStateManager = mockPremiumStateManager,
             specialCircumstanceManager = mockSpecialCircumstanceManager,
             vaultRepository = mockVaultRepository,
             clock = clock,
@@ -1378,14 +1483,11 @@ private const val PLACEHOLDER = "--"
 
 private val DEFAULT_PREMIUM_ACTIVE_VIEW_STATE = PlanState.ViewState.Premium(
     status = PremiumSubscriptionStatus.ACTIVE,
-    descriptionText = BitwardenString.premium_next_charge_summary.asText(
-        "$45.55",
-        "April 2, 2026",
-    ),
     billingAmountText = BitwardenString.billing_rate_per_year.asText("$19.80"),
     storageCostText = "$24.00",
     discountAmountText = "-$2.10",
     estimatedTaxText = "$3.85",
+    nextChargeTotalText = "$45.55",
     nextChargeDateText = "April 2, 2026",
     showCancelButton = true,
 )
