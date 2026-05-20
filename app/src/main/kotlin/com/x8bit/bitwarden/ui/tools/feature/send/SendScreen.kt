@@ -52,6 +52,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
+import com.x8bit.bitwarden.ui.tools.feature.send.model.UpgradedToPremiumCardData
 import com.x8bit.bitwarden.ui.tools.feature.send.util.selectionText
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import kotlinx.collections.immutable.persistentListOf
@@ -184,31 +185,27 @@ fun SendScreen(
         snackbarHost = { BitwardenSnackbarHost(bitwardenHostState = snackbarHostState) },
     ) {
         val contentModifier = Modifier.fillMaxSize()
+        val upgradedToPremiumCardData = UpgradedToPremiumCardData(
+            onCardClick = {
+                viewModel.trySendAction(SendAction.UpgradedToPremiumCardClick)
+            },
+            onCardDismiss = {
+                viewModel.trySendAction(SendAction.UpgradedToPremiumCardDismiss)
+            },
+        ).takeIf { state.isUpgradedToPremiumCardEligible }
         when (val viewState = state.viewState) {
             is SendState.ViewState.Content -> SendContent(
                 policyDisablesSend = state.policyDisablesSend,
                 state = viewState,
-                isUpgradedToPremiumCardEligible = state.isUpgradedToPremiumCardEligible,
+                upgradedToPremiumCardData = upgradedToPremiumCardData,
                 sendHandlers = sendHandlers,
-                onUpgradedToPremiumCardClick = {
-                    viewModel.trySendAction(SendAction.UpgradedToPremiumCardClick)
-                },
-                onUpgradedToPremiumCardDismiss = {
-                    viewModel.trySendAction(SendAction.UpgradedToPremiumCardDismiss)
-                },
                 modifier = contentModifier,
             )
 
             SendState.ViewState.Empty -> SendEmpty(
                 policyDisablesSend = state.policyDisablesSend,
                 onAddItemClick = { viewModel.trySendAction(SendAction.AddSendClick) },
-                isUpgradedToPremiumCardEligible = state.isUpgradedToPremiumCardEligible,
-                onUpgradedToPremiumCardClick = {
-                    viewModel.trySendAction(SendAction.UpgradedToPremiumCardClick)
-                },
-                onUpgradedToPremiumCardDismiss = {
-                    viewModel.trySendAction(SendAction.UpgradedToPremiumCardDismiss)
-                },
+                upgradedToPremiumCardData = upgradedToPremiumCardData,
                 modifier = contentModifier,
             )
 

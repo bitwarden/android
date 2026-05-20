@@ -31,6 +31,7 @@ import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.tools.feature.send.model.UpgradedToPremiumCardData
 
 /**
  * Content for the empty state of the [SendScreen].
@@ -40,20 +41,18 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 fun SendEmpty(
     policyDisablesSend: Boolean,
     onAddItemClick: () -> Unit,
-    isUpgradedToPremiumCardEligible: Boolean,
-    onUpgradedToPremiumCardClick: () -> Unit,
-    onUpgradedToPremiumCardDismiss: () -> Unit,
+    upgradedToPremiumCardData: UpgradedToPremiumCardData?,
     modifier: Modifier = Modifier,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.verticalScroll(rememberScrollState()),
     ) {
-        if (isUpgradedToPremiumCardEligible) {
+        upgradedToPremiumCardData?.let {
             Spacer(modifier = Modifier.height(height = 12.dp))
             UpgradedToPremiumActionCard(
-                onActionClick = onUpgradedToPremiumCardClick,
-                onDismissClick = onUpgradedToPremiumCardDismiss,
+                onActionClick = it.onCardClick,
+                onDismissClick = it.onCardDismiss,
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
@@ -132,9 +131,7 @@ private fun SendEmpty_preview() {
             SendEmpty(
                 policyDisablesSend = false,
                 onAddItemClick = {},
-                isUpgradedToPremiumCardEligible = false,
-                onUpgradedToPremiumCardClick = {},
-                onUpgradedToPremiumCardDismiss = {},
+                upgradedToPremiumCardData = null,
             )
         }
     }
@@ -151,9 +148,7 @@ private fun SendEmptyPolicyDisabled_preview() {
             SendEmpty(
                 policyDisablesSend = true,
                 onAddItemClick = {},
-                isUpgradedToPremiumCardEligible = false,
-                onUpgradedToPremiumCardClick = {},
-                onUpgradedToPremiumCardDismiss = {},
+                upgradedToPremiumCardData = null,
             )
         }
     }

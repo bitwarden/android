@@ -26,6 +26,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
+import com.x8bit.bitwarden.ui.tools.feature.send.model.UpgradedToPremiumCardData
 
 private const val SEND_TYPES_COUNT: Int = 2
 
@@ -37,17 +38,15 @@ private const val SEND_TYPES_COUNT: Int = 2
 fun SendContent(
     policyDisablesSend: Boolean,
     state: SendState.ViewState.Content,
-    isUpgradedToPremiumCardEligible: Boolean,
+    upgradedToPremiumCardData: UpgradedToPremiumCardData?,
     sendHandlers: SendHandlers,
-    onUpgradedToPremiumCardClick: () -> Unit,
-    onUpgradedToPremiumCardDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
         item {
             Spacer(modifier = Modifier.height(height = 12.dp))
         }
-        if (isUpgradedToPremiumCardEligible) {
+        upgradedToPremiumCardData?.let {
             item {
                 BitwardenActionCard(
                     cardTitle = stringResource(id = BitwardenString.upgraded_to_premium),
@@ -63,8 +62,8 @@ fun SendContent(
                             tint = BitwardenTheme.colorScheme.icon.secondary,
                         )
                     },
-                    onActionClick = onUpgradedToPremiumCardClick,
-                    onDismissClick = onUpgradedToPremiumCardDismiss,
+                    onActionClick = it.onCardClick,
+                    onDismissClick = it.onCardDismiss,
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin(),
