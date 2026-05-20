@@ -193,11 +193,21 @@ class VaultUnlockedNavBarScreenTest : BitwardenComposeTest() {
                 notificationState = VaultUnlockedNavBarNotificationState(
                     settingsTabNotificationCount = 0,
                 ),
+                areSendsDisabled = false,
             ),
         )
 
         composeTestRule.onNodeWithText(text = "My vault").assertDoesNotExist()
         composeTestRule.onNodeWithText(text = "Vaults").assertExists()
+    }
+
+    @Test
+    fun `send tab should be hidden when areSendsDisabled is true`() {
+        composeTestRule.onNodeWithText(text = "Send").assertExists()
+
+        mutableStateFlow.update { it.copy(areSendsDisabled = true) }
+
+        composeTestRule.onNodeWithText(text = "Send").assertDoesNotExist()
     }
 
     @Suppress("MaxLineLength")
@@ -232,4 +242,5 @@ private val DEFAULT_STATE = VaultUnlockedNavBarState(
     notificationState = VaultUnlockedNavBarNotificationState(
         settingsTabNotificationCount = 0,
     ),
+    areSendsDisabled = false,
 )
