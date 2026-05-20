@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -15,15 +14,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
-import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
 import com.x8bit.bitwarden.ui.tools.feature.send.model.UpgradedToPremiumCardData
@@ -48,20 +44,7 @@ fun SendContent(
         }
         upgradedToPremiumCardData?.let {
             item {
-                BitwardenActionCard(
-                    cardTitle = stringResource(id = BitwardenString.upgraded_to_premium),
-                    cardSubtitle = stringResource(
-                        id = BitwardenString.you_now_have_access_to_all_advanced_security_features,
-                    ),
-                    actionText = stringResource(id = BitwardenString.learn_more),
-                    isExternalLink = true,
-                    leadingContent = {
-                        Icon(
-                            painter = rememberVectorPainter(id = BitwardenDrawable.ic_star),
-                            contentDescription = null,
-                            tint = BitwardenTheme.colorScheme.icon.secondary,
-                        )
-                    },
+                UpgradedToPremiumActionCard(
                     onActionClick = it.onCardClick,
                     onDismissClick = it.onCardDismiss,
                     modifier = Modifier
