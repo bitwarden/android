@@ -269,6 +269,7 @@ private fun FreeCloudContent(
     handlers: PlanHandlers,
     modifier: Modifier = Modifier,
 ) {
+    var shouldShowUpgradeDialog by rememberSaveable { mutableStateOf(false) }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -285,7 +286,7 @@ private fun FreeCloudContent(
 
         BitwardenFilledButton(
             label = stringResource(id = BitwardenString.upgrade_now),
-            onClick = handlers.onUpgradeNowClick,
+            onClick = { shouldShowUpgradeDialog = true },
             icon = rememberVectorPainter(id = BitwardenDrawable.ic_external_link),
             modifier = Modifier
                 .standardHorizontalMargin()
@@ -296,7 +297,10 @@ private fun FreeCloudContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = stringResource(id = BitwardenString.stripe_checkout_footer),
+            text = stringResource(
+                id = BitwardenString
+                    .youll_go_to_stripes_secure_checkout_to_complete_your_purchase,
+            ),
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.secondary,
             textAlign = TextAlign.Center,
@@ -308,6 +312,24 @@ private fun FreeCloudContent(
 
         Spacer(modifier = Modifier.height(16.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
+    }
+
+    if (shouldShowUpgradeDialog) {
+        BitwardenTwoButtonDialog(
+            title = stringResource(id = BitwardenString.continue_to_stripe),
+            message = stringResource(
+                id = BitwardenString
+                    .youll_go_to_stripes_secure_checkout_to_complete_your_purchase,
+            ),
+            confirmButtonText = stringResource(id = BitwardenString.continue_text),
+            dismissButtonText = stringResource(id = BitwardenString.cancel),
+            onConfirmClick = {
+                shouldShowUpgradeDialog = false
+                handlers.onUpgradeNowClick()
+            },
+            onDismissClick = { shouldShowUpgradeDialog = false },
+            onDismissRequest = { shouldShowUpgradeDialog = false },
+        )
     }
 }
 
