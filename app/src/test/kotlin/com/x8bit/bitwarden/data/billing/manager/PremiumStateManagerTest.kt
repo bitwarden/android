@@ -883,6 +883,7 @@ private fun createSubscriptionInfo(
     estimatedTax = java.math.BigDecimal.ZERO,
     nextChargeTotal = java.math.BigDecimal("19.80"),
     nextCharge = null,
+    cancelAt = null,
     canceledDate = null,
     suspensionDate = null,
     gracePeriodDays = null,

@@ -66,6 +66,40 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
     }
 
     @Test
+    fun `toSubscriptionInfo maps ACTIVE with cancelAt to PENDING_CANCELLATION`() {
+        val info = buildResponse(
+            status = SubscriptionStatusJson.ACTIVE,
+            cancelAt = Instant.parse("2026-05-01T00:00:00Z"),
+        ).toSubscriptionInfo()
+        assertEquals(PremiumSubscriptionStatus.PENDING_CANCELLATION, info.status)
+    }
+
+    @Test
+    fun `toSubscriptionInfo maps TRIALING with cancelAt to PENDING_CANCELLATION`() {
+        val info = buildResponse(
+            status = SubscriptionStatusJson.TRIALING,
+            cancelAt = Instant.parse("2026-05-01T00:00:00Z"),
+        ).toSubscriptionInfo()
+        assertEquals(PremiumSubscriptionStatus.PENDING_CANCELLATION, info.status)
+    }
+
+    @Test
+    fun `toSubscriptionInfo passes cancelAt through to SubscriptionInfo`() {
+        val cancelAt = Instant.parse("2026-05-01T00:00:00Z")
+        val info = buildResponse(cancelAt = cancelAt).toSubscriptionInfo()
+        assertEquals(cancelAt, info.cancelAt)
+    }
+
+    @Test
+    fun `toSubscriptionInfo maps CANCELED with cancelAt still to CANCELED`() {
+        val info = buildResponse(
+            status = SubscriptionStatusJson.CANCELED,
+            cancelAt = Instant.parse("2026-05-01T00:00:00Z"),
+        ).toSubscriptionInfo()
+        assertEquals(PremiumSubscriptionStatus.CANCELED, info.status)
+    }
+
+    @Test
     fun `toSubscriptionInfo maps cadence to PlanCadence`() {
         val annually = buildResponse(cadence = CadenceTypeJson.ANNUALLY).toSubscriptionInfo()
         assertEquals(PlanCadence.ANNUALLY, annually.cadence)
@@ -169,6 +203,7 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
     @Test
     fun `toSubscriptionInfo has null timestamps and gracePeriod when not provided`() {
         val info = buildResponse().toSubscriptionInfo()
+        assertNull(info.cancelAt)
         assertNull(info.canceledDate)
         assertNull(info.nextCharge)
         assertNull(info.suspensionDate)
@@ -184,6 +219,7 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
         discount: BitwardenDiscountJson? = null,
         estimatedTax: BigDecimal = BigDecimal.ZERO,
         storage: StorageJson? = null,
+        cancelAt: Instant? = null,
         canceled: Instant? = null,
         nextCharge: Instant? = null,
         suspension: Instant? = null,
@@ -213,7 +249,7 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
             estimatedTax = estimatedTax,
         ),
         storage = storage,
-        cancelAt = null,
+        cancelAt = cancelAt,
         canceled = canceled,
         nextCharge = nextCharge,
         suspension = suspension,

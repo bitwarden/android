@@ -16,4 +16,5 @@ class AuthTabLaunchers(
     val webAuthn: ActivityResultLauncher<Intent>,
     val cookie: ActivityResultLauncher<Intent>,
     val premiumCheckout: ActivityResultLauncher<Intent>,
+    val stripePortal: ActivityResultLauncher<Intent>,
 )

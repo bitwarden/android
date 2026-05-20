@@ -480,8 +480,37 @@ class PlanViewModel @Inject constructor(
     private fun handleSpecialCircumstanceReceive(
         action: PlanAction.Internal.SpecialCircumstanceReceive,
     ) {
-        val checkoutResult = action.specialCircumstance
-            as? SpecialCircumstance.PremiumCheckout ?: return
+        when (val circumstance = action.specialCircumstance) {
+            is SpecialCircumstance.PremiumCheckout -> {
+                handlePremiumCheckoutCircumstance(circumstance)
+            }
+
+            SpecialCircumstance.StripePortal -> handleStripePortalCircumstance()
+            else -> Unit
+        }
+    }
+
+    private fun handleStripePortalCircumstance() {
+        specialCircumstanceManager.specialCircumstance = null
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = PlanState.DialogState.Loading(
+                    message = BitwardenString.loading_subscription.asText(),
+                ),
+            )
+        }
+        viewModelScope.launch {
+            sendAction(
+                PlanAction.Internal.SubscriptionResultReceive(
+                    result = billingRepository.getSubscription(),
+                ),
+            )
+        }
+    }
+
+    private fun handlePremiumCheckoutCircumstance(
+        checkoutResult: SpecialCircumstance.PremiumCheckout,
+    ) {
         specialCircumstanceManager.specialCircumstance = null
 
         if (checkoutResult.callbackResult is PremiumCheckoutCallbackResult.Canceled) {
@@ -641,6 +670,7 @@ class PlanViewModel @Inject constructor(
     private fun SubscriptionInfo.toPremiumViewState(): PlanState.ViewState.Premium {
         val formattedTotal = currencyFormatter.format(nextChargeTotal)
         val formattedDate = nextCharge?.toLocalizedDate()
+        val formattedCancelAt = cancelAt?.toLocalizedDate()
         val formattedCanceled = canceledDate?.toLocalizedDate()
         val formattedSuspension = suspensionDate?.toLocalizedDate()
 
@@ -652,6 +682,7 @@ class PlanViewModel @Inject constructor(
             estimatedTaxText = estimatedTax.toMoneyText(),
             nextChargeTotalText = formattedTotal,
             nextChargeDateText = formattedDate,
+            cancelAtDateText = formattedCancelAt,
             canceledDateText = formattedCanceled,
             suspensionDateText = formattedSuspension,
             gracePeriodDays = gracePeriodDays,
@@ -786,6 +817,7 @@ data class PlanState(
             val estimatedTaxText: String = PLACEHOLDER_TEXT,
             val nextChargeTotalText: String? = null,
             val nextChargeDateText: String? = null,
+            val cancelAtDateText: String? = null,
             val canceledDateText: String? = null,
             val suspensionDateText: String? = null,
             val gracePeriodDays: Int? = null,
@@ -1073,7 +1105,9 @@ sealed class PlanAction {
  * states (canceled) do not present a cancel action.
  */
 private fun PremiumSubscriptionStatus.canBeCanceled(): Boolean = when (this) {
-    PremiumSubscriptionStatus.CANCELED -> false
+    PremiumSubscriptionStatus.CANCELED,
+    PremiumSubscriptionStatus.PENDING_CANCELLATION,
+        -> false
 
     PremiumSubscriptionStatus.ACTIVE,
     PremiumSubscriptionStatus.PAST_DUE,
@@ -1092,6 +1126,7 @@ private fun PremiumSubscriptionStatus.isPremiumViewEligible(): Boolean = when (t
     PremiumSubscriptionStatus.CANCELED,
     PremiumSubscriptionStatus.PAST_DUE,
     PremiumSubscriptionStatus.PAUSED,
+    PremiumSubscriptionStatus.PENDING_CANCELLATION,
     PremiumSubscriptionStatus.UPDATE_PAYMENT,
         -> true
 

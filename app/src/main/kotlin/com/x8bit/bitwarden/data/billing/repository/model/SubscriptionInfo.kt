@@ -17,6 +17,8 @@ import java.time.Instant
  * @property nextChargeTotal The total of the next invoice:
  * `seatsCost + (storageCost ?: 0) - (discountAmount ?: 0) + estimatedTax`.
  * @property nextCharge The date of the next charge, or null if not applicable.
+ * @property cancelAt The date the subscription is scheduled to cancel at (the subscription is
+ * still active until this date), or null if no future cancellation is scheduled.
  * @property canceledDate The date the subscription was canceled, or null.
  * @property suspensionDate The date the subscription will be suspended, or null.
  * @property gracePeriodDays The grace period in days, or null.
@@ -30,6 +32,7 @@ data class SubscriptionInfo(
     val estimatedTax: BigDecimal,
     val nextChargeTotal: BigDecimal,
     val nextCharge: Instant?,
+    val cancelAt: Instant?,
     val canceledDate: Instant?,
     val suspensionDate: Instant?,
     val gracePeriodDays: Int?,

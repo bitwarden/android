@@ -1453,6 +1453,140 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `StripePortal circumstance should clear circumstance, show loading, and refetch subscription`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE,
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_PREMIUM_LOADED_STATE, awaitItem())
+
+                mutableSpecialCircumstanceStateFlow.value =
+                    SpecialCircumstance.StripePortal
+
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        dialogState = PlanState.DialogState.Loading(
+                            message = BitwardenString.loading_subscription.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(DEFAULT_PREMIUM_LOADED_STATE, awaitItem())
+            }
+
+            verify { mockSpecialCircumstanceManager.specialCircumstance = null }
+            coVerify(exactly = 2) { mockBillingRepository.getSubscription() }
+        }
+
+    @Test
+    fun `StripePortal return applies PENDING_CANCELLATION status to view state`() =
+        runTest {
+            markUserPremium()
+            val cancelAt = Instant.parse("2026-05-01T00:00:00Z")
+            val pendingResult = SubscriptionResult.Success(
+                subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                    status = PremiumSubscriptionStatus.PENDING_CANCELLATION,
+                    cancelAt = cancelAt,
+                ),
+            )
+            val viewModel = createViewModel(
+                subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE,
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_PREMIUM_LOADED_STATE, awaitItem())
+
+                // Re-stub the second fetch (portal-return refetch) to return PENDING_CANCELLATION.
+                coEvery { mockBillingRepository.getSubscription() } returns pendingResult
+                mutableSpecialCircumstanceStateFlow.value =
+                    SpecialCircumstance.StripePortal
+
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        dialogState = PlanState.DialogState.Loading(
+                            message = BitwardenString.loading_subscription.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            status = PremiumSubscriptionStatus.PENDING_CANCELLATION,
+                            cancelAtDateText = "May 1, 2026",
+                            showCancelButton = false,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toPremiumViewState for PENDING_CANCELLATION should populate cancelAtDateText and hide cancel button`() =
+        runTest {
+            markUserPremium()
+            val cancelAt = Instant.parse("2026-05-01T00:00:00Z")
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        status = PremiumSubscriptionStatus.PENDING_CANCELLATION,
+                        cancelAt = cancelAt,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            status = PremiumSubscriptionStatus.PENDING_CANCELLATION,
+                            cancelAtDateText = "May 1, 2026",
+                            showCancelButton = false,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `init opens Premium view when free account holds PENDING_CANCELLATION status`() =
+        runTest {
+            mutableSubscriptionStatusStateFlow.value = SubscriptionStatusState.Available(
+                status = PremiumSubscriptionStatus.PENDING_CANCELLATION,
+            )
+            val cancelAt = Instant.parse("2026-05-01T00:00:00Z")
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        status = PremiumSubscriptionStatus.PENDING_CANCELLATION,
+                        cancelAt = cancelAt,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            status = PremiumSubscriptionStatus.PENDING_CANCELLATION,
+                            cancelAtDateText = "May 1, 2026",
+                            showCancelButton = false,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
     private fun markUserPremium() {
         mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
             accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = true)),
@@ -1557,6 +1691,7 @@ private val SUBSCRIPTION_INFO_ACTIVE = SubscriptionInfo(
     estimatedTax = BigDecimal("3.85"),
     nextChargeTotal = BigDecimal("45.55"),
     nextCharge = Instant.parse("2026-04-02T00:00:00Z"),
+    cancelAt = null,
     canceledDate = null,
     suspensionDate = null,
     gracePeriodDays = null,

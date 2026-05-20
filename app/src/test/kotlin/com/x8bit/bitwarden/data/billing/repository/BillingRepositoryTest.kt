@@ -185,6 +185,7 @@ class BillingRepositoryTest {
                         estimatedTax = BigDecimal.ZERO,
                         nextChargeTotal = BigDecimal("19.80"),
                         nextCharge = null,
+                        cancelAt = null,
                         canceledDate = null,
                         suspensionDate = null,
                         gracePeriodDays = null,

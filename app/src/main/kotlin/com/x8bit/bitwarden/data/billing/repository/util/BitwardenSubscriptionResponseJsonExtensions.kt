@@ -37,7 +37,7 @@ fun BitwardenSubscriptionResponseJson.toSubscriptionInfo(): SubscriptionInfo {
         estimatedTax
 
     return SubscriptionInfo(
-        status = status.toPremiumSubscriptionStatus(),
+        status = toPremiumSubscriptionStatus(),
         cadence = cart.cadence.toPlanCadence(),
         seatsCost = seatsCost,
         storageCost = storageCost,
@@ -45,30 +45,37 @@ fun BitwardenSubscriptionResponseJson.toSubscriptionInfo(): SubscriptionInfo {
         estimatedTax = estimatedTax,
         nextChargeTotal = nextChargeTotal,
         nextCharge = nextCharge,
+        cancelAt = cancelAt,
         canceledDate = canceled,
         suspensionDate = suspension,
         gracePeriodDays = gracePeriod,
     )
 }
 
-private fun SubscriptionStatusJson.toPremiumSubscriptionStatus(): PremiumSubscriptionStatus =
-    when (this) {
-        SubscriptionStatusJson.ACTIVE,
-        SubscriptionStatusJson.TRIALING,
-        -> PremiumSubscriptionStatus.ACTIVE
+private fun BitwardenSubscriptionResponseJson.toPremiumSubscriptionStatus():
+    PremiumSubscriptionStatus = when (status) {
+    SubscriptionStatusJson.ACTIVE,
+    SubscriptionStatusJson.TRIALING,
+        -> {
+        if (cancelAt != null) {
+            PremiumSubscriptionStatus.PENDING_CANCELLATION
+        } else {
+            PremiumSubscriptionStatus.ACTIVE
+        }
+    }
 
-        SubscriptionStatusJson.CANCELED,
-        SubscriptionStatusJson.INCOMPLETE_EXPIRED,
+    SubscriptionStatusJson.CANCELED,
+    SubscriptionStatusJson.INCOMPLETE_EXPIRED,
         -> PremiumSubscriptionStatus.CANCELED
 
-        SubscriptionStatusJson.INCOMPLETE,
-        SubscriptionStatusJson.UNPAID,
+    SubscriptionStatusJson.INCOMPLETE,
+    SubscriptionStatusJson.UNPAID,
         -> PremiumSubscriptionStatus.UPDATE_PAYMENT
 
-        SubscriptionStatusJson.PAST_DUE -> PremiumSubscriptionStatus.PAST_DUE
+    SubscriptionStatusJson.PAST_DUE -> PremiumSubscriptionStatus.PAST_DUE
 
-        SubscriptionStatusJson.PAUSED -> PremiumSubscriptionStatus.PAUSED
-    }
+    SubscriptionStatusJson.PAUSED -> PremiumSubscriptionStatus.PAUSED
+}
 
 private fun CadenceTypeJson.toPlanCadence(): PlanCadence = when (this) {
     CadenceTypeJson.ANNUALLY -> PlanCadence.ANNUALLY

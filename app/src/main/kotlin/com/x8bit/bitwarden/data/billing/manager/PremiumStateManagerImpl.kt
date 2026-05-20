@@ -322,7 +322,9 @@ private fun SubscriptionStatusState.isInTroubleState(): Boolean =
             PremiumSubscriptionStatus.UPDATE_PAYMENT,
                 -> true
 
-            PremiumSubscriptionStatus.ACTIVE -> false
+            PremiumSubscriptionStatus.ACTIVE,
+            PremiumSubscriptionStatus.PENDING_CANCELLATION,
+                -> false
         }
 
 /**
