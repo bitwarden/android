@@ -49,17 +49,17 @@ import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManage
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockBankAccountView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDriversLicenseView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPassportView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDriversLicenseView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPassportView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
@@ -232,12 +232,8 @@ class VaultViewModelTest : BaseViewModelTest() {
         coEvery { register() } returns RegisterExportResult.Success
         coEvery { unregister() } returns UnregisterExportResult.Success
     }
-    private val mutableCxpExportFeatureFlagFlow = MutableStateFlow(false)
     private val mutableNewItemTypesFlagFlow = MutableStateFlow(false)
     private val featureFlagManager: FeatureFlagManager = mockk {
-        every {
-            getFeatureFlagFlow(FlagKey.CredentialExchangeProtocolExport)
-        } returns mutableCxpExportFeatureFlagFlow
         every { getFeatureFlagFlow(FlagKey.NewItemTypes) } returns mutableNewItemTypesFlagFlow
     }
 
@@ -1260,7 +1256,6 @@ class VaultViewModelTest : BaseViewModelTest() {
             )
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `on AddAccountClick should set hasPendingAccountAddition to true on the AuthRepository`() {
         val viewModel = createViewModel()
@@ -3850,7 +3845,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `when ImportActionCardClick is sent, NavigateToImportLogins event is sent`() =
         runTest {
@@ -3864,7 +3858,6 @@ class VaultViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `when ImportActionCardClick is sent, repository is not called if value is already false`() {
         mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
@@ -4316,70 +4309,24 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `CredentialExchangeProtocolExportFlagUpdateReceive should register for export when flag is enabled`() =
-        runTest {
-            mutableCxpExportFeatureFlagFlow.value = false
-            coEvery { credentialExchangeRegistryManager.register() } just awaits
+    fun `credentialExchangeRegistryManager should register when not fdroid`() = runTest {
+        createViewModel()
 
-            val viewModel = createViewModel()
-
-            viewModel.trySendAction(
-                VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(
-                    isCredentialExchangeProtocolExportEnabled = true,
-                ),
-            )
-
-            coVerify {
-                credentialExchangeRegistryManager.register()
-            }
+        coVerify(exactly = 1) {
+            credentialExchangeRegistryManager.register()
         }
+    }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `CredentialExchangeProtocolExportFlagUpdateReceive should unregister when flag is disabled`() =
-        runTest {
-            mutableCxpExportFeatureFlagFlow.value = true
-            every { settingsRepository.isAppRegisteredForExport() } returns true
-            coEvery { credentialExchangeRegistryManager.unregister() } just awaits
+    fun `credentialExchangeRegistryManager should not register when fdroid`() = runTest {
+        every { buildInfoManager.isFdroid } returns true
+        createViewModel()
 
-            val viewModel = createViewModel()
-
-            viewModel.trySendAction(
-                VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(
-                    isCredentialExchangeProtocolExportEnabled = false,
-                ),
-            )
-
-            coVerify {
-                credentialExchangeRegistryManager.unregister()
-            }
+        coVerify(exactly = 0) {
+            credentialExchangeRegistryManager.register()
         }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `CredentialExchangeProtocolExportFlagUpdateReceive should unregister when flag is enabled but isFdroid is true`() =
-        runTest {
-            every { buildInfoManager.isFdroid } returns true
-            mutableCxpExportFeatureFlagFlow.value = false
-            coEvery { credentialExchangeRegistryManager.unregister() } just awaits
-
-            val viewModel = createViewModel()
-
-            viewModel.trySendAction(
-                VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(
-                    isCredentialExchangeProtocolExportEnabled = true,
-                ),
-            )
-
-            coVerify {
-                credentialExchangeRegistryManager.unregister()
-            }
-            coVerify(exactly = 0) {
-                credentialExchangeRegistryManager.register()
-            }
-        }
+    }
 
     @Test
     fun `vault data loaded with premium user should set validTotpIds from getValidTotpCipherIds`() =

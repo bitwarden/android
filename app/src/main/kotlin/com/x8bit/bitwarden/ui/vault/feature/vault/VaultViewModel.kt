@@ -121,7 +121,7 @@ class VaultViewModel @Inject constructor(
     private val browserAutofillDialogManager: BrowserAutofillDialogManager,
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager,
     private val buildInfoManager: BuildInfoManager,
-    private val featureFlagManager: FeatureFlagManager,
+    featureFlagManager: FeatureFlagManager,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
@@ -292,16 +292,16 @@ class VaultViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        featureFlagManager.getFeatureFlagFlow(FlagKey.CredentialExchangeProtocolExport)
-            .map { VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
         featureFlagManager.getFeatureFlagFlow(FlagKey.NewItemTypes)
             .map { VaultAction.Internal.NewItemTypesFlagUpdateReceive(isEnabled = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        if (!buildInfoManager.isFdroid) {
+            viewModelScope.launch {
+                credentialExchangeRegistryManager.register()
+            }
+        }
         viewModelScope.launch {
             delay(timeMillis = BROWSER_AUTOFILL_DIALOG_DELAY)
             mutableStateFlow.update { vaultState ->
@@ -1131,10 +1131,6 @@ class VaultViewModel @Inject constructor(
                 handleNewItemTypesFlagUpdateReceive(action)
             }
 
-            is VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive -> {
-                handleCredentialExchangeProtocolExportFlagUpdateReceive(action)
-            }
-
             is VaultAction.Internal.ArchiveCipherReceive -> handleArchiveCipherReceive(action)
             is VaultAction.Internal.UnarchiveCipherReceive -> handleUnarchiveCipherReceive(action)
             is VaultAction.Internal.IntroducingArchiveActionCardDismissedFlowReceive -> {
@@ -1218,20 +1214,6 @@ class VaultViewModel @Inject constructor(
                 dialog = state.dialog,
                 validTotpIds = state.validTotpIds,
             )
-        }
-    }
-
-    private fun handleCredentialExchangeProtocolExportFlagUpdateReceive(
-        action: VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive,
-    ) {
-        viewModelScope.launch {
-            if (action.isCredentialExchangeProtocolExportEnabled &&
-                !buildInfoManager.isFdroid
-            ) {
-                credentialExchangeRegistryManager.register()
-            } else {
-                credentialExchangeRegistryManager.unregister()
-            }
         }
     }
 
@@ -2683,13 +2665,6 @@ sealed class VaultAction {
          * Indicates the forced sync triggered for a KDF update check has completed.
          */
         data object KdfSyncCompletedReceive : Internal()
-
-        /**
-         * Indicates that the Credential Exchange Protocol export flag has been updated.
-         */
-        data class CredentialExchangeProtocolExportFlagUpdateReceive(
-            val isCredentialExchangeProtocolExportEnabled: Boolean,
-        ) : Internal()
 
         /**
          * Indicates that the New Item Types feature flag has been updated.
