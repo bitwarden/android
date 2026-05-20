@@ -211,13 +211,14 @@ private fun PlanDialogs(
 
         is PlanState.DialogState.CancelConfirmation -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(id = BitwardenString.cancel_premium),
+                title = stringResource(id = BitwardenString.continue_to_stripe),
                 message = stringResource(
-                    id = BitwardenString.cancel_premium_confirmation,
+                    id = BitwardenString
+                        .youll_be_taken_to_stripe_to_manage_your_subscription_cancellation,
                     dialogState.nextRenewalDate,
                 ),
-                confirmButtonText = stringResource(id = BitwardenString.cancel_now),
-                dismissButtonText = stringResource(id = BitwardenString.close),
+                confirmButtonText = stringResource(id = BitwardenString.continue_text),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
                 onConfirmClick = handlers.onConfirmCancelClick,
                 onDismissClick = handlers.onDismissCancelConfirmation,
                 onDismissRequest = handlers.onDismissCancelConfirmation,
