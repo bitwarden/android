@@ -661,8 +661,8 @@ private fun SubscriptionCard(
             testTag = "TotalRow",
             labelStyle = BitwardenTheme.typography.bodyLargeEmphasis,
             labelColor = BitwardenTheme.colorScheme.text.secondary,
-            valueStyle = BitwardenTheme.typography.bodyLargeEmphasis,
-            valueColor = BitwardenTheme.colorScheme.text.secondary,
+            valueStyle = BitwardenTheme.typography.bodyLarge,
+            valueColor = BitwardenTheme.colorScheme.text.primary,
             modifier = rowModifier,
         )
     }
@@ -731,6 +731,10 @@ private fun subscriptionDescriptionText(
         color = BitwardenTheme.colorScheme.text.secondary,
         textStyle = BitwardenTheme.typography.bodyMedium,
     )
+    val emphasisStyle = spanStyleOf(
+        color = BitwardenTheme.colorScheme.text.secondary,
+        textStyle = BitwardenTheme.typography.bodyMediumEmphasis,
+    )
     return when (status) {
         PremiumSubscriptionStatus.ACTIVE -> annotatedStringResource(
             id = BitwardenString.premium_next_charge_summary,
@@ -739,24 +743,28 @@ private fun subscriptionDescriptionText(
                 nextChargeDateText ?: PLACEHOLDER_TEXT,
             ),
             style = baseStyle,
+            emphasisHighlightStyle = emphasisStyle,
         )
 
         PremiumSubscriptionStatus.CANCELED -> annotatedStringResource(
             id = BitwardenString.subscription_canceled_description,
             args = arrayOf(canceledDateText ?: suspensionDateText ?: PLACEHOLDER_TEXT),
             style = baseStyle,
+            emphasisHighlightStyle = emphasisStyle,
         )
 
         PremiumSubscriptionStatus.PENDING_CANCELLATION -> annotatedStringResource(
             id = BitwardenString.subscription_pending_cancellation_description,
             args = arrayOf(cancelAtDateText ?: PLACEHOLDER_TEXT),
             style = baseStyle,
+            emphasisHighlightStyle = emphasisStyle,
         )
 
         PremiumSubscriptionStatus.UPDATE_PAYMENT -> annotatedStringResource(
             id = BitwardenString.subscription_update_payment_description,
             args = arrayOf(suspensionDateText ?: PLACEHOLDER_TEXT),
             style = baseStyle,
+            emphasisHighlightStyle = emphasisStyle,
         )
 
         PremiumSubscriptionStatus.PAST_DUE -> {
@@ -767,6 +775,7 @@ private fun subscriptionDescriptionText(
                 days.toString(),
                 suspensionDateText ?: PLACEHOLDER_TEXT,
                 style = baseStyle,
+                emphasisHighlightStyle = emphasisStyle,
             )
         }
 
