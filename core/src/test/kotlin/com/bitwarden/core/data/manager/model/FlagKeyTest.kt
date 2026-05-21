@@ -49,6 +49,10 @@ class FlagKeyTest {
             "pm-32009-new-item-types",
         )
         assertEquals(
+            FlagKey.FillAssistTargetingRules.keyName,
+            "fill-assist-targeting-rules",
+        )
+        assertEquals(
             FlagKey.ManageDevices.keyName,
             "pm-4516-devices-add-last-activity-date",
         )
@@ -68,6 +72,7 @@ class FlagKeyTest {
                 FlagKey.V2EncryptionPassword,
                 FlagKey.V2EncryptionTde,
                 FlagKey.NewItemTypes,
+                FlagKey.FillAssistTargetingRules,
                 FlagKey.ManageDevices,
             ).all {
                 !it.defaultValue

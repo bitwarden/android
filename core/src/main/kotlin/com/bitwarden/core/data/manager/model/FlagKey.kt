@@ -43,6 +43,7 @@ sealed class FlagKey<out T : Any> {
                 V2EncryptionTde,
                 NewItemTypes,
                 DebugDisableSelfHostPremiumCheck,
+                FillAssistTargetingRules,
             )
         }
     }
@@ -149,6 +150,14 @@ sealed class FlagKey<out T : Any> {
      */
     data object NewItemTypes : FlagKey<Boolean>() {
         override val keyName: String = "pm-32009-new-item-types"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the Fill Assist Targeting Rules feature.
+     */
+    data object FillAssistTargetingRules : FlagKey<Boolean>() {
+        override val keyName: String = "fill-assist-targeting-rules"
         override val defaultValue: Boolean = false
     }
 

@@ -36,6 +36,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.V2EncryptionPassword,
     FlagKey.V2EncryptionTde,
     FlagKey.NewItemTypes,
+    FlagKey.FillAssistTargetingRules,
     FlagKey.DebugDisableSelfHostPremiumCheck,
         -> {
         @Suppress("UNCHECKED_CAST")
@@ -94,6 +95,10 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.V2EncryptionPassword -> stringResource(BitwardenString.v2_encryption_password)
     FlagKey.V2EncryptionTde -> stringResource(BitwardenString.v2_encryption_tde)
     FlagKey.NewItemTypes -> stringResource(BitwardenString.new_item_types)
+    FlagKey.FillAssistTargetingRules -> {
+        stringResource(BitwardenString.fill_assist_targeting_rules)
+    }
+
     FlagKey.DebugDisableSelfHostPremiumCheck -> {
         stringResource(BitwardenString.debug_disable_self_host_premium_check)
     }
