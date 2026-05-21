@@ -24,10 +24,7 @@ fun AddEditSendState.ViewState.Content.toSendView(
         key = common.originalSendView?.key,
         newPassword = common
             .passwordInput
-            .takeIf {
-                common.sendAuth is SendAuth.Password ||
-                    !common.isSendEmailVerificationEnabled
-            }
+            .takeIf { common.sendAuth is SendAuth.Password }
             .orNullIfBlank(),
         hasPassword = false,
         type = selectedType.toSendType(),

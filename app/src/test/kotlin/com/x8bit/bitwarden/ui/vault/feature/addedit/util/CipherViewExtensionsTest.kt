@@ -13,10 +13,10 @@ import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.IdentityView
 import com.bitwarden.vault.LoginUriView
 import com.bitwarden.vault.LoginView
+import com.bitwarden.vault.PassportView
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SecureNoteView
-import com.bitwarden.vault.PassportView
 import com.bitwarden.vault.SshKeyView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -45,6 +45,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneOffset
 import java.util.UUID
 
@@ -412,7 +413,7 @@ class CipherViewExtensionsTest {
                 type = VaultAddEditState.ViewState.Content.ItemType.Passport(
                     givenName = "the given name",
                     surname = "the surname",
-                    dateOfBirth = "the date of birth",
+                    dateOfBirth = LocalDate.of(1990, 8, 10),
                     sex = "the sex",
                     birthPlace = "the birth place",
                     nationality = "the nationality",
@@ -421,8 +422,8 @@ class CipherViewExtensionsTest {
                     nationalIdentificationNumber = "the national identification number",
                     issuingCountry = "the issuing country",
                     issuingAuthority = "the issuing authority",
-                    issueDate = "the issue date",
-                    expirationDate = "the expiration date",
+                    issueDate = LocalDate.of(2021, 3, 20),
+                    expirationDate = LocalDate.of(2031, 3, 20),
                 ),
             ),
             result,
@@ -750,6 +751,7 @@ class CipherViewExtensionsTest {
             avatarColorHex = "#ffecbc49",
             environment = Environment.Eu,
             isPremium = true,
+            isPremiumFromSelf = true,
             isLoggedIn = false,
             isVaultUnlocked = false,
             needsPasswordReset = false,
@@ -957,7 +959,7 @@ private val DEFAULT_PASSPORT_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.
     passport = PassportView(
         surname = "the surname",
         givenName = "the given name",
-        dateOfBirth = "the date of birth",
+        dateOfBirth = "1990-08-10",
         birthPlace = "the birth place",
         sex = "the sex",
         nationality = "the nationality",
@@ -965,8 +967,8 @@ private val DEFAULT_PASSPORT_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.
         passportType = "the passport type",
         issuingCountry = "the issuing country",
         issuingAuthority = "the issuing authority",
-        issueDate = "the issue date",
-        expirationDate = "the expiration date",
+        issueDate = "2021-03-20",
+        expirationDate = "2031-03-20",
         nationalIdentificationNumber = "the national identification number",
     ),
 )

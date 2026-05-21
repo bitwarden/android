@@ -110,4 +110,55 @@ class StringResExtensionsTest : BaseComposeTest() {
             .onNodeWithText("Nothing special here, except this.")
             .assertIsDisplayed()
     }
+
+    @Test
+    fun `toAnnotatedPluralsString resolves singular form and applies arg annotations`() {
+        setTestContent {
+            Text(
+                text = R.plurals.test_for_plurals_with_annotation_and_arg_annotation
+                    .toAnnotatedPluralsString(
+                        quantity = 1,
+                        args = arrayOf("1", "April 21, 2026"),
+                    ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("You have 1 day to resolve by April 21, 2026.")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `toAnnotatedPluralsString resolves plural form and applies arg annotations`() {
+        setTestContent {
+            Text(
+                text = R.plurals.test_for_plurals_with_annotation_and_arg_annotation
+                    .toAnnotatedPluralsString(
+                        quantity = 7,
+                        args = arrayOf("7", "April 21, 2026"),
+                    ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("You have 7 days to resolve by April 21, 2026.")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `toAnnotatedPluralsString without annotations falls back to formatted quantity string`() {
+        setTestContent {
+            Text(
+                text = R.plurals.test_for_plurals_with_no_annotations
+                    .toAnnotatedPluralsString(
+                        quantity = 3,
+                        args = arrayOf("3"),
+                    ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("3 days remaining.")
+            .assertIsDisplayed()
+    }
 }

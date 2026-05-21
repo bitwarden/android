@@ -567,6 +567,103 @@ class CipherListViewExtensionsTest {
     }
 
     @Test
+    fun `toOverflowActions should return all copy actions for a passport cipher`() {
+        val cipher = createMockCipherListView(
+            number = 1,
+            type = CipherListViewType.Passport,
+            id = id,
+            copyableFields = listOf(
+                CopyableCipherFields.PASSPORT_PASSPORT_NUMBER,
+            ),
+        )
+
+        val result = cipher.toOverflowActions(
+            hasMasterPassword = true,
+            isPremiumUser = false,
+        )
+
+        assertEquals(
+            listOf(
+                ListingItemOverflowAction.VaultAction.CopyPassportNumberClick(
+                    cipherId = id,
+                    requiresPasswordReprompt = true,
+                ),
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = id,
+                    cipherType = CipherType.PASSPORT,
+                    requiresPasswordReprompt = true,
+                ),
+                ListingItemOverflowAction.VaultAction.EditClick(
+                    cipherId = id,
+                    cipherType = CipherType.PASSPORT,
+                    requiresPasswordReprompt = true,
+                ),
+                ListingItemOverflowAction.VaultAction.ArchiveClick(cipherId = id),
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toOverflowActions should omit passport copy action when copyable fields are empty`() {
+        val cipher = createMockCipherListView(
+            number = 1,
+            type = CipherListViewType.Passport,
+            id = id,
+            copyableFields = emptyList(),
+        )
+
+        val result = cipher.toOverflowActions(
+            hasMasterPassword = false,
+            isPremiumUser = false,
+        )
+
+        assertEquals(
+            listOf(
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = id,
+                    cipherType = CipherType.PASSPORT,
+                    requiresPasswordReprompt = false,
+                ),
+                ListingItemOverflowAction.VaultAction.EditClick(
+                    cipherId = id,
+                    cipherType = CipherType.PASSPORT,
+                    requiresPasswordReprompt = false,
+                ),
+                ListingItemOverflowAction.VaultAction.ArchiveClick(cipherId = id),
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toOverflowActions should return minimum actions for a passport cipher`() {
+        val cipher = createMockCipherListView(
+            number = 1,
+            id = id,
+            isDeleted = true,
+            isArchived = true,
+            type = CipherListViewType.Passport,
+        )
+
+        val result = cipher.toOverflowActions(
+            hasMasterPassword = false,
+            isPremiumUser = false,
+        )
+
+        assertEquals(
+            listOf(
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = id,
+                    cipherType = CipherType.PASSPORT,
+                    requiresPasswordReprompt = false,
+                ),
+            ),
+            result,
+        )
+    }
+
+    @Test
     fun `toOverflowActions should not return bank-account copy actions for non-bank ciphers`() {
         val cipher = createMockCipherListView(
             number = 1,

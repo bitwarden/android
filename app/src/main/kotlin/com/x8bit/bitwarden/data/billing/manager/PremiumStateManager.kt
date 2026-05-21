@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.billing.manager
 
+import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionStatusState
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -25,6 +26,29 @@ interface PremiumStateManager {
      * consumes the card via [dismissUpgradedToPremiumCard].
      */
     val isUpgradedToPremiumCardEligibleFlow: StateFlow<Boolean>
+
+    /**
+     * Emits `true` when the active user is eligible to see the Plan row in Settings, or `false`
+     * otherwise.
+     */
+    val isPlanRowEligibleFlow: StateFlow<Boolean>
+
+    /**
+     * Emits the active user's latest [SubscriptionStatusState].
+     */
+    val subscriptionStatusStateFlow: StateFlow<SubscriptionStatusState>
+
+    /**
+     * Emits whether the current state should be treated as self-hosted for premium upgrade
+     * gating. Reactive equivalent of [isSelfHosted].
+     */
+    val isSelfHostedFlow: StateFlow<Boolean>
+
+    /**
+     * `true` when the current state should be treated as self-hosted for premium upgrade
+     * gating, or `false` otherwise.
+     */
+    val isSelfHosted: Boolean
 
     /**
      * Returns `true` when the in-app upgrade flow is available, or `false` otherwise.

@@ -107,4 +107,12 @@ class SearchTypeExtensionsTest {
             SearchType.Vault.Licenses.toSearchTypeData(),
         )
     }
+
+    @Test
+    fun `toSearchTypeData should return Vault Passports when SearchType is Vault Passports`() {
+        assertEquals(
+            SearchTypeData.Vault.Passports,
+            SearchType.Vault.Passports.toSearchTypeData(),
+        )
+    }
 }

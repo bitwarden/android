@@ -28,21 +28,24 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
     }
 
     @Test
-    fun `toSubscriptionInfo maps CANCELED and INCOMPLETE_EXPIRED to CANCELED`() {
-        listOf(
-            SubscriptionStatusJson.CANCELED,
-            SubscriptionStatusJson.INCOMPLETE_EXPIRED,
-        ).forEach {
-            val info = buildResponse(status = it).toSubscriptionInfo()
-            assertEquals(PremiumSubscriptionStatus.CANCELED, info.status)
-        }
+    fun `toSubscriptionInfo maps CANCELED to CANCELED`() {
+        val info = buildResponse(status = SubscriptionStatusJson.CANCELED).toSubscriptionInfo()
+        assertEquals(PremiumSubscriptionStatus.CANCELED, info.status)
     }
 
     @Test
-    fun `toSubscriptionInfo maps INCOMPLETE and UNPAID to OVERDUE_PAYMENT`() {
+    fun `toSubscriptionInfo maps INCOMPLETE_EXPIRED to CANCELED`() {
+        val info = buildResponse(
+            status = SubscriptionStatusJson.INCOMPLETE_EXPIRED,
+        ).toSubscriptionInfo()
+        assertEquals(PremiumSubscriptionStatus.CANCELED, info.status)
+    }
+
+    @Test
+    fun `toSubscriptionInfo maps INCOMPLETE and UNPAID to UPDATE_PAYMENT`() {
         listOf(SubscriptionStatusJson.INCOMPLETE, SubscriptionStatusJson.UNPAID).forEach {
             val info = buildResponse(status = it).toSubscriptionInfo()
-            assertEquals(PremiumSubscriptionStatus.OVERDUE_PAYMENT, info.status)
+            assertEquals(PremiumSubscriptionStatus.UPDATE_PAYMENT, info.status)
         }
     }
 
@@ -60,6 +63,40 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
             status = SubscriptionStatusJson.PAUSED,
         ).toSubscriptionInfo()
         assertEquals(PremiumSubscriptionStatus.PAUSED, info.status)
+    }
+
+    @Test
+    fun `toSubscriptionInfo maps ACTIVE with cancelAt to PENDING_CANCELLATION`() {
+        val info = buildResponse(
+            status = SubscriptionStatusJson.ACTIVE,
+            cancelAt = Instant.parse("2026-05-01T00:00:00Z"),
+        ).toSubscriptionInfo()
+        assertEquals(PremiumSubscriptionStatus.PENDING_CANCELLATION, info.status)
+    }
+
+    @Test
+    fun `toSubscriptionInfo maps TRIALING with cancelAt to PENDING_CANCELLATION`() {
+        val info = buildResponse(
+            status = SubscriptionStatusJson.TRIALING,
+            cancelAt = Instant.parse("2026-05-01T00:00:00Z"),
+        ).toSubscriptionInfo()
+        assertEquals(PremiumSubscriptionStatus.PENDING_CANCELLATION, info.status)
+    }
+
+    @Test
+    fun `toSubscriptionInfo passes cancelAt through to SubscriptionInfo`() {
+        val cancelAt = Instant.parse("2026-05-01T00:00:00Z")
+        val info = buildResponse(cancelAt = cancelAt).toSubscriptionInfo()
+        assertEquals(cancelAt, info.cancelAt)
+    }
+
+    @Test
+    fun `toSubscriptionInfo maps CANCELED with cancelAt still to CANCELED`() {
+        val info = buildResponse(
+            status = SubscriptionStatusJson.CANCELED,
+            cancelAt = Instant.parse("2026-05-01T00:00:00Z"),
+        ).toSubscriptionInfo()
+        assertEquals(PremiumSubscriptionStatus.CANCELED, info.status)
     }
 
     @Test
@@ -166,6 +203,7 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
     @Test
     fun `toSubscriptionInfo has null timestamps and gracePeriod when not provided`() {
         val info = buildResponse().toSubscriptionInfo()
+        assertNull(info.cancelAt)
         assertNull(info.canceledDate)
         assertNull(info.nextCharge)
         assertNull(info.suspensionDate)
@@ -181,6 +219,7 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
         discount: BitwardenDiscountJson? = null,
         estimatedTax: BigDecimal = BigDecimal.ZERO,
         storage: StorageJson? = null,
+        cancelAt: Instant? = null,
         canceled: Instant? = null,
         nextCharge: Instant? = null,
         suspension: Instant? = null,
@@ -210,7 +249,7 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
             estimatedTax = estimatedTax,
         ),
         storage = storage,
-        cancelAt = null,
+        cancelAt = cancelAt,
         canceled = canceled,
         nextCharge = nextCharge,
         suspension = suspension,

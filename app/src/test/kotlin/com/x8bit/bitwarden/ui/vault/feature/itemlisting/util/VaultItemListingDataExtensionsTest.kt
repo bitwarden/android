@@ -417,6 +417,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.SshKey to false,
             VaultItemListingState.ItemListingType.Vault.BankAccount to true,
             VaultItemListingState.ItemListingType.Vault.License to false,
+            VaultItemListingState.ItemListingType.Vault.Passport to false,
             VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to true,
             VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to true,
         )
@@ -450,6 +451,41 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.SshKey to false,
             VaultItemListingState.ItemListingType.Vault.BankAccount to false,
             VaultItemListingState.ItemListingType.Vault.License to true,
+            VaultItemListingState.ItemListingType.Vault.Passport to false,
+            VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to true,
+            VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to true,
+        )
+            .forEach { (type, expected) ->
+                val result = cipherView.determineListingPredicate(
+                    itemListingType = type,
+                )
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `determineListingPredicate should return the correct predicate for a non trash Passport cipherView`() {
+        val cipherView = createMockCipherListView(
+            number = 1,
+            isDeleted = false,
+            type = CipherListViewType.Passport,
+        )
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Vault.Login to false,
+            VaultItemListingState.ItemListingType.Vault.Card to false,
+            VaultItemListingState.ItemListingType.Vault.SecureNote to false,
+            VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Archive to false,
+            VaultItemListingState.ItemListingType.Vault.Trash to false,
+            VaultItemListingState.ItemListingType.Vault.SshKey to false,
+            VaultItemListingState.ItemListingType.Vault.BankAccount to false,
+            VaultItemListingState.ItemListingType.Vault.License to false,
+            VaultItemListingState.ItemListingType.Vault.Passport to true,
             VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to true,
             VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to true,
         )
@@ -883,7 +919,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ViewState.NoItems(
                 message = BitwardenString.no_items_trash.asText(),
                 shouldShowAddButton = false,
-                buttonText = BitwardenString.new_item.asText(),
+                buttonText = BitwardenString.add_item.asText(),
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Trash,
@@ -904,7 +940,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ViewState.NoItems(
                 message = BitwardenString.no_items_folder.asText(),
                 shouldShowAddButton = true,
-                buttonText = BitwardenString.new_item.asText(),
+                buttonText = BitwardenString.add_item.asText(),
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Folder(
@@ -927,7 +963,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ViewState.NoItems(
                 message = BitwardenString.no_ssh_keys.asText(),
                 shouldShowAddButton = false,
-                buttonText = BitwardenString.new_ssh_key.asText(),
+                buttonText = BitwardenString.add_ssh_key.asText(),
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.SshKey,
@@ -948,7 +984,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ViewState.NoItems(
                 message = BitwardenString.no_bank_accounts.asText(),
                 shouldShowAddButton = true,
-                buttonText = BitwardenString.new_bank_account.asText(),
+                buttonText = BitwardenString.add_bank_account.asText(),
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.BankAccount,
@@ -969,10 +1005,31 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ViewState.NoItems(
                 message = BitwardenString.no_licenses.asText(),
                 shouldShowAddButton = true,
-                buttonText = BitwardenString.new_license.asText(),
+                buttonText = BitwardenString.add_license.asText(),
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.License,
+                vaultFilterType = VaultFilterType.AllVaults,
+                hasMasterPassword = true,
+                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                isIconLoadingDisabled = false,
+                autofillSelectionData = null,
+                createCredentialRequestData = null,
+                totpData = null,
+                isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
+            ),
+        )
+
+        // Passports
+        assertEquals(
+            VaultItemListingState.ViewState.NoItems(
+                message = BitwardenString.no_passports.asText(),
+                shouldShowAddButton = true,
+                buttonText = BitwardenString.add_passport.asText(),
+            ),
+            vaultData.toViewState(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Passport,
                 vaultFilterType = VaultFilterType.AllVaults,
                 hasMasterPassword = true,
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
@@ -991,7 +1048,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ViewState.NoItems(
                 message = BitwardenString.no_logins.asText(),
                 shouldShowAddButton = true,
-                buttonText = BitwardenString.new_login.asText(),
+                buttonText = BitwardenString.add_login.asText(),
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
@@ -1012,7 +1069,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ViewState.NoItems(
                 message = BitwardenString.no_cards.asText(),
                 shouldShowAddButton = true,
-                buttonText = BitwardenString.new_card.asText(),
+                buttonText = BitwardenString.add_card.asText(),
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Card,
@@ -1033,7 +1090,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ViewState.NoItems(
                 message = BitwardenString.no_notes.asText(),
                 shouldShowAddButton = true,
-                buttonText = BitwardenString.new_note.asText(),
+                buttonText = BitwardenString.add_note.asText(),
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.SecureNote,
@@ -1054,7 +1111,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ViewState.NoItems(
                 message = BitwardenString.no_identities.asText(),
                 shouldShowAddButton = true,
-                buttonText = BitwardenString.new_identity.asText(),
+                buttonText = BitwardenString.add_identity.asText(),
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Identity,
@@ -1077,7 +1134,7 @@ class VaultItemListingDataExtensionsTest {
                 message = BitwardenString.no_archives_message.asText(),
                 vectorRes = BitwardenDrawable.ill_open_source,
                 shouldShowAddButton = false,
-                buttonText = BitwardenString.new_item.asText(),
+                buttonText = BitwardenString.add_item.asText(),
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Archive,
@@ -1098,7 +1155,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ViewState.NoItems(
                 message = BitwardenString.no_items_for_uri.asText("www.test.com"),
                 shouldShowAddButton = true,
-                buttonText = BitwardenString.new_login.asText(),
+                buttonText = BitwardenString.add_login.asText(),
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
@@ -1149,7 +1206,7 @@ class VaultItemListingDataExtensionsTest {
                 header = BitwardenString.no_items_for_vault.asText("issuer"),
                 message = BitwardenString.search_for_a_login_or_add_a_new_login.asText(),
                 shouldShowAddButton = false,
-                buttonText = BitwardenString.new_item.asText(),
+                buttonText = BitwardenString.add_item.asText(),
                 vectorRes = BitwardenDrawable.ill_folder_question,
             ),
             vaultData.toViewState(
@@ -1611,7 +1668,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ViewState.NoItems(
                 message = BitwardenString.no_cards.asText(),
                 shouldShowAddButton = false,
-                buttonText = BitwardenString.new_card.asText(),
+                buttonText = BitwardenString.add_card.asText(),
             ),
             actual,
         )

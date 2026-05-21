@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import app.cash.turbine.test
 import com.bitwarden.core.data.manager.BuildInfoManager
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
@@ -10,7 +9,6 @@ import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -37,13 +35,6 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         every { currentOrDefaultUserFirstTimeState } returns DEFAULT_FIRST_TIME_STATE
         every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
         every { storeShowImportLoginsSettingsBadge(any()) } just runs
-    }
-    private val mutableFeatureFlagFlow = bufferedMutableSharedFlow<Boolean>()
-    private val featureFlagManager = mockk<FeatureFlagManager> {
-        every { getFeatureFlag(FlagKey.CredentialExchangeProtocolImport) } returns true
-        every {
-            getFeatureFlagFlow(FlagKey.CredentialExchangeProtocolImport)
-        } returns mutableFeatureFlagFlow
     }
     private val mutablePoliciesFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Policy>>()
     private val policyManager = mockk<PolicyManager> {
@@ -79,28 +70,8 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `ImportItemsClick should emit NavigateToImportVault when CredentialExchangeProtocolImport is disabled`() =
-        runTest {
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                every {
-                    featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport)
-                } returns false
-                viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
-                assertEquals(
-                    VaultSettingsEvent.NavigateToImportVault,
-                    awaitItem(),
-                )
-            }
-        }
-
     @Test
     fun `ImportItemsClick should emit NavigateToImportVault when policy is not empty`() = runTest {
-        every {
-            featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport)
-        } returns true
         every {
             policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
         } returns listOf(mockk())
@@ -115,22 +86,17 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `ImportItemsClick should emit NavigateToImportItems when CredentialExchangeProtocolImport is enabled`() =
-        runTest {
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                every {
-                    featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport)
-                } returns true
-                viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
-                assertEquals(
-                    VaultSettingsEvent.NavigateToImportItems,
-                    awaitItem(),
-                )
-            }
+    fun `ImportItemsClick should emit NavigateToImportItems when policy is empty`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
+            assertEquals(
+                VaultSettingsEvent.NavigateToImportItems,
+                awaitItem(),
+            )
         }
+    }
 
     @Test
     fun `shouldShowImportCard should update when first time state changes`() = runTest {
@@ -191,44 +157,34 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `showImportItemsChevron should display based on feature flag and policies`() {
+    fun `showImportItemsChevron should display based on policies`() = runTest {
         val viewModel = createViewModel()
-        // Verify chevron is shown when feature flag is enabled and no policies (default state)
-        assertEquals(
-            viewModel.stateFlow.value,
-            VaultSettingsState(showImportActionCard = true, showImportItemsChevron = true),
-        )
+        viewModel.stateFlow.test {
+            // Verify chevron is shown when there are no policies (default state)
+            assertEquals(
+                VaultSettingsState(showImportActionCard = true, showImportItemsChevron = true),
+                awaitItem(),
+            )
 
-        // Verify chevron is hidden when feature flag is disabled and no policies
-        mutableFeatureFlagFlow.tryEmit(false)
-        mutablePoliciesFlow.tryEmit(emptyList())
-        assertEquals(
-            viewModel.stateFlow.value,
-            VaultSettingsState(showImportActionCard = true, showImportItemsChevron = false),
-        )
+            // Verify chevron is hidden when policies exist
+            mutablePoliciesFlow.tryEmit(listOf(mockk()))
+            assertEquals(
+                VaultSettingsState(showImportActionCard = true, showImportItemsChevron = false),
+                awaitItem(),
+            )
 
-        // Verify chevron is hidden when feature flag is enabled and policies exist
-        mutableFeatureFlagFlow.tryEmit(true)
-        mutablePoliciesFlow.tryEmit(listOf(mockk()))
-        assertEquals(
-            viewModel.stateFlow.value,
-            VaultSettingsState(showImportActionCard = true, showImportItemsChevron = false),
-        )
-
-        // Verify chevron is hidden when feature flag is disabled and no policies
-        mutableFeatureFlagFlow.tryEmit(false)
-        mutablePoliciesFlow.tryEmit(emptyList())
-        assertEquals(
-            viewModel.stateFlow.value,
-            VaultSettingsState(showImportActionCard = true, showImportItemsChevron = false),
-        )
+            // Verify chevron is hidden when there are no policies
+            mutablePoliciesFlow.tryEmit(emptyList())
+            assertEquals(
+                VaultSettingsState(showImportActionCard = true, showImportItemsChevron = true),
+                awaitItem(),
+            )
+        }
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `showImportItemsChevron should be false when feature flag is enabled but policy exists`() {
+    fun `showImportItemsChevron should be false when policy exists`() {
         val viewModel = createViewModel()
-        mutableFeatureFlagFlow.tryEmit(true)
         mutablePoliciesFlow.tryEmit(listOf(mockk()))
         assertEquals(
             VaultSettingsState(showImportActionCard = true, showImportItemsChevron = false),
@@ -267,7 +223,6 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         buildInfoManager = buildInfoManager,
         firstTimeActionManager = firstTimeActionManager,
         snackbarRelayManager = snackbarRelayManager,
-        featureFlagManager = featureFlagManager,
         policyManager = policyManager,
     )
 }

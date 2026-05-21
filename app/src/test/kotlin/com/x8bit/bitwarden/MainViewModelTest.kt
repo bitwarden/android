@@ -1299,6 +1299,21 @@ class MainViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `on StripePortalResult should set StripePortal special circumstance`() {
+        val authResult = mockk<AuthTabIntent.AuthResult>()
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            MainAction.StripePortalResult(authResult = authResult),
+        )
+
+        assertEquals(
+            SpecialCircumstance.StripePortal,
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `cookie acquisition should emit NavigateToCookieAcquisition when vault unlocked with matching hostname`() =
@@ -1416,6 +1431,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     environment = Environment.Us,
     avatarColorHex = "#aa00aa",
     isPremium = true,
+    isPremiumFromSelf = true,
     isLoggedIn = true,
     isVaultUnlocked = true,
     needsPasswordReset = false,

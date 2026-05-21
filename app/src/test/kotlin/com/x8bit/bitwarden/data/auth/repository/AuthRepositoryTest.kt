@@ -33,6 +33,9 @@ import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.ConfigResponseJson
 import com.bitwarden.network.model.CreateAccountKeysResponseJson
 import com.bitwarden.network.model.DeleteAccountResponseJson
+import com.bitwarden.network.model.DeviceResponseJson
+import com.bitwarden.network.model.DeviceType
+import com.bitwarden.network.model.DevicesResponseJson
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
 import com.bitwarden.network.model.KdfJson
@@ -99,7 +102,9 @@ import com.x8bit.bitwarden.data.auth.manager.model.MigrateNewUserToKeyConnectorR
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.DeviceInfo
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
+import com.x8bit.bitwarden.data.auth.repository.model.GetDevicesResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
@@ -6876,6 +6881,58 @@ class AuthRepositoryTest {
     }
 
     @Test
+    fun `getDevices should return Error when service returns failure`() = runTest {
+        val error = Throwable("Fail!")
+        coEvery { devicesService.getDevices() } returns error.asFailure()
+
+        val result = repository.getDevices()
+
+        coVerify(exactly = 1) { devicesService.getDevices() }
+        assertEquals(GetDevicesResult.Error, result)
+    }
+
+    @Test
+    fun `getDevices should return Success when service returns success`() = runTest {
+        val deviceJson = DeviceResponseJson(
+            id = "deviceId",
+            name = "Test Device",
+            identifier = "deviceIdentifier",
+            type = DeviceType.ANDROID,
+            creationDate = Instant.parse("2023-10-27T12:00:00Z"),
+            lastActivityDate = null,
+            isTrusted = false,
+            encryptedUserKey = null,
+            encryptedPublicKey = null,
+            devicePendingAuthRequest = null,
+        )
+        val devicesResponse = DevicesResponseJson(devices = listOf(deviceJson))
+        coEvery { devicesService.getDevices() } returns devicesResponse.asSuccess()
+
+        val result = repository.getDevices()
+
+        coVerify(exactly = 1) { devicesService.getDevices() }
+        assertEquals(
+            GetDevicesResult.Success(
+                devices = listOf(
+                    DeviceInfo(
+                        id = "deviceId",
+                        name = "Test Device",
+                        // identifier "deviceIdentifier" != uniqueAppId "testUniqueAppId"
+                        identifier = "deviceIdentifier",
+                        type = DeviceType.ANDROID,
+                        isTrusted = false,
+                        creationDate = Instant.parse("2023-10-27T12:00:00Z"),
+                        lastActivityDate = null,
+                        pendingAuthRequest = null,
+                        isCurrentDevice = false,
+                    ),
+                ),
+            ),
+            result,
+        )
+    }
+
+    @Test
     fun `getPasswordBreachCount should return failure when service returns failure`() = runTest {
         val password = "password"
         val error = Throwable("Fail")
@@ -7916,7 +7973,8 @@ class AuthRepositoryTest {
             email = EMAIL,
             isEmailVerified = true,
             name = "Bitwarden Tester",
-            hasPremium = false,
+            hasPremiumPersonally = false,
+            hasPremiumFromOrganization = null,
             stamp = null,
             organizationId = null,
             avatarColorHex = null,
@@ -7954,7 +8012,8 @@ class AuthRepositoryTest {
                 email = EMAIL_2,
                 isEmailVerified = true,
                 name = "Bitwarden Tester 2",
-                hasPremium = false,
+                hasPremiumPersonally = false,
+                hasPremiumFromOrganization = null,
                 stamp = null,
                 organizationId = null,
                 avatarColorHex = null,

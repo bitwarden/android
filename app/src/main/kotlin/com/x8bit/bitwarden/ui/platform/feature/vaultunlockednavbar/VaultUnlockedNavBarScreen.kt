@@ -14,6 +14,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.navigateToTabOrRoot
 import com.bitwarden.ui.platform.components.navigation.model.NavigationItem
@@ -37,7 +38,6 @@ import com.x8bit.bitwarden.ui.vault.feature.importitems.navigateToImportItemsScr
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultGraphRoute
 import com.x8bit.bitwarden.ui.vault.feature.vault.vaultGraph
-import kotlinx.collections.immutable.persistentListOf
 
 /**
  * Top level composable for the Vault Unlocked Screen.
@@ -69,6 +69,7 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToImportLogins: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
+    onNavigateToManageDevices: () -> Unit,
     onNavigateToPlan: () -> Unit,
     onNavigateToUpgradedToPremium: () -> Unit,
 ) {
@@ -111,6 +112,7 @@ fun VaultUnlockedNavBarScreen(
         onNavigateToFlightRecorder = onNavigateToFlightRecorder,
         onNavigateToRecordedLogs = onNavigateToRecordedLogs,
         onNavigateToAboutPrivilegedApps = onNavigateToAboutPrivilegedApps,
+        onNavigateToManageDevices = onNavigateToManageDevices,
         onNavigateToPlan = onNavigateToPlan,
         onNavigateToUpgradedToPremium = onNavigateToUpgradedToPremium,
     )
@@ -148,6 +150,7 @@ private fun VaultUnlockedNavBarScaffold(
     onNavigateToImportLogins: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
+    onNavigateToManageDevices: () -> Unit,
     onNavigateToPlan: () -> Unit,
     onNavigateToUpgradedToPremium: () -> Unit,
 ) {
@@ -156,9 +159,9 @@ private fun VaultUnlockedNavBarScaffold(
     // This scaffold will host screens that contain top bars while not hosting one itself.
     // We need to ignore the all insets here and let the content screens handle it themselves.
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val navigationItems = persistentListOf<NavigationItem>(
+    val navigationItems = persistentListOfNotNull<NavigationItem>(
         VaultUnlockedNavBarTab.Vault(labelRes = state.vaultNavBarLabelRes),
-        VaultUnlockedNavBarTab.Send,
+        VaultUnlockedNavBarTab.Send.takeUnless { state.areSendsDisabled },
         VaultUnlockedNavBarTab.Generator,
         VaultUnlockedNavBarTab.Settings(state.notificationState.settingsTabNotificationCount),
     )
@@ -235,6 +238,7 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToFlightRecorder = onNavigateToFlightRecorder,
                 onNavigateToRecordedLogs = onNavigateToRecordedLogs,
                 onNavigateToAboutPrivilegedApps = onNavigateToAboutPrivilegedApps,
+                onNavigateToManageDevices = onNavigateToManageDevices,
                 onNavigateToUpgradedToPremium = onNavigateToUpgradedToPremium,
             )
         }

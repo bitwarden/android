@@ -1326,6 +1326,23 @@ class VaultItemListingViewModel @Inject constructor(
         }
     }
 
+    private fun handleCopyPassportNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyPassportNumberClick,
+    ) {
+        viewModelScope.launch {
+            getCipherViewOrNull(action.cipherId)
+                ?.passport
+                ?.passportNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    clipboardManager.setText(
+                        text = it,
+                        toastDescriptorOverride = BitwardenString.passport_number.asText(),
+                    )
+                }
+        }
+    }
+
     private fun handleCopyPasswordClick(
         action: ListingItemOverflowAction.VaultAction.CopyPasswordClick,
     ) {
@@ -1629,6 +1646,10 @@ class VaultItemListingViewModel @Inject constructor(
 
             is ListingItemOverflowAction.VaultAction.CopyLicenseNumberClick -> {
                 handleCopyLicenseNumberClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyPassportNumberClick -> {
+                handleCopyPassportNumberClick(overflowAction)
             }
 
             is ListingItemOverflowAction.VaultAction.CopyPasswordClick -> {
@@ -2954,6 +2975,7 @@ data class VaultItemListingState(
             ItemListingType.Vault.SshKey,
             ItemListingType.Vault.BankAccount,
             ItemListingType.Vault.License,
+            ItemListingType.Vault.Passport,
             ItemListingType.Vault.Trash,
             ItemListingType.Send.SendFile,
             ItemListingType.Send.SendText,
@@ -3412,6 +3434,14 @@ data class VaultItemListingState(
              */
             data object License : Vault() {
                 override val titleText: Text get() = BitwardenString.licenses.asText()
+                override val hasFab: Boolean get() = true
+            }
+
+            /**
+             * A Passport item listing.
+             */
+            data object Passport : Vault() {
+                override val titleText: Text get() = BitwardenString.passports.asText()
                 override val hasFab: Boolean get() = true
             }
 
@@ -4042,7 +4072,7 @@ sealed class VaultItemListingsAction {
          */
         data class SnackbarDataReceived(
             val data: BitwardenSnackbarData,
-        ) : Internal(), BackgroundEvent
+        ) : Internal()
 
         /**
          * Indicates that an error occurred while decrypting a cipher.

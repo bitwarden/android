@@ -36,11 +36,13 @@ fun SavedStateHandle.toAttachmentsArgs(): AttachmentsArgs {
 fun NavGraphBuilder.attachmentDestination(
     onNavigateBack: () -> Unit,
     onNavigateToPreviewAttachment: (route: PreviewAttachmentRoute) -> Unit,
+    onNavigateToPlan: () -> Unit,
 ) {
     composableWithSlideTransitions<AttachmentsRoute> {
         AttachmentsScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToPreview = onNavigateToPreviewAttachment,
+            onNavigateToPlan = onNavigateToPlan,
         )
     }
 }

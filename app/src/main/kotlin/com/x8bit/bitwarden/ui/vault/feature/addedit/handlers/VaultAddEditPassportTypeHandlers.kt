@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditViewModel
+import java.time.LocalDate
 
 /**
  * A collection of handler functions for managing user interactions on the Passport portion of the
@@ -33,6 +34,9 @@ data class VaultAddEditPassportTypeHandlers(
     val onNationalIdentificationNumberTextChange: (String) -> Unit,
     val onIssuingCountryTextChange: (String) -> Unit,
     val onIssuingAuthorityTextChange: (String) -> Unit,
+    val onDateOfBirthChange: (LocalDate?) -> Unit,
+    val onIssueDateChange: (LocalDate?) -> Unit,
+    val onExpirationDateChange: (LocalDate?) -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -114,6 +118,27 @@ data class VaultAddEditPassportTypeHandlers(
                     viewModel.trySendAction(
                         VaultAddEditAction.ItemType.PassportType.IssuingAuthorityTextChange(
                             authority = it,
+                        ),
+                    )
+                },
+                onDateOfBirthChange = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.PassportType.DateOfBirthChange(
+                            dateOfBirth = it,
+                        ),
+                    )
+                },
+                onIssueDateChange = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.PassportType.IssueDateChange(
+                            issueDate = it,
+                        ),
+                    )
+                },
+                onExpirationDateChange = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.PassportType.ExpirationDateChange(
+                            expirationDate = it,
                         ),
                     )
                 },

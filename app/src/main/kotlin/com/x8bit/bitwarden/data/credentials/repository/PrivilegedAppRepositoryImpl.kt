@@ -39,7 +39,7 @@ private const val RELEASE_BUILD = "release"
 class PrivilegedAppRepositoryImpl(
     private val privilegedAppDiskSource: PrivilegedAppDiskSource,
     private val assetManager: AssetManager,
-    dispatcherManager: DispatcherManager,
+    private val dispatcherManager: DispatcherManager,
     private val json: Json,
 ) : PrivilegedAppRepository {
 
@@ -118,7 +118,7 @@ class PrivilegedAppRepositoryImpl(
             .toPrivilegedAppAllowListJson()
 
     override suspend fun getGoogleTrustedPrivilegedAppsOrNull(): PrivilegedAppAllowListJson? =
-        withContext(ioScope.coroutineContext) {
+        withContext(dispatcherManager.io) {
             assetManager
                 .readAsset(fileName = GOOGLE_ALLOW_LIST_FILE_NAME)
                 .map { json.decodeFromStringOrNull<PrivilegedAppAllowListJson>(it) }
@@ -126,7 +126,7 @@ class PrivilegedAppRepositoryImpl(
         }
 
     override suspend fun getCommunityTrustedPrivilegedAppsOrNull(): PrivilegedAppAllowListJson? {
-        return withContext(ioScope.coroutineContext) {
+        return withContext(dispatcherManager.io) {
             assetManager
                 .readAsset(fileName = COMMUNITY_ALLOW_LIST_FILE_NAME)
                 .map { json.decodeFromStringOrNull<PrivilegedAppAllowListJson>(it) }

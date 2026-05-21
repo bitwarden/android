@@ -10,6 +10,7 @@ import com.bitwarden.network.model.CartItemJson
 import com.bitwarden.network.model.CartJson
 import com.bitwarden.network.model.CheckoutSessionResponseJson
 import com.bitwarden.network.model.DiscountTypeJson
+import com.bitwarden.network.model.GetSubscriptionResponse
 import com.bitwarden.network.model.PasswordManagerCartItemsJson
 import com.bitwarden.network.model.PortalUrlResponseJson
 import com.bitwarden.network.model.PremiumPlanResponseJson
@@ -91,12 +92,21 @@ class BillingServiceTest : BaseServiceTest() {
         }
 
     @Test
-    fun `getSubscription when response is Failure should return Failure`() =
+    fun `getSubscription when response is non-404 Failure should return Failure`() =
         runTest {
             val response = MockResponse().setResponseCode(400)
             server.enqueue(response)
             val actual = service.getSubscription()
             assertTrue(actual.isFailure)
+        }
+
+    @Test
+    fun `getSubscription when response is 404 should return NotFound`() =
+        runTest {
+            val response = MockResponse().setResponseCode(404)
+            server.enqueue(response)
+            val actual = service.getSubscription()
+            assertEquals(GetSubscriptionResponse.NotFound.asSuccess(), actual)
         }
 
     @Test
@@ -107,7 +117,10 @@ class BillingServiceTest : BaseServiceTest() {
                 .setResponseCode(200)
             server.enqueue(response)
             val actual = service.getSubscription()
-            assertEquals(SUBSCRIPTION_RESPONSE.asSuccess(), actual)
+            assertEquals(
+                GetSubscriptionResponse.Success(subscription = SUBSCRIPTION_RESPONSE).asSuccess(),
+                actual,
+            )
         }
 
     @Test
@@ -119,8 +132,10 @@ class BillingServiceTest : BaseServiceTest() {
             server.enqueue(response)
             val actual = service.getSubscription()
             assertEquals(
-                CadenceTypeJson.MONTHLY,
-                actual.getOrNull()?.cart?.cadence,
+                GetSubscriptionResponse.Success(
+                    subscription = SUBSCRIPTION_RESPONSE_MONTHLY,
+                ).asSuccess(),
+                actual,
             )
         }
 
@@ -134,7 +149,12 @@ class BillingServiceTest : BaseServiceTest() {
                     .setResponseCode(200)
                 server.enqueue(response)
                 val actual = service.getSubscription()
-                assertEquals(status, actual.getOrNull()?.status)
+                assertEquals(
+                    status,
+                    (actual.getOrNull() as? GetSubscriptionResponse.Success)
+                        ?.subscription
+                        ?.status,
+                )
             }
         }
 
@@ -146,7 +166,12 @@ class BillingServiceTest : BaseServiceTest() {
                 .setResponseCode(200)
             server.enqueue(response)
             val actual = service.getSubscription()
-            assertTrue(actual.isSuccess)
+            assertEquals(
+                GetSubscriptionResponse.Success(
+                    subscription = SUBSCRIPTION_RESPONSE_MINIMAL,
+                ).asSuccess(),
+                actual,
+            )
         }
 
     @Test
@@ -158,8 +183,10 @@ class BillingServiceTest : BaseServiceTest() {
             server.enqueue(response)
             val actual = service.getSubscription()
             assertEquals(
-                DiscountTypeJson.AMOUNT_OFF,
-                actual.getOrNull()?.cart?.discount?.type,
+                GetSubscriptionResponse.Success(
+                    subscription = SUBSCRIPTION_RESPONSE_AMOUNT_OFF,
+                ).asSuccess(),
+                actual,
             )
         }
 
@@ -172,8 +199,10 @@ class BillingServiceTest : BaseServiceTest() {
             server.enqueue(response)
             val actual = service.getSubscription()
             assertEquals(
-                DiscountTypeJson.PERCENT_OFF,
-                actual.getOrNull()?.cart?.discount?.type,
+                GetSubscriptionResponse.Success(
+                    subscription = SUBSCRIPTION_RESPONSE_PERCENT_OFF,
+                ).asSuccess(),
+                actual,
             )
         }
 
@@ -347,6 +376,31 @@ private const val SUBSCRIPTION_RESPONSE_MONTHLY_JSON = """
 }
 """
 
+private val SUBSCRIPTION_RESPONSE_MONTHLY = BitwardenSubscriptionResponseJson(
+    status = SubscriptionStatusJson.ACTIVE,
+    cart = CartJson(
+        passwordManager = PasswordManagerCartItemsJson(
+            seats = CartItemJson(
+                translationKey = "premiumMembership",
+                quantity = 1,
+                cost = BigDecimal("1.67"),
+                discount = null,
+            ),
+            additionalStorage = null,
+        ),
+        secretsManager = null,
+        cadence = CadenceTypeJson.MONTHLY,
+        discount = null,
+        estimatedTax = BigDecimal("0"),
+    ),
+    storage = null,
+    cancelAt = null,
+    canceled = null,
+    nextCharge = null,
+    suspension = null,
+    gracePeriod = null,
+)
+
 private const val SUBSCRIPTION_RESPONSE_MINIMAL_JSON = """
 {
   "status": "active",
@@ -373,6 +427,31 @@ private const val SUBSCRIPTION_RESPONSE_MINIMAL_JSON = """
   "gracePeriod": null
 }
 """
+
+private val SUBSCRIPTION_RESPONSE_MINIMAL = BitwardenSubscriptionResponseJson(
+    status = SubscriptionStatusJson.ACTIVE,
+    cart = CartJson(
+        passwordManager = PasswordManagerCartItemsJson(
+            seats = CartItemJson(
+                translationKey = "premiumMembership",
+                quantity = 1,
+                cost = BigDecimal("19.80"),
+                discount = null,
+            ),
+            additionalStorage = null,
+        ),
+        secretsManager = null,
+        cadence = CadenceTypeJson.ANNUALLY,
+        discount = null,
+        estimatedTax = BigDecimal("0"),
+    ),
+    storage = null,
+    cancelAt = null,
+    canceled = null,
+    nextCharge = null,
+    suspension = null,
+    gracePeriod = null,
+)
 
 private const val SUBSCRIPTION_RESPONSE_AMOUNT_OFF_JSON = """
 {
@@ -404,6 +483,15 @@ private const val SUBSCRIPTION_RESPONSE_AMOUNT_OFF_JSON = """
 }
 """
 
+private val SUBSCRIPTION_RESPONSE_AMOUNT_OFF = SUBSCRIPTION_RESPONSE_MINIMAL.copy(
+    cart = SUBSCRIPTION_RESPONSE_MINIMAL.cart.copy(
+        discount = BitwardenDiscountJson(
+            type = DiscountTypeJson.AMOUNT_OFF,
+            value = BigDecimal("5.00"),
+        ),
+    ),
+)
+
 private const val SUBSCRIPTION_RESPONSE_PERCENT_OFF_JSON = """
 {
   "status": "active",
@@ -433,6 +521,15 @@ private const val SUBSCRIPTION_RESPONSE_PERCENT_OFF_JSON = """
   "gracePeriod": null
 }
 """
+
+private val SUBSCRIPTION_RESPONSE_PERCENT_OFF = SUBSCRIPTION_RESPONSE_MINIMAL.copy(
+    cart = SUBSCRIPTION_RESPONSE_MINIMAL.cart.copy(
+        discount = BitwardenDiscountJson(
+            type = DiscountTypeJson.PERCENT_OFF,
+            value = BigDecimal("15.00"),
+        ),
+    ),
+)
 
 private const val SUBSCRIPTION_RESPONSE_UNKNOWN_CADENCE_JSON = """
 {

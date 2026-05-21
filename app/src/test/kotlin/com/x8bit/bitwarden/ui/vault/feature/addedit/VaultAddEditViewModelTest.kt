@@ -129,6 +129,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneOffset
 import java.util.UUID
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType as UriMatchTypeModel
@@ -2547,15 +2548,15 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     fun `screenDisplayName should resolve new title strings for new vault item types in add mode`() {
         val baseAddState = createVaultAddItemState(vaultAddEditType = VaultAddEditType.AddItem)
         assertEquals(
-            BitwardenString.new_bank_account.asText(),
+            BitwardenString.add_bank_account.asText(),
             baseAddState.copy(cipherType = VaultItemCipherType.BANK_ACCOUNT).screenDisplayName,
         )
         assertEquals(
-            BitwardenString.new_license.asText(),
+            BitwardenString.add_license.asText(),
             baseAddState.copy(cipherType = VaultItemCipherType.DRIVERS_LICENSE).screenDisplayName,
         )
         assertEquals(
-            BitwardenString.new_passport.asText(),
+            BitwardenString.add_passport.asText(),
             baseAddState.copy(cipherType = VaultItemCipherType.PASSPORT).screenDisplayName,
         )
     }
@@ -2587,15 +2588,15 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             vaultAddEditType = VaultAddEditType.CloneItem(DEFAULT_EDIT_ITEM_ID),
         )
         assertEquals(
-            BitwardenString.new_bank_account.asText(),
+            BitwardenString.add_bank_account.asText(),
             baseCloneState.copy(cipherType = VaultItemCipherType.BANK_ACCOUNT).screenDisplayName,
         )
         assertEquals(
-            BitwardenString.new_license.asText(),
+            BitwardenString.add_license.asText(),
             baseCloneState.copy(cipherType = VaultItemCipherType.DRIVERS_LICENSE).screenDisplayName,
         )
         assertEquals(
-            BitwardenString.new_passport.asText(),
+            BitwardenString.add_passport.asText(),
             baseCloneState.copy(cipherType = VaultItemCipherType.PASSPORT).screenDisplayName,
         )
     }
@@ -4337,6 +4338,47 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value,
             )
         }
+
+        @Test
+        fun `DateOfBirthChange should update date of birth`() = runTest {
+            val localDate = LocalDate.of(1990, 8, 10)
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.DateOfBirthChange(dateOfBirth = localDate),
+            )
+
+            assertEquals(
+                expectedLicense { copy(dateOfBirth = localDate) },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssueDateChange should update issue date`() = runTest {
+            val localDate = LocalDate.of(2020, 1, 15)
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssueDateChange(issueDate = localDate),
+            )
+
+            assertEquals(
+                expectedLicense { copy(issueDate = localDate) },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `ExpirationDateChange should update expiration date`() = runTest {
+            val localDate = LocalDate.of(2025, 12, 31)
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.ExpirationDateChange(
+                    expirationDate = localDate,
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(expirationDate = localDate) },
+                viewModel.stateFlow.value,
+            )
+        }
     }
 
     @Nested
@@ -4516,6 +4558,47 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 expectedPassport { copy(issuingAuthority = "U.S. Department of State") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `DateOfBirthChange should update date of birth`() = runTest {
+            val localDate = LocalDate.of(1990, 8, 10)
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.DateOfBirthChange(dateOfBirth = localDate),
+            )
+
+            assertEquals(
+                expectedPassport { copy(dateOfBirth = localDate) },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssueDateChange should update issue date`() = runTest {
+            val localDate = LocalDate.of(2021, 3, 20)
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.IssueDateChange(issueDate = localDate),
+            )
+
+            assertEquals(
+                expectedPassport { copy(issueDate = localDate) },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `ExpirationDateChange should update expiration date`() = runTest {
+            val localDate = LocalDate.of(2031, 3, 20)
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.ExpirationDateChange(
+                    expirationDate = localDate,
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(expirationDate = localDate) },
                 viewModel.stateFlow.value,
             )
         }
@@ -6474,6 +6557,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     avatarColorHex = "#ffecbc49",
                     environment = Environment.Eu,
                     isPremium = true,
+                    isPremiumFromSelf = true,
                     isLoggedIn = false,
                     isVaultUnlocked = false,
                     needsPasswordReset = false,

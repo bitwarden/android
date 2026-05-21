@@ -9,14 +9,6 @@ class FlagKeyTest {
     @Test
     fun `Feature flags have the correct key name set`() {
         assertEquals(
-            FlagKey.CredentialExchangeProtocolImport.keyName,
-            "cxp-import-mobile",
-        )
-        assertEquals(
-            FlagKey.CredentialExchangeProtocolExport.keyName,
-            "cxp-export-mobile",
-        )
-        assertEquals(
             FlagKey.BitwardenAuthenticationEnabled.keyName,
             "bitwarden-authentication-enabled",
         )
@@ -29,12 +21,8 @@ class FlagKeyTest {
             "pm-20558-migrate-myvault-to-myitems",
         )
         assertEquals(
-            FlagKey.SendEmailVerification.keyName,
-            "pm-19051-send-email-verification",
-        )
-        assertEquals(
             FlagKey.MobilePremiumUpgrade.keyName,
-            "PM-31697-premium-upgrade-path",
+            "pm-31697-premium-upgrade-path",
         )
         assertEquals(
             FlagKey.AttachmentUpdates.keyName,
@@ -60,18 +48,23 @@ class FlagKeyTest {
             FlagKey.NewItemTypes.keyName,
             "pm-32009-new-item-types",
         )
+        assertEquals(
+            FlagKey.FillAssistTargetingRules.keyName,
+            "fill-assist-targeting-rules",
+        )
+        assertEquals(
+            FlagKey.ManageDevices.keyName,
+            "pm-4516-devices-add-last-activity-date",
+        )
     }
 
     @Test
     fun `All feature flags have the correct default value set`() {
         assertTrue(
             listOf(
-                FlagKey.CredentialExchangeProtocolImport,
-                FlagKey.CredentialExchangeProtocolExport,
                 FlagKey.BitwardenAuthenticationEnabled,
                 FlagKey.ForceUpdateKdfSettings,
                 FlagKey.MigrateMyVaultToMyItems,
-                FlagKey.SendEmailVerification,
                 FlagKey.MobilePremiumUpgrade,
                 FlagKey.AttachmentUpdates,
                 FlagKey.V2EncryptionJitPassword,
@@ -79,6 +72,8 @@ class FlagKeyTest {
                 FlagKey.V2EncryptionPassword,
                 FlagKey.V2EncryptionTde,
                 FlagKey.NewItemTypes,
+                FlagKey.FillAssistTargetingRules,
+                FlagKey.ManageDevices,
             ).all {
                 !it.defaultValue
             },

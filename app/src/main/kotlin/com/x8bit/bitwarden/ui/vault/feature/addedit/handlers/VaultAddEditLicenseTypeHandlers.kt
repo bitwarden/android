@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit.handlers
 
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditViewModel
+import java.time.LocalDate
 
 /**
  * A collection of handler functions for managing user interactions on the License portion of the
@@ -26,6 +27,9 @@ data class VaultAddEditLicenseTypeHandlers(
     val onIssuingStateTextChange: (String) -> Unit,
     val onIssuingAuthorityTextChange: (String) -> Unit,
     val onLicenseClassTextChange: (String) -> Unit,
+    val onDateOfBirthChange: (LocalDate?) -> Unit,
+    val onIssueDateChange: (LocalDate?) -> Unit,
+    val onExpirationDateChange: (LocalDate?) -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -92,6 +96,27 @@ data class VaultAddEditLicenseTypeHandlers(
                     viewModel.trySendAction(
                         VaultAddEditAction.ItemType.LicenseType.LicenseClassTextChange(
                             licenseClass = it,
+                        ),
+                    )
+                },
+                onDateOfBirthChange = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.LicenseType.DateOfBirthChange(
+                            dateOfBirth = it,
+                        ),
+                    )
+                },
+                onIssueDateChange = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.LicenseType.IssueDateChange(
+                            issueDate = it,
+                        ),
+                    )
+                },
+                onExpirationDateChange = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.LicenseType.ExpirationDateChange(
+                            expirationDate = it,
                         ),
                     )
                 },

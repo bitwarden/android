@@ -254,6 +254,9 @@ class SettingsScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(text = "Learn more")
             .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription(label = "Learn more, External link")
+            .assertIsDisplayed()
     }
 
     @Test
@@ -305,4 +308,5 @@ private val DEFAULT_STATE = SettingsState(
     securityCount = 0,
     autoFillCount = 0,
     vaultCount = 0,
+    isPlanRowEligible = false,
 )
