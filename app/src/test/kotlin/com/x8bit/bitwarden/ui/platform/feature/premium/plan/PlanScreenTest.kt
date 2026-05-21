@@ -43,6 +43,7 @@ class PlanScreenTest : BitwardenComposeTest() {
     private var onNavigateBackCalled = false
     private var onNavigateToUpgradedToPremiumCalled = false
     private val premiumCheckoutLauncher: ActivityResultLauncher<Intent> = mockk()
+    private val stripePortalLauncher: ActivityResultLauncher<Intent> = mockk()
 
     private val mutableEventFlow = bufferedMutableSharedFlow<PlanEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_FREE_STATE)
@@ -66,6 +67,7 @@ class PlanScreenTest : BitwardenComposeTest() {
                 webAuthn = mockk(),
                 cookie = mockk(),
                 premiumCheckout = premiumCheckoutLauncher,
+                stripePortal = stripePortalLauncher,
             ),
             intentManager = intentManager,
         ) {
@@ -597,6 +599,20 @@ class PlanScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `status badge should render with Pending cancellation label for PENDING_CANCELLATION`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(
+                    status = PremiumSubscriptionStatus.PENDING_CANCELLATION,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText("Pending cancellation")
+            .assertIsDisplayed()
+    }
+
+    @Test
     fun `status badge should not render when status is null`() {
         mutableStateFlow.update {
             it.copy(
@@ -607,6 +623,7 @@ class PlanScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Canceled").assertDoesNotExist()
         composeTestRule.onNodeWithText("Past due").assertDoesNotExist()
         composeTestRule.onNodeWithText("Paused").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Pending cancellation").assertDoesNotExist()
         composeTestRule.onNodeWithText("Update payment").assertDoesNotExist()
     }
 
@@ -725,6 +742,24 @@ class PlanScreenTest : BitwardenComposeTest() {
                 "Your subscription is paused. Resume to continue using premium features.",
             )
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun `PENDING_CANCELLATION description should bold the cancel-at date`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(
+                    status = PremiumSubscriptionStatus.PENDING_CANCELLATION,
+                    cancelAtDateText = "May 1, 2026",
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(
+                "Your subscription is scheduled to cancel on May 1, 2026. " +
+                    "You can reinstate it anytime before then.",
+            )
+            .assertTextRangeHasBoldSpan(boldSubstring = "May 1, 2026")
     }
 
     // endregion Premium content rendering
@@ -1194,10 +1229,18 @@ class PlanScreenTest : BitwardenComposeTest() {
     // region LaunchPortal event
 
     @Test
-    fun `LaunchPortal event should call intentManager launchUri`() {
+    fun `LaunchPortal event should call startAuthTab with stripePortal launcher`() {
         val url = "https://portal"
         mutableEventFlow.tryEmit(PlanEvent.LaunchPortal(url = url))
-        verify { intentManager.launchUri(url.toUri()) }
+        verify {
+            intentManager.startAuthTab(
+                uri = url.toUri(),
+                authTabData = AuthTabData.CustomScheme(
+                    callbackUrl = PREMIUM_CHECKOUT_CALLBACK_URL,
+                ),
+                launcher = stripePortalLauncher,
+            )
+        }
     }
 
     // endregion LaunchPortal event

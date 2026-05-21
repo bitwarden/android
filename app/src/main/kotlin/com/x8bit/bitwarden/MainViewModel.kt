@@ -210,6 +210,7 @@ class MainViewModel @Inject constructor(
             is MainAction.WebAuthnResult -> handleWebAuthnResult(action)
             is MainAction.CookieAcquisitionResult -> handleCookieAcquisitionResult(action)
             is MainAction.PremiumCheckoutResult -> handlePremiumCheckoutResult(action)
+            is MainAction.StripePortalResult -> handleStripePortalResult()
             is MainAction.Internal -> handleInternalAction(action)
         }
     }
@@ -265,6 +266,10 @@ class MainViewModel @Inject constructor(
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.PremiumCheckout(
             callbackResult = action.authResult.getPremiumCheckoutCallbackResult(),
         )
+    }
+
+    private fun handleStripePortalResult() {
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.StripePortal
     }
 
     private fun handleAppResumeDataUpdated(action: MainAction.ResumeScreenDataReceived) {
@@ -590,6 +595,14 @@ sealed class MainAction {
      * Receive the result from the premium checkout flow.
      */
     data class PremiumCheckoutResult(
+        val authResult: AuthTabIntent.AuthResult,
+    ) : MainAction()
+
+    /**
+     * Receive the result from the Stripe customer portal flow. The AuthTab does not return a
+     * payload — closing the tab is the only signal that the user is back in the app.
+     */
+    data class StripePortalResult(
         val authResult: AuthTabIntent.AuthResult,
     ) : MainAction()
 

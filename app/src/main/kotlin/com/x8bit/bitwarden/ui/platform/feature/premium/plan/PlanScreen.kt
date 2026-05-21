@@ -60,6 +60,7 @@ import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -101,7 +102,16 @@ fun PlanScreen(
                 )
             }
 
-            is PlanEvent.LaunchPortal -> intentManager.launchUri(event.url.toUri())
+            is PlanEvent.LaunchPortal -> {
+                intentManager.startAuthTab(
+                    uri = event.url.toUri(),
+                    authTabData = AuthTabData.CustomScheme(
+                        callbackUrl = PREMIUM_CHECKOUT_CALLBACK_URL,
+                    ),
+                    launcher = authTabLaunchers.stripePortal,
+                )
+            }
+
             is PlanEvent.LaunchUri -> intentManager.launchUri(event.url.toUri())
             PlanEvent.NavigateBack -> onNavigateBack()
             PlanEvent.NavigateToUpgradedToPremium -> onNavigateToUpgradedToPremium()
@@ -579,6 +589,7 @@ private fun SubscriptionCard(
             status = viewState.status,
             nextChargeTotalText = viewState.nextChargeTotalText,
             nextChargeDateText = viewState.nextChargeDateText,
+            cancelAtDateText = viewState.cancelAtDateText,
             canceledDateText = viewState.canceledDateText,
             suspensionDateText = viewState.suspensionDateText,
             gracePeriodDays = viewState.gracePeriodDays,
@@ -635,6 +646,7 @@ private fun SubscriptionHeader(
     status: PremiumSubscriptionStatus?,
     nextChargeTotalText: String?,
     nextChargeDateText: String?,
+    cancelAtDateText: String?,
     canceledDateText: String?,
     suspensionDateText: String?,
     gracePeriodDays: Int?,
@@ -660,6 +672,7 @@ private fun SubscriptionHeader(
             status = status,
             nextChargeTotalText = nextChargeTotalText,
             nextChargeDateText = nextChargeDateText,
+            cancelAtDateText = cancelAtDateText,
             canceledDateText = canceledDateText,
             suspensionDateText = suspensionDateText,
             gracePeriodDays = gracePeriodDays,
@@ -676,11 +689,13 @@ private fun SubscriptionHeader(
     }
 }
 
+@Suppress("CyclomaticComplexMethod")
 @Composable
 private fun subscriptionDescriptionText(
     status: PremiumSubscriptionStatus?,
     nextChargeTotalText: String?,
     nextChargeDateText: String?,
+    cancelAtDateText: String?,
     canceledDateText: String?,
     suspensionDateText: String?,
     gracePeriodDays: Int?,
@@ -702,6 +717,12 @@ private fun subscriptionDescriptionText(
         PremiumSubscriptionStatus.CANCELED -> annotatedStringResource(
             id = BitwardenString.subscription_canceled_description,
             args = arrayOf(canceledDateText ?: suspensionDateText ?: PLACEHOLDER_TEXT),
+            style = baseStyle,
+        )
+
+        PremiumSubscriptionStatus.PENDING_CANCELLATION -> annotatedStringResource(
+            id = BitwardenString.subscription_pending_cancellation_description,
+            args = arrayOf(cancelAtDateText ?: PLACEHOLDER_TEXT),
             style = baseStyle,
         )
 
