@@ -97,6 +97,18 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
+    titleExtraLarge = TextStyle(
+        fontSize = 24.sp,
+        lineHeight = 28.sp,
+        fontFamily = FontFamily(Font(R.font.dm_sans_semi_bold)),
+        fontWeight = FontWeight.W600,
+        letterSpacing = 0.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
+    ),
     titleLarge = TextStyle(
         fontSize = 19.sp,
         lineHeight = 28.sp,
@@ -316,6 +328,7 @@ private fun BitwardenTypography_preview() {
             Text(text = "Headline large", style = bitwardenTypography.headlineLarge)
             Text(text = "Headline medium", style = bitwardenTypography.headlineMedium)
             Text(text = "Headline small", style = bitwardenTypography.headlineSmall)
+            Text(text = "Title extra large", style = bitwardenTypography.titleExtraLarge)
             Text(text = "Title large", style = bitwardenTypography.titleLarge)
             Text(text = "Title medium", style = bitwardenTypography.titleMedium)
             Text(text = "Title small", style = bitwardenTypography.titleSmall)

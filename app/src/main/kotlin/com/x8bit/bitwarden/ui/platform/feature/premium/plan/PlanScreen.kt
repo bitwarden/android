@@ -665,7 +665,7 @@ private fun SubscriptionHeader(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = stringResource(id = BitwardenString.premium_plan_name),
-                style = BitwardenTheme.typography.titleLarge,
+                style = BitwardenTheme.typography.titleExtraLarge,
                 color = BitwardenTheme.colorScheme.text.primary,
             )
             status?.let {
