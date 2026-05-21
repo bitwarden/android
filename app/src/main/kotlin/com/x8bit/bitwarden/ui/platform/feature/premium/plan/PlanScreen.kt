@@ -31,6 +31,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -604,6 +605,10 @@ private fun SubscriptionCard(
             label = stringResource(id = BitwardenString.billing_amount),
             value = viewState.billingAmountText(),
             testTag = "BillingAmountRow",
+            labelStyle = BitwardenTheme.typography.bodyLarge,
+            labelColor = BitwardenTheme.colorScheme.text.secondary,
+            valueStyle = BitwardenTheme.typography.bodyLarge,
+            valueColor = BitwardenTheme.colorScheme.text.primary,
             modifier = rowModifier,
         )
 
@@ -613,6 +618,10 @@ private fun SubscriptionCard(
                 label = stringResource(id = BitwardenString.storage_cost),
                 value = storageCostText,
                 testTag = "StorageCostRow",
+                labelStyle = BitwardenTheme.typography.bodyLarge,
+                labelColor = BitwardenTheme.colorScheme.text.secondary,
+                valueStyle = BitwardenTheme.typography.bodyLarge,
+                valueColor = BitwardenTheme.colorScheme.text.primary,
                 modifier = rowModifier,
             )
         }
@@ -622,8 +631,11 @@ private fun SubscriptionCard(
             SubscriptionLineItem(
                 label = stringResource(id = BitwardenString.discount),
                 value = discountAmountText,
-                valueColor = BitwardenTheme.colorScheme.statusBadge.success.text,
                 testTag = "DiscountRow",
+                labelStyle = BitwardenTheme.typography.bodyLarge,
+                labelColor = BitwardenTheme.colorScheme.text.secondary,
+                valueStyle = BitwardenTheme.typography.bodyLarge,
+                valueColor = BitwardenTheme.colorScheme.statusBadge.success.text,
                 modifier = rowModifier,
             )
         }
@@ -634,6 +646,10 @@ private fun SubscriptionCard(
             label = stringResource(id = BitwardenString.estimated_tax),
             value = viewState.estimatedTaxText,
             testTag = "EstimatedTaxRow",
+            labelStyle = BitwardenTheme.typography.bodyLarge,
+            labelColor = BitwardenTheme.colorScheme.text.secondary,
+            valueStyle = BitwardenTheme.typography.bodyLarge,
+            valueColor = BitwardenTheme.colorScheme.text.primary,
             modifier = rowModifier,
         )
 
@@ -643,6 +659,10 @@ private fun SubscriptionCard(
             label = stringResource(id = BitwardenString.total),
             value = viewState.totalText(),
             testTag = "TotalRow",
+            labelStyle = BitwardenTheme.typography.bodyLargeEmphasis,
+            labelColor = BitwardenTheme.colorScheme.text.secondary,
+            valueStyle = BitwardenTheme.typography.bodyLargeEmphasis,
+            valueColor = BitwardenTheme.colorScheme.text.secondary,
             modifier = rowModifier,
         )
     }
@@ -763,8 +783,11 @@ private fun SubscriptionLineItem(
     label: String,
     value: String,
     testTag: String,
+    labelStyle: TextStyle,
+    labelColor: Color,
+    valueStyle: TextStyle,
+    valueColor: Color,
     modifier: Modifier = Modifier,
-    valueColor: Color = BitwardenTheme.colorScheme.text.primary,
 ) {
     Row(
         modifier = modifier
@@ -775,12 +798,12 @@ private fun SubscriptionLineItem(
     ) {
         Text(
             text = label,
-            style = BitwardenTheme.typography.bodyLarge,
-            color = BitwardenTheme.colorScheme.text.secondary,
+            style = labelStyle,
+            color = labelColor,
         )
         Text(
             text = value,
-            style = BitwardenTheme.typography.bodyLarge,
+            style = valueStyle,
             color = valueColor,
         )
     }
