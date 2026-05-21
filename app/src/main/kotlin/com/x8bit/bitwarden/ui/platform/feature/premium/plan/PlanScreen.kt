@@ -607,28 +607,26 @@ private fun SubscriptionCard(
             modifier = rowModifier,
         )
 
-        BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
+        viewState.storageCostText?.let { storageCostText ->
+            BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
+            SubscriptionLineItem(
+                label = stringResource(id = BitwardenString.storage_cost),
+                value = storageCostText,
+                testTag = "StorageCostRow",
+                modifier = rowModifier,
+            )
+        }
 
-        SubscriptionLineItem(
-            label = stringResource(id = BitwardenString.storage_cost),
-            value = viewState.storageCostText,
-            testTag = "StorageCostRow",
-            modifier = rowModifier,
-        )
-
-        BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
-
-        SubscriptionLineItem(
-            label = stringResource(id = BitwardenString.discount),
-            value = viewState.discountAmountText,
-            valueColor = if (viewState.discountAmountText == "--") {
-                BitwardenTheme.colorScheme.text.primary
-            } else {
-                BitwardenTheme.colorScheme.statusBadge.success.text
-            },
-            testTag = "DiscountRow",
-            modifier = rowModifier,
-        )
+        viewState.discountAmountText?.let { discountAmountText ->
+            BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
+            SubscriptionLineItem(
+                label = stringResource(id = BitwardenString.discount),
+                value = discountAmountText,
+                valueColor = BitwardenTheme.colorScheme.statusBadge.success.text,
+                testTag = "DiscountRow",
+                modifier = rowModifier,
+            )
+        }
 
         BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
 
@@ -636,6 +634,15 @@ private fun SubscriptionCard(
             label = stringResource(id = BitwardenString.estimated_tax),
             value = viewState.estimatedTaxText,
             testTag = "EstimatedTaxRow",
+            modifier = rowModifier,
+        )
+
+        BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
+
+        SubscriptionLineItem(
+            label = stringResource(id = BitwardenString.total),
+            value = viewState.totalText(),
+            testTag = "TotalRow",
             modifier = rowModifier,
         )
     }
@@ -839,7 +846,50 @@ private fun PlanScreenPremiumAccount_preview() {
                     storageCostText = "$24.00",
                     discountAmountText = "-$2.10",
                     estimatedTaxText = "$3.85",
+                    totalText = BitwardenString.billing_rate_per_year.asText("$45.55"),
                     nextChargeTotalText = "$45.55",
+                    nextChargeDateText = "April 2, 2026",
+                    showCancelButton = true,
+                ),
+                handlers = PlanHandlers(
+                    onBackClick = {},
+                    onUpgradeNowClick = {},
+                    onDismissError = {},
+                    onRetryClick = {},
+                    onRetryPricingClick = {},
+                    onClosePricingErrorClick = {},
+                    onCancelWaiting = {},
+                    onGoBackClick = {},
+                    onSyncClick = {},
+                    onContinueClick = {},
+                    onManagePlanClick = {},
+                    onCancelPremiumClick = {},
+                    onConfirmCancelClick = {},
+                    onDismissCancelConfirmation = {},
+                    onDismissPortalError = {},
+                    onRetryPortalClick = {},
+                    onRetrySubscriptionClick = {},
+                ),
+            )
+        }
+    }
+}
+
+@Preview
+@OmitFromCoverage
+@Composable
+private fun PlanScreenPremiumAccountZeroState_preview() {
+    BitwardenTheme {
+        BitwardenScaffold {
+            PremiumContent(
+                viewState = PlanState.ViewState.Premium(
+                    status = PremiumSubscriptionStatus.ACTIVE,
+                    billingAmountText = BitwardenString.billing_rate_per_year.asText("$19.80"),
+                    storageCostText = null,
+                    discountAmountText = null,
+                    estimatedTaxText = "$0.00",
+                    totalText = BitwardenString.billing_rate_per_year.asText("$19.80"),
+                    nextChargeTotalText = "$19.80",
                     nextChargeDateText = "April 2, 2026",
                     showCancelButton = true,
                 ),

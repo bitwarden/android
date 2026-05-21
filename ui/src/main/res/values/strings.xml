@@ -1295,6 +1295,7 @@ Do you want to switch to this account?</string>
     <string name="storage_cost">Storage cost</string>
     <string name="discount">Discount</string>
     <string name="estimated_tax">Estimated tax</string>
+    <string name="total">Total</string>
     <string name="billing_rate_per_year">%1$s / year</string>
     <string name="billing_rate_per_month">%1$s / month</string>
     <string name="manage_plan">Manage plan</string>
