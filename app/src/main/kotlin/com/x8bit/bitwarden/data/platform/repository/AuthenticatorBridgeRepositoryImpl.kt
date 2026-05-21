@@ -12,7 +12,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.repository.util.toAccountCryptographicState
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
-import com.x8bit.bitwarden.data.platform.repository.util.sanitizeTotpUri
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.ScopedVaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
@@ -104,11 +103,6 @@ class AuthenticatorBridgeRepositoryImpl(
                                 decryptedCipher.login?.totp?.let { rawTotp ->
                                     SharedAccountData.CipherData(
                                         uri = rawTotp,
-                                        // TODO: PM-34085 Remove the legacyUri.
-                                        legacyUri = rawTotp.sanitizeTotpUri(
-                                            issuer = cipherName,
-                                            username = username,
-                                        ),
                                         id = cipherId,
                                         name = cipherName,
                                         username = username,

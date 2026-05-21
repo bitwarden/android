@@ -16,11 +16,7 @@ fun List<SharedAccountData.Account>.toAuthenticatorItems(): List<AuthenticatorIt
                 val issuer = uri
                     .getQueryParameter(TotpCodeManager.ISSUER_PARAM)
                     ?.takeUnless { it.isBlank() }
-                    ?: cipherData.name.takeUnless {
-                        // TODO: PM-34085 The cipher name will never be blank once we
-                        // TODO: remove the legacy support.
-                        it.isBlank()
-                    }
+                    ?: cipherData.name
                 val label = uri
                     .pathSegments
                     .firstOrNull()
