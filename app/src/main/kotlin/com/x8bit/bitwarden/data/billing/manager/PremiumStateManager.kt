@@ -39,6 +39,18 @@ interface PremiumStateManager {
     val subscriptionStatusStateFlow: StateFlow<SubscriptionStatusState>
 
     /**
+     * Emits whether the current state should be treated as self-hosted for premium upgrade
+     * gating. Reactive equivalent of [isSelfHosted].
+     */
+    val isSelfHostedFlow: StateFlow<Boolean>
+
+    /**
+     * `true` when the current state should be treated as self-hosted for premium upgrade
+     * gating, or `false` otherwise.
+     */
+    val isSelfHosted: Boolean
+
+    /**
      * Returns `true` when the in-app upgrade flow is available, or `false` otherwise.
      */
     fun isInAppUpgradeAvailable(): Boolean

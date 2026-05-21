@@ -6,6 +6,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.util.toFormattedDateStyle
+import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -27,6 +28,7 @@ import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionStatusState
 import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -65,6 +67,7 @@ class PlanViewModel @Inject constructor(
     private val billingRepository: BillingRepository,
     private val authRepository: AuthRepository,
     private val premiumStateManager: PremiumStateManager,
+    private val environmentRepository: EnvironmentRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val vaultRepository: VaultRepository,
     private val clock: Clock,
@@ -78,12 +81,13 @@ class PlanViewModel @Inject constructor(
             ?.isPremium == true
         val showsPremiumView = isPremium ||
             premiumStateManager.subscriptionStatusStateFlow.value.isPremiumViewEligible()
+        val isSelfHosted = premiumStateManager.isSelfHosted
         PlanState(
             planMode = planMode,
-            viewState = if (showsPremiumView) {
-                PlanState.ViewState.Premium()
-            } else {
-                PlanState.ViewState.Free(
+            viewState = when {
+                showsPremiumView -> PlanState.ViewState.Premium()
+                isSelfHosted -> PlanState.ViewState.Free.SelfHosted
+                else -> PlanState.ViewState.Free.Cloud(
                     rate = PLACEHOLDER_TEXT,
                     checkoutUrl = null,
                     isAwaitingPremiumStatus = false,
@@ -120,7 +124,7 @@ class PlanViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        onFreeContent {
+        onFreeCloudContent {
             viewModelScope.launch {
                 sendAction(
                     PlanAction.Internal.PricingResultReceive(
@@ -165,6 +169,7 @@ class PlanViewModel @Inject constructor(
             is PlanAction.ConfirmCancelClick -> handleConfirmCancelClick()
             is PlanAction.DismissCancelConfirmation -> handleDismissCancelConfirmation()
             is PlanAction.DismissPortalError -> handleDismissPortalError()
+            is PlanAction.RetryPortalClick -> handleRetryPortalClick()
             is PlanAction.RetrySubscriptionClick -> handleRetrySubscriptionClick()
             is PlanAction.Internal.CheckoutUrlReceive -> handleCheckoutUrlReceive(action)
             is PlanAction.Internal.UserStateUpdateReceive -> handleUserStateUpdateReceive(action)
@@ -242,7 +247,7 @@ class PlanViewModel @Inject constructor(
     }
 
     private fun handleGoBackClick() {
-        onFreeContent { freeState ->
+        onFreeCloudContent { freeState ->
             freeState.checkoutUrl?.let { url ->
                 sendEvent(
                     PlanEvent.LaunchBrowser(
@@ -269,7 +274,7 @@ class PlanViewModel @Inject constructor(
                         ),
                     ),
                 )
-                onFreeContent { freeState ->
+                onFreeCloudContent { freeState ->
                     mutableStateFlow.update {
                         it.copy(
                             viewState = freeState.copy(
@@ -294,7 +299,11 @@ class PlanViewModel @Inject constructor(
     // region Premium user handlers
 
     private fun handleManagePlanClick() {
-        launchPortalFetch()
+        val webVaultBaseUrl = environmentRepository
+            .environment
+            .environmentUrlData
+            .baseWebVaultUrlOrDefault
+        sendEvent(PlanEvent.LaunchUri(url = "$webVaultBaseUrl/#/settings/subscription/premium"))
     }
 
     private fun handleCancelPremiumClick() {
@@ -316,6 +325,10 @@ class PlanViewModel @Inject constructor(
 
     private fun handleDismissCancelConfirmation() {
         mutableStateFlow.update { it.copy(dialogState = null) }
+    }
+
+    private fun handleRetryPortalClick() {
+        launchPortalFetch()
     }
 
     private fun handleDismissPortalError() {
@@ -386,7 +399,7 @@ class PlanViewModel @Inject constructor(
             SubscriptionResult.NotFound -> {
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = PlanState.ViewState.Free(
+                        viewState = PlanState.ViewState.Free.Cloud(
                             rate = PLACEHOLDER_TEXT,
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = false,
@@ -426,8 +439,8 @@ class PlanViewModel @Inject constructor(
         val status = (action.state as? SubscriptionStatusState.Available)?.status
             ?: return
         if (!status.isPremiumViewEligible()) return
-        onFreeContent { freeState ->
-            if (freeState.isAwaitingPremiumStatus) return@onFreeContent
+        onFreeCloudContent { freeState ->
+            if (freeState.isAwaitingPremiumStatus) return@onFreeCloudContent
             mutableStateFlow.update {
                 it.copy(
                     viewState = PlanState.ViewState.Premium(),
@@ -453,8 +466,8 @@ class PlanViewModel @Inject constructor(
     private fun handleUserStateUpdateReceive(
         action: PlanAction.Internal.UserStateUpdateReceive,
     ) {
-        onFreeContent { freeState ->
-            if (!freeState.isAwaitingPremiumStatus) return@onFreeContent
+        onFreeCloudContent { freeState ->
+            if (!freeState.isAwaitingPremiumStatus) return@onFreeCloudContent
 
             val isPremium = action.userState?.activeAccount?.isPremium == true
             if (isPremium) {
@@ -471,7 +484,7 @@ class PlanViewModel @Inject constructor(
         specialCircumstanceManager.specialCircumstance = null
 
         if (checkoutResult.callbackResult is PremiumCheckoutCallbackResult.Canceled) {
-            onFreeContent { freeState ->
+            onFreeCloudContent { freeState ->
                 mutableStateFlow.update {
                     it.copy(
                         viewState = freeState.copy(
@@ -492,7 +505,7 @@ class PlanViewModel @Inject constructor(
         if (isPremium) {
             onPremiumUpgradeSuccess()
         } else {
-            onFreeContent { freeState ->
+            onFreeCloudContent { freeState ->
                 mutableStateFlow.update {
                     it.copy(
                         viewState = freeState.copy(
@@ -516,8 +529,8 @@ class PlanViewModel @Inject constructor(
     }
 
     private fun handleSyncCompleteReceive() {
-        onFreeContent { freeState ->
-            if (!freeState.isAwaitingPremiumStatus) return@onFreeContent
+        onFreeCloudContent { freeState ->
+            if (!freeState.isAwaitingPremiumStatus) return@onFreeCloudContent
 
             val isPremium = authRepository
                 .userStateFlow
@@ -537,7 +550,7 @@ class PlanViewModel @Inject constructor(
     }
 
     private fun onPremiumUpgradeSuccess() {
-        onFreeContent {
+        onFreeCloudContent {
             mutableStateFlow.update {
                 it.copy(
                     viewState = PlanState.ViewState.Premium(),
@@ -556,7 +569,7 @@ class PlanViewModel @Inject constructor(
         }
         // The Upgraded to Premium route uses `launchSingleTop = true` so a duplicate event is a
         // no-op for the user. The event itself is harmless to re-emit; the state mutation above
-        // is what's guarded by `onFreeContent`.
+        // is what's guarded by `onFreeCloudContent`.
         sendEvent(PlanEvent.NavigateToUpgradedToPremium)
     }
 
@@ -569,8 +582,10 @@ class PlanViewModel @Inject constructor(
                     .format(result.annualPrice / MONTHS_PER_YEAR)
                 mutableStateFlow.update { currentState ->
                     val updatedViewState = when (val vs = currentState.viewState) {
-                        is PlanState.ViewState.Free -> vs.copy(rate = formattedRate)
-                        is PlanState.ViewState.Premium -> vs
+                        is PlanState.ViewState.Free.Cloud -> vs.copy(rate = formattedRate)
+                        is PlanState.ViewState.Free.SelfHosted,
+                        is PlanState.ViewState.Premium,
+                            -> vs
                     }
                     currentState.copy(
                         viewState = updatedViewState,
@@ -610,10 +625,10 @@ class PlanViewModel @Inject constructor(
         }
     }
 
-    private inline fun onFreeContent(
-        block: (PlanState.ViewState.Free) -> Unit,
+    private inline fun onFreeCloudContent(
+        block: (PlanState.ViewState.Free.Cloud) -> Unit,
     ) {
-        (state.viewState as? PlanState.ViewState.Free)?.let(block)
+        (state.viewState as? PlanState.ViewState.Free.Cloud)?.let(block)
     }
 
     private inline fun onPremiumContent(
@@ -728,14 +743,30 @@ data class PlanState(
     sealed class ViewState : Parcelable {
 
         /**
-         * Free user view — shows upgrade pricing and feature list.
+         * Free user view — shows the upgrade flow for cloud accounts or a
+         * "manage on web vault" info card for self-hosted accounts.
          */
-        @Parcelize
-        data class Free(
-            val rate: String,
-            val checkoutUrl: String?,
-            val isAwaitingPremiumStatus: Boolean,
-        ) : ViewState()
+        sealed class Free : ViewState() {
+
+            /**
+             * Free user on a cloud-hosted environment — shows upgrade pricing
+             * and feature list.
+             */
+            @Parcelize
+            data class Cloud(
+                val rate: String,
+                val checkoutUrl: String?,
+                val isAwaitingPremiumStatus: Boolean,
+            ) : Free()
+
+            /**
+             * Free user on a self-hosted environment — Stripe checkout is
+             * unavailable, so the screen redirects the user to manage their
+             * subscription on the web vault.
+             */
+            @Parcelize
+            data object SelfHosted : Free()
+        }
 
         /**
          * Premium user view — shows subscription details and management options.
@@ -855,6 +886,13 @@ sealed class PlanEvent {
     ) : PlanEvent()
 
     /**
+     * Launch the user's browser with the given web vault [url].
+     */
+    data class LaunchUri(
+        val url: String,
+    ) : PlanEvent()
+
+    /**
      * Navigate back to the previous screen.
      */
     data object NavigateBack : PlanEvent()
@@ -952,6 +990,11 @@ sealed class PlanAction {
      * The user dismissed the portal error dialog.
      */
     data object DismissPortalError : PlanAction()
+
+    /**
+     * The user clicked retry on the portal error dialog.
+     */
+    data object RetryPortalClick : PlanAction()
 
     /**
      * The user clicked retry on the subscription error dialog.

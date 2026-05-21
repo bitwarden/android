@@ -2,6 +2,9 @@ package com.x8bit.bitwarden.ui.platform.feature.premium.plan
 
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.getOrNull
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
@@ -11,11 +14,8 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.text.font.FontWeight
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
@@ -136,14 +136,66 @@ class PlanScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `upgrade now button click should send UpgradeNowClick action`() {
+    fun `upgrade now button click should show continue to Stripe confirmation dialog`() {
+        composeTestRule
+            .onAllNodesWithText("Continue to Stripe?")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertDoesNotExist()
+
         composeTestRule
             .onNodeWithTag("UpgradeNowButton")
             .performScrollTo()
             .performClick()
-        verify {
-            viewModel.trySendAction(PlanAction.UpgradeNowClick)
-        }
+
+        composeTestRule
+            .onAllNodesWithText("Continue to Stripe?")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+        composeTestRule
+            .onAllNodesWithText(
+                "You’ll go to Stripe’s secure checkout to complete your purchase.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+        verify(exactly = 0) { viewModel.trySendAction(PlanAction.UpgradeNowClick) }
+    }
+
+    @Test
+    fun `upgrade now dialog continue click should send UpgradeNowClick action and dismiss`() {
+        composeTestRule
+            .onNodeWithTag("UpgradeNowButton")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Continue")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify { viewModel.trySendAction(PlanAction.UpgradeNowClick) }
+        composeTestRule
+            .onAllNodesWithText("Continue to Stripe?")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `upgrade now dialog cancel click should dismiss without sending action`() {
+        composeTestRule
+            .onNodeWithTag("UpgradeNowButton")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 0) { viewModel.trySendAction(PlanAction.UpgradeNowClick) }
+        composeTestRule
+            .onAllNodesWithText("Continue to Stripe?")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertDoesNotExist()
     }
 
     @Test
@@ -739,13 +791,78 @@ class PlanScreenTest : BitwardenComposeTest() {
     // region Action buttons
 
     @Test
-    fun `manage plan button click should send ManagePlanClick action`() {
+    fun `manage plan button click should show continue to web app confirmation dialog`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_PREMIUM_VIEW_STATE) }
+        composeTestRule
+            .onAllNodesWithText("Continue to web app?")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithTag("ManagePlanButton")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Continue to web app?")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+        composeTestRule
+            .onAllNodesWithText(
+                "Manage your subscription plan in the Bitwarden web app.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+        verify(exactly = 0) { viewModel.trySendAction(PlanAction.ManagePlanClick) }
+    }
+
+    @Test
+    fun `manage plan dialog continue click should send ManagePlanClick action and dismiss`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_PREMIUM_VIEW_STATE) }
         composeTestRule
             .onNodeWithTag("ManagePlanButton")
             .performScrollTo()
             .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Continue")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
         verify { viewModel.trySendAction(PlanAction.ManagePlanClick) }
+        composeTestRule
+            .onAllNodesWithText("Continue to web app?")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `manage plan dialog cancel click should dismiss without sending action`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_PREMIUM_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithTag("ManagePlanButton")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 0) { viewModel.trySendAction(PlanAction.ManagePlanClick) }
+        composeTestRule
+            .onAllNodesWithText("Continue to web app?")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `manage plan button should announce external-link affordance`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_PREMIUM_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithContentDescription(label = "Manage plan, External link")
+            .performScrollTo()
+            .assertIsDisplayed()
     }
 
     @Test
@@ -758,6 +875,19 @@ class PlanScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTag("CancelPremiumButton")
             .assertExists()
+    }
+
+    @Test
+    fun `cancel premium button should announce external-link affordance`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(showCancelButton = true),
+            )
+        }
+        composeTestRule
+            .onNodeWithContentDescription(label = "Cancel Premium, External link")
+            .performScrollTo()
+            .assertIsDisplayed()
     }
 
     @Test
@@ -934,6 +1064,21 @@ class PlanScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `portal error dialog try again click should send RetryPortalClick action`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_PREMIUM_VIEW_STATE,
+                dialogState = PlanState.DialogState.PortalError,
+            )
+        }
+        composeTestRule
+            .onAllNodesWithText("Try again")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify { viewModel.trySendAction(PlanAction.RetryPortalClick) }
+    }
+
+    @Test
     fun `cancel confirmation dialog should render when dialogState is CancelConfirmation`() {
         composeTestRule
             .onAllNodesWithText("Cancel Premium")
@@ -950,12 +1095,12 @@ class PlanScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onAllNodesWithText("Cancel Premium")
+            .onAllNodesWithText("Continue to Stripe?")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertExists()
         composeTestRule
             .onAllNodesWithText(
-                "You’ll continue to have Premium access until April 2, 2026.",
+                "You’ll be taken to Stripe to manage your subscription cancellation.",
             )
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertExists()
@@ -972,7 +1117,7 @@ class PlanScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onAllNodesWithText("Cancel now")
+            .onAllNodesWithText("Continue")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         verify { viewModel.trySendAction(PlanAction.ConfirmCancelClick) }
@@ -989,13 +1134,62 @@ class PlanScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onAllNodesWithText("Close")
+            .onAllNodesWithText("Cancel")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         verify { viewModel.trySendAction(PlanAction.DismissCancelConfirmation) }
     }
 
     // endregion Premium-flow dialogs
+
+    // region Self-hosted free flow
+
+    @Test
+    fun `manage subscription info callout should render when self-hosted free`() {
+        mutableStateFlow.update {
+            it.copy(viewState = PlanState.ViewState.Free.SelfHosted)
+        }
+        composeTestRule
+            .onNodeWithText(
+                "To manage your Premium subscription, " +
+                    "you’ll need to login to your web vault on a computer.",
+            )
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithTag("SelfHostedManageOnWebVaultCallout")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `premium features header should render when self-hosted free`() {
+        mutableStateFlow.update {
+            it.copy(viewState = PlanState.ViewState.Free.SelfHosted)
+        }
+        composeTestRule
+            .onNodeWithText("Unlock more advanced features with a Premium plan.")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `premium feature list items should render when self-hosted free`() {
+        mutableStateFlow.update {
+            it.copy(viewState = PlanState.ViewState.Free.SelfHosted)
+        }
+        composeTestRule
+            .onNodeWithText("Built-in authenticator")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Emergency access")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Secure file storage")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Breach monitoring")
+            .assertIsDisplayed()
+    }
+
+    // endregion Self-hosted free flow
 
     // region LaunchPortal event
 
@@ -1007,11 +1201,22 @@ class PlanScreenTest : BitwardenComposeTest() {
     }
 
     // endregion LaunchPortal event
+
+    // region LaunchUri event
+
+    @Test
+    fun `LaunchUri event should call intentManager launchUri`() {
+        val url = "https://vault.bitwarden.com/#/settings/subscription/premium"
+        mutableEventFlow.tryEmit(PlanEvent.LaunchUri(url = url))
+        verify { intentManager.launchUri(url.toUri()) }
+    }
+
+    // endregion LaunchUri event
 }
 
 private val DEFAULT_FREE_STATE = PlanState(
     planMode = PlanMode.Modal,
-    viewState = PlanState.ViewState.Free(
+    viewState = PlanState.ViewState.Free.Cloud(
         rate = "$1.65",
         checkoutUrl = null,
         isAwaitingPremiumStatus = false,

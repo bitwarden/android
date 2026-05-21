@@ -30,12 +30,9 @@ sealed class FlagKey<out T : Any> {
          */
         val activePasswordManagerFlags: List<FlagKey<*>> by lazy {
             listOf(
-                CredentialExchangeProtocolImport,
-                CredentialExchangeProtocolExport,
                 ForceUpdateKdfSettings,
                 NoLogoutOnKdfChange,
                 MigrateMyVaultToMyItems,
-                SendEmailVerification,
                 CardScanner,
                 MobilePremiumUpgrade,
                 ManageDevices,
@@ -45,27 +42,10 @@ sealed class FlagKey<out T : Any> {
                 V2EncryptionPassword,
                 V2EncryptionTde,
                 NewItemTypes,
+                DebugDisableSelfHostPremiumCheck,
                 FillAssistTargetingRules,
             )
         }
-    }
-
-    /**
-     * Data object holding hte feature flag key for the Credential Exchange Protocol (CXP) import
-     * feature.
-     */
-    data object CredentialExchangeProtocolImport : FlagKey<Boolean>() {
-        override val keyName: String = "cxp-import-mobile"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key for the Credential Exchange Protocol (CXP) export
-     * feature.
-     */
-    data object CredentialExchangeProtocolExport : FlagKey<Boolean>() {
-        override val keyName: String = "cxp-export-mobile"
-        override val defaultValue: Boolean = false
     }
 
     /**
@@ -97,14 +77,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object MigrateMyVaultToMyItems : FlagKey<Boolean>() {
         override val keyName: String = "pm-20558-migrate-myvault-to-myitems"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key for the Send Email Verification feature.
-     */
-    data object SendEmailVerification : FlagKey<Boolean>() {
-        override val keyName: String = "pm-19051-send-email-verification"
         override val defaultValue: Boolean = false
     }
 
@@ -186,6 +158,16 @@ sealed class FlagKey<out T : Any> {
      */
     data object FillAssistTargetingRules : FlagKey<Boolean>() {
         override val keyName: String = "fill-assist-targeting-rules"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Debug-only flag that, when enabled, makes self-hosted environments behave as cloud
+     * environments for premium-upgrade gating. Used by QA to test the premium upgrade flow
+     * against internal self-hosted environments.
+     */
+    data object DebugDisableSelfHostPremiumCheck : FlagKey<Boolean>() {
+        override val keyName: String = "debug-disable-self-host-premium-check"
         override val defaultValue: Boolean = false
     }
 

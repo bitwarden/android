@@ -41,11 +41,13 @@ class SettingsViewModelTest : BaseViewModelTest() {
 
     private val mutablePlanRowEligibleFlow = MutableStateFlow(false)
     private val mutableUpgradedToPremiumCardEligibleFlow = MutableStateFlow(false)
+    private val mutableIsSelfHostedFlow = MutableStateFlow(false)
     private val premiumStateManager: PremiumStateManager = mockk(relaxed = true) {
         every { isPlanRowEligibleFlow } returns mutablePlanRowEligibleFlow
         every {
             isUpgradedToPremiumCardEligibleFlow
         } returns mutableUpgradedToPremiumCardEligibleFlow
+        every { isSelfHostedFlow } returns mutableIsSelfHostedFlow
     }
 
     @BeforeEach
@@ -320,6 +322,54 @@ class SettingsViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(SettingsAction.UpgradedToPremiumCardDismiss)
         verify(exactly = 1) {
             premiumStateManager.dismissUpgradedToPremiumCard()
+        }
+    }
+
+    @Test
+    fun `Plan row should be hidden when self-hosted status flow emits true`() {
+        mutablePlanRowEligibleFlow.value = true
+        mutableIsSelfHostedFlow.value = true
+        val viewModel = createViewModel()
+        assertFalse(
+            viewModel.stateFlow.value.settingRows
+                .contains(Settings.PLAN),
+        )
+    }
+
+    @Test
+    fun `Plan row should update when self-hosted status flow flips to true`() = runTest {
+        mutablePlanRowEligibleFlow.value = true
+        val viewModel = createViewModel()
+        assertTrue(
+            viewModel.stateFlow.value.settingRows
+                .contains(Settings.PLAN),
+        )
+
+        mutableIsSelfHostedFlow.value = true
+        viewModel.stateFlow.test {
+            assertFalse(
+                awaitItem().settingRows.contains(Settings.PLAN),
+            )
+        }
+    }
+
+    @Test
+    fun `Plan row should re-appear when self-hosted status flow flips back to false`() = runTest {
+        // Simulates the debug-disable flag being toggled on while self-hosted: the flow emits
+        // false even though the environment is still self-hosted.
+        mutablePlanRowEligibleFlow.value = true
+        mutableIsSelfHostedFlow.value = true
+        val viewModel = createViewModel()
+        assertFalse(
+            viewModel.stateFlow.value.settingRows
+                .contains(Settings.PLAN),
+        )
+
+        mutableIsSelfHostedFlow.value = false
+        viewModel.stateFlow.test {
+            assertTrue(
+                awaitItem().settingRows.contains(Settings.PLAN),
+            )
         }
     }
 

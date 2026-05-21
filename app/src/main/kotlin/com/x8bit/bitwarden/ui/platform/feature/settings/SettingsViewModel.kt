@@ -41,6 +41,7 @@ class SettingsViewModel @Inject constructor(
         autoFillCount = firstTimeActionManager.allAutofillSettingsBadgeCountFlow.value,
         vaultCount = firstTimeActionManager.allVaultSettingsBadgeCountFlow.value,
         isPlanRowEligible = premiumStateManager.isPlanRowEligibleFlow.value,
+        isSelfHosted = premiumStateManager.isSelfHostedFlow.value,
         isUpgradedToPremiumCardEligible = premiumStateManager
             .isUpgradedToPremiumCardEligibleFlow
             .value,
@@ -76,6 +77,12 @@ class SettingsViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        premiumStateManager
+            .isSelfHostedFlow
+            .map { SettingsAction.Internal.SelfHostedStatusReceive(isSelfHosted = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         when (specialCircumstanceManager.specialCircumstance) {
             SpecialCircumstance.AccountSecurityShortcut -> {
                 sendEvent(SettingsEvent.NavigateAccountSecurityShortcut)
@@ -101,6 +108,18 @@ class SettingsViewModel @Inject constructor(
 
         is SettingsAction.Internal.UpgradedToPremiumCardEligibilityReceive -> {
             handleUpgradedToPremiumCardEligibilityReceive(action)
+        }
+
+        is SettingsAction.Internal.SelfHostedStatusReceive -> {
+            handleSelfHostedStatusReceive(action)
+        }
+    }
+
+    private fun handleSelfHostedStatusReceive(
+        action: SettingsAction.Internal.SelfHostedStatusReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isSelfHosted = action.isSelfHosted)
         }
     }
 
@@ -185,6 +204,7 @@ data class SettingsState(
     private val securityCount: Int,
     private val vaultCount: Int,
     private val isPlanRowEligible: Boolean,
+    private val isSelfHosted: Boolean = false,
     private val isUpgradedToPremiumCardEligible: Boolean = false,
 ) {
     val shouldShowCloseButton: Boolean = isPreAuth
@@ -199,9 +219,10 @@ data class SettingsState(
      * Whether the plan row should be shown. The row is visible post-authentication when the user
      * is eligible per [PremiumStateManager.isPlanRowEligibleFlow] — currently, when the in-app
      * upgrade feature is enabled and the user is not relying solely on organization-granted
-     * Premium.
+     * Premium — and the account is on a cloud-hosted environment. Self-hosted users manage their
+     * subscription on the web vault.
      */
-    private val shouldShowPlanRow: Boolean = !isPreAuth && isPlanRowEligible
+    private val shouldShowPlanRow: Boolean = !isPreAuth && isPlanRowEligible && !isSelfHosted
 
     val settingRows: ImmutableList<Settings> = Settings
         .entries
@@ -333,6 +354,14 @@ sealed class SettingsAction {
          */
         data class UpgradedToPremiumCardEligibilityReceive(
             val isEligible: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that the effective self-hosted status for premium gating has been updated —
+         * driven by environment changes or by the debug-only self-host-bypass flag.
+         */
+        data class SelfHostedStatusReceive(
+            val isSelfHosted: Boolean,
         ) : Internal()
     }
 }

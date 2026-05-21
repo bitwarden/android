@@ -472,8 +472,6 @@ Scanning will happen automatically.</string>
     <string name="maximum_access_count_info">If set, users will no longer be able to access this Send once the maximum access count is reached.</string>
     <string name="maximum_access_count_reached">Max access count reached</string>
     <string name="current_access_count">Current access count: %s</string>
-    <string name="new_password">New password</string>
-    <string name="password_info">Require this password to view the Send.</string>
     <string name="remove_password">Remove password</string>
     <string name="removing_send_password">Removing password</string>
     <string name="password_removed">Password removed</string>
@@ -892,8 +890,6 @@ Do you want to switch to this account?</string>
     <string name="copy_address">Copy address</string>
     <string name="biometrics_no_longer_supported_title">Biometrics are no longer supported on this device</string>
     <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
-    <string name="cxp_import">CXP Import</string>
-    <string name="cxp_export">CXP Export</string>
     <string name="choose_three_or_four_random_words">Choose three or four random words</string>
     <string name="pick_three_or_four_random_unrelated_words">Pick three or four random, unrelated words that you can easily remember. Think of <annotation emphasis="bold">objects, places, or things</annotation> you like.</string>
     <string name="combine_those_words_together">Combine those words together</string>
@@ -1217,6 +1213,7 @@ Do you want to switch to this account?</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Upgrade to Premium</string>
     <string name="plan">Plan</string>
+    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
     <string name="unlock_advanced_security_features">Unlock advanced security features</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">This item is archived.</string>
@@ -1277,7 +1274,7 @@ Do you want to switch to this account?</string>
     <string name="secure_file_storage">Secure file storage</string>
     <string name="breach_monitoring">Breach monitoring</string>
     <string name="upgrade_now">Upgrade now</string>
-    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
     <string name="opening_checkout">Opening checkout…</string>
     <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
     <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
@@ -1301,9 +1298,8 @@ Do you want to switch to this account?</string>
     <string name="billing_rate_per_year">%1$s / year</string>
     <string name="billing_rate_per_month">%1$s / month</string>
     <string name="manage_plan">Manage plan</string>
+    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Manage your subscription plan in the Bitwarden web app.</string>
     <string name="cancel_premium">Cancel Premium</string>
-    <string name="cancel_now">Cancel now</string>
-    <string name="cancel_premium_confirmation">You’ll continue to have Premium access until %1$s.</string>
     <string name="subscription_status_active">Active</string>
     <string name="subscription_status_canceled">Canceled</string>
     <string name="subscription_status_past_due">Past due</string>
@@ -1391,4 +1387,6 @@ Do you want to switch to this account?</string>
     <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Bitwarden needs local network access to sync with your server. Without this permission, the app won’t be able to connect.</string>
     <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Without this permission, Bitwarden won’t be able to connect and sync with your server. You can enable this in your device settings.</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Your request was interrupted because the app needs local network access. You can enable this in your device settings.</string>
+    <string name="continue_to_stripe">Continue to Stripe?</string>
+    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">You’ll be taken to Stripe to manage your subscription cancellation.</string>
 </resources>
