@@ -13,6 +13,7 @@ data class VaultLoginItemTypeHandlers(
     val onCopyPasswordClick: () -> Unit,
     val onCopyTotpCodeClick: () -> Unit,
     val onAuthenticatorHelpToolTipClick: () -> Unit,
+    val onTotpRequiresPremiumClick: () -> Unit,
     val onCopyUriClick: (String) -> Unit,
     val onCopyUsernameClick: () -> Unit,
     val onLaunchUriClick: (String) -> Unit,
@@ -40,6 +41,11 @@ data class VaultLoginItemTypeHandlers(
                 onAuthenticatorHelpToolTipClick = {
                     viewModel.trySendAction(
                         VaultItemAction.ItemType.Login.AuthenticatorHelpToolTipClick,
+                    )
+                },
+                onTotpRequiresPremiumClick = {
+                    viewModel.trySendAction(
+                        VaultItemAction.ItemType.Login.TotpRequiresPremiumClick,
                     )
                 },
                 onCopyUriClick = {

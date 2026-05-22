@@ -28,6 +28,8 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
  * is clicked.
  * @property onAuthenticatorHelpToolTipClick Handles the action when the authenticator help tooltip
  * is clicked.
+ * @property onTotpRequiresPremiumClick Handles the action when the Premium subscription required
+ * CTA is clicked in place of the authenticator key for non-Premium accounts.
  */
 @Suppress("LongParameterList")
 data class VaultAddEditLoginTypeHandlers(
@@ -47,6 +49,7 @@ data class VaultAddEditLoginTypeHandlers(
     val onStartLoginCoachMarkTour: () -> Unit,
     val onDismissLearnAboutLoginsCard: () -> Unit,
     val onAuthenticatorHelpToolTipClick: () -> Unit,
+    val onTotpRequiresPremiumClick: () -> Unit,
     val onLearnMoreClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
@@ -110,6 +113,11 @@ data class VaultAddEditLoginTypeHandlers(
                 onAuthenticatorHelpToolTipClick = {
                     viewModel.trySendAction(
                         VaultAddEditAction.ItemType.LoginType.AuthenticatorHelpToolTipClick,
+                    )
+                },
+                onTotpRequiresPremiumClick = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.LoginType.TotpRequiresPremiumClick,
                     )
                 },
                 onCopyTotpKeyClick = { totpKey ->

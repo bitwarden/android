@@ -134,6 +134,7 @@ fun LazyListScope.vaultAddEditLoginItems(
         TotpRow(
             totpKey = loginState.totp,
             canViewTotp = loginState.canViewPassword,
+            isAuthenticatorKeyPremiumGated = loginState.isAuthenticatorKeyPremiumGated,
             loginItemTypeHandlers = loginItemTypeHandlers,
             onTotpSetupClick = onTotpSetupClick,
             modifier = Modifier.fillMaxWidth(),
@@ -362,6 +363,7 @@ private fun CoachMarkScope<AddEditItemCoachMark>.PasswordRow(
 private fun TotpRow(
     totpKey: String?,
     canViewTotp: Boolean,
+    isAuthenticatorKeyPremiumGated: Boolean,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
     onTotpSetupClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -393,18 +395,31 @@ private fun TotpRow(
         ),
         supportingContentPadding = PaddingValues(),
         supportingContent = {
-            BitwardenClickableText(
-                label = stringResource(id = BitwardenString.set_up_authenticator_key),
-                onClick = onTotpSetupClick,
-                leadingIcon = painterResource(id = BitwardenDrawable.ic_camera_small),
-                style = BitwardenTheme.typography.labelMedium,
-                innerPadding = PaddingValues(all = 16.dp),
-                isEnabled = canViewTotp,
-                cornerSize = 0.dp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("SetupTotpButton"),
-            )
+            if (isAuthenticatorKeyPremiumGated) {
+                BitwardenClickableText(
+                    label = stringResource(id = BitwardenString.premium_subscription_required),
+                    onClick = loginItemTypeHandlers.onTotpRequiresPremiumClick,
+                    style = BitwardenTheme.typography.labelMedium,
+                    innerPadding = PaddingValues(all = 16.dp),
+                    cornerSize = 0.dp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("LoginTotpPremiumRequired"),
+                )
+            } else {
+                BitwardenClickableText(
+                    label = stringResource(id = BitwardenString.set_up_authenticator_key),
+                    onClick = onTotpSetupClick,
+                    leadingIcon = painterResource(id = BitwardenDrawable.ic_camera_small),
+                    style = BitwardenTheme.typography.labelMedium,
+                    innerPadding = PaddingValues(all = 16.dp),
+                    isEnabled = canViewTotp,
+                    cornerSize = 0.dp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("SetupTotpButton"),
+                )
+            }
         },
         passwordFieldTestTag = "LoginTotpEntry",
         cardStyle = CardStyle.Full,

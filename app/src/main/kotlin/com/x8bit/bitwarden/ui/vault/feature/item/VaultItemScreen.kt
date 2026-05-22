@@ -156,6 +156,9 @@ fun VaultItemScreen(
         onUpgradeToPremiumClick = {
             viewModel.trySendAction(VaultItemAction.Common.UpgradeToPremiumClick)
         },
+        onNavigateToPlanClick = {
+            viewModel.trySendAction(VaultItemAction.Common.NavigateToPlanClick)
+        },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -301,6 +304,7 @@ fun VaultItemScreen(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun VaultItemDialogs(
     dialog: VaultItemState.DialogState?,
@@ -309,6 +313,7 @@ private fun VaultItemDialogs(
     onConfirmCloneWithoutFido2Credential: () -> Unit,
     onConfirmRestoreAction: () -> Unit,
     onUpgradeToPremiumClick: () -> Unit,
+    onNavigateToPlanClick: () -> Unit,
 ) {
     when (dialog) {
         is VaultItemState.DialogState.ArchiveRequiresPremium -> {
@@ -317,7 +322,21 @@ private fun VaultItemDialogs(
                 message = stringResource(id = BitwardenString.archiving_items_is_a_premium_feature),
                 confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
                 dismissButtonText = stringResource(id = BitwardenString.cancel),
-                onConfirmClick = onUpgradeToPremiumClick,
+                onConfirmClick = onNavigateToPlanClick,
+                onDismissClick = onDismissRequest,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is VaultItemState.DialogState.TotpRequiresPremium -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = BitwardenString.premium_subscription_required),
+                message = stringResource(
+                    id = BitwardenString.authenticator_key_is_a_premium_feature,
+                ),
+                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
+                onConfirmClick = onNavigateToPlanClick,
                 onDismissClick = onDismissRequest,
                 onDismissRequest = onDismissRequest,
             )

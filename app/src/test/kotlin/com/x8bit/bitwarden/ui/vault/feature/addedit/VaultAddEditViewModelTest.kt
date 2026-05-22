@@ -586,6 +586,37 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
     @Test
+    fun `NavigateToPlanClick should emit NavigateToPlanModal regardless of in-app upgrade`() =
+        runTest {
+            every { premiumStateManager.isInAppUpgradeAvailable() } returns false
+            val viewModel = createAddVaultItemViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.NavigateToPlanClick)
+                assertEquals(
+                    VaultAddEditEvent.NavigateToPlanModal,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `NavigateToPlanClick should clear the active dialog`() {
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = createVaultAddItemState(
+                    dialogState = VaultAddEditState.DialogState.TotpRequiresPremium,
+                ),
+                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultItemCipherType = VaultItemCipherType.LOGIN,
+            ),
+        )
+
+        viewModel.trySendAction(VaultAddEditAction.Common.NavigateToPlanClick)
+
+        assertEquals(null, viewModel.stateFlow.value.dialog)
+    }
+
+    @Test
     fun `snackbar relay emission should send ShowSnackbar`() = runTest {
         val viewModel = createAddVaultItemViewModel()
         val snackbarData = mockk<BitwardenSnackbarData>()
@@ -3293,6 +3324,18 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     awaitItem(),
                 )
             }
+        }
+
+        @Test
+        fun `TotpRequiresPremiumClick should show TotpRequiresPremium dialog`() {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.TotpRequiresPremiumClick,
+            )
+
+            assertEquals(
+                VaultAddEditState.DialogState.TotpRequiresPremium,
+                viewModel.stateFlow.value.dialog,
+            )
         }
 
         @Test
