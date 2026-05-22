@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.disk
 
 import android.content.SharedPreferences
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.serializer.SafeMapSerializer
 import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.bitwarden.data.datasource.disk.BaseEncryptedDiskSource
 import com.bitwarden.network.model.AccountKeysJson
@@ -14,6 +15,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
+import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import java.time.Instant
 import java.util.UUID
@@ -485,8 +487,13 @@ class AuthDiskSourceImpl(
         getString(key = POLICIES_KEY.appendIdentifier(userId))
             ?.let {
                 // The policies are stored as a map.
-                val policiesMap: Map<String, SyncResponseJson.Policy>? =
-                    json.decodeFromStringOrNull(it)
+                val policiesMap = json.decodeFromStringOrNull(
+                    deserializer = SafeMapSerializer(
+                        keySerializer = String.serializer(),
+                        valueSerializer = SyncResponseJson.Policy.serializer(),
+                    ),
+                    string = it,
+                )
                 policiesMap?.values?.toList()
             }
 

@@ -40,6 +40,7 @@ data class SyncResponseJson(
     @SerialName("ciphers")
     val ciphers: List<Cipher>?,
 
+    @Contextual
     @SerialName("policies")
     val policies: List<Policy>?,
 
