@@ -1263,6 +1263,7 @@ private val DEFAULT_FREE_STATE = PlanState(
         rate = "$1.65",
         checkoutUrl = null,
         isAwaitingPremiumStatus = false,
+        isPremiumUpgradePending = false,
     ),
     dialogState = null,
 )

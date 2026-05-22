@@ -91,6 +91,9 @@ class PlanViewModel @Inject constructor(
                     rate = PLACEHOLDER_TEXT,
                     checkoutUrl = null,
                     isAwaitingPremiumStatus = false,
+                    isPremiumUpgradePending = premiumStateManager
+                        .isPremiumUpgradePendingFlow
+                        .value,
                 )
             },
             dialogState = null,
@@ -121,6 +124,12 @@ class PlanViewModel @Inject constructor(
         premiumStateManager
             .subscriptionStatusStateFlow
             .map { PlanAction.Internal.SubscriptionStatusUpdateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        premiumStateManager
+            .isPremiumUpgradePendingFlow
+            .map { PlanAction.Internal.PremiumUpgradePendingUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -187,6 +196,10 @@ class PlanViewModel @Inject constructor(
             is PlanAction.Internal.SubscriptionStatusUpdateReceive -> {
                 handleSubscriptionStatusUpdateReceive(action)
             }
+
+            is PlanAction.Internal.PremiumUpgradePendingUpdateReceive -> {
+                handlePremiumUpgradePendingUpdateReceive(action)
+            }
         }
     }
 
@@ -242,6 +255,17 @@ class PlanViewModel @Inject constructor(
     }
 
     private fun handleContinueClick() {
+        // Continue is the user's explicit "I'll deal with this later" signal on the
+        // PendingUpgrade dialog — clear the pending flag so CTAs reappear if Stripe never
+        // resolves and the user comes back to upgrade again.
+        authRepository
+            .userStateFlow
+            .value
+            ?.activeAccount
+            ?.userId
+            ?.let { userId ->
+                premiumStateManager.clearPremiumUpgradePending(userId = userId)
+            }
         mutableStateFlow.update { it.copy(dialogState = null) }
         sendEvent(PlanEvent.NavigateBack)
     }
@@ -403,6 +427,9 @@ class PlanViewModel @Inject constructor(
                             rate = PLACEHOLDER_TEXT,
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = premiumStateManager
+                                .isPremiumUpgradePendingFlow
+                                .value,
                         ),
                         dialogState = PlanState.DialogState.Loading(
                             message = BitwardenString.loading.asText(),
@@ -429,6 +456,21 @@ class PlanViewModel @Inject constructor(
                         ),
                     )
                 }
+            }
+        }
+    }
+
+    private fun handlePremiumUpgradePendingUpdateReceive(
+        action: PlanAction.Internal.PremiumUpgradePendingUpdateReceive,
+    ) {
+        onFreeCloudContent { freeState ->
+            if (freeState.isPremiumUpgradePending == action.isPending) return@onFreeCloudContent
+            mutableStateFlow.update {
+                it.copy(
+                    viewState = freeState.copy(
+                        isPremiumUpgradePending = action.isPending,
+                    ),
+                )
             }
         }
     }
@@ -561,14 +603,19 @@ class PlanViewModel @Inject constructor(
         onFreeCloudContent { freeState ->
             if (!freeState.isAwaitingPremiumStatus) return@onFreeCloudContent
 
-            val isPremium = authRepository
+            val activeAccount = authRepository
                 .userStateFlow
                 .value
                 ?.activeAccount
-                ?.isPremium == true
+            val isPremium = activeAccount?.isPremium == true
             if (isPremium) {
                 onPremiumUpgradeSuccess()
             } else {
+                // Persist the pending-upgrade signal so the Vault banner and the Plan-screen
+                // Upgrade Now CTA can suppress themselves while the server catches up.
+                activeAccount?.userId?.let { userId ->
+                    premiumStateManager.markPremiumUpgradePending(userId = userId)
+                }
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = PlanState.DialogState.PendingUpgrade,
@@ -788,6 +835,7 @@ data class PlanState(
                 val rate: String,
                 val checkoutUrl: String?,
                 val isAwaitingPremiumStatus: Boolean,
+                val isPremiumUpgradePending: Boolean,
             ) : Free()
 
             /**
@@ -1094,6 +1142,13 @@ sealed class PlanAction {
          */
         data class SubscriptionStatusUpdateReceive(
             val state: SubscriptionStatusState,
+        ) : Internal()
+
+        /**
+         * The shared "Premium upgrade pending" flag for the active user has updated.
+         */
+        data class PremiumUpgradePendingUpdateReceive(
+            val isPending: Boolean,
         ) : Internal()
     }
 }

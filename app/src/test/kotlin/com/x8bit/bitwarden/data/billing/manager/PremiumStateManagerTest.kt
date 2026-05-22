@@ -725,6 +725,121 @@ class PremiumStateManagerTest {
     }
 
     @Test
+    fun `isPremiumUpgradePendingFlow emits false when nothing has been observed`() = runTest {
+        val manager = createManager()
+        manager.isPremiumUpgradePendingFlow.test {
+            assertFalse(awaitItem())
+        }
+    }
+
+    @Test
+    fun `isPremiumUpgradePendingFlow emits false when there is no active user`() = runTest {
+        fakeAuthDiskSource.userState = null
+        val manager = createManager()
+        manager.isPremiumUpgradePendingFlow.test {
+            assertFalse(awaitItem())
+        }
+    }
+
+    @Test
+    fun `markPremiumUpgradePending stores true and isPremiumUpgradePendingFlow emits true`() =
+        runTest {
+            val manager = createManager()
+            manager.isPremiumUpgradePendingFlow.test {
+                assertFalse(awaitItem())
+                manager.markPremiumUpgradePending(userId = ACTIVE_USER_ID)
+                assertTrue(awaitItem())
+                fakeSettingsDiskSource.assertPremiumUpgradePending(
+                    userId = ACTIVE_USER_ID,
+                    expected = true,
+                )
+            }
+        }
+
+    @Test
+    fun `clearPremiumUpgradePending writes false and isPremiumUpgradePendingFlow emits false`() =
+        runTest {
+            fakeSettingsDiskSource.storePremiumUpgradePending(
+                userId = ACTIVE_USER_ID,
+                isPending = true,
+            )
+            val manager = createManager()
+            manager.isPremiumUpgradePendingFlow.test {
+                assertTrue(awaitItem())
+                manager.clearPremiumUpgradePending(userId = ACTIVE_USER_ID)
+                assertFalse(awaitItem())
+                fakeSettingsDiskSource.assertPremiumUpgradePending(
+                    userId = ACTIVE_USER_ID,
+                    expected = false,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isPremiumUpgradePendingFlow re-keys on active user change and only reflects the active user's flag`() =
+        runTest {
+            val otherUserId = "otherUserId"
+            fakeSettingsDiskSource.storePremiumUpgradePending(
+                userId = ACTIVE_USER_ID,
+                isPending = true,
+            )
+            val manager = createManager()
+            manager.isPremiumUpgradePendingFlow.test {
+                assertTrue(awaitItem())
+                // Switching active user — the other user has no pending flag set.
+                fakeAuthDiskSource.userState = userStateJsonWith(
+                    account = createAccountJson(userId = otherUserId),
+                )
+                assertFalse(awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `userState transition from non-Premium to personal Premium clears the pending upgrade flag`() =
+        runTest {
+            // Free user with a pending upgrade in flight.
+            fakeAuthDiskSource.userState = userStateJsonWith(account = createAccountJson())
+            fakeSettingsDiskSource.storePremiumUpgradePending(
+                userId = ACTIVE_USER_ID,
+                isPending = true,
+            )
+            val manager = createManager()
+            manager.isPremiumUpgradePendingFlow.test {
+                assertTrue(awaitItem())
+                // Server flips personal Premium on — pending should auto-clear.
+                fakeAuthDiskSource.userState = userStateJsonWith(
+                    account = createAccountJson(hasPremiumPersonally = true),
+                )
+                assertFalse(awaitItem())
+                fakeSettingsDiskSource.assertPremiumUpgradePending(
+                    userId = ACTIVE_USER_ID,
+                    expected = false,
+                )
+            }
+        }
+
+    @Test
+    fun `banner is ineligible while the active user has a pending Premium upgrade`() = runTest {
+        // Baseline: banner is eligible (the default DEFAULT_USER_STATE_JSON satisfies all gates).
+        fakeSettingsDiskSource.storePremiumUpgradePending(
+            userId = ACTIVE_USER_ID,
+            isPending = true,
+        )
+        val manager = createManager()
+        manager.isPremiumUpgradeBannerEligibleFlow.test {
+            assertFalse(awaitItem())
+            // Clearing pending re-enables the banner.
+            fakeSettingsDiskSource.storePremiumUpgradePending(
+                userId = ACTIVE_USER_ID,
+                isPending = false,
+            )
+            assertTrue(awaitItem())
+        }
+    }
+
+    @Test
     fun `subscriptionStatusStateFlow emits NoSubscription when there is no active user`() =
         runTest {
             fakeAuthDiskSource.userState = null

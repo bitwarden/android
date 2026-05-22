@@ -85,6 +85,33 @@ class PremiumStateManagerImpl(
                 initialValue = SubscriptionStatusState.Loading,
             )
 
+    /**
+     * Reactive read of the per-user "Premium upgrade pending" disk flag. There is no premium /
+     * consumed gating — this is just the raw flag, set by [markPremiumUpgradePending] when sync
+     * confirms post-checkout that `isPremium` has not yet flipped, and cleared either explicitly
+     * (the Continue button on the PendingUpgrade dialog) or implicitly when
+     * `hasPremiumPersonally` transitions `false → true` in the init block below.
+     */
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val isPremiumUpgradePendingFlow: StateFlow<Boolean> =
+        authDiskSource
+            .activeUserIdChangesFlow
+            .flatMapLatest { userId ->
+                userId
+                    ?.let { id ->
+                        settingsDiskSource
+                            .getPremiumUpgradePendingFlow(id)
+                            .map { it ?: false }
+                    }
+                    ?: flowOf(false)
+            }
+            .distinctUntilChanged()
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = false,
+            )
+
     @OptIn(ExperimentalCoroutinesApi::class)
     override val isPremiumUpgradeBannerEligibleFlow: StateFlow<Boolean> =
         combine(
@@ -118,6 +145,9 @@ class PremiumStateManagerImpl(
             )
         }
             .combine(subscriptionStatusStateFlow) { inputs, subscriptionStatus ->
+                inputs to subscriptionStatus
+            }
+            .combine(isPremiumUpgradePendingFlow) { (inputs, subscriptionStatus), isPending ->
                 val profile = inputs.userState?.activeAccount?.profile
                     ?: return@combine false
                 val isAccountOldEnough = profile.creationDate.isOlderThanDays(
@@ -134,6 +164,7 @@ class PremiumStateManagerImpl(
                     inputs.isInAppBillingSupported &&
                     inputs.featureFlagEnabled &&
                     !inputs.isDismissed &&
+                    !isPending &&
                     isAccountOldEnough &&
                     itemCount >= PREMIUM_UPGRADE_MINIMUM_VAULT_ITEMS
             }
@@ -254,6 +285,10 @@ class PremiumStateManagerImpl(
                 // an upgrade.
                 if (previous?.first == currentUserId && !previous.second) {
                     markUpgradedToPremiumCardPending(userId = currentUserId)
+                    // The upgrade just resolved — clear any in-flight pending flag we set
+                    // post-Stripe checkout. Symmetric with the "upgrade succeeded" moment used
+                    // to arm the Upgraded-to-Premium card above.
+                    clearPremiumUpgradePending(userId = currentUserId)
                 }
             }
             .launchIn(unconfinedScope)
@@ -281,6 +316,20 @@ class PremiumStateManagerImpl(
         )
         settingsDiskSource.storeUpgradedToPremiumCardPending(
             userId = activeUserId,
+            isPending = false,
+        )
+    }
+
+    override fun markPremiumUpgradePending(userId: String) {
+        settingsDiskSource.storePremiumUpgradePending(
+            userId = userId,
+            isPending = true,
+        )
+    }
+
+    override fun clearPremiumUpgradePending(userId: String) {
+        settingsDiskSource.storePremiumUpgradePending(
+            userId = userId,
             isPending = false,
         )
     }

@@ -183,6 +183,27 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     fun getUpgradedToPremiumCardPendingFlow(userId: String): Flow<Boolean?>
 
     /**
+     * Retrieves the stored value of whether a Premium upgrade is awaiting server confirmation
+     * for the given [userId]. When `true`, surfaces that the active user has completed Stripe
+     * checkout but the server has not yet flipped `isPremium = true` — used to suppress
+     * upgrade CTAs while the upgrade is in flight.
+     */
+    fun getPremiumUpgradePending(userId: String): Boolean?
+
+    /**
+     * Stores whether a Premium upgrade is awaiting server confirmation for the given [userId].
+     */
+    fun storePremiumUpgradePending(
+        userId: String,
+        isPending: Boolean?,
+    )
+
+    /**
+     * Emits updates that track [getPremiumUpgradePending] for the given [userId].
+     */
+    fun getPremiumUpgradePendingFlow(userId: String): Flow<Boolean?>
+
+    /**
      * Retrieves the biometric integrity validity for the given [userId] and
      * [systemBioIntegrityState].
      */

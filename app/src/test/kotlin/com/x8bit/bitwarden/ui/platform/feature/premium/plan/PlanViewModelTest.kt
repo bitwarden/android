@@ -67,9 +67,11 @@ class PlanViewModelTest : BaseViewModelTest() {
     }
     private val mutableSubscriptionStatusStateFlow =
         MutableStateFlow<SubscriptionStatusState>(SubscriptionStatusState.NoSubscription)
+    private val mutableIsPremiumUpgradePendingFlow = MutableStateFlow(false)
     private var mockIsSelfHosted = false
-    private val mockPremiumStateManager: PremiumStateManager = mockk {
+    private val mockPremiumStateManager: PremiumStateManager = mockk(relaxed = true) {
         every { subscriptionStatusStateFlow } returns mutableSubscriptionStatusStateFlow
+        every { isPremiumUpgradePendingFlow } returns mutableIsPremiumUpgradePendingFlow
         every { isSelfHosted } answers { mockIsSelfHosted }
     }
     private val mutableEnvironmentFlow = MutableStateFlow<Environment>(Environment.Us)
@@ -144,6 +146,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                             rate = "$1.67",
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = true,
+                            isPremiumUpgradePending = false,
                         ),
                         dialogState = PlanState.DialogState.WaitingForPayment,
                     ),
@@ -224,6 +227,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                             rate = "$1.67",
                             checkoutUrl = checkoutUrl,
                             isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = false,
                         ),
                         dialogState = null,
                     ),
@@ -314,6 +318,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                             rate = "$1.67",
                             checkoutUrl = checkoutUrl,
                             isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = false,
                         ),
                         dialogState = null,
                     ),
@@ -386,6 +391,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 rate = "$1.67",
                 checkoutUrl = checkoutUrl,
                 isAwaitingPremiumStatus = false,
+                isPremiumUpgradePending = false,
             )
             val viewModel = createViewModel(
                 initialState = DEFAULT_FREE_STATE.copy(
@@ -434,6 +440,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                         rate = "$1.67",
                         checkoutUrl = null,
                         isAwaitingPremiumStatus = true,
+                        isPremiumUpgradePending = false,
                     ),
                     dialogState = PlanState.DialogState.WaitingForPayment,
                 ),
@@ -476,6 +483,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                             rate = "$1.67",
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = true,
+                            isPremiumUpgradePending = false,
                         ),
                         dialogState = PlanState.DialogState.WaitingForPayment,
                     ),
@@ -531,6 +539,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                             rate = "$1.67",
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = true,
+                            isPremiumUpgradePending = false,
                         ),
                         dialogState = PlanState.DialogState.PendingUpgrade,
                     ),
@@ -540,11 +549,65 @@ class PlanViewModelTest : BaseViewModelTest() {
 
             verify {
                 mockSpecialCircumstanceManager.specialCircumstance = null
+                mockPremiumStateManager.markPremiumUpgradePending(userId = DEFAULT_ACCOUNT.userId)
             }
             coVerify {
                 mockVaultRepository.syncForResult(forced = true)
             }
         }
+
+    @Test
+    fun `ContinueClick should clear the pending upgrade flag and navigate back`() = runTest {
+        val viewModel = createViewModel(
+            initialState = DEFAULT_FREE_STATE.copy(
+                viewState = PlanState.ViewState.Free.Cloud(
+                    rate = "$1.67",
+                    checkoutUrl = null,
+                    isAwaitingPremiumStatus = true,
+                    isPremiumUpgradePending = true,
+                ),
+                dialogState = PlanState.DialogState.PendingUpgrade,
+            ),
+            pricingResult = null,
+        )
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(PlanAction.ContinueClick)
+            assertEquals(PlanEvent.NavigateBack, awaitItem())
+        }
+
+        verify {
+            mockPremiumStateManager.clearPremiumUpgradePending(userId = DEFAULT_ACCOUNT.userId)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isPremiumUpgradePendingFlow updates propagate onto Free Cloud view state`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_FREE_STATE, awaitItem())
+
+            mutableIsPremiumUpgradePendingFlow.value = true
+
+            assertEquals(
+                DEFAULT_FREE_STATE.copy(
+                    viewState = PlanState.ViewState.Free.Cloud(
+                        rate = "$1.67",
+                        checkoutUrl = null,
+                        isAwaitingPremiumStatus = false,
+                        isPremiumUpgradePending = true,
+                    ),
+                ),
+                awaitItem(),
+            )
+
+            mutableIsPremiumUpgradePendingFlow.value = false
+
+            assertEquals(DEFAULT_FREE_STATE, awaitItem())
+        }
+    }
 
     @Test
     fun `UserStateUpdateReceive premium during Loading should navigate to UpgradedToPremium`() =
@@ -555,6 +618,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                         rate = "$1.67",
                         checkoutUrl = null,
                         isAwaitingPremiumStatus = true,
+                        isPremiumUpgradePending = false,
                     ),
                     dialogState = PlanState.DialogState.Loading(
                         message = BitwardenString.confirming_your_upgrade.asText(),
@@ -666,6 +730,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                             rate = "$1.67",
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = false,
                         ),
                         dialogState = null,
                     ),
@@ -694,6 +759,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                             rate = "--",
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = false,
                         ),
                         dialogState = null,
                     ),
@@ -719,6 +785,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                             rate = "--",
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = false,
                         ),
                         dialogState = PlanState.DialogState.GetPricingError(
                             title = BitwardenString.pricing_unavailable.asText(),
@@ -747,6 +814,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                             rate = "--",
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = false,
                         ),
                         dialogState = PlanState.DialogState.GetPricingError(
                             title = BitwardenString.pricing_unavailable.asText(),
@@ -770,6 +838,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                             rate = "--",
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = false,
                         ),
                         dialogState = PlanState.DialogState.Loading(
                             message = BitwardenString.loading.asText(),
@@ -801,6 +870,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                             rate = "--",
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = false,
                         ),
                         dialogState = PlanState.DialogState.GetPricingError(
                             title = BitwardenString.pricing_unavailable.asText(),
@@ -819,6 +889,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                             rate = "--",
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = false,
                         ),
                         dialogState = null,
                     ),
@@ -990,6 +1061,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                             rate = "--",
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = false,
                         ),
                         dialogState = PlanState.DialogState.Loading(
                             message = BitwardenString.loading.asText(),
@@ -1705,6 +1777,7 @@ private val DEFAULT_FREE_STATE = PlanState(
         rate = "$1.67",
         checkoutUrl = null,
         isAwaitingPremiumStatus = false,
+        isPremiumUpgradePending = false,
     ),
     dialogState = null,
 )
