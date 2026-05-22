@@ -1,6 +1,6 @@
 ---
 name: implementing-android-code
-version: 0.1.3
+version: 0.1.4
 description: This skill should be used when implementing Android code in Bitwarden. Covers critical patterns, gotchas, and anti-patterns unique to this codebase. Triggered by "How do I implement a ViewModel?", "Create a new screen", "Add navigation", "Write a repository", "BaseViewModel pattern", "State-Action-Event", "type-safe navigation", "@Serializable route", "SavedStateHandle persistence", "process death recovery", "handleAction", "sendAction", "Hilt module", "Repository pattern", "implementing a screen", "adding a data source", "handling navigation", "encrypted storage", "security patterns", "Clock injection", "DataState", or any questions about implementing features, screens, ViewModels, data sources, or navigation in the Bitwarden Android app.
 ---
 
@@ -235,6 +235,44 @@ object ExampleRepositoryModule {
 - ✅ **ALWAYS** inject interfaces, never implementations
 - ✅ Data sources return `Result<T>`, repositories return domain sealed classes
 - ✅ Use `StateFlow` for continuously observed data
+
+**KDoc on Interfaces vs. Implementations**
+
+KDoc on an interface member describes the **contract** — what the caller can rely on. It must not describe **how** the implementation fulfills that contract. Implementation details (which data source is consulted, what is cached, what is logged, which manager is delegated to, ordering of internal calls, etc.) belong on the `...Impl` member — and only when the *why* is non-obvious from the code itself.
+
+This applies to every interface in the codebase: repositories, managers, data sources, validators, and UI-layer interfaces alike. The rule is the same one CLAUDE.md states for comments in general — describe the contract or the non-obvious *why*, never the *what* a well-named identifier already conveys.
+
+❌ **Wrong** — interface KDoc leaks the implementation:
+```kotlin
+interface ExampleRepository {
+    /**
+     * Fetches data by reading from [ExampleDiskSource] first, falling back to
+     * [ExampleService] on cache miss and writing the network result back to disk.
+     */
+    suspend fun fetchData(id: String): ExampleResult
+}
+```
+
+✅ **Right** — interface KDoc describes the contract; implementation details (if needed at all) live on the override:
+```kotlin
+interface ExampleRepository {
+    /** Returns the [ExampleData] for [id], or an error result on failure. */
+    suspend fun fetchData(id: String): ExampleResult
+}
+
+class ExampleRepositoryImpl(...) : ExampleRepository {
+    // No KDoc needed — the disk-then-network pattern is visible in the code.
+    override suspend fun fetchData(id: String): ExampleResult { ... }
+}
+```
+
+Red flags that an interface KDoc has drifted into implementation territory:
+- Names a concrete collaborator (`...DiskSource`, `...Service`, `...Manager`, `...Impl`)
+- Describes ordering of internal calls ("first ... then ...", "falls back to ...")
+- Mentions caching, retries, logging, or threading behavior that callers don't depend on
+- Restates the method signature in prose ("Suspends until X returns Y")
+
+If callers genuinely depend on a behavior (e.g., "this method is safe to call before vault unlock", "result is cached for the session"), that *is* part of the contract and belongs on the interface. The test: would a different valid implementation be free to change this? If yes, it's implementation detail — strip it.
 
 ---
 
@@ -503,6 +541,9 @@ Single-line branches (body fits on the same line as `->`) do **not** need braces
 
 ❌ **NEVER call `Instant.now()` or `DateTime.now()` directly**
 - Inject `Clock` via Hilt, use `clock.instant()` for testability
+
+❌ **NEVER put implementation details in interface KDoc**
+- Interface KDoc describes the contract; concrete collaborators, call ordering, caching, and fallback behavior belong on the `...Impl` override (and only when the *why* is non-obvious). See section D for examples.
 
 ---
 
