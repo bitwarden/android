@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.exportitems.verifypassword
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -59,8 +59,8 @@ class VerifyPasswordViewModel @Inject constructor(
             val singleAccount = !args.hasOtherAccounts
 
             val restrictedItemPolicyOrgIds = policyManager
-                .getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
-                .filter { it.isEnabled }
+                .getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES)
+                .filter { it.enabled }
                 .map { it.organizationId }
 
             VerifyPasswordState(

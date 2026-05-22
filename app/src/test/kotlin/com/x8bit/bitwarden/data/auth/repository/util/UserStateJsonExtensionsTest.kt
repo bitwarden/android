@@ -9,12 +9,11 @@ import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorUserDecryptionOptionsJson
 import com.bitwarden.network.model.MasterPasswordUnlockDataJson
 import com.bitwarden.network.model.OrganizationType
-import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.bitwarden.network.model.UserDecryptionJson
 import com.bitwarden.network.model.UserDecryptionOptionsJson
-import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.PolicyType
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
@@ -29,6 +28,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import io.mockk.every
 import io.mockk.mockk
@@ -321,19 +321,27 @@ class UserStateJsonExtensionsTest {
             .accounts
             .first()
 
-        val freeAccount = toAccount(stateWith(hasPremiumPersonally = false, hasPremiumFromOrg = false))
+        val freeAccount = toAccount(
+            stateWith(hasPremiumPersonally = false, hasPremiumFromOrg = false),
+        )
         assertFalse(freeAccount.isPremium)
         assertFalse(freeAccount.isPremiumFromSelf)
 
-        val personalAccount = toAccount(stateWith(hasPremiumPersonally = true, hasPremiumFromOrg = false))
+        val personalAccount = toAccount(
+            stateWith(hasPremiumPersonally = true, hasPremiumFromOrg = false),
+        )
         assertTrue(personalAccount.isPremium)
         assertTrue(personalAccount.isPremiumFromSelf)
 
-        val orgOnlyAccount = toAccount(stateWith(hasPremiumPersonally = false, hasPremiumFromOrg = true))
+        val orgOnlyAccount = toAccount(
+            stateWith(hasPremiumPersonally = false, hasPremiumFromOrg = true),
+        )
         assertTrue(orgOnlyAccount.isPremium)
         assertFalse(orgOnlyAccount.isPremiumFromSelf)
 
-        val bothAccount = toAccount(stateWith(hasPremiumPersonally = true, hasPremiumFromOrg = true))
+        val bothAccount = toAccount(
+            stateWith(hasPremiumPersonally = true, hasPremiumFromOrg = true),
+        )
         assertTrue(bothAccount.isPremium)
         assertTrue(bothAccount.isPremiumFromSelf)
     }
@@ -1816,12 +1824,11 @@ class UserStateJsonExtensionsTest {
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
                     getUserPolicies = { _, _ ->
                         listOf(
-                            createMockPolicy(
+                            createMockPolicyView(
                                 id = "policyId",
                                 organizationId = "organizationId",
-                                type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
-                                data = null,
-                                isEnabled = true,
+                                type = PolicyType.DISABLE_PERSONAL_VAULT_EXPORT,
+                                enabled = true,
                             ),
                         )
                     },
@@ -1938,12 +1945,11 @@ class UserStateJsonExtensionsTest {
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
                     getUserPolicies = { _, _ ->
                         listOf(
-                            createMockPolicy(
+                            createMockPolicyView(
                                 id = "policyId",
                                 organizationId = "organizationId",
-                                type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
-                                data = null,
-                                isEnabled = false,
+                                type = PolicyType.DISABLE_PERSONAL_VAULT_EXPORT,
+                                enabled = false,
                             ),
                         )
                     },

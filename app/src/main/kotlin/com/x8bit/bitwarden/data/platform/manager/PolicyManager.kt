@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager
 
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -11,20 +11,20 @@ interface PolicyManager {
     /**
      * Returns a flow of all the active policies of the given type.
      */
-    fun getActivePoliciesFlow(type: PolicyTypeJson): Flow<List<SyncResponseJson.Policy>>
+    fun getActivePoliciesFlow(type: PolicyType): Flow<List<PolicyView>>
 
     /**
      * Get all the policies of the given [type] that are enabled and applicable to the user.
      */
-    fun getActivePolicies(type: PolicyTypeJson): List<SyncResponseJson.Policy>
+    fun getActivePolicies(type: PolicyType): List<PolicyView>
 
     /**
      * Get all the policies of the given [type] that are enabled and applicable to the [userId].
      */
     fun getUserPolicies(
         userId: String,
-        type: PolicyTypeJson,
-    ): List<SyncResponseJson.Policy>
+        type: PolicyType,
+    ): List<PolicyView>
 
     /**
      * Get the organization id of the personal ownership policy.

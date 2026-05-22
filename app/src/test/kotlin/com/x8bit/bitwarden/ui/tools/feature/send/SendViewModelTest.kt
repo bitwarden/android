@@ -6,7 +6,7 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseWebSendUrl
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -72,8 +72,8 @@ class SendViewModelTest : BaseViewModelTest() {
         every { sendDataStateFlow } returns mutableSendDataFlow
     }
     private val policyManager: PolicyManager = mockk {
-        every { getActivePolicies(type = PolicyTypeJson.DISABLE_SEND) } returns emptyList()
-        every { getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND) } returns emptyFlow()
+        every { getActivePolicies(type = PolicyType.DISABLE_SEND) } returns emptyList()
+        every { getActivePoliciesFlow(type = PolicyType.DISABLE_SEND) } returns emptyFlow()
     }
 
     private val networkConnectionManager: NetworkConnectionManager = mockk {

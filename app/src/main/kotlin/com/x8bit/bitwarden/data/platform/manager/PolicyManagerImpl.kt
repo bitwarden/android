@@ -2,15 +2,18 @@ package com.x8bit.bitwarden.data.platform.manager
 
 import com.bitwarden.network.model.OrganizationStatusType
 import com.bitwarden.network.model.OrganizationType
-import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
+import com.x8bit.bitwarden.data.vault.repository.util.toSdkPolicyViews
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 
 /**
@@ -21,14 +24,15 @@ class PolicyManagerImpl(
     private val authDiskSource: AuthDiskSource,
 ) : PolicyManager {
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getActivePoliciesFlow(type: PolicyTypeJson): Flow<List<SyncResponseJson.Policy>> =
+    override fun getActivePoliciesFlow(type: PolicyType): Flow<List<PolicyView>> =
         authDiskSource
             .activeUserIdChangesFlow
             .flatMapLatest { activeUserId ->
                 activeUserId
                     ?.let { userId ->
                         authDiskSource
-                            .getPoliciesFlow(userId)
+                            .getPoliciesFlow(userId = userId)
+                            .map { it?.toSdkPolicyViews() }
                             .mapNotNull {
                                 filterPolicies(
                                     userId = userId,
@@ -41,7 +45,7 @@ class PolicyManagerImpl(
             }
             .distinctUntilChanged()
 
-    override fun getActivePolicies(type: PolicyTypeJson): List<SyncResponseJson.Policy> =
+    override fun getActivePolicies(type: PolicyType): List<PolicyView> =
         authDiskSource
             .userState
             ?.activeUserId
@@ -49,26 +53,26 @@ class PolicyManagerImpl(
                 filterPolicies(
                     userId = userId,
                     type = type,
-                    policies = authDiskSource.getPolicies(userId = userId),
+                    policies = getPolicyViews(userId = userId),
                 )
             }
-            ?: emptyList()
+            .orEmpty()
 
     override fun getUserPolicies(
         userId: String,
-        type: PolicyTypeJson,
-    ): List<SyncResponseJson.Policy> =
+        type: PolicyType,
+    ): List<PolicyView> =
         this
             .filterPolicies(
                 userId = userId,
                 type = type,
-                policies = authDiskSource.getPolicies(userId = userId),
+                policies = getPolicyViews(userId = userId),
             )
             .orEmpty()
 
     override fun getPersonalOwnershipPolicyOrganizationId(): String? =
         this
-            .getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            .getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
             .sortedBy { it.revisionDate }
             .firstOrNull()
             ?.organizationId
@@ -78,9 +82,9 @@ class PolicyManagerImpl(
      */
     private fun filterPolicies(
         userId: String,
-        type: PolicyTypeJson,
-        policies: List<SyncResponseJson.Policy>?,
-    ): List<SyncResponseJson.Policy>? {
+        type: PolicyType,
+        policies: List<PolicyView>?,
+    ): List<PolicyView>? {
         policies ?: return null
         if (policies.isEmpty()) return emptyList()
 
@@ -90,7 +94,7 @@ class PolicyManagerImpl(
             ?.filter {
                 it.shouldUsePolicies &&
                     it.status >= OrganizationStatusType.ACCEPTED &&
-                    !isOrganizationExemptFromPolicies(it, type)
+                    !isOrganizationExemptFromPolicies(organization = it, policyType = type)
             }
             ?.map { it.id }
             .orEmpty()
@@ -99,7 +103,7 @@ class PolicyManagerImpl(
         // and whether the organization rules except the user from the policy.
         return policies.filter {
             it.type == type &&
-                it.isEnabled &&
+                it.enabled &&
                 organizationIdsWithActivePolicies.contains(it.organizationId)
         }
     }
@@ -109,16 +113,16 @@ class PolicyManagerImpl(
      */
     private fun isOrganizationExemptFromPolicies(
         organization: SyncResponseJson.Profile.Organization,
-        policyType: PolicyTypeJson,
+        policyType: PolicyType,
     ): Boolean =
         when (policyType) {
-            PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT -> {
+            PolicyType.MAXIMUM_VAULT_TIMEOUT -> {
                 organization.type == OrganizationType.OWNER
             }
 
-            PolicyTypeJson.PASSWORD_GENERATOR,
-            PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
-            PolicyTypeJson.RESTRICT_ITEM_TYPES,
+            PolicyType.PASSWORD_GENERATOR,
+            PolicyType.REMOVE_UNLOCK_WITH_PIN,
+            PolicyType.RESTRICTED_ITEM_TYPES,
                 -> {
                 false
             }
@@ -129,4 +133,10 @@ class PolicyManagerImpl(
                     organization.permissions.shouldManagePolicies
             }
         }
+
+    private fun getPolicyViews(
+        userId: String,
+    ): List<PolicyView>? = authDiskSource
+        .getPolicies(userId = userId)
+        ?.toSdkPolicyViews()
 }

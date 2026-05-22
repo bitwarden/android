@@ -6,7 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.data.manager.file.FileManager
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -66,7 +66,7 @@ class ExportVaultViewModel @Inject constructor(
             passwordInput = "",
             passwordStrengthState = PasswordStrengthState.NONE,
             policyPreventsExport = policyManager
-                .getActivePolicies(type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT)
+                .getActivePolicies(type = PolicyType.DISABLE_PERSONAL_VAULT_EXPORT)
                 .any(),
             showSendCodeButton = authRepository
                 .userStateFlow

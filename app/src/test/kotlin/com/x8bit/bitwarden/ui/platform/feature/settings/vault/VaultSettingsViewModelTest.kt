@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 import app.cash.turbine.test
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -36,7 +36,7 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
         every { storeShowImportLoginsSettingsBadge(any()) } just runs
     }
-    private val mutablePoliciesFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Policy>>()
+    private val mutablePoliciesFlow = bufferedMutableSharedFlow<List<PolicyView>>()
     private val policyManager = mockk<PolicyManager> {
         every { getActivePolicies(any()) } returns emptyList()
         every { getActivePoliciesFlow(any()) } returns mutablePoliciesFlow
@@ -73,7 +73,7 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
     @Test
     fun `ImportItemsClick should emit NavigateToImportVault when policy is not empty`() = runTest {
         every {
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns listOf(mockk())
 
         val viewModel = createViewModel()

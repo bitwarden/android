@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.BuildInfoManager
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
@@ -54,7 +54,7 @@ class VaultSettingsViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         policyManager
-            .getActivePoliciesFlow(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+            .getActivePoliciesFlow(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
             .map { policies ->
                 VaultSettingsAction.Internal.CredentialExchangeAvailabilityChanged(
                     isEnabled = !buildInfoManager.isFdroid && policies.isEmpty(),
@@ -133,7 +133,7 @@ class VaultSettingsViewModel @Inject constructor(
 
     private fun handleImportItemsClicked() {
         if (!buildInfoManager.isFdroid &&
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP).isEmpty()
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP).isEmpty()
         ) {
             sendEvent(VaultSettingsEvent.NavigateToImportItems)
         } else {

@@ -27,7 +27,6 @@ import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
 import com.bitwarden.network.model.OrganizationKeysResponseJson
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PasswordHintResponseJson
-import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
 import com.bitwarden.network.model.RefreshTokenResponseJson
 import com.bitwarden.network.model.RegisterFinishRequestJson
@@ -38,7 +37,6 @@ import com.bitwarden.network.model.ResetPasswordRequestJson
 import com.bitwarden.network.model.SendVerificationEmailRequestJson
 import com.bitwarden.network.model.SendVerificationEmailResponseJson
 import com.bitwarden.network.model.SetPasswordRequestJson
-import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.bitwarden.network.model.TwoFactorAuthMethod
 import com.bitwarden.network.model.TwoFactorDataModel
@@ -52,6 +50,8 @@ import com.bitwarden.network.service.HaveIBeenPwnedService
 import com.bitwarden.network.service.IdentityService
 import com.bitwarden.network.service.OrganizationService
 import com.bitwarden.network.util.isSslHandShakeError
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
@@ -366,7 +366,7 @@ class AuthRepositoryImpl(
 
         // When the policies for the user have been set, complete the login process.
         policyManager
-            .getActivePoliciesFlow(type = PolicyTypeJson.MASTER_PASSWORD)
+            .getActivePoliciesFlow(type = PolicyType.MASTER_PASSWORD)
             .onEach { policies ->
                 val userId = activeUserId ?: return@onEach
 
@@ -1706,7 +1706,7 @@ class AuthRepositoryImpl(
      */
     private suspend fun passwordPassesPolicies(
         password: String,
-        policies: List<SyncResponseJson.Policy>,
+        policies: List<PolicyView>,
     ): Boolean {
         // If there are no master password policies that are enabled and should be
         // enforced on login, the check should complete.

@@ -6,7 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.util.baseWebSendUrl
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.icon.model.IconData
@@ -70,7 +70,7 @@ class SendViewModel @Inject constructor(
             dialogState = null,
             isPullToRefreshSettingEnabled = settingsRepo.getPullToRefreshEnabledFlow().value,
             policyDisablesSend = policyManager
-                .getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
+                .getActivePolicies(type = PolicyType.DISABLE_SEND)
                 .any(),
             isRefreshing = false,
             isPremiumUser = authRepo.userStateFlow.value?.activeAccount?.isPremium == true,
@@ -85,7 +85,7 @@ class SendViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
         policyManager
-            .getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND)
+            .getActivePoliciesFlow(type = PolicyType.DISABLE_SEND)
             .map { SendAction.Internal.PolicyUpdateReceive(it.any()) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)

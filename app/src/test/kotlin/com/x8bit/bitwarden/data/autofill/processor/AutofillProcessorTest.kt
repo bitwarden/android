@@ -11,8 +11,8 @@ import android.service.autofill.SaveCallback
 import android.service.autofill.SaveInfo
 import android.service.autofill.SaveRequest
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilder
 import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilder
 import com.x8bit.bitwarden.data.autofill.builder.SaveInfoBuilder
@@ -306,10 +306,10 @@ class AutofillProcessorTest {
             every { onSuccess() } just runs
         }
         val saveRequest: SaveRequest = mockk()
-        val policies: List<SyncResponseJson.Policy> = listOf(mockk())
+        val policies: List<PolicyView> = listOf(mockk())
         every { settingsRepository.isAutofillSavePromptDisabled } returns false
         every {
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns policies
 
         // Test
@@ -322,7 +322,7 @@ class AutofillProcessorTest {
         // Verify
         verify(exactly = 1) {
             settingsRepository.isAutofillSavePromptDisabled
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
             saveCallback.onSuccess()
         }
     }
@@ -338,7 +338,7 @@ class AutofillProcessorTest {
         }
         every { settingsRepository.isAutofillSavePromptDisabled } returns false
         every {
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns emptyList()
 
         // Test
@@ -351,7 +351,7 @@ class AutofillProcessorTest {
         // Verify
         verify(exactly = 1) {
             settingsRepository.isAutofillSavePromptDisabled
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
             saveCallback.onSuccess()
         }
     }
@@ -380,7 +380,7 @@ class AutofillProcessorTest {
         }
         every { settingsRepository.isAutofillSavePromptDisabled } returns false
         every {
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns emptyList()
         every {
             parser.parse(
@@ -405,7 +405,7 @@ class AutofillProcessorTest {
         // Verify
         verify(exactly = 1) {
             settingsRepository.isAutofillSavePromptDisabled
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
             parser.parse(
                 autofillAppInfo = appInfo,
                 assistStructure = assistStructure,
@@ -435,7 +435,7 @@ class AutofillProcessorTest {
         val autofillRequest = AutofillRequest.Unfillable
         every { settingsRepository.isAutofillSavePromptDisabled } returns false
         every {
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns emptyList()
         every {
             parser.parse(
@@ -454,7 +454,7 @@ class AutofillProcessorTest {
         // Verify
         verify(exactly = 1) {
             settingsRepository.isAutofillSavePromptDisabled
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
             parser.parse(
                 autofillAppInfo = appInfo,
                 assistStructure = assistStructure,

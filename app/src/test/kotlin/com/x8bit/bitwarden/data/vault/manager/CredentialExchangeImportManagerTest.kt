@@ -8,12 +8,12 @@ import com.bitwarden.cxf.model.CredentialExchangePayload
 import com.bitwarden.cxf.parser.CredentialExchangePayloadParser
 import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.ImportCiphersResponseJson
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.network.service.CiphersService
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.vault.Cipher
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.manager.model.ImportCxfPayloadResult
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
@@ -336,13 +336,12 @@ class CredentialExchangeImportManagerTest {
         fun `when user has restrict item types policy, card ciphers should be filtered out`() =
             runTest {
                 every {
-                    policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+                    policyManager.getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES)
                 } returns listOf(
-                    createMockPolicy(
-                        id = "mockId-1",
+                    createMockPolicyView(
                         organizationId = "mockId-1",
-                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
-                        isEnabled = true,
+                        type = PolicyType.RESTRICTED_ITEM_TYPES,
+                        enabled = true,
                         data = null,
                     ),
                 )
@@ -385,7 +384,7 @@ class CredentialExchangeImportManagerTest {
         fun `when user has no restrict item types policy, card ciphers should not be filtered`() =
             runTest {
                 every {
-                    policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+                    policyManager.getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES)
                 } returns emptyList()
 
                 val loginCipher = createMockSdkCipher(number = 1)
@@ -426,13 +425,12 @@ class CredentialExchangeImportManagerTest {
         fun `when user has restrict policy disabled, card ciphers should not be filtered`() =
             runTest {
                 every {
-                    policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+                    policyManager.getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES)
                 } returns listOf(
-                    createMockPolicy(
-                        id = "mockId-1",
+                    createMockPolicyView(
                         organizationId = "mockId-1",
-                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
-                        isEnabled = false,
+                        type = PolicyType.RESTRICTED_ITEM_TYPES,
+                        enabled = false,
                         data = null,
                     ),
                 )
@@ -475,13 +473,12 @@ class CredentialExchangeImportManagerTest {
         fun `when user has restrict policy and all ciphers are cards, should return NoItems`() =
             runTest {
                 every {
-                    policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+                    policyManager.getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES)
                 } returns listOf(
-                    createMockPolicy(
-                        id = "mockId-1",
+                    createMockPolicyView(
                         organizationId = "mockId-1",
-                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
-                        isEnabled = true,
+                        type = PolicyType.RESTRICTED_ITEM_TYPES,
+                        enabled = true,
                         data = null,
                     ),
                 )

@@ -11,7 +11,7 @@ import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.hexToColor
@@ -137,7 +137,7 @@ class VaultViewModel @Inject constructor(
         val activeAccountSummary = activeAccount.toAccountSummary(isActive = true)
         val vaultFilterData = activeAccount.toVaultFilterData(
             isIndividualVaultDisabled = policyManager
-                .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+                .getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
                 .any(),
         )
         VaultState(
@@ -286,7 +286,7 @@ class VaultViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         policyManager
-            .getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            .getActivePoliciesFlow(type = PolicyType.RESTRICTED_ITEM_TYPES)
             .map { policies -> policies.map { it.organizationId } }
             .map { VaultAction.Internal.PolicyUpdateReceive(it) }
             .onEach(::sendAction)
@@ -1369,7 +1369,7 @@ class VaultViewModel @Inject constructor(
 
         val vaultFilterData = userState.activeAccount.toVaultFilterData(
             isIndividualVaultDisabled = policyManager
-                .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+                .getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
                 .any(),
         )
         val appBarTitle = vaultFilterData.toAppBarTitle()

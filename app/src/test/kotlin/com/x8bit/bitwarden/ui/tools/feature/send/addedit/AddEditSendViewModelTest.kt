@@ -6,8 +6,7 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
@@ -29,6 +28,7 @@ import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManage
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
@@ -57,8 +57,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.encodeToJsonElement
-import kotlinx.serialization.json.jsonObject
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -98,8 +96,8 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         every { getSendStateFlow(any()) } returns mutableSendDataStateFlow
     }
     private val policyManager: PolicyManager = mockk {
-        every { getActivePolicies(type = PolicyTypeJson.DISABLE_SEND) } returns emptyList()
-        every { getActivePolicies(type = PolicyTypeJson.SEND_OPTIONS) } returns emptyList()
+        every { getActivePolicies(type = PolicyType.DISABLE_SEND) } returns emptyList()
+        every { getActivePolicies(type = PolicyType.SEND_OPTIONS) } returns emptyList()
     }
     private val networkConnectionManager = mockk<NetworkConnectionManager> {
         every { isNetworkConnected } returns true
@@ -143,15 +141,15 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     @Test
     fun `initial state should be correct when a sendOption includes shouldDisableHideEmail`() {
         every {
-            policyManager.getActivePolicies(type = PolicyTypeJson.SEND_OPTIONS)
+            policyManager.getActivePolicies(type = PolicyType.SEND_OPTIONS)
         } returns listOf(
-            createMockPolicy(
+            createMockPolicyView(
                 id = "123",
-                type = PolicyTypeJson.SEND_OPTIONS,
-                isEnabled = true,
-                data = Json.encodeToJsonElement(
+                type = PolicyType.SEND_OPTIONS,
+                enabled = true,
+                data = Json.encodeToString(
                     PolicyInformation.SendOptions(shouldDisableHideEmail = true),
-                ).jsonObject,
+                ),
                 organizationId = "id2",
             ),
         )
