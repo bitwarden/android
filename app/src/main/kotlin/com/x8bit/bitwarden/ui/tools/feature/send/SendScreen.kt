@@ -30,6 +30,7 @@ import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -69,6 +70,7 @@ fun SendScreen(
     onNavigateToSendFilesList: () -> Unit,
     onNavigateToSendTextList: () -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
+    onNavigateToPlan: () -> Unit,
     viewModel: SendViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
     appResumeStateManager: AppResumeStateManager = LocalAppResumeStateManager.current,
@@ -122,12 +124,16 @@ fun SendScreen(
             SendEvent.NavigateToFileSends -> onNavigateToSendFilesList()
             SendEvent.NavigateToTextSends -> onNavigateToSendTextList()
             is SendEvent.NavigateToUrl -> intentManager.launchUri(event.url.toUri())
+            SendEvent.NavigateToPlanModal -> onNavigateToPlan()
         }
     }
 
     SendDialogs(
         dialogState = state.dialogState,
         onAddSendSelected = { viewModel.trySendAction(SendAction.AddSendSelected(it)) },
+        onUpgradeToPremiumClick = {
+            viewModel.trySendAction(SendAction.UpgradeToPremiumClick)
+        },
         onDismissRequest = { viewModel.trySendAction(SendAction.DismissDialog) },
     )
 
@@ -229,6 +235,7 @@ fun SendScreen(
 private fun SendDialogs(
     dialogState: SendState.DialogState?,
     onAddSendSelected: (SendItemType) -> Unit,
+    onUpgradeToPremiumClick: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
@@ -253,6 +260,18 @@ private fun SendDialogs(
                     onClick = { onAddSendSelected(it) },
                 )
             }
+        }
+
+        SendState.DialogState.FileTypeRequiresPremium -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = BitwardenString.premium_subscription_required),
+                message = stringResource(id = BitwardenString.send_file_premium_required),
+                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
+                onConfirmClick = onUpgradeToPremiumClick,
+                onDismissClick = onDismissRequest,
+                onDismissRequest = onDismissRequest,
+            )
         }
 
         null -> Unit
