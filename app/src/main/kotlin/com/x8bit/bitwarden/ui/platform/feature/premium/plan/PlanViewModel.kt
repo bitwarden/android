@@ -676,9 +676,10 @@ class PlanViewModel @Inject constructor(
         return PlanState.ViewState.Premium(
             status = status,
             billingAmountText = seatsCost.toBillingAmountText(cadence),
-            storageCostText = storageCost.toMoneyText(),
-            discountAmountText = discountAmount.toMoneyText(negative = true),
-            estimatedTaxText = estimatedTax.toMoneyText(),
+            storageCostText = storageCost.toOptionalMoneyText(),
+            discountAmountText = discountAmount.toOptionalMoneyText(negative = true),
+            estimatedTaxText = estimatedTax.toRequiredMoneyText(),
+            totalText = nextChargeTotal.toBillingAmountText(cadence),
             nextChargeTotalText = formattedTotal,
             nextChargeDateText = formattedDate,
             cancelAtDateText = formattedCancelAt,
@@ -690,7 +691,6 @@ class PlanViewModel @Inject constructor(
     }
 
     private fun BigDecimal.toBillingAmountText(cadence: PlanCadence): Text {
-        if (this.signum() == 0) return PLACEHOLDER_TEXT.asText()
         val formatted = currencyFormatter.format(this)
         val cadenceRes = when (cadence) {
             PlanCadence.ANNUALLY -> BitwardenString.billing_rate_per_year
@@ -699,9 +699,23 @@ class PlanViewModel @Inject constructor(
         return cadenceRes.asText(formatted)
     }
 
-    private fun BigDecimal?.toMoneyText(negative: Boolean = false): String =
+    /**
+     * Formats this amount for an always-rendered line item. Null is coerced to zero so the row
+     * still shows the locale-formatted `$0.00`, matching the Web convention of always rendering
+     * the Estimated Tax and Total rows.
+     */
+    private fun BigDecimal?.toRequiredMoneyText(): String =
+        currencyFormatter.format(this ?: BigDecimal.ZERO)
+
+    /**
+     * Formats this amount for a hide-when-absent line item. Returns `null` when the amount is
+     * `null` or non-positive so the caller can omit the row entirely (Discount, Storage).
+     * When [negative] is true, the formatted value is prefixed with `-` to match the canonical
+     * Web discount styling.
+     */
+    private fun BigDecimal?.toOptionalMoneyText(negative: Boolean = false): String? =
         when {
-            this == null || this.signum() == 0 -> PLACEHOLDER_TEXT
+            this == null || this.signum() <= 0 -> null
             negative -> "-${currencyFormatter.format(this)}"
             else -> currencyFormatter.format(this)
         }
@@ -802,18 +816,28 @@ data class PlanState(
         /**
          * Premium user view — shows subscription details and management options.
          *
-         * Line-item text fields are always populated: they default to the
-         * `"--"` placeholder during the initial load and for any value that
-         * resolves to null or `0.00` (e.g. no additional storage, no discount,
-         * no tax).
+         * Line-item text fields follow two visibility contracts that mirror the
+         * canonical Web subscription card:
+         *
+         * - **Required** ([billingAmountText], [estimatedTaxText], [totalText]):
+         *   the row is always rendered. A zero amount is formatted as `$0.00`
+         *   rather than hidden. Defaults are sensible empty values used only
+         *   during the initial load — the `DialogState.Loading` overlay covers
+         *   the screen during the fetch, so these defaults are never surfaced
+         *   to the user.
+         * - **Optional** ([storageCostText], [discountAmountText]): a `null`
+         *   value signals the screen to omit the row entirely (along with its
+         *   leading divider). When non-null, the value is fully formatted by
+         *   the view model — the screen renders it verbatim.
          */
         @Parcelize
         data class Premium(
             val status: PremiumSubscriptionStatus? = null,
-            val billingAmountText: Text = PLACEHOLDER_TEXT.asText(),
-            val storageCostText: String = PLACEHOLDER_TEXT,
-            val discountAmountText: String = PLACEHOLDER_TEXT,
-            val estimatedTaxText: String = PLACEHOLDER_TEXT,
+            val billingAmountText: Text = "".asText(),
+            val storageCostText: String? = null,
+            val discountAmountText: String? = null,
+            val estimatedTaxText: String = "$0.00",
+            val totalText: Text = "".asText(),
             val nextChargeTotalText: String? = null,
             val nextChargeDateText: String? = null,
             val cancelAtDateText: String? = null,

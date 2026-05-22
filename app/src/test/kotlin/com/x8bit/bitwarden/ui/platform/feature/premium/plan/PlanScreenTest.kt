@@ -5,7 +5,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsNodeInteraction
-import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
@@ -778,7 +777,7 @@ class PlanScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `storage cost row should display storageCostText value`() {
+    fun `storage cost row should display storageCostText value when populated`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_PREMIUM_VIEW_STATE) }
         composeTestRule
             .onNodeWithTag("StorageCostRow")
@@ -789,7 +788,17 @@ class PlanScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `discount row should display discountAmountText value`() {
+    fun `storage cost row should not render when storageCostText is null`() {
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(storageCostText = null))
+        }
+        composeTestRule
+            .onNodeWithTag("StorageCostRow")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `discount row should display discountAmountText value when populated`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_PREMIUM_VIEW_STATE) }
         composeTestRule
             .onNodeWithTag("DiscountRow")
@@ -800,7 +809,17 @@ class PlanScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `estimated tax row should display estimatedTaxText value`() {
+    fun `discount row should not render when discountAmountText is null`() {
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(discountAmountText = null))
+        }
+        composeTestRule
+            .onNodeWithTag("DiscountRow")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `estimated tax row should always display estimatedTaxText value`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_PREMIUM_VIEW_STATE) }
         composeTestRule
             .onNodeWithTag("EstimatedTaxRow")
@@ -811,14 +830,66 @@ class PlanScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `line items should display -- placeholder when values are defaults`() {
+    fun `estimated tax row should display dollar zero zero when amount is zero`() {
         mutableStateFlow.update {
-            it.copy(viewState = PlanState.ViewState.Premium())
+            it.copy(viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(estimatedTaxText = "$0.00"))
         }
-        // Four rows, each displaying the default placeholder value "--".
         composeTestRule
-            .onAllNodesWithText("--")
-            .assertCountEquals(4)
+            .onNodeWithTag("EstimatedTaxRow")
+            .assertExists()
+        composeTestRule
+            .onNodeWithText("$0.00")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `total row should always display totalText value with cadence suffix`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_PREMIUM_VIEW_STATE) }
+        composeTestRule
+            .onNodeWithTag("TotalRow")
+            .assertExists()
+        composeTestRule
+            .onNodeWithText("$45.55 / year")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `total row should display monthly cadence suffix when cadence is monthly`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(
+                    totalText = BitwardenString.billing_rate_per_month.asText("$0.00"),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithTag("TotalRow")
+            .assertExists()
+        composeTestRule
+            .onNodeWithText("$0.00 / month")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `discount and storage rows should both hide when both texts are null`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(
+                    storageCostText = null,
+                    discountAmountText = null,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithTag("StorageCostRow")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithTag("DiscountRow")
+            .assertDoesNotExist()
+        // Billing, Tax, and Total are always rendered.
+        composeTestRule.onNodeWithTag("BillingAmountRow").assertExists()
+        composeTestRule.onNodeWithTag("EstimatedTaxRow").assertExists()
+        composeTestRule.onNodeWithTag("TotalRow").assertExists()
     }
 
     // endregion Line items
@@ -1273,6 +1344,7 @@ private val DEFAULT_PREMIUM_VIEW_STATE = PlanState.ViewState.Premium(
     storageCostText = "$24.00",
     discountAmountText = "-$2.10",
     estimatedTaxText = "$3.85",
+    totalText = BitwardenString.billing_rate_per_year.asText("$45.55"),
     nextChargeTotalText = "$45.55",
     nextChargeDateText = "April 2, 2026",
     showCancelButton = true,

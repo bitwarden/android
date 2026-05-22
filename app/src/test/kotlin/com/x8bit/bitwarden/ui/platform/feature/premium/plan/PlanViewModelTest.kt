@@ -1172,6 +1172,9 @@ class PlanViewModelTest : BaseViewModelTest() {
                             billingAmountText = BitwardenString
                                 .billing_rate_per_month
                                 .asText("$19.80"),
+                            totalText = BitwardenString
+                                .billing_rate_per_month
+                                .asText("$45.55"),
                         ),
                     ),
                     awaitItem(),
@@ -1180,7 +1183,7 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `SubscriptionResultReceive Success with zero seatsCost shows placeholder rate`() =
+    fun `SubscriptionResultReceive Success with zero seatsCost still renders billing row`() =
         runTest {
             markUserPremium()
 
@@ -1196,7 +1199,9 @@ class PlanViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_PREMIUM_LOADED_STATE.copy(
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
-                            billingAmountText = PLACEHOLDER.asText(),
+                            billingAmountText = BitwardenString
+                                .billing_rate_per_year
+                                .asText("$0.00"),
                         ),
                     ),
                     awaitItem(),
@@ -1205,7 +1210,7 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `SubscriptionResultReceive Success with null line items shows placeholder text`() =
+    fun `SubscriptionResultReceive Success with null line items hides discount and storage rows`() =
         runTest {
             markUserPremium()
 
@@ -1222,8 +1227,8 @@ class PlanViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_PREMIUM_LOADED_STATE.copy(
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
-                            storageCostText = PLACEHOLDER,
-                            discountAmountText = PLACEHOLDER,
+                            storageCostText = null,
+                            discountAmountText = null,
                         ),
                     ),
                     awaitItem(),
@@ -1232,7 +1237,7 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `SubscriptionResultReceive Success with zero line items shows placeholder text`() =
+    fun `SubscriptionResultReceive Success with zero line items hides discount and storage rows`() =
         runTest {
             markUserPremium()
 
@@ -1250,9 +1255,69 @@ class PlanViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_PREMIUM_LOADED_STATE.copy(
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
-                            storageCostText = PLACEHOLDER,
-                            discountAmountText = PLACEHOLDER,
-                            estimatedTaxText = PLACEHOLDER,
+                            storageCostText = null,
+                            discountAmountText = null,
+                            estimatedTaxText = "$0.00",
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with zero nextChargeTotal renders zero total row`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        nextChargeTotal = BigDecimal.ZERO,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            totalText = BitwardenString
+                                .billing_rate_per_year
+                                .asText("$0.00"),
+                            nextChargeTotalText = "$0.00",
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with Monthly cadence renders total with month suffix`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        cadence = PlanCadence.MONTHLY,
+                        nextChargeTotal = BigDecimal.ZERO,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            billingAmountText = BitwardenString
+                                .billing_rate_per_month
+                                .asText("$19.80"),
+                            totalText = BitwardenString
+                                .billing_rate_per_month
+                                .asText("$0.00"),
+                            nextChargeTotalText = "$0.00",
                         ),
                     ),
                     awaitItem(),
@@ -1738,14 +1803,13 @@ private val DEFAULT_PRICING_SUCCESS = PremiumPlanPricingResult.Success(
     annualPrice = ANNUAL_PRICE,
 )
 
-private const val PLACEHOLDER = "--"
-
 private val DEFAULT_PREMIUM_ACTIVE_VIEW_STATE = PlanState.ViewState.Premium(
     status = PremiumSubscriptionStatus.ACTIVE,
     billingAmountText = BitwardenString.billing_rate_per_year.asText("$19.80"),
     storageCostText = "$24.00",
     discountAmountText = "-$2.10",
     estimatedTaxText = "$3.85",
+    totalText = BitwardenString.billing_rate_per_year.asText("$45.55"),
     nextChargeTotalText = "$45.55",
     nextChargeDateText = "April 2, 2026",
     showCancelButton = true,
