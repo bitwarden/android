@@ -12,6 +12,7 @@ import com.bitwarden.network.model.ArchiveCipherResponseJson
 import com.bitwarden.network.model.AttachmentJsonResponse
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.CreateCipherResponseJson
+import com.bitwarden.network.model.GetCipherResponse
 import com.bitwarden.network.model.ShareCipherJsonRequest
 import com.bitwarden.network.model.UnarchiveCipherResponseJson
 import com.bitwarden.network.model.UpdateCipherCollectionsJsonRequest
@@ -48,7 +49,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import retrofit2.HttpException
 import java.io.File
 import java.time.Clock
 
@@ -763,6 +763,7 @@ class CipherManagerImpl(
      * are met. If the resource cannot be found cloud-side, and it was updated, delete it from disk
      * for now.
      */
+    @Suppress("CyclomaticComplexMethod")
     private suspend fun syncCipherIfNecessary(syncCipherUpsertData: SyncCipherUpsertData) {
         val userId = syncCipherUpsertData.userId
         val cipherId = syncCipherUpsertData.cipherId
@@ -817,14 +818,21 @@ class CipherManagerImpl(
         ciphersService
             .getCipher(cipherId = cipherId)
             .fold(
-                onSuccess = { vaultDiskSource.saveCipher(userId = userId, cipher = it) },
-                onFailure = {
-                    // Delete any updates if it's missing from the server
-                    val httpException = it as? HttpException
-                    @Suppress("MagicNumber")
-                    if (httpException?.code() == 404 && isUpdate) {
-                        vaultDiskSource.deleteCipher(userId = userId, cipherId = cipherId)
+                onSuccess = { response ->
+                    when (response) {
+                        is GetCipherResponse.NotFound -> {
+                            if (isUpdate) {
+                                vaultDiskSource.deleteCipher(userId = userId, cipherId = cipherId)
+                            }
+                        }
+
+                        is GetCipherResponse.Success -> {
+                            vaultDiskSource.saveCipher(userId = userId, cipher = response.cipher)
+                        }
                     }
+                },
+                onFailure = {
+                    // no-op
                 },
             )
     }

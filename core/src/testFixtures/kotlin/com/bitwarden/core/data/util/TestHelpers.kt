@@ -3,6 +3,7 @@ package com.bitwarden.core.data.util
 import com.bitwarden.core.di.CoreModule
 import io.mockk.MockKMatcherScope
 import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.TestDispatcher
@@ -20,7 +21,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 fun assertJsonEquals(
     expected: String,
     actual: String,
-    json: Json = CoreModule.providesJson(),
+    json: Json = CoreModule.providesJson(buildInfoManager = mockk(relaxed = true)),
 ) {
     assertEquals(
         json.parseToJsonElement(expected),

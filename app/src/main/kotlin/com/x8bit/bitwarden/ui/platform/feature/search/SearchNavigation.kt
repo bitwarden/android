@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.search
 
 import androidx.lifecycle.SavedStateHandle
@@ -5,6 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.toRoute
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
@@ -42,6 +45,9 @@ enum class SearchableItemType {
     VAULT_FOLDER,
     VAULT_TRASH,
     VAULT_VERIFICATION_CODES,
+    VAULT_BANK_ACCOUNTS,
+    VAULT_LICENSES,
+    VAULT_PASSPORTS,
 }
 
 /**
@@ -72,6 +78,9 @@ fun SavedStateHandle.toSearchArgs(): SearchArgs {
             SearchableItemType.VAULT_NO_FOLDER -> SearchType.Vault.NoFolder
             SearchableItemType.VAULT_TRASH -> SearchType.Vault.Trash
             SearchableItemType.VAULT_VERIFICATION_CODES -> SearchType.Vault.VerificationCodes
+            SearchableItemType.VAULT_BANK_ACCOUNTS -> SearchType.Vault.BankAccounts
+            SearchableItemType.VAULT_LICENSES -> SearchType.Vault.Licenses
+            SearchableItemType.VAULT_PASSPORTS -> SearchType.Vault.Passports
             SearchableItemType.VAULT_FOLDER -> SearchType.Vault.Folder(
                 folderId = requireNotNull(route.id),
             )
@@ -86,12 +95,14 @@ fun SavedStateHandle.toSearchArgs(): SearchArgs {
 /**
  * Add search destinations to the nav graph.
  */
+@Suppress("LongParameterList")
 fun NavGraphBuilder.searchDestination(
     onNavigateBack: () -> Unit,
     onNavigateToAddEditSend: (route: AddEditSendRoute) -> Unit,
     onNavigateToViewSend: (route: ViewSendRoute) -> Unit,
     onNavigateToEditCipher: (args: VaultAddEditArgs) -> Unit,
     onNavigateToViewCipher: (args: VaultItemArgs) -> Unit,
+    onNavigateToPlan: () -> Unit,
 ) {
     composableWithSlideTransitions<SearchRoute> {
         SearchScreen(
@@ -100,6 +111,7 @@ fun NavGraphBuilder.searchDestination(
             onNavigateToViewSend = onNavigateToViewSend,
             onNavigateToEditCipher = onNavigateToEditCipher,
             onNavigateToViewCipher = onNavigateToViewCipher,
+            onNavigateToPlan = onNavigateToPlan,
         )
     }
 }
@@ -137,6 +149,9 @@ private fun SearchType.toSearchableItemType(): SearchableItemType =
         SearchType.Vault.VerificationCodes -> SearchableItemType.VAULT_VERIFICATION_CODES
         SearchType.Vault.SshKeys -> SearchableItemType.VAULT_SSH_KEYS
         SearchType.Vault.Archive -> SearchableItemType.VAULT_ARCHIVE
+        SearchType.Vault.BankAccounts -> SearchableItemType.VAULT_BANK_ACCOUNTS
+        SearchType.Vault.Licenses -> SearchableItemType.VAULT_LICENSES
+        SearchType.Vault.Passports -> SearchableItemType.VAULT_PASSPORTS
     }
 
 private fun SearchType.toIdOrNull(): String? =
@@ -156,4 +171,7 @@ private fun SearchType.toIdOrNull(): String? =
         SearchType.Vault.VerificationCodes -> null
         SearchType.Vault.SshKeys -> null
         SearchType.Vault.Archive -> null
+        SearchType.Vault.BankAccounts -> null
+        SearchType.Vault.Licenses -> null
+        SearchType.Vault.Passports -> null
     }

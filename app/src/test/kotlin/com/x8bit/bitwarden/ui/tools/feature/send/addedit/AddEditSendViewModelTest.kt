@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addedit
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
@@ -21,7 +20,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -109,14 +108,8 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         every { sendSnackbarData(data = any(), relay = any()) } just runs
     }
 
-    private val mutableSendEmailVerificationFeatureFlagFlow = MutableStateFlow(false)
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every {
-            getFeatureFlagFlow(FlagKey.SendEmailVerification)
-        } returns mutableSendEmailVerificationFeatureFlagFlow
-        every {
-            getFeatureFlag(FlagKey.SendEmailVerification)
-        } answers { mutableSendEmailVerificationFeatureFlagFlow.value }
+    private val premiumStateManager: PremiumStateManager = mockk {
+        every { isInAppUpgradeAvailable() } returns false
     }
 
     @BeforeEach
@@ -320,7 +313,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                 mockSendView.toViewState(
                     baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                     isHideEmailAddressEnabled = true,
-                    isSendEmailVerificationEnabled = false,
                 )
             } returns viewState
             every { viewState.toSendView(clock) } returns mockSendView
@@ -364,7 +356,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             mockSendView.toViewState(
                 baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                 isHideEmailAddressEnabled = true,
-                isSendEmailVerificationEnabled = false,
             )
         } returns viewState
         every { viewState.toSendView(clock) } returns mockSendView
@@ -480,7 +471,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `SaveClick for file without premium show error dialog`() {
+    fun `SaveClick for file without Premium show error dialog`() {
         mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
             accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = false)),
         )
@@ -608,7 +599,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             mockSendView.toViewState(
                 baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                 isHideEmailAddressEnabled = true,
-                isSendEmailVerificationEnabled = false,
             )
         } returns viewState
         mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
@@ -670,7 +660,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                 mockSendView.toViewState(
                     baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                     isHideEmailAddressEnabled = true,
-                    isSendEmailVerificationEnabled = false,
                 )
             } returns DEFAULT_VIEW_STATE
             mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
@@ -716,7 +705,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                 mockSendView.toViewState(
                     baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                     isHideEmailAddressEnabled = true,
-                    isSendEmailVerificationEnabled = false,
                 )
             } returns DEFAULT_VIEW_STATE
             mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
@@ -791,7 +779,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             mockSendView.toViewState(
                 baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                 isHideEmailAddressEnabled = true,
-                isSendEmailVerificationEnabled = false,
             )
         } returns DEFAULT_VIEW_STATE
         mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
@@ -844,7 +831,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                 mockSendView.toViewState(
                     baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                     isHideEmailAddressEnabled = true,
-                    isSendEmailVerificationEnabled = false,
                 )
             } returns DEFAULT_VIEW_STATE
             mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
@@ -912,7 +898,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             mockSendView.toViewState(
                 baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                 isHideEmailAddressEnabled = true,
-                isSendEmailVerificationEnabled = false,
             )
         } returns viewState
         mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
@@ -1088,23 +1073,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
             viewModel.trySendAction(AddEditSendAction.NoteChange("input"))
-            assertEquals(DEFAULT_STATE.copy(viewState = expectedViewState), awaitItem())
-        }
-    }
-
-    @Test
-    fun `PasswordChange should update note input`() = runTest {
-        val viewModel = createViewModel()
-        val expectedViewState = DEFAULT_VIEW_STATE.copy(
-            common = DEFAULT_COMMON_STATE.copy(
-                passwordInput = "input",
-                sendAuth = SendAuth.Password,
-            ),
-        )
-
-        viewModel.stateFlow.test {
-            assertEquals(DEFAULT_STATE, awaitItem())
-            viewModel.trySendAction(AddEditSendAction.PasswordChange("input"))
             assertEquals(DEFAULT_STATE.copy(viewState = expectedViewState), awaitItem())
         }
     }
@@ -1412,7 +1380,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `AuthTypeSelect with Email auth without premium should show premium dialog`() = runTest {
+    fun `AuthTypeSelect with Email auth without Premium should show Premium dialog`() = runTest {
         val nonPremiumState = DEFAULT_STATE.copy(isPremium = false)
         val viewModel = createViewModel(nonPremiumState)
 
@@ -1430,7 +1398,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `AuthTypeSelect with Email auth with premium should allow selection`() = runTest {
+    fun `AuthTypeSelect with Email auth with Premium should allow selection`() = runTest {
         every { UUID.randomUUID().toString() } returns "uuid"
         val premiumState = DEFAULT_STATE.copy(isPremium = true)
         val viewModel = createViewModel(premiumState)
@@ -1458,20 +1426,33 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `UpgradeToPremiumClick should send NavigateToPremium event`() = runTest {
-        val viewModel = createViewModel()
-
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(AddEditSendAction.UpgradeToPremiumClick)
-            val event = awaitItem()
-            assertEquals(
-                AddEditSendEvent.NavigateToPremium(
-                    uri = "https://vault.bitwarden.com/#/settings/subscription/premium?callToAction=upgradeToPremium",
-                ),
-                event,
-            )
+    fun `UpgradeToPremiumClick should send NavigateToPremium when in-app upgrade not available`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(AddEditSendAction.UpgradeToPremiumClick)
+                assertEquals(
+                    AddEditSendEvent.NavigateToPremium(
+                        uri = "https://vault.bitwarden.com/#/settings/subscription/premium?callToAction=upgradeToPremium",
+                    ),
+                    awaitItem(),
+                )
+            }
         }
-    }
+
+    @Test
+    fun `UpgradeToPremiumClick should send NavigateToPlanModal when in-app upgrade available`() =
+        runTest {
+            every { premiumStateManager.isInAppUpgradeAvailable() } returns true
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(AddEditSendAction.UpgradeToPremiumClick)
+                assertEquals(
+                    AddEditSendEvent.NavigateToPlanModal,
+                    awaitItem(),
+                )
+            }
+        }
 
     //endregion Authentication Tests
 
@@ -1498,7 +1479,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         networkConnectionManager = networkConnectionManager,
         snackbarRelayManager = snackbarRelayManager,
         generatorRepository = generatorRepository,
-        featureFlagManager = featureFlagManager,
+        premiumStateManager = premiumStateManager,
     )
 }
 
@@ -1515,7 +1496,6 @@ private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
     sendUrl = null,
     hasPassword = false,
     isHideEmailAddressEnabled = true,
-    isSendEmailVerificationEnabled = false,
     sendAuth = SendAuth.None,
 )
 
@@ -1550,6 +1530,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     environment = Environment.Us,
     avatarColorHex = "#aa00aa",
     isPremium = true,
+    isPremiumFromSelf = true,
     isLoggedIn = true,
     isVaultUnlocked = true,
     needsPasswordReset = false,

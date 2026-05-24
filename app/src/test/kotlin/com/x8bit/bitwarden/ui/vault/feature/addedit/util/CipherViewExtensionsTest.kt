@@ -13,6 +13,7 @@ import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.IdentityView
 import com.bitwarden.vault.LoginUriView
 import com.bitwarden.vault.LoginView
+import com.bitwarden.vault.PassportView
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SecureNoteView
@@ -44,6 +45,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneOffset
 import java.util.UUID
 
@@ -377,6 +379,58 @@ class CipherViewExtensionsTest {
     }
 
     @Test
+    fun `toViewState should create a Passport ViewState`() {
+        val cipherView = DEFAULT_PASSPORT_CIPHER_VIEW
+
+        val result = cipherView.toViewState(
+            isClone = false,
+            isPremium = false,
+            isIndividualVaultDisabled = false,
+            totpData = null,
+            resourceManager = resourceManager,
+            clock = FIXED_CLOCK,
+            canDelete = true,
+            canAssignToCollections = true,
+        )
+
+        assertEquals(
+            VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(
+                    originalCipher = cipherView,
+                    name = "cipher",
+                    favorite = false,
+                    masterPasswordReprompt = true,
+                    notes = "Lots of notes",
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
+                        VaultAddEditState.Custom.TextField(TEST_ID, "TestText", "TestText"),
+                        VaultAddEditState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
+                    ),
+                    availableFolders = emptyList(),
+                    availableOwners = emptyList(),
+                ),
+                isIndividualVaultDisabled = false,
+                type = VaultAddEditState.ViewState.Content.ItemType.Passport(
+                    givenName = "the given name",
+                    surname = "the surname",
+                    dateOfBirth = LocalDate.of(1990, 8, 10),
+                    sex = "the sex",
+                    birthPlace = "the birth place",
+                    nationality = "the nationality",
+                    passportNumber = "the passport number",
+                    passportType = "the passport type",
+                    nationalIdentificationNumber = "the national identification number",
+                    issuingCountry = "the issuing country",
+                    issuingAuthority = "the issuing authority",
+                    issueDate = LocalDate.of(2021, 3, 20),
+                    expirationDate = LocalDate.of(2031, 3, 20),
+                ),
+            ),
+            result,
+        )
+    }
+
+    @Test
     fun `toViewState with isClone true should append clone text to the cipher name`() {
         val cipherView = DEFAULT_SECURE_NOTES_CIPHER_VIEW
 
@@ -454,7 +508,7 @@ class CipherViewExtensionsTest {
     }
 
     @Test
-    fun `toViewState with archived cipher and no premium account should set archiveCalloutText`() {
+    fun `toViewState with archived cipher and no Premium account should set archiveCalloutText`() {
         val cipherView = DEFAULT_SECURE_NOTES_CIPHER_VIEW.copy(
             deletedDate = FIXED_CLOCK.instant(),
             archivedDate = FIXED_CLOCK.instant(),
@@ -697,6 +751,7 @@ class CipherViewExtensionsTest {
             avatarColorHex = "#ffecbc49",
             environment = Environment.Eu,
             isPremium = true,
+            isPremiumFromSelf = true,
             isLoggedIn = false,
             isVaultUnlocked = false,
             needsPasswordReset = false,
@@ -739,6 +794,9 @@ private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     identity = null,
     card = null,
     secureNote = null,
+    bankAccount = null,
+    driversLicense = null,
+    passport = null,
     favorite = false,
     reprompt = CipherRepromptType.PASSWORD,
     organizationUseTotp = false,
@@ -873,6 +931,45 @@ private val DEFAULT_SSH_KEY_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.c
         publicKey = "PublicKey",
         privateKey = "PrivateKey",
         fingerprint = "Fingerprint",
+    ),
+)
+
+private val DEFAULT_PASSPORT_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.copy(
+    type = CipherType.PASSPORT,
+    fields = listOf(
+        FieldView(
+            name = "TestBoolean",
+            value = false.toString(),
+            type = FieldType.BOOLEAN,
+            linkedId = null,
+        ),
+        FieldView(
+            name = "TestText",
+            value = "TestText",
+            type = FieldType.TEXT,
+            linkedId = null,
+        ),
+        FieldView(
+            name = "TestHidden",
+            value = "TestHidden",
+            type = FieldType.HIDDEN,
+            linkedId = null,
+        ),
+    ),
+    passport = PassportView(
+        surname = "the surname",
+        givenName = "the given name",
+        dateOfBirth = "1990-08-10",
+        birthPlace = "the birth place",
+        sex = "the sex",
+        nationality = "the nationality",
+        passportNumber = "the passport number",
+        passportType = "the passport type",
+        issuingCountry = "the issuing country",
+        issuingAuthority = "the issuing authority",
+        issueDate = "2021-03-20",
+        expirationDate = "2031-03-20",
+        nationalIdentificationNumber = "the national identification number",
     ),
 )
 

@@ -42,7 +42,7 @@ class AuthDiskSourceTest {
         every { migrateIfNecessary() } just runs
     }
 
-    private val json = CoreModule.providesJson()
+    private val json = CoreModule.providesJson(buildInfoManager = mockk(relaxed = true))
 
     private val authDiskSource = AuthDiskSourceImpl(
         encryptedSharedPreferences = fakeEncryptedSharedPreferences,
@@ -1570,7 +1570,8 @@ private val USER_STATE = UserStateJson(
                 stamp = "stamp",
                 organizationId = "organizationId",
                 avatarColorHex = "avatarColorHex",
-                hasPremium = true,
+                hasPremiumPersonally = true,
+                hasPremiumFromOrganization = null,
                 forcePasswordResetReason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
                 kdfType = KdfTypeJson.ARGON2_ID,
                 kdfIterations = 600000,

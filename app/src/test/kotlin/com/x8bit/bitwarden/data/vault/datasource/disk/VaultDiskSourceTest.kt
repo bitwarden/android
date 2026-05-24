@@ -34,7 +34,7 @@ import java.time.Instant
 
 class VaultDiskSourceTest {
 
-    private val json = CoreModule.providesJson()
+    private val json = CoreModule.providesJson(buildInfoManager = mockk(relaxed = true))
     private val dispatcherManager: FakeDispatcherManager = FakeDispatcherManager()
     private lateinit var ciphersDao: FakeCiphersDao
     private lateinit var collectionsDao: FakeCollectionsDao
@@ -246,6 +246,30 @@ class VaultDiskSourceTest {
     }
 
     @Test
+    fun `deleteSelectedFolders should call deleteSelectedFolders`() = runTest {
+        assertFalse(foldersDao.deleteSelectedFoldersCalled)
+        foldersDao.storedFolders.add(FOLDER_ENTITY)
+        assertEquals(1, foldersDao.storedFolders.size)
+
+        vaultDiskSource.deleteSelectedFolders(USER_ID, listOf(FOLDER_1.id))
+
+        assertTrue(foldersDao.deleteSelectedFoldersCalled)
+        assertEquals(emptyList<FolderEntity>(), foldersDao.storedFolders)
+    }
+
+    @Test
+    fun `deleteAllFolders should call deleteAllFolders`() = runTest {
+        assertFalse(foldersDao.deleteFoldersCalled)
+        foldersDao.storedFolders.add(FOLDER_ENTITY)
+        assertEquals(1, foldersDao.storedFolders.size)
+
+        vaultDiskSource.deleteAllFolders(USER_ID)
+
+        assertTrue(foldersDao.deleteFoldersCalled)
+        assertEquals(emptyList<FolderEntity>(), foldersDao.storedFolders)
+    }
+
+    @Test
     fun `saveFolder should call insertFolder`() = runTest {
         assertFalse(foldersDao.insertFolderCalled)
         assertEquals(0, foldersDao.storedFolders.size)
@@ -254,6 +278,31 @@ class VaultDiskSourceTest {
 
         assertTrue(foldersDao.insertFolderCalled)
         assertEquals(listOf(FOLDER_ENTITY), foldersDao.storedFolders)
+    }
+
+    @Test
+    fun `saveFolders should call insertFolders`() = runTest {
+        assertFalse(foldersDao.insertFoldersCalled)
+        assertEquals(0, foldersDao.storedFolders.size)
+
+        vaultDiskSource.saveFolders(USER_ID, listOf(FOLDER_1))
+
+        assertTrue(foldersDao.insertFoldersCalled)
+        assertEquals(1, foldersDao.storedFolders.size)
+        val storedFolderEntity = foldersDao.storedFolders.first()
+        assertEquals(FOLDER_ENTITY, storedFolderEntity)
+    }
+
+    @Test
+    fun `getFolders should return all FoldersDao folders`() = runTest {
+        val folderEntities = listOf(FOLDER_ENTITY)
+        val folders = listOf(FOLDER_1)
+
+        val result1 = vaultDiskSource.getFolders(USER_ID)
+        assertEquals(emptyList<SyncResponseJson.Folder>(), result1)
+        foldersDao.insertFolders(folderEntities)
+        val result2 = vaultDiskSource.getFolders(USER_ID)
+        assertEquals(folders, result2)
     }
 
     @Test
@@ -539,6 +588,46 @@ private const val CIPHER_JSON = """
     "publicKey": "mockPublicKey-1",
     "privateKey": "mockPrivateKey-1",
     "keyFingerprint": "mockKeyFingerprint-1"
+  },
+  "bankAccount": {
+    "bankName": "mockBankName-1",
+    "nameOnAccount": "mockNameOnAccount-1",
+    "accountType": "mockAccountType-1",
+    "accountNumber": "mockAccountNumber-1",
+    "routingNumber": "mockRoutingNumber-1",
+    "branchNumber": "mockBranchNumber-1",
+    "pin": "mockPin-1",
+    "swiftCode": "mockSwiftCode-1",
+    "iban": "mockIban-1",
+    "bankContactPhone": "mockBankContactPhone-1"
+  },
+  "driversLicense": {
+    "firstName": "mockFirstName-1",
+    "middleName": "mockMiddleName-1",
+    "lastName": "mockLastName-1",
+    "licenseNumber": "mockLicenseNumber-1",
+    "issuingCountry": "mockIssuingCountry-1",
+    "issuingState": "mockIssuingState-1",
+    "issuingAuthority": "mockIssuingAuthority-1",
+    "expirationDate": "mockExpirationDate-1",
+    "dateOfBirth": "mockDateOfBirth-1",
+    "issueDate": "mockIssueDate-1",
+    "licenseClass": "mockLicenseClass-1",
+  },
+  "passport": {
+    "surname": "mockSurname-1",
+    "givenName": "mockGivenName-1",
+    "dateOfBirth": "mockDateOfBirth-1",
+    "birthPlace": "mockBirthPlace-1",
+    "sex": "mockSex-1",
+    "nationality": "mockNationality-1",
+    "passportNumber": "mockPassportNumber-1",
+    "passportType": "mockPassportType-1",
+    "nationalIdentificationNumber": "mockNationalIdentificationNumber-1",
+    "issuingCountry": "mockIssuingCountry-1",
+    "issuingAuthority": "mockIssuingAuthority-1",
+    "issueDate": "mockIssueDate-1",
+    "expirationDate": "mockExpirationDate-1",
   },
   "encryptedFor": "mockEncryptedFor-1"
 }

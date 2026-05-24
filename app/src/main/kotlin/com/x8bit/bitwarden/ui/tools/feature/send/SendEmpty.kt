@@ -31,6 +31,7 @@ import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.tools.feature.send.model.UpgradedToPremiumCardData
 
 /**
  * Content for the empty state of the [SendScreen].
@@ -40,12 +41,23 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 fun SendEmpty(
     policyDisablesSend: Boolean,
     onAddItemClick: () -> Unit,
+    upgradedToPremiumCardData: UpgradedToPremiumCardData?,
     modifier: Modifier = Modifier,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.verticalScroll(rememberScrollState()),
     ) {
+        upgradedToPremiumCardData?.let {
+            Spacer(modifier = Modifier.height(height = 12.dp))
+            UpgradedToPremiumActionCard(
+                onActionClick = it.onCardClick,
+                onDismissClick = it.onCardDismiss,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+        }
         if (policyDisablesSend) {
             Spacer(modifier = Modifier.height(12.dp))
             BitwardenInfoCalloutCard(
@@ -119,6 +131,7 @@ private fun SendEmpty_preview() {
             SendEmpty(
                 policyDisablesSend = false,
                 onAddItemClick = {},
+                upgradedToPremiumCardData = null,
             )
         }
     }
@@ -135,6 +148,7 @@ private fun SendEmptyPolicyDisabled_preview() {
             SendEmpty(
                 policyDisablesSend = true,
                 onAddItemClick = {},
+                upgradedToPremiumCardData = null,
             )
         }
     }

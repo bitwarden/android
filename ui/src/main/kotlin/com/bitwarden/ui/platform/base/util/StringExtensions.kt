@@ -11,6 +11,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.core.graphics.toColorInt
+import timber.log.Timber
 import java.net.URI
 import java.net.URISyntaxException
 import java.text.Normalizer
@@ -169,11 +170,16 @@ fun String.toAnnotatedString(): AnnotatedString = AnnotatedString(text = this)
  * Supported formats:
  * - "rrggbb" / "#rrggbb"
  * - "aarrggbb" / "#aarrggbb"
+ * Support for some default color names per the [toColorInt] function.
  */
-fun String.hexToColor(): Color = if (startsWith("#")) {
-    Color(toColorInt())
-} else {
-    Color("#$this".toColorInt())
+fun String.hexToColor(): Color {
+    val colorString = if (Regex("^[0-9A-Fa-f]+$").matches(this)) "#$this" else this
+    return try {
+        Color(colorString.toColorInt())
+    } catch (e: IllegalArgumentException) {
+        Timber.e(e, "Failed to parse color: $this")
+        Color.Black
+    }
 }
 
 /**

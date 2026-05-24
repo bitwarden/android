@@ -13,6 +13,7 @@ import com.bitwarden.network.model.AuthTokenData
 import com.bitwarden.network.model.BitwardenServiceClientConfig
 import com.bitwarden.network.model.NetworkCookie
 import com.bitwarden.network.provider.CookieProvider
+import com.bitwarden.network.provider.PermissionProvider
 import com.bitwarden.network.service.ConfigService
 import com.bitwarden.network.service.DownloadService
 import com.bitwarden.network.ssl.CertificateProvider
@@ -20,6 +21,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
 import java.net.Socket
 import java.security.Principal
 import java.security.PrivateKey
@@ -42,11 +44,11 @@ object PlatformNetworkModule {
 
     @Provides
     @Singleton
-    fun provideBitwardenServiceClient(
+    fun provideBitwardenServiceClientConfig(
         baseUrlsProvider: BaseUrlsProvider,
         authDiskSource: AuthDiskSource,
         clock: Clock,
-    ): BitwardenServiceClient = bitwardenServiceClient(
+    ): BitwardenServiceClientConfig =
         BitwardenServiceClientConfig(
             clock = clock,
             appIdProvider = authDiskSource,
@@ -59,6 +61,7 @@ object PlatformNetworkModule {
             enableHttpBodyLogging = BuildConfig.DEBUG,
             authTokenProvider = object : AuthTokenProvider {
                 override fun getAuthTokenDataOrNull(): AuthTokenData? = null
+
                 override fun getAuthTokenDataOrNull(userId: String): AuthTokenData? = null
             },
             certificateProvider = object : CertificateProvider {
@@ -66,20 +69,38 @@ object PlatformNetworkModule {
                     keyType: Array<out String>?,
                     issuers: Array<out Principal>?,
                     socket: Socket?,
-                ) = ""
+                ): String = ""
 
                 override fun getCertificateChain(alias: String?): Array<X509Certificate>? = null
 
                 override fun getPrivateKey(alias: String?): PrivateKey? = null
             },
             cookieProvider = object : CookieProvider {
+                override val errorMessageString: String get() = "Error"
+
                 override fun needsBootstrap(hostname: String): Boolean = false
 
                 override fun getCookies(hostname: String): List<NetworkCookie> = emptyList()
 
-                override fun acquireCookies(hostname: String) = Unit
+                override fun acquireCookies(hostname: String): Unit = Unit
             },
-        ),
+            permissionProvider = object : PermissionProvider {
+                override val errorMessageString: String get() = "Error"
+
+                override val hasLocalNetworkAccessPermission: Boolean get() = false
+
+                override fun acquireLocalNetworkAccessPermission(): Unit = Unit
+            },
+        )
+
+    @Provides
+    @Singleton
+    fun provideBitwardenServiceClient(
+        serviceClientConfig: BitwardenServiceClientConfig,
+        json: Json,
+    ): BitwardenServiceClient = bitwardenServiceClient(
+        config = serviceClientConfig,
+        json = json,
     )
 
     @Provides

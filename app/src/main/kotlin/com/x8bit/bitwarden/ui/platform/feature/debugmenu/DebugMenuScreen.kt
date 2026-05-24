@@ -162,6 +162,18 @@ fun DebugMenuScreen(
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
             )
+            Spacer(Modifier.height(height = 8.dp))
+            BitwardenFilledButton(
+                label = stringResource(BitwardenString.show_upgraded_to_premium_card),
+                onClick = {
+                    viewModel.trySendAction(
+                        DebugMenuAction.ShowUpgradedToPremiumCard,
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
             Spacer(Modifier.height(height = 16.dp))
             BitwardenHorizontalDivider()
             Spacer(Modifier.height(height = 16.dp))

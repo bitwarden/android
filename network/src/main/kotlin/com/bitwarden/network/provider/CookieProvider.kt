@@ -10,6 +10,11 @@ import com.bitwarden.network.model.NetworkCookie
  * Bitwarden API endpoints behind a load balancer.
  */
 interface CookieProvider {
+    /**
+     * The translated human-readable string to be displayed when the missing cookie is the reason
+     * for a request failure.
+     */
+    val errorMessageString: String
 
     /**
      * Determines if the given [hostname] requires cookie bootstrap.

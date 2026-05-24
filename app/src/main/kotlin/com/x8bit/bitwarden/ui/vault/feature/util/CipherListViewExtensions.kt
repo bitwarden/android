@@ -6,6 +6,7 @@ import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CopyableCipherFields
 import com.x8bit.bitwarden.data.autofill.util.login
+import com.x8bit.bitwarden.data.platform.util.isActive
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.model.VaultTrailingIcon
 import com.x8bit.bitwarden.ui.vault.util.toSdkCipherType
@@ -19,8 +20,7 @@ import kotlinx.collections.immutable.toImmutableList
 fun CipherListView.toOverflowActions(
     hasMasterPassword: Boolean,
     isPremiumUser: Boolean,
-    isArchiveEnabled: Boolean,
-): List<ListingItemOverflowAction.VaultAction> =
+): ImmutableList<ListingItemOverflowAction.VaultAction> =
     this
         .id
         ?.let { cipherId ->
@@ -73,6 +73,50 @@ fun CipherListView.toOverflowActions(
                         this.type is CipherListViewType.SecureNote &&
                             this.copyableFields.contains(CopyableCipherFields.SECURE_NOTES)
                     },
+                ListingItemOverflowAction.VaultAction
+                    .CopyAccountNumberClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = hasMasterPassword,
+                    )
+                    .takeIf {
+                        this.type is CipherListViewType.BankAccount &&
+                            this.copyableFields.contains(
+                                CopyableCipherFields.BANK_ACCOUNT_ACCOUNT_NUMBER,
+                            )
+                    },
+                ListingItemOverflowAction.VaultAction
+                    .CopyRoutingNumberClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = hasMasterPassword,
+                    )
+                    .takeIf {
+                        this.type is CipherListViewType.BankAccount &&
+                            this.copyableFields.contains(
+                                CopyableCipherFields.BANK_ACCOUNT_ROUTING_NUMBER,
+                            )
+                    },
+                ListingItemOverflowAction.VaultAction
+                    .CopyLicenseNumberClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = hasMasterPassword,
+                    )
+                    .takeIf {
+                        this.type is CipherListViewType.DriversLicense &&
+                            this.copyableFields.contains(
+                                CopyableCipherFields.DRIVERS_LICENSE_LICENSE_NUMBER,
+                            )
+                    },
+                ListingItemOverflowAction.VaultAction
+                    .CopyPassportNumberClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = hasMasterPassword,
+                    )
+                    .takeIf {
+                        this.type is CipherListViewType.Passport &&
+                            this.copyableFields.contains(
+                                CopyableCipherFields.PASSPORT_PASSPORT_NUMBER,
+                            )
+                    },
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = cipherId,
                     cipherType = this.type.toSdkCipherType(),
@@ -88,16 +132,13 @@ fun CipherListView.toOverflowActions(
                     ListingItemOverflowAction.VaultAction.LaunchClick(url = it)
                 },
                 ListingItemOverflowAction.VaultAction.ArchiveClick(cipherId = cipherId)
-                    .takeIf {
-                        this.archivedDate == null && deletedDate == null && isArchiveEnabled
-                    },
+                    .takeIf { this.isActive },
                 ListingItemOverflowAction.VaultAction.UnarchiveClick(cipherId = cipherId)
-                    .takeIf {
-                        this.archivedDate != null && deletedDate == null && isArchiveEnabled
-                    },
+                    .takeIf { this.archivedDate != null && deletedDate == null },
             )
         }
         .orEmpty()
+        .toImmutableList()
 
 /**
  * Checks if the list is empty and if not returns an icon in a list.

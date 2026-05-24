@@ -5,7 +5,6 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
@@ -33,7 +32,7 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySele
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
@@ -44,6 +43,9 @@ import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockBankAccountView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDriversLicenseView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPassportView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
@@ -162,10 +164,8 @@ class SearchViewModelTest : BaseViewModelTest() {
             getSnackbarDataFlow(relay = any(), relays = anyVararg())
         } returns mutableSnackbarDataFlow
     }
-    private val mutableArchiveItemsFlow = MutableStateFlow(true)
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(FlagKey.ArchiveItems) } answers { mutableArchiveItemsFlow.value }
-        every { getFeatureFlagFlow(FlagKey.ArchiveItems) } returns mutableArchiveItemsFlow
+    private val premiumStateManager: PremiumStateManager = mockk {
+        every { isInAppUpgradeAvailable() } returns false
     }
 
     @BeforeEach
@@ -301,23 +301,38 @@ class SearchViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `UpgradeToPremiumClick should emit NavigateToUrl`() = runTest {
-        val viewModel = createViewModel(initialState = null)
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(SearchAction.UpgradeToPremiumClick)
-            assertEquals(
-                SearchEvent.NavigateToUrl(
-                    url = "https://vault.bitwarden.com/#/" +
-                        "settings/subscription/premium" +
-                        "?callToAction=upgradeToPremium",
-                ),
-                awaitItem(),
-            )
+    fun `UpgradeToPremiumClick should emit NavigateToUrl when in-app upgrade not available`() =
+        runTest {
+            val viewModel = createViewModel(initialState = null)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(SearchAction.UpgradeToPremiumClick)
+                assertEquals(
+                    SearchEvent.NavigateToUrl(
+                        url = "https://vault.bitwarden.com/#/" +
+                            "settings/subscription/premium" +
+                            "?callToAction=upgradeToPremium",
+                    ),
+                    awaitItem(),
+                )
+            }
         }
-    }
 
     @Test
-    fun `ArchiveClick without premium should show ArchiveRequiresPremium dialog`() = runTest {
+    fun `UpgradeToPremiumClick should emit NavigateToPlanModal when in-app upgrade available`() =
+        runTest {
+            every { premiumStateManager.isInAppUpgradeAvailable() } returns true
+            val viewModel = createViewModel(initialState = null)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(SearchAction.UpgradeToPremiumClick)
+                assertEquals(
+                    SearchEvent.NavigateToPlanModal,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `ArchiveClick without Premium should show ArchiveRequiresPremium dialog`() = runTest {
         mutableUserStateFlow.update {
             it?.copy(accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = false)))
         }
@@ -1233,6 +1248,282 @@ class SearchViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `OverflowOptionClick Vault CopyAccountNumberClick should call setText on the ClipboardManager`() =
+        runTest {
+            val accountNumber = "12345678"
+            val viewModel = createViewModel()
+            coEvery {
+                vaultRepository.getCipher(CIPHER_ID)
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    cipherType = CipherType.BANK_ACCOUNT,
+                    bankAccount = createMockBankAccountView(
+                        number = 1,
+                        accountNumber = accountNumber,
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyAccountNumberClick(
+                        cipherId = "mockId-1",
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = accountNumber,
+                    toastDescriptorOverride = BitwardenString.account_number.asText(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyAccountNumberClick should not copy when account number is blank`() =
+        runTest {
+            val viewModel = createViewModel()
+            coEvery {
+                vaultRepository.getCipher(CIPHER_ID)
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    cipherType = CipherType.BANK_ACCOUNT,
+                    bankAccount = createMockBankAccountView(
+                        number = 1,
+                        accountNumber = "",
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyAccountNumberClick(
+                        cipherId = "mockId-1",
+                        requiresPasswordReprompt = false,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyRoutingNumberClick should call setText on the ClipboardManager`() =
+        runTest {
+            val routingNumber = "021000021"
+            val viewModel = createViewModel()
+            coEvery {
+                vaultRepository.getCipher(CIPHER_ID)
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    cipherType = CipherType.BANK_ACCOUNT,
+                    bankAccount = createMockBankAccountView(
+                        number = 1,
+                        routingNumber = routingNumber,
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyRoutingNumberClick(
+                        cipherId = "mockId-1",
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = routingNumber,
+                    toastDescriptorOverride = BitwardenString.routing_number.asText(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyRoutingNumberClick should not copy when routing number is null`() =
+        runTest {
+            val viewModel = createViewModel()
+            coEvery {
+                vaultRepository.getCipher(CIPHER_ID)
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    cipherType = CipherType.BANK_ACCOUNT,
+                    bankAccount = createMockBankAccountView(
+                        number = 1,
+                        routingNumber = null,
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyRoutingNumberClick(
+                        cipherId = "mockId-1",
+                        requiresPasswordReprompt = false,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyLicenseNumberClick should call setText on the ClipboardManager`() =
+        runTest {
+            val licenseNumber = "D123-4567-8901-23"
+            val viewModel = createViewModel()
+            coEvery {
+                vaultRepository.getCipher(CIPHER_ID)
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    cipherType = CipherType.DRIVERS_LICENSE,
+                    driversLicense = createMockDriversLicenseView(
+                        number = 1,
+                        licenseNumber = licenseNumber,
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyLicenseNumberClick(
+                        cipherId = "mockId-1",
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = licenseNumber,
+                    toastDescriptorOverride = BitwardenString.license_number.asText(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyLicenseNumberClick should not copy when license number is null`() =
+        runTest {
+            val viewModel = createViewModel()
+            coEvery {
+                vaultRepository.getCipher(CIPHER_ID)
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    cipherType = CipherType.DRIVERS_LICENSE,
+                    driversLicense = createMockDriversLicenseView(
+                        number = 1,
+                        licenseNumber = null,
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyLicenseNumberClick(
+                        cipherId = "mockId-1",
+                        requiresPasswordReprompt = false,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyPassportNumberClick should call setText on the ClipboardManager`() =
+        runTest {
+            val passportNumber = "P12345678"
+            val viewModel = createViewModel()
+            coEvery {
+                vaultRepository.getCipher(CIPHER_ID)
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    cipherType = CipherType.PASSPORT,
+                    passport = createMockPassportView(
+                        number = 1,
+                        passportNumber = passportNumber,
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyPassportNumberClick(
+                        cipherId = "mockId-1",
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = passportNumber,
+                    toastDescriptorOverride = BitwardenString.passport_number.asText(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyPassportNumberClick should not copy when passport number is null`() =
+        runTest {
+            val viewModel = createViewModel()
+            coEvery {
+                vaultRepository.getCipher(CIPHER_ID)
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    cipherType = CipherType.PASSPORT,
+                    passport = createMockPassportView(
+                        number = 1,
+                        passportNumber = null,
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyPassportNumberClick(
+                        cipherId = "mockId-1",
+                        requiresPasswordReprompt = false,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `OverflowOptionClick Vault CopyTotpClick with GenerateTotpCode success should call setText on the ClipboardManager`() =
         runTest {
             val totpCode = "totpCode"
@@ -1444,7 +1735,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         setupMockUri()
         val ciphers = listOf(createMockCipherListView(number = 1))
         val expectedViewState = SearchState.ViewState.Content(
-            displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
+            displayItems = persistentListOf(createMockDisplayItemForCipher(number = 1)),
         )
         every {
             ciphers.filterAndOrganize(
@@ -1463,7 +1754,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isArchiveEnabled = true,
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(
@@ -1484,7 +1774,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(
+                    displayItems = persistentListOf(
                         createMockDisplayItemForCipher(number = 1),
                     ),
                 ),
@@ -1556,7 +1846,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         setupMockUri()
         val ciphers = listOf(createMockCipherListView(number = 1))
         val expectedViewState = SearchState.ViewState.Content(
-            displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
+            displayItems = persistentListOf(createMockDisplayItemForCipher(number = 1)),
         )
         every {
             ciphers.filterAndOrganize(
@@ -1575,7 +1865,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isArchiveEnabled = true,
             )
         } returns expectedViewState
         mutableVaultDataStateFlow.tryEmit(
@@ -1597,7 +1886,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(
+                    displayItems = persistentListOf(
                         createMockDisplayItemForCipher(number = 1),
                     ),
                 ),
@@ -1675,7 +1964,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         setupMockUri()
         val ciphers = listOf(createMockCipherListView(number = 1))
         val expectedViewState = SearchState.ViewState.Content(
-            displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
+            displayItems = persistentListOf(createMockDisplayItemForCipher(number = 1)),
         )
         every {
             ciphers.filterAndOrganize(
@@ -1694,7 +1983,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isArchiveEnabled = true,
             )
         } returns expectedViewState
         val dataState = DataState.Error(
@@ -1797,7 +2085,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         setupMockUri()
         val ciphers = listOf(createMockCipherListView(number = 1))
         val expectedViewState = SearchState.ViewState.Content(
-            displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
+            displayItems = persistentListOf(createMockDisplayItemForCipher(number = 1)),
         )
         every {
             ciphers.filterAndOrganize(
@@ -1816,7 +2104,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isArchiveEnabled = true,
             )
         } returns expectedViewState
         val dataState = DataState.NoNetwork(
@@ -1837,7 +2124,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(
+                    displayItems = persistentListOf(
                         createMockDisplayItemForCipher(number = 1),
                     ),
                 ),
@@ -1996,6 +2283,9 @@ class SearchViewModelTest : BaseViewModelTest() {
                     SearchTypeData.Vault.NoFolder -> SearchType.Vault.NoFolder
                     SearchTypeData.Vault.SecureNotes -> SearchType.Vault.SecureNotes
                     SearchTypeData.Vault.SshKeys -> SearchType.Vault.SshKeys
+                    SearchTypeData.Vault.BankAccounts -> SearchType.Vault.BankAccounts
+                    SearchTypeData.Vault.Licenses -> SearchType.Vault.Licenses
+                    SearchTypeData.Vault.Passports -> SearchType.Vault.Passports
                     SearchTypeData.Vault.Trash -> SearchType.Vault.Trash
                     SearchTypeData.Vault.VerificationCodes -> SearchType.Vault.VerificationCodes
                     null -> SearchType.Vault.All
@@ -2013,8 +2303,8 @@ class SearchViewModelTest : BaseViewModelTest() {
         accessibilitySelectionManager = accessibilitySelectionManager,
         autofillSelectionManager = autofillSelectionManager,
         organizationEventManager = organizationEventManager,
+        premiumStateManager = premiumStateManager,
         snackbarRelayManager = snackbarRelayManager,
-        featureFlagManager = featureFlagManager,
     )
 
     /**
@@ -2031,7 +2321,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         val cipherListView = createMockCipherListView(number = 1)
         val ciphers = listOf(cipherListView)
         val expectedViewState = SearchState.ViewState.Content(
-            displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
+            displayItems = persistentListOf(createMockDisplayItemForCipher(number = 1)),
         )
         every {
             ciphers.filterAndOrganize(
@@ -2050,7 +2340,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = true,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isArchiveEnabled = true,
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(
@@ -2095,7 +2384,6 @@ private val DEFAULT_STATE: SearchState = SearchState(
     autofillSelectionData = null,
     isPremium = true,
     restrictItemTypesPolicyOrgIds = persistentListOf(),
-    isArchiveEnabled = true,
 )
 
 private val DEFAULT_ACCOUNT = UserState.Account(
@@ -2105,6 +2393,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     avatarColorHex = "#aa00aa",
     environment = Environment.Us,
     isPremium = true,
+    isPremiumFromSelf = true,
     isLoggedIn = true,
     isVaultUnlocked = true,
     needsPasswordReset = false,
@@ -2138,7 +2427,7 @@ private val AUTOFILL_SELECTION_DATA =
 private val INITIAL_STATE_FOR_AUTOFILL =
     DEFAULT_STATE.copy(
         viewState = SearchState.ViewState.Content(
-            displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
+            displayItems = persistentListOf(createMockDisplayItemForCipher(number = 1)),
         ),
         autofillSelectionData = AUTOFILL_SELECTION_DATA,
     )

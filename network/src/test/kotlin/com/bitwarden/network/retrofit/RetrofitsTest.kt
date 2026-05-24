@@ -4,6 +4,7 @@ import com.bitwarden.network.interceptor.AuthTokenManager
 import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.network.interceptor.CookieInterceptor
 import com.bitwarden.network.interceptor.HeadersInterceptor
+import com.bitwarden.network.interceptor.PermissionInterceptor
 import com.bitwarden.network.model.NetworkResult
 import com.bitwarden.network.ssl.CertificateProvider
 import io.mockk.MockKMatcherScope
@@ -50,6 +51,9 @@ class RetrofitsTest {
     private val cookieInterceptor = mockk<CookieInterceptor> {
         mockIntercept { isCookieInterceptorCalled = true }
     }
+    private val permissionInterceptor = mockk<PermissionInterceptor> {
+        mockIntercept { isPermissionInterceptorCalled = true }
+    }
     private val headersInterceptors = mockk<HeadersInterceptor> {
         mockIntercept { isHeadersInterceptorCalled = true }
     }
@@ -65,6 +69,7 @@ class RetrofitsTest {
         authTokenManager = authTokenManager,
         baseUrlInterceptors = baseUrlInterceptors,
         cookieInterceptor = cookieInterceptor,
+        permissionInterceptor = permissionInterceptor,
         headersInterceptor = headersInterceptors,
         certificateProvider = certificateProvider,
         json = json,
@@ -73,6 +78,7 @@ class RetrofitsTest {
     private var isAuthInterceptorCalled = false
     private var isApiInterceptorCalled = false
     private var isCookieInterceptorCalled = false
+    private var isPermissionInterceptorCalled = false
     private var isHeadersInterceptorCalled = false
     private var isIdentityInterceptorCalled = false
     private var isEventsInterceptorCalled = false
@@ -176,6 +182,7 @@ class RetrofitsTest {
         assertTrue(isAuthInterceptorCalled)
         assertTrue(isApiInterceptorCalled)
         assertTrue(isCookieInterceptorCalled)
+        assertTrue(isPermissionInterceptorCalled)
         assertTrue(isHeadersInterceptorCalled)
         assertFalse(isIdentityInterceptorCalled)
         assertFalse(isEventsInterceptorCalled)
@@ -195,6 +202,7 @@ class RetrofitsTest {
         assertTrue(isAuthInterceptorCalled)
         assertFalse(isApiInterceptorCalled)
         assertTrue(isCookieInterceptorCalled)
+        assertTrue(isPermissionInterceptorCalled)
         assertTrue(isHeadersInterceptorCalled)
         assertFalse(isIdentityInterceptorCalled)
         assertTrue(isEventsInterceptorCalled)
@@ -214,6 +222,7 @@ class RetrofitsTest {
         assertFalse(isAuthInterceptorCalled)
         assertTrue(isApiInterceptorCalled)
         assertTrue(isCookieInterceptorCalled)
+        assertTrue(isPermissionInterceptorCalled)
         assertTrue(isHeadersInterceptorCalled)
         assertFalse(isIdentityInterceptorCalled)
         assertFalse(isEventsInterceptorCalled)
@@ -233,6 +242,7 @@ class RetrofitsTest {
         assertFalse(isAuthInterceptorCalled)
         assertFalse(isApiInterceptorCalled)
         assertTrue(isCookieInterceptorCalled)
+        assertTrue(isPermissionInterceptorCalled)
         assertTrue(isHeadersInterceptorCalled)
         assertTrue(isIdentityInterceptorCalled)
         assertFalse(isEventsInterceptorCalled)
@@ -253,6 +263,7 @@ class RetrofitsTest {
             assertTrue(isAuthInterceptorCalled)
             assertFalse(isApiInterceptorCalled)
             assertTrue(isCookieInterceptorCalled)
+            assertTrue(isPermissionInterceptorCalled)
             assertTrue(isHeadersInterceptorCalled)
             assertFalse(isIdentityInterceptorCalled)
             assertFalse(isEventsInterceptorCalled)
@@ -273,6 +284,7 @@ class RetrofitsTest {
             assertFalse(isAuthInterceptorCalled)
             assertFalse(isApiInterceptorCalled)
             assertTrue(isCookieInterceptorCalled)
+            assertTrue(isPermissionInterceptorCalled)
             assertTrue(isHeadersInterceptorCalled)
             assertFalse(isIdentityInterceptorCalled)
             assertFalse(isEventsInterceptorCalled)
@@ -294,6 +306,7 @@ class RetrofitsTest {
                 cookieInterceptor = cookieInterceptor,
                 headersInterceptor = headersInterceptors,
                 certificateProvider = certificateProvider,
+                permissionInterceptor = permissionInterceptor,
                 json = json,
             )
 

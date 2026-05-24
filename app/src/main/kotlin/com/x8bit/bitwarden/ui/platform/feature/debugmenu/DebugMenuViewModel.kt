@@ -66,7 +66,12 @@ class DebugMenuViewModel @Inject constructor(
             DebugMenuAction.TriggerCookieAcquisition -> handleTriggerCookieAcquisition()
             DebugMenuAction.ClearSsoCookies -> handleClearSsoCookies()
             DebugMenuAction.ResetPremiumUpgradeBanner -> handleResetPremiumUpgradeBanner()
+            DebugMenuAction.ShowUpgradedToPremiumCard -> handleShowUpgradedToPremiumCard()
         }
+    }
+
+    private fun handleShowUpgradedToPremiumCard() {
+        debugMenuRepository.showUpgradedToPremiumCard()
     }
 
     private fun handleResetCoachMarkTourStatuses() {
@@ -212,9 +217,14 @@ sealed class DebugMenuAction {
     data object ClearSsoCookies : DebugMenuAction()
 
     /**
-     * User has clicked to reset the premium upgrade banner dismiss status.
+     * User has clicked to reset the Premium upgrade banner dismiss status.
      */
     data object ResetPremiumUpgradeBanner : DebugMenuAction()
+
+    /**
+     * User has clicked to force the "Upgraded to Premium" action card to display.
+     */
+    data object ShowUpgradedToPremiumCard : DebugMenuAction()
 
     /**
      * Internal actions not triggered from the UI.

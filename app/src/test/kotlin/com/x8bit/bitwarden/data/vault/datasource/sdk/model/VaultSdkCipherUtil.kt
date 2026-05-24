@@ -1,16 +1,19 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
 import com.bitwarden.vault.Attachment
+import com.bitwarden.vault.BankAccount
 import com.bitwarden.vault.Card
 import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherPermissions
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.DriversLicense
 import com.bitwarden.vault.Field
 import com.bitwarden.vault.FieldType
 import com.bitwarden.vault.Identity
 import com.bitwarden.vault.Login
 import com.bitwarden.vault.LoginUri
+import com.bitwarden.vault.Passport
 import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.SecureNote
 import com.bitwarden.vault.SecureNoteType
@@ -32,7 +35,10 @@ private val FIXED_CLOCK: Clock = Clock.fixed(
 /**
  * Create a mock [Cipher] with a given [number].
  */
-fun createMockSdkCipher(number: Int, clock: Clock = FIXED_CLOCK): Cipher =
+fun createMockSdkCipher(
+    number: Int,
+    clock: Clock = FIXED_CLOCK,
+): Cipher =
     Cipher(
         id = "mockId-$number",
         organizationId = "mockOrganizationId-$number",
@@ -49,6 +55,9 @@ fun createMockSdkCipher(number: Int, clock: Clock = FIXED_CLOCK): Cipher =
         archivedDate = clock.instant(),
         attachments = listOf(createMockSdkAttachment(number = number)),
         card = createMockSdkCard(number = number),
+        bankAccount = createMockSdkBankAccount(number = number),
+        driversLicense = createMockSdkDriversLicense(number = number),
+        passport = createMockSdkPassport(number = number),
         fields = listOf(createMockSdkField(number = number)),
         identity = createMockSdkIdentity(number = number),
         sshKey = createMockSdkSshKey(number = number),
@@ -126,6 +135,61 @@ fun createMockSdkSshKey(number: Int): SshKey =
         publicKey = "mockPublicKey-$number",
         privateKey = "mockPrivateKey-$number",
         fingerprint = "mockKeyFingerprint-$number",
+    )
+
+/**
+ * Create a mock [BankAccount] with a given [number].
+ */
+fun createMockSdkBankAccount(number: Int): BankAccount =
+    BankAccount(
+        bankName = "mockBankName-$number",
+        nameOnAccount = "mockNameOnAccount-$number",
+        accountType = "mockAccountType-$number",
+        accountNumber = "mockAccountNumber-$number",
+        routingNumber = "mockRoutingNumber-$number",
+        branchNumber = "mockBranchNumber-$number",
+        pin = "mockPin-$number",
+        swiftCode = "mockSwiftCode-$number",
+        iban = "mockIban-$number",
+        bankContactPhone = "mockBankContactPhone-$number",
+    )
+
+/**
+ * Create a mock [DriversLicense] with a given [number].
+ */
+fun createMockSdkDriversLicense(number: Int): DriversLicense =
+    DriversLicense(
+        firstName = "mockFirstName-$number",
+        middleName = "mockMiddleName-$number",
+        lastName = "mockLastName-$number",
+        licenseNumber = "mockLicenseNumber-$number",
+        issuingCountry = "mockIssuingCountry-$number",
+        issuingState = "mockIssuingState-$number",
+        issuingAuthority = "mockIssuingAuthority-$number",
+        expirationDate = "mockExpirationDate-$number",
+        dateOfBirth = "mockDateOfBirth-$number",
+        issueDate = "mockIssueDate-$number",
+        licenseClass = "mockLicenseClass-$number",
+    )
+
+/**
+ * Create a mock [Passport] with a given [number].
+ */
+fun createMockSdkPassport(number: Int): Passport =
+    Passport(
+        surname = "mockSurname-$number",
+        givenName = "mockGivenName-$number",
+        dateOfBirth = "mockDateOfBirth-$number",
+        birthPlace = "mockBirthPlace-$number",
+        sex = "mockSex-$number",
+        nationality = "mockNationality-$number",
+        passportNumber = "mockPassportNumber-$number",
+        passportType = "mockPassportType-$number",
+        nationalIdentificationNumber = "mockNationalIdentificationNumber-$number",
+        issuingCountry = "mockIssuingCountry-$number",
+        issuingAuthority = "mockIssuingAuthority-$number",
+        issueDate = "mockIssueDate-$number",
+        expirationDate = "mockExpirationDate-$number",
     )
 
 /**

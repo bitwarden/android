@@ -32,4 +32,19 @@ enum class VaultItemCipherType {
      * A SSH key cipher.
      */
     SSH_KEY,
+
+    /**
+     * A bank account cipher.
+     */
+    BANK_ACCOUNT,
+
+    /**
+     * A driver's license cipher.
+     */
+    DRIVERS_LICENSE,
+
+    /**
+     * A passport cipher.
+     */
+    PASSPORT,
 }

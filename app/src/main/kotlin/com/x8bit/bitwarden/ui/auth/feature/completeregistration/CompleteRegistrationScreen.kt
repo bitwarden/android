@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -249,6 +250,7 @@ private fun CompleteRegistrationContent(
             ),
             value = passwordHintInput,
             onValueChange = handler.onPasswordHintChange,
+            supportingContentPadding = PaddingValues(top = 12.dp),
             supportingContent = {
                 Text(
                     text = stringResource(
@@ -257,7 +259,9 @@ private fun CompleteRegistrationContent(
                     ),
                     style = BitwardenTheme.typography.bodySmall,
                     color = BitwardenTheme.colorScheme.text.secondary,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
                 )
                 BitwardenClickableText(
                     label = stringResource(
@@ -265,7 +269,9 @@ private fun CompleteRegistrationContent(
                     ),
                     onClick = handler.onLearnToPreventLockout,
                     style = BitwardenTheme.typography.labelMedium,
-                    innerPadding = PaddingValues(vertical = 4.dp),
+                    cornerSize = 0.dp,
+                    innerPadding = PaddingValues(vertical = 4.dp, horizontal = 16.dp),
+                    modifier = Modifier.fillMaxWidth(),
                 )
             },
             textFieldTestTag = "MasterPasswordHintLabel",

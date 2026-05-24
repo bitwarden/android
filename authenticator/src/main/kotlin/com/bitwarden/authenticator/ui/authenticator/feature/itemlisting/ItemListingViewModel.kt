@@ -23,6 +23,7 @@ import com.bitwarden.authenticator.ui.authenticator.feature.util.toSharedCodesDi
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDropdownMenuAction
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.platform.components.listitem.model.util.sortAlphabetically
 import com.bitwarden.authenticator.ui.platform.model.SnackbarRelay
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.core.data.repository.model.DataState
@@ -63,6 +64,7 @@ class ItemListingViewModel @Inject constructor(
 ) : BaseViewModel<ItemListingState, ItemListingEvent, ItemListingAction>(
     initialState = ItemListingState(
         alertThresholdSeconds = settingsRepository.authenticatorAlertThresholdSeconds,
+        isShowNextCodeEnabled = settingsRepository.isShowNextCodeEnabled,
         viewState = ItemListingState.ViewState.Loading,
         dialog = null,
     ),
@@ -72,6 +74,12 @@ class ItemListingViewModel @Inject constructor(
         settingsRepository
             .authenticatorAlertThresholdSecondsFlow
             .map { ItemListingAction.Internal.AlertThresholdSecondsReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        settingsRepository
+            .isShowNextCodeEnabledFlow
+            .map { ItemListingAction.Internal.IsShowNextCodeEnabledReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -241,6 +249,10 @@ class ItemListingViewModel @Inject constructor(
 
             is ItemListingAction.Internal.AlertThresholdSecondsReceive -> {
                 handleAlertThresholdSecondsReceive(internalAction)
+            }
+
+            is ItemListingAction.Internal.IsShowNextCodeEnabledReceive -> {
+                handleIsShowNextCodeEnabledReceive(internalAction)
             }
 
             is ItemListingAction.Internal.TotpCodeReceive -> {
@@ -449,6 +461,16 @@ class ItemListingViewModel @Inject constructor(
         }
     }
 
+    private fun handleIsShowNextCodeEnabledReceive(
+        action: ItemListingAction.Internal.IsShowNextCodeEnabledReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                isShowNextCodeEnabled = action.isShowNextCodeEnabled,
+            )
+        }
+    }
+
     private fun handleDialogDismiss() {
         mutableStateFlow.update {
             it.copy(dialog = null)
@@ -482,6 +504,7 @@ class ItemListingViewModel @Inject constructor(
                 val currentCodes = viewState?.sharedItems as? SharedCodesDisplayState.Codes
                 action.sharedCodesState.toSharedCodesDisplayState(
                     alertThresholdSeconds = state.alertThresholdSeconds,
+                    isShowNextCodeEnabled = state.isShowNextCodeEnabled,
                     currentSections = currentCodes?.sections.orEmpty(),
                 )
             }
@@ -503,24 +526,28 @@ class ItemListingViewModel @Inject constructor(
                     .map {
                         it.toDisplayItem(
                             alertThresholdSeconds = state.alertThresholdSeconds,
+                            isShowNextCodeEnabled = state.isShowNextCodeEnabled,
                             sharedVerificationCodesState = authenticatorRepository
                                 .sharedCodesStateFlow
                                 .value,
                             showOverflow = true,
                         )
                     }
+                    .sortAlphabetically()
                     .toImmutableList(),
                 itemList = localItems
                     .filter { it.source is AuthenticatorItem.Source.Local && !it.source.isFavorite }
                     .map {
                         it.toDisplayItem(
                             alertThresholdSeconds = state.alertThresholdSeconds,
+                            isShowNextCodeEnabled = state.isShowNextCodeEnabled,
                             sharedVerificationCodesState = authenticatorRepository
                                 .sharedCodesStateFlow
                                 .value,
                             showOverflow = true,
                         )
                     }
+                    .sortAlphabetically()
                     .toImmutableList(),
                 sharedItems = sharedItemsState,
                 actionCard = action.sharedCodesState.toActionCard(),
@@ -709,9 +736,16 @@ const val ISSUER = "issuer"
 @Parcelize
 data class ItemListingState(
     val alertThresholdSeconds: Int,
+    val isShowNextCodeEnabled: Boolean,
     val viewState: ViewState,
     val dialog: DialogState?,
 ) : Parcelable {
+    /**
+     * Whether the search icon should be shown.
+     */
+    val shouldShowSearchIcon: Boolean
+        get() = viewState is ViewState.Content
+
     /**
      * Represents the different view states of the [ItemListingScreen].
      */
@@ -980,6 +1014,13 @@ sealed class ItemListingAction {
          */
         data class AlertThresholdSecondsReceive(
             val thresholdSeconds: Int,
+        ) : Internal()
+
+        /**
+         * Indicates the show next code enabled setting has been received.
+         */
+        data class IsShowNextCodeEnabledReceive(
+            val isShowNextCodeEnabled: Boolean,
         ) : Internal()
 
         /**

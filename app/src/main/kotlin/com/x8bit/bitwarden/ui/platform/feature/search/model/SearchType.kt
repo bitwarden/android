@@ -69,6 +69,21 @@ sealed class SearchType : Parcelable {
         data object SshKeys : Vault()
 
         /**
+         * Indicates that we should be searching only bank account ciphers.
+         */
+        data object BankAccounts : Vault()
+
+        /**
+         * Indicates that we should be searching only license ciphers.
+         */
+        data object Licenses : Vault()
+
+        /**
+         * Indicates that we should be searching only passport ciphers.
+         */
+        data object Passports : Vault()
+
+        /**
          * Indicates that we should be searching only ciphers in the given collection.
          */
         data class Collection(

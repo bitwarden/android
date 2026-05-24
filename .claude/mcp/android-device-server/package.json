@@ -1,0 +1,34 @@
+{
+  "name": "@bitwarden/android-device-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for Android device interaction via ADB — UI hierarchy capture, element finding with obstruction detection, tap, and navigation",
+  "type": "module",
+  "main": "build/index.js",
+  "bin": {
+    "android-device-mcp": "./build/index.js"
+  },
+  "scripts": {
+    "build": "tsc && chmod +x build/index.js",
+    "watch": "tsc --watch",
+    "dev": "tsc && node build/index.js",
+    "inspector": "npx @modelcontextprotocol/inspector build/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": ["mcp", "android", "adb", "model-context-protocol", "ui-testing"],
+  "author": "Bitwarden",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.27.1",
+    "fast-xml-parser": "^4.5.0",
+    "zod": "3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "20.19.35",
+    "typescript": "5.8.3",
+    "vitest": "3.1.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

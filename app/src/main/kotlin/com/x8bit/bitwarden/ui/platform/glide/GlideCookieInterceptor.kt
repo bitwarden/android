@@ -43,6 +43,7 @@ class GlideCookieInterceptor(
             response.close()
             throw CookieRedirectException(
                 hostname = response.request.url.host,
+                message = cookieProvider.errorMessageString,
             )
         }
     }

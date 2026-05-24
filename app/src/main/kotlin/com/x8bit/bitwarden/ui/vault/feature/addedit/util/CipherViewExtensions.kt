@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import com.x8bit.bitwarden.ui.vault.model.VaultBankAccountType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
@@ -28,6 +29,8 @@ import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType.Companion.fromId
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
 import java.time.Clock
+import java.time.LocalDate
+import java.time.format.DateTimeParseException
 import java.time.format.FormatStyle
 import java.util.UUID
 
@@ -98,6 +101,51 @@ fun CipherView.toViewState(
                 privateKey = sshKey?.privateKey.orEmpty(),
                 fingerprint = sshKey?.fingerprint.orEmpty(),
             )
+
+            CipherType.BANK_ACCOUNT -> VaultAddEditState.ViewState.Content.ItemType.BankAccount(
+                bankName = bankAccount?.bankName.orEmpty(),
+                nameOnAccount = bankAccount?.nameOnAccount.orEmpty(),
+                accountType = bankAccount?.accountType.toBankAccountTypeOrDefault(),
+                accountNumber = bankAccount?.accountNumber.orEmpty(),
+                routingNumber = bankAccount?.routingNumber.orEmpty(),
+                branchNumber = bankAccount?.branchNumber.orEmpty(),
+                pin = bankAccount?.pin.orEmpty(),
+                swiftCode = bankAccount?.swiftCode.orEmpty(),
+                iban = bankAccount?.iban.orEmpty(),
+                bankContactPhone = bankAccount?.bankContactPhone.orEmpty(),
+            )
+
+            CipherType.DRIVERS_LICENSE -> {
+                VaultAddEditState.ViewState.Content.ItemType.License(
+                    firstName = driversLicense?.firstName.orEmpty(),
+                    middleName = driversLicense?.middleName.orEmpty(),
+                    lastName = driversLicense?.lastName.orEmpty(),
+                    licenseNumber = driversLicense?.licenseNumber.orEmpty(),
+                    issuingCountry = driversLicense?.issuingCountry.orEmpty(),
+                    issuingState = driversLicense?.issuingState.orEmpty(),
+                    expirationDate = driversLicense?.expirationDate?.toLocalDate(),
+                    licenseClass = driversLicense?.licenseClass.orEmpty(),
+                    dateOfBirth = driversLicense?.dateOfBirth?.toLocalDate(),
+                    issuingAuthority = driversLicense?.issuingAuthority.orEmpty(),
+                    issueDate = driversLicense?.issueDate?.toLocalDate(),
+                )
+            }
+
+            CipherType.PASSPORT -> VaultAddEditState.ViewState.Content.ItemType.Passport(
+                givenName = passport?.givenName.orEmpty(),
+                surname = passport?.surname.orEmpty(),
+                dateOfBirth = passport?.dateOfBirth?.toLocalDate(),
+                sex = passport?.sex.orEmpty(),
+                birthPlace = passport?.birthPlace.orEmpty(),
+                nationality = passport?.nationality.orEmpty(),
+                passportNumber = passport?.passportNumber.orEmpty(),
+                passportType = passport?.passportType.orEmpty(),
+                nationalIdentificationNumber = passport?.nationalIdentificationNumber.orEmpty(),
+                issuingCountry = passport?.issuingCountry.orEmpty(),
+                issuingAuthority = passport?.issuingAuthority.orEmpty(),
+                issueDate = passport?.issueDate?.toLocalDate(),
+                expirationDate = passport?.expirationDate?.toLocalDate(),
+            )
         },
         common = VaultAddEditState.ViewState.Content.Common(
             originalCipher = this,
@@ -125,6 +173,12 @@ fun CipherView.toViewState(
         ),
         isIndividualVaultDisabled = isIndividualVaultDisabled,
     )
+
+private fun String.toLocalDate(): LocalDate? = try {
+    LocalDate.parse(this)
+} catch (_: DateTimeParseException) {
+    null
+}
 
 /**
  * Adds Folder and Owner data to [VaultAddEditState.ViewState].
@@ -260,7 +314,7 @@ private fun UserState.Account.toAvailableOwners(
         *organizations
             .map {
                 VaultAddEditState.Owner(
-                    name = it.name.orEmpty(),
+                    name = it.name,
                     id = it.id,
                     collections = collectionViewList
                         .filter { collection ->
@@ -328,6 +382,9 @@ private fun String?.toExpirationMonthOrDefault(): VaultCardExpirationMonth =
         .entries
         .find { it.number == this }
         ?: VaultCardExpirationMonth.SELECT
+
+private fun String?.toBankAccountTypeOrDefault(): VaultBankAccountType =
+    this?.let { VaultBankAccountType.parse(it) } ?: VaultBankAccountType.SELECT
 
 private fun String.appendCloneTextIfRequired(
     isClone: Boolean,

@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -31,10 +32,13 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.vault.components.collectionItemsSelector
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditBankAccountTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLicenseTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditPassportTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
 
 /**
@@ -51,6 +55,11 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
     identityItemTypeHandlers: VaultAddEditIdentityTypeHandlers,
     cardItemTypeHandlers: VaultAddEditCardTypeHandlers,
     sshKeyItemTypeHandlers: VaultAddEditSshKeyTypeHandlers,
+    bankAccountItemTypeHandlers: VaultAddEditBankAccountTypeHandlers,
+    licenseItemTypeHandlers: VaultAddEditLicenseTypeHandlers,
+    passportItemTypeHandlers: VaultAddEditPassportTypeHandlers,
+    isCardScannerEnabled: Boolean,
+    cardHolderNameFocusRequester: FocusRequester,
     modifier: Modifier = Modifier,
     lazyListState: LazyListState,
     permissionsManager: PermissionsManager,
@@ -64,9 +73,15 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
         onResult = { isGranted ->
             when (state.type) {
                 is VaultAddEditState.ViewState.Content.ItemType.SecureNotes -> Unit
-                is VaultAddEditState.ViewState.Content.ItemType.Card -> Unit
+                is VaultAddEditState.ViewState.Content.ItemType.Card -> {
+                    cardItemTypeHandlers.onScanCardClick(isGranted)
+                }
+
                 is VaultAddEditState.ViewState.Content.ItemType.Identity -> Unit
                 is VaultAddEditState.ViewState.Content.ItemType.SshKey -> Unit
+                is VaultAddEditState.ViewState.Content.ItemType.BankAccount -> Unit
+                is VaultAddEditState.ViewState.Content.ItemType.License -> Unit
+                is VaultAddEditState.ViewState.Content.ItemType.Passport -> Unit
                 is VaultAddEditState.ViewState.Content.ItemType.Login -> {
                     loginItemTypeHandlers.onSetupTotpClick(isGranted)
                 }
@@ -236,6 +251,15 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
             is VaultAddEditState.ViewState.Content.ItemType.Card -> {
                 vaultAddEditCardItems(
                     cardState = state.type,
+                    isCardScannerEnabled = isCardScannerEnabled,
+                    cardHolderNameFocusRequester = cardHolderNameFocusRequester,
+                    onScanCardClick = {
+                        if (permissionsManager.checkPermission(Manifest.permission.CAMERA)) {
+                            cardItemTypeHandlers.onScanCardClick(true)
+                        } else {
+                            launcher.launch(Manifest.permission.CAMERA)
+                        }
+                    },
                     cardHandlers = cardItemTypeHandlers,
                 )
             }
@@ -258,6 +282,27 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
                 vaultAddEditSshKeyItems(
                     sshKeyState = state.type,
                     sshKeyTypeHandlers = sshKeyItemTypeHandlers,
+                )
+            }
+
+            is VaultAddEditState.ViewState.Content.ItemType.BankAccount -> {
+                vaultAddEditBankAccountItems(
+                    bankAccountState = state.type,
+                    bankAccountHandlers = bankAccountItemTypeHandlers,
+                )
+            }
+
+            is VaultAddEditState.ViewState.Content.ItemType.License -> {
+                vaultAddEditLicenseItems(
+                    licenseState = state.type,
+                    licenseHandlers = licenseItemTypeHandlers,
+                )
+            }
+
+            is VaultAddEditState.ViewState.Content.ItemType.Passport -> {
+                vaultAddEditPassportItems(
+                    passportState = state.type,
+                    passportHandlers = passportItemTypeHandlers,
                 )
             }
         }

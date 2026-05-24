@@ -8,6 +8,7 @@ import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.network.model.CreateFileSendResponse
 import com.bitwarden.network.model.CreateSendJsonResponse
+import com.bitwarden.network.model.GetSendResponse
 import com.bitwarden.network.model.UpdateSendResponseJson
 import com.bitwarden.network.service.SendsService
 import com.bitwarden.send.Send
@@ -32,7 +33,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import retrofit2.HttpException
 
 /**
  * The default implementation of the [SendManager].
@@ -291,14 +291,21 @@ class SendManagerImpl(
         sendsService
             .getSend(sendId = sendId)
             .fold(
-                onSuccess = { vaultDiskSource.saveSend(userId = userId, send = it) },
-                onFailure = {
-                    // Delete any updates if it's missing from the server
-                    val httpException = it as? HttpException
-                    @Suppress("MagicNumber")
-                    if (httpException?.code() == 404 && isUpdate) {
-                        vaultDiskSource.deleteSend(userId = userId, sendId = sendId)
+                onSuccess = { response ->
+                    when (response) {
+                        is GetSendResponse.NotFound -> {
+                            if (isUpdate) {
+                                vaultDiskSource.deleteSend(userId = userId, sendId = sendId)
+                            }
+                        }
+
+                        is GetSendResponse.Success -> {
+                            vaultDiskSource.saveSend(userId = userId, send = response.send)
+                        }
                     }
+                },
+                onFailure = {
+                    // no-op
                 },
             )
     }

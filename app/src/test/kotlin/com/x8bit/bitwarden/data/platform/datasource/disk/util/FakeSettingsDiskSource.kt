@@ -68,6 +68,8 @@ class FakeSettingsDiskSource(
     private val storedPullToRefreshEnabled = mutableMapOf<String, Boolean?>()
     private var storedIntroducingArchiveActionCardDismissed = mutableMapOf<String, Boolean?>()
     private var storedPremiumUpgradeBannerDismissed = mutableMapOf<String, Boolean?>()
+    private val storedUpgradedToPremiumCardConsumed = mutableMapOf<String, Boolean?>()
+    private val storedUpgradedToPremiumCardPending = mutableMapOf<String, Boolean?>()
     private val storedInlineAutofillEnabled = mutableMapOf<String, Boolean?>()
     private val storedBlockedAutofillUris = mutableMapOf<String, List<String>?>()
     private var storedIsIconLoadingDisabled: Boolean? = null
@@ -114,6 +116,12 @@ class FakeSettingsDiskSource(
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutablePremiumUpgradeBannerDismissedFlow =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableUpgradedToPremiumCardConsumedFlow =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableUpgradedToPremiumCardPendingFlow =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     override var appLanguage: AppLanguage?
@@ -357,6 +365,30 @@ class FakeSettingsDiskSource(
         getMutablePremiumUpgradeBannerDismissedFlow(userId = userId).tryEmit(isDismissed)
     }
 
+    override fun getUpgradedToPremiumCardConsumed(userId: String): Boolean? =
+        storedUpgradedToPremiumCardConsumed[userId]
+
+    override fun storeUpgradedToPremiumCardConsumed(userId: String, isConsumed: Boolean?) {
+        storedUpgradedToPremiumCardConsumed[userId] = isConsumed
+        getMutableUpgradedToPremiumCardConsumedFlow(userId = userId).tryEmit(isConsumed)
+    }
+
+    override fun getUpgradedToPremiumCardConsumedFlow(userId: String): Flow<Boolean?> =
+        getMutableUpgradedToPremiumCardConsumedFlow(userId = userId)
+            .onSubscription { emit(getUpgradedToPremiumCardConsumed(userId = userId)) }
+
+    override fun getUpgradedToPremiumCardPending(userId: String): Boolean? =
+        storedUpgradedToPremiumCardPending[userId]
+
+    override fun storeUpgradedToPremiumCardPending(userId: String, isPending: Boolean?) {
+        storedUpgradedToPremiumCardPending[userId] = isPending
+        getMutableUpgradedToPremiumCardPendingFlow(userId = userId).tryEmit(isPending)
+    }
+
+    override fun getUpgradedToPremiumCardPendingFlow(userId: String): Flow<Boolean?> =
+        getMutableUpgradedToPremiumCardPendingFlow(userId = userId)
+            .onSubscription { emit(getUpgradedToPremiumCardPending(userId = userId)) }
+
     override fun getInlineAutofillEnabled(userId: String): Boolean? =
         storedInlineAutofillEnabled[userId]
 
@@ -515,10 +547,24 @@ class FakeSettingsDiskSource(
     }
 
     /**
-     * Asserts that the stored premium upgrade banner dismissed matches the [expected] one.
+     * Asserts that the stored Premium upgrade banner dismissed matches the [expected] one.
      */
     fun assertPremiumUpgradeBannerDismissed(userId: String, expected: Boolean?) {
         assertEquals(expected, storedPremiumUpgradeBannerDismissed[userId])
+    }
+
+    /**
+     * Asserts that the stored "Upgraded to Premium" card consumed value matches the [expected] one.
+     */
+    fun assertUpgradedToPremiumCardConsumed(userId: String, expected: Boolean?) {
+        assertEquals(expected, storedUpgradedToPremiumCardConsumed[userId])
+    }
+
+    /**
+     * Asserts that the stored "Upgraded to Premium" card pending value matches the [expected] one.
+     */
+    fun assertUpgradedToPremiumCardPending(userId: String, expected: Boolean?) {
+        assertEquals(expected, storedUpgradedToPremiumCardPending[userId])
     }
 
     /**
@@ -589,6 +635,20 @@ class FakeSettingsDiskSource(
         userId: String,
     ): MutableSharedFlow<Boolean?> =
         mutablePremiumUpgradeBannerDismissedFlow.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableUpgradedToPremiumCardConsumedFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutableUpgradedToPremiumCardConsumedFlow.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableUpgradedToPremiumCardPendingFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutableUpgradedToPremiumCardPendingFlow.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 

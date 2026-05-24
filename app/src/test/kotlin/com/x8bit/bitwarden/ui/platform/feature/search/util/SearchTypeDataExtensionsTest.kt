@@ -24,6 +24,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -34,6 +35,7 @@ import java.time.temporal.TemporalAccessor
 
 private const val DEFAULT_FORMATTED_DATE_TIME = "Oct 27, 2023, 12:00 PM"
 
+@Suppress("LargeClass")
 class SearchTypeDataExtensionsTest {
 
     private val clock: Clock = Clock.fixed(
@@ -241,6 +243,45 @@ class SearchTypeDataExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `updateWithAdditionalDataIfNecessary should return the searchTypeData unchanged for Vault BankAccounts`() {
+        val searchTypeData = SearchTypeData.Vault.BankAccounts
+        assertEquals(
+            searchTypeData,
+            searchTypeData.updateWithAdditionalDataIfNecessary(
+                folderList = listOf(),
+                collectionList = emptyList(),
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `updateWithAdditionalDataIfNecessary should return the searchTypeData unchanged for Vault Licenses`() {
+        val searchTypeData = SearchTypeData.Vault.Licenses
+        assertEquals(
+            searchTypeData,
+            searchTypeData.updateWithAdditionalDataIfNecessary(
+                folderList = listOf(),
+                collectionList = emptyList(),
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `updateWithAdditionalDataIfNecessary should return the searchTypeData unchanged for Vault Passports`() {
+        val searchTypeData = SearchTypeData.Vault.Passports
+        assertEquals(
+            searchTypeData,
+            searchTypeData.updateWithAdditionalDataIfNecessary(
+                folderList = listOf(),
+                collectionList = emptyList(),
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `updateWithAdditionalDataIfNecessary should return the searchTypeData unchanged for Vault VerificationCodes`() {
         val searchTypeData = SearchTypeData.Vault.VerificationCodes
         assertEquals(
@@ -359,6 +400,69 @@ class SearchTypeDataExtensionsTest {
         assertEquals(listOf(match1, match3), result)
     }
 
+    @Test
+    fun `CipherViews filterAndOrganize should return list with only bank account items`() {
+        val match1 = createMockCipherListView(
+            number = 1,
+            type = CipherListViewType.BankAccount,
+            name = "match1",
+        )
+        val match2 = createMockCipherListView(number = 2, name = "match2")
+        val match3 = createMockCipherListView(
+            number = 3,
+            type = CipherListViewType.BankAccount,
+            name = "match3",
+        )
+        val ciphers = listOf(match1, match2, match3)
+        val result = ciphers.filterAndOrganize(
+            searchTypeData = SearchTypeData.Vault.BankAccounts,
+            searchTerm = "match",
+        )
+        assertEquals(listOf(match1, match3), result)
+    }
+
+    @Test
+    fun `CipherViews filterAndOrganize should return list with only license items`() {
+        val match1 = createMockCipherListView(
+            number = 1,
+            type = CipherListViewType.DriversLicense,
+            name = "match1",
+        )
+        val match2 = createMockCipherListView(number = 2, name = "match2")
+        val match3 = createMockCipherListView(
+            number = 3,
+            type = CipherListViewType.DriversLicense,
+            name = "match3",
+        )
+        val ciphers = listOf(match1, match2, match3)
+        val result = ciphers.filterAndOrganize(
+            searchTypeData = SearchTypeData.Vault.Licenses,
+            searchTerm = "match",
+        )
+        assertEquals(listOf(match1, match3), result)
+    }
+
+    @Test
+    fun `CipherViews filterAndOrganize should return list with only passport items`() {
+        val match1 = createMockCipherListView(
+            number = 1,
+            type = CipherListViewType.Passport,
+            name = "match1",
+        )
+        val match2 = createMockCipherListView(number = 2, name = "match2")
+        val match3 = createMockCipherListView(
+            number = 3,
+            type = CipherListViewType.Passport,
+            name = "match3",
+        )
+        val ciphers = listOf(match1, match2, match3)
+        val result = ciphers.filterAndOrganize(
+            searchTypeData = SearchTypeData.Vault.Passports,
+            searchTerm = "match",
+        )
+        assertEquals(listOf(match1, match3), result)
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `CipherViews toViewState should return empty state with no message when search term is blank`() {
@@ -375,7 +479,6 @@ class SearchTypeDataExtensionsTest {
             isAutofill = false,
             hasMasterPassword = true,
             isPremiumUser = true,
-            isArchiveEnabled = true,
         )
 
         assertEquals(SearchState.ViewState.Empty(message = null), result)
@@ -401,12 +504,11 @@ class SearchTypeDataExtensionsTest {
             isAutofill = false,
             hasMasterPassword = true,
             isPremiumUser = true,
-            isArchiveEnabled = true,
         )
 
         assertEquals(
             SearchState.ViewState.Content(
-                displayItems = listOf(
+                displayItems = persistentListOf(
                     createMockDisplayItemForCipher(number = 0),
                     createMockDisplayItemForCipher(number = 1),
                     createMockDisplayItemForCipher(number = 2),
@@ -444,18 +546,17 @@ class SearchTypeDataExtensionsTest {
             isAutofill = true,
             hasMasterPassword = true,
             isPremiumUser = true,
-            isArchiveEnabled = true,
         )
 
         assertEquals(
             SearchState.ViewState.Content(
-                displayItems = listOf(
+                displayItems = persistentListOf(
                     createMockDisplayItemForCipher(
                         number = 0,
                         cipherType = CipherType.CARD,
                     )
                         .copy(
-                            autofillSelectionOptions = listOf(
+                            autofillSelectionOptions = persistentListOf(
                                 AutofillSelectionOption.AUTOFILL,
                                 AutofillSelectionOption.VIEW,
                             ),
@@ -463,7 +564,7 @@ class SearchTypeDataExtensionsTest {
                         ),
                     createMockDisplayItemForCipher(number = 1)
                         .copy(
-                            autofillSelectionOptions = listOf(
+                            autofillSelectionOptions = persistentListOf(
                                 AutofillSelectionOption.AUTOFILL,
                                 AutofillSelectionOption.AUTOFILL_AND_SAVE,
                                 AutofillSelectionOption.VIEW,
@@ -472,7 +573,7 @@ class SearchTypeDataExtensionsTest {
                         ),
                     createMockDisplayItemForCipher(number = 2)
                         .copy(
-                            autofillSelectionOptions = listOf(
+                            autofillSelectionOptions = persistentListOf(
                                 AutofillSelectionOption.AUTOFILL,
                                 AutofillSelectionOption.AUTOFILL_AND_SAVE,
                                 AutofillSelectionOption.VIEW,
@@ -495,7 +596,6 @@ class SearchTypeDataExtensionsTest {
             isAutofill = false,
             hasMasterPassword = true,
             isPremiumUser = true,
-            isArchiveEnabled = true,
         )
 
         assertEquals(
@@ -530,12 +630,11 @@ class SearchTypeDataExtensionsTest {
             hasMasterPassword = true,
             isAutofill = false,
             isPremiumUser = true,
-            isArchiveEnabled = true,
         )
 
         assertEquals(
             SearchState.ViewState.Content(
-                displayItems = listOf(
+                displayItems = persistentListOf(
                     createMockDisplayItemForCipher(
                         number = 1,
                         cipherType = CipherType.LOGIN,
@@ -634,7 +733,7 @@ class SearchTypeDataExtensionsTest {
 
             assertEquals(
                 SearchState.ViewState.Content(
-                    displayItems = listOf(
+                    displayItems = persistentListOf(
                         createMockDisplayItemForSend(number = 0),
                         createMockDisplayItemForSend(number = 1),
                         createMockDisplayItemForSend(number = 2),

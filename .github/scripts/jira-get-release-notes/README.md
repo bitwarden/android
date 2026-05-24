@@ -4,18 +4,13 @@ Fetches release notes from Jira issues.
 
 ## Prerequisites
 
-- Python dev environment - use [uv](https://github.com/astral-sh/uv)
 - Jira API token. Generate one at: https://id.atlassian.com/manage-profile/security/api-tokens
-- Install dependencies:
-
-```bash
-uv pip install -r pyproject.toml
-```
+- Jira cloud ID. Can be retrieved from the `tenant_info` endpoint, e.g.: `https://<my-site-name>.atlassian.net/_edge/tenant_info`
 
 ## Usage
 
 ```bash
-./jira_release_notes.py RELEASE-1762 example@example.com T0k3n123
+./jira_release_notes.py RELEASE-1762 jira-cloud-id example@example.com T0k3n123
 ```
 
 # Output Format

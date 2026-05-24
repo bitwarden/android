@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.platform.manager
 
+import androidx.credentials.providerevents.exception.ClearExportUnknownErrorException
 import androidx.credentials.providerevents.exception.RegisterExportUnknownErrorException
+import androidx.credentials.providerevents.transfer.ClearExportResponse
 import androidx.credentials.providerevents.transfer.CredentialTypes
 import androidx.credentials.providerevents.transfer.RegisterExportResponse
 import com.bitwarden.core.data.util.asFailure
@@ -28,7 +30,7 @@ class CredentialExchangeRegistryManagerImplTest {
 
     private val credentialExchangeRegistry: CredentialExchangeRegistry = mockk {
         coEvery { register(any()) } returns RegisterExportResponse().asSuccess()
-        coEvery { unregister() } returns RegisterExportResponse().asSuccess()
+        coEvery { unregister() } returns ClearExportResponse(isDeleted = true).asSuccess()
     }
     private val settingsDiskSource: SettingsDiskSource = mockk {
         every { getAppRegisteredForExport() } returns false
@@ -109,7 +111,7 @@ class CredentialExchangeRegistryManagerImplTest {
     fun `unregister should return Failure when unregistration fails`() = runTest {
         coEvery {
             credentialExchangeRegistry.unregister()
-        } returns RegisterExportUnknownErrorException().asFailure()
+        } returns ClearExportUnknownErrorException().asFailure()
 
         val result = registryManager.unregister()
 

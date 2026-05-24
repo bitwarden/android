@@ -60,7 +60,10 @@ internal class CookieInterceptor(
         if (cookieProvider.needsBootstrap(hostname)) {
             Timber.d("Cookie bootstrap required for $hostname, triggering acquisition")
             cookieProvider.acquireCookies(hostname)
-            throw CookieRedirectException(hostname = hostname)
+            throw CookieRedirectException(
+                hostname = hostname,
+                message = cookieProvider.errorMessageString,
+            )
         }
 
         val request = originalRequest.withCookies(hostname)
@@ -77,6 +80,7 @@ internal class CookieInterceptor(
         cookieProvider.acquireCookies(hostname)
         throw CookieRedirectException(
             hostname = hostname,
+            message = cookieProvider.errorMessageString,
         )
     }
 

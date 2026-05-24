@@ -10,13 +10,12 @@ import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.auth.repository.util.toAccountCryptographicState
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
-import com.x8bit.bitwarden.data.platform.repository.util.sanitizeTotpUri
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.ScopedVaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
-import com.x8bit.bitwarden.data.vault.repository.util.createWrappedAccountCryptographicState
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
 
@@ -48,6 +47,7 @@ class AuthenticatorBridgeRepositoryImpl(
             }
         }
 
+    @Suppress("LongMethod")
     override suspend fun getSharedAccounts(): SharedAccountData {
         return authDiskSource
             .userState
@@ -88,7 +88,7 @@ class AuthenticatorBridgeRepositoryImpl(
                 }
 
                 // Vault is unlocked, query vault disk source for totp logins:
-                val totpUris = vaultDiskSource
+                val cipherData = vaultDiskSource
                     .getTotpCiphers(userId = userId)
                     // Filter out any deleted and archived ciphers.
                     .filter { it.deletedDate == null && it.archivedDate == null }
@@ -97,10 +97,18 @@ class AuthenticatorBridgeRepositoryImpl(
                             .decryptCipher(userId = userId, cipher = it.toEncryptedSdkCipher())
                             .getOrNull()
                             ?.let { decryptedCipher ->
-                                val rawTotp = decryptedCipher.login?.totp
+                                val cipherId = decryptedCipher.id ?: return@let null
                                 val cipherName = decryptedCipher.name
                                 val username = decryptedCipher.login?.username
-                                rawTotp.sanitizeTotpUri(issuer = cipherName, username = username)
+                                decryptedCipher.login?.totp?.let { rawTotp ->
+                                    SharedAccountData.CipherData(
+                                        uri = rawTotp,
+                                        id = cipherId,
+                                        name = cipherName,
+                                        username = username,
+                                        isFavorite = decryptedCipher.favorite,
+                                    )
+                                }
                             }
                     }
 
@@ -116,7 +124,7 @@ class AuthenticatorBridgeRepositoryImpl(
                         .environmentUrlData
                         .toEnvironmentUrlsOrDefault()
                         .label,
-                    totpUris = totpUris,
+                    cipherData = cipherData,
                 )
             }
             .let(::SharedAccountData)
@@ -133,22 +141,13 @@ class AuthenticatorBridgeRepositoryImpl(
             ?: return VaultUnlockResult.InvalidStateError(
                 MissingPropertyException("Private key"),
             )
-        val securityState = authDiskSource
-            .getAccountKeys(userId = userId)
-            ?.securityState
-            ?.securityState
-        val signingKey = accountKeys?.signatureKeyPair?.wrappedSigningKey
-        val signedPublicKey = accountKeys?.publicKeyEncryptionKeyPair?.signedPublicKey
 
         return scopedVaultSdkSource
             .initializeCrypto(
                 userId = userId,
                 request = InitUserCryptoRequest(
-                    accountCryptographicState = createWrappedAccountCryptographicState(
+                    accountCryptographicState = accountKeys.toAccountCryptographicState(
                         privateKey = privateKey,
-                        securityState = securityState,
-                        signingKey = signingKey,
-                        signedPublicKey = signedPublicKey,
                     ),
                     userId = userId,
                     kdfParams = account.profile.toSdkParams(),

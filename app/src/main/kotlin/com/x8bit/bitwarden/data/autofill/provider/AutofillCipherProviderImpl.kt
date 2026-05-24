@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillField
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.util.firstWithTimeoutOrNull
+import com.x8bit.bitwarden.data.platform.util.isActive
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -67,10 +68,8 @@ class AutofillCipherProviderImpl(
                     .takeIf {
                         // Must be card type.
                         it.type is CipherListViewType.Card &&
-                            // Must not be deleted.
-                            it.deletedDate == null &&
-                            // Must not be archived.
-                            it.archivedDate == null &&
+                            // Must still be active.
+                            it.isActive &&
                             // Must not require a reprompt.
                             it.reprompt == CipherRepromptType.NONE &&
                             // Must not be restricted by organization.
@@ -107,10 +106,8 @@ class AutofillCipherProviderImpl(
             .filter {
                 // Must be login type
                 it.type is CipherListViewType.Login &&
-                    // Must not be deleted.
-                    it.deletedDate == null &&
-                    // Must not be archived.
-                    it.archivedDate == null &&
+                    // Must still be active.
+                    it.isActive &&
                     // Must not require a reprompt.
                     it.reprompt == CipherRepromptType.NONE
             }

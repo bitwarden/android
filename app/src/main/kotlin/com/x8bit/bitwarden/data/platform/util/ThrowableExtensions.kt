@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.util
 
 import com.bitwarden.network.exception.CookieRedirectException
+import com.bitwarden.network.exception.LocalNetworkAccessException
 
 /**
  * Returns a user-friendly error message if this [Throwable] is an allow-listed
@@ -8,6 +9,7 @@ import com.bitwarden.network.exception.CookieRedirectException
  */
 val Throwable.userFriendlyMessage: String?
     get() = when (this) {
+        is LocalNetworkAccessException -> message
         is CookieRedirectException -> message
         else -> null
     }

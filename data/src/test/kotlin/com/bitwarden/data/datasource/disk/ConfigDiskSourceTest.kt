@@ -8,6 +8,7 @@ import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.network.model.ConfigResponseJson
 import com.bitwarden.network.model.ConfigResponseJson.EnvironmentJson
 import com.bitwarden.network.model.ConfigResponseJson.ServerJson
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -16,7 +17,7 @@ import org.junit.jupiter.api.Test
 import java.time.Instant
 
 class ConfigDiskSourceTest {
-    private val json = CoreModule.providesJson()
+    private val json = CoreModule.providesJson(buildInfoManager = mockk(relaxed = true))
 
     private val fakeSharedPreferences = FakeSharedPreferences()
 

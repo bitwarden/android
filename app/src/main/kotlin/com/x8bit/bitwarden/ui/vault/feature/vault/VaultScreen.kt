@@ -97,6 +97,7 @@ fun VaultScreen(
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutScreen: () -> Unit,
     onNavigateToAutofillScreen: () -> Unit,
+    onNavigateToPlan: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     appReviewManager: AppReviewManager = LocalAppReviewManager.current,
 ) {
@@ -177,6 +178,8 @@ fun VaultScreen(
             }
 
             VaultEvent.NavigateToAutofillSettings -> onNavigateToAutofillScreen()
+
+            VaultEvent.NavigateToUpgradePremium -> onNavigateToPlan()
         }
     }
     val vaultHandlers = remember(viewModel) { VaultHandlers.create(viewModel) }
@@ -235,6 +238,7 @@ private fun VaultScreenScaffold(
                     )
                     BitwardenSearchActionItem(
                         contentDescription = stringResource(id = BitwardenString.search_vault),
+                        isDisplayed = state.shouldShowSearchIcon,
                         onClick = vaultHandlers.searchIconClickAction,
                     )
                     BitwardenOverflowActionItem(
@@ -362,7 +366,7 @@ private fun VaultScreenScaffold(
                         message = stringResource(
                             BitwardenString.the_vault_protects_more_than_just_passwords,
                         ),
-                        buttonText = stringResource(BitwardenString.new_login),
+                        buttonText = stringResource(id = BitwardenString.add_login),
                         policyDisablesSend = false,
                         addItemClickAction = {
                             vaultHandlers.addItemClickAction(CreateVaultItemType.LOGIN)

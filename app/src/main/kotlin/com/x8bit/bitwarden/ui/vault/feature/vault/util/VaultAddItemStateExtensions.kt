@@ -3,21 +3,25 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
+import com.bitwarden.vault.BankAccountView
 import com.bitwarden.vault.CardView
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.DriversLicenseView
 import com.bitwarden.vault.FieldType
 import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.IdentityView
 import com.bitwarden.vault.LoginUriView
 import com.bitwarden.vault.LoginView
+import com.bitwarden.vault.PassportView
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SecureNoteView
 import com.bitwarden.vault.SshKeyView
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
+import com.x8bit.bitwarden.ui.vault.model.VaultBankAccountType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
@@ -62,6 +66,9 @@ fun VaultAddEditState.ViewState.Content.toCipherView(
         login = type.toLoginView(common = common, clock = clock),
         card = type.toCardView(),
         sshKey = type.toSshKeyView(),
+        bankAccount = type.toBankAccountView(),
+        driversLicense = type.toDriversLicense(),
+        passport = type.toPassport(),
 
         // Fields we always grab from the UI
         name = common.name,
@@ -80,6 +87,11 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toCipherType(): CipherT
         is VaultAddEditState.ViewState.Content.ItemType.Login -> CipherType.LOGIN
         is VaultAddEditState.ViewState.Content.ItemType.SecureNotes -> CipherType.SECURE_NOTE
         is VaultAddEditState.ViewState.Content.ItemType.SshKey -> CipherType.SSH_KEY
+        is VaultAddEditState.ViewState.Content.ItemType.BankAccount -> CipherType.BANK_ACCOUNT
+        is VaultAddEditState.ViewState.Content.ItemType.Passport -> CipherType.PASSPORT
+        is VaultAddEditState.ViewState.Content.ItemType.License -> {
+            throw IllegalArgumentException("SDK mapping not yet available for $this")
+        }
     }
 
 private fun VaultAddEditState.ViewState.Content.ItemType.toSshKeyView(): SshKeyView? =
@@ -88,6 +100,61 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toSshKeyView(): SshKeyV
             publicKey = it.publicKey,
             privateKey = it.privateKey,
             fingerprint = it.fingerprint,
+        )
+    }
+
+private fun VaultAddEditState.ViewState.Content.ItemType.toBankAccountView(): BankAccountView? =
+    (this as? VaultAddEditState.ViewState.Content.ItemType.BankAccount)?.let {
+        BankAccountView(
+            bankName = it.bankName.orNullIfBlank(),
+            nameOnAccount = it.nameOnAccount.orNullIfBlank(),
+            accountType = it
+                .accountType
+                .takeUnless { type -> type == VaultBankAccountType.SELECT }
+                ?.value,
+            accountNumber = it.accountNumber.orNullIfBlank(),
+            routingNumber = it.routingNumber.orNullIfBlank(),
+            branchNumber = it.branchNumber.orNullIfBlank(),
+            pin = it.pin.orNullIfBlank(),
+            swiftCode = it.swiftCode.orNullIfBlank(),
+            iban = it.iban.orNullIfBlank(),
+            bankContactPhone = it.bankContactPhone.orNullIfBlank(),
+        )
+    }
+
+private fun VaultAddEditState.ViewState.Content.ItemType.toDriversLicense(): DriversLicenseView? =
+    (this as? VaultAddEditState.ViewState.Content.ItemType.License)?.let {
+        DriversLicenseView(
+            firstName = it.firstName.orNullIfBlank(),
+            middleName = it.middleName.orNullIfBlank(),
+            lastName = it.lastName.orNullIfBlank(),
+            dateOfBirth = it.dateOfBirth?.toString(),
+            licenseNumber = it.licenseNumber.orNullIfBlank(),
+            issuingCountry = it.issuingCountry.orNullIfBlank(),
+            issuingState = it.issuingState.orNullIfBlank(),
+            issueDate = it.issueDate?.toString(),
+            issuingAuthority = it.issuingAuthority.orNullIfBlank(),
+            expirationDate = it.expirationDate?.toString(),
+            licenseClass = it.licenseClass.orNullIfBlank(),
+        )
+    }
+
+private fun VaultAddEditState.ViewState.Content.ItemType.toPassport(): PassportView? =
+    (this as? VaultAddEditState.ViewState.Content.ItemType.Passport)?.let {
+        PassportView(
+            surname = it.surname.orNullIfBlank(),
+            givenName = it.givenName.orNullIfBlank(),
+            dateOfBirth = it.dateOfBirth?.toString(),
+            birthPlace = it.birthPlace.orNullIfBlank(),
+            sex = it.sex.orNullIfBlank(),
+            nationality = it.nationality.orNullIfBlank(),
+            passportNumber = it.passportNumber.orNullIfBlank(),
+            passportType = it.passportType.orNullIfBlank(),
+            issuingCountry = it.issuingCountry.orNullIfBlank(),
+            issuingAuthority = it.issuingAuthority.orNullIfBlank(),
+            issueDate = it.issueDate?.toString(),
+            expirationDate = it.expirationDate?.toString(),
+            nationalIdentificationNumber = it.nationalIdentificationNumber.orNullIfBlank(),
         )
     }
 
@@ -163,13 +230,16 @@ private fun VaultAddEditState.ViewState.Content.toPasswordHistory(
     )
 
     return listOf(
-        common.originalCipher?.passwordHistory.orEmpty(),
         newPasswordHistory,
+        common.originalCipher?.passwordHistory.orEmpty(),
         newHiddenFieldHistory,
     )
         .flatten()
+        // Ensure that they are in the correct order before saving.
+        .sortedByDescending { it.lastUsedDate }
+        // Only persist the 5 most recent items.
+        .take(5)
         .ifEmpty { null }
-        ?.takeLast(5)
 }
 
 private fun getPasswordHistory(

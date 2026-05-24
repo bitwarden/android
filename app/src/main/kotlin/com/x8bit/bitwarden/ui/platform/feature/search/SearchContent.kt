@@ -33,7 +33,7 @@ import kotlinx.collections.immutable.toPersistentList
 /**
  * The contents state for the search screen.
  */
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
 fun SearchContent(
     viewState: SearchState.ViewState.Content,
@@ -41,43 +41,28 @@ fun SearchContent(
     searchType: SearchTypeData,
     modifier: Modifier = Modifier,
 ) {
-    var showConfirmationDialog: ListingItemOverflowAction? by rememberSaveable {
+    var overflowSpeedBumpAction: ListingItemOverflowAction? by rememberSaveable {
         mutableStateOf(null)
     }
-    when (val option = showConfirmationDialog) {
-        is ListingItemOverflowAction.SendAction.DeleteClick -> {
-            BitwardenTwoButtonDialog(
-                title = stringResource(id = BitwardenString.delete),
-                message = stringResource(id = BitwardenString.are_you_sure_delete_send),
-                confirmButtonText = stringResource(id = BitwardenString.yes),
-                dismissButtonText = stringResource(id = BitwardenString.cancel),
-                onConfirmClick = {
-                    showConfirmationDialog = null
-                    searchHandlers.onOverflowItemClick(option)
-                },
-                onDismissClick = { showConfirmationDialog = null },
-                onDismissRequest = { showConfirmationDialog = null },
-            )
-        }
-
-        is ListingItemOverflowAction.SendAction.CopyUrlClick,
-        is ListingItemOverflowAction.SendAction.EditClick,
-        is ListingItemOverflowAction.SendAction.RemovePasswordClick,
-        is ListingItemOverflowAction.SendAction.ShareUrlClick,
-        is ListingItemOverflowAction.SendAction.ViewClick,
-        is ListingItemOverflowAction.VaultAction.CopyNoteClick,
-        is ListingItemOverflowAction.VaultAction.CopyNumberClick,
-        is ListingItemOverflowAction.VaultAction.CopyPasswordClick,
-        is ListingItemOverflowAction.VaultAction.CopyTotpClick,
-        is ListingItemOverflowAction.VaultAction.CopySecurityCodeClick,
-        is ListingItemOverflowAction.VaultAction.CopyUsernameClick,
-        is ListingItemOverflowAction.VaultAction.EditClick,
-        is ListingItemOverflowAction.VaultAction.LaunchClick,
-        is ListingItemOverflowAction.VaultAction.ViewClick,
-        is ListingItemOverflowAction.VaultAction.ArchiveClick,
-        is ListingItemOverflowAction.VaultAction.UnarchiveClick,
-        null,
-            -> Unit
+    overflowSpeedBumpAction?.let { action ->
+        action
+            .speedBump
+            ?.let { speedBump ->
+                BitwardenTwoButtonDialog(
+                    twoButtonDialogData = speedBump,
+                    onConfirmClick = {
+                        overflowSpeedBumpAction = null
+                        searchHandlers.onOverflowItemClick(action)
+                    },
+                    onDismissClick = { overflowSpeedBumpAction = null },
+                    onDismissRequest = { overflowSpeedBumpAction = null },
+                )
+            }
+            ?: run {
+                // If we somehow get here and there is no speed bump, then we should keep on going.
+                overflowSpeedBumpAction = null
+                searchHandlers.onOverflowItemClick(action)
+            }
     }
 
     var autofillSelectionOptionsItem by rememberSaveable {
@@ -143,8 +128,12 @@ fun SearchContent(
                             contentDescription = option.contentDescription(),
                             onClick = {
                                 when (option) {
-                                    is ListingItemOverflowAction.SendAction.DeleteClick -> {
-                                        showConfirmationDialog = option
+                                    is ListingItemOverflowAction.SendAction -> {
+                                        if (option.speedBump != null) {
+                                            overflowSpeedBumpAction = option
+                                        } else {
+                                            searchHandlers.onOverflowItemClick(option)
+                                        }
                                     }
 
                                     is ListingItemOverflowAction.VaultAction -> {
@@ -155,12 +144,12 @@ fun SearchContent(
                                                 MasterPasswordRepromptData.OverflowItem(
                                                     action = option,
                                                 )
+                                        } else if (option.speedBump != null) {
+                                            overflowSpeedBumpAction = option
                                         } else {
                                             searchHandlers.onOverflowItemClick(option)
                                         }
                                     }
-
-                                    else -> searchHandlers.onOverflowItemClick(option)
                                 }
                             },
                         )

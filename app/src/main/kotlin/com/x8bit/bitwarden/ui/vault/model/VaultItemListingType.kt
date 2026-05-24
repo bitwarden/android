@@ -36,6 +36,21 @@ sealed class VaultItemListingType {
     data object SshKey : VaultItemListingType()
 
     /**
+     * A Bank Account listing.
+     */
+    data object BankAccount : VaultItemListingType()
+
+    /**
+     * A License listing.
+     */
+    data object License : VaultItemListingType()
+
+    /**
+     * A Passport listing.
+     */
+    data object Passport : VaultItemListingType()
+
+    /**
      * A Trash listing.
      */
     data object Trash : VaultItemListingType()

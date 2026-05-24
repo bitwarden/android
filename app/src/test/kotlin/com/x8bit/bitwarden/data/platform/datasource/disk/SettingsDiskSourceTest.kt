@@ -24,7 +24,7 @@ import java.time.Instant
 @Suppress("LargeClass")
 class SettingsDiskSourceTest {
     private val fakeSharedPreferences = FakeSharedPreferences()
-    private val json = CoreModule.providesJson()
+    private val json = CoreModule.providesJson(buildInfoManager = mockk(relaxed = true))
 
     private val settingsDiskSource: SettingsDiskSource = SettingsDiskSourceImpl(
         sharedPreferences = fakeSharedPreferences,
@@ -146,6 +146,14 @@ class SettingsDiskSourceTest {
             userId = userId,
             isDismissed = true,
         )
+        settingsDiskSource.storeUpgradedToPremiumCardConsumed(
+            userId = userId,
+            isConsumed = true,
+        )
+        settingsDiskSource.storeUpgradedToPremiumCardPending(
+            userId = userId,
+            isPending = true,
+        )
         settingsDiskSource.storeInlineAutofillEnabled(
             userId = userId,
             isInlineAutofillEnabled = true,
@@ -181,6 +189,12 @@ class SettingsDiskSourceTest {
         )
         assertTrue(
             settingsDiskSource.getPremiumUpgradeBannerDismissed(userId = userId) ?: false,
+        )
+        assertTrue(
+            settingsDiskSource.getUpgradedToPremiumCardConsumed(userId = userId) ?: false,
+        )
+        assertTrue(
+            settingsDiskSource.getUpgradedToPremiumCardPending(userId = userId) ?: false,
         )
 
         // These should be cleared
@@ -864,6 +878,78 @@ class SettingsDiskSourceTest {
                     settingsDiskSource.storePremiumUpgradeBannerDismissed(
                         userId = mockUserId,
                         isDismissed = true,
+                    )
+                    assertEquals(true, awaitItem())
+                }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getUpgradedToPremiumCardConsumed when values are present should pull from SharedPreferences`() {
+        val baseKey = "bwPreferencesStorage:upgradedToPremiumCardConsumed"
+        val mockUserId = "mockUserId"
+        val key = "${baseKey}_$mockUserId"
+        assertNull(settingsDiskSource.getUpgradedToPremiumCardConsumed(userId = mockUserId))
+        fakeSharedPreferences.edit { putBoolean(key, true) }
+        assertEquals(
+            true,
+            settingsDiskSource.getUpgradedToPremiumCardConsumed(userId = mockUserId),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getUpgradedToPremiumCardConsumedFlow should react to changes in storeUpgradedToPremiumCardConsumed`() =
+        runTest {
+            val mockUserId = "mockUserId"
+            settingsDiskSource
+                .getUpgradedToPremiumCardConsumedFlow(userId = mockUserId)
+                .test {
+                    assertNull(
+                        settingsDiskSource
+                            .getUpgradedToPremiumCardConsumed(userId = mockUserId),
+                    )
+                    assertNull(awaitItem())
+
+                    settingsDiskSource.storeUpgradedToPremiumCardConsumed(
+                        userId = mockUserId,
+                        isConsumed = true,
+                    )
+                    assertEquals(true, awaitItem())
+                }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getUpgradedToPremiumCardPending when values are present should pull from SharedPreferences`() {
+        val baseKey = "bwPreferencesStorage:upgradedToPremiumCardPending"
+        val mockUserId = "mockUserId"
+        val key = "${baseKey}_$mockUserId"
+        assertNull(settingsDiskSource.getUpgradedToPremiumCardPending(userId = mockUserId))
+        fakeSharedPreferences.edit { putBoolean(key, true) }
+        assertEquals(
+            true,
+            settingsDiskSource.getUpgradedToPremiumCardPending(userId = mockUserId),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getUpgradedToPremiumCardPendingFlow should react to changes in storeUpgradedToPremiumCardPending`() =
+        runTest {
+            val mockUserId = "mockUserId"
+            settingsDiskSource
+                .getUpgradedToPremiumCardPendingFlow(userId = mockUserId)
+                .test {
+                    assertNull(
+                        settingsDiskSource
+                            .getUpgradedToPremiumCardPending(userId = mockUserId),
+                    )
+                    assertNull(awaitItem())
+
+                    settingsDiskSource.storeUpgradedToPremiumCardPending(
+                        userId = mockUserId,
+                        isPending = true,
                     )
                     assertEquals(true, awaitItem())
                 }

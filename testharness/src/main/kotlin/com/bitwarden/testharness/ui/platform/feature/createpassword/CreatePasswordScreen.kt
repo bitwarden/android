@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -86,7 +87,8 @@ fun CreatePasswordScreen(
                 cardStyle = null,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .standardHorizontalMargin(),
+                    .standardHorizontalMargin()
+                    .testTag("PasswordUsernameField"),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -100,7 +102,8 @@ fun CreatePasswordScreen(
                 cardStyle = null,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .standardHorizontalMargin(),
+                    .standardHorizontalMargin()
+                    .testTag("PasswordField"),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -111,7 +114,8 @@ fun CreatePasswordScreen(
                 isEnabled = !state.isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .standardHorizontalMargin(),
+                    .standardHorizontalMargin()
+                    .testTag("PasswordExecuteButton"),
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -122,7 +126,8 @@ fun CreatePasswordScreen(
                 isEnabled = !state.isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .standardHorizontalMargin(),
+                    .standardHorizontalMargin()
+                    .testTag("PasswordClearButton"),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -136,7 +141,8 @@ fun CreatePasswordScreen(
                 singleLine = false,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .standardHorizontalMargin(),
+                    .standardHorizontalMargin()
+                    .testTag("PasswordResultTextField"),
             )
 
             Spacer(modifier = Modifier.height(16.dp))

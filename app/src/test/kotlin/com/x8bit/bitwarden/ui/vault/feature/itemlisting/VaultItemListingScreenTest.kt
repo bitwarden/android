@@ -100,6 +100,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     private var onNavigateToVaultItemListingScreenType: VaultItemListingType? = null
     private var onNavigateToAddFolderCalled = false
     private var onNavigateToAddFolderParentFolderName: String? = null
+    private var onNavigateToPlanCalled: Boolean = false
 
     private val exitManager: ExitManager = mockk {
         every { exitApplication() } just runs
@@ -146,6 +147,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
                     onNavigateToAddFolderCalled = true
                     onNavigateToAddFolderParentFolderName = folderName
                 },
+                onNavigateToPlan = { onNavigateToPlanCalled = true },
             )
         }
     }
@@ -222,7 +224,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `premium action card restart premium button click should send UpgradeToPremiumClick`() {
+    fun `Premium action card restart Premium button click should send UpgradeToPremiumClick`() {
         composeTestRule
             .onNodeWithText(text = "Your Premium subscription ended")
             .assertDoesNotExist()
@@ -450,6 +452,15 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `search icon click should send SearchIconClick action`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayItemList = emptyList(),
+                    displayFolderList = emptyList(),
+                    displayCollectionList = emptyList(),
+                ),
+            )
+        }
         composeTestRule
             .onNodeWithContentDescription("Search vault")
             .performClick()
@@ -489,7 +500,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     @Test
     fun `floating action button click should send AddItemClick action`() {
         composeTestRule
-            .onNodeWithContentDescription("Add Item")
+            .onNodeWithContentDescription("Add item")
             .performClick()
         verify { viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick) }
     }
@@ -627,6 +638,12 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `NavigateToPlanModal event should invoke onNavigateToPlan`() {
+        mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToPlanModal)
+        assertTrue(onNavigateToPlanCalled)
+    }
+
+    @Test
     fun `progressbar should be displayed according to state`() {
         mutableStateFlow.update { DEFAULT_STATE }
         composeTestRule.onNode(isProgressBar).assertIsDisplayed()
@@ -739,7 +756,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update { DEFAULT_STATE }
 
         composeTestRule
-            .onNodeWithContentDescription("Add Item")
+            .onNodeWithContentDescription("Add item")
             .assertIsDisplayed()
 
         mutableStateFlow.update {
@@ -760,7 +777,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithContentDescription("Add item")
-            .assertDoesNotExist()
+            .assertIsDisplayed()
 
         mutableStateFlow.update {
             it.copy(
@@ -1443,6 +1460,55 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `on item archive overflow option click should display archive confirmation dialog and emits ArchiveClick on confirmation`() {
+        val cipherId = "mockId-1"
+        val archiveAction = ListingItemOverflowAction.VaultAction.ArchiveClick(cipherId = cipherId)
+        mutableStateFlow.update {
+            it.copy(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayCollectionList = emptyList(),
+                    displayItemList = listOf(
+                        createCipherDisplayItem(number = 1).copy(
+                            overflowOptions = listOf(archiveAction),
+                        ),
+                    ),
+                    displayFolderList = emptyList(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "mockTitle-1")
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "More options"))
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Archive")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Archive item")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Archive")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                action = VaultItemListingsAction.OverflowOptionClick(action = archiveAction),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `on cipher item overflow option click when reprompt is required should show the master password dialog`() {
         mutableStateFlow.update {
             it.copy(
@@ -1530,6 +1596,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
     }
 
+    @Suppress("LongMethod")
     @Test
     fun `on send item overflow option click should emit the appropriate action`() {
         val number = 1
@@ -2576,7 +2643,6 @@ private val DEFAULT_STATE = VaultItemListingState(
     isPremium = false,
     isRefreshing = false,
     restrictItemTypesPolicyOrgIds = persistentListOf(),
-    isArchiveEnabled = true,
 )
 
 private val STATE_FOR_AUTOFILL = DEFAULT_STATE.copy(

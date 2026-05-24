@@ -5,6 +5,7 @@ import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.provider.CallingAppInfo
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
@@ -13,7 +14,10 @@ import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.feature.cardscanner.manager.CardScanManager
+import com.bitwarden.ui.platform.feature.cardscanner.util.CardScanResult
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.model.TotpData
 import com.bitwarden.ui.platform.resource.BitwardenPlurals
@@ -30,6 +34,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
@@ -81,12 +86,14 @@ import com.x8bit.bitwarden.ui.vault.feature.util.canAssignToCollections
 import com.x8bit.bitwarden.ui.vault.feature.util.hasDeletePermissionInAtLeastOneCollection
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import com.x8bit.bitwarden.ui.vault.model.VaultBankAccountType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
+import com.x8bit.bitwarden.ui.vault.util.detectCardBrand
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -100,6 +107,7 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.time.Clock
+import java.time.LocalDate
 import java.util.Collections
 import java.util.UUID
 import javax.inject.Inject
@@ -121,6 +129,8 @@ class VaultAddEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     featureFlagManager: FeatureFlagManager,
     generatorRepository: GeneratorRepository,
+    cardScanManager: CardScanManager,
+    private val buildInfoManager: BuildInfoManager,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val toastManager: ToastManager,
     private val authRepository: AuthRepository,
@@ -136,6 +146,7 @@ class VaultAddEditViewModel @Inject constructor(
     private val networkConnectionManager: NetworkConnectionManager,
     private val firstTimeActionManager: FirstTimeActionManager,
     private val environmentRepository: EnvironmentRepository,
+    private val premiumStateManager: PremiumStateManager,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -177,7 +188,8 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             VaultAddEditState(
-                isArchiveEnabled = featureFlagManager.getFeatureFlag(FlagKey.ArchiveItems),
+                isCardScannerEnabled = featureFlagManager
+                    .getFeatureFlag(FlagKey.CardScanner) && !buildInfoManager.isFdroid,
                 vaultAddEditType = vaultAddEditType,
                 cipherType = vaultCipherType,
                 viewState = when (vaultAddEditType) {
@@ -274,8 +286,14 @@ class VaultAddEditViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         featureFlagManager
-            .getFeatureFlagFlow(FlagKey.ArchiveItems)
-            .map { VaultAddEditAction.Internal.ArchiveItemsFlagUpdateReceive(it) }
+            .getFeatureFlagFlow(FlagKey.CardScanner)
+            .map { VaultAddEditAction.Internal.CardScannerFlagUpdateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        cardScanManager
+            .cardScanResultFlow
+            .map { VaultAddEditAction.Internal.CardScanResultReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -293,6 +311,18 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.ItemType.IdentityType -> handleIdentityTypeActions(action)
             is VaultAddEditAction.ItemType.CardType -> handleCardTypeActions(action)
             is VaultAddEditAction.ItemType.SshKeyType -> handleSshKeyTypeActions(action)
+            is VaultAddEditAction.ItemType.BankAccountType -> {
+                handleBankAccountTypeActions(action)
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType -> {
+                handleLicenseTypeActions(action)
+            }
+
+            is VaultAddEditAction.ItemType.PassportType -> {
+                handlePassportTypeActions(action)
+            }
+
             is VaultAddEditAction.Internal -> handleInternalActions(action)
         }
     }
@@ -325,6 +355,10 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Common.ConfirmDeleteClick -> handleConfirmDeleteClick()
             is VaultAddEditAction.Common.CloseClick -> handleCloseClick()
             is VaultAddEditAction.Common.DismissDialog -> handleDismissDialog()
+            is VaultAddEditAction.Common.CameraPermissionSettingsClick -> {
+                handleCameraPermissionSettingsClick()
+            }
+
             is VaultAddEditAction.Common.SaveClick -> handleSaveClick()
             is VaultAddEditAction.Common.AddNewCustomFieldClick -> {
                 handleAddNewCustomFieldClick(action)
@@ -417,6 +451,14 @@ class VaultAddEditViewModel @Inject constructor(
 
     @Suppress("LongMethod")
     private fun handleSaveClick() = onContent { content ->
+        if (!content.type.isSdkSupported) {
+            sendEvent(
+                VaultAddEditEvent.ShowSnackbar(
+                    message = BitwardenString.an_error_has_occurred.asText(),
+                ),
+            )
+            return@onContent
+        }
         if (hasValidationErrors(content)) return@onContent
 
         mutableStateFlow.update {
@@ -630,12 +672,19 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleUpgradeToPremiumClick() {
-        val baseUrl = environmentRepository.environment.environmentUrlData.baseWebVaultUrlOrDefault
-        sendEvent(
-            VaultAddEditEvent.NavigateToPremium(
-                uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium",
-            ),
-        )
+        if (premiumStateManager.isInAppUpgradeAvailable()) {
+            sendEvent(VaultAddEditEvent.NavigateToPlanModal)
+        } else {
+            val baseUrl = environmentRepository
+                .environment
+                .environmentUrlData
+                .baseWebVaultUrlOrDefault
+            sendEvent(
+                VaultAddEditEvent.NavigateToPremium(
+                    uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium",
+                ),
+            )
+        }
     }
 
     private fun handleConfirmDeleteClick() {
@@ -670,6 +719,11 @@ class VaultAddEditViewModel @Inject constructor(
 
     private fun handleDismissDialog() {
         clearDialogState()
+    }
+
+    private fun handleCameraPermissionSettingsClick() {
+        clearDialogState()
+        sendEvent(VaultAddEditEvent.NavigateToAppSettings)
     }
 
     private fun handleInitialAutofillDialogDismissed() {
@@ -1542,6 +1596,27 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.ItemType.CardType.SecurityCodeVisibilityChange -> {
                 handleSecurityCodeVisibilityChange(action)
             }
+
+            is VaultAddEditAction.ItemType.CardType.ScanCardClick -> {
+                handleScanCardClick(action)
+            }
+        }
+    }
+
+    private fun handleScanCardClick(
+        action: VaultAddEditAction.ItemType.CardType.ScanCardClick,
+    ) {
+        if (!state.isCardScannerEnabled) return
+        if (action.isGranted) {
+            sendEvent(VaultAddEditEvent.NavigateToCardScan)
+        } else {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = VaultAddEditState
+                        .DialogState
+                        .CameraPermissionDenied,
+                )
+            }
         }
     }
 
@@ -1629,6 +1704,177 @@ class VaultAddEditViewModel @Inject constructor(
 
     //endregion SSH Key Type Handlers
 
+    //region Bank Account Type Handlers
+
+    @Suppress("LongMethod")
+    private fun handleBankAccountTypeActions(
+        action: VaultAddEditAction.ItemType.BankAccountType,
+    ) {
+        when (action) {
+            is VaultAddEditAction.ItemType.BankAccountType.BankNameTextChange -> {
+                updateBankAccountContent { it.copy(bankName = action.bankName) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.NameOnAccountTextChange -> {
+                updateBankAccountContent { it.copy(nameOnAccount = action.nameOnAccount) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.AccountTypeSelect -> {
+                updateBankAccountContent { it.copy(accountType = action.accountType) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.AccountNumberTextChange -> {
+                updateBankAccountContent { it.copy(accountNumber = action.accountNumber) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.RoutingNumberTextChange -> {
+                updateBankAccountContent { it.copy(routingNumber = action.routingNumber) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.BranchNumberTextChange -> {
+                updateBankAccountContent { it.copy(branchNumber = action.branchNumber) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.PinTextChange -> {
+                updateBankAccountContent { it.copy(pin = action.pin) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.SwiftCodeTextChange -> {
+                updateBankAccountContent { it.copy(swiftCode = action.swiftCode) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.IbanTextChange -> {
+                updateBankAccountContent { it.copy(iban = action.iban) }
+            }
+
+            is VaultAddEditAction.ItemType.BankAccountType.BankContactPhoneTextChange -> {
+                updateBankAccountContent { it.copy(bankContactPhone = action.phone) }
+            }
+        }
+    }
+
+    //endregion Bank Account Type Handlers
+
+    //region License Type Handlers
+
+    @Suppress("LongMethod")
+    private fun handleLicenseTypeActions(
+        action: VaultAddEditAction.ItemType.LicenseType,
+    ) {
+        when (action) {
+            is VaultAddEditAction.ItemType.LicenseType.FirstNameTextChange -> {
+                updateLicenseContent { it.copy(firstName = action.firstName) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.MiddleNameTextChange -> {
+                updateLicenseContent { it.copy(middleName = action.middleName) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.LastNameTextChange -> {
+                updateLicenseContent { it.copy(lastName = action.lastName) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.LicenseNumberTextChange -> {
+                updateLicenseContent { it.copy(licenseNumber = action.licenseNumber) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.IssuingCountryTextChange -> {
+                updateLicenseContent { it.copy(issuingCountry = action.country) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.IssuingStateTextChange -> {
+                updateLicenseContent { it.copy(issuingState = action.state) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.IssuingAuthorityTextChange -> {
+                updateLicenseContent { it.copy(issuingAuthority = action.authority) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.LicenseClassTextChange -> {
+                updateLicenseContent { it.copy(licenseClass = action.licenseClass) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.DateOfBirthChange -> {
+                updateLicenseContent { it.copy(dateOfBirth = action.dateOfBirth) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.IssueDateChange -> {
+                updateLicenseContent { it.copy(issueDate = action.issueDate) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.ExpirationDateChange -> {
+                updateLicenseContent { it.copy(expirationDate = action.expirationDate) }
+            }
+        }
+    }
+
+    //endregion License Type Handlers
+
+    //region Passport Type Handlers
+
+    @Suppress("LongMethod")
+    private fun handlePassportTypeActions(
+        action: VaultAddEditAction.ItemType.PassportType,
+    ) {
+        when (action) {
+            is VaultAddEditAction.ItemType.PassportType.GivenNameTextChange -> {
+                updatePassportContent { it.copy(givenName = action.givenName) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.SurnameTextChange -> {
+                updatePassportContent { it.copy(surname = action.surname) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.SexTextChange -> {
+                updatePassportContent { it.copy(sex = action.sex) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.BirthPlaceTextChange -> {
+                updatePassportContent { it.copy(birthPlace = action.birthPlace) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.NationalityTextChange -> {
+                updatePassportContent { it.copy(nationality = action.nationality) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.PassportNumberTextChange -> {
+                updatePassportContent { it.copy(passportNumber = action.passportNumber) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.PassportTypeTextChange -> {
+                updatePassportContent { it.copy(passportType = action.passportType) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.NationalIdentificationNumberTextChange -> {
+                updatePassportContent {
+                    it.copy(nationalIdentificationNumber = action.nationalIdentificationNumber)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.IssuingCountryTextChange -> {
+                updatePassportContent { it.copy(issuingCountry = action.country) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.IssuingAuthorityTextChange -> {
+                updatePassportContent { it.copy(issuingAuthority = action.authority) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.DateOfBirthChange -> {
+                updatePassportContent { it.copy(dateOfBirth = action.dateOfBirth) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.ExpirationDateChange -> {
+                updatePassportContent { it.copy(expirationDate = action.expirationDate) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.IssueDateChange -> {
+                updatePassportContent { it.copy(issueDate = action.issueDate) }
+            }
+        }
+    }
+
+    //endregion Passport Type Handlers
+
     //region Internal Type Handlers
 
     private fun handleInternalActions(action: VaultAddEditAction.Internal) {
@@ -1649,8 +1895,12 @@ class VaultAddEditViewModel @Inject constructor(
                 handleUnarchiveCipherReceive(action)
             }
 
-            is VaultAddEditAction.Internal.ArchiveItemsFlagUpdateReceive -> {
-                handleArchiveItemsFlagUpdateReceive(action)
+            is VaultAddEditAction.Internal.CardScannerFlagUpdateReceive -> {
+                handleCardScannerFlagUpdateReceive(action)
+            }
+
+            is VaultAddEditAction.Internal.CardScanResultReceive -> {
+                handleCardScanResultReceive(action)
             }
 
             is VaultAddEditAction.Internal.DeleteCipherReceive -> handleDeleteCipherReceive(action)
@@ -1864,10 +2114,36 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun handleArchiveItemsFlagUpdateReceive(
-        action: VaultAddEditAction.Internal.ArchiveItemsFlagUpdateReceive,
+    private fun handleCardScannerFlagUpdateReceive(
+        action: VaultAddEditAction.Internal.CardScannerFlagUpdateReceive,
     ) {
-        mutableStateFlow.update { it.copy(isArchiveEnabled = action.isEnabled) }
+        mutableStateFlow.update {
+            it.copy(isCardScannerEnabled = action.isEnabled && !buildInfoManager.isFdroid)
+        }
+    }
+
+    private fun handleCardScanResultReceive(
+        action: VaultAddEditAction.Internal.CardScanResultReceive,
+    ) {
+        when (val result = action.cardScanResult) {
+            is CardScanResult.Success -> {
+                val data = result.cardScanData
+                updateCardContent { cardType ->
+                    cardType.copy(
+                        number = data.number,
+                        brand = data.number.detectCardBrand(),
+                        expirationMonth = data.expirationMonth.toExpirationMonth(),
+                        expirationYear = data.expirationYear ?: cardType.expirationYear,
+                    )
+                }
+                sendEvent(
+                    VaultAddEditEvent.ShowSnackbar(BitwardenString.card_scanned.asText()),
+                )
+                sendEvent(VaultAddEditEvent.FocusCardHolderName)
+            }
+
+            is CardScanResult.ScanError -> Unit
+        }
     }
 
     private fun handleDeleteCipherReceive(action: VaultAddEditAction.Internal.DeleteCipherReceive) {
@@ -2356,6 +2632,36 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
+    private inline fun updateBankAccountContent(
+        crossinline block: (VaultAddEditState.ViewState.Content.ItemType.BankAccount) ->
+        VaultAddEditState.ViewState.Content.ItemType.BankAccount,
+    ) {
+        updateContent { currentContent ->
+            (currentContent.type as? VaultAddEditState.ViewState.Content.ItemType.BankAccount)
+                ?.let { currentContent.copy(type = block(it)) }
+        }
+    }
+
+    private inline fun updateLicenseContent(
+        crossinline block: (VaultAddEditState.ViewState.Content.ItemType.License) ->
+        VaultAddEditState.ViewState.Content.ItemType.License,
+    ) {
+        updateContent { currentContent ->
+            (currentContent.type as? VaultAddEditState.ViewState.Content.ItemType.License)
+                ?.let { currentContent.copy(type = block(it)) }
+        }
+    }
+
+    private inline fun updatePassportContent(
+        crossinline block: (VaultAddEditState.ViewState.Content.ItemType.Passport) ->
+        VaultAddEditState.ViewState.Content.ItemType.Passport,
+    ) {
+        updateContent { currentContent ->
+            (currentContent.type as? VaultAddEditState.ViewState.Content.ItemType.Passport)
+                ?.let { currentContent.copy(type = block(it)) }
+        }
+    }
+
     @Suppress("MaxLineLength")
     private suspend fun VaultAddEditState.ViewState.Content.createCipherForAddAndCloneItemStates(): CreateCipherResult {
         return common.selectedOwner?.collections
@@ -2404,6 +2710,24 @@ class VaultAddEditViewModel @Inject constructor(
     //endregion Utility Functions
 }
 
+@Suppress("MagicNumber")
+private fun String.toExpirationMonth(): VaultCardExpirationMonth =
+    when (this.toIntOrNull()) {
+        1 -> VaultCardExpirationMonth.JANUARY
+        2 -> VaultCardExpirationMonth.FEBRUARY
+        3 -> VaultCardExpirationMonth.MARCH
+        4 -> VaultCardExpirationMonth.APRIL
+        5 -> VaultCardExpirationMonth.MAY
+        6 -> VaultCardExpirationMonth.JUNE
+        7 -> VaultCardExpirationMonth.JULY
+        8 -> VaultCardExpirationMonth.AUGUST
+        9 -> VaultCardExpirationMonth.SEPTEMBER
+        10 -> VaultCardExpirationMonth.OCTOBER
+        11 -> VaultCardExpirationMonth.NOVEMBER
+        12 -> VaultCardExpirationMonth.DECEMBER
+        else -> VaultCardExpirationMonth.SELECT
+    }
+
 /**
  * Represents the state for adding an item to the vault.
  *
@@ -2427,7 +2751,7 @@ data class VaultAddEditState(
     val createCredentialRequest: CreateCredentialRequest? = null,
     val defaultUriMatchType: UriMatchType,
     private val shouldShowCoachMarkTour: Boolean,
-    private val isArchiveEnabled: Boolean,
+    val isCardScannerEnabled: Boolean,
 ) : Parcelable {
 
     /**
@@ -2438,11 +2762,14 @@ data class VaultAddEditState(
             is VaultAddEditType.AddItem,
             is VaultAddEditType.CloneItem,
                 -> when (cipherType) {
-                VaultItemCipherType.LOGIN -> BitwardenString.new_login.asText()
-                VaultItemCipherType.CARD -> BitwardenString.new_card.asText()
-                VaultItemCipherType.IDENTITY -> BitwardenString.new_identity.asText()
-                VaultItemCipherType.SECURE_NOTE -> BitwardenString.new_note.asText()
-                VaultItemCipherType.SSH_KEY -> BitwardenString.new_ssh_key.asText()
+                VaultItemCipherType.LOGIN -> BitwardenString.add_login.asText()
+                VaultItemCipherType.CARD -> BitwardenString.add_card.asText()
+                VaultItemCipherType.IDENTITY -> BitwardenString.add_identity.asText()
+                VaultItemCipherType.SECURE_NOTE -> BitwardenString.add_note.asText()
+                VaultItemCipherType.SSH_KEY -> BitwardenString.add_ssh_key.asText()
+                VaultItemCipherType.BANK_ACCOUNT -> BitwardenString.add_bank_account.asText()
+                VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.add_license.asText()
+                VaultItemCipherType.PASSPORT -> BitwardenString.add_passport.asText()
             }
 
             is VaultAddEditType.EditItem -> when (cipherType) {
@@ -2451,6 +2778,9 @@ data class VaultAddEditState(
                 VaultItemCipherType.IDENTITY -> BitwardenString.edit_identity.asText()
                 VaultItemCipherType.SECURE_NOTE -> BitwardenString.edit_note.asText()
                 VaultItemCipherType.SSH_KEY -> BitwardenString.edit_ssh_key.asText()
+                VaultItemCipherType.BANK_ACCOUNT -> BitwardenString.edit_bank_account.asText()
+                VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.edit_license.asText()
+                VaultItemCipherType.PASSPORT -> BitwardenString.edit_passport.asText()
             }
         }
 
@@ -2484,8 +2814,7 @@ data class VaultAddEditState(
      * Helper to determine if the UI should display the archive button.
      */
     val displayArchiveButton: Boolean
-        get() = isArchiveEnabled &&
-            isEditItemMode &&
+        get() = isEditItemMode &&
             (viewState as? ViewState.Content)
                 ?.common
                 ?.originalCipher
@@ -2495,8 +2824,7 @@ data class VaultAddEditState(
      * Helper to determine if the UI should display the unarchive button.
      */
     val displayUnarchiveButton: Boolean
-        get() = isArchiveEnabled &&
-            isEditItemMode &&
+        get() = isEditItemMode &&
             (viewState as? ViewState.Content)
                 ?.common
                 ?.originalCipher
@@ -2544,6 +2872,9 @@ data class VaultAddEditState(
         IDENTITY(BitwardenString.type_identity),
         SECURE_NOTES(BitwardenString.type_secure_note),
         SSH_KEYS(BitwardenString.type_ssh_key),
+        BANK_ACCOUNT(BitwardenString.type_bank_account),
+        LICENSE(BitwardenString.type_license),
+        PASSPORT(BitwardenString.type_passport),
     }
 
     /**
@@ -2651,6 +2982,11 @@ data class VaultAddEditState(
                  * A list of all the linked field types supported by this [ItemType].
                  */
                 abstract val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+
+                /**
+                 * Whether this item type has SDK support for save operations.
+                 */
+                open val isSdkSupported: Boolean get() = true
 
                 /**
                  * Represents the login item information.
@@ -2827,6 +3163,92 @@ data class VaultAddEditState(
                     override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
                         get() = persistentListOf()
                 }
+
+                /**
+                 * Represents the bank account item information.
+                 *
+                 * @property bankName The name of the bank.
+                 * @property nameOnAccount The name on the bank account.
+                 * @property accountType The selected bank account type.
+                 * @property accountNumber The bank account number.
+                 * @property routingNumber The bank routing number.
+                 * @property branchNumber The bank branch number.
+                 * @property pin The bank account PIN.
+                 * @property swiftCode The bank SWIFT code.
+                 * @property iban The bank IBAN.
+                 * @property bankContactPhone The bank contact phone number.
+                 */
+                @Parcelize
+                data class BankAccount(
+                    val bankName: String = "",
+                    val nameOnAccount: String = "",
+                    val accountType: VaultBankAccountType = VaultBankAccountType.SELECT,
+                    val accountNumber: String = "",
+                    val routingNumber: String = "",
+                    val branchNumber: String = "",
+                    val pin: String = "",
+                    val swiftCode: String = "",
+                    val iban: String = "",
+                    val bankContactPhone: String = "",
+                ) : ItemType() {
+                    override val itemTypeOption: ItemTypeOption
+                        get() = ItemTypeOption.BANK_ACCOUNT
+
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf()
+                }
+
+                /**
+                 * Represents the driver's license item information.
+                 */
+                @Parcelize
+                data class License(
+                    val firstName: String = "",
+                    val middleName: String = "",
+                    val lastName: String = "",
+                    val dateOfBirth: LocalDate? = null,
+                    val licenseNumber: String = "",
+                    val issuingCountry: String = "",
+                    val issuingState: String = "",
+                    val issuingAuthority: String = "",
+                    val issueDate: LocalDate? = null,
+                    val expirationDate: LocalDate? = null,
+                    val licenseClass: String = "",
+                ) : ItemType() {
+                    override val itemTypeOption: ItemTypeOption
+                        get() = ItemTypeOption.LICENSE
+
+                    override val isSdkSupported: Boolean get() = false
+
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf()
+                }
+
+                /**
+                 * Represents the passport item information.
+                 */
+                @Parcelize
+                data class Passport(
+                    val givenName: String = "",
+                    val surname: String = "",
+                    val dateOfBirth: LocalDate? = null,
+                    val sex: String = "",
+                    val birthPlace: String = "",
+                    val nationality: String = "",
+                    val passportNumber: String = "",
+                    val passportType: String = "",
+                    val nationalIdentificationNumber: String = "",
+                    val issuingCountry: String = "",
+                    val issuingAuthority: String = "",
+                    val issueDate: LocalDate? = null,
+                    val expirationDate: LocalDate? = null,
+                ) : ItemType() {
+                    override val itemTypeOption: ItemTypeOption
+                        get() = ItemTypeOption.PASSPORT
+
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf()
+                }
             }
 
             /**
@@ -2943,7 +3365,7 @@ data class VaultAddEditState(
     sealed class DialogState : Parcelable {
 
         /**
-         * Displays a dialog to the user indicating that archiving requires a premium account.
+         * Displays a dialog to the user indicating that archiving requires a Premium account.
          */
         data object ArchiveRequiresPremium : DialogState()
 
@@ -3021,6 +3443,13 @@ data class VaultAddEditState(
          */
         @Parcelize
         data object Fido2PinSetUpError : DialogState()
+
+        /**
+         * Displays a dialog informing the user that camera permission is required
+         * to use the card scanner, with an option to navigate to app settings.
+         */
+        @Parcelize
+        data object CameraPermissionDenied : DialogState()
     }
 }
 
@@ -3075,11 +3504,16 @@ sealed class VaultAddEditEvent {
     ) : VaultAddEditEvent()
 
     /**
-     * Navigates to the upgrade-to-premium url.
+     * Navigates to the upgrade-to-Premium url.
      */
     data class NavigateToPremium(
         val uri: String,
     ) : VaultAddEditEvent()
+
+    /**
+     * Navigates to the in-app plan modal for premium upgrade.
+     */
+    data object NavigateToPlanModal : VaultAddEditEvent()
 
     /**
      * Navigates to the collections screen.
@@ -3097,6 +3531,11 @@ sealed class VaultAddEditEvent {
      * Navigate to the QR code scan screen.
      */
     data object NavigateToQrCodeScan : VaultAddEditEvent()
+
+    /**
+     * Navigate to the card scan screen.
+     */
+    data object NavigateToCardScan : VaultAddEditEvent()
 
     /**
      * Navigate to the manual code entry screen.
@@ -3142,6 +3581,16 @@ sealed class VaultAddEditEvent {
      * Navigate the user to the learn more help page
      */
     data object NavigateToLearnMore : VaultAddEditEvent()
+
+    /**
+     * Focus the cardholder name field after a successful card scan.
+     */
+    data object FocusCardHolderName : VaultAddEditEvent(), DeferredBackgroundEvent
+
+    /**
+     * Navigate to the app settings screen.
+     */
+    data object NavigateToAppSettings : VaultAddEditEvent()
 }
 
 /**
@@ -3168,6 +3617,11 @@ sealed class VaultAddEditAction {
          * The user has clicked to dismiss the dialog.
          */
         data object DismissDialog : Common()
+
+        /**
+         * The user has clicked the settings button in the camera permission dialog.
+         */
+        data object CameraPermissionSettingsClick : Common()
 
         /**
          * The user has clicked the attachments overflow option.
@@ -3200,7 +3654,7 @@ sealed class VaultAddEditAction {
         data object UnarchiveClick : Common()
 
         /**
-         * The user has clicked the upgrade to premium dialog.
+         * The user has clicked the upgrade to Premium dialog.
          */
         data object UpgradeToPremiumClick : Common()
 
@@ -3698,6 +4152,13 @@ sealed class VaultAddEditAction {
              * @property isVisible The new code visibility state.
              */
             data class SecurityCodeVisibilityChange(val isVisible: Boolean) : CardType()
+
+            /**
+             * Fired when the scan card button is clicked.
+             *
+             * @property isGranted Whether camera permission was granted.
+             */
+            data class ScanCardClick(val isGranted: Boolean) : CardType()
         }
 
         /**
@@ -3709,6 +4170,204 @@ sealed class VaultAddEditAction {
              * Fired when the private key's visibility has changed.
              */
             data class PrivateKeyVisibilityChange(val isVisible: Boolean) : SshKeyType()
+        }
+
+        /**
+         * Represents actions specific to the Bank Account type.
+         */
+        sealed class BankAccountType : ItemType() {
+
+            /**
+             * Fired when the bank name text input is changed.
+             */
+            data class BankNameTextChange(val bankName: String) : BankAccountType()
+
+            /**
+             * Fired when the name on account text input is changed.
+             */
+            data class NameOnAccountTextChange(val nameOnAccount: String) : BankAccountType()
+
+            /**
+             * Fired when the account type is selected.
+             */
+            data class AccountTypeSelect(
+                val accountType: VaultBankAccountType,
+            ) : BankAccountType()
+
+            /**
+             * Fired when the account number text input is changed.
+             */
+            data class AccountNumberTextChange(val accountNumber: String) : BankAccountType()
+
+            /**
+             * Fired when the routing number text input is changed.
+             */
+            data class RoutingNumberTextChange(val routingNumber: String) : BankAccountType()
+
+            /**
+             * Fired when the branch number text input is changed.
+             */
+            data class BranchNumberTextChange(val branchNumber: String) : BankAccountType()
+
+            /**
+             * Fired when the PIN text input is changed.
+             */
+            data class PinTextChange(val pin: String) : BankAccountType()
+
+            /**
+             * Fired when the SWIFT code text input is changed.
+             */
+            data class SwiftCodeTextChange(val swiftCode: String) : BankAccountType()
+
+            /**
+             * Fired when the IBAN text input is changed.
+             */
+            data class IbanTextChange(val iban: String) : BankAccountType()
+
+            /**
+             * Fired when the bank contact phone text input is changed.
+             */
+            data class BankContactPhoneTextChange(val phone: String) : BankAccountType()
+        }
+
+        /**
+         * Represents actions specific to the Passport type.
+         */
+        sealed class PassportType : ItemType() {
+
+            /**
+             * Fired when the given name text input is changed.
+             */
+            data class GivenNameTextChange(val givenName: String) : PassportType()
+
+            /**
+             * Fired when the surname text input is changed.
+             */
+            data class SurnameTextChange(val surname: String) : PassportType()
+
+            /**
+             * Fired when the sex text input is changed.
+             */
+            data class SexTextChange(val sex: String) : PassportType()
+
+            /**
+             * Fired when the birth place text input is changed.
+             */
+            data class BirthPlaceTextChange(val birthPlace: String) : PassportType()
+
+            /**
+             * Fired when the nationality text input is changed.
+             */
+            data class NationalityTextChange(val nationality: String) : PassportType()
+
+            /**
+             * Fired when the passport number text input is changed.
+             */
+            data class PassportNumberTextChange(val passportNumber: String) : PassportType()
+
+            /**
+             * Fired when the passport type text input is changed.
+             */
+            data class PassportTypeTextChange(val passportType: String) : PassportType()
+
+            /**
+             * Fired when the national identification number text input is changed.
+             */
+            data class NationalIdentificationNumberTextChange(
+                val nationalIdentificationNumber: String,
+            ) : PassportType()
+
+            /**
+             * Fired when the issuing country text input is changed.
+             */
+            data class IssuingCountryTextChange(val country: String) : PassportType()
+
+            /**
+             * Fired when the issuing authority text input is changed.
+             */
+            data class IssuingAuthorityTextChange(val authority: String) : PassportType()
+
+            /**
+             * Fired when the date of birth input is changed.
+             */
+            data class DateOfBirthChange(val dateOfBirth: LocalDate?) : PassportType()
+
+            /**
+             * Fired when the issue date input is changed.
+             */
+            data class IssueDateChange(val issueDate: LocalDate?) : PassportType()
+
+            /**
+             * Fired when the expiration date input is changed.
+             */
+            data class ExpirationDateChange(val expirationDate: LocalDate?) : PassportType()
+        }
+
+        /**
+         * Represents actions specific to the License type.
+         */
+        sealed class LicenseType : ItemType() {
+
+            /**
+             * Fired when the first name text input is changed.
+             */
+            data class FirstNameTextChange(val firstName: String) : LicenseType()
+
+            /**
+             * Fired when the middle name text input is changed.
+             */
+            data class MiddleNameTextChange(val middleName: String) : LicenseType()
+
+            /**
+             * Fired when the last name text input is changed.
+             */
+            data class LastNameTextChange(val lastName: String) : LicenseType()
+
+            /**
+             * Fired when the license number text input is changed.
+             */
+            data class LicenseNumberTextChange(val licenseNumber: String) : LicenseType()
+
+            /**
+             * Fired when the issuing country text input is changed.
+             */
+            data class IssuingCountryTextChange(val country: String) : LicenseType()
+
+            /**
+             * Fired when the issuing state/province text input is changed.
+             */
+            data class IssuingStateTextChange(val state: String) : LicenseType()
+
+            /**
+             * Fired when the issuing authority text input is changed.
+             */
+            data class IssuingAuthorityTextChange(val authority: String) : LicenseType()
+
+            /**
+             * Fired when the license class text input is changed.
+             */
+            data class LicenseClassTextChange(val licenseClass: String) : LicenseType()
+
+            /**
+             * Fired when the date of birth input is changed.
+             */
+            data class DateOfBirthChange(
+                val dateOfBirth: LocalDate?,
+            ) : LicenseType()
+
+            /**
+             * Fired when the issue date input is changed.
+             */
+            data class IssueDateChange(
+                val issueDate: LocalDate?,
+            ) : LicenseType()
+
+            /**
+             * Fired when the expiration date input is changed.
+             */
+            data class ExpirationDateChange(
+                val expirationDate: LocalDate?,
+            ) : LicenseType()
         }
     }
 
@@ -3836,10 +4495,17 @@ sealed class VaultAddEditAction {
         ) : Internal()
 
         /**
-         * Indicates that the Archive Items flag has been updated.
+         * Indicates that the Card Scanner flag has been updated.
          */
-        data class ArchiveItemsFlagUpdateReceive(
+        data class CardScannerFlagUpdateReceive(
             val isEnabled: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that a card scan result has been received.
+         */
+        data class CardScanResultReceive(
+            val cardScanResult: CardScanResult,
         ) : Internal()
     }
 }

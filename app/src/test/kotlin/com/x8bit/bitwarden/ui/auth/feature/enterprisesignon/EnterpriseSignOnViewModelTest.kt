@@ -1150,14 +1150,18 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     @Test
     fun `ConfirmKeyConnectorDomainClick with login Success should show loading dialog and hide it`() =
         runTest {
+            val orgIdentifier = "Bitwarden"
             coEvery {
-                authRepository.continueKeyConnectorLogin()
+                authRepository.continueKeyConnectorLogin(
+                    orgIdentifier = orgIdentifier,
+                    email = DEFAULT_EMAIL,
+                )
             } returns LoginResult.Success
             coEvery {
                 authRepository.rememberedOrgIdentifier
-            } returns "Bitwarden"
+            } returns orgIdentifier
 
-            val initialState = DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden")
+            val initialState = DEFAULT_STATE.copy(orgIdentifierInput = orgIdentifier)
             val viewModel = createViewModel(
                 initialState = initialState,
                 ssoData = DEFAULT_SSO_DATA,
@@ -1187,7 +1191,10 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             }
 
             coVerify(exactly = 1) {
-                authRepository.continueKeyConnectorLogin()
+                authRepository.continueKeyConnectorLogin(
+                    orgIdentifier = orgIdentifier,
+                    email = DEFAULT_EMAIL,
+                )
             }
         }
 
@@ -1271,13 +1278,14 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         }
 }
 
+private const val DEFAULT_EMAIL = "test@gmail.com"
 private val DEFAULT_STATE = EnterpriseSignOnState(
     dialogState = null,
     orgIdentifierInput = "",
+    emailAddress = DEFAULT_EMAIL,
 )
 private val DEFAULT_SSO_DATA = SsoResponseData(
     redirectUri = "https://bitwarden.com/sso-callback",
     state = "abc",
     codeVerifier = "def",
 )
-private const val DEFAULT_EMAIL = "test@gmail.com"

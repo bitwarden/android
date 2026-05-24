@@ -8,6 +8,7 @@ import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRe
 import com.bitwarden.authenticator.data.authenticator.repository.model.DeleteItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.authenticator.feature.util.toDisplayItem
 import com.bitwarden.authenticator.ui.authenticator.feature.util.toSharedCodesDisplayState
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedCodesDisplayState
@@ -51,10 +52,12 @@ class ItemSearchViewModel @Inject constructor(
     private val clipboardManager: BitwardenClipboardManager,
     private val authenticatorRepository: AuthenticatorRepository,
     private val authenticatorBridgeManager: AuthenticatorBridgeManager,
+    private val settingsRepository: SettingsRepository,
 ) : BaseViewModel<ItemSearchState, ItemSearchEvent, ItemSearchAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: ItemSearchState(
             searchTerm = "",
+            isShowNextCodeEnabled = settingsRepository.isShowNextCodeEnabled,
             viewState = ItemSearchState.ViewState.Empty(message = null),
             dialog = null,
         ),
@@ -65,6 +68,11 @@ class ItemSearchViewModel @Inject constructor(
             .getSnackbarDataFlow(relay = SnackbarRelay.ITEM_SAVED)
             .map(ItemSearchEvent::ShowSnackbar)
             .onEach(::sendEvent)
+            .launchIn(viewModelScope)
+        settingsRepository
+            .isShowNextCodeEnabledFlow
+            .map { ItemSearchAction.Internal.IsShowNextCodeEnabledReceive(it) }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
         combine(
             authenticatorRepository.getLocalVerificationCodesFlow(),
@@ -164,6 +172,10 @@ class ItemSearchViewModel @Inject constructor(
             }
 
             is ItemSearchAction.Internal.DeleteItemReceive -> handleDeleteItemReceive(action)
+
+            is ItemSearchAction.Internal.IsShowNextCodeEnabledReceive -> {
+                handleIsShowNextCodeEnabledReceive(action)
+            }
         }
     }
 
@@ -209,6 +221,14 @@ class ItemSearchViewModel @Inject constructor(
                 mutableStateFlow.update { it.copy(dialog = null) }
                 sendEvent(ItemSearchEvent.ShowSnackbar(BitwardenString.item_deleted.asText()))
             }
+        }
+    }
+
+    private fun handleIsShowNextCodeEnabledReceive(
+        action: ItemSearchAction.Internal.IsShowNextCodeEnabledReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isShowNextCodeEnabled = action.isShowNextCodeEnabled)
         }
     }
 
@@ -291,7 +311,10 @@ class ItemSearchViewModel @Inject constructor(
             is SharedVerificationCodesState.Success -> {
                 sharedData
                     .copy(items = sharedData.items.filterAndOrganize(searchTerm = searchTerm))
-                    .toSharedCodesDisplayState(alertThresholdSeconds = 7)
+                    .toSharedCodesDisplayState(
+                        alertThresholdSeconds = 7,
+                        isShowNextCodeEnabled = state.isShowNextCodeEnabled,
+                    )
             }
         }
 
@@ -308,6 +331,7 @@ class ItemSearchViewModel @Inject constructor(
                         .map {
                             it.toDisplayItem(
                                 alertThresholdSeconds = 7,
+                                isShowNextCodeEnabled = state.isShowNextCodeEnabled,
                                 sharedVerificationCodesState = authenticatorRepository
                                     .sharedCodesStateFlow
                                     .value,
@@ -329,6 +353,7 @@ class ItemSearchViewModel @Inject constructor(
 @Parcelize
 data class ItemSearchState(
     val searchTerm: String,
+    val isShowNextCodeEnabled: Boolean,
     val viewState: ViewState,
     val dialog: DialogState?,
 ) : Parcelable {
@@ -456,6 +481,13 @@ sealed class ItemSearchAction {
          */
         data class DeleteItemReceive(
             val result: DeleteItemResult,
+        ) : Internal()
+
+        /**
+         * Indicates the show next code enabled setting has been received.
+         */
+        data class IsShowNextCodeEnabledReceive(
+            val isShowNextCodeEnabled: Boolean,
         ) : Internal()
     }
 }

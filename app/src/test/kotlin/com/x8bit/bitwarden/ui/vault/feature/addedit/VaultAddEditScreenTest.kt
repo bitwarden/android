@@ -8,6 +8,7 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
@@ -31,6 +32,7 @@ import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -66,6 +68,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import com.x8bit.bitwarden.ui.vault.model.VaultBankAccountType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
@@ -84,6 +87,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.time.LocalDate
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType as UriMatchTypeModel
 
 @Suppress("LargeClass")
@@ -94,7 +98,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     private var onNavigateToManualCodeEntryScreenCalled = false
     private var onNavigateToGeneratorModalType: GeneratorMode.Modal? = null
     private var onNavigateToAttachmentsId: String? = null
+    private var onNavigateToCardScanScreenCalled = false
     private var onNavigateToMoveToOrganizationId: String? = null
+    private var onNavigateToPlanCalled = false
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultAddEditEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE_LOGIN)
@@ -136,6 +142,8 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                 onNavigateToGeneratorModal = { onNavigateToGeneratorModalType = it },
                 onNavigateToAttachments = { onNavigateToAttachmentsId = it },
                 onNavigateToMoveToOrganization = { id, _ -> onNavigateToMoveToOrganizationId = id },
+                onNavigateToCardScanScreen = { onNavigateToCardScanScreenCalled = true },
+                onNavigateToPlan = { onNavigateToPlanCalled = true },
                 viewModel = viewModel,
             )
         }
@@ -189,6 +197,45 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `on NavigateToCardScan event should invoke onNavigateToCardScanScreen`() {
+        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToCardScan)
+        assertTrue(onNavigateToCardScanScreenCalled)
+    }
+
+    @Test
+    fun `on FocusCardHolderName event should focus field`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD
+        composeTestRule.waitForIdle()
+        mutableEventFlow.tryEmit(VaultAddEditEvent.FocusCardHolderName)
+        composeTestRule.waitForIdle()
+        composeTestRule
+            .onNodeWithTag("CardholderNameEntry")
+            .performScrollTo()
+            .assertIsFocused()
+    }
+
+    @Test
+    fun `scan card button should be displayed when isCardScannerEnabled is true`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD.copy(
+            isCardScannerEnabled = true,
+        )
+        composeTestRule
+            .onNodeWithText("Scan card")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `scan card button should not be displayed when isCardScannerEnabled is false`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD.copy(
+            isCardScannerEnabled = false,
+        )
+        composeTestRule
+            .onNodeWithText("Scan card")
+            .assertDoesNotExist()
+    }
+
+    @Test
     fun `on NavigateToManualCodeEntry event should invoke NavigateToManualCodeEntry`() {
         mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToManualCodeEntry)
         assertTrue(onNavigateToManualCodeEntryScreenCalled)
@@ -233,6 +280,12 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `on NavigateToPlanModal event should invoke onNavigateToPlan`() {
+        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToPlanModal)
+        assertTrue(onNavigateToPlanCalled)
+    }
+
+    @Test
     fun `on CompleteCredentialCreate event should invoke CredentialProviderCompletionManager`() {
         val result = CreateCredentialResult.Success.Fido2CredentialRegistered(
             responseJson = "mockRegistrationResponse",
@@ -268,7 +321,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ArchiveRequiresPremium dialog on upgrade to premium click should emit UpgradeToPremiumClick`() {
+    fun `ArchiveRequiresPremium dialog on upgrade to Premium click should emit UpgradeToPremiumClick`() {
         composeTestRule.assertNoDialogExists()
         mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
             dialog = VaultAddEditState.DialogState.ArchiveRequiresPremium,
@@ -2558,6 +2611,702 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `in ItemType_BankAccount changing bank name should trigger BankNameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Bank name")
+            .performTextInput(text = "TestBank")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.BankNameTextChange(
+                    bankName = "TestBank",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_BankAccount changing the name on account text field should trigger NameOnAccountTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Name on account")
+            .performTextInput(text = "TestNameOnAccount")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.NameOnAccountTextChange(
+                    nameOnAccount = "TestNameOnAccount",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_BankAccount selecting an account type should trigger AccountTypeSelect`() {
+        mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
+        // Opens the menu
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Account type")
+            .performClick()
+
+        // Choose the option from the menu
+        composeTestRule
+            .onAllNodesWithText(text = "Checking")
+            .onLast()
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.AccountTypeSelect(
+                    accountType = VaultBankAccountType.CHECKING,
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_BankAccount changing the account number text field should trigger AccountNumberTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Account number")
+            .performTextInput(text = "TestAccountNumber")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.AccountNumberTextChange(
+                    accountNumber = "TestAccountNumber",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_BankAccount changing the routing number text field should trigger RoutingNumberTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Routing number")
+            .performTextInput(text = "TestRoutingNumber")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.RoutingNumberTextChange(
+                    routingNumber = "TestRoutingNumber",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_BankAccount changing the branch number text field should trigger BranchNumberTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Branch number")
+            .performTextInput(text = "TestBranchNumber")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.BranchNumberTextChange(
+                    branchNumber = "TestBranchNumber",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_BankAccount changing the PIN text field should trigger PinTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "PIN")
+            .performTextInput(text = "1234")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.PinTextChange(pin = "1234"),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_BankAccount changing the SWIFT code text field should trigger SwiftCodeTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "SWIFT code")
+            .performTextInput(text = "TestSwiftCode")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.SwiftCodeTextChange(
+                    swiftCode = "TestSwiftCode",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_BankAccount changing the IBAN text field should trigger IbanTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "IBAN")
+            .performTextInput(text = "TestIban")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.IbanTextChange(iban = "TestIban"),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_BankAccount changing the bank contact phone text field should trigger BankContactPhoneTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Bank contact phone")
+            .performTextInput(text = "555-1234")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.BankContactPhoneTextChange(
+                    phone = "555-1234",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_License changing first name should trigger FirstNameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "First name")
+            .performTextInput(text = "Missy")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.FirstNameTextChange(
+                    firstName = "Missy",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_License changing middle name should trigger MiddleNameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Middle name")
+            .performTextInput(text = "Anne")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.MiddleNameTextChange(
+                    middleName = "Anne",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_License changing last name should trigger LastNameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Last name")
+            .performTextInput(text = "Katner")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.LastNameTextChange(
+                    lastName = "Katner",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_License changing the license number text field should trigger LicenseNumberTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "License number")
+            .performTextInput(text = "K123-456-789")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.LicenseNumberTextChange(
+                    licenseNumber = "K123-456-789",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_License changing the issuing country text field should trigger IssuingCountryTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Issuing country")
+            .performTextInput(text = "USA")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssuingCountryTextChange(
+                    country = "USA",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_License changing the issuing state text field should trigger IssuingStateTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Issuing state / province")
+            .performTextInput(text = "Wisconsin")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssuingStateTextChange(
+                    state = "Wisconsin",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_License changing the issuing authority text field should trigger IssuingAuthorityTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Issuing authority")
+            .performTextInput(text = "DMV")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssuingAuthorityTextChange(
+                    authority = "DMV",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_License changing license class should trigger LicenseClassTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "License class")
+            .performTextInput(text = "Class D")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.LicenseClassTextChange(
+                    licenseClass = "Class D",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_License the date of birth should display the selected date from the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Date of birth")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateLicenseType(currentState) {
+                copy(dateOfBirth = LocalDate.of(1990, 8, 10))
+            }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "August 10, 1990. Date of birth")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_License clicking the date of birth clear button should trigger DateOfBirthChange with null`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Date of birth")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Clear")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.DateOfBirthChange(dateOfBirth = null),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_License the issue date should display the selected date from the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Issue date")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateLicenseType(currentState) {
+                copy(issueDate = LocalDate.of(2020, 1, 15))
+            }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "January 15, 2020. Issue date")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_License clicking the issue date clear button should trigger IssueDateChange with null`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Issue date")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Clear")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssueDateChange(issueDate = null),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_License the expiration date should display the selected date from the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Expiration date")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateLicenseType(currentState) {
+                copy(expirationDate = LocalDate.of(2025, 12, 31))
+            }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "December 31, 2025. Expiration date")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_License clicking the expiration date clear button should trigger ExpirationDateChange with null`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Expiration date")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Clear")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.ExpirationDateChange(
+                    expirationDate = null,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Passport changing first name should trigger GivenNameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "First name")
+            .performTextInput(text = "Bruce")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.GivenNameTextChange(
+                    givenName = "Bruce",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Passport changing last name should trigger SurnameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Last name")
+            .performTextInput(text = "Wayne")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.SurnameTextChange(
+                    surname = "Wayne",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Passport changing sex should trigger SexTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Sex")
+            .performTextInput(text = "M")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.SexTextChange(sex = "M"),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Passport changing birth place should trigger BirthPlaceTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Birth place")
+            .performTextInput(text = "Gotham City")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.BirthPlaceTextChange(
+                    birthPlace = "Gotham City",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Passport changing nationality should trigger NationalityTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Nationality")
+            .performTextInput(text = "American")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.NationalityTextChange(
+                    nationality = "American",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport changing the passport number text field should trigger PassportNumberTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Passport number")
+            .performTextInput(text = "X12345678")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.PassportNumberTextChange(
+                    passportNumber = "X12345678",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Passport changing passport type should trigger PassportTypeTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Passport type")
+            .performTextInput(text = "Regular")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.PassportTypeTextChange(
+                    passportType = "Regular",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport changing the national identification number text field should trigger NationalIdentificationNumberTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "National identification number")
+            .performTextInput(text = "987-65-4321")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction
+                    .ItemType
+                    .PassportType
+                    .NationalIdentificationNumberTextChange(
+                        nationalIdentificationNumber = "987-65-4321",
+                    ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport changing the issuing country text field should trigger IssuingCountryTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Issuing country")
+            .performTextInput(text = "USA")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.IssuingCountryTextChange(
+                    country = "USA",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport changing the issuing authority text field should trigger IssuingAuthorityTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Issuing authority")
+            .performTextInput(text = "U.S. Department of State")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.IssuingAuthorityTextChange(
+                    authority = "U.S. Department of State",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Passport the date of birth should display the selected date from the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Date of birth")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updatePassportType(currentState) {
+                copy(dateOfBirth = LocalDate.of(1990, 8, 10))
+            }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "August 10, 1990. Date of birth")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport clicking the date of birth clear button should trigger DateOfBirthChange with null`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Date of birth")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Clear")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.DateOfBirthChange(dateOfBirth = null),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport the issue date should display the selected date from the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Issue date")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updatePassportType(currentState) {
+                copy(issueDate = LocalDate.of(2021, 3, 20))
+            }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "March 20, 2021. Issue date")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport clicking the issue date clear button should trigger IssueDateChange with null`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Issue date")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Clear")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.IssueDateChange(issueDate = null),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport the expiration date should display the selected date from the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Expiration date")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updatePassportType(currentState) {
+                copy(expirationDate = LocalDate.of(2031, 3, 20))
+            }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "March 20, 2031. Expiration date")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport clicking the expiration date clear button should trigger ExpirationDateChange with null`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Expiration date")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Clear")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.ExpirationDateChange(
+                    expirationDate = null,
+                ),
+            )
+        }
+    }
+
+    @Test
     fun `clicking Add field button should allow creation of Linked type`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN
 
@@ -3516,7 +4265,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onAllNodesWithContentDescriptionAfterScroll("Edit")
-            .onFirst()
+            .onLast()
             .performClick()
 
         composeTestRule
@@ -3527,14 +4276,115 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             viewModel.trySendAction(
                 VaultAddEditAction.Common.CustomFieldActionSelect(
                     customFieldAction = CustomFieldAction.MOVE_UP,
-                    customField = VaultAddEditState.Custom.BooleanField(
-                        itemId = "Test ID 1",
-                        name = "TestBoolean",
-                        value = false,
+                    customField = VaultAddEditState.Custom.HiddenField(
+                        itemId = "Test ID 3",
+                        name = "TestHidden",
+                        value = "TestHiddenVal",
                     ),
                 ),
             )
         }
+    }
+
+    @Test
+    fun `clicking first custom field edit icon only shows move down action in dialog`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithContentDescriptionAfterScroll("Edit")
+            .onFirst()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Move Up")
+            .assertIsNotDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Move down")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `clicking middle custom field edit icon shows both move actions in dialog`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithContentDescriptionAfterScroll("Edit")[1]
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Move Up")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Move down")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `clicking last custom field edit icon only shows move up action in dialog`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithContentDescriptionAfterScroll("Edit")
+            .onLast()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Move Up")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Move down")
+            .assertIsNotDisplayed()
+    }
+
+    @Test
+    fun `clicking single custom field edit icon shows no move actions in dialog`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS.copy(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.BooleanField("Test ID 1", "TestBoolean", false),
+                    ),
+                ),
+                type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                isIndividualVaultDisabled = false,
+            ),
+        )
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithContentDescriptionAfterScroll("Edit")
+            .onFirst()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Move Up")
+            .assertIsNotDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Move down")
+            .assertIsNotDisplayed()
     }
 
     @Test
@@ -4483,6 +5333,52 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
     }
 
+    private fun updateLicenseType(
+        currentState: VaultAddEditState,
+        transform: VaultAddEditState.ViewState.Content.ItemType.License.() ->
+        VaultAddEditState.ViewState.Content.ItemType.License,
+    ): VaultAddEditState {
+        val updatedType = when (val viewState = currentState.viewState) {
+            is VaultAddEditState.ViewState.Content -> {
+                when (val type = viewState.type) {
+                    is VaultAddEditState.ViewState.Content.ItemType.License -> {
+                        viewState.copy(
+                            type = type.transform(),
+                        )
+                    }
+
+                    else -> viewState
+                }
+            }
+
+            else -> viewState
+        }
+        return currentState.copy(viewState = updatedType)
+    }
+
+    private fun updatePassportType(
+        currentState: VaultAddEditState,
+        transform: VaultAddEditState.ViewState.Content.ItemType.Passport.() ->
+        VaultAddEditState.ViewState.Content.ItemType.Passport,
+    ): VaultAddEditState {
+        val updatedType = when (val viewState = currentState.viewState) {
+            is VaultAddEditState.ViewState.Content -> {
+                when (val type = viewState.type) {
+                    is VaultAddEditState.ViewState.Content.ItemType.Passport -> {
+                        viewState.copy(
+                            type = type.transform(),
+                        )
+                    }
+
+                    else -> viewState
+                }
+            }
+
+            else -> viewState
+        }
+        return currentState.copy(viewState = updatedType)
+    }
+
     //endregion Helper functions
 
     companion object {
@@ -4499,7 +5395,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddEditState(
@@ -4515,7 +5411,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
         private val DEFAULT_STATE_IDENTITY = VaultAddEditState(
@@ -4531,7 +5427,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
         private val DEFAULT_STATE_CARD = VaultAddEditState(
@@ -4547,7 +5443,55 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
+            isCardScannerEnabled = false,
+        )
+
+        private val DEFAULT_STATE_BANK_ACCOUNT = VaultAddEditState(
+            vaultAddEditType = VaultAddEditType.AddItem,
+            cipherType = VaultItemCipherType.BANK_ACCOUNT,
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.BankAccount(),
+                isIndividualVaultDisabled = false,
+            ),
+            dialog = null,
+            bottomSheetState = null,
+            shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isCardScannerEnabled = false,
+        )
+
+        private val DEFAULT_STATE_LICENSE = VaultAddEditState(
+            vaultAddEditType = VaultAddEditType.AddItem,
+            cipherType = VaultItemCipherType.DRIVERS_LICENSE,
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.License(),
+                isIndividualVaultDisabled = false,
+            ),
+            dialog = null,
+            bottomSheetState = null,
+            shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isCardScannerEnabled = false,
+        )
+
+        private val DEFAULT_STATE_PASSPORT = VaultAddEditState(
+            vaultAddEditType = VaultAddEditType.AddItem,
+            cipherType = VaultItemCipherType.PASSPORT,
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.Passport(),
+                isIndividualVaultDisabled = false,
+            ),
+            dialog = null,
+            bottomSheetState = null,
+            shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isCardScannerEnabled = false,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS = VaultAddEditState(
@@ -4573,7 +5517,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddEditState(
@@ -4589,7 +5533,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
         private val DEFAULT_STATE_SSH_KEYS = VaultAddEditState(
@@ -4605,7 +5549,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
-            isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
         private val ALTERED_COLLECTIONS = listOf(

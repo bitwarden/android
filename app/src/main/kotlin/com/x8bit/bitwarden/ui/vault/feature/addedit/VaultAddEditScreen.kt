@@ -27,6 +27,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -65,6 +66,7 @@ import com.bitwarden.ui.platform.composition.LocalExitManager
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.manager.exit.ExitManager
+import com.bitwarden.ui.platform.manager.util.startAppSettingsActivity
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -80,9 +82,12 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.PinInput
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditBankAccountTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLicenseTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.rememberVaultAddEditPassportTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditUserVerificationHandlers
@@ -99,6 +104,7 @@ import kotlinx.coroutines.launch
 fun VaultAddEditScreen(
     onNavigateBack: () -> Unit,
     onNavigateToQrCodeScanScreen: () -> Unit,
+    onNavigateToCardScanScreen: () -> Unit,
     viewModel: VaultAddEditViewModel = hiltViewModel(),
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
@@ -110,6 +116,7 @@ fun VaultAddEditScreen(
     onNavigateToGeneratorModal: (GeneratorMode.Modal) -> Unit,
     onNavigateToAttachments: (cipherId: String) -> Unit,
     onNavigateToMoveToOrganization: (cipherId: String, showOnlyCollections: Boolean) -> Unit,
+    onNavigateToPlan: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val userVerificationHandlers = remember(viewModel) {
@@ -121,12 +128,17 @@ fun VaultAddEditScreen(
         lazyListState = lazyListState,
         orderedList = AddEditItemCoachMark.entries,
     )
+    val cardHolderNameFocusRequester = remember { FocusRequester() }
     val scope = rememberCoroutineScope()
     val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is VaultAddEditEvent.NavigateToQrCodeScan -> {
                 onNavigateToQrCodeScanScreen()
+            }
+
+            is VaultAddEditEvent.NavigateToCardScan -> {
+                onNavigateToCardScanScreen()
             }
 
             is VaultAddEditEvent.NavigateToManualCodeEntry -> {
@@ -194,6 +206,16 @@ fun VaultAddEditScreen(
             is VaultAddEditEvent.NavigateToPremium -> {
                 intentManager.launchUri(uri = event.uri.toUri())
             }
+
+            VaultAddEditEvent.FocusCardHolderName -> {
+                cardHolderNameFocusRequester.requestFocus()
+            }
+
+            VaultAddEditEvent.NavigateToAppSettings -> {
+                intentManager.startAppSettingsActivity()
+            }
+
+            VaultAddEditEvent.NavigateToPlanModal -> onNavigateToPlan()
         }
     }
 
@@ -216,6 +238,16 @@ fun VaultAddEditScreen(
     val sshKeyItemTypeHandlers = remember(viewModel) {
         VaultAddEditSshKeyTypeHandlers.create(viewModel = viewModel)
     }
+
+    val bankAccountItemTypeHandlers = remember(viewModel) {
+        VaultAddEditBankAccountTypeHandlers.create(viewModel = viewModel)
+    }
+
+    val licenseItemTypeHandlers = remember(viewModel) {
+        VaultAddEditLicenseTypeHandlers.create(viewModel = viewModel)
+    }
+
+    val passportItemTypeHandlers = rememberVaultAddEditPassportTypeHandlers(viewModel = viewModel)
 
     val archiveClickAction = { viewModel.trySendAction(VaultAddEditAction.Common.ArchiveClick) }
 
@@ -266,6 +298,11 @@ fun VaultAddEditScreen(
         },
         onUpgradeToPremiumClick = {
             viewModel.trySendAction(VaultAddEditAction.Common.UpgradeToPremiumClick)
+        },
+        onCameraPermissionSettingsClick = {
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.CameraPermissionSettingsClick,
+            )
         },
     )
 
@@ -393,6 +430,11 @@ fun VaultAddEditScreen(
                         identityItemTypeHandlers = identityItemTypeHandlers,
                         cardItemTypeHandlers = cardItemTypeHandlers,
                         sshKeyItemTypeHandlers = sshKeyItemTypeHandlers,
+                        bankAccountItemTypeHandlers = bankAccountItemTypeHandlers,
+                        licenseItemTypeHandlers = licenseItemTypeHandlers,
+                        passportItemTypeHandlers = passportItemTypeHandlers,
+                        isCardScannerEnabled = state.isCardScannerEnabled,
+                        cardHolderNameFocusRequester = cardHolderNameFocusRequester,
                         lazyListState = lazyListState,
                         onPreviousCoachMark = {
                             coroutineScope.launch {
@@ -453,6 +495,7 @@ private fun VaultAddEditItemDialogs(
     onRetryPinSetUpFido2Verification: () -> Unit,
     onDismissFido2Verification: () -> Unit,
     onUpgradeToPremiumClick: () -> Unit,
+    onCameraPermissionSettingsClick: () -> Unit,
 ) {
     when (dialogState) {
         is VaultAddEditState.DialogState.ArchiveRequiresPremium -> {
@@ -555,6 +598,20 @@ private fun VaultAddEditItemDialogs(
                     stringResource(id = BitwardenString.pin),
                 ),
                 onDismissRequest = onRetryPinSetUpFido2Verification,
+            )
+        }
+
+        is VaultAddEditState.DialogState.CameraPermissionDenied -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(BitwardenString.allow_camera_access),
+                message = stringResource(
+                    id = BitwardenString.to_scan_your_card_we_need_access_to_your_camera,
+                ),
+                confirmButtonText = stringResource(id = BitwardenString.go_to_settings),
+                dismissButtonText = stringResource(id = BitwardenString.not_now),
+                onConfirmClick = onCameraPermissionSettingsClick,
+                onDismissClick = onDismissRequest,
+                onDismissRequest = onDismissRequest,
             )
         }
 

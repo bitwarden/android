@@ -19,9 +19,11 @@ import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.repository.util.toAccountCryptographicState
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
+import com.x8bit.bitwarden.data.platform.util.isActive
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
@@ -40,7 +42,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
-import com.x8bit.bitwarden.data.vault.repository.util.createWrappedAccountCryptographicState
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolder
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkAccount
@@ -191,7 +192,7 @@ class VaultRepositoryImpl(
                         .filter {
                             it.type is CipherListViewType.Login &&
                                 !it.login?.totp.isNullOrBlank() &&
-                                it.deletedDate == null
+                                it.isActive
                         }
                         .toFilteredList(vaultFilterType)
                 }
@@ -437,6 +438,34 @@ class VaultRepositoryImpl(
             )
     }
 
+    override suspend fun getValidTotpCipherIds(isPremium: Boolean, time: Instant): Set<String> {
+        val userId = activeUserId ?: return emptySet()
+        val candidates = decryptCipherListResultStateFlow
+            .value
+            .data
+            ?.successes
+            ?.filter {
+                it.type is CipherListViewType.Login &&
+                    !it.login?.totp.isNullOrBlank() &&
+                    it.isActive
+            }
+            ?: return emptySet()
+
+        return candidates
+            .filter { cipher ->
+                (isPremium || cipher.organizationUseTotp) &&
+                    vaultSdkSource
+                        .generateTotpForCipherListView(
+                            userId = userId,
+                            cipherListView = cipher,
+                            time = time,
+                        )
+                        .isSuccess
+            }
+            .mapNotNull { it.id }
+            .toSet()
+    }
+
     override suspend fun exportVaultDataToString(
         format: ExportFormat,
         restrictedTypes: List<CipherType>,
@@ -538,17 +567,10 @@ class VaultRepositoryImpl(
             ?: return VaultUnlockResult.InvalidStateError(
                 error = MissingPropertyException("Private key"),
             )
-        val signingKey = accountKeys?.signatureKeyPair?.wrappedSigningKey
-        val securityState = accountKeys?.securityState?.securityState
-        val signedPublicKey = accountKeys?.publicKeyEncryptionKeyPair?.signedPublicKey
-        val organizationKeys = authDiskSource
-            .getOrganizationKeys(userId = userId)
+        val organizationKeys = authDiskSource.getOrganizationKeys(userId = userId)
         return vaultLockManager.unlockVault(
-            accountCryptographicState = createWrappedAccountCryptographicState(
+            accountCryptographicState = accountKeys.toAccountCryptographicState(
                 privateKey = privateKey,
-                securityState = securityState,
-                signingKey = signingKey,
-                signedPublicKey = signedPublicKey,
             ),
             userId = userId,
             email = account.profile.email,

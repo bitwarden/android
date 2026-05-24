@@ -42,8 +42,13 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmentRoute
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultBankAccountItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultDriversLicenseItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultPassportItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.rememberVaultPassportItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultSshKeyItemTypeHandlers
@@ -63,6 +68,8 @@ fun VaultItemScreen(
     onNavigateToMoveToOrganization: (vaultItemId: String, showOnlyCollections: Boolean) -> Unit,
     onNavigateToAttachments: (vaultItemId: String) -> Unit,
     onNavigateToPasswordHistory: (vaultItemId: String) -> Unit,
+    onNavigateToPreviewAttachment: (route: PreviewAttachmentRoute) -> Unit,
+    onNavigateToPlan: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val fileChooserLauncher = intentManager.getActivityResultLauncher { activityResult ->
@@ -98,6 +105,8 @@ fun VaultItemScreen(
 
             is VaultItemEvent.NavigateToUri -> intentManager.launchUri(event.uri.toUri())
 
+            VaultItemEvent.NavigateToPlanModal -> onNavigateToPlan()
+
             is VaultItemEvent.NavigateToAttachments -> onNavigateToAttachments(event.itemId)
 
             is VaultItemEvent.NavigateToMoveToOrganization -> {
@@ -113,6 +122,18 @@ fun VaultItemScreen(
             is VaultItemEvent.NavigateToSelectAttachmentSaveLocation -> {
                 fileChooserLauncher.launch(
                     intentManager.createDocumentIntent(event.fileName),
+                )
+            }
+
+            is VaultItemEvent.NavigateToPreviewAttachment -> {
+                onNavigateToPreviewAttachment(
+                    PreviewAttachmentRoute(
+                        cipherId = event.cipherId,
+                        attachmentId = event.attachmentId,
+                        fileName = event.fileName,
+                        displaySize = event.displaySize,
+                        isLargeFile = event.isLargeFile,
+                    ),
                 )
             }
         }
@@ -267,6 +288,15 @@ fun VaultItemScreen(
             vaultIdentityItemTypeHandlers = remember(viewModel) {
                 VaultIdentityItemTypeHandlers.create(viewModel = viewModel)
             },
+            vaultBankAccountItemTypeHandlers = remember(viewModel) {
+                VaultBankAccountItemTypeHandlers.create(viewModel = viewModel)
+            },
+            vaultDriversLicenseItemTypeHandlers = remember(viewModel) {
+                VaultDriversLicenseItemTypeHandlers.create(viewModel = viewModel)
+            },
+            vaultPassportItemTypeHandlers = rememberVaultPassportItemTypeHandlers(
+                viewModel = viewModel,
+            ),
         )
     }
 }
@@ -351,6 +381,9 @@ private fun VaultItemContent(
     vaultCardItemTypeHandlers: VaultCardItemTypeHandlers,
     vaultSshKeyItemTypeHandlers: VaultSshKeyItemTypeHandlers,
     vaultIdentityItemTypeHandlers: VaultIdentityItemTypeHandlers,
+    vaultBankAccountItemTypeHandlers: VaultBankAccountItemTypeHandlers,
+    vaultDriversLicenseItemTypeHandlers: VaultDriversLicenseItemTypeHandlers,
+    vaultPassportItemTypeHandlers: VaultPassportItemTypeHandlers,
     modifier: Modifier = Modifier,
 ) {
     when (viewState) {
@@ -409,6 +442,37 @@ private fun VaultItemContent(
                         sshKeyItemState = viewState.type,
                         vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
                         vaultSshKeyItemTypeHandlers = vaultSshKeyItemTypeHandlers,
+                        modifier = modifier,
+                    )
+                }
+
+                is VaultItemState.ViewState.Content.ItemType.BankAccount -> {
+                    VaultItemBankAccountContent(
+                        commonState = viewState.common,
+                        bankAccountState = viewState.type,
+                        vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+                        vaultBankAccountItemTypeHandlers = vaultBankAccountItemTypeHandlers,
+                        modifier = modifier,
+                    )
+                }
+
+                is VaultItemState.ViewState.Content.ItemType.DriversLicense -> {
+                    VaultItemDriversLicenseContent(
+                        commonState = viewState.common,
+                        driversLicenseState = viewState.type,
+                        vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+                        vaultDriversLicenseItemTypeHandlers =
+                            vaultDriversLicenseItemTypeHandlers,
+                        modifier = modifier,
+                    )
+                }
+
+                is VaultItemState.ViewState.Content.ItemType.Passport -> {
+                    VaultItemPassportContent(
+                        commonState = viewState.common,
+                        passportState = viewState.type,
+                        vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+                        vaultPassportItemTypeHandlers = vaultPassportItemTypeHandlers,
                         modifier = modifier,
                     )
                 }

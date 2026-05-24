@@ -32,7 +32,8 @@
     <string name="error_reports">Error reports</string>
     <string name="cookies">Cookies</string>
     <string name="premium">Premium</string>
-    <string name="reset_premium_upgrade_banner">Reset premium upgrade banner</string>
+    <string name="reset_premium_upgrade_banner">Reset Premium upgrade banner</string>
+    <string name="show_upgraded_to_premium_card">Show \"Upgraded to Premium\" card</string>
     <string name="bitwarden_authentication_enabled">Bitwarden authentication enabled</string>
     <string name="import_format_label_bitwarden_json">Bitwarden (.json)</string>
     <string name="import_format_label_2fas_json">2FAS (no password)</string>
@@ -41,11 +42,18 @@
     <string name="force_update_kdf_settings">Force update KDF settings</string>
     <string name="avoid_logout_on_kdf_change">Avoid logout on KDF change</string>
     <string name="migrate_my_vault_to_my_items">Migrate My Vault to My Items</string>
-    <string name="archive_items">Archive Items</string>
-    <string name="send_email_verification">Send Email Verification</string>
     <string name="trigger_cookie_acquisition">Trigger cookie acquisition</string>
     <string name="clear_sso_cookies">Clear SSO cookies</string>
     <string name="mobile_premium_upgrade">Mobile Premium Upgrade</string>
+    <string name="attachment_updates">Attachment Updates</string>
+    <string name="v2_encryption_tde">V2 Encryption - TDE</string>
+    <string name="v2_encryption_key_connector">V2 Encryption - Key Connector</string>
+    <string name="v2_encryption_jit_password">V2 Encryption - JIT Password</string>
+    <string name="v2_encryption_password">V2 Encryption - Password</string>
+    <string name="manage_devices">Manage devices</string>
+    <string name="new_item_types">New Item Types</string>
+    <string name="fill_assist_targeting_rules">Fill Assist Targeting Rules</string>
+    <string name="debug_disable_self_host_premium_check">Debug: Disable self-host premium check</string>
 
     <!-- endregion Debug Menu -->
 </resources>

@@ -7,6 +7,7 @@ import com.bitwarden.ui.platform.manager.share.model.ShareData
 import com.bitwarden.ui.platform.model.TotpData
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
@@ -135,11 +136,20 @@ sealed class SpecialCircumstance : Parcelable {
     data object VerificationCodeShortcut : SpecialCircumstance()
 
     /**
-     * The app was launched via a premium checkout callback deep link,
+     * The app was launched via a Premium checkout callback deep link,
      * indicating the user is returning from a Stripe checkout session.
      */
     @Parcelize
-    data object PremiumCheckoutResult : SpecialCircumstance()
+    data class PremiumCheckout(
+        val callbackResult: PremiumCheckoutCallbackResult,
+    ) : SpecialCircumstance()
+
+    /**
+     * The user has returned from the Stripe customer portal (launched to manage or cancel their
+     * subscription). The close of the portal is the only signal — there is no callback payload.
+     */
+    @Parcelize
+    data object StripePortal : SpecialCircumstance()
 
     /**
      * The app was launched to select an account to export credentials from.

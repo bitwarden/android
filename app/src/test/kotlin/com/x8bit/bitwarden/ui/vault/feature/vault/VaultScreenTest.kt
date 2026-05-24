@@ -15,6 +15,7 @@ import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -64,6 +65,7 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
@@ -78,6 +80,7 @@ import org.junit.Test
 class VaultScreenTest : BitwardenComposeTest() {
     private var onNavigateToAboutCalled = false
     private var onNavigateToAutofillCalled = false
+    private var onNavigateToPlanCalled = false
     private var onNavigateToImportLoginsCalled = false
     private var onNavigateToVaultAddItemScreenCalled = false
     private var onNavigateToVaultItemArgs: VaultItemArgs? = null
@@ -121,6 +124,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                 },
                 onNavigateToAboutScreen = { onNavigateToAboutCalled = true },
                 onNavigateToAutofillScreen = { onNavigateToAutofillCalled = true },
+                onNavigateToPlan = { onNavigateToPlanCalled = true },
             )
         }
     }
@@ -454,7 +458,7 @@ class VaultScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `floating action button should be shown or hidden according to the state`() {
-        val fabDescription = "Add Item"
+        val fabDescription = "Add item"
 
         mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.Loading) }
         composeTestRule.onNodeWithContentDescription(fabDescription).assertDoesNotExist()
@@ -985,15 +989,44 @@ class VaultScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `search icon click should send SearchIconClick action`() {
-        mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.NoItems) }
-        composeTestRule.onNodeWithContentDescription("Search vault").performClick()
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultState.ViewState.Content(
+                    itemTypesCount = 0,
+                    totpItemsCount = 0,
+                    loginItemsCount = 0,
+                    cardItemsCount = 0,
+                    identityItemsCount = 0,
+                    secureNoteItemsCount = 0,
+                    sshKeyItemsCount = 0,
+                    bankAccountItemsCount = 0,
+                    licenseItemsCount = 0,
+                    passportItemsCount = 0,
+                    favoriteItems = emptyList(),
+                    folderItems = emptyList(),
+                    noFolderItems = emptyList(),
+                    collectionItems = emptyList(),
+                    trashItemsCount = 0,
+                    archivedItemsCount = 0,
+                    archiveSubText = null,
+                    archiveEndIcon = null,
+                    showCardGroup = false,
+                    showBankAccountGroup = false,
+                    showLicenseGroup = false,
+                    showPassportGroup = false,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithContentDescription("Search vault")
+            .performClick()
         verify { viewModel.trySendAction(VaultAction.SearchIconClick) }
     }
 
     @Test
     fun `floating action button click should send SelectAddItemType action`() {
         mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.NoItems) }
-        composeTestRule.onNodeWithContentDescription("Add Item").performClick()
+        composeTestRule.onNodeWithContentDescription("Add item").performClick()
         verify { viewModel.trySendAction(VaultAction.SelectAddItemType) }
     }
 
@@ -1001,7 +1034,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     fun `add an item button click should send AddItemClick action`() {
         mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.NoItems) }
         composeTestRule
-            .onNodeWithText("New login")
+            .onNodeWithText("Add login")
             .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(VaultAction.AddItemClick(CreateVaultItemType.LOGIN)) }
@@ -1181,7 +1214,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             id = "12345",
             name = itemText.asText(),
             username = username.asText(),
-            overflowOptions = emptyList(),
+            overflowOptions = persistentListOf(),
             shouldShowMasterPasswordReprompt = false,
             hasDecryptionError = false,
         )
@@ -1218,7 +1251,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             id = "12345",
             name = itemText.asText(),
             username = userName.asText(),
-            overflowOptions = emptyList(),
+            overflowOptions = persistentListOf(),
             shouldShowMasterPasswordReprompt = true,
             hasDecryptionError = false,
         )
@@ -1277,7 +1310,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             id = "12345",
             name = itemText.asText(),
             username = userName.asText(),
-            overflowOptions = emptyList(),
+            overflowOptions = persistentListOf(),
             shouldShowMasterPasswordReprompt = true,
             hasDecryptionError = false,
         )
@@ -1324,6 +1357,57 @@ class VaultScreenTest : BitwardenComposeTest() {
                     password = password,
                 ),
             )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on vault item archive overflow option click should display archive confirmation dialog and emits ArchiveClick on confirmation`() {
+        val itemText = "Test Item"
+        val userName = "Bitwarden"
+        val cipherId = "12345"
+        val archiveAction = ListingItemOverflowAction.VaultAction.ArchiveClick(cipherId = cipherId)
+        val vaultItem = VaultState.ViewState.VaultItem.Login(
+            id = cipherId,
+            name = itemText.asText(),
+            username = userName.asText(),
+            overflowOptions = persistentListOf(archiveAction),
+            shouldShowMasterPasswordReprompt = false,
+            hasDecryptionError = false,
+        )
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    favoriteItems = listOf(vaultItem),
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(itemText))
+        composeTestRule
+            .onNodeWithText(text = itemText)
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "More options"))
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Archive")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Archive item")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Archive")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultAction.OverflowOptionClick(overflowAction = archiveAction))
         }
     }
 
@@ -1610,6 +1694,64 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `UpgradedToPremium action card should display when eligible`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isUpgradedToPremiumCardEligible = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Upgraded to Premium")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Learn more")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription(label = "Learn more, External link")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `UpgradedToPremium action card CTA click should send ActionCardClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isUpgradedToPremiumCardEligible = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Learn more")
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAction.ActionCardClick(
+                    actionCard = VaultState.ActionCardState.UpgradedToPremium,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `UpgradedToPremium action card dismiss click should send DismissActionCardClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            isUpgradedToPremiumCardEligible = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAction.DismissActionCardClick(VaultState.ActionCardState.UpgradedToPremium),
+            )
+        }
+    }
+
+    @Test
     fun `collection data should update according to the state`() {
         val collectionsHeader = "COLLECTIONS (1)"
         val collectionName = "Test Collection"
@@ -1676,7 +1818,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             id = "12345",
             name = itemText.asText(),
             username = userName.asText(),
-            overflowOptions = emptyList(),
+            overflowOptions = persistentListOf(),
             shouldShowMasterPasswordReprompt = false,
             hasDecryptionError = false,
         )
@@ -1849,7 +1991,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             id = "12345",
             name = itemText.asText(),
             username = userName.asText(),
-            overflowOptions = emptyList(),
+            overflowOptions = persistentListOf(),
             shouldShowMasterPasswordReprompt = true,
             hasDecryptionError = false,
         )
@@ -1908,7 +2050,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             id = "12345",
             name = itemText.asText(),
             username = userName.asText(),
-            overflowOptions = emptyList(),
+            overflowOptions = persistentListOf(),
             shouldShowMasterPasswordReprompt = true,
             hasDecryptionError = false,
         )
@@ -2001,6 +2143,9 @@ class VaultScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     cardItemsCount = 1,
                     showCardGroup = true,
+                    showBankAccountGroup = false,
+                    showLicenseGroup = false,
+                    showPassportGroup = false,
                 ),
             )
         }
@@ -2015,6 +2160,9 @@ class VaultScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     cardItemsCount = 0,
                     showCardGroup = false,
+                    showBankAccountGroup = false,
+                    showLicenseGroup = false,
+                    showPassportGroup = false,
                 ),
             )
         }
@@ -2296,6 +2444,12 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `when NavigateToUpgradePremium is sent, it should call onNavigateToPlan`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToUpgradePremium)
+        assertTrue(onNavigateToPlanCalled)
+    }
+
+    @Test
     fun `when ShowSnackbar is sent snackbar should be displayed`() {
         val data = BitwardenSnackbarData("message".asText())
         mutableEventFlow.tryEmit(VaultEvent.ShowSnackbar(data))
@@ -2342,7 +2496,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                         VaultState.ViewState.VaultItem.SshKey(
                             id = "mockId",
                             name = "mockSshKey".asText(),
-                            overflowOptions = emptyList(),
+                            overflowOptions = persistentListOf(),
                             shouldShowMasterPasswordReprompt = false,
                             hasDecryptionError = false,
                         ),
@@ -2353,6 +2507,160 @@ class VaultScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll("mockSshKey")
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun `Bank account group header should display correctly based on state`() {
+        val count = 2
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    bankAccountItemsCount = count,
+                    showBankAccountGroup = true,
+                    showLicenseGroup = true,
+                    showPassportGroup = true,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithTextAfterScroll("Bank account")
+            .assertTextEquals("Bank account", count.toString())
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `clicking a bank account group should send BankAccountGroupClick action`() {
+        val rowText = "Bank account"
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    bankAccountItemsCount = 1,
+                    showBankAccountGroup = true,
+                    showLicenseGroup = true,
+                    showPassportGroup = true,
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onNodeWithText(rowText).performClick()
+        verify {
+            viewModel.trySendAction(VaultAction.BankAccountGroupClick)
+        }
+    }
+
+    @Test
+    fun `License group header should display correctly based on state`() {
+        val count = 3
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    licenseItemsCount = count,
+                    passportItemsCount = 0,
+                    showLicenseGroup = true,
+                    showPassportGroup = true,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithTextAfterScroll("License")
+            .assertTextEquals("License", count.toString())
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `License group should not display when showLicenseGroup is false`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    licenseItemsCount = 0,
+                    passportItemsCount = 0,
+                    showLicenseGroup = false,
+                    showPassportGroup = false,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithTag("LicenseFilter")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `clicking a license group should send LicenseGroupClick action`() {
+        val rowText = "License"
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    licenseItemsCount = 1,
+                    passportItemsCount = 0,
+                    showLicenseGroup = true,
+                    showPassportGroup = true,
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onNodeWithText(rowText).performClick()
+        verify {
+            viewModel.trySendAction(VaultAction.LicenseGroupClick)
+        }
+    }
+
+    @Test
+    fun `Passport group header should display correctly based on state`() {
+        val count = 3
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    licenseItemsCount = 0,
+                    passportItemsCount = count,
+                    showLicenseGroup = false,
+                    showPassportGroup = true,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithTextAfterScroll("Passport")
+            .assertTextEquals("Passport", count.toString())
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `Passport group should not display when showPassportGroup is false`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    licenseItemsCount = 0,
+                    passportItemsCount = 0,
+                    showLicenseGroup = false,
+                    showPassportGroup = false,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithTag("PassportFilter")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `clicking a passport group should send PassportGroupClick action`() {
+        val rowText = "Passport"
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    licenseItemsCount = 0,
+                    passportItemsCount = 1,
+                    showLicenseGroup = false,
+                    showPassportGroup = true,
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onNodeWithText(rowText).performClick()
+        verify {
+            viewModel.trySendAction(VaultAction.PassportGroupClick)
+        }
     }
 
     @Test
@@ -2568,8 +2876,8 @@ private val DEFAULT_STATE: VaultState = VaultState(
     cipherDecryptionFailureIds = persistentListOf(),
     hasShownDecryptionFailureAlert = false,
     restrictItemTypesPolicyOrgIds = emptyList(),
-    isArchiveEnabled = true,
     isIntroducingArchiveActionCardDismissed = false,
+    validTotpIds = persistentSetOf(),
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(
@@ -2585,9 +2893,14 @@ private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultStat
     totpItemsCount = 0,
     itemTypesCount = 4,
     sshKeyItemsCount = 0,
+    bankAccountItemsCount = 0,
+    licenseItemsCount = 0,
+    passportItemsCount = 0,
     archivedItemsCount = 0,
-    archiveEnabled = true,
     archiveSubText = null,
     archiveEndIcon = null,
     showCardGroup = true,
+    showBankAccountGroup = false,
+    showLicenseGroup = false,
+    showPassportGroup = false,
 )

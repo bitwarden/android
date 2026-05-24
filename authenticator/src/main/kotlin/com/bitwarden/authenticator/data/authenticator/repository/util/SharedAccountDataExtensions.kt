@@ -10,22 +10,30 @@ import com.bitwarden.authenticatorbridge.model.SharedAccountData
  */
 fun List<SharedAccountData.Account>.toAuthenticatorItems(): List<AuthenticatorItem> =
     flatMap { sharedAccount ->
-        sharedAccount.totpUris.mapNotNull { totpUriString ->
+        sharedAccount.cipherData.mapNotNull { cipherData ->
             runCatching {
-                val uri = totpUriString.toUri()
-                val issuer = uri.getQueryParameter(TotpCodeManager.ISSUER_PARAM)
-                val label = uri.pathSegments
+                val uri = cipherData.uri.toUri()
+                val issuer = uri
+                    .getQueryParameter(TotpCodeManager.ISSUER_PARAM)
+                    ?.takeUnless { it.isBlank() }
+                    ?: cipherData.name
+                val label = uri
+                    .pathSegments
                     .firstOrNull()
                     ?.removePrefix("$issuer:")
+                    // If there is no scheme, then the whole uri is the secret.
+                    ?.takeUnless { it.isBlank() || uri.scheme == null }
+                    ?: cipherData.username
 
                 AuthenticatorItem(
+                    cipherId = cipherData.id,
                     source = AuthenticatorItem.Source.Shared(
                         userId = sharedAccount.userId,
                         nameOfUser = sharedAccount.name,
                         email = sharedAccount.email,
                         environmentLabel = sharedAccount.environmentLabel,
                     ),
-                    otpUri = totpUriString,
+                    otpUri = cipherData.uri,
                     issuer = issuer,
                     label = label,
                 )

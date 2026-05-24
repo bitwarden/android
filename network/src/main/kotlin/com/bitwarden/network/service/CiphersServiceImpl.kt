@@ -13,6 +13,7 @@ import com.bitwarden.network.model.CipherMiniResponseJson
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.CreateCipherResponseJson
 import com.bitwarden.network.model.FileUploadType
+import com.bitwarden.network.model.GetCipherResponse
 import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.ImportCiphersResponseJson
 import com.bitwarden.network.model.ShareCipherJsonRequest
@@ -22,6 +23,7 @@ import com.bitwarden.network.model.UpdateCipherCollectionsJsonRequest
 import com.bitwarden.network.model.UpdateCipherResponseJson
 import com.bitwarden.network.model.toBitwardenError
 import com.bitwarden.network.util.NetworkErrorCode
+import com.bitwarden.network.util.isErrorCode
 import com.bitwarden.network.util.parseErrorBodyOrNull
 import com.bitwarden.network.util.toResult
 import kotlinx.serialization.json.Json
@@ -269,10 +271,19 @@ internal class CiphersServiceImpl(
 
     override suspend fun getCipher(
         cipherId: String,
-    ): Result<SyncResponseJson.Cipher> =
+    ): Result<GetCipherResponse> =
         ciphersApi
             .getCipher(cipherId = cipherId)
             .toResult()
+            .map { GetCipherResponse.Success(cipher = it) }
+            .recoverCatching { throwable ->
+                val bitwardenError = throwable.toBitwardenError()
+                if (bitwardenError.isErrorCode(code = NetworkErrorCode.NOT_FOUND)) {
+                    GetCipherResponse.NotFound(throwable = throwable)
+                } else {
+                    throw throwable
+                }
+            }
 
     override suspend fun getCipherAttachment(
         cipherId: String,

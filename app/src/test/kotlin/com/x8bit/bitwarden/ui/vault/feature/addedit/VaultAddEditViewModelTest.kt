@@ -7,6 +7,7 @@ import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.collections.CollectionView
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
@@ -18,6 +19,9 @@ import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.feature.cardscanner.manager.CardScanManager
+import com.bitwarden.ui.platform.feature.cardscanner.util.CardScanData
+import com.bitwarden.ui.platform.feature.cardscanner.util.CardScanResult
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.model.TotpData
 import com.bitwarden.ui.platform.resource.BitwardenPlurals
@@ -39,6 +43,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
@@ -91,6 +96,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttest
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDefaultAddTypeContent
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import com.x8bit.bitwarden.ui.vault.model.VaultBankAccountType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
@@ -123,6 +129,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneOffset
 import java.util.UUID
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType as UriMatchTypeModel
@@ -223,10 +230,20 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         every { show(message = any(), duration = any()) } just runs
     }
     private val environmentRepository = FakeEnvironmentRepository()
-    private val mutableArchiveItemsFlow = MutableStateFlow(true)
+    private val premiumStateManager: PremiumStateManager = mockk {
+        every { isInAppUpgradeAvailable() } returns false
+    }
+    private val mutableCardScannerFlow = MutableStateFlow(false)
+    private val mutableCardScanResultFlow = bufferedMutableSharedFlow<CardScanResult>()
+    private val cardScanManager: CardScanManager = mockk {
+        every { cardScanResultFlow } returns mutableCardScanResultFlow
+    }
     private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(FlagKey.ArchiveItems) } answers { mutableArchiveItemsFlow.value }
-        every { getFeatureFlagFlow(FlagKey.ArchiveItems) } returns mutableArchiveItemsFlow
+        every { getFeatureFlag(FlagKey.CardScanner) } answers { mutableCardScannerFlow.value }
+        every { getFeatureFlagFlow(FlagKey.CardScanner) } returns mutableCardScannerFlow
+    }
+    private val buildInfoManager: BuildInfoManager = mockk {
+        every { isFdroid } returns false
     }
 
     @BeforeEach
@@ -268,7 +285,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             shouldShowCoachMarkTour = false,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = true,
-            isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -357,7 +374,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 shouldShowCoachMarkTour = false,
                 defaultUriMatchType = UriMatchTypeModel.EXACT,
                 hasPremium = true,
-                isArchiveEnabled = true,
+                isCardScannerEnabled = false,
             ),
             viewModel.stateFlow.value,
         )
@@ -539,20 +556,35 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `UpgradeToPremiumClick should emit NavigateToPremium`() = runTest {
-        val viewModel = createAddVaultItemViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultAddEditAction.Common.UpgradeToPremiumClick)
-            assertEquals(
-                VaultAddEditEvent.NavigateToPremium(
-                    uri = "https://vault.bitwarden.com/#/" +
-                        "settings/subscription/premium" +
-                        "?callToAction=upgradeToPremium",
-                ),
-                awaitItem(),
-            )
+    fun `UpgradeToPremiumClick should emit NavigateToPremium when in-app upgrade not available`() =
+        runTest {
+            val viewModel = createAddVaultItemViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.UpgradeToPremiumClick)
+                assertEquals(
+                    VaultAddEditEvent.NavigateToPremium(
+                        uri = "https://vault.bitwarden.com/#/" +
+                            "settings/subscription/premium" +
+                            "?callToAction=upgradeToPremium",
+                    ),
+                    awaitItem(),
+                )
+            }
         }
-    }
+
+    @Test
+    fun `UpgradeToPremiumClick should emit NavigateToPlanModal when in-app upgrade available`() =
+        runTest {
+            every { premiumStateManager.isInAppUpgradeAvailable() } returns true
+            val viewModel = createAddVaultItemViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.UpgradeToPremiumClick)
+                assertEquals(
+                    VaultAddEditEvent.NavigateToPlanModal,
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `snackbar relay emission should send ShowSnackbar`() = runTest {
@@ -2378,7 +2410,199 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `ArchiveClick without premium should show ArchiveRequiresPremium dialog`() = runTest {
+    fun `in add mode, SaveClick with a License item should emit ShowSnackbar without saving`() =
+        runTest {
+            mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
+            val licenseState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
+                commonContentViewState = createCommonContentViewState(name = "mockName-1"),
+                typeContentViewState =
+                    VaultAddEditState.ViewState.Content.ItemType.License(),
+            )
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = licenseState,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
+                ),
+            )
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+                assertEquals(
+                    VaultAddEditEvent.ShowSnackbar(
+                        message = BitwardenString.an_error_has_occurred.asText(),
+                    ),
+                    awaitItem(),
+                )
+            }
+            assertEquals(licenseState, viewModel.stateFlow.value)
+            coVerify(exactly = 0) {
+                vaultRepository.createCipher(any())
+                vaultRepository.createCipherInOrganization(any(), any())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in add mode, SaveClick with a Passport item should not short-circuit and should run validation`() =
+        runTest {
+            mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
+            val passportState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.PASSPORT,
+                commonContentViewState = createCommonContentViewState(name = ""),
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Passport(),
+            )
+            val expectedValidationDialogState = passportState.copy(
+                dialog = VaultAddEditState.DialogState.Generic(
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.validation_field_required
+                        .asText(BitwardenString.name.asText()),
+                ),
+            )
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = passportState,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.PASSPORT,
+                ),
+            )
+
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+                assertEquals(passportState, stateFlow.awaitItem())
+                assertEquals(expectedValidationDialogState, stateFlow.awaitItem())
+                eventFlow.expectNoEvents()
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in add mode, SaveClick with a Bank Account item should not short-circuit and should run validation`() =
+        runTest {
+            mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
+            val bankAccountState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.BANK_ACCOUNT,
+                commonContentViewState = createCommonContentViewState(name = ""),
+                typeContentViewState =
+                    VaultAddEditState.ViewState.Content.ItemType.BankAccount(),
+            )
+            val expectedValidationDialogState = bankAccountState.copy(
+                dialog = VaultAddEditState.DialogState.Generic(
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.validation_field_required
+                        .asText(BitwardenString.name.asText()),
+                ),
+            )
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = bankAccountState,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.BANK_ACCOUNT,
+                ),
+            )
+
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+                assertEquals(bankAccountState, stateFlow.awaitItem())
+                assertEquals(expectedValidationDialogState, stateFlow.awaitItem())
+                eventFlow.expectNoEvents()
+            }
+        }
+
+    @Test
+    fun `ItemType BankAccount should expose BANK_ACCOUNT itemTypeOption and be SDK supported`() {
+        val itemType = VaultAddEditState.ViewState.Content.ItemType.BankAccount()
+        assertEquals(
+            VaultAddEditState.ItemTypeOption.BANK_ACCOUNT,
+            itemType.itemTypeOption,
+        )
+        assertTrue(itemType.isSdkSupported)
+        assertTrue(itemType.vaultLinkedFieldTypes.isEmpty())
+    }
+
+    @Test
+    fun `ItemType License should expose DRIVERS_LICENSE itemTypeOption and not be SDK supported`() {
+        val itemType = VaultAddEditState.ViewState.Content.ItemType.License()
+        assertEquals(
+            VaultAddEditState.ItemTypeOption.LICENSE,
+            itemType.itemTypeOption,
+        )
+        assertFalse(itemType.isSdkSupported)
+        assertTrue(itemType.vaultLinkedFieldTypes.isEmpty())
+    }
+
+    @Test
+    fun `ItemType Passport should expose PASSPORT itemTypeOption and be SDK supported`() {
+        val itemType = VaultAddEditState.ViewState.Content.ItemType.Passport()
+        assertEquals(
+            VaultAddEditState.ItemTypeOption.PASSPORT,
+            itemType.itemTypeOption,
+        )
+        assertTrue(itemType.isSdkSupported)
+        assertTrue(itemType.vaultLinkedFieldTypes.isEmpty())
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `screenDisplayName should resolve new title strings for new vault item types in add mode`() {
+        val baseAddState = createVaultAddItemState(vaultAddEditType = VaultAddEditType.AddItem)
+        assertEquals(
+            BitwardenString.add_bank_account.asText(),
+            baseAddState.copy(cipherType = VaultItemCipherType.BANK_ACCOUNT).screenDisplayName,
+        )
+        assertEquals(
+            BitwardenString.add_license.asText(),
+            baseAddState.copy(cipherType = VaultItemCipherType.DRIVERS_LICENSE).screenDisplayName,
+        )
+        assertEquals(
+            BitwardenString.add_passport.asText(),
+            baseAddState.copy(cipherType = VaultItemCipherType.PASSPORT).screenDisplayName,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `screenDisplayName should resolve new title strings for new vault item types in edit mode`() {
+        val baseEditState = createVaultAddItemState(
+            vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+        )
+        assertEquals(
+            BitwardenString.edit_bank_account.asText(),
+            baseEditState.copy(cipherType = VaultItemCipherType.BANK_ACCOUNT).screenDisplayName,
+        )
+        assertEquals(
+            BitwardenString.edit_license.asText(),
+            baseEditState.copy(cipherType = VaultItemCipherType.DRIVERS_LICENSE).screenDisplayName,
+        )
+        assertEquals(
+            BitwardenString.edit_passport.asText(),
+            baseEditState.copy(cipherType = VaultItemCipherType.PASSPORT).screenDisplayName,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `screenDisplayName should resolve new title strings for new vault item types in clone mode`() {
+        val baseCloneState = createVaultAddItemState(
+            vaultAddEditType = VaultAddEditType.CloneItem(DEFAULT_EDIT_ITEM_ID),
+        )
+        assertEquals(
+            BitwardenString.add_bank_account.asText(),
+            baseCloneState.copy(cipherType = VaultItemCipherType.BANK_ACCOUNT).screenDisplayName,
+        )
+        assertEquals(
+            BitwardenString.add_license.asText(),
+            baseCloneState.copy(cipherType = VaultItemCipherType.DRIVERS_LICENSE).screenDisplayName,
+        )
+        assertEquals(
+            BitwardenString.add_passport.asText(),
+            baseCloneState.copy(cipherType = VaultItemCipherType.PASSPORT).screenDisplayName,
+        )
+    }
+
+    @Test
+    fun `ArchiveClick without Premium should show ArchiveRequiresPremium dialog`() = runTest {
         val cipherListView = createMockCipherListView(number = 1, isArchived = false)
         val cipherView = createMockCipherView(number = 1, isArchived = false)
         val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
@@ -3784,6 +4008,602 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Nested
+    inner class VaultAddEditBankAccountTypeItemActions {
+        private lateinit var viewModel: VaultAddEditViewModel
+        private lateinit var vaultAddItemInitialState: VaultAddEditState
+        private lateinit var bankAccountInitialSavedStateHandle: SavedStateHandle
+
+        @BeforeEach
+        fun setup() {
+            mutableVaultDataFlow.value = DataState.Loaded(
+                createVaultData(cipherListView = createMockCipherListView(1)),
+            )
+            vaultAddItemInitialState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.BANK_ACCOUNT,
+                typeContentViewState =
+                    VaultAddEditState.ViewState.Content.ItemType.BankAccount(),
+            )
+            bankAccountInitialSavedStateHandle = createSavedStateHandleWithState(
+                state = vaultAddItemInitialState,
+                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultItemCipherType = VaultItemCipherType.BANK_ACCOUNT,
+            )
+            viewModel = createAddVaultItemViewModel(
+                savedStateHandle = bankAccountInitialSavedStateHandle,
+            )
+        }
+
+        private fun expectedBankAccount(
+            block: VaultAddEditState.ViewState.Content.ItemType.BankAccount.() ->
+            VaultAddEditState.ViewState.Content.ItemType.BankAccount,
+        ): VaultAddEditState =
+            createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.BANK_ACCOUNT,
+                typeContentViewState = VaultAddEditState
+                    .ViewState
+                    .Content
+                    .ItemType
+                    .BankAccount()
+                    .block(),
+            )
+
+        @Test
+        fun `BankNameTextChange should update bank name`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.BankNameTextChange(
+                    bankName = "First National",
+                ),
+            )
+
+            assertEquals(
+                expectedBankAccount { copy(bankName = "First National") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `NameOnAccountTextChange should update name on account`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.NameOnAccountTextChange(
+                    nameOnAccount = "John Doe",
+                ),
+            )
+
+            assertEquals(
+                expectedBankAccount { copy(nameOnAccount = "John Doe") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `AccountTypeSelect should update account type`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.AccountTypeSelect(
+                    accountType = VaultBankAccountType.CHECKING,
+                ),
+            )
+
+            assertEquals(
+                expectedBankAccount { copy(accountType = VaultBankAccountType.CHECKING) },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `AccountNumberTextChange should update account number`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.AccountNumberTextChange(
+                    accountNumber = "12345",
+                ),
+            )
+
+            assertEquals(
+                expectedBankAccount { copy(accountNumber = "12345") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `RoutingNumberTextChange should update routing number`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.RoutingNumberTextChange(
+                    routingNumber = "021000021",
+                ),
+            )
+
+            assertEquals(
+                expectedBankAccount { copy(routingNumber = "021000021") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `BranchNumberTextChange should update branch number`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.BranchNumberTextChange(
+                    branchNumber = "001",
+                ),
+            )
+
+            assertEquals(
+                expectedBankAccount { copy(branchNumber = "001") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `PinTextChange should update PIN`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.PinTextChange(pin = "1234"),
+            )
+
+            assertEquals(
+                expectedBankAccount { copy(pin = "1234") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `SwiftCodeTextChange should update SWIFT code`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.SwiftCodeTextChange(
+                    swiftCode = "BOFAUS3N",
+                ),
+            )
+
+            assertEquals(
+                expectedBankAccount { copy(swiftCode = "BOFAUS3N") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IbanTextChange should update IBAN`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.IbanTextChange(
+                    iban = "GB29NWBK60161331926819",
+                ),
+            )
+
+            assertEquals(
+                expectedBankAccount { copy(iban = "GB29NWBK60161331926819") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `BankContactPhoneTextChange should update bank contact phone`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.BankAccountType.BankContactPhoneTextChange(
+                    phone = "555-0100",
+                ),
+            )
+
+            assertEquals(
+                expectedBankAccount { copy(bankContactPhone = "555-0100") },
+                viewModel.stateFlow.value,
+            )
+        }
+    }
+
+    @Nested
+    inner class VaultAddEditLicenseTypeItemActions {
+        private lateinit var viewModel: VaultAddEditViewModel
+        private lateinit var vaultAddItemInitialState: VaultAddEditState
+        private lateinit var licenseInitialSavedStateHandle: SavedStateHandle
+
+        @BeforeEach
+        fun setup() {
+            mutableVaultDataFlow.value = DataState.Loaded(
+                createVaultData(cipherListView = createMockCipherListView(1)),
+            )
+            vaultAddItemInitialState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
+                typeContentViewState =
+                    VaultAddEditState.ViewState.Content.ItemType.License(),
+            )
+            licenseInitialSavedStateHandle = createSavedStateHandleWithState(
+                state = vaultAddItemInitialState,
+                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
+            )
+            viewModel = createAddVaultItemViewModel(
+                savedStateHandle = licenseInitialSavedStateHandle,
+            )
+        }
+
+        private fun expectedLicense(
+            block: VaultAddEditState.ViewState.Content.ItemType.License.() ->
+            VaultAddEditState.ViewState.Content.ItemType.License,
+        ): VaultAddEditState =
+            createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
+                typeContentViewState = VaultAddEditState
+                    .ViewState
+                    .Content
+                    .ItemType
+                    .License()
+                    .block(),
+            )
+
+        @Test
+        fun `FirstNameTextChange should update first name`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.FirstNameTextChange(
+                    firstName = "Missy",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(firstName = "Missy") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `MiddleNameTextChange should update middle name`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.MiddleNameTextChange(
+                    middleName = "Anne",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(middleName = "Anne") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `LastNameTextChange should update last name`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.LastNameTextChange(
+                    lastName = "Katner",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(lastName = "Katner") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `LicenseNumberTextChange should update license number`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.LicenseNumberTextChange(
+                    licenseNumber = "K123-456-789",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(licenseNumber = "K123-456-789") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssuingCountryTextChange should update issuing country`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssuingCountryTextChange(
+                    country = "USA",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(issuingCountry = "USA") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssuingStateTextChange should update issuing state`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssuingStateTextChange(
+                    state = "Wisconsin",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(issuingState = "Wisconsin") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssuingAuthorityTextChange should update issuing authority`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssuingAuthorityTextChange(
+                    authority = "DMV",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(issuingAuthority = "DMV") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `LicenseClassTextChange should update license class`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.LicenseClassTextChange(
+                    licenseClass = "Class D",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(licenseClass = "Class D") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `DateOfBirthChange should update date of birth`() = runTest {
+            val localDate = LocalDate.of(1990, 8, 10)
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.DateOfBirthChange(dateOfBirth = localDate),
+            )
+
+            assertEquals(
+                expectedLicense { copy(dateOfBirth = localDate) },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssueDateChange should update issue date`() = runTest {
+            val localDate = LocalDate.of(2020, 1, 15)
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssueDateChange(issueDate = localDate),
+            )
+
+            assertEquals(
+                expectedLicense { copy(issueDate = localDate) },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `ExpirationDateChange should update expiration date`() = runTest {
+            val localDate = LocalDate.of(2025, 12, 31)
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.ExpirationDateChange(
+                    expirationDate = localDate,
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(expirationDate = localDate) },
+                viewModel.stateFlow.value,
+            )
+        }
+    }
+
+    @Nested
+    inner class VaultAddEditPassportTypeItemActions {
+        private lateinit var viewModel: VaultAddEditViewModel
+        private lateinit var vaultAddItemInitialState: VaultAddEditState
+        private lateinit var passportInitialSavedStateHandle: SavedStateHandle
+
+        @BeforeEach
+        fun setup() {
+            mutableVaultDataFlow.value = DataState.Loaded(
+                createVaultData(cipherListView = createMockCipherListView(1)),
+            )
+            vaultAddItemInitialState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.PASSPORT,
+                typeContentViewState =
+                    VaultAddEditState.ViewState.Content.ItemType.Passport(),
+            )
+            passportInitialSavedStateHandle = createSavedStateHandleWithState(
+                state = vaultAddItemInitialState,
+                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultItemCipherType = VaultItemCipherType.PASSPORT,
+            )
+            viewModel = createAddVaultItemViewModel(
+                savedStateHandle = passportInitialSavedStateHandle,
+            )
+        }
+
+        private fun expectedPassport(
+            block: VaultAddEditState.ViewState.Content.ItemType.Passport.() ->
+            VaultAddEditState.ViewState.Content.ItemType.Passport,
+        ): VaultAddEditState =
+            createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.PASSPORT,
+                typeContentViewState = VaultAddEditState
+                    .ViewState
+                    .Content
+                    .ItemType
+                    .Passport()
+                    .block(),
+            )
+
+        @Test
+        fun `GivenNameTextChange should update given name`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.GivenNameTextChange(
+                    givenName = "Bruce",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(givenName = "Bruce") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `SurnameTextChange should update surname`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.SurnameTextChange(
+                    surname = "Wayne",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(surname = "Wayne") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `SexTextChange should update sex`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.SexTextChange(sex = "M"),
+            )
+
+            assertEquals(
+                expectedPassport { copy(sex = "M") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `BirthPlaceTextChange should update birth place`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.BirthPlaceTextChange(
+                    birthPlace = "Gotham City",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(birthPlace = "Gotham City") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `NationalityTextChange should update nationality`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.NationalityTextChange(
+                    nationality = "American",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(nationality = "American") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `PassportNumberTextChange should update passport number`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.PassportNumberTextChange(
+                    passportNumber = "X12345678",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(passportNumber = "X12345678") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `PassportTypeTextChange should update passport type`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.PassportTypeTextChange(
+                    passportType = "Regular",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(passportType = "Regular") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `NationalIdentificationNumberTextChange should update national id number`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction
+                    .ItemType
+                    .PassportType
+                    .NationalIdentificationNumberTextChange(
+                        nationalIdentificationNumber = "987-65-4321",
+                    ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(nationalIdentificationNumber = "987-65-4321") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssuingCountryTextChange should update issuing country`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.IssuingCountryTextChange(
+                    country = "USA",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(issuingCountry = "USA") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssuingAuthorityTextChange should update issuing authority`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.IssuingAuthorityTextChange(
+                    authority = "U.S. Department of State",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(issuingAuthority = "U.S. Department of State") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `DateOfBirthChange should update date of birth`() = runTest {
+            val localDate = LocalDate.of(1990, 8, 10)
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.DateOfBirthChange(dateOfBirth = localDate),
+            )
+
+            assertEquals(
+                expectedPassport { copy(dateOfBirth = localDate) },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssueDateChange should update issue date`() = runTest {
+            val localDate = LocalDate.of(2021, 3, 20)
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.IssueDateChange(issueDate = localDate),
+            )
+
+            assertEquals(
+                expectedPassport { copy(issueDate = localDate) },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `ExpirationDateChange should update expiration date`() = runTest {
+            val localDate = LocalDate.of(2031, 3, 20)
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.ExpirationDateChange(
+                    expirationDate = localDate,
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(expirationDate = localDate) },
+                viewModel.stateFlow.value,
+            )
+        }
+    }
+
     @Test
     fun `NumberVisibilityChange should log an event when in edit mode and password is visible`() =
         runTest {
@@ -5117,6 +5937,458 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    fun `CardScannerFlagUpdateReceive should update isCardScannerEnabled`() =
+        runTest {
+            val initState = createVaultAddItemState()
+            val viewModel = createAddVaultItemViewModel()
+            mutableCardScannerFlow.value = true
+            assertEquals(
+                initState.copy(isCardScannerEnabled = true),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `isCardScannerEnabled should remain false on F-Droid even when flag is on`() =
+        runTest {
+            every { buildInfoManager.isFdroid } returns true
+            mutableCardScannerFlow.value = true
+            val initState = createVaultAddItemState()
+            val viewModel = createAddVaultItemViewModel()
+            assertEquals(
+                initState.copy(isCardScannerEnabled = false),
+                viewModel.stateFlow.value,
+            )
+            mutableCardScannerFlow.value = false
+            mutableCardScannerFlow.value = true
+            assertEquals(
+                initState.copy(isCardScannerEnabled = false),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `CardScanResultReceive with Success should update card fields and focus name`() =
+        runTest {
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = VaultAddEditState
+                            .ViewState
+                            .Content
+                            .ItemType
+                            .Card(),
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                mutableCardScanResultFlow.tryEmit(
+                    CardScanResult.Success(
+                        cardScanData = CardScanData(
+                            number = "4111111111111111",
+                            expirationMonth = "12",
+                            expirationYear = "2025",
+                            securityCode = "123",
+                        ),
+                    ),
+                )
+                // CVV is intentionally dropped from the apply path to match iOS.
+                val expectedCard = VaultAddEditState
+                    .ViewState
+                    .Content
+                    .ItemType
+                    .Card(
+                        number = "4111111111111111",
+                        expirationYear = "2025",
+                        expirationMonth = VaultCardExpirationMonth.DECEMBER,
+                        brand = VaultCardBrand.VISA,
+                    )
+                val content = viewModel.stateFlow.value.viewState
+                    as VaultAddEditState.ViewState.Content
+                assertEquals(expectedCard, content.type)
+                assertEquals(
+                    VaultAddEditEvent.ShowSnackbar(BitwardenString.card_scanned.asText()),
+                    awaitItem(),
+                )
+                assertEquals(
+                    VaultAddEditEvent.FocusCardHolderName,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `CardScanResultReceive with ScanError should not change state or focus`() =
+        runTest {
+            val initialCardState = VaultAddEditState
+                .ViewState
+                .Content
+                .ItemType
+                .Card()
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = initialCardState,
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                mutableCardScanResultFlow.tryEmit(CardScanResult.ScanError())
+                val content = viewModel.stateFlow.value.viewState
+                    as VaultAddEditState.ViewState.Content
+                assertEquals(initialCardState, content.type)
+                expectNoEvents()
+            }
+        }
+
+    @Test
+    fun `ScanCardClick with permission granted should send NavigateToCardScan`() =
+        runTest {
+            mutableCardScannerFlow.value = true
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = VaultAddEditState
+                            .ViewState
+                            .Content
+                            .ItemType
+                            .Card(),
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultAddEditAction.ItemType.CardType.ScanCardClick(
+                        isGranted = true,
+                    ),
+                )
+                assertEquals(
+                    VaultAddEditEvent.NavigateToCardScan,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `ScanCardClick when flag disabled should not navigate`() =
+        runTest {
+            mutableCardScannerFlow.value = false
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = VaultAddEditState
+                            .ViewState
+                            .Content
+                            .ItemType
+                            .Card(),
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultAddEditAction.ItemType.CardType.ScanCardClick(
+                        isGranted = true,
+                    ),
+                )
+                expectNoEvents()
+            }
+        }
+
+    @Test
+    fun `ScanCardClick with permission denied should show camera permission dialog`() =
+        runTest {
+            mutableCardScannerFlow.value = true
+            val initialState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.CARD,
+                typeContentViewState = VaultAddEditState
+                    .ViewState
+                    .Content
+                    .ItemType
+                    .Card(),
+            )
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = initialState,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.CardType.ScanCardClick(
+                    isGranted = false,
+                ),
+            )
+            assertEquals(
+                initialState.copy(
+                    dialog = VaultAddEditState
+                        .DialogState
+                        .CameraPermissionDenied,
+                    isCardScannerEnabled = true,
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `CameraPermissionSettingsClick should clear dialog and navigate to app settings`() =
+        runTest {
+            mutableCardScannerFlow.value = true
+            val initialState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.CARD,
+                typeContentViewState = VaultAddEditState
+                    .ViewState
+                    .Content
+                    .ItemType
+                    .Card(),
+                dialogState = VaultAddEditState
+                    .DialogState
+                    .CameraPermissionDenied,
+            )
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = initialState,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                stateFlow.skipItems(1)
+                viewModel.trySendAction(
+                    VaultAddEditAction.Common.CameraPermissionSettingsClick,
+                )
+                assertEquals(
+                    initialState.copy(
+                        dialog = null,
+                        isCardScannerEnabled = true,
+                    ),
+                    stateFlow.awaitItem(),
+                )
+                assertEquals(
+                    VaultAddEditEvent.NavigateToAppSettings,
+                    eventFlow.awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `CardScanResultReceive with number and month present should not modify CVV when scan carries securityCode`() =
+        runTest {
+            val initialCard = VaultAddEditState
+                .ViewState
+                .Content
+                .ItemType
+                .Card(
+                    securityCode = "999",
+                )
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = initialCard,
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                mutableCardScanResultFlow.tryEmit(
+                    CardScanResult.Success(
+                        cardScanData = CardScanData(
+                            number = "4111111111111111",
+                            expirationMonth = "12",
+                            expirationYear = "2025",
+                            securityCode = "123",
+                        ),
+                    ),
+                )
+                val content = viewModel.stateFlow.value.viewState
+                    as VaultAddEditState.ViewState.Content
+                val card = content.type as VaultAddEditState.ViewState.Content.ItemType.Card
+                assertEquals("999", card.securityCode)
+                assertEquals(
+                    VaultAddEditEvent.ShowSnackbar(BitwardenString.card_scanned.asText()),
+                    awaitItem(),
+                )
+                assertEquals(
+                    VaultAddEditEvent.FocusCardHolderName,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `CardScanResultReceive should overwrite manually-typed values`() =
+        runTest {
+            val typedCard = VaultAddEditState
+                .ViewState
+                .Content
+                .ItemType
+                .Card(
+                    number = "5555555555554444",
+                    brand = VaultCardBrand.MASTERCARD,
+                    expirationMonth = VaultCardExpirationMonth.JUNE,
+                    expirationYear = "2030",
+                )
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = typedCard,
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                mutableCardScanResultFlow.tryEmit(
+                    CardScanResult.Success(
+                        cardScanData = CardScanData(
+                            number = "4111111111111111",
+                            expirationMonth = "12",
+                            expirationYear = "2025",
+                            securityCode = null,
+                        ),
+                    ),
+                )
+                val expectedCard = typedCard.copy(
+                    number = "4111111111111111",
+                    brand = VaultCardBrand.VISA,
+                    expirationMonth = VaultCardExpirationMonth.DECEMBER,
+                    expirationYear = "2025",
+                )
+                val content = viewModel.stateFlow.value.viewState
+                    as VaultAddEditState.ViewState.Content
+                assertEquals(expectedCard, content.type)
+                assertEquals(
+                    VaultAddEditEvent.ShowSnackbar(BitwardenString.card_scanned.asText()),
+                    awaitItem(),
+                )
+                assertEquals(
+                    VaultAddEditEvent.FocusCardHolderName,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `CardScanResultReceive should refresh all four fields when re-scanned`() =
+        runTest {
+            val firstScanCard = VaultAddEditState
+                .ViewState
+                .Content
+                .ItemType
+                .Card(
+                    number = "5555555555554444",
+                    brand = VaultCardBrand.MASTERCARD,
+                    expirationMonth = VaultCardExpirationMonth.JUNE,
+                    expirationYear = "2030",
+                )
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = firstScanCard,
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                mutableCardScanResultFlow.tryEmit(
+                    CardScanResult.Success(
+                        cardScanData = CardScanData(
+                            number = "4111111111111111",
+                            expirationMonth = "12",
+                            expirationYear = "2025",
+                            securityCode = null,
+                        ),
+                    ),
+                )
+                val expectedCard = firstScanCard.copy(
+                    number = "4111111111111111",
+                    brand = VaultCardBrand.VISA,
+                    expirationMonth = VaultCardExpirationMonth.DECEMBER,
+                    expirationYear = "2025",
+                )
+                val content = viewModel.stateFlow.value.viewState
+                    as VaultAddEditState.ViewState.Content
+                assertEquals(expectedCard, content.type)
+                assertEquals(
+                    VaultAddEditEvent.ShowSnackbar(BitwardenString.card_scanned.asText()),
+                    awaitItem(),
+                )
+                assertEquals(
+                    VaultAddEditEvent.FocusCardHolderName,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `CardScanResultReceive with null year should preserve existing year`() =
+        runTest {
+            val initialCard = VaultAddEditState
+                .ViewState
+                .Content
+                .ItemType
+                .Card(
+                    expirationYear = "2030",
+                )
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        vaultItemCipherType = VaultItemCipherType.CARD,
+                        typeContentViewState = initialCard,
+                    ),
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+            viewModel.eventFlow.test {
+                mutableCardScanResultFlow.tryEmit(
+                    CardScanResult.Success(
+                        cardScanData = CardScanData(
+                            number = "4111111111111111",
+                            expirationMonth = "12",
+                            expirationYear = null,
+                            securityCode = null,
+                        ),
+                    ),
+                )
+                val expectedCard = initialCard.copy(
+                    number = "4111111111111111",
+                    brand = VaultCardBrand.VISA,
+                    expirationMonth = VaultCardExpirationMonth.DECEMBER,
+                    // expirationYear unchanged at "2030".
+                )
+                val content = viewModel.stateFlow.value.viewState
+                    as VaultAddEditState.ViewState.Content
+                assertEquals(expectedCard, content.type)
+                assertEquals(
+                    VaultAddEditEvent.ShowSnackbar(BitwardenString.card_scanned.asText()),
+                    awaitItem(),
+                )
+                assertEquals(
+                    VaultAddEditEvent.FocusCardHolderName,
+                    awaitItem(),
+                )
+            }
+        }
+
     //region Helper functions
 
     @Suppress("LongParameterList")
@@ -5153,7 +6425,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             createCredentialRequest = createCredentialRequest,
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = hasPremium,
-            isArchiveEnabled = true,
+            isCardScannerEnabled = false,
         )
 
     @Suppress("LongParameterList")
@@ -5238,7 +6510,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             savedStateHandle = savedStateHandle,
             featureFlagManager = featureFlagManager,
             authRepository = authRepository,
+            buildInfoManager = buildInfoManager,
             clipboardManager = bitwardenClipboardManager,
+            cardScanManager = cardScanManager,
             policyManager = policyManager,
             vaultRepository = vaultRepo,
             bitwardenCredentialManager = bitwardenCredentialManager,
@@ -5253,6 +6527,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             networkConnectionManager = networkConnectionManager,
             firstTimeActionManager = firstTimeActionManager,
             environmentRepository = environmentRepository,
+            premiumStateManager = premiumStateManager,
         )
 
     private fun createVaultData(
@@ -5282,6 +6557,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     avatarColorHex = "#ffecbc49",
                     environment = Environment.Eu,
                     isPremium = true,
+                    isPremiumFromSelf = true,
                     isLoggedIn = false,
                     isVaultUnlocked = false,
                     needsPasswordReset = false,

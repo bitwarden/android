@@ -173,7 +173,15 @@ private val SHARED_ACCOUNT_DATA = SharedAccountData(
             name = "Johnny Appleseed",
             email = "johnyapples@test.com",
             environmentLabel = "bitwarden.com",
-            totpUris = listOf("test.com"),
+            cipherData = listOf(
+                SharedAccountData.CipherData(
+                    uri = "test.com",
+                    id = "1234",
+                    name = "test",
+                    username = null,
+                    isFavorite = false,
+                ),
+            ),
         ),
     ),
 )

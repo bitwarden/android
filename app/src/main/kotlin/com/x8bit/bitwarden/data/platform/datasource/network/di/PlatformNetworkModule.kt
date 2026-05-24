@@ -15,10 +15,12 @@ import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_CL
 import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_USER_AGENT
 import com.x8bit.bitwarden.data.platform.manager.CertificateManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
 import java.time.Clock
 import javax.inject.Singleton
 
@@ -50,28 +52,38 @@ object PlatformNetworkModule {
 
     @Provides
     @Singleton
-    fun provideBitwardenServiceClient(
+    fun provideBitwardenServiceClientConfig(
         authTokenManager: AuthTokenManager,
         baseUrlsProvider: BaseUrlsProvider,
         authDiskSource: AuthDiskSource,
         certificateManager: CertificateManager,
         buildInfoManager: BuildInfoManager,
         networkCookieManager: NetworkCookieManager,
+        networkPermissionManager: NetworkPermissionManager,
         clock: Clock,
-    ): BitwardenServiceClient = bitwardenServiceClient(
-        BitwardenServiceClientConfig(
-            clock = clock,
-            appIdProvider = authDiskSource,
-            clientData = BitwardenServiceClientConfig.ClientData(
-                userAgent = HEADER_VALUE_USER_AGENT,
-                clientName = HEADER_VALUE_CLIENT_NAME,
-                clientVersion = HEADER_VALUE_CLIENT_VERSION,
-            ),
-            authTokenProvider = authTokenManager,
-            baseUrlsProvider = baseUrlsProvider,
-            certificateProvider = certificateManager,
-            enableHttpBodyLogging = buildInfoManager.isDevBuild,
-            cookieProvider = networkCookieManager,
+    ): BitwardenServiceClientConfig = BitwardenServiceClientConfig(
+        clock = clock,
+        appIdProvider = authDiskSource,
+        clientData = BitwardenServiceClientConfig.ClientData(
+            userAgent = HEADER_VALUE_USER_AGENT,
+            clientName = HEADER_VALUE_CLIENT_NAME,
+            clientVersion = HEADER_VALUE_CLIENT_VERSION,
         ),
+        authTokenProvider = authTokenManager,
+        baseUrlsProvider = baseUrlsProvider,
+        certificateProvider = certificateManager,
+        enableHttpBodyLogging = buildInfoManager.isDevBuild,
+        cookieProvider = networkCookieManager,
+        permissionProvider = networkPermissionManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideBitwardenServiceClient(
+        serviceClientConfig: BitwardenServiceClientConfig,
+        json: Json,
+    ): BitwardenServiceClient = bitwardenServiceClient(
+        config = serviceClientConfig,
+        json = json,
     )
 }

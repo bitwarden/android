@@ -2,9 +2,11 @@ package com.bitwarden.ui.platform.composition
 
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.compositionLocalOf
+import com.bitwarden.ui.platform.feature.cardscanner.util.CardTextAnalyzer
 import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzer
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.manager.exit.ExitManager
+import java.time.Clock
 
 /**
  * Provides access to the exit manager throughout the app.
@@ -19,6 +21,19 @@ val LocalExitManager: ProvidableCompositionLocal<ExitManager> = compositionLocal
 val LocalIntentManager: ProvidableCompositionLocal<IntentManager> = compositionLocalOf {
     error("CompositionLocal LocalIntentManager not present")
 }
+
+/**
+ * Provides access to the Card Text Analyzer throughout the app.
+ */
+val LocalCardTextAnalyzer: ProvidableCompositionLocal<CardTextAnalyzer> =
+    compositionLocalOf {
+        error("CompositionLocal LocalCardTextAnalyzer not present")
+    }
+
+/**
+ * Provides access to the clock throughout the app.
+ */
+val LocalClock: ProvidableCompositionLocal<Clock> = compositionLocalOf { Clock.systemDefaultZone() }
 
 /**
  * Provides access to the QR Code Analyzer throughout the app.

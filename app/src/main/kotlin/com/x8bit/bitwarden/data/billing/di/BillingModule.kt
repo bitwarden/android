@@ -4,7 +4,6 @@ import android.content.Context
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.network.service.BillingService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.billing.manager.PlayBillingManager
 import com.x8bit.bitwarden.data.billing.manager.PlayBillingManagerImpl
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
@@ -13,6 +12,8 @@ import com.x8bit.bitwarden.data.billing.repository.BillingRepository
 import com.x8bit.bitwarden.data.billing.repository.BillingRepositoryImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.PushManager
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module
 import dagger.Provides
@@ -53,20 +54,22 @@ object BillingModule {
     @Singleton
     fun providePremiumStateManager(
         authDiskSource: AuthDiskSource,
-        authRepository: AuthRepository,
         billingRepository: BillingRepository,
         settingsDiskSource: SettingsDiskSource,
         vaultRepository: VaultRepository,
         featureFlagManager: FeatureFlagManager,
+        environmentRepository: EnvironmentRepository,
+        pushManager: PushManager,
         clock: Clock,
         dispatcherManager: DispatcherManager,
     ): PremiumStateManager = PremiumStateManagerImpl(
         authDiskSource = authDiskSource,
-        authRepository = authRepository,
         billingRepository = billingRepository,
         settingsDiskSource = settingsDiskSource,
         vaultRepository = vaultRepository,
         featureFlagManager = featureFlagManager,
+        environmentRepository = environmentRepository,
+        pushManager = pushManager,
         clock = clock,
         dispatcherManager = dispatcherManager,
     )

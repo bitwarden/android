@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.settings
 
 import android.os.Parcelable
@@ -9,6 +11,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
 import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.bitwarden.ui.platform.util.ParcelableRouteSerializer
@@ -32,6 +35,8 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.other.navigateToOther
 import com.x8bit.bitwarden.ui.platform.feature.settings.other.otherDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.vault.navigateToVaultSettings
 import com.x8bit.bitwarden.ui.platform.feature.settings.vault.vaultSettingsDestination
+import com.x8bit.bitwarden.ui.platform.feature.premium.plan.navigateToPlan
+import com.x8bit.bitwarden.ui.platform.feature.premium.plan.planDestination
 import com.x8bit.bitwarden.ui.vault.feature.importitems.importItemsDestination
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
@@ -39,12 +44,14 @@ import kotlinx.serialization.Serializable
 /**
  * The type-safe route for the settings graph.
  */
+@OmitFromCoverage
 @Serializable
 data object SettingsGraphRoute
 
 /**
  * The type-safe route for the settings screen.
  */
+@OmitFromCoverage
 @Parcelize
 @Serializable(with = SettingsRoute.Serializer::class)
 sealed class SettingsRoute : Parcelable {
@@ -103,7 +110,7 @@ fun SavedStateHandle.toSettingsArgs(): SettingsArgs {
 /**
  * Add settings destinations to the nav graph.
  */
-@Suppress("LongParameterList")
+@Suppress("LongMethod", "LongParameterList")
 fun NavGraphBuilder.settingsGraph(
     navController: NavController,
     onNavigateToDeleteAccount: () -> Unit,
@@ -118,6 +125,8 @@ fun NavGraphBuilder.settingsGraph(
     onNavigateToImportLogins: () -> Unit,
     onNavigateToImportItems: () -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
+    onNavigateToManageDevices: () -> Unit,
+    onNavigateToUpgradedToPremium: () -> Unit,
 ) {
     navigation<SettingsGraphRoute>(
         startDestination = SettingsRoute.Standard,
@@ -131,6 +140,7 @@ fun NavGraphBuilder.settingsGraph(
                 onNavigateToAutoFill = { navController.navigateToAutoFill() },
                 onNavigateToOther = { navController.navigateToOther(isPreAuth = false) },
                 onNavigateToVault = { navController.navigateToVaultSettings() },
+                onNavigateToPlan = { navController.navigateToPlan() },
             )
         }
         aboutDestination(
@@ -144,6 +154,7 @@ fun NavGraphBuilder.settingsGraph(
             onNavigateToDeleteAccount = onNavigateToDeleteAccount,
             onNavigateToPendingRequests = onNavigateToPendingRequests,
             onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
+            onNavigateToManageDevices = onNavigateToManageDevices,
         )
         appearanceDestination(
             isPreAuth = false,
@@ -174,6 +185,10 @@ fun NavGraphBuilder.settingsGraph(
         )
         blockAutoFillDestination(onNavigateBack = { navController.popBackStack() })
         privilegedAppsListDestination(onNavigateBack = { navController.popBackStack() })
+        planDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToUpgradedToPremium = onNavigateToUpgradedToPremium,
+        )
     }
 }
 
@@ -192,6 +207,7 @@ fun NavGraphBuilder.preAuthSettingsDestinations(
             onNavigateToAccountSecurity = { /* no-op */ },
             onNavigateToAutoFill = { /* no-op */ },
             onNavigateToVault = { /* no-op */ },
+            onNavigateToPlan = { /* no-op */ },
         )
     }
     appearanceDestination(

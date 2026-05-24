@@ -78,6 +78,16 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     val isCrashLoggingEnabledFlow: Flow<Boolean?>
 
     /**
+     * The current setting for showing the next TOTP code.
+     */
+    var isShowNextCodeEnabled: Boolean?
+
+    /**
+     * Emits updates that track the [isShowNextCodeEnabled] value.
+     */
+    val isShowNextCodeEnabledFlow: Flow<Boolean?>
+
+    /**
      * Whether the user has previously dismissed the download Bitwarden action card.
      */
     var hasUserDismissedDownloadBitwardenCard: Boolean?

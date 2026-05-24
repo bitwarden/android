@@ -145,7 +145,6 @@ class UserLogoutManagerTest {
         val pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope"
         val encryptedPin = "encryptedPin"
 
-        every { authDiskSource.userState } returns MULTI_USER_STATE
         every {
             settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
         } returns vaultTimeoutInMinutes
@@ -186,7 +185,6 @@ class UserLogoutManagerTest {
                 userId = userId,
                 vaultTimeoutAction = vaultTimeoutAction,
             )
-            toastManager.show(messageId = BitwardenString.account_switched_automatically)
             settingsDiskSource.storeVaultTimeoutInMinutes(
                 userId = userId,
                 vaultTimeoutInMinutes = vaultTimeoutInMinutes,
@@ -208,7 +206,7 @@ class UserLogoutManagerTest {
     }
 
     @Test
-    fun `softLogout should switch active user but keep previous user in accounts list`() {
+    fun `softLogout should clear user data but keep the user in accounts list`() {
         val userId = USER_ID_1
         val vaultTimeoutInMinutes = 360
         val vaultTimeoutAction = VaultTimeoutAction.LOGOUT
@@ -216,7 +214,6 @@ class UserLogoutManagerTest {
         val pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope"
         val encryptedPin = "encryptedPin"
 
-        every { authDiskSource.userState } returns MULTI_USER_STATE
         every {
             settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
         } returns vaultTimeoutInMinutes
@@ -247,11 +244,6 @@ class UserLogoutManagerTest {
         userLogoutManager.softLogout(userId = userId, reason = LogoutReason.Timeout)
 
         verify(exactly = 1) {
-            authDiskSource.userState = UserStateJson(
-                activeUserId = USER_ID_2,
-                accounts = MULTI_USER_STATE.accounts,
-            )
-            toastManager.show(messageId = BitwardenString.account_switched_automatically)
             settingsDiskSource.storeVaultTimeoutInMinutes(
                 userId = userId,
                 vaultTimeoutInMinutes = vaultTimeoutInMinutes,
@@ -297,7 +289,8 @@ private val ACCOUNT_1 = AccountJson(
         email = "test@bitwarden.com",
         isEmailVerified = true,
         name = "Bitwarden Tester",
-        hasPremium = false,
+        hasPremiumPersonally = false,
+        hasPremiumFromOrganization = null,
         stamp = null,
         organizationId = null,
         avatarColorHex = null,
@@ -324,7 +317,8 @@ private val ACCOUNT_2 = AccountJson(
         email = EMAIL_2,
         isEmailVerified = true,
         name = "Bitwarden Tester 2",
-        hasPremium = false,
+        hasPremiumPersonally = false,
+        hasPremiumFromOrganization = null,
         stamp = null,
         organizationId = null,
         avatarColorHex = null,

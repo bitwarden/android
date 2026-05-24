@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.data.billing.repository
 
 import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
 import com.x8bit.bitwarden.data.billing.repository.model.CustomerPortalResult
+import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResult
+import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionResult
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -20,7 +22,19 @@ interface BillingRepository {
     suspend fun getCheckoutSessionUrl(): CheckoutSessionResult
 
     /**
-     * Retrieves the Stripe customer portal URL for managing the premium subscription.
+     * Retrieves the Stripe customer portal URL for managing the Premium subscription.
      */
     suspend fun getPortalUrl(): CustomerPortalResult
+
+    /**
+     * Retrieves the premium plan pricing information.
+     */
+    suspend fun getPremiumPlanPricing(): PremiumPlanPricingResult
+
+    /**
+     * Fetches the current user's premium subscription details. The endpoint 404s when the
+     * user has no `GatewaySubscriptionId` (free user); callers receive
+     * [SubscriptionResult.NotFound] in that case instead of [SubscriptionResult.Error].
+     */
+    suspend fun getSubscription(): SubscriptionResult
 }

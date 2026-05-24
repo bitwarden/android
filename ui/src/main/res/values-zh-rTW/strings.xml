@@ -11,6 +11,7 @@
     <string name="copy_password">複製密碼</string>
     <string name="copy_username">複製使用者名稱</string>
     <string name="delete">刪除</string>
+    <string name="preview">預覽</string>
     <string name="deleting">正在刪除…</string>
     <string name="do_you_really_want_to_delete">您確定要刪除嗎？刪除後將無法復原。</string>
     <string name="edit">編輯</string>
@@ -42,7 +43,7 @@
     <string name="master_password">主密碼</string>
     <string name="master_password_required">主密碼（必填）</string>
     <string name="new_master_password_required">新增主密碼（必填）</string>
-    <string name="more_options">More options</string>
+    <string name="more_options">更多選項</string>
     <string name="my_vault">我的密碼庫</string>
     <string name="name">名稱</string>
     <string name="item_name_required">項目名稱（必填）</string>
@@ -82,7 +83,7 @@
     <string name="create_an_account">建立帳戶</string>
     <string name="edit_item">編輯項目</string>
     <string name="edit_login">編輯登錄</string>
-    <string name="edit_card">編輯支付卡</string>
+    <string name="edit_card">編輯付款卡</string>
     <string name="edit_identity">編輯身分</string>
     <string name="edit_note">編輯筆記</string>
     <string name="edit_ssh_key">編輯 SSH 金鑰</string>
@@ -116,8 +117,8 @@
     <string name="min_special">最少符號位數</string>
     <string name="never">永不</string>
     <string name="new_item_created">已新增項目</string>
-    <string name="no_cards">您的密碼庫中沒有支付卡</string>
-    <string name="new_card">新增支付卡</string>
+    <string name="no_cards">您的密碼庫中沒有付款卡。</string>
+    <string name="new_card">新增付款卡</string>
     <string name="no_logins">您的密碼庫中沒有登入資料。</string>
     <string name="no_identities">您的密碼庫中沒有身份識別。</string>
     <string name="new_identity">新增身份識別</string>
@@ -154,7 +155,7 @@
     <string name="unlock_with_pin">使用 PIN 碼解鎖</string>
     <string name="verification_code">驗證碼</string>
     <string name="view_login">檢視登入</string>
-    <string name="view_card">檢視支付卡</string>
+    <string name="view_card">檢視付款卡</string>
     <string name="view_identity">檢視身分</string>
     <string name="view_note">檢視筆記</string>
     <string name="view_ssh_key">檢視 SSH 金鑰</string>
@@ -169,7 +170,7 @@
     <string name="autofill_noun">自動填入</string>
     <string name="autofill_verb">自動填入</string>
     <string name="autofill_or_view">您想自動填入還是檢視此項目？</string>
-    <string name="search">搜尋</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">搜尋 %1$s</string>
     <string name="learn_org">了解組織</string>
     <string name="authenticator_app_title">驗證器應用程式</string>
     <string name="enter_verification_code_app">輸入驗證器應用程式提供的 6 位數驗證碼。</string>
@@ -199,11 +200,12 @@
     <string name="copy_totp_automatically">自動複製 TOTP</string>
     <string name="premium_required">進階會員才可使用此功能。</string>
     <string name="attachment_deleted">已刪除附件</string>
-    <string name="attachments_unavailable">Attachments unavailable</string>
-    <string name="attachments_are_a_premium_feature">Attachments are a Premium feature. Your current plan does not include access to this feature.</string>
+    <string name="attachments_unavailable">附件不可用</string>
+    <string name="attachments_are_a_premium_feature">附件是進階版功能。您目前的方案不包含此功能的存取權限。</string>
     <string name="choose_file">選擇檔案</string>
     <string name="file">檔案</string>
     <string name="no_file_chosen">未選擇任何檔案</string>
+    <string name="file_name">檔案名稱</string>
     <string name="no_attachments">沒有附件。</string>
     <string name="file_source">檔案來源</string>
     <string name="max_file_size">檔案最大為 100MB。</string>
@@ -225,7 +227,10 @@
     <string name="copy_security_code">複製安全代碼</string>
     <string name="number">號碼</string>
     <string name="security_code">安全代碼</string>
-    <string name="type_card">支付卡</string>
+    <string name="scan_card">掃描付款卡</string>
+    <string name="scan_card_instruction">請將卡片置於框內以進行掃描。</string>
+    <string name="hold_steady_and_ensure_all_card_details_are_visible">請保持穩定，並確保所有卡片資訊清晰可見</string>
+    <string name="type_card">付款卡</string>
     <string name="type_identity">身分</string>
     <string name="type_login">登入</string>
     <string name="type_secure_note">安全筆記</string>
@@ -236,6 +241,7 @@
     <string name="august">八月</string>
     <string name="brand">發卡組織</string>
     <string name="card_details">付款卡詳細資料</string>
+    <string name="card_scanned">卡片已掃描</string>
     <string name="cardholder_name">持卡人姓名</string>
     <string name="city_town">市/鎮</string>
     <string name="company">公司</string>
@@ -290,7 +296,6 @@
     <string name="field_type_text">文字型</string>
     <string name="select_type_field">您要新增哪種類型的自訂欄位？</string>
     <string name="remove">移除</string>
-    <string name="new_uri">新增 URI</string>
     <string name="add_website">新增網站</string>
     <string name="base_domain">基底網域</string>
     <string name="default_text">預設（%1$s）</string>
@@ -307,7 +312,7 @@
     <string name="password_updated">密碼更新於：%1$s</string>
     <string name="last_edited">最後編輯於：%1$s</string>
     <string name="invalid_email">無效的電子郵件地址。</string>
-    <string name="cards">支付卡</string>
+    <string name="cards">付款卡</string>
     <string name="identities">身分</string>
     <string name="identification">身分</string>
     <string name="logins">登入資料</string>
@@ -377,6 +382,7 @@
     <string name="capitalize">大寫</string>
     <string name="include_number">包含數字</string>
     <string name="download">下載</string>
+    <string name="download_file">下載檔案</string>
     <string name="login_expired">您的登入階段已逾期。</string>
     <string name="biometrics_direction">生物辨識驗證</string>
     <string name="device_verification">裝置驗證</string>
@@ -506,10 +512,10 @@
     <string name="remove_master_password">移除主密碼</string>
     <string name="leave_organization">離開組織</string>
     <string name="leave_organization_name">離開 %1$s？</string>
-    <string name="are_you_sure_you_want_to_leave_organization">您確定要離開 %1$s？</string>
+    <string name="are_you_sure_you_want_to_leave_organization">您確定要離開 [%1$s]？</string>
     <string name="leave_organization_button">離開 %1$s</string>
     <string name="leave_organization_warning">若選擇拒絕，您的個人項目將保留在帳號中，但您將失去對共用項目與組織功能的存取權。\n\n請聯絡您的管理員以重新取得存取權限。</string>
-    <string name="how_to_manage_my_vault">如何管理我的密碼庫</string>
+    <string name="contact_your_admin_to_regain_access">請聯絡您的管理員以重新取得存取權限。</string>
     <string name="fido2_authenticate_web_authn">驗證 WebAuthn</string>
     <string name="fido2_return_to_app">返回應用程式</string>
     <string name="reset_password_auto_enroll_invite_warning">此組織有一個可以為您自動註冊密碼重設的企業原則。註冊後將允許組織管理員變更您的主密碼。</string>
@@ -659,7 +665,9 @@
     <string name="you_will_be_notified_once_approved">核准後將通知您。</string>
     <string name="trouble_logging_in">登入時遇到困難？</string>
     <string name="block_auto_fill">封鎖表單自動填入功能</string>
+    <string name="no_uris_blocked">沒有封鎖任何 URI</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">不對下列 URI 提供自動填寫功能。</string>
+    <string name="edit_blocked_uri">編輯已封鎖的 URI</string>
     <string name="new_blocked_uri">新增要封鎖的 URI</string>
     <string name="invalid_format_use_https_http_or_android_app">格式無效，請用 https://、http:// 或 androidapp:// 開頭</string>
     <string name="enter_uri">輸入 URI</string>
@@ -834,7 +842,7 @@
     <string name="fill_out_the_form_and_import_your_saved_password_file">填入表單並<annotation emphasis="bold">匯入您的密碼檔案</annotation>。</string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">為了您的安全，記得<annotation emphasis="bold">刪除先前匯出的密碼檔案</annotation>。</string>
     <string name="need_help_check_out_import_help">需要幫助嗎？看看我們的<annotation link="importHelp">匯入說明</annotation>。</string>
-    <string name="import_help">import help</string>
+    <string name="import_help">匯入說明</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">在您的電腦上<annotation emphasis="bold">儲存匯出的檔案</annotation>方便日後尋找。</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">這不是一個 Bitwarden 伺服器。您可能需要聯繫您的提供商或更新您的伺服器。</string>
     <string name="syncing_logins_loading_message">正在同步登入資訊...</string>
@@ -871,7 +879,10 @@
     <string name="copy_company">複製公司名稱</string>
     <string name="copy_ssn">複製社會保險號碼</string>
     <string name="copy_passport_number">複製護照號碼</string>
+    <string name="copy_first_name">複製名字</string>
+    <string name="copy_last_name">複製姓氏</string>
     <string name="copy_license_number">複製駕照號碼</string>
+    <string name="copy_middle_name">複製中間名</string>
     <string name="copy_email">複製電子郵件地址</string>
     <string name="copy_phone">複製電話號碼</string>
     <string name="copy_address">複製地址</string>
@@ -935,6 +946,7 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">通行金鑰操作失敗，因為未選取任何項目。</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">通行金鑰操作失敗，因為該請求不受支援。</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">密碼操作失敗，因為所選項目不存在。</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">密碼操作失敗，因為所選項目沒有有效的密碼。</string>
     <string name="password_operation_failed_because_no_item_was_selected">密碼操作失敗，因為未選取任何項目。</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">憑證操作失敗，因為請求無效。</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">憑證操作失敗，因為該請求不受支援。</string>
@@ -1064,6 +1076,7 @@
     <string name="security">安全性</string>
     <string name="too_many_failed_biometric_attempts">生物辨識嘗試次數過多。</string>
     <string name="version">版本</string>
+    <string name="version_x" comment="%1$s is the version string (e.g. 2025.1.0 (1234)).">版本：%1$s</string>
     <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">在說明中心了解有關如何使用 Bitwarden Authenticato的更多資訊。</string>
     <string name="key">金鑰</string>
     <string name="create_verification_code">建立驗證碼</string>
@@ -1116,7 +1129,7 @@
     <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
         <item quantity="other">Bitwarden 無法解密 %1$d 個保險庫項目。請複製並將此錯誤報告提供給客服團隊，以避免進一步的資料遺失。</item>
     </plurals>
-    <string name="select_a_card_for_x">選擇 %s 的支付卡</string>
+    <string name="select_a_card_for_x">選擇 %s 的付款卡</string>
     <string name="advanced_options">進階選項</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">深入了解匹配偵測</annotation></string>
     <string name="keep_your_credential_secure">保護您的憑證安全</string>
@@ -1196,6 +1209,9 @@
     <string name="archive_unavailable">封存不可用</string>
     <string name="archiving_items_is_a_premium_feature">封存項目為進階版功能。您目前的方案不包含此功能。</string>
     <string name="upgrade_to_premium">升級到 Premium</string>
+    <string name="plan">方案</string>
+    <string name="unlock_advanced_security_features">解鎖進階安全功能</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Premium 方案可提供更多工具，讓您保持安全並掌控一切。</string>
     <string name="this_item_is_archived">此項目已被封存。</string>
     <string name="introducing_archive">封存功能介紹</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">將您目前不需要的項目安全保存，同時隱藏於視線之外。</string>
@@ -1215,5 +1231,136 @@
     <string name="launch_browser">開啟瀏覽器</string>
     <string name="continue_without_syncing">不進行同步並繼續</string>
     <string name="external_link">外部連結</string>
-    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
+    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s，外部連結</string>
+    <string name="preview_not_available_for_files">無法預覽 %1$s 類型的檔案。您仍可下載後在裝置上檢視。</string>
+    <string name="this_file_is_too_large_to_preview">此檔案過大，無法預覽。您仍可下載後在裝置上檢視。</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden 無法解密此檔案，因此無法顯示預覽。</string>
+    <string name="preview_unavailable_for_this_file">此檔案無法預覽。您仍可下載後在裝置上檢視。</string>
+    <string name="preview_unavailable">無法預覽</string>
+    <string name="download_attachment">下載附件</string>
+    <string name="upgraded_to_premium">升級到 Premium</string>
+    <string name="you_now_have_access_to_all_advanced_security_features">您現在可以使用所有進階安全功能。</string>
+    <string name="you_now_have_access_to_advanced_security_features_learn_more_about_premium">您現在可以使用進階安全功能。深入了解 Premium 包含的內容。</string>
+    <string name="confirming_your_upgrade">正在確認您的升級…</string>
+    <string name="upgrade_pending">升級處理中</string>
+    <string name="upgrade_pending_message">您的升級正在處理中。在完成之前，您將維持免費方案。立即同步以進行檢查，或繼續操作，系統將自動更新。</string>
+    <string name="unlock_premium_features">透過 Premium 方案解鎖更多進階功能。</string>
+    <string name="per_month">/ 月</string>
+    <string name="built_in_authenticator">內建驗證器</string>
+    <string name="emergency_access">緊急存取</string>
+    <string name="secure_file_storage">安全檔案儲存</string>
+    <string name="breach_monitoring">外洩監控</string>
+    <string name="upgrade_now">立即升級</string>
+    <string name="stripe_checkout_footer">您將前往 Stripe 的安全結帳頁面完成購買。</string>
+    <string name="opening_checkout">正在開啟結帳頁面…</string>
+    <string name="secure_checkout_didnt_load">安全結帳頁面未成功載入</string>
+    <string name="trouble_opening_payment_page">開啟付款頁面時發生問題，請再試一次。</string>
+    <string name="payment_not_received_yet">尚未收到付款</string>
+    <string name="return_to_stripe_to_finish">請在瀏覽器中返回 Stripe 完成升級流程。</string>
+    <string name="go_back">返回</string>
+    <string name="allow_camera_access">允許相機存取</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">為了掃描您的卡片，需要存取您的相機。您可以隨時在裝置設定中變更。</string>
+    <string name="show_next_code">顯示下一個驗證碼</string>
+    <string name="see_upcoming_codes_in_the_list">在清單中查看即將產生的驗證碼</string>
+    <string name="next_code_x">下一個驗證碼 %1$s</string>
+    <string name="archive_item">封存項目</string>
+    <string name="once_archived_this_item_will_be_excluded">封存後，此項目將不會顯示在搜尋結果與自動填入建議中。</string>
+    <string name="pricing_unavailable">無法取得價格資訊</string>
+    <string name="current_plan">目前方案</string>
+    <string name="premium_plan_name">進階版</string>
+    <string name="billing_amount">帳單金額</string>
+    <string name="storage_cost">儲存空間費用</string>
+    <string name="discount">折扣</string>
+    <string name="estimated_tax">預估稅額</string>
+    <string name="billing_rate_per_year">%1$s／年</string>
+    <string name="billing_rate_per_month">%1$s／月</string>
+    <string name="manage_plan">管理方案</string>
+    <string name="cancel_premium">取消 Premium</string>
+    <string name="cancel_now">立即取消</string>
+    <string name="cancel_premium_confirmation">您將可持續使用 Premium 功能至 %1$s。</string>
+    <string name="subscription_status_active">生效中</string>
+    <string name="subscription_status_canceled">已取消</string>
+    <string name="subscription_status_overdue_payment">逾期付款</string>
+    <string name="subscription_status_past_due">逾期</string>
+    <string name="subscription_status_paused">已暫停</string>
+    <string name="premium_next_charge_summary">您的下一筆扣款為 %1$s USD，將於 %2$s 到期。</string>
+    <string name="subscription_canceled_description">您的訂閱已於 %1$s 取消。重新訂閱以繼續使用 Premium 功能。</string>
+    <string name="subscription_overdue_description">我們無法處理您的付款。請在 %1$s 訂閱結束前更新付款資訊。</string>
+    <plurals name="subscription_past_due_description">
+        <item quantity="other">自訂閱到期日起，您有 %1$d 天的寬限期。請於 %2$s 前完成逾期款項付款。</item>
+    </plurals>
+    <string name="subscription_paused_description">您的訂閱已暫停。恢復訂閱以繼續使用 Premium 功能。</string>
+    <string name="loading_subscription">正在載入訂閱資訊…</string>
+    <string name="loading_portal">正在載入入口網站…</string>
+    <string name="portal_error">出了點問題</string>
+    <string name="trouble_loading_portal">載入管理入口網站時發生問題，請再試一次。</string>
+    <string name="subscription_error">訂閱錯誤</string>
+    <string name="trouble_loading_subscription">無法載入您的訂閱詳細資訊。請再試一次。</string>
+    <string name="view_bank_account">檢視銀行帳戶</string>
+    <string name="view_license">檢視駕照</string>
+    <string name="view_passport">檢視護照</string>
+    <string name="new_bank_account">新增銀行帳戶</string>
+    <string name="new_license">新增駕照</string>
+    <string name="new_passport">新增護照</string>
+    <string name="edit_bank_account">編輯銀行帳戶</string>
+    <string name="edit_license">編輯駕照</string>
+    <string name="edit_passport">編輯護照</string>
+    <string name="type_bank_account">銀行帳戶</string>
+    <string name="type_license">駕照</string>
+    <string name="type_passport">護照</string>
+    <string name="bank_accounts">銀行帳戶</string>
+    <string name="passports">護照</string>
+    <string name="bank_name">銀行名稱</string>
+    <string name="name_on_account">帳戶名稱</string>
+    <string name="account_type">帳戶類型</string>
+    <string name="account_number">帳號</string>
+    <string name="routing_number">匯款路徑編號</string>
+    <string name="branch_number">分行代碼</string>
+    <string name="swift_code">SWIFT 代碼</string>
+    <string name="iban">IBAN</string>
+    <string name="bank_contact_phone">銀行聯絡電話</string>
+    <string name="copy_name_on_account">複製帳戶名稱</string>
+    <string name="copy_account_number">複製帳號</string>
+    <string name="copy_routing_number">複製匯款路徑編號</string>
+    <string name="copy_branch_number">複製分行代碼</string>
+    <string name="copy_pin">複製 PIN 碼</string>
+    <string name="copy_swift_code">複製 SWIFT 代碼</string>
+    <string name="copy_iban">複製 IBAN</string>
+    <string name="copy_bank_contact_phone">複製銀行聯絡電話</string>
+    <string name="checking">支票帳戶</string>
+    <string name="savings">儲蓄帳戶</string>
+    <string name="certificate_of_deposit">定期存款</string>
+    <string name="line_of_credit">信用額度</string>
+    <string name="investment_brokerage">投資／券商帳戶</string>
+    <string name="money_market">貨幣市場帳戶</string>
+    <string name="issuing_country">簽發國家</string>
+    <string name="issuing_state">簽發州／省</string>
+    <string name="license_class">駕照類別</string>
+    <string name="surname">姓氏</string>
+    <string name="given_name">名字</string>
+    <string name="date_of_birth">出生日期</string>
+    <string name="nationality">國籍</string>
+    <string name="passport_type">護照類型</string>
+    <string name="issuing_authority">簽發機關／單位</string>
+    <string name="issue_date">簽發日期</string>
+    <string name="expiration_date">到期日期</string>
+    <string name="details">詳細資訊</string>
+    <string name="account_details">帳戶詳細資訊</string>
+    <string name="no_bank_accounts">您的保管庫中沒有銀行帳戶。</string>
+    <string name="license_details">駕照詳細資訊</string>
+    <string name="licenses">駕照</string>
+    <string name="no_licenses">您的密碼庫中沒有駕照。</string>
+    <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">您的請求已中斷，因為應用程式需要重新驗證。請再試一次。</string>
+    <string name="passport_details">Passport details</string>
+    <string name="sex">Sex</string>
+    <string name="birth_place">Birth place</string>
+    <string name="national_identification_number">National identification number</string>
+    <string name="copy_national_identification_number">Copy national identification number</string>
+    <string name="access_your_local_network">Access your local network</string>
+    <string name="local_network_access_required">Local network access required</string>
+    <string name="ask_again_later">Ask again later</string>
+    <string name="enable_local_network_access">Enable local network access</string>
+    <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Bitwarden needs local network access to sync with your server. Without this permission, the app won’t be able to connect.</string>
+    <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Without this permission, Bitwarden won’t be able to connect and sync with your server. You can enable this in your device settings.</string>
+    <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Your request was interrupted because the app needs local network access. You can enable this in your device settings.</string>
 </resources>

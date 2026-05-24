@@ -9,6 +9,7 @@ import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.IdentityView
 import com.bitwarden.vault.LoginUriView
 import com.bitwarden.vault.LoginView
+import com.bitwarden.vault.PassportView
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SecureNoteView
@@ -18,8 +19,8 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2Cre
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
-import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
+import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -27,6 +28,7 @@ import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneOffset
 
 @Suppress("LargeClass")
@@ -91,6 +93,9 @@ class VaultAddItemStateExtensionsTest {
                 identity = null,
                 card = null,
                 secureNote = null,
+                bankAccount = null,
+                driversLicense = null,
+                passport = null,
                 favorite = false,
                 reprompt = CipherRepromptType.NONE,
                 organizationUseTotp = false,
@@ -202,11 +207,11 @@ class VaultAddItemStateExtensionsTest {
                 ),
                 passwordHistory = listOf(
                     PasswordHistoryView(
-                        password = "old_password",
+                        password = "password",
                         lastUsedDate = FIXED_CLOCK.instant(),
                     ),
                     PasswordHistoryView(
-                        password = "password",
+                        password = "old_password",
                         lastUsedDate = FIXED_CLOCK.instant(),
                     ),
                     PasswordHistoryView(
@@ -254,6 +259,9 @@ class VaultAddItemStateExtensionsTest {
                 login = null,
                 identity = null,
                 card = null,
+                bankAccount = null,
+                driversLicense = null,
+                passport = null,
                 secureNote = SecureNoteView(SecureNoteType.GENERIC),
                 favorite = false,
                 reprompt = CipherRepromptType.NONE,
@@ -383,6 +391,9 @@ class VaultAddItemStateExtensionsTest {
                 notes = "mockNotes-1",
                 type = CipherType.IDENTITY,
                 login = null,
+                bankAccount = null,
+                driversLicense = null,
+                passport = null,
                 identity = IdentityView(
                     title = "MR",
                     firstName = "mockFirstName",
@@ -546,6 +557,89 @@ class VaultAddItemStateExtensionsTest {
     }
 
     @Test
+    fun `toCipherView should transform Passport ItemType to CipherView`() {
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
+                name = "mockName-1",
+                selectedFolderId = "mockId-1",
+                favorite = false,
+                masterPasswordReprompt = false,
+                notes = "mockNotes-1",
+                selectedOwnerId = "mockOwnerId-1",
+            ),
+            isIndividualVaultDisabled = false,
+            type = VaultAddEditState.ViewState.Content.ItemType.Passport(
+                givenName = "Bruce",
+                surname = "Wayne",
+                dateOfBirth = LocalDate.of(1939, 5, 27),
+                sex = "M",
+                birthPlace = "Gotham City",
+                nationality = "American",
+                passportNumber = "X12345678",
+                passportType = "Regular",
+                nationalIdentificationNumber = "987-65-4321",
+                issuingCountry = "USA",
+                issuingAuthority = "U.S. Department of State",
+                issueDate = LocalDate.of(2020, 1, 15),
+                expirationDate = LocalDate.of(2030, 1, 15),
+            ),
+        )
+
+        val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
+
+        assertEquals(
+            CipherView(
+                id = null,
+                organizationId = "mockOwnerId-1",
+                folderId = "mockId-1",
+                collectionIds = emptyList(),
+                key = null,
+                name = "mockName-1",
+                notes = "mockNotes-1",
+                type = CipherType.PASSPORT,
+                login = null,
+                identity = null,
+                card = null,
+                secureNote = null,
+                bankAccount = null,
+                driversLicense = null,
+                passport = PassportView(
+                    surname = "Wayne",
+                    givenName = "Bruce",
+                    dateOfBirth = "1939-05-27",
+                    birthPlace = "Gotham City",
+                    sex = "M",
+                    nationality = "American",
+                    passportNumber = "X12345678",
+                    passportType = "Regular",
+                    issuingCountry = "USA",
+                    issuingAuthority = "U.S. Department of State",
+                    issueDate = "2020-01-15",
+                    expirationDate = "2030-01-15",
+                    nationalIdentificationNumber = "987-65-4321",
+                ),
+                favorite = false,
+                reprompt = CipherRepromptType.NONE,
+                organizationUseTotp = false,
+                edit = true,
+                viewPassword = true,
+                localData = null,
+                attachments = null,
+                fields = emptyList(),
+                passwordHistory = null,
+                permissions = null,
+                creationDate = FIXED_CLOCK.instant(),
+                deletedDate = null,
+                revisionDate = FIXED_CLOCK.instant(),
+                archivedDate = null,
+                sshKey = null,
+                attachmentDecryptionFailures = null,
+            ),
+            result,
+        )
+    }
+
+    @Test
     fun `toCipherView should transform Card ItemType to CipherView`() {
         val viewState = VaultAddEditState.ViewState.Content(
             common = VaultAddEditState.ViewState.Content.Common(
@@ -590,6 +684,9 @@ class VaultAddItemStateExtensionsTest {
                     number = "1234567",
                 ),
                 secureNote = null,
+                bankAccount = null,
+                driversLicense = null,
+                passport = null,
                 favorite = false,
                 reprompt = CipherRepromptType.NONE,
                 organizationUseTotp = false,
@@ -731,6 +828,9 @@ class VaultAddItemStateExtensionsTest {
                 identity = null,
                 card = null,
                 secureNote = null,
+                bankAccount = null,
+                driversLicense = null,
+                passport = null,
                 favorite = false,
                 reprompt = CipherRepromptType.NONE,
                 organizationUseTotp = false,
@@ -758,7 +858,7 @@ class VaultAddItemStateExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toCipherView without premium should delete the archive date from the original cipher`() {
+    fun `toCipherView without Premium should delete the archive date from the original cipher`() {
         val cipherView = DEFAULT_BASE_CIPHER_VIEW.copy(
             notes = null,
             fields = emptyList(),
@@ -1029,6 +1129,9 @@ class VaultAddItemStateExtensionsTest {
                 identity = null,
                 card = null,
                 secureNote = null,
+                bankAccount = null,
+                driversLicense = null,
+                passport = null,
                 favorite = false,
                 reprompt = CipherRepromptType.NONE,
                 organizationUseTotp = false,
@@ -1104,11 +1207,11 @@ class VaultAddItemStateExtensionsTest {
                 fields = emptyList(),
                 passwordHistory = listOf(
                     PasswordHistoryView(
-                        password = "old_password",
+                        password = "password",
                         lastUsedDate = FIXED_CLOCK.instant(),
                     ),
                     PasswordHistoryView(
-                        password = "password",
+                        password = "old_password",
                         lastUsedDate = FIXED_CLOCK.instant(),
                     ),
                     PasswordHistoryView(
@@ -1140,6 +1243,9 @@ private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     identity = null,
     card = null,
     secureNote = null,
+    bankAccount = null,
+    driversLicense = null,
+    passport = null,
     favorite = false,
     reprompt = CipherRepromptType.PASSWORD,
     organizationUseTotp = false,

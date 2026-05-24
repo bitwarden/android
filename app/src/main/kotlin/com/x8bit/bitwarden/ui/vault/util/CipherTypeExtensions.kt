@@ -13,4 +13,7 @@ fun CipherType.toVaultItemCipherType(): VaultItemCipherType =
         CipherType.CARD -> VaultItemCipherType.CARD
         CipherType.IDENTITY -> VaultItemCipherType.IDENTITY
         CipherType.SSH_KEY -> VaultItemCipherType.SSH_KEY
+        CipherType.BANK_ACCOUNT -> VaultItemCipherType.BANK_ACCOUNT
+        CipherType.DRIVERS_LICENSE -> VaultItemCipherType.DRIVERS_LICENSE
+        CipherType.PASSPORT -> VaultItemCipherType.PASSPORT
     }

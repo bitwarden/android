@@ -133,6 +133,36 @@ class VaultItemListingStateExtensionsTest {
     }
 
     @Test
+    fun `toSearchType should return BankAccounts when item type is BankAccount`() {
+        val expected = SearchType.Vault.BankAccounts
+        val itemType = VaultItemListingState.ItemListingType.Vault.BankAccount
+
+        val result = itemType.toSearchType()
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `toSearchType should return Licenses when item type is License`() {
+        val expected = SearchType.Vault.Licenses
+        val itemType = VaultItemListingState.ItemListingType.Vault.License
+
+        val result = itemType.toSearchType()
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `toSearchType should return Passports when item type is Passport`() {
+        val expected = SearchType.Vault.Passports
+        val itemType = VaultItemListingState.ItemListingType.Vault.Passport
+
+        val result = itemType.toSearchType()
+
+        assertEquals(expected, result)
+    }
+
+    @Test
     fun `toVaultItemCipherType should return the correct response`() {
         val itemListingTypes = listOf(
             VaultItemListingState.ItemListingType.Vault.Card,
@@ -141,6 +171,9 @@ class VaultItemListingStateExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.Login,
             VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId"),
             VaultItemListingState.ItemListingType.Vault.SshKey,
+            VaultItemListingState.ItemListingType.Vault.BankAccount,
+            VaultItemListingState.ItemListingType.Vault.License,
+            VaultItemListingState.ItemListingType.Vault.Passport,
             VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId"),
         )
 
@@ -154,6 +187,9 @@ class VaultItemListingStateExtensionsTest {
                 VaultItemCipherType.LOGIN,
                 VaultItemCipherType.LOGIN,
                 VaultItemCipherType.SSH_KEY,
+                VaultItemCipherType.BANK_ACCOUNT,
+                VaultItemCipherType.DRIVERS_LICENSE,
+                VaultItemCipherType.PASSPORT,
                 VaultItemCipherType.LOGIN,
             ),
             result,

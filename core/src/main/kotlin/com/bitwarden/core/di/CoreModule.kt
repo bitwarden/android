@@ -1,10 +1,14 @@
 package com.bitwarden.core.di
 
+import com.bitwarden.core.data.manager.BuildInfoManager
+import com.bitwarden.core.data.serializer.BigDecimalSerializer
 import com.bitwarden.core.data.serializer.InstantSerializer
+import com.bitwarden.core.data.serializer.SafeListSerializer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.contextual
@@ -20,8 +24,9 @@ object CoreModule {
 
     @Provides
     @Singleton
-    fun providesJson(): Json = Json {
-
+    fun providesJson(
+        buildInfoManager: BuildInfoManager,
+    ): Json = Json {
         // If there are keys returned by the server not modeled by a serializable class,
         // ignore them.
         // This makes additive server changes non-breaking.
@@ -31,6 +36,8 @@ object CoreModule {
         explicitNulls = false
         serializersModule = SerializersModule {
             contextual(InstantSerializer())
+            contextual(BigDecimalSerializer())
+            contextual(List::class) { args -> SafeListSerializer(args.first()) }
         }
 
         // Respect model default property values.
@@ -38,6 +45,10 @@ object CoreModule {
 
         // Allow trailing commas in JSON objects and arrays.
         allowTrailingComma = true
+
+        // Hide any sensitive data in exceptions when not using debug builds.
+        @OptIn(ExperimentalSerializationApi::class)
+        exceptionsWithDebugInfo = buildInfoManager.isDevBuild
     }
 
     @Provides

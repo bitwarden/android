@@ -11,6 +11,7 @@
     <string name="copy_password">Kopiuj hasło</string>
     <string name="copy_username">Kopiuj nazwę użytkownika</string>
     <string name="delete">Usuń</string>
+    <string name="preview">Podgląd</string>
     <string name="deleting">Usuwanie…</string>
     <string name="do_you_really_want_to_delete">Czy na pewno chcesz usunąć? Tej operacji nie można cofnąć.</string>
     <string name="edit">Edytuj</string>
@@ -172,7 +173,7 @@
     <string name="autofill_noun">Autouzupełnianie</string>
     <string name="autofill_verb">Autouzupełnianie</string>
     <string name="autofill_or_view">Co chcesz zrobić z elementem?</string>
-    <string name="search">Szukaj</string>
+    <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Szukaj %1$s</string>
     <string name="learn_org">Dowiedz się więcej o organizacjach</string>
     <string name="authenticator_app_title">Aplikacja uwierzytelniająca</string>
     <string name="enter_verification_code_app">Wpisz 6-cyfrowy kod weryfikacyjny z aplikacji uwierzytelniającej.</string>
@@ -190,7 +191,7 @@
     <string name="attachments">Załączniki</string>
     <string name="unable_to_download_file">Nie można pobrać pliku.</string>
     <string name="downloading">Pobieranie…</string>
-    <string name="attachment_large_warning">Załącznik ma rozmiar %1$s. Czy na pewno chcesz go pobrać na urządzenie?</string>
+    <string name="attachment_large_warning">Załącznik ma rozmiar <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Czy chcesz go pobrać?</string>
     <string name="authenticator_key">Klucz uwierzytelniający</string>
     <string name="verification_code_totp">Kod weryfikacyjny (TOTP)</string>
     <string name="authenticator_key_added">Klucz uwierzytelniający został dodany.</string>
@@ -200,13 +201,14 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="copy_totp">Kopiuj kod TOTP</string>
     <string name="copy_totp_automatically_description">Automatycznie kopiuje kod TOTP do schowka podczas autouzupełniania.</string>
     <string name="copy_totp_automatically">Kopiuj kod TOTP automatycznie</string>
-    <string name="premium_required">Konto premium jest wymagane, aby skorzystać z tej funkcji.</string>
+    <string name="premium_required">Konto Premium jest wymagane, aby skorzystać z tej funkcji.</string>
     <string name="attachment_deleted">Załącznik został usunięty</string>
     <string name="attachments_unavailable">Załączniki są niedostępne</string>
-    <string name="attachments_are_a_premium_feature">Attachments are a Premium feature. Your current plan does not include access to this feature.</string>
+    <string name="attachments_are_a_premium_feature">Załączniki są funkcją Premium. Twój obecny plan nie zawiera tej funkcji.</string>
     <string name="choose_file">Wybierz plik</string>
     <string name="file">Plik</string>
     <string name="no_file_chosen">Nie wybrano pliku</string>
+    <string name="file_name">Nazwa pliku</string>
     <string name="no_attachments">Brak załączników.</string>
     <string name="file_source">Źródło pliku</string>
     <string name="max_file_size">Maksymalny rozmiar pliku to 100 MB.</string>
@@ -228,6 +230,9 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="copy_security_code">Kopiuj kod zabezpieczający</string>
     <string name="number">Numer</string>
     <string name="security_code">Kod zabezpieczający</string>
+    <string name="scan_card">Zeskanuj kartę</string>
+    <string name="scan_card_instruction">Umieść kartę w ramce, aby ją zeskanować.</string>
+    <string name="hold_steady_and_ensure_all_card_details_are_visible">Trzymaj kartę nieruchomo i upewnij się, że wszystkie dane są dobrze widoczne</string>
     <string name="type_card">Karta</string>
     <string name="type_identity">Tożsamość</string>
     <string name="type_login">Dane logowania</string>
@@ -239,6 +244,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="august">Sierpień</string>
     <string name="brand">Wydawca</string>
     <string name="card_details">Szczegóły karty</string>
+    <string name="card_scanned">Karta została zeskanowana</string>
     <string name="cardholder_name">Właściciel karty</string>
     <string name="city_town">Miasto</string>
     <string name="company">Firma</string>
@@ -293,7 +299,6 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="field_type_text">Tekst</string>
     <string name="select_type_field">Jakiego rodzaju pole niestandardowe chcesz dodać?</string>
     <string name="remove">Usuń</string>
-    <string name="new_uri">Nowy URI</string>
     <string name="add_website">Dodaj stronę internetową</string>
     <string name="base_domain">Domena podstawowa</string>
     <string name="default_text">Domyślne (%1$s)</string>
@@ -383,6 +388,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="capitalize">Wielkie litery</string>
     <string name="include_number">Cyfry</string>
     <string name="download">Pobierz</string>
+    <string name="download_file">Pobierz plik</string>
     <string name="login_expired">Twoja sesja wygasła.</string>
     <string name="biometrics_direction">Weryfikacja biometryczna</string>
     <string name="device_verification">Weryfikacja urządzenia</string>
@@ -501,7 +507,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="about_send">O wysyłkach</string>
     <string name="hide_email">Ukryj mój adres e-mail przed odbiorcami</string>
     <string name="send_options_policy_in_effect">Co najmniej jedna zasada organizacji wpływa na ustawienia wysyłek.</string>
-    <string name="send_file_premium_required">Darmowe konta są ograniczone do udostępniania tylko tekstu. Konto premium jest wymagane do udostępniania plików.</string>
+    <string name="send_file_premium_required">Darmowe konta są ograniczone do udostępniania tylko tekstu. Konto Premium jest wymagane do udostępniania plików.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Udostępnianie użytkownikom jest funkcją Premium. Twój obecny plan nie zawiera tej funkcji.</string>
     <string name="password_prompt">Potwierdź hasłem głównym</string>
     <string name="password_confirmation">Potwierdź hasło główne</string>
@@ -512,10 +518,10 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="remove_master_password">Usuń hasło główne</string>
     <string name="leave_organization">Opuść organizację</string>
     <string name="leave_organization_name">Opuścić organizację %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Czy na pewno chcesz opuścić organizację %1$s?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Czy na pewno chcesz opuścić organizację?</string>
     <string name="leave_organization_button">Opuść organizację %1$s</string>
-    <string name="leave_organization_warning">Odrzucenie spowoduje, że Twoje osobiste elementy pozostaną na koncie, ale stracisz dostęp do udostępnionych elementów oraz funkcji organizacji.\n\nSkontaktuj się z administratorem, aby odzyskać dostęp.</string>
-    <string name="how_to_manage_my_vault">Jak zarządzać sejfem</string>
+    <string name="leave_organization_warning">Odrzucenie spowoduje, że Twoje osobiste elementy pozostaną na koncie, ale stracisz dostęp do udostępnionych elementów oraz funkcji organizacji. <annotation link="learnMore">Dowiedz się więcej</annotation></string>
+    <string name="contact_your_admin_to_regain_access">Skontaktuj się z administratorem, aby odzyskać dostęp.</string>
     <string name="fido2_authenticate_web_authn">Uwierzytelnianie WebAuthn</string>
     <string name="fido2_return_to_app">Wróć do aplikacji</string>
     <string name="reset_password_auto_enroll_invite_warning">Zasada organizacji umożliwia administratorom organizacji zmianę Twojego hasła głównego.</string>
@@ -669,8 +675,10 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="you_will_be_notified_once_approved">Zostaniesz powiadomiony po potwierdzeniu.</string>
     <string name="trouble_logging_in">Problem z logowaniem?</string>
     <string name="block_auto_fill">Blokuj autouzupełnianie</string>
+    <string name="no_uris_blocked">Brak zablokowanych URI</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Autouzupełnianie będzie zablokowane dla tych URI.</string>
-    <string name="new_blocked_uri">Nowy blokowany URI</string>
+    <string name="edit_blocked_uri">Edytuj zablokowany URI</string>
+    <string name="new_blocked_uri">Nowy zablokowany URI</string>
     <string name="invalid_format_use_https_http_or_android_app">Format jest nieprawidłowy. Użyj https://, http://, lub androidapp://</string>
     <string name="enter_uri">Wpisz URI</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Format: %1$s. Oddziel wiele URI przecinkiem.</string>
@@ -775,7 +783,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="write_this_password_down_and_keep_it_somewhere_safe">Zapisz to hasło i przechowuj je w bezpiecznym miejscu.</string>
     <string name="learn_about_other_ways_to_prevent_account_lockout">Dowiedz się więcej o innych sposobach zapobiegania blokowaniu konta</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Dowiedz się więcej o sposobach zapobiegania blokowaniu konta</annotation></string>
-    <string name="help_with_server_geolocations">Pomoc z geolokalizacjami serwera.</string>
+    <string name="help_with_server_geolocations">Pomoc z geolokalizacjami serwera</string>
     <string name="email_address_required">Adres e-mail (wymagane)</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Kliknij link w wiadomości, aby zweryfikować adres e-mail i utworzyć konto.</string>
     <string name="change_email_address">Zmień adres e-mail</string>
@@ -847,7 +855,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="fill_out_the_form_and_import_your_saved_password_file">Wypełnij formularz i <annotation emphasis="bold">zaimportuj plik z hasłami.</annotation></string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Upewnij się, że <annotation emphasis="bold">usunąłeś zapisany plik.</annotation></string>
     <string name="need_help_check_out_import_help">Potrzebujesz pomocy? Sprawdź <annotation link="importHelp">pomoc dotyczącą importowania</annotation>.</string>
-    <string name="import_help">import help</string>
+    <string name="import_help">Pomoc dotyczącą importowania</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Zapisz wyeksportowany plik</annotation> na komputerze.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">To nie jest serwer Bitwarden. Sprawdź dostawcę lub zaktualizuj serwer.</string>
     <string name="syncing_logins_loading_message">Synchronizacja danych logowania…</string>
@@ -887,7 +895,10 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="copy_company">Kopiuj firmę</string>
     <string name="copy_ssn">Kopiuj numer PESEL</string>
     <string name="copy_passport_number">Kopiuj numer paszportu</string>
+    <string name="copy_first_name">Kopiuj imię</string>
+    <string name="copy_last_name">Kopiuj nazwisko</string>
     <string name="copy_license_number">Kopiuj numer prawa jazdy</string>
+    <string name="copy_middle_name">Kopiuj drugie imię</string>
     <string name="copy_email">Kopiuj adres e-mail</string>
     <string name="copy_phone">Kopiuj numer telefonu</string>
     <string name="copy_address">Kopiuj adres</string>
@@ -951,6 +962,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Operacja klucza dostępu nie powiodła się, ponieważ nie wybrano żadnego elementu.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operacja klucza dostępu nie powiodła się, ponieważ żądanie nie jest obsługiwane.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operacja hasła nie powiodła się, ponieważ element nie istnieje.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Operacja hasła nie powiodła się, ponieważ element nie ma prawidłowego hasła.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Operacja hasła nie powiodła się, ponieważ nie wybrano elementu.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Operacja nie powiodła się, ponieważ żądanie jest nieprawidłowe.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Operacja nie powiodła się, ponieważ żądanie jest nieobsługiwane.</string>
@@ -975,7 +987,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="enable_flight_recorder_title">Włącz rejestrator zdarzeń</string>
     <string name="recorded_logs_title">Zarejestrowane logi</string>
     <string name="no_logs_recorded">Brak zarejestrowanych logów</string>
-    <string name="experiencing_an_issue">Doświadczasz problemu?</string>
+    <string name="experiencing_an_issue">Doświadczasz problemów?</string>
     <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Włącz tymczasowy rejestrowanie, aby zbierać i sprawdzać logi lokalnie. Po włączeniu tej opcji możliwe jest rejestrowanie stanów aplikacji i żądań sieciowych — żadnych poufnych informacji z sejfu.</string>
     <string name="to_get_started_set_a_logging_duration">Aby rozpocząć, ustaw czas rejestrowania logów. Rejestrowanie zostanie automatycznie wyłączone po tym okresie, dając czas na zapisanie aktywności podczas odtwarzania wszelkich problemów.</string>
     <string name="logs_will_be_automatically_deleted_after_30_days">Logi zostaną automatycznie usunięte po 30 dniach. Bitwarden może uzyskać dostęp do logów tylko wtedy, gdy je udostępnisz.</string>
@@ -1083,6 +1095,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="security">Zabezpieczenia</string>
     <string name="too_many_failed_biometric_attempts">Zbyt wiele prób logowania za pomocą biometrii.</string>
     <string name="version">Wersja</string>
+    <string name="version_x" comment="%1$s is the version string (e.g. 2025.1.0 (1234)).">Wersja: %1$s</string>
     <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">Dowiedz się więcej o tym, jak używać aplikacji Bitwarden Authenticator.</string>
     <string name="key">Klucz</string>
     <string name="create_verification_code">Utwórz kod weryfikacyjny</string>
@@ -1201,14 +1214,14 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="resending">Ponowne wysyłanie</string>
     <string name="you_left_the_organization">Nie należysz już do tej organizacji</string>
     <string name="transfer_items_to_org">Przenieś elementy do organizacji %1$s</string>
-    <string name="transfer_items_description">Organizacja %1$s wymaga, aby wszystkie elementy były ich własnością. Kliknij „Akceptuj”, aby przenieść własność swoich elementów.</string>
+    <string name="transfer_items_description">Organizacja <annotation arg="0">%1$s</annotation> wymaga, aby wszystkie elementy były ich własnością. Kliknij „Akceptuj”, aby przenieść własność swoich elementów. <annotation link="learnMore">Dowiedz się więcej</annotation></string>
     <string name="decline_and_leave">Odrzuć i wyjdź</string>
     <string name="why_am_i_seeing_this">Dlaczego to widzę?</string>
     <string name="migrating_items_to_x">Przenoszenie elementów do organizacji %s</string>
     <string name="failed_to_migrate_items_to_x">Nie udało się przenieść elementów do organizacji %s</string>
     <string name="search_archive">Szukaj w archiwum</string>
     <string name="archive_noun">Archiwum</string>
-    <string name="archive_verb">Archiwum</string>
+    <string name="archive_verb">Archiwizuj</string>
     <string name="unarchive">Usuń z archiwum</string>
     <string name="archived">Zarchiwizowano</string>
     <string name="hidden_items">Ukryte elementy</string>
@@ -1219,8 +1232,11 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="item_moved_to_archived">Element został przeniesiony do archiwum</string>
     <string name="item_moved_to_vault">Element został przeniesiony do archiwum</string>
     <string name="archive_unavailable">Archiwum jest niedostępne</string>
-    <string name="archiving_items_is_a_premium_feature">Archiwizowanie elementów jest funkcją Premium. Twój obecny plan nie obejmuje dostępu do tej funkcji.</string>
+    <string name="archiving_items_is_a_premium_feature">Archiwizowanie elementów jest funkcją Premium. Twój obecny plan nie zawiera tej funkcji.</string>
     <string name="upgrade_to_premium">Kup konto Premium</string>
+    <string name="plan">Plan</string>
+    <string name="unlock_advanced_security_features">Odblokuj zaawansowane funkcje bezpieczeństwa</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Plan Premium zapewnia więcej narzędzi, które pomogą Ci zachować bezpieczeństwo i kontrolę.</string>
     <string name="this_item_is_archived">Element jest zarchiwizowany.</string>
     <string name="introducing_archive">Przedstawiamy archiwum</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Zachowaj elementy, których teraz nie potrzebujesz.</string>
@@ -1240,5 +1256,139 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="launch_browser">Uruchom przeglądarkę</string>
     <string name="continue_without_syncing">Kontynuuj bez synchronizacji</string>
     <string name="external_link">Link zewnętrzny</string>
-    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
+    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s (link zewnętrzny)</string>
+    <string name="preview_not_available_for_files">Podgląd pliku %1$s jest niedostępny. Nadal możesz go pobrać na urządzenie.</string>
+    <string name="this_file_is_too_large_to_preview">Plik jest zbyt duży, aby go wyświetlić. Nadal możesz go pobrać na urządzenie.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden nie mógł odszyfrować pliku, więc nie można wyświetlić podglądu.</string>
+    <string name="preview_unavailable_for_this_file">Podgląd pliku jest niedostępny. Nadal możesz go pobrać na urządzenie.</string>
+    <string name="preview_unavailable">Podgląd jest niedostępny</string>
+    <string name="download_attachment">Pobierz załącznik</string>
+    <string name="upgraded_to_premium">Masz konto Premium</string>
+    <string name="you_now_have_access_to_all_advanced_security_features">Masz teraz dostęp do wszystkich zaawansowanych funkcji bezpieczeństwa.</string>
+    <string name="you_now_have_access_to_advanced_security_features_learn_more_about_premium">Masz teraz dostęp do zaawansowanych funkcji bezpieczeństwa. Dowiedz się więcej o tym, co zawiera plan Premium.</string>
+    <string name="confirming_your_upgrade">Potwierdzanie ulepszenia…</string>
+    <string name="upgrade_pending">Trwa ulepszanie</string>
+    <string name="upgrade_pending_message">Ulepszenie jest przetwarzane. Do czasu jego zakończenia będziesz korzystać z darmowego planu. Zsynchronizuj, aby sprawdzić status lub kontynuuj. Aktualizacja nastąpi automatycznie.</string>
+    <string name="unlock_premium_features">Odblokuj więcej zaawansowanych funkcji za pomocą planu Premium.</string>
+    <string name="per_month">/ miesiąc</string>
+    <string name="built_in_authenticator">Wbudowana aplikacja uwierzytelniająca</string>
+    <string name="emergency_access">Dostęp awaryjny</string>
+    <string name="secure_file_storage">Bezpieczne przechowywanie plików</string>
+    <string name="breach_monitoring">Monitorowanie naruszeń</string>
+    <string name="upgrade_now">Ulepsz teraz</string>
+    <string name="stripe_checkout_footer">Zostaniesz przekierowany do płatności Stripe, aby zakończyć zakup.</string>
+    <string name="opening_checkout">Otwieranie zamówienia…</string>
+    <string name="secure_checkout_didnt_load">Nie udało się załadować płatności</string>
+    <string name="trouble_opening_payment_page">Mieliśmy problem z otwarciem płatności. Spróbuj ponownie.</string>
+    <string name="payment_not_received_yet">Nie otrzymano jeszcze płatności</string>
+    <string name="return_to_stripe_to_finish">Wróć do Stripe w przeglądarce, aby zakończyć ulepszenie planu.</string>
+    <string name="go_back">Wróć</string>
+    <string name="allow_camera_access">Zezwalaj na dostęp do aparatu</string>
+    <string name="to_scan_your_card_we_need_access_to_your_camera">Aby zeskanować kartę, potrzebujemy dostępu do aparatu. Ustawienia te można zmienić w dowolnym momencie w ustawieniach urządzenia.</string>
+    <string name="show_next_code">Pokaż następny kod</string>
+    <string name="see_upcoming_codes_in_the_list">Zobacz nadchodzące kody na liście</string>
+    <string name="next_code_x">Następny kod, %1$s</string>
+    <string name="archive_item">Archiwizuj element</string>
+    <string name="once_archived_this_item_will_be_excluded">Zarchiwizowany element zostanie wykluczony z wyników wyszukiwania i sugestii autouzupełniania.</string>
+    <string name="pricing_unavailable">Cennik jest niedostępny</string>
+    <string name="current_plan">Obecny plan</string>
+    <string name="premium_plan_name">Premium</string>
+    <string name="billing_amount">Kwota płatności</string>
+    <string name="storage_cost">Koszt przestrzeni</string>
+    <string name="discount">Zniżka</string>
+    <string name="estimated_tax">Podatek</string>
+    <string name="billing_rate_per_year">%1$s / rok</string>
+    <string name="billing_rate_per_month">%1$s / miesiąc</string>
+    <string name="manage_plan">Zarządzaj planem</string>
+    <string name="cancel_premium">Anuluj Konto Premium</string>
+    <string name="cancel_now">Anuluj teraz</string>
+    <string name="cancel_premium_confirmation">Będziesz mieć dostęp do funkcji Premium do %1$s.</string>
+    <string name="subscription_status_active">Aktywny</string>
+    <string name="subscription_status_canceled">Anulowano</string>
+    <string name="subscription_status_overdue_payment">Zaległa płatność</string>
+    <string name="subscription_status_past_due">Termin przekroczony</string>
+    <string name="subscription_status_paused">Wstrzymano</string>
+    <string name="premium_next_charge_summary">Następna płatność %2$s w kwocie %1$s USD.</string>
+    <string name="subscription_canceled_description">Twoja subskrypcja została anulowana %1$s. Zasubskrybuj ponownie, aby kontynuować korzystanie z funkcji Premium.</string>
+    <string name="subscription_overdue_description">Nie mogliśmy przetworzyć płatności. Zaktualizuj metodę płatności przed %1$s.</string>
+    <plurals name="subscription_past_due_description">
+        <item quantity="one">Masz %1$d dzień od daty wygaśnięcia subskrypcji na uregulowanie płatności. Zapłać zaległe faktury do %2$s.</item>
+        <item quantity="few">Masz %1$d dni od daty wygaśnięcia subskrypcji na uregulowanie płatności. Zapłać zaległe faktury do %2$s.</item>
+        <item quantity="many">Masz %1$d dni od daty wygaśnięcia subskrypcji na uregulowanie płatności. Zapłać zaległe faktury do %2$s.</item>
+        <item quantity="other">Masz %1$d dnia od daty wygaśnięcia subskrypcji na uregulowanie płatności. Zapłać zaległe faktury do %2$s.</item>
+    </plurals>
+    <string name="subscription_paused_description">Subskrypcja jest wstrzymana. Wznów ją, aby kontynuować korzystanie z funkcji Premium.</string>
+    <string name="loading_subscription">Ładowanie subskrypcji…</string>
+    <string name="loading_portal">Ładowanie…</string>
+    <string name="portal_error">Coś poszło nie tak</string>
+    <string name="trouble_loading_portal">Mieliśmy problem z załadowaniem płatności. Spróbuj ponownie.</string>
+    <string name="subscription_error">Błąd subskrypcji</string>
+    <string name="trouble_loading_subscription">Nie mogliśmy załadować szczegółów subskrypcji. Spróbuj ponownie.</string>
+    <string name="view_bank_account">Pokaż konto bankowe</string>
+    <string name="view_license">Pokaż prawo jazdy</string>
+    <string name="view_passport">Pokaż paszport</string>
+    <string name="new_bank_account">Nowe konto bankowe</string>
+    <string name="new_license">Nowe prawo jazdy</string>
+    <string name="new_passport">Nowy paszport</string>
+    <string name="edit_bank_account">Edytuj konto bankowe</string>
+    <string name="edit_license">Edytuj prawo jazdy</string>
+    <string name="edit_passport">Edytuj paszport</string>
+    <string name="type_bank_account">Konto bankowe</string>
+    <string name="type_license">Prawo jazdy</string>
+    <string name="type_passport">Paszport</string>
+    <string name="bank_accounts">Konta bankowe</string>
+    <string name="passports">Paszporty</string>
+    <string name="bank_name">Nazwa banku</string>
+    <string name="name_on_account">Nazwa konta</string>
+    <string name="account_type">Rodzaj konta</string>
+    <string name="account_number">Numer konta</string>
+    <string name="routing_number">Numer rozliczeniowy</string>
+    <string name="branch_number">Identyfikator banku</string>
+    <string name="swift_code">Kod SWIFT</string>
+    <string name="iban">Numer IBAN</string>
+    <string name="bank_contact_phone">Numer kontaktowy do banku</string>
+    <string name="copy_name_on_account">Kopiuj nazwę konta</string>
+    <string name="copy_account_number">Kopiuj numer konta</string>
+    <string name="copy_routing_number">Kopiuj numer rozliczeniowy</string>
+    <string name="copy_branch_number">Kopiuj identyfikator banku</string>
+    <string name="copy_pin">Kopiuj kod PIN</string>
+    <string name="copy_swift_code">Kopiuj kod SWIFT</string>
+    <string name="copy_iban">Kopiuj numer IBAN</string>
+    <string name="copy_bank_contact_phone">Kopiuj numer kontaktowy do banku</string>
+    <string name="checking">Standardowe</string>
+    <string name="savings">Oszczędnościowe</string>
+    <string name="certificate_of_deposit">Lokata</string>
+    <string name="line_of_credit">Kredytowe</string>
+    <string name="investment_brokerage">Maklerskie</string>
+    <string name="money_market">Kapitałowe</string>
+    <string name="issuing_country">Kraj wydający</string>
+    <string name="issuing_state">Rejon wydający</string>
+    <string name="license_class">Kategoria prawa jazdy</string>
+    <string name="surname">Nazwisko</string>
+    <string name="given_name">Imię</string>
+    <string name="date_of_birth">Data urodzenia</string>
+    <string name="nationality">Narodowość</string>
+    <string name="passport_type">Rodzaj paszportu</string>
+    <string name="issuing_authority">Organ wydający</string>
+    <string name="issue_date">Data wydania</string>
+    <string name="expiration_date">Data wygaśnięcia</string>
+    <string name="details">Szczegóły</string>
+    <string name="account_details">Szczegóły konta</string>
+    <string name="no_bank_accounts">Brak kont bankowych w sejfie.</string>
+    <string name="license_details">Szczegóły prawa jazdy</string>
+    <string name="licenses">Prawa jazdy</string>
+    <string name="no_licenses">Brak praw jazdy w sejfie.</string>
+    <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">Żądanie zostało przerwane, ponieważ aplikacja wymagała ponownego uwierzytelniania. Spróbuj ponownie.</string>
+    <string name="passport_details">Szczegóły paszportu</string>
+    <string name="sex">Płeć</string>
+    <string name="birth_place">Miejsce urodzenia</string>
+    <string name="national_identification_number">Numer PESEL</string>
+    <string name="copy_national_identification_number">Kopiuj numer PESEL</string>
+    <string name="access_your_local_network">Dostęp do sieci lokalnej</string>
+    <string name="local_network_access_required">Local network access required</string>
+    <string name="ask_again_later">Zapytaj później</string>
+    <string name="enable_local_network_access">Włącz dostęp do sieci lokalnej</string>
+    <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Aplikacja Bitwarden wymaga dostępu do sieci lokalnej, aby zsynchronizować się z serwerem. Bez tego uprawnienia aplikacja nie będzie mogła nawiązać połączenia.</string>
+    <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Without this permission, Bitwarden won’t be able to connect and sync with your server. You can enable this in your device settings.</string>
+    <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Your request was interrupted because the app needs local network access. You can enable this in your device settings.</string>
 </resources>

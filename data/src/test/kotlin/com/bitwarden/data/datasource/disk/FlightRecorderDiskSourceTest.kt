@@ -6,6 +6,7 @@ import com.bitwarden.core.data.util.assertJsonEquals
 import com.bitwarden.core.di.CoreModule
 import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
 import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.Test
 
 class FlightRecorderDiskSourceTest {
     private val fakeSharedPreferences = FakeSharedPreferences()
-    private val json = CoreModule.providesJson()
+    private val json = CoreModule.providesJson(buildInfoManager = mockk(relaxed = true))
 
     private val flightRecorderDiskSource = FlightRecorderDiskSourceImpl(
         sharedPreferences = fakeSharedPreferences,

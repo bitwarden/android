@@ -11,7 +11,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
@@ -31,11 +32,9 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPassword
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
-import kotlinx.collections.immutable.toImmutableList
 
 private const val TOTP_TYPES_COUNT: Int = 1
 private const val HIDDEN_TYPES_COUNT: Int = 2
-private const val TRASH_TYPES_COUNT: Int = 1
 
 /**
  * Content view for the [VaultScreen].
@@ -49,7 +48,7 @@ fun VaultContent(
     modifier: Modifier = Modifier,
 ) {
     // Handles the master password prompt for the row click
-    var masterPasswordRepromptItem by remember {
+    var masterPasswordRepromptItem by rememberSaveable {
         mutableStateOf<VaultState.ViewState.VaultItem?>(value = null)
     }
     masterPasswordRepromptItem?.let { action ->
@@ -62,7 +61,7 @@ fun VaultContent(
         )
     }
     // Handles the master password prompt for the overflow clicks
-    var overflowMasterPasswordRepromptAction by remember {
+    var overflowMasterPasswordRepromptAction by rememberSaveable {
         mutableStateOf<ListingItemOverflowAction.VaultAction?>(value = null)
     }
     overflowMasterPasswordRepromptAction?.let { action ->
@@ -74,6 +73,31 @@ fun VaultContent(
             onDismissRequest = { overflowMasterPasswordRepromptAction = null },
         )
     }
+
+    var overflowSpeedBumpAction: ListingItemOverflowAction.VaultAction? by rememberSaveable {
+        mutableStateOf(value = null)
+    }
+    overflowSpeedBumpAction?.let { action ->
+        action
+            .speedBump
+            ?.let { speedBump ->
+                BitwardenTwoButtonDialog(
+                    twoButtonDialogData = speedBump,
+                    onConfirmClick = {
+                        overflowSpeedBumpAction = null
+                        vaultHandlers.overflowOptionClick(action)
+                    },
+                    onDismissClick = { overflowSpeedBumpAction = null },
+                    onDismissRequest = { overflowSpeedBumpAction = null },
+                )
+            }
+            ?: run {
+                // If we somehow get here and there is no speed bump, then we should keep on going.
+                overflowSpeedBumpAction = null
+                vaultHandlers.overflowOptionClick(action)
+            }
+    }
+
     LazyColumn(
         modifier = modifier,
     ) {
@@ -157,12 +181,14 @@ fun VaultContent(
                             vaultHandlers.vaultItemClick(favoriteItem)
                         }
                     },
-                    overflowOptions = favoriteItem.overflowOptions.toImmutableList(),
+                    overflowOptions = favoriteItem.overflowOptions,
                     onOverflowOptionClick = { action ->
                         if (favoriteItem.shouldShowMasterPasswordReprompt &&
                             action.requiresPasswordReprompt
                         ) {
                             overflowMasterPasswordRepromptAction = action
+                        } else if (action.speedBump != null) {
+                            overflowSpeedBumpAction = action
                         } else {
                             vaultHandlers.overflowOptionClick(action)
                         }
@@ -233,6 +259,26 @@ fun VaultContent(
             }
         }
 
+        if (state.showBankAccountGroup) {
+            item(key = "bank_accounts_group") {
+                BitwardenGroupItem(
+                    startIcon = IconData.Local(
+                        iconRes = BitwardenDrawable.ic_payment_card,
+                        testTag = "BankAccountCipherIcon",
+                    ),
+                    label = stringResource(id = BitwardenString.type_bank_account),
+                    supportingLabel = state.bankAccountItemsCount.toString(),
+                    onClick = vaultHandlers.bankAccountGroupClick,
+                    cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
+                    modifier = Modifier
+                        .animateItem()
+                        .fillMaxWidth()
+                        .testTag("BankAccountFilter")
+                        .standardHorizontalMargin(),
+                )
+            }
+        }
+
         item(key = "identities_group") {
             BitwardenGroupItem(
                 startIcon = IconData.Local(
@@ -249,6 +295,46 @@ fun VaultContent(
                     .testTag("IdentityFilter")
                     .standardHorizontalMargin(),
             )
+        }
+
+        if (state.showLicenseGroup) {
+            item(key = "licenses_group") {
+                BitwardenGroupItem(
+                    startIcon = IconData.Local(
+                        iconRes = BitwardenDrawable.ic_id_card,
+                        testTag = "LicenseCipherIcon",
+                    ),
+                    label = stringResource(id = BitwardenString.type_license),
+                    supportingLabel = state.licenseItemsCount.toString(),
+                    onClick = vaultHandlers.licenseGroupClick,
+                    cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
+                    modifier = Modifier
+                        .animateItem()
+                        .fillMaxWidth()
+                        .testTag("LicenseFilter")
+                        .standardHorizontalMargin(),
+                )
+            }
+        }
+
+        if (state.showPassportGroup) {
+            item(key = "passports_group") {
+                BitwardenGroupItem(
+                    startIcon = IconData.Local(
+                        iconRes = BitwardenDrawable.ic_passport,
+                        testTag = "PassportCipherIcon",
+                    ),
+                    label = stringResource(id = BitwardenString.type_passport),
+                    supportingLabel = state.passportItemsCount.toString(),
+                    onClick = vaultHandlers.passportGroupClick,
+                    cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
+                    modifier = Modifier
+                        .animateItem()
+                        .fillMaxWidth()
+                        .testTag("PassportFilter")
+                        .standardHorizontalMargin(),
+                )
+            }
         }
 
         item(key = "notes_group") {
@@ -359,12 +445,14 @@ fun VaultContent(
                             vaultHandlers.vaultItemClick(noFolderItem)
                         }
                     },
-                    overflowOptions = noFolderItem.overflowOptions.toImmutableList(),
+                    overflowOptions = noFolderItem.overflowOptions,
                     onOverflowOptionClick = { action ->
                         if (noFolderItem.shouldShowMasterPasswordReprompt &&
                             action.requiresPasswordReprompt
                         ) {
                             overflowMasterPasswordRepromptAction = action
+                        } else if (action.speedBump != null) {
+                            overflowSpeedBumpAction = action
                         } else {
                             vaultHandlers.overflowOptionClick(action)
                         }
@@ -425,11 +513,7 @@ fun VaultContent(
         item(key = "hidden_items_header") {
             BitwardenListHeaderText(
                 label = stringResource(id = BitwardenString.hidden_items),
-                supportingLabel = if (state.archiveEnabled) {
-                    HIDDEN_TYPES_COUNT.toString()
-                } else {
-                    TRASH_TYPES_COUNT.toString()
-                },
+                supportingLabel = HIDDEN_TYPES_COUNT.toString(),
                 modifier = Modifier
                     .animateItem()
                     .fillMaxWidth()
@@ -439,23 +523,21 @@ fun VaultContent(
             Spacer(modifier = Modifier.height(height = 8.dp))
         }
 
-        if (state.archiveEnabled) {
-            item(key = "archive_group") {
-                BitwardenGroupItem(
-                    startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_archive),
-                    endIcon = state.archiveEndIcon?.let { IconData.Local(iconRes = it) },
-                    label = stringResource(id = BitwardenString.archive_noun),
-                    subLabel = state.archiveSubText?.invoke(),
-                    supportingLabel = state.archivedItemsCount?.toString().orEmpty(),
-                    onClick = vaultHandlers.archiveClick,
-                    cardStyle = CardStyle.Top(dividerPadding = 56.dp),
-                    modifier = Modifier
-                        .animateItem()
-                        .fillMaxWidth()
-                        .testTag(tag = "ArchiveFilter")
-                        .standardHorizontalMargin(),
-                )
-            }
+        item(key = "archive_group") {
+            BitwardenGroupItem(
+                startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_archive),
+                endIcon = state.archiveEndIcon?.let { IconData.Local(iconRes = it) },
+                label = stringResource(id = BitwardenString.archive_noun),
+                subLabel = state.archiveSubText?.invoke(),
+                supportingLabel = state.archivedItemsCount?.toString().orEmpty(),
+                onClick = vaultHandlers.archiveClick,
+                cardStyle = CardStyle.Top(dividerPadding = 56.dp),
+                modifier = Modifier
+                    .animateItem()
+                    .fillMaxWidth()
+                    .testTag(tag = "ArchiveFilter")
+                    .standardHorizontalMargin(),
+            )
         }
 
         item(key = "trash_group") {
@@ -464,7 +546,7 @@ fun VaultContent(
                 label = stringResource(id = BitwardenString.trash),
                 supportingLabel = state.trashItemsCount.toString(),
                 onClick = vaultHandlers.trashClick,
-                cardStyle = if (state.archiveEnabled) CardStyle.Bottom else CardStyle.Full,
+                cardStyle = CardStyle.Bottom,
                 modifier = Modifier
                     .animateItem()
                     .fillMaxWidth()
@@ -487,6 +569,27 @@ private fun ActionCard(
     modifier: Modifier = Modifier,
 ) {
     when (actionCardState) {
+        VaultState.ActionCardState.UpgradedToPremium -> {
+            BitwardenActionCard(
+                cardTitle = stringResource(id = BitwardenString.upgraded_to_premium),
+                cardSubtitle = stringResource(
+                    id = BitwardenString.you_now_have_access_to_all_advanced_security_features,
+                ),
+                actionText = stringResource(id = BitwardenString.learn_more),
+                isExternalLink = true,
+                leadingContent = {
+                    Icon(
+                        painter = rememberVectorPainter(id = BitwardenDrawable.ic_star),
+                        contentDescription = null,
+                        tint = BitwardenTheme.colorScheme.icon.secondary,
+                    )
+                },
+                onActionClick = { vaultHandlers.actionCardClick(actionCardState) },
+                onDismissClick = { vaultHandlers.dismissActionCardClick(actionCardState) },
+                modifier = modifier,
+            )
+        }
+
         VaultState.ActionCardState.UpgradePremium -> {
             BitwardenActionCard(
                 cardTitle = stringResource(

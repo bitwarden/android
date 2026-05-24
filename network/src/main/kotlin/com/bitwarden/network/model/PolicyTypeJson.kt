@@ -77,10 +77,22 @@ enum class PolicyTypeJson {
     DISABLE_PERSONAL_VAULT_EXPORT,
 
     /**
-     * Activate the auto-fill in the browser extension. Currently unused in mobile.
+     * Activate the autofill in the browser extension. Currently unused in mobile.
      */
     @SerialName("11")
     ACTIVATE_AUTOFILL,
+
+    /**
+     * Automatically logs members into apps using single sign-on.
+     */
+    @SerialName("12")
+    AUTOMATIC_APP_LOG_IN,
+
+    /**
+     * Removes members' access to the free Bitwarden Families sponsorship benefit.
+     */
+    @SerialName("13")
+    FREE_FAMILIES_SPONSORSHIP_POLICY,
 
     /**
      * Hides the setting to "Unlock with Pin".
@@ -95,18 +107,48 @@ enum class PolicyTypeJson {
     RESTRICT_ITEM_TYPES,
 
     /**
-     * Represents an unknown policy type.
-     *
-     * This is used for forward compatibility to handle new policy types that the client doesn't yet
-     * understand.
+     * Sets the default URI match detection strategy for autofill.
      */
-    @SerialName("-1")
-    UNKNOWN,
+    @SerialName("16")
+    URI_MATCH_DEFAULTS,
+
+    /**
+     * Sets the default behavior for the autotype feature.
+     */
+    @SerialName("17")
+    AUTOTYPE_DEFAULT_SETTING,
+
+    /**
+     * Automatically confirms invited users into the organization.
+     */
+    @SerialName("18")
+    AUTOMATIC_USER_CONFIRMATION,
+
+    /**
+     * Blocks account creation for users with email addresses on claimed domains.
+     */
+    @SerialName("19")
+    BLOCK_CLAIMED_DOMAIN_ACCOUNT_CREATION,
+
+    /**
+     * Displays an organization-configured banner message to members in their vault.
+     */
+    @SerialName("20")
+    ORGANIZATION_USER_NOTIFICATION,
+
+    /**
+     * Configures Send-related behavior: disabling Sends, email visibility, access controls,
+     * Send types, and deletion.
+     *
+     * Supersedes [`DisableSend`](Self::DisableSend) and [`SendOptions`](Self::SendOptions) when
+     * the `pm-31885-send-controls` feature flag is active on the server.
+     */
+    @SerialName("21")
+    SEND_CONTROLS,
 }
 
 @Keep
 private class PolicyTypeSerializer : BaseEnumeratedIntSerializer<PolicyTypeJson>(
     className = "PolicyTypeJson",
     values = PolicyTypeJson.entries.toTypedArray(),
-    default = PolicyTypeJson.UNKNOWN,
 )

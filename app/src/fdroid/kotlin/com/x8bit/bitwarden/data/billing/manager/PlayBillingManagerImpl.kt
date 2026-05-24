@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 /**
  * F-Droid implementation of [PlayBillingManager]. Always returns `true` since
- * F-Droid users are eligible for the premium upgrade flow.
+ * F-Droid users are eligible for the Premium upgrade flow.
  */
 @OmitFromCoverage
 @Suppress("UnusedParameter")

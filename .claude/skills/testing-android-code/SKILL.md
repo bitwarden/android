@@ -263,7 +263,6 @@ Common testing mistakes in Bitwarden. **For complete details and examples:** See
 - **Null stream testing** - Test null returns from ContentResolver operations
 - **bufferedMutableSharedFlow** - Use with `.onSubscription { emit(state) }` in Fakes
 - **Test factory methods** - Accept domain state types, not SavedStateHandle
-- **@Suppress("MaxLineLength")** - Only add when the `fun` declaration line **actually exceeds 100 chars** — do not copy the pattern blindly
 
 ---
 
@@ -282,6 +281,10 @@ module/src/testFixtures/kotlin/com/bitwarden/.../
 ├── base/Base*Test.kt
 └── model/*Util.kt
 ```
+
+### Test Constants Placement
+
+Declare test constants as top-level `private const val` at the **bottom** of the file, after the class closing brace. Do NOT use `companion object` for test constants.
 
 ### Test Naming
 

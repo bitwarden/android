@@ -94,9 +94,16 @@ ui/src/testFixtures/             # UI test utilities (BaseViewModelTest, BaseCom
 
 ## Lint & Static Analysis
 
+**IMPORTANT**: Prefer running detekt on modified files only — a full project scan is slow and unnecessary during development. The project supports a `-Pprecommit=true` flag that limits detekt to staged files.
+
+**IMPORTANT**: Always pipe detekt output through a filter to capture errors on the first run. Detekt prints violation details to stderr/stdout but Gradle can obscure them. Use the grep pattern below to see violations immediately.
+
 ```bash
-# Detekt (static analysis)
-./gradlew detekt
+# Detekt on staged files only (preferred during development)
+git add -u && ./gradlew -Pprecommit=true detekt 2>&1 | grep -E "FAILED|BUILD|Line |Rule |Signature|detekt" | head -40
+
+# Detekt on all files (full scan, use sparingly)
+./gradlew detekt 2>&1 | grep -E "FAILED|BUILD|Line |Rule |Signature|detekt" | head -40
 
 # Android Lint
 ./gradlew lint
@@ -104,6 +111,10 @@ ui/src/testFixtures/             # UI test utilities (BaseViewModelTest, BaseCom
 # Full validation suite (detekt + lint + tests + coverage)
 ./fastlane check
 ```
+
+### How `-Pprecommit=true` Works
+
+The root `build.gradle.kts` configures detekt tasks to use `git diff --name-only --cached` when this property is set, limiting analysis to staged files only. This is the same mechanism used by the project's pre-commit hook. Stage your changes with `git add` before running.
 
 ---
 

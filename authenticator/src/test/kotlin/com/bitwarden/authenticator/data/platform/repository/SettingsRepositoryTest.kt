@@ -169,6 +169,41 @@ class SettingsRepositoryTest {
     }
 
     @Test
+    fun `isShowNextCodeEnabled should default to false when disk source returns null`() {
+        every { settingsDiskSource.isShowNextCodeEnabled } returns null
+        assertFalse(settingsRepository.isShowNextCodeEnabled)
+    }
+
+    @Test
+    fun `isShowNextCodeEnabled should return disk source value when set`() {
+        every { settingsDiskSource.isShowNextCodeEnabled } returns true
+        assertTrue(settingsRepository.isShowNextCodeEnabled)
+    }
+
+    @Test
+    fun `isShowNextCodeEnabled setter should write to disk source`() {
+        every { settingsDiskSource.isShowNextCodeEnabled = true } just runs
+        settingsRepository.isShowNextCodeEnabled = true
+        verify { settingsDiskSource.isShowNextCodeEnabled = true }
+    }
+
+    @Test
+    fun `isShowNextCodeEnabledFlow should map null to false and emit updates`() = runTest {
+        val mutableShowNextCodeFlow = bufferedMutableSharedFlow<Boolean?>()
+        every { settingsDiskSource.isShowNextCodeEnabledFlow } returns mutableShowNextCodeFlow
+        every { settingsDiskSource.isShowNextCodeEnabled } returns null
+
+        settingsRepository.isShowNextCodeEnabledFlow.test {
+            assertFalse(awaitItem())
+            mutableShowNextCodeFlow.emit(true)
+            assertTrue(awaitItem())
+            mutableShowNextCodeFlow.emit(false)
+            assertFalse(awaitItem())
+            expectNoEvents()
+        }
+    }
+
+    @Test
     fun `previouslySyncedBitwardenAccountIds should pull from and update SettingsDiskSource`() {
         // Reading from repository should read from disk source:
         every { settingsDiskSource.previouslySyncedBitwardenAccountIds } returns emptySet()

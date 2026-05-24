@@ -10,6 +10,7 @@ import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.network.exception.CookieRedirectException
 import com.bitwarden.network.model.CreateFileSendResponse
 import com.bitwarden.network.model.CreateSendJsonResponse
+import com.bitwarden.network.model.GetSendResponse
 import com.bitwarden.network.model.SendTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UpdateSendResponseJson
@@ -53,7 +54,6 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import retrofit2.HttpException
 import java.io.File
 import java.time.Clock
 import java.time.Instant
@@ -186,10 +186,11 @@ class SendManagerTest {
             revisionDate = FIXED_CLOCK.instant(),
         )
         val updatedSend = createMockSend(number = number)
+        val updatedSendResponse = GetSendResponse.Success(send = updatedSend)
         coEvery {
             vaultDiskSource.getSendsFlow(userId = userId)
         } returns MutableStateFlow(listOf(send))
-        coEvery { sendsService.getSend(sendId = sendId) } returns updatedSend.asSuccess()
+        coEvery { sendsService.getSend(sendId = sendId) } returns updatedSendResponse.asSuccess()
         coEvery { vaultDiskSource.saveSend(userId = userId, send = updatedSend) } just runs
 
         mutableSyncSendUpsertFlow.tryEmit(
@@ -216,10 +217,8 @@ class SendManagerTest {
             val sendId = "mockId-$number"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val response: HttpException = mockk {
-                every { code() } returns 404
-            }
-            coEvery { sendsService.getSend(sendId = sendId) } returns response.asFailure()
+            val response = GetSendResponse.NotFound(throwable = Throwable("Fail"))
+            coEvery { sendsService.getSend(sendId = sendId) } returns response.asSuccess()
             coEvery {
                 vaultDiskSource.deleteSend(userId = userId, sendId = sendId)
             } just runs
@@ -255,10 +254,8 @@ class SendManagerTest {
             val sendId = "mockId-1"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val response: HttpException = mockk {
-                every { code() } returns 404
-            }
-            coEvery { sendsService.getSend(sendId = sendId) } returns response.asFailure()
+            val response = GetSendResponse.NotFound(throwable = Throwable("Fail"))
+            coEvery { sendsService.getSend(sendId = sendId) } returns response.asSuccess()
             coEvery {
                 vaultDiskSource.getSendsFlow(userId = userId)
             } returns MutableStateFlow(emptyList())
@@ -293,7 +290,10 @@ class SendManagerTest {
                 vaultDiskSource.getSendsFlow(userId = userId)
             } returns MutableStateFlow(emptyList())
             val send = mockk<SyncResponseJson.Send>()
-            coEvery { sendsService.getSend(sendId = sendId) } returns send.asSuccess()
+            val updatedSendResponse = GetSendResponse.Success(send = send)
+            coEvery {
+                sendsService.getSend(sendId = sendId)
+            } returns updatedSendResponse.asSuccess()
             coEvery { vaultDiskSource.saveSend(userId = userId, send = send) } just runs
 
             mutableSyncSendUpsertFlow.tryEmit(
@@ -329,7 +329,10 @@ class SendManagerTest {
             } returns MutableStateFlow(listOf(sendView))
 
             val send = mockk<SyncResponseJson.Send>()
-            coEvery { sendsService.getSend(sendId = sendId) } returns send.asSuccess()
+            val updatedSendResponse = GetSendResponse.Success(send = send)
+            coEvery {
+                sendsService.getSend(sendId = sendId)
+            } returns updatedSendResponse.asSuccess()
             coEvery { vaultDiskSource.saveSend(userId = userId, send = send) } just runs
 
             mutableSyncSendUpsertFlow.tryEmit(
@@ -683,7 +686,9 @@ class SendManagerTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val sendId = "mockId-1"
-            val error = CookieRedirectException(hostname = "example.com")
+            val message = "Your request was interrupted because " +
+                "the app needed to re-authenticate. Please try again."
+            val error = CookieRedirectException(hostname = "test.host", message = message)
             coEvery {
                 sendsService.deleteSend(sendId = sendId)
             } returns error.asFailure()
@@ -692,7 +697,7 @@ class SendManagerTest {
 
             assertEquals(
                 DeleteSendResult.Error(
-                    errorMessage = error.message,
+                    errorMessage = message,
                     error = error,
                 ),
                 result,
@@ -991,7 +996,8 @@ private val MOCK_PROFILE = AccountJson.Profile(
     stamp = "mockSecurityStamp-1",
     organizationId = null,
     avatarColorHex = null,
-    hasPremium = false,
+    hasPremiumPersonally = false,
+    hasPremiumFromOrganization = null,
     forcePasswordResetReason = null,
     kdfType = null,
     kdfIterations = null,

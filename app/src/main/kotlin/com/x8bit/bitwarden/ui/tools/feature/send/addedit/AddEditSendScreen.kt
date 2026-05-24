@@ -57,6 +57,7 @@ fun AddEditSendScreen(
     onNavigateBack: () -> Unit,
     onNavigateUpToSearchOrRoot: () -> Unit,
     onNavigateToGeneratorModal: (GeneratorMode.Modal) -> Unit,
+    onNavigateToPlan: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val addSendHandlers = remember(viewModel) { AddEditSendHandlers.create(viewModel) }
@@ -98,6 +99,8 @@ fun AddEditSendScreen(
             is AddEditSendEvent.NavigateToPremium -> {
                 intentManager.launchUri(uri = event.uri.toUri())
             }
+
+            AddEditSendEvent.NavigateToPlanModal -> onNavigateToPlan()
         }
     }
 
@@ -151,6 +154,7 @@ fun AddEditSendScreen(
                                 .takeIf { !state.policyDisablesSend },
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.share_link),
+                                isExternalLink = true,
                                 onClick = {
                                     viewModel.trySendAction(AddEditSendAction.ShareLinkClick)
                                 },

@@ -73,8 +73,12 @@ data class TutorialState(
      * - Displays "Continue" if the user is not on the last page.
      * - Displays "Get Started" if the user is on the last page.
      */
-    val actionButtonText: String
-        get() = if (index != pages.lastIndex) "Continue" else "Get Started"
+    val actionButtonText: Int
+        get() = if (index != pages.lastIndex) {
+            BitwardenString.continue_text
+        } else {
+            BitwardenString.get_started
+        }
 
     /**
      * Indicates whether the current slide is the last in the pages array.

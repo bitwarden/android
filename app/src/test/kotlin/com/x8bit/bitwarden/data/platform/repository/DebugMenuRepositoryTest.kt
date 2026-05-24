@@ -105,8 +105,8 @@ class DebugMenuRepositoryTest {
             debugMenuRepository.resetFeatureFlagOverrides()
             verify(exactly = 1) {
                 mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
-                    FlagKey.CredentialExchangeProtocolImport,
-                    FlagKey.CredentialExchangeProtocolImport.defaultValue,
+                    FlagKey.AttachmentUpdates,
+                    FlagKey.AttachmentUpdates.defaultValue,
                 )
             }
             debugMenuRepository.featureFlagOverridesUpdatedFlow.test {
@@ -175,6 +175,7 @@ class DebugMenuRepositoryTest {
             mockSettingsDiskSource.storeShouldShowAddLoginCoachMark(shouldShow = null)
         }
     }
+
     @Test
     fun `clearSsoCookies should call clearCookies on CookieDiskSource`() {
         debugMenuRepository.clearSsoCookies()
@@ -217,6 +218,58 @@ class DebugMenuRepositoryTest {
             mockSettingsDiskSource.storePremiumUpgradeBannerDismissed(
                 userId = any(),
                 isDismissed = any(),
+            )
+        }
+    }
+
+    @Test
+    fun `showUpgradedToPremiumCard should clear consumed and mark pending for the current user`() {
+        val userId = "testUserId"
+        val mockUserStateJson = mockk<UserStateJson>(relaxed = true) {
+            every { activeUserId } returns userId
+        }
+        every { mockAuthDiskSource.userState } returns mockUserStateJson
+        every {
+            mockSettingsDiskSource.storeUpgradedToPremiumCardConsumed(
+                userId = any(),
+                isConsumed = any(),
+            )
+        } just runs
+        every {
+            mockSettingsDiskSource.storeUpgradedToPremiumCardPending(
+                userId = any(),
+                isPending = any(),
+            )
+        } just runs
+
+        debugMenuRepository.showUpgradedToPremiumCard()
+
+        verify(exactly = 1) {
+            mockSettingsDiskSource.storeUpgradedToPremiumCardConsumed(
+                userId = userId,
+                isConsumed = false,
+            )
+            mockSettingsDiskSource.storeUpgradedToPremiumCardPending(
+                userId = userId,
+                isPending = true,
+            )
+        }
+    }
+
+    @Test
+    fun `showUpgradedToPremiumCard should do nothing if no active user`() {
+        every { mockAuthDiskSource.userState } returns null
+
+        debugMenuRepository.showUpgradedToPremiumCard()
+
+        verify(exactly = 0) {
+            mockSettingsDiskSource.storeUpgradedToPremiumCardConsumed(
+                userId = any(),
+                isConsumed = any(),
+            )
+            mockSettingsDiskSource.storeUpgradedToPremiumCardPending(
+                userId = any(),
+                isPending = any(),
             )
         }
     }

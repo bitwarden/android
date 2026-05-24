@@ -376,6 +376,7 @@ private val DEFAULT_STATE = SettingsState(
         .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
     copyrightInfo = "© Bitwarden Inc. 2015-2024".asText(),
     allowScreenCapture = false,
+    isShowNextCodeEnabled = false,
     hasBiometricsSupport = true,
     appTimeout = AppTimeout.OnAppRestart,
 )

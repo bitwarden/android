@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySele
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
+import com.x8bit.bitwarden.data.billing.util.getPremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.credentials.manager.CredentialProviderRequestManager
 import com.x8bit.bitwarden.data.credentials.manager.model.CredentialProviderRequest
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
@@ -36,6 +37,7 @@ import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManage
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.isAddTotpLoginItemFromAuthenticator
@@ -79,6 +81,7 @@ class MainViewModel @Inject constructor(
     accessibilitySelectionManager: AccessibilitySelectionManager,
     autofillSelectionManager: AutofillSelectionManager,
     cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
+    networkPermissionManager: NetworkPermissionManager,
     private val addTotpItemFromAuthenticatorManager: AddTotpItemFromAuthenticatorManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val garbageCollectionManager: GarbageCollectionManager,
@@ -97,6 +100,7 @@ class MainViewModel @Inject constructor(
         theme = settingsRepository.appTheme,
         isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
         isDynamicColorsEnabled = settingsRepository.isDynamicColorsEnabled,
+        hasResizeBeenRequested = false,
     ),
 ) {
     private var specialCircumstance: SpecialCircumstance?
@@ -166,6 +170,13 @@ class MainViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        networkPermissionManager
+            .isLocalNetworkAccessRequiredStateFlow
+            .filter { it }
+            .map { MainAction.Internal.LocalNetworkAccessRequired }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         cookieAcquisitionRequestManager
             .cookieAcquisitionRequestFlow
             .filterNotNull()
@@ -198,6 +209,8 @@ class MainViewModel @Inject constructor(
             is MainAction.SsoResult -> handleSsoResult(action)
             is MainAction.WebAuthnResult -> handleWebAuthnResult(action)
             is MainAction.CookieAcquisitionResult -> handleCookieAcquisitionResult(action)
+            is MainAction.PremiumCheckoutResult -> handlePremiumCheckoutResult(action)
+            is MainAction.StripePortalResult -> handleStripePortalResult()
             is MainAction.Internal -> handleInternalAction(action)
         }
     }
@@ -220,6 +233,8 @@ class MainViewModel @Inject constructor(
             is MainAction.Internal.ThemeUpdate -> handleAppThemeUpdated(action)
             is MainAction.Internal.DynamicColorsUpdate -> handleDynamicColorsUpdate(action)
             is MainAction.Internal.CookieAcquisitionReady -> handleCookieAcquisitionReady()
+            is MainAction.Internal.LocalNetworkAccessRequired -> handleLocalNetworkAccessRequired()
+            is MainAction.Internal.ResizeHasBeenRequested -> handleResizeHasBeenRequested()
         }
     }
 
@@ -245,6 +260,16 @@ class MainViewModel @Inject constructor(
         authRepository.setCookieCallbackResult(
             result = action.cookieCallbackResult.getCookieCallbackResult(),
         )
+    }
+
+    private fun handlePremiumCheckoutResult(action: MainAction.PremiumCheckoutResult) {
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.PremiumCheckout(
+            callbackResult = action.authResult.getPremiumCheckoutCallbackResult(),
+        )
+    }
+
+    private fun handleStripePortalResult() {
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.StripePortal
     }
 
     private fun handleAppResumeDataUpdated(action: MainAction.ResumeScreenDataReceived) {
@@ -292,6 +317,14 @@ class MainViewModel @Inject constructor(
 
     private fun handleCookieAcquisitionReady() {
         sendEvent(MainEvent.NavigateToCookieAcquisition)
+    }
+
+    private fun handleLocalNetworkAccessRequired() {
+        sendEvent(MainEvent.NavigateToLocalNetworkAccess)
+    }
+
+    private fun handleResizeHasBeenRequested() {
+        mutableStateFlow.update { it.copy(hasResizeBeenRequested = true) }
     }
 
     private fun handleFirstIntentReceived(action: MainAction.ReceiveFirstIntent) {
@@ -398,7 +431,9 @@ class MainViewModel @Inject constructor(
 
             hasPremiumCheckoutCallback -> {
                 specialCircumstanceManager.specialCircumstance =
-                    SpecialCircumstance.PremiumCheckoutResult
+                    SpecialCircumstance.PremiumCheckout(
+                        callbackResult = intent.data.getPremiumCheckoutCallbackResult(),
+                    )
             }
 
             hasGeneratorShortcut -> {
@@ -521,6 +556,7 @@ data class MainState(
     val theme: AppTheme,
     val isScreenCaptureAllowed: Boolean,
     val isDynamicColorsEnabled: Boolean,
+    val hasResizeBeenRequested: Boolean,
 ) : Parcelable {
     /**
      * Contains all feature flags that are available to the UI.
@@ -553,6 +589,21 @@ sealed class MainAction {
      */
     data class CookieAcquisitionResult(
         val cookieCallbackResult: AuthTabIntent.AuthResult,
+    ) : MainAction()
+
+    /**
+     * Receive the result from the premium checkout flow.
+     */
+    data class PremiumCheckoutResult(
+        val authResult: AuthTabIntent.AuthResult,
+    ) : MainAction()
+
+    /**
+     * Receive the result from the Stripe customer portal flow. The AuthTab does not return a
+     * payload — closing the tab is the only signal that the user is back in the app.
+     */
+    data class StripePortalResult(
+        val authResult: AuthTabIntent.AuthResult,
     ) : MainAction()
 
     /**
@@ -631,6 +682,16 @@ sealed class MainAction {
          * should proceed.
          */
         data object CookieAcquisitionReady : Internal()
+
+        /**
+         * Indicates that the local network access is required.
+         */
+        data object LocalNetworkAccessRequired : Internal()
+
+        /**
+         * Indicates that resize has been requested on the Activity
+         */
+        data object ResizeHasBeenRequested : Internal()
     }
 }
 
@@ -664,6 +725,11 @@ sealed class MainEvent {
      * Navigate to the cookie acquisition screen.
      */
     data object NavigateToCookieAcquisition : MainEvent()
+
+    /**
+     * Navigate to the local network access screen.
+     */
+    data object NavigateToLocalNetworkAccess : MainEvent()
 
     /**
      * Indicates that the app language has been updated.

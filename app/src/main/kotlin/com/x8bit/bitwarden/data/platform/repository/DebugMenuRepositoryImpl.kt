@@ -82,4 +82,16 @@ class DebugMenuRepositoryImpl(
             isDismissed = null,
         )
     }
+
+    override fun showUpgradedToPremiumCard() {
+        val currentUserId = authDiskSource.userState?.activeUserId ?: return
+        settingsDiskSource.storeUpgradedToPremiumCardConsumed(
+            userId = currentUserId,
+            isConsumed = false,
+        )
+        settingsDiskSource.storeUpgradedToPremiumCardPending(
+            userId = currentUserId,
+            isPending = true,
+        )
+    }
 }

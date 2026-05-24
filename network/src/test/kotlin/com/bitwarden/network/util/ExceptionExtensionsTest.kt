@@ -24,7 +24,7 @@ class ExceptionExtensionsTest {
     fun `parseErrorBodyOrNull with CookieRedirectException should extract message`() {
         val expectedMessage = "Your request was interrupted because the app " +
             "needed to re-authenticate. Please try again."
-        val error = CookieRedirectException(hostname = "example.com")
+        val error = CookieRedirectException(hostname = "example.com", message = expectedMessage)
             .toBitwardenError()
 
         val result = error.parseErrorBodyOrNull<CreateCipherResponseJson.Invalid>(

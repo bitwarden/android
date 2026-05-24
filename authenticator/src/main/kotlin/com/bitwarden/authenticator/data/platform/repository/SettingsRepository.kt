@@ -94,6 +94,16 @@ interface SettingsRepository : FlightRecorderManager {
     val isCrashLoggingEnabledFlow: Flow<Boolean>
 
     /**
+     * Whether the next TOTP code preview is enabled.
+     */
+    var isShowNextCodeEnabled: Boolean
+
+    /**
+     * Emits updates that track the [isShowNextCodeEnabled] value.
+     */
+    val isShowNextCodeEnabledFlow: Flow<Boolean>
+
+    /**
      * Whether the user has previously dismissed the download Bitwarden action card.
      */
     var hasUserDismissedDownloadBitwardenCard: Boolean

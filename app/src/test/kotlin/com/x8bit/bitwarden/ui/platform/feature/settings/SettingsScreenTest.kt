@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -25,6 +26,7 @@ class SettingsScreenTest : BitwardenComposeTest() {
     private var haveCalledNavigateToOther = false
     private var haveCalledNavigateToVault = false
     private var haveCalledNavigateBack = false
+    private var haveCalledNavigateToPlan = false
 
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val mutableEventFlow = bufferedMutableSharedFlow<SettingsEvent>()
@@ -45,6 +47,9 @@ class SettingsScreenTest : BitwardenComposeTest() {
                 onNavigateToOther = { haveCalledNavigateToOther = true },
                 onNavigateToVault = { haveCalledNavigateToVault = true },
                 onNavigateBack = { haveCalledNavigateBack = true },
+                onNavigateToPlan = {
+                    haveCalledNavigateToPlan = true
+                },
             )
         }
     }
@@ -146,6 +151,12 @@ class SettingsScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `on NavigatePlan should call onNavigateToPlan`() {
+        mutableEventFlow.tryEmit(SettingsEvent.NavigatePlan)
+        assertTrue(haveCalledNavigateToPlan)
+    }
+
+    @Test
     fun `should display correct items according to state`() {
         mutableStateFlow.update { it.copy(isPreAuth = false) }
         composeTestRule
@@ -230,6 +241,66 @@ class SettingsScreenTest : BitwardenComposeTest() {
             .onAllNodesWithText(text = "1", useUnmergedTree = true)[2]
             .assertExists()
     }
+
+    @Test
+    fun `UpgradedToPremium action card should display when eligible and post-auth`() {
+        mutableStateFlow.update {
+            it.copy(isPreAuth = false, isUpgradedToPremiumCardEligible = true)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Upgraded to Premium")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Learn more")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription(label = "Learn more, External link")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `UpgradedToPremium action card should not display when pre-auth`() {
+        mutableStateFlow.update {
+            it.copy(isPreAuth = true, isUpgradedToPremiumCardEligible = true)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Upgraded to Premium")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `UpgradedToPremium action card CTA click should send UpgradedToPremiumCardClick`() {
+        every { viewModel.trySendAction(SettingsAction.UpgradedToPremiumCardClick) } just runs
+        mutableStateFlow.update {
+            it.copy(isPreAuth = false, isUpgradedToPremiumCardEligible = true)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Learn more")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(SettingsAction.UpgradedToPremiumCardClick)
+        }
+    }
+
+    @Test
+    fun `UpgradedToPremium action card dismiss click should send UpgradedToPremiumCardDismiss`() {
+        every { viewModel.trySendAction(SettingsAction.UpgradedToPremiumCardDismiss) } just runs
+        mutableStateFlow.update {
+            it.copy(isPreAuth = false, isUpgradedToPremiumCardEligible = true)
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(SettingsAction.UpgradedToPremiumCardDismiss)
+        }
+    }
 }
 
 private val DEFAULT_STATE = SettingsState(
@@ -237,4 +308,5 @@ private val DEFAULT_STATE = SettingsState(
     securityCount = 0,
     autoFillCount = 0,
     vaultCount = 0,
+    isPlanRowEligible = false,
 )

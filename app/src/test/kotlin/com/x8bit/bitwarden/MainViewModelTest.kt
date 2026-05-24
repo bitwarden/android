@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden
 
 import android.content.Intent
+import android.net.Uri
 import androidx.browser.auth.AuthTabIntent
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.provider.BiometricPromptResult
@@ -45,6 +46,8 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
+import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
+import com.x8bit.bitwarden.data.billing.util.getPremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.credentials.manager.CredentialProviderRequestManager
 import com.x8bit.bitwarden.data.credentials.manager.model.CredentialProviderRequest
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
@@ -62,6 +65,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.isAddTotpLoginItemFromAuthenticator
@@ -179,6 +183,12 @@ class MainViewModelTest : BaseViewModelTest() {
     private val cookieAcquisitionRequestManager: CookieAcquisitionRequestManager = mockk {
         every { cookieAcquisitionRequestFlow } returns mutableCookieAcquisitionRequestFlow
     }
+    private val mutableIsLocalNetworkAccessRequiredStateFlow = MutableStateFlow(false)
+    private val networkPermissionManager: NetworkPermissionManager = mockk {
+        every {
+            isLocalNetworkAccessRequiredStateFlow
+        } returns mutableIsLocalNetworkAccessRequiredStateFlow
+    }
     private val credentialProviderRequestManager: CredentialProviderRequestManager = mockk {
         every { getPendingCredentialRequest() } returns null
     }
@@ -196,6 +206,7 @@ class MainViewModelTest : BaseViewModelTest() {
             AuthTabIntent.AuthResult::getDuoCallbackTokenResult,
             AuthTabIntent.AuthResult::getSsoCallbackResult,
             AuthTabIntent.AuthResult::getWebAuthResult,
+            AuthTabIntent.AuthResult::getPremiumCheckoutCallbackResult,
         )
         mockkStatic(
             Intent::isMyVaultShortcut,
@@ -228,6 +239,7 @@ class MainViewModelTest : BaseViewModelTest() {
             AuthTabIntent.AuthResult::getDuoCallbackTokenResult,
             AuthTabIntent.AuthResult::getSsoCallbackResult,
             AuthTabIntent.AuthResult::getWebAuthResult,
+            AuthTabIntent.AuthResult::getPremiumCheckoutCallbackResult,
         )
         unmockkStatic(
             Intent::isMyVaultShortcut,
@@ -864,34 +876,92 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveFirstIntent with premium checkout callback should set special circumstance to PremiumCheckoutResult`() {
+    fun `on ReceiveFirstIntent with Premium checkout success callback should set PremiumCheckoutResult with isSuccess true`() {
         val viewModel = createViewModel()
+        val mockUri = mockk<Uri> {
+            every { getQueryParameter("result") } returns "success"
+        }
         val mockIntent = createMockIntent(
             mockIsPremiumCheckoutCallback = true,
+            mockDataUri = mockUri,
         )
 
         viewModel.trySendAction(
             MainAction.ReceiveFirstIntent(intent = mockIntent),
         )
         assertEquals(
-            SpecialCircumstance.PremiumCheckoutResult,
+            SpecialCircumstance.PremiumCheckout(
+                callbackResult = PremiumCheckoutCallbackResult.Success,
+            ),
             specialCircumstanceManager.specialCircumstance,
         )
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveNewIntent with premium checkout callback should set special circumstance to PremiumCheckoutResult`() {
+    fun `on ReceiveFirstIntent with Premium checkout canceled callback should set PremiumCheckoutResult with isSuccess false`() {
         val viewModel = createViewModel()
+        val mockUri = mockk<Uri> {
+            every { getQueryParameter("result") } returns "canceled"
+        }
         val mockIntent = createMockIntent(
             mockIsPremiumCheckoutCallback = true,
+            mockDataUri = mockUri,
+        )
+
+        viewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(intent = mockIntent),
+        )
+        assertEquals(
+            SpecialCircumstance.PremiumCheckout(
+                callbackResult = PremiumCheckoutCallbackResult.Canceled,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveNewIntent with Premium checkout success callback should set PremiumCheckoutResult with isSuccess true`() {
+        val viewModel = createViewModel()
+        val mockUri = mockk<Uri> {
+            every { getQueryParameter("result") } returns "success"
+        }
+        val mockIntent = createMockIntent(
+            mockIsPremiumCheckoutCallback = true,
+            mockDataUri = mockUri,
         )
 
         viewModel.trySendAction(
             MainAction.ReceiveNewIntent(intent = mockIntent),
         )
         assertEquals(
-            SpecialCircumstance.PremiumCheckoutResult,
+            SpecialCircumstance.PremiumCheckout(
+                callbackResult = PremiumCheckoutCallbackResult.Success,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveNewIntent with Premium checkout canceled callback should set PremiumCheckoutResult with isSuccess false`() {
+        val viewModel = createViewModel()
+        val mockUri = mockk<Uri> {
+            every { getQueryParameter("result") } returns "canceled"
+        }
+        val mockIntent = createMockIntent(
+            mockIsPremiumCheckoutCallback = true,
+            mockDataUri = mockUri,
+        )
+
+        viewModel.trySendAction(
+            MainAction.ReceiveNewIntent(intent = mockIntent),
+        )
+        assertEquals(
+            SpecialCircumstance.PremiumCheckout(
+                callbackResult = PremiumCheckoutCallbackResult.Canceled,
+            ),
             specialCircumstanceManager.specialCircumstance,
         )
     }
@@ -1191,6 +1261,61 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `on PremiumCheckoutResult with RESULT_OK should set PremiumCheckoutResult with isSuccess true`() {
+        val authResult = mockk<AuthTabIntent.AuthResult> {
+            every { getPremiumCheckoutCallbackResult() } returns PremiumCheckoutCallbackResult.Success
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            MainAction.PremiumCheckoutResult(authResult = authResult),
+        )
+
+        assertEquals(
+            SpecialCircumstance.PremiumCheckout(
+                callbackResult = PremiumCheckoutCallbackResult.Success,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on PremiumCheckoutResult with RESULT_CANCELED should set PremiumCheckoutResult with isSuccess false`() {
+        val authResult = mockk<AuthTabIntent.AuthResult> {
+            every { getPremiumCheckoutCallbackResult() } returns PremiumCheckoutCallbackResult.Canceled
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            MainAction.PremiumCheckoutResult(authResult = authResult),
+        )
+
+        assertEquals(
+            SpecialCircumstance.PremiumCheckout(
+                callbackResult = PremiumCheckoutCallbackResult.Canceled,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Test
+    fun `on StripePortalResult should set StripePortal special circumstance`() {
+        val authResult = mockk<AuthTabIntent.AuthResult>()
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            MainAction.StripePortalResult(authResult = authResult),
+        )
+
+        assertEquals(
+            SpecialCircumstance.StripePortal,
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `cookie acquisition should emit NavigateToCookieAcquisition when vault unlocked with matching hostname`() =
         runTest {
             mutableCookieAcquisitionRequestFlow.value = CookieAcquisitionRequest(
@@ -1209,6 +1334,20 @@ class MainViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `local network access required should emit NavigateToLocalNetworkAccess when stateflow emits`() =
+        runTest {
+            mutableIsLocalNetworkAccessRequiredStateFlow.value = true
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                // Skip init events (appLanguage + appTheme)
+                skipItems(2)
+                assertEquals(MainEvent.NavigateToLocalNetworkAccess, awaitItem())
+            }
+        }
+
     @Test
     fun `cookie acquisition should not emit event when conditions are false`() =
         runTest {
@@ -1222,13 +1361,38 @@ class MainViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    fun `on handleResizeHasBeenRequested should set hasResizeBeenRequested as true`() = runTest {
+        val viewModel = createViewModel()
+        val initialState = MainState(
+            theme = settingsRepository.appTheme,
+            isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
+            isDynamicColorsEnabled = settingsRepository.isDynamicColorsEnabled,
+            hasResizeBeenRequested = false,
+        )
+        viewModel.stateFlow.test {
+            assertEquals(
+                initialState,
+                awaitItem(),
+            )
+            viewModel.trySendAction(MainAction.Internal.ResizeHasBeenRequested)
+            assertEquals(
+                initialState.copy(
+                    hasResizeBeenRequested = true,
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
     private fun createViewModel(
         initialSpecialCircumstance: SpecialCircumstance? = null,
-    ) = MainViewModel(
+    ): MainViewModel = MainViewModel(
         accessibilitySelectionManager = accessibilitySelectionManager,
         addTotpItemFromAuthenticatorManager = addTotpItemAuthenticatorManager,
         autofillSelectionManager = autofillSelectionManager,
         cookieAcquisitionRequestManager = cookieAcquisitionRequestManager,
+        networkPermissionManager = networkPermissionManager,
         specialCircumstanceManager = specialCircumstanceManager,
         garbageCollectionManager = garbageCollectionManager,
         credentialProviderRequestManager = credentialProviderRequestManager,
@@ -1250,6 +1414,7 @@ private val DEFAULT_STATE: MainState = MainState(
     theme = AppTheme.DEFAULT,
     isScreenCaptureAllowed = true,
     isDynamicColorsEnabled = false,
+    hasResizeBeenRequested = false,
 )
 
 private val DEFAULT_FIRST_TIME_STATE = FirstTimeState(
@@ -1266,6 +1431,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     environment = Environment.Us,
     avatarColorHex = "#aa00aa",
     isPremium = true,
+    isPremiumFromSelf = true,
     isLoggedIn = true,
     isVaultUnlocked = true,
     needsPasswordReset = false,
@@ -1304,6 +1470,7 @@ private fun createMockIntent(
     mockIsPremiumCheckoutCallback: Boolean = false,
     mockIsAddTotpLoginItemFromAuthenticator: Boolean = false,
     mockProviderImportCredentialsRequest: ProviderImportCredentialsRequest? = null,
+    mockDataUri: Uri? = null,
 ): Intent = mockk<Intent> {
     every { getTotpDataOrNull() } returns mockTotpData
     every { getPasswordlessRequestDataIntentOrNull() } returns mockPasswordlessRequestData
@@ -1316,6 +1483,7 @@ private fun createMockIntent(
     every { isPremiumCheckoutCallback } returns mockIsPremiumCheckoutCallback
     every { isAddTotpLoginItemFromAuthenticator() } returns mockIsAddTotpLoginItemFromAuthenticator
     every { getProviderImportCredentialsRequest() } returns mockProviderImportCredentialsRequest
+    every { data } returns mockDataUri
 }
 
 private val FIXED_CLOCK: Clock = Clock.fixed(

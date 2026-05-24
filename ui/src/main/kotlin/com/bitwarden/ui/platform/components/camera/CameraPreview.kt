@@ -18,14 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzer
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.concurrent.Executors
 
 /**
  * A composable for displaying the camera preview.
  *
- * @param qrCodeAnalyzer The [QrCodeAnalyzer].
+ * @param analyzer The [ImageAnalysis.Analyzer] to use for image analysis.
  * @param cameraErrorReceive A callback invoked when an error occurs.
  * @param modifier The [Modifier] for this composable.
  * @param context The local context.
@@ -33,7 +32,7 @@ import java.util.concurrent.Executors
  */
 @Composable
 fun CameraPreview(
-    qrCodeAnalyzer: QrCodeAnalyzer,
+    analyzer: ImageAnalysis.Analyzer,
     cameraErrorReceive: (Exception) -> Unit,
     modifier: Modifier = Modifier,
     context: Context = LocalContext.current,
@@ -43,7 +42,7 @@ fun CameraPreview(
     if ("robolectric" == Build.FINGERPRINT) return
     val surfaceRequests = remember { MutableStateFlow<SurfaceRequest?>(null) }
     val preview = rememberPreview { surfaceRequests.value = it }
-    val imageAnalyzer = rememberImageAnalyzer(qrCodeAnalyzer = qrCodeAnalyzer)
+    val imageAnalyzer = rememberImageAnalyzer(analyzer = analyzer)
     LaunchedEffect(Unit) {
         try {
             val provider = ProcessCameraProvider.awaitInstance(context = context)
@@ -72,12 +71,12 @@ fun CameraPreview(
 
 @Composable
 private fun rememberImageAnalyzer(
-    qrCodeAnalyzer: QrCodeAnalyzer,
-): ImageAnalysis = remember(qrCodeAnalyzer) {
+    analyzer: ImageAnalysis.Analyzer,
+): ImageAnalysis = remember(analyzer) {
     ImageAnalysis.Builder()
         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
         .build()
-        .apply { setAnalyzer(Executors.newSingleThreadExecutor(), qrCodeAnalyzer) }
+        .apply { setAnalyzer(Executors.newSingleThreadExecutor(), analyzer) }
 }
 
 @Composable

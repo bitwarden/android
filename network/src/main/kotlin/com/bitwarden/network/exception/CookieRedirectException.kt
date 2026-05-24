@@ -13,6 +13,5 @@ import java.io.IOException
  */
 class CookieRedirectException(
     val hostname: String,
-) : IOException(
-    "Your request was interrupted because the app needed to re-authenticate. Please try again.",
-)
+    message: String,
+) : IOException(message)

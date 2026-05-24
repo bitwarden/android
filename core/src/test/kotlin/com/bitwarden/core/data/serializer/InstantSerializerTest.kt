@@ -1,6 +1,7 @@
 package com.bitwarden.core.data.serializer
 
 import com.bitwarden.core.di.CoreModule
+import io.mockk.mockk
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.encodeToJsonElement
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test
 import java.time.Instant
 
 class InstantSerializerTest {
-    private val json = CoreModule.providesJson()
+    private val json = CoreModule.providesJson(buildInfoManager = mockk(relaxed = true))
 
     @Test
     fun `properly deserializes raw JSON to Instant`() {

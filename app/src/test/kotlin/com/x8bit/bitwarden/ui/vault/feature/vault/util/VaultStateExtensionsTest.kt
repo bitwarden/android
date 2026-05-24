@@ -85,10 +85,15 @@ class VaultStateExtensionsTest {
             totpItemsCount = 1,
             itemTypesCount = 4,
             sshKeyItemsCount = 0,
+            bankAccountItemsCount = 0,
+            licenseItemsCount = 0,
+            passportItemsCount = 0,
             archivedItemsCount = 0,
-            archiveEnabled = true,
             archiveSubText = null,
             archiveEndIcon = null,
             showCardGroup = true,
+            showBankAccountGroup = false,
+            showLicenseGroup = false,
+            showPassportGroup = false,
         )
 }

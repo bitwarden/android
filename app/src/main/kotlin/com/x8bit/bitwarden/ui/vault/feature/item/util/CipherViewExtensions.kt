@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.util
 
 import androidx.annotation.DrawableRes
+import com.bitwarden.core.data.util.toFormattedDateStyle
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.ui.platform.base.util.nullIfAllEqual
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
@@ -19,15 +20,21 @@ import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.IdentityView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
+import com.x8bit.bitwarden.ui.vault.feature.attachments.util.isLargeFile
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
+import com.x8bit.bitwarden.ui.vault.model.VaultBankAccountType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
+import com.x8bit.bitwarden.ui.vault.util.formatCardNumber
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import java.time.Clock
+import java.time.LocalDate
+import java.time.format.DateTimeParseException
 import java.time.format.FormatStyle
 import java.util.Locale
 
@@ -53,14 +60,17 @@ fun CipherView.toViewState(
         common = VaultItemState.ViewState.Content.Common(
             currentCipher = this,
             name = name,
-            customFields = fields.orEmpty().map { fieldView ->
-                fieldView.toCustomField(
-                    previousState = previousState
-                        ?.common
-                        ?.customFields
-                        ?.find { it.id == fieldView.hashCode().toString() },
-                )
-            },
+            customFields = fields
+                .orEmpty()
+                .map { fieldView ->
+                    fieldView.toCustomField(
+                        previousState = previousState
+                            ?.common
+                            ?.customFields
+                            ?.find { it.id == fieldView.hashCode().toString() },
+                    )
+                }
+                .toImmutableList(),
             created = BitwardenString.created.asText(
                 creationDate.toFormattedDateTimeStyle(
                     dateStyle = FormatStyle.MEDIUM,
@@ -93,16 +103,13 @@ fun CipherView.toViewState(
                             title = requireNotNull(it.fileName),
                             displaySize = requireNotNull(it.sizeName),
                             url = requireNotNull(it.url),
-                            isLargeFile = try {
-                                requireNotNull(it.size).toLong() >= 10485760
-                            } catch (_: NumberFormatException) {
-                                false
-                            },
+                            isLargeFile = it.isLargeFile(),
                             isDownloadAllowed = isPremiumUser || this.organizationId != null,
                         )
                     }
                 }
-                .orEmpty(),
+                .orEmpty()
+                .toImmutableList(),
             canDelete = canDelete,
             canRestore = canRestore,
             canAssignToCollections = canAssignToCollections,
@@ -160,7 +167,7 @@ fun CipherView.toViewState(
                     cardholderName = card?.cardholderName,
                     number = card?.number?.let {
                         VaultItemState.ViewState.Content.ItemType.Card.NumberData(
-                            number = it,
+                            number = it.formatCardNumber(),
                             isVisible = (previousState?.type
                                 as? VaultItemState.ViewState.Content.ItemType.Card)
                                 ?.number
@@ -210,6 +217,53 @@ fun CipherView.toViewState(
                         ?.showPrivateKey == true,
                 )
             }
+
+            CipherType.BANK_ACCOUNT -> {
+                VaultItemState.ViewState.Content.ItemType.BankAccount(
+                    bankName = bankAccount?.bankName,
+                    nameOnAccount = bankAccount?.nameOnAccount,
+                    accountType = bankAccount?.accountType?.let(VaultBankAccountType::parse),
+                    accountNumber = bankAccount?.accountNumber,
+                    routingNumber = bankAccount?.routingNumber,
+                    branchNumber = bankAccount?.branchNumber,
+                    pin = bankAccount?.pin,
+                    swiftCode = bankAccount?.swiftCode,
+                    iban = bankAccount?.iban,
+                    bankContactPhone = bankAccount?.bankContactPhone,
+                )
+            }
+
+            CipherType.DRIVERS_LICENSE -> {
+                VaultItemState.ViewState.Content.ItemType.DriversLicense(
+                    firstName = driversLicense?.firstName,
+                    middleName = driversLicense?.middleName,
+                    lastName = driversLicense?.lastName,
+                    licenseNumber = driversLicense?.licenseNumber,
+                    dateOfBirth = driversLicense?.dateOfBirth?.toFormattedDate(clock = clock),
+                    issuingCountry = driversLicense?.issuingCountry,
+                    issuingState = driversLicense?.issuingState,
+                    issuingAuthority = driversLicense?.issuingAuthority,
+                    issueDate = driversLicense?.issueDate?.toFormattedDate(clock = clock),
+                    expirationDate = driversLicense?.expirationDate?.toFormattedDate(clock = clock),
+                    licenseClass = driversLicense?.licenseClass,
+                )
+            }
+
+            CipherType.PASSPORT -> VaultItemState.ViewState.Content.ItemType.Passport(
+                givenName = passport?.givenName,
+                surname = passport?.surname,
+                dateOfBirth = passport?.dateOfBirth?.toFormattedDate(clock = clock),
+                sex = passport?.sex,
+                birthPlace = passport?.birthPlace,
+                nationality = passport?.nationality,
+                passportNumber = passport?.passportNumber,
+                passportType = passport?.passportType,
+                nationalIdentificationNumber = passport?.nationalIdentificationNumber,
+                issuingCountry = passport?.issuingCountry,
+                issuingAuthority = passport?.issuingAuthority,
+                issueDate = passport?.issueDate?.toFormattedDate(clock = clock),
+                expirationDate = passport?.expirationDate?.toFormattedDate(clock = clock),
+            )
         },
     )
 
@@ -250,6 +304,24 @@ fun FieldView.toCustomField(
             name = name.orEmpty(),
         )
     }
+
+/**
+ * Takes a string date that is formatted in the default ISO-8601 format (uuuu-MM-dd) and converts
+ * it to appropriate human-readable format.
+ */
+private fun String.toFormattedDate(
+    clock: Clock,
+): String? {
+    val localDate = try {
+        LocalDate.parse(this)
+    } catch (_: DateTimeParseException) {
+        null
+    }
+    return localDate?.toFormattedDateStyle(
+        dateStyle = FormatStyle.LONG,
+        clock = clock,
+    )
+}
 
 private fun LoginUriView.toUriData() =
     VaultItemState.ViewState.Content.ItemType.Login.UriData(
@@ -300,6 +372,9 @@ private val CipherType.iconRes: Int
         CipherType.IDENTITY -> BitwardenDrawable.ic_id_card
         CipherType.SSH_KEY -> BitwardenDrawable.ic_ssh_key
         CipherType.LOGIN -> BitwardenDrawable.ic_globe
+        CipherType.BANK_ACCOUNT -> BitwardenDrawable.ic_payment_card
+        CipherType.DRIVERS_LICENSE -> BitwardenDrawable.ic_note
+        CipherType.PASSPORT -> BitwardenDrawable.ic_passport
     }
 
 @get:DrawableRes

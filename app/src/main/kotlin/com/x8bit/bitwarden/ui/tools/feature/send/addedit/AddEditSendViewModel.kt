@@ -4,7 +4,6 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.takeUntilLoaded
 import com.bitwarden.data.repository.util.baseWebSendUrl
@@ -23,7 +22,7 @@ import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -89,7 +88,7 @@ class AddEditSendViewModel @Inject constructor(
     private val policyManager: PolicyManager,
     private val networkConnectionManager: NetworkConnectionManager,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
-    private val featureFlagManager: FeatureFlagManager,
+    private val premiumStateManager: PremiumStateManager,
 ) : BaseViewModel<AddEditSendState, AddEditSendEvent, AddEditSendAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -124,8 +123,6 @@ class AddEditSendViewModel @Inject constructor(
                         expirationDate = null,
                         sendUrl = null,
                         hasPassword = false,
-                        isSendEmailVerificationEnabled = featureFlagManager
-                            .getFeatureFlag(key = FlagKey.SendEmailVerification),
                         sendAuth = SendAuth.None,
                     ),
                     selectedType = shareSendType ?: when (sendType) {
@@ -201,7 +198,6 @@ class AddEditSendViewModel @Inject constructor(
         is AddEditSendAction.MaxAccessCountChange -> handleMaxAccessCountChange(action)
         is AddEditSendAction.TextChange -> handleTextChange(action)
         is AddEditSendAction.NoteChange -> handleNoteChange(action)
-        is AddEditSendAction.PasswordChange -> handlePasswordChange(action)
         is AddEditSendAction.HideByDefaultToggle -> handleHideByDefaultToggle(action)
         is AddEditSendAction.DeactivateThisSendToggle -> handleDeactivateThisSendToggle(action)
         is AddEditSendAction.HideMyEmailToggle -> handleHideMyEmailToggle(action)
@@ -411,7 +407,6 @@ class AddEditSendViewModel @Inject constructor(
                                     .environmentUrlData
                                     .baseWebSendUrl,
                                 isHideEmailAddressEnabled = isHideEmailAddressEnabled,
-                                isSendEmailVerificationEnabled = isSendEmailVerificationEnabled,
                             )
                             ?: AddEditSendState.ViewState.Error(
                                 message = BitwardenString.generic_error_message.asText(),
@@ -452,7 +447,6 @@ class AddEditSendViewModel @Inject constructor(
                                     .environmentUrlData
                                     .baseWebSendUrl,
                                 isHideEmailAddressEnabled = isHideEmailAddressEnabled,
-                                isSendEmailVerificationEnabled = isSendEmailVerificationEnabled,
                             )
                             ?: AddEditSendState.ViewState.Error(
                                 message = BitwardenString.generic_error_message.asText(),
@@ -524,19 +518,6 @@ class AddEditSendViewModel @Inject constructor(
         }
     }
 
-    private fun handlePasswordChange(action: AddEditSendAction.PasswordChange) {
-        updateCommonContent {
-            it.copy(
-                passwordInput = action.input,
-                sendAuth = when {
-                    action.input.isNotEmpty() -> SendAuth.Password
-                    !isSendEmailVerificationEnabled -> SendAuth.None
-                    else -> it.sendAuth
-                },
-            )
-        }
-    }
-
     private fun handleNoteChange(action: AddEditSendAction.NoteChange) {
         updateCommonContent {
             it.copy(noteInput = action.input)
@@ -564,7 +545,7 @@ class AddEditSendViewModel @Inject constructor(
     }
 
     private fun handleAuthTypeSelect(action: AddEditSendAction.AuthTypeSelect) {
-        // Check if user is trying to select Email auth without premium
+        // Check if user is trying to select Email auth without Premium
         if (action.sendAuth is SendAuth.Email && !state.isPremium) {
             mutableStateFlow.update {
                 it.copy(dialogState = AddEditSendState.DialogState.EmailAuthRequiresPremium)
@@ -648,15 +629,19 @@ class AddEditSendViewModel @Inject constructor(
     }
 
     private fun handleUpgradeToPremiumClick() {
-        val baseUrl = environmentRepo
-            .environment
-            .environmentUrlData
-            .baseWebVaultUrlOrDefault
-        sendEvent(
-            AddEditSendEvent.NavigateToPremium(
-                uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium",
-            ),
-        )
+        if (premiumStateManager.isInAppUpgradeAvailable()) {
+            sendEvent(AddEditSendEvent.NavigateToPlanModal)
+        } else {
+            val baseUrl = environmentRepo
+                .environment
+                .environmentUrlData
+                .baseWebVaultUrlOrDefault
+            sendEvent(
+                AddEditSendEvent.NavigateToPremium(
+                    uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium",
+                ),
+            )
+        }
     }
 
     @Suppress("LongMethod")
@@ -712,7 +697,7 @@ class AddEditSendViewModel @Inject constructor(
             (content.selectedType as? AddEditSendState.ViewState.Content.SendType.File)
                 ?.let { fileType ->
                     if (!state.isPremium) {
-                        // We should never get here without a premium account, but we do one last
+                        // We should never get here without a Premium account, but we do one last
                         // check just in case.
                         mutableStateFlow.update {
                             it.copy(
@@ -847,10 +832,6 @@ class AddEditSendViewModel @Inject constructor(
         get() = !policyManager
             .getActivePolicies<PolicyInformation.SendOptions>()
             .any { it.shouldDisableHideEmail ?: false }
-
-    private val isSendEmailVerificationEnabled: Boolean
-        get() = featureFlagManager
-            .getFeatureFlag(key = FlagKey.SendEmailVerification)
 
     private inline fun onContent(
         crossinline block: (AddEditSendState.ViewState.Content) -> Unit,
@@ -1001,7 +982,6 @@ data class AddEditSendState(
                 val expirationDate: Instant?,
                 val sendUrl: String?,
                 val hasPassword: Boolean,
-                val isSendEmailVerificationEnabled: Boolean,
                 val sendAuth: SendAuth,
             ) : Parcelable
 
@@ -1057,7 +1037,7 @@ data class AddEditSendState(
 
         /**
          * Displays a dialog to the user indicating that email authentication requires
-         * a premium account.
+         * a Premium account.
          */
         @Parcelize
         data object EmailAuthRequiresPremium : DialogState()
@@ -1110,9 +1090,14 @@ sealed class AddEditSendEvent {
     ) : AddEditSendEvent()
 
     /**
-     * Navigate to the premium upgrade page.
+     * Navigate to the Premium upgrade page.
      */
     data class NavigateToPremium(val uri: String) : AddEditSendEvent()
+
+    /**
+     * Navigates to the in-app plan modal for premium upgrade.
+     */
+    data object NavigateToPlanModal : AddEditSendEvent()
 }
 
 /**
@@ -1183,11 +1168,6 @@ sealed class AddEditSendAction {
     data class TextChange(val input: String) : AddEditSendAction()
 
     /**
-     * Value of the password field updated.
-     */
-    data class PasswordChange(val input: String) : AddEditSendAction()
-
-    /**
      * Value of the note text field updated.
      */
     data class NoteChange(val input: String) : AddEditSendAction()
@@ -1250,7 +1230,7 @@ sealed class AddEditSendAction {
     data class AuthEmailRemove(val authEmail: AuthEmail) : AddEditSendAction()
 
     /**
-     * User clicked upgrade to premium from the email auth premium dialog.
+     * User clicked upgrade to Premium from the email auth Premium dialog.
      */
     data object UpgradeToPremiumClick : AddEditSendAction()
 
