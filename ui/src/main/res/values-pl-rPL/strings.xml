@@ -121,14 +121,13 @@
     <string name="never">Nigdy</string>
     <string name="new_item_created">Element został dodany</string>
     <string name="no_cards">Brak kart w sejfie.</string>
-    <string name="new_card">Nowa karta</string>
+    <string name="add_card">Dodaj kartę</string>
     <string name="no_logins">Brak danych logowania w sejfie.</string>
     <string name="no_identities">Brak tożsamości w sejfie.</string>
-    <string name="new_identity">Nowa tożsamość</string>
+    <string name="add_identity">Dodaj tożsamość</string>
     <string name="no_notes">Brak notatek w sejfie.</string>
-    <string name="new_note">Nowa notatka</string>
-    <string name="new_item">Nowy element</string>
-    <string name="new_ssh_key">Nowy klucz SSH</string>
+    <string name="add_note">Dodaj notatkę</string>
+    <string name="add_ssh_key">Dodaj klucz SSH</string>
     <string name="no_text_sends">Brak wysyłek tekstowych w sejfie.</string>
     <string name="no_file_sends">Brak wysyłek plików w sejfie.</string>
     <string name="no_ssh_keys">Brak kluczy SSH w sejfie.</string>
@@ -477,8 +476,6 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="maximum_access_count_info">Po osiągnięciu maksymalnej liczby dostępów użytkownicy nie będą mieli dostępu do wysyłki.</string>
     <string name="maximum_access_count_reached">Maksymalna liczba dostępów została osiągnięta</string>
     <string name="current_access_count">Obecna liczba dostępów: %s</string>
-    <string name="new_password">Nowe hasło</string>
-    <string name="password_info">Opcjonalne hasło dla użytkownika, aby uzyskać dostęp do wysyłki.</string>
     <string name="remove_password">Usuń hasło</string>
     <string name="removing_send_password">Usuwanie hasła</string>
     <string name="password_removed">Hasło zostało usunięte</string>
@@ -824,7 +821,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="get_started">Rozpocznij</string>
     <string name="save_and_protect_your_data">Zapisz i chroń swoje dane</string>
     <string name="the_vault_protects_more_than_just_passwords">Sejf chroni nie tylko hasła. Przechowuj bezpiecznie dane logowania, identyfikatory, karty i notatki.</string>
-    <string name="new_login">Nowe dane logowania</string>
+    <string name="add_login">Dodaj dane logowania</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">Udostępniaj pliki i teksty każdemu na dowolnej platformie. Informacje będę szyfrowane end-to-end, zapewniając poufność.</string>
     <string name="send_sensitive_information_safely">Wysyłaj poufne informacje w bezpieczny sposób</string>
     <string name="import_saved_logins">Importuj zapisane dane logowania</string>
@@ -904,8 +901,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="copy_address">Kopiuj adres</string>
     <string name="biometrics_no_longer_supported_title">Biometria nie jest już obsługiwana na tym urządzeniu</string>
     <string name="biometrics_no_longer_supported">Wylogowano z aplikacji, ponieważ logowanie biometryczne urządzenia nie spełniają najnowszych wymagań bezpieczeństwa. Aby zaktualizować ustawienia, zaloguj się ponownie lub skontaktuj się z administratorem w celu uzyskania dostępu.</string>
-    <string name="cxp_import">Import plik CXP</string>
-    <string name="cxp_export">Eksport plik CXP</string>
     <string name="choose_three_or_four_random_words">Wybierz 3 lub 4 losowe słowa</string>
     <string name="pick_three_or_four_random_unrelated_words">Wybierz 3 lub 4 losowe, niepowiązane ze sobą słowa, które łatwo zapamiętasz. Pomyśl o <annotation emphasis="bold">obiektach, miejscach lub rzeczach</annotation>, które lubisz.</string>
     <string name="combine_those_words_together">Połącz te słowa</string>
@@ -1235,6 +1230,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="archiving_items_is_a_premium_feature">Archiwizowanie elementów jest funkcją Premium. Twój obecny plan nie zawiera tej funkcji.</string>
     <string name="upgrade_to_premium">Kup konto Premium</string>
     <string name="plan">Plan</string>
+    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Aby zarządzać subskrypcją Premium, zaloguj się do sejfu internetowego na komputerze.</string>
     <string name="unlock_advanced_security_features">Odblokuj zaawansowane funkcje bezpieczeństwa</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Plan Premium zapewnia więcej narzędzi, które pomogą Ci zachować bezpieczeństwo i kontrolę.</string>
     <string name="this_item_is_archived">Element jest zarchiwizowany.</string>
@@ -1257,6 +1253,25 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="continue_without_syncing">Kontynuuj bez synchronizacji</string>
     <string name="external_link">Link zewnętrzny</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s (link zewnętrzny)</string>
+    <string name="devices">Urządzenia</string>
+    <string name="mobile_platform">Mobile - %1$s</string>
+    <string name="extension_platform">Extension - %1$s</string>
+    <string name="web_platform">Web - %1$s</string>
+    <string name="desktop_platform">Desktop - %1$s</string>
+    <string name="cli_platform">CLI - %1$s</string>
+    <string name="sdk">SDK</string>
+    <string name="server">Serwer</string>
+    <string name="unknown_device">Nieznane urządzenie</string>
+    <string name="first_login_date"><annotation emphasis="bold">Pierwsze logowanie:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="current_session">Obecna sesja</string>
+    <string name="pending_request">Pending request</string>
+    <string name="today">Dzisiaj</string>
+    <string name="past_seven_days">Ostatnie 7 dni</string>
+    <string name="past_fourteen_days">Ostatnie 14 dni</string>
+    <string name="past_thirty_days">Ostatnie 30 dni</string>
+    <string name="over_thirty_days_ago">Ponad 30 dni temu</string>
+    <string name="recently_active"><annotation emphasis="bold">Ostatnia aktywność:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="trusted">Zaufane</string>
     <string name="preview_not_available_for_files">Podgląd pliku %1$s jest niedostępny. Nadal możesz go pobrać na urządzenie.</string>
     <string name="this_file_is_too_large_to_preview">Plik jest zbyt duży, aby go wyświetlić. Nadal możesz go pobrać na urządzenie.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden nie mógł odszyfrować pliku, więc nie można wyświetlić podglądu.</string>
@@ -1276,7 +1291,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="secure_file_storage">Bezpieczne przechowywanie plików</string>
     <string name="breach_monitoring">Monitorowanie naruszeń</string>
     <string name="upgrade_now">Ulepsz teraz</string>
-    <string name="stripe_checkout_footer">Zostaniesz przekierowany do płatności Stripe, aby zakończyć zakup.</string>
+    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">Zostaniesz przekierowany do płatności Stripe, aby zakończyć zakup.</string>
     <string name="opening_checkout">Otwieranie zamówienia…</string>
     <string name="secure_checkout_didnt_load">Nie udało się załadować płatności</string>
     <string name="trouble_opening_payment_page">Mieliśmy problem z otwarciem płatności. Spróbuj ponownie.</string>
@@ -1297,20 +1312,22 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="storage_cost">Koszt przestrzeni</string>
     <string name="discount">Zniżka</string>
     <string name="estimated_tax">Podatek</string>
+    <string name="total">Łącznie</string>
     <string name="billing_rate_per_year">%1$s / rok</string>
     <string name="billing_rate_per_month">%1$s / miesiąc</string>
     <string name="manage_plan">Zarządzaj planem</string>
+    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Manage your subscription plan in the Bitwarden web app.</string>
     <string name="cancel_premium">Anuluj Konto Premium</string>
-    <string name="cancel_now">Anuluj teraz</string>
-    <string name="cancel_premium_confirmation">Będziesz mieć dostęp do funkcji Premium do %1$s.</string>
     <string name="subscription_status_active">Aktywny</string>
     <string name="subscription_status_canceled">Anulowano</string>
-    <string name="subscription_status_overdue_payment">Zaległa płatność</string>
     <string name="subscription_status_past_due">Termin przekroczony</string>
     <string name="subscription_status_paused">Wstrzymano</string>
+    <string name="subscription_status_update_payment">Zaktualizuj płatność</string>
+    <string name="subscription_status_pending_cancellation">Pending cancellation</string>
+    <string name="subscription_pending_cancellation_description">Your subscription is scheduled to cancel on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. You can reinstate it anytime before then.</string>
     <string name="premium_next_charge_summary">Następna płatność %2$s w kwocie %1$s USD.</string>
     <string name="subscription_canceled_description">Twoja subskrypcja została anulowana %1$s. Zasubskrybuj ponownie, aby kontynuować korzystanie z funkcji Premium.</string>
-    <string name="subscription_overdue_description">Nie mogliśmy przetworzyć płatności. Zaktualizuj metodę płatności przed %1$s.</string>
+    <string name="subscription_update_payment_description">Nie mogliśmy przetworzyć płatności. Zaktualizuj metodę płatności przed <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Masz %1$d dzień od daty wygaśnięcia subskrypcji na uregulowanie płatności. Zapłać zaległe faktury do %2$s.</item>
         <item quantity="few">Masz %1$d dni od daty wygaśnięcia subskrypcji na uregulowanie płatności. Zapłać zaległe faktury do %2$s.</item>
@@ -1327,9 +1344,9 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="view_bank_account">Pokaż konto bankowe</string>
     <string name="view_license">Pokaż prawo jazdy</string>
     <string name="view_passport">Pokaż paszport</string>
-    <string name="new_bank_account">Nowe konto bankowe</string>
-    <string name="new_license">Nowe prawo jazdy</string>
-    <string name="new_passport">Nowy paszport</string>
+    <string name="add_bank_account">Dodaj konto bankowe</string>
+    <string name="add_license">Add license</string>
+    <string name="add_passport">Dodaj paszport</string>
     <string name="edit_bank_account">Edytuj konto bankowe</string>
     <string name="edit_license">Edytuj prawo jazdy</string>
     <string name="edit_passport">Edytuj paszport</string>
@@ -1378,6 +1395,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="license_details">Szczegóły prawa jazdy</string>
     <string name="licenses">Prawa jazdy</string>
     <string name="no_licenses">Brak praw jazdy w sejfie.</string>
+    <string name="no_passports">Brak paszportów w sejfie.</string>
     <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">Żądanie zostało przerwane, ponieważ aplikacja wymagała ponownego uwierzytelniania. Spróbuj ponownie.</string>
     <string name="passport_details">Szczegóły paszportu</string>
     <string name="sex">Płeć</string>
@@ -1391,4 +1409,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Aplikacja Bitwarden wymaga dostępu do sieci lokalnej, aby zsynchronizować się z serwerem. Bez tego uprawnienia aplikacja nie będzie mogła nawiązać połączenia.</string>
     <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Without this permission, Bitwarden won’t be able to connect and sync with your server. You can enable this in your device settings.</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Your request was interrupted because the app needs local network access. You can enable this in your device settings.</string>
+    <string name="continue_to_stripe">Kontynuować przejście do Stripe?</string>
+    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">You’ll be taken to Stripe to manage your subscription cancellation.</string>
 </resources>

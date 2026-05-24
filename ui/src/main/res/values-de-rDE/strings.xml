@@ -119,14 +119,13 @@
     <string name="never">Niemals</string>
     <string name="new_item_created">Eintrag erstellt</string>
     <string name="no_cards">Du hast keine Karten in deinem Tresor.</string>
-    <string name="new_card">Neue Karte</string>
+    <string name="add_card">Karte hinzufügen</string>
     <string name="no_logins">Du hast keine Zugangsdaten in deinem Tresor.</string>
     <string name="no_identities">Du hast keine Identitäten in deinem Tresor.</string>
-    <string name="new_identity">Neue Identität</string>
+    <string name="add_identity">Identität hinzufügen</string>
     <string name="no_notes">Du hast keine Notizen in deinem Tresor.</string>
-    <string name="new_note">Neue Notiz</string>
-    <string name="new_item">Neuer Eintrag</string>
-    <string name="new_ssh_key">Neuer SSH-Schlüssel</string>
+    <string name="add_note">Notiz hinzufügen</string>
+    <string name="add_ssh_key">SSH-Schlüssel hinzufügen</string>
     <string name="no_text_sends">Du hast keine Text-Sends in deinem Tresor.</string>
     <string name="no_file_sends">Du hast keine Datei-Sends in deinem Tresor.</string>
     <string name="no_ssh_keys">Es gibt keine SSH-Schlüssel in deinem Tresor.</string>
@@ -473,8 +472,6 @@ Das Scannen erfolgt automatisch.</string>
     <string name="maximum_access_count_info">Falls aktiviert, können Benutzer nicht mehr auf dieses Send zugreifen, sobald die maximale Zugriffsanzahl erreicht ist.</string>
     <string name="maximum_access_count_reached">Maximale Zugriffsanzahl erreicht</string>
     <string name="current_access_count">Aktuelle Zugriffsanzahl: %s</string>
-    <string name="new_password">Neues Passwort</string>
-    <string name="password_info">Optional ein Passwort verlangen, damit Benutzer auf dieses Send zugreifen können.</string>
     <string name="remove_password">Passwort entfernen</string>
     <string name="removing_send_password">Passwort wird entfernt</string>
     <string name="password_removed">Passwort entfernt</string>
@@ -814,7 +811,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="get_started">Loslegen</string>
     <string name="save_and_protect_your_data">Speicher und schütze deine Daten</string>
     <string name="the_vault_protects_more_than_just_passwords">Der Tresor schützt mehr als nur Passwörter. Speicher hier sicher Zugangsdaten, Identitäten, Karten und Notizen.</string>
-    <string name="new_login">Neue Zugangsdaten</string>
+    <string name="add_login">Zugangsdaten hinzufügen</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">Teile Dateien und Daten sicher mit jedem auf jeder Plattform. Deine Informationen bleiben Ende-zu-Ende-verschlüsselt, während die Verbreitung begrenzt wird.</string>
     <string name="send_sensitive_information_safely">Sensible Informationen sicher versenden</string>
     <string name="import_saved_logins">Gespeicherte Zugangsdaten importieren</string>
@@ -892,8 +889,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="copy_address">Adresse kopieren</string>
     <string name="biometrics_no_longer_supported_title">Biometrie wird auf diesem Gerät nicht mehr unterstützt</string>
     <string name="biometrics_no_longer_supported">Du wurdest abgemeldet, weil die biometrischen Daten deines Geräts nicht den neuesten Sicherheitsanforderungen entsprechen. Um die Einstellungen zu aktualisieren, melde dich erneut an oder kontaktiere deinen Administrator für den Zugriff.</string>
-    <string name="cxp_import">CXP-Import</string>
-    <string name="cxp_export">CXP-Export</string>
     <string name="choose_three_or_four_random_words">Wähle drei oder vier zufällige Wörter aus</string>
     <string name="pick_three_or_four_random_unrelated_words">Wähle drei oder vier zufällige, nicht zusammenhängende Wörter, die du dir leicht merken kannst. Denke an Gegenstände, Orte oder Dinge, die du magst.</string>
     <string name="combine_those_words_together">Diese Wörter miteinander kombinieren</string>
@@ -1217,6 +1212,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="archiving_items_is_a_premium_feature">Das Archivieren von Einträgen ist eine Premium-Funktion. Dein aktueller Tarif umfasst keinen Zugriff auf diese Funktion.</string>
     <string name="upgrade_to_premium">Auf Premium upgraden</string>
     <string name="plan">Tarif</string>
+    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Um dein Premium-Abonnement zu verwalten, musst du dich bei deinem Web-Tresor auf einem Computer anmelden.</string>
     <string name="unlock_advanced_security_features">Erweiterte Sicherheitsfunktionen freischalten</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Mit einem Premium-Tarif stehen dir mehr Werkzeuge zur Verfügung, um sicher zu bleiben und die Kontrolle zu behalten.</string>
     <string name="this_item_is_archived">Dieser Eintrag ist archiviert.</string>
@@ -1239,6 +1235,25 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="continue_without_syncing">Ohne Synchronisierung fortfahren</string>
     <string name="external_link">Externer Link</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Externer Link</string>
+    <string name="devices">Geräte</string>
+    <string name="mobile_platform">Smartphone - %1$s</string>
+    <string name="extension_platform">Erweiterung - %1$s</string>
+    <string name="web_platform">Web - %1$s</string>
+    <string name="desktop_platform">Desktop - %1$s</string>
+    <string name="cli_platform">CLI - %1$s</string>
+    <string name="sdk">SDK</string>
+    <string name="server">Server</string>
+    <string name="unknown_device">Unbekanntes Gerät</string>
+    <string name="first_login_date"><annotation emphasis="bold">Erste Anmeldung:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="current_session">Aktuelle Sitzung</string>
+    <string name="pending_request">Ausstehende Anfrage</string>
+    <string name="today">Heute</string>
+    <string name="past_seven_days">Letzte 7 Tage</string>
+    <string name="past_fourteen_days">Letzte 14 Tage</string>
+    <string name="past_thirty_days">Letzte 30 Tage</string>
+    <string name="over_thirty_days_ago">Vor mehr als 30 Tagen</string>
+    <string name="recently_active"><annotation emphasis="bold">Kürzlich aktiv:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="trusted">Vertrauenswürdig</string>
     <string name="preview_not_available_for_files">Für %1$s Dateien ist keine Vorschau verfügbar. Du kannst sie trotzdem herunterladen, um sie auf deinem Gerät anzuzeigen.</string>
     <string name="this_file_is_too_large_to_preview">Diese Datei ist zu groß für die Vorschau. Du kannst sie trotzdem herunterladen, um sie auf deinem Gerät anzuzeigen.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden konnte diese Datei nicht entschlüsseln, daher kann die Vorschau nicht angezeigt werden.</string>
@@ -1258,7 +1273,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="secure_file_storage">Sichere Dateispeicherung</string>
     <string name="breach_monitoring">Datendiebstahl-Überwachung</string>
     <string name="upgrade_now">Jetzt upgraden</string>
-    <string name="stripe_checkout_footer">Du wirst zur sicheren Kaufabwicklung von Stripe weitergeleitet, um deinen Kauf abzuschließen.</string>
+    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">Du wirst zur sicheren Kaufabwicklung von Stripe weitergeleitet, um deinen Kauf abzuschließen.</string>
     <string name="opening_checkout">Kaufabwicklung wird geöffnet…</string>
     <string name="secure_checkout_didnt_load">Die sichere Kaufabwicklung wurde nicht geladen</string>
     <string name="trouble_opening_payment_page">Wir hatten Probleme beim Öffnen der Zahlungsseite. Bitte versuche es erneut.</string>
@@ -1279,20 +1294,22 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="storage_cost">Speicherkosten</string>
     <string name="discount">Rabatt</string>
     <string name="estimated_tax">Voraussichtliche Steuern</string>
+    <string name="total">Gesamt</string>
     <string name="billing_rate_per_year">%1$s / Jahr</string>
     <string name="billing_rate_per_month">%1$s / Monat</string>
     <string name="manage_plan">Tarif verwalten</string>
+    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Verwalte dein Abonnement in der Bitwarden Web-App.</string>
     <string name="cancel_premium">Premium kündigen</string>
-    <string name="cancel_now">Jetzt kündigen</string>
-    <string name="cancel_premium_confirmation">Du hast weiterhin Premium-Zugriff bis zum %1$s.</string>
     <string name="subscription_status_active">Aktiv</string>
     <string name="subscription_status_canceled">Gekündigt</string>
-    <string name="subscription_status_overdue_payment">Überfällige Zahlung</string>
     <string name="subscription_status_past_due">Überfällig</string>
     <string name="subscription_status_paused">Pausiert</string>
+    <string name="subscription_status_update_payment">Zahlungsmethode aktualisieren</string>
+    <string name="subscription_status_pending_cancellation">Ausstehende Kündigung</string>
+    <string name="subscription_pending_cancellation_description">Dein Abonnement läuft am <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> ab. Du kannst es jederzeit vor diesem Datum wieder aktivieren.</string>
     <string name="premium_next_charge_summary">Deine nächste Abbuchung in Höhe von %1$s USD ist am %2$s fällig.</string>
     <string name="subscription_canceled_description">Dein Abonnement wurde am %1$s gekündigt. Abonniere erneut, um die Premium-Funktionen weiterhin nutzen zu können.</string>
-    <string name="subscription_overdue_description">Wir konnten deine Zahlung nicht bearbeiten. Aktualisiere deine Zahlungsdaten, bevor dein Abonnement am %1$s endet.</string>
+    <string name="subscription_update_payment_description">Deine Zahlung konnte nicht bearbeitet werden. Aktualisiere deine Zahlungsmethode, bevor dein Abonnement am <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> endet.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Du hast eine Nachfrist von %1$d Tag ab dem Ablaufdatum deines Abonnements. Bitte begleiche den ausstehenden Betrag bis zum %2$s.</item>
         <item quantity="other">Du hast eine Nachfrist von %1$d Tagen ab dem Ablaufdatum deines Abonnements. Bitte begleiche den ausstehenden Betrag bis zum %2$s.</item>
@@ -1307,9 +1324,9 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="view_bank_account">Bankkonto anzeigen</string>
     <string name="view_license">Führerschein anzeigen</string>
     <string name="view_passport">Reisepass anzeigen</string>
-    <string name="new_bank_account">Neues Bankkonto</string>
-    <string name="new_license">Neuer Führerschein</string>
-    <string name="new_passport">Neuer Reisepass</string>
+    <string name="add_bank_account">Bankkonto hinzufügen</string>
+    <string name="add_license">Führerschein hinzufügen</string>
+    <string name="add_passport">Reisepass hinzufügen</string>
     <string name="edit_bank_account">Bankkonto bearbeiten</string>
     <string name="edit_license">Führerschein bearbeiten</string>
     <string name="edit_passport">Reisepass bearbeiten</string>
@@ -1356,19 +1373,22 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="account_details">Kontodetails</string>
     <string name="no_bank_accounts">Es gibt keine Bankkonten in deinem Tresor.</string>
     <string name="license_details">Führerscheindetails</string>
-    <string name="licenses">Licenses</string>
-    <string name="no_licenses">There are no licenses in your vault.</string>
+    <string name="licenses">Führerscheine</string>
+    <string name="no_licenses">Es gibt keine Führerscheine in deinem Tresor.</string>
+    <string name="no_passports">Es gibt keine Reisepässe in deinem Tresor.</string>
     <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">Deine Anfrage wurde unterbrochen, weil die App erneut authentifiziert werden musste. Bitte versuche es erneut.</string>
-    <string name="passport_details">Passport details</string>
-    <string name="sex">Sex</string>
-    <string name="birth_place">Birth place</string>
-    <string name="national_identification_number">National identification number</string>
-    <string name="copy_national_identification_number">Copy national identification number</string>
-    <string name="access_your_local_network">Access your local network</string>
-    <string name="local_network_access_required">Local network access required</string>
-    <string name="ask_again_later">Ask again later</string>
-    <string name="enable_local_network_access">Enable local network access</string>
-    <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Bitwarden needs local network access to sync with your server. Without this permission, the app won’t be able to connect.</string>
-    <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Without this permission, Bitwarden won’t be able to connect and sync with your server. You can enable this in your device settings.</string>
-    <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Your request was interrupted because the app needs local network access. You can enable this in your device settings.</string>
+    <string name="passport_details">Reisepassdetails</string>
+    <string name="sex">Geschlecht</string>
+    <string name="birth_place">Geburtsort</string>
+    <string name="national_identification_number">Nationale Identifikationsnummer</string>
+    <string name="copy_national_identification_number">Nationale Identifikationsnummer kopieren</string>
+    <string name="access_your_local_network">Zugriff auf dein lokales Netzwerk</string>
+    <string name="local_network_access_required">Lokaler Netzwerkzugriff erforderlich</string>
+    <string name="ask_again_later">Später erneut fragen</string>
+    <string name="enable_local_network_access">Lokalen Netzwerkzugriff aktivieren</string>
+    <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Bitwarden benötigt lokalen Netzwerkzugriff zum Synchronisieren mit deinem Server. Ohne diese Berechtigung kann sich die App nicht verbinden.</string>
+    <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Ohne diese Berechtigung wird Bitwarden keine Verbindung herstellen und mit deinem Server synchronisieren können. Du kannst dies in deinen Geräteeinstellungen aktivieren.</string>
+    <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Deine Anfrage wurde unterbrochen, da die App lokalen Netzwerkzugriff benötigt. Du kannst dies in deinen Geräteeinstellungen aktivieren.</string>
+    <string name="continue_to_stripe">Weiter zu Stripe?</string>
+    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Du wirst zu Stripe weitergeleitet, um die Kündigung deines Abonnements vorzunehmen.</string>
 </resources>

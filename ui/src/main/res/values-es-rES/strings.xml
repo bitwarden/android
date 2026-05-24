@@ -12,7 +12,7 @@
     <string name="copy_username">Copiar nombre de usuario</string>
     <string name="delete">Eliminar</string>
     <string name="preview">Preview</string>
-    <string name="deleting">Deleting…</string>
+    <string name="deleting">Eliminando…</string>
     <string name="do_you_really_want_to_delete">¿Seguro que quieres eliminarlo? Esto no puedes deshacerse.</string>
     <string name="edit">Editar</string>
     <string name="edit_folder">Editar carpeta</string>
@@ -55,7 +55,7 @@
     <string name="password">Contraseña</string>
     <string name="save">Guardar</string>
     <string name="move">Mover</string>
-    <string name="saving">Saving…</string>
+    <string name="saving">Guardando…</string>
     <string name="settings">Ajustes</string>
     <string name="show">Mostrar</string>
     <string name="item_deleted">Elemento eliminado</string>
@@ -104,7 +104,7 @@
     <string name="immediately">Inmediatamente</string>
     <string name="vault_timeout_log_out_confirmation_title">¿Establecer el tiempo de espera de la sesión en \"Cerrar sesión\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">Después del período de tiempo de espera, se cerrará la sesión. Deberá estar conectado a Internet para iniciar sesión y volver a acceder a su caja fuerte. Los ajustes y el PIN guardados en este dispositivo no cambiarán.</string>
-    <string name="logging_in">Logging in…</string>
+    <string name="logging_in">Iniciando sesión…</string>
     <string name="login_to_bitwarden">Iniciar sesión en Bitwarden</string>
     <string name="master_password_confirmation_val_message">La confirmación de la contraseña no es correcta.</string>
     <string name="master_password_description">La contraseña maestra es la clave que utilizas para acceder a tu caja fuerte. Es muy importante que no olvides tu contraseña maestra. No hay forma de recuperarla si la olvidas.</string>
@@ -119,14 +119,13 @@
     <string name="never">Nunca</string>
     <string name="new_item_created">Elemento agregado</string>
     <string name="no_cards">No hay tarjetas en tu caja fuerte.</string>
-    <string name="new_card">Nueva tarjeta</string>
+    <string name="add_card">Add card</string>
     <string name="no_logins">No hay inicios de sesión en tu caja fuerte.</string>
     <string name="no_identities">No hay identidades en tu caja fuerte.</string>
-    <string name="new_identity">Nueva identidad</string>
+    <string name="add_identity">Add identity</string>
     <string name="no_notes">No hay notas en tu caja fuerte.</string>
-    <string name="new_note">Nueva nota</string>
-    <string name="new_item">Nuevo elemento</string>
-    <string name="new_ssh_key">Nueva clave SSH</string>
+    <string name="add_note">Add note</string>
+    <string name="add_ssh_key">Add SSH key</string>
     <string name="no_text_sends">No hay textos Send en tu caja fuerte.</string>
     <string name="no_file_sends">No hay archivos Send en tu caja fuerte.</string>
     <string name="no_ssh_keys">No hay claves SSH en tu caja fuerte.</string>
@@ -139,7 +138,7 @@
     <string name="other">Otro</string>
     <string name="password_generator">Generador de contraseñas</string>
     <string name="password_hint">Pista de contraseña</string>
-    <string name="password_hint_alert">We’ve sent you an email with your master password hint.</string>
+    <string name="password_hint_alert">Te hemos enviado un correo electrónico con la pista de tu contraseña maestra.</string>
     <string name="password_override_alert">¿Estás seguro de que quieres sobreescribir la contraseña actual?</string>
     <string name="retype_master_password">Reescribir contraseña maestra</string>
     <string name="retype_new_master_password_required">Vuelva a escribir la nueva contraseña maestra (requerido)</string>
@@ -148,8 +147,8 @@
     <string name="select">Seleccionar</string>
     <string name="item_details">Detalles del elemento</string>
     <string name="item_updated">Elemento guardado</string>
-    <string name="submitting">Submitting…</string>
-    <string name="syncing">Syncing…</string>
+    <string name="submitting">Enviando…</string>
+    <string name="syncing">Sincronizando…</string>
     <string name="syncing_complete">Sincronización completada</string>
     <string name="two_step_login">Autenticación en dos pasos</string>
     <string name="unlock_with_biometrics">Desbloquear con Biometría</string>
@@ -188,7 +187,7 @@
     <string name="add_new_attachment">Añadir nuevo archivo adjunto</string>
     <string name="attachments">Adjuntos</string>
     <string name="unable_to_download_file">No se pudo descargar el archivo.</string>
-    <string name="downloading">Downloading…</string>
+    <string name="downloading">Descargando…</string>
     <string name="attachment_large_warning">Este adjunto ocupa %1$s. ¿Estás seguro de que quieres descargarlo en tu dispositivo?</string>
     <string name="authenticator_key">Clave de autenticación (TOTP)</string>
     <string name="verification_code_totp">Código de verificación (TOTP)</string>
@@ -352,7 +351,7 @@ El escaneo se realizará automáticamente.</string>
     <string name="generator">Generador</string>
     <string name="no_folders_to_list">No hay carpetas que listar.</string>
     <string name="fingerprint_phrase">Frase de huella digital</string>
-    <string name="your_accounts_fingerprint">Your account’s fingerprint phrase</string>
+    <string name="your_accounts_fingerprint">Frase de la huella digital de su cuenta</string>
     <string name="export_vault">Exportar caja fuerte</string>
     <string name="lock_now">Bloquear ahora</string>
     <string name="pin">PIN</string>
@@ -408,10 +407,10 @@ El escaneo se realizará automáticamente.</string>
     <string name="save_attachment_success">Archivo adjunto guardado con éxito</string>
     <string name="autofill_tile_accessibility_required">Por favor, habilite \"Servicio de Accesibilidad de Autocompletado\" en la configuración de Bitwarden para utilizar la función de autocompletado.</string>
     <string name="autofill_tile_uri_not_found">No se han detectado campos de contraseña</string>
-    <string name="soft_deleting">Sending to trash…</string>
+    <string name="soft_deleting">Enviando a la papelera…</string>
     <string name="item_soft_deleted">El elemento ha sido enviado a la papelera.</string>
     <string name="restore">Restaurar</string>
-    <string name="restoring">Restoring…</string>
+    <string name="restoring">Restaurando…</string>
     <string name="item_restored">El elemento ha sido restaurado.</string>
     <string name="trash">Papelera</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">¿Seguro que quieres eliminarlo permanentemente? Esto no se puede deshacer.</string>
@@ -473,8 +472,6 @@ El escaneo se realizará automáticamente.</string>
     <string name="maximum_access_count_info">Si se configura, los usuarios ya no podrán acceder a este Send una vez que se alcance el número máximo de accesos.</string>
     <string name="maximum_access_count_reached">Número máximo de accesos alcanzado</string>
     <string name="current_access_count">Número de acceso actual</string>
-    <string name="new_password">Nueva contraseña</string>
-    <string name="password_info">Opcionalmente requieren una contraseña para que los usuarios accedan al Send.</string>
     <string name="remove_password">Eliminar contraseña</string>
     <string name="removing_send_password">Eliminando contraseña</string>
     <string name="password_removed">Contraseña eliminada</string>
@@ -708,7 +705,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="privacy_policy_description_long">Revise nuestra política de privacidad en bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Explora más características de tu cuenta de Bitwarden en la aplicación web.</string>
     <string name="learn_about_organizations_description_long">Bitwarden te permite compartir tus elementos de la caja fuerte con otros utilizando una organización. Más información en el sitio web de bitwarden.com.</string>
-    <string name="created_x">Created %1$s</string>
+    <string name="created_x">Creado %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Tu organización requiere que establezcas una contraseña maestra.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Configura una opción de desbloqueo para cambiar tu acción de tiempo de espera de tu caja fuerte.</string>
     <string name="save_passkey_as_new_login">Guardar clave de acceso como un nuevo inicio de sesión</string>
@@ -748,8 +745,8 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="security_prioritized">Seguridad, priorizada</string>
     <string name="welcome_message_1">Save logins, cards, and identities to your secure vault. Bitwarden uses zero-knowledge, end-to-end encryption to protect what’s important to you.</string>
     <string name="welcome_message_2">Configura el desbloqueo biométrico y el autocompletado para iniciar sesión en tus cuentas sin tener que escribir ni una sola letra.</string>
-    <string name="quick_and_easy_login">Quick and easy login</string>
-    <string name="level_up_your_logins">Level up your logins</string>
+    <string name="quick_and_easy_login">Inicio de sesión rápido y fácil</string>
+    <string name="level_up_your_logins">Sube de nivel tus inicios de sesión</string>
     <string name="welcome_message_3">Usa el generador para crear contraseñas seguras y únicas para todas tus cuentas.</string>
     <string name="your_data_when_and_where_you_need_it">Tus datos, dónde y cuándo los necesites</string>
     <string name="welcome_message_4">Guarda contraseñas ilimitadas a través de dispositivos ilimitados con aplicaciones móviles, de navegador y de escritorio de Bitwarden.</string>
@@ -816,7 +813,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="get_started">Empezar</string>
     <string name="save_and_protect_your_data">Save and protect your data</string>
     <string name="the_vault_protects_more_than_just_passwords">La caja fuerte protege mucho más que contraseñas. Guarda aquí de forma segura tus datos de inicio de sesión, identificaciones, tarjetas y notas.</string>
-    <string name="new_login">Nuevo inicio de sesión</string>
+    <string name="add_login">Add login</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">Comparte archivos y datos de forma segura con cualquiera, en cualquier plataforma. Tu información permanecerá encriptada de extremo a extremo, limitando su exposición.</string>
     <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
     <string name="import_saved_logins">Importar inicios de sesión guardados</string>
@@ -894,8 +891,6 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="copy_address">Copiar dirección</string>
     <string name="biometrics_no_longer_supported_title">La biometría ya no está soportada en este dispositivo</string>
     <string name="biometrics_no_longer_supported">Se ha cerrado su sesión porque los datos biométricos de su dispositivo no cumplen los últimos requisitos de seguridad. Para actualizar los ajustes, vuelva a iniciar sesión o póngase en contacto con su administrador para obtener acceso.</string>
-    <string name="cxp_import">Importar CXP</string>
-    <string name="cxp_export">Exportar CXP</string>
     <string name="choose_three_or_four_random_words">Elige tres o cuatro palabras aleatorias</string>
     <string name="pick_three_or_four_random_unrelated_words">Elige tres o cuatro palabras aleatorias sin relación que puedas memorizar fácilmente. Piensa en <annotation emphasis="bold">objetos, lugares o cosas</annotation> que te gusten.</string>
     <string name="combine_those_words_together">Combinar estas palabras juntas</string>
@@ -914,9 +909,9 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3 DE 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="learn_about_new_logins">Learn about new logins</string>
+    <string name="learn_about_new_logins">Aprende sobre nuevos inicios de sesión</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We’ll walk you through the key features to add a new login.</string>
-    <string name="explore_the_generator">Explore the generator</string>
+    <string name="explore_the_generator">Explora el generador</string>
     <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Saber más acerca de generar credenciales seguras de inicio de sesión con un tour guiado.</string>
     <string name="import_client_certificate">Importar certificado de cliente</string>
     <string name="enter_the_client_certificate_password_and_alias">Introduce la contraseña del certificado de cliente y el alias deseado para este certificado.</string>
@@ -1221,6 +1216,7 @@ cualquier problema.</string>
     <string name="archiving_items_is_a_premium_feature">El archivado de elementos es una funcionalidad Premium. Tu plan actual no incluye acceso a esta función.</string>
     <string name="upgrade_to_premium">Mejorar a premium</string>
     <string name="plan">Plan</string>
+    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
     <string name="unlock_advanced_security_features">Unlock advanced security features</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">Este elemento está archivado.</string>
@@ -1243,6 +1239,25 @@ cualquier problema.</string>
     <string name="continue_without_syncing">Continuar sin sincronizar</string>
     <string name="external_link">Enlace externo</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Enlace externo</string>
+    <string name="devices">Devices</string>
+    <string name="mobile_platform">Mobile - %1$s</string>
+    <string name="extension_platform">Extension - %1$s</string>
+    <string name="web_platform">Web - %1$s</string>
+    <string name="desktop_platform">Desktop - %1$s</string>
+    <string name="cli_platform">CLI - %1$s</string>
+    <string name="sdk">SDK</string>
+    <string name="server">Server</string>
+    <string name="unknown_device">Unknown device</string>
+    <string name="first_login_date"><annotation emphasis="bold">First login:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="current_session">Current session</string>
+    <string name="pending_request">Pending request</string>
+    <string name="today">Today</string>
+    <string name="past_seven_days">Past 7 days</string>
+    <string name="past_fourteen_days">Past 14 days</string>
+    <string name="past_thirty_days">Past 30 days</string>
+    <string name="over_thirty_days_ago">Over 30 days ago</string>
+    <string name="recently_active"><annotation emphasis="bold">Recently active:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="trusted">Trusted</string>
     <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
     <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
@@ -1262,7 +1277,7 @@ cualquier problema.</string>
     <string name="secure_file_storage">Secure file storage</string>
     <string name="breach_monitoring">Breach monitoring</string>
     <string name="upgrade_now">Upgrade now</string>
-    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
     <string name="opening_checkout">Opening checkout…</string>
     <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
     <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
@@ -1283,23 +1298,25 @@ cualquier problema.</string>
     <string name="storage_cost">Storage cost</string>
     <string name="discount">Discount</string>
     <string name="estimated_tax">Estimated tax</string>
+    <string name="total">Total</string>
     <string name="billing_rate_per_year">%1$s / year</string>
     <string name="billing_rate_per_month">%1$s / month</string>
     <string name="manage_plan">Manage plan</string>
+    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Manage your subscription plan in the Bitwarden web app.</string>
     <string name="cancel_premium">Cancel Premium</string>
-    <string name="cancel_now">Cancel now</string>
-    <string name="cancel_premium_confirmation">You’ll continue to have Premium access until %1$s.</string>
     <string name="subscription_status_active">Active</string>
     <string name="subscription_status_canceled">Canceled</string>
-    <string name="subscription_status_overdue_payment">Overdue payment</string>
     <string name="subscription_status_past_due">Past due</string>
     <string name="subscription_status_paused">Paused</string>
-    <string name="premium_next_charge_summary">Your next charge is for %1$s USD due on %2$s.</string>
-    <string name="subscription_canceled_description">Your subscription was canceled on %1$s. Resubscribe to continue using premium features.</string>
-    <string name="subscription_overdue_description">We couldn’t process your payment. Update your payment before your subscription ends on %1$s.</string>
+    <string name="subscription_status_update_payment">Update payment</string>
+    <string name="subscription_status_pending_cancellation">Pending cancellation</string>
+    <string name="subscription_pending_cancellation_description">Your subscription is scheduled to cancel on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. You can reinstate it anytime before then.</string>
+    <string name="premium_next_charge_summary">Your next charge is for <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD due on <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
+    <string name="subscription_canceled_description">Your subscription was canceled on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using premium features.</string>
+    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
-        <item quantity="one">You have a grace period of %1$d day from your subscription expiration date. Please resolve the past due amount by %2$s.</item>
-        <item quantity="other">You have a grace period of %1$d days from your subscription expiration date. Please resolve the past due amount by %2$s.</item>
+        <item quantity="one">You have a grace period of <annotation arg="0">%1$d</annotation> day from your subscription expiration date. Please resolve the past due amount by <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="other">You have a grace period of <annotation arg="0">%1$d</annotation> days from your subscription expiration date. Please resolve the past due amount by <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
     </plurals>
     <string name="subscription_paused_description">Your subscription is paused. Resume to continue using premium features.</string>
     <string name="loading_subscription">Loading subscription…</string>
@@ -1311,9 +1328,9 @@ cualquier problema.</string>
     <string name="view_bank_account">View bank account</string>
     <string name="view_license">View license</string>
     <string name="view_passport">View passport</string>
-    <string name="new_bank_account">New bank account</string>
-    <string name="new_license">New license</string>
-    <string name="new_passport">New passport</string>
+    <string name="add_bank_account">Add bank account</string>
+    <string name="add_license">Add license</string>
+    <string name="add_passport">Add passport</string>
     <string name="edit_bank_account">Edit bank account</string>
     <string name="edit_license">Edit license</string>
     <string name="edit_passport">Edit passport</string>
@@ -1362,6 +1379,7 @@ cualquier problema.</string>
     <string name="license_details">License details</string>
     <string name="licenses">Licenses</string>
     <string name="no_licenses">There are no licenses in your vault.</string>
+    <string name="no_passports">There are no passports in your vault.</string>
     <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">Your request was interrupted because the app needed to re-authenticate. Please try again.</string>
     <string name="passport_details">Passport details</string>
     <string name="sex">Sex</string>
@@ -1375,4 +1393,6 @@ cualquier problema.</string>
     <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Bitwarden needs local network access to sync with your server. Without this permission, the app won’t be able to connect.</string>
     <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Without this permission, Bitwarden won’t be able to connect and sync with your server. You can enable this in your device settings.</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Your request was interrupted because the app needs local network access. You can enable this in your device settings.</string>
+    <string name="continue_to_stripe">Continue to Stripe?</string>
+    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">You’ll be taken to Stripe to manage your subscription cancellation.</string>
 </resources>

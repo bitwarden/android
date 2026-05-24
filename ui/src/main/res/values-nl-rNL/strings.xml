@@ -119,14 +119,13 @@
     <string name="never">Nooit</string>
     <string name="new_item_created">Nieuw item aangemaakt.</string>
     <string name="no_cards">Er zijn geen kaarten in je kluis.</string>
-    <string name="new_card">Nieuwe kaart</string>
+    <string name="add_card">Kaart toevoegen</string>
     <string name="no_logins">Er zijn geen inloggegevens in je kluis.</string>
     <string name="no_identities">Er zijn geen identiteiten in je kluis.</string>
-    <string name="new_identity">Nieuwe identiteit</string>
+    <string name="add_identity">Identiteit toevoegen</string>
     <string name="no_notes">Er zijn geen notities in je kluis.</string>
-    <string name="new_note">Nieuwe notitie</string>
-    <string name="new_item">Nieuw item</string>
-    <string name="new_ssh_key">Nieuwe SSH-sleutel</string>
+    <string name="add_note">Notitie toevogen</string>
+    <string name="add_ssh_key">SSH-sleutel toevoegen</string>
     <string name="no_text_sends">Er zijn geen Sends (tekst) in je kluis.</string>
     <string name="no_file_sends">Er zijn geen Sends (bestanden) in je kluis.</string>
     <string name="no_ssh_keys">Er zijn geen SSH-sleutels in je kluis.</string>
@@ -473,8 +472,6 @@ Het scannen gebeurt automatisch.</string>
     <string name="maximum_access_count_info">Als dit is ingesteld kunnen gebruikers deze Send niet meer benaderen zodra het maximale aantal toegang is bereikt.</string>
     <string name="maximum_access_count_reached">Maximum aantal keren benaderd</string>
     <string name="current_access_count">Huidige toegangsaantal</string>
-    <string name="new_password">Nieuw wachtwoord</string>
-    <string name="password_info">Vereis dit wachtwoord om de Send te bekijken.</string>
     <string name="remove_password">Wachtwoord verwijderen</string>
     <string name="removing_send_password">Wachtwoord verwijderen</string>
     <string name="password_removed">Wachtwoord verwijderd</string>
@@ -815,7 +812,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="get_started">Aan de slag</string>
     <string name="save_and_protect_your_data">Je gegevens opslaan en beschermen</string>
     <string name="the_vault_protects_more_than_just_passwords">De kluis beschermt meer dan alleen wachtwoorden. Sla hier beveiligde inloggegevens, ID\'s, kaarten en notities op.</string>
-    <string name="new_login">Nieuwe login</string>
+    <string name="add_login">Login toevoegen</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">Deel bestanden en gegevens veilig met iedereen, op elk platform. Je informatie blijft end-to-end versleuteld terwijl en blootstelling beperkt.</string>
     <string name="send_sensitive_information_safely">Gevoelige informatie veilig versturen</string>
     <string name="import_saved_logins">Opgeslagen logins importeren</string>
@@ -893,8 +890,6 @@ Wilt u naar dit account wisselen?</string>
     <string name="copy_address">Adres kopiëren</string>
     <string name="biometrics_no_longer_supported_title">Biometrie wordt niet langer ondersteund op dit apparaat</string>
     <string name="biometrics_no_longer_supported">Je bent uitgelogd omdat de biometrische gegevens van je apparaat niet voldoen aan de laatste beveiligingseisen. Log opnieuw in om instellingen bij te werken of neem contact op met je beheerder voor toegang.</string>
-    <string name="cxp_import">CXP-import</string>
-    <string name="cxp_export">CXP-export</string>
     <string name="choose_three_or_four_random_words">Kies drie of vier willekeurige woorden</string>
     <string name="pick_three_or_four_random_unrelated_words">Kies drie of vier willekeurige, niet-gerelateerde woorden die je makkelijk kunt onthouden. Denk aan voorwerpen, plaatsen of dingen die je leuk vindt.</string>
     <string name="combine_those_words_together">Combineer deze woorden</string>
@@ -1218,6 +1213,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="archiving_items_is_a_premium_feature">Het archiveren van items is een Premium-functie. Toegang tot deze functie is niet inbegrepen in je huidige abonnement.</string>
     <string name="upgrade_to_premium">Naar Premium upgraden</string>
     <string name="plan">Abonnement</string>
+    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Meld je aan bij je webkluis op een computer om je Premium-abonnement te beheren.</string>
     <string name="unlock_advanced_security_features">Geavanceerde beveiligingsfuncties ontgrendelen</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Een Premium-abonnement geeft je meer tools om veilig en in controle te blijven.</string>
     <string name="this_item_is_archived">Dit item is gearchiveerd.</string>
@@ -1240,6 +1236,25 @@ Wilt u naar dit account wisselen?</string>
     <string name="continue_without_syncing">Doorgaan zonder synchroniseren</string>
     <string name="external_link">Externe link</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, externe link</string>
+    <string name="devices">Apparaten</string>
+    <string name="mobile_platform">Mobiel - %1$s</string>
+    <string name="extension_platform">Extensie - %1$s</string>
+    <string name="web_platform">Web - %1$s</string>
+    <string name="desktop_platform">Bureaublad - %1$s</string>
+    <string name="cli_platform">CLI - %1$s</string>
+    <string name="sdk">SDK</string>
+    <string name="server">Server</string>
+    <string name="unknown_device">Onbekend apparaat</string>
+    <string name="first_login_date"><annotation emphasis="bold">Eerste aanmelding:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="current_session">Huidige sessie</string>
+    <string name="pending_request">Verzoek in behandeling</string>
+    <string name="today">Vandaag</string>
+    <string name="past_seven_days">Afgelopen 7 dagen</string>
+    <string name="past_fourteen_days">Afgelopen 14 dagen</string>
+    <string name="past_thirty_days">Afgelopen 30 dagen</string>
+    <string name="over_thirty_days_ago">Meer dan 30 dagen geleden</string>
+    <string name="recently_active"><annotation emphasis="bold">Onlangs actief:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="trusted">Vertrouwd</string>
     <string name="preview_not_available_for_files">Voorbeeld niet beschikbaar voor %1$s bestanden. Je kunt het nog steeds downloaden om het op je apparaat te bekijken.</string>
     <string name="this_file_is_too_large_to_preview">Dit bestand is te groot om te bekijken. Je kunt het nog steeds downloaden om op je apparaat te bekijken.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden kan dit bestand niet decoderen, dus het voorbeeld kan niet worden weergegeven.</string>
@@ -1259,7 +1274,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="secure_file_storage">Beveiligde bestandsopslag</string>
     <string name="breach_monitoring">Lek-monitoring</string>
     <string name="upgrade_now">Nu upgraden</string>
-    <string name="stripe_checkout_footer">Je gaat naar Stripe\'s beveiligde checkout voor het afronden van je aankoop.</string>
+    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">Je gaat naar Stripe\'s beveiligde checkout voor het afronden van je aankoop.</string>
     <string name="opening_checkout">Checkout openen…</string>
     <string name="secure_checkout_didnt_load">Beveiligde checkout werd niet geladen</string>
     <string name="trouble_opening_payment_page">We hebben problemen gehad met het openen van de betaalpagina, dus probeer het opnieuw.</string>
@@ -1280,20 +1295,22 @@ Wilt u naar dit account wisselen?</string>
     <string name="storage_cost">Kosten voor opslag</string>
     <string name="discount">Korting</string>
     <string name="estimated_tax">Geschatte belasting</string>
+    <string name="total">Totaal</string>
     <string name="billing_rate_per_year">%1$s / year</string>
     <string name="billing_rate_per_month">%1$s / month</string>
     <string name="manage_plan">Abonnement beheren</string>
+    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Je abonnement beheren in de Bitwarden-webapp.</string>
     <string name="cancel_premium">Premium annuleren</string>
-    <string name="cancel_now">Nu annuleren</string>
-    <string name="cancel_premium_confirmation">Je blijft Premium-toegang hebben tot %1$s.</string>
     <string name="subscription_status_active">Actief</string>
     <string name="subscription_status_canceled">Geannuleerd</string>
-    <string name="subscription_status_overdue_payment">Overdue payment</string>
     <string name="subscription_status_past_due">Verlopen</string>
     <string name="subscription_status_paused">Paused</string>
+    <string name="subscription_status_update_payment">Betalingswijze bijwerken</string>
+    <string name="subscription_status_pending_cancellation">In afwachting van opzegging</string>
+    <string name="subscription_pending_cancellation_description">Je abonnement verloopt op <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Je kunt het op elk gewenst moment hervatten.</string>
     <string name="premium_next_charge_summary">Je volgende rekening wordt %1$s USD voor %2$s.</string>
     <string name="subscription_canceled_description">Je abonnement is op %1$s geannuleerd. Activeer je abonnement opnieuw om gebruik te blijven maken van premium-functies.</string>
-    <string name="subscription_overdue_description">We hebben uw betaling niet kunnen verwerken. Werk uw betaling bij voordat uw abonnement afloopt op %1$s.</string>
+    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Je hebt gratie voor een periode van %1$d dag vanaf de vervaldatum van je abonnement. Betaal de achterstallige facturen vóór **%2$s**.</item>
         <item quantity="other">Je hebt gratie voor een periode van %1$d dagen vanaf de vervaldatum van je abonnement. Betaal de achterstallige facturen vóór **%2$s**.</item>
@@ -1308,9 +1325,9 @@ Wilt u naar dit account wisselen?</string>
     <string name="view_bank_account">Bankrekening weergeven</string>
     <string name="view_license">Rijbewijs weergeven</string>
     <string name="view_passport">Paspoort weergeven</string>
-    <string name="new_bank_account">Nieuwe bankrekening</string>
-    <string name="new_license">Nieuw rijbewijs</string>
-    <string name="new_passport">Nieuw paspoort</string>
+    <string name="add_bank_account">Bankrekening toevoegen</string>
+    <string name="add_license">Rijbewijs toevoegen</string>
+    <string name="add_passport">Paspoort toevoegen</string>
     <string name="edit_bank_account">Bankrekening bewerken</string>
     <string name="edit_license">Rijbewijs bewerken</string>
     <string name="edit_passport">Paspoort bewerken</string>
@@ -1359,6 +1376,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="license_details">Rijbewijsdetails</string>
     <string name="licenses">Rijbewijzen</string>
     <string name="no_licenses">Er zijn geen rijbewijzen in je kluis.</string>
+    <string name="no_passports">There are no passports in your vault.</string>
     <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">Je aanvraag werd onderbroken omdat de app opnieuw moet verifiëren. Probeer het opnieuw.</string>
     <string name="passport_details">Paspoortgegevens</string>
     <string name="sex">Geslacht</string>
@@ -1372,4 +1390,6 @@ Wilt u naar dit account wisselen?</string>
     <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Bitwarden heeft toegang tot het lokale netwerk nodig om te synchroniseren met je server. Zonder deze machtiging kan de app geen verbinding maken.</string>
     <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Zonder deze machtiging kan Bitwarden niet verbinden en synchroniseren met je server. Je kunt dit inschakelen in je apparaatinstellingen.</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Je verzoek is onderbroken omdat de app lokale netwerktoegang nodig heeft. Je kunt dit inschakelen in je apparaatinstellingen.</string>
+    <string name="continue_to_stripe">Doorgaan naar Stripe?</string>
+    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Je wordt naar Stripe geleid voor het beheren van de opzegging van je abonnement.</string>
 </resources>
