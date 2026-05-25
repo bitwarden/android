@@ -68,6 +68,7 @@ private val CONFIG_RESPONSE = ConfigResponseJson(
         notificationsUrl = "notificationsUrl",
         identityUrl = "identityUrl",
         ssoUrl = "ssoUrl",
+        fillAssistRulesUrl = null,
     ),
     featureStates = mapOf(
         "feature one" to JsonPrimitive(false),

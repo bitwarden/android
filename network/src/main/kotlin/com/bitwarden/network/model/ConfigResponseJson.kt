@@ -82,6 +82,9 @@ data class ConfigResponseJson(
 
         @SerialName("sso")
         val ssoUrl: String?,
+
+        @SerialName("fillAssistRules")
+        val fillAssistRulesUrl: String?,
     )
 
     /**
