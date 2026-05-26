@@ -85,13 +85,6 @@ class PremiumStateManagerImpl(
                 initialValue = SubscriptionStatusState.Loading,
             )
 
-    /**
-     * Reactive read of the per-user "Premium upgrade pending" disk flag. There is no premium /
-     * consumed gating — this is just the raw flag, set by [markPremiumUpgradePending] when sync
-     * confirms post-checkout that `isPremium` has not yet flipped, and cleared either explicitly
-     * (the Continue button on the PendingUpgrade dialog) or implicitly when
-     * `hasPremiumPersonally` transitions `false → true` in the init block below.
-     */
     @OptIn(ExperimentalCoroutinesApi::class)
     override val isPremiumUpgradePendingFlow: StateFlow<Boolean> =
         authDiskSource
@@ -285,9 +278,6 @@ class PremiumStateManagerImpl(
                 // an upgrade.
                 if (previous?.first == currentUserId && !previous.second) {
                     markUpgradedToPremiumCardPending(userId = currentUserId)
-                    // The upgrade just resolved — clear any in-flight pending flag we set
-                    // post-Stripe checkout. Symmetric with the "upgrade succeeded" moment used
-                    // to arm the Upgraded-to-Premium card above.
                     clearPremiumUpgradePending(userId = currentUserId)
                 }
             }

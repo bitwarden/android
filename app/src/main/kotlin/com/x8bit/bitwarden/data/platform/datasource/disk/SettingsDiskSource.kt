@@ -184,9 +184,7 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
 
     /**
      * Retrieves the stored value of whether a Premium upgrade is awaiting server confirmation
-     * for the given [userId]. When `true`, surfaces that the active user has completed Stripe
-     * checkout but the server has not yet flipped `isPremium = true` — used to suppress
-     * upgrade CTAs while the upgrade is in flight.
+     * for the given [userId].
      */
     fun getPremiumUpgradePending(userId: String): Boolean?
 

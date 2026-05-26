@@ -29,9 +29,7 @@ interface PremiumStateManager {
 
     /**
      * Emits `true` while the active user has a Premium upgrade awaiting server confirmation
-     * (Stripe checkout completed but `isPremium` not yet flipped), and `false` otherwise. The
-     * banner and Plan-screen Upgrade Now CTA use this to avoid advertising an upgrade that is
-     * already in flight.
+     * (Stripe checkout completed but `isPremium` not yet flipped), and `false` otherwise.
      */
     val isPremiumUpgradePendingFlow: StateFlow<Boolean>
 
@@ -77,15 +75,12 @@ interface PremiumStateManager {
 
     /**
      * Marks the active user as having a Premium upgrade in flight (Stripe checkout completed
-     * but the server has not yet flipped `isPremium`). While set, upgrade CTAs are suppressed
-     * for that user.
+     * but the server has not yet flipped `isPremium`).
      */
     fun markPremiumUpgradePending(userId: String)
 
     /**
-     * Clears the "Premium upgrade pending" flag for the given user. Called when the user
-     * explicitly dismisses the pending-upgrade dialog (Continue) or when the upgrade resolves
-     * to a confirmed Premium status.
+     * Clears the "Premium upgrade pending" flag for the given [userId].
      */
     fun clearPremiumUpgradePending(userId: String)
 }
