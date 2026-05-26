@@ -557,29 +557,30 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `ContinueClick should clear the pending upgrade flag and navigate back`() = runTest {
-        val viewModel = createViewModel(
-            initialState = DEFAULT_FREE_STATE.copy(
-                viewState = PlanState.ViewState.Free.Cloud(
-                    rate = "$1.67",
-                    checkoutUrl = null,
-                    isAwaitingPremiumStatus = true,
-                    isPremiumUpgradePending = true,
+    fun `ContinueClick dismisses dialog and navigates back without clearing pending flag`() =
+        runTest {
+            val viewModel = createViewModel(
+                initialState = DEFAULT_FREE_STATE.copy(
+                    viewState = PlanState.ViewState.Free.Cloud(
+                        rate = "$1.67",
+                        checkoutUrl = null,
+                        isAwaitingPremiumStatus = true,
+                        isPremiumUpgradePending = true,
+                    ),
+                    dialogState = PlanState.DialogState.PendingUpgrade,
                 ),
-                dialogState = PlanState.DialogState.PendingUpgrade,
-            ),
-            pricingResult = null,
-        )
+                pricingResult = null,
+            )
 
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(PlanAction.ContinueClick)
-            assertEquals(PlanEvent.NavigateBack, awaitItem())
-        }
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(PlanAction.ContinueClick)
+                assertEquals(PlanEvent.NavigateBack, awaitItem())
+            }
 
-        verify {
-            mockPremiumStateManager.clearPremiumUpgradePending(userId = DEFAULT_ACCOUNT.userId)
+            verify(exactly = 0) {
+                mockPremiumStateManager.clearPremiumUpgradePending(any())
+            }
         }
-    }
 
     @Suppress("MaxLineLength")
     @Test

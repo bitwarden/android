@@ -255,17 +255,6 @@ class PlanViewModel @Inject constructor(
     }
 
     private fun handleContinueClick() {
-        // Continue is the user's explicit "I'll deal with this later" signal on the
-        // PendingUpgrade dialog — clear the pending flag so CTAs reappear if Stripe never
-        // resolves and the user comes back to upgrade again.
-        authRepository
-            .userStateFlow
-            .value
-            ?.activeAccount
-            ?.userId
-            ?.let { userId ->
-                premiumStateManager.clearPremiumUpgradePending(userId = userId)
-            }
         mutableStateFlow.update { it.copy(dialogState = null) }
         sendEvent(PlanEvent.NavigateBack)
     }
