@@ -2591,6 +2591,42 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             viewModel.trySendAction(VaultItemListingsAction.UpgradeToPremiumClick)
         }
     }
+
+    @Test
+    fun `FileTypeRequiresPremium dialog should display based on state`() {
+        composeTestRule.assertNoDialogExists()
+        mutableStateFlow.update {
+            it.copy(dialogState = VaultItemListingState.DialogState.FileTypeRequiresPremium)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Premium subscription required")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(
+                text = "Free accounts are restricted to sharing text only. " +
+                    "A Premium membership is required to use files with Send.",
+            )
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `FileTypeRequiresPremium dialog Upgrade click should send UpgradeToPremiumClick`() {
+        mutableStateFlow.update {
+            it.copy(dialogState = VaultItemListingState.DialogState.FileTypeRequiresPremium)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Upgrade to Premium")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemListingsAction.UpgradeToPremiumClick)
+        }
+    }
 }
 
 private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(

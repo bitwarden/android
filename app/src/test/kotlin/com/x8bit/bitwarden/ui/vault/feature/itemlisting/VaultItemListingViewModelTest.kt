@@ -1822,8 +1822,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `AddVaultItemClick for file send item without Premium should display error dialog`() =
+    fun `AddVaultItemClick for file send without Premium and upgrade unavailable shows Error`() =
         runTest {
+            every { premiumStateManager.isInAppUpgradeAvailable() } returns false
             mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
                 accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = false)),
             )
@@ -1841,6 +1842,31 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         title = BitwardenString.send.asText(),
                         message = BitwardenString.send_file_premium_required.asText(),
                     ),
+                    isPremium = false,
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `AddVaultItemClick for file send without Premium and upgrade available shows Upgrade to Premium dialog`() =
+        runTest {
+            every { premiumStateManager.isInAppUpgradeAvailable() } returns true
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = false)),
+            )
+            val viewModel = createVaultItemListingViewModel(
+                createSavedStateHandleWithVaultItemListingType(VaultItemListingType.SendFile),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
+                expectNoEvents()
+            }
+            assertEquals(
+                createVaultItemListingState(
+                    itemListingType = VaultItemListingState.ItemListingType.Send.SendFile,
+                    dialogState = VaultItemListingState.DialogState.FileTypeRequiresPremium,
                     isPremium = false,
                 ),
                 viewModel.stateFlow.value,

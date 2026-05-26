@@ -25,6 +25,7 @@ fun NavGraphBuilder.sendDestination(
     onNavigateToSendFilesList: () -> Unit,
     onNavigateToSendTextList: () -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
+    onNavigateToPlan: () -> Unit,
 ) {
     composableWithRootPushTransitions<SendRoute> {
         SendScreen(
@@ -33,6 +34,7 @@ fun NavGraphBuilder.sendDestination(
             onNavigateToSendFilesList = onNavigateToSendFilesList,
             onNavigateToSendTextList = onNavigateToSendTextList,
             onNavigateToSearchSend = onNavigateToSearchSend,
+            onNavigateToPlan = onNavigateToPlan,
         )
     }
 }

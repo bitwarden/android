@@ -54,6 +54,7 @@ class SendScreenTest : BitwardenComposeTest() {
     private var onNavigateToSendTextListCalled = false
     private var onNavigateToSendSearchCalled = false
     private var onNavigateToViewSendRoute: ViewSendRoute? = null
+    private var onNavigateToPlanCalled = false
 
     private val intentManager = mockk<IntentManager> {
         every { launchUri(any()) } just runs
@@ -80,6 +81,7 @@ class SendScreenTest : BitwardenComposeTest() {
                 onNavigateToSendFilesList = { onNavigateToSendFilesListCalled = true },
                 onNavigateToSendTextList = { onNavigateToSendTextListCalled = true },
                 onNavigateToSearchSend = { onNavigateToSendSearchCalled = true },
+                onNavigateToPlan = { onNavigateToPlanCalled = true },
             )
         }
     }
@@ -943,6 +945,59 @@ class SendScreenTest : BitwardenComposeTest() {
         verify(exactly = 1) {
             viewModel.trySendAction(SendAction.AddSendSelected(sendType = SendItemType.TEXT))
         }
+    }
+
+    @Test
+    fun `FileTypeRequiresPremium dialog should be displayed according to state`() {
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(dialogState = SendState.DialogState.FileTypeRequiresPremium)
+        }
+
+        composeTestRule
+            .onNodeWithText("Premium subscription required")
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+        composeTestRule
+            .onNodeWithText(
+                "Free accounts are restricted to sharing text only. " +
+                    "A Premium membership is required to use files with Send.",
+            )
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+    }
+
+    @Test
+    fun `FileTypeRequiresPremium dialog Cancel click should send DismissDialog`() {
+        mutableStateFlow.update {
+            it.copy(dialogState = SendState.DialogState.FileTypeRequiresPremium)
+        }
+
+        composeTestRule
+            .onNodeWithText("Cancel")
+            .performClick()
+
+        verify { viewModel.trySendAction(SendAction.DismissDialog) }
+    }
+
+    @Test
+    fun `FileTypeRequiresPremium dialog Upgrade click should send UpgradeToPremiumClick`() {
+        mutableStateFlow.update {
+            it.copy(dialogState = SendState.DialogState.FileTypeRequiresPremium)
+        }
+
+        composeTestRule
+            .onNodeWithText("Upgrade to Premium")
+            .performClick()
+
+        verify { viewModel.trySendAction(SendAction.UpgradeToPremiumClick) }
+    }
+
+    @Test
+    fun `on NavigateToPlanModal event should call onNavigateToPlan`() {
+        mutableEventFlow.tryEmit(SendEvent.NavigateToPlanModal)
+        assertTrue(onNavigateToPlanCalled)
     }
 
     @Test

@@ -860,6 +860,16 @@ class VaultItemListingViewModel @Inject constructor(
         )
     }
 
+    private fun fileSendRequiresPremiumDialog(): VaultItemListingState.DialogState =
+        if (premiumStateManager.isInAppUpgradeAvailable()) {
+            VaultItemListingState.DialogState.FileTypeRequiresPremium
+        } else {
+            VaultItemListingState.DialogState.Error(
+                title = BitwardenString.send.asText(),
+                message = BitwardenString.send_file_premium_required.asText(),
+            )
+        }
+
     private fun handleAddVaultItemClick() {
         when (val itemListingType = state.itemListingType) {
             is VaultItemListingState.ItemListingType.Vault.Collection -> {
@@ -897,14 +907,7 @@ class VaultItemListingViewModel @Inject constructor(
                             sendEvent(VaultItemListingEvent.NavigateToAddSendItem(sendType))
                         } else {
                             mutableStateFlow.update {
-                                it.copy(
-                                    dialogState = VaultItemListingState.DialogState.Error(
-                                        title = BitwardenString.send.asText(),
-                                        message = BitwardenString
-                                            .send_file_premium_required
-                                            .asText(),
-                                    ),
-                                )
+                                it.copy(dialogState = fileSendRequiresPremiumDialog())
                             }
                         }
                     }
@@ -3206,6 +3209,13 @@ data class VaultItemListingState(
          */
         @Parcelize
         data object ArchiveRequiresPremium : DialogState()
+
+        /**
+         * Displays a dialog to the user indicating that creating a File-type Send
+         * requires a Premium account.
+         */
+        @Parcelize
+        data object FileTypeRequiresPremium : DialogState()
     }
 
     /**
