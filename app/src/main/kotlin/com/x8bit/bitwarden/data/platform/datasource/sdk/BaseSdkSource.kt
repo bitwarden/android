@@ -12,6 +12,11 @@ abstract class BaseSdkSource(
     protected val sdkClientManager: SdkClientManager,
 ) {
     /**
+     * Helper function to retrieve the global [Client] synchronously.
+     */
+    protected val globalClient get() = sdkClientManager.globalClient
+
+    /**
      * Helper function to retrieve the [Client] associated with the given [userId].
      */
     protected suspend fun getClient(
