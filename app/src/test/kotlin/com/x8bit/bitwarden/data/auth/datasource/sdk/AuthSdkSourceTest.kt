@@ -531,10 +531,6 @@ class AuthSdkSourceTest {
     @Test
     fun `filterPolicies should call SDK and return a Result with the correct data`() =
         runBlocking {
-            val slot = slot<suspend Client.() -> List<PolicyView>>()
-            coEvery {
-                sdkClientManager.singleUseClient(block = capture(slot))
-            } coAnswers { slot.captured(client) }
             val policies = listOf(mockk<PolicyView>())
             val organizations = listOf(mockk<OrganizationUserPolicyContext>())
             val policyType = mockk<PolicyType>()

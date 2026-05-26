@@ -19,6 +19,7 @@ import com.bitwarden.network.model.BitwardenServiceClientConfig
 import com.bitwarden.network.service.EventService
 import com.bitwarden.network.service.PushService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
@@ -264,8 +265,12 @@ object PlatformManagerModule {
     @Singleton
     fun providePolicyManager(
         authDiskSource: AuthDiskSource,
+        authSdkSource: AuthSdkSource,
+        featureFlagManager: FeatureFlagManager,
     ): PolicyManager = PolicyManagerImpl(
         authDiskSource = authDiskSource,
+        authSdkSource = authSdkSource,
+        featureFlagManager = featureFlagManager,
     )
 
     @Provides
