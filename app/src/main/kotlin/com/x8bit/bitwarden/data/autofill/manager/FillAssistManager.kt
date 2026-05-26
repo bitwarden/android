@@ -10,10 +10,10 @@ import com.x8bit.bitwarden.data.autofill.model.FillAssistRules
  */
 interface FillAssistManager {
     /**
-     * Fetches and persists fill-assist rules for the active server when the feature flag is
-     * enabled and the cached data is stale. Returns [Result.failure] on network or parse failure.
+     * Triggers a background sync if no sync is currently running. The sync fetches and persists
+     * fill-assist rules when the feature flag is enabled and cached data is stale.
      */
-    suspend fun sync(): Result<Unit>
+    fun syncIfNecessary()
 
     /**
      * Returns the last successfully cached [FillAssistRules] for the active server, or null if

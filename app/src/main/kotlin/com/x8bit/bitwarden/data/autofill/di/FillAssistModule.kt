@@ -5,7 +5,6 @@ import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.data.datasource.disk.di.UnencryptedPreferences
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.network.service.FillAssistService
-import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.autofill.datasource.disk.FillAssistDiskSource
 import com.x8bit.bitwarden.data.autofill.datasource.disk.FillAssistDiskSourceImpl
 import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
@@ -44,7 +43,6 @@ object FillAssistModule {
         fillAssistDiskSource: FillAssistDiskSource,
         featureFlagManager: FeatureFlagManager,
         serverConfigRepository: ServerConfigRepository,
-        authDiskSource: AuthDiskSource,
         clock: Clock,
         dispatcherManager: DispatcherManager,
     ): FillAssistManager =
@@ -53,7 +51,6 @@ object FillAssistModule {
             fillAssistDiskSource = fillAssistDiskSource,
             featureFlagManager = featureFlagManager,
             serverConfigRepository = serverConfigRepository,
-            authDiskSource = authDiskSource,
             clock = clock,
             dispatcherManager = dispatcherManager,
         )

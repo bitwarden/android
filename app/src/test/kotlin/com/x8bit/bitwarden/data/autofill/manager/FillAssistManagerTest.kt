@@ -2,15 +2,12 @@ package com.x8bit.bitwarden.data.autofill.manager
 
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.manager.model.FlagKey
-import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.network.model.ConfigResponseJson
 import com.bitwarden.network.model.FillAssistFormsJson
 import com.bitwarden.network.model.FillAssistManifestJson
 import com.bitwarden.network.service.FillAssistService
-import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.autofill.datasource.disk.FillAssistDiskSource
 import com.x8bit.bitwarden.data.autofill.model.FillAssistRules
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
@@ -29,7 +26,6 @@ import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -59,10 +55,6 @@ class FillAssistManagerTest {
         every { serverConfigStateFlow } returns MutableStateFlow(SERVER_CONFIG)
     }
 
-    private val authDiskSource: AuthDiskSource = mockk {
-        every { userSwitchingChangesFlow } returns bufferedMutableSharedFlow()
-    }
-
     private val fillAssistService: FillAssistService = mockk {
         coEvery { getManifest(url = MANIFEST_URL) } returns Result.success(MANIFEST)
         coEvery { getForms(formsUrl = FORMS_URL) } returns Result.success(FORMS_V1)
@@ -82,16 +74,14 @@ class FillAssistManagerTest {
         fillAssistDiskSource = fillAssistDiskSource,
         featureFlagManager = featureFlagManager,
         serverConfigRepository = serverConfigRepository,
-        authDiskSource = authDiskSource,
         clock = FIXED_CLOCK,
         dispatcherManager = FakeDispatcherManager(),
     )
 
     @BeforeEach
     fun setUp() {
-        // FillAssistManagerImpl.init {} calls sync() immediately via ioScope.launch, and the
-        // serverConfigStateFlow subscription also fires on construction (StateFlow replays its
-        // current value). Clear call counts so test verifications see a clean slate.
+        // serverConfigStateFlow replays its current value on subscription, triggering
+        // syncIfNecessary() during construction. Clear call counts for a clean test slate.
         clearMocks(fillAssistService, fillAssistDiskSource, answers = false)
     }
 
@@ -101,9 +91,8 @@ class FillAssistManagerTest {
             featureFlagManager.getFeatureFlag(FlagKey.FillAssistTargetingRules)
         } returns false
 
-        val result = manager.sync()
+        manager.syncIfNecessary()
 
-        assertTrue(result.isSuccess)
         coVerify(exactly = 0) { fillAssistService.getManifest(any()) }
         verify(exactly = 0) { fillAssistDiskSource.storeFillAssistRules(any(), any()) }
     }
@@ -112,9 +101,8 @@ class FillAssistManagerTest {
     fun `sync returns success and does nothing when fillAssistRulesUrl is null`() = runTest {
         every { serverConfigRepository.serverConfigStateFlow } returns MutableStateFlow(null)
 
-        val result = manager.sync()
+        manager.syncIfNecessary()
 
-        assertTrue(result.isSuccess)
         coVerify(exactly = 0) { fillAssistService.getManifest(any()) }
     }
 
@@ -124,9 +112,8 @@ class FillAssistManagerTest {
             fillAssistDiskSource.getLastFetchTimestamp(BASE_URL)
         } returns FIXED_CLOCK.millis() - (6 * 60 * 60 * 1000L - 1)
 
-        val result = manager.sync()
+        manager.syncIfNecessary()
 
-        assertTrue(result.isSuccess)
         coVerify(exactly = 0) { fillAssistService.getManifest(any()) }
         coVerify(exactly = 0) { fillAssistService.getForms(any()) }
     }
@@ -135,77 +122,59 @@ class FillAssistManagerTest {
     fun `sync skips forms download and updates timestamp when CID is unchanged`() = runTest {
         every { fillAssistDiskSource.getLastKnownCid(BASE_URL) } returns CID
 
-        val result = manager.sync()
+        manager.syncIfNecessary()
 
-        assertTrue(result.isSuccess)
         coVerify(exactly = 1) { fillAssistService.getManifest(url = MANIFEST_URL) }
         coVerify(exactly = 0) { fillAssistService.getForms(any()) }
         verify(exactly = 0) { fillAssistDiskSource.storeFillAssistRules(any(), any()) }
-        verify {
-            fillAssistDiskSource.storeLastFetchTimestamp(
-                BASE_URL,
-                FIXED_CLOCK.millis(),
-            )
-        }
+        verify { fillAssistDiskSource.storeLastFetchTimestamp(BASE_URL, FIXED_CLOCK.millis()) }
     }
 
     @Test
     fun `sync re-fetches forms when CID changes`() = runTest {
         every { fillAssistDiskSource.getLastKnownCid(BASE_URL) } returns "sha256:old"
 
-        val result = manager.sync()
+        manager.syncIfNecessary()
 
-        assertTrue(result.isSuccess)
         coVerify(exactly = 1) { fillAssistService.getForms(formsUrl = FORMS_URL) }
         verify { fillAssistDiskSource.storeFillAssistRules(BASE_URL, any()) }
         verify { fillAssistDiskSource.storeLastKnownCid(BASE_URL, CID) }
-        verify {
-            fillAssistDiskSource.storeLastFetchTimestamp(
-                BASE_URL,
-                FIXED_CLOCK.millis(),
-            )
-        }
+        verify { fillAssistDiskSource.storeLastFetchTimestamp(BASE_URL, FIXED_CLOCK.millis()) }
     }
 
     @Test
-    fun `sync returns failure when manifest fetch fails`() = runTest {
+    fun `sync does not store data when manifest fetch fails`() = runTest {
         coEvery {
             fillAssistService.getManifest(any())
         } returns Result.failure(RuntimeException("network error"))
 
-        val result = manager.sync()
+        manager.syncIfNecessary()
 
-        assertTrue(result.isFailure)
-        verify(exactly = 0) { fillAssistDiskSource.storeFillAssistRules(any(), any()) }
-    }
-
-    @Test
-    fun `sync does not store anything when schemaVersion major is unsupported`() = runTest {
-        coEvery { fillAssistService.getForms(any()) } returns Result.success(
-            FORMS_V1.copy(schemaVersion = "1.0.0"),
-        )
-
-        val result = manager.sync()
-
-        assertTrue(result.isSuccess)
         verify(exactly = 0) { fillAssistDiskSource.storeFillAssistRules(any(), any()) }
         verify(exactly = 0) { fillAssistDiskSource.storeLastKnownCid(any(), any()) }
         verify(exactly = 0) { fillAssistDiskSource.storeLastFetchTimestamp(any(), any()) }
     }
 
     @Test
-    fun `sync happy path stores rules, cid, and timestamp`() = runTest {
-        val result = manager.sync()
+    fun `sync does not store rules or cid when schemaVersion major is unsupported`() = runTest {
+        coEvery { fillAssistService.getForms(any()) } returns Result.success(
+            FORMS_V1.copy(schemaVersion = "1.0.0"),
+        )
 
-        assertTrue(result.isSuccess)
+        manager.syncIfNecessary()
+
+        verify(exactly = 0) { fillAssistDiskSource.storeFillAssistRules(any(), any()) }
+        verify(exactly = 0) { fillAssistDiskSource.storeLastKnownCid(any(), any()) }
+        verify { fillAssistDiskSource.storeLastFetchTimestamp(BASE_URL, FIXED_CLOCK.millis()) }
+    }
+
+    @Test
+    fun `sync happy path stores rules, cid, and timestamp`() = runTest {
+        manager.syncIfNecessary()
+
         verify { fillAssistDiskSource.storeFillAssistRules(BASE_URL, any()) }
         verify { fillAssistDiskSource.storeLastKnownCid(BASE_URL, CID) }
-        verify {
-            fillAssistDiskSource.storeLastFetchTimestamp(
-                BASE_URL,
-                FIXED_CLOCK.millis(),
-            )
-        }
+        verify { fillAssistDiskSource.storeLastFetchTimestamp(BASE_URL, FIXED_CLOCK.millis()) }
     }
 
     @Test
@@ -219,7 +188,7 @@ class FillAssistManagerTest {
             fillAssistDiskSource.storeFillAssistRules(any(), capture(rulesSlot))
         } just runs
 
-        manager.sync()
+        manager.syncIfNecessary()
 
         assertEquals(EXPECTED_RULES_MULTI_PATHNAME, rulesSlot.captured)
     }
@@ -235,7 +204,7 @@ class FillAssistManagerTest {
             fillAssistDiskSource.storeFillAssistRules(any(), capture(rulesSlot))
         } just runs
 
-        manager.sync()
+        manager.syncIfNecessary()
 
         assertEquals(EXPECTED_RULES_HOST_AND_PATHNAME, rulesSlot.captured)
     }
@@ -252,7 +221,7 @@ class FillAssistManagerTest {
                 fillAssistDiskSource.storeFillAssistRules(any(), capture(rulesSlot))
             } just runs
 
-            manager.sync()
+            manager.syncIfNecessary()
 
             assertEquals(EXPECTED_RULES_MERGED_CATEGORY, rulesSlot.captured)
         }
@@ -268,7 +237,7 @@ class FillAssistManagerTest {
             fillAssistDiskSource.storeFillAssistRules(any(), capture(rulesSlot))
         } just runs
 
-        manager.sync()
+        manager.syncIfNecessary()
 
         assertEquals(EXPECTED_RULES_DEDUPLICATED_SELECTORS, rulesSlot.captured)
     }

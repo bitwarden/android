@@ -6,8 +6,6 @@ import java.time.Clock
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.network.model.FillAssistFormsJson
 import com.bitwarden.network.service.FillAssistService
-import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.autofill.datasource.disk.FillAssistDiskSource
 import com.x8bit.bitwarden.data.autofill.model.FillAssistRules
 import com.x8bit.bitwarden.data.autofill.model.FillAssistRules.SelectorClause
@@ -48,7 +46,6 @@ class FillAssistManagerImpl(
     private val fillAssistDiskSource: FillAssistDiskSource,
     private val featureFlagManager: FeatureFlagManager,
     private val serverConfigRepository: ServerConfigRepository,
-    val authDiskSource: AuthDiskSource,
     private val clock: Clock,
     dispatcherManager: DispatcherManager,
 ) : FillAssistManager {
@@ -58,38 +55,23 @@ class FillAssistManagerImpl(
     private var syncJob: Job = Job().apply { complete() }
 
     init {
-        // Trigger an immediate sync on app start regardless of config or user state.
-        syncIfIdle()
-
-        // Re-sync when the server config is refreshed (e.g. after unlock or periodic refresh).
         serverConfigRepository.serverConfigStateFlow
             .filterNotNull()
-            .onEach { syncIfIdle() }
-            .launchIn(unconfinedScope)
-
-        // Re-sync on account switch. Needed because serverConfigStateFlow only updates after an
-        // explicit getServerConfig() fetch, which runs asynchronously after the switch.
-        authDiskSource.userSwitchingChangesFlow
-            .onEach { syncIfIdle() }
+            .onEach { syncIfNecessary() }
             .launchIn(unconfinedScope)
     }
 
-    private fun syncIfIdle() {
-        if (!syncJob.isCompleted) return
-        syncJob = ioScope.launch { sync() }
-    }
-
-    override suspend fun sync(): Result<Unit> = runCatching {
-        if (!featureFlagManager.getFeatureFlag(FlagKey.FillAssistTargetingRules)) return@runCatching
-
-        val environment =
-            serverConfigRepository.serverConfigStateFlow.value?.serverData?.environment
-        val serverUrl = environment?.fillAssistRulesUrl ?: return@runCatching
-
-        // Timestamp check: skip all network calls if data was fetched recently.
+    override fun syncIfNecessary() {
+        if (!featureFlagManager.getFeatureFlag(FlagKey.FillAssistTargetingRules)) return
+        val serverUrl = serverConfigRepository.serverConfigStateFlow.value
+            ?.serverData?.environment?.fillAssistRulesUrl ?: return
         val lastFetch = fillAssistDiskSource.getLastFetchTimestamp(serverUrl) ?: 0L
-        if (clock.millis() - lastFetch < UPDATE_INTERVAL_MS) return@runCatching
+        if (clock.millis() - lastFetch < UPDATE_INTERVAL_MS) return
+        if (!syncJob.isCompleted) return
+        syncJob = ioScope.launch { sync(serverUrl) }
+    }
 
+    private suspend fun sync(serverUrl: String) = runCatching {
         // Always fetch the manifest — it is the CID staleness check.
         val manifest = fillAssistService
             .getManifest(url = serverUrl.trimEnd('/') + "/manifest.json")
@@ -101,7 +83,7 @@ class FillAssistManagerImpl(
             ?: error("No CID for version $CURRENT_FORMS_VERSION in manifest")
 
         if (versionEntry.deprecated == true) {
-            Timber.w("Fill-assist forms $CURRENT_FORMS_VERSION is deprecated; update the app")
+            Timber.w("Fill-assist forms $CURRENT_FORMS_VERSION is deprecated")
         }
 
         // CID check: data on the server is unchanged — update the timestamp and skip download.
@@ -123,6 +105,10 @@ class FillAssistManagerImpl(
         val schemaMajor = forms.schemaVersion?.substringBefore('.')
         if (schemaMajor != EXPECTED_SCHEMA_MAJOR) {
             Timber.w("Unsupported fill-assist schema version: ${forms.schemaVersion}")
+            fillAssistDiskSource.storeLastFetchTimestamp(
+                serverUrl = serverUrl,
+                timestamp = clock.millis(),
+            )
             return@runCatching
         }
 
@@ -134,7 +120,6 @@ class FillAssistManagerImpl(
             timestamp = clock.millis(),
         )
     }.also { result ->
-        // Only log when the flag is active — failures from flag-off paths return success.
         result.onFailure { Timber.w(it, "Fill-assist sync failed") }
     }
 

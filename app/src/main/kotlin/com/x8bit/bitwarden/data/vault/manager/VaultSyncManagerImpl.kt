@@ -14,6 +14,7 @@ import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
+import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
@@ -78,6 +79,7 @@ class VaultSyncManagerImpl(
     private val authDiskSource: AuthDiskSource,
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
+    private val fillAssistManager: FillAssistManager,
     private val userLogoutManager: UserLogoutManager,
     private val userStateManager: UserStateManager,
     private val vaultLockManager: VaultLockManager,
@@ -340,6 +342,7 @@ class VaultSyncManagerImpl(
                         lastSyncTime = clock.instant(),
                     )
                     vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
+                    fillAssistManager.syncIfNecessary()
                     val itemsAvailable = syncResponse.ciphers?.isNotEmpty() == true
                     SyncVaultDataResult.Success(itemsAvailable = itemsAvailable)
                 }
