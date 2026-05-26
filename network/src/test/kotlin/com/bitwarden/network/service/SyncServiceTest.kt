@@ -122,6 +122,55 @@ private const val SYNC_SUCCESS_JSON = """
         "userIsClaimedByOrganization": false
       }
     ],
+    "organizationsNew": [
+      {
+        "usePolicies": false,
+        "keyConnectorEnabled": false,
+        "keyConnectorUrl": "mockKeyConnectorUrl-1",
+        "type": 1,
+        "seats": 1,
+        "enabled": false,
+        "providerType": 1,
+        "maxCollections": 1,
+        "selfHost": false,
+        "permissions": {
+          "manageGroups": false,
+          "manageResetPassword": false,
+          "accessReports": false,
+          "managePolicies": false,
+          "deleteAnyCollection": false,
+          "manageSso": false,
+          "deleteAssignedCollections": false,
+          "manageUsers": false,
+          "accessImportExport": false,
+          "editAnyCollection": false,
+          "accessEventLogs": false,
+          "createNewCollections": false,
+          "editAssignedCollections": false
+        },
+        "providerId": "mockProviderId-1",
+        "id": "mockId-1",
+        "useGroups": false,
+        "useDirectory": false,
+        "key": "mockKey-1",
+        "providerName": "mockProviderName-1",
+        "usersGetPremium": false,
+        "maxStorageGb": 1,
+        "identifier": "mockIdentifier-1",
+        "use2fa": false,
+        "familySponsorshipToDelete": false,
+        "userId": "mockUserId-1",
+        "useEvents": false,
+        "familySponsorshipFriendlyName": "mockFamilySponsorshipFriendlyName-1",
+        "useTotp": false,
+        "familySponsorshipLastSyncDate": "2023-10-27T12:00:00.00Z",
+        "name": "mockName-1",
+        "useApi": false,
+        "familySponsorshipValidUntil": "2023-10-27T12:00:00.00Z",
+        "status": 1,
+        "userIsClaimedByOrganization": false
+      }
+    ],
     "providers": [
       {
         "useEvents": false,
@@ -396,6 +445,14 @@ private const val SYNC_SUCCESS_JSON = """
     ]
   },
   "policies": [
+    {
+      "organizationId": "mockOrganizationId-1",
+      "id": "mockId-1",
+      "type": 1,
+      "enabled": false
+    }
+  ],
+  "policiesNew": [
     {
       "organizationId": "mockOrganizationId-1",
       "id": "mockId-1",
