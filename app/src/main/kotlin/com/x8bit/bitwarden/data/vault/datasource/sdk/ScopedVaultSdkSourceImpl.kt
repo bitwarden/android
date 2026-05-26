@@ -21,6 +21,7 @@ class ScopedVaultSdkSourceImpl(
     sdkPlatformApiFactory: SdkPlatformApiFactory,
     vaultSdkSource: VaultSdkSource = VaultSdkSourceImpl(
         sdkClientManager = SdkClientManagerImpl(
+            dispatcherManager = dispatcherManager,
             // We do not want to have the real NativeLibraryManager used here to avoid
             // initializing the library twice.
             nativeLibraryManager = object : NativeLibraryManager {

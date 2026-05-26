@@ -220,11 +220,13 @@ object PlatformManagerModule {
     @Provides
     @Singleton
     fun provideSdkClientManager(
+        dispatcherManager: DispatcherManager,
         featureFlagManager: FeatureFlagManager,
         nativeLibraryManager: NativeLibraryManager,
         sdkRepositoryFactory: SdkRepositoryFactory,
         sdkPlatformApiFactory: SdkPlatformApiFactory,
     ): SdkClientManager = SdkClientManagerImpl(
+        dispatcherManager = dispatcherManager,
         featureFlagManager = featureFlagManager,
         nativeLibraryManager = nativeLibraryManager,
         sdkRepoFactory = sdkRepositoryFactory,
