@@ -120,14 +120,13 @@
     <string name="never">Nikad</string>
     <string name="new_item_created">Stavka dodana</string>
     <string name="no_cards">U tvom trezoru nema kartica.</string>
-    <string name="new_card">Nova kartica</string>
+    <string name="add_card">Add card</string>
     <string name="no_logins">U tvom trezoru nema prijava.</string>
     <string name="no_identities">U tvom trezoru nema identiteta.</string>
-    <string name="new_identity">Novi identitet</string>
+    <string name="add_identity">Add identity</string>
     <string name="no_notes">U tvom trezoru nema bilješki.</string>
-    <string name="new_note">Nova bilješka</string>
-    <string name="new_item">Nova stavka</string>
-    <string name="new_ssh_key">Novi SSH ključ</string>
+    <string name="add_note">Add note</string>
+    <string name="add_ssh_key">Add SSH key</string>
     <string name="no_text_sends">U tvom trezoru nema tekst Sendova.</string>
     <string name="no_file_sends">U tvom trezoru nema datotečnih Sendova.</string>
     <string name="no_ssh_keys">U tvom trezoru nema SSH ključeva.</string>
@@ -474,8 +473,6 @@
     <string name="maximum_access_count_info">Ako je određeno, ovom Sendu će se moći pristupiti samo ograničeni broj puta.</string>
     <string name="maximum_access_count_reached">Dostignut najveći broj pristupanja</string>
     <string name="current_access_count">Trenutni broj pristupanja</string>
-    <string name="new_password">Nova lozinka</string>
-    <string name="password_info">Neobavezno zahtijevaj korisnika lozinku za pristup ovom Sendu.</string>
     <string name="remove_password">Ukloni lozinku</string>
     <string name="removing_send_password">Lozinka uklonjena</string>
     <string name="password_removed">Lozinka uklonjena</string>
@@ -818,7 +815,7 @@
     <string name="get_started">Počni</string>
     <string name="save_and_protect_your_data">Spremi i zaštiti svoje podatke</string>
     <string name="the_vault_protects_more_than_just_passwords">Trezor štiti više od lozinki. Sigurno spremi prijave, identitete, kartice i bilješke.</string>
-    <string name="new_login">Nova prijava</string>
+    <string name="add_login">Add login</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">Sigurno dijeli datoteke i podatke s bilo kime, na bilo kojoj platformi. Tvoji podaci ostaju kriptirani uz ograničenje izloženosti.</string>
     <string name="send_sensitive_information_safely">Sigurno pošalji osjetljive podatke</string>
     <string name="import_saved_logins">Uvoz spremljenih prijava</string>
@@ -897,8 +894,6 @@
     <string name="copy_address">Kopiraj adresu</string>
     <string name="biometrics_no_longer_supported_title">Na ovom uređaju biometrija više nije podržaana</string>
     <string name="biometrics_no_longer_supported">Odjavlili smo te jer biometrijski podaci tvojeg uređaja ne zadovoljavaju najnovije sigurnosne zahtjeve. Za ažuriranje postavki ponovno se prijavi ili kontaktiraj svog administratora za pristup.</string>
-    <string name="cxp_import">CXP uvoz</string>
-    <string name="cxp_export">CXP izvoz</string>
     <string name="choose_three_or_four_random_words">Odaberi tri ili četiri nasumične riječi</string>
     <string name="pick_three_or_four_random_unrelated_words">Odaberi tri ili četiri nasumične, nevezane riješa koje možeš jednostavno zapamtiti. <annotation emphasis="bold">Stvari, mjesta ili nešto</annotation> 
 što voliš.</string>
@@ -1227,6 +1222,7 @@ bilo kakav problem.</string>
     <string name="archiving_items_is_a_premium_feature">Arhiviranje je Premium značajka. Tvoj trenutni paket ne uključuje pristup ovoj značajki.</string>
     <string name="upgrade_to_premium">Nadogradnja na premium</string>
     <string name="plan">Paket</string>
+    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
     <string name="unlock_advanced_security_features">Otključaj napredne sigurnosne značajke</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Premium paket daje ti više alata za sigurnost i nadzor.</string>
     <string name="this_item_is_archived">Ova stavka je arhivirana.</string>
@@ -1249,6 +1245,25 @@ bilo kakav problem.</string>
     <string name="continue_without_syncing">Nastavi bez sinkronizacije</string>
     <string name="external_link">Vanjska poveznica</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, vanjska poveznica</string>
+    <string name="devices">Devices</string>
+    <string name="mobile_platform">Mobile - %1$s</string>
+    <string name="extension_platform">Extension - %1$s</string>
+    <string name="web_platform">Web - %1$s</string>
+    <string name="desktop_platform">Desktop - %1$s</string>
+    <string name="cli_platform">CLI - %1$s</string>
+    <string name="sdk">SDK</string>
+    <string name="server">Server</string>
+    <string name="unknown_device">Unknown device</string>
+    <string name="first_login_date"><annotation emphasis="bold">First login:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="current_session">Current session</string>
+    <string name="pending_request">Pending request</string>
+    <string name="today">Today</string>
+    <string name="past_seven_days">Past 7 days</string>
+    <string name="past_fourteen_days">Past 14 days</string>
+    <string name="past_thirty_days">Past 30 days</string>
+    <string name="over_thirty_days_ago">Over 30 days ago</string>
+    <string name="recently_active"><annotation emphasis="bold">Recently active:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="trusted">Trusted</string>
     <string name="preview_not_available_for_files">Pregled nije dostupan za %1$s datoteke/a. I dalje ih možeš preuzeti za pregled na svom uređaju.</string>
     <string name="this_file_is_too_large_to_preview">Ova je datoteka prevelika za pretpregled. I dalje ju možeš preuzeti za pregled na svom uređaju.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden nije mogao dešifrirati ovu datoteku, tako da pretpregled ne može biti prikazan.</string>
@@ -1268,7 +1283,7 @@ bilo kakav problem.</string>
     <string name="secure_file_storage">Sigurna pohrana datoteka</string>
     <string name="breach_monitoring">Nadzor proboja</string>
     <string name="upgrade_now">Nadogradi sada</string>
-    <string name="stripe_checkout_footer">Kupnju ćeš dovršiti na sigurnoj blagajni Stripea.</string>
+    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
     <string name="opening_checkout">Otvaranje kupnje…</string>
     <string name="secure_checkout_didnt_load">Sigurna blagajna nije učitana</string>
     <string name="trouble_opening_payment_page">Nismo mogli otvoriti stranicu za plaćanje, pokušaj ponovno.</string>
@@ -1289,20 +1304,22 @@ bilo kakav problem.</string>
     <string name="storage_cost">Trošak pohrane</string>
     <string name="discount">Popust</string>
     <string name="estimated_tax">Procijenjeni porez</string>
+    <string name="total">Total</string>
     <string name="billing_rate_per_year">%1$s godišnje</string>
     <string name="billing_rate_per_month">%1$s mjesečno</string>
     <string name="manage_plan">Upravljaj paketom</string>
+    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Manage your subscription plan in the Bitwarden web app.</string>
     <string name="cancel_premium">Otkaži Premium</string>
-    <string name="cancel_now">Otkaži odmah</string>
-    <string name="cancel_premium_confirmation">Tvoj Premium paket ističe: %1$s.</string>
     <string name="subscription_status_active">Aktivno</string>
     <string name="subscription_status_canceled">Otkazano</string>
-    <string name="subscription_status_overdue_payment">Dospjelo plaćanje</string>
     <string name="subscription_status_past_due">Prekoračeno dospijeće</string>
     <string name="subscription_status_paused">Pauzirano</string>
+    <string name="subscription_status_update_payment">Ažuriraj plaćanje</string>
+    <string name="subscription_status_pending_cancellation">Pending cancellation</string>
+    <string name="subscription_pending_cancellation_description">Your subscription is scheduled to cancel on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. You can reinstate it anytime before then.</string>
     <string name="premium_next_charge_summary">Iznos tvoje sljedeće naplate je %1$s USD, dospijeva %2$s.</string>
     <string name="subscription_canceled_description">Tvoja je preplata otkazana %1$s. Ponovno se pretplati za nastavak korištenja Premium značajki.</string>
-    <string name="subscription_overdue_description">Nismo mogli obraditi tvoje plaćanje. Ažuriraj način plaćanja prije isteka pretplate %1$s.</string>
+    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Imaš razdoblje odgode od %1$d dana od datuma isteka tvoje pretplate. Molimo plati nepodmireni iznos do %2$s.</item>
         <item quantity="few">Imaš razdoblje odgode od %1$d dana od datuma isteka tvoje pretplate. Molimo plati nepodmireni iznos do %2$s.</item>
@@ -1318,9 +1335,9 @@ bilo kakav problem.</string>
     <string name="view_bank_account">Pogledaj broj bankovnog računa</string>
     <string name="view_license">Pogledaj osobnu iskaznicu</string>
     <string name="view_passport">Pogledaj putovnicu</string>
-    <string name="new_bank_account">Novi broj računa</string>
-    <string name="new_license">Nova osobna iskaznica</string>
-    <string name="new_passport">Nova putovnica</string>
+    <string name="add_bank_account">Add bank account</string>
+    <string name="add_license">Add license</string>
+    <string name="add_passport">Add passport</string>
     <string name="edit_bank_account">Uredi podatke o bankovnom računu</string>
     <string name="edit_license">Uredi osobnu iskaznicu</string>
     <string name="edit_passport">Uredi putovnicu</string>
@@ -1369,6 +1386,7 @@ bilo kakav problem.</string>
     <string name="license_details">Detalji dozvole</string>
     <string name="licenses">Osobne</string>
     <string name="no_licenses">Nema osobnih iskaznica u tvojem trezoru.</string>
+    <string name="no_passports">There are no passports in your vault.</string>
     <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">Zahtjev je prekinut jer je aplikacija trebala ponovnu autentifikaciju. Pokušaj ponovno.</string>
     <string name="passport_details">Detalji putovnice</string>
     <string name="sex">Spol</string>
@@ -1382,4 +1400,6 @@ bilo kakav problem.</string>
     <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Bitwarden needs local network access to sync with your server. Without this permission, the app won’t be able to connect.</string>
     <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Without this permission, Bitwarden won’t be able to connect and sync with your server. You can enable this in your device settings.</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Your request was interrupted because the app needs local network access. You can enable this in your device settings.</string>
+    <string name="continue_to_stripe">Continue to Stripe?</string>
+    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">You’ll be taken to Stripe to manage your subscription cancellation.</string>
 </resources>

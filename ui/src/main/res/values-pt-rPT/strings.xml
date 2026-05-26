@@ -119,14 +119,13 @@
     <string name="never">Nunca</string>
     <string name="new_item_created">Item adicionado</string>
     <string name="no_cards">Não existem cartões no seu cofre.</string>
-    <string name="new_card">Novo cartão</string>
+    <string name="add_card">Adicionar cartão</string>
     <string name="no_logins">Não existem credenciais no seu cofre.</string>
     <string name="no_identities">Não existem identidades no seu cofre.</string>
-    <string name="new_identity">Nova identidade</string>
+    <string name="add_identity">Adicionar identidade</string>
     <string name="no_notes">Não existem notas no seu cofre.</string>
-    <string name="new_note">Nova nota</string>
-    <string name="new_item">Novo item</string>
-    <string name="new_ssh_key">Nova chave SSH</string>
+    <string name="add_note">Adicionar nota</string>
+    <string name="add_ssh_key">Adicionar chave SSH</string>
     <string name="no_text_sends">Não existem Sends de texto no seu cofre.</string>
     <string name="no_file_sends">Não existem Sends de ficheiro no seu cofre.</string>
     <string name="no_ssh_keys">Não existem chaves SSH no seu cofre.</string>
@@ -473,8 +472,6 @@ A leitura será efetuada automaticamente.</string>
     <string name="maximum_access_count_info">Se definido, os utilizadores deixarão de poder aceder a este Send quando a contagem máxima de acessos for atingida.</string>
     <string name="maximum_access_count_reached">Número máximo de acessos atingido</string>
     <string name="current_access_count">Número de acessos atual: %s</string>
-    <string name="new_password">Nova palavra-passe</string>
-    <string name="password_info">Esta palavra-passe é necessária para ver o Send.</string>
     <string name="remove_password">Remover palavra-passe</string>
     <string name="removing_send_password">A remover palavra-passe</string>
     <string name="password_removed">Palavra-passe removida</string>
@@ -815,7 +812,7 @@ Pretende mudar para esta conta?</string>
     <string name="get_started">Começar</string>
     <string name="save_and_protect_your_data">Guarde e proteja os seus dados</string>
     <string name="the_vault_protects_more_than_just_passwords">O cofre protege mais do que apenas palavras-passe. Guarde aqui credenciais, IDs, cartões e notas de forma segura.</string>
-    <string name="new_login">Nova credencial</string>
+    <string name="add_login">Adicionar credencial</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">Partilhe ficheiros e dados de forma segura com qualquer pessoa, em qualquer plataforma. As suas informações permanecerão encriptadas ponto a ponto, limitando a exposição.</string>
     <string name="send_sensitive_information_safely">Envie informações sensíveis, com segurança</string>
     <string name="import_saved_logins">Importar credenciais guardadas</string>
@@ -893,8 +890,6 @@ Pretende mudar para esta conta?</string>
     <string name="copy_address">Copiar endereço</string>
     <string name="biometrics_no_longer_supported_title">A biometria já não é suportada neste dispositivo</string>
     <string name="biometrics_no_longer_supported">A sua sessão foi terminada porque os dados biométricos do seu dispositivo não cumprem os requisitos de segurança mais recentes. Para atualizar as definições, inicie sessão novamente ou contacte o seu administrador para obter acesso.</string>
-    <string name="cxp_import">Importar CXP</string>
-    <string name="cxp_export">Exportar CXP</string>
     <string name="choose_three_or_four_random_words">Escolha três ou quatro palavras ao acaso</string>
     <string name="pick_three_or_four_random_unrelated_words">Escolha três ou quatro palavras ao acaso, não relacionadas, de que se possa lembrar facilmente. Pense em <annotation emphasis="bold">objetos, lugares ou coisas</annotation> de que gosta.</string>
     <string name="combine_those_words_together">Combine estas palavras</string>
@@ -1218,6 +1213,7 @@ Pretende mudar para esta conta?</string>
     <string name="archiving_items_is_a_premium_feature">O arquivo de itens é uma funcionalidade Premium. O seu plano atual não inclui acesso a esta funcionalidade.</string>
     <string name="upgrade_to_premium">Atualize para o Premium</string>
     <string name="plan">Plano</string>
+    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Para gerir a sua subscrição Premium, terá de iniciar sessão no seu cofre web num computador.</string>
     <string name="unlock_advanced_security_features">Desbloqueie funcionalidades de segurança avançadas</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Um plano Premium dá-lhe ferramentas adicionais para reforçar a sua segurança e manter o controlo.</string>
     <string name="this_item_is_archived">Este item está arquivado.</string>
@@ -1240,6 +1236,25 @@ Pretende mudar para esta conta?</string>
     <string name="continue_without_syncing">Continuar sem sincronizar</string>
     <string name="external_link">Link externo</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Link externo</string>
+    <string name="devices">Dispositivos</string>
+    <string name="mobile_platform">Telemóvel - %1$s</string>
+    <string name="extension_platform">Extensão - %1$s</string>
+    <string name="web_platform">Web - %1$s</string>
+    <string name="desktop_platform">Computador - %1$s</string>
+    <string name="cli_platform">CLI - %1$s</string>
+    <string name="sdk">SDK</string>
+    <string name="server">Servidor</string>
+    <string name="unknown_device">Dispositivo desconhecido</string>
+    <string name="first_login_date"><annotation emphasis="bold">Primeiro início de sessão:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="current_session">Sessão atual</string>
+    <string name="pending_request">Pedido pendente</string>
+    <string name="today">Hoje</string>
+    <string name="past_seven_days">Últimos 7 dias</string>
+    <string name="past_fourteen_days">Últimos 14 dias</string>
+    <string name="past_thirty_days">Últimos 30 dias</string>
+    <string name="over_thirty_days_ago">Há mais de 30 dias</string>
+    <string name="recently_active"><annotation emphasis="bold">Recentemente ativo:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="trusted">Confiável</string>
     <string name="preview_not_available_for_files">Pré-visualização indisponível para ficheiros %1$s. Pode ainda transferi-lo para o visualizar no seu dispositivo.</string>
     <string name="this_file_is_too_large_to_preview">Este ficheiro é demasiado grande para ser visualizado. Pode ainda transferi-lo para visualizá-lo no seu dispositivo.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">O Bitwarden não conseguiu desencriptar este ficheiro, pelo que a pré-visualização não pode ser apresentada.</string>
@@ -1259,7 +1274,7 @@ Pretende mudar para esta conta?</string>
     <string name="secure_file_storage">Armazenamento seguro de ficheiros</string>
     <string name="breach_monitoring">Monitorização de violações</string>
     <string name="upgrade_now">Atualizar agora</string>
-    <string name="stripe_checkout_footer">Será encaminhado para o checkout seguro da Stripe para concluir a sua compra.</string>
+    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">Será encaminhado para o checkout seguro da Stripe para concluir a sua compra.</string>
     <string name="opening_checkout">A abrir checkout…</string>
     <string name="secure_checkout_didnt_load">Não foi possível carregar o checkout seguro</string>
     <string name="trouble_opening_payment_page">Tivemos problemas ao abrir a página de pagamento, por isso tente novamente.</string>
@@ -1280,23 +1295,25 @@ Pretende mudar para esta conta?</string>
     <string name="storage_cost">Custo de armazenamento</string>
     <string name="discount">Desconto</string>
     <string name="estimated_tax">Imposto estimado</string>
+    <string name="total">Total</string>
     <string name="billing_rate_per_year">%1$s / ano</string>
     <string name="billing_rate_per_month">%1$s / mês</string>
     <string name="manage_plan">Gerir plano</string>
+    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Faça a gestão do seu plano de subscrição na aplicação web do Bitwarden.</string>
     <string name="cancel_premium">Cancelar Premium</string>
-    <string name="cancel_now">Cancelar agora</string>
-    <string name="cancel_premium_confirmation">Continuará a ter acesso ao Premium até %1$s.</string>
     <string name="subscription_status_active">Ativo</string>
     <string name="subscription_status_canceled">Cancelado</string>
-    <string name="subscription_status_overdue_payment">Pagamento em atraso</string>
     <string name="subscription_status_past_due">Caducado</string>
     <string name="subscription_status_paused">Em pausa</string>
-    <string name="premium_next_charge_summary">O seu próximo pagamento será de %1$s USD, com vencimento em %2$s.</string>
-    <string name="subscription_canceled_description">A sua subscrição foi cancelada a %1$s. Volte a subscrever para continuar a utilizar funcionalidades Premium.</string>
-    <string name="subscription_overdue_description">Não foi possível processar o seu pagamento. Atualize o seu pagamento antes de a sua subscrição terminar a %1$s.</string>
+    <string name="subscription_status_update_payment">Atualizar pagamento</string>
+    <string name="subscription_status_pending_cancellation">Cancelamento pendente</string>
+    <string name="subscription_pending_cancellation_description">A sua subscrição está agendada para ser cancelada em <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Pode reativá-la a qualquer momento até essa data.</string>
+    <string name="premium_next_charge_summary">O seu próximo pagamento será de <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD, com vencimento em <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
+    <string name="subscription_canceled_description">A sua subscrição foi cancelada a <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Volte a subscrever para continuar a utilizar funcionalidades Premium.</string>
+    <string name="subscription_update_payment_description">Não foi possível processar o seu pagamento. Atualize o seu pagamento antes de a sua subscrição terminar a <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
-        <item quantity="one">Dispõe de um período de tolerância de %1$d dia a partir da data de expiração da sua subscrição. Por favor, resolva o valor em atraso até %2$s.</item>
-        <item quantity="other">Dispõe de um período de tolerância de %1$d dias a partir da data de expiração da sua subscrição. Por favor, resolva o valor em atraso até %2$s.</item>
+        <item quantity="one">Dispõe de um período de tolerância de <annotation arg="0">%1$d</annotation> dia a partir da data de expiração da sua subscrição. Por favor, resolva o valor em atraso até <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="other">Dispõe de um período de tolerância de <annotation arg="0">%1$d</annotation> dias a partir da data de expiração da sua subscrição. Por favor, resolva o valor em atraso até <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
     </plurals>
     <string name="subscription_paused_description">A sua subscrição está suspensa. Reative-a para continuar a utilizar as funcionalidades Premium.</string>
     <string name="loading_subscription">A carregar subscrição…</string>
@@ -1308,9 +1325,9 @@ Pretende mudar para esta conta?</string>
     <string name="view_bank_account">Ver conta bancária</string>
     <string name="view_license">Ver carta de condução</string>
     <string name="view_passport">Ver passaporte</string>
-    <string name="new_bank_account">Nova conta bancária</string>
-    <string name="new_license">Nova carta de condução</string>
-    <string name="new_passport">Novo passaporte</string>
+    <string name="add_bank_account">Adicionar conta bancária</string>
+    <string name="add_license">Adicionar carta de condução</string>
+    <string name="add_passport">Adicionar passaporte</string>
     <string name="edit_bank_account">Editar conta bancária</string>
     <string name="edit_license">Editar carta de condução</string>
     <string name="edit_passport">Editar passaporte</string>
@@ -1359,6 +1376,7 @@ Pretende mudar para esta conta?</string>
     <string name="license_details">Detalhes da carta de condução</string>
     <string name="licenses">Cartas de condução</string>
     <string name="no_licenses">Não existem cartas de condução no seu cofre.</string>
+    <string name="no_passports">Não existem passaportes no seu cofre.</string>
     <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">O seu pedido foi interrompido porque a app precisou de voltar a autenticar. Por favor, tente novamente.</string>
     <string name="passport_details">Detalhes do passaporte</string>
     <string name="sex">Género</string>
@@ -1372,4 +1390,6 @@ Pretende mudar para esta conta?</string>
     <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">O Bitwarden precisa de acesso à rede local para sincronizar com o seu servidor. Sem esta permissão, a app não conseguirá estabelecer ligação.</string>
     <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Sem esta permissão, o Bitwarden não conseguirá ligar-se nem sincronizar com o seu servidor. Pode ativar esta opção nas definições do seu dispositivo.</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">O seu pedido foi interrompido porque a app precisa de acesso à rede local. Pode ativar esta opção nas definições do seu dispositivo.</string>
+    <string name="continue_to_stripe">Continuar para o Stripe?</string>
+    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Será redirecionado para o Stripe para gerir o cancelamento da sua subscrição.</string>
 </resources>

@@ -119,14 +119,13 @@
     <string name="never">Ποτέ</string>
     <string name="new_item_created">Το στοιχείο προστέθηκε</string>
     <string name="no_cards">Δεν υπάρχουν κάρτες στην κρύπτη σας.</string>
-    <string name="new_card">Νέα κάρτα</string>
+    <string name="add_card">Add card</string>
     <string name="no_logins">Δεν υπάρχουν συνδέσεις στην κρύπτη σας.</string>
     <string name="no_identities">Δεν υπάρχουν ταυτότητες στην κρύπτη σας.</string>
-    <string name="new_identity">Νέα ταυτότητα</string>
+    <string name="add_identity">Add identity</string>
     <string name="no_notes">Δεν υπάρχουν σημειώσεις στην κρύπτη σας.</string>
-    <string name="new_note">Νέα σημείωση</string>
-    <string name="new_item">Νέο στοιχείο</string>
-    <string name="new_ssh_key">Νέο κλειδί SSH</string>
+    <string name="add_note">Add note</string>
+    <string name="add_ssh_key">Add SSH key</string>
     <string name="no_text_sends">Δεν υπάρχουν Send κειμένου στην κρύπτη σας.</string>
     <string name="no_file_sends">There are no file Sends in your vault.</string>
     <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
@@ -473,8 +472,6 @@
     <string name="maximum_access_count_info">Εάν οριστεί, οι χρήστες δεν θα μπορούν πλέον να έχουν πρόσβαση σε αυτό το send μόλις επιτευχθεί ο μέγιστος αριθμός πρόσβασης.</string>
     <string name="maximum_access_count_reached">Φτάσατε στον μέγιστο αριθμό πρόσβασης</string>
     <string name="current_access_count">Τρέχων Αριθμός Πρόσβασης</string>
-    <string name="new_password">Νέος κωδικός πρόσβασης</string>
-    <string name="password_info">Προαιρετικά απαιτείται κωδικός πρόσβασης για τους χρήστες για να έχουν πρόσβαση σε αυτό το Send.</string>
     <string name="remove_password">Αφαίρεση κωδικού πρόσβασης</string>
     <string name="removing_send_password">Αφαίρεση κωδικού...</string>
     <string name="password_removed">Ο κωδικός πρόσβασης αφαιρέθηκε</string>
@@ -815,7 +812,7 @@
     <string name="get_started">Έναρξη</string>
     <string name="save_and_protect_your_data">Αποθηκεύστε και προστασεύστε τα δεδομένα σας</string>
     <string name="the_vault_protects_more_than_just_passwords">Η κρύπτη προστατεύει περισσότερα από μόνο κωδικούς πρόσβασης. Αποθηκεύστε ασφαλείς συνδέσεις, ταυτότητες, κάρτες και σημειώσεις με ασφάλεια εδώ.</string>
-    <string name="new_login">Νέα σύνδεση</string>
+    <string name="add_login">Add login</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">Κοινή χρήση αρχείων και δεδομένων με ασφάλεια σε οποιονδήποτε, σε οποιαδήποτε πλατφόρμα. Οι πληροφορίες σας θα παραμείνουν κρυπτογραφημένες από άκρο σε άκρο, περιορίζοντας την έκθεση.</string>
     <string name="send_sensitive_information_safely">Ασφαλής αποστολή ευαίσθητων πληροφοριών</string>
     <string name="import_saved_logins">Εισαγωγή αποθηκευμένων συνδέσεων</string>
@@ -893,8 +890,6 @@
     <string name="copy_address">Αντιγραφή διεύθυνσης</string>
     <string name="biometrics_no_longer_supported_title">Τα βιομετρικά δεν υποστηρίζεται πλέον σε αυτήν τη συσκευή</string>
     <string name="biometrics_no_longer_supported">Έχετε αποσυνδεθεί επειδή τα βιομετρικά στοιχεία της συσκευής σας δεν πληρούν τις τελευταίες απαιτήσεις ασφαλείας. Για να ενημερώσετε τις ρυθμίσεις, συνδεθείτε ξανά ή επικοινωνήστε με το διαχειριστή για πρόσβαση.</string>
-    <string name="cxp_import">Εισαγωγή CXP</string>
-    <string name="cxp_export">Εξαγωγή CXP</string>
     <string name="choose_three_or_four_random_words">Επιλέξτε τρεις ή τέσσερις τυχαίες λέξεις</string>
     <string name="pick_three_or_four_random_unrelated_words">Επιλέξτε τρεις ή τέσσερις τυχαίες, άσχετες μεταξύ τους λέξεις που θα θυμάστε εύκολα. Σκεφτείτε <annotation emphasis="bold">αντικείμενα, μέρη ή πράγματα</annotation> που σας αρέσουν.</string>
     <string name="combine_those_words_together">Συνδυάστε αυτές τις λέξεις μαζί</string>
@@ -1218,6 +1213,7 @@
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Upgrade to Premium</string>
     <string name="plan">Πακέτο</string>
+    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
     <string name="unlock_advanced_security_features">Unlock advanced security features</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">This item is archived.</string>
@@ -1240,6 +1236,25 @@
     <string name="continue_without_syncing">Συνέχεια χωρίς συγχρονισμό</string>
     <string name="external_link">Εξωτερικός σύνδεσμος</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Εξωτερικός σύνδεσμος</string>
+    <string name="devices">Devices</string>
+    <string name="mobile_platform">Mobile - %1$s</string>
+    <string name="extension_platform">Extension - %1$s</string>
+    <string name="web_platform">Web - %1$s</string>
+    <string name="desktop_platform">Desktop - %1$s</string>
+    <string name="cli_platform">CLI - %1$s</string>
+    <string name="sdk">SDK</string>
+    <string name="server">Server</string>
+    <string name="unknown_device">Unknown device</string>
+    <string name="first_login_date"><annotation emphasis="bold">First login:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="current_session">Current session</string>
+    <string name="pending_request">Pending request</string>
+    <string name="today">Today</string>
+    <string name="past_seven_days">Past 7 days</string>
+    <string name="past_fourteen_days">Past 14 days</string>
+    <string name="past_thirty_days">Past 30 days</string>
+    <string name="over_thirty_days_ago">Over 30 days ago</string>
+    <string name="recently_active"><annotation emphasis="bold">Recently active:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="trusted">Trusted</string>
     <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
     <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
@@ -1259,7 +1274,7 @@
     <string name="secure_file_storage">Ασφαλής χώρος αποθήκευσης αρχείων</string>
     <string name="breach_monitoring">Εποπτεία παραβιάσεων</string>
     <string name="upgrade_now">Αναβάθμιση τώρα</string>
-    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
     <string name="opening_checkout">Opening checkout…</string>
     <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
     <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
@@ -1280,23 +1295,25 @@
     <string name="storage_cost">Κόστος αποθήκευσης</string>
     <string name="discount">Έκπτωση</string>
     <string name="estimated_tax">Εκτιμώμενος φόρος</string>
+    <string name="total">Total</string>
     <string name="billing_rate_per_year">%1$s / έτος</string>
     <string name="billing_rate_per_month">%1$s / μήνα</string>
     <string name="manage_plan">Διαχείριση πακέτου</string>
+    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Manage your subscription plan in the Bitwarden web app.</string>
     <string name="cancel_premium">Ακύρωση Premium</string>
-    <string name="cancel_now">Ακύρωση τώρα</string>
-    <string name="cancel_premium_confirmation">You’ll continue to have Premium access until %1$s.</string>
     <string name="subscription_status_active">Ενεργό</string>
     <string name="subscription_status_canceled">Ακυρώθηκε</string>
-    <string name="subscription_status_overdue_payment">Εκπρόθεσμη πληρωμή</string>
     <string name="subscription_status_past_due">Past due</string>
     <string name="subscription_status_paused">Σε παύση</string>
-    <string name="premium_next_charge_summary">Your next charge is for %1$s USD due on %2$s.</string>
-    <string name="subscription_canceled_description">Your subscription was canceled on %1$s. Resubscribe to continue using premium features.</string>
-    <string name="subscription_overdue_description">We couldn’t process your payment. Update your payment before your subscription ends on %1$s.</string>
+    <string name="subscription_status_update_payment">Ενημέρωση πληρωμής</string>
+    <string name="subscription_status_pending_cancellation">Pending cancellation</string>
+    <string name="subscription_pending_cancellation_description">Your subscription is scheduled to cancel on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. You can reinstate it anytime before then.</string>
+    <string name="premium_next_charge_summary">Your next charge is for <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD due on <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
+    <string name="subscription_canceled_description">Your subscription was canceled on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using premium features.</string>
+    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
-        <item quantity="one">You have a grace period of %1$d day from your subscription expiration date. Please resolve the past due amount by %2$s.</item>
-        <item quantity="other">You have a grace period of %1$d days from your subscription expiration date. Please resolve the past due amount by %2$s.</item>
+        <item quantity="one">You have a grace period of <annotation arg="0">%1$d</annotation> day from your subscription expiration date. Please resolve the past due amount by <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="other">You have a grace period of <annotation arg="0">%1$d</annotation> days from your subscription expiration date. Please resolve the past due amount by <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
     </plurals>
     <string name="subscription_paused_description">Your subscription is paused. Resume to continue using premium features.</string>
     <string name="loading_subscription">Loading subscription…</string>
@@ -1308,9 +1325,9 @@
     <string name="view_bank_account">Προβολή τραπεζικού λογαριασμού</string>
     <string name="view_license">View license</string>
     <string name="view_passport">Προβολή διαβατηρίου</string>
-    <string name="new_bank_account">Νέος τραπεζικός λογαριασμός</string>
-    <string name="new_license">New license</string>
-    <string name="new_passport">Νέο διαβατήριο</string>
+    <string name="add_bank_account">Add bank account</string>
+    <string name="add_license">Add license</string>
+    <string name="add_passport">Add passport</string>
     <string name="edit_bank_account">Επεξεργασία τραπεζικού λογαριασμού</string>
     <string name="edit_license">Edit license</string>
     <string name="edit_passport">Επεξεργασία διαβατηρίου</string>
@@ -1359,6 +1376,7 @@
     <string name="license_details">License details</string>
     <string name="licenses">Licenses</string>
     <string name="no_licenses">There are no licenses in your vault.</string>
+    <string name="no_passports">There are no passports in your vault.</string>
     <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">Your request was interrupted because the app needed to re-authenticate. Please try again.</string>
     <string name="passport_details">Passport details</string>
     <string name="sex">Sex</string>
@@ -1372,4 +1390,6 @@
     <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Bitwarden needs local network access to sync with your server. Without this permission, the app won’t be able to connect.</string>
     <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Without this permission, Bitwarden won’t be able to connect and sync with your server. You can enable this in your device settings.</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Your request was interrupted because the app needs local network access. You can enable this in your device settings.</string>
+    <string name="continue_to_stripe">Continue to Stripe?</string>
+    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">You’ll be taken to Stripe to manage your subscription cancellation.</string>
 </resources>
