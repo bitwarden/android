@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -94,7 +94,7 @@ class AccountSecurityViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         policyManager
-            .getActivePoliciesFlow(type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT)
+            .getActivePoliciesFlow(type = PolicyType.MAXIMUM_VAULT_TIMEOUT)
             .map { policies ->
                 AccountSecurityAction.Internal.PolicyUpdateReceive(
                     vaultTimeoutPolicies = policies.mapNotNull {
@@ -106,7 +106,7 @@ class AccountSecurityViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         policyManager
-            .getActivePoliciesFlow(type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN)
+            .getActivePoliciesFlow(type = PolicyType.REMOVE_UNLOCK_WITH_PIN)
             .map { policies ->
                 AccountSecurityAction.Internal.RemovePinPolicyUpdateReceive(
                     removeUnlockWithPinPolicyEnabled = policies.isNotEmpty(),

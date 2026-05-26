@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.ui.vault.feature.exportitems.selectaccount
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.cxf.model.ImportCredentialsRequestData
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -118,7 +118,7 @@ class SelectAccountViewModel @Inject constructor(
         action: SelectAccountAction.Internal.SelectionDataReceive,
     ) {
         val itemRestrictedOrgIds = action.itemRestrictedOrgs
-            .filter { it.isEnabled }
+            .filter { it.enabled }
             .map { it.organizationId }
 
         val accountSelectionListItems = action.userState
@@ -159,7 +159,7 @@ class SelectAccountViewModel @Inject constructor(
     private fun observeSelectionData() {
         combine(
             authRepository.userStateFlow,
-            policyManager.getActivePoliciesFlow(PolicyTypeJson.RESTRICT_ITEM_TYPES),
+            policyManager.getActivePoliciesFlow(PolicyType.RESTRICTED_ITEM_TYPES),
         ) { userState, itemRestrictedOrgs ->
             SelectAccountAction.Internal.SelectionDataReceive(
                 userState = userState,
@@ -248,7 +248,7 @@ sealed class SelectAccountAction {
          */
         data class SelectionDataReceive(
             val userState: UserState?,
-            val itemRestrictedOrgs: List<SyncResponseJson.Policy>,
+            val itemRestrictedOrgs: List<PolicyView>,
         ) : Internal()
     }
 }

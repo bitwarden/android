@@ -1,9 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
 import app.cash.turbine.test
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.SyncResponseJson
-import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -12,6 +11,7 @@ import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -36,14 +36,13 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
     private val firstTimeActionManager: FirstTimeActionManager = mockk {
         every { allSettingsBadgeCountFlow } returns mutableSettingsBadgeCountFlow
     }
-    private val mutableDisableSendsPolicyFlow =
-        MutableStateFlow<List<SyncResponseJson.Policy>>(emptyList())
+    private val mutableDisableSendsPolicyFlow = MutableStateFlow<List<PolicyView>>(emptyList())
     private val policyManager: PolicyManager = mockk {
         every {
-            getActivePoliciesFlow(PolicyTypeJson.DISABLE_SEND)
+            getActivePoliciesFlow(PolicyType.DISABLE_SEND)
         } returns mutableDisableSendsPolicyFlow
         every {
-            getActivePolicies(PolicyTypeJson.DISABLE_SEND)
+            getActivePolicies(PolicyType.DISABLE_SEND)
         } answers { mutableDisableSendsPolicyFlow.value }
     }
 
@@ -336,7 +335,7 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
                 assertEquals(DEFAULT_STATE.copy(areSendsDisabled = false), awaitItem())
 
                 mutableDisableSendsPolicyFlow.emit(
-                    listOf(createMockPolicy(type = PolicyTypeJson.DISABLE_SEND)),
+                    listOf(createMockPolicyView(type = PolicyType.DISABLE_SEND)),
                 )
                 assertEquals(DEFAULT_STATE.copy(areSendsDisabled = true), awaitItem())
 

@@ -14,8 +14,7 @@ import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
@@ -71,6 +70,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createManageCollectio
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipherPermissions
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createViewCollectionView
@@ -176,7 +176,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     }
     private val policyManager: PolicyManager = mockk {
         every {
-            getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+            getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns emptyList()
     }
     private val bitwardenCredentialManager = mockk<BitwardenCredentialManager> {
@@ -301,7 +301,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
         }
         verify {
-            policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         }
     }
 
@@ -330,14 +330,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Test
     fun `initial add state should be correct with individual vault disabled`() = runTest {
         every {
-            policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns listOf(
-            createMockPolicy(
+            createMockPolicyView(
                 organizationId = "Test Org",
                 id = "testId",
-                type = PolicyTypeJson.PERSONAL_OWNERSHIP,
-                isEnabled = true,
-                data = null,
+                type = PolicyType.ORGANIZATION_DATA_OWNERSHIP,
+                enabled = true,
             ),
         )
         val vaultAddEditType = VaultAddEditType.AddItem
@@ -382,7 +381,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             vaultRepository.vaultDataStateFlow
         }
         verify {
-            policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         }
     }
 
@@ -5319,14 +5318,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         fun `CollectionSelect should update selectedOwnerId when isIndividualVaultDisabled is true`() =
             runTest {
                 every {
-                    policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+                    policyManager.getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
                 } returns listOf(
-                    createMockPolicy(
+                    createMockPolicyView(
                         organizationId = "Test Org",
                         id = "testId",
-                        type = PolicyTypeJson.PERSONAL_OWNERSHIP,
-                        isEnabled = true,
-                        data = null,
+                        type = PolicyType.ORGANIZATION_DATA_OWNERSHIP,
+                        enabled = true,
                     ),
                 )
 

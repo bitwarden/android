@@ -1,15 +1,13 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.bitwarden.network.model.OrganizationType
-import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.bitwarden.network.model.createMockPermissions
-import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.PolicyType
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.encodeToJsonElement
-import kotlinx.serialization.json.jsonObject
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
@@ -60,9 +58,9 @@ class SyncResponseJsonExtensionsTest {
             requireSpecial = null,
             enforceOnLogin = true,
         )
-        val policy = createMockPolicy(
-            type = PolicyTypeJson.MASTER_PASSWORD,
-            data = Json.encodeToJsonElement(policyInformation).jsonObject,
+        val policy = createMockPolicyView(
+            type = PolicyType.MASTER_PASSWORD,
+            data = Json.encodeToString(policyInformation),
         )
 
         assertEquals(
@@ -86,9 +84,9 @@ class SyncResponseJsonExtensionsTest {
             capitalize = true,
             includeNumber = null,
         )
-        val policy = createMockPolicy(
-            type = PolicyTypeJson.PASSWORD_GENERATOR,
-            data = Json.encodeToJsonElement(policyInformation).jsonObject,
+        val policy = createMockPolicyView(
+            type = PolicyType.PASSWORD_GENERATOR,
+            data = Json.encodeToString(policyInformation),
         )
 
         assertEquals(
@@ -104,9 +102,9 @@ class SyncResponseJsonExtensionsTest {
             action = PolicyInformation.VaultTimeout.Action.LOCK,
             type = PolicyInformation.VaultTimeout.Type.CUSTOM,
         )
-        val policy = createMockPolicy(
-            type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
-            data = Json.encodeToJsonElement(policyInformation).jsonObject,
+        val policy = createMockPolicyView(
+            type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
+            data = Json.encodeToString(policyInformation),
         )
 
         assertEquals(
@@ -117,8 +115,8 @@ class SyncResponseJsonExtensionsTest {
 
     @Test
     fun `policyInformation returns null policy information for null data`() {
-        val masterPasswordPolicy = createMockPolicy(
-            type = PolicyTypeJson.MASTER_PASSWORD,
+        val masterPasswordPolicy = createMockPolicyView(
+            type = PolicyType.MASTER_PASSWORD,
             data = null,
         )
 

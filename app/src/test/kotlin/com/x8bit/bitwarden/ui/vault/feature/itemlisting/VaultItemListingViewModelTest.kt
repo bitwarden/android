@@ -25,9 +25,8 @@ import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.SyncResponseJson
-import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.account.model.AccountSummary
@@ -96,6 +95,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDriversLice
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPassportView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
@@ -218,13 +218,13 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             authRepository = mockAuthRepository,
             dispatcherManager = FakeDispatcherManager(),
         )
-    private val mutableActivePoliciesFlow: MutableStateFlow<List<SyncResponseJson.Policy>> =
+    private val mutableActivePoliciesFlow: MutableStateFlow<List<PolicyView>> =
         MutableStateFlow(emptyList())
     private val policyManager: PolicyManager = mockk {
-        every { getActivePolicies(type = PolicyTypeJson.DISABLE_SEND) } returns emptyList()
-        every { getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND) } returns emptyFlow()
+        every { getActivePolicies(type = PolicyType.DISABLE_SEND) } returns emptyList()
+        every { getActivePoliciesFlow(type = PolicyType.DISABLE_SEND) } returns emptyFlow()
         every {
-            getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            getActivePoliciesFlow(type = PolicyType.RESTRICTED_ITEM_TYPES)
         } returns mutableActivePoliciesFlow
     }
     private val bitwardenCredentialManager: BitwardenCredentialManager = mockk {
@@ -394,12 +394,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
             mutableActivePoliciesFlow.emit(
                 listOf(
-                    createMockPolicy(
+                    createMockPolicyView(
                         organizationId = "Test Organization",
                         id = "testId",
-                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
-                        isEnabled = true,
-                        data = null,
+                        type = PolicyType.RESTRICTED_ITEM_TYPES,
+                        enabled = true,
                     ),
                 ),
             )
@@ -1681,12 +1680,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
             mutableActivePoliciesFlow.emit(
                 listOf(
-                    createMockPolicy(
+                    createMockPolicyView(
                         organizationId = "Test Organization",
                         id = "testId",
-                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
-                        isEnabled = true,
-                        data = null,
+                        type = PolicyType.RESTRICTED_ITEM_TYPES,
+                        enabled = true,
                     ),
                 ),
             )
@@ -1722,12 +1720,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
             mutableActivePoliciesFlow.emit(
                 listOf(
-                    createMockPolicy(
+                    createMockPolicyView(
                         organizationId = "Test Organization",
                         id = "testId",
-                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
-                        isEnabled = true,
-                        data = null,
+                        type = PolicyType.RESTRICTED_ITEM_TYPES,
+                        enabled = true,
                     ),
                 ),
             )

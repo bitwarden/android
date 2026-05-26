@@ -1,8 +1,9 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.bitwarden.core.data.util.decodeFromStringOrNull
-import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import kotlinx.serialization.json.Json
@@ -39,25 +40,24 @@ fun List<SyncResponseJson.Profile.Organization>.toOrganizations(): List<Organiza
     this.mapNotNull { it.toOrganization() }
 
 /**
- * Convert the JSON data of the [SyncResponseJson.Policy] object into [PolicyInformation] data.
+ * Convert the JSON data of the [PolicyView] object into [PolicyInformation] data.
  */
-val SyncResponseJson.Policy.policyInformation: PolicyInformation?
-    get() = data?.toString()?.let {
-
+val PolicyView.policyInformation: PolicyInformation?
+    get() = data?.let {
         when (type) {
-            PolicyTypeJson.MASTER_PASSWORD -> {
+            PolicyType.MASTER_PASSWORD -> {
                 JSON.decodeFromStringOrNull<PolicyInformation.MasterPassword>(it)
             }
 
-            PolicyTypeJson.PASSWORD_GENERATOR -> {
+            PolicyType.PASSWORD_GENERATOR -> {
                 JSON.decodeFromStringOrNull<PolicyInformation.PasswordGenerator>(it)
             }
 
-            PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT -> {
+            PolicyType.MAXIMUM_VAULT_TIMEOUT -> {
                 JSON.decodeFromStringOrNull<PolicyInformation.VaultTimeout>(it)
             }
 
-            PolicyTypeJson.SEND_OPTIONS -> {
+            PolicyType.SEND_OPTIONS -> {
                 JSON.decodeFromStringOrNull<PolicyInformation.SendOptions>(it)
             }
 

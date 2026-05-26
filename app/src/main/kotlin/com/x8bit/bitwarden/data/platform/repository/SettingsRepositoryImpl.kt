@@ -4,8 +4,8 @@ import android.view.autofill.AutofillManager
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
@@ -374,7 +374,7 @@ class SettingsRepositoryImpl(
 
     init {
         policyManager
-            .getActivePoliciesFlow(type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT)
+            .getActivePoliciesFlow(type = PolicyType.MAXIMUM_VAULT_TIMEOUT)
             .onEach { updateVaultUnlockSettingsIfNecessary(it) }
             .launchIn(unconfinedScope)
     }
@@ -676,7 +676,7 @@ class SettingsRepositoryImpl(
      * settings to determine whether to update the user's settings.
      */
     private fun updateVaultUnlockSettingsIfNecessary(
-        policies: List<SyncResponseJson.Policy>,
+        policies: List<PolicyView>,
     ) {
         // The vault timeout policy can only be implemented in organizations that have
         // the single organization policy, meaning that if this is enabled, the user is

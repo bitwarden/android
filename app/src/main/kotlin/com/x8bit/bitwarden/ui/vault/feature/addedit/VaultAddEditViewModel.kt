@@ -11,7 +11,7 @@ import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.takeUntilLoaded
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
@@ -157,7 +157,7 @@ class VaultAddEditViewModel @Inject constructor(
             val selectedFolderId = args.selectedFolderId
             val selectedCollectionId = args.selectedCollectionId
             val isIndividualVaultDisabled = policyManager
-                .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+                .getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
                 .any()
 
             val specialCircumstance = specialCircumstanceManager.specialCircumstance
@@ -2247,7 +2247,7 @@ class VaultAddEditViewModel @Inject constructor(
                 sendViewList = emptyList(),
             )
         val isIndividualVaultDisabled = policyManager
-            .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+            .getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
             .any()
         return copy(
             viewState = internalVaultData.decryptCipherListResult.successes

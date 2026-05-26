@@ -19,7 +19,7 @@ import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -185,7 +185,7 @@ class VaultItemListingViewModel @Inject constructor(
                     VaultItemListingState.DialogState.Loading(BitwardenString.loading.asText())
                 },
             policyDisablesSend = policyManager
-                .getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
+                .getActivePolicies(type = PolicyType.DISABLE_SEND)
                 .any(),
             restrictItemTypesPolicyOrgIds = persistentListOf(),
             autofillSelectionData = specialCircumstance?.toAutofillSelectionDataOrNull(),
@@ -214,13 +214,13 @@ class VaultItemListingViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         policyManager
-            .getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND)
+            .getActivePoliciesFlow(type = PolicyType.DISABLE_SEND)
             .map { VaultItemListingsAction.Internal.PolicyUpdateReceive(it.any()) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
         policyManager
-            .getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            .getActivePoliciesFlow(type = PolicyType.RESTRICTED_ITEM_TYPES)
             .map { policies -> policies.map { it.organizationId } }
             .map { VaultItemListingsAction.Internal.RestrictItemTypesPolicyUpdateReceive(it) }
             .onEach(::sendAction)

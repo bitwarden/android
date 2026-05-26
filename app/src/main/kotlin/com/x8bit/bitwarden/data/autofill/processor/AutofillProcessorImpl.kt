@@ -6,7 +6,7 @@ import android.service.autofill.FillRequest
 import android.service.autofill.SaveCallback
 import android.service.autofill.SaveRequest
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilder
 import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilder
 import com.x8bit.bitwarden.data.autofill.builder.SaveInfoBuilder
@@ -80,7 +80,7 @@ class AutofillProcessorImpl(
             return
         }
 
-        if (policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP).any()) {
+        if (policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP).any()) {
             saveCallback.onSuccess()
             return
         }

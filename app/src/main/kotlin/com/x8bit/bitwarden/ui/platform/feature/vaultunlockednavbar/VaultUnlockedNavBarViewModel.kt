@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -36,7 +36,7 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
             settingsTabNotificationCount = firstTimeActionManager.allSettingsBadgeCountFlow.value,
         ),
         areSendsDisabled = policyManager
-            .getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
+            .getActivePolicies(type = PolicyType.DISABLE_SEND)
             .any(),
     ),
 ) {
@@ -56,7 +56,7 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         policyManager
-            .getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND)
+            .getActivePoliciesFlow(type = PolicyType.DISABLE_SEND)
             .map { VaultUnlockedNavBarAction.Internal.SendPolicyUpdateReceive(it.any()) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)

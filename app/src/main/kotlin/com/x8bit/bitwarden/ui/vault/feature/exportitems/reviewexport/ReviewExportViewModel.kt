@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.cxf.manager.model.ExportCredentialsResult
 import com.bitwarden.cxf.model.ImportCredentialsRequestData
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
@@ -223,8 +223,8 @@ class ReviewExportViewModel @Inject constructor(
             ?.map { it.id }
             ?: return this
         val itemRestrictedOrgIds = policyManager
-            .getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
-            .filter { it.isEnabled }
+            .getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES)
+            .filter { it.enabled }
             .map { it.organizationId }
 
         return if (activeUserOrgIds.any { itemRestrictedOrgIds.contains(it) }) {

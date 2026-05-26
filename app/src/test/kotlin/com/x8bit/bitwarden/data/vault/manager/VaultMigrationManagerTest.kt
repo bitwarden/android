@@ -5,11 +5,10 @@ import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
-import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCipherMiniResponseJson
-import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.network.model.createMockSyncResponse
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.FolderView
@@ -30,6 +29,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockEncryptionContext
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
@@ -134,9 +134,9 @@ class VaultMigrationManagerTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
         // Setup conditions for migration
-        val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+        val mockPolicy = createMockPolicyView(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         every {
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns listOf(mockPolicy)
         every {
             policyManager.getPersonalOwnershipPolicyOrganizationId()
@@ -181,7 +181,7 @@ class VaultMigrationManagerTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
         every {
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns emptyList()
 
         val vaultMigrationManager = createVaultMigrationManager()
@@ -210,9 +210,9 @@ class VaultMigrationManagerTest {
         val userId = "mockId-1"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
-        val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+        val mockPolicy = createMockPolicyView(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         every {
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns listOf(mockPolicy)
 
         every {
@@ -246,9 +246,9 @@ class VaultMigrationManagerTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         fakeNetworkConnectionManager.fakeIsNetworkConnected = false
 
-        val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+        val mockPolicy = createMockPolicyView(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         every {
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns listOf(mockPolicy)
         every {
             policyManager.getPersonalOwnershipPolicyOrganizationId()
@@ -286,9 +286,9 @@ class VaultMigrationManagerTest {
         val userId = "mockId-1"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
-        val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+        val mockPolicy = createMockPolicyView(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         every {
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns listOf(mockPolicy)
 
         val vaultMigrationManager = createVaultMigrationManager()
@@ -317,9 +317,9 @@ class VaultMigrationManagerTest {
         val userId = "mockId-1"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
-        val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+        val mockPolicy = createMockPolicyView(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         every {
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns listOf(mockPolicy)
         every {
             policyManager.getPersonalOwnershipPolicyOrganizationId()
@@ -351,9 +351,9 @@ class VaultMigrationManagerTest {
         val userId = "mockId-1"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
-        val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+        val mockPolicy = createMockPolicyView(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         every {
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns listOf(mockPolicy)
         every {
             policyManager.getPersonalOwnershipPolicyOrganizationId()
@@ -388,9 +388,9 @@ class VaultMigrationManagerTest {
         val userId = "mockId-1"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
-        val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+        val mockPolicy = createMockPolicyView(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         every {
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns listOf(mockPolicy)
         // Return a different org ID that doesn't match the one in the sync response
         every {
@@ -430,9 +430,9 @@ class VaultMigrationManagerTest {
         val userId = "mockId-1"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
-        val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+        val mockPolicy = createMockPolicyView(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         every {
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns listOf(mockPolicy)
         every {
             policyManager.getPersonalOwnershipPolicyOrganizationId()
@@ -469,9 +469,9 @@ class VaultMigrationManagerTest {
         // Set sync time as null (never synced)
         mutableLastSyncTimeFlow.value = null
 
-        val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+        val mockPolicy = createMockPolicyView(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         every {
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns listOf(mockPolicy)
         every {
             policyManager.getPersonalOwnershipPolicyOrganizationId()
@@ -513,9 +513,9 @@ class VaultMigrationManagerTest {
         // where lastSyncTime was cleared without clearing cipher data
         mutableLastSyncTimeFlow.value = null
 
-        val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+        val mockPolicy = createMockPolicyView(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         every {
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns listOf(mockPolicy)
         every {
             policyManager.getPersonalOwnershipPolicyOrganizationId()
@@ -566,9 +566,9 @@ class VaultMigrationManagerTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             fakeNetworkConnectionManager.fakeIsNetworkConnected = false
 
-            val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+            val mockPolicy = createMockPolicyView(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
             every {
-                policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+                policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
             } returns listOf(mockPolicy)
             every {
                 policyManager.getPersonalOwnershipPolicyOrganizationId()
@@ -619,9 +619,9 @@ class VaultMigrationManagerTest {
             val userId = "mockId-1"
             fakeAuthDiskSource.userState = MOCK_USER_STATE
 
-            val mockPolicy = createMockPolicy(number = 1, type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+            val mockPolicy = createMockPolicyView(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
             every {
-                policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+                policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
             } returns listOf(mockPolicy)
             every {
                 policyManager.getPersonalOwnershipPolicyOrganizationId()

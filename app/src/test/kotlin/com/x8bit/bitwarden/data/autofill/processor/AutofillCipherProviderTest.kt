@@ -1,8 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.processor
 
 import com.bitwarden.core.data.repository.model.DataState
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.vault.CardListView
 import com.bitwarden.vault.CardView
 import com.bitwarden.vault.CipherListView
@@ -22,6 +21,7 @@ import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.util.subtitle
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
@@ -152,7 +152,7 @@ class AutofillCipherProviderTest {
     }
     private val policyManager: PolicyManager = mockk {
         every {
-            getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES)
         } returns emptyList()
     }
 
@@ -317,12 +317,9 @@ class AutofillCipherProviderTest {
             )
 
             every {
-                policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+                policyManager.getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES)
             } returns listOf(
-                createMockPolicy(
-                    number = 1,
-                    organizationId = ORGANIZATION_ID_WITH_CARD_TYPE_RESTRICTIONS,
-                ),
+                createMockPolicyView(organizationId = ORGANIZATION_ID_WITH_CARD_TYPE_RESTRICTIONS),
             )
             coEvery {
                 vaultRepository.getCipher(CARD_CIPHER_ID)

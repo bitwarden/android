@@ -4,9 +4,8 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.cxf.model.ImportCredentialsRequestData
 import com.bitwarden.data.repository.model.Environment
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.SyncResponseJson
-import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
@@ -18,6 +17,7 @@ import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.model.AccountSelectionListItem
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.selectaccount.SelectAccountAction
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.selectaccount.SelectAccountEvent
@@ -36,20 +36,18 @@ import org.junit.jupiter.api.Test
 class SelectAccountViewModelTest : BaseViewModelTest() {
 
     private val mutableUserUserStateFlow = MutableStateFlow(DEFAULT_USER_STATE)
-    private val mutableRestrictItemTypesFlow =
-        bufferedMutableSharedFlow<List<SyncResponseJson.Policy>>()
-    private val mutablePersonalOwnershipPolicyFlow =
-        bufferedMutableSharedFlow<List<SyncResponseJson.Policy>>()
+    private val mutableRestrictItemTypesFlow = bufferedMutableSharedFlow<List<PolicyView>>()
+    private val mutablePersonalOwnershipPolicyFlow = bufferedMutableSharedFlow<List<PolicyView>>()
 
     private val authRepository = mockk<AuthRepository> {
         every { userStateFlow } returns mutableUserUserStateFlow
     }
     private val policyManager = mockk<PolicyManager> {
         every {
-            getActivePoliciesFlow(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            getActivePoliciesFlow(PolicyType.RESTRICTED_ITEM_TYPES)
         } returns mutableRestrictItemTypesFlow
         every {
-            getActivePoliciesFlow(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            getActivePoliciesFlow(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns mutablePersonalOwnershipPolicyFlow
     }
     private val specialCircumstanceManager = mockk<SpecialCircumstanceManager> {
@@ -84,8 +82,8 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
 
                 verify(exactly = 0) {
                     authRepository.userStateFlow
-                    policyManager.getActivePoliciesFlow(PolicyTypeJson.RESTRICT_ITEM_TYPES)
-                    policyManager.getActivePoliciesFlow(PolicyTypeJson.PERSONAL_OWNERSHIP)
+                    policyManager.getActivePoliciesFlow(PolicyType.RESTRICTED_ITEM_TYPES)
+                    policyManager.getActivePoliciesFlow(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
                 }
             }
         }
@@ -125,7 +123,7 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
 
             verify(Ordering.ORDERED) {
                 authRepository.userStateFlow
-                policyManager.getActivePoliciesFlow(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+                policyManager.getActivePoliciesFlow(PolicyType.RESTRICTED_ITEM_TYPES)
             }
         }
 
@@ -217,10 +215,9 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
                 SelectAccountAction.Internal.SelectionDataReceive(
                     userState = DEFAULT_USER_STATE.copy(accounts = listOf(accountInOrg)),
                     itemRestrictedOrgs = listOf(
-                        createMockPolicy(
-                            number = 1,
+                        createMockPolicyView(
                             id = organizationId,
-                            isEnabled = true,
+                            enabled = true,
                         ),
                     ),
                 ),

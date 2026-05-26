@@ -6,9 +6,8 @@ import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.KdfTypeJson
-import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.createMockOrganizationNetwork
-import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.PolicyType
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
@@ -20,6 +19,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import io.mockk.every
@@ -259,12 +259,11 @@ class UserStateManagerTest {
     @Test
     fun `userStateFlow should update isExportable when getUserPolicies returns policies`() =
         runTest {
-            val policy = createMockPolicy(
+            val policy = createMockPolicyView(
                 id = "policyId",
                 organizationId = "mockId-1",
-                type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
-                data = null,
-                isEnabled = true,
+                type = PolicyType.DISABLE_PERSONAL_VAULT_EXPORT,
+                enabled = true,
             )
             every { policyManager.getUserPolicies(any(), any()) } returns listOf(policy)
 

@@ -9,9 +9,8 @@ import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.network.exception.CookieRedirectException
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.SyncResponseJson
-import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
@@ -60,6 +59,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPassportView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
@@ -129,14 +129,14 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { setText(text = any<String>(), toastDescriptorOverride = any<Text>()) } just runs
     }
 
-    private val mutableActivePoliciesFlow: MutableStateFlow<List<SyncResponseJson.Policy>> =
+    private val mutableActivePoliciesFlow: MutableStateFlow<List<PolicyView>> =
         MutableStateFlow(emptyList())
     private val policyManager: PolicyManager = mockk {
         every {
-            getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+            getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns emptyList()
         every {
-            getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            getActivePoliciesFlow(type = PolicyType.RESTRICTED_ITEM_TYPES)
         } returns mutableActivePoliciesFlow
     }
 
@@ -278,7 +278,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
         verify {
             vaultRepository.syncIfNecessary()
-            policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         }
     }
 
@@ -673,14 +673,13 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `UserState updates with a non-null value when not switching accounts should update the account information in the state when personal ownership disabled`() {
         every {
-            policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns listOf(
-            createMockPolicy(
+            createMockPolicyView(
                 organizationId = "Test Organization",
                 id = "testId",
-                type = PolicyTypeJson.PERSONAL_OWNERSHIP,
-                isEnabled = true,
-                data = null,
+                type = PolicyType.ORGANIZATION_DATA_OWNERSHIP,
+                enabled = true,
             ),
         )
         val viewModel = createViewModel()
@@ -767,12 +766,11 @@ class VaultViewModelTest : BaseViewModelTest() {
             )
             mutableActivePoliciesFlow.emit(
                 listOf(
-                    createMockPolicy(
+                    createMockPolicyView(
                         organizationId = "Test Organization",
                         id = "testId",
-                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
-                        isEnabled = true,
-                        data = null,
+                        type = PolicyType.RESTRICTED_ITEM_TYPES,
+                        enabled = true,
                     ),
                 ),
             )
@@ -4097,12 +4095,11 @@ class VaultViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             mutableActivePoliciesFlow.emit(
                 listOf(
-                    createMockPolicy(
+                    createMockPolicyView(
                         organizationId = "Test Organization",
                         id = "testId",
-                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
-                        isEnabled = true,
-                        data = null,
+                        type = PolicyType.RESTRICTED_ITEM_TYPES,
+                        enabled = true,
                     ),
                 ),
             )

@@ -8,7 +8,7 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.takeUntilLoaded
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -149,7 +149,7 @@ class AddEditSendViewModel @Inject constructor(
             dialogState = null,
             baseWebSendUrl = environmentRepo.environment.environmentUrlData.baseWebSendUrl,
             policyDisablesSend = policyManager
-                .getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
+                .getActivePolicies(type = PolicyType.DISABLE_SEND)
                 .any(),
             isPremium = authRepo.userStateFlow.value?.activeAccount?.isPremium == true,
         )

@@ -8,7 +8,7 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -127,7 +127,7 @@ class SearchViewModel @Inject constructor(
                     is SearchType.Sends -> null
                     is SearchType.Vault -> userState.activeAccount.toVaultFilterData(
                         isIndividualVaultDisabled = policyManager
-                            .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+                            .getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
                             .any(),
                     )
                 },
@@ -156,7 +156,7 @@ class SearchViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         policyManager
-            .getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            .getActivePoliciesFlow(type = PolicyType.RESTRICTED_ITEM_TYPES)
             .map { policies -> policies.map { it.organizationId } }
             .map { SearchAction.Internal.RestrictItemTypesPolicyUpdateReceive(it) }
             .onEach(::sendAction)
