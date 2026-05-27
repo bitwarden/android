@@ -334,7 +334,7 @@ class PremiumStateManagerImpl(
     private fun clearPremiumUpgradePending(userId: String) {
         settingsDiskSource.storePremiumUpgradePending(
             userId = userId,
-            isPending = false,
+            isPending = null,
         )
     }
 

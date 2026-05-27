@@ -818,7 +818,7 @@ class PremiumStateManagerTest {
                 )
                 fakeSettingsDiskSource.assertPremiumUpgradePending(
                     userId = ACTIVE_USER_ID,
-                    expected = false,
+                    expected = null,
                 )
             }
         }
