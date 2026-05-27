@@ -73,7 +73,7 @@ class PlanViewModelTest : BaseViewModelTest() {
     private var mockIsSelfHosted = false
     private val mockPremiumStateManager: PremiumStateManager = mockk(relaxed = true) {
         every { subscriptionStatusStateFlow } returns mutableSubscriptionStatusStateFlow
-        every { lifecycleStateFlow } returns mutableLifecycleStateFlow
+        every { upgradeLifecycleStateFlow } returns mutableLifecycleStateFlow
         every { isSelfHosted } answers { mockIsSelfHosted }
     }
     private val mutableEnvironmentFlow = MutableStateFlow<Environment>(Environment.Us)
@@ -580,7 +580,7 @@ class PlanViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `lifecycleStateFlow updates propagate onto Free Cloud view state`() = runTest {
+    fun `upgradeLifecycleStateFlow updates propagate onto Free Cloud view state`() = runTest {
         val viewModel = createViewModel()
 
         viewModel.stateFlow.test {

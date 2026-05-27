@@ -87,7 +87,7 @@ class PremiumStateManagerImpl(
             )
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val lifecycleStateFlow: StateFlow<UpgradeLifecycleState> =
+    override val upgradeLifecycleStateFlow: StateFlow<UpgradeLifecycleState> =
         combine(
             authDiskSource.userStateFlow,
             subscriptionStatusStateFlow,
@@ -154,7 +154,7 @@ class PremiumStateManagerImpl(
                 vaultDataState = vaultDataState,
             )
         }
-            .combine(lifecycleStateFlow) { inputs, lifecycle ->
+            .combine(upgradeLifecycleStateFlow) { inputs, lifecycle ->
                 val profile = inputs.userState?.activeAccount?.profile
                     ?: return@combine false
                 val isAccountOldEnough = profile.creationDate.isOlderThanDays(

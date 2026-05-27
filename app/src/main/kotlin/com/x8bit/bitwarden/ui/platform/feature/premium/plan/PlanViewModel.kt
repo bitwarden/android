@@ -93,7 +93,7 @@ class PlanViewModel @Inject constructor(
                     checkoutUrl = null,
                     isAwaitingPremiumStatus = false,
                     isPremiumUpgradePending = premiumStateManager
-                        .lifecycleStateFlow
+                        .upgradeLifecycleStateFlow
                         .value is UpgradeLifecycleState.UpgradePending,
                 )
             },
@@ -129,7 +129,7 @@ class PlanViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         premiumStateManager
-            .lifecycleStateFlow
+            .upgradeLifecycleStateFlow
             .map { PlanAction.Internal.LifecycleStateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -418,7 +418,7 @@ class PlanViewModel @Inject constructor(
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = false,
                             isPremiumUpgradePending = premiumStateManager
-                                .lifecycleStateFlow
+                                .upgradeLifecycleStateFlow
                                 .value is UpgradeLifecycleState.UpgradePending,
                         ),
                         dialogState = PlanState.DialogState.Loading(

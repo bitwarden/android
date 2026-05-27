@@ -42,7 +42,7 @@ interface PremiumStateManager {
     /**
      * Emits the active user's current [UpgradeLifecycleState].
      */
-    val lifecycleStateFlow: StateFlow<UpgradeLifecycleState>
+    val upgradeLifecycleStateFlow: StateFlow<UpgradeLifecycleState>
 
     /**
      * Emits whether the current state should be treated as self-hosted for premium upgrade

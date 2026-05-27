@@ -726,55 +726,57 @@ class PremiumStateManagerTest {
     }
 
     @Test
-    fun `lifecycleStateFlow emits Free when nothing has been observed`() = runTest {
+    fun `upgradeLifecycleStateFlow emits Free when nothing has been observed`() = runTest {
         val manager = createManager()
-        manager.lifecycleStateFlow.test {
+        manager.upgradeLifecycleStateFlow.test {
             assertEquals(UpgradeLifecycleState.Free, awaitItem())
         }
     }
 
     @Test
-    fun `lifecycleStateFlow emits Free when there is no active user`() = runTest {
+    fun `upgradeLifecycleStateFlow emits Free when there is no active user`() = runTest {
         fakeAuthDiskSource.userState = null
         val manager = createManager()
-        manager.lifecycleStateFlow.test {
+        manager.upgradeLifecycleStateFlow.test {
             assertEquals(UpgradeLifecycleState.Free, awaitItem())
         }
     }
 
     @Test
-    fun `markPremiumUpgradePending transitions lifecycleStateFlow to UpgradePending`() = runTest {
-        val manager = createManager()
-        manager.lifecycleStateFlow.test {
-            assertEquals(UpgradeLifecycleState.Free, awaitItem())
-            manager.markPremiumUpgradePending(userId = ACTIVE_USER_ID)
-            assertEquals(UpgradeLifecycleState.UpgradePending, awaitItem())
-            fakeSettingsDiskSource.assertPremiumUpgradePending(
-                userId = ACTIVE_USER_ID,
-                expected = true,
-            )
+    fun `markPremiumUpgradePending transitions upgradeLifecycleStateFlow to UpgradePending`() =
+        runTest {
+            val manager = createManager()
+            manager.upgradeLifecycleStateFlow.test {
+                assertEquals(UpgradeLifecycleState.Free, awaitItem())
+                manager.markPremiumUpgradePending(userId = ACTIVE_USER_ID)
+                assertEquals(UpgradeLifecycleState.UpgradePending, awaitItem())
+                fakeSettingsDiskSource.assertPremiumUpgradePending(
+                    userId = ACTIVE_USER_ID,
+                    expected = true,
+                )
+            }
         }
-    }
 
     @Test
-    fun `lifecycleStateFlow emits Premium when the active user holds personal Premium`() = runTest {
-        fakeAuthDiskSource.userState = userStateJsonWith(
-            account = createAccountJson(hasPremiumPersonally = true),
-        )
-        val manager = createManager()
-        manager.lifecycleStateFlow.test {
-            assertEquals(
-                UpgradeLifecycleState.Premium(
-                    subscriptionStatus = SubscriptionStatusState.NoSubscription,
-                ),
-                awaitItem(),
+    fun `upgradeLifecycleStateFlow emits Premium when the active user holds personal Premium`() =
+        runTest {
+            fakeAuthDiskSource.userState = userStateJsonWith(
+                account = createAccountJson(hasPremiumPersonally = true),
             )
+            val manager = createManager()
+            manager.upgradeLifecycleStateFlow.test {
+                assertEquals(
+                    UpgradeLifecycleState.Premium(
+                        subscriptionStatus = SubscriptionStatusState.NoSubscription,
+                    ),
+                    awaitItem(),
+                )
+            }
         }
-    }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `lifecycleStateFlow re-keys on active user change and only reflects the active user's flag`() =
+    fun `upgradeLifecycleStateFlow re-keys on active user change and only reflects the active user's flag`() =
         runTest {
             val otherUserId = "otherUserId"
             fakeSettingsDiskSource.storePremiumUpgradePending(
@@ -782,7 +784,7 @@ class PremiumStateManagerTest {
                 isPending = true,
             )
             val manager = createManager()
-            manager.lifecycleStateFlow.test {
+            manager.upgradeLifecycleStateFlow.test {
                 assertEquals(UpgradeLifecycleState.UpgradePending, awaitItem())
                 // Switching active user — the other user has no pending flag set.
                 fakeAuthDiskSource.userState = userStateJsonWith(
@@ -794,7 +796,7 @@ class PremiumStateManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `userState transition from non-Premium to personal Premium transitions lifecycleStateFlow to Premium and clears the pending flag`() =
+    fun `userState transition from non-Premium to personal Premium transitions upgradeLifecycleStateFlow to Premium and clears the pending flag`() =
         runTest {
             // Free user with a pending upgrade in flight.
             fakeAuthDiskSource.userState = userStateJsonWith(account = createAccountJson())
@@ -803,7 +805,7 @@ class PremiumStateManagerTest {
                 isPending = true,
             )
             val manager = createManager()
-            manager.lifecycleStateFlow.test {
+            manager.upgradeLifecycleStateFlow.test {
                 assertEquals(UpgradeLifecycleState.UpgradePending, awaitItem())
                 // Server flips personal Premium on — lifecycle transitions to Premium, the
                 // disk-backed pending flag auto-clears via the manager's init block.
