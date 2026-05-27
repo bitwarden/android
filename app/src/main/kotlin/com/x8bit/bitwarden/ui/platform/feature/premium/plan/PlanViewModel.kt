@@ -25,6 +25,7 @@ import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStat
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionInfo
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionResult
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionStatusState
+import com.x8bit.bitwarden.data.billing.repository.model.UpgradeLifecycleState
 import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -92,8 +93,8 @@ class PlanViewModel @Inject constructor(
                     checkoutUrl = null,
                     isAwaitingPremiumStatus = false,
                     isPremiumUpgradePending = premiumStateManager
-                        .isPremiumUpgradePendingFlow
-                        .value,
+                        .lifecycleStateFlow
+                        .value is UpgradeLifecycleState.UpgradePending,
                 )
             },
             dialogState = null,
@@ -128,8 +129,8 @@ class PlanViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         premiumStateManager
-            .isPremiumUpgradePendingFlow
-            .map { PlanAction.Internal.PremiumUpgradePendingUpdateReceive(it) }
+            .lifecycleStateFlow
+            .map { PlanAction.Internal.LifecycleStateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -197,8 +198,8 @@ class PlanViewModel @Inject constructor(
                 handleSubscriptionStatusUpdateReceive(action)
             }
 
-            is PlanAction.Internal.PremiumUpgradePendingUpdateReceive -> {
-                handlePremiumUpgradePendingUpdateReceive(action)
+            is PlanAction.Internal.LifecycleStateReceive -> {
+                handleLifecycleStateReceive(action)
             }
         }
     }
@@ -417,8 +418,8 @@ class PlanViewModel @Inject constructor(
                             checkoutUrl = null,
                             isAwaitingPremiumStatus = false,
                             isPremiumUpgradePending = premiumStateManager
-                                .isPremiumUpgradePendingFlow
-                                .value,
+                                .lifecycleStateFlow
+                                .value is UpgradeLifecycleState.UpgradePending,
                         ),
                         dialogState = PlanState.DialogState.Loading(
                             message = BitwardenString.loading.asText(),
@@ -449,15 +450,16 @@ class PlanViewModel @Inject constructor(
         }
     }
 
-    private fun handlePremiumUpgradePendingUpdateReceive(
-        action: PlanAction.Internal.PremiumUpgradePendingUpdateReceive,
+    private fun handleLifecycleStateReceive(
+        action: PlanAction.Internal.LifecycleStateReceive,
     ) {
+        val isPending = action.state is UpgradeLifecycleState.UpgradePending
         onFreeCloudContent { freeState ->
-            if (freeState.isPremiumUpgradePending == action.isPending) return@onFreeCloudContent
+            if (freeState.isPremiumUpgradePending == isPending) return@onFreeCloudContent
             mutableStateFlow.update {
                 it.copy(
                     viewState = freeState.copy(
-                        isPremiumUpgradePending = action.isPending,
+                        isPremiumUpgradePending = isPending,
                     ),
                 )
             }
@@ -1134,10 +1136,10 @@ sealed class PlanAction {
         ) : Internal()
 
         /**
-         * The shared "Premium upgrade pending" flag for the active user has updated.
+         * The shared [UpgradeLifecycleState] for the active user has updated.
          */
-        data class PremiumUpgradePendingUpdateReceive(
-            val isPending: Boolean,
+        data class LifecycleStateReceive(
+            val state: UpgradeLifecycleState,
         ) : Internal()
     }
 }

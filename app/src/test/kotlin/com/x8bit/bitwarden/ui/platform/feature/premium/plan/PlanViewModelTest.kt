@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStat
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionInfo
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionResult
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionStatusState
+import com.x8bit.bitwarden.data.billing.repository.model.UpgradeLifecycleState
 import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -67,11 +68,12 @@ class PlanViewModelTest : BaseViewModelTest() {
     }
     private val mutableSubscriptionStatusStateFlow =
         MutableStateFlow<SubscriptionStatusState>(SubscriptionStatusState.NoSubscription)
-    private val mutableIsPremiumUpgradePendingFlow = MutableStateFlow(false)
+    private val mutableLifecycleStateFlow =
+        MutableStateFlow<UpgradeLifecycleState>(UpgradeLifecycleState.Free)
     private var mockIsSelfHosted = false
     private val mockPremiumStateManager: PremiumStateManager = mockk(relaxed = true) {
         every { subscriptionStatusStateFlow } returns mutableSubscriptionStatusStateFlow
-        every { isPremiumUpgradePendingFlow } returns mutableIsPremiumUpgradePendingFlow
+        every { lifecycleStateFlow } returns mutableLifecycleStateFlow
         every { isSelfHosted } answers { mockIsSelfHosted }
     }
     private val mutableEnvironmentFlow = MutableStateFlow<Environment>(Environment.Us)
@@ -557,40 +559,34 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `ContinueClick dismisses dialog and navigates back without clearing pending flag`() =
-        runTest {
-            val viewModel = createViewModel(
-                initialState = DEFAULT_FREE_STATE.copy(
-                    viewState = PlanState.ViewState.Free.Cloud(
-                        rate = "$1.67",
-                        checkoutUrl = null,
-                        isAwaitingPremiumStatus = true,
-                        isPremiumUpgradePending = true,
-                    ),
-                    dialogState = PlanState.DialogState.PendingUpgrade,
+    fun `ContinueClick dismisses the PendingUpgrade dialog and navigates back`() = runTest {
+        val viewModel = createViewModel(
+            initialState = DEFAULT_FREE_STATE.copy(
+                viewState = PlanState.ViewState.Free.Cloud(
+                    rate = "$1.67",
+                    checkoutUrl = null,
+                    isAwaitingPremiumStatus = true,
+                    isPremiumUpgradePending = true,
                 ),
-                pricingResult = null,
-            )
+                dialogState = PlanState.DialogState.PendingUpgrade,
+            ),
+            pricingResult = null,
+        )
 
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(PlanAction.ContinueClick)
-                assertEquals(PlanEvent.NavigateBack, awaitItem())
-            }
-
-            verify(exactly = 0) {
-                mockPremiumStateManager.clearPremiumUpgradePending(any())
-            }
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(PlanAction.ContinueClick)
+            assertEquals(PlanEvent.NavigateBack, awaitItem())
         }
+    }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `isPremiumUpgradePendingFlow updates propagate onto Free Cloud view state`() = runTest {
+    fun `lifecycleStateFlow updates propagate onto Free Cloud view state`() = runTest {
         val viewModel = createViewModel()
 
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_FREE_STATE, awaitItem())
 
-            mutableIsPremiumUpgradePendingFlow.value = true
+            mutableLifecycleStateFlow.value = UpgradeLifecycleState.UpgradePending
 
             assertEquals(
                 DEFAULT_FREE_STATE.copy(
@@ -604,7 +600,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
 
-            mutableIsPremiumUpgradePendingFlow.value = false
+            mutableLifecycleStateFlow.value = UpgradeLifecycleState.Free
 
             assertEquals(DEFAULT_FREE_STATE, awaitItem())
         }
