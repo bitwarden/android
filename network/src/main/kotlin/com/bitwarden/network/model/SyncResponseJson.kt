@@ -311,6 +311,9 @@ data class SyncResponseJson(
             @SerialName("providerType")
             val providerType: Int?,
 
+            @SerialName("isProviderUser")
+            val isProviderUser: Boolean = false,
+
             @SerialName("maxCollections")
             val maxCollections: Int?,
 

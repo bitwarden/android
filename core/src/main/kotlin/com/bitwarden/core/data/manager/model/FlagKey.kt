@@ -44,6 +44,7 @@ sealed class FlagKey<out T : Any> {
                 NewItemTypes,
                 DebugDisableSelfHostPremiumCheck,
                 FillAssistTargetingRules,
+                PoliciesInAcceptedState,
             )
         }
     }
@@ -159,6 +160,14 @@ sealed class FlagKey<out T : Any> {
     data object FillAssistTargetingRules : FlagKey<Boolean>() {
         override val keyName: String = "fill-assist-targeting-rules"
         override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the Policies In Accepted State feature.
+     */
+    data object PoliciesInAcceptedState : FlagKey<Boolean>() {
+        override val keyName: String get() = "pm-34145-policies-in-accepted-state"
+        override val defaultValue: Boolean get() = false
     }
 
     /**

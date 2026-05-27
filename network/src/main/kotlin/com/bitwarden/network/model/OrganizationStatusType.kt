@@ -11,6 +11,12 @@ import kotlinx.serialization.Serializable
 @Serializable(OrganizationStatusTypeSerializer::class)
 enum class OrganizationStatusType {
     /**
+     * The user has been revoked from the organization.
+     */
+    @SerialName("-1")
+    REVOKED,
+
+    /**
      * The user has been invited to the organization.
      */
     @SerialName("0")
