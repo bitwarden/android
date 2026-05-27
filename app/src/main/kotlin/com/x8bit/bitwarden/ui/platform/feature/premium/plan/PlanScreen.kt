@@ -295,33 +295,14 @@ private fun FreeCloudContent(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        BitwardenFilledButton(
-            label = stringResource(id = BitwardenString.upgrade_now),
-            onClick = { shouldShowUpgradeDialog = true },
-            icon = rememberVectorPainter(id = BitwardenDrawable.ic_external_link),
-            modifier = Modifier
-                .standardHorizontalMargin()
-                .fillMaxWidth()
-                .testTag("UpgradeNowButton"),
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Text(
-            text = stringResource(
-                id = BitwardenString
-                    .youll_go_to_stripes_secure_checkout_to_complete_your_purchase,
-            ),
-            style = BitwardenTheme.typography.bodyMedium,
-            color = BitwardenTheme.colorScheme.text.secondary,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin()
-                .testTag("StripeFooterText"),
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
+        // Hide the Upgrade Now CTA (and its Stripe footer copy) while a Stripe upgrade is
+        // already in flight for the active user. CTAs reappear once the server flips the
+        // user to Premium.
+        if (!viewState.isPremiumUpgradePending) {
+            UpgradeNowCallToAction(
+                onUpgradeNowClick = { shouldShowUpgradeDialog = true },
+            )
+        }
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
 
@@ -342,6 +323,38 @@ private fun FreeCloudContent(
             onDismissRequest = { shouldShowUpgradeDialog = false },
         )
     }
+}
+
+@Composable
+private fun UpgradeNowCallToAction(
+    onUpgradeNowClick: () -> Unit,
+) {
+    BitwardenFilledButton(
+        label = stringResource(id = BitwardenString.upgrade_now),
+        onClick = onUpgradeNowClick,
+        icon = rememberVectorPainter(id = BitwardenDrawable.ic_external_link),
+        modifier = Modifier
+            .standardHorizontalMargin()
+            .fillMaxWidth()
+            .testTag("UpgradeNowButton"),
+    )
+
+    Spacer(modifier = Modifier.height(12.dp))
+
+    Text(
+        text = stringResource(
+            id = BitwardenString.youll_go_to_stripes_secure_checkout_to_complete_your_purchase,
+        ),
+        style = BitwardenTheme.typography.bodyMedium,
+        color = BitwardenTheme.colorScheme.text.secondary,
+        textAlign = TextAlign.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin()
+            .testTag("StripeFooterText"),
+    )
+
+    Spacer(modifier = Modifier.height(16.dp))
 }
 
 @Suppress("MaxLineLength")
@@ -811,6 +824,7 @@ private fun PlanScreenFreeCloudAccount_preview() {
                     rate = "$1.67",
                     checkoutUrl = null,
                     isAwaitingPremiumStatus = false,
+                    isPremiumUpgradePending = false,
                 ),
                 handlers = PlanHandlers(
                     onBackClick = {},

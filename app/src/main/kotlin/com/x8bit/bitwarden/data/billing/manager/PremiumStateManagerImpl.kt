@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.billing.repository.BillingRepository
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStatus
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionResult
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionStatusState
+import com.x8bit.bitwarden.data.billing.repository.model.UpgradeLifecycleState
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -86,6 +87,42 @@ class PremiumStateManagerImpl(
             )
 
     @OptIn(ExperimentalCoroutinesApi::class)
+    override val upgradeLifecycleStateFlow: StateFlow<UpgradeLifecycleState> =
+        combine(
+            authDiskSource.userStateFlow,
+            subscriptionStatusStateFlow,
+            authDiskSource.activeUserIdChangesFlow
+                .flatMapLatest { userId ->
+                    userId
+                        ?.let { id ->
+                            settingsDiskSource
+                                .getPremiumUpgradePendingFlow(id)
+                                .map { it ?: false }
+                        }
+                        ?: flowOf(false)
+                },
+        ) { userState, subscriptionStatus, isPending ->
+            deriveLifecycleState(
+                userState = userState,
+                subscriptionStatus = subscriptionStatus,
+                isPending = isPending,
+            )
+        }
+            .distinctUntilChanged()
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = deriveLifecycleState(
+                    userState = authDiskSource.userState,
+                    subscriptionStatus = subscriptionStatusStateFlow.value,
+                    isPending = authDiskSource.userState
+                        ?.activeUserId
+                        ?.let { settingsDiskSource.getPremiumUpgradePending(userId = it) }
+                        ?: false,
+                ),
+            )
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     override val isPremiumUpgradeBannerEligibleFlow: StateFlow<Boolean> =
         combine(
             authDiskSource.userStateFlow,
@@ -117,7 +154,7 @@ class PremiumStateManagerImpl(
                 vaultDataState = vaultDataState,
             )
         }
-            .combine(subscriptionStatusStateFlow) { inputs, subscriptionStatus ->
+            .combine(upgradeLifecycleStateFlow) { inputs, lifecycle ->
                 val profile = inputs.userState?.activeAccount?.profile
                     ?: return@combine false
                 val isAccountOldEnough = profile.creationDate.isOlderThanDays(
@@ -125,12 +162,13 @@ class PremiumStateManagerImpl(
                     clock = clock,
                 )
                 val itemCount = inputs.vaultDataState.activeVaultItemCount()
-                val hasPremium = profile.hasPremiumPersonally == true ||
-                    profile.hasPremiumFromOrganization == true
-                val isEffectivelyPremium = hasPremium &&
-                    !subscriptionStatus.isInTroubleState()
+                val lifecycleAllowsBanner = lifecycle is UpgradeLifecycleState.Free ||
+                    (
+                        lifecycle is UpgradeLifecycleState.Premium &&
+                            lifecycle.subscriptionStatus.isInTroubleState()
+                        )
 
-                !isEffectivelyPremium &&
+                lifecycleAllowsBanner &&
                     inputs.isInAppBillingSupported &&
                     inputs.featureFlagEnabled &&
                     !inputs.isDismissed &&
@@ -254,6 +292,7 @@ class PremiumStateManagerImpl(
                 // an upgrade.
                 if (previous?.first == currentUserId && !previous.second) {
                     markUpgradedToPremiumCardPending(userId = currentUserId)
+                    clearPremiumUpgradePending(userId = currentUserId)
                 }
             }
             .launchIn(unconfinedScope)
@@ -283,6 +322,35 @@ class PremiumStateManagerImpl(
             userId = activeUserId,
             isPending = false,
         )
+    }
+
+    override fun markPremiumUpgradePending(userId: String) {
+        settingsDiskSource.storePremiumUpgradePending(
+            userId = userId,
+            isPending = true,
+        )
+    }
+
+    private fun clearPremiumUpgradePending(userId: String) {
+        settingsDiskSource.storePremiumUpgradePending(
+            userId = userId,
+            isPending = null,
+        )
+    }
+
+    private fun deriveLifecycleState(
+        userState: UserStateJson?,
+        subscriptionStatus: SubscriptionStatusState,
+        isPending: Boolean,
+    ): UpgradeLifecycleState {
+        val profile = userState?.activeAccount?.profile ?: return UpgradeLifecycleState.Free
+        val hasPremium = profile.hasPremiumPersonally == true ||
+            profile.hasPremiumFromOrganization == true
+        return when {
+            hasPremium -> UpgradeLifecycleState.Premium(subscriptionStatus = subscriptionStatus)
+            isPending -> UpgradeLifecycleState.UpgradePending
+            else -> UpgradeLifecycleState.Free
+        }
     }
 
     private fun markUpgradedToPremiumCardPending(userId: String) {

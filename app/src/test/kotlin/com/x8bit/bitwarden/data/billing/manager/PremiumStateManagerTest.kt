@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStat
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionInfo
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionResult
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionStatusState
+import com.x8bit.bitwarden.data.billing.repository.model.UpgradeLifecycleState
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -722,6 +723,125 @@ class PremiumStateManagerTest {
             userId = ACTIVE_USER_ID,
             expected = null,
         )
+    }
+
+    @Test
+    fun `upgradeLifecycleStateFlow emits Free when nothing has been observed`() = runTest {
+        val manager = createManager()
+        manager.upgradeLifecycleStateFlow.test {
+            assertEquals(UpgradeLifecycleState.Free, awaitItem())
+        }
+    }
+
+    @Test
+    fun `upgradeLifecycleStateFlow emits Free when there is no active user`() = runTest {
+        fakeAuthDiskSource.userState = null
+        val manager = createManager()
+        manager.upgradeLifecycleStateFlow.test {
+            assertEquals(UpgradeLifecycleState.Free, awaitItem())
+        }
+    }
+
+    @Test
+    fun `markPremiumUpgradePending transitions upgradeLifecycleStateFlow to UpgradePending`() =
+        runTest {
+            val manager = createManager()
+            manager.upgradeLifecycleStateFlow.test {
+                assertEquals(UpgradeLifecycleState.Free, awaitItem())
+                manager.markPremiumUpgradePending(userId = ACTIVE_USER_ID)
+                assertEquals(UpgradeLifecycleState.UpgradePending, awaitItem())
+                fakeSettingsDiskSource.assertPremiumUpgradePending(
+                    userId = ACTIVE_USER_ID,
+                    expected = true,
+                )
+            }
+        }
+
+    @Test
+    fun `upgradeLifecycleStateFlow emits Premium when the active user holds personal Premium`() =
+        runTest {
+            fakeAuthDiskSource.userState = userStateJsonWith(
+                account = createAccountJson(hasPremiumPersonally = true),
+            )
+            val manager = createManager()
+            manager.upgradeLifecycleStateFlow.test {
+                assertEquals(
+                    UpgradeLifecycleState.Premium(
+                        subscriptionStatus = SubscriptionStatusState.NoSubscription,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `upgradeLifecycleStateFlow re-keys on active user change and only reflects the active user's flag`() =
+        runTest {
+            val otherUserId = "otherUserId"
+            fakeSettingsDiskSource.storePremiumUpgradePending(
+                userId = ACTIVE_USER_ID,
+                isPending = true,
+            )
+            val manager = createManager()
+            manager.upgradeLifecycleStateFlow.test {
+                assertEquals(UpgradeLifecycleState.UpgradePending, awaitItem())
+                // Switching active user — the other user has no pending flag set.
+                fakeAuthDiskSource.userState = userStateJsonWith(
+                    account = createAccountJson(userId = otherUserId),
+                )
+                assertEquals(UpgradeLifecycleState.Free, awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `userState transition from non-Premium to personal Premium transitions upgradeLifecycleStateFlow to Premium and clears the pending flag`() =
+        runTest {
+            // Free user with a pending upgrade in flight.
+            fakeAuthDiskSource.userState = userStateJsonWith(account = createAccountJson())
+            fakeSettingsDiskSource.storePremiumUpgradePending(
+                userId = ACTIVE_USER_ID,
+                isPending = true,
+            )
+            val manager = createManager()
+            manager.upgradeLifecycleStateFlow.test {
+                assertEquals(UpgradeLifecycleState.UpgradePending, awaitItem())
+                // Server flips personal Premium on — lifecycle transitions to Premium, the
+                // disk-backed pending flag auto-clears via the manager's init block.
+                fakeAuthDiskSource.userState = userStateJsonWith(
+                    account = createAccountJson(hasPremiumPersonally = true),
+                )
+                assertEquals(
+                    UpgradeLifecycleState.Premium(
+                        subscriptionStatus = SubscriptionStatusState.NoSubscription,
+                    ),
+                    awaitItem(),
+                )
+                fakeSettingsDiskSource.assertPremiumUpgradePending(
+                    userId = ACTIVE_USER_ID,
+                    expected = null,
+                )
+            }
+        }
+
+    @Test
+    fun `banner is ineligible while the active user has a pending Premium upgrade`() = runTest {
+        // Baseline: banner is eligible (the default DEFAULT_USER_STATE_JSON satisfies all gates).
+        fakeSettingsDiskSource.storePremiumUpgradePending(
+            userId = ACTIVE_USER_ID,
+            isPending = true,
+        )
+        val manager = createManager()
+        manager.isPremiumUpgradeBannerEligibleFlow.test {
+            assertFalse(awaitItem())
+            // Clearing pending re-enables the banner.
+            fakeSettingsDiskSource.storePremiumUpgradePending(
+                userId = ACTIVE_USER_ID,
+                isPending = false,
+            )
+            assertTrue(awaitItem())
+        }
     }
 
     @Test

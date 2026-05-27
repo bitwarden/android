@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.billing.manager
 
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionStatusState
+import com.x8bit.bitwarden.data.billing.repository.model.UpgradeLifecycleState
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -39,6 +40,11 @@ interface PremiumStateManager {
     val subscriptionStatusStateFlow: StateFlow<SubscriptionStatusState>
 
     /**
+     * Emits the active user's current [UpgradeLifecycleState].
+     */
+    val upgradeLifecycleStateFlow: StateFlow<UpgradeLifecycleState>
+
+    /**
      * Emits whether the current state should be treated as self-hosted for premium upgrade
      * gating. Reactive equivalent of [isSelfHosted].
      */
@@ -66,4 +72,10 @@ interface PremiumStateManager {
      * never re-appears for that user.
      */
     fun dismissUpgradedToPremiumCard()
+
+    /**
+     * Marks the active user as having a Premium upgrade in flight (Stripe checkout completed
+     * but the server has not yet flipped `isPremium`).
+     */
+    fun markPremiumUpgradePending(userId: String)
 }
