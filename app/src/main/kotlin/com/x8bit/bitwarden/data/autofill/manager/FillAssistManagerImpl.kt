@@ -194,17 +194,24 @@ private fun parseCompositeSelectorArray(element: JsonElement): List<SelectorClau
 }
 
 internal fun parseSingleSelector(selector: String): SelectorClause? {
-    if (selector.contains(">>>")) return null
-    if (selector.trimStart().startsWith(".")) return null
+    // For shadow DOM / iframe selectors (>>>), extract the last segment — the actual target
+    // element. Android's autofill framework may expose these elements via htmlInfo when they
+    // are reachable (e.g. open shadow roots), so we parse their attributes for matching.
+    val effective = if (selector.contains(">>>")) {
+        selector.substringAfterLast(">>>").trim()
+    } else {
+        selector
+    }
+    if (effective.trimStart().startsWith(".")) return null
 
-    val tag = TAG_REGEX.find(selector)?.groupValues?.get(1)
+    val tag = TAG_REGEX.find(effective)?.groupValues?.get(1)
 
     var id: String? = null
     var name: String? = null
     var type: String? = null
     var role: String? = null
 
-    ATTRIBUTE_REGEX.findAll(selector).forEach { match ->
+    ATTRIBUTE_REGEX.findAll(effective).forEach { match ->
         val attrName = match.groupValues[1]
         val attrValue = match.groupValues[2]
         when (attrName) {
@@ -217,7 +224,7 @@ internal fun parseSingleSelector(selector: String): SelectorClause? {
 
     // Fallback: extract id from #shorthand (e.g. input#oid) when not present as [id='...'].
     if (id == null) {
-        id = ID_SHORTHAND_REGEX.find(selector)?.groupValues?.get(1)
+        id = ID_SHORTHAND_REGEX.find(effective)?.groupValues?.get(1)
     }
 
     return SelectorClause(tag = tag, id = id, name = name, type = type, role = role)

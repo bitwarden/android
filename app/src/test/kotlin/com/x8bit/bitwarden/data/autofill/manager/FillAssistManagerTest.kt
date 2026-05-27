@@ -320,8 +320,31 @@ class FillAssistManagerTest {
     }
 
     @Test
-    fun `parseSingleSelector returns null for shadow DOM selector`() {
-        assertNull(parseSingleSelector("div#container >>> input#field"))
+    fun `parseSingleSelector extracts last segment of shadow DOM selector`() {
+        assertEquals(
+            FillAssistRules.SelectorClause(
+                tag = "input",
+                id = "field",
+                name = null,
+                type = null,
+                role = null,
+            ),
+            parseSingleSelector("div#container >>> input#field"),
+        )
+    }
+
+    @Test
+    fun `parseSingleSelector extracts last segment of multi-level shadow DOM selector`() {
+        assertEquals(
+            FillAssistRules.SelectorClause(
+                tag = "input",
+                name = "password",
+                id = null,
+                type = null,
+                role = null,
+            ),
+            parseSingleSelector("div#form-container >>> form > div >>> input[name='password']"),
+        )
     }
 
     @Test
