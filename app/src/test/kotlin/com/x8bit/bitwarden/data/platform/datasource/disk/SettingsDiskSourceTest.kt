@@ -962,7 +962,6 @@ class SettingsDiskSourceTest {
                 }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `getPremiumUpgradePending when values are present should pull from SharedPreferences`() {
         val baseKey = "bwPreferencesStorage:premiumUpgradePending"
@@ -1001,7 +1000,6 @@ class SettingsDiskSourceTest {
         assertFalse(fakeSharedPreferences.contains(key))
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `getPremiumUpgradePendingFlow should react to changes in storePremiumUpgradePending`() =
         runTest {
