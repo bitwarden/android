@@ -336,8 +336,10 @@ private fun SubscriptionStatusState.isInTroubleState(): Boolean =
     this is SubscriptionStatusState.Available &&
         when (this.status) {
             PremiumSubscriptionStatus.CANCELED,
+            PremiumSubscriptionStatus.EXPIRED,
             PremiumSubscriptionStatus.PAST_DUE,
             PremiumSubscriptionStatus.PAUSED,
+            PremiumSubscriptionStatus.UNPAID,
             PremiumSubscriptionStatus.UPDATE_PAYMENT,
                 -> true
 

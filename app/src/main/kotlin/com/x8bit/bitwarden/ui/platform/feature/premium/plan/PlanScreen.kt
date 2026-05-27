@@ -72,6 +72,7 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalAuthTabLaunchers
 import com.x8bit.bitwarden.ui.platform.feature.premium.plan.handlers.PlanHandlers
 import com.x8bit.bitwarden.ui.platform.feature.premium.plan.util.badgeColors
 import com.x8bit.bitwarden.ui.platform.feature.premium.plan.util.labelRes
+import com.x8bit.bitwarden.ui.platform.feature.premium.plan.util.showsFeatureList
 import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 
 private const val PLACEHOLDER_TEXT: String = "--"
@@ -399,25 +400,30 @@ private fun PremiumFeaturesCard(
                 .standardHorizontalMargin(),
         )
 
-        BitwardenHorizontalDivider()
+        PremiumFeatureRows()
+    }
+}
 
-        val features = listOf(
-            BitwardenString.built_in_authenticator,
-            BitwardenString.emergency_access,
-            BitwardenString.secure_file_storage,
-            BitwardenString.breach_monitoring,
+@Composable
+private fun PremiumFeatureRows() {
+    BitwardenHorizontalDivider()
+
+    val features = listOf(
+        BitwardenString.built_in_authenticator,
+        BitwardenString.emergency_access,
+        BitwardenString.secure_file_storage,
+        BitwardenString.breach_monitoring,
+    )
+    features.forEachIndexed { index, featureStringRes ->
+        BitwardenContentBlock(
+            data = ContentBlockData(
+                headerText = stringResource(id = featureStringRes),
+                iconVectorResource = BitwardenDrawable.ic_check_mark,
+            ),
+            headerTextStyle = BitwardenTheme.typography.titleMedium,
+            showDivider = index != features.lastIndex,
+            modifier = Modifier.padding(vertical = 8.dp),
         )
-        features.forEachIndexed { index, featureStringRes ->
-            BitwardenContentBlock(
-                data = ContentBlockData(
-                    headerText = stringResource(id = featureStringRes),
-                    iconVectorResource = BitwardenDrawable.ic_check_mark,
-                ),
-                headerTextStyle = BitwardenTheme.typography.titleMedium,
-                showDivider = index != features.lastIndex,
-                modifier = Modifier.padding(vertical = 8.dp),
-            )
-        }
     }
 }
 
@@ -568,21 +574,18 @@ private fun PremiumContent(
     }
 }
 
-@Suppress("LongMethod")
 @Composable
 private fun SubscriptionCard(
     viewState: PlanState.ViewState.Premium,
     modifier: Modifier = Modifier,
 ) {
-    val rowModifier = Modifier
-        .fillMaxWidth()
-        .standardHorizontalMargin()
     Column(
         modifier = modifier
             .fillMaxWidth()
             .cardStyle(
                 cardStyle = CardStyle.Full,
-                // Override bottom padding; the final row owns its own spacing.
+                // Override bottom padding; the final row (line item or feature) owns its
+                // own spacing.
                 paddingBottom = 0.dp,
             ),
     ) {
@@ -599,55 +602,70 @@ private fun SubscriptionCard(
                 .standardHorizontalMargin(),
         )
 
-        BitwardenHorizontalDivider()
-
-        SubscriptionLineItem(
-            label = stringResource(id = BitwardenString.billing_amount),
-            value = viewState.billingAmountText(),
-            testTag = "BillingAmountRow",
-            modifier = rowModifier,
-        )
-
-        viewState.storageCostText?.let { storageCostText ->
-            BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
-            SubscriptionLineItem(
-                label = stringResource(id = BitwardenString.storage_cost),
-                value = storageCostText,
-                testTag = "StorageCostRow",
-                modifier = rowModifier,
-            )
+        if (viewState.status?.showsFeatureList() == true) {
+            PremiumFeatureRows()
+        } else {
+            SubscriptionLineItems(viewState = viewState)
         }
+    }
+}
 
-        viewState.discountAmountText?.let { discountAmountText ->
-            BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
-            SubscriptionLineItem(
-                label = stringResource(id = BitwardenString.discount),
-                value = discountAmountText,
-                testTag = "DiscountRow",
-                modifier = rowModifier,
-                valueColor = BitwardenTheme.colorScheme.statusBadge.success.text,
-            )
-        }
+@Composable
+private fun SubscriptionLineItems(
+    viewState: PlanState.ViewState.Premium,
+) {
+    val rowModifier = Modifier
+        .fillMaxWidth()
+        .standardHorizontalMargin()
 
+    BitwardenHorizontalDivider()
+
+    SubscriptionLineItem(
+        label = stringResource(id = BitwardenString.billing_amount),
+        value = viewState.billingAmountText(),
+        testTag = "BillingAmountRow",
+        modifier = rowModifier,
+    )
+
+    viewState.storageCostText?.let { storageCostText ->
         BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
-
         SubscriptionLineItem(
-            label = stringResource(id = BitwardenString.estimated_tax),
-            value = viewState.estimatedTaxText,
-            testTag = "EstimatedTaxRow",
+            label = stringResource(id = BitwardenString.storage_cost),
+            value = storageCostText,
+            testTag = "StorageCostRow",
             modifier = rowModifier,
-        )
-
-        BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
-
-        SubscriptionLineItem(
-            label = stringResource(id = BitwardenString.total),
-            value = viewState.totalText(),
-            testTag = "TotalRow",
-            modifier = rowModifier,
-            labelStyle = BitwardenTheme.typography.bodyLargeEmphasis,
         )
     }
+
+    viewState.discountAmountText?.let { discountAmountText ->
+        BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
+        SubscriptionLineItem(
+            label = stringResource(id = BitwardenString.discount),
+            value = discountAmountText,
+            testTag = "DiscountRow",
+            modifier = rowModifier,
+            valueColor = BitwardenTheme.colorScheme.statusBadge.success.text,
+        )
+    }
+
+    BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
+
+    SubscriptionLineItem(
+        label = stringResource(id = BitwardenString.estimated_tax),
+        value = viewState.estimatedTaxText,
+        testTag = "EstimatedTaxRow",
+        modifier = rowModifier,
+    )
+
+    BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
+
+    SubscriptionLineItem(
+        label = stringResource(id = BitwardenString.total),
+        value = viewState.totalText(),
+        testTag = "TotalRow",
+        modifier = rowModifier,
+        labelStyle = BitwardenTheme.typography.bodyLargeEmphasis,
+    )
 }
 
 @Composable
@@ -698,7 +716,7 @@ private fun SubscriptionHeader(
     }
 }
 
-@Suppress("CyclomaticComplexMethod")
+@Suppress("CyclomaticComplexMethod", "LongMethod")
 @Composable
 private fun subscriptionDescriptionText(
     status: PremiumSubscriptionStatus?,
@@ -763,6 +781,17 @@ private fun subscriptionDescriptionText(
 
         PremiumSubscriptionStatus.PAUSED -> AnnotatedString(
             stringResource(id = BitwardenString.subscription_paused_description),
+        )
+
+        PremiumSubscriptionStatus.EXPIRED -> annotatedStringResource(
+            id = BitwardenString.subscription_expired_description,
+            args = arrayOf(suspensionDateText ?: PLACEHOLDER_TEXT),
+            style = baseStyle,
+            emphasisHighlightStyle = emphasisStyle,
+        )
+
+        PremiumSubscriptionStatus.UNPAID -> AnnotatedString(
+            stringResource(id = BitwardenString.subscription_unpaid_description),
         )
 
         null -> null

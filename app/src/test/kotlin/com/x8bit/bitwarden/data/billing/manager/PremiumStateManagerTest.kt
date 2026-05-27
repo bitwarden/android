@@ -915,8 +915,10 @@ class PremiumStateManagerTest {
     fun `banner eligible when account is premium but status is in a trouble state`() = runTest {
         listOf(
             PremiumSubscriptionStatus.CANCELED,
+            PremiumSubscriptionStatus.EXPIRED,
             PremiumSubscriptionStatus.PAST_DUE,
             PremiumSubscriptionStatus.PAUSED,
+            PremiumSubscriptionStatus.UNPAID,
             PremiumSubscriptionStatus.UPDATE_PAYMENT,
         ).forEach { status ->
             fakeAuthDiskSource.userState = userStateJsonWith(

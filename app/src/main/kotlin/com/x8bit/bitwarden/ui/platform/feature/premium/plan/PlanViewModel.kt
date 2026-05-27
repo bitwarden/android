@@ -1129,7 +1129,9 @@ sealed class PlanAction {
  */
 private fun PremiumSubscriptionStatus.canBeCanceled(): Boolean = when (this) {
     PremiumSubscriptionStatus.CANCELED,
+    PremiumSubscriptionStatus.EXPIRED,
     PremiumSubscriptionStatus.PENDING_CANCELLATION,
+    PremiumSubscriptionStatus.UNPAID,
         -> false
 
     PremiumSubscriptionStatus.ACTIVE,
@@ -1147,9 +1149,11 @@ private fun PremiumSubscriptionStatus.canBeCanceled(): Boolean = when (this) {
  */
 private fun PremiumSubscriptionStatus.isPremiumViewEligible(): Boolean = when (this) {
     PremiumSubscriptionStatus.CANCELED,
+    PremiumSubscriptionStatus.EXPIRED,
     PremiumSubscriptionStatus.PAST_DUE,
     PremiumSubscriptionStatus.PAUSED,
     PremiumSubscriptionStatus.PENDING_CANCELLATION,
+    PremiumSubscriptionStatus.UNPAID,
     PremiumSubscriptionStatus.UPDATE_PAYMENT,
         -> true
 
