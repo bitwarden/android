@@ -130,7 +130,7 @@ class PlanViewModel @Inject constructor(
 
         premiumStateManager
             .upgradeLifecycleStateFlow
-            .map { PlanAction.Internal.LifecycleStateReceive(it) }
+            .map { PlanAction.Internal.UpgradeLifecycleStateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -198,8 +198,8 @@ class PlanViewModel @Inject constructor(
                 handleSubscriptionStatusUpdateReceive(action)
             }
 
-            is PlanAction.Internal.LifecycleStateReceive -> {
-                handleLifecycleStateReceive(action)
+            is PlanAction.Internal.UpgradeLifecycleStateReceive -> {
+                handleUpgradeLifecycleStateReceive(action)
             }
         }
     }
@@ -450,8 +450,8 @@ class PlanViewModel @Inject constructor(
         }
     }
 
-    private fun handleLifecycleStateReceive(
-        action: PlanAction.Internal.LifecycleStateReceive,
+    private fun handleUpgradeLifecycleStateReceive(
+        action: PlanAction.Internal.UpgradeLifecycleStateReceive,
     ) {
         val isPending = action.state is UpgradeLifecycleState.UpgradePending
         onFreeCloudContent { freeState ->
@@ -1138,7 +1138,7 @@ sealed class PlanAction {
         /**
          * The shared [UpgradeLifecycleState] for the active user has updated.
          */
-        data class LifecycleStateReceive(
+        data class UpgradeLifecycleStateReceive(
             val state: UpgradeLifecycleState,
         ) : Internal()
     }
