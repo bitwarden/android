@@ -295,8 +295,8 @@ private fun FreeCloudContent(
         Spacer(modifier = Modifier.height(24.dp))
 
         // Hide the Upgrade Now CTA (and its Stripe footer copy) while a Stripe upgrade is
-        // already in flight for the active user. CTAs reappear once the pending flag clears
-        // once the server flips the user to Premium.
+        // already in flight for the active user. CTAs reappear once the server flips the
+        // user to Premium.
         if (!viewState.isPremiumUpgradePending) {
             UpgradeNowCallToAction(
                 onUpgradeNowClick = { shouldShowUpgradeDialog = true },

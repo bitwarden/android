@@ -102,7 +102,10 @@ class PremiumStateManagerImpl(
             .stateIn(
                 scope = unconfinedScope,
                 started = SharingStarted.Eagerly,
-                initialValue = false,
+                initialValue = authDiskSource.userState
+                    ?.activeUserId
+                    ?.let { settingsDiskSource.getPremiumUpgradePending(userId = it) }
+                    ?: false,
             )
 
     @OptIn(ExperimentalCoroutinesApi::class)
