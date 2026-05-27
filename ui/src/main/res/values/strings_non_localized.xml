@@ -54,6 +54,7 @@
     <string name="new_item_types">New Item Types</string>
     <string name="fill_assist_targeting_rules">Fill Assist Targeting Rules</string>
     <string name="debug_disable_self_host_premium_check">Debug: Disable self-host premium check</string>
+    <string name="policies_in_accepted_state">Policies in accepted state</string>
 
     <!-- endregion Debug Menu -->
 </resources>
