@@ -918,7 +918,6 @@ class PremiumStateManagerTest {
             PremiumSubscriptionStatus.EXPIRED,
             PremiumSubscriptionStatus.PAST_DUE,
             PremiumSubscriptionStatus.PAUSED,
-            PremiumSubscriptionStatus.UNPAID,
             PremiumSubscriptionStatus.UPDATE_PAYMENT,
         ).forEach { status ->
             fakeAuthDiskSource.userState = userStateJsonWith(

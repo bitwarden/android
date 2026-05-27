@@ -570,20 +570,6 @@ class PlanScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `status badge should render with Unpaid label for UNPAID status`() {
-        mutableStateFlow.update {
-            it.copy(
-                viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(
-                    status = PremiumSubscriptionStatus.UNPAID,
-                ),
-            )
-        }
-        composeTestRule
-            .onNodeWithText("Unpaid")
-            .assertIsDisplayed()
-    }
-
-    @Test
     fun `status badge should render with Update payment label for UPDATE_PAYMENT status`() {
         mutableStateFlow.update {
             it.copy(
@@ -652,7 +638,6 @@ class PlanScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Past due").assertDoesNotExist()
         composeTestRule.onNodeWithText("Paused").assertDoesNotExist()
         composeTestRule.onNodeWithText("Pending cancellation").assertDoesNotExist()
-        composeTestRule.onNodeWithText("Unpaid").assertDoesNotExist()
         composeTestRule.onNodeWithText("Update payment").assertDoesNotExist()
     }
 
@@ -807,22 +792,6 @@ class PlanScreenTest : BitwardenComposeTest() {
                     "Resubscribe to continue using Premium features.",
             )
             .assertTextRangeHasBoldSpan(boldSubstring = "April 21, 2026")
-    }
-
-    @Test
-    fun `UNPAID description should render plain text`() {
-        mutableStateFlow.update {
-            it.copy(
-                viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(
-                    status = PremiumSubscriptionStatus.UNPAID,
-                ),
-            )
-        }
-        composeTestRule
-            .onNodeWithText(
-                "To reactivate your subscription, please resolve the past due invoices.",
-            )
-            .assertIsDisplayed()
     }
 
     // endregion Premium content rendering
@@ -998,22 +967,6 @@ class PlanScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithTag("DiscountRow").assertDoesNotExist()
         composeTestRule.onNodeWithTag("EstimatedTaxRow").assertDoesNotExist()
         composeTestRule.onNodeWithTag("TotalRow").assertDoesNotExist()
-    }
-
-    @Test
-    fun `UNPAID status should keep line items and not render feature list`() {
-        mutableStateFlow.update {
-            it.copy(
-                viewState = DEFAULT_PREMIUM_VIEW_STATE.copy(
-                    status = PremiumSubscriptionStatus.UNPAID,
-                ),
-            )
-        }
-        composeTestRule.onNodeWithTag("BillingAmountRow").assertExists()
-        composeTestRule.onNodeWithTag("EstimatedTaxRow").assertExists()
-        composeTestRule.onNodeWithTag("TotalRow").assertExists()
-        composeTestRule.onNodeWithText("Built-in authenticator").assertDoesNotExist()
-        composeTestRule.onNodeWithText("Breach monitoring").assertDoesNotExist()
     }
 
     @Test

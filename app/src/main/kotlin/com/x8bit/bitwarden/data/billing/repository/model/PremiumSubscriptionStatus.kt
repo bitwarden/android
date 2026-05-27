@@ -20,11 +20,5 @@ enum class PremiumSubscriptionStatus {
     PENDING_CANCELLATION,
     PAST_DUE,
     PAUSED,
-
-    /**
-     * The subscription is delinquent past the grace period and Stripe has stopped attempting
-     * to collect payment. Recoverable only by resolving the outstanding invoices.
-     */
-    UNPAID,
     UPDATE_PAYMENT,
 }

@@ -790,10 +790,6 @@ private fun subscriptionDescriptionText(
             emphasisHighlightStyle = emphasisStyle,
         )
 
-        PremiumSubscriptionStatus.UNPAID -> AnnotatedString(
-            stringResource(id = BitwardenString.subscription_unpaid_description),
-        )
-
         null -> null
     }
 }

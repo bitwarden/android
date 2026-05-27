@@ -1306,7 +1306,6 @@ Do you want to switch to this account?</string>
     <string name="subscription_status_expired">Expired</string>
     <string name="subscription_status_past_due">Past due</string>
     <string name="subscription_status_paused">Paused</string>
-    <string name="subscription_status_unpaid">Unpaid</string>
     <string name="subscription_status_update_payment">Update payment</string>
     <string name="subscription_status_pending_cancellation">Pending cancellation</string>
     <string name="subscription_pending_cancellation_description">Your subscription is scheduled to cancel on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. You can reinstate it anytime before then.</string>
@@ -1319,7 +1318,6 @@ Do you want to switch to this account?</string>
     </plurals>
     <string name="subscription_paused_description">Your subscription is paused. Resume to continue using premium features.</string>
     <string name="subscription_expired_description">Your subscription expired on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using Premium features.</string>
-    <string name="subscription_unpaid_description">To reactivate your subscription, please resolve the past due invoices.</string>
     <string name="loading_subscription">Loading subscription…</string>
     <string name="loading_portal">Loading portal…</string>
     <string name="portal_error">Something went wrong</string>

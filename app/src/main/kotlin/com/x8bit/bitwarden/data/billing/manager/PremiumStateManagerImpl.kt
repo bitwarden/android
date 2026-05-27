@@ -339,7 +339,6 @@ private fun SubscriptionStatusState.isInTroubleState(): Boolean =
             PremiumSubscriptionStatus.EXPIRED,
             PremiumSubscriptionStatus.PAST_DUE,
             PremiumSubscriptionStatus.PAUSED,
-            PremiumSubscriptionStatus.UNPAID,
             PremiumSubscriptionStatus.UPDATE_PAYMENT,
                 -> true
 

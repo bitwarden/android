@@ -28,9 +28,11 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
     }
 
     @Test
-    fun `toSubscriptionInfo maps CANCELED to CANCELED`() {
-        val info = buildResponse(status = SubscriptionStatusJson.CANCELED).toSubscriptionInfo()
-        assertEquals(PremiumSubscriptionStatus.CANCELED, info.status)
+    fun `toSubscriptionInfo maps CANCELED and UNPAID to CANCELED`() {
+        listOf(SubscriptionStatusJson.CANCELED, SubscriptionStatusJson.UNPAID).forEach {
+            val info = buildResponse(status = it).toSubscriptionInfo()
+            assertEquals(PremiumSubscriptionStatus.CANCELED, info.status)
+        }
     }
 
     @Test
@@ -47,14 +49,6 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
             status = SubscriptionStatusJson.INCOMPLETE,
         ).toSubscriptionInfo()
         assertEquals(PremiumSubscriptionStatus.UPDATE_PAYMENT, info.status)
-    }
-
-    @Test
-    fun `toSubscriptionInfo maps UNPAID to UNPAID`() {
-        val info = buildResponse(
-            status = SubscriptionStatusJson.UNPAID,
-        ).toSubscriptionInfo()
-        assertEquals(PremiumSubscriptionStatus.UNPAID, info.status)
     }
 
     @Test

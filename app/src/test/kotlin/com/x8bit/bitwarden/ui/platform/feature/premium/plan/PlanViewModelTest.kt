@@ -1179,32 +1179,6 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `SubscriptionResultReceive Success with Unpaid status should hide cancel button`() =
-        runTest {
-            markUserPremium()
-
-            val viewModel = createViewModel(
-                subscriptionResult = SubscriptionResult.Success(
-                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
-                        status = PremiumSubscriptionStatus.UNPAID,
-                    ),
-                ),
-            )
-
-            viewModel.stateFlow.test {
-                assertEquals(
-                    DEFAULT_PREMIUM_LOADED_STATE.copy(
-                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
-                            status = PremiumSubscriptionStatus.UNPAID,
-                            showCancelButton = false,
-                        ),
-                    ),
-                    awaitItem(),
-                )
-            }
-        }
-
-    @Test
     fun `SubscriptionResultReceive Success with Monthly cadence formats per-month rate`() =
         runTest {
             markUserPremium()
