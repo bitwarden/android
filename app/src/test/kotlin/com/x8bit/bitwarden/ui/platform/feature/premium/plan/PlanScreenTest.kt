@@ -665,7 +665,7 @@ class PlanScreenTest : BitwardenComposeTest() {
         }
         composeTestRule
             .onNodeWithText(
-                "We couldn’t process your payment. Update your payment before " +
+                "We couldn’t process your payment. Update your payment method before " +
                     "your subscription ends on April 21, 2026.",
             )
             .assertTextRangeHasBoldSpan(boldSubstring = "April 21, 2026")
