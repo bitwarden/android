@@ -46,6 +46,8 @@ class AccessibilityParserImpl(
             }
             .ifEmpty {
                 browser.possibleUrlSemanticIds.flatMap { semanticId ->
+                    // Semantic IDs are exposed as viewIdResourceName via testTagsAsResourceId
+                    // and cannot be found via findAccessibilityNodeInfosByViewId on Firefox.
                     accessibilityNodeInfoManager.findAccessibilityNodeInfoList(rootNode) {
                         it.viewIdResourceName == semanticId
                     }
