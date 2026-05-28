@@ -11,7 +11,7 @@ import com.bitwarden.policies.OrganizationUserPolicyContext
 fun createMockOrganizationUserPolicyContext(
     number: Int = 1,
     id: String = "mockId-$number",
-    status: OrganizationUserStatusType = OrganizationUserStatusType.ACCEPTED,
+    status: OrganizationUserStatusType = OrganizationUserStatusType.CONFIRMED,
     role: OrganizationUserType = OrganizationUserType.ADMIN,
     enabled: Boolean = false,
     usePolicies: Boolean = false,

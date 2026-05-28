@@ -25,6 +25,7 @@ import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
 import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
 import com.bitwarden.network.model.OrganizationKeysResponseJson
+import com.bitwarden.network.model.OrganizationStatusType
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PasswordHintResponseJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
@@ -312,6 +313,7 @@ class AuthRepositoryImpl(
     override val organizations: List<Organization>
         get() = activeUserId
             ?.let { authDiskSource.getOrganizations(it) }
+            ?.filter { it.status == OrganizationStatusType.CONFIRMED }
             .orEmpty()
             .toOrganizations()
 
