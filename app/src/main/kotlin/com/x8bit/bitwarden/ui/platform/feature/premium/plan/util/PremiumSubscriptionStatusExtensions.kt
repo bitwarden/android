@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStat
 fun PremiumSubscriptionStatus.labelRes(): Int = when (this) {
     PremiumSubscriptionStatus.ACTIVE -> BitwardenString.subscription_status_active
     PremiumSubscriptionStatus.CANCELED -> BitwardenString.subscription_status_canceled
+    PremiumSubscriptionStatus.EXPIRED -> BitwardenString.subscription_status_expired
     PremiumSubscriptionStatus.PENDING_CANCELLATION -> {
         BitwardenString.subscription_status_pending_cancellation
     }
@@ -24,6 +25,24 @@ fun PremiumSubscriptionStatus.labelRes(): Int = when (this) {
 }
 
 /**
+ * Returns `true` when the Premium plan card should replace its billing line items with the
+ * premium feature list. Reserved for terminal states where line items carry no actionable
+ * information and the user's path forward is to resubscribe.
+ */
+fun PremiumSubscriptionStatus.showsFeatureList(): Boolean = when (this) {
+    PremiumSubscriptionStatus.CANCELED,
+    PremiumSubscriptionStatus.EXPIRED,
+        -> true
+
+    PremiumSubscriptionStatus.ACTIVE,
+    PremiumSubscriptionStatus.PAST_DUE,
+    PremiumSubscriptionStatus.PAUSED,
+    PremiumSubscriptionStatus.PENDING_CANCELLATION,
+    PremiumSubscriptionStatus.UPDATE_PAYMENT,
+        -> false
+}
+
+/**
  * Returns the [BitwardenColorScheme.StatusBadgeVariantColors] used to render the badge for a
  * [PremiumSubscriptionStatus].
  */
@@ -31,7 +50,10 @@ fun PremiumSubscriptionStatus.labelRes(): Int = when (this) {
 fun PremiumSubscriptionStatus.badgeColors(): BitwardenColorScheme.StatusBadgeVariantColors =
     when (this) {
         PremiumSubscriptionStatus.ACTIVE -> BitwardenTheme.colorScheme.statusBadge.success
-        PremiumSubscriptionStatus.CANCELED -> BitwardenTheme.colorScheme.statusBadge.error
+        PremiumSubscriptionStatus.CANCELED,
+        PremiumSubscriptionStatus.EXPIRED,
+            -> BitwardenTheme.colorScheme.statusBadge.error
+
         PremiumSubscriptionStatus.PAST_DUE,
         PremiumSubscriptionStatus.PAUSED,
         PremiumSubscriptionStatus.PENDING_CANCELLATION,
