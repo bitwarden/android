@@ -1131,6 +1131,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
                             status = PremiumSubscriptionStatus.UPDATE_PAYMENT,
                             suspensionDateText = "April 21, 2026",
+                            showCancelButton = false,
                         ),
                     ),
                     awaitItem(),

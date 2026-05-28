@@ -1170,19 +1170,20 @@ sealed class PlanAction {
 
 /**
  * Returns `true` when this status corresponds to a subscription that the user can still
- * cancel through the Stripe portal — i.e., a live or recoverable subscription. Terminal
- * states (canceled) do not present a cancel action.
+ * cancel through the Stripe portal — i.e., a live subscription. Terminal states (canceled,
+ * expired, pending cancellation) and states whose primary action is recovering payment
+ * (update payment) do not present a cancel action.
  */
 private fun PremiumSubscriptionStatus.canBeCanceled(): Boolean = when (this) {
     PremiumSubscriptionStatus.CANCELED,
     PremiumSubscriptionStatus.EXPIRED,
     PremiumSubscriptionStatus.PENDING_CANCELLATION,
+    PremiumSubscriptionStatus.UPDATE_PAYMENT,
         -> false
 
     PremiumSubscriptionStatus.ACTIVE,
     PremiumSubscriptionStatus.PAST_DUE,
     PremiumSubscriptionStatus.PAUSED,
-    PremiumSubscriptionStatus.UPDATE_PAYMENT,
         -> true
 }
 
