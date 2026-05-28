@@ -7,6 +7,7 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.combineDataStates
 import com.bitwarden.core.data.repository.util.map
 import com.bitwarden.core.data.repository.util.updateToPendingOrLoading
+import com.bitwarden.network.model.OrganizationStatusType
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.service.SyncService
 import com.bitwarden.network.util.isNoConnectionError
@@ -469,6 +470,9 @@ class VaultSyncManagerImpl(
                                 data = collections.sortAlphabeticallyByTypeAndOrganization(
                                     userOrganizations = authDiskSource
                                         .getOrganizations(userId = userId)
+                                        ?.filter { org ->
+                                            org.status == OrganizationStatusType.CONFIRMED
+                                        }
                                         .orEmpty(),
                                 ),
                             )

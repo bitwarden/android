@@ -8,6 +8,7 @@ import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.network.model.BulkShareCiphersJsonRequest
+import com.bitwarden.network.model.OrganizationStatusType
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.toCipherWithIdJsonRequest
 import com.bitwarden.network.service.CiphersService
@@ -144,6 +145,7 @@ class VaultMigrationManagerImpl(
 
             val orgName = authDiskSource
                 .getOrganizations(userId = userId)
+                ?.filter { it.status == OrganizationStatusType.CONFIRMED }
                 ?.firstOrNull { it.id == orgId }
                 ?.name
                 ?: return@update VaultMigrationData.NoMigrationRequired
