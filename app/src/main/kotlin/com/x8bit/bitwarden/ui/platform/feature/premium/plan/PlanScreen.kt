@@ -4,6 +4,7 @@ package com.x8bit.bitwarden.ui.platform.feature.premium.plan
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -405,7 +406,7 @@ private fun PremiumFeaturesCard(
 }
 
 @Composable
-private fun PremiumFeatureRows() {
+private fun ColumnScope.PremiumFeatureRows() {
     BitwardenHorizontalDivider()
 
     val features = listOf(

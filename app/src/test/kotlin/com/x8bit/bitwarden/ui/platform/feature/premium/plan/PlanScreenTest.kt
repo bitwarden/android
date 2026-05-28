@@ -681,7 +681,7 @@ class PlanScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(
                 "Your subscription was canceled on April 21, 2026. " +
-                    "Resubscribe to continue using premium features.",
+                    "Resubscribe to continue using Premium features.",
             )
             .assertTextRangeHasBoldSpan(boldSubstring = "April 21, 2026")
     }
@@ -700,7 +700,7 @@ class PlanScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(
                 "Your subscription was canceled on May 15, 2026. " +
-                    "Resubscribe to continue using premium features.",
+                    "Resubscribe to continue using Premium features.",
             )
             .assertTextRangeHasBoldSpan(boldSubstring = "May 15, 2026")
     }

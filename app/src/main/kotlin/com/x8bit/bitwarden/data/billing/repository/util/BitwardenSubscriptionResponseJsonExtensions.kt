@@ -67,7 +67,6 @@ private fun BitwardenSubscriptionResponseJson.toPremiumSubscriptionStatus():
     SubscriptionStatusJson.CANCELED -> PremiumSubscriptionStatus.CANCELED
 
     SubscriptionStatusJson.INCOMPLETE_EXPIRED -> PremiumSubscriptionStatus.EXPIRED
-
     SubscriptionStatusJson.INCOMPLETE,
     SubscriptionStatusJson.UNPAID,
         -> PremiumSubscriptionStatus.UPDATE_PAYMENT
