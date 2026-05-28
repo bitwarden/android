@@ -137,66 +137,14 @@ class PlanScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `upgrade now button click should show continue to Stripe confirmation dialog`() {
-        composeTestRule
-            .onAllNodesWithText("Continue to Stripe?")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertDoesNotExist()
-
+    fun `upgrade now button click should send UpgradeNowClick action`() {
         composeTestRule
             .onNodeWithTag("UpgradeNowButton")
             .performScrollTo()
             .performClick()
-
-        composeTestRule
-            .onAllNodesWithText("Continue to Stripe?")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertExists()
-        composeTestRule
-            .onAllNodesWithText(
-                "You’ll go to Stripe’s secure checkout to complete your purchase.",
-            )
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertExists()
-        verify(exactly = 0) { viewModel.trySendAction(PlanAction.UpgradeNowClick) }
-    }
-
-    @Test
-    fun `upgrade now dialog continue click should send UpgradeNowClick action and dismiss`() {
-        composeTestRule
-            .onNodeWithTag("UpgradeNowButton")
-            .performScrollTo()
-            .performClick()
-
-        composeTestRule
-            .onAllNodesWithText("Continue")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        verify { viewModel.trySendAction(PlanAction.UpgradeNowClick) }
-        composeTestRule
-            .onAllNodesWithText("Continue to Stripe?")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertDoesNotExist()
-    }
-
-    @Test
-    fun `upgrade now dialog cancel click should dismiss without sending action`() {
-        composeTestRule
-            .onNodeWithTag("UpgradeNowButton")
-            .performScrollTo()
-            .performClick()
-
-        composeTestRule
-            .onAllNodesWithText("Cancel")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        verify(exactly = 0) { viewModel.trySendAction(PlanAction.UpgradeNowClick) }
-        composeTestRule
-            .onAllNodesWithText("Continue to Stripe?")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertDoesNotExist()
+        verify {
+            viewModel.trySendAction(PlanAction.UpgradeNowClick)
+        }
     }
 
     @Test

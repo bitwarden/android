@@ -280,7 +280,6 @@ private fun FreeCloudContent(
     handlers: PlanHandlers,
     modifier: Modifier = Modifier,
 ) {
-    var shouldShowUpgradeDialog by rememberSaveable { mutableStateOf(false) }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -300,28 +299,10 @@ private fun FreeCloudContent(
         // user to Premium.
         if (!viewState.isPremiumUpgradePending) {
             UpgradeNowCallToAction(
-                onUpgradeNowClick = { shouldShowUpgradeDialog = true },
+                onUpgradeNowClick = handlers.onUpgradeNowClick,
             )
         }
         Spacer(modifier = Modifier.navigationBarsPadding())
-    }
-
-    if (shouldShowUpgradeDialog) {
-        BitwardenTwoButtonDialog(
-            title = stringResource(id = BitwardenString.continue_to_stripe),
-            message = stringResource(
-                id = BitwardenString
-                    .youll_go_to_stripes_secure_checkout_to_complete_your_purchase,
-            ),
-            confirmButtonText = stringResource(id = BitwardenString.continue_text),
-            dismissButtonText = stringResource(id = BitwardenString.cancel),
-            onConfirmClick = {
-                shouldShowUpgradeDialog = false
-                handlers.onUpgradeNowClick()
-            },
-            onDismissClick = { shouldShowUpgradeDialog = false },
-            onDismissRequest = { shouldShowUpgradeDialog = false },
-        )
     }
 }
 
