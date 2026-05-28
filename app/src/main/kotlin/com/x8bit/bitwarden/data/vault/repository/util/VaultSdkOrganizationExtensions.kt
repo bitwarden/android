@@ -43,6 +43,5 @@ private val OrganizationType.toSdkOrganizationUserType: OrganizationUserType
         OrganizationType.OWNER -> OrganizationUserType.OWNER
         OrganizationType.ADMIN -> OrganizationUserType.ADMIN
         OrganizationType.USER -> OrganizationUserType.USER
-        OrganizationType.MANAGER -> OrganizationUserType.ADMIN
         OrganizationType.CUSTOM -> OrganizationUserType.CUSTOM
     }

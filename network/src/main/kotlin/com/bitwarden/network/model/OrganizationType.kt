@@ -29,12 +29,6 @@ enum class OrganizationType {
     USER,
 
     /**
-     * The user is a manager in the organization.
-     */
-    @SerialName("3")
-    MANAGER,
-
-    /**
      * The user has a custom role in the organization.
      */
     @SerialName("4")

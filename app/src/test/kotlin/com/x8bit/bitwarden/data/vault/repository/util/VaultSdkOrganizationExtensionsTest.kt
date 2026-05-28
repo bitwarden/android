@@ -70,6 +70,5 @@ private val ORGANIZATION_TYPE_MAP: Map<OrganizationType, OrganizationUserType> =
     OrganizationType.OWNER to OrganizationUserType.OWNER,
     OrganizationType.ADMIN to OrganizationUserType.ADMIN,
     OrganizationType.USER to OrganizationUserType.USER,
-    OrganizationType.MANAGER to OrganizationUserType.ADMIN,
     OrganizationType.CUSTOM to OrganizationUserType.CUSTOM,
 )
