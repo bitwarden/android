@@ -1131,6 +1131,35 @@ class PlanViewModelTest : BaseViewModelTest() {
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
                             status = PremiumSubscriptionStatus.UPDATE_PAYMENT,
                             suspensionDateText = "April 21, 2026",
+                            showCancelButton = false,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with UpdatePayment status should hide cancel button`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        status = PremiumSubscriptionStatus.UPDATE_PAYMENT,
+                        suspensionDate = Instant.parse("2026-04-21T00:00:00Z"),
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            status = PremiumSubscriptionStatus.UPDATE_PAYMENT,
+                            suspensionDateText = "April 21, 2026",
+                            showCancelButton = false,
                         ),
                     ),
                     awaitItem(),
