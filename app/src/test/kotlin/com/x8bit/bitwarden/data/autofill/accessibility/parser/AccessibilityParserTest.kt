@@ -158,6 +158,32 @@ class AccessibilityParserTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `parseForUriOrPackageName should return the site url from content description when URL bar is found via semantic id`() {
+        val firefoxPackage = "org.mozilla.firefox"
+        val contentDesc = " www.reddit.com. Search or enter address"
+        val urlNode = mockk<AccessibilityNodeInfo> {
+            every { text } returns null
+            every { contentDescription } returns contentDesc
+        }
+        val rootNode = mockk<AccessibilityNodeInfo> {
+            every { packageName } returns firefoxPackage
+            every { findAccessibilityNodeInfosByViewId(any()) } returns emptyList()
+        }
+        every {
+            accessibilityNodeInfoManager.findAccessibilityNodeInfoList(
+                rootNode = rootNode,
+                predicate = any(),
+            )
+        } returns listOf(urlNode)
+        val expectedResult = "https://www.reddit.com".toUri()
+
+        val result = accessibilityParser.parseForUriOrPackageName(rootNode = rootNode)
+
+        assertEquals(expectedResult, result)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `parseForUriOrPackageName should return the site url un-augmented with https protocol as a URI when package is a supported browser and URL is found`() {
         val testBrowser = Browser(packageName = "com.android.chrome", urlFieldId = "url_bar")
         val url = "https://www.google.com"
