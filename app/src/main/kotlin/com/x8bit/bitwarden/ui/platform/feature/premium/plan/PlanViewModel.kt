@@ -714,7 +714,7 @@ class PlanViewModel @Inject constructor(
         return PlanState.ViewState.Premium(
             status = status,
             billingAmountText = seatsCost.toBillingAmountText(cadence),
-            storageCostText = storageCost.toOptionalMoneyText(),
+            storageCostText = storageCost.toPresentMoneyText(),
             discountAmountText = discountAmount.toOptionalMoneyText(negative = true),
             estimatedTaxText = estimatedTax.toRequiredMoneyText(),
             totalText = nextChargeTotal.toBillingAmountText(cadence),
@@ -746,10 +746,15 @@ class PlanViewModel @Inject constructor(
         currencyFormatter.format(this ?: BigDecimal.ZERO)
 
     /**
-     * Formats this amount for a hide-when-absent line item. Returns `null` when the amount is
-     * `null` or non-positive so the caller can omit the row entirely (Discount, Storage).
-     * When [negative] is true, the formatted value is prefixed with `-` to match the canonical
-     * Web discount styling.
+     * Formats this amount for a render-when-present line item (Storage), rendering `$0.00` for a
+     * free line and returning `null` only when the amount is `null`.
+     */
+    private fun BigDecimal?.toPresentMoneyText(): String? =
+        this?.let { currencyFormatter.format(it) }
+
+    /**
+     * Formats this amount for a hide-when-absent line item (Discount), returning `null` when it is
+     * `null` or non-positive. When [negative] is true, prefixes `-` to the formatted value.
      */
     private fun BigDecimal?.toOptionalMoneyText(negative: Boolean = false): String? =
         when {

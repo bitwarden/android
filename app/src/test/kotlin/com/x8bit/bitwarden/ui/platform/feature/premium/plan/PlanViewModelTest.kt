@@ -1333,7 +1333,7 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `SubscriptionResultReceive Success with zero line items hides discount and storage rows`() =
+    fun `SubscriptionResultReceive Success renders zero storage row but hides zero discount`() =
         runTest {
             markUserPremium()
 
@@ -1351,7 +1351,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_PREMIUM_LOADED_STATE.copy(
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
-                            storageCostText = null,
+                            storageCostText = "$0.00",
                             discountAmountText = null,
                             estimatedTaxText = "$0.00",
                         ),
