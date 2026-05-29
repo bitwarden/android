@@ -29,6 +29,8 @@ import com.bitwarden.network.service.DownloadService
 import com.bitwarden.network.service.DownloadServiceImpl
 import com.bitwarden.network.service.EventService
 import com.bitwarden.network.service.EventServiceImpl
+import com.bitwarden.network.service.FillAssistService
+import com.bitwarden.network.service.FillAssistServiceImpl
 import com.bitwarden.network.service.FolderService
 import com.bitwarden.network.service.FolderServiceImpl
 import com.bitwarden.network.service.HaveIBeenPwnedService
@@ -152,6 +154,12 @@ internal class BitwardenServiceClientImpl(
         FolderServiceImpl(
             foldersApi = retrofits.authenticatedApiRetrofit.create(),
             json = clientJson,
+        )
+    }
+
+    override val fillAssistService: FillAssistService by lazy {
+        FillAssistServiceImpl(
+            api = retrofits.createStaticRetrofit().create(),
         )
     }
 

@@ -262,6 +262,7 @@ private val SERVER_CONFIG = ServerConfig(
             identityUrl = "http://localhost:33656",
             notificationsUrl = "http://localhost:61840",
             ssoUrl = "http://localhost:51822",
+            fillAssistRulesUrl = null,
         ),
         featureStates = mapOf(
             "dummy-boolean" to JsonPrimitive(true),

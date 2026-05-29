@@ -46,6 +46,7 @@ import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
 import com.bitwarden.network.model.OrganizationKeysResponseJson
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PasswordHintResponseJson
+import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.PreLoginResponseJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
 import com.bitwarden.network.model.RefreshTokenResponseJson
@@ -56,6 +57,7 @@ import com.bitwarden.network.model.ResetPasswordRequestJson
 import com.bitwarden.network.model.SendVerificationEmailRequestJson
 import com.bitwarden.network.model.SendVerificationEmailResponseJson
 import com.bitwarden.network.model.SetPasswordRequestJson
+import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.bitwarden.network.model.TwoFactorAuthMethod
 import com.bitwarden.network.model.TwoFactorDataModel
@@ -67,13 +69,12 @@ import com.bitwarden.network.model.VerifyEmailTokenResponseJson
 import com.bitwarden.network.model.createMockAccountKeysJson
 import com.bitwarden.network.model.createMockAccountKeysJsonWithNullFields
 import com.bitwarden.network.model.createMockOrganizationNetwork
+import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.network.service.AccountsService
 import com.bitwarden.network.service.DevicesService
 import com.bitwarden.network.service.HaveIBeenPwnedService
 import com.bitwarden.network.service.IdentityService
 import com.bitwarden.network.service.OrganizationService
-import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -147,7 +148,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -168,6 +168,8 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -264,14 +266,14 @@ class AuthRepositoryTest {
 
     private val mutableLogoutFlow = bufferedMutableSharedFlow<NotificationLogoutData>()
     private val mutableSyncOrgKeysFlow = bufferedMutableSharedFlow<String>()
-    private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<PolicyView>>()
+    private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Policy>>()
     private val pushManager: PushManager = mockk {
         every { logoutFlow } returns mutableLogoutFlow
         every { syncOrgKeysFlow } returns mutableSyncOrgKeysFlow
     }
     private val policyManager: PolicyManager = mockk {
         every {
-            getActivePoliciesFlow(type = PolicyType.MASTER_PASSWORD)
+            getActivePoliciesFlow(type = PolicyTypeJson.MASTER_PASSWORD)
         } returns mutableActivePolicyFlow
     }
     private val logsManager: LogsManager = mockk {
@@ -468,20 +470,18 @@ class AuthRepositoryTest {
             // Set policies that will fail the password.
             mutableActivePolicyFlow.emit(
                 listOf(
-                    createMockPolicyView(
-                        type = PolicyType.MASTER_PASSWORD,
-                        enabled = true,
-                        data = """
-                            {
-                              "minLength":100,
-                              "minComplexity":null,
-                              "requireUpper":null,
-                              "requireLower":null,
-                              "requireNumbers":null,
-                              "requireSpecial":null,
-                              "enforceOnLogin":true
-                            }
-                        """,
+                    createMockPolicy(
+                        type = PolicyTypeJson.MASTER_PASSWORD,
+                        isEnabled = true,
+                        data = buildJsonObject {
+                            put(key = "minLength", value = 100)
+                            put(key = "minComplexity", value = null)
+                            put(key = "requireUpper", value = null)
+                            put(key = "requireLower", value = null)
+                            put(key = "requireNumbers", value = null)
+                            put(key = "requireSpecial", value = null)
+                            put(key = "enforceOnLogin", value = true)
+                        },
                     ),
                 ),
             )
@@ -7344,22 +7344,20 @@ class AuthRepositoryTest {
             requireSpecial: Boolean = false,
         ) {
             every {
-                policyManager.getActivePolicies(type = PolicyType.MASTER_PASSWORD)
+                policyManager.getActivePolicies(type = PolicyTypeJson.MASTER_PASSWORD)
             } returns listOf(
-                createMockPolicyView(
-                    type = PolicyType.MASTER_PASSWORD,
-                    enabled = true,
-                    data = """
-                      {
-                        "minLength":$minLength,
-                        "minComplexity":$minComplexity,
-                        "requireUpper":$requireUpper,
-                        "requireLower":$requireLower,
-                        "requireNumbers":$requireNumbers,
-                        "requireSpecial":$requireSpecial,
-                        "enforceOnLogin":true
-                      }
-                    """,
+                createMockPolicy(
+                    type = PolicyTypeJson.MASTER_PASSWORD,
+                    isEnabled = true,
+                    data = buildJsonObject {
+                        put(key = "minLength", value = minLength)
+                        put(key = "minComplexity", value = minComplexity)
+                        put(key = "requireUpper", value = requireUpper)
+                        put(key = "requireLower", value = requireLower)
+                        put(key = "requireNumbers", value = requireNumbers)
+                        put(key = "requireSpecial", value = requireSpecial)
+                        put(key = "enforceOnLogin", value = true)
+                    },
                 ),
             )
         }
@@ -8106,6 +8104,7 @@ class AuthRepositoryTest {
                     identityUrl = "mockIdentityUrl",
                     notificationsUrl = "mockNotificationsUrl",
                     ssoUrl = "mockSsoUrl",
+                    fillAssistRulesUrl = null,
                 ),
                 featureStates = emptyMap(),
                 communication = null,
