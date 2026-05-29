@@ -10,7 +10,6 @@ import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.RsaKeyPair
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorKeyRequestJson
-import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
 import com.bitwarden.network.model.createMockAccountKeysJson
 import com.bitwarden.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
@@ -40,36 +39,6 @@ class KeyConnectorManagerTest {
         vaultSdkSource = vaultSdkSource,
         featureFlagManager = featureFlagManager,
     )
-
-    @Test
-    fun `getMasterKeyFromKeyConnector with service failure should return failure`() = runTest {
-        val expectedResult = Throwable("Fail").asFailure()
-        coEvery {
-            accountsService.getMasterKeyFromKeyConnector(url = URL, accessToken = ACCESS_TOKEN)
-        } returns expectedResult
-
-        val result = keyConnectorManager.getMasterKeyFromKeyConnector(
-            url = URL,
-            accessToken = ACCESS_TOKEN,
-        )
-
-        assertEquals(expectedResult, result)
-    }
-
-    @Test
-    fun `getMasterKeyFromKeyConnector with service success should return success`() = runTest {
-        val expectedResult = mockk<KeyConnectorMasterKeyResponseJson>().asSuccess()
-        coEvery {
-            accountsService.getMasterKeyFromKeyConnector(url = URL, accessToken = ACCESS_TOKEN)
-        } returns expectedResult
-
-        val result = keyConnectorManager.getMasterKeyFromKeyConnector(
-            url = URL,
-            accessToken = ACCESS_TOKEN,
-        )
-
-        assertEquals(expectedResult, result)
-    }
 
     @Suppress("MaxLineLength")
     @Test

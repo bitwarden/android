@@ -190,9 +190,9 @@ class VaultSdkSourceImpl(
     ): Result<InitializeCryptoResult> =
         runCatchingWithLogs {
             try {
-                getClient(userId = userId)
-                    .crypto()
-                    .initializeUserCrypto(req = request)
+                withContext(context = dispatcherManager.io) {
+                    getClient(userId = userId).crypto().initializeUserCrypto(req = request)
+                }
                 InitializeCryptoResult.Success
             } catch (exception: BitwardenException) {
                 // The only truly expected error from the SDK is an incorrect key/password.
