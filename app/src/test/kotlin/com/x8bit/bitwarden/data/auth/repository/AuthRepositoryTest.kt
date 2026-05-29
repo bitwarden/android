@@ -5364,9 +5364,14 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `removePassword with no userKey should return error`() = runTest {
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = null)
+    fun `removePassword with no masterKeyWrappedUserKey should return error`() = runTest {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1.copy(
+            accounts = mapOf(
+                USER_ID_1 to ACCOUNT_1.copy(
+                    profile = PROFILE_1.copy(userDecryptionOptions = null),
+                ),
+            ),
+        )
 
         val result = repository.removePassword(masterPassword = PASSWORD)
 
@@ -5379,7 +5384,6 @@ class AuthRepositoryTest {
     @Test
     fun `removePassword with no keyConnectorUrl should return error`() = runTest {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
         val organizations = listOf(
             createMockOrganizationNetwork(
                 number = 1,
@@ -5402,7 +5406,6 @@ class AuthRepositoryTest {
     fun `removePassword with migrateExistingUserToKeyConnector exception should return error`() =
         runTest {
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-            fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
             val url = "www.example.com"
             val error = Throwable("Fail!")
             val organizations = listOf(
@@ -5434,7 +5437,6 @@ class AuthRepositoryTest {
     fun `removePassword with migrateExistingUserToKeyConnector error should return error`() =
         runTest {
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-            fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
             val url = "www.example.com"
             val error = Throwable("Fail!")
             val expectedResult = MigrateExistingUserToKeyConnectorResult.Error(error)
@@ -5471,7 +5473,6 @@ class AuthRepositoryTest {
     fun `removePassword with migrateExistingUserToKeyConnector wrong password error should return WrongPasswordError error`() =
         runTest {
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-            fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
             val url = "www.example.com"
             val expectedResult = MigrateExistingUserToKeyConnectorResult.WrongPasswordError
             val organizations = listOf(
@@ -5507,7 +5508,6 @@ class AuthRepositoryTest {
     fun `removePassword with migrateExistingUserToKeyConnector success should sync and return success`() =
         runTest {
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-            fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
             val url = "www.example.com"
             val organizations = listOf(
                 createMockOrganizationNetwork(
@@ -7027,12 +7027,18 @@ class AuthRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `validatePassword with no stored password hash and no stored user key returns ValidatePasswordResult Error`() =
+    fun `validatePassword with no stored password hash and no stored masterKeyWrappedUserKey returns ValidatePasswordResult Error`() =
         runTest {
             val userId = USER_ID_1
             val password = "password"
             val passwordHash = "passwordHash"
-            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1.copy(
+                accounts = mapOf(
+                    USER_ID_1 to ACCOUNT_1.copy(
+                        profile = PROFILE_1.copy(userDecryptionOptions = null),
+                    ),
+                ),
+            )
             coEvery {
                 vaultSdkSource.validatePassword(
                     userId = userId,
@@ -7098,18 +7104,16 @@ class AuthRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `validatePassword with no stored password hash and a stored user key with sdk failure returns ValidatePasswordResult Success invalid`() =
+    fun `validatePassword with no stored password hash and a stored masterKeyWrappedUserKey with sdk failure returns ValidatePasswordResult Success invalid`() =
         runTest {
             val userId = USER_ID_1
             val password = "password"
-            val userKey = "userKey"
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-            fakeAuthDiskSource.storeUserKey(userId = userId, userKey = userKey)
             coEvery {
                 vaultSdkSource.validatePasswordUserKey(
                     userId = userId,
                     password = password,
-                    encryptedUserKey = userKey,
+                    encryptedUserKey = ENCRYPTED_USER_KEY,
                 )
             } returns Throwable("Fail").asFailure()
 
@@ -7120,19 +7124,17 @@ class AuthRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `validatePassword with no stored password hash and a stored user key with sdk success returns ValidatePasswordResult Success valid`() =
+    fun `validatePassword with no stored password hash and a stored masterKeyWrappedUserKey with sdk success returns ValidatePasswordResult Success valid`() =
         runTest {
             val userId = USER_ID_1
             val password = "password"
-            val userKey = "userKey"
             val passwordHash = "passwordHash"
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-            fakeAuthDiskSource.storeUserKey(userId = userId, userKey = userKey)
             coEvery {
                 vaultSdkSource.validatePasswordUserKey(
                     userId = userId,
                     password = password,
-                    encryptedUserKey = userKey,
+                    encryptedUserKey = ENCRYPTED_USER_KEY,
                 )
             } returns passwordHash.asSuccess()
 
@@ -7997,7 +7999,7 @@ class AuthRepositoryTest {
                 keyConnectorUserDecryptionOptions = null,
                 masterPasswordUnlock = MasterPasswordUnlockDataJson(
                     kdf = BASE_PROFILE_1.toSdkParams().toKdfRequestModel(),
-                    masterKeyWrappedUserKey = "key",
+                    masterKeyWrappedUserKey = ENCRYPTED_USER_KEY,
                     salt = "mockSalt",
                 ),
             ),
@@ -8049,7 +8051,7 @@ class AuthRepositoryTest {
                             trustedDeviceUserDecryptionOptions = null,
                             masterPasswordUnlock = MasterPasswordUnlockDataJson(
                                 kdf = BASE_PROFILE_1.toSdkParams().toKdfRequestModel(),
-                                masterKeyWrappedUserKey = "key",
+                                masterKeyWrappedUserKey = ENCRYPTED_USER_KEY,
                                 salt = "mockSalt",
                             ),
                         ),

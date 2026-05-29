@@ -1046,14 +1046,16 @@ class AuthRepositoryImpl(
     }
 
     override suspend fun removePassword(masterPassword: String): RemovePasswordResult {
-        val activeAccount = authDiskSource
+        val profile = authDiskSource
             .userState
             ?.activeAccount
+            ?.profile
             ?: return RemovePasswordResult.Error(error = NoActiveUserException())
-        val profile = activeAccount.profile
         val userId = profile.userId
-        val userKey = authDiskSource
-            .getUserKey(userId = userId)
+        val userKey = profile
+            .userDecryptionOptions
+            ?.masterPasswordUnlock
+            ?.masterKeyWrappedUserKey
             ?: return RemovePasswordResult.Error(error = MissingPropertyException("User Key"))
         val keyConnectorUrl = organizations
             .find {
@@ -1513,7 +1515,12 @@ class AuthRepositoryImpl(
             )
 
     override suspend fun validatePassword(password: String): ValidatePasswordResult {
-        val userId = activeUserId ?: return ValidatePasswordResult.Error(NoActiveUserException())
+        val profile = authDiskSource
+            .userState
+            ?.activeAccount
+            ?.profile
+            ?: return ValidatePasswordResult.Error(error = NoActiveUserException())
+        val userId = profile.userId
         return authDiskSource
             .getMasterPasswordHash(userId = userId)
             ?.let { masterPasswordHash ->
@@ -1529,8 +1536,10 @@ class AuthRepositoryImpl(
                     )
             }
             ?: run {
-                val encryptedKey = authDiskSource
-                    .getUserKey(userId)
+                val encryptedKey = profile
+                    .userDecryptionOptions
+                    ?.masterPasswordUnlock
+                    ?.masterKeyWrappedUserKey
                     ?: return ValidatePasswordResult.Error(MissingPropertyException("UserKey"))
                 vaultSdkSource
                     .validatePasswordUserKey(
