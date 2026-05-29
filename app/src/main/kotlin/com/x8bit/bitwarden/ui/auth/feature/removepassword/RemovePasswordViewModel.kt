@@ -32,7 +32,7 @@ class RemovePasswordViewModel @Inject constructor(
         val org = authRepository.userStateFlow.value
             ?.activeAccount
             ?.organizations
-            ?.firstOrNull { it.shouldUseKeyConnector }
+            ?.firstOrNull { it.isKeyConnectorEnabled }
 
         RemovePasswordState(
             input = "",

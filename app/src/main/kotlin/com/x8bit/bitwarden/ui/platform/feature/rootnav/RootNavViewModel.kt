@@ -268,7 +268,7 @@ class RootNavViewModel @Inject constructor(
             ?.let(::parseJwtTokenDataOrNull)
             ?.isExternal == true
         val usesKeyConnectorAndNotAdmin = this.activeAccount.organizations.any {
-            it.shouldUseKeyConnector &&
+            it.isKeyConnectorEnabled &&
                 it.role != OrganizationType.OWNER &&
                 it.role != OrganizationType.ADMIN
         }

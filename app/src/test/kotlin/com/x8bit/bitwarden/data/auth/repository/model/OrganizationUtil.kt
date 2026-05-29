@@ -22,7 +22,7 @@ fun createMockOrganization(
         id = id,
         name = name,
         shouldManageResetPassword = shouldManageResetPassword,
-        shouldUseKeyConnector = shouldUseKeyConnector,
+        isKeyConnectorEnabled = shouldUseKeyConnector,
         role = role,
         keyConnectorUrl = keyConnectorUrl,
         userIsClaimedByOrganization = userIsClaimedByOrganization,
