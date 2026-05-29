@@ -2,22 +2,19 @@ package com.x8bit.bitwarden.data.platform.manager.util
 
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.SyncResponseJson
-import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.json.JsonNull
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class PolicyManagerExtensionsTest {
-    private val mutablePolicyFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Policy>>()
+    private val mutablePolicyFlow = bufferedMutableSharedFlow<List<PolicyView>>()
     private val policyManager: PolicyManager = mockk {
         every { getActivePoliciesFlow(any()) } returns mutablePolicyFlow
     }
@@ -50,54 +47,54 @@ class PolicyManagerExtensionsTest {
         }
 
     @Test
-    fun `getPolicyTypeJson with MasterPassword should map to appropriate PolicyTypeJson`() {
+    fun `getPolicyType with MasterPassword should map to appropriate PolicyTypeJson`() {
         assertEquals(
-            PolicyTypeJson.MASTER_PASSWORD,
-            getPolicyTypeJson<PolicyInformation.MasterPassword>(),
+            PolicyType.MASTER_PASSWORD,
+            getPolicyType<PolicyInformation.MasterPassword>(),
         )
     }
 
     @Test
-    fun `getPolicyTypeJson with PasswordGenerator should map to appropriate PolicyTypeJson`() {
+    fun `getPolicyType with PasswordGenerator should map to appropriate PolicyTypeJson`() {
         assertEquals(
-            PolicyTypeJson.PASSWORD_GENERATOR,
-            getPolicyTypeJson<PolicyInformation.PasswordGenerator>(),
+            PolicyType.PASSWORD_GENERATOR,
+            getPolicyType<PolicyInformation.PasswordGenerator>(),
         )
     }
 
     @Test
-    fun `getPolicyTypeJson with SendOptions should map to appropriate PolicyTypeJson`() {
+    fun `getPolicyType with SendOptions should map to appropriate PolicyTypeJson`() {
         assertEquals(
-            PolicyTypeJson.SEND_OPTIONS,
-            getPolicyTypeJson<PolicyInformation.SendOptions>(),
+            PolicyType.SEND_OPTIONS,
+            getPolicyType<PolicyInformation.SendOptions>(),
         )
     }
 
     @Test
-    fun `getPolicyTypeJson with VaultTimeout should map to appropriate PolicyTypeJson`() {
+    fun `getPolicyType with VaultTimeout should map to appropriate PolicyTypeJson`() {
         assertEquals(
-            PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
-            getPolicyTypeJson<PolicyInformation.VaultTimeout>(),
+            PolicyType.MAXIMUM_VAULT_TIMEOUT,
+            getPolicyType<PolicyInformation.VaultTimeout>(),
         )
     }
 }
 
-private val MASTER_PASSWORD_POLICY = createMockPolicy(
+private val MASTER_PASSWORD_POLICY = createMockPolicyView(
     organizationId = "organizationId",
     id = "master_password_id",
-    type = PolicyTypeJson.MASTER_PASSWORD,
-    isEnabled = true,
-    data = JsonObject(
-        mapOf(
-            "minLength" to JsonPrimitive(10),
-            "minComplexity" to JsonPrimitive(10),
-            "requireUpper" to JsonPrimitive(false),
-            "requireLower" to JsonPrimitive(true),
-            "requireNumbers" to JsonNull,
-            "requireSpecial" to JsonPrimitive(false),
-            "enforceOnLogin" to JsonPrimitive(true),
-        ),
-    ),
+    type = PolicyType.MASTER_PASSWORD,
+    enabled = true,
+    data = """
+      {
+        "minLength":10,
+        "minComplexity":10,
+        "requireUpper":false,
+        "requireLower":true,
+        "requireNumbers":null,
+        "requireSpecial":false,
+        "enforceOnLogin":true
+      }
+    """,
 )
 
 private val MASTER_PASSWORD_POLICY_INFO = PolicyInformation.MasterPassword(
@@ -110,24 +107,24 @@ private val MASTER_PASSWORD_POLICY_INFO = PolicyInformation.MasterPassword(
     enforceOnLogin = true,
 )
 
-private val PASSWORD_GENERATOR_POLICY = createMockPolicy(
+private val PASSWORD_GENERATOR_POLICY = createMockPolicyView(
     organizationId = "organizationId",
     id = "password_generator_id",
-    type = PolicyTypeJson.PASSWORD_GENERATOR,
-    isEnabled = true,
-    data = JsonObject(
-        mapOf(
-            "defaultType" to JsonNull,
-            "minLength" to JsonPrimitive(10),
-            "useUpper" to JsonPrimitive(true),
-            "useNumbers" to JsonPrimitive(true),
-            "useSpecial" to JsonPrimitive(true),
-            "minNumbers" to JsonPrimitive(3),
-            "minSpecial" to JsonPrimitive(3),
-            "minNumberWords" to JsonPrimitive(5),
-            "capitalize" to JsonPrimitive(true),
-            "includeNumber" to JsonPrimitive(true),
-            "useLower" to JsonPrimitive(true),
-        ),
-    ),
+    type = PolicyType.PASSWORD_GENERATOR,
+    enabled = true,
+    data = """
+      {
+        "defaultType":null,
+        "minLength":10,
+        "useUpper":true,
+        "useNumbers":true,
+        "useSpecial":true,
+        "minNumbers":3,
+        "minSpecial":3,
+        "minNumberWords":5,
+        "capitalize":true,
+        "includeNumber":true,
+        "useLower":true
+      }
+    """,
 )

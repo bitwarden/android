@@ -418,6 +418,18 @@ private fun VaultItemListingDialogs(
             )
         }
 
+        is VaultItemListingState.DialogState.FileTypeRequiresPremium -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = BitwardenString.premium_subscription_required),
+                message = stringResource(id = BitwardenString.send_file_premium_required),
+                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
+                onConfirmClick = vaultItemListingHandlers.upgradeToPremiumClick,
+                onDismissClick = vaultItemListingHandlers.dismissDialogRequest,
+                onDismissRequest = vaultItemListingHandlers.dismissDialogRequest,
+            )
+        }
+
         null -> Unit
     }
 }

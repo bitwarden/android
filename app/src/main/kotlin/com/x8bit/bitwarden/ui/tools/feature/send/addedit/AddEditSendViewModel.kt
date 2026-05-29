@@ -4,12 +4,11 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.takeUntilLoaded
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -22,9 +21,8 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -90,7 +88,6 @@ class AddEditSendViewModel @Inject constructor(
     private val policyManager: PolicyManager,
     private val networkConnectionManager: NetworkConnectionManager,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
-    private val featureFlagManager: FeatureFlagManager,
     private val premiumStateManager: PremiumStateManager,
 ) : BaseViewModel<AddEditSendState, AddEditSendEvent, AddEditSendAction>(
     // We load the state from the savedStateHandle for testing purposes.
@@ -126,8 +123,6 @@ class AddEditSendViewModel @Inject constructor(
                         expirationDate = null,
                         sendUrl = null,
                         hasPassword = false,
-                        isSendEmailVerificationEnabled = featureFlagManager
-                            .getFeatureFlag(key = FlagKey.SendEmailVerification),
                         sendAuth = SendAuth.None,
                     ),
                     selectedType = shareSendType ?: when (sendType) {
@@ -154,7 +149,7 @@ class AddEditSendViewModel @Inject constructor(
             dialogState = null,
             baseWebSendUrl = environmentRepo.environment.environmentUrlData.baseWebSendUrl,
             policyDisablesSend = policyManager
-                .getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
+                .getActivePolicies(type = PolicyType.DISABLE_SEND)
                 .any(),
             isPremium = authRepo.userStateFlow.value?.activeAccount?.isPremium == true,
         )
@@ -203,7 +198,6 @@ class AddEditSendViewModel @Inject constructor(
         is AddEditSendAction.MaxAccessCountChange -> handleMaxAccessCountChange(action)
         is AddEditSendAction.TextChange -> handleTextChange(action)
         is AddEditSendAction.NoteChange -> handleNoteChange(action)
-        is AddEditSendAction.PasswordChange -> handlePasswordChange(action)
         is AddEditSendAction.HideByDefaultToggle -> handleHideByDefaultToggle(action)
         is AddEditSendAction.DeactivateThisSendToggle -> handleDeactivateThisSendToggle(action)
         is AddEditSendAction.HideMyEmailToggle -> handleHideMyEmailToggle(action)
@@ -413,7 +407,6 @@ class AddEditSendViewModel @Inject constructor(
                                     .environmentUrlData
                                     .baseWebSendUrl,
                                 isHideEmailAddressEnabled = isHideEmailAddressEnabled,
-                                isSendEmailVerificationEnabled = isSendEmailVerificationEnabled,
                             )
                             ?: AddEditSendState.ViewState.Error(
                                 message = BitwardenString.generic_error_message.asText(),
@@ -454,7 +447,6 @@ class AddEditSendViewModel @Inject constructor(
                                     .environmentUrlData
                                     .baseWebSendUrl,
                                 isHideEmailAddressEnabled = isHideEmailAddressEnabled,
-                                isSendEmailVerificationEnabled = isSendEmailVerificationEnabled,
                             )
                             ?: AddEditSendState.ViewState.Error(
                                 message = BitwardenString.generic_error_message.asText(),
@@ -523,19 +515,6 @@ class AddEditSendViewModel @Inject constructor(
             it.common.sendUrl?.let { sendUrl ->
                 sendEvent(AddEditSendEvent.ShowShareSheet(sendUrl))
             }
-        }
-    }
-
-    private fun handlePasswordChange(action: AddEditSendAction.PasswordChange) {
-        updateCommonContent {
-            it.copy(
-                passwordInput = action.input,
-                sendAuth = when {
-                    action.input.isNotEmpty() -> SendAuth.Password
-                    !isSendEmailVerificationEnabled -> SendAuth.None
-                    else -> it.sendAuth
-                },
-            )
         }
     }
 
@@ -854,10 +833,6 @@ class AddEditSendViewModel @Inject constructor(
             .getActivePolicies<PolicyInformation.SendOptions>()
             .any { it.shouldDisableHideEmail ?: false }
 
-    private val isSendEmailVerificationEnabled: Boolean
-        get() = featureFlagManager
-            .getFeatureFlag(key = FlagKey.SendEmailVerification)
-
     private inline fun onContent(
         crossinline block: (AddEditSendState.ViewState.Content) -> Unit,
     ) {
@@ -1007,7 +982,6 @@ data class AddEditSendState(
                 val expirationDate: Instant?,
                 val sendUrl: String?,
                 val hasPassword: Boolean,
-                val isSendEmailVerificationEnabled: Boolean,
                 val sendAuth: SendAuth,
             ) : Parcelable
 
@@ -1192,11 +1166,6 @@ sealed class AddEditSendAction {
      * Value of the send text field updated.
      */
     data class TextChange(val input: String) : AddEditSendAction()
-
-    /**
-     * Value of the password field updated.
-     */
-    data class PasswordChange(val input: String) : AddEditSendAction()
 
     /**
      * Value of the note text field updated.

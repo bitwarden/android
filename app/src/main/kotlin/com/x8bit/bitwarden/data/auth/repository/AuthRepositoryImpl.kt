@@ -25,9 +25,9 @@ import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
 import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
 import com.bitwarden.network.model.OrganizationKeysResponseJson
+import com.bitwarden.network.model.OrganizationStatusType
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PasswordHintResponseJson
-import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
 import com.bitwarden.network.model.RefreshTokenResponseJson
 import com.bitwarden.network.model.RegisterFinishRequestJson
@@ -38,7 +38,6 @@ import com.bitwarden.network.model.ResetPasswordRequestJson
 import com.bitwarden.network.model.SendVerificationEmailRequestJson
 import com.bitwarden.network.model.SendVerificationEmailResponseJson
 import com.bitwarden.network.model.SetPasswordRequestJson
-import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.bitwarden.network.model.TwoFactorAuthMethod
 import com.bitwarden.network.model.TwoFactorDataModel
@@ -52,6 +51,8 @@ import com.bitwarden.network.service.HaveIBeenPwnedService
 import com.bitwarden.network.service.IdentityService
 import com.bitwarden.network.service.OrganizationService
 import com.bitwarden.network.util.isSslHandShakeError
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
@@ -73,6 +74,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
+import com.x8bit.bitwarden.data.auth.repository.model.GetDevicesResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
@@ -107,6 +109,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.privateKey
 import com.x8bit.bitwarden.data.auth.repository.util.toAccountCryptographicState
+import com.x8bit.bitwarden.data.auth.repository.util.toDeviceInfo
 import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
 import com.x8bit.bitwarden.data.auth.repository.util.toRemovedPasswordUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
@@ -310,6 +313,7 @@ class AuthRepositoryImpl(
     override val organizations: List<Organization>
         get() = activeUserId
             ?.let { authDiskSource.getOrganizations(it) }
+            ?.filter { it.status == OrganizationStatusType.CONFIRMED }
             .orEmpty()
             .toOrganizations()
 
@@ -364,7 +368,7 @@ class AuthRepositoryImpl(
 
         // When the policies for the user have been set, complete the login process.
         policyManager
-            .getActivePoliciesFlow(type = PolicyTypeJson.MASTER_PASSWORD)
+            .getActivePoliciesFlow(type = PolicyType.MASTER_PASSWORD)
             .onEach { policies ->
                 val userId = activeUserId ?: return@onEach
 
@@ -1461,6 +1465,20 @@ class AuthRepositoryImpl(
         mutableCookieCallbackResultFlow.tryEmit(result)
     }
 
+    override suspend fun getDevices(): GetDevicesResult =
+        devicesService
+            .getDevices()
+            .fold(
+                onFailure = { GetDevicesResult.Error },
+                onSuccess = { response ->
+                    GetDevicesResult.Success(
+                        devices = response.devices.map { json ->
+                            json.toDeviceInfo(currentDeviceIdentifier = authDiskSource.uniqueAppId)
+                        },
+                    )
+                },
+            )
+
     override suspend fun getIsKnownDevice(emailAddress: String): KnownDeviceResult =
         devicesService
             .getIsKnownDevice(
@@ -1690,7 +1708,7 @@ class AuthRepositoryImpl(
      */
     private suspend fun passwordPassesPolicies(
         password: String,
-        policies: List<SyncResponseJson.Policy>,
+        policies: List<PolicyView>,
     ): Boolean {
         // If there are no master password policies that are enabled and should be
         // enforced on login, the check should complete.

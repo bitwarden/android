@@ -820,8 +820,9 @@ class GeneratorViewModel @Inject constructor(
             }
 
             is GeneratedRandomWordUsernameResult.InvalidRequest -> {
-                sendEvent(GeneratorEvent.ShowSnackbar(
-                    BitwardenString.an_error_has_occurred.asText()))
+                sendEvent(
+                    GeneratorEvent.ShowSnackbar(BitwardenString.an_error_has_occurred.asText()),
+                )
             }
         }
     }

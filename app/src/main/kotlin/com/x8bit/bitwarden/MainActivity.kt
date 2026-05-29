@@ -41,6 +41,8 @@ import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.navigateToCooki
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.debugMenuDestination
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.manager.DebugMenuLaunchManager
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.navigateToDebugMenuScreen
+import com.x8bit.bitwarden.ui.platform.feature.localnetworkaccess.localNetworkAccessDestination
+import com.x8bit.bitwarden.ui.platform.feature.localnetworkaccess.navigateToLocalNetworkAccess
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavigationRoute
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.rootNavDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
@@ -93,6 +95,21 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.trySendAction(MainAction.PremiumCheckoutResult(it))
     }
 
+    private val stripePortalLauncher = AuthTabIntent.registerActivityResultLauncher(this) {
+        mainViewModel.trySendAction(MainAction.StripePortalResult(it))
+    }
+
+    private val authTabLaunchers by lazy {
+        AuthTabLaunchers(
+            duo = duoLauncher,
+            sso = ssoLauncher,
+            webAuthn = webAuthnLauncher,
+            cookie = cookieLauncher,
+            premiumCheckout = premiumCheckoutLauncher,
+            stripePortal = stripePortalLauncher,
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         intent = intent.validate()
         var shouldShowSplashScreen = true
@@ -115,13 +132,7 @@ class MainActivity : AppCompatActivity() {
             updateScreenCapture(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
             LocalManagerProvider(
                 featureFlagsState = state.featureFlagsState,
-                authTabLaunchers = AuthTabLaunchers(
-                    duo = duoLauncher,
-                    sso = ssoLauncher,
-                    webAuthn = webAuthnLauncher,
-                    cookie = cookieLauncher,
-                    premiumCheckout = premiumCheckoutLauncher,
-                ),
+                authTabLaunchers = authTabLaunchers,
             ) {
                 ObserveScreenDataEffect(
                     onDataUpdate = remember(mainViewModel) {
@@ -148,6 +159,10 @@ class MainActivity : AppCompatActivity() {
                             onSplashScreenRemoved = { shouldShowSplashScreen = false },
                         )
                         cookieAcquisitionDestination(
+                            onDismiss = { navController.popBackStack() },
+                            onSplashScreenRemoved = { shouldShowSplashScreen = false },
+                        )
+                        localNetworkAccessDestination(
                             onDismiss = { navController.popBackStack() },
                             onSplashScreenRemoved = { shouldShowSplashScreen = false },
                         )
@@ -235,6 +250,9 @@ class MainActivity : AppCompatActivity() {
                 MainEvent.Recreate -> handleRecreate()
                 MainEvent.NavigateToDebugMenu -> navController.navigateToDebugMenuScreen()
                 MainEvent.NavigateToCookieAcquisition -> navController.navigateToCookieAcquisition()
+                MainEvent.NavigateToLocalNetworkAccess -> {
+                    navController.navigateToLocalNetworkAccess()
+                }
 
                 is MainEvent.UpdateAppLocale -> {
                     AppCompatDelegate.setApplicationLocales(

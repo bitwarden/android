@@ -3,13 +3,13 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.OrganizationType
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.SyncResponseJson.Policy
-import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -30,6 +31,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.AccountSecurityAction.AuthenticatorSyncToggle
@@ -46,8 +48,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.encodeToJsonElement
-import kotlinx.serialization.json.jsonObject
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -78,19 +78,29 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         every { isUnlockWithPinEnabledFlow } returns mutablePinUnlockEnabledFlow
     }
 
+    private val mutableManageDevicesFlagFlow = MutableStateFlow(false)
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every {
+            getFeatureFlag(FlagKey.ManageDevices)
+        } answers {
+            mutableManageDevicesFlagFlow.value
+        }
+        every { getFeatureFlagFlow(FlagKey.ManageDevices) } returns mutableManageDevicesFlagFlow
+    }
+
     private val mutableFirstTimeStateFlow = MutableStateFlow(FirstTimeState())
     private val firstTimeActionManager: FirstTimeActionManager = mockk {
         every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
         every { storeShowUnlockSettingBadge(any()) } just runs
     }
-    private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<Policy>>()
-    private val mutableRemovePinPolicyFlow = bufferedMutableSharedFlow<List<Policy>>()
+    private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<PolicyView>>()
+    private val mutableRemovePinPolicyFlow = bufferedMutableSharedFlow<List<PolicyView>>()
     private val policyManager: PolicyManager = mockk {
         every {
-            getActivePoliciesFlow(type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT)
+            getActivePoliciesFlow(type = PolicyType.MAXIMUM_VAULT_TIMEOUT)
         } returns mutableActivePolicyFlow
         every {
-            getActivePoliciesFlow(type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN)
+            getActivePoliciesFlow(type = PolicyType.REMOVE_UNLOCK_WITH_PIN)
         } returns mutableRemovePinPolicyFlow
     }
 
@@ -132,10 +142,10 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         )
         mutableActivePolicyFlow.emit(
             listOf(
-                createMockPolicy(
-                    isEnabled = true,
-                    type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
-                    data = Json.encodeToJsonElement(policyInformation).jsonObject,
+                createMockPolicyView(
+                    enabled = true,
+                    type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
+                    data = Json.encodeToString(policyInformation),
                 ),
             ),
         )
@@ -160,9 +170,9 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
         mutableRemovePinPolicyFlow.emit(
             listOf(
-                createMockPolicy(
-                    isEnabled = true,
-                    type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
+                createMockPolicyView(
+                    enabled = true,
+                    type = PolicyType.REMOVE_UNLOCK_WITH_PIN,
                     organizationId = "organizationUser",
                 ),
             ),
@@ -184,10 +194,10 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
         mutableRemovePinPolicyFlow.emit(
             listOf(
-                createMockPolicy(
+                createMockPolicyView(
                     organizationId = "organizationAdmin",
-                    isEnabled = true,
-                    type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
+                    enabled = true,
+                    type = PolicyType.REMOVE_UNLOCK_WITH_PIN,
                 ),
             ),
         )
@@ -208,10 +218,10 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
         mutableRemovePinPolicyFlow.emit(
             listOf(
-                createMockPolicy(
+                createMockPolicyView(
                     organizationId = "organizationOwner",
-                    isEnabled = true,
-                    type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
+                    enabled = true,
+                    type = PolicyType.REMOVE_UNLOCK_WITH_PIN,
                 ),
             ),
         )
@@ -232,10 +242,10 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
         mutableRemovePinPolicyFlow.emit(
             listOf(
-                createMockPolicy(
+                createMockPolicyView(
                     organizationId = "organizationCustom",
-                    isEnabled = true,
-                    type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
+                    enabled = true,
+                    type = PolicyType.REMOVE_UNLOCK_WITH_PIN,
                 ),
             ),
         )
@@ -874,6 +884,26 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `on ManageDevicesClick should emit NavigateToManageDevices`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AccountSecurityAction.ManageDevicesClick)
+            assertEquals(AccountSecurityEvent.NavigateToManageDevices, awaitItem())
+        }
+    }
+
+    @Test
+    fun `when ManageDevices flag updates, should update isManageDevicesEnabled state`() = runTest {
+        val viewModel = createViewModel()
+        mutableManageDevicesFlagFlow.emit(true)
+        val expectedState = DEFAULT_STATE.copy(isManageDevicesEnabled = true)
+        assertEquals(
+            viewModel.stateFlow.value,
+            expectedState,
+        )
+    }
+
     @Suppress("LongParameterList")
     private fun createViewModel(
         initialState: AccountSecurityState? = DEFAULT_STATE,
@@ -881,12 +911,14 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         vaultRepository: VaultRepository = this.vaultRepository,
         environmentRepository: EnvironmentRepository = this.fakeEnvironmentRepository,
         settingsRepository: SettingsRepository = this.settingsRepository,
+        featureFlagManager: FeatureFlagManager = this.featureFlagManager,
         policyManager: PolicyManager = this.policyManager,
     ): AccountSecurityViewModel = AccountSecurityViewModel(
         authRepository = authRepository,
         vaultRepository = vaultRepository,
         settingsRepository = settingsRepository,
         environmentRepository = environmentRepository,
+        featureFlagManager = featureFlagManager,
         policyManager = policyManager,
         savedStateHandle = SavedStateHandle().apply {
             set("state", initialState)
@@ -909,6 +941,7 @@ private val DEFAULT_USER_STATE = UserState(
             avatarColorHex = "#aa00aa",
             environment = Environment.Us,
             isPremium = true,
+            isPremiumFromSelf = true,
             isLoggedIn = true,
             isVaultUnlocked = true,
             needsPasswordReset = false,
@@ -961,6 +994,7 @@ private val DEFAULT_STATE: AccountSecurityState = AccountSecurityState(
     isUnlockWithBiometricsEnabled = false,
     isUnlockWithPasswordEnabled = true,
     isUnlockWithPinEnabled = false,
+    isManageDevicesEnabled = false,
     userId = DEFAULT_USER_ID,
     vaultTimeout = VaultTimeout.ThirtyMinutes,
     vaultTimeoutAction = VaultTimeoutAction.LOCK,

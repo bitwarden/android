@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.provider
 
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
@@ -58,7 +58,7 @@ class AutofillCipherProviderImpl(
     override suspend fun getCardAutofillCiphers(): List<AutofillCipher.Card> {
         val cipherListViews = getUnlockedCipherListViewsOrNull() ?: return emptyList()
         val organizationIdsWithCardTypeRestrictions = policyManager
-            .getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            .getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES)
             .map { it.organizationId }
         return cipherListViews
             .mapNotNull { cipherListView ->

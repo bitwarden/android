@@ -10,6 +10,7 @@ import com.bitwarden.network.model.createMockCollection
 import com.bitwarden.network.model.createMockDomains
 import com.bitwarden.network.model.createMockFolder
 import com.bitwarden.network.model.createMockSend
+import com.bitwarden.network.model.createMockSyncResponse
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeCiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeCollectionsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeDomainsDao
@@ -459,7 +460,8 @@ private val DOMAINS_1: SyncResponseJson.Domains = createMockDomains(1)
 private val FOLDER_1: SyncResponseJson.Folder = createMockFolder(2)
 private val SEND_1: SyncResponseJson.Send = createMockSend(1)
 
-private val VAULT_DATA: SyncResponseJson = SyncResponseJson(
+private val VAULT_DATA: SyncResponseJson = createMockSyncResponse(
+    number = 1,
     folders = listOf(FOLDER_1),
     collections = listOf(COLLECTION_1),
     profile = mockk<SyncResponseJson.Profile> {

@@ -121,14 +121,13 @@
     <string name="never">Nikdy</string>
     <string name="new_item_created">Položka byla přidána</string>
     <string name="no_cards">Žádné karty ve Vašem trezoru.</string>
-    <string name="new_card">Nová karta</string>
+    <string name="add_card">Přidat kartu</string>
     <string name="no_logins">Žádné přihlašovací údaje ve Vašem trezoru.</string>
     <string name="no_identities">Žádné identity ve Vašem trezoru.</string>
-    <string name="new_identity">Nová identita</string>
+    <string name="add_identity">Přidat identitu</string>
     <string name="no_notes">Žádné poznámky ve Vašem trezoru.</string>
-    <string name="new_note">Nová poznámka</string>
-    <string name="new_item">Nová položka</string>
-    <string name="new_ssh_key">Nový SSH klíč</string>
+    <string name="add_note">Přidat poznámku</string>
+    <string name="add_ssh_key">Přidat SSH klíč</string>
     <string name="no_text_sends">Žádné textové Sends ve Vašem trezoru.</string>
     <string name="no_file_sends">Žádné Sends se soubory ve Vašem trezoru.</string>
     <string name="no_ssh_keys">Žádné SSH klíče ve Vašem trezoru.</string>
@@ -477,8 +476,6 @@ Načtení proběhne automaticky.</string>
     <string name="maximum_access_count_info">Je-li nastaveno, uživatelé již nebudou mít přístup k tomuto Send, jakmile bude dosaženo maximálního počtu přístupů.</string>
     <string name="maximum_access_count_reached">Dosažen maximální počet přístupů</string>
     <string name="current_access_count">Aktuální počet přístupů: %s</string>
-    <string name="new_password">Nové heslo</string>
-    <string name="password_info">Vyžadovat toto heslo pro přístup k tomuto Send.</string>
     <string name="remove_password">Odebrat heslo</string>
     <string name="removing_send_password">Odebírání hesla</string>
     <string name="password_removed">Heslo bylo odebráno</string>
@@ -824,7 +821,7 @@ Chcete se přepnout na tento účet?</string>
     <string name="get_started">Začínáme</string>
     <string name="save_and_protect_your_data">Uložit a chránit Vaše data</string>
     <string name="the_vault_protects_more_than_just_passwords">Trezor chrání více než jen hesla. Bezpečně zde uložte zabezpečená přihlášení, ID, karty a poznámky.</string>
-    <string name="new_login">Nové přihlášení</string>
+    <string name="add_login">Přidat přihlašovací údaje</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">Sdílejte bezpečně soubory a data s kýmkoli na libovolné platformě. Vaše informace zůstanou šifrovány a zároveň omezují expozici.</string>
     <string name="send_sensitive_information_safely">Posílejte citlivé informace bezpečně</string>
     <string name="import_saved_logins">Importovat uložená přihlášení</string>
@@ -895,14 +892,15 @@ Chcete se přepnout na tento účet?</string>
     <string name="copy_company">Kopírovat společnost</string>
     <string name="copy_ssn">Kopírovat rodné číslo</string>
     <string name="copy_passport_number">Kopírovat číslo pasu</string>
-    <string name="copy_license_number">Kopírovat číslo dokladu totožnosti</string>
+    <string name="copy_first_name">Kopírovat křestní jméno</string>
+    <string name="copy_last_name">Kopírovat příjmení</string>
+    <string name="copy_license_number">Kopírovat číslo řidičského průkazu</string>
+    <string name="copy_middle_name">Kopírovat prostřední jméno</string>
     <string name="copy_email">Kopírovat e-mail</string>
     <string name="copy_phone">Kopírovat telefonní číslo</string>
     <string name="copy_address">Kopírovat adresu</string>
     <string name="biometrics_no_longer_supported_title">Biometrika již není v tomto zařízení podporována</string>
     <string name="biometrics_no_longer_supported">Byli jste odhlášeni, protože biometrika Vašeho zařízení nesplňuje nejnovější bezpečnostní požadavky. Chcete-li aktualizovat nastavení, přihlaste se znovu nebo kontaktujte správce pro přístup.</string>
-    <string name="cxp_import">Import CXP</string>
-    <string name="cxp_export">Exportovat CXP</string>
     <string name="choose_three_or_four_random_words">Vyberte tři nebo čtyři náhodná slova</string>
     <string name="pick_three_or_four_random_unrelated_words">Vyberte tři nebo čtyři náhodná slova, která si snadno pamatujete. Vzpomeňte si na <annotation emphasis="bold">objekty, místa nebo věci,</annotation> které se Vám líbí.</string>
     <string name="combine_those_words_together">Spojte tato slova dohromady</string>
@@ -1234,6 +1232,7 @@ při opakování problémů.</string>
     <string name="archiving_items_is_a_premium_feature">Archivace položek je prémiová funkce. Váš aktuální plán nezahrnuje přístup k této funkci.</string>
     <string name="upgrade_to_premium">Aktualizovat na Premium</string>
     <string name="plan">Plán</string>
+    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Pro správu předplatného Premium se musíte přihlásit do svého webového trezoru na počítači.</string>
     <string name="unlock_advanced_security_features">Odemknout pokročilé bezpečnostní funkce</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Předplatné Premium Vám dává více nástrojů k bezpečí a kontrole.</string>
     <string name="this_item_is_archived">Tato položka je archivována.</string>
@@ -1256,6 +1255,25 @@ při opakování problémů.</string>
     <string name="continue_without_syncing">Pokračovat bez synchronizace</string>
     <string name="external_link">Externí odkaz</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, externí odkaz</string>
+    <string name="devices">Zařízení</string>
+    <string name="mobile_platform">Mobil - %1$s</string>
+    <string name="extension_platform">Rozšíření - %1$s</string>
+    <string name="web_platform">Web - %1$s</string>
+    <string name="desktop_platform">Desktop - %1$s</string>
+    <string name="cli_platform">CLI - %1$s</string>
+    <string name="sdk">SDK</string>
+    <string name="server">Server</string>
+    <string name="unknown_device">Neznámé zařízení</string>
+    <string name="first_login_date"><annotation emphasis="bold">První přihlášení:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="current_session">Aktuální relace</string>
+    <string name="pending_request">Čekající požadavek</string>
+    <string name="today">Dnes</string>
+    <string name="past_seven_days">Posledních 7 dnů</string>
+    <string name="past_fourteen_days">Posledních 14 dnů</string>
+    <string name="past_thirty_days">Posledních 30 dnů</string>
+    <string name="over_thirty_days_ago">Před více než 30 dny</string>
+    <string name="recently_active"><annotation emphasis="bold">Nedávno aktivní:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="trusted">Důvěryhodný</string>
     <string name="preview_not_available_for_files">Náhled není %1$s souborů k dispozici. Stále si je můžete stáhnout pro zobrazení na Vašem zařízení.</string>
     <string name="this_file_is_too_large_to_preview">Tento soubor je pro náhled příliš velký. Stále si jej můžete stáhnout pro zobrazení na Vašem zařízení.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden nemohl dešifrovat tento soubor, takže náhled nelze zobrazit.</string>
@@ -1275,7 +1293,7 @@ při opakování problémů.</string>
     <string name="secure_file_storage">Zabezpečené úložiště souborů</string>
     <string name="breach_monitoring">Sledování úniků</string>
     <string name="upgrade_now">Aktualizovat nyní</string>
-    <string name="stripe_checkout_footer">Pro dokončení nákupu přejdete do zabezpečené pokladny Stripe.</string>
+    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">Pro dokončení nákupu přejdete do zabezpečené pokladny Stripe.</string>
     <string name="opening_checkout">Otevírání pokladny...</string>
     <string name="secure_checkout_didnt_load">Zabezpečená pokladna se nenačetla</string>
     <string name="trouble_opening_payment_page">Měli jsme potíže s otevřením platební stránky, zkuste to znovu.</string>
@@ -1296,25 +1314,27 @@ při opakování problémů.</string>
     <string name="storage_cost">Náklady na úložiště</string>
     <string name="discount">Sleva</string>
     <string name="estimated_tax">Odhadovaná daň</string>
+    <string name="total">Celkem</string>
     <string name="billing_rate_per_year">%1$s / ročně</string>
     <string name="billing_rate_per_month">%1$s / měsíčně</string>
     <string name="manage_plan">Spravovat plán</string>
+    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Spravujte svoje předplatné ve webové aplikaci Bitwarden.</string>
     <string name="cancel_premium">Zrušit Premium</string>
-    <string name="cancel_now">Zrušit nyní</string>
-    <string name="cancel_premium_confirmation">Budete mít předplatné Premium až do %1$s.</string>
     <string name="subscription_status_active">Aktivní</string>
     <string name="subscription_status_canceled">Zrušeno</string>
-    <string name="subscription_status_overdue_payment">Platba po splatnosti</string>
     <string name="subscription_status_past_due">Po splatnosti</string>
     <string name="subscription_status_paused">Pozastaveno</string>
-    <string name="premium_next_charge_summary">Vaše další platba je za %1$s USD, splatná %2$s.</string>
-    <string name="subscription_canceled_description">Vaše předplatné bylo zrušeno %1$s. Chcete-li pokračovat v používání prémiových funkcí, proveďte obnovení.</string>
-    <string name="subscription_overdue_description">Vaši platbu nelze zpracovat. Aktualizujte svou platební metodu před ukončením předplatného %1$s.</string>
+    <string name="subscription_status_update_payment">Aktualizovat platbu</string>
+    <string name="subscription_status_pending_cancellation">Čeká na zrušení</string>
+    <string name="subscription_pending_cancellation_description">Zrušení Vašeho předplatného je naplánováno na <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Před tím ho můžete kdykoli obnovit.</string>
+    <string name="premium_next_charge_summary">Vaše další platba ve výši <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD je splatná <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
+    <string name="subscription_canceled_description">Vaše předplatné bylo zrušeno <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Chcete-li pokračovat v používání prémiových funkcí, proveďte obnovení.</string>
+    <string name="subscription_update_payment_description">Vaši platbu nelze zpracovat. Aktualizujte svou platební metodu před ukončením předplatného <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
-        <item quantity="one">Máte lhůtu k odkladu [%1$d] den od data vypršení předplatného. Vyřešte poslední splatné faktury do %2$s.</item>
-        <item quantity="few">Máte lhůtu k odkladu [%1$d] dny od data vypršení předplatného. Vyřešte poslední splatné faktury do %2$s.</item>
-        <item quantity="many">Máte lhůtu k odkladu [%1$d] dnů od data vypršení předplatného. Vyřešte poslední splatné faktury do %2$s.</item>
-        <item quantity="other">Máte lhůtu k odkladu [%1$d] dnů od data vypršení předplatného. Vyřešte poslední splatné faktury do %2$s.</item>
+        <item quantity="one">Máte lhůtu k odkladu <annotation arg="0">%1$d</annotation> den od data vypršení předplatného. Vyřešte poslední splatné faktury do <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="few">Máte lhůtu k odkladu <annotation arg="0">%1$d</annotation> dny od data vypršení předplatného. Vyřešte poslední splatné faktury do <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="many">Máte lhůtu k odkladu <annotation arg="0">%1$d</annotation> dnů od data vypršení předplatného. Vyřešte poslední splatné faktury do <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="other">Máte lhůtu k odkladu <annotation arg="0">%1$d</annotation> dnů od data vypršení předplatného. Vyřešte poslední splatné faktury do <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
     </plurals>
     <string name="subscription_paused_description">Vaše předplatné bylo pozastaveno. Chcete-li pokračovat v používání prémiových funkcí, proveďte obnovení.</string>
     <string name="loading_subscription">Načítání předplatného...</string>
@@ -1324,19 +1344,18 @@ při opakování problémů.</string>
     <string name="subscription_error">Chyba předplatného</string>
     <string name="trouble_loading_subscription">Nemohli jsme načíst údaje o předplatném. Zkuste to znovu.</string>
     <string name="view_bank_account">Zobrazit bankovní účet</string>
-    <string name="view_drivers_license">Zobrazit řidičský průkaz</string>
+    <string name="view_license">Zobrazit řidičský průkaz</string>
     <string name="view_passport">Zobrazit pas</string>
-    <string name="new_bank_account">Nový bankovní účet</string>
-    <string name="new_drivers_license">Nový řidičský průkaz</string>
-    <string name="new_passport">Nový pas</string>
+    <string name="add_bank_account">Přidat bankovní účet</string>
+    <string name="add_license">Přidat řidičský průkaz</string>
+    <string name="add_passport">Přidat pas</string>
     <string name="edit_bank_account">Upravit bankovní účet</string>
-    <string name="edit_drivers_license">Upravit řidičský průkaz</string>
+    <string name="edit_license">Upravit řidičský průkaz</string>
     <string name="edit_passport">Upravit pas</string>
     <string name="type_bank_account">Bankovní účet</string>
-    <string name="type_drivers_license">Řidičský průkaz</string>
+    <string name="type_license">Řidičský průkaz</string>
     <string name="type_passport">Cestovní pas</string>
     <string name="bank_accounts">Bankovní účty</string>
-    <string name="drivers_licenses">Řidičské průkazy</string>
     <string name="passports">Pasy</string>
     <string name="bank_name">Názov banky</string>
     <string name="name_on_account">Jméno na účtu</string>
@@ -1362,17 +1381,36 @@ při opakování problémů.</string>
     <string name="investment_brokerage">Investice/Zprostředkování</string>
     <string name="money_market">Peněžní trh</string>
     <string name="issuing_country">Země vydání průkazu</string>
-    <string name="issuing_state">Vydávající stát/provincie</string>
+    <string name="issuing_state">Vydávající stát/Provincie</string>
     <string name="license_class">Skupina řidičského průkazu</string>
     <string name="surname">Příjmení</string>
     <string name="given_name">Jméno</string>
     <string name="date_of_birth">Datum narození</string>
     <string name="nationality">Národnost</string>
     <string name="passport_type">Typ pasu</string>
-    <string name="issuing_authority">Vydávající orgán/úřad</string>
+    <string name="issuing_authority">Vydávající orgán</string>
     <string name="issue_date">Datum vystavení</string>
     <string name="expiration_date">Datum vypršení platnosti</string>
     <string name="details">Podrobnosti</string>
     <string name="account_details">Podrobnosti účtu</string>
     <string name="no_bank_accounts">Ve vašem trezoru nejsou žádné bankovní účty.</string>
+    <string name="license_details">Podrobnosti řidičského průkazu</string>
+    <string name="licenses">Řidičské průkazy</string>
+    <string name="no_licenses">Ve Vašem trezoru nejsou žádné řidičské průkazy.</string>
+    <string name="no_passports">Žádné pasy ve Vašem trezoru.</string>
+    <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">Váš požadavek byl přerušen, protože aplikace musí být znovu ověřena. Zkuste to znovu.</string>
+    <string name="passport_details">Údaje o pasu</string>
+    <string name="sex">Pohlaví</string>
+    <string name="birth_place">Místo narození</string>
+    <string name="national_identification_number">Rodné číslo</string>
+    <string name="copy_national_identification_number">Kopírovat rodné číslo</string>
+    <string name="access_your_local_network">Přístup k místní síti</string>
+    <string name="local_network_access_required">Je vyžadován přístup k místní síti</string>
+    <string name="ask_again_later">Zeptat se později</string>
+    <string name="enable_local_network_access">Povolit přístup k místní síti</string>
+    <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Bitwarden potřebuje přístup k místní síti pro synchronizaci s Vaším serverem. Bez tohoto oprávnění se aplikace nebude moci připojit.</string>
+    <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Bez tohoto oprávnění se Bitwarden nebude moci připojit a synchronizovat s Vaším serverem. Můžete to povolit v nastavení zařízení.</string>
+    <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Váš požadavek byl přerušen, protože aplikace potřebuje přístup k místní síti. Toto můžete povolit v nastavení zařízení.</string>
+    <string name="continue_to_stripe">Pokračovat do Stripe?</string>
+    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Budete přesměrováni na Stripe ke správě zrušení předplatného.</string>
 </resources>

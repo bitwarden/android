@@ -41,6 +41,7 @@ fun NavGraphBuilder.sendGraph(
                 navController.navigateToSendItemListing(VaultItemListingType.SendText)
             },
             onNavigateToSearchSend = onNavigateToSearchSend,
+            onNavigateToPlan = onNavigateToPlan,
         )
         sendItemListingDestination(
             onNavigateBack = { navController.popBackStack() },

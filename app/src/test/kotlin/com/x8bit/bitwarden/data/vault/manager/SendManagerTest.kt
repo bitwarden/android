@@ -686,7 +686,9 @@ class SendManagerTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val sendId = "mockId-1"
-            val error = CookieRedirectException(hostname = "example.com")
+            val message = "Your request was interrupted because " +
+                "the app needed to re-authenticate. Please try again."
+            val error = CookieRedirectException(hostname = "test.host", message = message)
             coEvery {
                 sendsService.deleteSend(sendId = sendId)
             } returns error.asFailure()
@@ -695,7 +697,7 @@ class SendManagerTest {
 
             assertEquals(
                 DeleteSendResult.Error(
-                    errorMessage = error.message,
+                    errorMessage = message,
                     error = error,
                 ),
                 result,
@@ -994,7 +996,8 @@ private val MOCK_PROFILE = AccountJson.Profile(
     stamp = "mockSecurityStamp-1",
     organizationId = null,
     avatarColorHex = null,
-    hasPremium = false,
+    hasPremiumPersonally = false,
+    hasPremiumFromOrganization = null,
     forcePasswordResetReason = null,
     kdfType = null,
     kdfIterations = null,

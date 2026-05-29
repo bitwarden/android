@@ -731,6 +731,7 @@ class VaultSyncManagerTest {
                         profile = MOCK_PROFILE.copy(
                             avatarColorHex = "mockAvatarColor-1",
                             stamp = "mockSecurityStamp-1",
+                            hasPremiumFromOrganization = false,
                             kdfType = KdfTypeJson.PBKDF2_SHA256,
                             kdfIterations = 600000,
                             kdfMemory = null,
@@ -1321,7 +1322,8 @@ private val MOCK_PROFILE = AccountJson.Profile(
     stamp = "mockSecurityStamp-1",
     organizationId = null,
     avatarColorHex = null,
-    hasPremium = false,
+    hasPremiumPersonally = false,
+    hasPremiumFromOrganization = null,
     forcePasswordResetReason = null,
     kdfType = null,
     kdfIterations = null,

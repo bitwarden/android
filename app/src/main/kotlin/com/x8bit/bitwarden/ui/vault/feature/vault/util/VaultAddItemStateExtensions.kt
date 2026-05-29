@@ -88,9 +88,10 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toCipherType(): CipherT
         is VaultAddEditState.ViewState.Content.ItemType.SecureNotes -> CipherType.SECURE_NOTE
         is VaultAddEditState.ViewState.Content.ItemType.SshKey -> CipherType.SSH_KEY
         is VaultAddEditState.ViewState.Content.ItemType.BankAccount -> CipherType.BANK_ACCOUNT
-        is VaultAddEditState.ViewState.Content.ItemType.License,
-        is VaultAddEditState.ViewState.Content.ItemType.Passport,
-            -> throw IllegalArgumentException("SDK mapping not yet available for $this")
+        is VaultAddEditState.ViewState.Content.ItemType.Passport -> CipherType.PASSPORT
+        is VaultAddEditState.ViewState.Content.ItemType.License -> {
+            throw IllegalArgumentException("SDK mapping not yet available for $this")
+        }
     }
 
 private fun VaultAddEditState.ViewState.Content.ItemType.toSshKeyView(): SshKeyView? =
@@ -127,13 +128,13 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toDriversLicense(): Dri
             firstName = it.firstName.orNullIfBlank(),
             middleName = it.middleName.orNullIfBlank(),
             lastName = it.lastName.orNullIfBlank(),
-            dateOfBirth = it.dateOfBirth.orNullIfBlank(),
+            dateOfBirth = it.dateOfBirth?.toString(),
             licenseNumber = it.licenseNumber.orNullIfBlank(),
             issuingCountry = it.issuingCountry.orNullIfBlank(),
             issuingState = it.issuingState.orNullIfBlank(),
-            issueDate = it.issueDate.orNullIfBlank(),
+            issueDate = it.issueDate?.toString(),
             issuingAuthority = it.issuingAuthority.orNullIfBlank(),
-            expirationDate = it.expirationDate.orNullIfBlank(),
+            expirationDate = it.expirationDate?.toString(),
             licenseClass = it.licenseClass.orNullIfBlank(),
         )
     }
@@ -143,16 +144,16 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toPassport(): PassportV
         PassportView(
             surname = it.surname.orNullIfBlank(),
             givenName = it.givenName.orNullIfBlank(),
-            dateOfBirth = it.dateOfBirth.orNullIfBlank(),
-            birthPlace = it.dateOfBirth.orNullIfBlank(),
+            dateOfBirth = it.dateOfBirth?.toString(),
+            birthPlace = it.birthPlace.orNullIfBlank(),
             sex = it.sex.orNullIfBlank(),
             nationality = it.nationality.orNullIfBlank(),
             passportNumber = it.passportNumber.orNullIfBlank(),
             passportType = it.passportType.orNullIfBlank(),
             issuingCountry = it.issuingCountry.orNullIfBlank(),
             issuingAuthority = it.issuingAuthority.orNullIfBlank(),
-            issueDate = it.issueDate.orNullIfBlank(),
-            expirationDate = it.expirationDate.orNullIfBlank(),
+            issueDate = it.issueDate?.toString(),
+            expirationDate = it.expirationDate?.toString(),
             nationalIdentificationNumber = it.nationalIdentificationNumber.orNullIfBlank(),
         )
     }

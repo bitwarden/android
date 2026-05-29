@@ -1,9 +1,5 @@
 package com.x8bit.bitwarden.data.auth.repository.model
 
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.buildJsonObject
-
 /**
  * Create a mock [PolicyInformation.MasterPassword] with a given parameters.
  */
@@ -42,34 +38,32 @@ fun createMockVaultTimeoutPolicy(
     )
 
 /**
- * Create a mock [JsonObject] representing a [PolicyInformation.VaultTimeout].
+ * Create a mock `String` representing a [PolicyInformation.VaultTimeout].
  */
-fun createMockVaultTimeoutPolicyJsonObject(
+fun createMockVaultTimeoutPolicyJsonString(
     vaultTimeout: PolicyInformation.VaultTimeout,
-): JsonObject =
-    buildJsonObject {
-        put(key = "minutes", element = JsonPrimitive(value = vaultTimeout.minutes))
-        put(
-            key = "action",
-            element = JsonPrimitive(
-                value = when (vaultTimeout.action) {
-                    PolicyInformation.VaultTimeout.Action.LOCK -> "lock"
-                    PolicyInformation.VaultTimeout.Action.LOGOUT -> "logOut"
-                    null -> null
-                },
-            ),
-        )
-        put(
-            key = "type",
-            element = JsonPrimitive(
-                value = when (vaultTimeout.type) {
-                    PolicyInformation.VaultTimeout.Type.NEVER -> "never"
-                    PolicyInformation.VaultTimeout.Type.ON_APP_RESTART -> "onAppRestart"
-                    PolicyInformation.VaultTimeout.Type.ON_SYSTEM_LOCK -> "onSystemLock"
-                    PolicyInformation.VaultTimeout.Type.IMMEDIATELY -> "immediately"
-                    PolicyInformation.VaultTimeout.Type.CUSTOM -> "custom"
-                    null -> null
-                },
-            ),
-        )
+): String =
+    """
+      {
+        "minutes":${vaultTimeout.minutes},
+        "action":${vaultTimeout.toActionString?.let { "\"$it\"" }},
+        "type":${vaultTimeout.toTypeString?.let { "\"$it\"" }}
+      }
+    """
+
+private val PolicyInformation.VaultTimeout.toActionString: String?
+    get() = when (this.action) {
+        PolicyInformation.VaultTimeout.Action.LOCK -> "lock"
+        PolicyInformation.VaultTimeout.Action.LOGOUT -> "logOut"
+        null -> null
+    }
+
+private val PolicyInformation.VaultTimeout.toTypeString: String?
+    get() = when (this.type) {
+        PolicyInformation.VaultTimeout.Type.NEVER -> "never"
+        PolicyInformation.VaultTimeout.Type.ON_APP_RESTART -> "onAppRestart"
+        PolicyInformation.VaultTimeout.Type.ON_SYSTEM_LOCK -> "onSystemLock"
+        PolicyInformation.VaultTimeout.Type.IMMEDIATELY -> "immediately"
+        PolicyInformation.VaultTimeout.Type.CUSTOM -> "custom"
+        null -> null
     }

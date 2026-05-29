@@ -118,14 +118,13 @@
     <string name="never">なし</string>
     <string name="new_item_created">新しいアイテムを作成しました。</string>
     <string name="no_cards">保管庫にカードがありません</string>
-    <string name="new_card">新しいカード</string>
+    <string name="add_card">カードを追加</string>
     <string name="no_logins">保管庫にログイン情報がありません</string>
     <string name="no_identities">保管庫に身分証はありません</string>
-    <string name="new_identity">新しい身分証</string>
+    <string name="add_identity">ID を追加</string>
     <string name="no_notes">保管庫にメモがありません</string>
-    <string name="new_note">新しいメモ</string>
-    <string name="new_item">新しいアイテム</string>
-    <string name="new_ssh_key">新しいSSHキー</string>
+    <string name="add_note">メモを追加</string>
+    <string name="add_ssh_key">SSH 鍵を追加</string>
     <string name="no_text_sends">保管庫にテキスト入のSendはありません</string>
     <string name="no_file_sends">保管庫にファイル入のSendはありません</string>
     <string name="no_ssh_keys">保管庫に SSH キーがありません</string>
@@ -471,8 +470,6 @@
     <string name="maximum_access_count_info">設定されている場合、最大アクセス数に達するとユーザーはこの Send にアクセスできなくなります。</string>
     <string name="maximum_access_count_reached">最大アクセス数に達しました</string>
     <string name="current_access_count">現在のアクセス数: %s</string>
-    <string name="new_password">新しいパスワード</string>
-    <string name="password_info">必要に応じて、ユーザーがこの Send にアクセスするためのパスワードを要求します。</string>
     <string name="remove_password">パスワードを削除</string>
     <string name="removing_send_password">パスワードを削除中</string>
     <string name="password_removed">パスワードを削除しました</string>
@@ -810,7 +807,7 @@
     <string name="get_started">利用を開始</string>
     <string name="save_and_protect_your_data">データの保存と保護</string>
     <string name="the_vault_protects_more_than_just_passwords">保管庫はパスワードだけではなく、ログイン情報、ID、カード、メモを安全に保管できます。</string>
-    <string name="new_login">新しいログイン</string>
+    <string name="add_login">ログイン情報を追加</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">どのプラットフォームでも、誰とでも安全にファイルとデータを共有できます。流出を防止しながら、あなたの情報はエンドツーエンドで暗号化されます。</string>
     <string name="send_sensitive_information_safely">機密情報を安全に送信する</string>
     <string name="import_saved_logins">保存したログイン情報をインポート</string>
@@ -878,14 +875,15 @@
     <string name="copy_company">Copy company</string>
     <string name="copy_ssn">Copy social security number</string>
     <string name="copy_passport_number">パスポート番号をコピー</string>
+    <string name="copy_first_name">名前をコピー</string>
+    <string name="copy_last_name">姓をコピー</string>
     <string name="copy_license_number">免許証番号をコピー</string>
+    <string name="copy_middle_name">ミドルネームをコピー</string>
     <string name="copy_email">メールアドレスをコピー</string>
     <string name="copy_phone">電話番号をコピー</string>
     <string name="copy_address">住所をコピー</string>
     <string name="biometrics_no_longer_supported_title">このデバイスでは生体認証はサポートされていません</string>
     <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
-    <string name="cxp_import">CXP インポート</string>
-    <string name="cxp_export">CXP エクスポート</string>
     <string name="choose_three_or_four_random_words">3つまたは4つのランダムな単語を選択</string>
     <string name="pick_three_or_four_random_unrelated_words">Pick three or four random, unrelated words that you can easily remember. Think of <annotation emphasis="bold">objects, places, or things</annotation> you like.</string>
     <string name="combine_those_words_together">それらの単語を組み合わせてください</string>
@@ -1206,6 +1204,7 @@
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Upgrade to Premium</string>
     <string name="plan">プラン</string>
+    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">プレミアムサブスクリプションを管理するには、PC でウェブ保管庫にログインする必要があります。</string>
     <string name="unlock_advanced_security_features">Unlock advanced security features</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">This item is archived.</string>
@@ -1228,6 +1227,25 @@
     <string name="continue_without_syncing">同期せずに続行</string>
     <string name="external_link">外部リンク</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s、外部リンク</string>
+    <string name="devices">デバイス</string>
+    <string name="mobile_platform">モバイル - %1$s</string>
+    <string name="extension_platform">拡張機能 - %1$s</string>
+    <string name="web_platform">ウェブ - %1$s</string>
+    <string name="desktop_platform">デスクトップ - %1$s</string>
+    <string name="cli_platform">CLI - %1$s</string>
+    <string name="sdk">SDK</string>
+    <string name="server">サーバー</string>
+    <string name="unknown_device">不明なデバイス</string>
+    <string name="first_login_date"><annotation emphasis="bold">最初のログイン:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="current_session">現在のセッション</string>
+    <string name="pending_request">保留中のリクエスト</string>
+    <string name="today">今日</string>
+    <string name="past_seven_days">過去7日間</string>
+    <string name="past_fourteen_days">過去14日間</string>
+    <string name="past_thirty_days">過去30日間</string>
+    <string name="over_thirty_days_ago">30日以上前</string>
+    <string name="recently_active"><annotation emphasis="bold">最近アクティブ:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="trusted">信頼済み</string>
     <string name="preview_not_available_for_files">%1$s ファイルではプレビューできません。ダウンロードするとデバイスで表示できます。</string>
     <string name="this_file_is_too_large_to_preview">このファイルは大きすぎてプレビューできません。ダウンロードするとデバイス上で表示できます。</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden はこのファイルを復号できませんでした。プレビューを表示できません。</string>
@@ -1247,7 +1265,7 @@
     <string name="secure_file_storage">セキュアなファイルストレージ</string>
     <string name="breach_monitoring">情報漏洩の監視</string>
     <string name="upgrade_now">今すぐアップグレード</string>
-    <string name="stripe_checkout_footer">Stripe の安全なチェックアウトで購入できます。</string>
+    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">Stripe の安全なチェックアウトで購入できます。</string>
     <string name="opening_checkout">チェックアウトを開いています…</string>
     <string name="secure_checkout_didnt_load">セキュアなチェックアウトが読み込まれませんでした</string>
     <string name="trouble_opening_payment_page">支払いページを開く際に問題がありました。もう一度やり直してください。</string>
@@ -1268,22 +1286,24 @@
     <string name="storage_cost">ストレージコスト</string>
     <string name="discount">割引</string>
     <string name="estimated_tax">推定税額</string>
+    <string name="total">合計</string>
     <string name="billing_rate_per_year">%1$s / year</string>
     <string name="billing_rate_per_month">%1$s / month</string>
     <string name="manage_plan">プランの管理</string>
+    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Bitwarden ウェブアプリでサブスクリプションプランを管理します。</string>
     <string name="cancel_premium">プレミアムをキャンセル</string>
-    <string name="cancel_now">今すぐキャンセル</string>
-    <string name="cancel_premium_confirmation">You’ll continue to have Premium access until %1$s.</string>
     <string name="subscription_status_active">有効</string>
     <string name="subscription_status_canceled">キャンセル済み</string>
-    <string name="subscription_status_overdue_payment">Overdue payment</string>
     <string name="subscription_status_past_due">期限切れ</string>
     <string name="subscription_status_paused">Paused</string>
-    <string name="premium_next_charge_summary">Your next charge is for %1$s USD due on %2$s.</string>
-    <string name="subscription_canceled_description">Your subscription was canceled on %1$s. Resubscribe to continue using premium features.</string>
-    <string name="subscription_overdue_description">We couldn’t process your payment. Update your payment before your subscription ends on %1$s.</string>
+    <string name="subscription_status_update_payment">支払方法を更新</string>
+    <string name="subscription_status_pending_cancellation">キャンセル保留中</string>
+    <string name="subscription_pending_cancellation_description">あなたのサブスクリプションは <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>でキャンセルが予定されています。それ以前ならいつでも再開できます。</string>
+    <string name="premium_next_charge_summary">Your next charge is for <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD due on <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
+    <string name="subscription_canceled_description">Your subscription was canceled on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using premium features.</string>
+    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
-        <item quantity="other">You have a grace period of %1$d days from your subscription expiration date. Please resolve the past due amount by %2$s.</item>
+        <item quantity="other">You have a grace period of <annotation arg="0">%1$d</annotation> days from your subscription expiration date. Please resolve the past due amount by <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
     </plurals>
     <string name="subscription_paused_description">Your subscription is paused. Resume to continue using premium features.</string>
     <string name="loading_subscription">Loading subscription…</string>
@@ -1293,19 +1313,18 @@
     <string name="subscription_error">Subscription error</string>
     <string name="trouble_loading_subscription">We couldn’t load your subscription details. Please try again.</string>
     <string name="view_bank_account">銀行口座を表示</string>
-    <string name="view_drivers_license">運転免許証を表示</string>
+    <string name="view_license">免許証を表示</string>
     <string name="view_passport">パスポートを表示</string>
-    <string name="new_bank_account">新しい銀行口座</string>
-    <string name="new_drivers_license">新しい運転免許証</string>
-    <string name="new_passport">新しいパスポート</string>
+    <string name="add_bank_account">銀行口座を追加</string>
+    <string name="add_license">免許証を追加</string>
+    <string name="add_passport">パスポートを追加</string>
     <string name="edit_bank_account">銀行口座を編集</string>
-    <string name="edit_drivers_license">運転免許証を編集</string>
+    <string name="edit_license">免許証を編集</string>
     <string name="edit_passport">パスポートを編集</string>
     <string name="type_bank_account">銀行口座</string>
-    <string name="type_drivers_license">運転免許証</string>
+    <string name="type_license">免許証</string>
     <string name="type_passport">パスポート</string>
     <string name="bank_accounts">銀行口座</string>
-    <string name="drivers_licenses">運転免許証</string>
     <string name="passports">パスポート</string>
     <string name="bank_name">銀行名</string>
     <string name="name_on_account">口座名義</string>
@@ -1342,6 +1361,25 @@
     <string name="issue_date">発行日</string>
     <string name="expiration_date">有効期限日</string>
     <string name="details">詳細</string>
-    <string name="account_details">Account details</string>
+    <string name="account_details">口座の詳細</string>
     <string name="no_bank_accounts">保管庫に銀行口座がありません。</string>
+    <string name="license_details">免許証の詳細</string>
+    <string name="licenses">免許証</string>
+    <string name="no_licenses">保管庫に免許証はありません。</string>
+    <string name="no_passports">保管庫にパスポートはありません。</string>
+    <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">アプリを再認証する必要があるため、リクエストが中断されました。もう一度やり直してください。</string>
+    <string name="passport_details">パスポートの詳細</string>
+    <string name="sex">性別</string>
+    <string name="birth_place">出生地</string>
+    <string name="national_identification_number">国民識別番号</string>
+    <string name="copy_national_identification_number">国民識別番号をコピー</string>
+    <string name="access_your_local_network">ローカルネットワークにアクセス</string>
+    <string name="local_network_access_required">ローカルネットワークへのアクセスが必要です</string>
+    <string name="ask_again_later">後で再度確認する</string>
+    <string name="enable_local_network_access">ローカルネットワークアクセスを有効化</string>
+    <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Bitwarden はサーバーと同期するためにローカルネットワークへのアクセスが必要です。この許可がないとアプリは接続できません。</string>
+    <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">この許可がないと、Bitwarden はあなたのサーバーに接続して同期できません。デバイスの設定で有効にできます。</string>
+    <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">アプリがローカルネットワークにアクセスする必要があるため、リクエストが中断されました。デバイスの設定で有効にできます。</string>
+    <string name="continue_to_stripe">Stripe へ進みますか？</string>
+    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">サブスクリプションのキャンセルを管理するために Stripe に移動します。</string>
 </resources>

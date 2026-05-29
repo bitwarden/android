@@ -8,6 +8,13 @@ import com.bitwarden.sdk.Client
 interface SdkClientManager {
 
     /**
+     * Synchronously returns a [Client] that is unassociated with any user. It cannot be used for
+     * anything that performs a network requests. If the client is not yet ready, this will block
+     * until it is ready.
+     */
+    val globalClient: Client
+
+    /**
      * Returns the cached [Client] instance for the given [userId], otherwise creates and caches
      * a new one and returns it.
      */

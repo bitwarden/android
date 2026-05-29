@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.util
 
 import com.bitwarden.network.exception.CookieRedirectException
+import com.bitwarden.network.exception.LocalNetworkAccessException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
@@ -10,12 +11,23 @@ class ThrowableExtensionsTest {
 
     @Test
     fun `userFriendlyMessage should return message for CookieRedirectException`() {
-        val exception = CookieRedirectException(hostname = "example.com")
+        val message = "Your request was interrupted because the app needed to " +
+            "re-authenticate. Please try again."
+        val exception = CookieRedirectException(
+            hostname = "example.com",
+            message = message,
+        )
         assertEquals(
-            "Your request was interrupted because the app needed to " +
-                "re-authenticate. Please try again.",
+            message,
             exception.userFriendlyMessage,
         )
+    }
+
+    @Test
+    fun `userFriendlyMessage should return message for LocalNetworkAccessException`() {
+        val message = "Fail!"
+        val exception = LocalNetworkAccessException(message = message)
+        assertEquals(message, exception.userFriendlyMessage)
     }
 
     @Test

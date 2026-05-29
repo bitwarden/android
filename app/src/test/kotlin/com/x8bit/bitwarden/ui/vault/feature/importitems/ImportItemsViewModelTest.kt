@@ -5,8 +5,7 @@ import androidx.credentials.providerevents.transfer.CredentialTypes
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.cxf.importer.model.ImportCredentialsSelectionResult
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenPlurals
@@ -14,6 +13,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
@@ -61,7 +61,7 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
     fun `ImportFromAnotherAppClick sends ShowRegisteredImportSources event`() {
         runTest {
             every {
-                policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+                policyManager.getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES)
             } returns emptyList()
 
             val viewModel = createViewModel()
@@ -98,13 +98,13 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
         runTest {
             // Policy is active and enabled
             every {
-                policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+                policyManager.getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES)
             } returns listOf(
-                createMockPolicy(
+                createMockPolicyView(
                     organizationId = "org-id",
                     id = "policy-id",
-                    type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
-                    isEnabled = true,
+                    type = PolicyType.RESTRICTED_ITEM_TYPES,
+                    enabled = true,
                     data = null,
                 ),
             )

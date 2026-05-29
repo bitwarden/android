@@ -1,17 +1,23 @@
 package com.x8bit.bitwarden.data.platform.manager
 
-import com.bitwarden.network.model.OrganizationStatusType
-import com.bitwarden.network.model.OrganizationType
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.core.data.manager.model.FlagKey
+import com.bitwarden.organizations.OrganizationUserStatusType
+import com.bitwarden.organizations.OrganizationUserType
+import com.bitwarden.policies.OrganizationUserPolicyContext
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
+import com.x8bit.bitwarden.data.vault.repository.util.toSdkOrganizationPolicyContext
+import com.x8bit.bitwarden.data.vault.repository.util.toSdkPolicyViews
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.map
 
 /**
  * The default [PolicyManager] implementation. This class is responsible for
@@ -19,114 +25,151 @@ import kotlinx.coroutines.flow.mapNotNull
  */
 class PolicyManagerImpl(
     private val authDiskSource: AuthDiskSource,
+    private val authSdkSource: AuthSdkSource,
+    private val featureFlagManager: FeatureFlagManager,
 ) : PolicyManager {
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getActivePoliciesFlow(type: PolicyTypeJson): Flow<List<SyncResponseJson.Policy>> =
+    override fun getActivePoliciesFlow(type: PolicyType): Flow<List<PolicyView>> =
         authDiskSource
             .activeUserIdChangesFlow
             .flatMapLatest { activeUserId ->
                 activeUserId
-                    ?.let { userId ->
-                        authDiskSource
-                            .getPoliciesFlow(userId)
-                            .mapNotNull {
-                                filterPolicies(
-                                    userId = userId,
-                                    type = type,
-                                    policies = it,
-                                )
-                            }
-                    }
+                    ?.let { userId -> getAppliedPolicyViewsFlow(userId = userId, type = type) }
                     ?: emptyFlow()
             }
             .distinctUntilChanged()
 
-    override fun getActivePolicies(type: PolicyTypeJson): List<SyncResponseJson.Policy> =
+    override fun getActivePolicies(type: PolicyType): List<PolicyView> =
         authDiskSource
             .userState
             ?.activeUserId
-            ?.let { userId ->
-                filterPolicies(
-                    userId = userId,
-                    type = type,
-                    policies = authDiskSource.getPolicies(userId = userId),
-                )
-            }
-            ?: emptyList()
+            ?.let { userId -> getUserPolicies(userId = userId, type = type) }
+            .orEmpty()
 
     override fun getUserPolicies(
         userId: String,
-        type: PolicyTypeJson,
-    ): List<SyncResponseJson.Policy> =
+        type: PolicyType,
+    ): List<PolicyView> =
         this
             .filterPolicies(
-                userId = userId,
                 type = type,
-                policies = authDiskSource.getPolicies(userId = userId),
+                policies = authDiskSource
+                    .getPolicies(userId = userId)
+                    ?.toSdkPolicyViews(),
+                organizations = authDiskSource
+                    .getOrganizations(userId = userId)
+                    ?.map {
+                        OrganizationPolicyData(
+                            organizationUserPolicyContext = it.toSdkOrganizationPolicyContext(),
+                            organizationShouldUsePolicies = it.permissions.shouldManagePolicies,
+                        )
+                    },
+                isPoliciesInAcceptedStateEnabled = featureFlagManager
+                    .getFeatureFlag(key = FlagKey.PoliciesInAcceptedState),
             )
             .orEmpty()
 
     override fun getPersonalOwnershipPolicyOrganizationId(): String? =
         this
-            .getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
+            .getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
             .sortedBy { it.revisionDate }
             .firstOrNull()
             ?.organizationId
 
-    /**
-     * A helper method to filter policies.
-     */
-    private fun filterPolicies(
+    private fun getAppliedPolicyViewsFlow(
         userId: String,
-        type: PolicyTypeJson,
-        policies: List<SyncResponseJson.Policy>?,
-    ): List<SyncResponseJson.Policy>? {
-        policies ?: return null
-        if (policies.isEmpty()) return emptyList()
-
-        // Get a list of the user's organizations that enforce policies.
-        val organizationIdsWithActivePolicies = authDiskSource
-            .getOrganizations(userId)
-            ?.filter {
-                it.shouldUsePolicies &&
-                    it.status >= OrganizationStatusType.ACCEPTED &&
-                    !isOrganizationExemptFromPolicies(it, type)
-            }
-            ?.map { it.id }
+        type: PolicyType,
+    ): Flow<List<PolicyView>> = combine(
+        authDiskSource
+            .getPoliciesFlow(userId = userId)
+            .map { it?.toSdkPolicyViews() },
+        authDiskSource
+            .getOrganizationsFlow(userId = userId)
+            .map { organizations ->
+                organizations?.map {
+                    OrganizationPolicyData(
+                        organizationUserPolicyContext = it.toSdkOrganizationPolicyContext(),
+                        organizationShouldUsePolicies = it.permissions.shouldManagePolicies,
+                    )
+                }
+            },
+        featureFlagManager.getFeatureFlagFlow(key = FlagKey.PoliciesInAcceptedState),
+    ) { policies, organizations, isEnabled ->
+        this
+            .filterPolicies(
+                type = type,
+                policies = policies,
+                organizations = organizations,
+                isPoliciesInAcceptedStateEnabled = isEnabled,
+            )
             .orEmpty()
-
-        // Filter the policies based on the type, whether the policy is active,
-        // and whether the organization rules except the user from the policy.
-        return policies.filter {
-            it.type == type &&
-                it.isEnabled &&
-                organizationIdsWithActivePolicies.contains(it.organizationId)
-        }
     }
+
+    private fun filterPolicies(
+        type: PolicyType,
+        policies: List<PolicyView>?,
+        organizations: List<OrganizationPolicyData>?,
+        isPoliciesInAcceptedStateEnabled: Boolean,
+    ): List<PolicyView>? =
+        when {
+            policies == null -> null
+            policies.isEmpty() -> emptyList()
+            isPoliciesInAcceptedStateEnabled -> {
+                authSdkSource
+                    .filterPolicies(
+                        policies = policies,
+                        policyType = type,
+                        organizations = organizations
+                            ?.map { it.organizationUserPolicyContext }
+                            .orEmpty(),
+                    )
+                    .getOrElse { emptyList() }
+            }
+
+            else -> {
+                // Legacy flow
+                val organizationIdsWithActivePolicies = organizations
+                    ?.filter {
+                        @Suppress("MaxLineLength")
+                        it.organizationUserPolicyContext.usePolicies &&
+                            it.organizationUserPolicyContext.status >= OrganizationUserStatusType.ACCEPTED &&
+                            !it.isOrganizationExemptFromPolicies(policyType = type)
+                    }
+                    ?.map { it.organizationUserPolicyContext.id }
+                    .orEmpty()
+                return policies.filter {
+                    it.type == type &&
+                        it.enabled &&
+                        organizationIdsWithActivePolicies.contains(it.organizationId)
+                }
+            }
+        }
 
     /**
      * A helper method to determine if the organization is exempt from policies.
      */
-    private fun isOrganizationExemptFromPolicies(
-        organization: SyncResponseJson.Profile.Organization,
-        policyType: PolicyTypeJson,
+    private fun OrganizationPolicyData.isOrganizationExemptFromPolicies(
+        policyType: PolicyType,
     ): Boolean =
         when (policyType) {
-            PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT -> {
-                organization.type == OrganizationType.OWNER
+            PolicyType.MAXIMUM_VAULT_TIMEOUT -> {
+                this.organizationUserPolicyContext.role == OrganizationUserType.OWNER
             }
 
-            PolicyTypeJson.PASSWORD_GENERATOR,
-            PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
-            PolicyTypeJson.RESTRICT_ITEM_TYPES,
-                -> {
-                false
-            }
+            PolicyType.PASSWORD_GENERATOR,
+            PolicyType.REMOVE_UNLOCK_WITH_PIN,
+            PolicyType.RESTRICTED_ITEM_TYPES,
+                -> false
 
             else -> {
-                (organization.type == OrganizationType.OWNER ||
-                    organization.type == OrganizationType.ADMIN) ||
-                    organization.permissions.shouldManagePolicies
+                this.organizationUserPolicyContext.role == OrganizationUserType.OWNER ||
+                    this.organizationUserPolicyContext.role == OrganizationUserType.ADMIN ||
+                    this.organizationShouldUsePolicies
             }
         }
 }
+
+private data class OrganizationPolicyData(
+    val organizationUserPolicyContext: OrganizationUserPolicyContext,
+    val organizationShouldUsePolicies: Boolean,
+)

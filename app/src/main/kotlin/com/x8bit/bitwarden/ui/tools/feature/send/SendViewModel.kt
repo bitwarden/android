@@ -6,7 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.util.baseWebSendUrl
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.icon.model.IconData
@@ -70,7 +70,7 @@ class SendViewModel @Inject constructor(
             dialogState = null,
             isPullToRefreshSettingEnabled = settingsRepo.getPullToRefreshEnabledFlow().value,
             policyDisablesSend = policyManager
-                .getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
+                .getActivePolicies(type = PolicyType.DISABLE_SEND)
                 .any(),
             isRefreshing = false,
             isPremiumUser = authRepo.userStateFlow.value?.activeAccount?.isPremium == true,
@@ -85,7 +85,7 @@ class SendViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
         policyManager
-            .getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND)
+            .getActivePoliciesFlow(type = PolicyType.DISABLE_SEND)
             .map { SendAction.Internal.PolicyUpdateReceive(it.any()) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -132,6 +132,7 @@ class SendViewModel @Inject constructor(
         SendAction.RefreshPull -> handleRefreshPull()
         SendAction.UpgradedToPremiumCardClick -> handleUpgradedToPremiumCardClick()
         SendAction.UpgradedToPremiumCardDismiss -> handleUpgradedToPremiumCardDismiss()
+        SendAction.UpgradeToPremiumClick -> handleUpgradeToPremiumClick()
         is SendAction.Internal -> handleInternalAction(action)
     }
 
@@ -348,14 +349,15 @@ class SendViewModel @Inject constructor(
                 return
             }
             if (!state.isPremiumUser) {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialogState = SendState.DialogState.Error(
-                            title = BitwardenString.send.asText(),
-                            message = BitwardenString.send_file_premium_required.asText(),
-                        ),
+                val dialog = if (premiumStateManager.isInAppUpgradeAvailable()) {
+                    SendState.DialogState.FileTypeRequiresPremium
+                } else {
+                    SendState.DialogState.Error(
+                        title = BitwardenString.send.asText(),
+                        message = BitwardenString.send_file_premium_required.asText(),
                     )
                 }
+                mutableStateFlow.update { it.copy(dialogState = dialog) }
                 return
             }
         }
@@ -447,6 +449,11 @@ class SendViewModel @Inject constructor(
 
     private fun handleFileTypeClick() {
         sendEvent(SendEvent.NavigateToFileSends)
+    }
+
+    private fun handleUpgradeToPremiumClick() {
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        sendEvent(SendEvent.NavigateToPlanModal)
     }
 
     private fun handleTextTypeClick() {
@@ -627,6 +634,13 @@ data class SendState(
          */
         @Parcelize
         data object SelectSendAddType : DialogState()
+
+        /**
+         * Displays a dialog to the user indicating that creating a File-type Send
+         * requires a Premium account.
+         */
+        @Parcelize
+        data object FileTypeRequiresPremium : DialogState()
     }
 }
 
@@ -744,6 +758,11 @@ sealed class SendAction {
      * User clicked the "Learn more" CTA on the "Upgraded to Premium" action card.
      */
     data object UpgradedToPremiumCardClick : SendAction()
+
+    /**
+     * User clicked the upgrade to premium button in a dialog.
+     */
+    data object UpgradeToPremiumClick : SendAction()
 
     /**
      * User clicked the dismiss icon on the "Upgraded to Premium" action card.
@@ -871,6 +890,11 @@ sealed class SendEvent {
     data class NavigateToUrl(
         val url: String,
     ) : SendEvent()
+
+    /**
+     * Navigate to the in-app Plan (upgrade) modal.
+     */
+    data object NavigateToPlanModal : SendEvent()
 
     /**
      * Show a snackbar to the user.

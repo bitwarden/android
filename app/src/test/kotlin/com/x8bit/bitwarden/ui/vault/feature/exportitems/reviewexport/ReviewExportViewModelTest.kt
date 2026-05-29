@@ -8,8 +8,7 @@ import com.bitwarden.cxf.manager.model.ExportCredentialsResult
 import com.bitwarden.cxf.model.ImportCredentialsRequestData
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.OrganizationType
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
@@ -26,6 +25,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import io.mockk.awaits
 import io.mockk.coEvery
@@ -59,7 +59,7 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
         )
     }
     private val policyManager = mockk<PolicyManager> {
-        every { getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES) } returns emptyList()
+        every { getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES) } returns emptyList()
     }
 
     @Nested
@@ -185,12 +185,11 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 every {
-                    policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+                    policyManager.getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES)
                 } returns listOf(
-                    createMockPolicy(
-                        number = 1,
-                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
-                        isEnabled = true,
+                    createMockPolicyView(
+                        type = PolicyType.RESTRICTED_ITEM_TYPES,
+                        enabled = true,
                     ),
                 )
                 coEvery { vaultRepository.exportVaultDataToCxf(any()) } just awaits
@@ -444,6 +443,7 @@ private val DEFAULT_USER_STATE = UserState(
             avatarColorHex = "#aa00aa",
             environment = Environment.Us,
             isPremium = true,
+            isPremiumFromSelf = true,
             isLoggedIn = true,
             isVaultUnlocked = true,
             needsPasswordReset = false,

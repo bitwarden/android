@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.masterpasswordgenerator
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test
 class MasterPasswordGeneratorViewModelTest : BaseViewModelTest() {
     private val fakeGeneratorRepository = FakeGeneratorRepository()
     private val mockPolicyManager = mockk<PolicyManager>(relaxed = true) {
-        every { getActivePolicies(type = PolicyTypeJson.MASTER_PASSWORD) } returns emptyList()
+        every { getActivePolicies(type = PolicyType.MASTER_PASSWORD) } returns emptyList()
     }
 
     @BeforeEach
@@ -64,7 +64,7 @@ class MasterPasswordGeneratorViewModelTest : BaseViewModelTest() {
     fun `Verify passphrase request is created and attempts to check for policy constraints`() {
         createViewModel()
 
-        verify { mockPolicyManager.getActivePolicies(type = PolicyTypeJson.MASTER_PASSWORD) }
+        verify { mockPolicyManager.getActivePolicies(type = PolicyType.MASTER_PASSWORD) }
     }
 
     @Test

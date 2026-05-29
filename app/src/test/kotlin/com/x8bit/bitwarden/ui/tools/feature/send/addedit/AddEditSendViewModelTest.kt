@@ -3,12 +3,10 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addedit
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
@@ -19,10 +17,9 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -31,6 +28,7 @@ import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManage
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
@@ -59,8 +57,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.encodeToJsonElement
-import kotlinx.serialization.json.jsonObject
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -100,8 +96,8 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         every { getSendStateFlow(any()) } returns mutableSendDataStateFlow
     }
     private val policyManager: PolicyManager = mockk {
-        every { getActivePolicies(type = PolicyTypeJson.DISABLE_SEND) } returns emptyList()
-        every { getActivePolicies(type = PolicyTypeJson.SEND_OPTIONS) } returns emptyList()
+        every { getActivePolicies(type = PolicyType.DISABLE_SEND) } returns emptyList()
+        every { getActivePolicies(type = PolicyType.SEND_OPTIONS) } returns emptyList()
     }
     private val networkConnectionManager = mockk<NetworkConnectionManager> {
         every { isNetworkConnected } returns true
@@ -112,15 +108,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
 
     private val premiumStateManager: PremiumStateManager = mockk {
         every { isInAppUpgradeAvailable() } returns false
-    }
-    private val mutableSendEmailVerificationFeatureFlagFlow = MutableStateFlow(false)
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every {
-            getFeatureFlagFlow(FlagKey.SendEmailVerification)
-        } returns mutableSendEmailVerificationFeatureFlagFlow
-        every {
-            getFeatureFlag(FlagKey.SendEmailVerification)
-        } answers { mutableSendEmailVerificationFeatureFlagFlow.value }
     }
 
     @BeforeEach
@@ -154,15 +141,15 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     @Test
     fun `initial state should be correct when a sendOption includes shouldDisableHideEmail`() {
         every {
-            policyManager.getActivePolicies(type = PolicyTypeJson.SEND_OPTIONS)
+            policyManager.getActivePolicies(type = PolicyType.SEND_OPTIONS)
         } returns listOf(
-            createMockPolicy(
+            createMockPolicyView(
                 id = "123",
-                type = PolicyTypeJson.SEND_OPTIONS,
-                isEnabled = true,
-                data = Json.encodeToJsonElement(
+                type = PolicyType.SEND_OPTIONS,
+                enabled = true,
+                data = Json.encodeToString(
                     PolicyInformation.SendOptions(shouldDisableHideEmail = true),
-                ).jsonObject,
+                ),
                 organizationId = "id2",
             ),
         )
@@ -324,7 +311,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                 mockSendView.toViewState(
                     baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                     isHideEmailAddressEnabled = true,
-                    isSendEmailVerificationEnabled = false,
                 )
             } returns viewState
             every { viewState.toSendView(clock) } returns mockSendView
@@ -368,7 +354,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             mockSendView.toViewState(
                 baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                 isHideEmailAddressEnabled = true,
-                isSendEmailVerificationEnabled = false,
             )
         } returns viewState
         every { viewState.toSendView(clock) } returns mockSendView
@@ -612,7 +597,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             mockSendView.toViewState(
                 baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                 isHideEmailAddressEnabled = true,
-                isSendEmailVerificationEnabled = false,
             )
         } returns viewState
         mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
@@ -674,7 +658,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                 mockSendView.toViewState(
                     baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                     isHideEmailAddressEnabled = true,
-                    isSendEmailVerificationEnabled = false,
                 )
             } returns DEFAULT_VIEW_STATE
             mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
@@ -720,7 +703,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                 mockSendView.toViewState(
                     baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                     isHideEmailAddressEnabled = true,
-                    isSendEmailVerificationEnabled = false,
                 )
             } returns DEFAULT_VIEW_STATE
             mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
@@ -795,7 +777,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             mockSendView.toViewState(
                 baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                 isHideEmailAddressEnabled = true,
-                isSendEmailVerificationEnabled = false,
             )
         } returns DEFAULT_VIEW_STATE
         mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
@@ -848,7 +829,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                 mockSendView.toViewState(
                     baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                     isHideEmailAddressEnabled = true,
-                    isSendEmailVerificationEnabled = false,
                 )
             } returns DEFAULT_VIEW_STATE
             mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
@@ -916,7 +896,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             mockSendView.toViewState(
                 baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
                 isHideEmailAddressEnabled = true,
-                isSendEmailVerificationEnabled = false,
             )
         } returns viewState
         mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
@@ -1092,23 +1071,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
             viewModel.trySendAction(AddEditSendAction.NoteChange("input"))
-            assertEquals(DEFAULT_STATE.copy(viewState = expectedViewState), awaitItem())
-        }
-    }
-
-    @Test
-    fun `PasswordChange should update note input`() = runTest {
-        val viewModel = createViewModel()
-        val expectedViewState = DEFAULT_VIEW_STATE.copy(
-            common = DEFAULT_COMMON_STATE.copy(
-                passwordInput = "input",
-                sendAuth = SendAuth.Password,
-            ),
-        )
-
-        viewModel.stateFlow.test {
-            assertEquals(DEFAULT_STATE, awaitItem())
-            viewModel.trySendAction(AddEditSendAction.PasswordChange("input"))
             assertEquals(DEFAULT_STATE.copy(viewState = expectedViewState), awaitItem())
         }
     }
@@ -1515,7 +1477,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         networkConnectionManager = networkConnectionManager,
         snackbarRelayManager = snackbarRelayManager,
         generatorRepository = generatorRepository,
-        featureFlagManager = featureFlagManager,
         premiumStateManager = premiumStateManager,
     )
 }
@@ -1533,7 +1494,6 @@ private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
     sendUrl = null,
     hasPassword = false,
     isHideEmailAddressEnabled = true,
-    isSendEmailVerificationEnabled = false,
     sendAuth = SendAuth.None,
 )
 
@@ -1568,6 +1528,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     environment = Environment.Us,
     avatarColorHex = "#aa00aa",
     isPremium = true,
+    isPremiumFromSelf = true,
     isLoggedIn = true,
     isVaultUnlocked = true,
     needsPasswordReset = false,

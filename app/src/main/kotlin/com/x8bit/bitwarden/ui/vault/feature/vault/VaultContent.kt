@@ -297,6 +297,46 @@ fun VaultContent(
             )
         }
 
+        if (state.showLicenseGroup) {
+            item(key = "licenses_group") {
+                BitwardenGroupItem(
+                    startIcon = IconData.Local(
+                        iconRes = BitwardenDrawable.ic_id_card,
+                        testTag = "LicenseCipherIcon",
+                    ),
+                    label = stringResource(id = BitwardenString.type_license),
+                    supportingLabel = state.licenseItemsCount.toString(),
+                    onClick = vaultHandlers.licenseGroupClick,
+                    cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
+                    modifier = Modifier
+                        .animateItem()
+                        .fillMaxWidth()
+                        .testTag("LicenseFilter")
+                        .standardHorizontalMargin(),
+                )
+            }
+        }
+
+        if (state.showPassportGroup) {
+            item(key = "passports_group") {
+                BitwardenGroupItem(
+                    startIcon = IconData.Local(
+                        iconRes = BitwardenDrawable.ic_passport,
+                        testTag = "PassportCipherIcon",
+                    ),
+                    label = stringResource(id = BitwardenString.type_passport),
+                    supportingLabel = state.passportItemsCount.toString(),
+                    onClick = vaultHandlers.passportGroupClick,
+                    cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
+                    modifier = Modifier
+                        .animateItem()
+                        .fillMaxWidth()
+                        .testTag("PassportFilter")
+                        .standardHorizontalMargin(),
+                )
+            }
+        }
+
         item(key = "notes_group") {
             BitwardenGroupItem(
                 startIcon = IconData.Local(
@@ -536,6 +576,7 @@ private fun ActionCard(
                     id = BitwardenString.you_now_have_access_to_all_advanced_security_features,
                 ),
                 actionText = stringResource(id = BitwardenString.learn_more),
+                isExternalLink = true,
                 leadingContent = {
                     Icon(
                         painter = rememberVectorPainter(id = BitwardenDrawable.ic_star),

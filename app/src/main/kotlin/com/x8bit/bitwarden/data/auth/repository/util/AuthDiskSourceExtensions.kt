@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
+import com.bitwarden.network.model.OrganizationStatusType
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
@@ -27,6 +28,7 @@ val AuthDiskSource.userOrganizationsList: List<UserOrganizations>
                 userId = userId,
                 organizations = this
                     .getOrganizations(userId = userId)
+                    ?.filter { it.status == OrganizationStatusType.CONFIRMED }
                     .orEmpty()
                     .toOrganizations(),
             )
@@ -48,10 +50,15 @@ val AuthDiskSource.userOrganizationsListFlow: Flow<List<UserOrganizations>>
                         .map { (userId, _) ->
                             this
                                 .getOrganizationsFlow(userId = userId)
-                                .map {
+                                .map { organizations ->
                                     UserOrganizations(
                                         userId = userId,
-                                        organizations = it.orEmpty().toOrganizations(),
+                                        organizations = organizations
+                                            ?.filter {
+                                                it.status == OrganizationStatusType.CONFIRMED
+                                            }
+                                            .orEmpty()
+                                            .toOrganizations(),
                                     )
                                 }
                         },

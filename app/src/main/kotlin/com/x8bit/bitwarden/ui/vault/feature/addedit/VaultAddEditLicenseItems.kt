@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
-import com.bitwarden.ui.platform.components.button.BitwardenTextSelectionButton
+import com.bitwarden.ui.platform.components.dropdown.BitwardenDatePickerButton
 import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
@@ -91,11 +91,10 @@ fun LazyListScope.vaultAddEditLicenseItems(
     }
 
     item {
-        BitwardenTextSelectionButton(
+        BitwardenDatePickerButton(
             label = stringResource(id = BitwardenString.date_of_birth),
-            selectedOption = licenseState.dateOfBirth,
-            // TODO: Open a native Material date picker (separate ticket TBD).
-            onClick = {},
+            currentDate = licenseState.dateOfBirth,
+            onDateSelect = licenseHandlers.onDateOfBirthChange,
             textFieldTestTag = "LicenseDateOfBirthEntry",
             cardStyle = CardStyle.Middle(),
             modifier = Modifier
@@ -144,11 +143,10 @@ fun LazyListScope.vaultAddEditLicenseItems(
     }
 
     item {
-        BitwardenTextSelectionButton(
+        BitwardenDatePickerButton(
             label = stringResource(id = BitwardenString.issue_date),
-            selectedOption = licenseState.issueDate,
-            // TODO: Open a native Material date picker (separate ticket TBD).
-            onClick = {},
+            currentDate = licenseState.issueDate,
+            onDateSelect = licenseHandlers.onIssueDateChange,
             textFieldTestTag = "LicenseIssueDateEntry",
             cardStyle = CardStyle.Middle(),
             modifier = Modifier
@@ -158,11 +156,10 @@ fun LazyListScope.vaultAddEditLicenseItems(
     }
 
     item {
-        BitwardenTextSelectionButton(
+        BitwardenDatePickerButton(
             label = stringResource(id = BitwardenString.expiration_date),
-            selectedOption = licenseState.expirationDate,
-            // TODO: Open a native Material date picker (separate ticket TBD).
-            onClick = {},
+            currentDate = licenseState.expirationDate,
+            onDateSelect = licenseHandlers.onExpirationDateChange,
             textFieldTestTag = "LicenseExpirationDateEntry",
             cardStyle = CardStyle.Middle(),
             modifier = Modifier

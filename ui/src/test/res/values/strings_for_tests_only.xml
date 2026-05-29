@@ -6,5 +6,13 @@
     <string name="test_for_string_with_no_annotations">Nothing special here.</string>
     <string name="test_for_string_with_no_annotations_with_format_arg">Nothing special here, except %1$s.</string>
     <string name="test_for_string_with_annotation_and_arg_annotation">On your computer, open a new browser tab and <annotation emphasis="bold">go to <annotation arg="0">%1$s</annotation></annotation></string>
+    <plurals name="test_for_plurals_with_annotation_and_arg_annotation">
+        <item quantity="one">You have <annotation arg="0">%1$d</annotation> day to resolve by <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="other">You have <annotation arg="0">%1$d</annotation> days to resolve by <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+    </plurals>
+    <plurals name="test_for_plurals_with_no_annotations">
+        <item quantity="one">%1$s day remaining.</item>
+        <item quantity="other">%1$s days remaining.</item>
+    </plurals>
     <!-- /StringResExtensions Test value -->
 </resources>

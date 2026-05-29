@@ -85,6 +85,7 @@ fun AccountSecurityScreen(
     onNavigateToDeleteAccount: () -> Unit,
     onNavigateToPendingRequests: () -> Unit,
     onNavigateToSetupUnlockScreen: () -> Unit,
+    onNavigateToManageDevices: () -> Unit,
     viewModel: AccountSecurityViewModel = hiltViewModel(),
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
@@ -117,6 +118,8 @@ fun AccountSecurityScreen(
             is AccountSecurityEvent.NavigateToChangeMasterPassword -> {
                 intentManager.launchUri(event.url.toUri())
             }
+
+            is AccountSecurityEvent.NavigateToManageDevices -> onNavigateToManageDevices()
 
             is AccountSecurityEvent.ShowBiometricsPrompt -> {
                 showBiometricsPrompt = true
@@ -192,32 +195,36 @@ fun AccountSecurityScreen(
                 )
             }
 
-            BitwardenListHeaderText(
-                label = stringResource(id = BitwardenString.approve_login_requests),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin()
-                    .padding(horizontal = 16.dp),
-            )
-            Spacer(modifier = Modifier.height(height = 8.dp))
-            BitwardenTextRow(
-                text = stringResource(id = BitwardenString.pending_log_in_requests),
-                onClick = {
-                    viewModel.trySendAction(AccountSecurityAction.PendingLoginRequestsClick)
-                },
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .testTag("PendingLogInRequestsLabel")
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
+            if (!state.isManageDevicesEnabled) {
+                BitwardenListHeaderText(
+                    label = stringResource(id = BitwardenString.approve_login_requests),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin()
+                        .padding(horizontal = 16.dp),
+                )
+                Spacer(modifier = Modifier.height(height = 8.dp))
+                BitwardenTextRow(
+                    text = stringResource(id = BitwardenString.pending_log_in_requests),
+                    onClick = {
+                        viewModel.trySendAction(AccountSecurityAction.PendingLoginRequestsClick)
+                    },
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .testTag("PendingLogInRequestsLabel")
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
+            }
 
             val biometricSupportStatus = biometricsManager.biometricSupportStatus
             if (biometricSupportStatus != BiometricSupportStatus.NOT_SUPPORTED ||
                 !state.removeUnlockWithPinPolicyEnabled ||
                 state.isUnlockWithPinEnabled
             ) {
-                Spacer(Modifier.height(16.dp))
+                if (!state.isManageDevicesEnabled) {
+                    Spacer(Modifier.height(16.dp))
+                }
                 BitwardenListHeaderText(
                     label = stringResource(id = BitwardenString.unlock_options),
                     modifier = Modifier
@@ -362,6 +369,19 @@ fun AccountSecurityScreen(
                     .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
+            if (state.isManageDevicesEnabled) {
+                BitwardenTextRow(
+                    text = stringResource(id = BitwardenString.devices),
+                    onClick = {
+                        viewModel.trySendAction(AccountSecurityAction.ManageDevicesClick)
+                    },
+                    cardStyle = CardStyle.Middle(),
+                    modifier = Modifier
+                        .testTag("ManageDevicesLabel")
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
+            }
             if (state.isUnlockWithPasswordEnabled) {
                 BitwardenExternalLinkRow(
                     text = stringResource(id = BitwardenString.change_master_password),

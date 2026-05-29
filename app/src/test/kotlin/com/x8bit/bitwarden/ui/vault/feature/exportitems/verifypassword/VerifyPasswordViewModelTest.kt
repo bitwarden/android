@@ -4,8 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.OrganizationType
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
@@ -19,6 +18,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.model.AccountSelectionListItem
@@ -54,11 +54,10 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
         } returns VaultUnlockResult.Success
     }
     private val policyManager = mockk<PolicyManager> {
-        every { getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES) } returns listOf(
-            createMockPolicy(
-                number = 1,
+        every { getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES) } returns listOf(
+            createMockPolicyView(
                 organizationId = DEFAULT_ORGANIZATION_ID,
-                isEnabled = false,
+                enabled = false,
             ),
         )
     }
@@ -137,12 +136,11 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
         @Test
         fun `initial state should be correct when account has item restrictions`() = runTest {
             every {
-                policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+                policyManager.getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES)
             } returns listOf(
-                createMockPolicy(
-                    number = 1,
+                createMockPolicyView(
                     organizationId = DEFAULT_ORGANIZATION_ID,
-                    isEnabled = true,
+                    enabled = true,
                 ),
             )
 
@@ -726,6 +724,7 @@ private val DEFAULT_USER_STATE = UserState(
             avatarColorHex = "#aa00aa",
             environment = Environment.Us,
             isPremium = true,
+            isPremiumFromSelf = true,
             isLoggedIn = true,
             isVaultUnlocked = true,
             needsPasswordReset = false,
@@ -756,6 +755,7 @@ private val DEFAULT_USER_STATE = UserState(
             avatarColorHex = "#aa00aa",
             environment = Environment.Us,
             isPremium = true,
+            isPremiumFromSelf = true,
             isLoggedIn = true,
             isVaultUnlocked = true,
             needsPasswordReset = false,

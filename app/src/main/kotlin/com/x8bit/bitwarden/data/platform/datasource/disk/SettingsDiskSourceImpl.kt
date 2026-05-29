@@ -57,11 +57,13 @@ private const val UPGRADED_TO_PREMIUM_CARD_CONSUMED =
     "upgradedToPremiumCardConsumed"
 private const val UPGRADED_TO_PREMIUM_CARD_PENDING =
     "upgradedToPremiumCardPending"
+private const val PREMIUM_UPGRADE_PENDING =
+    "premiumUpgradePending"
 
 /**
  * Primary implementation of [SettingsDiskSource].
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LargeClass")
 class SettingsDiskSourceImpl(
     private val sharedPreferences: SharedPreferences,
     private val json: Json,
@@ -105,6 +107,9 @@ class SettingsDiskSourceImpl(
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutableUpgradedToPremiumCardPendingFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutablePremiumUpgradePendingFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutableIsIconLoadingDisabledFlow = bufferedMutableSharedFlow<Boolean?>()
@@ -264,6 +269,7 @@ class SettingsDiskSourceImpl(
         // - Premium upgrade banner dismissed
         // - Upgraded to Premium action card consumed
         // - Upgraded to Premium action card pending
+        // - Premium upgrade pending
     }
 
     override fun getIntroducingArchiveActionCardDismissed(userId: String): Boolean? =
@@ -345,6 +351,26 @@ class SettingsDiskSourceImpl(
     override fun getUpgradedToPremiumCardPendingFlow(userId: String): Flow<Boolean?> =
         getMutableUpgradedToPremiumCardPendingFlow(userId = userId)
             .onSubscription { emit(getUpgradedToPremiumCardPending(userId = userId)) }
+
+    override fun getPremiumUpgradePending(userId: String): Boolean? =
+        getBoolean(
+            key = PREMIUM_UPGRADE_PENDING.appendIdentifier(identifier = userId),
+        )
+
+    override fun storePremiumUpgradePending(
+        userId: String,
+        isPending: Boolean?,
+    ) {
+        putBoolean(
+            key = PREMIUM_UPGRADE_PENDING.appendIdentifier(identifier = userId),
+            value = isPending,
+        )
+        getMutablePremiumUpgradePendingFlow(userId = userId).tryEmit(isPending)
+    }
+
+    override fun getPremiumUpgradePendingFlow(userId: String): Flow<Boolean?> =
+        getMutablePremiumUpgradePendingFlow(userId = userId)
+            .onSubscription { emit(getPremiumUpgradePending(userId = userId)) }
 
     override fun getAccountBiometricIntegrityValidity(
         userId: String,
@@ -708,6 +734,13 @@ class SettingsDiskSourceImpl(
         userId: String,
     ): MutableSharedFlow<Boolean?> =
         mutableUpgradedToPremiumCardPendingFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutablePremiumUpgradePendingFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutablePremiumUpgradePendingFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 

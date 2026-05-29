@@ -48,7 +48,8 @@ fun createMockProfile(
         isPremium = isPremium,
         culture = culture,
         name = name,
-        organizations = organizations,
+        legacyOrganizations = organizations,
+        newOrganizations = organizations,
         shouldUseKeyConnector = shouldUseKeyConnector,
         id = id,
         masterPasswordHint = masterPasswordHint,
@@ -93,7 +94,7 @@ fun createMockOrganizationNetwork(
     name: String? = "mockName-$number",
     shouldUseApi: Boolean = false,
     familySponsorshipValidUntil: Instant? = Instant.parse("2023-10-27T12:00:00Z"),
-    status: OrganizationStatusType = OrganizationStatusType.ACCEPTED,
+    status: OrganizationStatusType = OrganizationStatusType.CONFIRMED,
     userIsClaimedByOrganization: Boolean = false,
     limitItemDeletion: Boolean = false,
 ): SyncResponseJson.Profile.Organization =

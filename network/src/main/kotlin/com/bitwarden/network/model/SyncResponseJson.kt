@@ -40,8 +40,13 @@ data class SyncResponseJson(
     @SerialName("ciphers")
     val ciphers: List<Cipher>?,
 
+    @Contextual
     @SerialName("policies")
-    val policies: List<Policy>?,
+    private val legacyPolicies: List<Policy>?,
+
+    @Contextual
+    @SerialName("policiesNew")
+    private val newPolicies: List<Policy>?,
 
     @SerialName("domains")
     @JsonNames("Domains")
@@ -53,6 +58,11 @@ data class SyncResponseJson(
     @SerialName("userDecryption")
     val userDecryption: UserDecryptionJson?,
 ) {
+    /**
+     * A list of policies associated with the vault data (nullable).
+     */
+    val policies: List<Policy>? get() = newPolicies ?: legacyPolicies
+
     /**
      * Represents domains in the vault response.
      *
@@ -206,7 +216,10 @@ data class SyncResponseJson(
         val name: String?,
 
         @SerialName("organizations")
-        val organizations: List<Organization>?,
+        private val legacyOrganizations: List<Organization>?,
+
+        @SerialName("organizationsNew")
+        private val newOrganizations: List<Organization>?,
 
         @SerialName("usesKeyConnector")
         val shouldUseKeyConnector: Boolean,
@@ -233,6 +246,11 @@ data class SyncResponseJson(
         @Contextual
         val creationDate: Instant,
     ) {
+        /**
+         * A list of organizations associated with the profile (nullable).
+         */
+        val organizations: List<Organization>? get() = newOrganizations ?: legacyOrganizations
+
         /**
          * Represents an organization in the vault response.
          *
@@ -292,6 +310,9 @@ data class SyncResponseJson(
 
             @SerialName("providerType")
             val providerType: Int?,
+
+            @SerialName("isProviderUser")
+            val isProviderUser: Boolean = false,
 
             @SerialName("maxCollections")
             val maxCollections: Int?,

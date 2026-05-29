@@ -38,6 +38,22 @@ inline fun <reified T> Json.decodeFromStringOrNull(
 
 /**
  * Attempts to decode the given JSON [string] into the given type [T]. If there is an error in
+ * processing the JSON or deserializing it to an instance of [T], `null` will be returned.
+ */
+inline fun <reified T> Json.decodeFromStringOrNull(
+    deserializer: DeserializationStrategy<T>,
+    string: String,
+): T? =
+    try {
+        decodeFromString(string = string, deserializer = deserializer)
+    } catch (_: SerializationException) {
+        null
+    } catch (_: IllegalArgumentException) {
+        null
+    }
+
+/**
+ * Attempts to decode the given JSON [string] into the given type [T]. If there is an error in
  * processing the JSON or deserializing, the exception is still throw after [onFailure] lambda is
  * invoked.
  */

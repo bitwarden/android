@@ -19,6 +19,7 @@ import com.bitwarden.network.model.BitwardenServiceClientConfig
 import com.bitwarden.network.service.EventService
 import com.bitwarden.network.service.PushService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
@@ -74,6 +75,8 @@ import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManage
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManager
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
@@ -89,6 +92,7 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -217,11 +221,13 @@ object PlatformManagerModule {
     @Provides
     @Singleton
     fun provideSdkClientManager(
+        dispatcherManager: DispatcherManager,
         featureFlagManager: FeatureFlagManager,
         nativeLibraryManager: NativeLibraryManager,
         sdkRepositoryFactory: SdkRepositoryFactory,
         sdkPlatformApiFactory: SdkPlatformApiFactory,
     ): SdkClientManager = SdkClientManagerImpl(
+        dispatcherManager = dispatcherManager,
         featureFlagManager = featureFlagManager,
         nativeLibraryManager = nativeLibraryManager,
         sdkRepoFactory = sdkRepositoryFactory,
@@ -259,8 +265,12 @@ object PlatformManagerModule {
     @Singleton
     fun providePolicyManager(
         authDiskSource: AuthDiskSource,
+        authSdkSource: AuthSdkSource,
+        featureFlagManager: FeatureFlagManager,
     ): PolicyManager = PolicyManagerImpl(
         authDiskSource = authDiskSource,
+        authSdkSource = authSdkSource,
+        featureFlagManager = featureFlagManager,
     )
 
     @Provides
@@ -439,12 +449,24 @@ object PlatformManagerModule {
     @Provides
     @Singleton
     fun provideNetworkCookieManager(
+        resourceManager: ResourceManager,
         configDiskSource: ConfigDiskSource,
         cookieDiskSource: CookieDiskSource,
         cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
     ): NetworkCookieManager = NetworkCookieManagerImpl(
+        resourceManager = resourceManager,
         configDiskSource = configDiskSource,
         cookieDiskSource = cookieDiskSource,
         cookieAcquisitionRequestManager = cookieAcquisitionRequestManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideNetworkPermissionManager(
+        @ApplicationContext context: Context,
+        resourceManager: ResourceManager,
+    ): NetworkPermissionManager = NetworkPermissionManagerImpl(
+        context = context,
+        resourceManager = resourceManager,
     )
 }

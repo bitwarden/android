@@ -6,8 +6,7 @@ import app.cash.turbine.test
 import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.exporters.ExportFormat
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
@@ -24,6 +23,7 @@ import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
@@ -52,10 +52,10 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
 
     private val policyManager: PolicyManager = mockk {
         every {
-            getActivePolicies(type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT)
+            getActivePolicies(type = PolicyType.DISABLE_PERSONAL_VAULT_EXPORT)
         } returns emptyList()
         every {
-            getActivePolicies(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            getActivePolicies(type = PolicyType.RESTRICTED_ITEM_TYPES)
         } returns emptyList()
     }
 
@@ -86,8 +86,8 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `initial state should be correct`() = runTest {
         every {
-            policyManager.getActivePolicies(type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT)
-        } returns listOf(createMockPolicy())
+            policyManager.getActivePolicies(type = PolicyType.DISABLE_PERSONAL_VAULT_EXPORT)
+        } returns listOf(createMockPolicyView())
 
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
@@ -142,8 +142,8 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
             )
         } returns ValidatePasswordResult.Success(isValid = true)
         every {
-            policyManager.getActivePolicies(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
-        } returns listOf(createMockPolicy(isEnabled = true))
+            policyManager.getActivePolicies(type = PolicyType.RESTRICTED_ITEM_TYPES)
+        } returns listOf(createMockPolicyView(enabled = true))
 
         val viewModel = createViewModel()
         viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
@@ -844,6 +844,7 @@ private val DEFAULT_USER_STATE = UserState(
             avatarColorHex = "#aa00aa",
             environment = Environment.Us,
             isPremium = true,
+            isPremiumFromSelf = true,
             isLoggedIn = true,
             isVaultUnlocked = true,
             needsPasswordReset = false,

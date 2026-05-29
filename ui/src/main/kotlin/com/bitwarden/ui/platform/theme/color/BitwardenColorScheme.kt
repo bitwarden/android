@@ -137,6 +137,7 @@ data class BitwardenColorScheme(
         val success: StatusBadgeVariantColors,
         val error: StatusBadgeVariantColors,
         val warning: StatusBadgeVariantColors,
+        val primary: StatusBadgeVariantColors,
     )
 
     /**

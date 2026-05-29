@@ -6,6 +6,7 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDriversLicenseView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPassportView
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
@@ -22,6 +23,7 @@ import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
 
+@Suppress("LargeClass")
 class CipherViewExtensionsTest {
 
     private val fixedClock: Clock = Clock.fixed(
@@ -450,7 +452,6 @@ class CipherViewExtensionsTest {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `toViewState should transform full CipherView into ViewState Drivers License Content`() {
         val cipherView = createCipherView(type = CipherType.DRIVERS_LICENSE, isEmpty = false)
@@ -483,12 +484,12 @@ class CipherViewExtensionsTest {
                     middleName = "mockMiddleName-1",
                     lastName = "mockLastName-1",
                     licenseNumber = "mockLicenseNumber-1",
-                    dateOfBirth = "mockDateOfBirth-1",
+                    dateOfBirth = "May 11, 2006",
                     issuingCountry = "mockIssuingCountry-1",
                     issuingState = "mockIssuingState-1",
                     issuingAuthority = "mockIssuingAuthority-1",
-                    issueDate = "mockIssueDate-1",
-                    expirationDate = "mockExpirationDate-1",
+                    issueDate = "June 15, 2024",
+                    expirationDate = "November 25, 2031",
                     licenseClass = "mockLicenseClass-1",
                 ),
             ),
@@ -496,7 +497,6 @@ class CipherViewExtensionsTest {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `toViewState should transform empty CipherView into ViewState Drivers License Content`() {
         val cipherView = createCipherView(type = CipherType.DRIVERS_LICENSE, isEmpty = true)
@@ -535,6 +535,99 @@ class CipherViewExtensionsTest {
                     issueDate = null,
                     expirationDate = null,
                     licenseClass = null,
+                ),
+            ),
+            viewState,
+        )
+    }
+
+    @Test
+    fun `toViewState should transform full CipherView into ViewState Passport Content`() {
+        val cipherView = createCipherView(type = CipherType.PASSPORT, isEmpty = false)
+            .copy(passport = createMockPassportView(number = 1))
+        val viewState = cipherView.toViewState(
+            previousState = null,
+            isPremiumUser = true,
+            totpCodeItemData = null,
+            clock = fixedClock,
+            canDelete = true,
+            canRestore = true,
+            canAssignToCollections = true,
+            canEdit = true,
+            baseIconUrl = "https://example.com/",
+            isIconLoadingDisabled = true,
+            relatedLocations = persistentListOf(),
+            hasOrganizations = true,
+        )
+
+        assertEquals(
+            VaultItemState.ViewState.Content(
+                common = createCommonContent(
+                    isEmpty = false,
+                    isPremiumUser = true,
+                    iconResId = BitwardenDrawable.ic_passport,
+                )
+                    .copy(currentCipher = cipherView),
+                type = VaultItemState.ViewState.Content.ItemType.Passport(
+                    givenName = "mockGivenName-1",
+                    surname = "mockSurname-1",
+                    dateOfBirth = "May 11, 2006",
+                    sex = "mockSex-1",
+                    birthPlace = "mockBirthPlace-1",
+                    nationality = "mockNationality-1",
+                    passportNumber = "mockPassportNumber-1",
+                    passportType = "mockPassportType-1",
+                    nationalIdentificationNumber = "mockNationalIdentificationNumber-1",
+                    issuingCountry = "mockIssuingCountry-1",
+                    issuingAuthority = "mockIssuingAuthority-1",
+                    issueDate = "June 15, 2024",
+                    expirationDate = "November 25, 2031",
+                ),
+            ),
+            viewState,
+        )
+    }
+
+    @Test
+    fun `toViewState should transform empty CipherView into ViewState Passport Content`() {
+        val cipherView = createCipherView(type = CipherType.PASSPORT, isEmpty = true)
+        val viewState = cipherView.toViewState(
+            previousState = null,
+            isPremiumUser = true,
+            totpCodeItemData = null,
+            clock = fixedClock,
+            canDelete = true,
+            canRestore = true,
+            canAssignToCollections = true,
+            canEdit = true,
+            baseIconUrl = "https://example.com/",
+            isIconLoadingDisabled = true,
+            relatedLocations = persistentListOf(),
+            hasOrganizations = true,
+        )
+
+        assertEquals(
+            VaultItemState.ViewState.Content(
+                common = createCommonContent(
+                    isEmpty = true,
+                    isPremiumUser = true,
+                    iconResId = BitwardenDrawable.ic_passport,
+                )
+                    .copy(currentCipher = cipherView),
+                type = VaultItemState.ViewState.Content.ItemType.Passport(
+                    givenName = null,
+                    surname = null,
+                    dateOfBirth = null,
+                    sex = null,
+                    birthPlace = null,
+                    nationality = null,
+                    passportNumber = null,
+                    passportType = null,
+                    nationalIdentificationNumber = null,
+                    issuingCountry = null,
+                    issuingAuthority = null,
+                    issueDate = null,
+                    expirationDate = null,
                 ),
             ),
             viewState,

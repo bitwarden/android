@@ -119,14 +119,13 @@
     <string name="never">Nooit</string>
     <string name="new_item_created">Nuwe item geskep.</string>
     <string name="no_cards">There are no cards in your vault.</string>
-    <string name="new_card">New card</string>
+    <string name="add_card">Add card</string>
     <string name="no_logins">There are no logins in your vault.</string>
     <string name="no_identities">There are no identities in your vault.</string>
-    <string name="new_identity">New identity</string>
+    <string name="add_identity">Add identity</string>
     <string name="no_notes">There are no notes in your vault.</string>
-    <string name="new_note">New note</string>
-    <string name="new_item">Nuwe item</string>
-    <string name="new_ssh_key">New SSH key</string>
+    <string name="add_note">Add note</string>
+    <string name="add_ssh_key">Add SSH key</string>
     <string name="no_text_sends">There are no text Sends in your vault.</string>
     <string name="no_file_sends">There are no file Sends in your vault.</string>
     <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
@@ -473,8 +472,6 @@ Skandering gebeur outomaties.</string>
     <string name="maximum_access_count_info">Indien ingestel het gebruikers ne meer toegang tot hierdie Send sodra die maksimum aantal toegang bereik is.</string>
     <string name="maximum_access_count_reached">Maks toegangsaantal bereik</string>
     <string name="current_access_count">Huidige toegangsaantal</string>
-    <string name="new_password">Nuwe wagwoord</string>
-    <string name="password_info">Vereis opsioneel ’n wagwoord vir gebruikers om toegang tot hierdie Send te verkry.</string>
     <string name="remove_password">Verwyder wagwoord</string>
     <string name="removing_send_password">Verwyder tans wagwoord</string>
     <string name="password_removed">Wagwoord geverwydered</string>
@@ -815,7 +812,7 @@ Wil u na die rekening omskakel?</string>
     <string name="get_started">Val weg</string>
     <string name="save_and_protect_your_data">Save and protect your data</string>
     <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
-    <string name="new_login">New login</string>
+    <string name="add_login">Add login</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
     <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
     <string name="import_saved_logins">Import saved logins</string>
@@ -884,14 +881,15 @@ Wil u na die rekening omskakel?</string>
     <string name="copy_company">Copy company</string>
     <string name="copy_ssn">Copy social security number</string>
     <string name="copy_passport_number">Copy passport number</string>
+    <string name="copy_first_name">Copy first name</string>
+    <string name="copy_last_name">Copy last name</string>
     <string name="copy_license_number">Copy license number</string>
+    <string name="copy_middle_name">Copy middle name</string>
     <string name="copy_email">Copy email</string>
     <string name="copy_phone">Copy phone number</string>
     <string name="copy_address">Copy address</string>
     <string name="biometrics_no_longer_supported_title">Biometrics are no longer supported on this device</string>
     <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
-    <string name="cxp_import">CXP Import</string>
-    <string name="cxp_export">CXP Export</string>
     <string name="choose_three_or_four_random_words">Choose three or four random words</string>
     <string name="pick_three_or_four_random_unrelated_words">Pick three or four random, unrelated words that you can easily remember. Think of <annotation emphasis="bold">objects, places, or things</annotation> you like.</string>
     <string name="combine_those_words_together">Combine those words together</string>
@@ -1215,6 +1213,7 @@ Wil u na die rekening omskakel?</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Upgrade to Premium</string>
     <string name="plan">Plan</string>
+    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
     <string name="unlock_advanced_security_features">Unlock advanced security features</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">This item is archived.</string>
@@ -1237,6 +1236,25 @@ Wil u na die rekening omskakel?</string>
     <string name="continue_without_syncing">Continue without syncing</string>
     <string name="external_link">External link</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
+    <string name="devices">Devices</string>
+    <string name="mobile_platform">Mobile - %1$s</string>
+    <string name="extension_platform">Extension - %1$s</string>
+    <string name="web_platform">Web - %1$s</string>
+    <string name="desktop_platform">Desktop - %1$s</string>
+    <string name="cli_platform">CLI - %1$s</string>
+    <string name="sdk">SDK</string>
+    <string name="server">Server</string>
+    <string name="unknown_device">Unknown device</string>
+    <string name="first_login_date"><annotation emphasis="bold">First login:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="current_session">Current session</string>
+    <string name="pending_request">Pending request</string>
+    <string name="today">Today</string>
+    <string name="past_seven_days">Past 7 days</string>
+    <string name="past_fourteen_days">Past 14 days</string>
+    <string name="past_thirty_days">Past 30 days</string>
+    <string name="over_thirty_days_ago">Over 30 days ago</string>
+    <string name="recently_active"><annotation emphasis="bold">Recently active:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="trusted">Trusted</string>
     <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
     <string name="this_file_is_too_large_to_preview">This file is too large to preview. You can still download it to view on your device.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden could not decrypt this file, so the preview cannot be displayed.</string>
@@ -1256,7 +1274,7 @@ Wil u na die rekening omskakel?</string>
     <string name="secure_file_storage">Secure file storage</string>
     <string name="breach_monitoring">Breach monitoring</string>
     <string name="upgrade_now">Upgrade now</string>
-    <string name="stripe_checkout_footer">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
     <string name="opening_checkout">Opening checkout…</string>
     <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
     <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
@@ -1277,23 +1295,25 @@ Wil u na die rekening omskakel?</string>
     <string name="storage_cost">Storage cost</string>
     <string name="discount">Discount</string>
     <string name="estimated_tax">Estimated tax</string>
+    <string name="total">Total</string>
     <string name="billing_rate_per_year">%1$s / year</string>
     <string name="billing_rate_per_month">%1$s / month</string>
     <string name="manage_plan">Manage plan</string>
+    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Manage your subscription plan in the Bitwarden web app.</string>
     <string name="cancel_premium">Cancel Premium</string>
-    <string name="cancel_now">Cancel now</string>
-    <string name="cancel_premium_confirmation">You’ll continue to have Premium access until %1$s.</string>
     <string name="subscription_status_active">Active</string>
     <string name="subscription_status_canceled">Canceled</string>
-    <string name="subscription_status_overdue_payment">Overdue payment</string>
     <string name="subscription_status_past_due">Past due</string>
     <string name="subscription_status_paused">Paused</string>
-    <string name="premium_next_charge_summary">Your next charge is for %1$s USD due on %2$s.</string>
-    <string name="subscription_canceled_description">Your subscription was canceled on %1$s. Resubscribe to continue using premium features.</string>
-    <string name="subscription_overdue_description">We couldn’t process your payment. Update your payment before your subscription ends on %1$s.</string>
+    <string name="subscription_status_update_payment">Update payment</string>
+    <string name="subscription_status_pending_cancellation">Pending cancellation</string>
+    <string name="subscription_pending_cancellation_description">Your subscription is scheduled to cancel on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. You can reinstate it anytime before then.</string>
+    <string name="premium_next_charge_summary">Your next charge is for <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD due on <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
+    <string name="subscription_canceled_description">Your subscription was canceled on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using premium features.</string>
+    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
-        <item quantity="one">You have a grace period of %1$d day from your subscription expiration date. Please resolve the past due amount by %2$s.</item>
-        <item quantity="other">You have a grace period of %1$d days from your subscription expiration date. Please resolve the past due amount by %2$s.</item>
+        <item quantity="one">You have a grace period of <annotation arg="0">%1$d</annotation> day from your subscription expiration date. Please resolve the past due amount by <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="other">You have a grace period of <annotation arg="0">%1$d</annotation> days from your subscription expiration date. Please resolve the past due amount by <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
     </plurals>
     <string name="subscription_paused_description">Your subscription is paused. Resume to continue using premium features.</string>
     <string name="loading_subscription">Loading subscription…</string>
@@ -1303,19 +1323,18 @@ Wil u na die rekening omskakel?</string>
     <string name="subscription_error">Subscription error</string>
     <string name="trouble_loading_subscription">We couldn’t load your subscription details. Please try again.</string>
     <string name="view_bank_account">View bank account</string>
-    <string name="view_drivers_license">View driver’s license</string>
+    <string name="view_license">View license</string>
     <string name="view_passport">View passport</string>
-    <string name="new_bank_account">New bank account</string>
-    <string name="new_drivers_license">New driver’s license</string>
-    <string name="new_passport">New passport</string>
+    <string name="add_bank_account">Add bank account</string>
+    <string name="add_license">Add license</string>
+    <string name="add_passport">Add passport</string>
     <string name="edit_bank_account">Edit bank account</string>
-    <string name="edit_drivers_license">Edit driver’s license</string>
+    <string name="edit_license">Edit license</string>
     <string name="edit_passport">Edit passport</string>
     <string name="type_bank_account">Bank account</string>
-    <string name="type_drivers_license">Driver’s license</string>
+    <string name="type_license">License</string>
     <string name="type_passport">Passport</string>
     <string name="bank_accounts">Bank accounts</string>
-    <string name="drivers_licenses">Driver’s licenses</string>
     <string name="passports">Passports</string>
     <string name="bank_name">Bank name</string>
     <string name="name_on_account">Name on account</string>
@@ -1341,17 +1360,36 @@ Wil u na die rekening omskakel?</string>
     <string name="investment_brokerage">Investment/brokerage</string>
     <string name="money_market">Money market</string>
     <string name="issuing_country">Issuing country</string>
-    <string name="issuing_state">Issuing state/province</string>
+    <string name="issuing_state">Issuing state / province</string>
     <string name="license_class">License class</string>
     <string name="surname">Surname</string>
     <string name="given_name">Given name</string>
     <string name="date_of_birth">Date of birth</string>
     <string name="nationality">Nationality</string>
     <string name="passport_type">Passport type</string>
-    <string name="issuing_authority">Issuing authority/office</string>
+    <string name="issuing_authority">Issuing authority</string>
     <string name="issue_date">Issue date</string>
     <string name="expiration_date">Expiration date</string>
     <string name="details">Details</string>
     <string name="account_details">Account details</string>
     <string name="no_bank_accounts">There are no bank accounts in your vault.</string>
+    <string name="license_details">License details</string>
+    <string name="licenses">Licenses</string>
+    <string name="no_licenses">There are no licenses in your vault.</string>
+    <string name="no_passports">There are no passports in your vault.</string>
+    <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">Your request was interrupted because the app needed to re-authenticate. Please try again.</string>
+    <string name="passport_details">Passport details</string>
+    <string name="sex">Sex</string>
+    <string name="birth_place">Birth place</string>
+    <string name="national_identification_number">National identification number</string>
+    <string name="copy_national_identification_number">Copy national identification number</string>
+    <string name="access_your_local_network">Access your local network</string>
+    <string name="local_network_access_required">Local network access required</string>
+    <string name="ask_again_later">Ask again later</string>
+    <string name="enable_local_network_access">Enable local network access</string>
+    <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Bitwarden needs local network access to sync with your server. Without this permission, the app won’t be able to connect.</string>
+    <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Without this permission, Bitwarden won’t be able to connect and sync with your server. You can enable this in your device settings.</string>
+    <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Your request was interrupted because the app needs local network access. You can enable this in your device settings.</string>
+    <string name="continue_to_stripe">Continue to Stripe?</string>
+    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">You’ll be taken to Stripe to manage your subscription cancellation.</string>
 </resources>

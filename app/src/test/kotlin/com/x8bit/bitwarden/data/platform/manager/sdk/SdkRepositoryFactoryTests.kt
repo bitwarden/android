@@ -40,6 +40,7 @@ class SdkRepositoryFactoryTests {
         authTokenProvider = mockk(),
         certificateProvider = mockk(),
         cookieProvider = mockk(),
+        permissionProvider = mockk(),
         clock = FIXED_CLOCK,
     )
 

@@ -17,6 +17,7 @@ import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -50,6 +51,7 @@ class AttachmentsViewModel @Inject constructor(
     private val authRepo: AuthRepository,
     private val environmentRepo: EnvironmentRepository,
     private val vaultRepo: VaultRepository,
+    private val premiumStateManager: PremiumStateManager,
     featureFlagManager: FeatureFlagManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AttachmentsState, AttachmentsEvent, AttachmentsAction>(
@@ -168,15 +170,19 @@ class AttachmentsViewModel @Inject constructor(
 
     private fun handleUpgradeToPremiumClick() {
         mutableStateFlow.update { it.copy(dialogState = null) }
-        val baseUrl = environmentRepo
-            .environment
-            .environmentUrlData
-            .baseWebVaultUrlOrDefault
-        sendEvent(
-            AttachmentsEvent.NavigateToUri(
-                uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium",
-            ),
-        )
+        if (premiumStateManager.isInAppUpgradeAvailable()) {
+            sendEvent(AttachmentsEvent.NavigateToPlanModal)
+        } else {
+            val baseUrl = environmentRepo
+                .environment
+                .environmentUrlData
+                .baseWebVaultUrlOrDefault
+            sendEvent(
+                AttachmentsEvent.NavigateToUri(
+                    uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium",
+                ),
+            )
+        }
     }
 
     private fun handleChooseFileClick() {
@@ -522,6 +528,11 @@ sealed class AttachmentsEvent {
      * Navigates to upgrade to the given Uri.
      */
     data class NavigateToUri(val uri: String) : AttachmentsEvent()
+
+    /**
+     * Navigates to the in-app plan modal for premium upgrade.
+     */
+    data object NavigateToPlanModal : AttachmentsEvent()
 
     /**
      * Navigates to preview the attachment.

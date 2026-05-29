@@ -6,7 +6,7 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseWebSendUrl
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -72,8 +72,8 @@ class SendViewModelTest : BaseViewModelTest() {
         every { sendDataStateFlow } returns mutableSendDataFlow
     }
     private val policyManager: PolicyManager = mockk {
-        every { getActivePolicies(type = PolicyTypeJson.DISABLE_SEND) } returns emptyList()
-        every { getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND) } returns emptyFlow()
+        every { getActivePolicies(type = PolicyType.DISABLE_SEND) } returns emptyList()
+        every { getActivePoliciesFlow(type = PolicyType.DISABLE_SEND) } returns emptyFlow()
     }
 
     private val networkConnectionManager: NetworkConnectionManager = mockk {
@@ -155,7 +155,8 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `AddSendSelected with file type and non Premium user should display dialog`() {
+    fun `AddSendSelected file without Premium and upgrade unavailable shows Error dialog`() {
+        every { premiumStateManager.isInAppUpgradeAvailable() } returns false
         val state = DEFAULT_STATE.copy(isPremiumUser = false, policyDisablesSend = false)
         val viewModel = createViewModel(state = state)
         viewModel.trySendAction(SendAction.AddSendSelected(sendType = SendItemType.FILE))
@@ -168,6 +169,31 @@ class SendViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
+    }
+
+    @Test
+    fun `AddSendSelected file without Premium with upgrade available shows premium dialog`() {
+        every { premiumStateManager.isInAppUpgradeAvailable() } returns true
+        val state = DEFAULT_STATE.copy(isPremiumUser = false, policyDisablesSend = false)
+        val viewModel = createViewModel(state = state)
+        viewModel.trySendAction(SendAction.AddSendSelected(sendType = SendItemType.FILE))
+        assertEquals(
+            state.copy(dialogState = SendState.DialogState.FileTypeRequiresPremium),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `UpgradeToPremiumClick clears dialog and emits NavigateToPlanModal`() = runTest {
+        val state = DEFAULT_STATE.copy(
+            dialogState = SendState.DialogState.FileTypeRequiresPremium,
+        )
+        val viewModel = createViewModel(state = state)
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(SendAction.UpgradeToPremiumClick)
+            assertEquals(SendEvent.NavigateToPlanModal, awaitItem())
+        }
+        assertEquals(state.copy(dialogState = null), viewModel.stateFlow.value)
     }
 
     @Test
@@ -782,6 +808,7 @@ private val DEFAULT_USER_ACCOUNT_STATE = UserState.Account(
     avatarColorHex = "#ff00ff",
     environment = Environment.Us,
     isPremium = false,
+    isPremiumFromSelf = false,
     isLoggedIn = true,
     isVaultUnlocked = true,
     needsPasswordReset = false,

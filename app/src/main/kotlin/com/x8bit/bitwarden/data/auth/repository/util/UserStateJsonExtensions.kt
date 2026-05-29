@@ -5,9 +5,10 @@ import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.MasterPasswordUnlockDataJson
 import com.bitwarden.network.model.OrganizationType
-import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UserDecryptionOptionsJson
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.base.util.toHexColorRepresentation
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -83,7 +84,8 @@ fun UserStateJson.toUpdatedUserStateJson(
         .copy(
             avatarColorHex = syncProfile.avatarColor,
             stamp = syncProfile.securityStamp,
-            hasPremium = syncProfile.isPremium || syncProfile.isPremiumFromOrganization,
+            hasPremiumPersonally = syncProfile.isPremium,
+            hasPremiumFromOrganization = syncProfile.isPremiumFromOrganization,
             isTwoFactorEnabled = syncProfile.isTwoFactorEnabled,
             creationDate = syncProfile.creationDate,
             userDecryptionOptions = userDecryptionOptions,
@@ -191,7 +193,7 @@ fun UserStateJson.toUserState(
     isBiometricsEnabledProvider: (userId: String) -> Boolean,
     vaultUnlockTypeProvider: (userId: String) -> VaultUnlockType,
     isDeviceTrustedProvider: (userId: String) -> Boolean,
-    getUserPolicies: (userId: String, policy: PolicyTypeJson) -> List<SyncResponseJson.Policy>,
+    getUserPolicies: (userId: String, policy: PolicyType) -> List<PolicyView>,
 ): UserState =
     UserState(
         activeUserId = this.activeUserId,
@@ -234,15 +236,15 @@ fun UserStateJson.toUserState(
 
                 val hasPersonalOwnershipRestrictedOrg = getUserPolicies(
                     userId,
-                    PolicyTypeJson.PERSONAL_OWNERSHIP,
+                    PolicyType.ORGANIZATION_DATA_OWNERSHIP,
                 )
-                    .any { it.isEnabled }
+                    .any { it.enabled }
 
                 val hasPersonalVaultExportRestrictedOrg = getUserPolicies(
                     userId,
-                    PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
+                    PolicyType.DISABLE_PERSONAL_VAULT_EXPORT,
                 )
-                    .any { it.isEnabled }
+                    .any { it.enabled }
 
                 UserState.Account(
                     userId = userId,
@@ -253,7 +255,9 @@ fun UserStateJson.toUserState(
                         .settings
                         .environmentUrlData
                         .toEnvironmentUrlsOrDefault(),
-                    isPremium = profile.hasPremium == true,
+                    isPremium = profile.hasPremiumPersonally == true ||
+                        profile.hasPremiumFromOrganization == true,
+                    isPremiumFromSelf = profile.hasPremiumPersonally == true,
                     isLoggedIn = userAccountTokens
                         .find { it.userId == userId }
                         ?.isLoggedIn == true,

@@ -11,7 +11,7 @@ import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.takeUntilLoaded
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
@@ -107,6 +107,7 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.time.Clock
+import java.time.LocalDate
 import java.util.Collections
 import java.util.UUID
 import javax.inject.Inject
@@ -156,7 +157,7 @@ class VaultAddEditViewModel @Inject constructor(
             val selectedFolderId = args.selectedFolderId
             val selectedCollectionId = args.selectedCollectionId
             val isIndividualVaultDisabled = policyManager
-                .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+                .getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
                 .any()
 
             val specialCircumstance = specialCircumstanceManager.specialCircumstance
@@ -316,6 +317,10 @@ class VaultAddEditViewModel @Inject constructor(
 
             is VaultAddEditAction.ItemType.LicenseType -> {
                 handleLicenseTypeActions(action)
+            }
+
+            is VaultAddEditAction.ItemType.PassportType -> {
+                handlePassportTypeActions(action)
             }
 
             is VaultAddEditAction.Internal -> handleInternalActions(action)
@@ -1788,10 +1793,87 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.ItemType.LicenseType.LicenseClassTextChange -> {
                 updateLicenseContent { it.copy(licenseClass = action.licenseClass) }
             }
+
+            is VaultAddEditAction.ItemType.LicenseType.DateOfBirthChange -> {
+                updateLicenseContent { it.copy(dateOfBirth = action.dateOfBirth) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.IssueDateChange -> {
+                updateLicenseContent { it.copy(issueDate = action.issueDate) }
+            }
+
+            is VaultAddEditAction.ItemType.LicenseType.ExpirationDateChange -> {
+                updateLicenseContent { it.copy(expirationDate = action.expirationDate) }
+            }
         }
     }
 
     //endregion License Type Handlers
+
+    //region Passport Type Handlers
+
+    @Suppress("LongMethod")
+    private fun handlePassportTypeActions(
+        action: VaultAddEditAction.ItemType.PassportType,
+    ) {
+        when (action) {
+            is VaultAddEditAction.ItemType.PassportType.GivenNameTextChange -> {
+                updatePassportContent { it.copy(givenName = action.givenName) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.SurnameTextChange -> {
+                updatePassportContent { it.copy(surname = action.surname) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.SexTextChange -> {
+                updatePassportContent { it.copy(sex = action.sex) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.BirthPlaceTextChange -> {
+                updatePassportContent { it.copy(birthPlace = action.birthPlace) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.NationalityTextChange -> {
+                updatePassportContent { it.copy(nationality = action.nationality) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.PassportNumberTextChange -> {
+                updatePassportContent { it.copy(passportNumber = action.passportNumber) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.PassportTypeTextChange -> {
+                updatePassportContent { it.copy(passportType = action.passportType) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.NationalIdentificationNumberTextChange -> {
+                updatePassportContent {
+                    it.copy(nationalIdentificationNumber = action.nationalIdentificationNumber)
+                }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.IssuingCountryTextChange -> {
+                updatePassportContent { it.copy(issuingCountry = action.country) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.IssuingAuthorityTextChange -> {
+                updatePassportContent { it.copy(issuingAuthority = action.authority) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.DateOfBirthChange -> {
+                updatePassportContent { it.copy(dateOfBirth = action.dateOfBirth) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.ExpirationDateChange -> {
+                updatePassportContent { it.copy(expirationDate = action.expirationDate) }
+            }
+
+            is VaultAddEditAction.ItemType.PassportType.IssueDateChange -> {
+                updatePassportContent { it.copy(issueDate = action.issueDate) }
+            }
+        }
+    }
+
+    //endregion Passport Type Handlers
 
     //region Internal Type Handlers
 
@@ -2165,7 +2247,7 @@ class VaultAddEditViewModel @Inject constructor(
                 sendViewList = emptyList(),
             )
         val isIndividualVaultDisabled = policyManager
-            .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+            .getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
             .any()
         return copy(
             viewState = internalVaultData.decryptCipherListResult.successes
@@ -2570,6 +2652,16 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
+    private inline fun updatePassportContent(
+        crossinline block: (VaultAddEditState.ViewState.Content.ItemType.Passport) ->
+        VaultAddEditState.ViewState.Content.ItemType.Passport,
+    ) {
+        updateContent { currentContent ->
+            (currentContent.type as? VaultAddEditState.ViewState.Content.ItemType.Passport)
+                ?.let { currentContent.copy(type = block(it)) }
+        }
+    }
+
     @Suppress("MaxLineLength")
     private suspend fun VaultAddEditState.ViewState.Content.createCipherForAddAndCloneItemStates(): CreateCipherResult {
         return common.selectedOwner?.collections
@@ -2670,14 +2762,14 @@ data class VaultAddEditState(
             is VaultAddEditType.AddItem,
             is VaultAddEditType.CloneItem,
                 -> when (cipherType) {
-                VaultItemCipherType.LOGIN -> BitwardenString.new_login.asText()
-                VaultItemCipherType.CARD -> BitwardenString.new_card.asText()
-                VaultItemCipherType.IDENTITY -> BitwardenString.new_identity.asText()
-                VaultItemCipherType.SECURE_NOTE -> BitwardenString.new_note.asText()
-                VaultItemCipherType.SSH_KEY -> BitwardenString.new_ssh_key.asText()
-                VaultItemCipherType.BANK_ACCOUNT -> BitwardenString.new_bank_account.asText()
-                VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.new_license.asText()
-                VaultItemCipherType.PASSPORT -> BitwardenString.new_passport.asText()
+                VaultItemCipherType.LOGIN -> BitwardenString.add_login.asText()
+                VaultItemCipherType.CARD -> BitwardenString.add_card.asText()
+                VaultItemCipherType.IDENTITY -> BitwardenString.add_identity.asText()
+                VaultItemCipherType.SECURE_NOTE -> BitwardenString.add_note.asText()
+                VaultItemCipherType.SSH_KEY -> BitwardenString.add_ssh_key.asText()
+                VaultItemCipherType.BANK_ACCOUNT -> BitwardenString.add_bank_account.asText()
+                VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.add_license.asText()
+                VaultItemCipherType.PASSPORT -> BitwardenString.add_passport.asText()
             }
 
             is VaultAddEditType.EditItem -> when (cipherType) {
@@ -3114,13 +3206,13 @@ data class VaultAddEditState(
                     val firstName: String = "",
                     val middleName: String = "",
                     val lastName: String = "",
-                    val dateOfBirth: String = "",
+                    val dateOfBirth: LocalDate? = null,
                     val licenseNumber: String = "",
                     val issuingCountry: String = "",
                     val issuingState: String = "",
                     val issuingAuthority: String = "",
-                    val issueDate: String = "",
-                    val expirationDate: String = "",
+                    val issueDate: LocalDate? = null,
+                    val expirationDate: LocalDate? = null,
                     val licenseClass: String = "",
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption
@@ -3137,24 +3229,22 @@ data class VaultAddEditState(
                  */
                 @Parcelize
                 data class Passport(
-                    val surname: String = "",
                     val givenName: String = "",
-                    val dateOfBirth: String = "",
-                    val birthPlace: String = "",
+                    val surname: String = "",
+                    val dateOfBirth: LocalDate? = null,
                     val sex: String = "",
+                    val birthPlace: String = "",
                     val nationality: String = "",
                     val passportNumber: String = "",
                     val passportType: String = "",
+                    val nationalIdentificationNumber: String = "",
                     val issuingCountry: String = "",
                     val issuingAuthority: String = "",
-                    val issueDate: String = "",
-                    val expirationDate: String = "",
-                    val nationalIdentificationNumber: String = "",
+                    val issueDate: LocalDate? = null,
+                    val expirationDate: LocalDate? = null,
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption
                         get() = ItemTypeOption.PASSPORT
-
-                    override val isSdkSupported: Boolean get() = false
 
                     override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
                         get() = persistentListOf()
@@ -4141,6 +4231,79 @@ sealed class VaultAddEditAction {
         }
 
         /**
+         * Represents actions specific to the Passport type.
+         */
+        sealed class PassportType : ItemType() {
+
+            /**
+             * Fired when the given name text input is changed.
+             */
+            data class GivenNameTextChange(val givenName: String) : PassportType()
+
+            /**
+             * Fired when the surname text input is changed.
+             */
+            data class SurnameTextChange(val surname: String) : PassportType()
+
+            /**
+             * Fired when the sex text input is changed.
+             */
+            data class SexTextChange(val sex: String) : PassportType()
+
+            /**
+             * Fired when the birth place text input is changed.
+             */
+            data class BirthPlaceTextChange(val birthPlace: String) : PassportType()
+
+            /**
+             * Fired when the nationality text input is changed.
+             */
+            data class NationalityTextChange(val nationality: String) : PassportType()
+
+            /**
+             * Fired when the passport number text input is changed.
+             */
+            data class PassportNumberTextChange(val passportNumber: String) : PassportType()
+
+            /**
+             * Fired when the passport type text input is changed.
+             */
+            data class PassportTypeTextChange(val passportType: String) : PassportType()
+
+            /**
+             * Fired when the national identification number text input is changed.
+             */
+            data class NationalIdentificationNumberTextChange(
+                val nationalIdentificationNumber: String,
+            ) : PassportType()
+
+            /**
+             * Fired when the issuing country text input is changed.
+             */
+            data class IssuingCountryTextChange(val country: String) : PassportType()
+
+            /**
+             * Fired when the issuing authority text input is changed.
+             */
+            data class IssuingAuthorityTextChange(val authority: String) : PassportType()
+
+            /**
+             * Fired when the date of birth input is changed.
+             */
+            data class DateOfBirthChange(val dateOfBirth: LocalDate?) : PassportType()
+
+            /**
+             * Fired when the issue date input is changed.
+             */
+            data class IssueDateChange(val issueDate: LocalDate?) : PassportType()
+
+            /**
+             * Fired when the expiration date input is changed.
+             */
+            data class ExpirationDateChange(val expirationDate: LocalDate?) : PassportType()
+        }
+
+        /**
          * Represents actions specific to the License type.
          */
         sealed class LicenseType : ItemType() {
@@ -4184,6 +4347,27 @@ sealed class VaultAddEditAction {
              * Fired when the license class text input is changed.
              */
             data class LicenseClassTextChange(val licenseClass: String) : LicenseType()
+
+            /**
+             * Fired when the date of birth input is changed.
+             */
+            data class DateOfBirthChange(
+                val dateOfBirth: LocalDate?,
+            ) : LicenseType()
+
+            /**
+             * Fired when the issue date input is changed.
+             */
+            data class IssueDateChange(
+                val issueDate: LocalDate?,
+            ) : LicenseType()
+
+            /**
+             * Fired when the expiration date input is changed.
+             */
+            data class ExpirationDateChange(
+                val expirationDate: LocalDate?,
+            ) : LicenseType()
         }
     }
 

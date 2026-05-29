@@ -50,6 +50,8 @@ import com.bitwarden.ui.util.asText
  * @param cardSubtitle The subtitle of the card.
  * @param secondaryButton The optional data for a secondary button.
  * @param leadingContent Optional content to display on the leading side of the [cardTitle] [Text].
+ * @param isExternalLink Whether the CTA launches an external link, which announces the
+ * external-link affordance to screen readers via the shared `external_link_format` string.
  */
 @Suppress("LongMethod")
 @Composable
@@ -62,6 +64,7 @@ fun BitwardenActionCard(
     cardSubtitle: String? = null,
     secondaryButton: BitwardenButtonData? = null,
     leadingContent: @Composable (() -> Unit)? = null,
+    isExternalLink: Boolean = false,
 ) {
     Card(
         modifier = modifier,
@@ -133,6 +136,7 @@ fun BitwardenActionCard(
         BitwardenFilledButton(
             label = actionText,
             onClick = onActionClick,
+            isExternalLink = isExternalLink,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),

@@ -55,7 +55,7 @@ class GeneratorRepositoryImpl(
     private val vaultSdkSource: VaultSdkSource,
     private val passwordHistoryDiskSource: PasswordHistoryDiskSource,
     private val reviewPromptManager: ReviewPromptManager,
-    dispatcherManager: DispatcherManager,
+    private val dispatcherManager: DispatcherManager,
 ) : GeneratorRepository {
 
     private val scope = CoroutineScope(dispatcherManager.io)
@@ -193,7 +193,7 @@ class GeneratorRepositoryImpl(
 
     override suspend fun generateForwardedServiceUsername(
         forwardedServiceGeneratorRequest: UsernameGeneratorRequest.Forwarded,
-    ): GeneratedForwardedServiceUsernameResult = withContext(scope.coroutineContext) {
+    ): GeneratedForwardedServiceUsernameResult = withContext(dispatcherManager.io) {
         generatorSdkSource.generateForwardedServiceEmail(forwardedServiceGeneratorRequest)
             .fold(
                 onSuccess = { generatedEmail ->

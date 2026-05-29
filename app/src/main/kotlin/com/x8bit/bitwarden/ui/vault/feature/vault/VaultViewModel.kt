@@ -11,7 +11,7 @@ import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.hexToColor
@@ -121,7 +121,7 @@ class VaultViewModel @Inject constructor(
     private val browserAutofillDialogManager: BrowserAutofillDialogManager,
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager,
     private val buildInfoManager: BuildInfoManager,
-    private val featureFlagManager: FeatureFlagManager,
+    featureFlagManager: FeatureFlagManager,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
@@ -137,7 +137,7 @@ class VaultViewModel @Inject constructor(
         val activeAccountSummary = activeAccount.toAccountSummary(isActive = true)
         val vaultFilterData = activeAccount.toVaultFilterData(
             isIndividualVaultDisabled = policyManager
-                .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+                .getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
                 .any(),
         )
         VaultState(
@@ -286,14 +286,9 @@ class VaultViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         policyManager
-            .getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            .getActivePoliciesFlow(type = PolicyType.RESTRICTED_ITEM_TYPES)
             .map { policies -> policies.map { it.organizationId } }
             .map { VaultAction.Internal.PolicyUpdateReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        featureFlagManager.getFeatureFlagFlow(FlagKey.CredentialExchangeProtocolExport)
-            .map { VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -302,6 +297,11 @@ class VaultViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        if (!buildInfoManager.isFdroid) {
+            viewModelScope.launch {
+                credentialExchangeRegistryManager.register()
+            }
+        }
         viewModelScope.launch {
             delay(timeMillis = BROWSER_AUTOFILL_DIALOG_DELAY)
             mutableStateFlow.update { vaultState ->
@@ -318,6 +318,7 @@ class VaultViewModel @Inject constructor(
         }
     }
 
+    @Suppress("LongMethod")
     override fun handleAction(action: VaultAction) {
         when (action) {
             is VaultAction.AddItemClick -> handleAddItemClick(action)
@@ -338,6 +339,8 @@ class VaultViewModel @Inject constructor(
             is VaultAction.SecureNoteGroupClick -> handleSecureNoteClick()
             is VaultAction.SshKeyGroupClick -> handleSshKeyClick()
             is VaultAction.BankAccountGroupClick -> handleBankAccountClick()
+            is VaultAction.LicenseGroupClick -> handleLicenseClick()
+            is VaultAction.PassportGroupClick -> handlePassportClick()
             is VaultAction.ArchiveClick -> handleArchiveClick()
             is VaultAction.TrashClick -> handleTrashClick()
             is VaultAction.VaultItemClick -> handleVaultItemClick(action)
@@ -702,6 +705,14 @@ class VaultViewModel @Inject constructor(
         sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.SshKey))
     }
 
+    private fun handleLicenseClick() {
+        sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.License))
+    }
+
+    private fun handlePassportClick() {
+        sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.Passport))
+    }
+
     private fun handleBankAccountClick() {
         sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.BankAccount))
     }
@@ -759,6 +770,14 @@ class VaultViewModel @Inject constructor(
 
             is ListingItemOverflowAction.VaultAction.CopyRoutingNumberClick -> {
                 handleCopyRoutingNumberClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyLicenseNumberClick -> {
+                handleCopyLicenseNumberClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyPassportNumberClick -> {
+                handleCopyPassportNumberClick(overflowAction)
             }
 
             is ListingItemOverflowAction.VaultAction.CopyPasswordClick -> {
@@ -880,6 +899,40 @@ class VaultViewModel @Inject constructor(
                     clipboardManager.setText(
                         text = it,
                         toastDescriptorOverride = BitwardenString.routing_number.asText(),
+                    )
+                }
+        }
+    }
+
+    private fun handleCopyLicenseNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyLicenseNumberClick,
+    ) {
+        viewModelScope.launch {
+            getCipherForCopyOrNull(action.cipherId)
+                ?.driversLicense
+                ?.licenseNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    clipboardManager.setText(
+                        text = it,
+                        toastDescriptorOverride = BitwardenString.license_number.asText(),
+                    )
+                }
+        }
+    }
+
+    private fun handleCopyPassportNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyPassportNumberClick,
+    ) {
+        viewModelScope.launch {
+            getCipherForCopyOrNull(action.cipherId)
+                ?.passport
+                ?.passportNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    clipboardManager.setText(
+                        text = it,
+                        toastDescriptorOverride = BitwardenString.passport_number.asText(),
                     )
                 }
         }
@@ -1078,10 +1131,6 @@ class VaultViewModel @Inject constructor(
                 handleNewItemTypesFlagUpdateReceive(action)
             }
 
-            is VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive -> {
-                handleCredentialExchangeProtocolExportFlagUpdateReceive(action)
-            }
-
             is VaultAction.Internal.ArchiveCipherReceive -> handleArchiveCipherReceive(action)
             is VaultAction.Internal.UnarchiveCipherReceive -> handleUnarchiveCipherReceive(action)
             is VaultAction.Internal.IntroducingArchiveActionCardDismissedFlowReceive -> {
@@ -1165,20 +1214,6 @@ class VaultViewModel @Inject constructor(
                 dialog = state.dialog,
                 validTotpIds = state.validTotpIds,
             )
-        }
-    }
-
-    private fun handleCredentialExchangeProtocolExportFlagUpdateReceive(
-        action: VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive,
-    ) {
-        viewModelScope.launch {
-            if (action.isCredentialExchangeProtocolExportEnabled &&
-                !buildInfoManager.isFdroid
-            ) {
-                credentialExchangeRegistryManager.register()
-            } else {
-                credentialExchangeRegistryManager.unregister()
-            }
         }
     }
 
@@ -1334,10 +1369,12 @@ class VaultViewModel @Inject constructor(
 
         val vaultFilterData = userState.activeAccount.toVaultFilterData(
             isIndividualVaultDisabled = policyManager
-                .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+                .getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
                 .any(),
         )
         val appBarTitle = vaultFilterData.toAppBarTitle()
+        val previousIsPremium = state.isPremium
+        val nextIsPremium = userState.activeAccount.isPremium
 
         mutableStateFlow.update {
             val accountSummaries = userState.toAccountSummaries()
@@ -1348,8 +1385,18 @@ class VaultViewModel @Inject constructor(
                 avatarColorString = activeAccountSummary.avatarColorHex,
                 accountSummaries = accountSummaries,
                 vaultFilterData = vaultFilterData,
-                isPremium = userState.activeAccount.isPremium,
+                isPremium = nextIsPremium,
                 showImportActionCard = firstTimeState.showImportLoginsCard,
+            )
+        }
+
+        // Archive UI fields (count, lock icon, "Premium required" subtext) are precomputed
+        // from isPremium when the viewState is built. Recompute when isPremium transitions
+        // so the row reflects the new entitlement immediately after upgrade.
+        if (previousIsPremium != nextIsPremium) {
+            updateViewState(
+                vaultData = vaultRepository.vaultDataStateFlow.value,
+                validTotpIds = state.validTotpIds,
             )
         }
     }
@@ -1797,6 +1844,8 @@ data class VaultState(
          * @property loginItemsCount The count of Login type items.
          * @property cardItemsCount The count of Card type items.
          * @property bankAccountItemsCount The count of Bank Account type items.
+         * @property licenseItemsCount The count of License type items.
+         * @property passportItemsCount The count of Passport type items.
          * @property identityItemsCount The count of Identity type items.
          * @property secureNoteItemsCount The count of Secure Notes type items.
          * @property favoriteItems The list of favorites to be displayed.
@@ -1809,6 +1858,8 @@ data class VaultState(
          * @property archiveEndIcon The end icon to be displayed on the archive item.
          * @property showCardGroup Is the card group available for display.
          * @property showBankAccountGroup Is the bank account group available for display.
+         * @property showLicenseGroup Is the license group available for display.
+         * @property showPassportGroup Is the passport group available for display.
          */
         @Parcelize
         data class Content(
@@ -1820,6 +1871,8 @@ data class VaultState(
             val secureNoteItemsCount: Int,
             val sshKeyItemsCount: Int,
             val bankAccountItemsCount: Int,
+            val licenseItemsCount: Int,
+            val passportItemsCount: Int,
             val favoriteItems: List<VaultItem>,
             val folderItems: List<FolderItem>,
             val noFolderItems: List<VaultItem>,
@@ -1830,6 +1883,8 @@ data class VaultState(
             @field:DrawableRes val archiveEndIcon: Int?,
             val showCardGroup: Boolean,
             val showBankAccountGroup: Boolean,
+            val showLicenseGroup: Boolean,
+            val showPassportGroup: Boolean,
         ) : ViewState() {
             override val hasFab: Boolean get() = true
             override val isPullToRefreshEnabled: Boolean get() = true
@@ -2428,6 +2483,16 @@ sealed class VaultAction {
     data object BankAccountGroupClick : VaultAction()
 
     /**
+     * User clicked the license types button.
+     */
+    data object LicenseGroupClick : VaultAction()
+
+    /**
+     * User clicked the passport types button.
+     */
+    data object PassportGroupClick : VaultAction()
+
+    /**
      * User clicked the archive button.
      */
     data object ArchiveClick : VaultAction()
@@ -2612,13 +2677,6 @@ sealed class VaultAction {
          * Indicates the forced sync triggered for a KDF update check has completed.
          */
         data object KdfSyncCompletedReceive : Internal()
-
-        /**
-         * Indicates that the Credential Exchange Protocol export flag has been updated.
-         */
-        data class CredentialExchangeProtocolExportFlagUpdateReceive(
-            val isCredentialExchangeProtocolExportEnabled: Boolean,
-        ) : Internal()
 
         /**
          * Indicates that the New Item Types feature flag has been updated.
