@@ -13,6 +13,7 @@ import com.bitwarden.core.KeyConnectorResponse
 import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.core.RegisterTdeKeyResponse
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
@@ -57,6 +58,7 @@ class AuthSdkSourceTest {
     }
 
     private val authSkdSource: AuthSdkSource = AuthSdkSourceImpl(
+        dispatcherManager = FakeDispatcherManager(),
         sdkClientManager = sdkClientManager,
     )
 
