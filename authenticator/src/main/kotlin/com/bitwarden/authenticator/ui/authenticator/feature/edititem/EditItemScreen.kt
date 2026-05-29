@@ -176,9 +176,9 @@ fun EditItemContent(
             Spacer(Modifier.height(8.dp))
             BitwardenTextField(
                 modifier = Modifier
-                    .testTag(tag = "NameTextField")
                     .standardHorizontalMargin()
                     .fillMaxWidth(),
+                textFieldTestTag = "NameTextField",
                 label = stringResource(id = BitwardenString.name),
                 value = viewState.itemData.issuer,
                 onValueChange = onIssuerNameTextChange,
@@ -190,9 +190,9 @@ fun EditItemContent(
         item {
             BitwardenPasswordField(
                 modifier = Modifier
-                    .testTag(tag = "KeyTextField")
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
+                passwordFieldTestTag = "KeyTextField",
                 label = stringResource(id = BitwardenString.key),
                 value = viewState.itemData.totpCode,
                 onValueChange = onTotpCodeTextChange,
@@ -204,9 +204,9 @@ fun EditItemContent(
         item {
             BitwardenTextField(
                 modifier = Modifier
-                    .testTag(tag = "UsernameTextField")
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
+                textFieldTestTag = "UsernameTextField",
                 label = stringResource(id = BitwardenString.username),
                 value = viewState.itemData.username.orEmpty(),
                 onValueChange = onUsernameTextChange,
@@ -234,7 +234,8 @@ fun EditItemContent(
                 onClick = onExpandAdvancedOptionsClicked,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .standardHorizontalMargin(),
+                    .standardHorizontalMargin()
+                    .testTag("AdditionalOptionsExpandingHeader"),
             )
         }
 
