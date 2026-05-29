@@ -63,8 +63,13 @@ class FillAssistManagerImpl(
 
     override fun syncIfNecessary() {
         if (!featureFlagManager.getFeatureFlag(FlagKey.FillAssistTargetingRules)) return
-        val serverUrl = serverConfigRepository.serverConfigStateFlow.value
-            ?.serverData?.environment?.fillAssistRulesUrl ?: return
+        val serverUrl = serverConfigRepository
+            .serverConfigStateFlow
+            .value
+            ?.serverData
+            ?.environment
+            ?.fillAssistRulesUrl
+            ?: return
         val lastFetch = fillAssistDiskSource.getLastFetchTimestamp(serverUrl) ?: 0L
         if (clock.millis() - lastFetch < UPDATE_INTERVAL_MS) return
         if (!syncJob.isCompleted) return
