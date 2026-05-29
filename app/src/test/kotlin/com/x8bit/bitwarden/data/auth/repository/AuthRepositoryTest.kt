@@ -5383,7 +5383,7 @@ class AuthRepositoryTest {
         val organizations = listOf(
             createMockOrganizationNetwork(
                 number = 1,
-                shouldUseKeyConnector = true,
+                isKeyConnectorEnabled = true,
                 type = OrganizationType.USER,
                 keyConnectorUrl = null,
             ),
@@ -5408,7 +5408,7 @@ class AuthRepositoryTest {
             val organizations = listOf(
                 createMockOrganizationNetwork(
                     number = 1,
-                    shouldUseKeyConnector = true,
+                    isKeyConnectorEnabled = true,
                     type = OrganizationType.USER,
                     keyConnectorUrl = url,
                 ),
@@ -5441,7 +5441,7 @@ class AuthRepositoryTest {
             val organizations = listOf(
                 createMockOrganizationNetwork(
                     number = 1,
-                    shouldUseKeyConnector = true,
+                    isKeyConnectorEnabled = true,
                     type = OrganizationType.USER,
                     keyConnectorUrl = url,
                 ),
@@ -5477,7 +5477,7 @@ class AuthRepositoryTest {
             val organizations = listOf(
                 createMockOrganizationNetwork(
                     number = 1,
-                    shouldUseKeyConnector = true,
+                    isKeyConnectorEnabled = true,
                     type = OrganizationType.USER,
                     keyConnectorUrl = url,
                 ),
@@ -5512,7 +5512,7 @@ class AuthRepositoryTest {
             val organizations = listOf(
                 createMockOrganizationNetwork(
                     number = 1,
-                    shouldUseKeyConnector = true,
+                    isKeyConnectorEnabled = true,
                     type = OrganizationType.USER,
                     keyConnectorUrl = url,
                 ),

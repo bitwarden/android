@@ -1057,7 +1057,7 @@ class AuthRepositoryImpl(
             ?: return RemovePasswordResult.Error(error = MissingPropertyException("User Key"))
         val keyConnectorUrl = organizations
             .find {
-                it.shouldUseKeyConnector &&
+                it.isKeyConnectorEnabled &&
                     it.role != OrganizationType.OWNER &&
                     it.role != OrganizationType.ADMIN
             }

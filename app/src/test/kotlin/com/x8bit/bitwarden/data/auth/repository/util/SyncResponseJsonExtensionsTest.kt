@@ -1,11 +1,14 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.bitwarden.network.model.createMockPermissions
+import com.bitwarden.organizations.ProfileOrganization
 import com.bitwarden.policies.PolicyType
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
+import com.x8bit.bitwarden.data.auth.repository.model.createMockSdkProfileOrganization
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -36,7 +39,7 @@ class SyncResponseJsonExtensionsTest {
                 ),
             ),
             listOf(
-                createMockOrganizationNetwork(number = 1, shouldUseKeyConnector = true),
+                createMockOrganizationNetwork(number = 1, isKeyConnectorEnabled = true),
                 createMockOrganizationNetwork(
                     number = 2,
                     type = OrganizationType.USER,
@@ -44,6 +47,62 @@ class SyncResponseJsonExtensionsTest {
                 ),
             )
                 .toOrganizations(),
+        )
+    }
+
+    @Test
+    fun `toSdkProfileOrganizations should correctly map a single organization`() {
+        assertEquals(
+            listOf(createMockSdkProfileOrganization(number = 1)),
+            listOf(createMockOrganizationNetwork(number = 1)).toSdkProfileOrganizations(),
+        )
+    }
+
+    @Test
+    fun `toSdkProfileOrganizations should correctly map multiple organizations`() {
+        assertEquals(
+            listOf(
+                createMockSdkProfileOrganization(number = 1),
+                createMockSdkProfileOrganization(number = 2),
+            ),
+            listOf(
+                createMockOrganizationNetwork(number = 1),
+                createMockOrganizationNetwork(number = 2),
+            )
+                .toSdkProfileOrganizations(),
+        )
+    }
+
+    @Test
+    fun `toSdkProfileOrganizations should filter out organizations with null names`() {
+        assertEquals(
+            listOf(createMockSdkProfileOrganization(number = 1)),
+            listOf(
+                createMockOrganizationNetwork(number = 1),
+                createMockOrganizationNetwork(number = 2, name = null),
+            )
+                .toSdkProfileOrganizations(),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toSdkProfileOrganizations should return empty list when all organizations have null names`() {
+        assertEquals(
+            emptyList<ProfileOrganization>(),
+            listOf(
+                createMockOrganizationNetwork(number = 1, name = null),
+                createMockOrganizationNetwork(number = 2, name = null),
+            )
+                .toSdkProfileOrganizations(),
+        )
+    }
+
+    @Test
+    fun `toSdkProfileOrganizations should return empty list for empty input`() {
+        assertEquals(
+            emptyList<ProfileOrganization>(),
+            emptyList<SyncResponseJson.Profile.Organization>().toSdkProfileOrganizations(),
         )
     }
 
