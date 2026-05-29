@@ -685,7 +685,7 @@ class PlanScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(
                 "You have a grace period of 7 days from your subscription expiration date. " +
-                    "Please resolve the past due amount by April 21, 2026.",
+                    "Please resolve the past due invoices by April 21, 2026.",
             )
             .assertTextRangeHasBoldSpan(boldSubstring = "April 21, 2026")
     }
