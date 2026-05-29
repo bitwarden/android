@@ -109,6 +109,10 @@ class AuthDiskSourceImpl(
         // We must migrate the tokens from being stored in the UserState(shared preferences) to
         // being stored separately in encrypted shared preferences.
         migrateAccountTokens()
+
+        // We want to make sure that any left over encrypted user keys are scrubbed from storage
+        // Since it is no longer supported.
+        removeLegacyUserKeys()
     }
 
     override var authenticatorSyncSymmetricKey: ByteArray?
@@ -146,7 +150,6 @@ class AuthDiskSourceImpl(
 
     override fun clearData(userId: String) {
         storeInvalidUnlockAttempts(userId = userId, invalidUnlockAttempts = null)
-        storeUserKey(userId = userId, userKey = null)
         storeLocalUserDataKey(userId = userId, wrappedKey = null)
         storeUserAutoUnlockKey(userId = userId, userAutoUnlockKey = null)
         storePrivateKey(userId = userId, privateKey = null)
@@ -228,16 +231,6 @@ class AuthDiskSourceImpl(
         putInt(
             key = INVALID_UNLOCK_ATTEMPTS_KEY.appendIdentifier(userId),
             value = invalidUnlockAttempts,
-        )
-    }
-
-    override fun getUserKey(userId: String): String? =
-        getString(key = MASTER_KEY_ENCRYPTION_USER_KEY.appendIdentifier(userId))
-
-    override fun storeUserKey(userId: String, userKey: String?) {
-        putString(
-            key = MASTER_KEY_ENCRYPTION_USER_KEY.appendIdentifier(userId),
-            value = userKey,
         )
     }
 
@@ -661,5 +654,9 @@ class AuthDiskSourceImpl(
                 ?.mapValues { (_, accountJson) -> accountJson.copy(tokens = null) }
                 .orEmpty(),
         )
+    }
+
+    private fun removeLegacyUserKeys() {
+        removeWithPrefix(prefix = MASTER_KEY_ENCRYPTION_USER_KEY)
     }
 }

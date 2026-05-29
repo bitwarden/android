@@ -1224,9 +1224,6 @@ class AuthRepositoryImpl(
                             keys = null,
                         ),
                     )
-                    .onSuccess {
-                        authDiskSource.storeUserKey(userId = userId, userKey = response.newKey)
-                    }
                     .map { response.passwordHash }
             }
             .flatMap { masterPasswordHash ->
@@ -1365,10 +1362,6 @@ class AuthRepositoryImpl(
                         authDiskSource.storePrivateKey(
                             userId = userId,
                             privateKey = response.keys.private,
-                        )
-                        authDiskSource.storeUserKey(
-                            userId = userId,
-                            userKey = response.encryptedUserKey,
                         )
                     }
                     .map { response.masterPasswordHash }
@@ -1983,11 +1976,6 @@ class AuthRepositoryImpl(
                     }
                 }
         }
-        loginResponse.key?.let {
-            // Only set the value if it's present, since we may have set it already
-            // when we completed the pending admin auth request.
-            authDiskSource.storeUserKey(userId = userId, userKey = it)
-        }
         // We continue to store the private key for backwards compatibility. Key connector
         // conversion still relies on the private key.
         loginResponse.privateKeyOrNull()?.let {
@@ -2136,13 +2124,6 @@ class AuthRepositoryImpl(
                         )
                         .also { result ->
                             if (result is VaultUnlockResult.Success) {
-                                // We now know that login/unlock was successful, so we store the
-                                // userKey and privateKey we now have since it didn't exist on the
-                                // loginResponse.
-                                authDiskSource.storeUserKey(
-                                    userId = userId,
-                                    userKey = keyConnector.encryptedUserKey,
-                                )
                                 // We continue to store the private key for backwards compatibility
                                 // since key connector conversion still relies on the private key.
                                 authDiskSource.storePrivateKey(
@@ -2283,7 +2264,6 @@ class AuthRepositoryImpl(
                             method = AuthRequestMethod.UserKey(protectedUserKey = userKey),
                         ),
                     )
-                    authDiskSource.storeUserKey(userId = userId, userKey = userKey)
                 }
             authDiskSource.storePendingAuthRequest(
                 userId = userId,
@@ -2313,10 +2293,6 @@ class AuthRepositoryImpl(
                 deviceProtectedUserKey = encryptedUserKey,
             ),
         )
-
-        if (vaultUnlockResult is VaultUnlockResult.Success) {
-            authDiskSource.storeUserKey(userId = userId, userKey = encryptedUserKey)
-        }
         return vaultUnlockResult
     }
 

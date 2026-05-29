@@ -37,7 +37,11 @@ import java.time.Instant
 @Suppress("LargeClass")
 class AuthDiskSourceTest {
     private val fakeEncryptedSharedPreferences = FakeSharedPreferences()
-    private val fakeSharedPreferences = FakeSharedPreferences()
+    private val fakeSharedPreferences = FakeSharedPreferences().apply {
+        edit(commit = true) {
+            putString("bwPreferencesStorage:masterKeyEncryptedUserKey", "testUserKey")
+        }
+    }
     private val legacySecureStorageMigrator = mockk<LegacySecureStorageMigrator> {
         every { migrateIfNecessary() } just runs
     }
@@ -54,6 +58,13 @@ class AuthDiskSourceTest {
     @Test
     fun `initialization should kick off a legacy migration if necessary`() {
         verify(exactly = 1) { legacySecureStorageMigrator.migrateIfNecessary() }
+    }
+
+    @Test
+    fun `initialization should trigger a legacy user key removal`() {
+        assertNull(
+            fakeSharedPreferences.getString("bwPreferencesStorage:masterKeyEncryptedUserKey", null),
+        )
     }
 
     @Test
@@ -279,7 +290,6 @@ class AuthDiskSourceTest {
             userId = userId,
             invalidUnlockAttempts = 1,
         )
-        authDiskSource.storeUserKey(userId = userId, userKey = "userKey")
         authDiskSource.storeUserAutoUnlockKey(
             userId = userId,
             userAutoUnlockKey = "userAutoUnlockKey",
@@ -334,7 +344,6 @@ class AuthDiskSourceTest {
         assertNull(authDiskSource.getUserBiometricInitVector(userId = userId))
         assertNull(authDiskSource.getUserBiometricUnlockKey(userId = userId))
         assertNull(authDiskSource.getInvalidUnlockAttempts(userId = userId))
-        assertNull(authDiskSource.getUserKey(userId = userId))
         assertNull(authDiskSource.getUserAutoUnlockKey(userId = userId))
         assertNull(authDiskSource.getPrivateKey(userId = userId))
         assertNull(authDiskSource.getAccountKeys(userId = userId))
@@ -407,45 +416,6 @@ class AuthDiskSourceTest {
             invalidUnlockAttempts = null,
         )
         assertFalse(fakeSharedPreferences.contains(invalidUnlockAttemptsKey))
-    }
-
-    @Test
-    fun `getUserKey should pull from SharedPreferences`() {
-        val userKeyBaseKey = "bwPreferencesStorage:masterKeyEncryptedUserKey"
-        val mockUserId = "mockUserId"
-        val mockUserKey = "mockUserKey"
-        fakeSharedPreferences
-            .edit {
-                putString(
-                    "${userKeyBaseKey}_$mockUserId",
-                    mockUserKey,
-                )
-            }
-        val actual = authDiskSource.getUserKey(userId = mockUserId)
-        assertEquals(
-            mockUserKey,
-            actual,
-        )
-    }
-
-    @Test
-    fun `storeUserKey should update SharedPreferences`() {
-        val userKeyBaseKey = "bwPreferencesStorage:masterKeyEncryptedUserKey"
-        val mockUserId = "mockUserId"
-        val mockUserKey = "mockUserKey"
-        authDiskSource.storeUserKey(
-            userId = mockUserId,
-            userKey = mockUserKey,
-        )
-        val actual = fakeSharedPreferences
-            .getString(
-                "${userKeyBaseKey}_$mockUserId",
-                null,
-            )
-        assertEquals(
-            mockUserKey,
-            actual,
-        )
     }
 
     @Test
