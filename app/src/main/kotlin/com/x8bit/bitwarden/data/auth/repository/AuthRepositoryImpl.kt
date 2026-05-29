@@ -153,7 +153,6 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.time.Clock
 import javax.inject.Singleton
@@ -190,7 +189,7 @@ class AuthRepositoryImpl(
     private val featureFlagManager: FeatureFlagManager,
     logsManager: LogsManager,
     pushManager: PushManager,
-    private val dispatcherManager: DispatcherManager,
+    dispatcherManager: DispatcherManager,
 ) : AuthRepository,
     AuthRequestManager by authRequestManager,
     BiometricsEncryptionManager by biometricsEncryptionManager,
@@ -565,15 +564,14 @@ class AuthRepositoryImpl(
     ): Result<VaultUnlockResult> {
         val userId = profile.userId
         val shouldTrustDevice = authDiskSource.getShouldTrustDevice(userId = userId) == true
-        return withContext(dispatcherManager.io) {
-            authSdkSource.postKeysForTdeRegistration(
+        return authSdkSource
+            .postKeysForTdeRegistration(
                 userId = userId,
                 organizationId = orgAutoEnrollStatus.organizationId,
                 organizationPublicKey = orgKeys.publicKey,
                 deviceIdentifier = authDiskSource.uniqueAppId,
                 shouldTrustDevice = shouldTrustDevice,
             )
-        }
             .map { response ->
                 // Clear the 'should trust device' flag, since the SDK trusted the device above.
                 authDiskSource.storeShouldTrustDevice(userId = userId, shouldTrustDevice = null)
@@ -976,15 +974,14 @@ class AuthRepositoryImpl(
             return RegisterResult.WeakPassword
         }
         if (featureFlagManager.getFeatureFlag(key = FlagKey.V2EncryptionPassword)) {
-            return withContext(dispatcherManager.io) {
-                authSdkSource.postKeysForUserPasswordRegistration(
+            return authSdkSource
+                .postKeysForUserPasswordRegistration(
                     email = email,
                     salt = email,
                     masterPassword = masterPassword,
                     masterPasswordHint = masterPasswordHint,
                     emailVerificationToken = emailVerificationToken,
                 )
-            }
                 .fold(
                     onSuccess = { RegisterResult.Success },
                     onFailure = { RegisterResult.Error(errorMessage = null, error = it) },
@@ -1281,18 +1278,16 @@ class AuthRepositoryImpl(
                     .map { orgKeys -> enrollStatus to orgKeys }
             }
             .flatMap { (enrollStatus, orgKeys) ->
-                withContext(dispatcherManager.io) {
-                    authSdkSource.postKeysForJitPasswordRegistration(
-                        userId = userId,
-                        organizationId = enrollStatus.organizationId,
-                        organizationPublicKey = orgKeys.publicKey,
-                        organizationSsoIdentifier = organizationIdentifier,
-                        salt = profile.email,
-                        masterPassword = password,
-                        masterPasswordHint = passwordHint,
-                        shouldResetPasswordEnroll = enrollStatus.isResetPasswordEnabled,
-                    )
-                }
+                authSdkSource.postKeysForJitPasswordRegistration(
+                    userId = userId,
+                    organizationId = enrollStatus.organizationId,
+                    organizationPublicKey = orgKeys.publicKey,
+                    organizationSsoIdentifier = organizationIdentifier,
+                    salt = profile.email,
+                    masterPassword = password,
+                    masterPasswordHint = passwordHint,
+                    shouldResetPasswordEnroll = enrollStatus.isResetPasswordEnabled,
+                )
             }
             .onSuccess { response ->
                 authDiskSource.storeAccountKeys(

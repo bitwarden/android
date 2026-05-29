@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.auth.manager
 
 import com.bitwarden.core.WrappedAccountCryptographicState
-import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.crypto.Kdf
@@ -17,7 +16,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.toAccountCryptographicState
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.DeriveKeyConnectorResult
-import kotlinx.coroutines.withContext
 
 /**
  * The default implementation of the [KeyConnectorManager].
@@ -27,7 +25,6 @@ class KeyConnectorManagerImpl(
     private val authSdkSource: AuthSdkSource,
     private val vaultSdkSource: VaultSdkSource,
     private val featureFlagManager: FeatureFlagManager,
-    private val dispatcherManager: DispatcherManager,
 ) : KeyConnectorManager {
     override suspend fun getMasterKeyFromKeyConnector(
         url: String,
@@ -97,26 +94,24 @@ class KeyConnectorManagerImpl(
         organizationIdentifier: String,
     ): Result<MigrateNewUserToKeyConnectorResult> =
         if (featureFlagManager.getFeatureFlag(FlagKey.V2EncryptionKeyConnector)) {
-            withContext(dispatcherManager.io) {
-                authSdkSource
-                    .postKeysForKeyConnectorRegistration(
-                        userId = userId,
-                        accessToken = accessToken,
-                        keyConnectorUrl = url,
-                        ssoOrganizationIdentifier = organizationIdentifier,
+            authSdkSource
+                .postKeysForKeyConnectorRegistration(
+                    userId = userId,
+                    accessToken = accessToken,
+                    keyConnectorUrl = url,
+                    ssoOrganizationIdentifier = organizationIdentifier,
+                )
+                .map {
+                    MigrateNewUserToKeyConnectorResult(
+                        masterKey = it.keyConnectorKey,
+                        encryptedUserKey = it.keyConnectorKeyWrappedUserKey,
+                        privateKey = when (val state = it.accountCryptographicState) {
+                            is WrappedAccountCryptographicState.V1 -> state.privateKey
+                            is WrappedAccountCryptographicState.V2 -> state.privateKey
+                        },
+                        accountCryptographicState = it.accountCryptographicState,
                     )
-                    .map {
-                        MigrateNewUserToKeyConnectorResult(
-                            masterKey = it.keyConnectorKey,
-                            encryptedUserKey = it.keyConnectorKeyWrappedUserKey,
-                            privateKey = when (val state = it.accountCryptographicState) {
-                                is WrappedAccountCryptographicState.V1 -> state.privateKey
-                                is WrappedAccountCryptographicState.V2 -> state.privateKey
-                            },
-                            accountCryptographicState = it.accountCryptographicState,
-                        )
-                    }
-            }
+                }
         } else {
             legacyMigrateNewUserToKeyConnector(
                 accountKeys = accountKeys,

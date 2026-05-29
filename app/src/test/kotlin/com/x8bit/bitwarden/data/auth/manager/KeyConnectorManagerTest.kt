@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.data.auth.manager
 import com.bitwarden.auth.KeyConnectorRegistrationResult
 import com.bitwarden.core.KeyConnectorResponse
 import com.bitwarden.core.WrappedAccountCryptographicState
-import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
@@ -40,7 +39,6 @@ class KeyConnectorManagerTest {
         authSdkSource = authSdkSource,
         vaultSdkSource = vaultSdkSource,
         featureFlagManager = featureFlagManager,
-        dispatcherManager = FakeDispatcherManager(),
     )
 
     @Test
