@@ -45,4 +45,4 @@ fun BigDecimal?.toPresentMoneyText(currencyFormatter: NumberFormat): String? =
 fun BigDecimal?.toDiscountMoneyText(currencyFormatter: NumberFormat): String? =
     this
         ?.takeIf { it.signum() > 0 }
-        ?.let { "-${currencyFormatter.format(it)}" }
+        ?.let { "\u2212${currencyFormatter.format(it)}" }

@@ -60,6 +60,6 @@ class BigDecimalExtensionsTest {
 
     @Test
     fun `toDiscountMoneyText formats a positive amount as a negative money string`() {
-        assertEquals("-$5.00", BigDecimal("5").toDiscountMoneyText(currencyFormatter))
+        assertEquals("\u2212$5.00", BigDecimal("5").toDiscountMoneyText(currencyFormatter))
     }
 }
