@@ -1333,7 +1333,7 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `SubscriptionResultReceive Success with zero line items hides discount and storage rows`() =
+    fun `SubscriptionResultReceive Success renders zero storage row but hides zero discount`() =
         runTest {
             markUserPremium()
 
@@ -1351,7 +1351,7 @@ class PlanViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_PREMIUM_LOADED_STATE.copy(
                         viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
-                            storageCostText = null,
+                            storageCostText = "$0.00",
                             discountAmountText = null,
                             estimatedTaxText = "$0.00",
                         ),
@@ -1904,7 +1904,7 @@ private val DEFAULT_PREMIUM_ACTIVE_VIEW_STATE = PlanState.ViewState.Premium(
     status = PremiumSubscriptionStatus.ACTIVE,
     billingAmountText = BitwardenString.billing_rate_per_year.asText("$19.80"),
     storageCostText = "$24.00",
-    discountAmountText = "-$2.10",
+    discountAmountText = "\u2212$2.10",
     estimatedTaxText = "$3.85",
     totalText = BitwardenString.billing_rate_per_year.asText("$45.55"),
     nextChargeTotalText = "$45.55",
