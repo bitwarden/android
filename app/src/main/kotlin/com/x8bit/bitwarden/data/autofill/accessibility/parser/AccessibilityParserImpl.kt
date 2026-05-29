@@ -40,18 +40,21 @@ class AccessibilityParserImpl(
         val browser = packageName
             .getSupportedBrowserOrNull()
             ?: return "androidapp://$packageName".toUri()
-        return browser.possibleUrlFieldIds
+        return browser
+            .possibleUrlFieldIds
             .flatMap { viewId ->
                 rootNode.findAccessibilityNodeInfosByViewId("$packageName:id/$viewId")
             }
             .ifEmpty {
-                browser.possibleUrlSemanticIds.flatMap { semanticId ->
-                    // Semantic IDs are exposed as viewIdResourceName via testTagsAsResourceId
-                    // and cannot be found via findAccessibilityNodeInfosByViewId on Firefox.
-                    accessibilityNodeInfoManager.findAccessibilityNodeInfoList(rootNode) {
-                        it.viewIdResourceName == semanticId
+                browser
+                    .possibleUrlSemanticIds
+                    .flatMap { semanticId ->
+                        // Semantic IDs are exposed as viewIdResourceName via testTagsAsResourceId
+                        // and cannot be found via findAccessibilityNodeInfosByViewId on Firefox.
+                        accessibilityNodeInfoManager.findAccessibilityNodeInfoList(rootNode) {
+                            it.viewIdResourceName == semanticId
+                        }
                     }
-                }
             }
             .firstNotNullOfOrNull { node ->
                 val urlText = node.text?.toString()?.takeIf { it.isNotEmpty() }
