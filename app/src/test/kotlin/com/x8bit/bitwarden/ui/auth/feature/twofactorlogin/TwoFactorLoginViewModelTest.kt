@@ -430,9 +430,9 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     TwoFactorLoginEvent.NavigateToDuo(
                         uri = mockkUri,
-                        authTabData = AuthTabData.CustomScheme(
-                            callbackUrl = "bitwarden://duo-callback",
-                            callbackScheme = "bitwarden",
+                        authTabData = AuthTabData.HttpsScheme(
+                            host = "bitwarden.com",
+                            path = "duo-callback",
                         ),
                     ),
                     awaitItem(),
@@ -519,9 +519,9 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     TwoFactorLoginEvent.NavigateToWebAuth(
                         uri = mockkUri,
-                        authTabData = AuthTabData.CustomScheme(
-                            callbackUrl = "bitwarden://webauthn-callback",
-                            callbackScheme = "bitwarden",
+                        authTabData = AuthTabData.HttpsScheme(
+                            host = "bitwarden.com",
+                            path = "webauthn-callback",
                         ),
                     ),
                     awaitItem(),

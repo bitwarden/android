@@ -339,8 +339,7 @@ class EnvironmentUrlsDataJsonExtensionsTest {
 
     @Test
     fun `appLinksScheme should return the correct scheme for US environment`() {
-        // TODO: PM-26577 Update this to use "https"
-        val expectedScheme = "bitwarden"
+        val expectedScheme = "https"
 
         assertEquals(
             expectedScheme,
@@ -350,8 +349,7 @@ class EnvironmentUrlsDataJsonExtensionsTest {
 
     @Test
     fun `appLinksScheme should return the correct scheme for EU environment`() {
-        // TODO: PM-26577 Update this to use "https"
-        val expectedScheme = "bitwarden"
+        val expectedScheme = "https"
 
         assertEquals(
             expectedScheme,
@@ -361,8 +359,7 @@ class EnvironmentUrlsDataJsonExtensionsTest {
 
     @Test
     fun `appLinksScheme should return the correct scheme for internal environment`() {
-        // TODO: PM-26577 Update this to use "https"
-        val expectedScheme = "bitwarden"
+        val expectedScheme = "https"
 
         assertEquals(
             expectedScheme,
