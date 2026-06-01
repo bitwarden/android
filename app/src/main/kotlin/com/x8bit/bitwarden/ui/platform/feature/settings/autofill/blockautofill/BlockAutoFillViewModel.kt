@@ -1,0 +1,280 @@
+@file:Suppress("TooManyFunctions")
+
+package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill
+
+import android.os.Parcelable
+import androidx.lifecycle.SavedStateHandle
+import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.util.Text
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill.util.isValidPattern
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill.util.validateUri
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.update
+import kotlinx.parcelize.Parcelize
+import javax.inject.Inject
+
+private const val KEY_STATE = "state"
+
+/**
+ * View model for the blocked autofill URIs screen.
+ */
+@HiltViewModel
+class BlockAutoFillViewModel @Inject constructor(
+    private val settingsRepository: SettingsRepository,
+    savedStateHandle: SavedStateHandle,
+) : BaseViewModel<BlockAutoFillState, BlockAutoFillEvent, BlockAutoFillAction>(
+    initialState = savedStateHandle[KEY_STATE]
+        ?: BlockAutoFillState(
+            dialog = null,
+            viewState = BlockAutoFillState.ViewState.Empty,
+        ),
+) {
+    init {
+        updateContentWithUris(
+            uris = settingsRepository.blockedAutofillUris,
+        )
+    }
+
+    private fun updateContentWithUris(uris: List<String>) {
+        mutableStateFlow.update { currentState ->
+            if (uris.isNotEmpty()) {
+                currentState.copy(
+                    viewState = BlockAutoFillState.ViewState.Content(
+                        blockedUris = uris.distinct().toImmutableList(),
+                    ),
+                )
+            } else {
+                currentState.copy(
+                    viewState = BlockAutoFillState.ViewState.Empty,
+                )
+            }
+        }
+    }
+
+    override fun handleAction(action: BlockAutoFillAction) {
+        when (action) {
+            BlockAutoFillAction.BackClick -> handleCloseClick()
+            BlockAutoFillAction.AddUriClick -> handleAddUriClick()
+            is BlockAutoFillAction.UriTextChange -> handleUriTextChange(action)
+            BlockAutoFillAction.DismissDialog -> handleDismissDialog()
+            is BlockAutoFillAction.EditUriClick -> handleEditUriClick(action)
+            is BlockAutoFillAction.RemoveUriClick -> handleRemoveUriClick(action)
+            is BlockAutoFillAction.SaveUri -> handleSaveUri(action)
+        }
+    }
+
+    private fun handleAddUriClick() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = BlockAutoFillState.DialogState.AddEdit(uri = ""),
+            )
+        }
+    }
+
+    private fun handleUriTextChange(action: BlockAutoFillAction.UriTextChange) {
+        mutableStateFlow.update { currentState ->
+            val currentDialog =
+                currentState.dialog as? BlockAutoFillState.DialogState.AddEdit
+            currentState.copy(
+                dialog = BlockAutoFillState.DialogState.AddEdit(
+                    uri = action.uri,
+                    originalUri = currentDialog?.originalUri,
+                ),
+            )
+        }
+    }
+
+    private fun handleEditUriClick(action: BlockAutoFillAction.EditUriClick) {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = BlockAutoFillState.DialogState.AddEdit(
+                    uri = action.uri,
+                    originalUri = action.uri,
+                ),
+            )
+        }
+    }
+
+    private fun handleDismissDialog() {
+        mutableStateFlow.update { it.copy(dialog = null) }
+    }
+
+    private fun handleSaveUri(action: BlockAutoFillAction.SaveUri) {
+        val uriList = action.newUri.split(",").map { it.trim() }
+
+        // When editing, exclude the original URI from duplicate validation
+        val existingUrisForValidation = action
+            .originalUri
+            ?.let { original ->
+                settingsRepository.blockedAutofillUris.filter { it != original }
+            }
+            ?: settingsRepository.blockedAutofillUris
+
+        val errorText = uriList
+            .filter { uri ->
+                uri in existingUrisForValidation || !uri.isValidPattern()
+            }
+            .firstNotNullOfOrNull { uri ->
+                uri.validateUri(existingUrisForValidation)
+            }
+
+        if (errorText != null) {
+            mutableStateFlow.update { currentState ->
+                currentState.copy(
+                    dialog = BlockAutoFillState.DialogState.AddEdit(
+                        uri = action.newUri,
+                        originalUri = action.originalUri,
+                        errorMessage = errorText,
+                    ),
+                )
+            }
+            return
+        }
+
+        val currentUris = settingsRepository.blockedAutofillUris.toMutableList()
+
+        // Remove the original URI if editing
+        action.originalUri?.let { currentUris.remove(it) }
+
+        uriList.forEach { newUri ->
+            if (newUri !in currentUris) {
+                currentUris.add(newUri)
+            }
+        }
+
+        settingsRepository.blockedAutofillUris = currentUris
+        updateContentWithUris(currentUris)
+        mutableStateFlow.update { it.copy(dialog = null) }
+    }
+
+    private fun handleRemoveUriClick(action: BlockAutoFillAction.RemoveUriClick) {
+        val currentUris = settingsRepository.blockedAutofillUris.toMutableList()
+        currentUris.remove(action.uri)
+
+        settingsRepository.blockedAutofillUris = currentUris
+        updateContentWithUris(currentUris)
+        mutableStateFlow.update { it.copy(dialog = null) }
+    }
+
+    private fun handleCloseClick() {
+        sendEvent(
+            event = BlockAutoFillEvent.NavigateBack,
+        )
+    }
+}
+
+/**
+ * Represents the state for block autofill.
+ *
+ * @property viewState indicates what view state the screen is in.
+ */
+@Parcelize
+data class BlockAutoFillState(
+    val dialog: DialogState? = null,
+    val viewState: ViewState,
+) : Parcelable {
+
+    /**
+     * Representation of the dialog to display on BlockAutoFillScreen.
+     */
+    sealed class DialogState : Parcelable {
+
+        /**
+         * Allows the user to confirm adding or editing URI.
+         */
+        @Parcelize
+        data class AddEdit(
+            val uri: String,
+            val originalUri: String? = null,
+            val errorMessage: Text? = null,
+        ) : DialogState() {
+            val isEdit: Boolean get() = originalUri != null
+        }
+    }
+
+    /**
+     * Represents the specific view states for the [BlockAutoFillScreen].
+     */
+    sealed class ViewState : Parcelable {
+
+        /**
+         * Represents a content state for the [BlockAutoFillScreen].
+         *
+         * @property blockedUris The list of blocked URIs.
+         */
+        @Parcelize
+        data class Content(
+            val blockedUris: ImmutableList<String> = persistentListOf(),
+        ) : ViewState()
+
+        /**
+         * Represents an empty content state for the [BlockAutoFillScreen].
+         */
+        @Parcelize
+        data object Empty : ViewState()
+    }
+}
+
+/**
+ * Represents a set of events that can be emitted for the block auto fill screen.
+ * Each subclass of this sealed class denotes a distinct event that can occur.
+ */
+sealed class BlockAutoFillEvent {
+
+    /**
+     * Navigate back to previous screen.
+     */
+    data object NavigateBack : BlockAutoFillEvent()
+}
+
+/**
+ * Represents a set of actions related to the block auto fill screen.
+ * Each subclass of this sealed class denotes a distinct action that can be taken.
+ */
+sealed class BlockAutoFillAction {
+
+    /**
+     * User clicked BlockAutoFillListItem.
+     */
+    data class EditUriClick(val uri: String) : BlockAutoFillAction()
+
+    /**
+     * User clicked Add uri.
+     */
+    data object AddUriClick : BlockAutoFillAction()
+
+    /**
+     * User updated uri text.
+     */
+    data class UriTextChange(val uri: String) : BlockAutoFillAction()
+
+    /**
+     * User clicked close.
+     */
+    data object BackClick : BlockAutoFillAction()
+
+    /**
+     * User click to save or edit a URI.
+     *
+     * @property newUri The new URI to save.
+     * @property originalUri The original URI being edited, or null if adding a new URI.
+     */
+    data class SaveUri(
+        val newUri: String,
+        val originalUri: String? = null,
+    ) : BlockAutoFillAction()
+
+    /**
+     * User click to remove URI.
+     */
+    data class RemoveUriClick(val uri: String) : BlockAutoFillAction()
+
+    /**
+     * User dismissed the currently displayed dialog.
+     */
+    data object DismissDialog : BlockAutoFillAction()
+}

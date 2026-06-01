@@ -1,0 +1,149 @@
+package com.x8bit.bitwarden.data.auth.datasource.sdk
+
+import com.bitwarden.auth.JitMasterPasswordRegistrationResponse
+import com.bitwarden.auth.KeyConnectorRegistrationResult
+import com.bitwarden.auth.TdeRegistrationResponse
+import com.bitwarden.auth.UserMasterPasswordRegistrationResponse
+import com.bitwarden.core.AuthRequestResponse
+import com.bitwarden.core.KeyConnectorResponse
+import com.bitwarden.core.MasterPasswordPolicyOptions
+import com.bitwarden.core.RegisterKeyResponse
+import com.bitwarden.core.RegisterTdeKeyResponse
+import com.bitwarden.crypto.HashPurpose
+import com.bitwarden.crypto.Kdf
+import com.bitwarden.policies.OrganizationUserPolicyContext
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
+import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
+
+/**
+ * Source of authentication information and functionality from the Bitwarden SDK.
+ */
+@Suppress("TooManyFunctions")
+interface AuthSdkSource {
+    /**
+     * Enrolls the user to master password unlock.
+     */
+    @Suppress("LongParameterList")
+    suspend fun postKeysForJitPasswordRegistration(
+        userId: String,
+        organizationId: String,
+        organizationPublicKey: String,
+        organizationSsoIdentifier: String,
+        salt: String,
+        masterPassword: String,
+        masterPasswordHint: String?,
+        shouldResetPasswordEnroll: Boolean,
+    ): Result<JitMasterPasswordRegistrationResponse>
+
+    /**
+     * Enrolls the user to key connector unlock.
+     */
+    suspend fun postKeysForKeyConnectorRegistration(
+        userId: String,
+        accessToken: String,
+        keyConnectorUrl: String,
+        ssoOrganizationIdentifier: String,
+    ): Result<KeyConnectorRegistrationResult>
+
+    /**
+     * Enrolls the user to TDE unlock.
+     */
+    suspend fun postKeysForTdeRegistration(
+        userId: String,
+        organizationId: String,
+        organizationPublicKey: String,
+        deviceIdentifier: String,
+        shouldTrustDevice: Boolean,
+    ): Result<TdeRegistrationResponse>
+
+    /**
+     * Enrolls the user for password unlock.
+     */
+    suspend fun postKeysForUserPasswordRegistration(
+        email: String,
+        salt: String,
+        masterPassword: String,
+        masterPasswordHint: String?,
+        emailVerificationToken: String,
+    ): Result<UserMasterPasswordRegistrationResponse>
+
+    /**
+     * Gets the data needed to create a new auth request.
+     */
+    suspend fun getNewAuthRequest(
+        email: String,
+    ): Result<AuthRequestResponse>
+
+    /**
+     * Gets the fingerprint phrase for this [email] and [publicKey].
+     */
+    suspend fun getUserFingerprint(
+        email: String,
+        publicKey: String,
+    ): Result<String>
+
+    /**
+     * Creates a hashed password provided the given [email], [password], [kdf], and [purpose].
+     */
+    suspend fun hashPassword(
+        email: String,
+        password: String,
+        kdf: Kdf,
+        purpose: HashPurpose,
+    ): Result<String>
+
+    /**
+     * Creates a set of encryption key information for use with a key connector.
+     */
+    suspend fun makeKeyConnectorKeys(): Result<KeyConnectorResponse>
+
+    /**
+     * Creates a set of encryption key information for registration.
+     */
+    suspend fun makeRegisterKeys(
+        email: String,
+        password: String,
+        kdf: Kdf,
+    ): Result<RegisterKeyResponse>
+
+    /**
+     * Creates a set of encryption key information for registration of a trusted device and unlocks
+     * the vault for the user.
+     */
+    suspend fun makeRegisterTdeKeysAndUnlockVault(
+        userId: String,
+        email: String,
+        orgPublicKey: String,
+        rememberDevice: Boolean,
+    ): Result<RegisterTdeKeyResponse>
+
+    /**
+     * Checks the password strength for the given [email] and [password] combination, along with
+     * some [additionalInputs].
+     */
+    suspend fun passwordStrength(
+        email: String,
+        password: String,
+        additionalInputs: List<String> = emptyList(),
+    ): Result<PasswordStrength>
+
+    /**
+     * Checks that the given [password] with the given [passwordStrength] satisfies the given
+     * [policy]. Returns `true` if so and `false` otherwise.
+     */
+    suspend fun satisfiesPolicy(
+        password: String,
+        passwordStrength: PasswordStrength,
+        policy: MasterPasswordPolicyOptions,
+    ): Result<Boolean>
+
+    /**
+     * Applies the appropriate filters for determining what policies apply to the user.
+     */
+    fun filterPolicies(
+        policies: List<PolicyView>,
+        organizations: List<OrganizationUserPolicyContext>,
+        policyType: PolicyType,
+    ): Result<List<PolicyView>>
+}

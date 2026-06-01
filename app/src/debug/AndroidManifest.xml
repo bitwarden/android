@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application tools:ignore="MissingApplicationIcon">
+        <!-- Disable Crashlytics for debug builds -->
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="false" />
+        <activity
+            android:name=".MainActivity"
+            tools:ignore="IntentFilterExportedReceiver">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="*.bitwarden.pw" />
+                <data android:pathPattern="/redirect-connector.*" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

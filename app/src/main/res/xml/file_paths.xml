@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <cache-path
+        name="cache"
+        path="." />
+    <files-path
+        name="temp_camera_images"
+        path="camera_temp/" />
+</paths>

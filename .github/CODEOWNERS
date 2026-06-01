@@ -1,0 +1,61 @@
+# Please sort into logical groups with comment headers. Sort groups in order of specificity.
+# For example, default owners should always be the first group.
+# Sort lines alphabetically within these groups to avoid accidentally adding duplicates.
+#
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default file owners.
+* @bitwarden/team-android @brian-livefront @david-livefront
+
+# Actions and workflow changes.
+.github/ @bitwarden/dept-development-mobile
+
+# Claude related files
+.claude/ @bitwarden/team-ai-sme
+.github/workflows/respond.yml @bitwarden/team-ai-sme
+.github/workflows/review-code.yml @bitwarden/team-ai-sme
+
+# Auth
+# app/src/main/java/com/x8bit/bitwarden/data/auth @bitwarden/team-auth-dev
+# app/src/main/java/com/x8bit/bitwarden/ui/auth @bitwarden/team-auth-dev
+# app/src/test/java/com/x8bit/bitwarden/data/auth @bitwarden/team-auth-dev
+# app/src/test/java/com/x8bit/bitwarden/ui/auth @bitwarden/team-auth-dev
+
+# AutoFill
+# app/src/main/java/com/x8bit/bitwarden/data/autofill @bitwarden/team-autofill-dev
+# app/src/main/java/com/x8bit/bitwarden/ui/autofill  @bitwarden/team-autofill-dev
+# app/src/test/java/com/x8bit/bitwarden/data/autofill @bitwarden/team-autofill-dev
+# app/src/test/java/com/x8bit/bitwarden/ui/autofill  @bitwarden/team-autofill-dev
+
+# Platform
+# app/src/main/java/com/x8bit/bitwarden/data/platform @bitwarden/team-platform-dev
+# app/src/main/java/com/x8bit/bitwarden/ui/platform  @bitwarden/team-platform-dev
+# app/src/main/java/com/x8bit/bitwarden/ui/BitwardenApplication.kt @bitwarden/team-platform-dev
+# app/src/main/java/com/x8bit/bitwarden/ui/MainActivity.kt @bitwarden/team-platform-dev
+# app/src/main/res @bitwarden/team-platform-dev
+# app/src/main/AndroidManifest.xml @bitwarden/team-platform-dev
+# app/src/test/java/com/x8bit/bitwarden/data/platform @bitwarden/team-platform-dev
+# app/src/test/java/com/x8bit/bitwarden/ui/platform  @bitwarden/team-platform-dev
+# app/src/.gitignore  @bitwarden/team-platform-dev
+# app/src/build.gradle.kts  @bitwarden/team-platform-dev
+# app/src/proguard-rules.pro  @bitwarden/team-platform-dev
+# docs @bitwarden/team-platform-dev
+# gradle  @bitwarden/team-platform-dev
+
+# Tools
+# app/src/main/java/com/x8bit/bitwarden/data/tools @bitwarden/team-tools-dev
+# app/src/main/java/com/x8bit/bitwarden/ui/tools  @bitwarden/team-tools-dev
+# app/src/test/java/com/x8bit/bitwarden/data/tools @bitwarden/team-tools-dev
+# app/src/test/java/com/x8bit/bitwarden/ui/tools  @bitwarden/team-tools-dev
+
+# Vault
+# app/src/main/java/com/x8bit/bitwarden/data/vault @bitwarden/team-vault-dev
+# app/src/main/java/com/x8bit/bitwarden/ui/vault  @bitwarden/team-vault-dev
+# app/src/test/java/com/x8bit/bitwarden/data/vault @bitwarden/team-vault-dev
+# app/src/test/java/com/x8bit/bitwarden/ui/vault  @bitwarden/team-vault-dev
+
+# Docker-related files
+**/Dockerfile @bitwarden/team-appsec @bitwarden/dept-bre
+**/*.dockerignore @bitwarden/team-appsec @bitwarden/dept-bre
+**/entrypoint.sh @bitwarden/team-appsec @bitwarden/dept-bre
+**/docker-compose.yml @bitwarden/team-appsec @bitwarden/dept-bre

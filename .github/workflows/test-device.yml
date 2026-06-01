@@ -1,0 +1,16 @@
+name: Test Device
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test Device
+    runs-on: ubuntu-24.04
+
+    steps:
+    - name: Placeholder step
+      run: echo "Placeholder workflow step"

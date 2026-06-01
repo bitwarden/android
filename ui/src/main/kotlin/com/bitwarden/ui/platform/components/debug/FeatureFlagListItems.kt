@@ -1,0 +1,104 @@
+package com.bitwarden.ui.platform.components.debug
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.bitwarden.core.data.manager.model.FlagKey
+import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
+import com.bitwarden.ui.platform.resource.BitwardenString
+
+/**
+ * Creates a list item for a [FlagKey].
+ */
+@Composable
+fun <T : Any> FlagKey<T>.ListItemContent(
+    currentValue: T,
+    onValueChange: (key: FlagKey<T>, value: T) -> Unit,
+    cardStyle: CardStyle,
+    modifier: Modifier = Modifier,
+) = when (val flagKey = this) {
+    is FlagKey.DummyInt,
+    FlagKey.DummyString,
+        -> Unit
+
+    FlagKey.DummyBoolean,
+    FlagKey.BitwardenAuthenticationEnabled,
+    FlagKey.ForceUpdateKdfSettings,
+    FlagKey.NoLogoutOnKdfChange,
+    FlagKey.MigrateMyVaultToMyItems,
+    FlagKey.CardScanner,
+    FlagKey.MobilePremiumUpgrade,
+    FlagKey.ManageDevices,
+    FlagKey.AttachmentUpdates,
+    FlagKey.V2EncryptionJitPassword,
+    FlagKey.V2EncryptionKeyConnector,
+    FlagKey.V2EncryptionPassword,
+    FlagKey.V2EncryptionTde,
+    FlagKey.NewItemTypes,
+    FlagKey.FillAssistTargetingRules,
+    FlagKey.DebugDisableSelfHostPremiumCheck,
+    FlagKey.PoliciesInAcceptedState,
+        -> {
+        @Suppress("UNCHECKED_CAST")
+        BooleanFlagItem(
+            label = flagKey.getDisplayLabel(),
+            key = flagKey as FlagKey<Boolean>,
+            currentValue = currentValue as Boolean,
+            onValueChange = onValueChange as (FlagKey<Boolean>, Boolean) -> Unit,
+            cardStyle = cardStyle,
+            modifier = modifier,
+        )
+    }
+}
+
+/**
+ * The UI layout for a boolean backed flag key.
+ */
+@Composable
+private fun BooleanFlagItem(
+    label: String,
+    key: FlagKey<Boolean>,
+    currentValue: Boolean,
+    onValueChange: (key: FlagKey<Boolean>, value: Boolean) -> Unit,
+    cardStyle: CardStyle,
+    modifier: Modifier = Modifier,
+) {
+    BitwardenSwitch(
+        label = label,
+        isChecked = currentValue,
+        onCheckedChange = { onValueChange(key, it) },
+        cardStyle = cardStyle,
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
+    FlagKey.DummyBoolean,
+    is FlagKey.DummyInt,
+    FlagKey.DummyString,
+        -> this.keyName
+
+    FlagKey.ForceUpdateKdfSettings -> stringResource(BitwardenString.force_update_kdf_settings)
+    FlagKey.NoLogoutOnKdfChange -> stringResource(BitwardenString.avoid_logout_on_kdf_change)
+    FlagKey.BitwardenAuthenticationEnabled -> {
+        stringResource(BitwardenString.bitwarden_authentication_enabled)
+    }
+
+    FlagKey.MigrateMyVaultToMyItems -> stringResource(BitwardenString.migrate_my_vault_to_my_items)
+    FlagKey.CardScanner -> stringResource(BitwardenString.scan_card)
+    FlagKey.MobilePremiumUpgrade -> stringResource(BitwardenString.mobile_premium_upgrade)
+    FlagKey.ManageDevices -> stringResource(BitwardenString.manage_devices)
+    FlagKey.AttachmentUpdates -> stringResource(BitwardenString.attachment_updates)
+    FlagKey.V2EncryptionJitPassword -> stringResource(BitwardenString.v2_encryption_jit_password)
+    FlagKey.V2EncryptionKeyConnector -> stringResource(BitwardenString.v2_encryption_key_connector)
+    FlagKey.V2EncryptionPassword -> stringResource(BitwardenString.v2_encryption_password)
+    FlagKey.V2EncryptionTde -> stringResource(BitwardenString.v2_encryption_tde)
+    FlagKey.NewItemTypes -> stringResource(BitwardenString.new_item_types)
+    FlagKey.FillAssistTargetingRules -> stringResource(BitwardenString.fill_assist_targeting_rules)
+    FlagKey.PoliciesInAcceptedState -> stringResource(BitwardenString.policies_in_accepted_state)
+    FlagKey.DebugDisableSelfHostPremiumCheck -> {
+        stringResource(BitwardenString.debug_disable_self_host_premium_check)
+    }
+}

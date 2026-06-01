@@ -1,0 +1,1927 @@
+package com.x8bit.bitwarden.ui.platform.feature.premium.plan
+
+import androidx.lifecycle.SavedStateHandle
+import app.cash.turbine.test
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
+import com.x8bit.bitwarden.data.billing.repository.BillingRepository
+import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
+import com.x8bit.bitwarden.data.billing.repository.model.CustomerPortalResult
+import com.x8bit.bitwarden.data.billing.repository.model.PlanCadence
+import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResult
+import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStatus
+import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionInfo
+import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionResult
+import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionStatusState
+import com.x8bit.bitwarden.data.billing.repository.model.UpgradeLifecycleState
+import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
+import io.mockk.verify
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import java.math.BigDecimal
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
+
+@Suppress("LargeClass")
+class PlanViewModelTest : BaseViewModelTest() {
+
+    private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
+    private val mockAuthRepository: AuthRepository = mockk {
+        every { userStateFlow } returns mutableUserStateFlow
+    }
+    private val mockBillingRepository: BillingRepository = mockk()
+    private val mutableSpecialCircumstanceStateFlow =
+        MutableStateFlow<SpecialCircumstance?>(null)
+    private val mockSpecialCircumstanceManager: SpecialCircumstanceManager =
+        mockk(relaxed = true) {
+            every { specialCircumstance } returns mutableSpecialCircumstanceStateFlow.value
+            every { specialCircumstanceStateFlow } returns mutableSpecialCircumstanceStateFlow
+        }
+    private val mockVaultRepository: VaultRepository = mockk {
+        coEvery {
+            syncForResult(any())
+        } returns SyncVaultDataResult.Success(itemsAvailable = true)
+    }
+    private val mutableSubscriptionStatusStateFlow =
+        MutableStateFlow<SubscriptionStatusState>(SubscriptionStatusState.NoSubscription)
+    private val mutableLifecycleStateFlow =
+        MutableStateFlow<UpgradeLifecycleState>(UpgradeLifecycleState.Free)
+    private var mockIsSelfHosted = false
+    private val mockPremiumStateManager: PremiumStateManager = mockk(relaxed = true) {
+        every { subscriptionStatusStateFlow } returns mutableSubscriptionStatusStateFlow
+        every { upgradeLifecycleStateFlow } returns mutableLifecycleStateFlow
+        every { isSelfHosted } answers { mockIsSelfHosted }
+    }
+    private val mutableEnvironmentFlow = MutableStateFlow<Environment>(Environment.Us)
+    private val mockEnvironmentRepository: EnvironmentRepository = mockk {
+        every { environment } answers { mutableEnvironmentFlow.value }
+        every { environmentStateFlow } returns mutableEnvironmentFlow
+    }
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(SavedStateHandle::toPlanArgs)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(SavedStateHandle::toPlanArgs)
+    }
+
+    // region PlanMode propagation
+
+    @Test
+    fun `initial state should use Standard PlanMode for Standard route`() =
+        runTest {
+            val viewModel = createViewModel(planMode = PlanMode.Standard)
+
+            viewModel.stateFlow.test {
+                assertEquals(PlanMode.Standard, awaitItem().planMode)
+            }
+        }
+
+    @Test
+    fun `initial state should use Modal PlanMode for Modal route`() =
+        runTest {
+            val viewModel = createViewModel(planMode = PlanMode.Modal)
+
+            viewModel.stateFlow.test {
+                assertEquals(PlanMode.Modal, awaitItem().planMode)
+            }
+        }
+
+    // endregion PlanMode propagation
+
+    // region Free user path
+
+    @Test
+    fun `initial state should be Free ViewState after pricing fetch`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_FREE_STATE, awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `PremiumCheckoutResult with isSuccess false should show WaitingForPayment when not premium`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_FREE_STATE, awaitItem())
+
+                mutableSpecialCircumstanceStateFlow.value =
+                    SpecialCircumstance.PremiumCheckout(
+                        callbackResult = PremiumCheckoutCallbackResult.Canceled,
+                    )
+
+                assertEquals(
+                    DEFAULT_FREE_STATE.copy(
+                        viewState = PlanState.ViewState.Free.Cloud(
+                            rate = "$1.67",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = true,
+                            isPremiumUpgradePending = false,
+                        ),
+                        dialogState = PlanState.DialogState.WaitingForPayment,
+                    ),
+                    awaitItem(),
+                )
+            }
+
+            verify {
+                mockSpecialCircumstanceManager.specialCircumstance = null
+            }
+        }
+
+    @Test
+    fun `PremiumCheckoutResult success should navigate to UpgradedToPremium when premium`() =
+        runTest {
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(
+                    DEFAULT_ACCOUNT.copy(isPremium = true),
+                ),
+            )
+
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                mutableSpecialCircumstanceStateFlow.value =
+                    SpecialCircumstance.PremiumCheckout(
+                        callbackResult = PremiumCheckoutCallbackResult.Success,
+                    )
+
+                assertEquals(
+                    PlanEvent.NavigateToUpgradedToPremium,
+                    awaitItem(),
+                )
+            }
+
+            verify {
+                mockSpecialCircumstanceManager.specialCircumstance = null
+            }
+        }
+
+    @Test
+    fun `BackClick should emit NavigateBack event`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(PlanAction.BackClick)
+            assertEquals(PlanEvent.NavigateBack, awaitItem())
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `UpgradeNowClick should transition to Loading then dismiss dialog and emit LaunchBrowser on success`() =
+        runTest {
+            val checkoutUrl = "https://checkout.stripe.com/session123"
+            coEvery {
+                mockBillingRepository.getCheckoutSessionUrl()
+            } returns CheckoutSessionResult.Success(url = checkoutUrl)
+
+            val viewModel = createViewModel()
+
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                assertEquals(DEFAULT_FREE_STATE, stateFlow.awaitItem())
+
+                viewModel.trySendAction(PlanAction.UpgradeNowClick)
+
+                assertEquals(
+                    DEFAULT_FREE_STATE.copy(
+                        dialogState = PlanState.DialogState.Loading(
+                            message = BitwardenString.opening_checkout.asText(),
+                        ),
+                    ),
+                    stateFlow.awaitItem(),
+                )
+                assertEquals(
+                    DEFAULT_FREE_STATE.copy(
+                        viewState = PlanState.ViewState.Free.Cloud(
+                            rate = "$1.67",
+                            checkoutUrl = checkoutUrl,
+                            isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = false,
+                        ),
+                        dialogState = null,
+                    ),
+                    stateFlow.awaitItem(),
+                )
+                assertEquals(
+                    PlanEvent.LaunchBrowser(
+                        url = checkoutUrl,
+                        authTabData = AuthTabData.CustomScheme(
+                            callbackUrl = PREMIUM_CHECKOUT_CALLBACK_URL,
+                        ),
+                    ),
+                    eventFlow.awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `UpgradeNowClick should transition to Loading then Error on failure`() =
+        runTest {
+            coEvery {
+                mockBillingRepository.getCheckoutSessionUrl()
+            } returns CheckoutSessionResult.Error(
+                error = RuntimeException("Network error"),
+            )
+
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_FREE_STATE, awaitItem())
+
+                viewModel.trySendAction(PlanAction.UpgradeNowClick)
+
+                assertEquals(
+                    DEFAULT_FREE_STATE.copy(
+                        dialogState = PlanState.DialogState.Loading(
+                            message = BitwardenString.opening_checkout.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    DEFAULT_FREE_STATE.copy(
+                        dialogState = PlanState.DialogState.CheckoutError,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `RetryClick should transition to Loading then dismiss dialog and emit LaunchBrowser on success`() =
+        runTest {
+            val checkoutUrl = "https://checkout.stripe.com/session123"
+            coEvery {
+                mockBillingRepository.getCheckoutSessionUrl()
+            } returns CheckoutSessionResult.Success(url = checkoutUrl)
+
+            val viewModel = createViewModel(
+                initialState = DEFAULT_FREE_STATE.copy(
+                    dialogState = PlanState.DialogState.CheckoutError,
+                ),
+                pricingResult = null,
+            )
+
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                assertEquals(
+                    DEFAULT_FREE_STATE.copy(
+                        dialogState = PlanState.DialogState.CheckoutError,
+                    ),
+                    stateFlow.awaitItem(),
+                )
+
+                viewModel.trySendAction(PlanAction.RetryClick)
+
+                assertEquals(
+                    DEFAULT_FREE_STATE.copy(
+                        dialogState = PlanState.DialogState.Loading(
+                            message = BitwardenString.opening_checkout.asText(),
+                        ),
+                    ),
+                    stateFlow.awaitItem(),
+                )
+                assertEquals(
+                    DEFAULT_FREE_STATE.copy(
+                        viewState = PlanState.ViewState.Free.Cloud(
+                            rate = "$1.67",
+                            checkoutUrl = checkoutUrl,
+                            isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = false,
+                        ),
+                        dialogState = null,
+                    ),
+                    stateFlow.awaitItem(),
+                )
+                assertEquals(
+                    PlanEvent.LaunchBrowser(
+                        url = checkoutUrl,
+                        authTabData = AuthTabData.CustomScheme(
+                            callbackUrl = PREMIUM_CHECKOUT_CALLBACK_URL,
+                        ),
+                    ),
+                    eventFlow.awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `DismissError should transition from Error to Content`() = runTest {
+        val viewModel = createViewModel(
+            initialState = DEFAULT_FREE_STATE.copy(
+                dialogState = PlanState.DialogState.CheckoutError,
+            ),
+            pricingResult = null,
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(
+                DEFAULT_FREE_STATE.copy(
+                    dialogState = PlanState.DialogState.CheckoutError,
+                ),
+                awaitItem(),
+            )
+
+            viewModel.trySendAction(PlanAction.DismissError)
+
+            assertEquals(DEFAULT_FREE_STATE, awaitItem())
+        }
+    }
+
+    @Test
+    fun `CancelWaiting should transition from WaitingForPayment to Content`() =
+        runTest {
+            val viewModel = createViewModel(
+                initialState = DEFAULT_FREE_STATE.copy(
+                    dialogState = PlanState.DialogState.WaitingForPayment,
+                ),
+                pricingResult = null,
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_FREE_STATE.copy(
+                        dialogState = PlanState.DialogState.WaitingForPayment,
+                    ),
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(PlanAction.CancelWaiting)
+
+                assertEquals(DEFAULT_FREE_STATE, awaitItem())
+            }
+        }
+
+    @Test
+    fun `GoBackClick should emit LaunchBrowser with checkout URL when URL is available`() =
+        runTest {
+            val checkoutUrl = "https://checkout.stripe.com/session123"
+            val freeState = PlanState.ViewState.Free.Cloud(
+                rate = "$1.67",
+                checkoutUrl = checkoutUrl,
+                isAwaitingPremiumStatus = false,
+                isPremiumUpgradePending = false,
+            )
+            val viewModel = createViewModel(
+                initialState = DEFAULT_FREE_STATE.copy(
+                    viewState = freeState,
+                    dialogState = PlanState.DialogState.WaitingForPayment,
+                ),
+                pricingResult = null,
+            )
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(PlanAction.GoBackClick)
+                assertEquals(
+                    PlanEvent.LaunchBrowser(
+                        url = checkoutUrl,
+                        authTabData = AuthTabData.CustomScheme(
+                            callbackUrl = PREMIUM_CHECKOUT_CALLBACK_URL,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `GoBackClick should not emit event when checkout URL is null`() =
+        runTest {
+            val viewModel = createViewModel(
+                initialState = DEFAULT_FREE_STATE.copy(
+                    dialogState = PlanState.DialogState.WaitingForPayment,
+                ),
+                pricingResult = null,
+            )
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(PlanAction.GoBackClick)
+                expectNoEvents()
+            }
+        }
+
+    @Test
+    fun `premium status flip should show snackbar when in WaitingForPayment`() =
+        runTest {
+            val viewModel = createViewModel(
+                initialState = DEFAULT_FREE_STATE.copy(
+                    viewState = PlanState.ViewState.Free.Cloud(
+                        rate = "$1.67",
+                        checkoutUrl = null,
+                        isAwaitingPremiumStatus = true,
+                        isPremiumUpgradePending = false,
+                    ),
+                    dialogState = PlanState.DialogState.WaitingForPayment,
+                ),
+                pricingResult = null,
+            )
+
+            viewModel.eventFlow.test {
+                // Simulate premium status flip while WaitingForPayment.
+                mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                    accounts = listOf(
+                        DEFAULT_ACCOUNT.copy(isPremium = true),
+                    ),
+                )
+
+                assertEquals(
+                    PlanEvent.NavigateToUpgradedToPremium,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `premium flip via canceled special circumstance should navigate to UpgradedToPremium`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                assertEquals(DEFAULT_FREE_STATE, stateFlow.awaitItem())
+
+                // Simulate returning from checkout canceled (isSuccess = false),
+                // then premium status updates.
+                mutableSpecialCircumstanceStateFlow.value =
+                    SpecialCircumstance.PremiumCheckout(
+                        callbackResult = PremiumCheckoutCallbackResult.Canceled,
+                    )
+
+                assertEquals(
+                    DEFAULT_FREE_STATE.copy(
+                        viewState = PlanState.ViewState.Free.Cloud(
+                            rate = "$1.67",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = true,
+                            isPremiumUpgradePending = false,
+                        ),
+                        dialogState = PlanState.DialogState.WaitingForPayment,
+                    ),
+                    stateFlow.awaitItem(),
+                )
+
+                // Simulate premium status flip.
+                mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                    accounts = listOf(
+                        DEFAULT_ACCOUNT.copy(isPremium = true),
+                    ),
+                )
+
+                // State transitions to Premium with subscription Loading.
+                assertEquals(
+                    DEFAULT_FREE_STATE.copy(
+                        viewState = PlanState.ViewState.Premium(),
+                        dialogState = PlanState.DialogState.Loading(
+                            message = BitwardenString.loading_subscription.asText(),
+                        ),
+                    ),
+                    stateFlow.awaitItem(),
+                )
+
+                assertEquals(
+                    PlanEvent.NavigateToUpgradedToPremium,
+                    eventFlow.awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `PremiumCheckoutResult with isSuccess true should trigger sync and show PendingUpgrade when not premium`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_FREE_STATE, awaitItem())
+
+                mutableSpecialCircumstanceStateFlow.value =
+                    SpecialCircumstance.PremiumCheckout(
+                        callbackResult = PremiumCheckoutCallbackResult.Success,
+                    )
+
+                // Loading while sync is in progress.
+                awaitItem()
+
+                // Sync completes without premium — PendingUpgrade shown.
+                assertEquals(
+                    DEFAULT_FREE_STATE.copy(
+                        viewState = PlanState.ViewState.Free.Cloud(
+                            rate = "$1.67",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = true,
+                            isPremiumUpgradePending = false,
+                        ),
+                        dialogState = PlanState.DialogState.PendingUpgrade,
+                    ),
+                    awaitItem(),
+                )
+            }
+
+            verify {
+                mockSpecialCircumstanceManager.specialCircumstance = null
+                mockPremiumStateManager.markPremiumUpgradePending(userId = DEFAULT_ACCOUNT.userId)
+            }
+            coVerify {
+                mockVaultRepository.syncForResult(forced = true)
+            }
+        }
+
+    @Test
+    fun `ContinueClick dismisses the PendingUpgrade dialog and navigates back`() = runTest {
+        val viewModel = createViewModel(
+            initialState = DEFAULT_FREE_STATE.copy(
+                viewState = PlanState.ViewState.Free.Cloud(
+                    rate = "$1.67",
+                    checkoutUrl = null,
+                    isAwaitingPremiumStatus = true,
+                    isPremiumUpgradePending = true,
+                ),
+                dialogState = PlanState.DialogState.PendingUpgrade,
+            ),
+            pricingResult = null,
+        )
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(PlanAction.ContinueClick)
+            assertEquals(PlanEvent.NavigateBack, awaitItem())
+        }
+    }
+
+    @Test
+    fun `upgradeLifecycleStateFlow updates propagate onto Free Cloud view state`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_FREE_STATE, awaitItem())
+
+            mutableLifecycleStateFlow.value = UpgradeLifecycleState.UpgradePending
+
+            assertEquals(
+                DEFAULT_FREE_STATE.copy(
+                    viewState = PlanState.ViewState.Free.Cloud(
+                        rate = "$1.67",
+                        checkoutUrl = null,
+                        isAwaitingPremiumStatus = false,
+                        isPremiumUpgradePending = true,
+                    ),
+                ),
+                awaitItem(),
+            )
+
+            mutableLifecycleStateFlow.value = UpgradeLifecycleState.Free
+
+            assertEquals(DEFAULT_FREE_STATE, awaitItem())
+        }
+    }
+
+    @Test
+    fun `UserStateUpdateReceive premium during Loading should navigate to UpgradedToPremium`() =
+        runTest {
+            val viewModel = createViewModel(
+                initialState = DEFAULT_FREE_STATE.copy(
+                    viewState = PlanState.ViewState.Free.Cloud(
+                        rate = "$1.67",
+                        checkoutUrl = null,
+                        isAwaitingPremiumStatus = true,
+                        isPremiumUpgradePending = false,
+                    ),
+                    dialogState = PlanState.DialogState.Loading(
+                        message = BitwardenString.confirming_your_upgrade.asText(),
+                    ),
+                ),
+                pricingResult = null,
+            )
+
+            viewModel.eventFlow.test {
+                mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                    accounts = listOf(
+                        DEFAULT_ACCOUNT.copy(isPremium = true),
+                    ),
+                )
+
+                assertEquals(
+                    PlanEvent.NavigateToUpgradedToPremium,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `premium status flip should not emit event when not in WaitingForPayment`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                // Flip premium while in Content state.
+                mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                    accounts = listOf(
+                        DEFAULT_ACCOUNT.copy(isPremium = true),
+                    ),
+                )
+                expectNoEvents()
+            }
+        }
+
+    @Test
+    fun `saved state should be restored`() = runTest {
+        val savedState = DEFAULT_FREE_STATE.copy(
+            dialogState = PlanState.DialogState.CheckoutError,
+        )
+        val viewModel = createViewModel(
+            initialState = savedState,
+            pricingResult = null,
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(savedState, awaitItem())
+        }
+    }
+
+    // endregion Free user path
+
+    // region Self-hosted path
+
+    @Test
+    fun `initial state on self-hosted should be Free SelfHosted ViewState`() = runTest {
+        mockIsSelfHosted = true
+        mutableEnvironmentFlow.value = Environment.SelfHosted(
+            environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+        )
+        val viewModel = createViewModel(
+            pricingResult = null,
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(
+                PlanState(
+                    planMode = PlanMode.Modal,
+                    viewState = PlanState.ViewState.Free.SelfHosted,
+                    dialogState = null,
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `initial state on self-hosted should not fetch pricing`() = runTest {
+        mockIsSelfHosted = true
+        mutableEnvironmentFlow.value = Environment.SelfHosted(
+            environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+        )
+        createViewModel(pricingResult = null)
+
+        coVerify(exactly = 0) {
+            mockBillingRepository.getPremiumPlanPricing()
+        }
+    }
+
+    @Test
+    fun `self-hosted with debug disable flag enabled should show Free Cloud and fetch pricing`() =
+        runTest {
+            // The PremiumStateManager helper reports false when the debug-disable flag is on,
+            // so the view model treats the self-hosted env as cloud for premium-upgrade purposes.
+            mockIsSelfHosted = false
+            mutableEnvironmentFlow.value = Environment.SelfHosted(
+                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+            )
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    PlanState(
+                        planMode = PlanMode.Modal,
+                        viewState = PlanState.ViewState.Free.Cloud(
+                            rate = "$1.67",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = false,
+                        ),
+                        dialogState = null,
+                    ),
+                    awaitItem(),
+                )
+            }
+            coVerify(exactly = 1) {
+                mockBillingRepository.getPremiumPlanPricing()
+            }
+        }
+
+    // endregion Self-hosted path
+
+    // region Pricing fetch
+
+    @Test
+    fun `initial state before pricing fetch resolves should show placeholder rate`() =
+        runTest {
+            val viewModel = createViewModel(pricingResult = null)
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    PlanState(
+                        planMode = PlanMode.Modal,
+                        viewState = PlanState.ViewState.Free.Cloud(
+                            rate = "--",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = false,
+                        ),
+                        dialogState = null,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `pricing fetch failure should show GetPricingError dialog`() =
+        runTest {
+            val viewModel = createViewModel(
+                pricingResult = PremiumPlanPricingResult.Error(
+                    error = RuntimeException("Network error"),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    PlanState(
+                        planMode = PlanMode.Modal,
+                        viewState = PlanState.ViewState.Free.Cloud(
+                            rate = "--",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = false,
+                        ),
+                        dialogState = PlanState.DialogState.GetPricingError(
+                            title = BitwardenString.pricing_unavailable.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `RetryPricingClick should transition to Loading then Free on success`() =
+        runTest {
+            val viewModel = createViewModel(
+                pricingResult = PremiumPlanPricingResult.Error(
+                    error = RuntimeException("Network error"),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    PlanState(
+                        planMode = PlanMode.Modal,
+                        viewState = PlanState.ViewState.Free.Cloud(
+                            rate = "--",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = false,
+                        ),
+                        dialogState = PlanState.DialogState.GetPricingError(
+                            title = BitwardenString.pricing_unavailable.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+
+                // Override mock for retry to return success.
+                coEvery {
+                    mockBillingRepository.getPremiumPlanPricing()
+                } returns DEFAULT_PRICING_SUCCESS
+
+                viewModel.trySendAction(PlanAction.RetryPricingClick)
+
+                assertEquals(
+                    PlanState(
+                        planMode = PlanMode.Modal,
+                        viewState = PlanState.ViewState.Free.Cloud(
+                            rate = "--",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = false,
+                        ),
+                        dialogState = PlanState.DialogState.Loading(
+                            message = BitwardenString.loading.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    DEFAULT_FREE_STATE,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `ClosePricingErrorClick should clear dialog and emit NavigateBack`() =
+        runTest {
+            val viewModel = createViewModel(
+                pricingResult = PremiumPlanPricingResult.Error(
+                    error = RuntimeException("Network error"),
+                ),
+            )
+
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                assertEquals(
+                    PlanState(
+                        planMode = PlanMode.Modal,
+                        viewState = PlanState.ViewState.Free.Cloud(
+                            rate = "--",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = false,
+                        ),
+                        dialogState = PlanState.DialogState.GetPricingError(
+                            title = BitwardenString.pricing_unavailable.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
+                        ),
+                    ),
+                    stateFlow.awaitItem(),
+                )
+
+                viewModel.trySendAction(PlanAction.ClosePricingErrorClick)
+
+                assertEquals(
+                    PlanState(
+                        planMode = PlanMode.Modal,
+                        viewState = PlanState.ViewState.Free.Cloud(
+                            rate = "--",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = false,
+                        ),
+                        dialogState = null,
+                    ),
+                    stateFlow.awaitItem(),
+                )
+                assertEquals(
+                    PlanEvent.NavigateBack,
+                    eventFlow.awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `init should fetch pricing for Free viewstate`() = runTest {
+        createViewModel()
+
+        coVerify(exactly = 1) {
+            mockBillingRepository.getPremiumPlanPricing()
+        }
+    }
+
+    @Test
+    fun `init should not fetch pricing for Premium viewstate`() = runTest {
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = true)),
+        )
+
+        createViewModel()
+
+        coVerify(exactly = 0) {
+            mockBillingRepository.getPremiumPlanPricing()
+        }
+    }
+
+    // endregion Pricing fetch
+
+    // region Premium user path
+
+    @Test
+    fun `initial state should be Premium ViewState with loading dialog for premium user`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_PREMIUM_LOADING_STATE, awaitItem())
+            }
+        }
+
+    @Test
+    fun `init should fetch subscription for Premium viewstate`() = runTest {
+        markUserPremium()
+
+        createViewModel(subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE)
+
+        coVerify(exactly = 1) {
+            mockBillingRepository.getSubscription()
+        }
+    }
+
+    @Test
+    fun `init should not fetch subscription for Free viewstate`() = runTest {
+        createViewModel()
+
+        coVerify(exactly = 0) {
+            mockBillingRepository.getSubscription()
+        }
+    }
+
+    @Test
+    fun `init opens Premium view when account is free but status is in a trouble state`() =
+        runTest {
+            mutableSubscriptionStatusStateFlow.value = SubscriptionStatusState.Available(
+                status = PremiumSubscriptionStatus.CANCELED,
+            )
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        status = PremiumSubscriptionStatus.CANCELED,
+                        canceledDate = Instant.parse("2026-04-21T00:00:00Z"),
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            status = PremiumSubscriptionStatus.CANCELED,
+                            canceledDateText = "April 21, 2026",
+                            showCancelButton = false,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionStatusUpdateReceive promotes Free view to Premium on trouble status`() =
+        runTest {
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        status = PremiumSubscriptionStatus.CANCELED,
+                        canceledDate = Instant.parse("2026-04-21T00:00:00Z"),
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_FREE_STATE, awaitItem())
+                mutableSubscriptionStatusStateFlow.value = SubscriptionStatusState.Available(
+                    status = PremiumSubscriptionStatus.CANCELED,
+                )
+                val loadingState = awaitItem()
+                assertEquals(
+                    PlanState.ViewState.Premium(),
+                    loadingState.viewState,
+                )
+                assertEquals(
+                    PlanState.DialogState.Loading(
+                        message = BitwardenString.loading_subscription.asText(),
+                    ),
+                    loadingState.dialogState,
+                )
+                val loadedState = awaitItem()
+                assertEquals(
+                    DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                        status = PremiumSubscriptionStatus.CANCELED,
+                        canceledDateText = "April 21, 2026",
+                        showCancelButton = false,
+                    ),
+                    loadedState.viewState,
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive NotFound falls back to Free view and fetches pricing`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.NotFound,
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_FREE_STATE, awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SubscriptionResultReceive NotFound keeps Loading dialog up while pricing fetch is pending`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.NotFound,
+                pricingResult = null,
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_FREE_STATE.copy(
+                        viewState = PlanState.ViewState.Free.Cloud(
+                            rate = "--",
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = false,
+                        ),
+                        dialogState = PlanState.DialogState.Loading(
+                            message = BitwardenString.loading.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success should populate Premium state from SubscriptionInfo`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE,
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_PREMIUM_LOADED_STATE, awaitItem())
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with Canceled status should hide cancel button`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        status = PremiumSubscriptionStatus.CANCELED,
+                        canceledDate = Instant.parse("2026-04-21T00:00:00Z"),
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            status = PremiumSubscriptionStatus.CANCELED,
+                            canceledDateText = "April 21, 2026",
+                            showCancelButton = false,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with UpdatePayment status should describe update`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        status = PremiumSubscriptionStatus.UPDATE_PAYMENT,
+                        suspensionDate = Instant.parse("2026-04-21T00:00:00Z"),
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            status = PremiumSubscriptionStatus.UPDATE_PAYMENT,
+                            suspensionDateText = "April 21, 2026",
+                            showCancelButton = false,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with PastDue status should describe grace period`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        status = PremiumSubscriptionStatus.PAST_DUE,
+                        suspensionDate = Instant.parse("2026-04-21T00:00:00Z"),
+                        gracePeriodDays = 7,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            status = PremiumSubscriptionStatus.PAST_DUE,
+                            suspensionDateText = "April 21, 2026",
+                            gracePeriodDays = 7,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with PastDue and null gracePeriodDays uses fallback`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        status = PremiumSubscriptionStatus.PAST_DUE,
+                        suspensionDate = Instant.parse("2026-04-21T00:00:00Z"),
+                        gracePeriodDays = null,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            status = PremiumSubscriptionStatus.PAST_DUE,
+                            suspensionDateText = "April 21, 2026",
+                            gracePeriodDays = null,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with Paused status should describe paused`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        status = PremiumSubscriptionStatus.PAUSED,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            status = PremiumSubscriptionStatus.PAUSED,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with Expired status should hide cancel button`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        status = PremiumSubscriptionStatus.EXPIRED,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            status = PremiumSubscriptionStatus.EXPIRED,
+                            showCancelButton = false,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with Monthly cadence formats per-month rate`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        cadence = PlanCadence.MONTHLY,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            billingAmountText = BitwardenString
+                                .billing_rate_per_month
+                                .asText("$19.80"),
+                            totalText = BitwardenString
+                                .billing_rate_per_month
+                                .asText("$45.55"),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with zero seatsCost still renders billing row`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        seatsCost = BigDecimal.ZERO,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            billingAmountText = BitwardenString
+                                .billing_rate_per_year
+                                .asText("$0.00"),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with null line items hides discount and storage rows`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        storageCost = null,
+                        discountAmount = null,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            storageCostText = null,
+                            discountAmountText = null,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success renders zero storage row but hides zero discount`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        storageCost = BigDecimal.ZERO,
+                        discountAmount = BigDecimal.ZERO,
+                        estimatedTax = BigDecimal.ZERO,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            storageCostText = "$0.00",
+                            discountAmountText = null,
+                            estimatedTaxText = "$0.00",
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with zero nextChargeTotal renders zero total row`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        nextChargeTotal = BigDecimal.ZERO,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            totalText = BitwardenString
+                                .billing_rate_per_year
+                                .asText("$0.00"),
+                            nextChargeTotalText = "$0.00",
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with Monthly cadence renders total with month suffix`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        cadence = PlanCadence.MONTHLY,
+                        nextChargeTotal = BigDecimal.ZERO,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            billingAmountText = BitwardenString
+                                .billing_rate_per_month
+                                .asText("$19.80"),
+                            totalText = BitwardenString
+                                .billing_rate_per_month
+                                .asText("$0.00"),
+                            nextChargeTotalText = "$0.00",
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Success with null nextCharge shows placeholder date`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        nextCharge = null,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            nextChargeDateText = null,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `SubscriptionResultReceive Error should show SubscriptionError dialog`() = runTest {
+        markUserPremium()
+
+        val viewModel = createViewModel(
+            subscriptionResult = SubscriptionResult.Error(error = RuntimeException("boom")),
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(
+                DEFAULT_PREMIUM_LOADING_STATE.copy(
+                    dialogState = PlanState.DialogState.SubscriptionError(
+                        title = BitwardenString.subscription_error.asText(),
+                        message = BitwardenString
+                            .trouble_loading_subscription
+                            .asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `RetrySubscriptionClick should transition to Loading then refetch subscription`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE,
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_PREMIUM_LOADED_STATE, awaitItem())
+
+                viewModel.trySendAction(PlanAction.RetrySubscriptionClick)
+
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        dialogState = PlanState.DialogState.Loading(
+                            message = BitwardenString.loading_subscription.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(DEFAULT_PREMIUM_LOADED_STATE, awaitItem())
+            }
+            coVerify(exactly = 2) { mockBillingRepository.getSubscription() }
+        }
+
+    @Test
+    fun `ManagePlanClick should emit LaunchUri with web vault subscription URL`() = runTest {
+        markUserPremium()
+
+        val viewModel = createViewModel(subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE)
+
+        viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+            assertEquals(DEFAULT_PREMIUM_LOADED_STATE, stateFlow.awaitItem())
+
+            viewModel.trySendAction(PlanAction.ManagePlanClick)
+
+            assertEquals(
+                PlanEvent.LaunchUri(
+                    url = "https://vault.bitwarden.com/#/settings/subscription/premium",
+                ),
+                eventFlow.awaitItem(),
+            )
+        }
+        coVerify(exactly = 0) { mockBillingRepository.getPortalUrl() }
+    }
+
+    @Test
+    fun `ManagePlanClick should fall back to base URL when webVault is null`() = runTest {
+        markUserPremium()
+        every { mockEnvironmentRepository.environment } returns Environment.SelfHosted(
+            environmentUrlData = EnvironmentUrlDataJson(base = "https://self-hosted.example"),
+        )
+
+        val viewModel = createViewModel(subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE)
+
+        viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+            assertEquals(DEFAULT_PREMIUM_LOADED_STATE, stateFlow.awaitItem())
+
+            viewModel.trySendAction(PlanAction.ManagePlanClick)
+
+            assertEquals(
+                PlanEvent.LaunchUri(
+                    url = "https://self-hosted.example/#/settings/subscription/premium",
+                ),
+                eventFlow.awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `CancelPremiumClick should show CancelConfirmation with next renewal date`() = runTest {
+        markUserPremium()
+
+        val viewModel = createViewModel(
+            subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE,
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_PREMIUM_LOADED_STATE, awaitItem())
+
+            viewModel.trySendAction(PlanAction.CancelPremiumClick)
+
+            assertEquals(
+                DEFAULT_PREMIUM_LOADED_STATE.copy(
+                    dialogState = PlanState.DialogState.CancelConfirmation(
+                        nextRenewalDate = "April 2, 2026",
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `DismissCancelConfirmation should clear dialog`() = runTest {
+        markUserPremium()
+
+        val viewModel = createViewModel(
+            subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE,
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_PREMIUM_LOADED_STATE, awaitItem())
+
+            viewModel.trySendAction(PlanAction.CancelPremiumClick)
+            assertEquals(
+                DEFAULT_PREMIUM_LOADED_STATE.copy(
+                    dialogState = PlanState.DialogState.CancelConfirmation(
+                        nextRenewalDate = "April 2, 2026",
+                    ),
+                ),
+                awaitItem(),
+            )
+
+            viewModel.trySendAction(PlanAction.DismissCancelConfirmation)
+            assertEquals(DEFAULT_PREMIUM_LOADED_STATE, awaitItem())
+        }
+    }
+
+    @Test
+    fun `RetryPortalClick should show LoadingPortal then emit LaunchPortal on success`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE,
+                portalResult = CustomerPortalResult.Success(url = "https://portal"),
+            )
+
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                assertEquals(DEFAULT_PREMIUM_LOADED_STATE, stateFlow.awaitItem())
+
+                viewModel.trySendAction(PlanAction.RetryPortalClick)
+
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        dialogState = PlanState.DialogState.LoadingPortal,
+                    ),
+                    stateFlow.awaitItem(),
+                )
+                assertEquals(
+                    PlanEvent.LaunchPortal(url = "https://portal"),
+                    eventFlow.awaitItem(),
+                )
+                assertEquals(DEFAULT_PREMIUM_LOADED_STATE, stateFlow.awaitItem())
+            }
+        }
+
+    @Test
+    fun `RetryPortalClick should show PortalError on failure`() = runTest {
+        markUserPremium()
+
+        val viewModel = createViewModel(
+            subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE,
+            portalResult = CustomerPortalResult.Error(error = RuntimeException("boom")),
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_PREMIUM_LOADED_STATE, awaitItem())
+
+            viewModel.trySendAction(PlanAction.RetryPortalClick)
+
+            assertEquals(
+                DEFAULT_PREMIUM_LOADED_STATE.copy(
+                    dialogState = PlanState.DialogState.LoadingPortal,
+                ),
+                awaitItem(),
+            )
+            assertEquals(
+                DEFAULT_PREMIUM_LOADED_STATE.copy(
+                    dialogState = PlanState.DialogState.PortalError,
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `StripePortal circumstance should clear circumstance, show loading, and refetch subscription`() =
+        runTest {
+            markUserPremium()
+
+            val viewModel = createViewModel(
+                subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE,
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_PREMIUM_LOADED_STATE, awaitItem())
+
+                mutableSpecialCircumstanceStateFlow.value =
+                    SpecialCircumstance.StripePortal
+
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        dialogState = PlanState.DialogState.Loading(
+                            message = BitwardenString.loading_subscription.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(DEFAULT_PREMIUM_LOADED_STATE, awaitItem())
+            }
+
+            verify { mockSpecialCircumstanceManager.specialCircumstance = null }
+            coVerify(exactly = 2) { mockBillingRepository.getSubscription() }
+        }
+
+    @Test
+    fun `StripePortal return applies PENDING_CANCELLATION status to view state`() =
+        runTest {
+            markUserPremium()
+            val cancelAt = Instant.parse("2026-05-01T00:00:00Z")
+            val pendingResult = SubscriptionResult.Success(
+                subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                    status = PremiumSubscriptionStatus.PENDING_CANCELLATION,
+                    cancelAt = cancelAt,
+                ),
+            )
+            val viewModel = createViewModel(
+                subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE,
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_PREMIUM_LOADED_STATE, awaitItem())
+
+                // Re-stub the second fetch (portal-return refetch) to return PENDING_CANCELLATION.
+                coEvery { mockBillingRepository.getSubscription() } returns pendingResult
+                mutableSpecialCircumstanceStateFlow.value =
+                    SpecialCircumstance.StripePortal
+
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        dialogState = PlanState.DialogState.Loading(
+                            message = BitwardenString.loading_subscription.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            status = PremiumSubscriptionStatus.PENDING_CANCELLATION,
+                            cancelAtDateText = "May 1, 2026",
+                            showCancelButton = false,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toPremiumViewState for PENDING_CANCELLATION should populate cancelAtDateText and hide cancel button`() =
+        runTest {
+            markUserPremium()
+            val cancelAt = Instant.parse("2026-05-01T00:00:00Z")
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        status = PremiumSubscriptionStatus.PENDING_CANCELLATION,
+                        cancelAt = cancelAt,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            status = PremiumSubscriptionStatus.PENDING_CANCELLATION,
+                            cancelAtDateText = "May 1, 2026",
+                            showCancelButton = false,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `init opens Premium view when free account holds PENDING_CANCELLATION status`() =
+        runTest {
+            mutableSubscriptionStatusStateFlow.value = SubscriptionStatusState.Available(
+                status = PremiumSubscriptionStatus.PENDING_CANCELLATION,
+            )
+            val cancelAt = Instant.parse("2026-05-01T00:00:00Z")
+            val viewModel = createViewModel(
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        status = PremiumSubscriptionStatus.PENDING_CANCELLATION,
+                        cancelAt = cancelAt,
+                    ),
+                ),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_PREMIUM_LOADED_STATE.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            status = PremiumSubscriptionStatus.PENDING_CANCELLATION,
+                            cancelAtDateText = "May 1, 2026",
+                            showCancelButton = false,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    private fun markUserPremium() {
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = true)),
+        )
+    }
+
+    // endregion Premium user path
+
+    @Suppress("LongParameterList")
+    private fun createViewModel(
+        initialState: PlanState? = null,
+        planMode: PlanMode = PlanMode.Modal,
+        pricingResult: PremiumPlanPricingResult? = DEFAULT_PRICING_SUCCESS,
+        subscriptionResult: SubscriptionResult? = null,
+        portalResult: CustomerPortalResult? = null,
+        clock: Clock = FIXED_CLOCK,
+    ): PlanViewModel {
+        coEvery {
+            mockBillingRepository.getPremiumPlanPricing()
+        } coAnswers {
+            pricingResult ?: awaitCancellation()
+        }
+        coEvery {
+            mockBillingRepository.getSubscription()
+        } coAnswers {
+            subscriptionResult ?: awaitCancellation()
+        }
+        coEvery {
+            mockBillingRepository.getPortalUrl()
+        } coAnswers {
+            portalResult ?: awaitCancellation()
+        }
+        val savedStateHandle = SavedStateHandle().apply {
+            set("state", initialState)
+            every { toPlanArgs() } returns PlanArgs(planMode = planMode)
+        }
+        return PlanViewModel(
+            savedStateHandle = savedStateHandle,
+            authRepository = mockAuthRepository,
+            billingRepository = mockBillingRepository,
+            premiumStateManager = mockPremiumStateManager,
+            specialCircumstanceManager = mockSpecialCircumstanceManager,
+            vaultRepository = mockVaultRepository,
+            environmentRepository = mockEnvironmentRepository,
+            clock = clock,
+        )
+    }
+}
+
+private val DEFAULT_ACCOUNT = UserState.Account(
+    userId = "user-id-1",
+    name = "Test User",
+    email = "test@bitwarden.com",
+    avatarColorHex = "#000000",
+    environment = mockk(),
+    isPremium = false,
+    isPremiumFromSelf = false,
+    isLoggedIn = true,
+    isVaultUnlocked = true,
+    needsPasswordReset = false,
+    isBiometricsEnabled = false,
+    organizations = emptyList(),
+    needsMasterPassword = false,
+    trustedDevice = null,
+    hasMasterPassword = true,
+    isUsingKeyConnector = false,
+    onboardingStatus = mockk(),
+    firstTimeState = mockk(),
+    isExportable = false,
+    creationDate = null,
+)
+
+private val DEFAULT_USER_STATE = UserState(
+    activeUserId = "user-id-1",
+    accounts = listOf(DEFAULT_ACCOUNT),
+    hasPendingAccountAddition = false,
+)
+
+private val DEFAULT_FREE_STATE = PlanState(
+    planMode = PlanMode.Modal,
+    viewState = PlanState.ViewState.Free.Cloud(
+        rate = "$1.67",
+        checkoutUrl = null,
+        isAwaitingPremiumStatus = false,
+        isPremiumUpgradePending = false,
+    ),
+    dialogState = null,
+)
+
+private const val ANNUAL_PRICE = 19.99
+
+private val FIXED_CLOCK: Clock = Clock.fixed(
+    Instant.parse("2026-04-21T00:00:00Z"),
+    ZoneOffset.UTC,
+)
+
+private val SUBSCRIPTION_INFO_ACTIVE = SubscriptionInfo(
+    status = PremiumSubscriptionStatus.ACTIVE,
+    cadence = PlanCadence.ANNUALLY,
+    seatsCost = BigDecimal("19.80"),
+    storageCost = BigDecimal("24.00"),
+    discountAmount = BigDecimal("2.10"),
+    estimatedTax = BigDecimal("3.85"),
+    nextChargeTotal = BigDecimal("45.55"),
+    nextCharge = Instant.parse("2026-04-02T00:00:00Z"),
+    cancelAt = null,
+    canceledDate = null,
+    suspensionDate = null,
+    gracePeriodDays = null,
+)
+
+private val SUBSCRIPTION_SUCCESS_ACTIVE =
+    SubscriptionResult.Success(subscription = SUBSCRIPTION_INFO_ACTIVE)
+
+private val DEFAULT_PRICING_SUCCESS = PremiumPlanPricingResult.Success(
+    annualPrice = ANNUAL_PRICE,
+)
+
+private val DEFAULT_PREMIUM_ACTIVE_VIEW_STATE = PlanState.ViewState.Premium(
+    status = PremiumSubscriptionStatus.ACTIVE,
+    billingAmountText = BitwardenString.billing_rate_per_year.asText("$19.80"),
+    storageCostText = "$24.00",
+    discountAmountText = "\u2212$2.10",
+    estimatedTaxText = "$3.85",
+    totalText = BitwardenString.billing_rate_per_year.asText("$45.55"),
+    nextChargeTotalText = "$45.55",
+    nextChargeDateText = "April 2, 2026",
+    showCancelButton = true,
+)
+
+private val DEFAULT_PREMIUM_LOADED_STATE = PlanState(
+    planMode = PlanMode.Modal,
+    viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE,
+    dialogState = null,
+)
+
+private val DEFAULT_PREMIUM_LOADING_STATE = PlanState(
+    planMode = PlanMode.Modal,
+    viewState = PlanState.ViewState.Premium(),
+    dialogState = PlanState.DialogState.Loading(
+        message = BitwardenString.loading_subscription.asText(),
+    ),
+)

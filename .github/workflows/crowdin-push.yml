@@ -1,0 +1,49 @@
+name: CI / Crowdin Push
+run-name: Crowdin Push - ${{ github.event_name == 'workflow_dispatch' && 'Manual' || 'CI' }}
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  crowdin-push:
+    name: Crowdin Push - ${{ github.event_name }}
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Log in to Azure
+        uses: bitwarden/gh-actions/azure-login@main
+        with:
+          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          client_id: ${{ secrets.AZURE_CLIENT_ID }}
+
+      - name: Retrieve secrets
+        id: retrieve-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: "gh-android"
+          secrets: "CROWDIN-API-TOKEN"
+
+      - name: Upload sources
+        uses: crowdin/github-action@8868a33591d21088edfc398968173a3b98d51706 # v2.16.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.CROWDIN-API-TOKEN }}
+          _CROWDIN_PROJECT_ID: "269690"
+        with:
+          config: crowdin.yml
+          upload_sources: true
+          upload_translations: false
+
+      - name: Log out from Azure
+        uses: bitwarden/gh-actions/azure-logout@main

@@ -1,0 +1,20 @@
+{
+  "apps": [
+    {
+      "type": "android",
+      "info": {
+        "package_name": "org.chromium.chrome",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "C6:AD:B8:B8:3C:6D:4C:17:D2:92:AF:DE:56:FD:48:8A:51:D3:16:FF:8F:2C:11:C5:41:02:23:BF:F8:A7:DB:B3"
+          },
+          {
+            "build": "userdebug",
+            "cert_fingerprint_sha256": "19:75:B2:F1:71:77:BC:89:A5:DF:F3:1F:9E:64:A6:CA:E2:81:A5:3D:C1:D1:D5:9B:1D:14:7F:E1:C8:2A:FA:00"
+          }
+        ]
+      }
+    }
+  ]
+}

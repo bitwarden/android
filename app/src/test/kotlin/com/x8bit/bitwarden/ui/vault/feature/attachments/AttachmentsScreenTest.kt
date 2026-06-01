@@ -1,0 +1,354 @@
+package com.x8bit.bitwarden.ui.vault.feature.attachments
+
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.filterToOne
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
+import androidx.core.net.toUri
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.assertNoDialogExists
+import com.bitwarden.ui.util.isProgressBar
+import com.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
+import com.bitwarden.ui.util.onNodeWithTextAfterScroll
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Test
+
+class AttachmentsScreenTest : BitwardenComposeTest() {
+    private var onNavigateBackCalled = false
+    private var onNavigateToPreviewCalled = false
+    private var onNavigateToPlanCalled = false
+
+    private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
+    private val mutableEventFlow = bufferedMutableSharedFlow<AttachmentsEvent>()
+    private val viewModel: AttachmentsViewModel = mockk {
+        every { stateFlow } returns mutableStateFlow
+        every { eventFlow } returns mutableEventFlow
+        every { trySendAction(any()) } just runs
+    }
+    private val intentManager: IntentManager = mockk(relaxed = true)
+
+    @Before
+    fun setup() {
+        setContent(
+            intentManager = intentManager,
+        ) {
+            AttachmentsScreen(
+                viewModel = viewModel,
+                onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToPreview = { onNavigateToPreviewCalled = true },
+                onNavigateToPlan = { onNavigateToPlanCalled = true },
+            )
+        }
+    }
+
+    @Test
+    fun `NavigateBack should call onNavigateBack`() {
+        mutableEventFlow.tryEmit(AttachmentsEvent.NavigateBack)
+        assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `NavigateToUri should call launchUri`() {
+        val uriString = "https://www.bitwarden.com"
+        mutableEventFlow.tryEmit(AttachmentsEvent.NavigateToUri(uri = uriString))
+        verify(exactly = 1) {
+            intentManager.launchUri(uriString.toUri())
+        }
+    }
+
+    @Test
+    fun `NavigateToPlanModal should call onNavigateToPlan`() {
+        mutableEventFlow.tryEmit(AttachmentsEvent.NavigateToPlanModal)
+        assertTrue(onNavigateToPlanCalled)
+    }
+
+    @Test
+    fun `NavigateToPreview should call onNavigateToPreview`() {
+        mutableEventFlow.tryEmit(
+            AttachmentsEvent.NavigateToPreview(
+                cipherId = "cipherId",
+                attachmentId = "attachmentId",
+                fileName = "file.png",
+                displaySize = "10 MB",
+                isLargeFile = true,
+            ),
+        )
+        assertTrue(onNavigateToPreviewCalled)
+    }
+
+    @Test
+    fun `on back click should send BackClick`() {
+        composeTestRule.onNodeWithContentDescription("Back").performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(AttachmentsAction.BackClick)
+        }
+    }
+
+    @Test
+    fun `on save click should send SaveClick`() {
+        composeTestRule.onNodeWithText("Save").performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(AttachmentsAction.SaveClick)
+        }
+    }
+
+    @Test
+    fun `on choose file click should send ChooseFileClick`() {
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_WITHOUT_ATTACHMENTS)
+        }
+
+        composeTestRule.onNodeWithTextAfterScroll("Choose file").performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(AttachmentsAction.ChooseFileClick)
+        }
+    }
+
+    @Test
+    fun `on edit file name should send FileNameChange`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_WITHOUT_ATTACHMENTS.copy(
+                    newAttachment = AttachmentsState.NewAttachment(
+                        extension = "png",
+                        displayName = "cool_file",
+                        uri = mockk(),
+                        sizeBytes = 100L,
+                    ),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText("cool_file")
+            .performTextInput("5")
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AttachmentsAction.FileNameChange(fileName = "cool_file5"))
+        }
+    }
+
+    @Test
+    fun `progressbar should be displayed according to state`() {
+        mutableStateFlow.update { it.copy(viewState = AttachmentsState.ViewState.Loading) }
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(viewState = AttachmentsState.ViewState.Error("Fail".asText()))
+        }
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_WITHOUT_ATTACHMENTS)
+        }
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
+    }
+
+    @Test
+    fun `error should be displayed according to state`() {
+        val errorMessage = "Fail"
+        mutableStateFlow.update {
+            it.copy(viewState = AttachmentsState.ViewState.Error(errorMessage.asText()))
+        }
+        composeTestRule.onNodeWithText(errorMessage).assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(viewState = AttachmentsState.ViewState.Loading) }
+        composeTestRule.onNodeWithText(errorMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_WITHOUT_ATTACHMENTS)
+        }
+        composeTestRule.onNodeWithText(errorMessage).assertDoesNotExist()
+    }
+
+    @Test
+    fun `content with no items should be displayed according to state`() {
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_WITHOUT_ATTACHMENTS)
+        }
+        composeTestRule
+            .onNodeWithTextAfterScroll("There are no attachments.")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `content with items should be displayed according to state`() {
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS)
+        }
+        composeTestRule
+            .onNodeWithTextAfterScroll("cool_file.png")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on delete click should display confirmation dialog`() {
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS)
+        }
+
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Delete")
+            .performClick()
+
+        // Title
+        composeTestRule
+            .onAllNodesWithText("Delete")
+            .filterToOne(!hasClickAction())
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        // Description
+        composeTestRule
+            .onAllNodesWithText("Do you really want to delete? This cannot be undone.")
+            .filterToOne(!hasClickAction())
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        // Cancel Button
+        composeTestRule
+            .onNodeWithText("Cancel")
+            .assert(hasClickAction())
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        // Delete Button
+        composeTestRule
+            .onAllNodesWithText("Delete")
+            .filterToOne(hasClickAction())
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on confirm delete click should send DeleteClick`() {
+        val cipherId = "cipherId-1234"
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS)
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Delete")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Delete")
+            .filterToOne(hasClickAction())
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AttachmentsAction.DeleteClick(cipherId))
+        }
+    }
+
+    @Test
+    fun `requires Premium dialog should be displayed according to state`() {
+        val requiresPremiumMessage = "Attachments unavailable"
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(requiresPremiumMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(dialogState = AttachmentsState.DialogState.RequiresPremium)
+        }
+
+        composeTestRule
+            .onNodeWithText(requiresPremiumMessage)
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Upgrade to Premium")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AttachmentsAction.UpgradeToPremiumClick)
+        }
+    }
+
+    @Test
+    fun `error dialog should be displayed according to state`() {
+        val errorMessage = "Fail"
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(errorMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = AttachmentsState.DialogState.Error(
+                    title = null,
+                    message = errorMessage.asText(),
+                    throwable = null,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(errorMessage)
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `loading dialog should be displayed according to state`() {
+        val loadingMessage = "deleting"
+        composeTestRule.assertNoDialogExists()
+        composeTestRule.onNodeWithText(loadingMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(dialogState = AttachmentsState.DialogState.Loading(loadingMessage.asText()))
+        }
+
+        composeTestRule
+            .onNodeWithText(loadingMessage)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+    }
+}
+
+private val DEFAULT_STATE: AttachmentsState = AttachmentsState(
+    cipherId = "cipherId-1234",
+    viewState = AttachmentsState.ViewState.Loading,
+    dialogState = null,
+    isPremiumUser = false,
+    isAttachmentUpdatesEnabled = true,
+)
+
+private val DEFAULT_CONTENT_WITHOUT_ATTACHMENTS: AttachmentsState.ViewState.Content =
+    AttachmentsState.ViewState.Content(
+        originalCipher = createMockCipherView(number = 1),
+        attachments = persistentListOf(),
+        newAttachment = null,
+    )
+
+private val DEFAULT_CONTENT_WITH_ATTACHMENTS: AttachmentsState.ViewState.Content =
+    AttachmentsState.ViewState.Content(
+        originalCipher = createMockCipherView(number = 1),
+        attachments = persistentListOf(
+            AttachmentsState.AttachmentItem(
+                id = "cipherId-1234",
+                title = "cool_file.png",
+                displaySize = "10 MB",
+                isLargeFile = true,
+            ),
+        ),
+        newAttachment = null,
+    )

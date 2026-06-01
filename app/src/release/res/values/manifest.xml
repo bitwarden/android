@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="known_authenticator_app_certs">
+        <!-- This is the SHA-256 digest for Google Play signing key of the Authenticator App release
+        variant: -->
+        <item>45bd689eb1493eaef19c346dc1385197ddbb53ddc5d09476db4895df75b9b53b</item>
+
+        <!-- This is the SHA-256 digest for Firebase App Distribution signing key of the
+         Authenticator App release variant: -->
+        <item>B06B54566AF2FBCC762700C8844B84EC410C230EACC3878FCF0248C0D9772A95</item>
+
+        <!-- These are the SHA-256 digest for APK signing key of the Authenticator App release
+        variant. -->
+        <item>52f393fb529fbf2ab5bb018bf17bf0f829d2fbebce099915aba42deab5a2fbb8</item>
+    </string-array>
+</resources>

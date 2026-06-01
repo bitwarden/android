@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "867301491091",
+    "project_id": "bitwarden-authenticator",
+    "storage_bucket": "bitwarden-authenticator.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:867301491091:android:3ee369dedcd20f6551e866",
+        "android_client_info": {
+          "package_name": "com.bitwarden.authenticator.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDXnnBuWzuh8rlihiMWRPif_sqkGk3fxw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

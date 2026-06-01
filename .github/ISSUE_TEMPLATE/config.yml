@@ -1,0 +1,16 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Feature Requests
+    url: https://community.bitwarden.com/c/feature-requests/
+    about: Request new features using the Community Forums. Please search existing feature requests before making a new one.
+  - name: Bitwarden Community Forums
+    url: https://community.bitwarden.com
+    about: Please visit the community forums for general community discussion, support and the development roadmap.
+  - name: Customer Support
+    url: https://bitwarden.com/contact/
+    about: Please contact our customer support for account issues and general customer support.
+  - name: Security Issues
+    url: https://hackerone.com/bitwarden
+    about: We use HackerOne to manage security disclosures.
+  - name: Report mobile autofill failure
+    url: https://docs.google.com/forms/d/e/1FAIpQLScMopHyN7KGJs8hW562VTzbIGL4KcFnx0wJcsW0GYE1BnPiGA/viewform

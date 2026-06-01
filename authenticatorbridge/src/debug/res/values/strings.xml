@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="known_bitwarden_certs">
+        <!-- This is the SHA-256 digest for Debug signing key of the Bitwarden App debug
+        variant: -->
+        <item>0418ff9b3a883040ee3e1931093a7edca19b2f87f455388f28906bf262e32de7</item>
+    </string-array>
+</resources>

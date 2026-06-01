@@ -1,0 +1,4 @@
+<resources>
+    <!--Common-->
+    <string name="app_name" translatable="false">Bitwarden</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- For beta variant, we don't have a matching variant of the Bitwarden Authenticator app.
+    Therefore, we leave the known app cert null here so that no clients can connect to
+    AuthenticatorBridgeService in the beta variant. If later another variant of the
+    Bitwarden Authenticator app is added, a SHA-256 digest of that variant's APK can be added here.
+    -->
+    <string-array name="known_authenticator_app_certs" />
+</resources>

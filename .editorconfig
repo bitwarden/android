@@ -1,0 +1,31 @@
+# EditorConfig is awesome: http://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Don't use tabs for indentation.
+[*]
+indent_size = 4
+indent_style = space
+tab_width = 4
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# JSON files
+[*.json]
+indent_size = 2
+
+# Kotlin files
+# noinspection EditorConfigKeyCorrectness
+[*.{kt,kts}]
+# https://pinterest.github.io/ktlint/1.0.1/rules/configuration-ktlint/#trailing-comma-on-declaration-site
+ij_kotlin_allow_trailing_comma = true
+# https://pinterest.github.io/ktlint/1.0.1/rules/configuration-ktlint/#trailing-comma-on-declaration-site
+trailing-comma-on-declaration-site = true
+# https://pinterest.github.io/ktlint/1.0.1/rules/configuration-ktlint/#trailing-comma-on-call-site
+ij_kotlin_allow_trailing_comma_on_call_site = true
+
+[*.{scss,yml}]
+indent_size = 2

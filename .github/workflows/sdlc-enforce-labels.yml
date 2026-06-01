@@ -1,0 +1,64 @@
+name: SDLC / Enforce PR labels
+run-name: Enforce labels for PR ${{ github.event.pull_request.number }}
+
+on:
+  pull_request:
+    types: [labeled, unlabeled, opened, reopened, edited, synchronize]
+
+permissions: {}
+
+jobs:
+  enforce-label:
+    name: Enforce Label
+    runs-on: ubuntu-24.04
+    permissions:
+      pull-requests: read
+    steps:
+      - name: Enforce banned labels (e.g. hold, needs-qa)
+        env:
+          _HOLD_LABEL: ${{ contains(github.event.pull_request.labels.*.name, 'hold') }}
+          _NEEDS_QA_LABEL: ${{ contains(github.event.pull_request.labels.*.name, 'needs-qa') }}
+        run: |
+          if [ "$_HOLD_LABEL" = "true" ]; then
+            echo "::error::PR has banned label: hold"
+            exit 1
+          fi
+          if [ "$_NEEDS_QA_LABEL" = "true" ]; then
+            echo "::error::PR has banned label: needs-qa"
+            exit 1
+          fi
+          echo "✅ No banned labels found."
+
+      - name: Enforce exactly one Change Type (t:*) label
+        env:
+          _PR_ACTION: ${{ github.event.action }}
+          _PR_LABELS: ${{ toJSON(github.event.pull_request.labels) }}
+          _REPO: ${{ github.repository }}
+          _PR_NUMBER: ${{ github.event.pull_request.number }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "$_PR_ACTION" = "opened" ] || [ "$_PR_ACTION" = "reopened" ]; then
+            echo "⏳ Waiting 15s for labeler to run..."
+            sleep 15
+            _PR_LABELS=$(gh api "repos/$_REPO/pulls/$_PR_NUMBER" --jq '.labels')
+            echo "Labels fetched from PR: $_PR_LABELS"
+          fi
+          _IGNORE_FOR_RELEASE_LABEL=$(echo "$_PR_LABELS" | jq 'any(.[]; .name == "ignore-for-release")')
+          if [ "$_IGNORE_FOR_RELEASE_LABEL" = "true" ]; then
+            echo "⏭️ Skipping type label check - 'ignore-for-release' label present"
+            exit 0
+          fi
+          _T_LABEL_COUNT=$(echo "$_PR_LABELS" | jq '[.[] | select(.name | startswith("t:"))] | length')
+          case "$_T_LABEL_COUNT" in
+            1)
+              echo "✅ PR has exactly one Change Type (t:*) label"
+              ;;
+            0)
+              echo "::error::PR is missing a Change Type (t:*) label. PRs must have exactly one Change Type (t:*) label"
+              exit 1
+              ;;
+            *)
+              echo "::error::PR has $_T_LABEL_COUNT Change Type (t:*) labels. PRs must have exactly one Change Type (t:*) label"
+              exit 1
+              ;;
+          esac

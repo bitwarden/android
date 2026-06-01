@@ -1,0 +1,29 @@
+name: 'Setup Android Build'
+description: 'Setup Android build environment with Gradle, Ruby, and Fastlane'
+inputs:
+  java-version:
+    description: 'Java version to use'
+    required: false
+    default: '21'
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e # v6.1.0
+
+    - name: Configure Ruby
+      uses: ruby/setup-ruby@6aaa311d81eba98ae12eaffbcb63296ace0efcde # v1.307.0
+      with:
+        bundler-cache: true
+
+    - name: Configure JDK
+      uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+      with:
+        distribution: "temurin"
+        java-version: ${{ inputs.java-version }}
+
+    - name: Install Fastlane
+      shell: bash
+      run: |
+        bundle config path vendor/bundle
+        bundle install --jobs 4 --retry 3

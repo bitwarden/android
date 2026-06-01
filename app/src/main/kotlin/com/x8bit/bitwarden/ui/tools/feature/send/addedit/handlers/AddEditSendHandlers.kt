@@ -1,0 +1,96 @@
+package com.x8bit.bitwarden.ui.tools.feature.send.addedit.handlers
+
+import com.bitwarden.ui.platform.model.FileData
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendAction
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendViewModel
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AuthEmail
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
+import java.time.Instant
+
+/**
+ * A collection of handler functions for managing actions within the context of adding and editing
+ * send items.
+ */
+data class AddEditSendHandlers(
+    val onNameChange: (String) -> Unit,
+    val onChooseFileClick: (hasPermission: Boolean) -> Unit,
+    val onFileChoose: (FileData) -> Unit,
+    val onTextChange: (String) -> Unit,
+    val onIsHideByDefaultToggle: (Boolean) -> Unit,
+    val onMaxAccessCountChange: (Int) -> Unit,
+    val onNoteChange: (String) -> Unit,
+    val onHideEmailToggle: (Boolean) -> Unit,
+    val onDeactivateSendToggle: (Boolean) -> Unit,
+    val onDeletionDateChange: (Instant) -> Unit,
+    val onDeleteClick: () -> Unit,
+    val onOpenPasswordGeneratorClick: () -> Unit,
+    val onPasswordCopyClick: (String) -> Unit,
+    val onAuthTypeSelect: (SendAuth) -> Unit,
+    val onAuthPasswordChange: (String) -> Unit,
+    val onEmailValueChange: (AuthEmail) -> Unit,
+    val onAddNewEmailClick: () -> Unit,
+    val onEmailsRemoveClick: (AuthEmail) -> Unit,
+) {
+    @Suppress("UndocumentedPublicClass")
+    companion object {
+        /**
+         * Creates an instance of [AddEditSendHandlers] by binding actions to the provided
+         * [AddEditSendViewModel].
+         */
+        fun create(
+            viewModel: AddEditSendViewModel,
+        ): AddEditSendHandlers =
+            AddEditSendHandlers(
+                onNameChange = { viewModel.trySendAction(AddEditSendAction.NameChange(it)) },
+                onChooseFileClick = {
+                    viewModel.trySendAction(AddEditSendAction.ChooseFileClick(it))
+                },
+                onFileChoose = { viewModel.trySendAction(AddEditSendAction.FileChoose(it)) },
+                onTextChange = { viewModel.trySendAction(AddEditSendAction.TextChange(it)) },
+                onIsHideByDefaultToggle = {
+                    viewModel.trySendAction(AddEditSendAction.HideByDefaultToggle(it))
+                },
+                onMaxAccessCountChange = {
+                    viewModel.trySendAction(AddEditSendAction.MaxAccessCountChange(it))
+                },
+                onNoteChange = { viewModel.trySendAction(AddEditSendAction.NoteChange(it)) },
+                onHideEmailToggle = {
+                    viewModel.trySendAction(AddEditSendAction.HideMyEmailToggle(it))
+                },
+                onDeactivateSendToggle = {
+                    viewModel.trySendAction(AddEditSendAction.DeactivateThisSendToggle(it))
+                },
+                onDeletionDateChange = {
+                    viewModel.trySendAction(AddEditSendAction.DeletionDateChange(it))
+                },
+                onDeleteClick = { viewModel.trySendAction(AddEditSendAction.DeleteClick) },
+                onOpenPasswordGeneratorClick = {
+                    viewModel.trySendAction(AddEditSendAction.OpenPasswordGeneratorClick)
+                },
+                onPasswordCopyClick = {
+                    viewModel.trySendAction(
+                        AddEditSendAction.PasswordCopyClick(
+                            password = it,
+                        ),
+                    )
+                },
+                onAuthTypeSelect = {
+                    viewModel.trySendAction(AddEditSendAction.AuthTypeSelect(it))
+                },
+                onAuthPasswordChange = {
+                    viewModel.trySendAction(AddEditSendAction.AuthPasswordChange(it))
+                },
+                onAddNewEmailClick = {
+                    viewModel.trySendAction(AddEditSendAction.AuthEmailAdd)
+                },
+                onEmailValueChange = { authEmail ->
+                    viewModel.trySendAction(
+                        AddEditSendAction.AuthEmailChange(authEmail = authEmail),
+                    )
+                },
+                onEmailsRemoveClick = {
+                    viewModel.trySendAction(AddEditSendAction.AuthEmailRemove(it))
+                },
+            )
+    }
+}

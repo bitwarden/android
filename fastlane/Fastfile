@@ -1,0 +1,480 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+require_relative 'patches/supply_custom_promote_config'
+require_relative 'patches/supply_custom_promote'
+
+default_platform(:android)
+
+platform :android do
+  before_all do
+    ENV["KEYSTORE_DIR"] = ENV["PWD"] + "/keystores/"
+  end
+
+  desc "Assemble debug APKs."
+  lane :assembleDebugApks do |options|
+    gradle(
+      tasks: ["assembleDebug"],
+    )
+  end
+
+  desc "Assemble FDroid release APK"
+  lane :assembleFDroidReleaseApk do |options|
+    buildAndSignBitwarden(
+      taskName: "app:assemble",
+      flavor: "Fdroid",
+      buildType: "Release",
+      storeFile: options[:storeFile],
+      storePassword: options[:storePassword],
+      keyAlias: options[:keyAlias],
+      keyPassword: options[:keyPassword],
+    )
+  end
+
+  desc "Assemble F-Droid Beta APK"
+  lane :assembleFDroidBetaApk do |options|
+    buildAndSignBitwarden(
+      taskName: "app:assemble",
+      flavor: "Fdroid",
+      buildType: "Beta",
+      storeFile: options[:storeFile],
+      storePassword: options[:storePassword],
+      keyAlias: options[:keyAlias],
+      keyPassword: options[:keyPassword],
+    )
+  end
+
+  desc "Assemble Play Store release APK"
+  lane :assemblePlayStoreReleaseApk do |options|
+    buildAndSignBitwarden(
+      taskName: "app:assemble",
+      flavor: "Standard",
+      buildType: "Release",
+      storeFile: options[:storeFile],
+      storePassword: options[:storePassword],
+      keyAlias: options[:keyAlias],
+      keyPassword: options[:keyPassword],
+    )
+  end
+
+  desc "Assemble Play Store release APK"
+  lane :assemblePlayStoreBetaApk do |options|
+    buildAndSignBitwarden(
+      taskName: "app:assemble",
+      flavor: "Standard",
+      buildType: "Beta",
+      storeFile: options[:storeFile],
+      storePassword: options[:storePassword],
+      keyAlias: options[:keyAlias],
+      keyPassword: options[:keyPassword],
+    )
+  end
+
+  desc "Bundle Play Store release"
+  lane :bundlePlayStoreRelease do |options|
+    buildAndSignBitwarden(
+      taskName: "app:bundle",
+      flavor: "Standard",
+      buildType: "Release",
+      storeFile: options[:storeFile],
+      storePassword: options[:storePassword],
+      keyAlias: options[:keyAlias],
+      keyPassword: options[:keyPassword],
+    )
+  end
+
+  desc "Bundle Play Store release"
+  lane :bundlePlayStoreBeta do |options|
+    buildAndSignBitwarden(
+      taskName: "app:bundle",
+      flavor: "Standard",
+      buildType: "Beta",
+      storeFile: options[:storeFile],
+      storePassword: options[:storePassword],
+      keyAlias: options[:keyAlias],
+      keyPassword: options[:keyPassword],
+    )
+  end
+
+  desc "Runs lint, tests, and generates Kover reports for all project modules"
+  lane :check do
+    gradle(
+        tasks: [
+          "detekt",
+          "lintStandardDebug",
+          "lintDebug",
+          "testStandardDebug",
+          "testDebug",
+          "koverXmlReportMergedCoverage",
+        ]
+    )
+  end
+
+  desc "Run static analysis (detekt + lint)"
+  lane :checkLint do
+    gradle(
+      tasks: [
+        "detekt",
+        "lintStandardDebug",
+        "lintDebug",
+      ]
+    )
+  end
+
+  desc "Run app module tests for a specific shard"
+  lane :testAppShard do |options|
+    gradle(
+      task: ":app:testStandardDebugUnitTest",
+      flags: options[:target],
+    )
+  end
+
+  desc "Run library module tests for specified modules"
+  lane :testLibraries do |options|
+    tasks = options[:target].split(" ").map { |mod| "#{mod}:testDebugUnitTest" }
+    gradle(tasks: tasks)
+  end
+
+  desc "Generate merged Kover coverage report from existing binary data"
+  lane :generateCoverageReport do
+    gradle(
+      task: "koverXmlReportMergedCoverage",
+      flags: "-x testStandardDebugUnitTest -x testDebugUnitTest",
+    )
+  end
+
+  desc "Apply build version information"
+  fastlane_require "time"
+  lane :setBuildVersionInfo do |options|
+
+    # Read-in app toml file.
+    tomlLibraryPath = "../gradle/libs.versions.toml"
+    tomlLibraryFile = File.open(tomlLibraryPath)
+    tomlLibraryText = tomlLibraryFile.read
+    tomlLibraryFile.close
+
+    currentVersionCode = tomlLibraryText.match(/appVersionCode = "(\d+)"/).captures[0]
+    currentVersionName = tomlLibraryText.match(/appVersionName = "(.+)"/).captures[0]
+
+    if options[:versionName].nil? or options[:versionName].to_s.empty?
+        puts "Fetching latest tags from origin..."
+        `git fetch --prune --no-recurse-submodules --filter=tree:0 --depth=1 --tags origin`
+        puts "Getting latest version name from previous git tag..."
+        latestTag = `git describe --tags $(git rev-list --tags --max-count=1)`.chomp()
+        puts "Using tag #{latestTag} to calculate version name..."
+        latestTag.slice!(0)
+        puts "Current version name resolved to #{latestTag}."
+
+        versionParts = latestTag.split(".")
+        currentMajor = versionParts[0]
+        currentMinor = versionParts[1]
+        currentRevision = versionParts[2]
+
+        currentDate = Time.new
+        major = currentDate.year.to_s
+        minor = currentDate.strftime "%-m"
+
+        revision = 0
+        if currentMajor == major and currentMinor == minor
+            revision = currentRevision.to_i + 1
+        end
+        nextVersionName = "#{major}.#{minor}.#{revision}"
+    else
+        nextVersionName = options[:versionName].to_s
+    end
+
+    # Replace version information.
+    puts "Setting version code to #{options[:versionCode]}."
+    tomlLibraryText.gsub!("appVersionCode = \"#{currentVersionCode}\"", "appVersionCode = \"#{options[:versionCode]}\"")
+    puts "Setting version name to #{nextVersionName}."
+    tomlLibraryText.gsub!("appVersionName = \"#{currentVersionName}\"", "appVersionName = \"#{nextVersionName}\"")
+
+    # Save changes
+    File.open(tomlLibraryPath, "w") { |tomlLibraryFile| tomlLibraryFile << tomlLibraryText }
+  end
+
+  desc "Generate artifacts for the given [build] signed with the provided [keystore] and credentials."
+  private_lane :buildAndSignBitwarden do |options|
+    gradle(
+      task: options[:taskName],
+      flavor: options[:flavor],
+      build_type: options[:buildType],
+      properties: {
+        "android.injected.signing.store.file" => ENV["KEYSTORE_DIR"] + options[:storeFile],
+        "android.injected.signing.store.password" => options[:storePassword],
+        "android.injected.signing.key.alias" => options[:keyAlias],
+        "android.injected.signing.key.password" => options[:keyPassword]
+      },
+      print_command: false,
+    )
+  end
+
+  desc "Publish Release Play Store artifacts to Firebase App Distribution"
+  lane :distributeReleasePlayStoreToFirebase do |options|
+    releaseNotes = generateReleaseNotes(
+      repoName: "android",
+      actionUrl: "#{options[:actionUrl]}"
+    )
+    firebase_app_distribution(
+      app: "1:64530857057:android:f8d67b786db1b844",
+      android_artifact_type: "APK",
+      android_artifact_path: "app/build/outputs/apk/standard/release/com.x8bit.bitwarden.apk",
+      service_credentials_file: options[:service_credentials_file],
+      groups: "internal-prod-group, livefront",
+      release_notes: "#{releaseNotes}",
+    )
+  end
+
+  desc "Publish Beta Play Store artifacts to Firebase App Distribution"
+  lane :distributeBetaPlayStoreToFirebase do |options|
+    releaseNotes = generateReleaseNotes(
+      repoName: "android",
+      actionUrl: "#{options[:actionUrl]}"
+    )
+    firebase_app_distribution(
+      app: "1:64530857057:android:54c1ae56b269b959887e20",
+      android_artifact_type: "APK",
+      android_artifact_path: "app/build/outputs/apk/standard/beta/com.x8bit.bitwarden.beta.apk",
+      service_credentials_file: options[:service_credentials_file],
+      groups: "internal-prod-group, livefront",
+      release_notes: "#{releaseNotes}",
+    )
+  end
+
+  desc "Publish Release F-Droid artifacts to Firebase App Distribution"
+  lane :distributeReleaseFDroidToFirebase do |options|
+    releaseNotes = generateReleaseNotes(
+        repoName: "android",
+        actionUrl: "#{options[:actionUrl]}"
+    )
+    firebase_app_distribution(
+      app: "1:439897860529:android:b143708734b99c0e3fb590",
+      android_artifact_type: "APK",
+      android_artifact_path: "app/build/outputs/apk/fdroid/release/com.x8bit.bitwarden-fdroid.apk",
+      service_credentials_file: options[:service_credentials_file],
+      groups: "internal-prod-group, livefront",
+      release_notes: "#{releaseNotes}"
+    )
+  end
+
+  desc "Publish Play Store Beta bundle to Google Play Store"
+  lane :publishBetaToPlayStore do
+    upload_to_play_store(
+      package_name: "com.x8bit.bitwarden.beta",
+      track: "internal",
+      release_status: "completed",
+      rollout: "1",
+      aab: "app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden.beta.aab",
+    )
+  end
+
+  desc "Publish Play Store Beta bundle to Google Play Store"
+  lane :publishProdToPlayStore do
+    upload_to_play_store(
+      package_name: "com.x8bit.bitwarden",
+      track: "internal",
+      release_status: "completed",
+      rollout: "1",
+      aab: "app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden.aab",
+    )
+  end
+
+  desc "Generate release notes"
+  lane :generateReleaseNotes do |options|
+    branchName = `git rev-parse --abbrev-ref HEAD`.chomp()
+    releaseNotes = changelog_from_git_commits(
+      commits_count: 1,
+      pretty: "%s%n#{options[:repoName]}/#{branchName} @ %h %n %n#{options[:actionUrl]}"
+    )
+    releaseNotes
+  end
+
+  desc "Get latest published version for a given package name and Play Store track"
+  lane :getLatestPlayStoreVersion do |options|
+    package_name = options[:package_name]
+    track = options[:track]
+    # Hardcoding paths for now, it will simplify transitioning to the new build .env files
+    case package_name
+    when "com.x8bit.bitwarden", "com.x8bit.bitwarden.beta"
+      json_key = "secrets/play_creds.json"
+    when "com.bitwarden.authenticator"
+      json_key = "secrets/authenticator_play_store-creds.json"
+    else
+      UI.important "Unexpected package name: #{package_name}, using default play store json key"
+      json_key = "secrets/play_creds.json"
+    end
+
+    release_name = google_play_track_release_names(
+      package_name: package_name,
+      track: track,
+      json_key: json_key,
+    )
+
+    version_code = google_play_track_version_codes(
+      package_name: package_name,
+      track: track,
+      json_key: json_key,
+    )
+
+    latest_version_name = release_name.first
+    latest_version_number = version_code.first.to_s.strip
+
+    UI.message("version_name: #{latest_version_name}")
+    UI.message("version_number: #{latest_version_number}")
+  end
+
+  desc "Assemble debug variants"
+  lane :buildAuthenticatorDebug do
+    gradle(
+      task: "authenticator:assemble",
+      build_type: "Debug",
+      print_command: false,
+    )
+  end
+
+  desc "Assemble and sign release APK"
+  lane :buildAuthenticatorRelease do |options|
+    gradle(
+      task: "authenticator:assemble",
+      build_type: "Release",
+      properties: {
+        "android.injected.signing.store.file" => options[:storeFile],
+        "android.injected.signing.store.password" => options[:storePassword],
+        "android.injected.signing.key.alias" => options[:keyAlias],
+        "android.injected.signing.key.password" => options[:keyPassword]
+      },
+      print_command: false,
+    )
+  end
+
+  desc "Bundle and sign release AAB"
+  lane :bundleAuthenticatorRelease do |options|
+    gradle(
+        task: "authenticator:bundle",
+        build_type: "Release",
+        properties: {
+          "android.injected.signing.store.file" => options[:storeFile],
+          "android.injected.signing.store.password" => options[:storePassword],
+          "android.injected.signing.key.alias" => options[:keyAlias],
+          "android.injected.signing.key.password" => options[:keyPassword]
+        },
+        print_command: false,
+    )
+  end
+
+  desc "Publish release AAB to Firebase"
+  lane :distributeAuthenticatorReleaseBundleToFirebase do |options|
+    release_notes = changelog_from_git_commits(
+      commits_count: 1,
+      pretty: "- %s"
+    )
+
+    puts "Release notes #{release_notes}"
+
+    firebase_app_distribution(
+      app: "1:867301491091:android:50b626dba42a361651e866",
+      android_artifact_type: "AAB",
+      android_artifact_path: "authenticator/build/outputs/bundle/release/com.bitwarden.authenticator.aab",
+      service_credentials_file: options[:serviceCredentialsFile],
+      groups: "internal-prod-group, livefront",
+      release_notes: release_notes,
+    )
+  end
+
+  desc "Publish release to Google Play Store"
+  lane :publishAuthenticatorReleaseToGooglePlayStore do |options|
+    upload_to_play_store(
+      package_name: "com.bitwarden.authenticator",
+      json_key: options[:serviceCredentialsFile],
+      track: "internal",
+      aab: "authenticator/build/outputs/bundle/release/com.bitwarden.authenticator.aab",
+      mapping: "authenticator/build/outputs/mapping/release/mapping.txt",
+    )
+  end
+
+  desc "Retrieve build from Github releases"
+    lane :retrieveBuildFromGithub do |options|
+
+    version_codes = Actions.lane_context[SharedValues::GOOGLE_PLAY_TRACK_VERSION_CODES]
+    UI.message("Version codes in beta track: #{version_codes}")
+  end
+
+  desc "Update release notes for all locales."
+  lane :updateReleaseNotes do |options|
+    changelog = options[:releaseNotes]
+    version_code = options[:versionCode]
+
+    auth_locales = ["en-US"]
+    pw_manager_locales = ["ca", "cs-CZ", "da-DK", "de-DE", "en-US", "es-ES", "et", "fi-FI", "fr-FR", "hr", "hu-HU", "id", "it-IT", "iw-IL", "ja-JP", "nl-NL", "pl-PL", "pt-BR", "pt-PT", "ro", "ru-RU", "sk", "sv-SE", "tr-TR", "uk", "vi", "zh-CN", "zh-TW"]
+    if options[:packageName] == "com.bitwarden.authenticator"
+      locales = auth_locales
+    elsif options[:packageName] == "com.x8bit.bitwarden" || options[:packageName] == "com.x8bit.bitwarden.beta"
+      locales = pw_manager_locales
+    else
+      UI.important "Unexpected package name: #{options[:packageName]}, using default locales"
+      locales = pw_manager_locales
+    end
+
+    locales.each do |locale|
+      dir = "metadata/android/#{locale}/changelogs"
+      FileUtils.mkdir_p(dir)
+      File.write("#{dir}/#{version_code}.txt", changelog)
+    end
+  end
+
+  desc "Promote to production."
+  lane :promoteToProduction do |options|
+    release_options = {
+      package_name: options[:packageName],
+      version_code: options[:versionCode].to_i,
+      version_name: options[:versionName],
+      track: options[:track],
+      track_promote_to: options[:trackPromoteTo],
+      skip_release_verification: true,
+      skip_upload_apk: true,
+      skip_upload_aab: true,
+    }
+
+    if options[:releaseNotes].nil? or options[:releaseNotes].to_s.empty?
+      release_options[:skip_upload_metadata] = true
+    else
+      release_options[:skip_upload_metadata] = false
+    end
+
+    if options[:rolloutPercentage].to_f < 1
+      release_options[:track_promote_release_status] = "inProgress"
+      release_options[:rollout] = options[:rolloutPercentage]
+    else
+      release_options[:release_status] = "completed"
+    end
+
+    begin
+    UI.message("🚀 Starting release to #{options[:trackPromoteTo]}...")
+
+    supply(release_options)
+
+      rescue => error
+      message = error.to_s
+
+      if message.include?("You cannot rollout this release because it does not allow any existing users to upgrade to the newly added APKs")
+        UI.error("❌ App Store Error: Cannot rollout release because no existing users can upgrade to the new build.")
+        UI.error("This might mean the version is older than what is currently available on the track, pick a newer build.")
+      else
+        UI.error("❌ Unexpected error during release: #{message}")
+      end
+      raise
+    end
+  end
+end

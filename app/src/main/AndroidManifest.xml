@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.ACCESS_LOCAL_NETWORK" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="horizons.permission.HEADSET_CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
+    <!-- Protect access to AuthenticatorBridgeService using this custom permission.
+
+    Note that each build type uses a different value for knownCerts.
+
+    This in effect means that the only application that can connect to the debug/release/etc
+    variant AuthenticatorBridgeService is the debug/release/etc variant Bitwarden Authenticator
+    app. -->
+    <permission
+        android:name="${applicationId}.permission.AUTHENTICATOR_BRIDGE_SERVICE"
+        android:knownCerts="@array/known_authenticator_app_certs"
+        android:label="Bitwarden Bridge"
+        android:protectionLevel="signature|knownSigner"
+        tools:targetApi="s" />
+
+    <application
+        android:name=".BitwardenApplication"
+        android:allowBackup="false"
+        android:appComponentFactory="com.x8bit.bitwarden.BitwardenAppComponentFactory"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:intentMatchingFlags="enforceIntentFilter"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/LaunchTheme"
+        tools:ignore="CredentialDependency"
+        tools:replace="appComponentFactory"
+        tools:targetApi="36">
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="uiMode"
+            android:exported="true"
+            android:launchMode="@integer/launchModeAPIlevel"
+            android:theme="@style/LaunchTheme"
+            android:windowSoftInputMode="adjustResize">
+
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="application/*" />
+                <data android:mimeType="image/*" />
+                <data android:mimeType="video/*" />
+                <data android:mimeType="text/*" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="*.bitwarden.com" />
+                <data android:host="*.bitwarden.eu" />
+                <data android:pathPattern="/redirect-connector.*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="otpauth" />
+                <data android:host="totp" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="bitwarden" />
+            </intent-filter>
+            <!-- Handle Credential Exchange transfer requests -->
+            <intent-filter
+                android:autoVerify="true"
+                tools:ignore="AppLinkUrlError">
+                <action android:name="androidx.identitycredentials.action.IMPORT_CREDENTIALS" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:mimeType="application/octet-stream"
+                    android:scheme="content"
+                    tools:ignore="AppLinkUriRelativeFilterGroupError" />
+            </intent-filter>
+        </activity>
+
+        <!-- Credential Provider Activity for handling passkey and password credential operations.
+             This activity is NOT exported to protect against external apps attempting to extract
+             vault credentials by sending malicious intents. Only our own PendingIntents can
+             launch this activity.
+
+             This is a transparent trampoline activity that launches MainActivity for credential
+             operations and forwards results back to the Credential Manager framework.
+             Uses Theme.Translucent.NoTitleBar for invisibility while allowing normal lifecycle
+             (Theme.NoDisplay requires finish() before onResume(), incompatible with ActivityResult).
+
+             Note: Unlike AuthCallbackActivity, this does NOT use noHistory="true" because it
+             must remain in the back stack to receive the ActivityResult callback from
+             MainActivity. -->
+        <activity
+            android:name=".CredentialProviderActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="com.x8bit.bitwarden.credentials.ACTION_CREATE_PASSKEY" />
+                <action android:name="com.x8bit.bitwarden.credentials.ACTION_GET_PASSKEY" />
+                <action android:name="com.x8bit.bitwarden.credentials.ACTION_CREATE_PASSWORD" />
+                <action android:name="com.x8bit.bitwarden.credentials.ACTION_GET_PASSWORD" />
+                <action android:name="com.x8bit.bitwarden.credentials.ACTION_UNLOCK_ACCOUNT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".AccessibilityActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.NoDisplay" />
+
+        <activity
+            android:name=".AutofillCallbackActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:noHistory="true"
+            android:theme="@style/AutofillCallbackTheme" />
+
+        <activity
+            android:name=".AuthCallbackActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="bitwarden.com" />
+                <data android:host="bitwarden.eu" />
+                <data android:pathPattern="/duo-callback" />
+                <data android:pathPattern="/sso-callback" />
+                <data android:pathPattern="/webauthn-callback" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="duo-callback"
+                    android:scheme="bitwarden" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="sso-callback"
+                    android:scheme="bitwarden" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="webauthn-callback"
+                    android:scheme="bitwarden" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="sso-cookie-vendor"
+                    android:scheme="bitwarden" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!--
+        The AutofillService name below refers to the legacy Xamarin app's service name. This must
+        always match in order for the app to properly query if it is providing autofill services.
+        -->
+        <!--suppress AndroidDomInspection -->
+        <service
+            android:name="com.x8bit.bitwarden.Autofill.AutofillService"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_AUTOFILL_SERVICE"
+            tools:ignore="MissingClass">
+            <meta-data
+                android:name="android.autofill"
+                android:resource="@xml/autofill_service_configuration" />
+            <intent-filter>
+                <action android:name="android.service.autofill.AutofillService" />
+            </intent-filter>
+        </service>
+
+        <!--
+        The AccessibilityService name below refers to the legacy Xamarin app's service name. This
+        must always match in order for the app to properly query if it is providing accessibility
+        services.
+        -->
+        <!--suppress AndroidDomInspection -->
+        <service
+            android:name="com.x8bit.bitwarden.Accessibility.AccessibilityService"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            tools:ignore="MissingClass">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service" />
+        </service>
+
+        <!--
+        The CredentialProviderService name below refers to the legacy Xamarin app's service name.
+        This must always match in order for the app to properly query if it is providing credential
+        services.
+        -->
+        <!--suppress AndroidDomInspection -->
+        <service
+            android:name="com.x8bit.bitwarden.Autofill.CredentialProviderService"
+            android:enabled="true"
+            android:exported="true"
+            android:label="@string/bitwarden"
+            android:permission="android.permission.BIND_CREDENTIAL_PROVIDER_SERVICE"
+            tools:ignore="MissingClass">
+            <intent-filter>
+                <action android:name="android.service.credentials.CredentialProviderService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.credentials.provider"
+                android:resource="@xml/provider" />
+        </service>
+
+        <!-- This is required to support in-app language picker in Android 12 (API 32) and below -->
+        <service
+            android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+            android:enabled="false"
+            android:exported="false">
+            <meta-data
+                android:name="autoStoreLocales"
+                android:value="true" />
+        </service>
+
+        <!--
+        The AutofillTileService name below refers to the legacy Xamarin app's service name.
+        This must always match in order for the app to properly query if it is providing autofill
+        tile services.
+        -->
+        <!--suppress AndroidDomInspection -->
+        <service
+            android:name="com.x8bit.bitwarden.AutofillTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_notification"
+            android:label="@string/autofill_verb"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            tools:ignore="MissingClass">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <!--
+        The GeneratorTileService name below refers to the legacy Xamarin app's service name.
+        This must always match in order for the app to properly query if it is providing generator
+        tile services.
+        -->
+        <!--suppress AndroidDomInspection -->
+        <service
+            android:name="com.x8bit.bitwarden.GeneratorTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_generator"
+            android:label="@string/password_generator"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            tools:ignore="MissingClass">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <!--
+        The MyVaultTileService name below refers to the legacy Xamarin app's service name.
+        This must always match in order for the app to properly query if it is providing vault
+        tile services.
+        -->
+        <!--suppress AndroidDomInspection -->
+        <service
+            android:name="com.x8bit.bitwarden.MyVaultTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_notification"
+            android:label="@string/my_vault"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            tools:ignore="MissingClass">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="android.content.APP_RESTRICTIONS"
+            android:resource="@xml/app_restrictions" />
+
+        <service
+            android:name="com.x8bit.bitwarden.data.platform.service.AuthenticatorBridgeService"
+            android:exported="true"
+            android:permission="${applicationId}.permission.AUTHENTICATOR_BRIDGE_SERVICE" />
+
+        <!-- Firebase SDK initOrder is 100. We use a higher order to initialize first -->
+        <provider
+            android:name=".data.platform.contentprovider.UncaughtErrorLoggingContentProvider"
+            android:authorities="${applicationId}"
+            android:exported="false"
+            android:grantUriPermissions="false"
+            android:initOrder="101" />
+
+    </application>
+
+    <queries>
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.HOME" />
+        </intent>
+        <!-- To Query Privileged Apps -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="http" />
+        </intent>
+        <!-- To Query Chrome Beta: -->
+        <package android:name="com.chrome.beta" />
+
+        <!-- To Query Chrome Stable: -->
+        <package android:name="com.android.chrome" />
+
+        <!-- To Query Brave Stable: -->
+        <package android:name="com.brave.browser" />
+    </queries>
+
+</manifest>

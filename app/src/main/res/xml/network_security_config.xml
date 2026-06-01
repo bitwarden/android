@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config xmlns:tools="http://schemas.android.com/tools">
+
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <!-- Trust pre-installed CAs -->
+            <certificates src="system" />
+            <!-- Additionally trust user added CAs -->
+            <certificates
+                src="user"
+                tools:ignore="AcceptsUserCertificates" />
+        </trust-anchors>
+    </base-config>
+
+    <!-- A lot of TLS certificates point to http:// URLs for CRL and OCSP checking,
+    so we need to allow cleartext traffic on them -->
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- CRL Distribution Servers -->
+        <domain includeSubdomains="true">c.lencr.org</domain>
+        <domain includeSubdomains="true">c.pki.goog</domain>
+
+        <!-- OCSP Responder Servers -->
+        <domain includeSubdomains="true">o.pki.goog</domain>
+        <domain includeSubdomains="true">ocsp.sectigo.com</domain>
+    </domain-config>
+
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">bitwarden.com</domain>
+        <domain includeSubdomains="true">bitwarden.eu</domain>
+        <domain includeSubdomains="true">bitwarden.pw</domain>
+        <trust-anchors>
+            <!-- Only trust pre-installed CAs for Bitwarden domains and all subdomains -->
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>
+
+</network-security-config>

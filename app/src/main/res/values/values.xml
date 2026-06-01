@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- default -->
+    <integer name="displayCutoutMode">0</integer>
+    <color name="windowBackground">@android:color/transparent</color>
+</resources>

@@ -1,0 +1,208 @@
+package com.bitwarden.core.data.manager.model
+
+/**
+ * Class to hold feature flag keys.
+ */
+sealed class FlagKey<out T : Any> {
+    /**
+     * The string value of the given key. This must match the network value.
+     */
+    abstract val keyName: String
+
+    /**
+     * The value to be used if the flags value cannot be determined or is not remotely configured.
+     */
+    abstract val defaultValue: T
+
+    @Suppress("UndocumentedPublicClass")
+    companion object {
+        /**
+         * List of all active Authenticator flag keys.
+         */
+        val activeAuthenticatorFlags: List<FlagKey<*>> by lazy {
+            listOf(
+                BitwardenAuthenticationEnabled,
+            )
+        }
+
+        /**
+         * List of all active Password Manager flag keys.
+         */
+        val activePasswordManagerFlags: List<FlagKey<*>> by lazy {
+            listOf(
+                ForceUpdateKdfSettings,
+                NoLogoutOnKdfChange,
+                MigrateMyVaultToMyItems,
+                CardScanner,
+                MobilePremiumUpgrade,
+                ManageDevices,
+                AttachmentUpdates,
+                V2EncryptionJitPassword,
+                V2EncryptionKeyConnector,
+                V2EncryptionPassword,
+                V2EncryptionTde,
+                NewItemTypes,
+                DebugDisableSelfHostPremiumCheck,
+                FillAssistTargetingRules,
+                PoliciesInAcceptedState,
+            )
+        }
+    }
+
+    /**
+     *  Indicates the state of Bitwarden authentication.
+     */
+    data object BitwardenAuthenticationEnabled : FlagKey<Boolean>() {
+        override val keyName: String = "bitwarden-authentication-enabled"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     *  Data object holding the feature flag key for the Force Update KDF Settings feature.
+     */
+    data object ForceUpdateKdfSettings : FlagKey<Boolean>() {
+        override val keyName: String = "pm-18021-force-update-kdf-settings"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     *  Data object holding the feature flag key for the No Logout On KDF Change feature.
+     */
+    data object NoLogoutOnKdfChange : FlagKey<Boolean>() {
+        override val keyName: String = "pm-23995-no-logout-on-kdf-change"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     *  Data object holding the feature flag key for the Migrate My Vault to My Items feature.
+     */
+    data object MigrateMyVaultToMyItems : FlagKey<Boolean>() {
+        override val keyName: String = "pm-20558-migrate-myvault-to-myitems"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the card scanner feature.
+     */
+    data object CardScanner : FlagKey<Boolean>() {
+        override val keyName: String = "pm-34171-card-scanner"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the mobile Premium upgrade feature.
+     */
+    data object MobilePremiumUpgrade : FlagKey<Boolean>() {
+        override val keyName: String = "pm-31697-premium-upgrade-path"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the Attachment Feature Updates.
+     */
+    data object AttachmentUpdates : FlagKey<Boolean>() {
+        override val keyName: String = "pm-34224-mobile-attachment-updates"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the Manage Devices feature.
+     */
+    data object ManageDevices : FlagKey<Boolean>() {
+        override val keyName: String = "pm-4516-devices-add-last-activity-date"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for Encryption V2 pertaining to JIT Password.
+     */
+    data object V2EncryptionJitPassword : FlagKey<Boolean>() {
+        override val keyName: String = "enable-account-encryption-v2-jit-password-registration"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for Encryption V2 pertaining to Key Connector.
+     */
+    data object V2EncryptionKeyConnector : FlagKey<Boolean>() {
+        override val keyName: String = "enable-account-encryption-v2-key-connector-registration"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for Encryption V2 pertaining to Password.
+     */
+    data object V2EncryptionPassword : FlagKey<Boolean>() {
+        override val keyName: String = "pm-27278-v2-password-registration"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for Encryption V2 pertaining to TDE.
+     */
+    data object V2EncryptionTde : FlagKey<Boolean>() {
+        override val keyName: String = "pm-27279-v2-registration-tde-jit"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for new vault item types
+     * (Bank Account, Driver's License, Passport).
+     */
+    data object NewItemTypes : FlagKey<Boolean>() {
+        override val keyName: String = "pm-32009-new-item-types"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the Fill Assist Targeting Rules feature.
+     */
+    data object FillAssistTargetingRules : FlagKey<Boolean>() {
+        override val keyName: String = "fill-assist-targeting-rules"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the Policies In Accepted State feature.
+     */
+    data object PoliciesInAcceptedState : FlagKey<Boolean>() {
+        override val keyName: String get() = "pm-34145-policies-in-accepted-state"
+        override val defaultValue: Boolean get() = false
+    }
+
+    /**
+     * Debug-only flag that, when enabled, makes self-hosted environments behave as cloud
+     * environments for premium-upgrade gating. Used by QA to test the premium upgrade flow
+     * against internal self-hosted environments.
+     */
+    data object DebugDisableSelfHostPremiumCheck : FlagKey<Boolean>() {
+        override val keyName: String = "debug-disable-self-host-premium-check"
+        override val defaultValue: Boolean = false
+    }
+
+    //region Dummy keys for testing
+    /**
+     * Data object holding the key for a [Boolean] flag to be used in tests.
+     */
+    data object DummyBoolean : FlagKey<Boolean>() {
+        override val keyName: String = "dummy-boolean"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the key for an [Int] flag to be used in tests.
+     */
+    data object DummyInt : FlagKey<Int>() {
+        override val keyName: String = "dummy-int"
+        override val defaultValue: Int = Int.MIN_VALUE
+    }
+
+    /**
+     * Data object holding the key for a [String] flag to be used in tests.
+     */
+    data object DummyString : FlagKey<String>() {
+        override val keyName: String = "dummy-string"
+        override val defaultValue: String = "defaultValue"
+    }
+    //endregion Dummy keys for testing
+}
