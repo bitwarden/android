@@ -44,7 +44,6 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedIsTdeLoginComplete = mutableMapOf<String, Boolean?>()
     private val storedShouldTrustDevice = mutableMapOf<String, Boolean?>()
     private val storedInvalidUnlockAttempts = mutableMapOf<String, Int?>()
-    private val storedUserKeys = mutableMapOf<String, String?>()
     private val storedLocalUserDataKeys = mutableMapOf<String, String?>()
     private val storedPrivateKeys = mutableMapOf<String, String?>()
     private val storedTwoFactorTokens = mutableMapOf<String, String?>()
@@ -81,7 +80,6 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     override fun clearData(userId: String) {
         storedInvalidUnlockAttempts.remove(userId)
-        storedUserKeys.remove(userId)
         storedLocalUserDataKeys.remove(userId)
         storedPrivateKeys.remove(userId)
         storedTwoFactorTokens.clear()
@@ -144,12 +142,6 @@ class FakeAuthDiskSource : AuthDiskSource {
         invalidUnlockAttempts: Int?,
     ) {
         storedInvalidUnlockAttempts[userId] = invalidUnlockAttempts
-    }
-
-    override fun getUserKey(userId: String): String? = storedUserKeys[userId]
-
-    override fun storeUserKey(userId: String, userKey: String?) {
-        storedUserKeys[userId] = userKey
     }
 
     override fun getLocalUserDataKey(userId: String): String? = storedLocalUserDataKeys[userId]
@@ -420,13 +412,6 @@ class FakeAuthDiskSource : AuthDiskSource {
      */
     fun assertInvalidUnlockAttempts(userId: String, invalidUnlockAttempts: Int?) {
         assertEquals(invalidUnlockAttempts, storedInvalidUnlockAttempts[userId])
-    }
-
-    /**
-     * Assert that the [userKey] was stored successfully using the [userId].
-     */
-    fun assertUserKey(userId: String, userKey: String?) {
-        assertEquals(userKey, storedUserKeys[userId])
     }
 
     /**

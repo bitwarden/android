@@ -55,9 +55,8 @@ class UserStateJsonExtensionsTest {
         unmockkStatic(Kdf::toKdfRequestModel)
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `toUpdatedUserStateJson should do nothing for a non-matching account using toRemovedPasswordUserStateJson`() {
+    fun `toRemovedPasswordUserStateJson should do nothing for a non-matching account`() {
         val originalUserState = UserStateJson(
             activeUserId = "activeUserId",
             accounts = mapOf("activeUserId" to mockk()),
@@ -70,7 +69,7 @@ class UserStateJsonExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toUpdatedUserStateJson should create user decryption options without a password if not present`() {
+    fun `toRemovedPasswordUserStateJson should create user decryption options without a password if not present`() {
         val originalProfile = AccountJson.Profile(
             userId = "activeUserId",
             email = "email",
@@ -120,8 +119,9 @@ class UserStateJsonExtensionsTest {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `toUpdatedUserStateJson should update user decryption options to not have a password`() {
+    fun `toRemovedPasswordUserStateJson should update user decryption options to not have a password`() {
         val originalProfile = AccountJson.Profile(
             userId = "activeUserId",
             email = "email",
@@ -141,7 +141,11 @@ class UserStateJsonExtensionsTest {
                 hasMasterPassword = true,
                 trustedDeviceUserDecryptionOptions = null,
                 keyConnectorUserDecryptionOptions = null,
-                masterPasswordUnlock = null,
+                masterPasswordUnlock = MasterPasswordUnlockDataJson(
+                    salt = "salt",
+                    kdf = mockk(),
+                    masterKeyWrappedUserKey = "masterKeyWrappedUserKey",
+                ),
             ),
             isTwoFactorEnabled = false,
             creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),

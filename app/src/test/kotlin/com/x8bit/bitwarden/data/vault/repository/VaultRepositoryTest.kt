@@ -504,10 +504,6 @@ class VaultRepositoryTest {
     @Test
     fun `unlockVaultWithMasterPassword with missing private key should return InvalidStateError`() =
         runTest {
-            fakeAuthDiskSource.storeUserKey(
-                userId = "mockId-1",
-                userKey = "mockKey-1",
-            )
             fakeAuthDiskSource.storePrivateKey(
                 userId = "mockId-1",
                 privateKey = null,
@@ -588,10 +584,6 @@ class VaultRepositoryTest {
                 ),
             )
 
-            fakeAuthDiskSource.storeUserKey(
-                userId = userId,
-                userKey = "mockKey-1",
-            )
             fakeAuthDiskSource.userState = userState
             fakeAuthDiskSource.storePrivateKey(userId = userId, privateKey = "mockPrivateKey-1")
 
@@ -657,7 +649,6 @@ class VaultRepositoryTest {
             )
             fakeAuthDiskSource.userState = userState
             fakeAuthDiskSource.storePrivateKey(userId = userId, privateKey = "mockPrivateKey-1")
-            fakeAuthDiskSource.storeUserKey(userId = userId, userKey = userKey)
 
             val result = vaultRepository.unlockVaultWithMasterPassword(
                 masterPassword = masterPassword,
@@ -1649,10 +1640,6 @@ class VaultRepositoryTest {
         fakeAuthDiskSource.storePrivateKey(
             userId = userId,
             privateKey = "mockPrivateKey-1",
-        )
-        fakeAuthDiskSource.storeUserKey(
-            userId = userId,
-            userKey = "mockKey-1",
         )
         fakeAuthDiskSource.storePinProtectedUserKey(
             userId = userId,

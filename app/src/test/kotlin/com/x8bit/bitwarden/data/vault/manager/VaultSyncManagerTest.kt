@@ -747,7 +747,6 @@ class VaultSyncManagerTest {
                 ),
             )
             fakeAuthDiskSource.assertUserState(userState = updatedUserState)
-            fakeAuthDiskSource.assertUserKey(userId = userId, userKey = "mockKey-1")
             fakeAuthDiskSource.assertPrivateKey(userId = userId, privateKey = "mockPrivateKey-1")
             fakeAuthDiskSource.assertOrganizationKeys(
                 userId = userId,

@@ -494,10 +494,6 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 accountKeys = ACCOUNT_KEYS,
             )
-            fakeAuthDiskSource.assertUserKey(
-                userId = USER_ID_1,
-                userKey = "key",
-            )
             fakeAuthDiskSource.assertMasterPasswordHash(
                 userId = USER_ID_1,
                 passwordHash = PASSWORD_HASH,
@@ -2154,10 +2150,6 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 accountKeys = ACCOUNT_KEYS,
             )
-            fakeAuthDiskSource.assertUserKey(
-                userId = USER_ID_1,
-                userKey = "key",
-            )
             fakeAuthDiskSource.assertMasterPasswordHash(
                 userId = USER_ID_1,
                 passwordHash = PASSWORD_HASH,
@@ -2268,10 +2260,6 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertAccountKeys(
                 userId = USER_ID_1,
                 accountKeys = ACCOUNT_KEYS_WITH_NULL_FIELDS,
-            )
-            fakeAuthDiskSource.assertUserKey(
-                userId = USER_ID_1,
-                userKey = "key",
             )
             fakeAuthDiskSource.assertMasterPasswordHash(
                 userId = USER_ID_1,
@@ -2389,10 +2377,6 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertAccountKeys(
                 userId = USER_ID_1,
                 accountKeys = null,
-            )
-            fakeAuthDiskSource.assertUserKey(
-                userId = USER_ID_1,
-                userKey = null,
             )
             fakeAuthDiskSource.assertMasterPasswordHash(
                 userId = USER_ID_1,
@@ -2621,10 +2605,6 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertAccountKeys(
                 userId = USER_ID_1,
                 accountKeys = ACCOUNT_KEYS,
-            )
-            fakeAuthDiskSource.assertUserKey(
-                userId = USER_ID_1,
-                userKey = "key",
             )
             coVerify {
                 identityService.getToken(
@@ -3003,10 +2983,6 @@ class AuthRepositoryTest {
             userId = USER_ID_1,
             accountKeys = ACCOUNT_KEYS,
         )
-        fakeAuthDiskSource.assertUserKey(
-            userId = USER_ID_1,
-            userKey = "key",
-        )
         coVerify {
             identityService.getToken(
                 email = EMAIL,
@@ -3272,10 +3248,6 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 accountKeys = ACCOUNT_KEYS,
             )
-            fakeAuthDiskSource.assertUserKey(
-                userId = USER_ID_1,
-                userKey = "key",
-            )
             coVerify {
                 identityService.getToken(
                     email = EMAIL,
@@ -3397,10 +3369,6 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertAccountKeys(
                 userId = USER_ID_1,
                 accountKeys = ACCOUNT_KEYS,
-            )
-            fakeAuthDiskSource.assertUserKey(
-                userId = USER_ID_1,
-                userKey = "key",
             )
             coVerify {
                 identityService.getToken(
@@ -3742,10 +3710,6 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 accountKeys = ACCOUNT_KEYS,
             )
-            fakeAuthDiskSource.assertUserKey(
-                userId = USER_ID_1,
-                userKey = "key",
-            )
             coVerify {
                 identityService.getToken(
                     email = EMAIL,
@@ -3815,7 +3779,6 @@ class AuthRepositoryTest {
                 privateKey = "mockWrappedPrivateKey-1",
             )
             fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = ACCOUNT_KEYS)
-            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = "key")
             coVerify(exactly = 1) {
                 identityService.getToken(
                     email = EMAIL,
@@ -3885,7 +3848,6 @@ class AuthRepositoryTest {
             assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
             fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
-            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
             coVerify(exactly = 1) {
                 identityService.getToken(
                     email = EMAIL,
@@ -3974,7 +3936,6 @@ class AuthRepositoryTest {
             assertEquals(LoginResult.Success, result)
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = "privateKey")
-            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = "key")
             coVerify(exactly = 1) {
                 identityService.getToken(
                     email = EMAIL,
@@ -4089,7 +4050,6 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 privateKey = "mockWrappedPrivateKey-1",
             )
-            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = "key")
             coVerify(exactly = 1) {
                 identityService.getToken(
                     email = EMAIL,
@@ -4195,7 +4155,6 @@ class AuthRepositoryTest {
             assertEquals(LoginResult.Error(errorMessage = null, error = error), continueResult)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
             fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
-            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
             coVerify(exactly = 1) {
                 identityService.getToken(
                     email = EMAIL,
@@ -4306,7 +4265,6 @@ class AuthRepositoryTest {
             assertEquals(LoginResult.Success, continueResult)
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = PRIVATE_KEY)
-            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
             coVerify(exactly = 1) {
                 identityService.getToken(
                     email = EMAIL,
@@ -4481,7 +4439,6 @@ class AuthRepositoryTest {
             assertEquals(LoginResult.Success, result)
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = "privateKey")
-            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = "encryptedUserKey")
             coVerify(exactly = 1) {
                 identityService.getToken(
                     email = EMAIL,
@@ -4571,10 +4528,6 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertAccountKeys(
                 userId = USER_ID_1,
                 accountKeys = ACCOUNT_KEYS,
-            )
-            fakeAuthDiskSource.assertUserKey(
-                userId = USER_ID_1,
-                userKey = "key",
             )
             coVerify {
                 identityService.getToken(
@@ -4670,7 +4623,6 @@ class AuthRepositoryTest {
                 privateKey = "mockWrappedPrivateKey-1",
             )
             fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = ACCOUNT_KEYS)
-            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
             fakeAuthDiskSource.assertDeviceKey(userId = USER_ID_1, deviceKey = null)
             assertEquals(SINGLE_USER_STATE_1, fakeAuthDiskSource.userState)
             coVerify(exactly = 1) {
@@ -4771,7 +4723,6 @@ class AuthRepositoryTest {
                 privateKey = "mockWrappedPrivateKey-1",
             )
             fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = ACCOUNT_KEYS)
-            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = encryptedUserKey)
             fakeAuthDiskSource.assertDeviceKey(userId = USER_ID_1, deviceKey = deviceKey)
             assertEquals(SINGLE_USER_STATE_1, fakeAuthDiskSource.userState)
             coVerify {
@@ -4901,7 +4852,6 @@ class AuthRepositoryTest {
                 privateKey = "mockWrappedPrivateKey-1",
             )
             fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = ACCOUNT_KEYS)
-            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = authRequestKey)
             assertEquals(SINGLE_USER_STATE_1, fakeAuthDiskSource.userState)
             coVerify(exactly = 1) {
                 identityService.getToken(
@@ -4993,10 +4943,6 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertAccountKeys(
                 userId = USER_ID_1,
                 accountKeys = ACCOUNT_KEYS,
-            )
-            fakeAuthDiskSource.assertUserKey(
-                userId = USER_ID_1,
-                userKey = "key",
             )
             coVerify {
                 identityService.getToken(
@@ -5206,10 +5152,6 @@ class AuthRepositoryTest {
             userId = USER_ID_1,
             accountKeys = ACCOUNT_KEYS,
         )
-        fakeAuthDiskSource.assertUserKey(
-            userId = USER_ID_1,
-            userKey = "key",
-        )
         coVerify {
             identityService.getToken(
                 email = EMAIL,
@@ -5364,9 +5306,14 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `removePassword with no userKey should return error`() = runTest {
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = null)
+    fun `removePassword with no masterKeyWrappedUserKey should return error`() = runTest {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1.copy(
+            accounts = mapOf(
+                USER_ID_1 to ACCOUNT_1.copy(
+                    profile = PROFILE_1.copy(userDecryptionOptions = null),
+                ),
+            ),
+        )
 
         val result = repository.removePassword(masterPassword = PASSWORD)
 
@@ -5379,7 +5326,6 @@ class AuthRepositoryTest {
     @Test
     fun `removePassword with no keyConnectorUrl should return error`() = runTest {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
         val organizations = listOf(
             createMockOrganizationNetwork(
                 number = 1,
@@ -5402,7 +5348,6 @@ class AuthRepositoryTest {
     fun `removePassword with migrateExistingUserToKeyConnector exception should return error`() =
         runTest {
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-            fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
             val url = "www.example.com"
             val error = Throwable("Fail!")
             val organizations = listOf(
@@ -5434,7 +5379,6 @@ class AuthRepositoryTest {
     fun `removePassword with migrateExistingUserToKeyConnector error should return error`() =
         runTest {
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-            fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
             val url = "www.example.com"
             val error = Throwable("Fail!")
             val expectedResult = MigrateExistingUserToKeyConnectorResult.Error(error)
@@ -5471,7 +5415,6 @@ class AuthRepositoryTest {
     fun `removePassword with migrateExistingUserToKeyConnector wrong password error should return WrongPasswordError error`() =
         runTest {
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-            fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
             val url = "www.example.com"
             val expectedResult = MigrateExistingUserToKeyConnectorResult.WrongPasswordError
             val organizations = listOf(
@@ -5507,7 +5450,6 @@ class AuthRepositoryTest {
     fun `removePassword with migrateExistingUserToKeyConnector success should sync and return success`() =
         runTest {
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-            fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
             val url = "www.example.com"
             val organizations = listOf(
                 createMockOrganizationNetwork(
@@ -5692,7 +5634,6 @@ class AuthRepositoryTest {
         fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
         fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
-        fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
     }
 
     @Test
@@ -5722,7 +5663,6 @@ class AuthRepositoryTest {
             assertEquals(SetPasswordResult.Error(error = error), result)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
             fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
-            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
         }
 
     @Test
@@ -6044,7 +5984,6 @@ class AuthRepositoryTest {
         assertEquals(SetPasswordResult.Error(error = error), result)
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
         fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
-        fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
     }
 
     @Test
@@ -6099,7 +6038,6 @@ class AuthRepositoryTest {
             assertEquals(SetPasswordResult.Error(error = error), result)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
             fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
-            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
         }
 
     @Test
@@ -6186,7 +6124,6 @@ class AuthRepositoryTest {
 
             assertEquals(SetPasswordResult.Success, result)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = privateRsaKey)
-            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = encryptedUserKey)
             fakeAuthDiskSource.assertUserState(SINGLE_USER_STATE_1_WITH_PASS)
             coVerify(exactly = 1) {
                 authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
@@ -6291,7 +6228,6 @@ class AuthRepositoryTest {
         assertEquals(SetPasswordResult.Success, result)
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
         fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
-        fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = encryptedUserKey)
         fakeAuthDiskSource.assertUserState(SINGLE_USER_STATE_1_WITH_PASS)
         coVerify(exactly = 1) {
             vaultSdkSource.updatePassword(userId = USER_ID_1, newPassword = password)
@@ -6369,7 +6305,6 @@ class AuthRepositoryTest {
 
             assertEquals(SetPasswordResult.Error(error = error), result)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = privateRsaKey)
-            fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = encryptedUserKey)
             fakeAuthDiskSource.assertUserState(SINGLE_USER_STATE_1)
             coVerify(exactly = 1) {
                 authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
@@ -7027,12 +6962,18 @@ class AuthRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `validatePassword with no stored password hash and no stored user key returns ValidatePasswordResult Error`() =
+    fun `validatePassword with no stored password hash and no stored masterKeyWrappedUserKey returns ValidatePasswordResult Error`() =
         runTest {
             val userId = USER_ID_1
             val password = "password"
             val passwordHash = "passwordHash"
-            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1.copy(
+                accounts = mapOf(
+                    USER_ID_1 to ACCOUNT_1.copy(
+                        profile = PROFILE_1.copy(userDecryptionOptions = null),
+                    ),
+                ),
+            )
             coEvery {
                 vaultSdkSource.validatePassword(
                     userId = userId,
@@ -7098,18 +7039,16 @@ class AuthRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `validatePassword with no stored password hash and a stored user key with sdk failure returns ValidatePasswordResult Success invalid`() =
+    fun `validatePassword with no stored password hash and a stored masterKeyWrappedUserKey with sdk failure returns ValidatePasswordResult Success invalid`() =
         runTest {
             val userId = USER_ID_1
             val password = "password"
-            val userKey = "userKey"
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-            fakeAuthDiskSource.storeUserKey(userId = userId, userKey = userKey)
             coEvery {
                 vaultSdkSource.validatePasswordUserKey(
                     userId = userId,
                     password = password,
-                    encryptedUserKey = userKey,
+                    encryptedUserKey = ENCRYPTED_USER_KEY,
                 )
             } returns Throwable("Fail").asFailure()
 
@@ -7120,19 +7059,17 @@ class AuthRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `validatePassword with no stored password hash and a stored user key with sdk success returns ValidatePasswordResult Success valid`() =
+    fun `validatePassword with no stored password hash and a stored masterKeyWrappedUserKey with sdk success returns ValidatePasswordResult Success valid`() =
         runTest {
             val userId = USER_ID_1
             val password = "password"
-            val userKey = "userKey"
             val passwordHash = "passwordHash"
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-            fakeAuthDiskSource.storeUserKey(userId = userId, userKey = userKey)
             coEvery {
                 vaultSdkSource.validatePasswordUserKey(
                     userId = userId,
                     password = password,
-                    encryptedUserKey = userKey,
+                    encryptedUserKey = ENCRYPTED_USER_KEY,
                 )
             } returns passwordHash.asSuccess()
 
@@ -7684,10 +7621,6 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 accountKeys = ACCOUNT_KEYS,
             )
-            fakeAuthDiskSource.assertUserKey(
-                userId = USER_ID_1,
-                userKey = "key",
-            )
             fakeAuthDiskSource.assertMasterPasswordHash(
                 userId = USER_ID_1,
                 passwordHash = PASSWORD_HASH,
@@ -7762,10 +7695,6 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertAccountKeys(
                 userId = USER_ID_1,
                 accountKeys = ACCOUNT_KEYS,
-            )
-            fakeAuthDiskSource.assertUserKey(
-                userId = USER_ID_1,
-                userKey = "key",
             )
             fakeAuthDiskSource.assertMasterPasswordHash(
                 userId = USER_ID_1,
@@ -7997,7 +7926,7 @@ class AuthRepositoryTest {
                 keyConnectorUserDecryptionOptions = null,
                 masterPasswordUnlock = MasterPasswordUnlockDataJson(
                     kdf = BASE_PROFILE_1.toSdkParams().toKdfRequestModel(),
-                    masterKeyWrappedUserKey = "key",
+                    masterKeyWrappedUserKey = ENCRYPTED_USER_KEY,
                     salt = "mockSalt",
                 ),
             ),
@@ -8049,7 +7978,7 @@ class AuthRepositoryTest {
                             trustedDeviceUserDecryptionOptions = null,
                             masterPasswordUnlock = MasterPasswordUnlockDataJson(
                                 kdf = BASE_PROFILE_1.toSdkParams().toKdfRequestModel(),
-                                masterKeyWrappedUserKey = "key",
+                                masterKeyWrappedUserKey = ENCRYPTED_USER_KEY,
                                 salt = "mockSalt",
                             ),
                         ),

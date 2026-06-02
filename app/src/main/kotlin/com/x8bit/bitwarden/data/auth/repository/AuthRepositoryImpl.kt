@@ -1046,14 +1046,16 @@ class AuthRepositoryImpl(
     }
 
     override suspend fun removePassword(masterPassword: String): RemovePasswordResult {
-        val activeAccount = authDiskSource
+        val profile = authDiskSource
             .userState
             ?.activeAccount
+            ?.profile
             ?: return RemovePasswordResult.Error(error = NoActiveUserException())
-        val profile = activeAccount.profile
         val userId = profile.userId
-        val userKey = authDiskSource
-            .getUserKey(userId = userId)
+        val userKey = profile
+            .userDecryptionOptions
+            ?.masterPasswordUnlock
+            ?.masterKeyWrappedUserKey
             ?: return RemovePasswordResult.Error(error = MissingPropertyException("User Key"))
         val keyConnectorUrl = organizations
             .find {
@@ -1222,9 +1224,6 @@ class AuthRepositoryImpl(
                             keys = null,
                         ),
                     )
-                    .onSuccess {
-                        authDiskSource.storeUserKey(userId = userId, userKey = response.newKey)
-                    }
                     .map { response.passwordHash }
             }
             .flatMap { masterPasswordHash ->
@@ -1363,10 +1362,6 @@ class AuthRepositoryImpl(
                         authDiskSource.storePrivateKey(
                             userId = userId,
                             privateKey = response.keys.private,
-                        )
-                        authDiskSource.storeUserKey(
-                            userId = userId,
-                            userKey = response.encryptedUserKey,
                         )
                     }
                     .map { response.masterPasswordHash }
@@ -1513,7 +1508,12 @@ class AuthRepositoryImpl(
             )
 
     override suspend fun validatePassword(password: String): ValidatePasswordResult {
-        val userId = activeUserId ?: return ValidatePasswordResult.Error(NoActiveUserException())
+        val profile = authDiskSource
+            .userState
+            ?.activeAccount
+            ?.profile
+            ?: return ValidatePasswordResult.Error(error = NoActiveUserException())
+        val userId = profile.userId
         return authDiskSource
             .getMasterPasswordHash(userId = userId)
             ?.let { masterPasswordHash ->
@@ -1529,8 +1529,10 @@ class AuthRepositoryImpl(
                     )
             }
             ?: run {
-                val encryptedKey = authDiskSource
-                    .getUserKey(userId)
+                val encryptedKey = profile
+                    .userDecryptionOptions
+                    ?.masterPasswordUnlock
+                    ?.masterKeyWrappedUserKey
                     ?: return ValidatePasswordResult.Error(MissingPropertyException("UserKey"))
                 vaultSdkSource
                     .validatePasswordUserKey(
@@ -1974,11 +1976,6 @@ class AuthRepositoryImpl(
                     }
                 }
         }
-        loginResponse.key?.let {
-            // Only set the value if it's present, since we may have set it already
-            // when we completed the pending admin auth request.
-            authDiskSource.storeUserKey(userId = userId, userKey = it)
-        }
         // We continue to store the private key for backwards compatibility. Key connector
         // conversion still relies on the private key.
         loginResponse.privateKeyOrNull()?.let {
@@ -2127,13 +2124,6 @@ class AuthRepositoryImpl(
                         )
                         .also { result ->
                             if (result is VaultUnlockResult.Success) {
-                                // We now know that login/unlock was successful, so we store the
-                                // userKey and privateKey we now have since it didn't exist on the
-                                // loginResponse.
-                                authDiskSource.storeUserKey(
-                                    userId = userId,
-                                    userKey = keyConnector.encryptedUserKey,
-                                )
                                 // We continue to store the private key for backwards compatibility
                                 // since key connector conversion still relies on the private key.
                                 authDiskSource.storePrivateKey(
@@ -2274,7 +2264,6 @@ class AuthRepositoryImpl(
                             method = AuthRequestMethod.UserKey(protectedUserKey = userKey),
                         ),
                     )
-                    authDiskSource.storeUserKey(userId = userId, userKey = userKey)
                 }
             authDiskSource.storePendingAuthRequest(
                 userId = userId,
@@ -2304,10 +2293,6 @@ class AuthRepositoryImpl(
                 deviceProtectedUserKey = encryptedUserKey,
             ),
         )
-
-        if (vaultUnlockResult is VaultUnlockResult.Success) {
-            authDiskSource.storeUserKey(userId = userId, userKey = encryptedUserKey)
-        }
         return vaultUnlockResult
     }
 

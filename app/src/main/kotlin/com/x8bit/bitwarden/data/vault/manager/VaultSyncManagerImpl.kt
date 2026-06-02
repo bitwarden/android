@@ -377,7 +377,6 @@ class VaultSyncManagerImpl(
         val profile = syncResponse.profile
         val userId = profile.id
         authDiskSource.apply {
-            storeUserKey(userId = userId, userKey = profile.key)
             storePrivateKey(userId = userId, privateKey = profile.privateKey)
             storeAccountKeys(userId = userId, accountKeys = profile.accountKeys)
             storeOrganizationKeys(
