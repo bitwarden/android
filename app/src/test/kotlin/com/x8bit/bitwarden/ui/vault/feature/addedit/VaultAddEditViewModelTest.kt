@@ -2409,35 +2409,32 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `ItemType BankAccount should expose BANK_ACCOUNT itemTypeOption and be SDK supported`() {
+    fun `ItemType BankAccount should expose BANK_ACCOUNT itemTypeOption`() {
         val itemType = VaultAddEditState.ViewState.Content.ItemType.BankAccount()
         assertEquals(
             VaultAddEditState.ItemTypeOption.BANK_ACCOUNT,
             itemType.itemTypeOption,
         )
-        assertTrue(itemType.isSdkSupported)
         assertTrue(itemType.vaultLinkedFieldTypes.isEmpty())
     }
 
     @Test
-    fun `ItemType License should expose DRIVERS_LICENSE itemTypeOption and be SDK supported`() {
+    fun `ItemType License should expose DRIVERS_LICENSE itemTypeOption`() {
         val itemType = VaultAddEditState.ViewState.Content.ItemType.License()
         assertEquals(
             VaultAddEditState.ItemTypeOption.LICENSE,
             itemType.itemTypeOption,
         )
-        assertTrue(itemType.isSdkSupported)
         assertTrue(itemType.vaultLinkedFieldTypes.isEmpty())
     }
 
     @Test
-    fun `ItemType Passport should expose PASSPORT itemTypeOption and be SDK supported`() {
+    fun `ItemType Passport should expose PASSPORT itemTypeOption`() {
         val itemType = VaultAddEditState.ViewState.Content.ItemType.Passport()
         assertEquals(
             VaultAddEditState.ItemTypeOption.PASSPORT,
             itemType.itemTypeOption,
         )
-        assertTrue(itemType.isSdkSupported)
         assertTrue(itemType.vaultLinkedFieldTypes.isEmpty())
     }
 
