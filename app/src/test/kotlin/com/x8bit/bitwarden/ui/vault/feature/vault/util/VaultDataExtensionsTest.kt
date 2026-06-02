@@ -1696,7 +1696,7 @@ private fun createMockDriversLicenseVaultItem(
             ),
             ListingItemOverflowAction.VaultAction.ArchiveClick(cipherId = "mockId-$number"),
         ),
-        startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_note),
+        startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_id_card),
         startIconTestTag = "LicenseCipherIcon",
         extraIconList = persistentListOf(
             IconData.Local(

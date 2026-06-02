@@ -2120,7 +2120,7 @@ data class VaultState(
                 override val id: String,
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(
-                    iconRes = BitwardenDrawable.ic_note,
+                    iconRes = BitwardenDrawable.ic_id_card,
                 ),
                 override val startIconTestTag: String = "LicenseCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
