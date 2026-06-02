@@ -1321,6 +1321,7 @@
     <string name="cancel_premium">Отменить Премиум</string>
     <string name="subscription_status_active">Активен</string>
     <string name="subscription_status_canceled">Отменен</string>
+    <string name="subscription_status_expired">Срок истек</string>
     <string name="subscription_status_past_due">Просрочен</string>
     <string name="subscription_status_paused">Приостановлена</string>
     <string name="subscription_status_update_payment">Обновить платежную информацию</string>
@@ -1328,7 +1329,7 @@
     <string name="subscription_pending_cancellation_description">Ваша подписка будет отменена <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Вы сможете восстановить ее в любое время до этого момента.</string>
     <string name="premium_next_charge_summary">Следующий платеж на сумму %1$s USD должен быть выполнен %2$s.</string>
     <string name="subscription_canceled_description">Ваша подписка была отменена %1$s. Подпишитесь заново, чтобы продолжить пользоваться возможностями Премиум.</string>
-    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
+    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment method before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">У вас есть льготный период продолжительностью %1$d день с даты истечения срока действия подписки. Просим вас оплатить просроченную сумму до %2$s.</item>
         <item quantity="few">У вас есть льготный период продолжительностью %1$d дня с даты истечения срока действия подписки. Просим вас оплатить просроченную сумму до %2$s.</item>
@@ -1336,6 +1337,7 @@
         <item quantity="other">У вас есть льготный период продолжительностью %1$d дня с даты истечения срока действия подписки. Просим вас оплатить просроченную сумму до %2$s.</item>
     </plurals>
     <string name="subscription_paused_description">Ваша подписка приостановлена. Возобновите ее, чтобы продолжить пользоваться возможностями Премиум.</string>
+    <string name="subscription_expired_description">Срок действия вашей подписки истек <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Продлите подписку, чтобы продолжить пользоваться возможностями Премиум.</string>
     <string name="loading_subscription">Загрузка подписки…</string>
     <string name="loading_portal">Загрузка портала…</string>
     <string name="portal_error">Что-то пошло не так</string>

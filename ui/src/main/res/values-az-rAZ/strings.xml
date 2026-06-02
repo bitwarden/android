@@ -1304,6 +1304,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="cancel_premium">Premium ləğv edildi</string>
     <string name="subscription_status_active">Aktiv</string>
     <string name="subscription_status_canceled">Ləğv edildi</string>
+    <string name="subscription_status_expired">Müddəti bitib</string>
     <string name="subscription_status_past_due">Vaxtı keçmiş</string>
     <string name="subscription_status_paused">Fasilə verilib</string>
     <string name="subscription_status_update_payment">Ödənişi güncəllə</string>
@@ -1317,6 +1318,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
         <item quantity="other">Abunəliyinizin bitmə tarixindən etibarən %1$d günlük güzəşt dövrünüz var. Lütfən %2$s tarixinə qədər vaxtı keçmiş fakturaları həll edin.</item>
     </plurals>
     <string name="subscription_paused_description">Abunəliyinizə fasilə verilib. Premium özəllikləri istifadə etməyə davam etmək üçün yenidən abunə olun.</string>
+    <string name="subscription_expired_description">Abunəliyinizin müddəti <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> tarixində bitir. Premium-dan faydalanmağa davam etmək üçün yenidən abunə olun.</string>
     <string name="loading_subscription">Abunəlik yüklənir…</string>
     <string name="loading_portal">Portal yüklənir…</string>
     <string name="portal_error">Nəsə səhv getdi</string>

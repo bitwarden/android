@@ -1302,6 +1302,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="cancel_premium">Premium kündigen</string>
     <string name="subscription_status_active">Aktiv</string>
     <string name="subscription_status_canceled">Gekündigt</string>
+    <string name="subscription_status_expired">Abgelaufen</string>
     <string name="subscription_status_past_due">Überfällig</string>
     <string name="subscription_status_paused">Pausiert</string>
     <string name="subscription_status_update_payment">Zahlungsmethode aktualisieren</string>
@@ -1315,6 +1316,7 @@ Möchtest du zu diesem Konto wechseln?</string>
         <item quantity="other">Du hast eine Nachfrist von %1$d Tagen ab dem Ablaufdatum deines Abonnements. Bitte begleiche den ausstehenden Betrag bis zum %2$s.</item>
     </plurals>
     <string name="subscription_paused_description">Dein Abonnement ist pausiert. Setze es fort, um die Premium-Funktionen weiterhin nutzen zu können.</string>
+    <string name="subscription_expired_description">Dein Abonnement ist am <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> abgelaufen. Abonniere erneut, um die Premium-Funktionen weiterhin nutzen zu können.</string>
     <string name="loading_subscription">Abonnements werden geladen…</string>
     <string name="loading_portal">Portal wird geladen…</string>
     <string name="portal_error">Etwas ist schiefgelaufen</string>
