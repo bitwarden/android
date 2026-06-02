@@ -3218,8 +3218,6 @@ data class VaultAddEditState(
                     override val itemTypeOption: ItemTypeOption
                         get() = ItemTypeOption.LICENSE
 
-                    override val isSdkSupported: Boolean get() = false
-
                     override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
                         get() = persistentListOf()
                 }

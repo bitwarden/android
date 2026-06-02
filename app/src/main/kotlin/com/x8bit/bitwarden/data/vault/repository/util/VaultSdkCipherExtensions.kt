@@ -70,8 +70,8 @@ fun Cipher.toEncryptedNetworkCipher(
         key = key,
         sshKey = sshKey?.toEncryptedNetworkSshKey(),
         bankAccount = bankAccount?.toEncryptedNetworkBankAccount(),
-        driversLicense = null,
-        passport = null,
+        driversLicense = driversLicense?.toEncryptedNetworkDriversLicense(),
+        passport = passport?.toEncryptedNetworkPassport(),
         archivedDate = archivedDate,
         encryptedFor = encryptedFor,
     )
