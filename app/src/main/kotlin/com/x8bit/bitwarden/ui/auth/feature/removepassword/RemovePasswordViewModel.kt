@@ -36,8 +36,10 @@ class RemovePasswordViewModel @Inject constructor(
 
         RemovePasswordState(
             input = "",
-            description = BitwardenString.password_no_longer_required_confirm_domain.asText(),
-            labelOrg = BitwardenString.key_connector_organization.asText(),
+            description = BitwardenString
+                .your_organization_no_longer_requires_a_master_password
+                .asText(),
+            labelOrg = BitwardenString.organization.asText(),
             orgName = org?.name?.asText(),
             labelDomain = BitwardenString.key_connector_domain.asText(),
             domainName = org?.keyConnectorUrl?.asText(),
