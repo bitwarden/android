@@ -385,10 +385,31 @@ private fun CipherListView.toVaultItemOrNull(
             hasDecryptionError = hasDecryptionError,
         )
 
-        // TODO: [PM-32009] Map License/Passport when their UIs are wired.
-        CipherListViewType.DriversLicense,
-        CipherListViewType.Passport,
-            -> null
+        CipherListViewType.DriversLicense -> VaultState.ViewState.VaultItem.DriversLicense(
+            id = id,
+            name = name.asText(),
+            overflowOptions = toOverflowActions(
+                hasMasterPassword = hasMasterPassword,
+                isPremiumUser = isPremiumUser,
+            ),
+            extraIconList = toLabelIcons(),
+            shouldShowMasterPasswordReprompt = hasMasterPassword &&
+                reprompt == CipherRepromptType.PASSWORD,
+            hasDecryptionError = hasDecryptionError,
+        )
+
+        CipherListViewType.Passport -> VaultState.ViewState.VaultItem.Passport(
+            id = id,
+            name = name.asText(),
+            overflowOptions = toOverflowActions(
+                hasMasterPassword = hasMasterPassword,
+                isPremiumUser = isPremiumUser,
+            ),
+            extraIconList = toLabelIcons(),
+            shouldShowMasterPasswordReprompt = hasMasterPassword &&
+                reprompt == CipherRepromptType.PASSWORD,
+            hasDecryptionError = hasDecryptionError,
+        )
     }
 }
 

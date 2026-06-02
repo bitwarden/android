@@ -2111,6 +2111,46 @@ data class VaultState(
                 override val supportingLabel: Text? get() = null
                 override val type: VaultItemCipherType get() = VaultItemCipherType.BANK_ACCOUNT
             }
+
+            /**
+             * Represents a Driver's License item within the vault.
+             */
+            @Parcelize
+            data class DriversLicense(
+                override val id: String,
+                override val name: Text,
+                override val startIcon: IconData = IconData.Local(
+                    iconRes = BitwardenDrawable.ic_note,
+                ),
+                override val startIconTestTag: String = "LicenseCipherIcon",
+                override val extraIconList: ImmutableList<IconData> = persistentListOf(),
+                override val overflowOptions: ImmutableList<ListingItemOverflowAction.VaultAction>,
+                override val shouldShowMasterPasswordReprompt: Boolean,
+                override val hasDecryptionError: Boolean,
+            ) : VaultItem() {
+                override val supportingLabel: Text? get() = null
+                override val type: VaultItemCipherType get() = VaultItemCipherType.DRIVERS_LICENSE
+            }
+
+            /**
+             * Represents a Passport item within the vault.
+             */
+            @Parcelize
+            data class Passport(
+                override val id: String,
+                override val name: Text,
+                override val startIcon: IconData = IconData.Local(
+                    iconRes = BitwardenDrawable.ic_passport,
+                ),
+                override val startIconTestTag: String = "PassportCipherIcon",
+                override val extraIconList: ImmutableList<IconData> = persistentListOf(),
+                override val overflowOptions: ImmutableList<ListingItemOverflowAction.VaultAction>,
+                override val shouldShowMasterPasswordReprompt: Boolean,
+                override val hasDecryptionError: Boolean,
+            ) : VaultItem() {
+                override val supportingLabel: Text? get() = null
+                override val type: VaultItemCipherType get() = VaultItemCipherType.PASSPORT
+            }
         }
     }
 

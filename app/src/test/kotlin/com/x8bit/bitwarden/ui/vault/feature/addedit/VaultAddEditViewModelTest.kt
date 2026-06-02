@@ -2408,15 +2408,23 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `in add mode, SaveClick with a License item should emit ShowSnackbar without saving`() =
+    fun `in add mode, SaveClick with a License item should not short-circuit and should run validation`() =
         runTest {
             mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
             val licenseState = createVaultAddItemState(
                 vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
-                commonContentViewState = createCommonContentViewState(name = "mockName-1"),
+                commonContentViewState = createCommonContentViewState(name = ""),
                 typeContentViewState =
                     VaultAddEditState.ViewState.Content.ItemType.License(),
+            )
+            val expectedValidationDialogState = licenseState.copy(
+                dialog = VaultAddEditState.DialogState.Generic(
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.validation_field_required
+                        .asText(BitwardenString.name.asText()),
+                ),
             )
             val viewModel = createAddVaultItemViewModel(
                 createSavedStateHandleWithState(
@@ -2426,19 +2434,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            viewModel.eventFlow.test {
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
                 viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
-                assertEquals(
-                    VaultAddEditEvent.ShowSnackbar(
-                        message = BitwardenString.an_error_has_occurred.asText(),
-                    ),
-                    awaitItem(),
-                )
-            }
-            assertEquals(licenseState, viewModel.stateFlow.value)
-            coVerify(exactly = 0) {
-                vaultRepository.createCipher(any())
-                vaultRepository.createCipherInOrganization(any(), any())
+                assertEquals(licenseState, stateFlow.awaitItem())
+                assertEquals(expectedValidationDialogState, stateFlow.awaitItem())
+                eventFlow.expectNoEvents()
             }
         }
 
@@ -2521,13 +2521,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ItemType License should expose DRIVERS_LICENSE itemTypeOption and not be SDK supported`() {
+    fun `ItemType License should expose DRIVERS_LICENSE itemTypeOption and be SDK supported`() {
         val itemType = VaultAddEditState.ViewState.Content.ItemType.License()
         assertEquals(
             VaultAddEditState.ItemTypeOption.LICENSE,
             itemType.itemTypeOption,
         )
-        assertFalse(itemType.isSdkSupported)
+        assertTrue(itemType.isSdkSupported)
         assertTrue(itemType.vaultLinkedFieldTypes.isEmpty())
     }
 
