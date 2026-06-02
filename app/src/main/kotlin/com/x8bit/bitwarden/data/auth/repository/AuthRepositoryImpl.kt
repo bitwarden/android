@@ -1882,6 +1882,14 @@ class AuthRepositoryImpl(
         )
         val profile = userStateJson.activeAccount.profile
         val userId = profile.userId
+        authDiskSource.storeAccountTokens(
+            userId = userId,
+            accountTokens = AccountTokensJson(
+                accessToken = loginResponse.accessToken,
+                refreshToken = loginResponse.refreshToken,
+                expiresAtSec = clock.instant().epochSecond + loginResponse.expiresInSeconds,
+            ),
+        )
 
         checkForVaultUnlockError(
             onVaultUnlockError = { vaultUnlockError ->
@@ -1914,6 +1922,7 @@ class AuthRepositoryImpl(
                 // If a new KeyConnector user is logging in for the first time,
                 // we should ask him to confirm the domain
                 if (isNewKeyConnectorUser && isNotConfirmed) {
+                    authDiskSource.storeAccountTokens(userId = profile.userId, accountTokens = null)
                     keyConnectorResponse = loginResponse
                     return@userStateTransaction LoginResult.ConfirmKeyConnectorDomain(
                         domain = keyConnectorUrl,
@@ -1955,16 +1964,7 @@ class AuthRepositoryImpl(
             passwordsToCheckMap.put(userId, it)
         }
 
-        authDiskSource.storeAccountTokens(
-            userId = userId,
-            accountTokens = AccountTokensJson(
-                accessToken = loginResponse.accessToken,
-                refreshToken = loginResponse.refreshToken,
-                expiresAtSec = clock.instant().epochSecond + loginResponse.expiresInSeconds,
-            ),
-        )
         settingsRepository.hasUserLoggedInOrCreatedAccount = true
-
         authDiskSource.userState = userStateJson
         password?.let {
             // Automatically update kdf to minimums after password unlock and userState update
@@ -2075,28 +2075,16 @@ class AuthRepositoryImpl(
             null
         } else if (key != null && privateKey != null) {
             // This is a returning user who should already have the key connector setup
-            keyConnectorManager
-                .getMasterKeyFromKeyConnector(
+            unlockVault(
+                accountCryptographicState = loginResponse
+                    .accountKeys
+                    .toAccountCryptographicState(privateKey = privateKey),
+                accountProfile = profile,
+                initUserCryptoMethod = InitUserCryptoMethod.KeyConnectorUrl(
                     url = keyConnectorUrl,
-                    accessToken = loginResponse.accessToken,
-                )
-                .map {
-                    unlockVault(
-                        accountCryptographicState = loginResponse
-                            .accountKeys
-                            .toAccountCryptographicState(privateKey = privateKey),
-                        accountProfile = profile,
-                        initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
-                            masterKey = it.masterKey,
-                            userKey = key,
-                        ),
-                    )
-                }
-                .fold(
-                    // If the request failed, we want to abort the login process
-                    onFailure = { VaultUnlockResult.GenericError(error = it) },
-                    onSuccess = { it },
-                )
+                    keyConnectorKeyWrappedUserKey = key,
+                ),
+            )
         } else {
             // This is a new user who needs to set up the key connector
             val userId = profile.userId

@@ -40,7 +40,6 @@ import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
 import com.bitwarden.network.model.KdfJson
 import com.bitwarden.network.model.KdfTypeJson
-import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
 import com.bitwarden.network.model.MasterPasswordUnlockDataJson
 import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
 import com.bitwarden.network.model.OrganizationKeysResponseJson
@@ -3825,11 +3824,23 @@ class AuthRepositoryTest {
                 )
             } returns successResponse.asSuccess()
             coEvery {
-                keyConnectorManager.getMasterKeyFromKeyConnector(
-                    url = keyConnectorUrl,
-                    accessToken = ACCESS_TOKEN,
+                vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = "mockWrappedPrivateKey-1",
+                        securityState = "mockSecurityState-1",
+                        signedPublicKey = "mockSignedPublicKey-1",
+                        signingKey = "mockWrappedSigningKey-1",
+                    ),
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    initUserCryptoMethod = InitUserCryptoMethod.KeyConnectorUrl(
+                        url = keyConnectorUrl,
+                        keyConnectorKeyWrappedUserKey = "key",
+                    ),
+                    organizationKeys = null,
                 )
-            } returns error.asFailure()
+            } returns VaultUnlockResult.GenericError(error = error)
             every {
                 successResponse.toUserState(
                     previousUserState = null,
@@ -3848,6 +3859,7 @@ class AuthRepositoryTest {
             assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
             fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
+            fakeAuthDiskSource.assertAccountTokens(userId = USER_ID_1, accountTokens = null)
             coVerify(exactly = 1) {
                 identityService.getToken(
                     email = EMAIL,
@@ -3859,9 +3871,21 @@ class AuthRepositoryTest {
                     uniqueAppId = UNIQUE_APP_ID,
                     deeplinkScheme = DEEPLINK_SCHEME,
                 )
-                keyConnectorManager.getMasterKeyFromKeyConnector(
-                    url = keyConnectorUrl,
-                    accessToken = ACCESS_TOKEN,
+                vaultRepository.unlockVault(
+                    accountCryptographicState = createWrappedAccountCryptographicState(
+                        privateKey = "mockWrappedPrivateKey-1",
+                        securityState = "mockSecurityState-1",
+                        signedPublicKey = "mockSignedPublicKey-1",
+                        signingKey = "mockWrappedSigningKey-1",
+                    ),
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    initUserCryptoMethod = InitUserCryptoMethod.KeyConnectorUrl(
+                        url = keyConnectorUrl,
+                        keyConnectorKeyWrappedUserKey = "key",
+                    ),
+                    organizationKeys = null,
                 )
             }
         }
@@ -3878,10 +3902,6 @@ class AuthRepositoryTest {
                     trustedDeviceUserDecryptionOptions = null,
                 ),
             )
-            val masterKey = "masterKey"
-            val keyConnectorMasterKeyResponseJson = mockk<KeyConnectorMasterKeyResponseJson> {
-                every { this@mockk.masterKey } returns masterKey
-            }
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -3895,12 +3915,6 @@ class AuthRepositoryTest {
                 )
             } returns successResponse.asSuccess()
             coEvery {
-                keyConnectorManager.getMasterKeyFromKeyConnector(
-                    url = keyConnectorUrl,
-                    accessToken = ACCESS_TOKEN,
-                )
-            } returns keyConnectorMasterKeyResponseJson.asSuccess()
-            coEvery {
                 vaultRepository.unlockVault(
                     accountCryptographicState = createWrappedAccountCryptographicState(
                         privateKey = "privateKey",
@@ -3911,9 +3925,9 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
-                        masterKey = masterKey,
-                        userKey = "key",
+                    initUserCryptoMethod = InitUserCryptoMethod.KeyConnectorUrl(
+                        url = keyConnectorUrl,
+                        keyConnectorKeyWrappedUserKey = "key",
                     ),
                     organizationKeys = null,
                 )
@@ -3947,10 +3961,6 @@ class AuthRepositoryTest {
                     uniqueAppId = UNIQUE_APP_ID,
                     deeplinkScheme = DEEPLINK_SCHEME,
                 )
-                keyConnectorManager.getMasterKeyFromKeyConnector(
-                    url = keyConnectorUrl,
-                    accessToken = ACCESS_TOKEN,
-                )
                 vaultRepository.unlockVault(
                     accountCryptographicState = createWrappedAccountCryptographicState(
                         privateKey = "privateKey",
@@ -3961,9 +3971,9 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
-                        masterKey = masterKey,
-                        userKey = "key",
+                    initUserCryptoMethod = InitUserCryptoMethod.KeyConnectorUrl(
+                        url = keyConnectorUrl,
+                        keyConnectorKeyWrappedUserKey = "key",
                     ),
                     organizationKeys = null,
                 )
@@ -3989,10 +3999,6 @@ class AuthRepositoryTest {
                     trustedDeviceUserDecryptionOptions = null,
                 ),
             )
-            val masterKey = "masterKey"
-            val keyConnectorMasterKeyResponseJson = mockk<KeyConnectorMasterKeyResponseJson> {
-                every { this@mockk.masterKey } returns masterKey
-            }
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -4006,12 +4012,6 @@ class AuthRepositoryTest {
                 )
             } returns successResponse.asSuccess()
             coEvery {
-                keyConnectorManager.getMasterKeyFromKeyConnector(
-                    url = keyConnectorUrl,
-                    accessToken = ACCESS_TOKEN,
-                )
-            } returns keyConnectorMasterKeyResponseJson.asSuccess()
-            coEvery {
                 vaultRepository.unlockVault(
                     accountCryptographicState = createWrappedAccountCryptographicState(
                         privateKey = "mockWrappedPrivateKey-1",
@@ -4022,9 +4022,9 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
-                        masterKey = masterKey,
-                        userKey = "key",
+                    initUserCryptoMethod = InitUserCryptoMethod.KeyConnectorUrl(
+                        url = keyConnectorUrl,
+                        keyConnectorKeyWrappedUserKey = "key",
                     ),
                     organizationKeys = null,
                 )
@@ -4061,10 +4061,6 @@ class AuthRepositoryTest {
                     uniqueAppId = UNIQUE_APP_ID,
                     deeplinkScheme = DEEPLINK_SCHEME,
                 )
-                keyConnectorManager.getMasterKeyFromKeyConnector(
-                    url = keyConnectorUrl,
-                    accessToken = ACCESS_TOKEN,
-                )
                 vaultRepository.unlockVault(
                     accountCryptographicState = createWrappedAccountCryptographicState(
                         privateKey = "mockWrappedPrivateKey-1",
@@ -4075,9 +4071,9 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
-                        masterKey = masterKey,
-                        userKey = "key",
+                    initUserCryptoMethod = InitUserCryptoMethod.KeyConnectorUrl(
+                        url = keyConnectorUrl,
+                        keyConnectorKeyWrappedUserKey = "key",
                     ),
                     organizationKeys = null,
                 )

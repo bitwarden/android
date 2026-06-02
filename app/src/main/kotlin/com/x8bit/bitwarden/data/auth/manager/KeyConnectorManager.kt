@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.data.auth.manager
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.network.model.AccountKeysJson
 import com.bitwarden.network.model.KdfTypeJson
-import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
 import com.x8bit.bitwarden.data.auth.manager.model.MigrateExistingUserToKeyConnectorResult
 import com.x8bit.bitwarden.data.auth.manager.model.MigrateNewUserToKeyConnectorResult
 
@@ -11,14 +10,6 @@ import com.x8bit.bitwarden.data.auth.manager.model.MigrateNewUserToKeyConnectorR
  * Manager used to interface with a key connector.
  */
 interface KeyConnectorManager {
-    /**
-     * Retrieves the master key from the key connector.
-     */
-    suspend fun getMasterKeyFromKeyConnector(
-        url: String,
-        accessToken: String,
-    ): Result<KeyConnectorMasterKeyResponseJson>
-
     /**
      * Migrates an existing user to use the key connector.
      */
