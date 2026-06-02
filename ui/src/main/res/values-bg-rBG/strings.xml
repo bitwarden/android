@@ -1297,7 +1297,7 @@
     <string name="storage_cost">Цена за съхранение</string>
     <string name="discount">Отстъпка</string>
     <string name="estimated_tax">Приблизителен данък</string>
-    <string name="total">Total</string>
+    <string name="total">Общо</string>
     <string name="billing_rate_per_year">%1$s / година</string>
     <string name="billing_rate_per_month">%1$s / месец</string>
     <string name="manage_plan">Управление на плана</string>
@@ -1305,6 +1305,7 @@
     <string name="cancel_premium">Отказване от платения план</string>
     <string name="subscription_status_active">Активно</string>
     <string name="subscription_status_canceled">Отказано</string>
+    <string name="subscription_status_expired">Изтекъл</string>
     <string name="subscription_status_past_due">Просрочено</string>
     <string name="subscription_status_paused">На пауза</string>
     <string name="subscription_status_update_payment">Актуализиране на плащанията</string>
@@ -1318,6 +1319,7 @@
         <item quantity="other">След като просрочите периода на абонамента си, разполагате с още %1$d дни. Моля, заплатете старите фактури до %2$s.</item>
     </plurals>
     <string name="subscription_paused_description">Абонаментът беше спрян на пауза. Можете да го стартирате отново, ако искате да продължите да ползвате функционалностите на платения план.</string>
+    <string name="subscription_expired_description">Вашият абонамент изтече на <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Ако искате да продължите да ползвате предимствата на платения план, ще трябва да се абонирате отново.</string>
     <string name="loading_subscription">Зареждане на абонамента…</string>
     <string name="loading_portal">Зареждане на портала…</string>
     <string name="portal_error">Нещо се обърка</string>

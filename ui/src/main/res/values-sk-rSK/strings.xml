@@ -170,7 +170,7 @@
     <string name="disabled">Vypnuté</string>
     <string name="bitwarden_autofill_service_alert2">Najjednoduchší spôsob, ako pridať nové prihlasovacie údaje do vášho trezora, je prostredníctvom služby automatického vypĺňania Bitwardenu. Ďalšie informácie o používaní automatického vypĺňania Bitwardenu získate prechodom do obrazovky Nastavení.</string>
     <string name="autofill_noun">Automatické vypĺňanie</string>
-    <string name="autofill_verb">Automatické vypĺňanie</string>
+    <string name="autofill_verb">Automaticky vyplniť</string>
     <string name="autofill_or_view">Chcete túto položku automaticky vyplniť alebo zobraziť?</string>
     <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Hľadať %1$s</string>
     <string name="learn_org">Zistiť viac o organizáciách</string>
@@ -1321,21 +1321,23 @@ Chcete prepnúť na tento účet?</string>
     <string name="cancel_premium">Zrušiť Prémium</string>
     <string name="subscription_status_active">Aktívne</string>
     <string name="subscription_status_canceled">Zrušené</string>
+    <string name="subscription_status_expired">Exspirované</string>
     <string name="subscription_status_past_due">Po splatnosti</string>
     <string name="subscription_status_paused">Pozastavené</string>
     <string name="subscription_status_update_payment">Aktualizovať platbu</string>
     <string name="subscription_status_pending_cancellation">Čaká na zrušenie</string>
     <string name="subscription_pending_cancellation_description">Vaše predplatné má naplánovaný koniec na <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Kedykoľvek predtým ho môžete obnoviť.</string>
-    <string name="premium_next_charge_summary">Vaša ďalšia platba vo výške %1$s USD je splatná dňa %2$s.</string>
-    <string name="subscription_canceled_description">Vaše predplatné bolo zrušené dňa %1$s. Obnovte si predplatné, ak chcete naďalej využívať prémiové funkcie.</string>
+    <string name="premium_next_charge_summary">Vaša ďalšia platba vo výške<annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD je splatná <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
+    <string name="subscription_canceled_description">Vaše predplatné bolo zrušené <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Obnovte si predplatné, ak chcete naďalej využívať prémiové funkcie.</string>
     <string name="subscription_update_payment_description">Vašu platbu sa nám nepodarilo spracovať. Aktualizujte si spôsob platby ešte pred uplynutím platnosti vášho predplatného <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
-        <item quantity="one">Od exspirácie predplatného máte ochrannú lehotu %1$d deň. Prosím, uhraďte nedoplatok do %2$s.</item>
-        <item quantity="few">Od exspirácie predplatného máte ochrannú lehotu %1$d dni. Prosím, uhraďte nedoplatok do %2$s.</item>
-        <item quantity="many">Od exspirácie predplatného máte ochrannú lehotu %1$d dní. Prosím, uhraďte nedoplatok do %2$s.</item>
-        <item quantity="other">Od exspirácie predplatného máte ochrannú lehotu %1$d dní. Prosím, uhraďte nedoplatok do %2$s.</item>
+        <item quantity="one">Máte bezplatnú skúšobnú lehotu <annotation arg="0">%1$d</annotation> deň od vypršania predplatného. Prosím, uhraďte faktúru do <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="few">Máte bezplatnú skúšobnú lehotu <annotation arg="0">%1$d</annotation> dni od vypršania predplatného. Prosím, uhraďte faktúru do <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="many">Máte bezplatnú skúšobnú lehotu <annotation arg="0">%1$d</annotation> dní od vypršania predplatného. Prosím, uhraďte faktúru do <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="other">Máte bezplatnú skúšobnú lehotu <annotation arg="0">%1$d</annotation> dní od vypršania predplatného. Prosím, uhraďte faktúru do <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
     </plurals>
     <string name="subscription_paused_description">Vaše predplatné bolo pozastavené. Obnovte si predplatné, ak chcete naďalej využívať prémiové funkcie.</string>
+    <string name="subscription_expired_description">Vaše predplatné vypršalo <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Obnovte si predplatné, ak chcete naďalej využívať prémiové funkcie.</string>
     <string name="loading_subscription">Načítava sa predplatné…</string>
     <string name="loading_portal">Načítava sa portál…</string>
     <string name="portal_error">Niečo sa pokazilo</string>

@@ -1303,6 +1303,7 @@ Pretende mudar para esta conta?</string>
     <string name="cancel_premium">Cancelar Premium</string>
     <string name="subscription_status_active">Ativo</string>
     <string name="subscription_status_canceled">Cancelado</string>
+    <string name="subscription_status_expired">Expirado</string>
     <string name="subscription_status_past_due">Caducado</string>
     <string name="subscription_status_paused">Em pausa</string>
     <string name="subscription_status_update_payment">Atualizar pagamento</string>
@@ -1310,12 +1311,13 @@ Pretende mudar para esta conta?</string>
     <string name="subscription_pending_cancellation_description">A sua subscrição está agendada para ser cancelada em <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Pode reativá-la a qualquer momento até essa data.</string>
     <string name="premium_next_charge_summary">O seu próximo pagamento será de <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD, com vencimento em <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
     <string name="subscription_canceled_description">A sua subscrição foi cancelada a <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Volte a subscrever para continuar a utilizar funcionalidades Premium.</string>
-    <string name="subscription_update_payment_description">Não foi possível processar o seu pagamento. Atualize o seu pagamento antes de a sua subscrição terminar a <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
+    <string name="subscription_update_payment_description">Não foi possível processar o seu pagamento. Atualize o seu método de pagamento antes de a sua subscrição terminar a <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
-        <item quantity="one">Dispõe de um período de tolerância de <annotation arg="0">%1$d</annotation> dia a partir da data de expiração da sua subscrição. Por favor, resolva o valor em atraso até <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
-        <item quantity="other">Dispõe de um período de tolerância de <annotation arg="0">%1$d</annotation> dias a partir da data de expiração da sua subscrição. Por favor, resolva o valor em atraso até <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="one">Dispõe de um período de tolerância de <annotation arg="0">%1$d</annotation> dia a partir da data de expiração da sua subscrição. Por favor, resolva as faturas em atraso até <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="other">Dispõe de um período de tolerância de <annotation arg="0">%1$d</annotation> dias a partir da data de expiração da sua subscrição. Por favor, resolva as faturas em atraso até <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
     </plurals>
     <string name="subscription_paused_description">A sua subscrição está suspensa. Reative-a para continuar a utilizar as funcionalidades Premium.</string>
+    <string name="subscription_expired_description">A sua subscrição expirou a <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Volte a subscrever para continuar a utilizar funcionalidades Premium.</string>
     <string name="loading_subscription">A carregar subscrição…</string>
     <string name="loading_portal">A carregar portal…</string>
     <string name="portal_error">Alguma coisa correu mal</string>

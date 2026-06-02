@@ -227,8 +227,8 @@
     <string name="number">号码</string>
     <string name="security_code">安全码</string>
     <string name="scan_card">扫描支付卡</string>
-    <string name="scan_card_instruction">将您的卡片置于取景框内进行扫描。</string>
-    <string name="hold_steady_and_ensure_all_card_details_are_visible">保持稳定并确保所有卡片细节清晰可见</string>
+    <string name="scan_card_instruction">将您的支付卡置于取景框内进行扫描。</string>
+    <string name="hold_steady_and_ensure_all_card_details_are_visible">保持稳定并确保支付卡的所有细节清晰可见</string>
     <string name="type_card">支付卡</string>
     <string name="type_identity">身份</string>
     <string name="type_login">登录</string>
@@ -240,7 +240,7 @@
     <string name="august">八月</string>
     <string name="brand">品牌</string>
     <string name="card_details">支付卡详细信息</string>
-    <string name="card_scanned">卡片已扫描</string>
+    <string name="card_scanned">支付卡已扫描</string>
     <string name="cardholder_name">持卡人姓名</string>
     <string name="city_town">市 / 镇</string>
     <string name="company">公司</string>
@@ -309,7 +309,7 @@
     <string name="try_again">重试</string>
     <string name="created">创建于：%1$s</string>
     <string name="password_updated">密码更新于：%1$s</string>
-    <string name="last_edited">上次编辑：%1$s</string>
+    <string name="last_edited">最后编辑于：%1$s</string>
     <string name="invalid_email">无效的电子邮箱地址。</string>
     <string name="cards">支付卡</string>
     <string name="identities">身份</string>
@@ -447,9 +447,9 @@
     <string name="all_sends">所有的 Send</string>
     <string name="text">文本</string>
     <string name="text_to_share">要分享的文本</string>
-    <string name="type_text">文本</string>
+    <string name="type_text">文本 Send</string>
     <string name="hide_text_by_default">访问此 Send 时，默认隐藏文本内容</string>
-    <string name="type_file">文件</string>
+    <string name="type_file">文件 Send</string>
     <string name="deletion_date">删除日期</string>
     <string name="deletion_time">删除时间</string>
     <string name="deletion_date_info">此 Send 将在指定的日期和时间后被永久删除。</string>
@@ -640,7 +640,7 @@
     <string name="check_known_data_breaches_for_this_password">检查已知的数据泄露是否包含此密码</string>
     <string name="exposed_master_password">已暴露的主密码</string>
     <string name="password_found_in_a_data_breach_alert_description">密码在数据泄露中被发现。请使用一个唯一的密码以保护您的账户。确定要使用已暴露的密码吗？</string>
-    <string name="weak_and_exposed_master_password">主密码弱且曾经暴露</string>
+    <string name="weak_and_exposed_master_password">弱且已暴露的主密码</string>
     <string name="weak_password_identified_and_found_in_a_data_breach_alert_description">识别到弱密码且其出现在数据泄露中。请使用一个强大且唯一的密码以保护您的账户。确定要使用这个密码吗？</string>
     <string name="there_are_no_items_that_match_the_search">没有匹配搜索条件的项目</string>
     <string name="self_hosted">自托管</string>
@@ -1001,7 +1001,7 @@
     <string name="replace_certificate">替换证书</string>
     <string name="unable_to_read_certificate">无法读取证书。</string>
     <string name="cannot_delete_your_account">无法删除您的账户</string>
-    <string name="cannot_delete_your_account_explanation">此操作无法完成，因为您的账户归组织所有。请联系您的组织管理员获取详细信息。</string>
+    <string name="cannot_delete_your_account_explanation">由于您的账户由某个组织拥有，此操作无法完成。请联系您的组织管理员以获取更多详细信息。</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">此账户即将被删除。请在 %1$s 前登录以继续使用 Bitwarden。</string>
     <string name="view_file_send">查看文件 Send</string>
     <string name="view_text_send">查看文本 Send</string>
@@ -1114,10 +1114,10 @@
     <string name="file_could_not_be_processed_message">文件无法处理。请确保它是有效的 JSON 文件然后重试。需要帮助吗？请访问 bitwarden.com/help</string>
     <string name="get_help">获取帮助</string>
     <string name="expand_advanced_options">展开高级选项</string>
-    <string name="local_items_are_expanded_click_to_collapse">本地项目被展开，点击以折叠。</string>
-    <string name="local_items_are_collapsed_click_to_expand">本地项目被折叠，点击以展开。</string>
-    <string name="items_expanded_click_to_collapse">项目被展开，点击以折叠。</string>
-    <string name="items_are_collapsed_click_to_expand">项目被折叠，点击以展开。</string>
+    <string name="local_items_are_expanded_click_to_collapse">本地项目已展开，点击折叠。</string>
+    <string name="local_items_are_collapsed_click_to_expand">本地项目已折叠，点击展开。</string>
+    <string name="items_expanded_click_to_collapse">项目已展开，点击折叠。</string>
+    <string name="items_are_collapsed_click_to_expand">项目已折叠，点击展开。</string>
     <string name="error_cannot_decrypt">[错误：无法解密]</string>
     <string name="copy_error_report">复制错误报告</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden 无法解密此密码库项目。复制此错误报告并将其分享给客户成功团队，以避免进一步的数据丢失。</string>
@@ -1231,7 +1231,7 @@
     <string name="devices">设备</string>
     <string name="mobile_platform">移动端 - %1$s</string>
     <string name="extension_platform">扩展 - %1$s</string>
-    <string name="web_platform">网页版 - %1$s</string>
+    <string name="web_platform">网页 - %1$s</string>
     <string name="desktop_platform">桌面端 - %1$s</string>
     <string name="cli_platform">CLI - %1$s</string>
     <string name="sdk">SDK</string>
@@ -1241,9 +1241,9 @@
     <string name="current_session">当前会话</string>
     <string name="pending_request">待处理的请求</string>
     <string name="today">今天</string>
-    <string name="past_seven_days">最近 7 天</string>
-    <string name="past_fourteen_days">最近 14 天</string>
-    <string name="past_thirty_days">最近 30 天</string>
+    <string name="past_seven_days">过去 7 天</string>
+    <string name="past_fourteen_days">过去 14 天</string>
+    <string name="past_thirty_days">过去 30 天</string>
     <string name="over_thirty_days_ago">30 天以前</string>
     <string name="recently_active"><annotation emphasis="bold">最近活动：</annotation><annotation arg="0">%1$s</annotation></string>
     <string name="trusted">已信任</string>
@@ -1295,6 +1295,7 @@
     <string name="cancel_premium">取消高级版</string>
     <string name="subscription_status_active">启用</string>
     <string name="subscription_status_canceled">已取消</string>
+    <string name="subscription_status_expired">已过期</string>
     <string name="subscription_status_past_due">逾期未支付</string>
     <string name="subscription_status_paused">已暂停</string>
     <string name="subscription_status_update_payment">更新付款信息</string>
@@ -1307,6 +1308,7 @@
         <item quantity="other">从您的订阅到期之日起，您有 <annotation arg="0">%1$d</annotation> 天的宽限期。请在 <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation> 之前处理逾期未支付的款项。</item>
     </plurals>
     <string name="subscription_paused_description">您的订阅已暂停。恢复订阅以继续使用高级版功能。</string>
+    <string name="subscription_expired_description">您的订阅到期于 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>。重新订阅以继续使用高级版功能。</string>
     <string name="loading_subscription">正在加载订阅…</string>
     <string name="loading_portal">正在加载门户…</string>
     <string name="portal_error">出错了</string>
@@ -1323,7 +1325,7 @@
     <string name="edit_license">编辑驾驶证</string>
     <string name="edit_passport">编辑护照</string>
     <string name="type_bank_account">银行账户</string>
-    <string name="type_license">许可证</string>
+    <string name="type_license">驾驶证</string>
     <string name="type_passport">护照</string>
     <string name="bank_accounts">银行账户</string>
     <string name="passports">护照</string>
@@ -1352,7 +1354,7 @@
     <string name="money_market">货币市场</string>
     <string name="issuing_country">签发国家 / 地区</string>
     <string name="issuing_state">签发州 / 省</string>
-    <string name="license_class">许可证等级</string>
+    <string name="license_class">驾驶证类别</string>
     <string name="surname">姓氏</string>
     <string name="given_name">名字</string>
     <string name="date_of_birth">出生日期</string>

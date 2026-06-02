@@ -1322,13 +1322,14 @@ při opakování problémů.</string>
     <string name="cancel_premium">Zrušit Premium</string>
     <string name="subscription_status_active">Aktivní</string>
     <string name="subscription_status_canceled">Zrušeno</string>
+    <string name="subscription_status_expired">Vypršela platnost</string>
     <string name="subscription_status_past_due">Po splatnosti</string>
     <string name="subscription_status_paused">Pozastaveno</string>
     <string name="subscription_status_update_payment">Aktualizovat platbu</string>
     <string name="subscription_status_pending_cancellation">Čeká na zrušení</string>
     <string name="subscription_pending_cancellation_description">Zrušení Vašeho předplatného je naplánováno na <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Před tím ho můžete kdykoli obnovit.</string>
     <string name="premium_next_charge_summary">Vaše další platba ve výši <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD je splatná <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
-    <string name="subscription_canceled_description">Vaše předplatné bylo zrušeno <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Chcete-li pokračovat v používání prémiových funkcí, proveďte obnovení.</string>
+    <string name="subscription_canceled_description">Vaše předplatné bylo zrušeno <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Chcete-li pokračovat v používání funkcí Premium, proveďte obnovení.</string>
     <string name="subscription_update_payment_description">Vaši platbu nelze zpracovat. Aktualizujte svou platební metodu před ukončením předplatného <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Máte lhůtu k odkladu <annotation arg="0">%1$d</annotation> den od data vypršení předplatného. Vyřešte poslední splatné faktury do <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
@@ -1337,6 +1338,7 @@ při opakování problémů.</string>
         <item quantity="other">Máte lhůtu k odkladu <annotation arg="0">%1$d</annotation> dnů od data vypršení předplatného. Vyřešte poslední splatné faktury do <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
     </plurals>
     <string name="subscription_paused_description">Vaše předplatné bylo pozastaveno. Chcete-li pokračovat v používání prémiových funkcí, proveďte obnovení.</string>
+    <string name="subscription_expired_description">Vaše předplatné vypršelo <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Chcete-li pokračovat v používání funkcí Premium, proveďte obnovení.</string>
     <string name="loading_subscription">Načítání předplatného...</string>
     <string name="loading_portal">Načítání portálu...</string>
     <string name="portal_error">Něco se pokazilo</string>

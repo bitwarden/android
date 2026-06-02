@@ -1254,17 +1254,17 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="external_link">Link zewnętrzny</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s (link zewnętrzny)</string>
     <string name="devices">Urządzenia</string>
-    <string name="mobile_platform">Mobile - %1$s</string>
-    <string name="extension_platform">Extension - %1$s</string>
-    <string name="web_platform">Web - %1$s</string>
-    <string name="desktop_platform">Desktop - %1$s</string>
-    <string name="cli_platform">CLI - %1$s</string>
+    <string name="mobile_platform">Aplikacja mobilna %1$s</string>
+    <string name="extension_platform">Rozszerzenie %1$s</string>
+    <string name="web_platform">Aplikacja internetowa %1$s</string>
+    <string name="desktop_platform">Aplikacja desktopowa %1$s</string>
+    <string name="cli_platform">CLI %1$s</string>
     <string name="sdk">SDK</string>
     <string name="server">Serwer</string>
     <string name="unknown_device">Nieznane urządzenie</string>
     <string name="first_login_date"><annotation emphasis="bold">Pierwsze logowanie:</annotation> <annotation arg="0">%1$s</annotation></string>
     <string name="current_session">Obecna sesja</string>
-    <string name="pending_request">Pending request</string>
+    <string name="pending_request">Oczekująca prośba</string>
     <string name="today">Dzisiaj</string>
     <string name="past_seven_days">Ostatnie 7 dni</string>
     <string name="past_fourteen_days">Ostatnie 14 dni</string>
@@ -1316,25 +1316,27 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="billing_rate_per_year">%1$s / rok</string>
     <string name="billing_rate_per_month">%1$s / miesiąc</string>
     <string name="manage_plan">Zarządzaj planem</string>
-    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Manage your subscription plan in the Bitwarden web app.</string>
+    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Zarządzaj subskrypcją w aplikacji internetowej Bitwarden.</string>
     <string name="cancel_premium">Anuluj Konto Premium</string>
     <string name="subscription_status_active">Aktywny</string>
     <string name="subscription_status_canceled">Anulowano</string>
+    <string name="subscription_status_expired">Wygasła</string>
     <string name="subscription_status_past_due">Termin przekroczony</string>
     <string name="subscription_status_paused">Wstrzymano</string>
     <string name="subscription_status_update_payment">Zaktualizuj płatność</string>
-    <string name="subscription_status_pending_cancellation">Pending cancellation</string>
-    <string name="subscription_pending_cancellation_description">Your subscription is scheduled to cancel on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. You can reinstate it anytime before then.</string>
-    <string name="premium_next_charge_summary">Następna płatność %2$s w kwocie %1$s USD.</string>
-    <string name="subscription_canceled_description">Twoja subskrypcja została anulowana %1$s. Zasubskrybuj ponownie, aby kontynuować korzystanie z funkcji Premium.</string>
+    <string name="subscription_status_pending_cancellation">Oczekiwanie na anulowanie</string>
+    <string name="subscription_pending_cancellation_description">Twoja subskrypcja zostanie anulowana <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Możesz ją odnowić w dowolnym momencie.</string>
+    <string name="premium_next_charge_summary">Następna płatność <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation> w kwocie <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD.</string>
+    <string name="subscription_canceled_description">Twoja subskrypcja została anulowana <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Zasubskrybuj ponownie, aby kontynuować korzystanie z funkcji Premium.</string>
     <string name="subscription_update_payment_description">Nie mogliśmy przetworzyć płatności. Zaktualizuj metodę płatności przed <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
-        <item quantity="one">Masz %1$d dzień od daty wygaśnięcia subskrypcji na uregulowanie płatności. Zapłać zaległe faktury do %2$s.</item>
-        <item quantity="few">Masz %1$d dni od daty wygaśnięcia subskrypcji na uregulowanie płatności. Zapłać zaległe faktury do %2$s.</item>
-        <item quantity="many">Masz %1$d dni od daty wygaśnięcia subskrypcji na uregulowanie płatności. Zapłać zaległe faktury do %2$s.</item>
-        <item quantity="other">Masz %1$d dnia od daty wygaśnięcia subskrypcji na uregulowanie płatności. Zapłać zaległe faktury do %2$s.</item>
+        <item quantity="one">Masz <annotation arg="0">%1$d</annotation> dzień od daty wygaśnięcia subskrypcji na uregulowanie płatności. Zapłać zaległe faktury do <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="few">Masz <annotation arg="0">%1$d</annotation> dni od daty wygaśnięcia subskrypcji na uregulowanie płatności. Zapłać zaległe faktury do <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="many">Masz <annotation arg="0">%1$d</annotation> dni od daty wygaśnięcia subskrypcji na uregulowanie płatności. Zapłać zaległe faktury do <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="other">Masz <annotation arg="0">%1$d</annotation> dnia od daty wygaśnięcia subskrypcji na uregulowanie płatności. Zapłać zaległe faktury do <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
     </plurals>
     <string name="subscription_paused_description">Subskrypcja jest wstrzymana. Wznów ją, aby kontynuować korzystanie z funkcji Premium.</string>
+    <string name="subscription_expired_description">Twoja subskrypcja wygasła <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Zasubskrybuj ponownie, aby kontynuować korzystanie z funkcji Premium.</string>
     <string name="loading_subscription">Ładowanie subskrypcji…</string>
     <string name="loading_portal">Ładowanie…</string>
     <string name="portal_error">Coś poszło nie tak</string>
@@ -1345,7 +1347,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="view_license">Pokaż prawo jazdy</string>
     <string name="view_passport">Pokaż paszport</string>
     <string name="add_bank_account">Dodaj konto bankowe</string>
-    <string name="add_license">Add license</string>
+    <string name="add_license">Dodaj prawo jazdy</string>
     <string name="add_passport">Dodaj paszport</string>
     <string name="edit_bank_account">Edytuj konto bankowe</string>
     <string name="edit_license">Edytuj prawo jazdy</string>
@@ -1403,12 +1405,12 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="national_identification_number">Numer PESEL</string>
     <string name="copy_national_identification_number">Kopiuj numer PESEL</string>
     <string name="access_your_local_network">Dostęp do sieci lokalnej</string>
-    <string name="local_network_access_required">Local network access required</string>
+    <string name="local_network_access_required">Dostęp do sieci lokalnej jest wymagany</string>
     <string name="ask_again_later">Zapytaj później</string>
     <string name="enable_local_network_access">Włącz dostęp do sieci lokalnej</string>
     <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Aplikacja Bitwarden wymaga dostępu do sieci lokalnej, aby zsynchronizować się z serwerem. Bez tego uprawnienia aplikacja nie będzie mogła nawiązać połączenia.</string>
-    <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Without this permission, Bitwarden won’t be able to connect and sync with your server. You can enable this in your device settings.</string>
-    <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Your request was interrupted because the app needs local network access. You can enable this in your device settings.</string>
+    <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Bez tego uprawnienia aplikacja Bitwarden nie będzie mogła połączyć się z serwerem. Możesz włączyć tę opcję w ustawieniach urządzenia.</string>
+    <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Żądanie zostało przerwane, ponieważ aplikacja wymaga dostępu do sieci lokalnej. Możesz włączyć tę opcję w ustawieniach urządzenia.</string>
     <string name="continue_to_stripe">Kontynuować przejście do Stripe?</string>
-    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">You’ll be taken to Stripe to manage your subscription cancellation.</string>
+    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Zostaniesz przekierowany do płatności Stripe, aby anulować subskrypcję.</string>
 </resources>

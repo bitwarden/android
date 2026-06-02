@@ -1295,6 +1295,7 @@
     <string name="cancel_premium">取消 Premium</string>
     <string name="subscription_status_active">生效中</string>
     <string name="subscription_status_canceled">已取消</string>
+    <string name="subscription_status_expired">已逾期</string>
     <string name="subscription_status_past_due">逾期</string>
     <string name="subscription_status_paused">已暫停</string>
     <string name="subscription_status_update_payment">更新付款方式</string>
@@ -1302,11 +1303,12 @@
     <string name="subscription_pending_cancellation_description">Your subscription is scheduled to cancel on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. You can reinstate it anytime before then.</string>
     <string name="premium_next_charge_summary">您的下一筆扣款為 %1$s USD，將於 %2$s 到期。</string>
     <string name="subscription_canceled_description">您的訂閱已於 %1$s 取消。重新訂閱以繼續使用 Premium 功能。</string>
-    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
+    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment method before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="other">自訂閱到期日起，您有 %1$d 天的寬限期。請於 %2$s 前完成逾期款項付款。</item>
     </plurals>
     <string name="subscription_paused_description">您的訂閱已暫停。恢復訂閱以繼續使用 Premium 功能。</string>
+    <string name="subscription_expired_description">Your subscription expired on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using Premium features.</string>
     <string name="loading_subscription">正在載入訂閱資訊…</string>
     <string name="loading_portal">正在載入入口網站…</string>
     <string name="portal_error">出了點問題</string>
