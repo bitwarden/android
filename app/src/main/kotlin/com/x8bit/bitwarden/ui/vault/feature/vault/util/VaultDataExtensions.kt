@@ -385,7 +385,7 @@ private fun CipherListView.toVaultItemOrNull(
             hasDecryptionError = hasDecryptionError,
         )
 
-        CipherListViewType.DriversLicense -> VaultState.ViewState.VaultItem.DriversLicense(
+        CipherListViewType.DriversLicense -> VaultState.ViewState.VaultItem.License(
             id = id,
             name = name.asText(),
             overflowOptions = toOverflowActions(

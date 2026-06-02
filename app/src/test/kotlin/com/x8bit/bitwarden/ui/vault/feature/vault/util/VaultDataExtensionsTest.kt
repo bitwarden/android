@@ -1506,14 +1506,14 @@ class VaultDataExtensionsTest {
                 bankAccountItemsCount = 0,
                 licenseItemsCount = 3,
                 passportItemsCount = 0,
-                favoriteItems = listOf(createMockDriversLicenseVaultItem(number = 1)),
+                favoriteItems = listOf(createMockLicenseVaultItem(number = 1)),
                 collectionItems = listOf(),
                 folderItems = listOf(),
                 noFolderItems = listOf(
-                    createMockDriversLicenseVaultItem(number = 1),
-                    createMockDriversLicenseVaultItem(number = 2)
+                    createMockLicenseVaultItem(number = 1),
+                    createMockLicenseVaultItem(number = 2)
                         .copy(shouldShowMasterPasswordReprompt = true),
-                    createMockDriversLicenseVaultItem(number = 3),
+                    createMockLicenseVaultItem(number = 3),
                 ),
                 trashItemsCount = 0,
                 totpItemsCount = 0,
@@ -1677,10 +1677,10 @@ private fun createMockBankAccountVaultItem(
         hasDecryptionError = false,
     )
 
-private fun createMockDriversLicenseVaultItem(
+private fun createMockLicenseVaultItem(
     number: Int,
-): VaultState.ViewState.VaultItem.DriversLicense =
-    VaultState.ViewState.VaultItem.DriversLicense(
+): VaultState.ViewState.VaultItem.License =
+    VaultState.ViewState.VaultItem.License(
         id = "mockId-$number",
         name = "mockName-$number".asText(),
         overflowOptions = persistentListOf(

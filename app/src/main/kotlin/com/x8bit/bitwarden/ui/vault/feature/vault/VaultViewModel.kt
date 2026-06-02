@@ -2113,10 +2113,10 @@ data class VaultState(
             }
 
             /**
-             * Represents a Driver's License item within the vault.
+             * Represents a License item within the vault.
              */
             @Parcelize
-            data class DriversLicense(
+            data class License(
                 override val id: String,
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(
