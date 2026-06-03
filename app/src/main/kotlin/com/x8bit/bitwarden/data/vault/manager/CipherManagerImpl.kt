@@ -442,7 +442,6 @@ class CipherManagerImpl(
 
     override suspend fun updateCipherCollections(
         cipherId: String,
-        cipherView: CipherView,
         collectionIds: List<String>,
     ): ShareCipherResult {
         val userId = activeUserId ?: return ShareCipherResult.Error(error = NoActiveUserException())
@@ -451,17 +450,18 @@ class CipherManagerImpl(
                 cipherId = cipherId,
                 body = UpdateCipherCollectionsJsonRequest(collectionIds = collectionIds),
             )
-            .flatMap {
-                vaultSdkSource.encryptCipher(
-                    userId = userId,
-                    cipherView = cipherView.copy(collectionIds = collectionIds),
-                )
-            }
-            .onSuccess { encryptionContext ->
-                vaultDiskSource.saveCipher(
-                    userId = userId,
-                    cipher = encryptionContext.toEncryptedNetworkCipherResponse(),
-                )
+            .onSuccess { response ->
+                response
+                    .cipher
+                    ?.let {
+                        // Save the updated cipher to disk.
+                        vaultDiskSource.saveCipher(userId = userId, cipher = it)
+                    }
+                    ?: run {
+                        // The user no longer has any collection access to the cipher after
+                        // the update, so remove it from disk.
+                        vaultDiskSource.deleteCipher(userId = userId, cipherId = cipherId)
+                    }
             }
             .fold(
                 onSuccess = { ShareCipherResult.Success },

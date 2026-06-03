@@ -11,6 +11,7 @@ import com.bitwarden.network.model.NetworkResult
 import com.bitwarden.network.model.ShareCipherJsonRequest
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UpdateCipherCollectionsJsonRequest
+import com.bitwarden.network.model.UpdateCipherCollectionsResponseJson
 import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -115,11 +116,11 @@ internal interface CiphersApi {
     /**
      * Updates a cipher's collections.
      */
-    @PUT("ciphers/{cipherId}/collections")
+    @PUT("ciphers/{cipherId}/collections_v2")
     suspend fun updateCipherCollections(
         @Path("cipherId") cipherId: String,
         @Body body: UpdateCipherCollectionsJsonRequest,
-    ): NetworkResult<Unit>
+    ): NetworkResult<UpdateCipherCollectionsResponseJson>
 
     /**
      * Hard deletes a cipher.
