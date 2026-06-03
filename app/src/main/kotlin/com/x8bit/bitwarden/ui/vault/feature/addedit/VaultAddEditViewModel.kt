@@ -451,14 +451,6 @@ class VaultAddEditViewModel @Inject constructor(
 
     @Suppress("LongMethod")
     private fun handleSaveClick() = onContent { content ->
-        if (!content.type.isSdkSupported) {
-            sendEvent(
-                VaultAddEditEvent.ShowSnackbar(
-                    message = BitwardenString.an_error_has_occurred.asText(),
-                ),
-            )
-            return@onContent
-        }
         if (hasValidationErrors(content)) return@onContent
 
         mutableStateFlow.update {
@@ -2982,11 +2974,6 @@ data class VaultAddEditState(
                  * A list of all the linked field types supported by this [ItemType].
                  */
                 abstract val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
-
-                /**
-                 * Whether this item type has SDK support for save operations.
-                 */
-                open val isSdkSupported: Boolean get() = true
 
                 /**
                  * Represents the login item information.
