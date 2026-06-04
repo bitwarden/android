@@ -113,6 +113,7 @@ class MainViewModelTest : BaseViewModelTest() {
     private val mutableAppLanguageFlow = MutableStateFlow(AppLanguage.DEFAULT)
     private val mutableScreenCaptureAllowedFlow = MutableStateFlow(true)
     private val mutableIsDynamicColorsEnabledFlow = MutableStateFlow(false)
+    private val mutableHasShownAccessibilityDisclaimerFlow = MutableStateFlow(true)
     private val settingsRepository = mockk<SettingsRepository> {
         every { appTheme } returns AppTheme.DEFAULT
         every { appThemeStateFlow } returns mutableAppThemeFlow
@@ -123,6 +124,10 @@ class MainViewModelTest : BaseViewModelTest() {
         every { appLanguage = any() } just runs
         every { isDynamicColorsEnabled } returns false
         every { isDynamicColorsEnabledFlow } returns mutableIsDynamicColorsEnabledFlow
+        every {
+            hasShownAccessibilityDisclaimerFlow
+        } returns mutableHasShownAccessibilityDisclaimerFlow
+        every { accessibilityDisclaimerHasBeenShown() } just runs
     }
     private val authRepository = mockk<AuthRepository> {
         every { activeUserId } returns DEFAULT_USER_STATE.activeUserId
@@ -1333,6 +1338,7 @@ class MainViewModelTest : BaseViewModelTest() {
             isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
             isDynamicColorsEnabled = settingsRepository.isDynamicColorsEnabled,
             hasResizeBeenRequested = false,
+            dialogState = null,
         )
         viewModel.stateFlow.test {
             assertEquals(
@@ -1346,6 +1352,49 @@ class MainViewModelTest : BaseViewModelTest() {
                 ),
                 awaitItem(),
             )
+        }
+    }
+
+    @Test
+    fun `on HasShownAccessibilityDisclaimerUpdate with false should show accessibility dialog`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                mutableHasShownAccessibilityDisclaimerFlow.value = false
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = MainState.DialogState.AccessibilityDisclosure,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `on HasShownAccessibilityDisclaimerUpdate with true should clear accessibility dialog`() =
+        runTest {
+            mutableHasShownAccessibilityDisclaimerFlow.value = false
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = MainState.DialogState.AccessibilityDisclosure,
+                    ),
+                    awaitItem(),
+                )
+                mutableHasShownAccessibilityDisclaimerFlow.value = true
+                assertEquals(DEFAULT_STATE, awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on DismissAccessibilityDisclaimerDialog should store that the accessibility disclaimer has been shown`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(MainAction.DismissAccessibilityDisclaimerDialog)
+        verify(exactly = 1) {
+            settingsRepository.accessibilityDisclaimerHasBeenShown()
         }
     }
 
@@ -1378,6 +1427,7 @@ private val DEFAULT_STATE: MainState = MainState(
     isScreenCaptureAllowed = true,
     isDynamicColorsEnabled = false,
     hasResizeBeenRequested = false,
+    dialogState = null,
 )
 
 private val DEFAULT_FIRST_TIME_STATE = FirstTimeState(
