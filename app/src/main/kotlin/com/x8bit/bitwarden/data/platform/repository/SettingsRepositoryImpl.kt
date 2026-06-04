@@ -372,11 +372,25 @@ class SettingsRepositoryImpl(
                 initialValue = isScreenCaptureAllowed,
             )
 
+    override val hasShownAccessibilityDisclaimerFlow: StateFlow<Boolean>
+        get() = settingsDiskSource
+            .hasShownAccessibilityDisclaimerFlow
+            .map { it ?: false }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Lazily,
+                initialValue = settingsDiskSource.hasShownAccessibilityDisclaimer ?: false,
+            )
+
     init {
         policyManager
             .getActivePoliciesFlow(type = PolicyType.MAXIMUM_VAULT_TIMEOUT)
             .onEach { updateVaultUnlockSettingsIfNecessary(it) }
             .launchIn(unconfinedScope)
+    }
+
+    override fun accessibilityDisclaimerHasBeenShown() {
+        settingsDiskSource.hasShownAccessibilityDisclaimer = true
     }
 
     override fun disableAutofill() {

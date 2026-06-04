@@ -474,6 +474,42 @@ class SettingsDiskSourceTest {
     }
 
     @Test
+    fun `hasShownAccessibilityDisclaimer should pull from and update SharedPreferences`() {
+        val hasShownAccessibilityDisclaimerKey =
+            "bwPreferencesStorage:hasShownAccessibilityDisclaimer"
+        val expected = true
+
+        assertNull(settingsDiskSource.hasShownAccessibilityDisclaimer)
+
+        fakeSharedPreferences.edit {
+            putBoolean(hasShownAccessibilityDisclaimerKey, expected)
+        }
+
+        assertEquals(
+            expected,
+            settingsDiskSource.hasShownAccessibilityDisclaimer,
+        )
+
+        settingsDiskSource.hasShownAccessibilityDisclaimer = false
+        assertFalse(fakeSharedPreferences.getBoolean(hasShownAccessibilityDisclaimerKey, true))
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `hasShownAccessibilityDisclaimerFlow should react to changes in hasShownAccessibilityDisclaimer`() =
+        runTest {
+            settingsDiskSource.hasShownAccessibilityDisclaimerFlow.test {
+                // The initial values of the Flow and the property are in sync
+                assertNull(settingsDiskSource.hasShownAccessibilityDisclaimer)
+                assertNull(awaitItem())
+                settingsDiskSource.hasShownAccessibilityDisclaimer = true
+                assertEquals(true, awaitItem())
+                settingsDiskSource.hasShownAccessibilityDisclaimer = false
+                assertEquals(false, awaitItem())
+            }
+        }
+
+    @Test
     fun `getVaultTimeoutInMinutes when values are present should pull from SharedPreferences`() {
         val vaultTimeoutBaseKey = "bwPreferencesStorage:vaultTimeout"
         val mockUserId = "mockUserId"
