@@ -1120,6 +1120,30 @@ class SettingsRepositoryTest {
         }
 
     @Test
+    fun `hasShownAccessibilityDisclaimerFlow should emit changes from SettingsDiskSource`() =
+        runTest {
+            fakeSettingsDiskSource.hasShownAccessibilityDisclaimer = null
+            settingsRepository.hasShownAccessibilityDisclaimerFlow.test {
+                assertFalse(awaitItem())
+
+                fakeSettingsDiskSource.hasShownAccessibilityDisclaimer = true
+                assertTrue(awaitItem())
+
+                fakeSettingsDiskSource.hasShownAccessibilityDisclaimer = false
+                assertFalse(awaitItem())
+            }
+        }
+
+    @Test
+    fun `accessibilityDisclaimerHasBeenShown should update SettingsDiskSource`() {
+        assertNull(fakeSettingsDiskSource.hasShownAccessibilityDisclaimer)
+
+        settingsRepository.accessibilityDisclaimerHasBeenShown()
+
+        assertTrue(fakeSettingsDiskSource.hasShownAccessibilityDisclaimer == true)
+    }
+
+    @Test
     fun `clearClipboardFrequency should pull from and update SettingsDiskSource`() = runTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 

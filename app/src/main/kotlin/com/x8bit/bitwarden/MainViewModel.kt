@@ -42,6 +42,7 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.isAddTotpLoginItemFromAuthenticator
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavViewModel
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import com.x8bit.bitwarden.ui.platform.util.isAccountSecurityShortcut
@@ -99,6 +100,7 @@ class MainViewModel @Inject constructor(
         isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
         isDynamicColorsEnabled = settingsRepository.isDynamicColorsEnabled,
         hasResizeBeenRequested = false,
+        dialogState = null,
     ),
 ) {
     private var specialCircumstance: SpecialCircumstance?
@@ -146,6 +148,12 @@ class MainViewModel @Inject constructor(
         settingsRepository
             .isDynamicColorsEnabledFlow
             .map { MainAction.Internal.DynamicColorsUpdate(it) }
+            .onEach(::trySendAction)
+            .launchIn(viewModelScope)
+
+        settingsRepository
+            .hasShownAccessibilityDisclaimerFlow
+            .map { MainAction.Internal.HasShownAccessibilityDisclaimerUpdate(it) }
             .onEach(::trySendAction)
             .launchIn(viewModelScope)
 
@@ -201,6 +209,10 @@ class MainViewModel @Inject constructor(
             is MainAction.WebAuthnResult -> handleWebAuthnResult(action)
             is MainAction.CookieAcquisitionResult -> handleCookieAcquisitionResult(action)
             is MainAction.PremiumCheckoutResult -> handlePremiumCheckoutResult(action)
+            is MainAction.DismissAccessibilityDisclaimerDialog -> {
+                handleDismissAccessibilityDisclaimerDialog()
+            }
+
             is MainAction.Internal -> handleInternalAction(action)
         }
     }
@@ -224,6 +236,20 @@ class MainViewModel @Inject constructor(
             is MainAction.Internal.DynamicColorsUpdate -> handleDynamicColorsUpdate(action)
             is MainAction.Internal.CookieAcquisitionReady -> handleCookieAcquisitionReady()
             is MainAction.Internal.ResizeHasBeenRequested -> handleResizeHasBeenRequested()
+            is MainAction.Internal.HasShownAccessibilityDisclaimerUpdate -> {
+                handleHasShownAccessibilityDisclaimerUpdate(action)
+            }
+        }
+    }
+
+    private fun handleHasShownAccessibilityDisclaimerUpdate(
+        action: MainAction.Internal.HasShownAccessibilityDisclaimerUpdate,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = MainState.DialogState.AccessibilityDisclosure
+                    .takeUnless { action.hasBeenShown },
+            )
         }
     }
 
@@ -255,6 +281,10 @@ class MainViewModel @Inject constructor(
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.PremiumCheckout(
             callbackResult = action.authResult.getPremiumCheckoutCallbackResult(),
         )
+    }
+
+    private fun handleDismissAccessibilityDisclaimerDialog() {
+        settingsRepository.accessibilityDisclaimerHasBeenShown()
     }
 
     private fun handleAppResumeDataUpdated(action: MainAction.ResumeScreenDataReceived) {
@@ -538,12 +568,25 @@ data class MainState(
     val isScreenCaptureAllowed: Boolean,
     val isDynamicColorsEnabled: Boolean,
     val hasResizeBeenRequested: Boolean,
+    val dialogState: DialogState?,
 ) : Parcelable {
     /**
      * Contains all feature flags that are available to the UI.
      */
     val featureFlagsState: FeatureFlagsState
         get() = FeatureFlagsState
+
+    /**
+     * Representation of all dialogs displayed from the [MainActivity].
+     */
+    @Parcelize
+    sealed class DialogState : Parcelable {
+        /**
+         * Displays an accessibility disclosure to users explaining how we utilize the
+         * AccessibilityService.
+         */
+        data object AccessibilityDisclosure : DialogState()
+    }
 }
 
 /**
@@ -606,6 +649,11 @@ sealed class MainAction {
     data class AppSpecificLanguageUpdate(val appLanguage: AppLanguage) : MainAction()
 
     /**
+     * Received if the user dismisses the accessibility disclaimer dialog.
+     */
+    data object DismissAccessibilityDisclaimerDialog : MainAction()
+
+    /**
      * Actions for internal use by the ViewModel.
      */
     sealed class Internal : MainAction() {
@@ -660,6 +708,11 @@ sealed class MainAction {
          * Indicates that resize has been requested on the Activity
          */
         data object ResizeHasBeenRequested : Internal()
+
+        /**
+         * Indicates that the accessibility disclaimer has been displayed.
+         */
+        data class HasShownAccessibilityDisclaimerUpdate(val hasBeenShown: Boolean) : Internal()
     }
 }
 
