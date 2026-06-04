@@ -188,6 +188,16 @@ interface SettingsRepository : FlightRecorderManager {
     val isScreenCaptureAllowedStateFlow: StateFlow<Boolean>
 
     /**
+     * Whether the accessibility disclaimer has been displayed to the user.
+     */
+    val hasShownAccessibilityDisclaimerFlow: StateFlow<Boolean>
+
+    /**
+     * Stores that the accessibility disclaimer has been displayed to the user.
+     */
+    fun accessibilityDisclaimerHasBeenShown()
+
+    /**
      * Disables autofill if it is currently enabled.
      */
     fun disableAutofill()
