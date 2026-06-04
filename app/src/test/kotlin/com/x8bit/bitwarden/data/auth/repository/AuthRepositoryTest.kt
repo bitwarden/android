@@ -207,11 +207,7 @@ class AuthRepositoryTest {
         every { storeUserHasLoggedInValue(any()) } just runs
     }
     private val authSdkSource = mockk<AuthSdkSource> {
-        coEvery {
-            getNewAuthRequest(
-                email = EMAIL,
-            )
-        } returns AUTH_REQUEST_RESPONSE.asSuccess()
+        coEvery { getNewAuthRequest(email = EMAIL) } returns AUTH_REQUEST_RESPONSE.asSuccess()
         coEvery {
             hashPassword(
                 email = EMAIL,
@@ -247,10 +243,7 @@ class AuthRepositoryTest {
     private val configDiskSource = FakeConfigDiskSource()
     private val vaultSdkSource = mockk<VaultSdkSource> {
         coEvery {
-            getAuthRequestKey(
-                publicKey = PUBLIC_KEY,
-                userId = USER_ID_1,
-            )
+            getAuthRequestKey(publicKey = PUBLIC_KEY, userId = USER_ID_1)
         } returns "AsymmetricEncString".asSuccess()
     }
     private val authRequestManager: AuthRequestManager = mockk()
@@ -282,7 +275,9 @@ class AuthRepositoryTest {
             hasPendingAccountAdditionStateFlow
         } returns mutableHasPendingAccountAdditionStateFlow
         every { hasPendingAccountAddition = any() } just runs
-        every { hasPendingAccountAddition } returns mutableHasPendingAccountAdditionStateFlow.value
+        every {
+            hasPendingAccountAddition
+        } answers { mutableHasPendingAccountAdditionStateFlow.value }
         every { hasPendingAccountDeletion = any() } just runs
         val blockSlot = slot<suspend () -> LoginResult>()
         coEvery { userStateTransaction(capture(blockSlot)) } coAnswers { blockSlot.captured() }
@@ -1561,7 +1556,7 @@ class AuthRepositoryTest {
             asymmetricalKey = asymmetricalKey,
         )
         assertEquals(
-            LoginResult.Error(errorMessage = null, error = NoActiveUserException()),
+            LoginResult.Error(error = NoActiveUserException()),
             result,
         )
     }
@@ -1577,10 +1572,7 @@ class AuthRepositoryTest {
                 asymmetricalKey = asymmetricalKey,
             )
             assertEquals(
-                LoginResult.Error(
-                    errorMessage = null,
-                    error = MissingPropertyException("Private Key"),
-                ),
+                LoginResult.Error(error = MissingPropertyException("Private Key")),
                 result,
             )
         }
@@ -1597,10 +1589,7 @@ class AuthRepositoryTest {
                 asymmetricalKey = asymmetricalKey,
             )
             assertEquals(
-                LoginResult.Error(
-                    errorMessage = null,
-                    error = MissingPropertyException("Private Key"),
-                ),
+                LoginResult.Error(error = MissingPropertyException("Private Key")),
                 result,
             )
         }
@@ -1841,7 +1830,7 @@ class AuthRepositoryTest {
             vaultRepository.syncIfNecessary()
             settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
         }
-        assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
+        assertEquals(LoginResult.Error(error = error), result)
     }
 
     @Suppress("MaxLineLength")
@@ -1910,7 +1899,7 @@ class AuthRepositoryTest {
             identityService.preLogin(email = EMAIL)
         } returns error.asFailure()
         val result = repository.login(email = EMAIL, password = PASSWORD)
-        assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
+        assertEquals(LoginResult.Error(error = error), result)
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
         coVerify { identityService.preLogin(email = EMAIL) }
     }
@@ -1935,7 +1924,7 @@ class AuthRepositoryTest {
                 )
             } returns error.asFailure()
             val result = repository.login(email = EMAIL, password = PASSWORD)
-            assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
+            assertEquals(LoginResult.Error(error = error), result)
             assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
             coVerify { identityService.preLogin(email = EMAIL) }
             coVerify {
@@ -2900,7 +2889,7 @@ class AuthRepositoryTest {
                 twoFactorData = TWO_FACTOR_DATA,
                 orgIdentifier = null,
             )
-            assertEquals(LoginResult.Error(errorMessage = null, error = error), finalResult)
+            assertEquals(LoginResult.Error(error = error), finalResult)
             assertEquals(twoFactorResponse, repository.twoFactorResponse)
             fakeAuthDiskSource.assertTwoFactorToken(
                 email = EMAIL,
@@ -3039,10 +3028,7 @@ class AuthRepositoryTest {
             orgIdentifier = null,
         )
         assertEquals(
-            LoginResult.Error(
-                errorMessage = null,
-                error = MissingPropertyException("Identity Token Auth Model"),
-            ),
+            LoginResult.Error(error = MissingPropertyException("Identity Token Auth Model")),
             result,
         )
     }
@@ -3111,7 +3097,7 @@ class AuthRepositoryTest {
             requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
             masterPasswordHash = PASSWORD_HASH,
         )
-        assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
+        assertEquals(LoginResult.Error(error = error), result)
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
         coVerify {
             identityService.getToken(
@@ -3608,7 +3594,7 @@ class AuthRepositoryTest {
             ssoRedirectUri = SSO_REDIRECT_URI,
             organizationIdentifier = ORGANIZATION_IDENTIFIER,
         )
-        assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
+        assertEquals(LoginResult.Error(error = error), result)
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
         coVerify {
             identityService.getToken(
@@ -3856,7 +3842,7 @@ class AuthRepositoryTest {
                 organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
 
-            assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
+            assertEquals(LoginResult.Error(error = error), result)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
             fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
             fakeAuthDiskSource.assertAccountTokens(userId = USER_ID_1, accountTokens = null)
@@ -4148,7 +4134,7 @@ class AuthRepositoryTest {
                 orgIdentifier = ORGANIZATION_IDENTIFIER,
                 email = EMAIL,
             )
-            assertEquals(LoginResult.Error(errorMessage = null, error = error), continueResult)
+            assertEquals(LoginResult.Error(error = error), continueResult)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
             fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
             coVerify(exactly = 1) {
@@ -7717,10 +7703,7 @@ class AuthRepositoryTest {
                 email = EMAIL,
             )
             assertEquals(
-                LoginResult.Error(
-                    errorMessage = null,
-                    error = MissingPropertyException("Key Connector Response"),
-                ),
+                LoginResult.Error(error = MissingPropertyException("Key Connector Response")),
                 continueResult,
             )
         }
