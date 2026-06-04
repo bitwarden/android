@@ -20,6 +20,7 @@ import com.bitwarden.network.model.ShareCipherJsonRequest
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UnarchiveCipherResponseJson
 import com.bitwarden.network.model.UpdateCipherCollectionsJsonRequest
+import com.bitwarden.network.model.UpdateCipherCollectionsResponseJson
 import com.bitwarden.network.model.UpdateCipherResponseJson
 import com.bitwarden.network.model.toBitwardenError
 import com.bitwarden.network.util.NetworkErrorCode
@@ -235,7 +236,7 @@ internal class CiphersServiceImpl(
     override suspend fun updateCipherCollections(
         cipherId: String,
         body: UpdateCipherCollectionsJsonRequest,
-    ): Result<Unit> =
+    ): Result<UpdateCipherCollectionsResponseJson> =
         ciphersApi
             .updateCipherCollections(
                 cipherId = cipherId,

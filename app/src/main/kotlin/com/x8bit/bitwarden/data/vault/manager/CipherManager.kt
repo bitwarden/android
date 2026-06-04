@@ -130,7 +130,6 @@ interface CipherManager {
      */
     suspend fun updateCipherCollections(
         cipherId: String,
-        cipherView: CipherView,
         collectionIds: List<String>,
     ): ShareCipherResult
 
