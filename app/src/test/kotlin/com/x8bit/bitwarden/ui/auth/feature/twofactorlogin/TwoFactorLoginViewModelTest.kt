@@ -569,7 +569,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 ),
                 orgIdentifier = DEFAULT_ORG_IDENTIFIER,
             )
-        } returns LoginResult.Error(errorMessage = null, error = error)
+        } returns LoginResult.Error(error = error)
 
         val viewModel = createViewModel()
         viewModel.stateFlow.test {

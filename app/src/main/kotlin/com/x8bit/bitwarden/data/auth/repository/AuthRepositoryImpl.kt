@@ -612,15 +612,12 @@ class AuthRepositoryImpl(
         asymmetricalKey: String,
     ): LoginResult {
         val profile = authDiskSource.userState?.activeAccount?.profile
-            ?: return LoginResult.Error(errorMessage = null, error = NoActiveUserException())
+            ?: return LoginResult.Error(error = NoActiveUserException())
         val userId = profile.userId
         val accountKeys = authDiskSource.getAccountKeys(userId = userId)
         val privateKey = accountKeys?.publicKeyEncryptionKeyPair?.wrappedPrivateKey
             ?: authDiskSource.getPrivateKey(userId = userId)
-            ?: return LoginResult.Error(
-                errorMessage = null,
-                error = MissingPropertyException("Private Key"),
-            )
+            ?: return LoginResult.Error(error = MissingPropertyException("Private Key"))
 
         checkForVaultUnlockError(
             onVaultUnlockError = { error ->
@@ -670,7 +667,7 @@ class AuthRepositoryImpl(
             onFailure = { throwable ->
                 when {
                     throwable.isSslHandShakeError() -> LoginResult.CertificateError
-                    else -> LoginResult.Error(errorMessage = null, error = throwable)
+                    else -> LoginResult.Error(error = throwable)
                 }
             },
             onSuccess = { it },
@@ -715,10 +712,7 @@ class AuthRepositoryImpl(
                 orgIdentifier = orgIdentifier,
             )
         }
-        ?: LoginResult.Error(
-            errorMessage = null,
-            error = MissingPropertyException("Identity Token Auth Model"),
-        )
+        ?: LoginResult.Error(error = MissingPropertyException("Identity Token Auth Model"))
 
     override suspend fun login(
         email: String,
@@ -736,17 +730,13 @@ class AuthRepositoryImpl(
                 orgIdentifier = orgIdentifier,
             )
         }
-        ?: LoginResult.Error(
-            errorMessage = null,
-            error = MissingPropertyException("Identity Token Auth Model"),
-        )
+        ?: LoginResult.Error(error = MissingPropertyException("Identity Token Auth Model"))
 
     override suspend fun continueKeyConnectorLogin(
         orgIdentifier: String,
         email: String,
     ): LoginResult {
         val response = keyConnectorResponse ?: return LoginResult.Error(
-            errorMessage = null,
             error = MissingPropertyException("Key Connector Response"),
         )
         return handleLoginCommonSuccess(
@@ -1815,10 +1805,7 @@ class AuthRepositoryImpl(
                         LoginResult.UnofficialServerError
                     }
 
-                    else -> LoginResult.Error(
-                        errorMessage = null,
-                        error = throwable,
-                    )
+                    else -> LoginResult.Error(error = throwable)
                 }
             },
             onSuccess = { loginResponse ->

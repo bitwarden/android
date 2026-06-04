@@ -338,7 +338,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             val error = Throwable("Fail!")
             coEvery {
                 authRepository.login(any(), any(), any(), any(), any())
-            } returns LoginResult.Error(errorMessage = null, error = error)
+            } returns LoginResult.Error(error = error)
 
             val viewModel = createViewModel(
                 ssoData = DEFAULT_SSO_DATA,
