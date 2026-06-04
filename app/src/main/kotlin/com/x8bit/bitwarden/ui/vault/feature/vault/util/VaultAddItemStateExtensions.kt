@@ -294,7 +294,7 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toLoginView(
                 clock = clock,
             ),
             uris = it.uriList.toLoginUriView(),
-            totp = it.totp,
+            totp = it.totp.orNullIfBlank(),
             autofillOnPageLoad = common.originalCipher?.login?.autofillOnPageLoad,
             fido2Credentials = common.originalCipher?.login?.fido2Credentials
                 .takeIf { _ -> it.fido2CredentialCreationDateTime != null },
