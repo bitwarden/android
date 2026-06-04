@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.core.os.LocaleListCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -25,6 +26,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.util.setHorizonOSAppLayout
 import com.bitwarden.ui.platform.util.setupEdgeToEdge
@@ -110,6 +113,7 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    @Suppress("LongMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         intent = intent.validate()
         var shouldShowSplashScreen = true
@@ -143,6 +147,14 @@ class MainActivity : AppCompatActivity() {
                     theme = state.theme,
                     dynamicColor = state.isDynamicColorsEnabled,
                 ) {
+                    MainActivityDialogs(
+                        dialogState = state.dialogState,
+                        onAccessibilityDisclaimerDismiss = {
+                            mainViewModel.trySendAction(
+                                MainAction.DismissAccessibilityDisclaimerDialog,
+                            )
+                        },
+                    )
                     NavHost(
                         navController = navController,
                         startDestination = RootNavigationRoute,
@@ -235,6 +247,26 @@ class MainActivity : AppCompatActivity() {
             setHorizonOSAppLayout {
                 mainViewModel.trySendAction(MainAction.Internal.ResizeHasBeenRequested)
             }
+        }
+    }
+
+    @Composable
+    private fun MainActivityDialogs(
+        dialogState: MainState.DialogState?,
+        onAccessibilityDisclaimerDismiss: () -> Unit,
+    ) {
+        when (dialogState) {
+            MainState.DialogState.AccessibilityDisclosure -> {
+                BitwardenBasicDialog(
+                    title = stringResource(id = BitwardenString.accessibility_service_disclosure),
+                    message = stringResource(
+                        id = BitwardenString.accessibility_disclosure_start_up_text,
+                    ),
+                    onDismissRequest = onAccessibilityDisclaimerDismiss,
+                )
+            }
+
+            null -> Unit
         }
     }
 
