@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
+import com.x8bit.bitwarden.data.auth.repository.util.toAccountCryptographicState
 import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
@@ -377,8 +378,14 @@ class VaultSyncManagerImpl(
         val profile = syncResponse.profile
         val userId = profile.id
         authDiskSource.apply {
-            storePrivateKey(userId = userId, privateKey = profile.privateKey)
-            storeAccountKeys(userId = userId, accountKeys = profile.accountKeys)
+            storeAccountCryptographicState(
+                userId = userId,
+                accountCryptographicState = profile.privateKeyOrNull()?.let {
+                    profile.accountKeys.toAccountCryptographicState(
+                        privateKey = it,
+                    )
+                },
+            )
             storeOrganizationKeys(
                 userId = userId,
                 organizationKeys = profile.organizations
@@ -538,6 +545,13 @@ class VaultSyncManagerImpl(
             .takeUnless { settingsDiskSource.getLastSyncTime(userId = userId) == null }
             ?: DataState.Loading
 }
+
+/**
+ * Convenience function to extract the private key from the [SyncResponseJson.Profile] response.
+ */
+private fun SyncResponseJson.Profile.privateKeyOrNull(): String? =
+    this.accountKeys?.publicKeyEncryptionKeyPair?.wrappedPrivateKey
+        ?: this.privateKey
 
 private fun <T> Throwable.toNetworkOrErrorState(
     data: T?,

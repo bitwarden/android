@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
+import com.x8bit.bitwarden.data.auth.repository.model.createMockWrappedAccountCryptographicState
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
@@ -747,7 +748,10 @@ class VaultSyncManagerTest {
                 ),
             )
             fakeAuthDiskSource.assertUserState(userState = updatedUserState)
-            fakeAuthDiskSource.assertPrivateKey(userId = userId, privateKey = "mockPrivateKey-1")
+            fakeAuthDiskSource.assertAccountCryptographicState(
+                userId = userId,
+                accountCryptographicState = createMockWrappedAccountCryptographicState(number = 1),
+            )
             fakeAuthDiskSource.assertOrganizationKeys(
                 userId = userId,
                 organizationKeys = mapOf(userId to "mockKey-1"),

@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk
 
-import com.bitwarden.network.model.AccountKeysJson
+import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.provider.AppIdProvider
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -125,34 +125,16 @@ interface AuthDiskSource : AppIdProvider {
     fun storeLocalUserDataKey(userId: String, wrappedKey: String?)
 
     /**
-     * Retrieves a private key using a [userId].
+     * Returns the Wrapped Account Cryptographic State for the given [userId].
      */
-    @Deprecated(
-        message = "Use getAccountKeys instead.",
-        replaceWith = ReplaceWith("getAccountKeys"),
-    )
-    fun getPrivateKey(userId: String): String?
+    fun getAccountCryptographicState(userId: String): WrappedAccountCryptographicState?
 
     /**
-     * Stores a private key using a [userId].
+     * Stores the Wrapped Account Cryptographic State for a given [userId].
      */
-    @Deprecated(
-        message = "Use storeAccountKeys instead.",
-        replaceWith = ReplaceWith("storeAccountKeys"),
-    )
-    fun storePrivateKey(userId: String, privateKey: String?)
-
-    /**
-     * Returns the profile account keys for the given [userId].
-     */
-    fun getAccountKeys(userId: String): AccountKeysJson?
-
-    /**
-     * Stores the profile account keys for the given [userId].
-     */
-    fun storeAccountKeys(
+    fun storeAccountCryptographicState(
         userId: String,
-        accountKeys: AccountKeysJson?,
+        accountCryptographicState: WrappedAccountCryptographicState?,
     )
 
     /**
