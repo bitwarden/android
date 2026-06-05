@@ -1,16 +1,35 @@
 package com.bitwarden.ui.platform.components.dialog
 
-import androidx.compose.material3.AlertDialog
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeightIn
+import androidx.compose.foundation.layout.requiredWidthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.dialog.util.maxDialogHeight
+import com.bitwarden.ui.platform.components.dialog.util.maxDialogWidth
+import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -36,54 +55,85 @@ fun BitwardenBasicDialog(
     throwable: Throwable? = null,
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
-    AlertDialog(
+    Dialog(
         onDismissRequest = onDismissRequest,
-        confirmButton = {
-            BitwardenTextButton(
-                label = confirmButtonLabel,
-                onClick = onDismissRequest,
-                modifier = Modifier.testTag(tag = "AcceptAlertButton"),
+        properties = DialogProperties(usePlatformDefaultWidth = false),
+    ) {
+        val configuration = LocalConfiguration.current
+        val scrollState = rememberScrollState()
+        Column(
+            modifier = Modifier
+                .semantics {
+                    testTagsAsResourceId = true
+                    testTag = "AlertPopup"
+                }
+                .requiredHeightIn(max = configuration.maxDialogHeight)
+                .requiredWidthIn(max = configuration.maxDialogWidth)
+                .background(
+                    color = BitwardenTheme.colorScheme.background.primary,
+                    shape = BitwardenTheme.shapes.dialog,
+                ),
+            horizontalAlignment = Alignment.End,
+        ) {
+            Spacer(modifier = Modifier.height(height = 24.dp))
+            title?.let {
+                Text(
+                    text = it,
+                    color = BitwardenTheme.colorScheme.text.primary,
+                    style = BitwardenTheme.typography.headlineSmall,
+                    modifier = Modifier
+                        .testTag(tag = "AlertTitleText")
+                        .padding(horizontal = 24.dp)
+                        .fillMaxWidth(),
+                )
+                Spacer(modifier = Modifier.height(height = 16.dp))
+            }
+            if (scrollState.canScrollBackward) {
+                BitwardenHorizontalDivider()
+            }
+            Text(
+                text = message,
+                color = BitwardenTheme.colorScheme.text.primary,
+                style = BitwardenTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .testTag(tag = "AlertContentText")
+                    .weight(weight = 1f, fill = false)
+                    .verticalScroll(state = scrollState)
+                    .padding(horizontal = 24.dp)
+                    .fillMaxWidth(),
             )
-        },
-        dismissButton = throwable
-            ?.let { error ->
-                {
+            if (scrollState.canScrollForward) {
+                BitwardenHorizontalDivider()
+            }
+            Spacer(modifier = Modifier.height(height = 24.dp))
+
+            FlowRow(
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            ) {
+                throwable?.let { error ->
                     BitwardenTextButton(
                         label = stringResource(id = BitwardenString.share_error_details),
                         onClick = {
                             intentManager.shareErrorReport(throwable = error)
                             onDismissRequest()
                         },
-                        modifier = Modifier.testTag(tag = "ShareErrorDetailsAlertButton"),
+                        modifier = Modifier
+                            .testTag(tag = "ShareErrorDetailsAlertButton")
+                            .padding(horizontal = 4.dp),
                     )
                 }
-            },
-        title = title?.let {
-            {
-                Text(
-                    text = it,
-                    style = BitwardenTheme.typography.headlineSmall,
-                    modifier = Modifier.testTag(tag = "AlertTitleText"),
+                BitwardenTextButton(
+                    label = confirmButtonLabel,
+                    onClick = onDismissRequest,
+                    modifier = Modifier
+                        .testTag(tag = "AcceptAlertButton")
+                        .padding(horizontal = 4.dp),
                 )
             }
-        },
-        text = {
-            Text(
-                text = message,
-                style = BitwardenTheme.typography.bodyMedium,
-                modifier = Modifier.testTag(tag = "AlertContentText"),
-            )
-        },
-        shape = BitwardenTheme.shapes.dialog,
-        containerColor = BitwardenTheme.colorScheme.background.primary,
-        iconContentColor = BitwardenTheme.colorScheme.icon.secondary,
-        titleContentColor = BitwardenTheme.colorScheme.text.primary,
-        textContentColor = BitwardenTheme.colorScheme.text.primary,
-        modifier = Modifier.semantics {
-            testTagsAsResourceId = true
-            testTag = "AlertPopup"
-        },
-    )
+            Spacer(modifier = Modifier.height(height = 24.dp))
+        }
+    }
 }
 
 @Preview
