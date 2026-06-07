@@ -608,6 +608,7 @@
     <string name="forwarded_email_description">สร้างนามแฝงอีเมลด้วยบริการส่งต่อภายนอก</string>
     <string name="accessibility_service_disclosure">การเปิดเผยข้อมูลบริการการเข้าถึง</string>
     <string name="accessibility_disclosure_text">Bitwarden ใช้บริการการเข้าถึงเพื่อค้นหาช่องข้อมูลเข้าสู่ระบบในแอปและเว็บไซต์ จากนั้นระบุ ID ของช่องที่เหมาะสมเพื่อกรอกชื่อผู้ใช้และรหัสผ่านเมื่อพบแอปหรือเว็บไซต์ที่ตรงกัน เราไม่จัดเก็บข้อมูลใด ๆ ที่ได้รับจากบริการนี้ และไม่พยายามควบคุมองค์ประกอบใด ๆ บนหน้าจอนอกเหนือจากการป้อนข้อมูลประจำตัว</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields in apps and websites. If you choose to enable it, Bitwarden will identify the appropriate fields and enter your credentials when a match is found. We do not store any information observed by the service, and we do not control any on-screen elements beyond credential entry.</string>
     <string name="accept">ยอมรับ</string>
     <string name="decline">ปฏิเสธ</string>
     <string name="login_request_has_already_expired">คำขอเข้าสู่ระบบหมดอายุแล้ว</string>
@@ -985,9 +986,8 @@
     <string name="delete_logs">ลบบันทึก</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">ยืนยันที่จะลบบันทึกที่ถูกบันทึกไว้ทั้งหมดหรือไม่</string>
     <string name="confirm_key_connector_domain">ยืนยันโดเมน Key Connector</string>
-    <string name="key_connector_domain">โดเมน Key Connector:</string>
-    <string name="key_connector_organization">องค์กร:</string>
-    <string name="password_no_longer_required_confirm_domain">สมาชิกขององค์กรต่อไปนี้ไม่จำเป็นต้องใช้รหัสผ่านหลักอีกต่อไป โปรดยืนยันโดเมนด้านล่างกับผู้ดูแลระบบองค์กรของคุณ</string>
+    <string name="key_connector_domain">Key Connector domain</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Your organization no longer requires a master password for its members. Please verify the domain below with your admin and enter your master password to continue.</string>
     <string name="please_confirm_domain_with_admin">โปรดยืนยันโดเมนด้านล่างกับผู้ดูแลระบบองค์กรของคุณ\n\nโดเมน Key Connector:\n%1$s</string>
     <string name="flight_recorder_banner_title">เปิด Flight recorder</string>
     <string name="flight_recorder_banner_message">Flight recorder จะทำงานจนถึง %1$s เวลา %2$s กลับไปที่การตั้งค่าเพื่อปิดใช้งานตอนนี้</string>

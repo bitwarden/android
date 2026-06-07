@@ -611,6 +611,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="forwarded_email_description">Gerar um alias de e-mail com um serviço de reencaminhamento externo.</string>
     <string name="accessibility_service_disclosure">Divulgação do serviço de acessibilidade</string>
     <string name="accessibility_disclosure_text">O Bitwarden utiliza o Serviço de acessibilidade para procurar campos de início de sessão em aplicações e sites e, em seguida, estabelece os IDs de campo adequados para introduzir um nome de utilizador e palavra-passe quando é encontrada uma correspondência para a aplicação ou site. Não armazenamos nenhuma das informações que nos são apresentadas pelo serviço, nem fazemos qualquer tentativa de controlar quaisquer elementos no ecrã para além da introdução de texto das credenciais.</string>
+    <string name="accessibility_disclosure_start_up_text">O Bitwarden disponibiliza um método opcional de preenchimento automático que utiliza o serviço de acessibilidade do Android para detetar campos de credenciais em apps e sites. Se optar por ativá-lo, o Bitwarden identificará os campos adequados e introduzirá as suas credenciais quando for encontrada uma correspondência. Não armazenamos qualquer informação observada pelo serviço nem controlamos quaisquer elementos apresentados no ecrã para além da introdução de credenciais.</string>
     <string name="accept">Aceitar</string>
     <string name="decline">Recusar</string>
     <string name="login_request_has_already_expired">O pedido de início de sessão já expirou.</string>
@@ -991,9 +992,8 @@ Pretende mudar para esta conta?</string>
     <string name="delete_logs">Eliminar registos</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Pretende realmente eliminar todos os registos gravados?</string>
     <string name="confirm_key_connector_domain">Confirmar o domínio do Key Connector</string>
-    <string name="key_connector_domain">Domínio do Key Connector:</string>
-    <string name="key_connector_organization">Organização:</string>
-    <string name="password_no_longer_required_confirm_domain">Já não é necessária uma palavra-passe mestra para os membros da seguinte organização. Por favor, confirme o domínio abaixo com o administrador da sua organização.</string>
+    <string name="key_connector_domain">Domínio do Key Connector</string>
+    <string name="your_organization_no_longer_requires_a_master_password">A sua organização já não requer uma palavra-passe mestra para os seus membros. Por favor, verifique o domínio abaixo com o seu administrador e introduza a sua palavra-passe mestra para continuar.</string>
     <string name="please_confirm_domain_with_admin">Por favor, confirme o domínio abaixo com o administrador da sua organização.\n\nDomínio do Key Connector:\n%1$s</string>
     <string name="flight_recorder_banner_title">Gravador de voo ativado</string>
     <string name="flight_recorder_banner_message">O gravador de voo estará ativo até %1$s a %2$s. Regresse às definições para o desativar agora.</string>

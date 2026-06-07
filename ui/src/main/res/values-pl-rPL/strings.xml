@@ -619,6 +619,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="forwarded_email_description">Wygeneruj alias za pomocą zewnętrznej usługi.</string>
     <string name="accessibility_service_disclosure">Omówienie usługi ułatwienia dostępu</string>
     <string name="accessibility_disclosure_text">Bitwarden używa usługi ułatwienia dostępu do wyszukiwania pól logowania w aplikacjach i stronach internetowych, a następnie ustanawia odpowiednie identyfikatory pól do nazwy użytkownika i hasła. Nie przechowujemy żadnych informacji przedstawionych nam przez usługę, ani nie podejmujemy żadnych prób kontrolowania jakichkolwiek innych elementów na ekranie.</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields in apps and websites. If you choose to enable it, Bitwarden will identify the appropriate fields and enter your credentials when a match is found. We do not store any information observed by the service, and we do not control any on-screen elements beyond credential entry.</string>
     <string name="accept">Akceptuj</string>
     <string name="decline">Odrzuć</string>
     <string name="login_request_has_already_expired">Prośba logowania wygasła.</string>
@@ -1002,9 +1003,8 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="delete_logs">Usuń logi</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Czy na pewno chcesz usunąć wszystkie zarejestrowane logi?</string>
     <string name="confirm_key_connector_domain">Potwierdź domenę Key Connector</string>
-    <string name="key_connector_domain">Domena Key Connector:</string>
-    <string name="key_connector_organization">Organizacja:</string>
-    <string name="password_no_longer_required_confirm_domain">Hasło główne nie jest już wymagane dla członków następującej organizacji. Potwierdź poniższą domenę z administratorem organizacji.</string>
+    <string name="key_connector_domain">Domena Key Connector</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Your organization no longer requires a master password for its members. Please verify the domain below with your admin and enter your master password to continue.</string>
     <string name="please_confirm_domain_with_admin">Potwierdź domenę przy pomocy administratora organizacji.\n\nDomena Key Connector:\n%1$s</string>
     <string name="flight_recorder_banner_title">Rejestrator zdarzeń jest włączony</string>
     <string name="flight_recorder_banner_message">Rejestrator zdarzeń będzie aktywny do %1$s %2$s. Przejdź do ustawień, aby wyłączyć go teraz.</string>

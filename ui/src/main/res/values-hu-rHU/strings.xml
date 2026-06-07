@@ -611,6 +611,7 @@ TOTP hozzáadása a kulcs biztonságos tárolásához lehetőséget.</string>
     <string name="forwarded_email_description">Email álnév generálása külső továbbító szolgáltatással.</string>
     <string name="accessibility_service_disclosure">Kisegítő lehetőségek szolgáltatás publikálása</string>
     <string name="accessibility_disclosure_text">A Bitwarden az akadálymentesítési szolgáltatást használja a bejelentkezési mezők megkeresésére az alkalmazásokban és webhelyeken, majd létrehozza a megfelelő mezőazonosítókat a felhasználónév és jelszó megadásához, ha talál egyezést az alkalmazáshoz vagy webhelyhez. A szolgáltatás által rendelkezésünkre bocsátott információk nem kerülnek tárolásra és nincs kísérlet a képernyőn megjelenő elemek vezérlésére a hitelesítő adatok szöveges bevitelén túl.</string>
+    <string name="accessibility_disclosure_start_up_text">A Bitwarden opcionális automatikus kitöltési módszert kínál, amely az Android Kisegítő lehetőségek szolgáltatását használja az alkalmazások és webhelyek bejelentkezési mezőinek észlelésére. Ha az engedélyezést választjuk, a Bitwarden azonosítja a megfelelő mezőket és megadja a hitelesítő adatokat, ha talál egyezést. Nem tárol semmilyen, a szolgáltatás által megfigyelt információt és nem szabályoz semmilyen képernyőn megjelenő elemet a hitelesítő adatok megadásán kívül.</string>
     <string name="accept">Elfogadás</string>
     <string name="decline">Elutasítás</string>
     <string name="login_request_has_already_expired">A bejelentkezési kérés már lejárt.</string>
@@ -991,8 +992,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Valóban törölni szeretnénk az összes rögzített naplót?</string>
     <string name="confirm_key_connector_domain">A Key Connector tartomány megerősítése</string>
     <string name="key_connector_domain">Key Connector tartomány:</string>
-    <string name="key_connector_organization">Szervezet:</string>
-    <string name="password_no_longer_required_confirm_domain">A következő szervezet tagjai számára már nincs szükség mesterjelszóra. Erősítsük meg az alábbi tartományt a szervezet adminisztrátorával.</string>
+    <string name="your_organization_no_longer_requires_a_master_password">A szervezet már nem igényel mesterjelszót a tagok számára. Ellenőrizzük az alábbi tartományt az adminisztrátorral és adjuk meg a mesterjelszót a folytatáshoz.</string>
     <string name="please_confirm_domain_with_admin">Erősítsük meg az alábbi tartományt a szervezet adminisztrátorával.\n\nKey Connector tartomány:\n%1$s</string>
     <string name="flight_recorder_banner_title">Adatrögzítő be</string>
     <string name="flight_recorder_banner_message">Az adatrögzítő aktív a következő időpontig: %1$s - %2$s. A kikapcsoláshoz térjünk vissza a beállításokhoz.</string>

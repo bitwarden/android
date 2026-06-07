@@ -3,7 +3,7 @@
     <string name="about">À propos</string>
     <string name="add_folder">Ajouter un dossier</string>
     <string name="add_item">Ajouter un élément</string>
-    <string name="an_error_has_occurred">Une erreur s\'est produite.</string>
+    <string name="an_error_has_occurred">Une erreur s\'est produite</string>
     <string name="apply">Enregistrer</string>
     <string name="back">Retour</string>
     <string name="cancel">Annuler</string>
@@ -126,8 +126,8 @@
     <string name="no_notes">Il n\'y a aucune note dans votre coffre.</string>
     <string name="add_note">Ajouter une note</string>
     <string name="add_ssh_key">Ajouter une clé SSH</string>
-    <string name="no_text_sends">Il n\'y a aucun texte Send dans votre coffre.</string>
-    <string name="no_file_sends">Il n\'y a aucun fichier Send dans votre coffre.</string>
+    <string name="no_text_sends">Il n\'y a aucun envoi de texte dans votre coffre-fort.</string>
+    <string name="no_file_sends">Il n\'y a aucun envoi de fichier dans votre coffre-fort.</string>
     <string name="no_ssh_keys">Il n\'y a aucune clé SSH dans votre coffre.</string>
     <string name="no_archives_title">L\'archive est vide</string>
     <string name="no_archives_message">Remplissez votre archive avec des éléments que vous ne voulez pas voir dans les résultats de recherche et les suggestions de saisie automatique, mais qui pourraient avoir besoin d\'un jour.</string>
@@ -229,7 +229,7 @@ La numérisation se fera automatiquement.</string>
     <string name="security_code">Code de sécurité</string>
     <string name="scan_card">Scanner la carte</string>
     <string name="scan_card_instruction">Placez votre carte dans le cadre pour la scanner.</string>
-    <string name="hold_steady_and_ensure_all_card_details_are_visible">Hold steady and ensure all card details are visible</string>
+    <string name="hold_steady_and_ensure_all_card_details_are_visible">Tenez votre appareil stable et assurez-vous que tous les détails de la carte sont visibles</string>
     <string name="type_card">Carte de paiement</string>
     <string name="type_identity">Identité</string>
     <string name="type_login">Identifiant</string>
@@ -455,7 +455,7 @@ La numérisation se fera automatiquement.</string>
     <string name="deletion_date">Date de suppression</string>
     <string name="deletion_time">Heure de suppression</string>
     <string name="deletion_date_info">Le Send sera définitivement supprimé à la date et heure spécifiées.</string>
-    <string name="who_can_view">Qui peut visionner</string>
+    <string name="who_can_view">Qui peut consulter</string>
     <string name="anyone_with_the_link">Toute personne disposant du lien</string>
     <string name="anyone_with_link_can_view_send">Toute personne disposant de ce lien peut afficher ce Send</string>
     <string name="specific_people">Personnes spécifiques</string>
@@ -612,6 +612,7 @@ sélectionnez « Ajouter un TOTP » pour stocker la clé en toute sécurité</
     <string name="forwarded_email_description">Générer un alias de courriel avec un service de transfert externe.</string>
     <string name="accessibility_service_disclosure">Divulgation du service d\'accessibilité</string>
     <string name="accessibility_disclosure_text">Bitwarden utilise le service d\'accessibilité pour rechercher les champs de connexion dans les applications et les sites web, puis établit les identifiants de champ appropriés pour la saisie d\'un nom d\'utilisateur et d\'un mot de passe lorsqu\'une correspondance est trouvée pour l\'application ou le site. Nous ne stockons aucune des informations qui nous sont présentées par le service, et nous ne tentons pas de contrôler les éléments à l\'écran au-delà de la saisie des informations d\'identification.</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden propose une méthode facultative de saisie automatique utilisant le service d\'accessibilité d\'Android pour détecter les champs de connexion dans les apps et sur les sites web. Si vous choisissez de l\'activer, Bitwarden identifiera les champs appropriés en saisira vos identifiants lorsqu\'une correspondance est trouvée. Nous ne stockons aucune information observée par le service, et nous ne contrôlons aucun élément à l\'écran au-delà de la saisie des identifiants.</string>
     <string name="accept">Accepter</string>
     <string name="decline">Refuser</string>
     <string name="login_request_has_already_expired">La demande de connexion a déjà expiré.</string>
@@ -992,8 +993,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Voulez-vous vraiment supprimer tous les journaux enregistrés ?</string>
     <string name="confirm_key_connector_domain">Confirmez le domaine de Key Connector</string>
     <string name="key_connector_domain">Domaine du Key Connector :</string>
-    <string name="key_connector_organization">Organisation :</string>
-    <string name="password_no_longer_required_confirm_domain">Un mot de passe principal n’est plus requis pour les membres de l’organisation suivante. Veuillez confirmer le domaine ci-dessous auprès de l\'administrateur de votre organisation.</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Votre organisation n\'exige plus de mot de passe principal pour ses membres. Veuillez vérifier le domaine ci-dessous avec votre administrateur et saisir votre mot de passe principal pour continuer.</string>
     <string name="please_confirm_domain_with_admin">Veuillez confirmer le domaine ci-dessous auprès de l\'administrateur de votre organisation.\n\nDomaine du Key Connector :\n%1$s</string>
     <string name="flight_recorder_banner_title">Enregistreur Flight activé</string>
     <string name="flight_recorder_banner_message">L’enregistreur Flight sera actif jusqu’au %1$s à %2$s. Retournez dans les paramètres pour le désactiver dès maintenant.</string>
@@ -1213,7 +1213,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="archiving_items_is_a_premium_feature">L\'archivage est une fonctionnalité Premium. Votre abonnement actuel n\'inclut pas l\'accès à cette fonctionnalité.</string>
     <string name="upgrade_to_premium">Mettre à niveau vers la version Premium</string>
     <string name="plan">Abonnement</string>
-    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
+    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Pour gérer votre abonnement Premium, vous devez vous connecter à votre coffre-fort web depuis un ordinateur.</string>
     <string name="unlock_advanced_security_features">Débloquer les fonctionnalités de sécurité avancées</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Un abonnement Premium vous donne plus d\'outils pour rester en sécurité et en contrôle</string>
     <string name="this_item_is_archived">Cet élément est archivé.</string>
@@ -1247,13 +1247,13 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="unknown_device">Appareil inconnu</string>
     <string name="first_login_date"><annotation emphasis="bold">Première connexion :</annotation><annotation arg="0">%1$s</annotation></string>
     <string name="current_session">Session en cours</string>
-    <string name="pending_request">Pending request</string>
+    <string name="pending_request">Demande en attente</string>
     <string name="today">Aujourd\'hui</string>
     <string name="past_seven_days">7 derniers jours</string>
     <string name="past_fourteen_days">14 derniers jours</string>
     <string name="past_thirty_days">30 derniers jours</string>
     <string name="over_thirty_days_ago">Il y a plus de 30 jours</string>
-    <string name="recently_active"><annotation emphasis="bold">Recently active:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="recently_active"><annotation emphasis="bold">Actif récemment :</annotation> <annotation arg="0">%1$s</annotation></string>
     <string name="trusted">Approuvé</string>
     <string name="preview_not_available_for_files">L\'aperçu est indisponible pour %1$s fichiers. Vous pouvez toujours les télécharger pour les afficher sur votre appareil.</string>
     <string name="this_file_is_too_large_to_preview">Ce fichier est trop volumineux pour être prévisualisé. Vous pouvez toujours le télécharger pour l\'afficher sur votre appareil.</string>
@@ -1262,8 +1262,8 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="preview_unavailable">Aperçu non disponible</string>
     <string name="download_attachment">Télécharger la pièce jointe</string>
     <string name="upgraded_to_premium">Passer à la version Premium</string>
-    <string name="you_now_have_access_to_all_advanced_security_features">You now have access to all advanced security features.</string>
-    <string name="you_now_have_access_to_advanced_security_features_learn_more_about_premium">You now have access to advanced security features. Learn more about what’s included with Premium.</string>
+    <string name="you_now_have_access_to_all_advanced_security_features">Vous avez désormais accès à toutes les fonctionnalités de sécurité avancées.</string>
+    <string name="you_now_have_access_to_advanced_security_features_learn_more_about_premium">Vous avez désormais accès aux fonctionnalités de sécurité avancées. Apprenez-en plus sur ce qui est inclus avec Premium.</string>
     <string name="confirming_your_upgrade">Confirmation de votre mise à niveau…</string>
     <string name="upgrade_pending">Mise à niveau en attente</string>
     <string name="upgrade_pending_message">Votre mise à niveau est en cours de traitement. Vous resterez sur la formule gratuite jusqu\'à ce qu\'elle soit finalisée. Synchronisez maintenant pour vérifier, ou continuez — la mise à jour s\'effectuera automatiquement.</string>
@@ -1274,7 +1274,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="secure_file_storage">Stockage sécurisé de fichier</string>
     <string name="breach_monitoring">Surveillance des fuites</string>
     <string name="upgrade_now">Mettre à niveau maintenant</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">Vous allez passer au paiement sécurisé Stripe pour compléter votre achat.</string>
     <string name="opening_checkout">Lancement du paiement</string>
     <string name="secure_checkout_didnt_load">Le paiement sécurisé n\'a pas été chargé</string>
     <string name="trouble_opening_payment_page">Nous avons eu des difficultés à ouvrir la page de paiement, essayez à nouveau.</string>
@@ -1299,31 +1299,31 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="billing_rate_per_year">%1$s / an</string>
     <string name="billing_rate_per_month">%1$s / mois</string>
     <string name="manage_plan">Gérer l\'abonnement</string>
-    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Manage your subscription plan in the Bitwarden web app.</string>
+    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Gérez votre plan d\'abonnement dans l\'application web Bitwarden.</string>
     <string name="cancel_premium">Annuler l\'abonnement Premium</string>
     <string name="subscription_status_active">Actif</string>
     <string name="subscription_status_canceled">Annulé</string>
     <string name="subscription_status_expired">Expiré</string>
     <string name="subscription_status_past_due">Échéance dépassée</string>
-    <string name="subscription_status_paused">Paused</string>
+    <string name="subscription_status_paused">En pause</string>
     <string name="subscription_status_update_payment">Mettre à jour le paiement</string>
-    <string name="subscription_status_pending_cancellation">Pending cancellation</string>
-    <string name="subscription_pending_cancellation_description">Your subscription is scheduled to cancel on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. You can reinstate it anytime before then.</string>
-    <string name="premium_next_charge_summary">Your next charge is for <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD due on <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
-    <string name="subscription_canceled_description">Your subscription was canceled on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using Premium features.</string>
-    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment method before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
+    <string name="subscription_status_pending_cancellation">Résiliation en attente</string>
+    <string name="subscription_pending_cancellation_description">Votre abonnement est prévu d\'être annulé le <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Vous pouvez le rétablir à tout moment avant cette date.</string>
+    <string name="premium_next_charge_summary">Votre prochain prélèvement est de <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD, prévu le <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
+    <string name="subscription_canceled_description">Votre abonnement a été annulé le <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Réabonnez-vous pour continuer à utiliser les fonctionnalités Premium.</string>
+    <string name="subscription_update_payment_description">Nous n\'avons pas pu traiter votre paiement. Mettez à jour votre mode de paiement avant la fin de votre abonnement le <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
-        <item quantity="one">You have a grace period of <annotation arg="0">%1$d</annotation> day from your subscription expiration date. Please resolve the past due invoices by <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
-        <item quantity="other">You have a grace period of <annotation arg="0">%1$d</annotation> days from your subscription expiration date. Please resolve the past due invoices by <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="one">Vous avez une période de grâce de <annotation arg="0">%1$d</annotation> jour à compter de la date d\'expiration de votre abonnement. Veuillez régulariser les factures impayées avant le <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="other">Vous avez une période de grâce de <annotation arg="0">%1$d</annotation> jours à compter de la date d\'expiration de votre abonnement. Veuillez régulariser les factures impayées avant le <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
     </plurals>
-    <string name="subscription_paused_description">Your subscription is paused. Resume to continue using premium features.</string>
-    <string name="subscription_expired_description">Your subscription expired on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using Premium features.</string>
+    <string name="subscription_paused_description">Votre abonnement est suspendu. Reprenez-le pour continuer à utiliser les fonctionnalités Premium.</string>
+    <string name="subscription_expired_description">Votre abonnement a expiré le <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Réabonnez-vous pour continuer à utiliser les fonctionnalités Premium.</string>
     <string name="loading_subscription">Chargement de l\'abonnement…</string>
     <string name="loading_portal">Chargement du portail…</string>
     <string name="portal_error">Un problème est survenu</string>
     <string name="trouble_loading_portal">Nous avons eu des difficultés à charger le portal de gestion, essayez à nouveau.</string>
-    <string name="subscription_error">Subscription error</string>
-    <string name="trouble_loading_subscription">We couldn’t load your subscription details. Please try again.</string>
+    <string name="subscription_error">Erreur d\'abonnement</string>
+    <string name="trouble_loading_subscription">Nous n\'avons pas pu charger les détails de votre abonnement. Veuillez réessayer.</string>
     <string name="view_bank_account">Afficher le compte bancaire</string>
     <string name="view_license">Afficher le permis</string>
     <string name="view_passport">Afficher le passeport</string>
@@ -1364,9 +1364,9 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="issuing_country">Pays émetteur</string>
     <string name="issuing_state">État / province émetteur</string>
     <string name="license_class">Classe de permis</string>
-    <string name="surname">Surname</string>
-    <string name="given_name">Given name</string>
-    <string name="date_of_birth">Date of birth</string>
+    <string name="surname">Nom de famille</string>
+    <string name="given_name">Prénom</string>
+    <string name="date_of_birth">Date de naissance</string>
     <string name="nationality">Nationalité</string>
     <string name="passport_type">Type de passeport</string>
     <string name="issuing_authority">Autorité émettrice</string>

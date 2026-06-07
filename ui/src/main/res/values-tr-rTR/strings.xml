@@ -611,6 +611,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="forwarded_email_description">Harici bir yönlendirme servisiyle e-posta maskesi oluştur.</string>
     <string name="accessibility_service_disclosure">Erişilebilirlik Hizmeti Beyanı</string>
     <string name="accessibility_disclosure_text">Bitwarden; uygulamalarda ve web sitelerinde giriş alanlarını bulmak ve eşleşme bulunduğunda kullanıcı adı ve parolayı doldurmak için erişilebilirlik hizmetini kullanır. Hizmetin bize sunduğu hiçbir bilgiyi saklamayız ve hesap bilgilerinin girilmesi dışında ekrandaki öğeleri değiştirmek için herhangi bir girişimde bulunmayız.</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden, uygulamalarda ve sitelerde oturum açma alanlarını tespit etmek için Android’in Erişilebilirlik Hizmeti’ni kullanan isteğe bağlı bir otomatik doldurma yöntemi sunar. Bu özelliği etkinleştirirseniz Bitwarden uygun alanları tespit eder ve eşleşme bulunduğunda hesap bilgilerinizi girer. Tespit edilen hiçbir bilgi saklanmaz ve hesap bilgilerinizin girilmesi dışında ekrandaki hiçbir öğe üzerinde işlem yapılmaz.</string>
     <string name="accept">Kabul et</string>
     <string name="decline">Reddet</string>
     <string name="login_request_has_already_expired">Giriş isteğinin süresi doldu.</string>
@@ -991,8 +992,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Tüm kaydedilen günlükleri gerçekten silmek istiyor musunuz?</string>
     <string name="confirm_key_connector_domain">Key Connector alan adını onaylayın</string>
     <string name="key_connector_domain">Key Connector alan adı:</string>
-    <string name="key_connector_organization">Kuruluş:</string>
-    <string name="password_no_longer_required_confirm_domain">Aşağıdaki organizasyonun üyeleri için artık ana parola gerekmemektedir. Lütfen alan adını organizasyon yöneticinizle doğrulayın.</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Your organization no longer requires a master password for its members. Please verify the domain below with your admin and enter your master password to continue.</string>
     <string name="please_confirm_domain_with_admin">Lütfen aşağıdaki etki alanını kuruluş yöneticinizle onaylayın.\n\Key Connector etki alanı:\n%1$s</string>
     <string name="flight_recorder_banner_title">Uçuş kaydedici etkin</string>
     <string name="flight_recorder_banner_message">Uçuş kaydedici, %1$s saat %2$s\'ye kadar aktif olacaktır. Şimdi devre dışı bırakmak için ayarlara geri dönün.</string>

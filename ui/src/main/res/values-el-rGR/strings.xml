@@ -612,6 +612,7 @@
     <string name="forwarded_email_description">Δημιουργήστε ένα ψευδώνυμο διεύθυνσης ηλ. ταχυδρομείου με μια εξωτερική υπηρεσία προώθησης.</string>
     <string name="accessibility_service_disclosure">Γνωστοποίηση Υπηρεσίας Προσβασιμότητας</string>
     <string name="accessibility_disclosure_text">Το Bitwarden χρησιμοποιεί την Υπηρεσία Προσβασιμότητας για να αναζητήσει πεδία σύνδεσης σε εφαρμογές και ιστότοπους και στη συνέχεια να δημιουργήσει τα κατάλληλα αναγνωριστικά πεδίου για την εισαγωγή ονόματος χρήστη και κωδικού πρόσβασης όταν βρεθεί αντιστοιχία για την εφαρμογή ή τον ιστότοπο. Δεν αποθηκεύουμε καμία από τις πληροφορίες που μας παρέχονται από την υπηρεσία, ούτε κάνουμε καμία προσπάθεια ελέγχου οποιωνδήποτε στοιχείων στην οθόνη πέραν της εισαγωγής του κειμένου των διαπιστευτηρίων.</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields in apps and websites. If you choose to enable it, Bitwarden will identify the appropriate fields and enter your credentials when a match is found. We do not store any information observed by the service, and we do not control any on-screen elements beyond credential entry.</string>
     <string name="accept">Αποδοχή</string>
     <string name="decline">Απόρριψη</string>
     <string name="login_request_has_already_expired">Το αίτημα σύνδεσης έχει ήδη λήξει.</string>
@@ -991,9 +992,8 @@
     <string name="delete_logs">Διαγραφή αρχείων καταγραφής</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Do you really want to delete all recorded logs?</string>
     <string name="confirm_key_connector_domain">Confirm Key Connector domain</string>
-    <string name="key_connector_domain">Key Connector domain:</string>
-    <string name="key_connector_organization">Οργανισμός:</string>
-    <string name="password_no_longer_required_confirm_domain">A master password is no longer required for members of the following organization. Please confirm the domain below with your organization administrator.</string>
+    <string name="key_connector_domain">Key Connector domain</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Your organization no longer requires a master password for its members. Please verify the domain below with your admin and enter your master password to continue.</string>
     <string name="please_confirm_domain_with_admin">Please confirm the domain below with your organization administrator.\n\nKey Connector domain:\n%1$s</string>
     <string name="flight_recorder_banner_title">Flight recorder on</string>
     <string name="flight_recorder_banner_message">Flight recorder will be active until %1$s at %2$s. Return to settings to deactivate now.</string>

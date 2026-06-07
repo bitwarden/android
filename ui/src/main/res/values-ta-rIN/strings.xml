@@ -612,6 +612,7 @@
     <string name="forwarded_email_description">ஒரு வெளிப்புற முன்னனுப்பு சேவை மூலம் ஒரு மின்னஞ்சல் புனைப்பெயரை உருவாக்கவும்.</string>
     <string name="accessibility_service_disclosure">அணுகல்தன்மை சேவை வெளிப்படுத்தல்</string>
     <string name="accessibility_disclosure_text">பயன்பாடுகள் மற்றும் இணையதளங்களில் உள்நுழைவு புலங்களைத் தேட Bitwarden அணுகல்தன்மை சேவையைப் பயன்படுத்துகிறது, பின்னர் பயன்பாடு அல்லது தளத்திற்கான பொருத்தம் கண்டறியப்பட்டால் ஒரு பயனர்பெயர் &amp; கடவுச்சொல்லை உள்ளிடுவதற்கு பொருத்தமான புல ஐடிகளை நிறுவுகிறது. சேவையால் எங்களுக்கு வழங்கப்படும் எந்த தகவலையும் நாங்கள் சேமிக்கவில்லை, மேலும் கடவுச்சொற்களின் உரை உள்ளீட்டிற்கு அப்பால் எந்த திரையில் உள்ள கூறுகளையும் கட்டுப்படுத்த நாங்கள் எந்த முயற்சியும் செய்யவில்லை.</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields in apps and websites. If you choose to enable it, Bitwarden will identify the appropriate fields and enter your credentials when a match is found. We do not store any information observed by the service, and we do not control any on-screen elements beyond credential entry.</string>
     <string name="accept">ஏற்றுக்கொள்</string>
     <string name="decline">மறு</string>
     <string name="login_request_has_already_expired">உள்நுழைவு கோரிக்கை ஏற்கனவே காலாவதியானது.</string>
@@ -992,8 +993,7 @@
     <string name="do_you_really_want_to_delete_all_recorded_logs">அனைத்து பதிவு செய்யப்பட்ட பதிவுகளையும் உண்மையில் நீக்க விரும்புகிறீர்களா?</string>
     <string name="confirm_key_connector_domain">விசை இணைப்பான் டொமைனை உறுதிப்படுத்தவும்</string>
     <string name="key_connector_domain">விசை இணைப்பான் டொமைன்:</string>
-    <string name="key_connector_organization">நிறுவனம்:</string>
-    <string name="password_no_longer_required_confirm_domain">பின்வரும் நிறுவனத்தின் உறுப்பினர்களுக்கு ஒரு முதன்மை கடவுச்சொல் இனி தேவையில்லை. உங்கள் நிறுவன நிர்வாகியுடன் கீழே உள்ள டொமைனை உறுதிப்படுத்தவும்.</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Your organization no longer requires a master password for its members. Please verify the domain below with your admin and enter your master password to continue.</string>
     <string name="please_confirm_domain_with_admin">உங்கள் நிறுவன நிர்வாகியுடன் கீழே உள்ள டொமைனை உறுதிப்படுத்தவும்.\n\nவிசை இணைப்பான் டொமைன்:\n%1$s</string>
     <string name="flight_recorder_banner_title">ஃபிளைட் ரெக்கார்டர் ஆன்</string>
     <string name="flight_recorder_banner_message">ஃபிளைட் ரெக்கார்டர் %1$s அன்று %2$s வரை செயலில் இருக்கும். இப்போது செயலிழக்க அமைப்புகளுக்குத் திரும்பவும்.</string>
