@@ -140,6 +140,7 @@ private fun FlightRecorderContent(
             selectedOption = state.selectedDuration,
             onOptionSelected = onDurationSelected,
             modifier = Modifier
+                .testTag("LoggingDurationChooser")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
