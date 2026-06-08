@@ -501,7 +501,7 @@ Skanningen sker automatiskt.</string>
     <string name="hide_email">Dölj min e-postadress för mottagare</string>
     <string name="send_options_policy_in_effect">En eller flera organisationsriktlinjer påverkar dina Send-inställningar.</string>
     <string name="send_file_premium_required">Gratiskonton är begränsade till att endast dela text. Ett premium-medlemskap krävs för att använda filer med Send.</string>
-    <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Delning med specifika personer är en Premiumfunktion. Din nuvarande plan inkluderar inte tillgång till denna funktion.</string>
     <string name="password_prompt">Återupprepa huvudlösenord</string>
     <string name="password_confirmation">Bekräfta huvudlösenord</string>
     <string name="password_confirmation_desc">Denna åtgärd är skyddad. För att fortsätta, vänligen verifiera din identitet genom att ange ditt huvudlösenord.</string>
@@ -612,6 +612,7 @@ välj Lägg till TOTP för att lagra nyckeln på ett säkert sätt</string>
     <string name="forwarded_email_description">Skapa ett e-postalias med en extern vidarebefordranstjänst.</string>
     <string name="accessibility_service_disclosure">Delgivning av tillgänglighetstjänst</string>
     <string name="accessibility_disclosure_text">Bitwarden använder tillgänglighetstjänsten för att söka efter inloggningsfält i appar och på webbplatser. Därefter fastställs lämpliga fältidentifierare för att mata in användarnamn och lösenord när en träff för appen eller webbplatsen hittas. Vi lagrar inte några av de uppgifter som hittas av tjänsten, vi gör inte heller några försök att kontrollera några element på skärmen bortom textinmatning av identitetshandlingarna.</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields in apps and websites. If you choose to enable it, Bitwarden will identify the appropriate fields and enter your credentials when a match is found. We do not store any information observed by the service, and we do not control any on-screen elements beyond credential entry.</string>
     <string name="accept">Acceptera</string>
     <string name="decline">Neka</string>
     <string name="login_request_has_already_expired">Inloggningsbegäran har redan löpt ut.</string>
@@ -992,8 +993,7 @@ Vill du byta till detta konto?</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Vill du verkligen radera alla inspelade loggar?</string>
     <string name="confirm_key_connector_domain">Bekräfta Key Connector-domän</string>
     <string name="key_connector_domain">Key Connector-domän:</string>
-    <string name="key_connector_organization">Organisation:</string>
-    <string name="password_no_longer_required_confirm_domain">Ett huvudlösenord krävs inte längre för medlemmar i följande organisation. Vänligen bekräfta domänen nedan med din organisationsadministratör.</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Your organization no longer requires a master password for its members. Please verify the domain below with your admin and enter your master password to continue.</string>
     <string name="please_confirm_domain_with_admin">Vänligen bekräfta domänen nedan med din organisationsadministratör.\n\nKey Connector-domän:\n%1$s</string>
     <string name="flight_recorder_banner_title">Färdskrivare på</string>
     <string name="flight_recorder_banner_message">Färdskrivaren kommer att vara aktiv tills %1$s vid %2$s. Återgå till inställningarna för att avaktivera nu.</string>

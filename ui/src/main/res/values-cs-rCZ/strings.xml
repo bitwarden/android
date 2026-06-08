@@ -619,6 +619,7 @@ Načtení proběhne automaticky.</string>
     <string name="forwarded_email_description">Vygeneruje alias e-mailu pomocí externí přeposílací služby.</string>
     <string name="accessibility_service_disclosure">Prohlášení služby usnadnění přístupu</string>
     <string name="accessibility_disclosure_text">Bitwarden používá službu usnadnění přístupu k hledání přihlašovacích polí v aplikacích a webových stránkách a pokud bude nalezena shoda pro aplikaci nebo stránku, pak vytvoří odpovídající ID pole pro zadání uživatelského jména a hesla. Neukládáme žádné informace, které nám služba poskytla, ani se nepokoušíme kontrolovat jakékoli prvky na obrazovce mimo zadání textových údajů.</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden nabízí volitelnou metodu automatického vyplňování, která používá službu Dostupnost operačního systému Android k detekci přihlašovacích polí v aplikacích a webových stránkách. Pokud se to rozhodnete povolit, Bitwarden identifikuje příslušná pole a zadá Vaše přihlašovací údaje, jakmile bude nalezena shoda. Neukládáme žádné informace pozorované službou ani nekontrolujeme žádné prvky na obrazovce mimo zadání přihlašovacích údajů.</string>
     <string name="accept">Potvrdit</string>
     <string name="decline">Zamítnout</string>
     <string name="login_request_has_already_expired">Požadavek na přihlášení již vypršel.</string>
@@ -1004,9 +1005,8 @@ při opakování problémů.</string>
     <string name="delete_logs">Smazat logy</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Opravdu chcete smazat všechny zaznamenané logy?</string>
     <string name="confirm_key_connector_domain">Potvrdit doménu Key Connectoru</string>
-    <string name="key_connector_domain">Doména Key Connectoru:</string>
-    <string name="key_connector_organization">Organizace:</string>
-    <string name="password_no_longer_required_confirm_domain">Hlavní heslo již není vyžadováno pro členy následující organizace. Potvrďte níže uvedenou doménu u správce Vaší organizace.</string>
+    <string name="key_connector_domain">Doména Key Connectoru</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Vaše organizace již pro své členy nevyžaduje hlavní heslo. Pro pokračování ověřte doménu níže s administrátorem a zadejte hlavní heslo.</string>
     <string name="please_confirm_domain_with_admin">Potvrďte níže uvedenou doménu u správce Vaší organizace.\n\nDoména Key Connectoru:\n%1$s</string>
     <string name="flight_recorder_banner_title">Letový zapisovač je zapnutý</string>
     <string name="flight_recorder_banner_message">Letový zapisovač bude aktivní do %1$s, %2$s. Pro deaktivování se vraťte do nastavení.</string>

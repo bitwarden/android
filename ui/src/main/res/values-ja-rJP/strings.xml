@@ -608,6 +608,7 @@
     <string name="forwarded_email_description">外部転送サービスを使用してメールエイリアスを生成します。</string>
     <string name="accessibility_service_disclosure">アクセシビリティサービスの開示</string>
     <string name="accessibility_disclosure_text">Bitwarden は、アプリやウェブサイトのログインフィールドを検索し、該当するアプリやサイトが見つかった場合にユーザー名とパスワードを入力するための適切なフィールドIDを確立するためにユーザー補助を使用しています。私たちはサービスから提供された情報を保存することはありませんし、資格情報のテキスト入力以外の画面要素の制御をしようとすることもありません。</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden は Android のユーザー補助サービスを利用してアプリやウェブサイトのログインフィールドを検出する、オプションの自動入力機能を提供しています。この機能を有効にすると Bitwarden は適切なフィールドを識別し、一致するフィールドが見つかった場合に認証情報を入力します。当社はこのサービスによって収集された情報を一切保存せず、認証情報の入力以外の画面上の要素を制御することもありません。</string>
     <string name="accept">同意</string>
     <string name="decline">拒否</string>
     <string name="login_request_has_already_expired">ログインリクエストの有効期限が切れています。</string>
@@ -985,9 +986,8 @@
     <string name="delete_logs">ログの削除</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Do you really want to delete all recorded logs?</string>
     <string name="confirm_key_connector_domain">Confirm Key Connector domain</string>
-    <string name="key_connector_domain">Key Connector domain:</string>
-    <string name="key_connector_organization">組織:</string>
-    <string name="password_no_longer_required_confirm_domain">A master password is no longer required for members of the following organization. Please confirm the domain below with your organization administrator.</string>
+    <string name="key_connector_domain">Key Connector domain</string>
+    <string name="your_organization_no_longer_requires_a_master_password">組織のメンバーにマスターパスワードを必要としなくなりました。 続行するには以下のドメインを管理者で認証し、マスターパスワードを入力してください。</string>
     <string name="please_confirm_domain_with_admin">Please confirm the domain below with your organization administrator.\n\nKey Connector domain:\n%1$s</string>
     <string name="flight_recorder_banner_title">フライトレコーダーがオンです</string>
     <string name="flight_recorder_banner_message">Flight recorder will be active until %1$s at %2$s. Return to settings to deactivate now.</string>

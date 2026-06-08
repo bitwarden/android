@@ -608,6 +608,7 @@ chọn Thêm TOTP để lưu khóa an toàn</string>
     <string name="forwarded_email_description">Tạo một địa chỉ email ảo bằng dịch vụ chuyển tiếp email bên ngoài.</string>
     <string name="accessibility_service_disclosure">Thông báo về Dịch vụ Trợ năng</string>
     <string name="accessibility_disclosure_text">Bitwarden sử dụng Dịch vụ trợ năng để tìm kiếm các trường đăng nhập trong ứng dụng và trang web, sau đó thiết lập ID trường thích hợp để nhập tên đăng nhập &amp; mật khẩu khi tìm thấy ứng dụng hoặc trang web tương ứng. Chúng tôi không lưu trữ bất kỳ thông tin nào được dịch vụ cung cấp, cũng như không cố gắng kiểm soát bất kỳ yếu tố nào trên màn hình ngoài việc nhập thông tin đăng nhập.</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields in apps and websites. If you choose to enable it, Bitwarden will identify the appropriate fields and enter your credentials when a match is found. We do not store any information observed by the service, and we do not control any on-screen elements beyond credential entry.</string>
     <string name="accept">Đồng ý</string>
     <string name="decline">Từ chối</string>
     <string name="login_request_has_already_expired">Yêu cầu đăng nhập đã hết hạn.</string>
@@ -988,8 +989,7 @@ các vấn đề.</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Bạn thực sự muốn xóa tất cả các bản ghi đã ghi lại?</string>
     <string name="confirm_key_connector_domain">Xác nhận tên miền Key Connector</string>
     <string name="key_connector_domain">Tên miền Key Connector:</string>
-    <string name="key_connector_organization">Tổ chức:</string>
-    <string name="password_no_longer_required_confirm_domain">Mật khẩu chính không còn được yêu cầu đối với các thành viên của tổ chức sau đây. Vui lòng xác nhận tên miền bên dưới với quản trị viên của tổ chức.</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Your organization no longer requires a master password for its members. Please verify the domain below with your admin and enter your master password to continue.</string>
     <string name="please_confirm_domain_with_admin">Vui lòng xác nhận tên miền bên dưới với quản trị viên tổ chức của bạn.\n\nTên miền kết Key Connector:\n%1$s</string>
     <string name="flight_recorder_banner_title">Bản ghi nhật ký bật</string>
     <string name="flight_recorder_banner_message">Bản ghi nhật ký sẽ kích hoạt cho tới %1$s vào %2$s. Đến Cài đặt để hủy kích hoạt ngay.</string>

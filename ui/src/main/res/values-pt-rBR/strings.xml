@@ -611,6 +611,7 @@ toque em Adicionar TOTP para armazenar a chave de forma segura</string>
     <string name="forwarded_email_description">Gere um alias de e-mail com um serviço de encaminhamento externo.</string>
     <string name="accessibility_service_disclosure">Comunicado sobre o serviço de acessibilidade</string>
     <string name="accessibility_disclosure_text">O Bitwarden utiliza o Serviço de Acessibilidade para procurar campos de autenticação em aplicativos e sites, e então identificar os IDs de campo apropriados para digitar um nome de usuário e senha quando uma correspondência para o aplicativo ou site for encontrada. Não armazenamos nenhuma das informações que nos são apresentadas pelo serviço, nem fazemos qualquer tentativa de controlar quaisquer elementos na tela além da entrada de credenciais em texto.</string>
+    <string name="accessibility_disclosure_start_up_text">O Bitwarden oferece um método opcional de preenchimento automático que utiliza o Serviço de Acessibilidade do Android para detectar campos de login em aplicativos e sites. Se você optar por ativá-lo, o Bitwarden identificará os campos apropriados e inserirá suas credenciais quando for encontrada uma correspondência. Não armazenamos nenhuma informação captada pelo serviço e não controlamos nenhum elemento na tela além da inserção das credenciais.</string>
     <string name="accept">Aceitar</string>
     <string name="decline">Recusar</string>
     <string name="login_request_has_already_expired">A solicitação de acesso já expirou.</string>
@@ -990,9 +991,8 @@ Deseja trocar para esta conta?</string>
     <string name="delete_logs">Apagar registros</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Tem certeza de que deseja apagar todos os registros gravados?</string>
     <string name="confirm_key_connector_domain">Confirmar domínio do Key Connector</string>
-    <string name="key_connector_domain">Domínio do Key Connector:</string>
-    <string name="key_connector_organization">Organização:</string>
-    <string name="password_no_longer_required_confirm_domain">Uma senha principal não é mais necessária para membros da seguinte organização. Confirme o domínio abaixo com o administrador da sua organização.</string>
+    <string name="key_connector_domain">Key Connector domain</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Your organization no longer requires a master password for its members. Please verify the domain below with your admin and enter your master password to continue.</string>
     <string name="please_confirm_domain_with_admin">Confirme o domínio abaixo com o administrador da sua organização.\n\nDomínio do Key Connector:\n%1$s</string>
     <string name="flight_recorder_banner_title">Gravador de voo ativado</string>
     <string name="flight_recorder_banner_message">O gravador de voo estará ativo até %1$s às %2$s. Volte às configurações para desativá-lo agora.</string>
@@ -1389,8 +1389,8 @@ Deseja trocar para esta conta?</string>
     <string name="ask_again_later">Pergunte novamente depois</string>
     <string name="enable_local_network_access">Habilitar acesso à rede local</string>
     <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">O Bitwarden precisa de acesso à rede local para sincronizar com o seu servidor. Sem esta permissão, o aplicativo não poderá se conectar.</string>
-    <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Without this permission, Bitwarden won’t be able to connect and sync with your server. You can enable this in your device settings.</string>
-    <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Your request was interrupted because the app needs local network access. You can enable this in your device settings.</string>
+    <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Sem esta permissão, o Bitwarden não será capaz de se conectar e sincronizar com o seu servidor. Você pode ativar isso nas configurações do seu dispositivo.</string>
+    <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Sua solicitação foi interrompida porque o aplicativo precisa de acesso à rede local. Você pode habilitar essa função nas configurações do seu dispositivo.</string>
     <string name="continue_to_stripe">Continue to Stripe?</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">You’ll be taken to Stripe to manage your subscription cancellation.</string>
 </resources>

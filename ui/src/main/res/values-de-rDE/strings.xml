@@ -611,6 +611,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="forwarded_email_description">Generiere ein E-Mail-Alias mit einem externen Weiterleitungsdienst.</string>
     <string name="accessibility_service_disclosure">Bedienungshilfen Offenlegung</string>
     <string name="accessibility_disclosure_text">Bitwarden verwendet die Bedienungshilfen, um nach Anmeldefeldern in Apps und auf Webseiten zu suchen und legt dann die entsprechenden Feld-IDs fest, um einen Benutzernamen und Passwort einzugeben, wenn eine Übereinstimmung mit der App oder der Seite gefunden wird. Wir speichern keine der Informationen, die uns der Dienst zur Verfügung stellt. Ebenso wenig versuchen wir beliebige Elemente auf dem Bildschirm außer der Texteingabe von Anmeldedaten zu kontrollieren.</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields in apps and websites. If you choose to enable it, Bitwarden will identify the appropriate fields and enter your credentials when a match is found. We do not store any information observed by the service, and we do not control any on-screen elements beyond credential entry.</string>
     <string name="accept">Akzeptieren</string>
     <string name="decline">Ablehnen</string>
     <string name="login_request_has_already_expired">Anmeldeanfrage ist bereits abgelaufen.</string>
@@ -991,8 +992,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Willst du wirklich alle aufgezeichneten Protokolle löschen?</string>
     <string name="confirm_key_connector_domain">Key Connector-Domain bestätigen</string>
     <string name="key_connector_domain">Key Connector-Domain:</string>
-    <string name="key_connector_organization">Organisation:</string>
-    <string name="password_no_longer_required_confirm_domain">Für Mitglieder der folgenden Organisation ist kein Master-Passwort mehr erforderlich. Bitte bestätige die folgende Domain bei deinem Organisations-Administrator.</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Deine Organisation verlangt von ihren Mitgliedern kein Master-Passwort mehr. Bitte überprüfe die folgende Domain mit deinem Administrator und gib dein Master-Passwort ein, um fortzufahren.</string>
     <string name="please_confirm_domain_with_admin">Bitte bestätige die folgende Domain bei deinem Organisations-Administrator.\n\nKey Connector-Domain:\n%1$s</string>
     <string name="flight_recorder_banner_title">Flugschreiber eingeschaltet</string>
     <string name="flight_recorder_banner_message">Der Flugschreiber wird bis zum %1$s um %2$s aktiv sein. Gehe zurück zu den Einstellungen, um ihn jetzt zu deaktivieren.</string>

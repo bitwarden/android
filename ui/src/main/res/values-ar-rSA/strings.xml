@@ -233,7 +233,7 @@
     <string name="security_code">رمز الأمان</string>
     <string name="scan_card">مسح البطاقة</string>
     <string name="scan_card_instruction">ضع بطاقتك داخل الإطار لمسحها.</string>
-    <string name="hold_steady_and_ensure_all_card_details_are_visible">ثبّت جهازك وتحقق من ظهور جميع تفاصيل البطاقة بوضوح.</string>
+    <string name="hold_steady_and_ensure_all_card_details_are_visible">ثبّت جهازك و تحقق مِن ظهور جميع تفاصيل البطاقة بوضوح</string>
     <string name="type_card">بطاقة</string>
     <string name="type_identity">الهوية</string>
     <string name="type_login">تسجيل الدخول</string>
@@ -628,6 +628,7 @@
     <string name="forwarded_email_description">إنشاء بريد إلكتروني مستعار مع خدمة إعادة توجيه خارجية.</string>
     <string name="accessibility_service_disclosure">كشف خدمة إمكانية الوصول</string>
     <string name="accessibility_disclosure_text">بت واردن يستخدم خدمة إمكانية الوصول للبحث عن حقول تسجيل الدخول في التطبيقات ومواقع الويب، ثم يقوم بإنشاء معرفات الحقل المناسب لإدخال اسم المستخدم وكلمة المرور عند العثور على تطابق للتطبيق أو الموقع. ونحن لا نخزن أيا من المعلومات التي قدمتها لنا الخدمة، كما أننا لا نحاول السيطرة على أي عناصر على الشاشة تتجاوز إدخال نصوص وثائق التفويض.</string>
+    <string name="accessibility_disclosure_start_up_text">يوفر Bitwarden طريقة تعبئة تلقائية اختيارية تستخدم خدمة إمكانية الوصول في Android للكشف عن حقول تسجيل الدخول في التطبيقات والمواقع. إذا اخترت تفعيلها، سيحدد Bitwarden الحقول المناسبة ويدخل بياناتك عند العثور على تطابق. لا نقوم بتخزين أي معلومات يطّلع عليها النظام، ولا نتحكم في أي عناصر على الشاشة خارج نطاق إدخال بيانات تسجيل الدخول.</string>
     <string name="accept">قبول</string>
     <string name="decline">رفض</string>
     <string name="login_request_has_already_expired">انتهت صلاحية طلب تسجيل الدخول.</string>
@@ -1016,8 +1017,7 @@
     <string name="do_you_really_want_to_delete_all_recorded_logs">هل تريد حقاً حذف جميع السجلات المسجلة؟</string>
     <string name="confirm_key_connector_domain">تأكيد نطاق موصل المفتاح</string>
     <string name="key_connector_domain">نطاق التوصيل الرئيسي:</string>
-    <string name="key_connector_organization">شركة:</string>
-    <string name="password_no_longer_required_confirm_domain">لم تعد كلمة المرور الرئيسية مطلوبة لأعضاء الشركة التالية. يرجى تأكيد النطاق أدناه مع مدير مؤسستك.</string>
+    <string name="your_organization_no_longer_requires_a_master_password">لم تعد مؤسستك تشترط كلمة مرور رئيسية لأعضائها. يُرجى التحقق من النطاق أدناه مع المسؤول وإدخال كلمة مرورك الرئيسية للمتابعة.</string>
     <string name="please_confirm_domain_with_admin">يرجى تأكيد المجال أدناه مع مسؤول شركتك.\n\nمجال رابط المفتاح:\n%1$s</string>
     <string name="flight_recorder_banner_title">تشغيل مسجل الطيران</string>
     <string name="flight_recorder_banner_message">مسجل الطيران سوف يكون نشطاً حتى %1$s عند %2$s. العودة إلى الإعدادات لإلغاء تنشيط الآن.</string>

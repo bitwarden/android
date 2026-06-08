@@ -608,6 +608,7 @@ pilih Tambahkan TOTP untuk menyimpan kunci dengan aman</string>
     <string name="forwarded_email_description">Buat alias email dengan layanan penerusan eksternal.</string>
     <string name="accessibility_service_disclosure">Pernyataan Layanan Aksesibilitas</string>
     <string name="accessibility_disclosure_text">Bitwarden menggunakan Layanan Aksesibilitas untuk mencari kolom login di apl dan situs web, lalu menetapkan ID kolom yang sesuai untuk memasukkan nama pengguna &amp; sandi ketika apl atau situs cocok ditemukan. Kami tidak menyimpan informasi apa pun yang diberikan layanan pada kami, dan kami tidak berupaya mengontrol elemen layar apa pun selain entri teks kredensial.</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields in apps and websites. If you choose to enable it, Bitwarden will identify the appropriate fields and enter your credentials when a match is found. We do not store any information observed by the service, and we do not control any on-screen elements beyond credential entry.</string>
     <string name="accept">Terima</string>
     <string name="decline">Tolak</string>
     <string name="login_request_has_already_expired">Permintaan login sudah kedaluwarsa.</string>
@@ -986,8 +987,7 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Anda yakin ingin menghapus semua catatan log?</string>
     <string name="confirm_key_connector_domain">Konfirmasi domain Key Connector</string>
     <string name="key_connector_domain">Domain Key Connector:</string>
-    <string name="key_connector_organization">Organisasi:</string>
-    <string name="password_no_longer_required_confirm_domain">Sandi utama tidak lagi diperlukan untuk anggota organisasi tersebut. Harap konfirmasi domain di bawah ini dengan administrator organisasi Anda.</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Your organization no longer requires a master password for its members. Please verify the domain below with your admin and enter your master password to continue.</string>
     <string name="please_confirm_domain_with_admin">Harap konfirmasi domain di bawah ini dengan administrator organisasi Anda.\n\nDomain Key Connector:\n%1$s</string>
     <string name="flight_recorder_banner_title">Kotak hitam aktif</string>
     <string name="flight_recorder_banner_message">Kotak hitam akan aktif hingga %1$s pada %2$s. Kembali ke pengaturan untuk menonaktifkan sekarang.</string>

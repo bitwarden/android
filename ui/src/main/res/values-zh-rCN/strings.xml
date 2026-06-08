@@ -608,6 +608,7 @@
     <string name="forwarded_email_description">使用外部转发服务生成电子邮箱别名。</string>
     <string name="accessibility_service_disclosure">无障碍服务声明</string>
     <string name="accessibility_disclosure_text">Bitwarden 使用无障碍服务在 App 和网站中搜索登录字段，当找到与 App 或网站相匹配的用户名 &amp; 密码时，建立适当的字段 ID 以输入它们。我们不会通过此服务存储提供给我们的任何信息，也不会尝试控制除凭据文本输入之外的任何屏幕元素。</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden 提供一种可选的自动填充方式，该方式使用 Android 无障碍服务检测 App 和网站中的登录字段。启用后，Bitwarden 将自动识别相应字段，并在找到匹配的项目时自动填入您的凭据。我们不会存储此服务获取到的任何信息，也不会控制除凭据输入之外的任何屏幕元素。</string>
     <string name="accept">接受</string>
     <string name="decline">拒绝</string>
     <string name="login_request_has_already_expired">登录请求已过期。</string>
@@ -986,9 +987,8 @@
     <string name="delete_logs">删除日志</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">确定要删除所有记录的日志吗？</string>
     <string name="confirm_key_connector_domain">确认 Key Connector 域名</string>
-    <string name="key_connector_domain">Key Connector 域名：</string>
-    <string name="key_connector_organization">组织：</string>
-    <string name="password_no_longer_required_confirm_domain">以下组织的成员不再需要主密码。请与您的组织管理员确认下面的域名。</string>
+    <string name="key_connector_domain">Key Connector 域名</string>
+    <string name="your_organization_no_longer_requires_a_master_password">您的组织不再要求其成员的主密码。请与您的组织管理员验证下面的域名，然后输入您的主密码以继续。</string>
     <string name="please_confirm_domain_with_admin">请与您的组织管理员确认下面的域名。\n\nKey Connector 域名：\n%1$s</string>
     <string name="flight_recorder_banner_title">Flight Recorder 已开启</string>
     <string name="flight_recorder_banner_message">Flight Recorder 将持续激活至 %1$s %2$s。现在返回设置以将其停用。</string>
@@ -1368,7 +1368,7 @@
     <string name="no_bank_accounts">您的密码库中没有银行账户。</string>
     <string name="license_details">驾驶证详细信息</string>
     <string name="licenses">驾驶证</string>
-    <string name="no_licenses">您的密码库中没有许可证。</string>
+    <string name="no_licenses">您的密码库中没有驾驶证。</string>
     <string name="no_passports">您的密码库中没有护照。</string>
     <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">由于 App 需要重新验证身份，您的请求被中断。请重试。</string>
     <string name="passport_details">护照详细信息</string>
