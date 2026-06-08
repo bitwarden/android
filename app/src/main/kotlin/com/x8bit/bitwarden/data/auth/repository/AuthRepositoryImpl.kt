@@ -104,10 +104,8 @@ import com.x8bit.bitwarden.data.auth.repository.util.CookieCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
-import com.x8bit.bitwarden.data.auth.repository.util.accountKeysJson
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
-import com.x8bit.bitwarden.data.auth.repository.util.privateKey
 import com.x8bit.bitwarden.data.auth.repository.util.toAccountCryptographicState
 import com.x8bit.bitwarden.data.auth.repository.util.toDeviceInfo
 import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
@@ -535,17 +533,13 @@ class AuthRepositoryImpl(
                     .map { registerTdeKeyResponse to createAccountKeysResponse }
             }
             .onSuccess { (registerTdeKeyResponse, createAccountKeysResponse) ->
-                authDiskSource.storeAccountKeys(
+                authDiskSource.storeAccountCryptographicState(
                     userId = userId,
-                    accountKeys = createAccountKeysResponse.accountKeys,
-                )
-                // TDE and SSO user creation still uses crypto-v1. These users are not expected to
-                // have the AEAD keys so we only store the private key for now.
-                // See https://github.com/bitwarden/android/pull/5682#discussion_r2273940332
-                // for more details.
-                authDiskSource.storePrivateKey(
-                    userId = userId,
-                    privateKey = registerTdeKeyResponse.privateKey,
+                    accountCryptographicState = createAccountKeysResponse
+                        .accountKeys
+                        .toAccountCryptographicState(
+                            privateKey = registerTdeKeyResponse.privateKey,
+                        ),
                 )
                 vaultRepository.syncVaultState(userId = userId)
                 registerTdeKeyResponse.deviceKey?.let { response ->
@@ -585,16 +579,9 @@ class AuthRepositoryImpl(
                     )
                     .also { result ->
                         if (result is VaultUnlockResult.Success) {
-                            authDiskSource.storeAccountKeys(
+                            authDiskSource.storeAccountCryptographicState(
                                 userId = userId,
-                                accountKeys = response.accountCryptographicState.accountKeysJson,
-                            )
-
-                            // Storing the private key here for legacy purposes, the
-                            // `accountKeysJson` stored above will be used for most purposes.
-                            authDiskSource.storePrivateKey(
-                                userId = userId,
-                                privateKey = response.accountCryptographicState.privateKey,
+                                accountCryptographicState = response.accountCryptographicState,
                             )
                             if (shouldTrustDevice) {
                                 authDiskSource.storeDeviceKey(
@@ -614,20 +601,16 @@ class AuthRepositoryImpl(
         val profile = authDiskSource.userState?.activeAccount?.profile
             ?: return LoginResult.Error(error = NoActiveUserException())
         val userId = profile.userId
-        val accountKeys = authDiskSource.getAccountKeys(userId = userId)
-        val privateKey = accountKeys?.publicKeyEncryptionKeyPair?.wrappedPrivateKey
-            ?: authDiskSource.getPrivateKey(userId = userId)
-            ?: return LoginResult.Error(error = MissingPropertyException("Private Key"))
-
+        val accountCryptographicState = authDiskSource
+            .getAccountCryptographicState(userId = userId)
+            ?: return LoginResult.Error(MissingPropertyException("Account Cryptographic State"))
         checkForVaultUnlockError(
             onVaultUnlockError = { error ->
                 return error.toLoginErrorResult()
             },
         ) {
             unlockVault(
-                accountCryptographicState = accountKeys.toAccountCryptographicState(
-                    privateKey = privateKey,
-                ),
+                accountCryptographicState = accountCryptographicState,
                 accountProfile = profile,
                 initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                     requestPrivateKey = requestPrivateKey,
@@ -1279,17 +1262,9 @@ class AuthRepositoryImpl(
                 )
             }
             .onSuccess { response ->
-                authDiskSource.storeAccountKeys(
+                authDiskSource.storeAccountCryptographicState(
                     userId = userId,
-                    accountKeys = response.accountCryptographicState.accountKeysJson,
-                )
-                // TDE and SSO user creation still uses crypto-v1. These users are not
-                // expected to have the AEAD keys so we only store the private key for now.
-                // See https://github.com/bitwarden/android/pull/5682#discussion_r2273940332
-                // for more details.
-                authDiskSource.storePrivateKey(
-                    userId = userId,
-                    privateKey = response.accountCryptographicState.privateKey,
+                    accountCryptographicState = response.accountCryptographicState,
                 )
                 authDiskSource.userState = authDiskSource.userState?.toUserStateJsonWithPassword(
                     masterPasswordUnlock = response.masterPasswordUnlock,
@@ -1346,12 +1321,11 @@ class AuthRepositoryImpl(
                         ),
                     )
                     .onSuccess {
-                        // This process is used by TDE and Enterprise accounts during initial
-                        // login. We continue to store the locally generated keys
-                        // until TDE and Enterprise accounts support AEAD keys.
-                        authDiskSource.storePrivateKey(
+                        authDiskSource.storeAccountCryptographicState(
                             userId = userId,
-                            privateKey = response.keys.private,
+                            accountCryptographicState = WrappedAccountCryptographicState.V1(
+                                privateKey = response.keys.private,
+                            ),
                         )
                     }
                     .map { response.masterPasswordHash }
@@ -1963,17 +1937,16 @@ class AuthRepositoryImpl(
                     }
                 }
         }
-        // We continue to store the private key for backwards compatibility. Key connector
-        // conversion still relies on the private key.
-        loginResponse.privateKeyOrNull()?.let {
-            // Only set the value if it's present, since we may have set it already
-            // when we completed the key connector conversion.
-            authDiskSource.storePrivateKey(userId = userId, privateKey = it)
-        }
-        loginResponse.accountKeys?.let {
-            // Only set the value if it's present, since we may have set it already
-            // when we completed the key connector conversion.
-            authDiskSource.storeAccountKeys(userId = userId, accountKeys = it)
+
+        loginResponse.privateKeyOrNull()?.let { privateKey ->
+            // Only set the value if the private key is present, since we may have set
+            // the value already when we completed the key connector conversion.
+            authDiskSource.storeAccountCryptographicState(
+                userId = userId,
+                accountCryptographicState = loginResponse.accountKeys.toAccountCryptographicState(
+                    privateKey = privateKey,
+                ),
+            )
         }
         // If the user just authenticated with a two-factor code and selected the option to
         // remember it, then the API response will return a token that will be used in place
@@ -2088,9 +2061,10 @@ class AuthRepositoryImpl(
                     organizationIdentifier = orgIdentifier,
                 )
                 .map { keyConnector ->
+                    val accountCryptographicState = keyConnector.accountCryptographicState
                     this
                         .unlockVault(
-                            accountCryptographicState = keyConnector.accountCryptographicState,
+                            accountCryptographicState = accountCryptographicState,
                             accountProfile = profile,
                             initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
                                 masterKey = keyConnector.masterKey,
@@ -2099,15 +2073,9 @@ class AuthRepositoryImpl(
                         )
                         .also { result ->
                             if (result is VaultUnlockResult.Success) {
-                                // We continue to store the private key for backwards compatibility
-                                // since key connector conversion still relies on the private key.
-                                authDiskSource.storePrivateKey(
+                                authDiskSource.storeAccountCryptographicState(
                                     userId = userId,
-                                    privateKey = keyConnector.privateKey,
-                                )
-                                authDiskSource.storeAccountKeys(
-                                    userId = userId,
-                                    accountKeys = loginResponse.accountKeys,
+                                    accountCryptographicState = accountCryptographicState,
                                 )
                             }
                         }

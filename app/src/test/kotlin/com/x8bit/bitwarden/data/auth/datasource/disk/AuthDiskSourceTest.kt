@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.datasource.disk
 import androidx.core.content.edit
 import app.cash.turbine.test
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
+import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.core.di.CoreModule
 import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
@@ -10,7 +11,6 @@ import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorUserDecryptionOptionsJson
 import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.bitwarden.network.model.UserDecryptionOptionsJson
-import com.bitwarden.network.model.createMockAccountKeysJson
 import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.bitwarden.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetRea
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.serializer.WrappedAccountCryptographicStateSerializer
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigrator
 import io.mockk.every
 import io.mockk.just
@@ -294,10 +295,9 @@ class AuthDiskSourceTest {
             userId = userId,
             userAutoUnlockKey = "userAutoUnlockKey",
         )
-        authDiskSource.storePrivateKey(userId = userId, privateKey = "privateKey")
-        authDiskSource.storeAccountKeys(
+        authDiskSource.storeAccountCryptographicState(
             userId = userId,
-            accountKeys = createMockAccountKeysJson(number = 1),
+            accountCryptographicState = WrappedAccountCryptographicState.V1("privateKey"),
         )
         authDiskSource.storeOrganizationKeys(
             userId = userId,
@@ -345,8 +345,7 @@ class AuthDiskSourceTest {
         assertNull(authDiskSource.getUserBiometricUnlockKey(userId = userId))
         assertNull(authDiskSource.getInvalidUnlockAttempts(userId = userId))
         assertNull(authDiskSource.getUserAutoUnlockKey(userId = userId))
-        assertNull(authDiskSource.getPrivateKey(userId = userId))
-        assertNull(authDiskSource.getAccountKeys(userId = userId))
+        assertNull(authDiskSource.getAccountCryptographicState(userId = userId))
         assertNull(authDiskSource.getOrganizationKeys(userId = userId))
         assertNull(authDiskSource.getOrganizations(userId = userId))
         assertNull(authDiskSource.getPolicies(userId = userId))
@@ -441,76 +440,48 @@ class AuthDiskSourceTest {
     }
 
     @Test
-    fun `getPrivateKey should pull from SharedPreferences`() {
-        val privateKeyBaseKey = "bwPreferencesStorage:encPrivateKey"
+    fun `getAccountCryptographicState should pull from SharedPreferences`() {
+        val accountKeysBaseKey = "bwSecureStorage:accountCryptographicState"
         val mockUserId = "mockUserId"
-        val mockPrivateKey = "mockPrivateKey"
-        fakeSharedPreferences
-            .edit {
-                putString(
-                    "${privateKeyBaseKey}_$mockUserId",
-                    mockPrivateKey,
-                )
-            }
-        val actual = authDiskSource.getPrivateKey(userId = mockUserId)
-        assertEquals(
-            mockPrivateKey,
-            actual,
+        val mockAccountCryptographicState = WrappedAccountCryptographicState.V1(
+            privateKey = "privateKey",
         )
-    }
-
-    @Test
-    fun `storePrivateKey should update SharedPreferences`() {
-        val privateKeyBaseKey = "bwPreferencesStorage:encPrivateKey"
-        val mockUserId = "mockUserId"
-        val mockPrivateKey = "mockPrivateKey"
-        authDiskSource.storePrivateKey(
-            userId = mockUserId,
-            privateKey = mockPrivateKey,
-        )
-        val actual = fakeSharedPreferences.getString(
-            "${privateKeyBaseKey}_$mockUserId",
-            null,
-        )
-        assertEquals(
-            mockPrivateKey,
-            actual,
-        )
-    }
-
-    @Test
-    fun `getAccountKeys should pull from SharedPreferences`() {
-        val accountKeysBaseKey = "bwSecureStorage:profileAccountKeys"
-        val mockUserId = "mockUserId"
-        val mockAccountKeys = createMockAccountKeysJson(number = 1)
         fakeEncryptedSharedPreferences.edit {
             putString(
                 "${accountKeysBaseKey}_$mockUserId",
-                json.encodeToString(mockAccountKeys),
+                json.encodeToString(
+                    WrappedAccountCryptographicStateSerializer(),
+                    mockAccountCryptographicState,
+                ),
             )
         }
-        val actual = authDiskSource.getAccountKeys(userId = mockUserId)
+        val actual = authDiskSource.getAccountCryptographicState(userId = mockUserId)
         assertEquals(
-            mockAccountKeys,
+            mockAccountCryptographicState,
             actual,
         )
     }
 
     @Test
-    fun `storeAccountKeys should update sharedPreferences`() {
-        val accountKeysBaseKey = "bwSecureStorage:profileAccountKeys"
+    fun `storeAccountCryptographicState should update sharedPreferences`() {
+        val accountKeysBaseKey = "bwSecureStorage:accountCryptographicState"
         val mockUserId = "mockUserId"
-        val mockAccountKeys = createMockAccountKeysJson(number = 1)
-        authDiskSource.storeAccountKeys(
+        val mockAccountCryptographicState = WrappedAccountCryptographicState.V1(
+            privateKey = "privateKey",
+        )
+        authDiskSource.storeAccountCryptographicState(
             userId = mockUserId,
-            accountKeys = mockAccountKeys,
+            accountCryptographicState = mockAccountCryptographicState,
         )
         val actual = fakeEncryptedSharedPreferences.getString(
             "${accountKeysBaseKey}_$mockUserId",
             null,
         )
         assertEquals(
-            json.encodeToJsonElement(mockAccountKeys),
+            json.encodeToJsonElement(
+                WrappedAccountCryptographicStateSerializer(),
+                mockAccountCryptographicState,
+            ),
             json.parseToJsonElement(requireNotNull(actual)),
         )
     }

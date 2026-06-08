@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk
 
 import android.content.SharedPreferences
+import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.serializer.SafeMapSerializer
 import com.bitwarden.core.data.util.decodeFromStringOrNull
@@ -11,6 +12,8 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.serializer.WrappedAccountCryptographicStateSerializer
+import com.x8bit.bitwarden.data.auth.repository.util.toAccountCryptographicState
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigrator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -54,6 +57,7 @@ private const val ONBOARDING_STATUS_KEY = "onboardingStatus"
 private const val SHOW_IMPORT_LOGINS_KEY = "showImportLogins"
 private const val LAST_LOCK_TIMESTAMP = "lastLockTimestamp"
 private const val PROFILE_ACCOUNT_KEYS_KEY = "profileAccountKeys"
+private const val ACCOUNT_CRYPTOGRAPHIC_STATE_KEY = "accountCryptographicState"
 
 /**
  * Primary implementation of [AuthDiskSource].
@@ -91,6 +95,10 @@ class AuthDiskSourceImpl(
         mutableMapOf<String, MutableSharedFlow<String?>>()
     private val mutableUserStateFlow = bufferedMutableSharedFlow<UserStateJson?>(replay = 1)
 
+    private val wrappedAccountCryptographicStateSerializer by lazy {
+        WrappedAccountCryptographicStateSerializer()
+    }
+
     override var userState: UserStateJson?
         get() = getString(key = STATE_KEY)?.let { json.decodeFromStringOrNull(it) }
         set(value) {
@@ -113,6 +121,10 @@ class AuthDiskSourceImpl(
         // We want to make sure that any left over encrypted user keys are scrubbed from storage
         // Since it is no longer supported.
         removeLegacyUserKeys()
+
+        // We must migrate the Private Key and Account Keys to use the Account Cryptographic state
+        // from now on.
+        migrateAccountKeys()
     }
 
     override var authenticatorSyncSymmetricKey: ByteArray?
@@ -152,8 +164,7 @@ class AuthDiskSourceImpl(
         storeInvalidUnlockAttempts(userId = userId, invalidUnlockAttempts = null)
         storeLocalUserDataKey(userId = userId, wrappedKey = null)
         storeUserAutoUnlockKey(userId = userId, userAutoUnlockKey = null)
-        storePrivateKey(userId = userId, privateKey = null)
-        storeAccountKeys(userId = userId, accountKeys = null)
+        storeAccountCryptographicState(userId = userId, accountCryptographicState = null)
         storeOrganizationKeys(userId = userId, organizationKeys = null)
         storeOrganizations(userId = userId, organizations = null)
         storeUserBiometricInitVector(userId = userId, iv = null)
@@ -241,29 +252,20 @@ class AuthDiskSourceImpl(
         putString(key = LOCAL_USER_DATA_KEY.appendIdentifier(userId), value = wrappedKey)
     }
 
-    @Deprecated("Use getAccountKeys instead.", replaceWith = ReplaceWith("getAccountKeys"))
-    override fun getPrivateKey(userId: String): String? =
-        getString(key = MASTER_KEY_ENCRYPTION_PRIVATE_KEY.appendIdentifier(userId))
+    override fun getAccountCryptographicState(userId: String): WrappedAccountCryptographicState? =
+        getEncryptedString(key = ACCOUNT_CRYPTOGRAPHIC_STATE_KEY.appendIdentifier(userId))?.let {
+            json.decodeFromStringOrNull(wrappedAccountCryptographicStateSerializer, it)
+        }
 
-    @Deprecated("Use storeAccountKeys instead.", replaceWith = ReplaceWith("storeAccountKeys"))
-    override fun storePrivateKey(userId: String, privateKey: String?) {
-        putString(
-            key = MASTER_KEY_ENCRYPTION_PRIVATE_KEY.appendIdentifier(userId),
-            value = privateKey,
-        )
-    }
-
-    override fun getAccountKeys(userId: String): AccountKeysJson? =
-        getEncryptedString(key = PROFILE_ACCOUNT_KEYS_KEY.appendIdentifier(userId))
-            ?.let { json.decodeFromStringOrNull(it) }
-
-    override fun storeAccountKeys(
+    override fun storeAccountCryptographicState(
         userId: String,
-        accountKeys: AccountKeysJson?,
+        accountCryptographicState: WrappedAccountCryptographicState?,
     ) {
         putEncryptedString(
-            key = PROFILE_ACCOUNT_KEYS_KEY.appendIdentifier(userId),
-            value = accountKeys?.let { json.encodeToString(it) },
+            key = ACCOUNT_CRYPTOGRAPHIC_STATE_KEY.appendIdentifier(userId),
+            value = accountCryptographicState?.let {
+                json.encodeToString(wrappedAccountCryptographicStateSerializer, it)
+            },
         )
     }
 
@@ -658,5 +660,32 @@ class AuthDiskSourceImpl(
 
     private fun removeLegacyUserKeys() {
         removeWithPrefix(prefix = MASTER_KEY_ENCRYPTION_USER_KEY)
+    }
+
+    private fun migrateAccountKeys() {
+        userState
+            ?.accounts
+            .orEmpty()
+            .values
+            .forEach { account ->
+                val userId = account.profile.userId
+                val accountKeysKey = PROFILE_ACCOUNT_KEYS_KEY.appendIdentifier(userId)
+                val privateKeyKey = MASTER_KEY_ENCRYPTION_PRIVATE_KEY.appendIdentifier(userId)
+                val accountKeys = getEncryptedString(key = accountKeysKey)
+                    ?.let { json.decodeFromStringOrNull<AccountKeysJson>(it) }
+                val privateKey = accountKeys
+                    ?.publicKeyEncryptionKeyPair
+                    ?.wrappedPrivateKey
+                    ?: getString(key = privateKeyKey)
+                privateKey?.let {
+                    storeAccountCryptographicState(
+                        userId = userId,
+                        accountCryptographicState = accountKeys.toAccountCryptographicState(it),
+                    )
+                    // Remove the Account Keys and Private Key
+                    putEncryptedString(key = accountKeysKey, value = null)
+                    putString(key = privateKeyKey, value = null)
+                }
+            }
     }
 }

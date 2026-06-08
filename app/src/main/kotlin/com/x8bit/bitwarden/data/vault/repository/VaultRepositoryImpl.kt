@@ -19,7 +19,6 @@ import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.repository.util.toAccountCryptographicState
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
@@ -559,19 +558,14 @@ class VaultRepositoryImpl(
     ): VaultUnlockResult {
         val account = authDiskSource.userState?.accounts?.get(userId)
             ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
-        val accountKeys = authDiskSource.getAccountKeys(userId = userId)
-        val privateKey = accountKeys
-            ?.publicKeyEncryptionKeyPair
-            ?.wrappedPrivateKey
-            ?: authDiskSource.getPrivateKey(userId = userId)
+        val accountCryptographicState = authDiskSource
+            .getAccountCryptographicState(userId = userId)
             ?: return VaultUnlockResult.InvalidStateError(
-                error = MissingPropertyException("Private key"),
+                error = MissingPropertyException("Account Cryptographic State"),
             )
         val organizationKeys = authDiskSource.getOrganizationKeys(userId = userId)
         return vaultLockManager.unlockVault(
-            accountCryptographicState = accountKeys.toAccountCryptographicState(
-                privateKey = privateKey,
-            ),
+            accountCryptographicState = accountCryptographicState,
             userId = userId,
             email = account.profile.email,
             kdf = account.profile.toSdkParams(),

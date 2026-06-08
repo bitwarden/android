@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk.util
 
+import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.bitwarden.network.model.AccountKeysJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -45,7 +45,6 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedShouldTrustDevice = mutableMapOf<String, Boolean?>()
     private val storedInvalidUnlockAttempts = mutableMapOf<String, Int?>()
     private val storedLocalUserDataKeys = mutableMapOf<String, String?>()
-    private val storedPrivateKeys = mutableMapOf<String, String?>()
     private val storedTwoFactorTokens = mutableMapOf<String, String?>()
     private val storedUserAutoUnlockKeys = mutableMapOf<String, String?>()
     private val storedPinProtectedUserKeys = mutableMapOf<String, Pair<String?, Boolean>>()
@@ -64,7 +63,8 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedOnboardingStatus = mutableMapOf<String, OnboardingStatus?>()
     private val storedShowImportLogins = mutableMapOf<String, Boolean?>()
     private val storedLastLockTimestampState = mutableMapOf<String, Instant?>()
-    private val storedAccountKeys = mutableMapOf<String, AccountKeysJson?>()
+    private val storedAccountCryptographicState =
+        mutableMapOf<String, WrappedAccountCryptographicState?>()
     private val storedPinProtectedUserKeyEnvelopes = mutableMapOf<String, Pair<String?, Boolean>>()
     private val mutablePinProtectedUserKeyEnvelopesFlowMap =
         mutableMapOf<String, MutableSharedFlow<String?>>()
@@ -81,7 +81,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     override fun clearData(userId: String) {
         storedInvalidUnlockAttempts.remove(userId)
         storedLocalUserDataKeys.remove(userId)
-        storedPrivateKeys.remove(userId)
+        storedAccountCryptographicState.remove(userId)
         storedTwoFactorTokens.clear()
         storedUserAutoUnlockKeys.remove(userId)
         storedOrganizations.remove(userId)
@@ -150,22 +150,15 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedLocalUserDataKeys[userId] = wrappedKey
     }
 
-    @Deprecated("Use getAccountKeys instead.", replaceWith = ReplaceWith("getAccountKeys"))
-    override fun getPrivateKey(userId: String): String? = storedPrivateKeys[userId]
-
-    @Deprecated("Use storeAccountKeys instead.", replaceWith = ReplaceWith("storeAccountKeys"))
-    override fun storePrivateKey(userId: String, privateKey: String?) {
-        storedPrivateKeys[userId] = privateKey
-    }
-
-    override fun getAccountKeys(userId: String): AccountKeysJson? =
-        storedAccountKeys[userId]
-
-    override fun storeAccountKeys(
+    override fun getAccountCryptographicState(
         userId: String,
-        accountKeys: AccountKeysJson?,
+    ): WrappedAccountCryptographicState? = storedAccountCryptographicState[userId]
+
+    override fun storeAccountCryptographicState(
+        userId: String,
+        accountCryptographicState: WrappedAccountCryptographicState?,
     ) {
-        storedAccountKeys[userId] = accountKeys
+        storedAccountCryptographicState[userId] = accountCryptographicState
     }
 
     override fun getTwoFactorToken(email: String): String? = storedTwoFactorTokens[email]
@@ -415,18 +408,13 @@ class FakeAuthDiskSource : AuthDiskSource {
     }
 
     /**
-     * Assert that the [privateKey] was stored successfully using the [userId].
+     * Assert that the [accountCryptographicState] was stored successfully using the [userId].
      */
-    @Deprecated("Use assertAccountKeys instead.", replaceWith = ReplaceWith("assertAccountKeys"))
-    fun assertPrivateKey(userId: String, privateKey: String?) {
-        assertEquals(privateKey, storedPrivateKeys[userId])
-    }
-
-    /**
-     * Assert that the [accountKeys] was stored successfully using the [userId].
-     */
-    fun assertAccountKeys(userId: String, accountKeys: AccountKeysJson?) {
-        assertEquals(accountKeys, storedAccountKeys[userId])
+    fun assertAccountCryptographicState(
+        userId: String,
+        accountCryptographicState: WrappedAccountCryptographicState?,
+    ) {
+        assertEquals(accountCryptographicState, storedAccountCryptographicState[userId])
     }
 
     /**
