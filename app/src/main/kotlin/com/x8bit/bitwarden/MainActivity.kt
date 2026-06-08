@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.core.os.LocaleListCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -26,8 +25,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.EventsEffect
-import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.util.setHorizonOSAppLayout
 import com.bitwarden.ui.platform.util.setupEdgeToEdge
@@ -39,6 +36,8 @@ import com.x8bit.bitwarden.data.platform.manager.util.ObserveScreenDataEffect
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.composition.LocalManagerProvider
+import com.x8bit.bitwarden.ui.platform.feature.accessibilitydisclosure.accessibilityDisclosureDestination
+import com.x8bit.bitwarden.ui.platform.feature.accessibilitydisclosure.navigateToAccessibilityDisclosure
 import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.cookieAcquisitionDestination
 import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.navigateToCookieAcquisition
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.debugMenuDestination
@@ -147,14 +146,6 @@ class MainActivity : AppCompatActivity() {
                     theme = state.theme,
                     dynamicColor = state.isDynamicColorsEnabled,
                 ) {
-                    MainActivityDialogs(
-                        dialogState = state.dialogState,
-                        onAccessibilityDisclaimerDismiss = {
-                            mainViewModel.trySendAction(
-                                MainAction.DismissAccessibilityDisclaimerDialog,
-                            )
-                        },
-                    )
                     NavHost(
                         navController = navController,
                         startDestination = RootNavigationRoute,
@@ -175,6 +166,10 @@ class MainActivity : AppCompatActivity() {
                             onSplashScreenRemoved = { shouldShowSplashScreen = false },
                         )
                         localNetworkAccessDestination(
+                            onDismiss = { navController.popBackStack() },
+                            onSplashScreenRemoved = { shouldShowSplashScreen = false },
+                        )
+                        accessibilityDisclosureDestination(
                             onDismiss = { navController.popBackStack() },
                             onSplashScreenRemoved = { shouldShowSplashScreen = false },
                         )
@@ -251,26 +246,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Composable
-    private fun MainActivityDialogs(
-        dialogState: MainState.DialogState?,
-        onAccessibilityDisclaimerDismiss: () -> Unit,
-    ) {
-        when (dialogState) {
-            MainState.DialogState.AccessibilityDisclosure -> {
-                BitwardenBasicDialog(
-                    title = stringResource(id = BitwardenString.accessibility_service_disclosure),
-                    message = stringResource(
-                        id = BitwardenString.accessibility_disclosure_start_up_text,
-                    ),
-                    onDismissRequest = onAccessibilityDisclaimerDismiss,
-                )
-            }
-
-            null -> Unit
-        }
-    }
-
-    @Composable
     private fun SetupEventsEffect(navController: NavController) {
         EventsEffect(viewModel = mainViewModel) { event ->
             when (event) {
@@ -284,6 +259,10 @@ class MainActivity : AppCompatActivity() {
                 MainEvent.NavigateToCookieAcquisition -> navController.navigateToCookieAcquisition()
                 MainEvent.NavigateToLocalNetworkAccess -> {
                     navController.navigateToLocalNetworkAccess()
+                }
+
+                MainEvent.NavigateToAccessibilityDisclosure -> {
+                    navController.navigateToAccessibilityDisclosure()
                 }
 
                 is MainEvent.UpdateAppLocale -> {
