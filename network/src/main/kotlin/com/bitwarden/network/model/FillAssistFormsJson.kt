@@ -42,7 +42,7 @@ data class FillAssistFormsJson(
     @Serializable
     data class PathnameEntryJson(
         @SerialName("forms")
-        val forms: List<FormJson>? = null,
+        val forms: List<FormJson>,
     )
 
     /**
@@ -57,12 +57,12 @@ data class FillAssistFormsJson(
     @Serializable
     data class FormJson(
         @SerialName("category")
-        val category: String? = null,
+        val category: String,
 
         @SerialName("container")
-        val container: List<String>? = null,
+        val container: List<String>?,
 
         @SerialName("fields")
-        val fields: Map<String, JsonElement>? = null,
+        val fields: Map<String, JsonElement>,
     )
 }

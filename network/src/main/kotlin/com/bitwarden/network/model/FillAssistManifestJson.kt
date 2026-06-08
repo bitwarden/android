@@ -14,16 +14,16 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class FillAssistManifestJson(
     @SerialName("buildId")
-    val buildId: String? = null,
+    val buildId: String,
 
     @SerialName("timestamp")
-    val timestamp: String? = null,
+    val timestamp: String,
 
     @SerialName("gitSha")
-    val gitSha: String? = null,
+    val gitSha: String,
 
     @SerialName("maps")
-    val maps: MapsJson? = null,
+    val maps: MapsJson,
 ) {
     /**
      * Container for all available maps.
@@ -34,13 +34,13 @@ data class FillAssistManifestJson(
     @Serializable
     data class MapsJson(
         @SerialName("forms")
-        val forms: Map<String, FileEntryJson?>?,
+        val forms: Map<String, FileEntryJson>,
     )
 
     /**
      * Metadata for a single versioned file in a map.
      *
-     * @property filename The filename to fetch (e.g. "forms.v0.json").
+     * @property filename The filename to fetch (e.g. "forms.v1.json").
      * @property cid The SHA-256 content hash in "sha256:<hex>" format. Used as a staleness key
      * to detect when the forms file has changed on the server, avoiding unnecessary re-downloads.
      * @property schema The schema filename associated with this file version.
@@ -50,13 +50,13 @@ data class FillAssistManifestJson(
     @Serializable
     data class FileEntryJson(
         @SerialName("filename")
-        val filename: String? = null,
+        val filename: String,
 
         @SerialName("cid")
-        val cid: String? = null,
+        val cid: String,
 
         @SerialName("schema")
-        val schema: String? = null,
+        val schema: String,
 
         @SerialName("deprecated")
         val deprecated: Boolean? = null,
