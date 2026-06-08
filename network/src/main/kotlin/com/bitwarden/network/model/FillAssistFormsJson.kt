@@ -14,10 +14,10 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class FillAssistFormsJson(
     @SerialName("schemaVersion")
-    val schemaVersion: String? = null,
+    val schemaVersion: String,
 
     @SerialName("hosts")
-    val hosts: Map<String, HostEntryJson?>? = null,
+    val hosts: Map<String, HostEntryJson?>,
 ) {
     /**
      * Form descriptions and pathname-specific overrides for a single host.
@@ -60,7 +60,7 @@ data class FillAssistFormsJson(
         val category: String,
 
         @SerialName("container")
-        val container: List<String>?,
+        val container: List<String>? = null,
 
         @SerialName("fields")
         val fields: Map<String, JsonElement>,
