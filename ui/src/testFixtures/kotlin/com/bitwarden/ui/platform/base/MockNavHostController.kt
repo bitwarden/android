@@ -31,6 +31,7 @@ fun createMockNavHostController(): NavHostController =
         every { setViewModelStore(viewModelStore = any()) } just runs
         every { setLifecycleOwner(owner = any()) } just runs
         every { navigate(route = any<Any>(), navOptions = any()) } just runs
+        every { navigate(route = any<Any>(), builder = any()) } just runs
     }
 
 /**

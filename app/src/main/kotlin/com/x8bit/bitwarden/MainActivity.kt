@@ -36,17 +36,11 @@ import com.x8bit.bitwarden.data.platform.manager.util.ObserveScreenDataEffect
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.composition.LocalManagerProvider
-import com.x8bit.bitwarden.ui.platform.feature.accessibilitydisclosure.accessibilityDisclosureDestination
-import com.x8bit.bitwarden.ui.platform.feature.accessibilitydisclosure.navigateToAccessibilityDisclosure
-import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.cookieAcquisitionDestination
-import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.navigateToCookieAcquisition
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.debugMenuDestination
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.manager.DebugMenuLaunchManager
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.navigateToDebugMenuScreen
-import com.x8bit.bitwarden.ui.platform.feature.localnetworkaccess.localNetworkAccessDestination
-import com.x8bit.bitwarden.ui.platform.feature.localnetworkaccess.navigateToLocalNetworkAccess
-import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavigationRoute
-import com.x8bit.bitwarden.ui.platform.feature.rootnav.rootNavDestination
+import com.x8bit.bitwarden.ui.platform.feature.overlaynav.OverlayNavRoute
+import com.x8bit.bitwarden.ui.platform.feature.overlaynav.overlayNavDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 import com.x8bit.bitwarden.ui.platform.util.appLanguage
@@ -112,7 +106,6 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    @Suppress("LongMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         intent = intent.validate()
         var shouldShowSplashScreen = true
@@ -148,29 +141,15 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     NavHost(
                         navController = navController,
-                        startDestination = RootNavigationRoute,
+                        startDestination = OverlayNavRoute,
                         modifier = Modifier
                             .background(color = BitwardenTheme.colorScheme.background.primary),
                     ) {
-                        // Root navigation, debug menu, and cookie acquisition exist at
-                        // this top level. They can appear on top of the rest of the app
-                        // without interacting with the state-based navigation used by
-                        // RootNavScreen.
-                        rootNavDestination { shouldShowSplashScreen = false }
+                        // The OverlayNav and Debug destinations are the only UIs that can be
+                        // displayed here, everything else should be inside the OverlayNav.
+                        overlayNavDestination { shouldShowSplashScreen = false }
                         debugMenuDestination(
                             onNavigateBack = { navController.popBackStack() },
-                            onSplashScreenRemoved = { shouldShowSplashScreen = false },
-                        )
-                        cookieAcquisitionDestination(
-                            onDismiss = { navController.popBackStack() },
-                            onSplashScreenRemoved = { shouldShowSplashScreen = false },
-                        )
-                        localNetworkAccessDestination(
-                            onDismiss = { navController.popBackStack() },
-                            onSplashScreenRemoved = { shouldShowSplashScreen = false },
-                        )
-                        accessibilityDisclosureDestination(
-                            onDismiss = { navController.popBackStack() },
                             onSplashScreenRemoved = { shouldShowSplashScreen = false },
                         )
                     }
@@ -207,7 +186,7 @@ class MainActivity : AppCompatActivity() {
                 locales.get(0)?.appLanguage
             }
         } else {
-            // For older versions, use what ever language is available from the repository.
+            // For older versions, use whatever language is available from the repository.
             settingsRepository.appLanguage
         }
 
@@ -256,15 +235,6 @@ class MainActivity : AppCompatActivity() {
                 is MainEvent.CompleteAutofill -> handleCompleteAutofill(event)
                 MainEvent.Recreate -> handleRecreate()
                 MainEvent.NavigateToDebugMenu -> navController.navigateToDebugMenuScreen()
-                MainEvent.NavigateToCookieAcquisition -> navController.navigateToCookieAcquisition()
-                MainEvent.NavigateToLocalNetworkAccess -> {
-                    navController.navigateToLocalNetworkAccess()
-                }
-
-                MainEvent.NavigateToAccessibilityDisclosure -> {
-                    navController.navigateToAccessibilityDisclosure()
-                }
-
                 is MainEvent.UpdateAppLocale -> {
                     AppCompatDelegate.setApplicationLocales(
                         LocaleListCompat.forLanguageTags(event.localeName),

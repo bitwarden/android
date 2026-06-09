@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.debugmenu
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
+import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import kotlinx.serialization.Serializable
 
 /**
@@ -27,7 +27,7 @@ fun NavGraphBuilder.debugMenuDestination(
     onNavigateBack: () -> Unit,
     onSplashScreenRemoved: () -> Unit,
 ) {
-    composableWithPushTransitions<DebugRoute> {
+    composableWithSlideTransitions<DebugRoute> {
         DebugMenuScreen(onNavigateBack = onNavigateBack)
         // If we are displaying the debug screen, then we can just hide the splash screen.
         onSplashScreenRemoved()
