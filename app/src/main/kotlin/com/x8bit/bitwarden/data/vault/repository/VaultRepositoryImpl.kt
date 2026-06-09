@@ -41,6 +41,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.model.onVaultUnlockSuccess
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolder
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkAccount
@@ -321,21 +322,19 @@ class VaultRepositoryImpl(
                     decryptedUserKey = decryptedUserKey,
                 ),
             )
-            .also {
-                if (it is VaultUnlockResult.Success) {
-                    encryptedBiometricsKey?.let { key ->
-                        // If this key is present, we store it and the associated IV for future use
-                        // since we want to migrate the user to a more secure form of biometrics.
-                        authDiskSource.storeUserBiometricUnlockKey(
-                            userId = userId,
-                            biometricsKey = key,
-                        )
-                        authDiskSource.storeUserBiometricInitVector(userId = userId, iv = cipher.iv)
-                    }
-                    pinProtectedUserKeyManager.deriveTemporaryPinProtectedUserKeyIfNecessary(
+            .onVaultUnlockSuccess {
+                encryptedBiometricsKey?.let { key ->
+                    // If this key is present, we store it and the associated IV for future use
+                    // since we want to migrate the user to a more secure form of biometrics.
+                    authDiskSource.storeUserBiometricUnlockKey(
                         userId = userId,
+                        biometricsKey = key,
                     )
+                    authDiskSource.storeUserBiometricInitVector(userId = userId, iv = cipher.iv)
                 }
+                pinProtectedUserKeyManager.deriveTemporaryPinProtectedUserKeyIfNecessary(
+                    userId = userId,
+                )
             }
     }
 
@@ -362,12 +361,10 @@ class VaultRepositoryImpl(
                 userId = userId,
                 initUserCryptoMethod = initUserCryptoMethod,
             )
-            .also {
-                if (it is VaultUnlockResult.Success) {
-                    pinProtectedUserKeyManager.deriveTemporaryPinProtectedUserKeyIfNecessary(
-                        userId = userId,
-                    )
-                }
+            .onVaultUnlockSuccess {
+                pinProtectedUserKeyManager.deriveTemporaryPinProtectedUserKeyIfNecessary(
+                    userId = userId,
+                )
             }
     }
 

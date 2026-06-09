@@ -131,6 +131,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockError
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.model.onVaultUnlockSuccess
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkMasterPasswordUnlock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -577,18 +578,16 @@ class AuthRepositoryImpl(
                             decryptedUserKey = response.userKey,
                         ),
                     )
-                    .also { result ->
-                        if (result is VaultUnlockResult.Success) {
-                            authDiskSource.storeAccountCryptographicState(
+                    .onVaultUnlockSuccess {
+                        authDiskSource.storeAccountCryptographicState(
+                            userId = userId,
+                            accountCryptographicState = response.accountCryptographicState,
+                        )
+                        if (shouldTrustDevice) {
+                            authDiskSource.storeDeviceKey(
                                 userId = userId,
-                                accountCryptographicState = response.accountCryptographicState,
+                                deviceKey = response.deviceKey,
                             )
-                            if (shouldTrustDevice) {
-                                authDiskSource.storeDeviceKey(
-                                    userId = userId,
-                                    deviceKey = response.deviceKey,
-                                )
-                            }
                         }
                     }
             }
@@ -1514,8 +1513,8 @@ class AuthRepositoryImpl(
                         onSuccess = { ValidatePasswordResult.Success(isValid = true) },
                         onFailure = {
                             // We currently assume that all errors are caused by the user entering
-                            // an invalid password, this is not necessarily the case but we have no
-                            // way to differentiate between the different errors.
+                            // an invalid password, this is not necessarily the case, but we have
+                            // no way to differentiate between the different errors.
                             ValidatePasswordResult.Success(isValid = false)
                         },
                     )
@@ -2071,13 +2070,11 @@ class AuthRepositoryImpl(
                                 userKey = keyConnector.encryptedUserKey,
                             ),
                         )
-                        .also { result ->
-                            if (result is VaultUnlockResult.Success) {
-                                authDiskSource.storeAccountCryptographicState(
-                                    userId = userId,
-                                    accountCryptographicState = accountCryptographicState,
-                                )
-                            }
+                        .onVaultUnlockSuccess {
+                            authDiskSource.storeAccountCryptographicState(
+                                userId = userId,
+                                accountCryptographicState = accountCryptographicState,
+                            )
                         }
                 }
                 .fold(
@@ -2152,8 +2149,8 @@ class AuthRepositoryImpl(
                     ),
                 )
                 // We are purposely not storing the master password hash here since it is not
-                // formatted in in a manner that we can use. We will store it properly the next
-                // time the user enters their master password and it is validated.
+                // formatted in a manner that we can use. We will store it properly the next
+                // time the user enters their master password, and it is validated.
             }
         }
 
@@ -2258,7 +2255,7 @@ class AuthRepositoryImpl(
             // unlock the vault for organization data after receiving the sync response if this
             // data is currently absent. These keys may be present during certain multi-phase login
             // processes or if we needed to delete the user's token due to an encrypted data
-            // corruption issue and they are forced to log back in.
+            // corruption issue, and they are forced to log back in.
             organizationKeys = authDiskSource.getOrganizationKeys(userId = userId),
         )
     }
