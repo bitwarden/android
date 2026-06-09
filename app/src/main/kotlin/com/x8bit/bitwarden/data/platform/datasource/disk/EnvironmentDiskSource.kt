@@ -27,4 +27,10 @@ interface EnvironmentDiskSource {
      * Stores the [urls] for the given [userEmail].
      */
     fun storePreAuthEnvironmentUrlDataForEmail(userEmail: String, urls: EnvironmentUrlDataJson)
+
+    /**
+     * The fill-assist URL provided by the server config, or `null` if the server does not
+     * configure fill-assist targeting rules.
+     */
+    var fillAssistRulesUrl: String?
 }
