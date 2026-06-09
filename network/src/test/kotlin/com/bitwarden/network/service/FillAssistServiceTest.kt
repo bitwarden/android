@@ -54,6 +54,7 @@ private val MANIFEST = FillAssistManifestJson(
                 filename = "forms.v1.json",
                 cid = "sha256:5b8f688d24bb9c38b4094838fa2baacb3cc4ab302e3545adf016b05f6b6b96db",
                 schema = "forms.v1.schema.json",
+                deprecated = null,
             ),
         ),
     ),

@@ -59,6 +59,6 @@ data class FillAssistManifestJson(
         val schema: String,
 
         @SerialName("deprecated")
-        val deprecated: Boolean? = null,
+        val deprecated: Boolean?,
     )
 }
