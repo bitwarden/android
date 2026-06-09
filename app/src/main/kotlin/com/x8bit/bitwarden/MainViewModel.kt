@@ -102,7 +102,6 @@ class MainViewModel @Inject constructor(
         isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
         isDynamicColorsEnabled = settingsRepository.isDynamicColorsEnabled,
         hasResizeBeenRequested = false,
-        dialogState = null,
     ),
 ) {
     private var specialCircumstance: SpecialCircumstance?
@@ -219,10 +218,6 @@ class MainViewModel @Inject constructor(
             is MainAction.CookieAcquisitionResult -> handleCookieAcquisitionResult(action)
             is MainAction.PremiumCheckoutResult -> handlePremiumCheckoutResult(action)
             is MainAction.StripePortalResult -> handleStripePortalResult()
-            is MainAction.DismissAccessibilityDisclaimerDialog -> {
-                handleDismissAccessibilityDisclaimerDialog()
-            }
-
             is MainAction.Internal -> handleInternalAction(action)
         }
     }
@@ -256,11 +251,8 @@ class MainViewModel @Inject constructor(
     private fun handleHasShownAccessibilityDisclaimerUpdate(
         action: MainAction.Internal.HasShownAccessibilityDisclaimerUpdate,
     ) {
-        mutableStateFlow.update {
-            it.copy(
-                dialogState = MainState.DialogState.AccessibilityDisclosure
-                    .takeUnless { action.hasBeenShown },
-            )
+        if (!action.hasBeenShown) {
+            sendEvent(MainEvent.NavigateToAccessibilityDisclosure)
         }
     }
 
@@ -296,10 +288,6 @@ class MainViewModel @Inject constructor(
 
     private fun handleStripePortalResult() {
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.StripePortal
-    }
-
-    private fun handleDismissAccessibilityDisclaimerDialog() {
-        settingsRepository.accessibilityDisclaimerHasBeenShown()
     }
 
     private fun handleAppResumeDataUpdated(action: MainAction.ResumeScreenDataReceived) {
@@ -587,25 +575,12 @@ data class MainState(
     val isScreenCaptureAllowed: Boolean,
     val isDynamicColorsEnabled: Boolean,
     val hasResizeBeenRequested: Boolean,
-    val dialogState: DialogState?,
 ) : Parcelable {
     /**
      * Contains all feature flags that are available to the UI.
      */
     val featureFlagsState: FeatureFlagsState
         get() = FeatureFlagsState
-
-    /**
-     * Representation of all dialogs displayed from the [MainActivity].
-     */
-    @Parcelize
-    sealed class DialogState : Parcelable {
-        /**
-         * Displays an accessibility disclosure to users explaining how we utilize the
-         * AccessibilityService.
-         */
-        data object AccessibilityDisclosure : DialogState()
-    }
 }
 
 /**
@@ -674,11 +649,6 @@ sealed class MainAction {
      * in the device's settings.
      */
     data class AppSpecificLanguageUpdate(val appLanguage: AppLanguage) : MainAction()
-
-    /**
-     * Received if the user dismisses the accessibility disclaimer dialog.
-     */
-    data object DismissAccessibilityDisclaimerDialog : MainAction()
 
     /**
      * Actions for internal use by the ViewModel.
@@ -783,6 +753,11 @@ sealed class MainEvent {
      * Navigate to the local network access screen.
      */
     data object NavigateToLocalNetworkAccess : MainEvent()
+
+    /**
+     * Navigate to the accessibility disclosure screen.
+     */
+    data object NavigateToAccessibilityDisclosure : MainEvent()
 
     /**
      * Indicates that the app language has been updated.
