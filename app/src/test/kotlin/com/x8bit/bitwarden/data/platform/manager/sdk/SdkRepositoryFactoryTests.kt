@@ -36,6 +36,7 @@ class SdkRepositoryFactoryTests {
             override fun getBaseApiUrl(): String = BASE_API_URL
             override fun getBaseIdentityUrl(): String = BASE_IDENTITY_URL
             override fun getBaseEventsUrl(): String = BASE_EVENTS_URL
+            override fun getBaseFillAssistUrl(): String? = null
         },
         authTokenProvider = mockk(),
         certificateProvider = mockk(),

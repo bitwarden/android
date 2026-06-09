@@ -4,6 +4,7 @@ import com.bitwarden.data.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.datasource.disk.FakeEnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.provider.BaseUrlsProviderImpl
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 
 class BaseUrlsProviderTest {
@@ -65,5 +66,17 @@ class BaseUrlsProviderTest {
             "https://events.bitwarden.com",
             baseUrlsManager.getBaseEventsUrl(),
         )
+    }
+
+    @Test
+    fun `getBaseFillAssistUrl should return url from disk source when present`() {
+        fakeEnvironmentDiskSource.fillAssistRulesUrl = "https://example.com/"
+        assertEquals("https://example.com/", baseUrlsManager.getBaseFillAssistUrl())
+    }
+
+    @Test
+    fun `getBaseFillAssistUrl should return null when not set`() {
+        fakeEnvironmentDiskSource.fillAssistRulesUrl = null
+        assertNull(baseUrlsManager.getBaseFillAssistUrl())
     }
 }

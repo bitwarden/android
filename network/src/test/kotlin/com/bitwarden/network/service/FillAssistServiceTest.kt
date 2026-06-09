@@ -22,25 +22,25 @@ class FillAssistServiceTest : BaseServiceTest() {
     @Test
     fun `getManifest should parse manifest response`() = runTest {
         server.enqueue(MockResponse().setBody(MANIFEST_JSON))
-        assertEquals(MANIFEST.asSuccess(), service.getManifest(url = "$urlPrefix/manifest.json"))
+        assertEquals(MANIFEST.asSuccess(), service.getManifest())
     }
 
     @Test
     fun `getManifest should return failure on server error`() = runTest {
         server.enqueue(MockResponse().setResponseCode(500))
-        assertTrue(service.getManifest(url = "$urlPrefix/manifest.json").isFailure)
+        assertTrue(service.getManifest().isFailure)
     }
 
     @Test
     fun `getForms should parse and return forms`() = runTest {
         server.enqueue(MockResponse().setBody(FORMS_V1_JSON))
-        assertEquals(FORMS_V1.asSuccess(), service.getForms(formsUrl = "$urlPrefix/forms.v1.json"))
+        assertEquals(FORMS_V1.asSuccess(), service.getForms(filename = "forms.v1.json"))
     }
 
     @Test
     fun `getForms should return failure on server error`() = runTest {
         server.enqueue(MockResponse().setResponseCode(404))
-        assertTrue(service.getForms(formsUrl = "$urlPrefix/forms.v1.json").isFailure)
+        assertTrue(service.getForms(filename = "forms.v1.json").isFailure)
     }
 }
 

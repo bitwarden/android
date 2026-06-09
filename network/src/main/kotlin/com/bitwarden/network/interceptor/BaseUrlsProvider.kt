@@ -18,4 +18,10 @@ interface BaseUrlsProvider {
      * Gets the base URL for "/events" calls.
      */
     fun getBaseEventsUrl(): String
+
+    /**
+     * Gets the base URL for fill-assist calls, or null if the server does not provide
+     * fill-assist targeting rules.
+     */
+    fun getBaseFillAssistUrl(): String?
 }
