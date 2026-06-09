@@ -63,13 +63,16 @@ class BrowserThirdPartyAutofillManagerImpl(
         var thirdPartyEnabled = false
         val isThirdPartyAvailable = cursor
             ?.use {
-                it.moveToFirst()
-                thirdPartyEnabled = it
-                    .getColumnIndex(THIRD_PARTY_MODE_COLUMN)
-                    .takeUnless { columnIndex -> columnIndex == -1 }
-                    ?.let { columnIndex -> it.getInt(columnIndex) != 0 }
-                    ?: false
-                true
+                if (it.moveToFirst()) {
+                    thirdPartyEnabled = it
+                        .getColumnIndex(THIRD_PARTY_MODE_COLUMN)
+                        .takeUnless { columnIndex -> columnIndex == -1 }
+                        ?.let { columnIndex -> it.getInt(columnIndex) != 0 }
+                        ?: false
+                    true
+                } else {
+                    false
+                }
             }
             ?: false
         return BrowserThirdPartyAutoFillData(
