@@ -10,6 +10,7 @@ import com.bitwarden.network.model.FillAssistManifestJson
 import com.bitwarden.network.service.FillAssistService
 import com.x8bit.bitwarden.data.autofill.datasource.disk.FillAssistDiskSource
 import com.x8bit.bitwarden.data.autofill.model.FillAssistRules
+import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import io.mockk.clearMocks
 import io.mockk.coEvery
@@ -33,8 +34,7 @@ import java.time.Instant
 import java.time.ZoneOffset
 
 private const val BASE_URL = "https://fill-assist.example.com"
-private const val MANIFEST_URL = "$BASE_URL/manifest.json"
-private const val FORMS_URL = "$BASE_URL/forms.v0.json"
+private const val FORMS_FILENAME = "forms.v1.json"
 private const val CID = "sha256:abc123"
 
 private val FIXED_CLOCK: Clock = Clock.fixed(
@@ -51,13 +51,15 @@ class FillAssistManagerTest {
         every { getFeatureFlag(FlagKey.FillAssistTargetingRules) } returns true
     }
 
+    private val serverConfigFlow = MutableStateFlow<ServerConfig?>(SERVER_CONFIG)
+
     private val serverConfigRepository: ServerConfigRepository = mockk {
-        every { serverConfigStateFlow } returns MutableStateFlow(SERVER_CONFIG)
+        every { serverConfigStateFlow } returns serverConfigFlow
     }
 
     private val fillAssistService: FillAssistService = mockk {
-        coEvery { getManifest(url = MANIFEST_URL) } returns Result.success(MANIFEST)
-        coEvery { getForms(formsUrl = FORMS_URL) } returns Result.success(FORMS_V1)
+        coEvery { getManifest() } returns Result.success(MANIFEST)
+        coEvery { getForms(any()) } returns Result.success(FORMS_V1)
     }
 
     private val fillAssistDiskSource: FillAssistDiskSource = mockk {
@@ -69,11 +71,16 @@ class FillAssistManagerTest {
         every { storeLastFetchTimestamp(any(), any()) } just runs
     }
 
+    private val environmentDiskSource: EnvironmentDiskSource = mockk {
+        every { fillAssistRulesUrl = any() } just runs
+    }
+
     private val manager = FillAssistManagerImpl(
         fillAssistService = fillAssistService,
         fillAssistDiskSource = fillAssistDiskSource,
         featureFlagManager = featureFlagManager,
         serverConfigRepository = serverConfigRepository,
+        environmentDiskSource = environmentDiskSource,
         clock = FIXED_CLOCK,
         dispatcherManager = FakeDispatcherManager(),
     )
@@ -81,8 +88,18 @@ class FillAssistManagerTest {
     @BeforeEach
     fun setUp() {
         // serverConfigStateFlow replays its current value on subscription, triggering
-        // syncIfNecessary() during construction. Clear call counts for a clean test slate.
-        clearMocks(fillAssistService, fillAssistDiskSource, answers = false)
+        // syncIfNecessary() and the URL write during construction. Clear call counts for a clean
+        // test slate.
+        clearMocks(fillAssistService, fillAssistDiskSource, environmentDiskSource, answers = false)
+    }
+
+    @Test
+    fun `server config change writes fillAssistRulesUrl to environment disk source`() = runTest {
+        serverConfigFlow.value = null
+        verify { environmentDiskSource.fillAssistRulesUrl = null }
+
+        serverConfigFlow.value = SERVER_CONFIG
+        verify { environmentDiskSource.fillAssistRulesUrl = BASE_URL }
     }
 
     @Test
@@ -93,17 +110,17 @@ class FillAssistManagerTest {
 
         manager.syncIfNecessary()
 
-        coVerify(exactly = 0) { fillAssistService.getManifest(any()) }
+        coVerify(exactly = 0) { fillAssistService.getManifest() }
         verify(exactly = 0) { fillAssistDiskSource.storeFillAssistRules(any(), any()) }
     }
 
     @Test
     fun `sync returns success and does nothing when fillAssistRulesUrl is null`() = runTest {
-        every { serverConfigRepository.serverConfigStateFlow } returns MutableStateFlow(null)
+        serverConfigFlow.value = null
 
         manager.syncIfNecessary()
 
-        coVerify(exactly = 0) { fillAssistService.getManifest(any()) }
+        coVerify(exactly = 0) { fillAssistService.getManifest() }
     }
 
     @Test
@@ -114,7 +131,7 @@ class FillAssistManagerTest {
 
         manager.syncIfNecessary()
 
-        coVerify(exactly = 0) { fillAssistService.getManifest(any()) }
+        coVerify(exactly = 0) { fillAssistService.getManifest() }
         coVerify(exactly = 0) { fillAssistService.getForms(any()) }
     }
 
@@ -124,7 +141,7 @@ class FillAssistManagerTest {
 
         manager.syncIfNecessary()
 
-        coVerify(exactly = 1) { fillAssistService.getManifest(url = MANIFEST_URL) }
+        coVerify(exactly = 1) { fillAssistService.getManifest() }
         coVerify(exactly = 0) { fillAssistService.getForms(any()) }
         verify(exactly = 0) { fillAssistDiskSource.storeFillAssistRules(any(), any()) }
         verify { fillAssistDiskSource.storeLastFetchTimestamp(BASE_URL, FIXED_CLOCK.millis()) }
@@ -136,7 +153,7 @@ class FillAssistManagerTest {
 
         manager.syncIfNecessary()
 
-        coVerify(exactly = 1) { fillAssistService.getForms(formsUrl = FORMS_URL) }
+        coVerify(exactly = 1) { fillAssistService.getForms(filename = FORMS_FILENAME) }
         verify { fillAssistDiskSource.storeFillAssistRules(BASE_URL, any()) }
         verify { fillAssistDiskSource.storeLastKnownCid(BASE_URL, CID) }
         verify { fillAssistDiskSource.storeLastFetchTimestamp(BASE_URL, FIXED_CLOCK.millis()) }
@@ -145,7 +162,7 @@ class FillAssistManagerTest {
     @Test
     fun `sync does not store data when manifest fetch fails`() = runTest {
         coEvery {
-            fillAssistService.getManifest(any())
+            fillAssistService.getManifest()
         } returns Result.failure(RuntimeException("network error"))
 
         manager.syncIfNecessary()
@@ -158,7 +175,7 @@ class FillAssistManagerTest {
     @Test
     fun `sync does not store rules or cid when schemaVersion major is unsupported`() = runTest {
         coEvery { fillAssistService.getForms(any()) } returns Result.success(
-            FORMS_V1.copy(schemaVersion = "1.0.0"),
+            FORMS_V1.copy(schemaVersion = "2.0.0"),
         )
 
         manager.syncIfNecessary()
@@ -257,7 +274,7 @@ class FillAssistManagerTest {
 
     @Test
     fun `getFillAssistRules returns null when server URL is not configured`() {
-        every { serverConfigRepository.serverConfigStateFlow } returns MutableStateFlow(null)
+        serverConfigFlow.value = null
         assertNull(manager.getFillAssistRules())
     }
 
@@ -371,21 +388,22 @@ class FillAssistManagerTest {
 
 private val MANIFEST = FillAssistManifestJson(
     buildId = "local-build",
-    timestamp = null,
-    gitSha = null,
+    timestamp = "2026-01-01T12:00:00Z",
+    gitSha = "abc123",
     maps = FillAssistManifestJson.MapsJson(
         forms = mapOf(
-            "v0" to FillAssistManifestJson.FileEntryJson(
-                filename = "forms.v0.json",
+            "v1" to FillAssistManifestJson.FileEntryJson(
+                filename = FORMS_FILENAME,
                 cid = CID,
-                schema = null,
+                schema = "forms.v1.schema.json",
+                deprecated = null,
             ),
         ),
     ),
 )
 
 private val FORMS_V1 = FillAssistFormsJson(
-    schemaVersion = "0.1.0",
+    schemaVersion = "1.0.0",
     hosts = mapOf(
         "example.com" to FillAssistFormsJson.HostEntryJson(
             forms = listOf(
@@ -406,7 +424,7 @@ private val FORMS_V1 = FillAssistFormsJson(
 
 // Host with two pathnames — both forms must appear in the stored rules.
 private val FORMS_V1_MULTI_PATHNAME = FillAssistFormsJson(
-    schemaVersion = "0.1.0",
+    schemaVersion = "1.0.0",
     hosts = mapOf(
         "example.com" to FillAssistFormsJson.HostEntryJson(
             forms = null,
@@ -495,7 +513,7 @@ private val EXPECTED_RULES_MULTI_PATHNAME = FillAssistRules(
 
 // Host with both top-level forms and pathname forms — both must appear in the stored rules.
 private val FORMS_V1_HOST_AND_PATHNAME = FillAssistFormsJson(
-    schemaVersion = "0.1.0",
+    schemaVersion = "1.0.0",
     hosts = mapOf(
         "example.com" to FillAssistFormsJson.HostEntryJson(
             forms = listOf(
@@ -561,7 +579,7 @@ private val EXPECTED_RULES_HOST_AND_PATHNAME = FillAssistRules(
 
 // Two pathnames both define account-login — must be merged into one HostRule.
 private val FORMS_V1_SAME_CATEGORY_PATHNAMES = FillAssistFormsJson(
-    schemaVersion = "0.1.0",
+    schemaVersion = "1.0.0",
     hosts = mapOf(
         "example.com" to FillAssistFormsJson.HostEntryJson(
             forms = null,
@@ -633,7 +651,7 @@ private val EXPECTED_RULES_MERGED_CATEGORY = FillAssistRules(
 
 // Two pathnames define the same selector — the duplicate must be removed.
 private val FORMS_V1_DUPLICATE_SELECTORS = FillAssistFormsJson(
-    schemaVersion = "0.1.0",
+    schemaVersion = "1.0.0",
     hosts = mapOf(
         "example.com" to FillAssistFormsJson.HostEntryJson(
             forms = null,

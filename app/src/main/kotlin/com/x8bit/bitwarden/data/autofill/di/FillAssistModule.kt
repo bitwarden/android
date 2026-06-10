@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.autofill.datasource.disk.FillAssistDiskSource
 import com.x8bit.bitwarden.data.autofill.datasource.disk.FillAssistDiskSourceImpl
 import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
 import com.x8bit.bitwarden.data.autofill.manager.FillAssistManagerImpl
+import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import dagger.Module
 import dagger.Provides
@@ -43,6 +44,7 @@ object FillAssistModule {
         fillAssistDiskSource: FillAssistDiskSource,
         featureFlagManager: FeatureFlagManager,
         serverConfigRepository: ServerConfigRepository,
+        environmentDiskSource: EnvironmentDiskSource,
         clock: Clock,
         dispatcherManager: DispatcherManager,
     ): FillAssistManager =
@@ -51,6 +53,7 @@ object FillAssistModule {
             fillAssistDiskSource = fillAssistDiskSource,
             featureFlagManager = featureFlagManager,
             serverConfigRepository = serverConfigRepository,
+            environmentDiskSource = environmentDiskSource,
             clock = clock,
             dispatcherManager = dispatcherManager,
         )

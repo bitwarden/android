@@ -2,13 +2,13 @@ package com.x8bit.bitwarden.data.autofill.manager
 
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.model.FlagKey
-import java.time.Clock
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.network.model.FillAssistFormsJson
 import com.bitwarden.network.service.FillAssistService
 import com.x8bit.bitwarden.data.autofill.datasource.disk.FillAssistDiskSource
 import com.x8bit.bitwarden.data.autofill.model.FillAssistRules
 import com.x8bit.bitwarden.data.autofill.model.FillAssistRules.SelectorClause
+import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -20,9 +20,10 @@ import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
 import timber.log.Timber
+import java.time.Clock
 
-private const val CURRENT_FORMS_VERSION = "v0"
-private const val EXPECTED_SCHEMA_MAJOR = "0"
+private const val CURRENT_FORMS_VERSION = "v1"
+private const val EXPECTED_SCHEMA_MAJOR = "1"
 
 /** Re-fetch interval in milliseconds (6 hours, matching the browser implementation). */
 private const val UPDATE_INTERVAL_MS = 6 * 60 * 60 * 1000L
@@ -46,6 +47,7 @@ class FillAssistManagerImpl(
     private val fillAssistDiskSource: FillAssistDiskSource,
     private val featureFlagManager: FeatureFlagManager,
     private val serverConfigRepository: ServerConfigRepository,
+    private val environmentDiskSource: EnvironmentDiskSource,
     private val clock: Clock,
     dispatcherManager: DispatcherManager,
 ) : FillAssistManager {
@@ -56,6 +58,10 @@ class FillAssistManagerImpl(
 
     init {
         serverConfigRepository.serverConfigStateFlow
+            .onEach { config ->
+                environmentDiskSource.fillAssistRulesUrl =
+                    config?.serverData?.environment?.fillAssistRulesUrl
+            }
             .filterNotNull()
             .onEach { syncIfNecessary() }
             .launchIn(unconfinedScope)
@@ -77,22 +83,16 @@ class FillAssistManagerImpl(
     }
 
     private suspend fun sync(serverUrl: String) = runCatching {
-        // Always fetch the manifest — it is the CID staleness check.
-        val manifest = fillAssistService
-            .getManifest(url = serverUrl.trimEnd('/') + "/manifest.json")
-            .getOrThrow()
+        val manifest = fillAssistService.getManifest().getOrThrow()
 
-        val versionEntry = manifest.maps?.forms?.get(CURRENT_FORMS_VERSION)
+        val versionEntry = manifest.maps.forms[CURRENT_FORMS_VERSION]
             ?: error("Version $CURRENT_FORMS_VERSION not found in manifest")
-        val cid = versionEntry.cid
-            ?: error("No CID for version $CURRENT_FORMS_VERSION in manifest")
 
         if (versionEntry.deprecated == true) {
             Timber.w("Fill-assist forms $CURRENT_FORMS_VERSION is deprecated")
         }
 
-        // CID check: data on the server is unchanged — update the timestamp and skip download.
-        if (cid == fillAssistDiskSource.getLastKnownCid(serverUrl)) {
+        if (versionEntry.cid == fillAssistDiskSource.getLastKnownCid(serverUrl)) {
             fillAssistDiskSource.storeLastFetchTimestamp(
                 serverUrl = serverUrl,
                 timestamp = clock.millis(),
@@ -100,14 +100,11 @@ class FillAssistManagerImpl(
             return@runCatching
         }
 
-        val formsUrl = serverUrl.trimEnd('/') + "/" +
-            (versionEntry.filename ?: "forms.$CURRENT_FORMS_VERSION.json")
-
         val forms = fillAssistService
-            .getForms(formsUrl = formsUrl)
+            .getForms(filename = versionEntry.filename)
             .getOrThrow()
 
-        val schemaMajor = forms.schemaVersion?.substringBefore('.')
+        val schemaMajor = forms.schemaVersion.substringBefore('.')
         if (schemaMajor != EXPECTED_SCHEMA_MAJOR) {
             Timber.w("Unsupported fill-assist schema version: ${forms.schemaVersion}")
             fillAssistDiskSource.storeLastFetchTimestamp(
@@ -119,7 +116,7 @@ class FillAssistManagerImpl(
 
         val rules = parseForms(forms)
         fillAssistDiskSource.storeFillAssistRules(serverUrl = serverUrl, rules = rules)
-        fillAssistDiskSource.storeLastKnownCid(serverUrl = serverUrl, cid = cid)
+        fillAssistDiskSource.storeLastKnownCid(serverUrl = serverUrl, cid = versionEntry.cid)
         fillAssistDiskSource.storeLastFetchTimestamp(
             serverUrl = serverUrl,
             timestamp = clock.millis(),
@@ -129,9 +126,13 @@ class FillAssistManagerImpl(
     }
 
     override fun getFillAssistRules(): FillAssistRules? {
-        val environment =
-            serverConfigRepository.serverConfigStateFlow.value?.serverData?.environment
-        val serverUrl = environment?.fillAssistRulesUrl ?: return null
+        val serverUrl = serverConfigRepository
+            .serverConfigStateFlow
+            .value
+            ?.serverData
+            ?.environment
+            ?.fillAssistRulesUrl
+            ?: return null
         return fillAssistDiskSource.getFillAssistRules(serverUrl = serverUrl)
     }
 }
@@ -140,10 +141,9 @@ class FillAssistManagerImpl(
 
 private fun parseForms(forms: FillAssistFormsJson): FillAssistRules {
     val hostRules = forms.hosts
-        ?.mapNotNull { (hostname, hostEntry) -> hostEntry?.let { hostname to parseHostEntry(it) } }
-        ?.filter { (_, rules) -> rules.isNotEmpty() }
-        ?.toMap()
-        .orEmpty()
+        .mapNotNull { (hostname, hostEntry) -> hostEntry?.let { hostname to parseHostEntry(it) } }
+        .filter { (_, rules) -> rules.isNotEmpty() }
+        .toMap()
     return FillAssistRules(hostRules = hostRules)
 }
 
@@ -152,7 +152,7 @@ private fun parseHostEntry(
 ): List<FillAssistRules.HostRule> {
     val allForms = buildList {
         addAll(hostEntry.forms.orEmpty())
-        hostEntry.pathnames?.values?.filterNotNull()?.forEach { addAll(it.forms.orEmpty()) }
+        hostEntry.pathnames?.values?.filterNotNull()?.forEach { addAll(it.forms) }
     }.distinct()
 
     return buildFieldsByCategory(allForms).map { (category, fields) ->
@@ -167,17 +167,16 @@ private fun buildFieldsByCategory(
     forms: List<FillAssistFormsJson.FormJson>,
 ): Map<String, MutableMap<String, MutableList<SelectorClause>>> {
     val result = mutableMapOf<String, MutableMap<String, MutableList<SelectorClause>>>()
-    forms.mapNotNull { form -> form.category?.let { form to it } }
-        .forEach { (form, category) ->
-            val parsedFields = form.fields.orEmpty()
-                .mapValues { (_, elem) -> parseCompositeSelectorArray(elem) }
-                .filterValues { it.isNotEmpty() }
-                .takeIf { it.isNotEmpty() } ?: return@forEach
-            val categoryFields = result.getOrPut(category) { mutableMapOf() }
-            parsedFields.forEach { (fieldKey, selectors) ->
-                categoryFields.getOrPut(fieldKey) { mutableListOf() }.addAll(selectors)
-            }
+    forms.forEach { form ->
+        val parsedFields = form.fields
+            .mapValues { (_, elem) -> parseCompositeSelectorArray(elem) }
+            .filterValues { it.isNotEmpty() }
+            .takeIf { it.isNotEmpty() } ?: return@forEach
+        val categoryFields = result.getOrPut(form.category) { mutableMapOf() }
+        parsedFields.forEach { (fieldKey, selectors) ->
+            categoryFields.getOrPut(fieldKey) { mutableListOf() }.addAll(selectors)
         }
+    }
     return result
 }
 

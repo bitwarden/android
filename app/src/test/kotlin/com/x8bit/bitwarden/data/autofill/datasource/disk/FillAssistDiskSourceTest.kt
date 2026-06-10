@@ -86,6 +86,27 @@ class FillAssistDiskSourceTest {
     }
 
     @Test
+    fun `migration does not clear fillAssistRulesUrl from EnvironmentDiskSource`() {
+        fakeSharedPreferences.edit()
+            .putString(
+                "bwPreferencesStorage:fillAssistRulesUrl",
+                "https://fill-assist.example.com/",
+            )
+            .putInt("bwPreferencesStorage:fillAssistCacheVersion", -1)
+            .apply()
+
+        FillAssistDiskSourceImpl(sharedPreferences = fakeSharedPreferences, json = json)
+
+        assertEquals(
+            "https://fill-assist.example.com/",
+            fakeSharedPreferences.getString(
+                key = "bwPreferencesStorage:fillAssistRulesUrl",
+                defaultValue = null,
+            ),
+        )
+    }
+
+    @Test
     fun `migration preserves data when cache version is current`() {
         diskSource.storeFillAssistRules(serverUrl = SERVER_URL_1, rules = FILL_ASSIST_RULES)
         diskSource.storeLastKnownCid(serverUrl = SERVER_URL_1, cid = "sha256:abc")
