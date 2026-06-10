@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.network.model.AccountKeysJson
-import com.x8bit.bitwarden.data.vault.repository.util.createWrappedAccountCryptographicState
 
 /**
  * Creates a [WrappedAccountCryptographicState] based on the available cryptographic parameters.
@@ -15,9 +14,20 @@ import com.x8bit.bitwarden.data.vault.repository.util.createWrappedAccountCrypto
  */
 fun AccountKeysJson?.toAccountCryptographicState(
     privateKey: String,
-): WrappedAccountCryptographicState = createWrappedAccountCryptographicState(
-    privateKey = privateKey,
-    securityState = this?.securityState?.securityState,
-    signingKey = this?.signatureKeyPair?.wrappedSigningKey,
-    signedPublicKey = this?.publicKeyEncryptionKeyPair?.signedPublicKey,
-)
+): WrappedAccountCryptographicState {
+    val securityState = this?.securityState?.securityState
+    val signingKey = this?.signatureKeyPair?.wrappedSigningKey
+    val signedPublicKey = this?.publicKeyEncryptionKeyPair?.signedPublicKey
+    return if (signingKey != null && securityState != null && signedPublicKey != null) {
+        WrappedAccountCryptographicState.V2(
+            privateKey = privateKey,
+            securityState = securityState,
+            signingKey = signingKey,
+            signedPublicKey = signedPublicKey,
+        )
+    } else {
+        WrappedAccountCryptographicState.V1(
+            privateKey = privateKey,
+        )
+    }
+}

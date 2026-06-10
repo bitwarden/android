@@ -612,6 +612,7 @@ kies je TOTP toevoegen om de sleutel veilig op te slaan</string>
     <string name="forwarded_email_description">E-mailadres genereren met een externe doorstuurdienst.</string>
     <string name="accessibility_service_disclosure">Toegankelijksheidsservice-melding</string>
     <string name="accessibility_disclosure_text">Bitwarden gebruikt de toegankelijkheidsservice om inlogvelden in apps en op websites te vinden, de juiste veld ID\'s te bepalen om de gebruikersnaam en het wachtwoord in te voeren wanneer een bijpassend paar gevonden is voor de app of site. We slaan geen informatie op die de service ons levert, ook controleren we geen elementen op het scherm naast de tekstinvoer van inloggegevens.</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden biedt een optionele automatisch invulmethode die Android Toegankelijkheids Service gebruikt om inlogvelden in apps en websites te detecteren. Als je dit inschakelt, zal Bitwarden de juiste velden identificeren en je inloggegevens invoeren als er een match wordt gevonden. We slaan geen informatie op die door de dienst wordt waargenomen en we bedienen ook geen elementen op het scherm buiten het invoeren van inloggegevens.</string>
     <string name="accept">Accepteren</string>
     <string name="decline">Weigeren</string>
     <string name="login_request_has_already_expired">Inlogverzoek is al verlopen.</string>
@@ -992,8 +993,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Weet je zeker dat je alle logs wilt verwijderen?</string>
     <string name="confirm_key_connector_domain">Key Connector domein bevestigen</string>
     <string name="key_connector_domain">Key Connector domein:</string>
-    <string name="key_connector_organization">Organisatie:</string>
-    <string name="password_no_longer_required_confirm_domain">Voor leden van de volgende organisatie is een hoofdwachtwoord niet langer nodig. Bevestig het domein hieronder met de beheerder van je organisatie.</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Your organization no longer requires a master password for its members. Please verify the domain below with your admin and enter your master password to continue.</string>
     <string name="please_confirm_domain_with_admin">Bevestig het onderstaande domein met je organisatiebeheerder.\n\nKey Connector domein:\n%1$s</string>
     <string name="flight_recorder_banner_title">Flight recorder aan</string>
     <string name="flight_recorder_banner_message">Flight Recorder zal actief zijn tot %1$s om %2$s. Terug naar instellingen om nu te deactiveren.</string>
@@ -1303,6 +1303,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="cancel_premium">Premium annuleren</string>
     <string name="subscription_status_active">Actief</string>
     <string name="subscription_status_canceled">Geannuleerd</string>
+    <string name="subscription_status_expired">Verlopen</string>
     <string name="subscription_status_past_due">Verlopen</string>
     <string name="subscription_status_paused">Paused</string>
     <string name="subscription_status_update_payment">Betalingswijze bijwerken</string>
@@ -1310,12 +1311,13 @@ Wilt u naar dit account wisselen?</string>
     <string name="subscription_pending_cancellation_description">Je abonnement verloopt op <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Je kunt het op elk gewenst moment hervatten.</string>
     <string name="premium_next_charge_summary">Je volgende rekening wordt %1$s USD voor %2$s.</string>
     <string name="subscription_canceled_description">Je abonnement is op %1$s geannuleerd. Activeer je abonnement opnieuw om gebruik te blijven maken van premium-functies.</string>
-    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
+    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment method before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Je hebt gratie voor een periode van %1$d dag vanaf de vervaldatum van je abonnement. Betaal de achterstallige facturen vóór **%2$s**.</item>
         <item quantity="other">Je hebt gratie voor een periode van %1$d dagen vanaf de vervaldatum van je abonnement. Betaal de achterstallige facturen vóór **%2$s**.</item>
     </plurals>
     <string name="subscription_paused_description">Your subscription is paused. Resume to continue using premium features.</string>
+    <string name="subscription_expired_description">Je abonnement is verlopen op <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Activeer je abonnement opnieuw om gebruik te blijven maken van premium-functies.</string>
     <string name="loading_subscription">Loading subscription…</string>
     <string name="loading_portal">Loading portal…</string>
     <string name="portal_error">Er is iets fout gegaan</string>

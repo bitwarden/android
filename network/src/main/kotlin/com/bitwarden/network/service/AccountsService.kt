@@ -3,7 +3,6 @@ package com.bitwarden.network.service
 import com.bitwarden.network.model.CreateAccountKeysResponseJson
 import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.KeyConnectorKeyRequestJson
-import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
 import com.bitwarden.network.model.PasswordHintResponseJson
 import com.bitwarden.network.model.ResendEmailRequestJson
 import com.bitwarden.network.model.ResendNewDeviceOtpRequestJson
@@ -89,17 +88,6 @@ interface AccountsService {
      * Set the password.
      */
     suspend fun setPassword(body: SetPasswordRequestJson): Result<Unit>
-
-    /**
-     * Retrieves the master key from the key connector.
-     *
-     * This API requires the [accessToken] to be passed in manually because it occurs during the
-     * login process.
-     */
-    suspend fun getMasterKeyFromKeyConnector(
-        url: String,
-        accessToken: String,
-    ): Result<KeyConnectorMasterKeyResponseJson>
 
     /**
      * Stores the master key to the key connector.

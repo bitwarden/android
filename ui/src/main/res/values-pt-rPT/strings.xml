@@ -611,6 +611,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="forwarded_email_description">Gerar um alias de e-mail com um serviço de reencaminhamento externo.</string>
     <string name="accessibility_service_disclosure">Divulgação do serviço de acessibilidade</string>
     <string name="accessibility_disclosure_text">O Bitwarden utiliza o Serviço de acessibilidade para procurar campos de início de sessão em aplicações e sites e, em seguida, estabelece os IDs de campo adequados para introduzir um nome de utilizador e palavra-passe quando é encontrada uma correspondência para a aplicação ou site. Não armazenamos nenhuma das informações que nos são apresentadas pelo serviço, nem fazemos qualquer tentativa de controlar quaisquer elementos no ecrã para além da introdução de texto das credenciais.</string>
+    <string name="accessibility_disclosure_start_up_text">O Bitwarden disponibiliza um método opcional de preenchimento automático que utiliza o serviço de acessibilidade do Android para detetar campos de credenciais em apps e sites. Se optar por ativá-lo, o Bitwarden identificará os campos adequados e introduzirá as suas credenciais quando for encontrada uma correspondência. Não armazenamos qualquer informação observada pelo serviço nem controlamos quaisquer elementos apresentados no ecrã para além da introdução de credenciais.</string>
     <string name="accept">Aceitar</string>
     <string name="decline">Recusar</string>
     <string name="login_request_has_already_expired">O pedido de início de sessão já expirou.</string>
@@ -991,9 +992,8 @@ Pretende mudar para esta conta?</string>
     <string name="delete_logs">Eliminar registos</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Pretende realmente eliminar todos os registos gravados?</string>
     <string name="confirm_key_connector_domain">Confirmar o domínio do Key Connector</string>
-    <string name="key_connector_domain">Domínio do Key Connector:</string>
-    <string name="key_connector_organization">Organização:</string>
-    <string name="password_no_longer_required_confirm_domain">Já não é necessária uma palavra-passe mestra para os membros da seguinte organização. Por favor, confirme o domínio abaixo com o administrador da sua organização.</string>
+    <string name="key_connector_domain">Domínio do Key Connector</string>
+    <string name="your_organization_no_longer_requires_a_master_password">A sua organização já não requer uma palavra-passe mestra para os seus membros. Por favor, verifique o domínio abaixo com o seu administrador e introduza a sua palavra-passe mestra para continuar.</string>
     <string name="please_confirm_domain_with_admin">Por favor, confirme o domínio abaixo com o administrador da sua organização.\n\nDomínio do Key Connector:\n%1$s</string>
     <string name="flight_recorder_banner_title">Gravador de voo ativado</string>
     <string name="flight_recorder_banner_message">O gravador de voo estará ativo até %1$s a %2$s. Regresse às definições para o desativar agora.</string>
@@ -1303,6 +1303,7 @@ Pretende mudar para esta conta?</string>
     <string name="cancel_premium">Cancelar Premium</string>
     <string name="subscription_status_active">Ativo</string>
     <string name="subscription_status_canceled">Cancelado</string>
+    <string name="subscription_status_expired">Expirado</string>
     <string name="subscription_status_past_due">Caducado</string>
     <string name="subscription_status_paused">Em pausa</string>
     <string name="subscription_status_update_payment">Atualizar pagamento</string>
@@ -1310,12 +1311,13 @@ Pretende mudar para esta conta?</string>
     <string name="subscription_pending_cancellation_description">A sua subscrição está agendada para ser cancelada em <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Pode reativá-la a qualquer momento até essa data.</string>
     <string name="premium_next_charge_summary">O seu próximo pagamento será de <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD, com vencimento em <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
     <string name="subscription_canceled_description">A sua subscrição foi cancelada a <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Volte a subscrever para continuar a utilizar funcionalidades Premium.</string>
-    <string name="subscription_update_payment_description">Não foi possível processar o seu pagamento. Atualize o seu pagamento antes de a sua subscrição terminar a <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
+    <string name="subscription_update_payment_description">Não foi possível processar o seu pagamento. Atualize o seu método de pagamento antes de a sua subscrição terminar a <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
-        <item quantity="one">Dispõe de um período de tolerância de <annotation arg="0">%1$d</annotation> dia a partir da data de expiração da sua subscrição. Por favor, resolva o valor em atraso até <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
-        <item quantity="other">Dispõe de um período de tolerância de <annotation arg="0">%1$d</annotation> dias a partir da data de expiração da sua subscrição. Por favor, resolva o valor em atraso até <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="one">Dispõe de um período de tolerância de <annotation arg="0">%1$d</annotation> dia a partir da data de expiração da sua subscrição. Por favor, resolva as faturas em atraso até <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="other">Dispõe de um período de tolerância de <annotation arg="0">%1$d</annotation> dias a partir da data de expiração da sua subscrição. Por favor, resolva as faturas em atraso até <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
     </plurals>
     <string name="subscription_paused_description">A sua subscrição está suspensa. Reative-a para continuar a utilizar as funcionalidades Premium.</string>
+    <string name="subscription_expired_description">A sua subscrição expirou a <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Volte a subscrever para continuar a utilizar funcionalidades Premium.</string>
     <string name="loading_subscription">A carregar subscrição…</string>
     <string name="loading_portal">A carregar portal…</string>
     <string name="portal_error">Alguma coisa correu mal</string>

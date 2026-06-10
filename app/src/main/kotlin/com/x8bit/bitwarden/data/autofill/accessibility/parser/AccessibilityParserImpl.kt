@@ -43,22 +43,34 @@ class AccessibilityParserImpl(
         return browser
             .possibleUrlFieldIds
             .flatMap { viewId ->
-                rootNode
-                    .findAccessibilityNodeInfosByViewId("$packageName:id/$viewId")
-                    .map { accessibilityNodeInfo ->
-                        browser
-                            .urlExtractor(accessibilityNodeInfo.text.toString())
-                            ?.trim()
-                            ?.let { rawUrl ->
-                                if (rawUrl.contains(other = ".") && !rawUrl.hasHttpProtocol()) {
-                                    "https://$rawUrl"
-                                } else {
-                                    rawUrl
-                                }
-                            }
+                rootNode.findAccessibilityNodeInfosByViewId("$packageName:id/$viewId")
+            }
+            .ifEmpty {
+                browser
+                    .possibleUrlSemanticIds
+                    .flatMap { semanticId ->
+                        // Semantic IDs are exposed as viewIdResourceName via testTagsAsResourceId
+                        // and cannot be found via findAccessibilityNodeInfosByViewId on Firefox.
+                        accessibilityNodeInfoManager.findAccessibilityNodeInfoList(rootNode) {
+                            it.viewIdResourceName == semanticId
+                        }
                     }
             }
-            .firstOrNull()
+            .firstNotNullOfOrNull { node ->
+                val urlText = node.text?.toString()?.takeIf { it.isNotEmpty() }
+                    ?: node.contentDescription?.toString()?.takeIf { it.isNotEmpty() }
+                    ?: return@firstNotNullOfOrNull null
+                browser
+                    .urlExtractor(urlText)
+                    ?.trim()
+                    ?.let { rawUrl ->
+                        if (rawUrl.contains(other = ".") && !rawUrl.hasHttpProtocol()) {
+                            "https://$rawUrl"
+                        } else {
+                            rawUrl
+                        }
+                    }
+            }
             ?.toUriOrNull()
     }
 }

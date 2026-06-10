@@ -43,6 +43,7 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.isAddTotpLoginItemFromAuthenticator
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavViewModel
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import com.x8bit.bitwarden.ui.platform.util.isAccountSecurityShortcut
@@ -151,6 +152,12 @@ class MainViewModel @Inject constructor(
             .onEach(::trySendAction)
             .launchIn(viewModelScope)
 
+        settingsRepository
+            .hasShownAccessibilityDisclaimerFlow
+            .map { MainAction.Internal.HasShownAccessibilityDisclaimerUpdate(it) }
+            .onEach(::trySendAction)
+            .launchIn(viewModelScope)
+
         merge(
             authRepository
                 .userStateFlow
@@ -235,6 +242,17 @@ class MainViewModel @Inject constructor(
             is MainAction.Internal.CookieAcquisitionReady -> handleCookieAcquisitionReady()
             is MainAction.Internal.LocalNetworkAccessRequired -> handleLocalNetworkAccessRequired()
             is MainAction.Internal.ResizeHasBeenRequested -> handleResizeHasBeenRequested()
+            is MainAction.Internal.HasShownAccessibilityDisclaimerUpdate -> {
+                handleHasShownAccessibilityDisclaimerUpdate(action)
+            }
+        }
+    }
+
+    private fun handleHasShownAccessibilityDisclaimerUpdate(
+        action: MainAction.Internal.HasShownAccessibilityDisclaimerUpdate,
+    ) {
+        if (!action.hasBeenShown) {
+            sendEvent(MainEvent.NavigateToAccessibilityDisclosure)
         }
     }
 
@@ -692,6 +710,11 @@ sealed class MainAction {
          * Indicates that resize has been requested on the Activity
          */
         data object ResizeHasBeenRequested : Internal()
+
+        /**
+         * Indicates that the accessibility disclaimer has been displayed.
+         */
+        data class HasShownAccessibilityDisclaimerUpdate(val hasBeenShown: Boolean) : Internal()
     }
 }
 
@@ -730,6 +753,11 @@ sealed class MainEvent {
      * Navigate to the local network access screen.
      */
     data object NavigateToLocalNetworkAccess : MainEvent()
+
+    /**
+     * Navigate to the accessibility disclosure screen.
+     */
+    data object NavigateToAccessibilityDisclosure : MainEvent()
 
     /**
      * Indicates that the app language has been updated.

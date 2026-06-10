@@ -24,7 +24,7 @@ class LoginResultExtensionsTest {
     fun `VaultUnlockResult with null error message as default maps to LoginResult Error with null message`() {
         val error = Throwable("Fail")
         val result = VaultUnlockResult.AuthenticationError(error = error).toLoginErrorResult()
-        assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
+        assertEquals(LoginResult.Error(error = error), result)
     }
 
     @Test
@@ -36,7 +36,7 @@ class LoginResultExtensionsTest {
         val genericErrorResult = VaultUnlockResult.GenericError(error = error).toLoginErrorResult()
         val biometricErrorResult =
             VaultUnlockResult.BiometricDecodingError(error = error).toLoginErrorResult()
-        val expectedResult = LoginResult.Error(errorMessage = null, error = error)
+        val expectedResult = LoginResult.Error(error = error)
 
         assertEquals(expectedResult, invalidStateResult)
         assertEquals(expectedResult, genericErrorResult)

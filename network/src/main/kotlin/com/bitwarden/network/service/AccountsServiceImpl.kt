@@ -10,7 +10,6 @@ import com.bitwarden.network.model.DeleteAccountRequestJson
 import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.KeyConnectorKeyRequestJson
 import com.bitwarden.network.model.KeyConnectorMasterKeyRequestJson
-import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
 import com.bitwarden.network.model.PasswordHintRequestJson
 import com.bitwarden.network.model.PasswordHintResponseJson
 import com.bitwarden.network.model.ResendEmailRequestJson
@@ -176,17 +175,6 @@ internal class AccountsServiceImpl constructor(
     ): Result<Unit> = authenticatedAccountsApi
         .setPassword(body)
         .toResult()
-
-    override suspend fun getMasterKeyFromKeyConnector(
-        url: String,
-        accessToken: String,
-    ): Result<KeyConnectorMasterKeyResponseJson> =
-        unauthenticatedKeyConnectorApi
-            .getMasterKeyFromKeyConnector(
-                url = "$url/user-keys",
-                bearerToken = "$HEADER_VALUE_BEARER_PREFIX$accessToken",
-            )
-            .toResult()
 
     override suspend fun storeMasterKeyToKeyConnector(
         url: String,

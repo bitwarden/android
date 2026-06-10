@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -171,7 +172,8 @@ private fun TutorialScreenContent(
                 .standardHorizontalMargin()
                 .fillMaxWidth()
                 .alpha(if (state.isLastPage) 0f else 1f)
-                .padding(bottom = 12.dp),
+                .padding(bottom = 12.dp)
+                .testTag("SkipTutorialButton"),
         )
 
         Spacer(modifier = Modifier.navigationBarsPadding())

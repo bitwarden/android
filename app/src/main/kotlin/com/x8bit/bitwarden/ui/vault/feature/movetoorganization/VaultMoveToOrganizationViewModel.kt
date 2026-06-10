@@ -309,7 +309,6 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
                     VaultMoveToOrganizationAction.Internal.ShareCipherResultReceive(
                         shareCipherResult = vaultRepository.updateCipherCollections(
                             cipherId = state.vaultItemId,
-                            cipherView = cipherView,
                             collectionIds = collectionIds,
                         ),
                         message = BitwardenString.item_updated.asText(),

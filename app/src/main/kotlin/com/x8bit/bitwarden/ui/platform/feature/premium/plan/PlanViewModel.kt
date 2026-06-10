@@ -19,7 +19,6 @@ import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.billing.repository.BillingRepository
 import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
 import com.x8bit.bitwarden.data.billing.repository.model.CustomerPortalResult
-import com.x8bit.bitwarden.data.billing.repository.model.PlanCadence
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResult
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStatus
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionInfo
@@ -32,6 +31,10 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.ui.platform.feature.premium.plan.util.toBillingAmountText
+import com.x8bit.bitwarden.ui.platform.feature.premium.plan.util.toDiscountMoneyText
+import com.x8bit.bitwarden.ui.platform.feature.premium.plan.util.toPresentMoneyText
+import com.x8bit.bitwarden.ui.platform.feature.premium.plan.util.toRequiredMoneyText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -40,7 +43,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
-import java.math.BigDecimal
 import java.text.NumberFormat
 import java.time.Clock
 import java.time.Instant
@@ -713,11 +715,11 @@ class PlanViewModel @Inject constructor(
 
         return PlanState.ViewState.Premium(
             status = status,
-            billingAmountText = seatsCost.toBillingAmountText(cadence),
-            storageCostText = storageCost.toOptionalMoneyText(),
-            discountAmountText = discountAmount.toOptionalMoneyText(negative = true),
-            estimatedTaxText = estimatedTax.toRequiredMoneyText(),
-            totalText = nextChargeTotal.toBillingAmountText(cadence),
+            billingAmountText = seatsCost.toBillingAmountText(cadence, currencyFormatter),
+            storageCostText = storageCost.toPresentMoneyText(currencyFormatter),
+            discountAmountText = discountAmount.toDiscountMoneyText(currencyFormatter),
+            estimatedTaxText = estimatedTax.toRequiredMoneyText(currencyFormatter),
+            totalText = nextChargeTotal.toBillingAmountText(cadence, currencyFormatter),
             nextChargeTotalText = formattedTotal,
             nextChargeDateText = formattedDate,
             cancelAtDateText = formattedCancelAt,
@@ -727,36 +729,6 @@ class PlanViewModel @Inject constructor(
             showCancelButton = status.canBeCanceled(),
         )
     }
-
-    private fun BigDecimal.toBillingAmountText(cadence: PlanCadence): Text {
-        val formatted = currencyFormatter.format(this)
-        val cadenceRes = when (cadence) {
-            PlanCadence.ANNUALLY -> BitwardenString.billing_rate_per_year
-            PlanCadence.MONTHLY -> BitwardenString.billing_rate_per_month
-        }
-        return cadenceRes.asText(formatted)
-    }
-
-    /**
-     * Formats this amount for an always-rendered line item. Null is coerced to zero so the row
-     * still shows the locale-formatted `$0.00`, matching the Web convention of always rendering
-     * the Estimated Tax and Total rows.
-     */
-    private fun BigDecimal?.toRequiredMoneyText(): String =
-        currencyFormatter.format(this ?: BigDecimal.ZERO)
-
-    /**
-     * Formats this amount for a hide-when-absent line item. Returns `null` when the amount is
-     * `null` or non-positive so the caller can omit the row entirely (Discount, Storage).
-     * When [negative] is true, the formatted value is prefixed with `-` to match the canonical
-     * Web discount styling.
-     */
-    private fun BigDecimal?.toOptionalMoneyText(negative: Boolean = false): String? =
-        when {
-            this == null || this.signum() <= 0 -> null
-            negative -> "-${currencyFormatter.format(this)}"
-            else -> currencyFormatter.format(this)
-        }
 
     private fun Instant.toLocalizedDate(): String =
         toFormattedDateStyle(

@@ -114,6 +114,7 @@ class MainViewModelTest : BaseViewModelTest() {
     private val mutableAppLanguageFlow = MutableStateFlow(AppLanguage.DEFAULT)
     private val mutableScreenCaptureAllowedFlow = MutableStateFlow(true)
     private val mutableIsDynamicColorsEnabledFlow = MutableStateFlow(false)
+    private val mutableHasShownAccessibilityDisclaimerFlow = MutableStateFlow(true)
     private val settingsRepository = mockk<SettingsRepository> {
         every { appTheme } returns AppTheme.DEFAULT
         every { appThemeStateFlow } returns mutableAppThemeFlow
@@ -124,6 +125,10 @@ class MainViewModelTest : BaseViewModelTest() {
         every { appLanguage = any() } just runs
         every { isDynamicColorsEnabled } returns false
         every { isDynamicColorsEnabledFlow } returns mutableIsDynamicColorsEnabledFlow
+        every {
+            hasShownAccessibilityDisclaimerFlow
+        } returns mutableHasShownAccessibilityDisclaimerFlow
+        every { accessibilityDisclaimerHasBeenShown() } just runs
     }
     private val authRepository = mockk<AuthRepository> {
         every { activeUserId } returns DEFAULT_USER_STATE.activeUserId
@@ -1384,6 +1389,23 @@ class MainViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on HasShownAccessibilityDisclaimerUpdate with false should show the accessibility disclosure`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                // We skip the first 2 events because they are the default appTheme and appLanguage
+                skipItems(2)
+
+                mutableHasShownAccessibilityDisclaimerFlow.value = false
+                assertEquals(MainEvent.NavigateToAccessibilityDisclosure, awaitItem())
+
+                mutableHasShownAccessibilityDisclaimerFlow.value = true
+                expectNoEvents()
+            }
+        }
 
     private fun createViewModel(
         initialSpecialCircumstance: SpecialCircumstance? = null,

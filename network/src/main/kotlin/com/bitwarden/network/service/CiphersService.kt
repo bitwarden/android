@@ -16,6 +16,7 @@ import com.bitwarden.network.model.ShareCipherJsonRequest
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UnarchiveCipherResponseJson
 import com.bitwarden.network.model.UpdateCipherCollectionsJsonRequest
+import com.bitwarden.network.model.UpdateCipherCollectionsResponseJson
 import com.bitwarden.network.model.UpdateCipherResponseJson
 import java.io.File
 
@@ -101,7 +102,7 @@ interface CiphersService {
     suspend fun updateCipherCollections(
         cipherId: String,
         body: UpdateCipherCollectionsJsonRequest,
-    ): Result<Unit>
+    ): Result<UpdateCipherCollectionsResponseJson>
 
     /**
      * Attempt to hard delete a cipher.
