@@ -15,13 +15,13 @@ import androidx.browser.auth.AuthTabIntent
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.core.os.LocaleListCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -126,35 +126,13 @@ class MainActivity : AppCompatActivity() {
             SetupEventsEffect(navController = navController)
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
             updateScreenCapture(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
-            LocalManagerProvider(
-                featureFlagsState = state.featureFlagsState,
+            MainActivityContent(
+                state = state,
                 authTabLaunchers = authTabLaunchers,
-            ) {
-                ObserveScreenDataEffect(
-                    onDataUpdate = remember(mainViewModel) {
-                        { mainViewModel.trySendAction(MainAction.ResumeScreenDataReceived(it)) }
-                    },
-                )
-                BitwardenTheme(
-                    theme = state.theme,
-                    dynamicColor = state.isDynamicColorsEnabled,
-                ) {
-                    NavHost(
-                        navController = navController,
-                        startDestination = OverlayNavRoute,
-                        modifier = Modifier
-                            .background(color = BitwardenTheme.colorScheme.background.primary),
-                    ) {
-                        // The OverlayNav and Debug destinations are the only UIs that can be
-                        // displayed here, everything else should be inside the OverlayNav.
-                        overlayNavDestination { shouldShowSplashScreen = false }
-                        debugMenuDestination(
-                            onNavigateBack = { navController.popBackStack() },
-                            onSplashScreenRemoved = { shouldShowSplashScreen = false },
-                        )
-                    }
-                }
-            }
+                navController = navController,
+                sendAction = mainViewModel::trySendAction,
+                onSplashScreenRemoved = { shouldShowSplashScreen = false },
+            )
         }
     }
 
@@ -275,6 +253,41 @@ class MainActivity : AppCompatActivity() {
             window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         } else {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        }
+    }
+}
+
+@OmitFromCoverage
+@Composable
+private fun MainActivityContent(
+    state: MainState,
+    authTabLaunchers: AuthTabLaunchers,
+    navController: NavHostController,
+    sendAction: (MainAction) -> Unit,
+    onSplashScreenRemoved: () -> Unit,
+) {
+    LocalManagerProvider(
+        featureFlagsState = state.featureFlagsState,
+        authTabLaunchers = authTabLaunchers,
+    ) {
+        ObserveScreenDataEffect { sendAction(MainAction.ResumeScreenDataReceived(it)) }
+        BitwardenTheme(
+            theme = state.theme,
+            dynamicColor = state.isDynamicColorsEnabled,
+        ) {
+            NavHost(
+                navController = navController,
+                startDestination = OverlayNavRoute,
+                modifier = Modifier.background(BitwardenTheme.colorScheme.background.primary),
+            ) {
+                // The OverlayNav and Debug destinations are the only UIs that can be
+                // displayed here, everything else should be inside the OverlayNav.
+                overlayNavDestination(onSplashScreenRemoved = onSplashScreenRemoved)
+                debugMenuDestination(
+                    onNavigateBack = { navController.popBackStack() },
+                    onSplashScreenRemoved = onSplashScreenRemoved,
+                )
+            }
         }
     }
 }
