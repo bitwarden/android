@@ -158,9 +158,7 @@ internal class BitwardenServiceClientImpl(
     }
 
     override val fillAssistService: FillAssistService by lazy {
-        FillAssistServiceImpl(
-            api = retrofits.createStaticRetrofit().create(),
-        )
+        FillAssistServiceImpl(api = retrofits.fillAssistRetrofit.create())
     }
 
     override val haveIBeenPwnedService: HaveIBeenPwnedService by lazy {

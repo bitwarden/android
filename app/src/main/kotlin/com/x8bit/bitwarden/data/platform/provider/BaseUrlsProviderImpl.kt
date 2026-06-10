@@ -31,4 +31,6 @@ class BaseUrlsProviderImpl(
         .toEnvironmentUrlsOrDefault()
         .environmentUrlData
         .baseEventsUrl
+
+    override fun getBaseFillAssistUrl(): String? = environmentDiskSource.fillAssistRulesUrl
 }

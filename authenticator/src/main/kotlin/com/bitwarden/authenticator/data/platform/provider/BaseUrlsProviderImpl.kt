@@ -20,4 +20,6 @@ object BaseUrlsProviderImpl : BaseUrlsProvider {
 
     override fun getBaseEventsUrl(): String =
         Environment.Us.environmentUrlData.baseEventsUrl
+
+    override fun getBaseFillAssistUrl(): String? = null
 }

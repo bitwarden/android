@@ -8,15 +8,14 @@ import com.bitwarden.network.model.FillAssistManifestJson
  */
 interface FillAssistService {
     /**
-     * Fetches and parses the fill-assist manifest from [url].
+     * Fetches and parses the fill-assist manifest.
      */
-    suspend fun getManifest(url: String): Result<FillAssistManifestJson>
+    suspend fun getManifest(): Result<FillAssistManifestJson>
 
     /**
-     * Downloads and parses the forms rules file from [formsUrl].
+     * Downloads and parses the forms rules file identified by [filename] (e.g. "forms.v1.json").
      *
      * Returns [Result.failure] if the network request fails or parsing fails.
-     * Version-agnostic: any forms file URL can be passed regardless of schema version.
      */
-    suspend fun getForms(formsUrl: String): Result<FillAssistFormsJson>
+    suspend fun getForms(filename: String): Result<FillAssistFormsJson>
 }

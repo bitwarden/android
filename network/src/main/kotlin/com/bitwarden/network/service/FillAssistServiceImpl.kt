@@ -12,9 +12,9 @@ internal class FillAssistServiceImpl(
     private val api: FillAssistApi,
 ) : FillAssistService {
 
-    override suspend fun getManifest(url: String): Result<FillAssistManifestJson> =
-        api.getManifest(url = url).toResult()
+    override suspend fun getManifest(): Result<FillAssistManifestJson> =
+        api.getManifest().toResult()
 
-    override suspend fun getForms(formsUrl: String): Result<FillAssistFormsJson> =
-        api.getForms(url = formsUrl).toResult()
+    override suspend fun getForms(filename: String): Result<FillAssistFormsJson> =
+        api.getForms(filename = filename).toResult()
 }

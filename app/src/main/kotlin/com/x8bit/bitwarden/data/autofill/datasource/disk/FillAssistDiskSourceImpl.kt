@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.bitwarden.data.datasource.disk.BaseDiskSource
 import com.x8bit.bitwarden.data.autofill.model.FillAssistRules
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 // Bump this constant in two cases:
@@ -64,9 +63,9 @@ class FillAssistDiskSourceImpl(
     }
 
     private fun clearAllData() {
-        removeWithPrefix(FILL_ASSIST_RULES_KEY)
-        removeWithPrefix(FILL_ASSIST_CID_KEY)
-        removeWithPrefix(FILL_ASSIST_TIMESTAMP_KEY)
+        removeWithPrefix("${FILL_ASSIST_RULES_KEY}_")
+        removeWithPrefix("${FILL_ASSIST_CID_KEY}_")
+        removeWithPrefix("${FILL_ASSIST_TIMESTAMP_KEY}_")
         putInt(FILL_ASSIST_CACHE_VERSION_KEY, CURRENT_CACHE_VERSION)
     }
 }

@@ -29,4 +29,11 @@ internal class BaseUrlInterceptors(
     val eventsInterceptor: BaseUrlInterceptor = BaseUrlInterceptor {
         baseUrlsProvider.getBaseEventsUrl()
     }
+
+    /**
+     * An interceptor for fill-assist calls.
+     */
+    val fillAssistInterceptor: BaseUrlInterceptor = BaseUrlInterceptor {
+        baseUrlsProvider.getBaseFillAssistUrl()
+    }
 }
