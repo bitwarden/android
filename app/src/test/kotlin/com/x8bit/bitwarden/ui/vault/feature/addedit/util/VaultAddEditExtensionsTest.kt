@@ -47,4 +47,70 @@ class VaultAddEditExtensionsTest {
             result,
         )
     }
+
+    @Test
+    fun `withAuthenticatorKeyPremiumGate gates Login when user lacks Premium`() {
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(),
+            isIndividualVaultDisabled = false,
+            type = VaultAddEditState.ViewState.Content.ItemType.Login(),
+        )
+
+        val result = viewState.withAuthenticatorKeyPremiumGate(isPremium = false)
+
+        assertEquals(
+            VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                isIndividualVaultDisabled = false,
+                type = VaultAddEditState.ViewState.Content.ItemType.Login(
+                    isAuthenticatorKeyPremiumGated = true,
+                ),
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `withAuthenticatorKeyPremiumGate does not gate Login when user has Premium`() {
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(),
+            isIndividualVaultDisabled = false,
+            type = VaultAddEditState.ViewState.Content.ItemType.Login(),
+        )
+
+        val result = viewState.withAuthenticatorKeyPremiumGate(isPremium = true)
+
+        assertEquals(
+            VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                isIndividualVaultDisabled = false,
+                type = VaultAddEditState.ViewState.Content.ItemType.Login(
+                    isAuthenticatorKeyPremiumGated = false,
+                ),
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `withAuthenticatorKeyPremiumGate returns input unchanged for non-Login content`() {
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(),
+            isIndividualVaultDisabled = false,
+            type = VaultAddEditState.ViewState.Content.ItemType.Card(),
+        )
+
+        val result = viewState.withAuthenticatorKeyPremiumGate(isPremium = false)
+
+        assertEquals(viewState, result)
+    }
+
+    @Test
+    fun `withAuthenticatorKeyPremiumGate returns input unchanged for non-Content view state`() {
+        val viewState: VaultAddEditState.ViewState = VaultAddEditState.ViewState.Loading
+
+        val result = viewState.withAuthenticatorKeyPremiumGate(isPremium = false)
+
+        assertEquals(viewState, result)
+    }
 }

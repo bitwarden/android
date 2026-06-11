@@ -79,6 +79,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.util.appendFolderAndOwnerDat
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toAvailableFolders
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDefaultAddTypeContent
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toItemType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.withAuthenticatorKeyPremiumGate
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.validateCipherOrReturnErrorState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.messageResourceId
@@ -187,6 +188,9 @@ class VaultAddEditViewModel @Inject constructor(
                 null
             }
 
+            val hasPremium =
+                authRepository.userStateFlow.value?.activeAccount?.isPremium == true
+
             VaultAddEditState(
                 isCardScannerEnabled = featureFlagManager
                     .getFeatureFlag(FlagKey.CardScanner) && !buildInfoManager.isFdroid,
@@ -194,7 +198,7 @@ class VaultAddEditViewModel @Inject constructor(
                 cipherType = vaultCipherType,
                 viewState = when (vaultAddEditType) {
                     is VaultAddEditType.AddItem -> {
-                        autofillSelectionData
+                        (autofillSelectionData
                             ?.toDefaultAddTypeContent(isIndividualVaultDisabled)
                             ?: autofillSaveItem?.toDefaultAddTypeContent(isIndividualVaultDisabled)
                             ?: providerCreateCredentialRequest?.toDefaultAddTypeContent(
@@ -209,7 +213,8 @@ class VaultAddEditViewModel @Inject constructor(
                                 ),
                                 isIndividualVaultDisabled = isIndividualVaultDisabled,
                                 type = vaultCipherType.toItemType(),
-                            )
+                            ))
+                            .withAuthenticatorKeyPremiumGate(isPremium = hasPremium)
                     }
 
                     is VaultAddEditType.EditItem -> VaultAddEditState.ViewState.Loading
@@ -226,7 +231,7 @@ class VaultAddEditViewModel @Inject constructor(
                 shouldShowCoachMarkTour = false,
                 shouldClearSpecialCircumstance = autofillSelectionData == null,
                 defaultUriMatchType = settingsRepository.defaultUriMatchType,
-                hasPremium = authRepository.userStateFlow.value?.activeAccount?.isPremium == true,
+                hasPremium = hasPremium,
             )
         },
 ) {
@@ -352,6 +357,7 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Common.ArchiveClick -> handleArchiveClick()
             is VaultAddEditAction.Common.UnarchiveClick -> handleUnarchiveClick()
             VaultAddEditAction.Common.UpgradeToPremiumClick -> handleUpgradeToPremiumClick()
+            VaultAddEditAction.Common.NavigateToPlanClick -> handleNavigateToPlanClick()
             is VaultAddEditAction.Common.ConfirmDeleteClick -> handleConfirmDeleteClick()
             is VaultAddEditAction.Common.CloseClick -> handleCloseClick()
             is VaultAddEditAction.Common.DismissDialog -> handleDismissDialog()
@@ -677,6 +683,11 @@ class VaultAddEditViewModel @Inject constructor(
                 ),
             )
         }
+    }
+
+    private fun handleNavigateToPlanClick() {
+        mutableStateFlow.update { it.copy(dialog = null) }
+        sendEvent(VaultAddEditEvent.NavigateToPlanModal)
     }
 
     private fun handleConfirmDeleteClick() {
@@ -1205,6 +1216,16 @@ class VaultAddEditViewModel @Inject constructor(
             VaultAddEditAction.ItemType.LoginType.LearnMoreClick -> {
                 handleLearnMoreClick()
             }
+
+            VaultAddEditAction.ItemType.LoginType.TotpRequiresPremiumClick -> {
+                handleTotpRequiresPremiumClick()
+            }
+        }
+    }
+
+    private fun handleTotpRequiresPremiumClick() {
+        mutableStateFlow.update {
+            it.copy(dialog = VaultAddEditState.DialogState.TotpRequiresPremium)
         }
     }
 
@@ -2985,6 +3006,10 @@ data class VaultAddEditState(
                  * @property canViewPassword Indicates whether the current user can view and copy
                  * passwords associated with the login item.
                  * @property canEditItem Indicates whether the current user can edit the login item.
+                 * @property isAuthenticatorKeyPremiumGated `true` when the active user lacks the
+                 * entitlement required to use the authenticator key (TOTP) for this cipher —
+                 * neither Premium nor an `organizationUseTotp` grant. Used solely to swap the
+                 * authenticator key supporting content for a Premium upsell.
                  * @property fido2CredentialCreationDateTime Date and time the FIDO 2 credential was
                  * created.
                  */
@@ -2995,6 +3020,7 @@ data class VaultAddEditState(
                     val totp: String? = null,
                     val canViewPassword: Boolean = true,
                     val canEditItem: Boolean = true,
+                    val isAuthenticatorKeyPremiumGated: Boolean = false,
                     val uriList: List<UriItem> = listOf(
                         UriItem(
                             id = UUID.randomUUID().toString(),
@@ -3355,6 +3381,12 @@ data class VaultAddEditState(
         data object ArchiveRequiresPremium : DialogState()
 
         /**
+         * Displays a dialog to the user indicating that the authenticator key (TOTP) requires a
+         * Premium account.
+         */
+        data object TotpRequiresPremium : DialogState()
+
+        /**
          * Displays a generic dialog to the user.
          */
         @Parcelize
@@ -3642,6 +3674,11 @@ sealed class VaultAddEditAction {
          * The user has clicked the upgrade to Premium dialog.
          */
         data object UpgradeToPremiumClick : Common()
+
+        /**
+         * The user has clicked an upgrade CTA that should always navigate to the Plan screen.
+         */
+        data object NavigateToPlanClick : Common()
 
         /**
          * The user has confirmed to deleted the cipher.
@@ -3937,6 +3974,12 @@ sealed class VaultAddEditAction {
              * User has clicked the call to action on the learn more help link.
              */
             data object LearnMoreClick : LoginType()
+
+            /**
+             * The user has clicked the Premium subscription required CTA shown in place of the
+             * authenticator key when the active account lacks the Premium entitlement.
+             */
+            data object TotpRequiresPremiumClick : LoginType()
         }
 
         /**

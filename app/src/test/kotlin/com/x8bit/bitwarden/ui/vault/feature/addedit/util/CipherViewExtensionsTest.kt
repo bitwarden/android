@@ -222,6 +222,7 @@ class CipherViewExtensionsTest {
                     ),
                     totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
                     canViewPassword = false,
+                    isAuthenticatorKeyPremiumGated = true,
                     fido2CredentialCreationDateTime = BitwardenString.created_x.asText(
                         "Oct 27, 2023, 12:00\u202FPM",
                     ),
@@ -284,6 +285,7 @@ class CipherViewExtensionsTest {
                     ),
                     totp = totp,
                     canViewPassword = false,
+                    isAuthenticatorKeyPremiumGated = true,
                     fido2CredentialCreationDateTime = BitwardenString.created_x.asText(
                         "Oct 27, 2023, 12:00\u202FPM",
                     ),

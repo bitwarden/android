@@ -36,3 +36,19 @@ fun VaultItemCipherType.toItemType(): VaultAddEditState.ViewState.Content.ItemTy
             VaultAddEditState.ViewState.Content.ItemType.Passport()
         }
     }
+
+/**
+ * Returns a copy of the [VaultAddEditState.ViewState] with the authenticator key Premium gate
+ * applied to its Login content (if any). Used to seed the gate for Add mode, where the Login
+ * state is constructed by factories that have no premium context. Edit and Clone modes already
+ * set the gate via `CipherView.toViewState`, which additionally honors `organizationUseTotp`.
+ */
+fun VaultAddEditState.ViewState.withAuthenticatorKeyPremiumGate(
+    isPremium: Boolean,
+): VaultAddEditState.ViewState {
+    val content = this as? VaultAddEditState.ViewState.Content ?: return this
+    val login = content.type as? VaultAddEditState.ViewState.Content.ItemType.Login ?: return this
+    return content.copy(
+        type = login.copy(isAuthenticatorKeyPremiumGated = !isPremium),
+    )
+}
