@@ -88,7 +88,10 @@ class FillAssistManagerImpl(
     }
 
     private suspend fun sync(serverUrl: String) = runCatching {
-        val manifest = fillAssistService.getManifest().getOrThrow()
+        val manifest = fillAssistService
+            .getManifest()
+            .getOrNull()
+            ?: return@runCatching
 
         val versionEntry = manifest.maps.forms[CURRENT_FORMS_VERSION]
             ?: error("Version $CURRENT_FORMS_VERSION not found in manifest")
@@ -107,7 +110,8 @@ class FillAssistManagerImpl(
 
         val forms = fillAssistService
             .getForms(filename = versionEntry.filename)
-            .getOrThrow()
+            .getOrNull()
+            ?: return@runCatching
 
         val schemaMajor = forms.schemaVersion.substringBefore('.')
         if (schemaMajor != EXPECTED_SCHEMA_MAJOR) {
@@ -176,7 +180,8 @@ private fun buildFieldsByCategory(
             val parsedFields = form.fields
                 .mapValues { (_, elem) -> parseCompositeSelectorArray(elem) }
                 .filterValues { it.isNotEmpty() }
-                .takeIf { it.isNotEmpty() } ?: return@mapNotNull null
+                .takeIf { it.isNotEmpty() }
+                ?: return@mapNotNull null
             form.category to parsedFields
         }
         .groupBy({ it.first }, { it.second })
