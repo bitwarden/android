@@ -255,7 +255,7 @@ private fun PrivilegedAppsListContent(
                     ) {
                         BitwardenStandardIconButton(
                             vectorIconRes = BitwardenDrawable.ic_delete,
-                            contentDescription = "",
+                            contentDescription = stringResource(id = BitwardenString.delete),
                             onClick = remember(item) {
                                 { onDeleteClick(item) }
                             },
