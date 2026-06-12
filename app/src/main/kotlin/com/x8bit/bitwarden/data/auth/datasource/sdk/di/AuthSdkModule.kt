@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.sdk.di
 
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSourceImpl
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
@@ -19,8 +20,10 @@ object AuthSdkModule {
     @Provides
     @Singleton
     fun provideAuthSdkSource(
+        dispatcherManager: DispatcherManager,
         sdkClientManager: SdkClientManager,
     ): AuthSdkSource = AuthSdkSourceImpl(
+        dispatcherManager = dispatcherManager,
         sdkClientManager = sdkClientManager,
     )
 }

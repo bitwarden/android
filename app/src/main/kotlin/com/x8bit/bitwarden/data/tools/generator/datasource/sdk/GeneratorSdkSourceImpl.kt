@@ -1,11 +1,13 @@
 package com.x8bit.bitwarden.data.tools.generator.datasource.sdk
 
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.generators.PassphraseGeneratorRequest
 import com.bitwarden.generators.PasswordGeneratorRequest
 import com.bitwarden.generators.UsernameGeneratorRequest
 import com.bitwarden.sdk.GeneratorClients
 import com.x8bit.bitwarden.data.platform.datasource.sdk.BaseSdkSource
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
+import kotlinx.coroutines.withContext
 
 /**
  * Implementation of [GeneratorSdkSource] that delegates password generation.
@@ -14,6 +16,7 @@ import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
  * [GeneratorClients] provided by the Bitwarden SDK.
  */
 class GeneratorSdkSourceImpl(
+    private val dispatcherManager: DispatcherManager,
     sdkClientManager: SdkClientManager,
 ) : BaseSdkSource(sdkClientManager = sdkClientManager),
     GeneratorSdkSource {
@@ -51,6 +54,8 @@ class GeneratorSdkSourceImpl(
     override suspend fun generateForwardedServiceEmail(
         request: UsernameGeneratorRequest.Forwarded,
     ): Result<String> = runCatchingWithLogs {
-        useClient { generators().username(request) }
+        withContext(context = dispatcherManager.io) {
+            useClient { generators().username(request) }
+        }
     }
 }

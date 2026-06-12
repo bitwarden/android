@@ -4,6 +4,7 @@ import com.bitwarden.vault.CardView
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.DriversLicenseView
 import com.bitwarden.vault.FieldType
 import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.IdentityView
@@ -618,6 +619,85 @@ class VaultAddItemStateExtensionsTest {
                     expirationDate = "2030-01-15",
                     nationalIdentificationNumber = "987-65-4321",
                 ),
+                favorite = false,
+                reprompt = CipherRepromptType.NONE,
+                organizationUseTotp = false,
+                edit = true,
+                viewPassword = true,
+                localData = null,
+                attachments = null,
+                fields = emptyList(),
+                passwordHistory = null,
+                permissions = null,
+                creationDate = FIXED_CLOCK.instant(),
+                deletedDate = null,
+                revisionDate = FIXED_CLOCK.instant(),
+                archivedDate = null,
+                sshKey = null,
+                attachmentDecryptionFailures = null,
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toCipherView should transform License ItemType to CipherView`() {
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
+                name = "mockName-1",
+                selectedFolderId = "mockId-1",
+                favorite = false,
+                masterPasswordReprompt = false,
+                notes = "mockNotes-1",
+                selectedOwnerId = "mockOwnerId-1",
+            ),
+            isIndividualVaultDisabled = false,
+            type = VaultAddEditState.ViewState.Content.ItemType.License(
+                firstName = "Bruce",
+                middleName = "Thomas",
+                lastName = "Wayne",
+                dateOfBirth = LocalDate.of(1939, 5, 27),
+                licenseNumber = "DL12345678",
+                issuingCountry = "USA",
+                issuingState = "NJ",
+                issuingAuthority = "NJ MVC",
+                issueDate = LocalDate.of(2020, 1, 15),
+                expirationDate = LocalDate.of(2030, 1, 15),
+                licenseClass = "D",
+            ),
+        )
+
+        val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
+
+        assertEquals(
+            CipherView(
+                id = null,
+                organizationId = "mockOwnerId-1",
+                folderId = "mockId-1",
+                collectionIds = emptyList(),
+                key = null,
+                name = "mockName-1",
+                notes = "mockNotes-1",
+                type = CipherType.DRIVERS_LICENSE,
+                login = null,
+                identity = null,
+                card = null,
+                secureNote = null,
+                bankAccount = null,
+                driversLicense = DriversLicenseView(
+                    firstName = "Bruce",
+                    middleName = "Thomas",
+                    lastName = "Wayne",
+                    dateOfBirth = "1939-05-27",
+                    licenseNumber = "DL12345678",
+                    issuingCountry = "USA",
+                    issuingState = "NJ",
+                    issueDate = "2020-01-15",
+                    issuingAuthority = "NJ MVC",
+                    expirationDate = "2030-01-15",
+                    licenseClass = "D",
+                ),
+                passport = null,
                 favorite = false,
                 reprompt = CipherRepromptType.NONE,
                 organizationUseTotp = false,

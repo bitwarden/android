@@ -46,3 +46,18 @@ sealed class VaultUnlockResult {
 sealed interface VaultUnlockError {
     val error: Throwable?
 }
+
+/**
+ * Invokes the [onSuccess] lambda as a side effect.
+ */
+inline fun VaultUnlockResult.onVaultUnlockSuccess(
+    onSuccess: () -> Unit,
+): VaultUnlockResult = when (this) {
+    is VaultUnlockResult.AuthenticationError,
+    is VaultUnlockResult.BiometricDecodingError,
+    is VaultUnlockResult.GenericError,
+    is VaultUnlockResult.InvalidStateError,
+        -> this
+
+    is VaultUnlockResult.Success -> this.also { onSuccess() }
+}

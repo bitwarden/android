@@ -612,6 +612,7 @@ kies u Voeg TOTP toe om die sleutel veilig te bewaar</string>
     <string name="forwarded_email_description">Genereer ’n e-posalias met ’n eksterne aanstuurdiens.</string>
     <string name="accessibility_service_disclosure">Toeganklikheidsdiensopenbaarmaking</string>
     <string name="accessibility_disclosure_text">Bitwarden gebruik die Toeganklikheidsdiens om na aantekenvelde in toeps en webwerwe te soek en dan die geskikte veld-ID’s om ’n gebruikersnaam en wagwoord in te voer wanner ’n ooreenstemming vir die toep of webwerf gevind is. Ons bewaar geen van die inligting wat deur die diens gebied word nie en ons poog ook nie om enige op-skerm-elemente buiten teksinvoer van velde te beheer nie.</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields in apps and websites. If you choose to enable it, Bitwarden will identify the appropriate fields and enter your credentials when a match is found. We do not store any information observed by the service, and we do not control any on-screen elements beyond credential entry.</string>
     <string name="accept">Aanvaar</string>
     <string name="decline">Wys af</string>
     <string name="login_request_has_already_expired">Aantekenversoek het reeds verstryk.</string>
@@ -991,9 +992,8 @@ Wil u na die rekening omskakel?</string>
     <string name="delete_logs">Delete logs</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Do you really want to delete all recorded logs?</string>
     <string name="confirm_key_connector_domain">Confirm Key Connector domain</string>
-    <string name="key_connector_domain">Key Connector domain:</string>
-    <string name="key_connector_organization">Organization:</string>
-    <string name="password_no_longer_required_confirm_domain">A master password is no longer required for members of the following organization. Please confirm the domain below with your organization administrator.</string>
+    <string name="key_connector_domain">Key Connector domain</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Your organization no longer requires a master password for its members. Please verify the domain below with your admin and enter your master password to continue.</string>
     <string name="please_confirm_domain_with_admin">Please confirm the domain below with your organization administrator.\n\nKey Connector domain:\n%1$s</string>
     <string name="flight_recorder_banner_title">Flight recorder on</string>
     <string name="flight_recorder_banner_message">Flight recorder will be active until %1$s at %2$s. Return to settings to deactivate now.</string>
@@ -1303,19 +1303,21 @@ Wil u na die rekening omskakel?</string>
     <string name="cancel_premium">Cancel Premium</string>
     <string name="subscription_status_active">Active</string>
     <string name="subscription_status_canceled">Canceled</string>
+    <string name="subscription_status_expired">Verstreke</string>
     <string name="subscription_status_past_due">Past due</string>
     <string name="subscription_status_paused">Paused</string>
     <string name="subscription_status_update_payment">Update payment</string>
     <string name="subscription_status_pending_cancellation">Pending cancellation</string>
     <string name="subscription_pending_cancellation_description">Your subscription is scheduled to cancel on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. You can reinstate it anytime before then.</string>
     <string name="premium_next_charge_summary">Your next charge is for <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD due on <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
-    <string name="subscription_canceled_description">Your subscription was canceled on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using premium features.</string>
-    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
+    <string name="subscription_canceled_description">Your subscription was canceled on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using Premium features.</string>
+    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment method before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
-        <item quantity="one">You have a grace period of <annotation arg="0">%1$d</annotation> day from your subscription expiration date. Please resolve the past due amount by <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
-        <item quantity="other">You have a grace period of <annotation arg="0">%1$d</annotation> days from your subscription expiration date. Please resolve the past due amount by <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="one">You have a grace period of <annotation arg="0">%1$d</annotation> day from your subscription expiration date. Please resolve the past due invoices by <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="other">You have a grace period of <annotation arg="0">%1$d</annotation> days from your subscription expiration date. Please resolve the past due invoices by <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
     </plurals>
     <string name="subscription_paused_description">Your subscription is paused. Resume to continue using premium features.</string>
+    <string name="subscription_expired_description">Your subscription expired on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using Premium features.</string>
     <string name="loading_subscription">Loading subscription…</string>
     <string name="loading_portal">Loading portal…</string>
     <string name="portal_error">Something went wrong</string>

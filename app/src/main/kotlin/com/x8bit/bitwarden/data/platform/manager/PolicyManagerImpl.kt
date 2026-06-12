@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
@@ -95,15 +96,15 @@ class PolicyManagerImpl(
             },
         featureFlagManager.getFeatureFlagFlow(key = FlagKey.PoliciesInAcceptedState),
     ) { policies, organizations, isEnabled ->
-        this
-            .filterPolicies(
-                type = type,
-                policies = policies,
-                organizations = organizations,
-                isPoliciesInAcceptedStateEnabled = isEnabled,
-            )
-            .orEmpty()
+        filterPolicies(
+            type = type,
+            policies = policies,
+            organizations = organizations,
+            isPoliciesInAcceptedStateEnabled = isEnabled,
+        )
     }
+        // We do not have any policies yet if it is null, so do not emit at all.
+        .filterNotNull()
 
     private fun filterPolicies(
         type: PolicyType,

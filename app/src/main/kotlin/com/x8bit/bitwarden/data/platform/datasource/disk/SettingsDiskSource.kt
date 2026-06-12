@@ -41,6 +41,17 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     var initialAutofillDialogShown: Boolean?
 
     /**
+     * Indicates if the accessibility disclaimer has been displayed to the user.
+     */
+    var hasShownAccessibilityDisclaimer: Boolean?
+
+    /**
+     * Emits up-to-date values indicating if the accessibility disclaimer has been displayed to
+     * the user.
+     */
+    val hasShownAccessibilityDisclaimerFlow: Flow<Boolean?>
+
+    /**
      * The currently persisted app theme (or `null` if not set).
      */
     var appTheme: AppTheme

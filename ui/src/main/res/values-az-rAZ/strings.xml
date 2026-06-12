@@ -611,6 +611,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="forwarded_email_description">Xarici yönləndirmə xidməti ilə e-poçt ləqəbi yaradın.</string>
     <string name="accessibility_service_disclosure">Erişiləbilənlik Xidməti açıqlaması</string>
     <string name="accessibility_disclosure_text">Bitwarden, tətbiqlərdə və veb saytlarda giriş xanalarını axtarmaq üçün Erişiləbilənlik Xidmətini istifadə edir, daha sonra tətbiq və ya sayt üçün uyuşma tapdıqda istifadəçi adı və parolun daxil edilməsi üçün müvafiq xana kimliklərini yaradır. Xidmət tərəfindən bizə təqdim edilən məlumatların heç birini saxlamırıq, kimlik məlumatlarının daxil edilməsindən kənar ekrandakı hər hansısa elementə nəzarət etməyə cəhd etmirik.</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields in apps and websites. If you choose to enable it, Bitwarden will identify the appropriate fields and enter your credentials when a match is found. We do not store any information observed by the service, and we do not control any on-screen elements beyond credential entry.</string>
     <string name="accept">Qəbul et</string>
     <string name="decline">Rədd et</string>
     <string name="login_request_has_already_expired">Giriş tələbinin müddəti artıq bitib.</string>
@@ -993,8 +994,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Həqiqətən yazılmış bütün jurnalları silmək istəyirsiniz?</string>
     <string name="confirm_key_connector_domain">Key Connector domenini təsdiqlə</string>
     <string name="key_connector_domain">Key Connector domeni:</string>
-    <string name="key_connector_organization">Təşkilat:</string>
-    <string name="password_no_longer_required_confirm_domain">Aşağıdakı təşkilatların üzvləri üçün artıq ana parol tələb olunmur. Lütfən aşağıdakı domeni təşkilatınızın inzibatçısı ilə təsdiqləyin.</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Təşkilatınız artıq öz üzvləri üçün ana parol tələb etmir. Lütfən aşağıdakı domeni admininizlə doğrulayın və davam etmək üçün ana parolunuzu daxil edin.</string>
     <string name="please_confirm_domain_with_admin">Lütfən aşağıdakı domeni təşkilatınızın inzibatçısı ilə təsdiqləyin.\n\nKey Connector domeni:\n%1$s</string>
     <string name="flight_recorder_banner_title">Uçuş yazıcısı açıqdır</string>
     <string name="flight_recorder_banner_message">Uçuş yazıcısı bu müddətə qədər açıqdır: %1$s %2$s. İndi deaktiv etmək üçün ayarlara qayıdın.</string>
@@ -1304,6 +1304,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="cancel_premium">Premium ləğv edildi</string>
     <string name="subscription_status_active">Aktiv</string>
     <string name="subscription_status_canceled">Ləğv edildi</string>
+    <string name="subscription_status_expired">Müddəti bitib</string>
     <string name="subscription_status_past_due">Vaxtı keçmiş</string>
     <string name="subscription_status_paused">Fasilə verilib</string>
     <string name="subscription_status_update_payment">Ödənişi güncəllə</string>
@@ -1317,6 +1318,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
         <item quantity="other">Abunəliyinizin bitmə tarixindən etibarən %1$d günlük güzəşt dövrünüz var. Lütfən %2$s tarixinə qədər vaxtı keçmiş fakturaları həll edin.</item>
     </plurals>
     <string name="subscription_paused_description">Abunəliyinizə fasilə verilib. Premium özəllikləri istifadə etməyə davam etmək üçün yenidən abunə olun.</string>
+    <string name="subscription_expired_description">Abunəliyinizin müddəti <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> tarixində bitir. Premium-dan faydalanmağa davam etmək üçün yenidən abunə olun.</string>
     <string name="loading_subscription">Abunəlik yüklənir…</string>
     <string name="loading_portal">Portal yüklənir…</string>
     <string name="portal_error">Nəsə səhv getdi</string>

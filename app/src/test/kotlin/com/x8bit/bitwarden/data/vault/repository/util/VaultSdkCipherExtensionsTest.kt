@@ -11,9 +11,11 @@ import com.bitwarden.network.model.createMockCard
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCipherJsonRequest
 import com.bitwarden.network.model.createMockCipherMiniResponse
+import com.bitwarden.network.model.createMockDriversLicense
 import com.bitwarden.network.model.createMockField
 import com.bitwarden.network.model.createMockIdentity
 import com.bitwarden.network.model.createMockLogin
+import com.bitwarden.network.model.createMockPassport
 import com.bitwarden.network.model.createMockPasswordHistory
 import com.bitwarden.network.model.createMockSecureNote
 import com.bitwarden.network.model.createMockSshKey
@@ -84,8 +86,6 @@ class VaultSdkCipherExtensionsTest {
             createMockCipherJsonRequest(
                 number = 1,
                 login = createMockLogin(number = 1, uri = null),
-                driversLicense = null,
-                passport = null,
                 archivedDate = FIXED_CLOCK.instant(),
             ),
             syncCipher,
@@ -224,13 +224,13 @@ class VaultSdkCipherExtensionsTest {
     }
 
     @Test
-    fun `toEncryptedNetworkCipher should always emit null driversLicense and passport`() {
+    fun `toEncryptedNetworkCipher should map driversLicense and passport`() {
         val sdkCipher = createMockSdkCipher(number = 1, clock = FIXED_CLOCK)
 
         val request = sdkCipher.toEncryptedNetworkCipher(encryptedFor = "mockEncryptedFor-1")
 
-        assertNull(request.driversLicense)
-        assertNull(request.passport)
+        assertEquals(createMockDriversLicense(number = 1), request.driversLicense)
+        assertEquals(createMockPassport(number = 1), request.passport)
     }
 
     @Test
@@ -448,8 +448,6 @@ class VaultSdkCipherExtensionsTest {
             createMockCipherJsonRequest(
                 number = 1,
                 login = createMockLogin(number = 1, uri = null),
-                driversLicense = null,
-                passport = null,
                 archivedDate = FIXED_CLOCK.instant(),
             ),
             encryptionContext.toEncryptedNetworkCipher(),

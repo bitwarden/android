@@ -4,6 +4,7 @@ import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.decodeFromStringWithErrorCallback
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CollectionsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.DomainsDao
@@ -134,7 +135,7 @@ class VaultDiskSourceImpl(
                 .filter {
                     // A safety-check since after the DB migration, we will temporarily think
                     // all ciphers contain a totp code
-                    it.login?.totp != null
+                    it.login?.totp.orNullIfBlank() != null
                 }
         }
     }
@@ -166,7 +167,7 @@ class VaultDiskSourceImpl(
                 CipherEntity(
                     id = cipher.id,
                     userId = userId,
-                    hasTotp = cipher.login?.totp != null,
+                    hasTotp = cipher.login?.totp.orNullIfBlank() != null,
                     cipherType = json.encodeToString(cipher.type),
                     cipherJson = json.encodeToString(cipher),
                     organizationId = cipher.organizationId,

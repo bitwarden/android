@@ -335,6 +335,7 @@ private fun ItemListingContent(
                         .fillMaxWidth()
                         .standardHorizontalMargin()
                         .padding(horizontal = 16.dp)
+                        .testTag("FavoritesHeaderLabel")
                         .animateItem(),
                 )
                 Spacer(modifier = Modifier.height(height = 8.dp))

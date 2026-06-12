@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.model
 
+import com.x8bit.bitwarden.data.platform.util.userFriendlyMessage
+
 /**
  * Models result of logging in.
  */
@@ -30,8 +32,8 @@ sealed class LoginResult {
      * There was an error logging in.
      */
     data class Error(
-        val errorMessage: String?,
         val error: Throwable?,
+        val errorMessage: String? = error?.userFriendlyMessage,
     ) : LoginResult()
 
     /**

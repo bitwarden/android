@@ -3,6 +3,15 @@ package com.x8bit.bitwarden.data.autofill.accessibility.util
 import com.x8bit.bitwarden.data.autofill.accessibility.model.Browser
 
 /**
+ * URL extractor for Mozilla browsers whose toolbar exposes the URL via [contentDescription]
+ * rather than [text]. The content description format is " $url. Search or enter address".
+ * Falls back to [text] for builds where the URL is still exposed via [text].
+ */
+private val mozillaUrlExtractor: (String) -> String? = { text ->
+    text.trim().split(" ").firstOrNull()?.trimEnd('.')?.takeIf { it.isNotEmpty() }
+}
+
+/**
  * Determines if the [String] receiver is a package name for a supported browser and returns that
  * [Browser] if it is a match.
  */
@@ -36,14 +45,21 @@ private val ACCESSIBILITY_SUPPORTED_BROWSERS = listOf(
     Browser(packageName = "com.cookiegames.smartcookie", urlFieldId = "search"),
     Browser(
         packageName = "com.cookiejarapps.android.smartcookieweb",
-        urlFieldId = "mozac_browser_toolbar_url_view",
+        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view"),
+        possibleUrlSemanticIds = listOf("ADDRESSBAR_URL_BOX"),
+        urlExtractor = mozillaUrlExtractor,
     ),
     Browser(packageName = "com.duckduckgo.mobile.android", urlFieldId = "omnibarTextInput"),
     Browser(packageName = "com.ecosia.android", urlFieldId = "url_bar"),
     Browser(packageName = "com.google.android.apps.chrome", urlFieldId = "url_bar"),
     Browser(packageName = "com.google.android.apps.chrome_dev", urlFieldId = "url_bar"),
     // "com.google.android.captiveportallogin": URL displayed in ActionBar subtitle without viewId
-    Browser(packageName = "com.iode.firefox", urlFieldId = "mozac_browser_toolbar_url_view"),
+    Browser(
+        packageName = "com.iode.firefox",
+        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view"),
+        possibleUrlSemanticIds = listOf("ADDRESSBAR_URL_BOX"),
+        urlExtractor = mozillaUrlExtractor,
+    ),
     Browser(packageName = "com.jamal2367.styx", urlFieldId = "search"),
     Browser(packageName = "com.kiwibrowser.browser", urlFieldId = "url_bar"),
     Browser(packageName = "com.kiwibrowser.browser.dev", urlFieldId = "url_bar"),
@@ -67,7 +83,12 @@ private val ACCESSIBILITY_SUPPORTED_BROWSERS = listOf(
     Browser(
         packageName = "com.qwant.liberty",
         // 2nd = Legacy (before v4)
-        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view", "url_bar_title"),
+        possibleUrlFieldIds = listOf(
+            "mozac_browser_toolbar_url_view",
+            "url_bar_title",
+        ),
+        possibleUrlSemanticIds = listOf("ADDRESSBAR_URL_BOX"),
+        urlExtractor = mozillaUrlExtractor,
     ),
     Browser(packageName = "com.rainsee.create", urlFieldId = "search_box"),
     Browser(packageName = "com.sec.android.app.sbrowser", urlFieldId = "location_bar_edit_text"),
@@ -102,7 +123,9 @@ private val ACCESSIBILITY_SUPPORTED_BROWSERS = listOf(
     Browser(packageName = "idm.internet.download.manager.plus", urlFieldId = "search"),
     Browser(
         packageName = "io.github.forkmaintainers.iceraven",
-        urlFieldId = "mozac_browser_toolbar_url_view",
+        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view"),
+        possibleUrlSemanticIds = listOf("ADDRESSBAR_URL_BOX"),
+        urlExtractor = mozillaUrlExtractor,
     ),
     Browser(packageName = "mark.via", urlFieldId = "am,an"),
     Browser(packageName = "mark.via.gp", urlFieldId = "as"),
@@ -129,78 +152,155 @@ private val ACCESSIBILITY_SUPPORTED_BROWSERS = listOf(
     Browser(
         packageName = "org.gnu.icecat",
         // 2nd = Anticipation
-        possibleUrlFieldIds = listOf("url_bar_title", "mozac_browser_toolbar_url_view"),
+        possibleUrlFieldIds = listOf(
+            "url_bar_title",
+            "mozac_browser_toolbar_url_view",
+        ),
+        possibleUrlSemanticIds = listOf("ADDRESSBAR_URL_BOX"),
+        urlExtractor = mozillaUrlExtractor,
     ),
     Browser(
         packageName = "org.ironfoxoss.ironfox",
         // 2nd = Legacy
-        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view", "url_bar_title"),
+        possibleUrlFieldIds = listOf(
+            "mozac_browser_toolbar_url_view",
+            "url_bar_title",
+        ),
+        possibleUrlSemanticIds = listOf("ADDRESSBAR_URL_BOX"),
+        urlExtractor = mozillaUrlExtractor,
     ),
     Browser(
         packageName = "org.ironfoxoss.ironfox.nightly",
         // 2nd = Legacy
-        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view", "url_bar_title"),
+        possibleUrlFieldIds = listOf(
+            "mozac_browser_toolbar_url_view",
+            "url_bar_title",
+        ),
+        possibleUrlSemanticIds = listOf("ADDRESSBAR_URL_BOX"),
+        urlExtractor = mozillaUrlExtractor,
     ),
-    Browser(packageName = "org.mozilla.fenix", urlFieldId = "mozac_browser_toolbar_url_view"),
+    Browser(
+        packageName = "org.mozilla.fenix",
+        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view"),
+        possibleUrlSemanticIds = listOf("ADDRESSBAR_URL_BOX"),
+        urlExtractor = mozillaUrlExtractor,
+    ),
     // [DEPRECATED ENTRY]
     Browser(
         packageName = "org.mozilla.fenix.nightly",
-        urlFieldId = "mozac_browser_toolbar_url_view",
+        possibleUrlFieldIds = listOf(
+            "mozac_browser_toolbar_url_view",
+        ),
+        possibleUrlSemanticIds = listOf("ADDRESSBAR_URL_BOX"),
+        urlExtractor = mozillaUrlExtractor,
     ),
     // [DEPRECATED ENTRY]
     Browser(
         packageName = "org.mozilla.fennec_aurora",
-        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view", "url_bar_title"),
+        // 2nd = Legacy
+        possibleUrlFieldIds = listOf(
+            "mozac_browser_toolbar_url_view",
+            "url_bar_title",
+        ),
+        possibleUrlSemanticIds = listOf("ADDRESSBAR_URL_BOX"),
+        urlExtractor = mozillaUrlExtractor,
     ),
     Browser(
         packageName = "org.mozilla.fennec_fdroid",
         // 2nd = Legacy
-        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view", "url_bar_title"),
+        possibleUrlFieldIds = listOf(
+            "mozac_browser_toolbar_url_view",
+            "url_bar_title",
+        ),
+        possibleUrlSemanticIds = listOf("ADDRESSBAR_URL_BOX"),
+        urlExtractor = mozillaUrlExtractor,
     ),
     Browser(
         packageName = "org.mozilla.firefox",
         // 2nd = Legacy
-        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view", "url_bar_title"),
+        possibleUrlFieldIds = listOf(
+            "mozac_browser_toolbar_url_view",
+            "url_bar_title",
+        ),
+        possibleUrlSemanticIds = listOf("ADDRESSBAR_URL_BOX"),
+        urlExtractor = mozillaUrlExtractor,
     ),
     Browser(
         packageName = "org.mozilla.firefox_beta",
         // 2nd = Legacy
-        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view", "url_bar_title"),
+        possibleUrlFieldIds = listOf(
+            "mozac_browser_toolbar_url_view",
+            "url_bar_title",
+        ),
+        possibleUrlSemanticIds = listOf("ADDRESSBAR_URL_BOX"),
+        urlExtractor = mozillaUrlExtractor,
     ),
     Browser(
         packageName = "org.mozilla.focus",
         // 2nd = Legacy
-        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view", "display_url"),
+        possibleUrlFieldIds = listOf(
+            "mozac_browser_toolbar_url_view",
+            "display_url",
+        ),
+        possibleUrlSemanticIds = listOf("ADDRESSBAR_URL_BOX"),
+        urlExtractor = mozillaUrlExtractor,
     ),
     Browser(
         packageName = "org.mozilla.focus.beta",
         // 2nd = Legacy
-        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view", "display_url"),
+        possibleUrlFieldIds = listOf(
+            "mozac_browser_toolbar_url_view",
+            "display_url",
+        ),
+        possibleUrlSemanticIds = listOf("ADDRESSBAR_URL_BOX"),
+        urlExtractor = mozillaUrlExtractor,
     ),
     Browser(
         packageName = "org.mozilla.focus.nightly",
         // 2nd = Legacy
-        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view", "display_url"),
+        possibleUrlFieldIds = listOf(
+            "mozac_browser_toolbar_url_view",
+            "display_url",
+        ),
+        possibleUrlSemanticIds = listOf("ADDRESSBAR_URL_BOX"),
+        urlExtractor = mozillaUrlExtractor,
     ),
     Browser(
         packageName = "org.mozilla.klar",
         // 2nd = Legacy
-        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view", "display_url"),
+        possibleUrlFieldIds = listOf(
+            "mozac_browser_toolbar_url_view",
+            "display_url",
+        ),
+        possibleUrlSemanticIds = listOf("ADDRESSBAR_URL_BOX"),
+        urlExtractor = mozillaUrlExtractor,
     ),
     Browser(
         packageName = "org.mozilla.reference.browser",
-        urlFieldId = "mozac_browser_toolbar_url_view",
+        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view"),
+        possibleUrlSemanticIds = listOf("ADDRESSBAR_URL_BOX"),
+        urlExtractor = mozillaUrlExtractor,
     ),
     Browser(packageName = "org.mozilla.rocket", urlFieldId = "display_url"),
     Browser(
         packageName = "org.torproject.torbrowser",
         // 2nd = Legacy (before v10.0.3)
-        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view", "url_bar_title"),
+        possibleUrlFieldIds = listOf(
+            "mozac_browser_toolbar_url_view",
+            "url_bar_title",
+        ),
+        possibleUrlSemanticIds = listOf("ADDRESSBAR_URL_BOX"),
+        urlExtractor = mozillaUrlExtractor,
     ),
     Browser(
         packageName = "org.torproject.torbrowser_alpha",
         // 2nd = Legacy (before v10.0a8)
-        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view", "url_bar_title"),
+        possibleUrlFieldIds = listOf(
+            "mozac_browser_toolbar_url_view",
+            "url_bar_title",
+        ),
+        possibleUrlSemanticIds = listOf("ADDRESSBAR_URL_BOX"),
+        urlExtractor = mozillaUrlExtractor,
     ),
     Browser(packageName = "org.ungoogled.chromium.extensions.stable", urlFieldId = "url_bar"),
     Browser(packageName = "org.ungoogled.chromium.stable", urlFieldId = "url_bar"),

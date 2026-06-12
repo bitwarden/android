@@ -9,7 +9,6 @@ import com.bitwarden.network.base.BaseServiceTest
 import com.bitwarden.network.model.KdfJson
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorKeyRequestJson
-import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
 import com.bitwarden.network.model.MasterPasswordAuthenticationDataJson
 import com.bitwarden.network.model.MasterPasswordUnlockDataJson
 import com.bitwarden.network.model.PasswordHintResponseJson
@@ -239,21 +238,6 @@ class AccountsServiceTest : BaseServiceTest() {
             ),
         )
         assertTrue(result.isSuccess)
-    }
-
-    @Test
-    fun `getMasterKeyFromKeyConnector with token and empty response is success`() = runTest {
-        val masterKey = "masterKey"
-        val response = MockResponse().setBody("""{ "key": "$masterKey" }""")
-        server.enqueue(response)
-        val result = service.getMasterKeyFromKeyConnector(
-            url = "$url/test",
-            accessToken = "token",
-        )
-        assertEquals(
-            KeyConnectorMasterKeyResponseJson(masterKey = masterKey).asSuccess(),
-            result,
-        )
     }
 
     @Test
