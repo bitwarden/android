@@ -163,13 +163,21 @@ fun VaultItemIdentityContent(
         }
         identityState.passportNumber?.let { passportNumber ->
             item(key = "passportNumber") {
-                IdentityCopyField(
+                BitwardenPasswordField(
                     label = stringResource(id = BitwardenString.passport_number),
                     value = passportNumber,
-                    copyContentDescription = stringResource(id = BitwardenString.copy_passport_number),
-                    textFieldTestTag = "IdentityPassportNumberEntry",
-                    copyActionTestTag = "IdentityCopyPassportNumberButton",
-                    onCopyClick = vaultIdentityItemTypeHandlers.onCopyPassportNumberClick,
+                    onValueChange = {},
+                    readOnly = true,
+                    actions = {
+                        BitwardenStandardIconButton(
+                            vectorIconRes = BitwardenDrawable.ic_copy,
+                            contentDescription = stringResource(id = BitwardenString.copy_passport_number),
+                            onClick = vaultIdentityItemTypeHandlers.onCopyPassportNumberClick,
+                            modifier = Modifier.testTag(tag = "IdentityCopyPassportNumberButton"),
+                        )
+                    },
+                    passwordFieldTestTag = "IdentityPassportNumberEntry",
+                    showPasswordTestTag = "IdentityViewPassportNumberButton",
                     cardStyle = identityState
                         .propertyList
                         .toListItemCardStyle(
