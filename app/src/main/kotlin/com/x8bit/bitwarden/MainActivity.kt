@@ -36,6 +36,8 @@ import com.x8bit.bitwarden.data.platform.manager.util.ObserveScreenDataEffect
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.composition.LocalManagerProvider
+import com.x8bit.bitwarden.ui.platform.feature.accessibilitydisclosure.accessibilityDisclosureDestination
+import com.x8bit.bitwarden.ui.platform.feature.accessibilitydisclosure.navigateToAccessibilityDisclosure
 import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.cookieAcquisitionDestination
 import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.navigateToCookieAcquisition
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.debugMenuDestination
@@ -110,6 +112,7 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    @Suppress("LongMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         intent = intent.validate()
         var shouldShowSplashScreen = true
@@ -163,6 +166,10 @@ class MainActivity : AppCompatActivity() {
                             onSplashScreenRemoved = { shouldShowSplashScreen = false },
                         )
                         localNetworkAccessDestination(
+                            onDismiss = { navController.popBackStack() },
+                            onSplashScreenRemoved = { shouldShowSplashScreen = false },
+                        )
+                        accessibilityDisclosureDestination(
                             onDismiss = { navController.popBackStack() },
                             onSplashScreenRemoved = { shouldShowSplashScreen = false },
                         )
@@ -252,6 +259,10 @@ class MainActivity : AppCompatActivity() {
                 MainEvent.NavigateToCookieAcquisition -> navController.navigateToCookieAcquisition()
                 MainEvent.NavigateToLocalNetworkAccess -> {
                     navController.navigateToLocalNetworkAccess()
+                }
+
+                MainEvent.NavigateToAccessibilityDisclosure -> {
+                    navController.navigateToAccessibilityDisclosure()
                 }
 
                 is MainEvent.UpdateAppLocale -> {

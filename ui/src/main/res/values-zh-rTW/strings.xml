@@ -118,13 +118,13 @@
     <string name="never">永不</string>
     <string name="new_item_created">已新增項目</string>
     <string name="no_cards">您的密碼庫中沒有付款卡。</string>
-    <string name="add_card">Add card</string>
+    <string name="add_card">新增付款卡</string>
     <string name="no_logins">您的密碼庫中沒有登入資料。</string>
     <string name="no_identities">您的密碼庫中沒有身份識別。</string>
     <string name="add_identity">Add identity</string>
     <string name="no_notes">您的密碼庫中沒有筆記。</string>
     <string name="add_note">Add note</string>
-    <string name="add_ssh_key">Add SSH key</string>
+    <string name="add_ssh_key">新增 SSH 金鑰</string>
     <string name="no_text_sends">您的帳戶中沒有文字 Send。</string>
     <string name="no_file_sends">您的帳戶中沒有檔案 Send。</string>
     <string name="no_ssh_keys">您的密碼庫中沒有 SSH 金鑰。</string>
@@ -227,7 +227,7 @@
     <string name="number">號碼</string>
     <string name="security_code">安全代碼</string>
     <string name="scan_card">掃描付款卡</string>
-    <string name="scan_card_instruction">請將卡片置於框內以進行掃描。</string>
+    <string name="scan_card_instruction">請將付款卡置於框內以進行掃描。</string>
     <string name="hold_steady_and_ensure_all_card_details_are_visible">請保持穩定，並確保所有卡片資訊清晰可見</string>
     <string name="type_card">付款卡</string>
     <string name="type_identity">身分</string>
@@ -240,7 +240,7 @@
     <string name="august">八月</string>
     <string name="brand">發卡組織</string>
     <string name="card_details">付款卡詳細資料</string>
-    <string name="card_scanned">卡片已掃描</string>
+    <string name="card_scanned">付款卡已掃描</string>
     <string name="cardholder_name">持卡人姓名</string>
     <string name="city_town">市/鎮</string>
     <string name="company">公司</string>
@@ -609,6 +609,7 @@
     <string name="forwarded_email_description">使用外部轉寄服務產生一個電子郵件別名。</string>
     <string name="accessibility_service_disclosure">無障礙服務聲明</string>
     <string name="accessibility_disclosure_text">Bitwarden 使用無障礙服務搜寻應用程式和網站中的登入欄位，然後建立適當的欄位 ID，以便在找到應用程式或網站的匹配項目時輸入用戶名和密碼。 我們不會存儲此服務提供給我們的任何資訊，也不會試圖控制憑證文字輸入以外的任何荧幕元素。</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields in apps and websites. If you choose to enable it, Bitwarden will identify the appropriate fields and enter your credentials when a match is found. We do not store any information observed by the service, and we do not control any on-screen elements beyond credential entry.</string>
     <string name="accept">接受</string>
     <string name="decline">拒絕</string>
     <string name="login_request_has_already_expired">登入要求已逾期。</string>
@@ -987,8 +988,7 @@
     <string name="do_you_really_want_to_delete_all_recorded_logs">您確定要刪除所有已記錄的日誌嗎？</string>
     <string name="confirm_key_connector_domain">確認 Key Connector 網域</string>
     <string name="key_connector_domain">Key Connector 網域</string>
-    <string name="key_connector_organization">組織：</string>
-    <string name="password_no_longer_required_confirm_domain">以下組織的成員已不再需要主密碼。請與你的組織管理員確認下方的網域。</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Your organization no longer requires a master password for its members. Please verify the domain below with your admin and enter your master password to continue.</string>
     <string name="please_confirm_domain_with_admin">請與您組織的管理員確認以下網域。\n\n金鑰連接器網域：\n%1$s</string>
     <string name="flight_recorder_banner_title">飛行記錄器已開啟</string>
     <string name="flight_recorder_banner_message">飛行記錄器將在 %1$s %2$s 前保持啟用。返回設定可立即停用。</string>
@@ -1228,7 +1228,7 @@
     <string name="continue_without_syncing">不進行同步並繼續</string>
     <string name="external_link">外部連結</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s，外部連結</string>
-    <string name="devices">Devices</string>
+    <string name="devices">裝置</string>
     <string name="mobile_platform">Mobile - %1$s</string>
     <string name="extension_platform">Extension - %1$s</string>
     <string name="web_platform">Web - %1$s</string>
@@ -1240,7 +1240,7 @@
     <string name="first_login_date"><annotation emphasis="bold">First login:</annotation> <annotation arg="0">%1$s</annotation></string>
     <string name="current_session">Current session</string>
     <string name="pending_request">Pending request</string>
-    <string name="today">Today</string>
+    <string name="today">今天</string>
     <string name="past_seven_days">Past 7 days</string>
     <string name="past_fourteen_days">Past 14 days</string>
     <string name="past_thirty_days">Past 30 days</string>
@@ -1295,6 +1295,7 @@
     <string name="cancel_premium">取消 Premium</string>
     <string name="subscription_status_active">生效中</string>
     <string name="subscription_status_canceled">已取消</string>
+    <string name="subscription_status_expired">已逾期</string>
     <string name="subscription_status_past_due">逾期</string>
     <string name="subscription_status_paused">已暫停</string>
     <string name="subscription_status_update_payment">更新付款方式</string>
@@ -1302,11 +1303,12 @@
     <string name="subscription_pending_cancellation_description">Your subscription is scheduled to cancel on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. You can reinstate it anytime before then.</string>
     <string name="premium_next_charge_summary">您的下一筆扣款為 %1$s USD，將於 %2$s 到期。</string>
     <string name="subscription_canceled_description">您的訂閱已於 %1$s 取消。重新訂閱以繼續使用 Premium 功能。</string>
-    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
+    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment method before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="other">自訂閱到期日起，您有 %1$d 天的寬限期。請於 %2$s 前完成逾期款項付款。</item>
     </plurals>
     <string name="subscription_paused_description">您的訂閱已暫停。恢復訂閱以繼續使用 Premium 功能。</string>
+    <string name="subscription_expired_description">Your subscription expired on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using Premium features.</string>
     <string name="loading_subscription">正在載入訂閱資訊…</string>
     <string name="loading_portal">正在載入入口網站…</string>
     <string name="portal_error">出了點問題</string>
@@ -1370,7 +1372,7 @@
     <string name="no_passports">There are no passports in your vault.</string>
     <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">您的請求已中斷，因為應用程式需要重新驗證。請再試一次。</string>
     <string name="passport_details">Passport details</string>
-    <string name="sex">Sex</string>
+    <string name="sex">性別</string>
     <string name="birth_place">Birth place</string>
     <string name="national_identification_number">National identification number</string>
     <string name="copy_national_identification_number">Copy national identification number</string>

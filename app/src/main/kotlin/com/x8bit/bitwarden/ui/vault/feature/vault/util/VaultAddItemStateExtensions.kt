@@ -89,9 +89,7 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toCipherType(): CipherT
         is VaultAddEditState.ViewState.Content.ItemType.SshKey -> CipherType.SSH_KEY
         is VaultAddEditState.ViewState.Content.ItemType.BankAccount -> CipherType.BANK_ACCOUNT
         is VaultAddEditState.ViewState.Content.ItemType.Passport -> CipherType.PASSPORT
-        is VaultAddEditState.ViewState.Content.ItemType.License -> {
-            throw IllegalArgumentException("SDK mapping not yet available for $this")
-        }
+        is VaultAddEditState.ViewState.Content.ItemType.License -> CipherType.DRIVERS_LICENSE
     }
 
 private fun VaultAddEditState.ViewState.Content.ItemType.toSshKeyView(): SshKeyView? =
@@ -296,7 +294,7 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toLoginView(
                 clock = clock,
             ),
             uris = it.uriList.toLoginUriView(),
-            totp = it.totp,
+            totp = it.totp.orNullIfBlank(),
             autofillOnPageLoad = common.originalCipher?.login?.autofillOnPageLoad,
             fido2Credentials = common.originalCipher?.login?.fido2Credentials
                 .takeIf { _ -> it.fido2CredentialCreationDateTime != null },

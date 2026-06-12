@@ -405,7 +405,7 @@
     <string name="save_attachment_success">添付ファイルを保存しました</string>
     <string name="autofill_tile_accessibility_required">自動入力タイルを使用するには、Bitwarden の設定で「自動入力のユーザー補助」を有効にしてください。</string>
     <string name="autofill_tile_uri_not_found">パスワードフィールドが見つかりませんでした</string>
-    <string name="soft_deleting">Sending to trash…</string>
+    <string name="soft_deleting">ごみ箱に入れています…</string>
     <string name="item_soft_deleted">アイテムをごみ箱に入れました。</string>
     <string name="restore">リストア</string>
     <string name="restoring">復元中…</string>
@@ -608,6 +608,7 @@
     <string name="forwarded_email_description">外部転送サービスを使用してメールエイリアスを生成します。</string>
     <string name="accessibility_service_disclosure">アクセシビリティサービスの開示</string>
     <string name="accessibility_disclosure_text">Bitwarden は、アプリやウェブサイトのログインフィールドを検索し、該当するアプリやサイトが見つかった場合にユーザー名とパスワードを入力するための適切なフィールドIDを確立するためにユーザー補助を使用しています。私たちはサービスから提供された情報を保存することはありませんし、資格情報のテキスト入力以外の画面要素の制御をしようとすることもありません。</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden は Android のユーザー補助サービスを利用してアプリやウェブサイトのログインフィールドを検出する、オプションの自動入力機能を提供しています。この機能を有効にすると Bitwarden は適切なフィールドを識別し、一致するフィールドが見つかった場合に認証情報を入力します。当社はこのサービスによって収集された情報を一切保存せず、認証情報の入力以外の画面上の要素を制御することもありません。</string>
     <string name="accept">同意</string>
     <string name="decline">拒否</string>
     <string name="login_request_has_already_expired">ログインリクエストの有効期限が切れています。</string>
@@ -985,9 +986,8 @@
     <string name="delete_logs">ログの削除</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Do you really want to delete all recorded logs?</string>
     <string name="confirm_key_connector_domain">Confirm Key Connector domain</string>
-    <string name="key_connector_domain">Key Connector domain:</string>
-    <string name="key_connector_organization">組織:</string>
-    <string name="password_no_longer_required_confirm_domain">A master password is no longer required for members of the following organization. Please confirm the domain below with your organization administrator.</string>
+    <string name="key_connector_domain">Key Connector domain</string>
+    <string name="your_organization_no_longer_requires_a_master_password">組織のメンバーにマスターパスワードを必要としなくなりました。 続行するには以下のドメインを管理者で認証し、マスターパスワードを入力してください。</string>
     <string name="please_confirm_domain_with_admin">Please confirm the domain below with your organization administrator.\n\nKey Connector domain:\n%1$s</string>
     <string name="flight_recorder_banner_title">フライトレコーダーがオンです</string>
     <string name="flight_recorder_banner_message">Flight recorder will be active until %1$s at %2$s. Return to settings to deactivate now.</string>
@@ -1294,18 +1294,20 @@
     <string name="cancel_premium">プレミアムをキャンセル</string>
     <string name="subscription_status_active">有効</string>
     <string name="subscription_status_canceled">キャンセル済み</string>
+    <string name="subscription_status_expired">有効期限切れ</string>
     <string name="subscription_status_past_due">期限切れ</string>
     <string name="subscription_status_paused">Paused</string>
     <string name="subscription_status_update_payment">支払方法を更新</string>
     <string name="subscription_status_pending_cancellation">キャンセル保留中</string>
     <string name="subscription_pending_cancellation_description">あなたのサブスクリプションは <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>でキャンセルが予定されています。それ以前ならいつでも再開できます。</string>
     <string name="premium_next_charge_summary">Your next charge is for <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD due on <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
-    <string name="subscription_canceled_description">Your subscription was canceled on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using premium features.</string>
-    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
+    <string name="subscription_canceled_description">Your subscription was canceled on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using Premium features.</string>
+    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment method before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
-        <item quantity="other">You have a grace period of <annotation arg="0">%1$d</annotation> days from your subscription expiration date. Please resolve the past due amount by <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="other">You have a grace period of <annotation arg="0">%1$d</annotation> days from your subscription expiration date. Please resolve the past due invoices by <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
     </plurals>
     <string name="subscription_paused_description">Your subscription is paused. Resume to continue using premium features.</string>
+    <string name="subscription_expired_description">あなたのサブスクリプションは <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>に失効しました。プレミアム機能を引き続き使用するには再加入してください。</string>
     <string name="loading_subscription">Loading subscription…</string>
     <string name="loading_portal">Loading portal…</string>
     <string name="portal_error">何らかのエラーが発生しました</string>

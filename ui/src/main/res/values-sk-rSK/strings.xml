@@ -170,7 +170,7 @@
     <string name="disabled">Vypnuté</string>
     <string name="bitwarden_autofill_service_alert2">Najjednoduchší spôsob, ako pridať nové prihlasovacie údaje do vášho trezora, je prostredníctvom služby automatického vypĺňania Bitwardenu. Ďalšie informácie o používaní automatického vypĺňania Bitwardenu získate prechodom do obrazovky Nastavení.</string>
     <string name="autofill_noun">Automatické vypĺňanie</string>
-    <string name="autofill_verb">Automatické vypĺňanie</string>
+    <string name="autofill_verb">Automaticky vyplniť</string>
     <string name="autofill_or_view">Chcete túto položku automaticky vyplniť alebo zobraziť?</string>
     <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Hľadať %1$s</string>
     <string name="learn_org">Zistiť viac o organizáciách</string>
@@ -620,6 +620,7 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</string>
     <string name="forwarded_email_description">Vytvoriť e-mailový alias pomocou externej služby presmerovania.</string>
     <string name="accessibility_service_disclosure">Vyhlásenie o prístupnosti</string>
     <string name="accessibility_disclosure_text">Bitwarden používa službu dostupnosti na vyhľadávanie prihlasovacích polí v aplikáciách a na webových stránkach a potom vytvára príslušné ID polí na zadanie používateľského mena a hesla, keď sa nájde zhoda s aplikáciou alebo webom. Neuchovávame žiadne informácie, ktoré nám poskytuje služba, ani sa nepokúšame ovládať žiadne prvky na obrazovke okrem zadávania textu prihlasovacích údajov.</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden ponúka voliteľnú funkciu automatického vypĺňania, ktorá využíva službu prístupnosti systému Android na rozpoznávanie prihlasovacích polí v aplikáciách a na webových stránkach. Ak sa rozhodnete túto funkciu zapnúť, Bitwarden identifikuje príslušné polia a po nájdení zhody do nich zadá vaše prihlasovacie údaje. Neukladáme žiadne informácie zaznamenané touto službou, ani nekontrolujeme žiadne prvky na obrazovke okrem zadávania prihlasovacích údajov.</string>
     <string name="accept">Prijať</string>
     <string name="decline">Odmietnuť</string>
     <string name="login_request_has_already_expired">Platnosť žiadosti o prihlásenie už vypršala.</string>
@@ -1004,8 +1005,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Naozaj chcete odstrániť všetky zaznamenané logy?</string>
     <string name="confirm_key_connector_domain">Potvrdiť doménu Key Connectora</string>
     <string name="key_connector_domain">Doména Key Connectora:</string>
-    <string name="key_connector_organization">Organizácia:</string>
-    <string name="password_no_longer_required_confirm_domain">Hlavné heslo sa už nevyžaduje pre členov tejto organizácie. Nižšie uvedenú doménu potvrďte u správcu organizácie.</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Vaša organizácia už od svojich členov nevyžaduje hlavné heslo. Ak chcete pokračovať, overte doménu nižšie u svojho správcu a zadajte hlavné heslo.</string>
     <string name="please_confirm_domain_with_admin">Potvrďte u správcu organizácie nižšie uvedenú doménu.\n\nDoména Key Connectora:\n%1$s</string>
     <string name="flight_recorder_banner_title">Čierna skrinka zapnutá</string>
     <string name="flight_recorder_banner_message">Čierna skrinka bude aktívna %1$s %2$s.</string>
@@ -1321,21 +1321,23 @@ Chcete prepnúť na tento účet?</string>
     <string name="cancel_premium">Zrušiť Prémium</string>
     <string name="subscription_status_active">Aktívne</string>
     <string name="subscription_status_canceled">Zrušené</string>
+    <string name="subscription_status_expired">Exspirované</string>
     <string name="subscription_status_past_due">Po splatnosti</string>
     <string name="subscription_status_paused">Pozastavené</string>
     <string name="subscription_status_update_payment">Aktualizovať platbu</string>
     <string name="subscription_status_pending_cancellation">Čaká na zrušenie</string>
     <string name="subscription_pending_cancellation_description">Vaše predplatné má naplánovaný koniec na <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Kedykoľvek predtým ho môžete obnoviť.</string>
-    <string name="premium_next_charge_summary">Vaša ďalšia platba vo výške %1$s USD je splatná dňa %2$s.</string>
-    <string name="subscription_canceled_description">Vaše predplatné bolo zrušené dňa %1$s. Obnovte si predplatné, ak chcete naďalej využívať prémiové funkcie.</string>
-    <string name="subscription_update_payment_description">Vašu platbu sa nám nepodarilo spracovať. Aktualizujte si spôsob platby ešte pred uplynutím platnosti vášho predplatného <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
+    <string name="premium_next_charge_summary">Vaša ďalšia platba vo výške<annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD je splatná <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
+    <string name="subscription_canceled_description">Vaše predplatné bolo zrušené <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Obnovte si predplatné, ak chcete naďalej využívať prémiové funkcie.</string>
+    <string name="subscription_update_payment_description">Vašu platbu sa nám nepodarilo spracovať. Aktualizujte spôsob platby ešte pred uplynutím platnosti vášho predplatného <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
-        <item quantity="one">Od exspirácie predplatného máte ochrannú lehotu %1$d deň. Prosím, uhraďte nedoplatok do %2$s.</item>
-        <item quantity="few">Od exspirácie predplatného máte ochrannú lehotu %1$d dni. Prosím, uhraďte nedoplatok do %2$s.</item>
-        <item quantity="many">Od exspirácie predplatného máte ochrannú lehotu %1$d dní. Prosím, uhraďte nedoplatok do %2$s.</item>
-        <item quantity="other">Od exspirácie predplatného máte ochrannú lehotu %1$d dní. Prosím, uhraďte nedoplatok do %2$s.</item>
+        <item quantity="one">Máte bezplatnú skúšobnú lehotu <annotation arg="0">%1$d</annotation> deň od vypršania predplatného. Prosím, uhraďte faktúru do <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="few">Máte bezplatnú skúšobnú lehotu <annotation arg="0">%1$d</annotation> dni od vypršania predplatného. Prosím, uhraďte faktúru do <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="many">Máte bezplatnú skúšobnú lehotu <annotation arg="0">%1$d</annotation> dní od vypršania predplatného. Prosím, uhraďte faktúru do <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="other">Máte bezplatnú skúšobnú lehotu <annotation arg="0">%1$d</annotation> dní od vypršania predplatného. Prosím, uhraďte faktúru do <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
     </plurals>
     <string name="subscription_paused_description">Vaše predplatné bolo pozastavené. Obnovte si predplatné, ak chcete naďalej využívať prémiové funkcie.</string>
+    <string name="subscription_expired_description">Vaše predplatné vypršalo <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Obnovte si predplatné, ak chcete naďalej využívať prémiové funkcie.</string>
     <string name="loading_subscription">Načítava sa predplatné…</string>
     <string name="loading_portal">Načítava sa portál…</string>
     <string name="portal_error">Niečo sa pokazilo</string>

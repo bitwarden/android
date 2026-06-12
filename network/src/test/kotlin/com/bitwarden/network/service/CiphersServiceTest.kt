@@ -16,6 +16,7 @@ import com.bitwarden.network.model.ImportCiphersResponseJson
 import com.bitwarden.network.model.ShareCipherJsonRequest
 import com.bitwarden.network.model.UnarchiveCipherResponseJson
 import com.bitwarden.network.model.UpdateCipherCollectionsJsonRequest
+import com.bitwarden.network.model.UpdateCipherCollectionsResponseJson
 import com.bitwarden.network.model.UpdateCipherResponseJson
 import com.bitwarden.network.model.createMockAttachment
 import com.bitwarden.network.model.createMockAttachmentInfo
@@ -419,7 +420,12 @@ class CiphersServiceTest : BaseServiceTest() {
 
     @Test
     fun `updateCipherCollections should execute the updateCipherCollections API`() = runTest {
-        server.enqueue(MockResponse().setResponseCode(200))
+        server.enqueue(
+            MockResponse()
+                .setBody(UPDATE_CIPHER_COLLECTION_SUCCESS_JSON)
+                .setResponseCode(200),
+        )
+        val response = UpdateCipherCollectionsResponseJson(cipher = createMockCipher(number = 1))
 
         val result = ciphersService.updateCipherCollections(
             cipherId = "mockId-1",
@@ -428,7 +434,7 @@ class CiphersServiceTest : BaseServiceTest() {
             ),
         )
         assertEquals(
-            Unit,
+            response,
             result.getOrThrow(),
         )
     }
@@ -613,7 +619,7 @@ private const val CREATE_ATTACHMENT_SUCCESS_JSON = """
       "mockCollectionId-1"
     ],
     "name": "mockName-1",
-    "id": "mockId-1"
+    "id": "mockId-1",
     "fields": [
       {
         "linkedId": 100,
@@ -661,7 +667,7 @@ private const val CREATE_ATTACHMENT_SUCCESS_JSON = """
       "expirationDate": "mockExpirationDate-1",
       "dateOfBirth": "mockDateOfBirth-1",
       "issueDate": "mockIssueDate-1",
-      "licenseClass": "mockLicenseClass-1",
+      "licenseClass": "mockLicenseClass-1"
     },
     "passport": {
       "surname": "mockSurname-1",
@@ -676,7 +682,7 @@ private const val CREATE_ATTACHMENT_SUCCESS_JSON = """
       "issuingCountry": "mockIssuingCountry-1",
       "issuingAuthority": "mockIssuingAuthority-1",
       "issueDate": "mockIssueDate-1",
-      "expirationDate": "mockExpirationDate-1",
+      "expirationDate": "mockExpirationDate-1"
     },
     "encryptedFor": "mockEncryptedFor-1",
     "archivedDate": "2023-10-27T12:00:00.00Z"
@@ -782,7 +788,7 @@ private const val CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON = """
     "mockCollectionId-1"
   ],
   "name": "mockName-1",
-  "id": "mockId-1"
+  "id": "mockId-1",
   "fields": [
     {
       "linkedId": 100,
@@ -830,7 +836,7 @@ private const val CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON = """
     "expirationDate": "mockExpirationDate-1",
     "dateOfBirth": "mockDateOfBirth-1",
     "issueDate": "mockIssueDate-1",
-    "licenseClass": "mockLicenseClass-1",
+    "licenseClass": "mockLicenseClass-1"
   },
   "passport": {
     "surname": "mockSurname-1",
@@ -845,7 +851,7 @@ private const val CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON = """
     "issuingCountry": "mockIssuingCountry-1",
     "issuingAuthority": "mockIssuingAuthority-1",
     "issueDate": "mockIssueDate-1",
-    "expirationDate": "mockExpirationDate-1",
+    "expirationDate": "mockExpirationDate-1"
   },
   "encryptedFor": "mockEncryptedFor-1",
   "archivedDate": "2023-10-27T12:00:00.00Z"
@@ -873,5 +879,168 @@ private const val GET_CIPHER_ATTACHMENT_SUCCESS_JSON = """
   "id": "mockId-1",
   "url": "mockUrl-1",
   "key": "mockKey-1"
+}
+"""
+
+private const val UPDATE_CIPHER_COLLECTION_SUCCESS_JSON = """
+{
+  "cipher": {
+    "notes": "mockNotes-1",
+    "attachments": [
+      {
+        "fileName": "mockFileName-1",
+        "size": 1,
+        "sizeName": "mockSizeName-1",
+        "id": "mockId-1",
+        "url": "mockUrl-1",
+        "key": "mockKey-1"
+      }
+    ],
+    "organizationUseTotp": false,
+    "reprompt": 0,
+    "edit": false,
+    "passwordHistory": [
+      {
+        "password": "mockPassword-1",
+        "lastUsedDate": "2023-10-27T12:00:00.00Z"
+      }
+    ],
+    "permissions": {
+      "delete": true,
+      "restore": true
+    },
+    "revisionDate": "2023-10-27T12:00:00.00Z",
+    "type": 1,
+    "login": {
+      "uris": [
+        {
+          "match": 1,
+          "uri": "mockUri-1",
+          "uriChecksum": "mockUriChecksum-1"
+        }
+      ],
+      "totp": "mockTotp-1",
+      "password": "mockPassword-1",
+      "passwordRevisionDate": "2023-10-27T12:00:00.00Z",
+      "autofillOnPageLoad": false,
+      "uri": "mockUri-1",
+      "username": "mockUsername-1",
+      "fido2Credentials": [
+        {
+          "credentialId": "mockCredentialId-1",
+          "keyType": "mockKeyType-1",
+          "keyAlgorithm": "mockKeyAlgorithm-1",
+          "keyCurve": "mockKeyCurve-1",
+          "keyValue": "mockKeyValue-1",
+          "rpId": "mockRpId-1",
+          "rpName": "mockRpName-1",
+          "userHandle": "mockUserHandle-1",
+          "userName": "mockUserName-1",
+          "userDisplayName": "mockUserDisplayName-1",
+          "counter": "mockCounter-1",
+          "discoverable": "mockDiscoverable-1",
+          "creationDate": "2023-10-27T12:00:00.00Z"
+        }
+      ]
+    },
+    "creationDate": "2023-10-27T12:00:00.00Z",
+    "secureNote": {
+      "type": 0
+    },
+    "folderId": "mockFolderId-1",
+    "organizationId": "mockOrganizationId-1",
+    "deletedDate": "2023-10-27T12:00:00.00Z",
+    "identity": {
+      "passportNumber": "mockPassportNumber-1",
+      "lastName": "mockLastName-1",
+      "address3": "mockAddress3-1",
+      "address2": "mockAddress2-1",
+      "city": "mockCity-1",
+      "country": "mockCountry-1",
+      "address1": "mockAddress1-1",
+      "postalCode": "mockPostalCode-1",
+      "title": "mockTitle-1",
+      "ssn": "mockSsn-1",
+      "firstName": "mockFirstName-1",
+      "phone": "mockPhone-1",
+      "middleName": "mockMiddleName-1",
+      "company": "mockCompany-1",
+      "licenseNumber": "mockLicenseNumber-1",
+      "state": "mockState-1",
+      "email": "mockEmail-1",
+      "username": "mockUsername-1"
+    },
+    "collectionIds": [
+      "mockCollectionId-1"
+    ],
+    "name": "mockName-1",
+    "id": "mockId-1",
+    "fields": [
+      {
+        "linkedId": 100,
+        "name": "mockName-1",
+        "type": 1,
+        "value": "mockValue-1"
+      }
+    ],
+    "viewPassword": false,
+    "favorite": false,
+    "card": {
+      "number": "mockNumber-1",
+      "expMonth": "mockExpMonth-1",
+      "code": "mockCode-1",
+      "expYear": "mockExpirationYear-1",
+      "cardholderName": "mockCardholderName-1",
+      "brand": "mockBrand-1"
+    },
+    "key": "mockKey-1",
+    "sshKey": {
+      "publicKey": "mockPublicKey-1",
+      "privateKey": "mockPrivateKey-1",
+      "keyFingerprint": "mockKeyFingerprint-1"
+    },
+    "bankAccount": {
+      "bankName": "mockBankName-1",
+      "nameOnAccount": "mockNameOnAccount-1",
+      "accountType": "mockAccountType-1",
+      "accountNumber": "mockAccountNumber-1",
+      "routingNumber": "mockRoutingNumber-1",
+      "branchNumber": "mockBranchNumber-1",
+      "pin": "mockPin-1",
+      "swiftCode": "mockSwiftCode-1",
+      "iban": "mockIban-1",
+      "bankContactPhone": "mockBankContactPhone-1"
+    },
+    "driversLicense": {
+      "firstName": "mockFirstName-1",
+      "middleName": "mockMiddleName-1",
+      "lastName": "mockLastName-1",
+      "licenseNumber": "mockLicenseNumber-1",
+      "issuingCountry": "mockIssuingCountry-1",
+      "issuingState": "mockIssuingState-1",
+      "issuingAuthority": "mockIssuingAuthority-1",
+      "expirationDate": "mockExpirationDate-1",
+      "dateOfBirth": "mockDateOfBirth-1",
+      "issueDate": "mockIssueDate-1",
+      "licenseClass": "mockLicenseClass-1"
+    },
+    "passport": {
+      "surname": "mockSurname-1",
+      "givenName": "mockGivenName-1",
+      "dateOfBirth": "mockDateOfBirth-1",
+      "birthPlace": "mockBirthPlace-1",
+      "sex": "mockSex-1",
+      "nationality": "mockNationality-1",
+      "passportNumber": "mockPassportNumber-1",
+      "passportType": "mockPassportType-1",
+      "nationalIdentificationNumber": "mockNationalIdentificationNumber-1",
+      "issuingCountry": "mockIssuingCountry-1",
+      "issuingAuthority": "mockIssuingAuthority-1",
+      "issueDate": "mockIssueDate-1",
+      "expirationDate": "mockExpirationDate-1"
+    },
+    "encryptedFor": "mockEncryptedFor-1",
+    "archivedDate": "2023-10-27T12:00:00.00Z"
+  }
 }
 """

@@ -614,6 +614,7 @@
     <string name="forwarded_email_description">Generiraj pseudonim e-pošte s vanjskom uslugom prosljeđivanja.</string>
     <string name="accessibility_service_disclosure">Odobrenje servisa pristupačnosti</string>
     <string name="accessibility_disclosure_text">Bitwarden koristi servis pristupačnosti za pretragu polja za prijavu u aplikacijama i na web stranicama, te potom određuje ID polja za unos korisničkog imena i lozinke kada su pronađeni odgovarajući podaci. Ne spremamo podatke koje servis daje, niti pokušavamo upravljati bilo kojim elementima na zaslonu osim tekstualnog unosa vjerodajnica.</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields in apps and websites. If you choose to enable it, Bitwarden will identify the appropriate fields and enter your credentials when a match is found. We do not store any information observed by the service, and we do not control any on-screen elements beyond credential entry.</string>
     <string name="accept">Prihvati</string>
     <string name="decline">Odbij</string>
     <string name="login_request_has_already_expired">Zahtjev za prijavu je već istekao.</string>
@@ -998,8 +999,7 @@ bilo kakav problem.</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Zaista želiš obrisati sve spremljene zapisnike?</string>
     <string name="confirm_key_connector_domain">Potvrdi domenu kontektora ključa</string>
     <string name="key_connector_domain">Domena konektora ključa:</string>
-    <string name="key_connector_organization">Organizacija:</string>
-    <string name="password_no_longer_required_confirm_domain">Glavna lozinka više nije obavezna za članove ove organizacije. Provjeri prikazanu domenu sa svojim administratorom.</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Your organization no longer requires a master password for its members. Please verify the domain below with your admin and enter your master password to continue.</string>
     <string name="please_confirm_domain_with_admin">Provjeri prikazanu domenu sa svojim administratorom.\n\nDomena konektora ključa:\n%1$s</string>
     <string name="flight_recorder_banner_title">Snimač leta uključen</string>
     <string name="flight_recorder_banner_message">Snimač leta biti će aktivan do %1$s u %2$s. Za gašenje vrati se na postavke.</string>
@@ -1312,6 +1312,7 @@ bilo kakav problem.</string>
     <string name="cancel_premium">Otkaži Premium</string>
     <string name="subscription_status_active">Aktivno</string>
     <string name="subscription_status_canceled">Otkazano</string>
+    <string name="subscription_status_expired">Isteklo</string>
     <string name="subscription_status_past_due">Prekoračeno dospijeće</string>
     <string name="subscription_status_paused">Pauzirano</string>
     <string name="subscription_status_update_payment">Ažuriraj plaćanje</string>
@@ -1319,13 +1320,14 @@ bilo kakav problem.</string>
     <string name="subscription_pending_cancellation_description">Your subscription is scheduled to cancel on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. You can reinstate it anytime before then.</string>
     <string name="premium_next_charge_summary">Iznos tvoje sljedeće naplate je %1$s USD, dospijeva %2$s.</string>
     <string name="subscription_canceled_description">Tvoja je preplata otkazana %1$s. Ponovno se pretplati za nastavak korištenja Premium značajki.</string>
-    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
+    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment method before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Imaš razdoblje odgode od %1$d dana od datuma isteka tvoje pretplate. Molimo plati nepodmireni iznos do %2$s.</item>
         <item quantity="few">Imaš razdoblje odgode od %1$d dana od datuma isteka tvoje pretplate. Molimo plati nepodmireni iznos do %2$s.</item>
         <item quantity="other">Imaš razdoblje odgode od %1$d dana od datuma isteka tvoje pretplate. Molimo plati nepodmireni iznos do %2$s.</item>
     </plurals>
     <string name="subscription_paused_description">Tvoja je preplata pauzirana. Za nastavak korištenja Premium značajki, ponovno pokreni.</string>
+    <string name="subscription_expired_description">Your subscription expired on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using Premium features.</string>
     <string name="loading_subscription">Učitavanje pretplate…</string>
     <string name="loading_portal">Učitavanje portala…</string>
     <string name="portal_error">Dogodila se greška</string>

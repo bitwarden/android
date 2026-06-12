@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.tools.generator.datasource.sdk
 
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.generators.AppendType
 import com.bitwarden.generators.ForwarderServiceType
@@ -27,7 +28,10 @@ class GeneratorSdkSourceTest {
         val slot = slot<suspend Client.() -> String>()
         coEvery { singleUseClient(block = capture(slot)) } coAnswers { slot.captured(client) }
     }
-    private val generatorSdkSource: GeneratorSdkSource = GeneratorSdkSourceImpl(sdkClientManager)
+    private val generatorSdkSource: GeneratorSdkSource = GeneratorSdkSourceImpl(
+        dispatcherManager = FakeDispatcherManager(),
+        sdkClientManager = sdkClientManager,
+    )
 
     @Test
     fun `generatePassword should call SDK and return a Result with the generated password`() =

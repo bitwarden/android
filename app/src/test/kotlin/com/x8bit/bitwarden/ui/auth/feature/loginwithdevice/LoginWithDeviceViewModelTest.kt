@@ -350,7 +350,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     requestPrivateKey = DEFAULT_LOGIN_DATA.privateKey,
                     masterPasswordHash = DEFAULT_LOGIN_DATA.masterPasswordHash,
                 )
-            } returns LoginResult.Error(errorMessage = null, error = error)
+            } returns LoginResult.Error(error = error)
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
                 viewModel.stateFlow.test {

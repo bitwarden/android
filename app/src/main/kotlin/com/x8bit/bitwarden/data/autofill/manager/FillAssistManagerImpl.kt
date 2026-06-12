@@ -25,6 +25,11 @@ import java.time.Clock
 private const val CURRENT_FORMS_VERSION = "v1"
 private const val EXPECTED_SCHEMA_MAJOR = "1"
 
+private const val ID = "id"
+private const val NAME = "name"
+private const val TYPE = "type"
+private const val ROLE = "role"
+
 /** Re-fetch interval in milliseconds (6 hours, matching the browser implementation). */
 private const val UPDATE_INTERVAL_MS = 6 * 60 * 60 * 1000L
 
@@ -83,7 +88,10 @@ class FillAssistManagerImpl(
     }
 
     private suspend fun sync(serverUrl: String) = runCatching {
-        val manifest = fillAssistService.getManifest().getOrThrow()
+        val manifest = fillAssistService
+            .getManifest()
+            .getOrNull()
+            ?: return@runCatching
 
         val versionEntry = manifest.maps.forms[CURRENT_FORMS_VERSION]
             ?: error("Version $CURRENT_FORMS_VERSION not found in manifest")
@@ -102,7 +110,8 @@ class FillAssistManagerImpl(
 
         val forms = fillAssistService
             .getForms(filename = versionEntry.filename)
-            .getOrThrow()
+            .getOrNull()
+            ?: return@runCatching
 
         val schemaMajor = forms.schemaVersion.substringBefore('.')
         if (schemaMajor != EXPECTED_SCHEMA_MAJOR) {
@@ -121,9 +130,8 @@ class FillAssistManagerImpl(
             serverUrl = serverUrl,
             timestamp = clock.millis(),
         )
-    }.also { result ->
-        result.onFailure { Timber.w(it, "Fill-assist sync failed") }
     }
+        .onFailure { Timber.w(it, "Fill-assist sync failed") }
 
     override fun getFillAssistRules(): FillAssistRules? {
         val serverUrl = serverConfigRepository
@@ -152,8 +160,9 @@ private fun parseHostEntry(
 ): List<FillAssistRules.HostRule> {
     val allForms = buildList {
         addAll(hostEntry.forms.orEmpty())
-        hostEntry.pathnames?.values?.filterNotNull()?.forEach { addAll(it.forms) }
-    }.distinct()
+        addAll(hostEntry.pathnames?.values?.filterNotNull()?.flatMap { it.forms }.orEmpty())
+    }
+        .distinct()
 
     return buildFieldsByCategory(allForms).map { (category, fields) ->
         FillAssistRules.HostRule(
@@ -165,36 +174,38 @@ private fun parseHostEntry(
 
 private fun buildFieldsByCategory(
     forms: List<FillAssistFormsJson.FormJson>,
-): Map<String, MutableMap<String, MutableList<SelectorClause>>> {
-    val result = mutableMapOf<String, MutableMap<String, MutableList<SelectorClause>>>()
-    forms.forEach { form ->
-        val parsedFields = form.fields
-            .mapValues { (_, elem) -> parseCompositeSelectorArray(elem) }
-            .filterValues { it.isNotEmpty() }
-            .takeIf { it.isNotEmpty() } ?: return@forEach
-        val categoryFields = result.getOrPut(form.category) { mutableMapOf() }
-        parsedFields.forEach { (fieldKey, selectors) ->
-            categoryFields.getOrPut(fieldKey) { mutableListOf() }.addAll(selectors)
+): Map<String, Map<String, List<SelectorClause>>> =
+    forms
+        .mapNotNull { form ->
+            val parsedFields = form.fields
+                .mapValues { (_, elem) -> parseCompositeSelectorArray(elem) }
+                .filterValues { it.isNotEmpty() }
+                .takeIf { it.isNotEmpty() }
+                ?: return@mapNotNull null
+            form.category to parsedFields
         }
-    }
-    return result
-}
+        .groupBy({ it.first }, { it.second })
+        .mapValues { (_, fieldMaps) ->
+            fieldMaps
+                .flatMap { it.entries }
+                .groupBy({ it.key }, { it.value })
+                .mapValues { (_, lists) -> lists.flatten() }
+        }
 
 private fun parseCompositeSelectorArray(element: JsonElement): List<SelectorClause> {
     if (element !is JsonArray) return emptyList()
-    val result = mutableListOf<SelectorClause>()
-    for (item in element) {
+    return element.flatMap { item ->
         when (item) {
-            is JsonPrimitive -> parseSingleSelector(item.content)?.let { result.add(it) }
-            is JsonArray -> item
-                .filterIsInstance<JsonPrimitive>()
-                .mapNotNull { parseSingleSelector(it.content) }
-                .forEach { result.add(it) }
+            is JsonPrimitive -> listOfNotNull(parseSingleSelector(item.content))
+            is JsonArray -> {
+                item
+                    .filterIsInstance<JsonPrimitive>()
+                    .mapNotNull { parseSingleSelector(it.content) }
+            }
 
-            else -> Unit
+            else -> emptyList()
         }
     }
-    return result
 }
 
 internal fun parseSingleSelector(selector: String): SelectorClause? {
@@ -215,14 +226,15 @@ internal fun parseSingleSelector(selector: String): SelectorClause? {
     var type: String? = null
     var role: String? = null
 
+    // For e.g. "[type='password']": groupValues[0]="[type='password']", [1]="type", [2]="password".
     ATTRIBUTE_REGEX.findAll(effective).forEach { match ->
         val attrName = match.groupValues[1]
         val attrValue = match.groupValues[2]
         when (attrName) {
-            "id" -> id = attrValue
-            "name" -> name = attrValue
-            "type" -> type = attrValue
-            "role" -> role = attrValue
+            ID -> id = attrValue
+            NAME -> name = attrValue
+            TYPE -> type = attrValue
+            ROLE -> role = attrValue
         }
     }
 

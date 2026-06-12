@@ -513,7 +513,6 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
             coEvery {
                 vaultRepository.updateCipherCollections(
                     cipherId = "mockCipherId",
-                    cipherView = createMockCipherView(number = 1),
                     collectionIds = listOf("mockId-1"),
                 )
             } returns ShareCipherResult.Success
@@ -533,7 +532,6 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
             coVerify {
                 vaultRepository.updateCipherCollections(
                     cipherId = "mockCipherId",
-                    cipherView = createMockCipherView(number = 1),
                     collectionIds = listOf("mockId-1"),
                 )
             }

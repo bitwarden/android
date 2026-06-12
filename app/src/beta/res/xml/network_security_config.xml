@@ -18,6 +18,7 @@
         <!-- CRL Distribution Servers -->
         <domain includeSubdomains="true">c.lencr.org</domain>
         <domain includeSubdomains="true">c.pki.goog</domain>
+        <domain includeSubdomains="true">crls.certainly.com</domain>
 
         <!-- OCSP Responder Servers -->
         <domain includeSubdomains="true">o.pki.goog</domain>

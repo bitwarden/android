@@ -189,9 +189,9 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     EnterpriseSignOnEvent.NavigateToSsoLogin(
                         uri = ssoUri,
-                        authTabData = AuthTabData.CustomScheme(
-                            callbackUrl = "bitwarden://sso-callback",
-                            callbackScheme = "bitwarden",
+                        authTabData = AuthTabData.HttpsScheme(
+                            host = "bitwarden.com",
+                            path = "sso-callback",
                         ),
                     ),
                     eventFlow.awaitItem(),
@@ -338,7 +338,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             val error = Throwable("Fail!")
             coEvery {
                 authRepository.login(any(), any(), any(), any(), any())
-            } returns LoginResult.Error(errorMessage = null, error = error)
+            } returns LoginResult.Error(error = error)
 
             val viewModel = createViewModel(
                 ssoData = DEFAULT_SSO_DATA,

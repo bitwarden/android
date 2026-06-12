@@ -612,6 +612,7 @@
     <string name="forwarded_email_description">Създайте псевдоним на е-поща с външна услуга за препращане.</string>
     <string name="accessibility_service_disclosure">Използване на услугата за достъпност</string>
     <string name="accessibility_disclosure_text">Битуорден използва услугата за достъпност, за да разпознава полета за вписване в приложенията и уеб сайтовете и, ако в трезора има съвпадение, да попълва потребителското име и паролата. Никаква информация, предоставена ни от услугата, не се запазва, както и не правим опити да контролираме елементите на екрана, освен въвеждането на данните за идентификация.</string>
+    <string name="accessibility_disclosure_start_up_text">Битуорден предлага и начин за автоматично попълване, който използва услугата за улеснен достъп на Андроид за разпознаване на полетата за вписване в приложения и уеб сайтове. Ако решите да включите това, Битуорден ще намира подходящите полета и ще въвежда данните Ви, когато открие съвпадение. Ние не съхраняваме никаква информация получена от услугата, нито можем да управляваме елементите на екрана, освен тези, в които се въвеждат данните за вписване.</string>
     <string name="accept">Приемане</string>
     <string name="decline">Отказване</string>
     <string name="login_request_has_already_expired">Заявката за вписване вече е изтекла.</string>
@@ -994,8 +995,7 @@
     <string name="do_you_really_want_to_delete_all_recorded_logs">Наистина ли искате да изтриете всички записани журнали?</string>
     <string name="confirm_key_connector_domain">Потвърждаване на домейна на конектора за ключове</string>
     <string name="key_connector_domain">Домейн на конектора за ключове:</string>
-    <string name="key_connector_organization">Организация:</string>
-    <string name="password_no_longer_required_confirm_domain">За членовете на следната организация вече не се изисква главна парола. Потвърдете домейна по-долу с администратора на организацията си.</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Вашата организация вече не изисква членовете да имат главна парола. Моля, потвърдете домейна по-долу с администратора си, и въведете главната си парола, за да продължите.</string>
     <string name="please_confirm_domain_with_admin">Моля, потвърдете домейна по-долу с администратора на организацията си.\n\nДомейн на конектора за ключове:\n%1$s</string>
     <string name="flight_recorder_banner_title">Проследяването чрез журнали е включено</string>
     <string name="flight_recorder_banner_message">Проследяването чрез журнали ще бъде включено до %1$s в %2$s. Върнете се в настройките, ако искате да го изключите още сега.</string>
@@ -1297,7 +1297,7 @@
     <string name="storage_cost">Цена за съхранение</string>
     <string name="discount">Отстъпка</string>
     <string name="estimated_tax">Приблизителен данък</string>
-    <string name="total">Total</string>
+    <string name="total">Общо</string>
     <string name="billing_rate_per_year">%1$s / година</string>
     <string name="billing_rate_per_month">%1$s / месец</string>
     <string name="manage_plan">Управление на плана</string>
@@ -1305,6 +1305,7 @@
     <string name="cancel_premium">Отказване от платения план</string>
     <string name="subscription_status_active">Активно</string>
     <string name="subscription_status_canceled">Отказано</string>
+    <string name="subscription_status_expired">Изтекъл</string>
     <string name="subscription_status_past_due">Просрочено</string>
     <string name="subscription_status_paused">На пауза</string>
     <string name="subscription_status_update_payment">Актуализиране на плащанията</string>
@@ -1318,6 +1319,7 @@
         <item quantity="other">След като просрочите периода на абонамента си, разполагате с още %1$d дни. Моля, заплатете старите фактури до %2$s.</item>
     </plurals>
     <string name="subscription_paused_description">Абонаментът беше спрян на пауза. Можете да го стартирате отново, ако искате да продължите да ползвате функционалностите на платения план.</string>
+    <string name="subscription_expired_description">Вашият абонамент изтече на <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Ако искате да продължите да ползвате предимствата на платения план, ще трябва да се абонирате отново.</string>
     <string name="loading_subscription">Зареждане на абонамента…</string>
     <string name="loading_portal">Зареждане на портала…</string>
     <string name="portal_error">Нещо се обърка</string>

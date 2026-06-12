@@ -6,6 +6,7 @@ package com.x8bit.bitwarden.data.autofill.accessibility.model
 data class Browser(
     val packageName: String,
     val possibleUrlFieldIds: List<String>,
+    val possibleUrlSemanticIds: List<String> = emptyList(),
     val urlExtractor: (String) -> String? = { it },
 ) {
     constructor(
@@ -15,6 +16,7 @@ data class Browser(
     ) : this(
         packageName = packageName,
         possibleUrlFieldIds = listOf(urlFieldId),
+        possibleUrlSemanticIds = emptyList(),
         urlExtractor = urlExtractor,
     )
 }
