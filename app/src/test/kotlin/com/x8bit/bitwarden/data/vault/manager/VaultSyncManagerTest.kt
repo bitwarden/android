@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
+import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.createMockWrappedAccountCryptographicState
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
@@ -144,7 +145,12 @@ class VaultSyncManagerTest {
         every { databaseSchemeChangeFlow } returns mutableDatabaseSchemeChangeFlow
     }
 
+    private val fillAssistManager: FillAssistManager = mockk {
+        every { syncIfNecessary() } just runs
+    }
+
     private val vaultSyncManager: VaultSyncManager = VaultSyncManagerImpl(
+        fillAssistManager = fillAssistManager,
         syncService = syncService,
         settingsDiskSource = settingsDiskSource,
         authDiskSource = fakeAuthDiskSource,
