@@ -19,7 +19,6 @@ import java.time.Clock
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
-private const val MISSING_TOKEN_MESSAGE: String = "Auth token is missing!"
 private const val MISSING_PROVIDER_MESSAGE: String = "Refresh token provider is missing!"
 private const val EXPIRATION_OFFSET_MINUTES: Long = 5L
 
@@ -83,8 +82,10 @@ internal class AuthTokenManager(
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
-        val token = getAccessToken()
-            ?: throw IOException(IllegalStateException(MISSING_TOKEN_MESSAGE))
+        val token = getAccessToken() ?: run {
+            Timber.w("Auth token is missing! Proceeding without token.")
+            return chain.proceed(chain.request())
+        }
         val request = chain
             .request()
             .newBuilder()
