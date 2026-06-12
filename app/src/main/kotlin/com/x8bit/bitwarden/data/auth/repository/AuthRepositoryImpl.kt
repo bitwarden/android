@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.repository
 
 import com.bitwarden.core.AuthRequestMethod
 import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.MasterPasswordUnlockData
 import com.bitwarden.core.RegisterTdeKeyResponse
 import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
@@ -1145,10 +1146,10 @@ class AuthRepositoryImpl(
         organizationIdentifier: String,
         password: String,
         passwordHint: String?,
-    ): SetPasswordResult {
+    ): SetPasswordResult = userStateManager.userStateTransaction {
         val profile = authDiskSource.userState?.activeAccount?.profile
-            ?: return SetPasswordResult.Error(error = NoActiveUserException())
-        return when (profile.forcePasswordResetReason) {
+            ?: return@userStateTransaction SetPasswordResult.Error(error = NoActiveUserException())
+        return@userStateTransaction when (profile.forcePasswordResetReason) {
             ForcePasswordResetReason.TDE_USER_WITHOUT_PASSWORD_HAS_PASSWORD_RESET_PERMISSION -> {
                 setUpdatedPassword(
                     profile = profile,
@@ -1196,29 +1197,24 @@ class AuthRepositoryImpl(
                             keys = null,
                         ),
                     )
-                    .map { response.passwordHash }
+                    .map { response }
             }
-            .flatMap { masterPasswordHash ->
-                when (val result = vaultRepository.unlockVaultWithMasterPassword(password)) {
-                    is VaultUnlockResult.Success -> {
-                        enrollUserInPasswordReset(
-                            userId = userId,
-                            organizationIdentifier = organizationIdentifier,
-                            passwordHash = masterPasswordHash,
-                        )
-                    }
-
-                    is VaultUnlockError -> {
-                        (result.error ?: IllegalStateException("Failed to unlock vault"))
-                            .asFailure()
-                    }
-                }
-            }
-            .onSuccess {
+            .onSuccess { response ->
                 authDiskSource.userState = authDiskSource.userState?.toUserStateJsonWithPassword(
-                    masterPasswordUnlock = null,
+                    masterPasswordUnlock = MasterPasswordUnlockData(
+                        kdf = profile.toSdkParams(),
+                        masterKeyWrappedUserKey = response.newKey,
+                        salt = profile.email,
+                    ),
                 )
                 this.organizationIdentifier = null
+            }
+            .flatMap { response ->
+                enrollUserInPasswordReset(
+                    userId = userId,
+                    organizationIdentifier = organizationIdentifier,
+                    passwordHash = response.passwordHash,
+                )
             }
             .fold(
                 onFailure = { SetPasswordResult.Error(error = it) },
@@ -1326,16 +1322,26 @@ class AuthRepositoryImpl(
                                 privateKey = response.keys.private,
                             ),
                         )
+                        authDiskSource.userState = authDiskSource
+                            .userState
+                            ?.toUserStateJsonWithPassword(
+                                masterPasswordUnlock = MasterPasswordUnlockData(
+                                    kdf = profile.toSdkParams(),
+                                    masterKeyWrappedUserKey = response.encryptedUserKey,
+                                    salt = profile.email,
+                                ),
+                            )
+                        this.organizationIdentifier = null
                     }
-                    .map { response.masterPasswordHash }
+                    .map { response }
             }
-            .flatMap { masterPasswordHash ->
+            .flatMap { response ->
                 when (val result = vaultRepository.unlockVaultWithMasterPassword(password)) {
                     is VaultUnlockResult.Success -> {
                         enrollUserInPasswordReset(
                             userId = userId,
                             organizationIdentifier = organizationIdentifier,
-                            passwordHash = masterPasswordHash,
+                            passwordHash = response.masterPasswordHash,
                         )
                     }
 
@@ -1344,12 +1350,6 @@ class AuthRepositoryImpl(
                             .asFailure()
                     }
                 }
-            }
-            .onSuccess {
-                authDiskSource.userState = authDiskSource.userState?.toUserStateJsonWithPassword(
-                    masterPasswordUnlock = null,
-                )
-                this.organizationIdentifier = null
             }
             .fold(
                 onFailure = { SetPasswordResult.Error(error = it) },
