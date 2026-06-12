@@ -7589,6 +7589,7 @@ class AuthRepositoryTest {
                     identityUrl = "mockIdentityUrl",
                     notificationsUrl = "mockNotificationsUrl",
                     ssoUrl = "mockSsoUrl",
+                    fillAssistRulesUrl = null,
                 ),
                 featureStates = emptyMap(),
                 communication = null,

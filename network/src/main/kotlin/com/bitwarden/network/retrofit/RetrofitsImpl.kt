@@ -64,6 +64,16 @@ internal class RetrofitsImpl(
 
     //endregion Unauthenticated Retrofits
 
+    //region Fill-Assist Retrofit
+
+    override val fillAssistRetrofit: Retrofit by lazy {
+        createUnauthenticatedRetrofit(
+            baseUrlInterceptor = baseUrlInterceptors.fillAssistInterceptor,
+        )
+    }
+
+    //endregion Fill-Assist Retrofit
+
     //region Static Retrofit
 
     override fun createStaticRetrofit(isAuthenticated: Boolean, baseUrl: String): Retrofit {
