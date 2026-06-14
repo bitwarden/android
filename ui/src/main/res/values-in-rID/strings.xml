@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Layanan Pengisian Otomatis Bitwarden</string>
     <string name="change_master_password">Ubah sandi utama</string>
     <string name="close">Tutup</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">Lanjutkan</string>
     <string name="create_account">Buat Akun</string>
     <string name="create_an_account">Buat akun</string>

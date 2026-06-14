@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Служба автозаповнення Bitwarden</string>
     <string name="change_master_password">Змінити головний пароль</string>
     <string name="close">Закрити</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">Продовжити</string>
     <string name="create_account">Створити обліковий запис</string>
     <string name="create_an_account">Створити обліковий запис</string>
@@ -1311,8 +1312,8 @@
     <string name="pricing_unavailable">Ціни недоступні</string>
     <string name="current_plan">Current plan</string>
     <string name="premium_plan_name">Premium</string>
-    <string name="billing_amount">Сума для оплати</string>
-    <string name="storage_cost">Вартість зберігання</string>
+    <string name="billing_amount">Сума до сплати</string>
+    <string name="storage_cost">Вартість сховища</string>
     <string name="discount">Знижка</string>
     <string name="estimated_tax">Estimated tax</string>
     <string name="total">Total</string>
@@ -1322,7 +1323,7 @@
     <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Manage your subscription plan in the Bitwarden web app.</string>
     <string name="cancel_premium">Скасувати Premium</string>
     <string name="subscription_status_active">Активний</string>
-    <string name="subscription_status_canceled">Скасований</string>
+    <string name="subscription_status_canceled">Скасовано</string>
     <string name="subscription_status_expired">Термін дії завершився</string>
     <string name="subscription_status_past_due">Протерміновано</string>
     <string name="subscription_status_paused">Paused</string>

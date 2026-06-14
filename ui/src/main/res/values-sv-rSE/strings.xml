@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwardens hjälpmedelsservice för automatisk ifyllnad</string>
     <string name="change_master_password">Ändra huvudlösenord</string>
     <string name="close">Stäng</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">Fortsätt</string>
     <string name="create_account">Skapa konto</string>
     <string name="create_an_account">Skapa ett konto</string>

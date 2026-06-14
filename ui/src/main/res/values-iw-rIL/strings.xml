@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">שירות מילוי אוטומטי של Bitwarden</string>
     <string name="change_master_password">שנה סיסמה ראשית</string>
     <string name="close">סגור</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">המשך</string>
     <string name="create_account">צור חשבון</string>
     <string name="create_an_account">יצירת חשבון</string>

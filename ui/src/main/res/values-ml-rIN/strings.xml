@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwarden ഓട്ടോഫിൽ സേവനം</string>
     <string name="change_master_password">പ്രാഥമിക പാസ്‌വേഡ് മാറ്റുക</string>
     <string name="close">അടയ്ക്കുക</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">തുടരുക</string>
     <string name="create_account">അക്കൗണ്ട് സൃഷ്ടിക്കുക</string>
     <string name="create_an_account">Create an account</string>

@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Servei d\'emplenament automàtic de Bitwarden</string>
     <string name="change_master_password">Canvia la contrasenya mestra</string>
     <string name="close">Tanca</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">Continua</string>
     <string name="create_account">Crea un compte</string>
     <string name="create_an_account">Crea un compte</string>

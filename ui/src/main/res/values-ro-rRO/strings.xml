@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Serviciul de completare automată Bitwarden</string>
     <string name="change_master_password">Modificare parolă principală</string>
     <string name="close">Închidere</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">Continuare</string>
     <string name="create_account">Creare cont</string>
     <string name="create_an_account">Creează un cont</string>

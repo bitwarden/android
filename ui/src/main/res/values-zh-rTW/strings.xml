@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwarden 自動填入服務</string>
     <string name="change_master_password">變更主密碼</string>
     <string name="close">關閉</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">繼續</string>
     <string name="create_account">建立帳戶</string>
     <string name="create_an_account">建立帳戶</string>
@@ -121,9 +122,9 @@
     <string name="add_card">新增付款卡</string>
     <string name="no_logins">您的密碼庫中沒有登入資料。</string>
     <string name="no_identities">您的密碼庫中沒有身份識別。</string>
-    <string name="add_identity">Add identity</string>
+    <string name="add_identity">新增身分資料</string>
     <string name="no_notes">您的密碼庫中沒有筆記。</string>
-    <string name="add_note">Add note</string>
+    <string name="add_note">新增備註</string>
     <string name="add_ssh_key">新增 SSH 金鑰</string>
     <string name="no_text_sends">您的帳戶中沒有文字 Send。</string>
     <string name="no_file_sends">您的帳戶中沒有檔案 Send。</string>
@@ -609,7 +610,7 @@
     <string name="forwarded_email_description">使用外部轉寄服務產生一個電子郵件別名。</string>
     <string name="accessibility_service_disclosure">無障礙服務聲明</string>
     <string name="accessibility_disclosure_text">Bitwarden 使用無障礙服務搜寻應用程式和網站中的登入欄位，然後建立適當的欄位 ID，以便在找到應用程式或網站的匹配項目時輸入用戶名和密碼。 我們不會存儲此服務提供給我們的任何資訊，也不會試圖控制憑證文字輸入以外的任何荧幕元素。</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields in apps and websites. If you choose to enable it, Bitwarden will identify the appropriate fields and enter your credentials when a match is found. We do not store any information observed by the service, and we do not control any on-screen elements beyond credential entry.</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden 提供一種可選的自動填入方式，透過 Android 的無障礙服務偵測應用程式與網站中的登入欄位。若您選擇啟用，Bitwarden 會在找到相符項目時識別適當欄位並填入您的登入憑證。我們不會儲存此服務所觀察到的任何資訊，也不會控制除輸入憑證以外的任何畫面元素。</string>
     <string name="accept">接受</string>
     <string name="decline">拒絕</string>
     <string name="login_request_has_already_expired">登入要求已逾期。</string>
@@ -809,7 +810,7 @@
     <string name="get_started">開始使用</string>
     <string name="save_and_protect_your_data">儲存並保護您的資料</string>
     <string name="the_vault_protects_more_than_just_passwords">除了密碼之外，您也可以儲存安全的登入資訊、身分資訊、信用卡及筆記在您的密碼庫。</string>
-    <string name="add_login">Add login</string>
+    <string name="add_login">新增登入資料</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">安全的和任何人及任何平臺分享檔案及資料。您的資料會受到端對端加密的保護。</string>
     <string name="send_sensitive_information_safely">安全傳送機密的資訊</string>
     <string name="import_saved_logins">匯入已儲存的登入資訊</string>
@@ -988,7 +989,7 @@
     <string name="do_you_really_want_to_delete_all_recorded_logs">您確定要刪除所有已記錄的日誌嗎？</string>
     <string name="confirm_key_connector_domain">確認 Key Connector 網域</string>
     <string name="key_connector_domain">Key Connector 網域</string>
-    <string name="your_organization_no_longer_requires_a_master_password">Your organization no longer requires a master password for its members. Please verify the domain below with your admin and enter your master password to continue.</string>
+    <string name="your_organization_no_longer_requires_a_master_password">您的組織已不再要求成員使用主密碼。請與管理員確認下方網域，並輸入您的主密碼以繼續。</string>
     <string name="please_confirm_domain_with_admin">請與您組織的管理員確認以下網域。\n\n金鑰連接器網域：\n%1$s</string>
     <string name="flight_recorder_banner_title">飛行記錄器已開啟</string>
     <string name="flight_recorder_banner_message">飛行記錄器將在 %1$s %2$s 前保持啟用。返回設定可立即停用。</string>
@@ -1205,7 +1206,7 @@
     <string name="archiving_items_is_a_premium_feature">封存項目為進階版功能。您目前的方案不包含此功能。</string>
     <string name="upgrade_to_premium">升級到 Premium</string>
     <string name="plan">方案</string>
-    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
+    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">若要管理您的 Premium 訂閱，您需要在電腦上登入您的網頁保管庫。</string>
     <string name="unlock_advanced_security_features">解鎖進階安全功能</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Premium 方案可提供更多工具，讓您保持安全並掌控一切。</string>
     <string name="this_item_is_archived">此項目已被封存。</string>
@@ -1229,24 +1230,24 @@
     <string name="external_link">外部連結</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s，外部連結</string>
     <string name="devices">裝置</string>
-    <string name="mobile_platform">Mobile - %1$s</string>
-    <string name="extension_platform">Extension - %1$s</string>
-    <string name="web_platform">Web - %1$s</string>
-    <string name="desktop_platform">Desktop - %1$s</string>
+    <string name="mobile_platform">行動裝置 - %1$s</string>
+    <string name="extension_platform">擴充功能 - %1$s</string>
+    <string name="web_platform">網頁版 - %1$s</string>
+    <string name="desktop_platform">桌面版 - %1$s</string>
     <string name="cli_platform">CLI - %1$s</string>
     <string name="sdk">SDK</string>
-    <string name="server">Server</string>
-    <string name="unknown_device">Unknown device</string>
-    <string name="first_login_date"><annotation emphasis="bold">First login:</annotation> <annotation arg="0">%1$s</annotation></string>
-    <string name="current_session">Current session</string>
-    <string name="pending_request">Pending request</string>
+    <string name="server">伺服器</string>
+    <string name="unknown_device">未知裝置</string>
+    <string name="first_login_date"><annotation emphasis="bold">首次登入：</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="current_session">目前工作階段</string>
+    <string name="pending_request">待處理請求</string>
     <string name="today">今天</string>
-    <string name="past_seven_days">Past 7 days</string>
-    <string name="past_fourteen_days">Past 14 days</string>
-    <string name="past_thirty_days">Past 30 days</string>
-    <string name="over_thirty_days_ago">Over 30 days ago</string>
-    <string name="recently_active"><annotation emphasis="bold">Recently active:</annotation> <annotation arg="0">%1$s</annotation></string>
-    <string name="trusted">Trusted</string>
+    <string name="past_seven_days">過去 7 天</string>
+    <string name="past_fourteen_days">過去 14 天</string>
+    <string name="past_thirty_days">過去 30 天</string>
+    <string name="over_thirty_days_ago">30 天前以上</string>
+    <string name="recently_active"><annotation emphasis="bold">最近活動：</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="trusted">已信任</string>
     <string name="preview_not_available_for_files">無法預覽 %1$s 類型的檔案。您仍可下載後在裝置上檢視。</string>
     <string name="this_file_is_too_large_to_preview">此檔案過大，無法預覽。您仍可下載後在裝置上檢視。</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden 無法解密此檔案，因此無法顯示預覽。</string>
@@ -1266,7 +1267,7 @@
     <string name="secure_file_storage">安全檔案儲存</string>
     <string name="breach_monitoring">外洩監控</string>
     <string name="upgrade_now">立即升級</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">您將前往 Stripe 的安全結帳頁面完成購買。</string>
     <string name="opening_checkout">正在開啟結帳頁面…</string>
     <string name="secure_checkout_didnt_load">安全結帳頁面未成功載入</string>
     <string name="trouble_opening_payment_page">開啟付款頁面時發生問題，請再試一次。</string>
@@ -1287,11 +1288,11 @@
     <string name="storage_cost">儲存空間費用</string>
     <string name="discount">折扣</string>
     <string name="estimated_tax">預估稅額</string>
-    <string name="total">Total</string>
+    <string name="total">總計</string>
     <string name="billing_rate_per_year">%1$s／年</string>
     <string name="billing_rate_per_month">%1$s／月</string>
     <string name="manage_plan">管理方案</string>
-    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Manage your subscription plan in the Bitwarden web app.</string>
+    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">請在 Bitwarden 網頁版中管理您的訂閱方案。</string>
     <string name="cancel_premium">取消 Premium</string>
     <string name="subscription_status_active">生效中</string>
     <string name="subscription_status_canceled">已取消</string>
@@ -1299,16 +1300,16 @@
     <string name="subscription_status_past_due">逾期</string>
     <string name="subscription_status_paused">已暫停</string>
     <string name="subscription_status_update_payment">更新付款方式</string>
-    <string name="subscription_status_pending_cancellation">Pending cancellation</string>
-    <string name="subscription_pending_cancellation_description">Your subscription is scheduled to cancel on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. You can reinstate it anytime before then.</string>
+    <string name="subscription_status_pending_cancellation">待取消</string>
+    <string name="subscription_pending_cancellation_description">您的訂閱預計將於 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 取消。在此之前，您隨時都可以恢復訂閱。</string>
     <string name="premium_next_charge_summary">您的下一筆扣款為 %1$s USD，將於 %2$s 到期。</string>
     <string name="subscription_canceled_description">您的訂閱已於 %1$s 取消。重新訂閱以繼續使用 Premium 功能。</string>
-    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment method before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
+    <string name="subscription_update_payment_description">我們無法處理您的付款。請在您的訂閱於 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 結束前更新付款方式。</string>
     <plurals name="subscription_past_due_description">
         <item quantity="other">自訂閱到期日起，您有 %1$d 天的寬限期。請於 %2$s 前完成逾期款項付款。</item>
     </plurals>
     <string name="subscription_paused_description">您的訂閱已暫停。恢復訂閱以繼續使用 Premium 功能。</string>
-    <string name="subscription_expired_description">Your subscription expired on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using Premium features.</string>
+    <string name="subscription_expired_description">您的訂閱已於 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 到期。重新訂閱以繼續使用 Premium 功能。</string>
     <string name="loading_subscription">正在載入訂閱資訊…</string>
     <string name="loading_portal">正在載入入口網站…</string>
     <string name="portal_error">出了點問題</string>
@@ -1318,9 +1319,9 @@
     <string name="view_bank_account">檢視銀行帳戶</string>
     <string name="view_license">檢視駕照</string>
     <string name="view_passport">檢視護照</string>
-    <string name="add_bank_account">Add bank account</string>
-    <string name="add_license">Add license</string>
-    <string name="add_passport">Add passport</string>
+    <string name="add_bank_account">新增銀行帳戶</string>
+    <string name="add_license">新增駕照</string>
+    <string name="add_passport">新增護照</string>
     <string name="edit_bank_account">編輯銀行帳戶</string>
     <string name="edit_license">編輯駕照</string>
     <string name="edit_passport">編輯護照</string>
@@ -1369,20 +1370,20 @@
     <string name="license_details">駕照詳細資訊</string>
     <string name="licenses">駕照</string>
     <string name="no_licenses">您的密碼庫中沒有駕照。</string>
-    <string name="no_passports">There are no passports in your vault.</string>
+    <string name="no_passports">您的保管庫中沒有護照。</string>
     <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">您的請求已中斷，因為應用程式需要重新驗證。請再試一次。</string>
-    <string name="passport_details">Passport details</string>
+    <string name="passport_details">護照詳細資訊</string>
     <string name="sex">性別</string>
-    <string name="birth_place">Birth place</string>
-    <string name="national_identification_number">National identification number</string>
-    <string name="copy_national_identification_number">Copy national identification number</string>
-    <string name="access_your_local_network">Access your local network</string>
-    <string name="local_network_access_required">Local network access required</string>
-    <string name="ask_again_later">Ask again later</string>
-    <string name="enable_local_network_access">Enable local network access</string>
-    <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Bitwarden needs local network access to sync with your server. Without this permission, the app won’t be able to connect.</string>
-    <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Without this permission, Bitwarden won’t be able to connect and sync with your server. You can enable this in your device settings.</string>
-    <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Your request was interrupted because the app needs local network access. You can enable this in your device settings.</string>
-    <string name="continue_to_stripe">Continue to Stripe?</string>
-    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">You’ll be taken to Stripe to manage your subscription cancellation.</string>
+    <string name="birth_place">出生地</string>
+    <string name="national_identification_number">身分證字號</string>
+    <string name="copy_national_identification_number">複製身分證字號</string>
+    <string name="access_your_local_network">存取本機網路</string>
+    <string name="local_network_access_required">需要本機網路存取權限</string>
+    <string name="ask_again_later">稍後再詢問</string>
+    <string name="enable_local_network_access">啟用本機網路存取權限</string>
+    <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Bitwarden 需要本機網路存取權限才能與您的伺服器同步。若未授予此權限，應用程式將無法連線。</string>
+    <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">若未授予此權限，Bitwarden 將無法連線並與您的伺服器同步。您可以在裝置設定中啟用此權限。</string>
+    <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">您的要求已中斷，因為應用程式需要本機網路存取權限。您可以在裝置設定中啟用此權限。</string>
+    <string name="continue_to_stripe">要前往 Stripe 嗎？</string>
+    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">您將前往 Stripe 管理您的訂閱取消事宜。</string>
 </resources>

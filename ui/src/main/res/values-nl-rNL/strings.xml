@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwarden Automatisch aanvullen</string>
     <string name="change_master_password">Hoofdwachtwoord wijzigen</string>
     <string name="close">Sluiten</string>
+    <string name="close_app">App sluiten</string>
     <string name="continue_text">Doorgaan</string>
     <string name="create_account">Account aanmaken</string>
     <string name="create_an_account">Account aanmaken</string>

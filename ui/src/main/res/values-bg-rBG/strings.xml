@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Услуга за автоматично дописване на Битуорден</string>
     <string name="change_master_password">Промяна на главната парола</string>
     <string name="close">Затваряне</string>
+    <string name="close_app">Затваряне на приложението</string>
     <string name="continue_text">Продължаване</string>
     <string name="create_account">Регистрация</string>
     <string name="create_an_account">Създаване на регистрация</string>

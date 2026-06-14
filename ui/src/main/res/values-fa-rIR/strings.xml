@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">سرویس پر کردن خودکار Bitwarden</string>
     <string name="change_master_password">تغییر کلمه عبور اصلی</string>
     <string name="close">بستن</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">ادامه</string>
     <string name="create_account">ایجاد حساب کاربری</string>
     <string name="create_an_account">ایجاد حساب کاربری</string>

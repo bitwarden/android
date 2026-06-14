@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">„Bitwarden“ automatinio užpildymo paslauga</string>
     <string name="change_master_password">Keisti pagrindinį slaptažodį</string>
     <string name="close">Uždaryti</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">Tęsti</string>
     <string name="create_account">Sukurti paskyrą</string>
     <string name="create_an_account">Create an account</string>

@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">خدمة التعبئة التلقائية من بت واردن</string>
     <string name="change_master_password">تغيير كلمة المرور الرئيسية</string>
     <string name="close">إغلاق</string>
+    <string name="close_app">إغلاق التطبيق</string>
     <string name="continue_text">متابعة</string>
     <string name="create_account">إنشاء حساب</string>
     <string name="create_an_account">أنشئ حساب</string>
@@ -104,19 +105,19 @@
     <string name="immediately">فورًا</string>
     <string name="vault_timeout_log_out_confirmation_title">تعيين مهلة الجَلسة إلى \"تسجيل الخروج\"؟</string>
     <string name="vault_timeout_log_out_confirmation_message">بعد انتهاء المهلة، سيتم تسجيل الخروج. سوف تحتاج إلى الاتصال بالإنترنت لتسجيل الدخول والوصول إلى المخزن الخاص بك مرة أخرى. لن تتغير الإعدادات الخاصة بك والرقم السري المحفوظين على هذا الجهاز.</string>
-    <string name="logging_in">جار تسجيل الدخول...</string>
+    <string name="logging_in">جار تسجيل الدخول…</string>
     <string name="login_to_bitwarden">تسجيل الدخول إلى بت واردن</string>
     <string name="master_password_confirmation_val_message">تأكيد كلمة المرور غير صحيح.</string>
     <string name="master_password_description">كلمة المرور الرئيسية هي كلمة المرور المستخدمة للوصول إلى الخزنة الخاصة بك. من المهم جدا ً ألا تنسى ذلك. لا توجد طريقة للعثور عليها إذا نسيت.</string>
     <string name="master_password_hint">فهرس كلمة المرور الرئيسية (اختياري)</string>
     <string name="master_password_hint_description">يمكن أن تساعدك فكرة كلمة المرور الرئيسية على تذكر كلمة المرور الخاصة بك إذا نسيت.</string>
     <plurals name="master_password_length_val_message_x">
-        <item quantity="zero">كلمة المرور الرئيسية يجب أن تكون على الأقل %d حرفاً.</item>
-        <item quantity="one">كلمة المرور الرئيسية يجب أن تكون على الأقل %d حرفاً.</item>
-        <item quantity="two">كلمة المرور الرئيسية يجب أن تكون على الأقل %d حرفاً.</item>
-        <item quantity="few">كلمة المرور الرئيسية يجب أن تكون على الأقل %d حرفاً.</item>
-        <item quantity="many">كلمة المرور الرئيسية يجب أن تكون على الأقل %d حرفاً.</item>
-        <item quantity="other">كلمة المرور الرئيسية يجب أن تكون على الأقل %d حرفاً.</item>
+        <item quantity="zero">يجب ألا يقل طول كلمة المرور الرئيسية عن %d حرفاً.</item>
+        <item quantity="one">يجب ألا يقل طول كلمة المرور الرئيسية عن %d حرفاً.</item>
+        <item quantity="two">يجب ألا يقل طول كلمة المرور الرئيسية عن %d حرفاً.</item>
+        <item quantity="few">يجب ألا يقل طول كلمة المرور الرئيسية عن %d حرفاً.</item>
+        <item quantity="many">يجب ألا يقل طول كلمة المرور الرئيسية عن %d حرفاً.</item>
+        <item quantity="other">يجب ألا يقل طول كلمة المرور الرئيسية عن %d حرفاً.</item>
     </plurals>
     <string name="min_numbers">الحد الأدنى للأرقام</string>
     <string name="min_special">الحد الأدنى من الأحرف الخاصة</string>
@@ -134,7 +135,7 @@
     <string name="no_file_sends">لا توجد ملفات مرسلة في خزانك.</string>
     <string name="no_ssh_keys">لا توجد مفاتيح SSH في خزانك.</string>
     <string name="no_archives_title">الأرشيف فارغ</string>
-    <string name="no_archives_message">املأ أرشيفك بالعناصر التي لا تريد رؤيتها في نتائج البحث واقتراحات التعبئة التلقائية ولكن قد تحتاج يوما ما.</string>
+    <string name="no_archives_message">ضع في الأرشيف العناصر التي لا تريد ظهورها في البحث والإكمال التلقائي، لكنك قد تحتاجها مستقبلاً.</string>
     <string name="new_text_send">إرسال نص جديد</string>
     <string name="new_file_send">إرسال ملف جديد</string>
     <string name="no_username">لا يوجد اسم مستخدم</string>
@@ -151,11 +152,11 @@
     <string name="select">تحديد</string>
     <string name="item_details">تفاصيل العنصر</string>
     <string name="item_updated">تم تحديث العنصر</string>
-    <string name="submitting">جاري الإرسال</string>
+    <string name="submitting">جاري الإرسال…</string>
     <string name="syncing">جارٍ المزامنة…</string>
     <string name="syncing_complete">اكتمال المزامنة.</string>
     <string name="two_step_login">تحديد المصادقة الثنائية</string>
-    <string name="unlock_with_biometrics">فتح باستخدام القياسات الحيوية</string>
+    <string name="unlock_with_biometrics">فتح القفل بالمقاييس الحيوية</string>
     <string name="unlock_with_pin">إلغاء القفل باستخدام رقم التعريف الشخصي</string>
     <string name="verification_code">رمز التحقق</string>
     <string name="view_login">عرض تسجيل الدخول</string>
@@ -192,13 +193,13 @@
     <string name="attachments">مرفقات</string>
     <string name="unable_to_download_file">تعذر تنزيل الملف.</string>
     <string name="downloading">تنزيل…</string>
-    <string name="attachment_large_warning">حجم هذا المرفق %1$s. هل أنت متأكد أنك تريد تنزيله على جهازك؟</string>
+    <string name="attachment_large_warning">هذا الملف هو  <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. هل ترغب في تنزيله؟</string>
     <string name="authenticator_key">مفتاح المصادقة (TOTP)</string>
     <string name="verification_code_totp">رمز التحقق (TOTP)</string>
     <string name="authenticator_key_added">تم إضافة مفتاح المصادقة.</string>
     <string name="authenticator_key_read_error">لا يمكن قراءة مفتاح المصادقة.</string>
-    <string name="point_your_camera_at_the_qr_code">حدد الكاميرا الخاصة بك على رمز QR.
-سيتم الفحص تلقائيا.</string>
+    <string name="point_your_camera_at_the_qr_code">وجّه الكاميرا نحو رمز QR.
+سيتم المسح تلقائيًا.</string>
     <string name="copy_totp">نسخ TOTP</string>
     <string name="copy_totp_automatically_description">إذا كان تسجيل الدخول يحتوي على مفتاح مصادقة، انسخ رمز التحقق TOTP إلى الحافظة الخاصة بك عند ملء تسجيل الدخول تلقائيا.</string>
     <string name="copy_totp_automatically">نسخ TOTP تلقائياً</string>
@@ -415,7 +416,7 @@
     <string name="save_attachment_success">تم حفظ المرفق بنجاح</string>
     <string name="autofill_tile_accessibility_required">الرجاء تمكين \"خدمة الوصول إلى الملء التلقائي\" من إعدادات بت واردن لاستخدام الملء التلقائي.</string>
     <string name="autofill_tile_uri_not_found">لم يتم العثور على حقول كلمة المرور</string>
-    <string name="soft_deleting">إرسال إلى سلة المهملات...</string>
+    <string name="soft_deleting">إرسال إلى سلة المهملات…</string>
     <string name="item_soft_deleted">تم إرسال العنصر إلى سلة المهملات.</string>
     <string name="restore">استعادة</string>
     <string name="restoring">جارٍ الاسترداد…</string>
@@ -463,7 +464,7 @@
     <string name="deletion_date">تاريخ الحذف</string>
     <string name="deletion_time">وقت الحذف</string>
     <string name="deletion_date_info">سيتم حذف الإرسال بشكل دائم في التاريخ والوقت المحددين.</string>
-    <string name="who_can_view">من يمكنه  الاطلاع</string>
+    <string name="who_can_view">من يمكنه الاطلاع</string>
     <string name="anyone_with_the_link">أي شخص لديه الرابط</string>
     <string name="anyone_with_link_can_view_send">أي شخص لديه هذا الرابط يمكنه عرض هذا الإرسال</string>
     <string name="specific_people">أشخاص محددين</string>
@@ -495,7 +496,7 @@
     <string name="add_text_send">إرسال نص جديد</string>
     <string name="are_you_sure_delete_send">هل أنت متأكد من أنك تريد حذف هذا الإرسال؟</string>
     <string name="send_deleted">تم حذف الإرسال.</string>
-    <string name="send_updated">تم تحديث الإرسال.</string>
+    <string name="send_updated">تم تحديث الإرسال</string>
     <string name="one_day">يوم واحد</string>
     <string name="two_days">يومان</string>
     <string name="three_days">3 أيام</string>
@@ -580,7 +581,7 @@
     <string name="verification_codes">رموز التحقق</string>
     <string name="premium_subscription_required">الاشتراك المميز مطلوب</string>
     <string name="cannot_add_authenticator_key_scan_qr_code">لا يمكن إضافة مفتاح المصادقة؟ <annotation link="scanQrCode">مسح رمز QR</annotation></string>
-    <string name="scan_qr_code">امسح رمز استجابة سريعة ضوئيًا</string>
+    <string name="scan_qr_code"><annotation link="scanQrCode">Scan QR code</annotation></string>
     <string name="cannot_scan_qr_code_enter_key_manually">لا يمكن مسح رمز QR؟ <annotation link="enterKeyManually">أدخل المفتاح يدوياً</annotation></string>
     <string name="authenticator_key_scanner">مفتاح المصادقة</string>
     <string name="authenticator_key_help">مساعدة مفتاح المصادقة</string>
@@ -623,12 +624,12 @@
     <string name="api_access_token">رمز الوصول API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">هل أنت متأكد من أنك تريد الكتابة فوق اسم المستخدم الحالي؟</string>
     <string name="generate_username">إنشاء اسم المستخدم</string>
-    <string name="plus_addressed_email_description">استخدم قدرات العنوان الفرعي لمزود البريد الإلكتروني الخاص بك.</string>
+    <string name="plus_addressed_email_description">استخدم قدرات العنوان الفرعي لمزود البريد الإلكتروني الخاص بك</string>
     <string name="catch_all_email_description">استخدم علبة البريد الإلكتروني الشاملة التي تم إعدادها في نطاقك.</string>
     <string name="forwarded_email_description">إنشاء بريد إلكتروني مستعار مع خدمة إعادة توجيه خارجية.</string>
     <string name="accessibility_service_disclosure">كشف خدمة إمكانية الوصول</string>
     <string name="accessibility_disclosure_text">بت واردن يستخدم خدمة إمكانية الوصول للبحث عن حقول تسجيل الدخول في التطبيقات ومواقع الويب، ثم يقوم بإنشاء معرفات الحقل المناسب لإدخال اسم المستخدم وكلمة المرور عند العثور على تطابق للتطبيق أو الموقع. ونحن لا نخزن أيا من المعلومات التي قدمتها لنا الخدمة، كما أننا لا نحاول السيطرة على أي عناصر على الشاشة تتجاوز إدخال نصوص وثائق التفويض.</string>
-    <string name="accessibility_disclosure_start_up_text">يوفر Bitwarden طريقة تعبئة تلقائية اختيارية تستخدم خدمة إمكانية الوصول في Android للكشف عن حقول تسجيل الدخول في التطبيقات والمواقع. إذا اخترت تفعيلها، سيحدد Bitwarden الحقول المناسبة ويدخل بياناتك عند العثور على تطابق. لا نقوم بتخزين أي معلومات يطّلع عليها النظام، ولا نتحكم في أي عناصر على الشاشة خارج نطاق إدخال بيانات تسجيل الدخول.</string>
+    <string name="accessibility_disclosure_start_up_text">يوفر Bitwarden طريقة ملء تلقائي اختيارية تستخدم خدمة إمكانية الوصول في Android للكشف عن حقول تسجيل الدخول في التطبيقات والمواقع. إذا اخترت تفعيلها، سيحدد Bitwarden الحقول المناسبة ويدخل بياناتك عند العثور على تطابق. لا نقوم بتخزين أي معلومات يطّلع عليها النظام، ولا نتحكم في أي عناصر على الشاشة خارج نطاق إدخال بيانات تسجيل الدخول.</string>
     <string name="accept">قبول</string>
     <string name="decline">رفض</string>
     <string name="login_request_has_already_expired">انتهت صلاحية طلب تسجيل الدخول.</string>
@@ -752,7 +753,7 @@
     <string name="create_account_on">إنشاء حساب في</string>
     <string name="create_account_on_with_colon">إنشاء حساب على:</string>
     <string name="we_sent_an_email_to">أرسلنا رسالة بريد إلكتروني إلى %1$s.</string>
-    <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">من خلال المتابعة، أنت توافق على شروط الخدمة وسياسة الخصوصية</string>
+    <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">من خلال المتابعة، أنت توافق على <annotation link="termsOfService">شروط الخدمة</annotation> و <annotation link="privacyPolicy">سياسة الخصوصية</annotation></string>
     <string name="unsubscribe">إلغاء الاشتراك</string>
     <string name="check_your_email">تحقق من بريدك الإلكتروني</string>
     <string name="open_email_app">افتح تطبيق البريد الإلكتروني</string>
@@ -819,7 +820,7 @@
     <string name="browser_requires_special_permissions_for_bitwarden_singular">أنت تستخدم متصفحًا يتطلب أذونات خاصة لـ Bitwarden لملء كلمات المرور الخاصة بك تلقائياً.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">أنت تستخدم المتصفحات التي تتطلب أذونات خاصة لـ Bitwarden لملء كلمات المرور الخاصة بك تلقائياً.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">أنت تستخدم متصفحًا يتطلب أذونات خاصة لـ Bitwarden لملء كلمات المرور الخاصة بك تلقائيًا. قم بتفعيل التكامل التلقائي المفضل أدناه.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">أنت تستخدم المتصفحات التي تتطلب صلاحيات خاصة لـ Bitwarden لملء كلمات المرور الخاصة بك. تمكين التعبئة التلقائية لجميع المتصفحات المثبتة للمتابعة.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_plural">أنت تستخدم المتصفحات التي تتطلب صلاحيات خاصة لـ Bitwarden لملء كلمات المرور الخاصة بك. تمكين الملء التلقائي لجميع المتصفحات المثبتة للمتابعة.</string>
     <string name="use_autofill_to_log_into_your_accounts">استخدم التعبئة التلقائية لتسجيل الدخول إلى حساباتك بنقرة واحدة.</string>
     <string name="turn_on_later">تشغيل في وقت لاحق</string>
     <string name="turn_on_autofill_later">تشغيل التعبئة التلقائية في وقت لاحق؟</string>
@@ -906,7 +907,7 @@
     <string name="copy_company">نسخ شركة</string>
     <string name="copy_ssn">نسخ رقم الضمان الاجتماعي</string>
     <string name="copy_passport_number">نسخ رقم جواز السفر</string>
-    <string name="copy_first_name">نسخ الاسم </string>
+    <string name="copy_first_name">نسخ الاسم</string>
     <string name="copy_last_name">نسخ اسم العائلة</string>
     <string name="copy_license_number">نسخ رقم الترخيص</string>
     <string name="copy_middle_name">نسخ الاسم الأوسط</string>
@@ -950,7 +951,7 @@
     <string name="coachmark_5_of_6">5 من 6</string>
     <string name="coachmark_6_of_6">6 من 6</string>
     <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">استخدم هذه الخيارات لضبط كلمة المرور الخاصة بك لتلبية متطلبات موقع الحساب الخاص بك.</string>
-    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">بعد حفظ كلمة المرور الجديدة إلى بت واردن، لا  تنسى تحديثها على موقع حسابك.</string>
+    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">بعد حفظ كلمة المرور الجديدة إلى Bitwarden، لا تنس تحديثها على موقع حسابك.</string>
     <string name="verify_your_identity">تحقق من هويتك</string>
     <string name="error_loading_certificate">خطأ في تحميل الشهادة</string>
     <string name="certificate_alias">اسم مستعار للشهادة</string>
@@ -1016,7 +1017,7 @@
     <string name="delete_logs">حذف السجلات</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">هل تريد حقاً حذف جميع السجلات المسجلة؟</string>
     <string name="confirm_key_connector_domain">تأكيد نطاق موصل المفتاح</string>
-    <string name="key_connector_domain">نطاق التوصيل الرئيسي:</string>
+    <string name="key_connector_domain">نطاق Key Connector</string>
     <string name="your_organization_no_longer_requires_a_master_password">لم تعد مؤسستك تشترط كلمة مرور رئيسية لأعضائها. يُرجى التحقق من النطاق أدناه مع المسؤول وإدخال كلمة مرورك الرئيسية للمتابعة.</string>
     <string name="please_confirm_domain_with_admin">يرجى تأكيد المجال أدناه مع مسؤول شركتك.\n\nمجال رابط المفتاح:\n%1$s</string>
     <string name="flight_recorder_banner_title">تشغيل مسجل الطيران</string>
@@ -1386,15 +1387,15 @@
     <string name="branch_number">رَقم الفرع</string>
     <string name="swift_code">رمز SWIFT</string>
     <string name="iban">IBAN</string>
-    <string name="bank_contact_phone">رَقم  هاتف البَنك</string>
+    <string name="bank_contact_phone">رَقم هاتف البَنك</string>
     <string name="copy_name_on_account">نسخ الاسم على الحساب</string>
     <string name="copy_account_number">نسخ رَقم الحساب</string>
     <string name="copy_routing_number">نسخ رَقم التوجيه</string>
-    <string name="copy_branch_number">نسخ رَقم  الفرع</string>
+    <string name="copy_branch_number">نسخ رَقم الفرع</string>
     <string name="copy_pin">نسخ رمز PIN</string>
     <string name="copy_swift_code">نسخ رمز SWIFT</string>
     <string name="copy_iban">نسخ رمز IBAN</string>
-    <string name="copy_bank_contact_phone">نسخ رَقم  هاتف البَنك</string>
+    <string name="copy_bank_contact_phone">نسخ رَقم هاتف البَنك</string>
     <string name="checking">التحقق</string>
     <string name="savings">المدخرات</string>
     <string name="certificate_of_deposit">شهادة إيداع</string>
@@ -1405,7 +1406,7 @@
     <string name="issuing_state">جهة الإصدار الولاية / المقاطعة</string>
     <string name="license_class">فئة الرخصة</string>
     <string name="surname">اللقب</string>
-    <string name="given_name">الاسم </string>
+    <string name="given_name">الاسم</string>
     <string name="date_of_birth">تاريخ الميلاد</string>
     <string name="nationality">الجنسية</string>
     <string name="passport_type">نوع جواز السفر</string>
