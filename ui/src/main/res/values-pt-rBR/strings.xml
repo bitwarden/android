@@ -2,7 +2,7 @@
 <resources>
     <string name="about">Sobre</string>
     <string name="add_folder">Adicionar pasta</string>
-    <string name="add_item">Adicionar Item</string>
+    <string name="add_item">Adicionar item</string>
     <string name="an_error_has_occurred">Ocorreu um erro</string>
     <string name="apply">Aplicar</string>
     <string name="back">Voltar</string>
@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Serviço de preenchimento automático do Bitwarden</string>
     <string name="change_master_password">Alterar senha principal</string>
     <string name="close">Fechar</string>
+    <string name="close_app">Fechar app</string>
     <string name="continue_text">Continuar</string>
     <string name="create_account">Criar conta</string>
     <string name="create_an_account">Criar uma conta</string>
@@ -124,8 +125,8 @@
     <string name="no_identities">Não há identidades no seu cofre.</string>
     <string name="add_identity">Adicionar identidade</string>
     <string name="no_notes">Não há anotações no seu cofre.</string>
-    <string name="add_note">Adicionar nota</string>
-    <string name="add_ssh_key">Adicionar Chave SSH</string>
+    <string name="add_note">Adicionar anotação</string>
+    <string name="add_ssh_key">Adicionar chave SSH</string>
     <string name="no_text_sends">Não há Sends de texto no seu cofre.</string>
     <string name="no_file_sends">Não há Sends de arquivo no seu cofre.</string>
     <string name="no_ssh_keys">Não há chaves SSH no seu cofre.</string>
@@ -991,8 +992,8 @@ Deseja trocar para esta conta?</string>
     <string name="delete_logs">Apagar registros</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Tem certeza de que deseja apagar todos os registros gravados?</string>
     <string name="confirm_key_connector_domain">Confirmar domínio do Key Connector</string>
-    <string name="key_connector_domain">Key Connector domain</string>
-    <string name="your_organization_no_longer_requires_a_master_password">Your organization no longer requires a master password for its members. Please verify the domain below with your admin and enter your master password to continue.</string>
+    <string name="key_connector_domain">Domínio do Key Connector</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Sua organização não exige mais uma senha principal para seus membros. Verifique o domínio abaixo com o administrador e digite sua senha principal para continuar.</string>
     <string name="please_confirm_domain_with_admin">Confirme o domínio abaixo com o administrador da sua organização.\n\nDomínio do Key Connector:\n%1$s</string>
     <string name="flight_recorder_banner_title">Gravador de voo ativado</string>
     <string name="flight_recorder_banner_message">O gravador de voo estará ativo até %1$s às %2$s. Volte às configurações para desativá-lo agora.</string>
@@ -1239,12 +1240,12 @@ Deseja trocar para esta conta?</string>
     <string name="mobile_platform">Celular - %1$s</string>
     <string name="extension_platform">Extensão - %1$s</string>
     <string name="web_platform">Web - %1$s</string>
-    <string name="desktop_platform">Desktop - %1$s</string>
+    <string name="desktop_platform">Computador - %1$s</string>
     <string name="cli_platform">CLI - %1$s</string>
     <string name="sdk">SDK</string>
     <string name="server">Servidor</string>
     <string name="unknown_device">Dispositivo desconhecido</string>
-    <string name="first_login_date"><annotation emphasis="bold">First login:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="first_login_date"><annotation emphasis="bold">Primeira entrada:</annotation> <annotation arg="0">%1$s</annotation></string>
     <string name="current_session">Sessão atual</string>
     <string name="pending_request">Solicitação pendente</string>
     <string name="today">Hoje</string>
@@ -1252,7 +1253,7 @@ Deseja trocar para esta conta?</string>
     <string name="past_fourteen_days">Últimos 14 dias</string>
     <string name="past_thirty_days">Últimos 30 dias</string>
     <string name="over_thirty_days_ago">Há mais de 30 dias</string>
-    <string name="recently_active"><annotation emphasis="bold">Recently active:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="recently_active"><annotation emphasis="bold">Atividade recente:</annotation> <annotation arg="0">%1$s</annotation></string>
     <string name="trusted">Confiado</string>
     <string name="preview_not_available_for_files">A pré-visualização está indisponível para %1$s arquivos. Você ainda pode baixá-los para vê-los no seu dispositivo.</string>
     <string name="this_file_is_too_large_to_preview">Este arquivo é grande demais para pré-visualização. Você ainda pode baixá-lo para visualizar no seu dispositivo.</string>
@@ -1307,16 +1308,16 @@ Deseja trocar para esta conta?</string>
     <string name="subscription_status_paused">Pausada</string>
     <string name="subscription_status_update_payment">Atualizar pagamento</string>
     <string name="subscription_status_pending_cancellation">Cancelamento pendente</string>
-    <string name="subscription_pending_cancellation_description">Your subscription is scheduled to cancel on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. You can reinstate it anytime before then.</string>
+    <string name="subscription_pending_cancellation_description">Sua assinatura está agendada para cancelar em <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Você pode reativá-la a qualquer momento antes disso.</string>
     <string name="premium_next_charge_summary">Sua próxima cobrança é de %1$s USD, para até %2$s.</string>
     <string name="subscription_canceled_description">Sua assinatura foi cancelada em %1$s. Reinscreva-se para continuar usando os recursos do Premium.</string>
-    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment method before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
+    <string name="subscription_update_payment_description">Não foi possível processar seu pagamento. Atualize seu método de pagamento antes que sua assinatura termine em <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Você tem um período de tolerância de %1$d dia desde a data de expiração da sua assinatura. Resolva as faturas em atraso até %2$s.</item>
         <item quantity="other">Você tem um período de tolerância de %1$d dias desde a data de expiração da sua assinatura. Resolva as faturas em atraso até %2$s.</item>
     </plurals>
     <string name="subscription_paused_description">Sua assinatura foi pausada. Reinscreva-se para continuar com os recursos do Premium.</string>
-    <string name="subscription_expired_description">Your subscription expired on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using Premium features.</string>
+    <string name="subscription_expired_description">Sua assinatura expirou em <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Inscreva-se novamente para continuar usando os recursos Premium.</string>
     <string name="loading_subscription">Carregando assinatura…</string>
     <string name="loading_portal">Carregando portal…</string>
     <string name="portal_error">Algo deu errado</string>
@@ -1391,6 +1392,6 @@ Deseja trocar para esta conta?</string>
     <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">O Bitwarden precisa de acesso à rede local para sincronizar com o seu servidor. Sem esta permissão, o aplicativo não poderá se conectar.</string>
     <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Sem esta permissão, o Bitwarden não será capaz de se conectar e sincronizar com o seu servidor. Você pode ativar isso nas configurações do seu dispositivo.</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Sua solicitação foi interrompida porque o aplicativo precisa de acesso à rede local. Você pode habilitar essa função nas configurações do seu dispositivo.</string>
-    <string name="continue_to_stripe">Continue to Stripe?</string>
-    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">You’ll be taken to Stripe to manage your subscription cancellation.</string>
+    <string name="continue_to_stripe">Continuar para o Stripe?</string>
+    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Você será levado para o Stripe para gerenciar o cancelamento de sua assinatura.</string>
 </resources>

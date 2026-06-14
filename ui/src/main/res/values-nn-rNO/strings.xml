@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwarden sjølvutfyllingsteneste</string>
     <string name="change_master_password">Brigda hovudpassord</string>
     <string name="close">Lat att</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">Haldt fram</string>
     <string name="create_account">Oppretta konto</string>
     <string name="create_an_account">Create an account</string>

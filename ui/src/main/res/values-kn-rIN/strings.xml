@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">ಬಿಟ್ವಾರ್ಡೆನ್ ಸ್ವಯಂ ಭರ್ತಿ ಸೇವೆ</string>
     <string name="change_master_password">ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್ ಬದಲಾಯಿಸಿ</string>
     <string name="close">ಮುಚ್ಚಿ</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">ಮುಂದುವರಿಸಿ</string>
     <string name="create_account">ಖಾತೆ ತೆರೆ</string>
     <string name="create_an_account">Create an account</string>

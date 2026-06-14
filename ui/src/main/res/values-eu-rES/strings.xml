@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwardenen automatikoki betetzeko zerbitzua</string>
     <string name="change_master_password">Aldatu pasahitz nagusia</string>
     <string name="close">Itxi</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">Jarraitu</string>
     <string name="create_account">Sortu kontua</string>
     <string name="create_an_account">Create an account</string>

@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwarden Autofill Service</string>
     <string name="change_master_password">Change master password</string>
     <string name="close">වසන්න</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">ඉදිරියට</string>
     <string name="create_account">ගිණුමක් සාදන්න</string>
     <string name="create_an_account">Create an account</string>

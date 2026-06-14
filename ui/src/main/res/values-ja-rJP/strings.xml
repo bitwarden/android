@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwarden 自動入力サービス</string>
     <string name="change_master_password">マスターパスワードの変更</string>
     <string name="close">閉じる</string>
+    <string name="close_app">アプリを終了</string>
     <string name="continue_text">続行</string>
     <string name="create_account">アカウントの作成</string>
     <string name="create_an_account">アカウントを作成</string>

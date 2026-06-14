@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwarden 자동 완성 서비스</string>
     <string name="change_master_password">마스터 비밀번호 변경</string>
     <string name="close">닫기</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">계속</string>
     <string name="create_account">계정 만들기</string>
     <string name="create_an_account">계정 생성</string>

@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Usługa autouzupełniania Bitwarden</string>
     <string name="change_master_password">Zmień hasło główne</string>
     <string name="close">Zamknij</string>
+    <string name="close_app">Zamnknij aplikację</string>
     <string name="continue_text">Kontynuuj</string>
     <string name="create_account">Utwórz konto</string>
     <string name="create_an_account">Utwórz konto</string>

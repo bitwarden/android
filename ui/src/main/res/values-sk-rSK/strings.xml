@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Služba automatického vypĺňania Bitwardenom</string>
     <string name="change_master_password">Zmeniť hlavné heslo</string>
     <string name="close">Zavrieť</string>
+    <string name="close_app">Zavrieť aplikáciu</string>
     <string name="continue_text">Pokračovať</string>
     <string name="create_account">Vytvoriť účet</string>
     <string name="create_an_account">Vytvoriť účet</string>

@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Υπηρεσία Αυτόματης Συμπλήρωσης Bitwarden</string>
     <string name="change_master_password">Αλλαγή κύριου κωδικού</string>
     <string name="close">Κλείσιμο</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">Συνέχεια</string>
     <string name="create_account">Δημιουργία λογαριασμού</string>
     <string name="create_an_account">Δημιουργήστε έναν λογαριασμό</string>

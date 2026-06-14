@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwarden Сервис ауто-попуњавања</string>
     <string name="change_master_password">Промени главну лозинку</string>
     <string name="close">Затвори</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">Настави</string>
     <string name="create_account">Направи налог</string>
     <string name="create_an_account">Направи налог</string>

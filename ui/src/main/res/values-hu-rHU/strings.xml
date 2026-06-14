@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwarden automatikus kitöltő szolgáltatás</string>
     <string name="change_master_password">Mesterjelszó megváltoztatása</string>
     <string name="close">Bezár</string>
+    <string name="close_app">Alkalmazás bezárása</string>
     <string name="continue_text">Folytatás</string>
     <string name="create_account">Fiók létrehozása</string>
     <string name="create_an_account">Fiók létrehozása</string>

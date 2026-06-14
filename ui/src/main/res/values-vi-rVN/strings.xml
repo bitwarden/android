@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Dịch vụ tự động điền Bitwarden</string>
     <string name="change_master_password">Thay đổi mật khẩu chính</string>
     <string name="close">Đóng</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">Tiếp tục</string>
     <string name="create_account">Tạo tài khoản</string>
     <string name="create_an_account">Tạo một tài khoản</string>
