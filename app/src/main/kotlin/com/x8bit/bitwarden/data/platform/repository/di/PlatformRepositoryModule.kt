@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.repository.di
 
 import android.view.autofill.AutofillManager
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
 import com.bitwarden.data.repository.ServerConfigRepository
@@ -67,6 +68,7 @@ object PlatformRepositoryModule {
         autofillManager: AutofillManager,
         autofillEnabledManager: AutofillEnabledManager,
         authDiskSource: AuthDiskSource,
+        buildInfoManager: BuildInfoManager,
         settingsDiskSource: SettingsDiskSource,
         vaultSdkSource: VaultSdkSource,
         accessibilityEnabledManager: AccessibilityEnabledManager,
@@ -78,6 +80,7 @@ object PlatformRepositoryModule {
             autofillManager = autofillManager,
             autofillEnabledManager = autofillEnabledManager,
             authDiskSource = authDiskSource,
+            buildInfoManager = buildInfoManager,
             settingsDiskSource = settingsDiskSource,
             vaultSdkSource = vaultSdkSource,
             accessibilityEnabledManager = accessibilityEnabledManager,
