@@ -3,17 +3,22 @@ package com.x8bit.bitwarden.data.autofill.parser
 import android.app.assist.AssistStructure
 import android.service.autofill.FillRequest
 import android.view.autofill.AutofillId
+import androidx.core.net.toUri
+import com.bitwarden.core.data.manager.model.FlagKey
+import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
 import com.x8bit.bitwarden.data.autofill.model.ViewNodeTraversalData
+import com.x8bit.bitwarden.data.autofill.util.buildFillAssistViews
 import com.x8bit.bitwarden.data.autofill.util.buildPackageNameOrNull
 import com.x8bit.bitwarden.data.autofill.util.buildUriOrNull
 import com.x8bit.bitwarden.data.autofill.util.getInlinePresentationSpecs
 import com.x8bit.bitwarden.data.autofill.util.getMaxInlineSuggestionsCount
 import com.x8bit.bitwarden.data.autofill.util.toAutofillView
 import com.x8bit.bitwarden.data.autofill.util.website
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import timber.log.Timber
 
@@ -56,6 +61,8 @@ private val URL_BARS: Map<String, String> = mapOf(
  */
 class AutofillParserImpl(
     private val settingsRepository: SettingsRepository,
+    private val fillAssistManager: FillAssistManager,
+    private val featureFlagManager: FeatureFlagManager,
 ) : AutofillParser {
     override fun parse(
         autofillAppInfo: AutofillAppInfo,
@@ -139,17 +146,40 @@ class AutofillParserImpl(
             return AutofillRequest.Unfillable
         }
 
+        // Apply fill-assist targeting rules when the feature flag is enabled. Rules take priority
+        // over heuristics; unmatched view nodes are excluded entirely (no heuristic fallback).
+        val fillAssistHostRules = uri
+            ?.takeUnless { it.startsWith("androidapp://") }?.toUri()?.host
+            ?.takeIf { featureFlagManager.getFeatureFlag(FlagKey.FillAssistTargetingRules) }
+            ?.let { host ->
+                fillAssistManager.getFillAssistRules()?.hostRules?.get(host.removePrefix("www."))
+            }
+
+        val effectiveViews = fillAssistHostRules
+            ?.let { rules ->
+                assistStructure.buildFillAssistViews(
+                    hostRules = rules,
+                    urlBarWebsite = urlBarWebsite,
+                )
+            }
+            ?: autofillViews
+
+        val effectiveFocusedView = effectiveViews
+            .firstOrNull { it.data.isFocused }
+            ?: effectiveViews.firstOrNull()
+            ?: return AutofillRequest.Unfillable
+
         // Choose the first focused partition of data for fulfillment.
-        val partition = when (focusedView) {
+        val partition = when (effectiveFocusedView) {
             is AutofillView.Card -> {
                 AutofillPartition.Card(
-                    views = autofillViews.filterIsInstance<AutofillView.Card>(),
+                    views = effectiveViews.filterIsInstance<AutofillView.Card>(),
                 )
             }
 
             is AutofillView.Login -> {
                 AutofillPartition.Login(
-                    views = autofillViews.filterIsInstance<AutofillView.Login>(),
+                    views = effectiveViews.filterIsInstance<AutofillView.Login>(),
                 )
             }
 

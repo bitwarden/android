@@ -6,6 +6,8 @@ import android.service.autofill.FillRequest
 import android.view.View
 import android.view.autofill.AutofillId
 import android.widget.inline.InlinePresentationSpec
+import com.bitwarden.core.data.manager.model.FlagKey
+import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
@@ -17,6 +19,7 @@ import com.x8bit.bitwarden.data.autofill.util.getInlinePresentationSpecs
 import com.x8bit.bitwarden.data.autofill.util.getMaxInlineSuggestionsCount
 import com.x8bit.bitwarden.data.autofill.util.toAutofillView
 import com.x8bit.bitwarden.data.autofill.util.website
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -69,6 +72,10 @@ class AutofillParserTests {
     private val settingsRepository: SettingsRepository = mockk {
         every { isInlineAutofillEnabled } answers { mockIsInlineAutofillEnabled }
         every { blockedAutofillUris } returns emptyList()
+    }
+    private val fillAssistManager: FillAssistManager = mockk()
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every { getFeatureFlag(FlagKey.FillAssistTargetingRules) } returns false
     }
 
     private var mockIsInlineAutofillEnabled = true
@@ -127,6 +134,8 @@ class AutofillParserTests {
         every { any<AutofillView>().buildUriOrNull(PACKAGE_NAME) } returns URI
         parser = AutofillParserImpl(
             settingsRepository = settingsRepository,
+            fillAssistManager = fillAssistManager,
+            featureFlagManager = featureFlagManager,
         )
     }
 

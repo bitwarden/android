@@ -3,6 +3,7 @@
 package com.x8bit.bitwarden.data.autofill.util
 
 import android.view.ViewStructure.HtmlInfo
+import com.x8bit.bitwarden.data.autofill.model.FillAssistRules
 
 /**
  * Whether this [HtmlInfo] represents a password field.
@@ -92,6 +93,29 @@ fun HtmlInfo?.hints(): List<String> = this
  * Whether this [HtmlInfo] represents an input field.
  */
 val HtmlInfo?.isInputField: Boolean get() = this?.tag == "input"
+
+/**
+ * Whether this [HtmlInfo] matches the given [SelectorClause].
+ *
+ * This function is untestable as [HtmlInfo] contains [android.util.Pair] which requires
+ * instrumentation testing.
+ */
+internal fun HtmlInfo.matchesSelectorClause(clause: FillAssistRules.SelectorClause): Boolean {
+    if (clause.tag != null && clause.tag != tag) return false
+    val attrs = attributes
+        ?: return clause.id == null &&
+            clause.name == null &&
+            clause.type == null &&
+            clause.role == null
+    fun hasAttr(key: String, value: String) = attrs.any { it.first == key && it.second == value }
+    return listOf(
+        clause.id to "id",
+        clause.name to "name",
+        clause.type to "type",
+        clause.role to "role",
+    )
+        .all { (value, key) -> value == null || hasAttr(key, value) }
+}
 
 /**
  * Checks if the list of strings contains any of the specified patterns.

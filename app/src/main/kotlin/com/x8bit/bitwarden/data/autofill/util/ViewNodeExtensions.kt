@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.autofill.util
 
 import android.app.assist.AssistStructure
 import android.view.View
+import android.view.autofill.AutofillId
 import android.widget.EditText
 import androidx.annotation.VisibleForTesting
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
@@ -73,6 +74,23 @@ fun AssistStructure.ViewNode.toAutofillView(
         autofillHint = this.supportedAutofillHint,
     )
 }
+
+/**
+ * Builds an [AutofillView.Data] for this [AssistStructure.ViewNode] using the given [autofillId]
+ * and [website].
+ */
+internal fun AssistStructure.ViewNode.toAutofillViewData(
+    autofillId: AutofillId,
+    website: String?,
+): AutofillView.Data = AutofillView.Data(
+    autofillId = autofillId,
+    autofillOptions = autofillOptions?.map { it.toString() }.orEmpty(),
+    autofillType = autofillType,
+    isFocused = isFocused,
+    textValue = autofillValue?.extractTextValue(),
+    hasPasswordTerms = hasPasswordTerms(),
+    website = website,
+)
 
 /**
  * The first supported autofill hint for this view node, or null if none are found.
