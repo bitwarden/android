@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwarden Autoudfyldningstjeneste</string>
     <string name="change_master_password">Skift hovedadgangskode</string>
     <string name="close">Luk</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">Forsæt</string>
     <string name="create_account">Opret konto</string>
     <string name="create_an_account">Opret en konto</string>

@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwarden Auto-utfyllingstjeneste</string>
     <string name="change_master_password">Endre hovedpassord</string>
     <string name="close">Lukk</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">Fortsett</string>
     <string name="create_account">Opprett konto</string>
     <string name="create_an_account">Opprett en konto</string>

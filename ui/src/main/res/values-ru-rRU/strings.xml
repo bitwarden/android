@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Служба автозаполнения Bitwarden</string>
     <string name="change_master_password">Изменить мастер-пароль</string>
     <string name="close">Закрыть</string>
+    <string name="close_app">Закрыть приложение</string>
     <string name="continue_text">Продолжить</string>
     <string name="create_account">Создать аккаунт</string>
     <string name="create_an_account">Создать аккаунт</string>

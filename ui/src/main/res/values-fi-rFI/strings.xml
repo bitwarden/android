@@ -12,7 +12,7 @@
     <string name="copy_username">Kopioi käyttäjätunnus</string>
     <string name="delete">Poista</string>
     <string name="preview">Preview</string>
-    <string name="deleting">Deleting…</string>
+    <string name="deleting">Poistetaan…</string>
     <string name="do_you_really_want_to_delete">Haluatko varmasti poistaa? Toiminnon peruminen ei ole mahdollista.</string>
     <string name="edit">Muokkaa</string>
     <string name="edit_folder">Muokkaa kansiota</string>
@@ -55,7 +55,7 @@
     <string name="password">Salasana</string>
     <string name="save">Tallenna</string>
     <string name="move">Siirrä</string>
-    <string name="saving">Saving…</string>
+    <string name="saving">Tallennetaan…</string>
     <string name="settings">Asetukset</string>
     <string name="show">Näytä</string>
     <string name="item_deleted">Kohde poistettiin</string>
@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwardenin automaattitäytön palvelu</string>
     <string name="change_master_password">Vaihda pääsalasana</string>
     <string name="close">Sulje</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">Jatka</string>
     <string name="create_account">Luo tili</string>
     <string name="create_an_account">Luo tili</string>
@@ -104,7 +105,7 @@
     <string name="immediately">Välittömästi</string>
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to “Log out”?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won’t change.</string>
-    <string name="logging_in">Logging in…</string>
+    <string name="logging_in">Kirjaudutaan…</string>
     <string name="login_to_bitwarden">Kirjaudu Bitwardeniin</string>
     <string name="master_password_confirmation_val_message">Salasanan vahvistus ei täsmää.</string>
     <string name="master_password_description">Pääsalasanalla pääset käsiksi holviisi. On erittäin tärkeää, että muistat pääsalasanasi, koska sen palautus ei ole mahdollista, jos unohdat sen.</string>
@@ -138,7 +139,7 @@
     <string name="other">Muut</string>
     <string name="password_generator">Salasanageneraattori</string>
     <string name="password_hint">Salasanavihje</string>
-    <string name="password_hint_alert">We’ve sent you an email with your master password hint.</string>
+    <string name="password_hint_alert">Lähetimme pääsalasanavihjeesi sähköpostiisi.</string>
     <string name="password_override_alert">Haluatko varmasti korvata nykyisen salasanan?</string>
     <string name="retype_master_password">Syötä pääsalasana uudelleen</string>
     <string name="retype_new_master_password_required">Toista pääsalasana (pakollinen)</string>
@@ -147,8 +148,8 @@
     <string name="select">Valitse</string>
     <string name="item_details">Kohteen tiedot</string>
     <string name="item_updated">Kohde tallennettiin</string>
-    <string name="submitting">Submitting…</string>
-    <string name="syncing">Syncing…</string>
+    <string name="submitting">Lähetetään…</string>
+    <string name="syncing">Synkronoidaan…</string>
     <string name="syncing_complete">Synkronointi suoritettiin</string>
     <string name="two_step_login">Kaksivaiheinen kirjautuminen</string>
     <string name="unlock_with_biometrics">Avaa biometrialla</string>
@@ -187,7 +188,7 @@
     <string name="add_new_attachment">Lisää uusi tiedostoliite</string>
     <string name="attachments">Liitteet</string>
     <string name="unable_to_download_file">Tiedostoa ei voitu ladata.</string>
-    <string name="downloading">Downloading…</string>
+    <string name="downloading">Ladataan…</string>
     <string name="attachment_large_warning">Tiedostoliitteen koko on %1$s. Haluatko varmasti ladata sen laitteellesi?</string>
     <string name="authenticator_key">Todennusavain (TOTP)</string>
     <string name="verification_code_totp">Todennuskoodi (TOTP)</string>
@@ -270,7 +271,7 @@ Koodi skannataan automaattisesti.</string>
     <string name="passport_number">Passin numero</string>
     <string name="phone">Puhelinnumero</string>
     <string name="september">Syyskuu</string>
-    <string name="ssn">Henkilötunnus</string>
+    <string name="ssn">Sosiaaliturvatunnus</string>
     <string name="state_province">Osavaltio/maakunta</string>
     <string name="title">Titteli</string>
     <string name="zip_postal_code">Postinumero</string>
@@ -308,9 +309,9 @@ Koodi skannataan automaattisesti.</string>
     <string name="autofill_and_save">Automaattitäytä ja tallenna</string>
     <string name="organization">Organisaatio</string>
     <string name="try_again">Yritä uudelleen</string>
-    <string name="created">Created: %1$s</string>
+    <string name="created">Luotu %1$s</string>
     <string name="password_updated">Salasana päivitetty: %1$s</string>
-    <string name="last_edited">Last edited: %1$s</string>
+    <string name="last_edited">Viimeksi muokattu: %1$s</string>
     <string name="invalid_email">Virheellinen sähköpostiosoite.</string>
     <string name="cards">Kortit</string>
     <string name="identities">Henkilöllisyydet</string>
@@ -351,7 +352,7 @@ Koodi skannataan automaattisesti.</string>
     <string name="generator">Generaattori</string>
     <string name="no_folders_to_list">Ei näytettäviä kansioita.</string>
     <string name="fingerprint_phrase">Tunnistelause</string>
-    <string name="your_accounts_fingerprint">Your account’s fingerprint phrase</string>
+    <string name="your_accounts_fingerprint">Tilisi tunnistelause</string>
     <string name="export_vault">Vie holvi</string>
     <string name="lock_now">Lukitse nyt</string>
     <string name="pin">PIN</string>
@@ -407,10 +408,10 @@ Koodi skannataan automaattisesti.</string>
     <string name="save_attachment_success">Tiedostoliite tallennettiin</string>
     <string name="autofill_tile_accessibility_required">Please turn on “Autofill Accessibility Service” from Bitwarden Settings to use the Autofill tile.</string>
     <string name="autofill_tile_uri_not_found">Salasanakenttiä ei havaittu</string>
-    <string name="soft_deleting">Sending to trash…</string>
+    <string name="soft_deleting">Siirretään roskakoriin...</string>
     <string name="item_soft_deleted">Kohde siirrettiin roskakoriin.</string>
     <string name="restore">Palauta</string>
-    <string name="restoring">Restoring…</string>
+    <string name="restoring">Palautetaan...</string>
     <string name="item_restored">Kohde palautettiin</string>
     <string name="trash">Roskakori</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Haluatko varmasti poistaa pysyvästi? Toiminnon peruminen ei ole mahdollista.</string>
@@ -461,7 +462,7 @@ Koodi skannataan automaattisesti.</string>
     <string name="specific_people">Specific people</string>
     <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
     <string name="anyone_with_password">Anyone with a password set by you</string>
-    <string name="add_email">Add email</string>
+    <string name="add_email">Lisää sähköpostiosoite</string>
     <string name="pending_delete">Odottaa poistoa</string>
     <string name="expired">Erääntynyt</string>
     <string name="expires_at">Erääntyy %s</string>
@@ -481,13 +482,13 @@ Koodi skannataan automaattisesti.</string>
     <string name="send_link">Send-linkki</string>
     <string name="search_sends">Etsi Sendeistä</string>
     <string name="edit_send">Muokkaa Sendiä</string>
-    <string name="edit_file_send">Edit file Send</string>
-    <string name="edit_text_send">Edit text Send</string>
+    <string name="edit_file_send">Muokkaa tiedosto-Sendiä</string>
+    <string name="edit_text_send">Muokkaa teksti-Sendiä</string>
     <string name="add_file_send">Uusi tiedosto-Send</string>
     <string name="add_text_send">Uusi teksti-Send</string>
     <string name="are_you_sure_delete_send">Haluatko varmasti poistaa Sendin?</string>
     <string name="send_deleted">Send poistettiin</string>
-    <string name="send_updated">Send updated</string>
+    <string name="send_updated">Send päivitettiin</string>
     <string name="one_day">1 päivä</string>
     <string name="two_days">2 päivää</string>
     <string name="three_days">3 päivää</string>
@@ -531,7 +532,7 @@ Koodi skannataan automaattisesti.</string>
     <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Your organization has set the maximum session timeout to %1$s.</string>
     <string name="this_setting_is_managed_by_your_organization">Organisaatiosi hallitsee tätä asetusta.</string>
     <string name="your_organization_has_set_the_default_session_timeout_to_never">Your organization has set the default session timeout to never.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Your organization has set the default session timeout to on app restart.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Organisaatiosi on asettanut istunnon aikakatkaisun oletukseksi \"Kun sovellus käynnistetään uudelleen\".</string>
     <string name="vault_timeout_to_large">Holvisi aikakatkaisu ylittää organisaatiosi asettamat rajoitukset.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Yksi tai useampi organisaatiokäytäntö estää henkilökohtaisen holvisi viennin.</string>
     <string name="add_account">Lisää tili</string>
@@ -705,7 +706,7 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="privacy_policy_description_long">Tutustu tietosuojakäytäntöömme osoitteessa bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Tutustu Bitwarden-tilisi muihin omimaisuuksiin verkkosovelluksessa.</string>
     <string name="learn_about_organizations_description_long">Bitwarden mahdollistaa holvisi sisällön jakamisen organisaation avulla. Lue lisää osoitteesta bitwarden.com.</string>
-    <string name="created_x">Created %1$s</string>
+    <string name="created_x">Luotu %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Organisaatiosi edellyttää, että asetat pääsalasanan.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Muuta holvisi aikakatkaisutoimintoa määrittämällä lukituksen avaustapa.</string>
     <string name="save_passkey_as_new_login">Tallenna pääsyavain uuteen kirjautumistietoon</string>
@@ -763,7 +764,7 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Määritä biometriatiedot tai aseta PIN-koodi avataksesi holvisi ja automaattitäyttääksesi kirjautumistietojasi nopeasti.</string>
     <string name="never_lose_access_to_your_vault">Älä koskaan menetä pääsyä holviisi</string>
     <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
-    <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">One of the best ways to create a secure and memorable password is to use a passphrase. \nHere’s how:</string>
+    <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">Yksi parhaita tapoja luoda turvallinen ja mieleenpainuva salasana on käyttää salalausetta. \nNäin se onnistuu:</string>
     <string name="create_a_hint">Luo vihje</string>
     <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Vihjeesi lähetetään sinulle sähköpostitse, kun pyydät sitä.</string>
     <string name="write_your_password_down">Kirjoita salasanasi muistiin</string>
@@ -880,7 +881,7 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="page_number_x_of_y">%1$s / %2$s</string>
     <string name="copy_identity_name">Kopioi identiteetin nimi</string>
     <string name="copy_company">Kopioi yritys</string>
-    <string name="copy_ssn">Kopioi henkilötunnus</string>
+    <string name="copy_ssn">Kopioi sosiaaliturvatunnus</string>
     <string name="copy_passport_number">Kopioi passin numero</string>
     <string name="copy_first_name">Copy first name</string>
     <string name="copy_last_name">Copy last name</string>
@@ -894,9 +895,9 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="choose_three_or_four_random_words">Valitse kolme tai neljä satunnaista sanaa</string>
     <string name="pick_three_or_four_random_unrelated_words">Pick three or four random, unrelated words that you can easily remember. Think of <annotation emphasis="bold">objects, places, or things</annotation> you like.</string>
     <string name="combine_those_words_together">Yhdistä nuo sanat yhteen</string>
-    <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Put the words together in any order to form your passphrase. <annotation emphasis="bold">Use hyphens, spaces, or leave them as one long word</annotation>—your choice!</string>
+    <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Luo salalause liittämällä sanoja yhteen vapaassa järjestyksessä. <annotation emphasis="bold">Käytä väliviivoja, välilyöntejä tai jätä ne yhtenäiseksi yhdyssanaksi</annotation> — valinta on sinun!</string>
     <string name="make_it_yours">Tee siitä omasi</string>
-    <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Add a number or symbol</annotation> to make it even stronger. Now you have a unique, secure, and memorable passphrase!</string>
+    <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Lisää numero tai symboli</annotation> vahvistaaksesi sitä entisestään. Nyt sinulla on ainutlaatuinen, turvallinen ja mieleenpainuva salasana!</string>
     <string name="need_some_inspiration">Tarvitsetko inspiraatiota?</string>
     <string name="check_out_the_passphrase_generator">Tutustu salalausegeneraattoriin</string>
     <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
@@ -916,8 +917,8 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="import_client_certificate">Import client certificate</string>
     <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
     <string name="alias">Alias</string>
-    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Use the generator to create secure passwords, passphrases and usernames.</string>
-    <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where Autofill is not available, like a streaming service on your TV.</string>
+    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Generaattorilla luot turvallisia salasanoja, salalauseita ja käyttäjätunnuksia.</string>
+    <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Salalauseet ovat vahvoja salasanoja, jotka on usein helpompi muistaa ja kirjoittaa kuin satunnaiset salasanat. Ne ovat hyödyllisiä kirjauduttaessa kohteisiin, joissa automaattitäyttö ei ole käytettävissä, kuten esimerkiksi televisioiden suoratoistosovellukset.</string>
     <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
     <string name="coachmark_1_of_6">1/6</string>
     <string name="coachmark_2_of_6">2/6</string>
@@ -1207,24 +1208,24 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="unable_to_unarchive_selected_item">Unable to unarchive selected item.</string>
     <string name="archiving">Archiving</string>
     <string name="unarchiving">Unarchiving</string>
-    <string name="item_moved_to_archived">Item moved to archive</string>
+    <string name="item_moved_to_archived">Kohde siirrettiin arkistoon</string>
     <string name="item_moved_to_vault">Item moved to vault</string>
     <string name="archive_unavailable">Archive unavailable</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Upgrade to Premium</string>
-    <string name="plan">Plan</string>
+    <string name="plan">Tilaustyyppi</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
     <string name="unlock_advanced_security_features">Unlock advanced security features</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">This item is archived.</string>
     <string name="introducing_archive">Introducing archive</string>
-    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>
-    <string name="go_to_archive">Go to archive</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Säilytä kohteet, joita et juuri nyt tarvitse turvassa, mutta poissa tieltä.</string>
+    <string name="go_to_archive">Avaa arkisto</string>
     <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">This item is archived. Saving changes will restore it to your vault.</string>
     <string name="your_premium_subscription_ended">Your Premium subscription ended</string>
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">To regain access to your archive, restart your Premium subscription. If you edit details for an archived item before restarting, it’ll be moved back into your vault.</string>
     <string name="restart_premium">Restart Premium</string>
-    <string name="items_transferred">Items transferred</string>
+    <string name="items_transferred">Kohteet siirrettiin</string>
     <string name="updated_master_password">Pääsalasanasi on vaihdettu</string>
     <string name="invalid_email_addresses">Invalid email addresses</string>
     <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
@@ -1235,7 +1236,7 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="launch_browser">Launch browser</string>
     <string name="continue_without_syncing">Continue without syncing</string>
     <string name="external_link">External link</string>
-    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, External link</string>
+    <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, ulkoinen linkki</string>
     <string name="devices">Devices</string>
     <string name="mobile_platform">Mobile - %1$s</string>
     <string name="extension_platform">Extension - %1$s</string>
@@ -1291,9 +1292,9 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="pricing_unavailable">Pricing unavailable</string>
     <string name="current_plan">Current plan</string>
     <string name="premium_plan_name">Premium</string>
-    <string name="billing_amount">Billing amount</string>
-    <string name="storage_cost">Storage cost</string>
-    <string name="discount">Discount</string>
+    <string name="billing_amount">Laskutettava summa</string>
+    <string name="storage_cost">Tallennustilan kustannus</string>
+    <string name="discount">Alennus</string>
     <string name="estimated_tax">Estimated tax</string>
     <string name="total">Total</string>
     <string name="billing_rate_per_year">%1$s / year</string>
@@ -1301,12 +1302,12 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="manage_plan">Manage plan</string>
     <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Manage your subscription plan in the Bitwarden web app.</string>
     <string name="cancel_premium">Cancel Premium</string>
-    <string name="subscription_status_active">Active</string>
-    <string name="subscription_status_canceled">Canceled</string>
+    <string name="subscription_status_active">Aktiivinen</string>
+    <string name="subscription_status_canceled">Irtisanottu</string>
     <string name="subscription_status_expired">Erääntynyt</string>
-    <string name="subscription_status_past_due">Past due</string>
+    <string name="subscription_status_past_due">Erääntynyt</string>
     <string name="subscription_status_paused">Paused</string>
-    <string name="subscription_status_update_payment">Update payment</string>
+    <string name="subscription_status_update_payment">Päivitä maksutapa</string>
     <string name="subscription_status_pending_cancellation">Pending cancellation</string>
     <string name="subscription_pending_cancellation_description">Your subscription is scheduled to cancel on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. You can reinstate it anytime before then.</string>
     <string name="premium_next_charge_summary">Your next charge is for <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD due on <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
@@ -1346,17 +1347,17 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="branch_number">Branch number</string>
     <string name="swift_code">SWIFT code</string>
     <string name="iban">IBAN</string>
-    <string name="bank_contact_phone">Bank contact phone</string>
+    <string name="bank_contact_phone">Pankin puhelinnumero</string>
     <string name="copy_name_on_account">Copy name on account</string>
-    <string name="copy_account_number">Copy account number</string>
-    <string name="copy_routing_number">Copy routing number</string>
-    <string name="copy_branch_number">Copy branch number</string>
-    <string name="copy_pin">Copy PIN</string>
-    <string name="copy_swift_code">Copy SWIFT code</string>
-    <string name="copy_iban">Copy IBAN</string>
-    <string name="copy_bank_contact_phone">Copy bank contact phone</string>
-    <string name="checking">Checking</string>
-    <string name="savings">Savings</string>
+    <string name="copy_account_number">Kopioi tilinumero</string>
+    <string name="copy_routing_number">Kopioi reititysnumero</string>
+    <string name="copy_branch_number">Kopioi haaranumero</string>
+    <string name="copy_pin">Kopioi PIN-koodi</string>
+    <string name="copy_swift_code">Kopioi SWIFT-koodi</string>
+    <string name="copy_iban">Kopioi IBAN</string>
+    <string name="copy_bank_contact_phone">Kopioi pankin puhelinnumero</string>
+    <string name="checking">Käyttötili</string>
+    <string name="savings">Säästötili</string>
     <string name="certificate_of_deposit">Certificate of deposit</string>
     <string name="line_of_credit">Line of credit</string>
     <string name="investment_brokerage">Investment/brokerage</string>
@@ -1383,8 +1384,8 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="passport_details">Passport details</string>
     <string name="sex">Sex</string>
     <string name="birth_place">Birth place</string>
-    <string name="national_identification_number">National identification number</string>
-    <string name="copy_national_identification_number">Copy national identification number</string>
+    <string name="national_identification_number">Henkilötunnus</string>
+    <string name="copy_national_identification_number">Kopioi henkilötunnus</string>
     <string name="access_your_local_network">Access your local network</string>
     <string name="local_network_access_required">Local network access required</string>
     <string name="ask_again_later">Ask again later</string>

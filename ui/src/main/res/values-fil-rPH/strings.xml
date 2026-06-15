@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Serbisyo ng Bitwarden Pang-autofill</string>
     <string name="change_master_password">Palitan ang master password</string>
     <string name="close">Isara</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">Magpatuloy</string>
     <string name="create_account">Gumawa ng account</string>
     <string name="create_an_account">Create an account</string>

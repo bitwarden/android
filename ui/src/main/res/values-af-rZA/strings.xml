@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwarden Outovuldiens</string>
     <string name="change_master_password">Verander hoofwagwoord</string>
     <string name="close">Sluit</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">Gaan voort</string>
     <string name="create_account">Skep rekening</string>
     <string name="create_an_account">Skep ’n rekening</string>

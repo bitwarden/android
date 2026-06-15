@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwardeni automaattäite teenus</string>
     <string name="change_master_password">Muuda ülemparooli</string>
     <string name="close">Sulge</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">Jätka</string>
     <string name="create_account">Loo konto</string>
     <string name="create_an_account">Loo konto</string>

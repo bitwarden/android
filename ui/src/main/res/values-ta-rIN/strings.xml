@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwarden தன்னிரப்பி சேவை</string>
     <string name="change_master_password">பிரதான கடவுச்சொல்லை மாற்று</string>
     <string name="close">மூடு</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">தொடர்</string>
     <string name="create_account">கணக்கை உருவாக்கு</string>
     <string name="create_an_account">ஒரு கணக்கை உருவாக்கு</string>

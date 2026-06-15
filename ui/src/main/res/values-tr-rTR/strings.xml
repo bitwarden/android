@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwarden otomatik doldurma hizmeti</string>
     <string name="change_master_password">Ana parolayı değiştir</string>
     <string name="close">Kapat</string>
+    <string name="close_app">Uygulamayı kapat</string>
     <string name="continue_text">Devam</string>
     <string name="create_account">Hesap oluştur</string>
     <string name="create_an_account">Hesap oluştur</string>

@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwarden บริการกรอกข้อมูลอัตโนมัติ</string>
     <string name="change_master_password">เปลี่ยนรหัสผ่านหลัก</string>
     <string name="close">ปิด</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">ดำเนินการต่อไป</string>
     <string name="create_account">สร้างบัญชี</string>
     <string name="create_an_account">สร้างบัญชีใหม่</string>

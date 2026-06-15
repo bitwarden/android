@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Gwasanaeth llenwi awtomatig Bitwarden</string>
     <string name="change_master_password">Newid y prif gyfrinair</string>
     <string name="close">Cau</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">Parhau</string>
     <string name="create_account">Crëwch gyfrif</string>
     <string name="create_an_account">Creu cyfrif</string>
