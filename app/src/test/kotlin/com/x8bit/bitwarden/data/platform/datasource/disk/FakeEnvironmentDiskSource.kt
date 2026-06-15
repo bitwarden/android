@@ -29,6 +29,8 @@ class FakeEnvironmentDiskSource : EnvironmentDiskSource {
         storedEmailVerificationUrls[userEmail] = urls
     }
 
+    override var fillAssistRulesUrl: String? = null
+
     private val mutablePreAuthEnvironmentUrlDataFlow =
         bufferedMutableSharedFlow<EnvironmentUrlDataJson?>(replay = 1)
 }

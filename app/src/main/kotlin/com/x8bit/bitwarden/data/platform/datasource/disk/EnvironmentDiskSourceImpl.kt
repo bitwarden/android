@@ -11,6 +11,7 @@ import kotlinx.serialization.json.Json
 
 private const val PRE_AUTH_URLS_KEY = "preAuthEnvironmentUrls"
 private const val EMAIL_VERIFICATION_URLS = "emailVerificationUrls"
+private const val FILL_ASSIST_RULES_URL_KEY = "fillAssistRulesUrl"
 
 /**
  * Primary implementation of [EnvironmentDiskSource].
@@ -54,4 +55,8 @@ class EnvironmentDiskSourceImpl(
             value = json.encodeToString(urls),
         )
     }
+
+    override var fillAssistRulesUrl: String?
+        get() = getString(key = FILL_ASSIST_RULES_URL_KEY)
+        set(value) = putString(key = FILL_ASSIST_RULES_URL_KEY, value = value)
 }
