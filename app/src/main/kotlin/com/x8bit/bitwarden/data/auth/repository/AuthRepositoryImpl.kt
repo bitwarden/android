@@ -109,6 +109,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.toAccountCryptographicState
 import com.x8bit.bitwarden.data.auth.repository.util.toDeviceInfo
+import com.x8bit.bitwarden.data.auth.repository.util.toKdfRequestModel
 import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
 import com.x8bit.bitwarden.data.auth.repository.util.toRemovedPasswordUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
@@ -1079,16 +1080,14 @@ class AuthRepositoryImpl(
         newPassword: String,
         passwordHint: String?,
     ): ResetPasswordResult {
-        val activeAccount = authDiskSource
-            .userState
-            ?.activeAccount
+        val profile = authDiskSource.userState?.activeAccount?.profile
             ?: return ResetPasswordResult.Error(error = NoActiveUserException())
         val currentPasswordHash = currentPassword?.let { password ->
             authSdkSource
                 .hashPassword(
-                    email = activeAccount.profile.email,
+                    email = profile.email,
                     password = password,
-                    kdf = activeAccount.profile.toSdkParams(),
+                    kdf = profile.toSdkParams(),
                     purpose = HashPurpose.SERVER_AUTHORIZATION,
                 )
                 .fold(
@@ -1096,48 +1095,32 @@ class AuthRepositoryImpl(
                     onSuccess = { it },
                 )
         }
-        val userId = activeAccount.profile.userId
+        val userId = profile.userId
         return vaultSdkSource
             .updatePassword(
                 userId = userId,
                 newPassword = newPassword,
             )
-            .flatMap { updatePasswordResponse ->
-                accountsService
-                    .resetPassword(
-                        body = ResetPasswordRequestJson(
-                            currentPasswordHash = currentPasswordHash,
-                            newPasswordHash = updatePasswordResponse.passwordHash,
-                            passwordHint = passwordHint,
-                            key = updatePasswordResponse.newKey,
-                        ),
-                    )
+            .flatMap { response ->
+                accountsService.resetPassword(
+                    body = ResetPasswordRequestJson(
+                        currentPasswordHash = currentPasswordHash,
+                        passwordHint = passwordHint,
+                        kdf = profile.toKdfRequestModel(),
+                        salt = profile.email,
+                        masterPasswordAuthenticationHash = response.passwordHash,
+                        masterKeyWrappedUserKey = response.newKey,
+                    ),
+                )
+            }
+            .onSuccess {
+                toastManager.show(BitwardenString.updated_master_password)
+                // Log out the user after successful password reset. This clears all
+                // user data, so there is no need to store any of the updated info.
+                logout(reason = LogoutReason.PasswordReset, userId = userId)
             }
             .fold(
-                onSuccess = {
-                    // Update the saved master password hash.
-                    authSdkSource
-                        .hashPassword(
-                            email = activeAccount.profile.email,
-                            password = newPassword,
-                            kdf = activeAccount.profile.toSdkParams(),
-                            purpose = HashPurpose.LOCAL_AUTHORIZATION,
-                        )
-                        .onSuccess { passwordHash ->
-                            authDiskSource.storeMasterPasswordHash(
-                                userId = userId,
-                                passwordHash = passwordHash,
-                            )
-                        }
-
-                    toastManager.show(BitwardenString.updated_master_password)
-                    // Log out the user after successful password reset.
-                    // This clears all user state including forcePasswordResetReason.
-                    logout(reason = LogoutReason.PasswordReset, userId = userId)
-
-                    // Return the success.
-                    ResetPasswordResult.Success
-                },
+                onSuccess = { ResetPasswordResult.Success },
                 onFailure = { ResetPasswordResult.Error(error = it) },
             )
     }
@@ -1185,16 +1168,13 @@ class AuthRepositoryImpl(
             .flatMap { response ->
                 accountsService
                     .setPassword(
-                        body = SetPasswordRequestJson(
-                            passwordHash = response.passwordHash,
+                        body = SetPasswordRequestJson.V2(
                             passwordHint = passwordHint,
                             organizationIdentifier = organizationIdentifier,
-                            kdfIterations = profile.kdfIterations,
-                            kdfMemory = profile.kdfMemory,
-                            kdfParallelism = profile.kdfParallelism,
-                            kdfType = profile.kdfType,
-                            key = response.newKey,
-                            keys = null,
+                            kdf = profile.toKdfRequestModel(),
+                            salt = profile.email,
+                            masterPasswordAuthenticationHash = response.passwordHash,
+                            masterKeyWrappedUserKey = response.newKey,
                         ),
                     )
                     .map { response }
@@ -1300,7 +1280,7 @@ class AuthRepositoryImpl(
             .flatMap { response ->
                 accountsService
                     .setPassword(
-                        body = SetPasswordRequestJson(
+                        body = SetPasswordRequestJson.V1(
                             passwordHash = response.masterPasswordHash,
                             passwordHint = passwordHint,
                             organizationIdentifier = organizationIdentifier,
@@ -1309,7 +1289,7 @@ class AuthRepositoryImpl(
                             kdfParallelism = profile.kdfParallelism,
                             kdfType = profile.kdfType,
                             key = response.encryptedUserKey,
-                            keys = SetPasswordRequestJson.Keys(
+                            keys = SetPasswordRequestJson.V1.Keys(
                                 publicKey = response.keys.public,
                                 encryptedPrivateKey = response.keys.private,
                             ),
