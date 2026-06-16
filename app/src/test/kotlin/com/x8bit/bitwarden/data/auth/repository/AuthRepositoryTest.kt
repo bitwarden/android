@@ -5795,9 +5795,6 @@ class AuthRepositoryTest {
                 userId = profile.userId,
             )
         } returns resetPasswordKey.asSuccess()
-        coEvery {
-            vaultRepository.unlockVaultWithMasterPassword(password)
-        } returns VaultUnlockResult.Success
 
         val result = repository.setPassword(
             organizationIdentifier = organizationIdentifier,
@@ -5822,7 +5819,6 @@ class AuthRepositoryTest {
                 passwordHash = passwordHash,
                 resetPasswordKey = resetPasswordKey,
             )
-            vaultRepository.unlockVaultWithMasterPassword(password)
             vaultSdkSource.getResetPasswordKey(
                 orgPublicKey = publicOrgKey,
                 userId = profile.userId,
@@ -7481,7 +7477,7 @@ class AuthRepositoryTest {
                 masterPasswordUnlock = MasterPasswordUnlockDataJson(
                     kdf = BASE_PROFILE_1.toSdkParams().toKdfRequestModel(),
                     masterKeyWrappedUserKey = ENCRYPTED_USER_KEY,
-                    salt = "mockSalt",
+                    salt = EMAIL,
                 ),
             ),
         )
@@ -7533,7 +7529,7 @@ class AuthRepositoryTest {
                             masterPasswordUnlock = MasterPasswordUnlockDataJson(
                                 kdf = BASE_PROFILE_1.toSdkParams().toKdfRequestModel(),
                                 masterKeyWrappedUserKey = ENCRYPTED_USER_KEY,
-                                salt = "mockSalt",
+                                salt = EMAIL,
                             ),
                         ),
                     ),
