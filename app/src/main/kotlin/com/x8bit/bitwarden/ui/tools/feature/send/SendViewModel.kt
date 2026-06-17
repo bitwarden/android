@@ -349,15 +349,9 @@ class SendViewModel @Inject constructor(
                 return
             }
             if (!state.isPremiumUser) {
-                val dialog = if (premiumStateManager.isInAppUpgradeAvailable()) {
-                    SendState.DialogState.FileTypeRequiresPremium
-                } else {
-                    SendState.DialogState.Error(
-                        title = BitwardenString.send.asText(),
-                        message = BitwardenString.send_file_premium_required.asText(),
-                    )
+                mutableStateFlow.update {
+                    it.copy(dialogState = SendState.DialogState.FileTypeRequiresPremium)
                 }
-                mutableStateFlow.update { it.copy(dialogState = dialog) }
                 return
             }
         }

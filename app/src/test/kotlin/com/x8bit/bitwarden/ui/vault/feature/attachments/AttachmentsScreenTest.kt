@@ -262,7 +262,7 @@ class AttachmentsScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `requires Premium dialog should be displayed according to state`() {
-        val requiresPremiumMessage = "Attachments unavailable"
+        val requiresPremiumMessage = "Premium subscription required"
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
         composeTestRule.onNodeWithText(requiresPremiumMessage).assertDoesNotExist()
 
