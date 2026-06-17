@@ -161,12 +161,7 @@ class SendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel(state = state)
         viewModel.trySendAction(SendAction.AddSendSelected(sendType = SendItemType.FILE))
         assertEquals(
-            state.copy(
-                dialogState = SendState.DialogState.Error(
-                    title = BitwardenString.send.asText(),
-                    message = BitwardenString.send_file_premium_required.asText(),
-                ),
-            ),
+            state.copy(dialogState = SendState.DialogState.FileTypeRequiresPremium),
             viewModel.stateFlow.value,
         )
     }

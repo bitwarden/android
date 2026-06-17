@@ -491,8 +491,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             initialState.copy(
-                dialogState = AddEditSendState.DialogState.Error(
-                    title = BitwardenString.send.asText(),
+                dialogState = AddEditSendState.DialogState.PremiumRequired(
                     message = BitwardenString.send_file_premium_required.asText(),
                 ),
             ),
@@ -1388,7 +1387,11 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             val newState = awaitItem()
             assertEquals(
                 nonPremiumState.copy(
-                    dialogState = AddEditSendState.DialogState.EmailAuthRequiresPremium,
+                    dialogState = AddEditSendState.DialogState.PremiumRequired(
+                        message = BitwardenString
+                            .sharing_with_specific_people_is_a_premium_feature
+                            .asText(),
+                    ),
                 ),
                 newState,
             )

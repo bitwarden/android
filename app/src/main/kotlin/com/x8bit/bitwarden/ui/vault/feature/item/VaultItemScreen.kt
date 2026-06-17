@@ -47,11 +47,11 @@ import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultBankAccountItemTy
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultDriversLicenseItemTypeHandlers
-import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultPassportItemTypeHandlers
-import com.x8bit.bitwarden.ui.vault.feature.item.handlers.rememberVaultPassportItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultPassportItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultSshKeyItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.rememberVaultPassportItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 
 /**
@@ -313,7 +313,7 @@ private fun VaultItemDialogs(
     when (dialog) {
         is VaultItemState.DialogState.ArchiveRequiresPremium -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(id = BitwardenString.archive_unavailable),
+                title = stringResource(id = BitwardenString.premium_subscription_required),
                 message = stringResource(id = BitwardenString.archiving_items_is_a_premium_feature),
                 confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
                 dismissButtonText = stringResource(id = BitwardenString.cancel),

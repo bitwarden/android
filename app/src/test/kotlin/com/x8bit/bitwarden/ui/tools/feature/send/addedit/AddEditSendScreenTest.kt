@@ -26,6 +26,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.manager.exit.ExitManager
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.isEditableText
@@ -923,7 +924,11 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                dialogState = AddEditSendState.DialogState.EmailAuthRequiresPremium,
+                dialogState = AddEditSendState.DialogState.PremiumRequired(
+                    message = BitwardenString
+                        .sharing_with_specific_people_is_a_premium_feature
+                        .asText(),
+                ),
             )
         }
 
@@ -944,7 +949,11 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     fun `EmailAuthRequiresPremium dialog Cancel click should send DismissDialogClick`() {
         mutableStateFlow.update {
             it.copy(
-                dialogState = AddEditSendState.DialogState.EmailAuthRequiresPremium,
+                dialogState = AddEditSendState.DialogState.PremiumRequired(
+                    message = BitwardenString
+                        .sharing_with_specific_people_is_a_premium_feature
+                        .asText(),
+                ),
             )
         }
 
@@ -959,7 +968,11 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     fun `EmailAuthRequiresPremium dialog Upgrade click should send UpgradeToPremiumClick`() {
         mutableStateFlow.update {
             it.copy(
-                dialogState = AddEditSendState.DialogState.EmailAuthRequiresPremium,
+                dialogState = AddEditSendState.DialogState.PremiumRequired(
+                    message = BitwardenString
+                        .sharing_with_specific_people_is_a_premium_feature
+                        .asText(),
+                ),
             )
         }
 

@@ -874,7 +874,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Archive unavailable")
+            .onNodeWithText(text = "Premium subscription required")
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
