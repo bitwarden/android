@@ -72,6 +72,7 @@ class FakeSettingsDiskSource(
     private val storedUpgradedToPremiumCardPending = mutableMapOf<String, Boolean?>()
     private val storedPremiumUpgradePending = mutableMapOf<String, Boolean?>()
     private val storedInlineAutofillEnabled = mutableMapOf<String, Boolean?>()
+    private val storedFillAssistEnabled = mutableMapOf<String, Boolean?>()
     private val storedBlockedAutofillUris = mutableMapOf<String, List<String>?>()
     private var storedIsIconLoadingDisabled: Boolean? = null
     private var storedIsCrashLoggingEnabled: Boolean? = null
@@ -428,6 +429,13 @@ class FakeSettingsDiskSource(
         isInlineAutofillEnabled: Boolean?,
     ) {
         storedInlineAutofillEnabled[userId] = isInlineAutofillEnabled
+    }
+
+    override fun getFillAssistEnabled(userId: String): Boolean? =
+        storedFillAssistEnabled[userId]
+
+    override fun storeFillAssistEnabled(userId: String, isFillAssistEnabled: Boolean?) {
+        storedFillAssistEnabled[userId] = isFillAssistEnabled
     }
 
     override fun getBlockedAutofillUris(userId: String): List<String>? =

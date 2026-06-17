@@ -150,7 +150,10 @@ class AutofillParserImpl(
         // over heuristics; unmatched view nodes are excluded entirely (no heuristic fallback).
         val fillAssistHostRules = uri
             ?.takeUnless { it.startsWith("androidapp://") }?.toUri()?.host
-            ?.takeIf { featureFlagManager.getFeatureFlag(FlagKey.FillAssistTargetingRules) }
+            ?.takeIf {
+                featureFlagManager.getFeatureFlag(FlagKey.FillAssistTargetingRules) &&
+                    settingsRepository.isFillAssistEnabled
+            }
             ?.let { host ->
                 fillAssistManager.getFillAssistRules()?.hostRules?.get(host.removePrefix("www."))
             }

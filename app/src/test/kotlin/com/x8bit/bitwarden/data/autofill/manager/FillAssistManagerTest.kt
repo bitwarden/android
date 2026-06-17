@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.autofill.datasource.disk.FillAssistDiskSource
 import com.x8bit.bitwarden.data.autofill.model.FillAssistRules
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -75,11 +76,16 @@ class FillAssistManagerTest {
         every { fillAssistRulesUrl = any() } just runs
     }
 
+    private val settingsRepository: SettingsRepository = mockk {
+        every { isFillAssistEnabled } returns true
+    }
+
     private val manager = FillAssistManagerImpl(
         fillAssistService = fillAssistService,
         fillAssistDiskSource = fillAssistDiskSource,
         featureFlagManager = featureFlagManager,
         serverConfigRepository = serverConfigRepository,
+        settingsRepository = settingsRepository,
         environmentDiskSource = environmentDiskSource,
         clock = FIXED_CLOCK,
         dispatcherManager = FakeDispatcherManager(),
@@ -107,6 +113,16 @@ class FillAssistManagerTest {
         every {
             featureFlagManager.getFeatureFlag(FlagKey.FillAssistTargetingRules)
         } returns false
+
+        manager.syncIfNecessary()
+
+        coVerify(exactly = 0) { fillAssistService.getManifest() }
+        verify(exactly = 0) { fillAssistDiskSource.storeFillAssistRules(any(), any()) }
+    }
+
+    @Test
+    fun `sync returns success and does nothing when fill assist is disabled by user`() = runTest {
+        every { settingsRepository.isFillAssistEnabled } returns false
 
         manager.syncIfNecessary()
 

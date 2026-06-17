@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
 import com.x8bit.bitwarden.data.autofill.manager.FillAssistManagerImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,6 +45,7 @@ object FillAssistModule {
         fillAssistDiskSource: FillAssistDiskSource,
         featureFlagManager: FeatureFlagManager,
         serverConfigRepository: ServerConfigRepository,
+        settingsRepository: SettingsRepository,
         environmentDiskSource: EnvironmentDiskSource,
         clock: Clock,
         dispatcherManager: DispatcherManager,
@@ -53,6 +55,7 @@ object FillAssistModule {
             fillAssistDiskSource = fillAssistDiskSource,
             featureFlagManager = featureFlagManager,
             serverConfigRepository = serverConfigRepository,
+            settingsRepository = settingsRepository,
             environmentDiskSource = environmentDiskSource,
             clock = clock,
             dispatcherManager = dispatcherManager,
