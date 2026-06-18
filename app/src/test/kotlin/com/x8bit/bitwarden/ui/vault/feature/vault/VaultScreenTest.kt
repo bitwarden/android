@@ -48,6 +48,7 @@ import com.bitwarden.ui.util.performLogoutAccountClick
 import com.bitwarden.ui.util.performRemoveAccountClick
 import com.bitwarden.ui.util.performYesDialogButtonClick
 import com.bitwarden.vault.CipherType
+import com.x8bit.bitwarden.data.billing.model.PremiumCard
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
@@ -1641,7 +1642,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     @Test
     fun `UpgradePremium action card should display when eligible`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
-            isPremiumUpgradeBannerEligible = true,
+            premiumCard = PremiumCard.UPGRADE,
             viewState = DEFAULT_CONTENT_VIEW_STATE,
         )
 
@@ -1656,7 +1657,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     @Test
     fun `UpgradePremium action card CTA click should send ActionCardClick`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
-            isPremiumUpgradeBannerEligible = true,
+            premiumCard = PremiumCard.UPGRADE,
             viewState = DEFAULT_CONTENT_VIEW_STATE,
         )
 
@@ -1677,7 +1678,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     @Test
     fun `UpgradePremium action card dismiss click should send DismissActionCardClick`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
-            isPremiumUpgradeBannerEligible = true,
+            premiumCard = PremiumCard.UPGRADE,
             viewState = DEFAULT_CONTENT_VIEW_STATE,
         )
 
@@ -1689,6 +1690,42 @@ class VaultScreenTest : BitwardenComposeTest() {
         verify(exactly = 1) {
             viewModel.trySendAction(
                 VaultAction.DismissActionCardClick(VaultState.ActionCardState.UpgradePremium),
+            )
+        }
+    }
+
+    @Test
+    fun `PremiumNeedsAttention action card should display when eligible`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            premiumCard = PremiumCard.NEEDS_ATTENTION,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Your subscription needs attention")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "View plan")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `PremiumNeedsAttention action card CTA click should send ActionCardClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            premiumCard = PremiumCard.NEEDS_ATTENTION,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "View plan")
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAction.ActionCardClick(
+                    actionCard = VaultState.ActionCardState.PremiumNeedsAttention,
+                ),
             )
         }
     }

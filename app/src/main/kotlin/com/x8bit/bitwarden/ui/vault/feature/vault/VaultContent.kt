@@ -562,6 +562,7 @@ fun VaultContent(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun ActionCard(
     actionCardState: VaultState.ActionCardState,
@@ -602,6 +603,16 @@ private fun ActionCard(
                 actionText = stringResource(id = BitwardenString.learn_more),
                 onActionClick = { vaultHandlers.actionCardClick(actionCardState) },
                 onDismissClick = { vaultHandlers.dismissActionCardClick(actionCardState) },
+                modifier = modifier,
+            )
+        }
+
+        VaultState.ActionCardState.PremiumNeedsAttention -> {
+            BitwardenActionCard(
+                cardTitle = stringResource(id = BitwardenString.your_subscription_needs_attention),
+                cardSubtitle = stringResource(id = BitwardenString.check_your_plan_for_details),
+                actionText = stringResource(id = BitwardenString.view_plan),
+                onActionClick = { vaultHandlers.actionCardClick(actionCardState) },
                 modifier = modifier,
             )
         }
