@@ -1324,7 +1324,6 @@ Do you want to switch to this account?</string>
     <string name="loading_portal">Loading portal…</string>
     <string name="portal_error">Something went wrong</string>
     <string name="trouble_loading_portal">We had trouble loading the management portal, so try again.</string>
-    <string name="subscription_error">Subscription error</string>
     <string name="trouble_loading_subscription">We couldn’t load your subscription details. Please try again.</string>
     <string name="view_bank_account">View bank account</string>
     <string name="view_license">View license</string>

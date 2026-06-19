@@ -50,8 +50,11 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.BitwardenStatusBadge
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.bitwarden.ui.platform.components.content.BitwardenContentBlock
+import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
+import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.content.model.ContentBlockData
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -70,6 +73,8 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStatus
 import com.x8bit.bitwarden.ui.platform.composition.LocalAuthTabLaunchers
+import com.x8bit.bitwarden.ui.platform.feature.premium.plan.PlanState.ViewState.Error.Type.PRICING_UNAVAILABLE
+import com.x8bit.bitwarden.ui.platform.feature.premium.plan.PlanState.ViewState.Error.Type.SUBSCRIPTION
 import com.x8bit.bitwarden.ui.platform.feature.premium.plan.handlers.PlanHandlers
 import com.x8bit.bitwarden.ui.platform.feature.premium.plan.util.badgeColors
 import com.x8bit.bitwarden.ui.platform.feature.premium.plan.util.labelRes
@@ -144,21 +149,45 @@ fun PlanScreen(
         },
     ) {
         when (val viewState = state.viewState) {
-            is PlanState.ViewState.Free.Cloud -> {
+            is PlanState.ViewState.Content.Free.Cloud -> {
                 FreeCloudContent(
                     viewState = viewState,
                     handlers = handlers,
                 )
             }
 
-            is PlanState.ViewState.Free.SelfHosted -> {
+            is PlanState.ViewState.Content.Free.SelfHosted -> {
                 FreeSelfHostedContent()
             }
 
-            is PlanState.ViewState.Premium -> {
+            is PlanState.ViewState.Content.Premium -> {
                 PremiumContent(
                     viewState = viewState,
                     handlers = handlers,
+                )
+            }
+
+            is PlanState.ViewState.Error -> {
+                BitwardenErrorContent(
+                    illustrationData = IconData.Local(iconRes = BitwardenDrawable.ill_file_error),
+                    message = viewState.message(),
+                    buttonData = BitwardenButtonData(
+                        label = BitwardenString.try_again.asText(),
+                        onClick = {
+                            when (viewState.type) {
+                                PRICING_UNAVAILABLE -> handlers.onRetryPricingClick()
+                                SUBSCRIPTION -> handlers.onRetrySubscriptionClick()
+                            }
+                        },
+                    ),
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
+
+            is PlanState.ViewState.Loading -> {
+                BitwardenLoadingContent(
+                    text = viewState.message(),
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
         }
@@ -181,18 +210,6 @@ private fun PlanDialogs(
                 onConfirmClick = handlers.onRetryClick,
                 onDismissClick = handlers.onDismissError,
                 onDismissRequest = handlers.onDismissError,
-            )
-        }
-
-        is PlanState.DialogState.GetPricingError -> {
-            BitwardenTwoButtonDialog(
-                title = dialogState.title(),
-                message = dialogState.message(),
-                confirmButtonText = stringResource(BitwardenString.try_again),
-                dismissButtonText = stringResource(BitwardenString.close),
-                onConfirmClick = handlers.onRetryPricingClick,
-                onDismissClick = handlers.onClosePricingErrorClick,
-                onDismissRequest = handlers.onClosePricingErrorClick,
             )
         }
 
@@ -250,18 +267,6 @@ private fun PlanDialogs(
             )
         }
 
-        is PlanState.DialogState.SubscriptionError -> {
-            BitwardenTwoButtonDialog(
-                title = dialogState.title(),
-                message = dialogState.message(),
-                confirmButtonText = stringResource(id = BitwardenString.try_again),
-                dismissButtonText = stringResource(id = BitwardenString.close),
-                onConfirmClick = handlers.onRetrySubscriptionClick,
-                onDismissClick = handlers.onBackClick,
-                onDismissRequest = handlers.onBackClick,
-            )
-        }
-
         PlanState.DialogState.LoadingPortal -> {
             BitwardenLoadingDialog(
                 text = stringResource(id = BitwardenString.loading_portal),
@@ -278,7 +283,7 @@ private fun PlanDialogs(
 
 @Composable
 private fun FreeCloudContent(
-    viewState: PlanState.ViewState.Free.Cloud,
+    viewState: PlanState.ViewState.Content.Free.Cloud,
     handlers: PlanHandlers,
     modifier: Modifier = Modifier,
 ) {
@@ -504,7 +509,7 @@ private fun PriceRow(
 
 @Composable
 private fun PremiumContent(
-    viewState: PlanState.ViewState.Premium,
+    viewState: PlanState.ViewState.Content.Premium,
     handlers: PlanHandlers,
     modifier: Modifier = Modifier,
 ) {
@@ -571,7 +576,7 @@ private fun PremiumContent(
 
 @Composable
 private fun SubscriptionCard(
-    viewState: PlanState.ViewState.Premium,
+    viewState: PlanState.ViewState.Content.Premium,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -607,7 +612,7 @@ private fun SubscriptionCard(
 
 @Composable
 private fun SubscriptionLineItems(
-    viewState: PlanState.ViewState.Premium,
+    viewState: PlanState.ViewState.Content.Premium,
 ) {
     val rowModifier = Modifier
         .fillMaxWidth()
@@ -827,7 +832,7 @@ private fun PlanScreenFreeCloudAccount_preview() {
     BitwardenTheme {
         BitwardenScaffold {
             FreeCloudContent(
-                viewState = PlanState.ViewState.Free.Cloud(
+                viewState = PlanState.ViewState.Content.Free.Cloud(
                     rate = "$1.67",
                     checkoutUrl = null,
                     isAwaitingPremiumStatus = false,
@@ -875,7 +880,7 @@ private fun PlanScreenPremiumAccount_preview() {
     BitwardenTheme {
         BitwardenScaffold {
             PremiumContent(
-                viewState = PlanState.ViewState.Premium(
+                viewState = PlanState.ViewState.Content.Premium(
                     status = PremiumSubscriptionStatus.ACTIVE,
                     billingAmountText = BitwardenString.billing_rate_per_year.asText("$19.80"),
                     storageCostText = "$24.00",
@@ -917,7 +922,7 @@ private fun PlanScreenPremiumAccountZeroState_preview() {
     BitwardenTheme {
         BitwardenScaffold {
             PremiumContent(
-                viewState = PlanState.ViewState.Premium(
+                viewState = PlanState.ViewState.Content.Premium(
                     status = PremiumSubscriptionStatus.ACTIVE,
                     billingAmountText = BitwardenString.billing_rate_per_year.asText("$19.80"),
                     storageCostText = null,
