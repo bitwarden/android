@@ -201,7 +201,6 @@ Skanningen sker automatiskt.</string>
     <string name="copy_totp_automatically">Kopiera TOTP automatiskt</string>
     <string name="premium_required">Ett premium-medlemskap krävs för att använda den här funktionen.</string>
     <string name="attachment_deleted">Bilaga borttagen</string>
-    <string name="attachments_unavailable">Attachments unavailable</string>
     <string name="attachments_are_a_premium_feature">Attachments are a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="choose_file">Välj fil</string>
     <string name="file">Fil</string>
@@ -1210,12 +1209,14 @@ Vill du byta till detta konto?</string>
     <string name="unarchiving">Avarkiverar</string>
     <string name="item_moved_to_archived">Objektet flyttat till arkivet</string>
     <string name="item_moved_to_vault">Objekt flyttat till valv</string>
-    <string name="archive_unavailable">Arkivet inte tillgängligt</string>
     <string name="archiving_items_is_a_premium_feature">Arkivering av objekt är en Premium-funktion. Din nuvarande plan inkluderar inte tillgång till denna funktion.</string>
     <string name="upgrade_to_premium">Uppgradera till premium</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
     <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="your_subscription_needs_attention">Your subscription needs attention</string>
+    <string name="check_your_plan_for_details">Check your plan for details.</string>
+    <string name="view_plan">View plan</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">Detta objekt är arkiverat.</string>
     <string name="introducing_archive">Introducerar arkiv</string>

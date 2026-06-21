@@ -201,7 +201,6 @@ El escaneo se realizará automáticamente.</string>
     <string name="copy_totp_automatically">Copiar TOTP automáticamente</string>
     <string name="premium_required">Se quiere membrasía Premium para poder utilizar esta característica.</string>
     <string name="attachment_deleted">Adjunto eliminado</string>
-    <string name="attachments_unavailable">Los archivos adjuntos no están disponibles</string>
     <string name="attachments_are_a_premium_feature">Los archivos adjuntos son una funcionalidad Premium. Tu plan actual no incluye acceso a esta función.</string>
     <string name="choose_file">Elegir archivo</string>
     <string name="file">Archivo</string>
@@ -1213,12 +1212,14 @@ cualquier problema.</string>
     <string name="unarchiving">Desarchivado</string>
     <string name="item_moved_to_archived">Item moved to archive</string>
     <string name="item_moved_to_vault">Elemento trasladado a la caja fuerte</string>
-    <string name="archive_unavailable">Archivar no disponible</string>
     <string name="archiving_items_is_a_premium_feature">El archivado de elementos es una funcionalidad Premium. Tu plan actual no incluye acceso a esta función.</string>
     <string name="upgrade_to_premium">Mejorar a premium</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Para administrar tu suscripción Premium, tendrás que iniciar sesión en tu caja fuerte web en un ordenador.</string>
     <string name="unlock_advanced_security_features">Desbloquea características de seguridad avanzadas</string>
+    <string name="your_subscription_needs_attention">Your subscription needs attention</string>
+    <string name="check_your_plan_for_details">Check your plan for details.</string>
+    <string name="view_plan">View plan</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Una suscripción Premium te ofrece más herramientas para mantenerte seguro y en control</string>
     <string name="this_item_is_archived">Este elemento está archivado.</string>
     <string name="introducing_archive">Introducción al archivo</string>

@@ -201,7 +201,6 @@ Das Scannen erfolgt automatisch.</string>
     <string name="copy_totp_automatically">TOTP automatisch kopieren</string>
     <string name="premium_required">Für diese Funktion benötigst du eine Premiummitgliedschaft.</string>
     <string name="attachment_deleted">Anhang entfernt</string>
-    <string name="attachments_unavailable">Anhänge sind nicht verfügbar</string>
     <string name="attachments_are_a_premium_feature">Anhänge sind eine Premium-Funktion. Dein aktueller Tarif enthält keinen Zugriff auf diese Funktion.</string>
     <string name="choose_file">Datei auswählen</string>
     <string name="file">Datei</string>
@@ -1209,12 +1208,14 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="unarchiving">Wird aus dem Archiv entfernt</string>
     <string name="item_moved_to_archived">Eintrag in das Archiv verschoben</string>
     <string name="item_moved_to_vault">Eintrag in Tresor verschoben</string>
-    <string name="archive_unavailable">Archiv nicht verfügbar</string>
     <string name="archiving_items_is_a_premium_feature">Das Archivieren von Einträgen ist eine Premium-Funktion. Dein aktueller Tarif umfasst keinen Zugriff auf diese Funktion.</string>
     <string name="upgrade_to_premium">Auf Premium upgraden</string>
     <string name="plan">Tarif</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Um dein Premium-Abonnement zu verwalten, musst du dich bei deinem Web-Tresor auf einem Computer anmelden.</string>
     <string name="unlock_advanced_security_features">Erweiterte Sicherheitsfunktionen freischalten</string>
+    <string name="your_subscription_needs_attention">Dein Abonnement benötigt Aufmerksamkeit</string>
+    <string name="check_your_plan_for_details">Überprüfe deinen Tarif für Details.</string>
+    <string name="view_plan">Tarif anzeigen</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Mit einem Premium-Tarif stehen dir mehr Werkzeuge zur Verfügung, um sicher zu bleiben und die Kontrolle zu behalten.</string>
     <string name="this_item_is_archived">Dieser Eintrag ist archiviert.</string>
     <string name="introducing_archive">Einführung des Archivs</string>

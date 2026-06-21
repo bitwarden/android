@@ -201,7 +201,6 @@
     <string name="copy_totp_automatically">Автоматично копиране на TOTP</string>
     <string name="premium_required">За да се възползвате от тази възможност, трябва да ползвате платен абонамент.</string>
     <string name="attachment_deleted">Файлът е махнат</string>
-    <string name="attachments_unavailable">Прикачването на файлове не е налично</string>
     <string name="attachments_are_a_premium_feature">Прикачването на файлове е платена функционалност. Текущият Ви план не включва достъп до нея.</string>
     <string name="choose_file">Изберете файл</string>
     <string name="file">Файл</string>
@@ -1212,12 +1211,14 @@
     <string name="unarchiving">Изваждане от архива</string>
     <string name="item_moved_to_archived">Елементът е преместен в архива</string>
     <string name="item_moved_to_vault">Елементът е преместен в трезора</string>
-    <string name="archive_unavailable">Архивирането не е налично</string>
     <string name="archiving_items_is_a_premium_feature">Архивирането на елементи е платена функционалност. Текущият Ви план не включва достъп до нея.</string>
     <string name="upgrade_to_premium">Надградете до Платения план</string>
     <string name="plan">План</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">За да управлявате своя платен абонамент, ще трябва да се впишете в трезора си чрез уеб браузър на компютър.</string>
     <string name="unlock_advanced_security_features">Отключване на разширените функционалности по сигурността</string>
+    <string name="your_subscription_needs_attention">Your subscription needs attention</string>
+    <string name="check_your_plan_for_details">Check your plan for details.</string>
+    <string name="view_plan">View plan</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Платеният план предоставя повече инструменти за защита и управление.</string>
     <string name="this_item_is_archived">Този елемент е архивиран.</string>
     <string name="introducing_archive">Представяме архива</string>
