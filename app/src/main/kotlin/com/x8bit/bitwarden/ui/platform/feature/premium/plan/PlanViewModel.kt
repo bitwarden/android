@@ -36,8 +36,10 @@ import com.x8bit.bitwarden.ui.platform.feature.premium.plan.util.toDiscountMoney
 import com.x8bit.bitwarden.ui.platform.feature.premium.plan.util.toPresentMoneyText
 import com.x8bit.bitwarden.ui.platform.feature.premium.plan.util.toRequiredMoneyText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -86,80 +88,85 @@ class PlanViewModel @Inject constructor(
             premiumStateManager.subscriptionStatusStateFlow.value.isPremiumViewEligible()
         val isSelfHosted = premiumStateManager.isSelfHosted
         PlanState(
+            isSelfHosted = isSelfHosted,
+            showsPremiumView = showsPremiumView,
             planMode = planMode,
             viewState = when {
-                showsPremiumView -> PlanState.ViewState.Premium()
-                isSelfHosted -> PlanState.ViewState.Free.SelfHosted
-                else -> PlanState.ViewState.Free.Cloud(
-                    rate = PLACEHOLDER_TEXT,
-                    checkoutUrl = null,
-                    isAwaitingPremiumStatus = false,
-                    isPremiumUpgradePending = premiumStateManager
-                        .upgradeLifecycleStateFlow
-                        .value is UpgradeLifecycleState.UpgradePending,
-                )
+                showsPremiumView -> {
+                    // We are loading the premium data.
+                    PlanState.ViewState.Loading(
+                        message = BitwardenString.loading_subscription.asText(),
+                    )
+                }
+
+                isSelfHosted -> {
+                    // Nothing to load, we are good to go.
+                    PlanState.ViewState.Content.Free.SelfHosted
+                }
+
+                else -> {
+                    // We are loading the plan details.
+                    PlanState.ViewState.Loading(
+                        message = BitwardenString.loading.asText(),
+                    )
+                }
             },
             dialogState = null,
         )
     },
 ) {
 
-    private val currencyFormatter: NumberFormat =
-        NumberFormat.getCurrencyInstance(Locale.US)
+    private val currencyFormatter: NumberFormat = NumberFormat.getCurrencyInstance(Locale.US)
 
     init {
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
             .launchIn(viewModelScope)
 
-        authRepository
-            .userStateFlow
-            .map { PlanAction.Internal.UserStateUpdateReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        specialCircumstanceManager
-            .specialCircumstanceStateFlow
-            .map { PlanAction.Internal.SpecialCircumstanceReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        premiumStateManager
-            .subscriptionStatusStateFlow
-            .map { PlanAction.Internal.SubscriptionStatusUpdateReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        premiumStateManager
-            .upgradeLifecycleStateFlow
-            .map { PlanAction.Internal.UpgradeLifecycleStateReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        onFreeCloudContent {
-            viewModelScope.launch {
-                sendAction(
-                    PlanAction.Internal.PricingResultReceive(
-                        result = billingRepository.getPremiumPlanPricing(),
-                    ),
-                )
+        merge(
+            authRepository.userStateFlow.map { PlanAction.Internal.UserStateUpdateReceive(it) },
+            specialCircumstanceManager
+                .specialCircumstanceStateFlow
+                .map { PlanAction.Internal.SpecialCircumstanceReceive(it) },
+            premiumStateManager
+                .subscriptionStatusStateFlow
+                .map { PlanAction.Internal.SubscriptionStatusUpdateReceive(it) },
+            premiumStateManager
+                .upgradeLifecycleStateFlow
+                .map { PlanAction.Internal.UpgradeLifecycleStateReceive(it) },
+        )
+            .onEach {
+                // Wait until we are in the Content state so we can update everything appropriately
+                mutableStateFlow.first { it.viewState is PlanState.ViewState.Content }
             }
-        }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
 
-        onPremiumContent {
-            mutableStateFlow.update {
-                it.copy(
-                    dialogState = PlanState.DialogState.Loading(
-                        message = BitwardenString.loading_subscription.asText(),
-                    ),
-                )
+        when {
+            state.showsPremiumView -> {
+                // We are loading the premium data.
+                viewModelScope.launch {
+                    sendAction(
+                        PlanAction.Internal.SubscriptionResultReceive(
+                            result = billingRepository.getSubscription(),
+                        ),
+                    )
+                }
             }
-            viewModelScope.launch {
-                sendAction(
-                    PlanAction.Internal.SubscriptionResultReceive(
-                        result = billingRepository.getSubscription(),
-                    ),
-                )
+
+            state.isSelfHosted -> {
+                // Nothing to load, we are good to go.
+            }
+
+            else -> {
+                // We are loading the plan details.
+                viewModelScope.launch {
+                    sendAction(
+                        PlanAction.Internal.PricingResultReceive(
+                            result = billingRepository.getPremiumPlanPricing(),
+                        ),
+                    )
+                }
             }
         }
     }
@@ -384,7 +391,7 @@ class PlanViewModel @Inject constructor(
     private fun handleRetrySubscriptionClick() {
         mutableStateFlow.update {
             it.copy(
-                dialogState = PlanState.DialogState.Loading(
+                viewState = PlanState.ViewState.Loading(
                     message = BitwardenString.loading_subscription.asText(),
                 ),
             )
@@ -415,15 +422,7 @@ class PlanViewModel @Inject constructor(
             SubscriptionResult.NotFound -> {
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = PlanState.ViewState.Free.Cloud(
-                            rate = PLACEHOLDER_TEXT,
-                            checkoutUrl = null,
-                            isAwaitingPremiumStatus = false,
-                            isPremiumUpgradePending = premiumStateManager
-                                .upgradeLifecycleStateFlow
-                                .value is UpgradeLifecycleState.UpgradePending,
-                        ),
-                        dialogState = PlanState.DialogState.Loading(
+                        viewState = PlanState.ViewState.Loading(
                             message = BitwardenString.loading.asText(),
                         ),
                     )
@@ -440,11 +439,9 @@ class PlanViewModel @Inject constructor(
             is SubscriptionResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
-                        dialogState = PlanState.DialogState.SubscriptionError(
-                            title = BitwardenString.subscription_error.asText(),
-                            message = BitwardenString
-                                .trouble_loading_subscription
-                                .asText(),
+                        viewState = PlanState.ViewState.Error(
+                            message = BitwardenString.trouble_loading_subscription.asText(),
+                            type = PlanState.ViewState.Error.Type.SUBSCRIPTION,
                         ),
                     )
                 }
@@ -471,15 +468,13 @@ class PlanViewModel @Inject constructor(
     private fun handleSubscriptionStatusUpdateReceive(
         action: PlanAction.Internal.SubscriptionStatusUpdateReceive,
     ) {
-        val status = (action.state as? SubscriptionStatusState.Available)?.status
-            ?: return
+        val status = (action.state as? SubscriptionStatusState.Available)?.status ?: return
         if (!status.isPremiumViewEligible()) return
         onFreeCloudContent { freeState ->
             if (freeState.isAwaitingPremiumStatus) return@onFreeCloudContent
             mutableStateFlow.update {
                 it.copy(
-                    viewState = PlanState.ViewState.Premium(),
-                    dialogState = PlanState.DialogState.Loading(
+                    viewState = PlanState.ViewState.Loading(
                         message = BitwardenString.loading_subscription.asText(),
                     ),
                 )
@@ -501,10 +496,15 @@ class PlanViewModel @Inject constructor(
     private fun handleUserStateUpdateReceive(
         action: PlanAction.Internal.UserStateUpdateReceive,
     ) {
+        val isPremium = action.userState?.activeAccount?.isPremium == true
+        mutableStateFlow.update {
+            it.copy(
+                showsPremiumView = isPremium ||
+                    premiumStateManager.subscriptionStatusStateFlow.value.isPremiumViewEligible(),
+            )
+        }
         onFreeCloudContent { freeState ->
             if (!freeState.isAwaitingPremiumStatus) return@onFreeCloudContent
-
-            val isPremium = action.userState?.activeAccount?.isPremium == true
             if (isPremium) {
                 onPremiumUpgradeSuccess()
             }
@@ -528,7 +528,7 @@ class PlanViewModel @Inject constructor(
         specialCircumstanceManager.specialCircumstance = null
         mutableStateFlow.update {
             it.copy(
-                dialogState = PlanState.DialogState.Loading(
+                viewState = PlanState.ViewState.Loading(
                     message = BitwardenString.loading_subscription.asText(),
                 ),
             )
@@ -622,8 +622,7 @@ class PlanViewModel @Inject constructor(
         onFreeCloudContent {
             mutableStateFlow.update {
                 it.copy(
-                    viewState = PlanState.ViewState.Premium(),
-                    dialogState = PlanState.DialogState.Loading(
+                    viewState = PlanState.ViewState.Loading(
                         message = BitwardenString.loading_subscription.asText(),
                     ),
                 )
@@ -647,17 +646,16 @@ class PlanViewModel @Inject constructor(
     ) {
         when (val result = action.result) {
             is PremiumPlanPricingResult.Success -> {
-                val formattedRate = currencyFormatter
-                    .format(result.annualPrice / MONTHS_PER_YEAR)
-                mutableStateFlow.update { currentState ->
-                    val updatedViewState = when (val vs = currentState.viewState) {
-                        is PlanState.ViewState.Free.Cloud -> vs.copy(rate = formattedRate)
-                        is PlanState.ViewState.Free.SelfHosted,
-                        is PlanState.ViewState.Premium,
-                            -> vs
-                    }
-                    currentState.copy(
-                        viewState = updatedViewState,
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = PlanState.ViewState.Content.Free.Cloud(
+                            rate = currencyFormatter.format(result.annualPrice / MONTHS_PER_YEAR),
+                            checkoutUrl = null,
+                            isAwaitingPremiumStatus = false,
+                            isPremiumUpgradePending = premiumStateManager
+                                .upgradeLifecycleStateFlow
+                                .value is UpgradeLifecycleState.UpgradePending,
+                        ),
                         dialogState = null,
                     )
                 }
@@ -666,10 +664,10 @@ class PlanViewModel @Inject constructor(
             is PremiumPlanPricingResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
-                        dialogState = PlanState.DialogState.GetPricingError(
-                            title = BitwardenString.pricing_unavailable.asText(),
+                        viewState = PlanState.ViewState.Error(
                             message = result.errorMessage?.asText()
-                                ?: BitwardenString.generic_error_message.asText(),
+                                ?: BitwardenString.pricing_unavailable.asText(),
+                            type = PlanState.ViewState.Error.Type.PRICING_UNAVAILABLE,
                         ),
                     )
                 }
@@ -680,7 +678,7 @@ class PlanViewModel @Inject constructor(
     private fun handleRetryPricingClick() {
         mutableStateFlow.update {
             it.copy(
-                dialogState = PlanState.DialogState.Loading(
+                viewState = PlanState.ViewState.Loading(
                     message = BitwardenString.loading.asText(),
                 ),
             )
@@ -695,25 +693,25 @@ class PlanViewModel @Inject constructor(
     }
 
     private inline fun onFreeCloudContent(
-        block: (PlanState.ViewState.Free.Cloud) -> Unit,
+        block: (PlanState.ViewState.Content.Free.Cloud) -> Unit,
     ) {
-        (state.viewState as? PlanState.ViewState.Free.Cloud)?.let(block)
+        (state.viewState as? PlanState.ViewState.Content.Free.Cloud)?.let(block)
     }
 
     private inline fun onPremiumContent(
-        block: (PlanState.ViewState.Premium) -> Unit,
+        block: (PlanState.ViewState.Content.Premium) -> Unit,
     ) {
-        (state.viewState as? PlanState.ViewState.Premium)?.let(block)
+        (state.viewState as? PlanState.ViewState.Content.Premium)?.let(block)
     }
 
-    private fun SubscriptionInfo.toPremiumViewState(): PlanState.ViewState.Premium {
+    private fun SubscriptionInfo.toPremiumViewState(): PlanState.ViewState.Content.Premium {
         val formattedTotal = currencyFormatter.format(nextChargeTotal)
         val formattedDate = nextCharge?.toLocalizedDate()
         val formattedCancelAt = cancelAt?.toLocalizedDate()
         val formattedCanceled = canceledDate?.toLocalizedDate()
         val formattedSuspension = suspensionDate?.toLocalizedDate()
 
-        return PlanState.ViewState.Premium(
+        return PlanState.ViewState.Content.Premium(
             status = status,
             billingAmountText = seatsCost.toBillingAmountText(cadence, currencyFormatter),
             storageCostText = storageCost.toPresentMoneyText(currencyFormatter),
@@ -760,6 +758,8 @@ data class PlanState(
     val planMode: PlanMode,
     val viewState: ViewState,
     val dialogState: DialogState?,
+    val showsPremiumView: Boolean,
+    val isSelfHosted: Boolean,
 ) : Parcelable {
 
     /**
@@ -787,10 +787,7 @@ data class PlanState(
      */
     @get:StringRes
     val title: Int
-        get() = when (viewState) {
-            is ViewState.Free -> BitwardenString.upgrade_to_premium
-            is ViewState.Premium -> BitwardenString.plan
-        }
+        get() = if (showsPremiumView) BitwardenString.plan else BitwardenString.upgrade_to_premium
 
     /**
      * Models the content state of the plan screen.
@@ -798,65 +795,93 @@ data class PlanState(
     sealed class ViewState : Parcelable {
 
         /**
-         * Free user view — shows the upgrade flow for cloud accounts or a
-         * "manage on web vault" info card for self-hosted accounts.
+         * Displays a loading state.
          */
-        sealed class Free : ViewState() {
+        @Parcelize
+        data class Loading(val message: Text) : ViewState()
 
+        /**
+         * Displays an error state.
+         */
+        @Parcelize
+        data class Error(
+            val message: Text,
+            val type: Type,
+        ) : ViewState() {
             /**
-             * Free user on a cloud-hosted environment — shows upgrade pricing
-             * and feature list.
+             * The specific type of error this represents.
              */
-            @Parcelize
-            data class Cloud(
-                val rate: String,
-                val checkoutUrl: String?,
-                val isAwaitingPremiumStatus: Boolean,
-                val isPremiumUpgradePending: Boolean,
-            ) : Free()
-
-            /**
-             * Free user on a self-hosted environment — Stripe checkout is
-             * unavailable, so the screen redirects the user to manage their
-             * subscription on the web vault.
-             */
-            @Parcelize
-            data object SelfHosted : Free()
+            enum class Type {
+                PRICING_UNAVAILABLE,
+                SUBSCRIPTION,
+            }
         }
 
         /**
-         * Premium user view — shows subscription details and management options.
-         *
-         * Line-item text fields follow two visibility contracts that mirror the
-         * canonical Web subscription card:
-         *
-         * - **Required** ([billingAmountText], [estimatedTaxText], [totalText]):
-         *   the row is always rendered. A zero amount is formatted as `$0.00`
-         *   rather than hidden. Defaults are sensible empty values used only
-         *   during the initial load — the `DialogState.Loading` overlay covers
-         *   the screen during the fetch, so these defaults are never surfaced
-         *   to the user.
-         * - **Optional** ([storageCostText], [discountAmountText]): a `null`
-         *   value signals the screen to omit the row entirely (along with its
-         *   leading divider). When non-null, the value is fully formatted by
-         *   the view model — the screen renders it verbatim.
+         * Displays a plan content.
          */
-        @Parcelize
-        data class Premium(
-            val status: PremiumSubscriptionStatus? = null,
-            val billingAmountText: Text = "".asText(),
-            val storageCostText: String? = null,
-            val discountAmountText: String? = null,
-            val estimatedTaxText: String = "$0.00",
-            val totalText: Text = "".asText(),
-            val nextChargeTotalText: String? = null,
-            val nextChargeDateText: String? = null,
-            val cancelAtDateText: String? = null,
-            val canceledDateText: String? = null,
-            val suspensionDateText: String? = null,
-            val gracePeriodDays: Int? = null,
-            val showCancelButton: Boolean = false,
-        ) : ViewState()
+        sealed class Content : ViewState() {
+            /**
+             * Free user view — shows the upgrade flow for cloud accounts or a
+             * "manage on web vault" info card for self-hosted accounts.
+             */
+            sealed class Free : Content() {
+
+                /**
+                 * Free user on a cloud-hosted environment — shows upgrade pricing
+                 * and feature list.
+                 */
+                @Parcelize
+                data class Cloud(
+                    val rate: String,
+                    val checkoutUrl: String?,
+                    val isAwaitingPremiumStatus: Boolean,
+                    val isPremiumUpgradePending: Boolean,
+                ) : Free()
+
+                /**
+                 * Free user on a self-hosted environment — Stripe checkout is
+                 * unavailable, so the screen redirects the user to manage their
+                 * subscription on the web vault.
+                 */
+                @Parcelize
+                data object SelfHosted : Free()
+            }
+
+            /**
+             * Premium user view — shows subscription details and management options.
+             *
+             * Line-item text fields follow two visibility contracts that mirror the
+             * canonical Web subscription card:
+             *
+             * - **Required** ([billingAmountText], [estimatedTaxText], [totalText]):
+             *   the row is always rendered. A zero amount is formatted as `$0.00`
+             *   rather than hidden. Defaults are sensible empty values used only
+             *   during the initial load — the `DialogState.Loading` overlay covers
+             *   the screen during the fetch, so these defaults are never surfaced
+             *   to the user.
+             * - **Optional** ([storageCostText], [discountAmountText]): a `null`
+             *   value signals the screen to omit the row entirely (along with its
+             *   leading divider). When non-null, the value is fully formatted by
+             *   the view model — the screen renders it verbatim.
+             */
+            @Parcelize
+            data class Premium(
+                val status: PremiumSubscriptionStatus? = null,
+                val billingAmountText: Text = "".asText(),
+                val storageCostText: String? = null,
+                val discountAmountText: String? = null,
+                val estimatedTaxText: String = "$0.00",
+                val totalText: Text = "".asText(),
+                val nextChargeTotalText: String? = null,
+                val nextChargeDateText: String? = null,
+                val cancelAtDateText: String? = null,
+                val canceledDateText: String? = null,
+                val suspensionDateText: String? = null,
+                val gracePeriodDays: Int? = null,
+                val showCancelButton: Boolean = false,
+            ) : Content()
+        }
     }
 
     /**
@@ -877,15 +902,6 @@ data class PlanState(
          */
         @Parcelize
         data object CheckoutError : DialogState()
-
-        /**
-         * Error dialog shown when pricing information cannot be retrieved.
-         */
-        @Parcelize
-        data class GetPricingError(
-            val title: Text,
-            val message: Text,
-        ) : DialogState()
 
         /**
          * Waiting dialog shown when the user returns from checkout without
@@ -920,15 +936,6 @@ data class PlanState(
          */
         @Parcelize
         data object PortalError : DialogState()
-
-        /**
-         * Error dialog shown when subscription details cannot be loaded.
-         */
-        @Parcelize
-        data class SubscriptionError(
-            val title: Text,
-            val message: Text,
-        ) : DialogState()
     }
 }
 
