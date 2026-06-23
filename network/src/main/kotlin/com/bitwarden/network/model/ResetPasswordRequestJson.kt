@@ -6,22 +6,44 @@ import kotlinx.serialization.Serializable
 /**
  * Request body for resetting the password.
  *
- * @param currentPasswordHash The hash of the user's current password.
- * @param newPasswordHash The hash of the user's new password.
- * @param passwordHint The hint for the master password (nullable).
- * @param key The user key for the request (encrypted).
+ * @property currentPasswordHash The hash of the user's current password.
+ * @property passwordHint The hint for the master password (nullable).
+ * @property authenticationData The data to authenticate with a master password.
+ * @property unlockData The data to unlock with a master password.
  */
 @Serializable
 data class ResetPasswordRequestJson(
     @SerialName("masterPasswordHash")
     val currentPasswordHash: String?,
 
-    @SerialName("newMasterPasswordHash")
-    val newPasswordHash: String,
-
     @SerialName("masterPasswordHint")
     val passwordHint: String?,
 
-    @SerialName("key")
-    val key: String,
-)
+    @SerialName("authenticationData")
+    val authenticationData: MasterPasswordAuthenticationDataJson,
+
+    @SerialName("unlockData")
+    val unlockData: MasterPasswordUnlockDataJson,
+) {
+    constructor(
+        currentPasswordHash: String?,
+        passwordHint: String?,
+        kdf: KdfJson,
+        salt: String,
+        masterPasswordAuthenticationHash: String,
+        masterKeyWrappedUserKey: String,
+    ) : this(
+        currentPasswordHash = currentPasswordHash,
+        passwordHint = passwordHint,
+        authenticationData = MasterPasswordAuthenticationDataJson(
+            kdf = kdf,
+            salt = salt,
+            masterPasswordAuthenticationHash = masterPasswordAuthenticationHash,
+        ),
+        unlockData = MasterPasswordUnlockDataJson(
+            kdf = kdf,
+            salt = salt,
+            masterKeyWrappedUserKey = masterKeyWrappedUserKey,
+        ),
+    )
+}

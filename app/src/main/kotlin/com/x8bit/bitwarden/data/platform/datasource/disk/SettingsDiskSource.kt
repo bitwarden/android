@@ -41,6 +41,17 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     var initialAutofillDialogShown: Boolean?
 
     /**
+     * Indicates if the accessibility disclaimer has been displayed to the user.
+     */
+    var hasShownAccessibilityDisclaimer: Boolean?
+
+    /**
+     * Emits up-to-date values indicating if the accessibility disclaimer has been displayed to
+     * the user.
+     */
+    val hasShownAccessibilityDisclaimerFlow: Flow<Boolean?>
+
+    /**
      * The currently persisted app theme (or `null` if not set).
      */
     var appTheme: AppTheme
@@ -181,6 +192,25 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
      * Emits updates that track [getUpgradedToPremiumCardPending] for the given [userId].
      */
     fun getUpgradedToPremiumCardPendingFlow(userId: String): Flow<Boolean?>
+
+    /**
+     * Retrieves the stored value of whether a Premium upgrade is awaiting server confirmation
+     * for the given [userId].
+     */
+    fun getPremiumUpgradePending(userId: String): Boolean?
+
+    /**
+     * Stores whether a Premium upgrade is awaiting server confirmation for the given [userId].
+     */
+    fun storePremiumUpgradePending(
+        userId: String,
+        isPending: Boolean?,
+    )
+
+    /**
+     * Emits updates that track [getPremiumUpgradePending] for the given [userId].
+     */
+    fun getPremiumUpgradePendingFlow(userId: String): Flow<Boolean?>
 
     /**
      * Retrieves the biometric integrity validity for the given [userId] and

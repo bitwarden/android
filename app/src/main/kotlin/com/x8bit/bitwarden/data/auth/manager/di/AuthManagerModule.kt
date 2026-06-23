@@ -90,14 +90,12 @@ object AuthManagerModule {
         authSdkSource: AuthSdkSource,
         vaultSdkSource: VaultSdkSource,
         featureFlagManager: FeatureFlagManager,
-        dispatcherManager: DispatcherManager,
     ): KeyConnectorManager =
         KeyConnectorManagerImpl(
             accountsService = accountsService,
             authSdkSource = authSdkSource,
             vaultSdkSource = vaultSdkSource,
             featureFlagManager = featureFlagManager,
-            dispatcherManager = dispatcherManager,
         )
 
     @Provides

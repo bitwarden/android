@@ -31,7 +31,6 @@ import com.x8bit.bitwarden.data.billing.util.getPremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.credentials.manager.CredentialProviderRequestManager
 import com.x8bit.bitwarden.data.credentials.manager.model.CredentialProviderRequest
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
-import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
@@ -42,6 +41,7 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.isAddTotpLoginItemFromAuthenticator
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavViewModel
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import com.x8bit.bitwarden.ui.platform.util.isAccountSecurityShortcut
@@ -55,7 +55,6 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -79,7 +78,6 @@ private const val ANIMATION_DEBOUNCE_DELAY_MS = 500L
 class MainViewModel @Inject constructor(
     accessibilitySelectionManager: AccessibilitySelectionManager,
     autofillSelectionManager: AutofillSelectionManager,
-    cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
     private val addTotpItemFromAuthenticatorManager: AddTotpItemFromAuthenticatorManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val garbageCollectionManager: GarbageCollectionManager,
@@ -168,13 +166,6 @@ class MainViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        cookieAcquisitionRequestManager
-            .cookieAcquisitionRequestFlow
-            .filterNotNull()
-            .map { MainAction.Internal.CookieAcquisitionReady }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
         // On app launch, mark all active users as having previously logged in.
         // This covers any users who are active prior to this value being recorded.
         viewModelScope.launch {
@@ -201,6 +192,7 @@ class MainViewModel @Inject constructor(
             is MainAction.WebAuthnResult -> handleWebAuthnResult(action)
             is MainAction.CookieAcquisitionResult -> handleCookieAcquisitionResult(action)
             is MainAction.PremiumCheckoutResult -> handlePremiumCheckoutResult(action)
+            is MainAction.StripePortalResult -> handleStripePortalResult()
             is MainAction.Internal -> handleInternalAction(action)
         }
     }
@@ -222,7 +214,6 @@ class MainViewModel @Inject constructor(
             is MainAction.Internal.ScreenCaptureUpdate -> handleScreenCaptureUpdate(action)
             is MainAction.Internal.ThemeUpdate -> handleAppThemeUpdated(action)
             is MainAction.Internal.DynamicColorsUpdate -> handleDynamicColorsUpdate(action)
-            is MainAction.Internal.CookieAcquisitionReady -> handleCookieAcquisitionReady()
             is MainAction.Internal.ResizeHasBeenRequested -> handleResizeHasBeenRequested()
         }
     }
@@ -255,6 +246,10 @@ class MainViewModel @Inject constructor(
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.PremiumCheckout(
             callbackResult = action.authResult.getPremiumCheckoutCallbackResult(),
         )
+    }
+
+    private fun handleStripePortalResult() {
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.StripePortal
     }
 
     private fun handleAppResumeDataUpdated(action: MainAction.ResumeScreenDataReceived) {
@@ -298,10 +293,6 @@ class MainViewModel @Inject constructor(
 
     private fun handleDynamicColorsUpdate(action: MainAction.Internal.DynamicColorsUpdate) {
         mutableStateFlow.update { it.copy(isDynamicColorsEnabled = action.isDynamicColorsEnabled) }
-    }
-
-    private fun handleCookieAcquisitionReady() {
-        sendEvent(MainEvent.NavigateToCookieAcquisition)
     }
 
     private fun handleResizeHasBeenRequested() {
@@ -580,6 +571,14 @@ sealed class MainAction {
     ) : MainAction()
 
     /**
+     * Receive the result from the Stripe customer portal flow. The AuthTab does not return a
+     * payload — closing the tab is the only signal that the user is back in the app.
+     */
+    data class StripePortalResult(
+        val authResult: AuthTabIntent.AuthResult,
+    ) : MainAction()
+
+    /**
      * Receive first Intent by the application.
      */
     data class ReceiveFirstIntent(val intent: Intent) : MainAction()
@@ -651,12 +650,6 @@ sealed class MainAction {
         ) : Internal()
 
         /**
-         * Indicates that the cookie acquisition conditions are met and navigation
-         * should proceed.
-         */
-        data object CookieAcquisitionReady : Internal()
-
-        /**
          * Indicates that resize has been requested on the Activity
          */
         data object ResizeHasBeenRequested : Internal()
@@ -688,11 +681,6 @@ sealed class MainEvent {
      * Navigate to the debug menu.
      */
     data object NavigateToDebugMenu : MainEvent()
-
-    /**
-     * Navigate to the cookie acquisition screen.
-     */
-    data object NavigateToCookieAcquisition : MainEvent()
 
     /**
      * Indicates that the app language has been updated.

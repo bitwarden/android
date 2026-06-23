@@ -13,14 +13,19 @@ import com.bitwarden.core.KeyConnectorResponse
 import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.core.RegisterTdeKeyResponse
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
+import com.bitwarden.policies.OrganizationUserPolicyContext
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import com.bitwarden.sdk.AuthClient
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toPasswordStrengthOrNull
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toUByte
 import com.x8bit.bitwarden.data.platform.datasource.sdk.BaseSdkSource
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
+import kotlinx.coroutines.withContext
 
 /**
  * Primary implementation of [AuthSdkSource] that serves as a convenience wrapper around a
@@ -28,6 +33,7 @@ import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
  */
 @Suppress("TooManyFunctions")
 class AuthSdkSourceImpl(
+    private val dispatcherManager: DispatcherManager,
     sdkClientManager: SdkClientManager,
 ) : BaseSdkSource(sdkClientManager = sdkClientManager),
     AuthSdkSource {
@@ -42,10 +48,8 @@ class AuthSdkSourceImpl(
         masterPasswordHint: String?,
         shouldResetPasswordEnroll: Boolean,
     ): Result<JitMasterPasswordRegistrationResponse> = runCatchingWithLogs {
-        getClient(userId = userId)
-            .auth()
-            .registration()
-            .postKeysForJitPasswordRegistration(
+        withContext(context = dispatcherManager.io) {
+            getClient(userId = userId).auth().registration().postKeysForJitPasswordRegistration(
                 request = JitMasterPasswordRegistrationRequest(
                     orgId = organizationId,
                     orgPublicKey = organizationPublicKey,
@@ -57,6 +61,7 @@ class AuthSdkSourceImpl(
                     resetPasswordEnroll = shouldResetPasswordEnroll,
                 ),
             )
+        }
     }
 
     override suspend fun postKeysForKeyConnectorRegistration(
@@ -65,11 +70,13 @@ class AuthSdkSourceImpl(
         keyConnectorUrl: String,
         ssoOrganizationIdentifier: String,
     ): Result<KeyConnectorRegistrationResult> = runCatchingWithLogs {
-        useClient(userId = userId, accessToken = accessToken) {
-            auth().registration().postKeysForKeyConnectorRegistration(
-                keyConnectorUrl = keyConnectorUrl,
-                ssoOrgIdentifier = ssoOrganizationIdentifier,
-            )
+        withContext(context = dispatcherManager.io) {
+            useClient(userId = userId, accessToken = accessToken) {
+                auth().registration().postKeysForKeyConnectorRegistration(
+                    keyConnectorUrl = keyConnectorUrl,
+                    ssoOrgIdentifier = ssoOrganizationIdentifier,
+                )
+            }
         }
     }
 
@@ -80,10 +87,8 @@ class AuthSdkSourceImpl(
         deviceIdentifier: String,
         shouldTrustDevice: Boolean,
     ): Result<TdeRegistrationResponse> = runCatchingWithLogs {
-        getClient(userId = userId)
-            .auth()
-            .registration()
-            .postKeysForTdeRegistration(
+        withContext(context = dispatcherManager.io) {
+            getClient(userId = userId).auth().registration().postKeysForTdeRegistration(
                 request = TdeRegistrationRequest(
                     orgId = organizationId,
                     orgPublicKey = organizationPublicKey,
@@ -92,6 +97,7 @@ class AuthSdkSourceImpl(
                     trustDevice = shouldTrustDevice,
                 ),
             )
+        }
     }
 
     override suspend fun postKeysForUserPasswordRegistration(
@@ -101,23 +107,25 @@ class AuthSdkSourceImpl(
         masterPasswordHint: String?,
         emailVerificationToken: String,
     ): Result<UserMasterPasswordRegistrationResponse> = runCatchingWithLogs {
-        useClient {
-            auth().registration().postKeysForUserPasswordRegistration(
-                request = UserMasterPasswordRegistrationRequest(
-                    email = email,
-                    salt = salt,
-                    masterPassword = masterPassword,
-                    masterPasswordHint = masterPasswordHint,
-                    emailVerificationToken = emailVerificationToken,
-                    organizationUserId = null,
-                    orgInviteToken = null,
-                    orgSponsoredFreeFamilyPlanToken = null,
-                    acceptEmergencyAccessInviteToken = null,
-                    acceptEmergencyAccessId = null,
-                    providerInviteToken = null,
-                    providerUserId = null,
-                ),
-            )
+        withContext(context = dispatcherManager.io) {
+            useClient {
+                auth().registration().postKeysForUserPasswordRegistration(
+                    request = UserMasterPasswordRegistrationRequest(
+                        email = email,
+                        salt = salt,
+                        masterPassword = masterPassword,
+                        masterPasswordHint = masterPasswordHint,
+                        emailVerificationToken = emailVerificationToken,
+                        organizationUserId = null,
+                        orgInviteToken = null,
+                        orgSponsoredFreeFamilyPlanToken = null,
+                        acceptEmergencyAccessInviteToken = null,
+                        acceptEmergencyAccessId = null,
+                        providerInviteToken = null,
+                        providerUserId = null,
+                    ),
+                )
+            }
         }
     }
 
@@ -220,5 +228,17 @@ class AuthSdkSourceImpl(
                 policy = policy,
             )
         }
+    }
+
+    override fun filterPolicies(
+        policies: List<PolicyView>,
+        organizations: List<OrganizationUserPolicyContext>,
+        policyType: PolicyType,
+    ): Result<List<PolicyView>> = runCatchingWithLogs {
+        globalClient.policies().filterByType(
+            policies = policies,
+            organizationUserPolicyContexts = organizations,
+            policyType = policyType,
+        )
     }
 }

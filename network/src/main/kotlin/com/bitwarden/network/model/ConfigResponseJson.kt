@@ -62,6 +62,8 @@ data class ConfigResponseJson(
      * @param identityUrl The URL of the identity service in the environment.
      * @param notificationsUrl The URL of the notifications service in the environment.
      * @param ssoUrl The URL of the single sign-on (SSO) service in the environment.
+     * @param fillAssistRulesUrl The base URL of the fill-assist targeting rules, or null if
+     * the server does not provide fill-assist rules.
      */
     @Serializable
     data class EnvironmentJson(
@@ -82,6 +84,9 @@ data class ConfigResponseJson(
 
         @SerialName("sso")
         val ssoUrl: String?,
+
+        @SerialName("fillAssistRules")
+        val fillAssistRulesUrl: String?,
     )
 
     /**

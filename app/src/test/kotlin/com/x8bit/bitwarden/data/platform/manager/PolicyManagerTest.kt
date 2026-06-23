@@ -1,13 +1,20 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
+import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.network.model.OrganizationStatusType
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
+import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,80 +22,221 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
+@Suppress("LargeClass")
 class PolicyManagerTest {
     private val mutableUserStateFlow = MutableStateFlow<UserStateJson?>(null)
     private val mutablePolicyFlow = MutableStateFlow<List<SyncResponseJson.Policy>?>(null)
+    private val mutableOrganizationsFlow =
+        MutableStateFlow<List<SyncResponseJson.Profile.Organization>?>(null)
     private val authDiskSource: AuthDiskSource = mockk {
         every { userStateFlow } returns mutableUserStateFlow
         every { getPoliciesFlow(USER_ID) } returns mutablePolicyFlow
+        every { getOrganizationsFlow(USER_ID) } returns mutableOrganizationsFlow
+    }
+    private val authSdkSource: AuthSdkSource = mockk()
+    private val mutablePoliciesInAcceptedStateFlagFlow = MutableStateFlow(true)
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every {
+            getFeatureFlagFlow(key = FlagKey.PoliciesInAcceptedState)
+        } returns mutablePoliciesInAcceptedStateFlagFlow
+        every { getFeatureFlag(key = FlagKey.PoliciesInAcceptedState) } answers {
+            mutablePoliciesInAcceptedStateFlagFlow.value
+        }
     }
 
-    private lateinit var policyManager: PolicyManager
-
-    @BeforeEach
-    fun setUp() {
-        policyManager = PolicyManagerImpl(
-            authDiskSource = authDiskSource,
-        )
-    }
+    private val policyManager: PolicyManager = PolicyManagerImpl(
+        authDiskSource = authDiskSource,
+        authSdkSource = authSdkSource,
+        featureFlagManager = featureFlagManager,
+    )
 
     @Test
-    fun `currentUserPoliciesListFlow should emit changes to current user's policy data`() =
+    fun `getActivePoliciesFlow should emit changes to current user's policy data`() =
         runTest {
             val userStateJson = mockk<UserStateJson> {
                 every { activeUserId } returns USER_ID
             }
-            val organizationsOne = createMockOrganizationNetwork(
+            val organizations = createMockOrganizationNetwork(
                 number = 1,
                 isEnabled = true,
                 shouldUsePolicies = true,
             )
-            val organizationsTwo = createMockOrganizationNetwork(
-                number = 2,
-                isEnabled = true,
-                shouldUsePolicies = true,
-            )
-            val expectedPolicyOne = createMockPolicy(
+            val storedPolicyOne = createMockPolicy(
                 isEnabled = true,
                 number = 1,
-                organizationId = organizationsOne.id,
+                organizationId = organizations.id,
                 type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
             )
-            val expectedPolicyTwo = createMockPolicy(
+            val storedPolicyTwo = createMockPolicy(
                 isEnabled = true,
                 number = 2,
-                organizationId = organizationsTwo.id,
+                organizationId = organizations.id,
                 type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
+            )
+            val expectedPolicyOne = createMockPolicyView(
+                enabled = true,
+                number = 1,
+                organizationId = organizations.id,
+                type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
+            )
+            val expectedPolicyTwo = createMockPolicyView(
+                enabled = true,
+                number = 2,
+                organizationId = organizations.id,
+                type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
             )
             every {
-                authDiskSource.getOrganizations(USER_ID)
-            } returns listOf(organizationsOne) andThen listOf(organizationsTwo)
+                authSdkSource.filterPolicies(
+                    policies = any(),
+                    organizations = any(),
+                    policyType = any(),
+                )
+            } returnsMany listOf(
+                listOf(expectedPolicyOne).asSuccess(),
+                listOf(expectedPolicyTwo).asSuccess(),
+            )
 
             mutableUserStateFlow.value = userStateJson
-            mutablePolicyFlow.value = listOf(expectedPolicyOne)
+            mutableOrganizationsFlow.value = listOf(organizations)
+            mutablePolicyFlow.value = listOf(storedPolicyOne)
 
             policyManager
-                .getActivePoliciesFlow(type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT)
+                .getActivePoliciesFlow(type = PolicyType.MAXIMUM_VAULT_TIMEOUT)
                 .test {
                     assertEquals(listOf(expectedPolicyOne), awaitItem())
 
-                    mutablePolicyFlow.value = listOf(expectedPolicyTwo)
+                    mutablePolicyFlow.value = listOf(storedPolicyTwo)
 
                     assertEquals(listOf(expectedPolicyTwo), awaitItem())
                 }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getActivePoliciesFlow when feature flag is false should emit policies using legacy filtering`() =
+        runTest {
+            mutablePoliciesInAcceptedStateFlagFlow.value = false
+
+            val userStateJson = mockk<UserStateJson> {
+                every { activeUserId } returns USER_ID
+            }
+            val organizations = createMockOrganizationNetwork(
+                number = 1,
+                isEnabled = true,
+                shouldUsePolicies = true,
+            )
+            val storedPolicyOne = createMockPolicy(
+                isEnabled = true,
+                number = 1,
+                organizationId = organizations.id,
+                type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
+            )
+            val expectedPolicyOne = createMockPolicyView(
+                enabled = true,
+                number = 1,
+                organizationId = organizations.id,
+                type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
+            )
+            val storedPolicyTwo = createMockPolicy(
+                isEnabled = true,
+                number = 2,
+                organizationId = organizations.id,
+                type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
+            )
+            val expectedPolicyTwo = createMockPolicyView(
+                enabled = true,
+                number = 2,
+                organizationId = organizations.id,
+                type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
+            )
+
+            mutableUserStateFlow.value = userStateJson
+            mutableOrganizationsFlow.value = listOf(organizations)
+            mutablePolicyFlow.value = listOf(storedPolicyOne)
+
+            policyManager
+                .getActivePoliciesFlow(type = PolicyType.MAXIMUM_VAULT_TIMEOUT)
+                .test {
+                    assertEquals(listOf(expectedPolicyOne), awaitItem())
+
+                    mutablePolicyFlow.value = listOf(storedPolicyOne, storedPolicyTwo)
+                    assertEquals(listOf(expectedPolicyOne, expectedPolicyTwo), awaitItem())
+                }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getActivePoliciesFlow when feature flag is false should emit empty list when organization status is below ACCEPTED`() =
+        runTest {
+            mutablePoliciesInAcceptedStateFlagFlow.value = false
+
+            val userStateJson = mockk<UserStateJson> {
+                every { activeUserId } returns USER_ID
+            }
+            val organizations = createMockOrganizationNetwork(
+                number = 1,
+                isEnabled = true,
+                shouldUsePolicies = true,
+                status = OrganizationStatusType.INVITED,
+            )
+            val storedPolicy = createMockPolicy(
+                isEnabled = true,
+                number = 1,
+                organizationId = organizations.id,
+                type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
+            )
+
+            mutableUserStateFlow.value = userStateJson
+            mutableOrganizationsFlow.value = listOf(organizations)
+            mutablePolicyFlow.value = listOf(storedPolicy)
+
+            policyManager
+                .getActivePoliciesFlow(type = PolicyType.MAXIMUM_VAULT_TIMEOUT)
+                .test {
+                    assertEquals(emptyList<PolicyView>(), awaitItem())
+                }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getActivePoliciesFlow when feature flag is false should emit empty list when organization does not use policies`() =
+        runTest {
+            mutablePoliciesInAcceptedStateFlagFlow.value = false
+
+            val userStateJson = mockk<UserStateJson> {
+                every { activeUserId } returns USER_ID
+            }
+            val organizations = createMockOrganizationNetwork(
+                number = 1,
+                isEnabled = true,
+                shouldUsePolicies = false,
+            )
+            val storedPolicy = createMockPolicy(
+                isEnabled = true,
+                number = 1,
+                organizationId = organizations.id,
+                type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
+            )
+
+            mutableUserStateFlow.value = userStateJson
+            mutableOrganizationsFlow.value = listOf(organizations)
+            mutablePolicyFlow.value = listOf(storedPolicy)
+
+            policyManager
+                .getActivePoliciesFlow(type = PolicyType.MAXIMUM_VAULT_TIMEOUT)
+                .test {
+                    assertEquals(emptyList<PolicyView>(), awaitItem())
+                }
+        }
+
     @Test
     fun `getActivePolicies returns empty list if user id is null`() {
-        every {
-            authDiskSource.userState
-        } returns null
+        every { authDiskSource.userState } returns null
 
-        assertTrue(policyManager.getActivePolicies(type = PolicyTypeJson.MASTER_PASSWORD).isEmpty())
+        assertTrue(policyManager.getActivePolicies(type = PolicyType.MASTER_PASSWORD).isEmpty())
     }
 
     @Test
@@ -113,8 +261,15 @@ class PolicyManagerTest {
                 isEnabled = true,
             ),
         )
+        every {
+            authSdkSource.filterPolicies(
+                policies = any(),
+                organizations = any(),
+                policyType = any(),
+            )
+        } returns emptyList<PolicyView>().asSuccess()
 
-        assertTrue(policyManager.getActivePolicies(type = PolicyTypeJson.MASTER_PASSWORD).isEmpty())
+        assertTrue(policyManager.getActivePolicies(type = PolicyType.MASTER_PASSWORD).isEmpty())
     }
 
     @Test
@@ -139,8 +294,15 @@ class PolicyManagerTest {
                 isEnabled = true,
             ),
         )
+        every {
+            authSdkSource.filterPolicies(
+                policies = any(),
+                organizations = any(),
+                policyType = any(),
+            )
+        } returns emptyList<PolicyView>().asSuccess()
 
-        assertTrue(policyManager.getActivePolicies(type = PolicyTypeJson.MASTER_PASSWORD).isEmpty())
+        assertTrue(policyManager.getActivePolicies(type = PolicyType.MASTER_PASSWORD).isEmpty())
     }
 
     @Test
@@ -148,7 +310,8 @@ class PolicyManagerTest {
         val userState: UserStateJson = mockk {
             every { activeUserId } returns USER_ID
         }
-        val policy = createMockPolicy(organizationId = "mockId-3", isEnabled = true)
+        val storedPolicy = createMockPolicy(organizationId = "mockId-3", isEnabled = true)
+        val expectedPolicy = createMockPolicyView(organizationId = "mockId-3", enabled = true)
         every { authDiskSource.userState } returns userState
         every {
             authDiskSource.getOrganizations(USER_ID)
@@ -160,11 +323,14 @@ class PolicyManagerTest {
                 type = OrganizationType.USER,
             ),
         )
-        every { authDiskSource.getPolicies(USER_ID) } returns listOf(policy)
+        every { authDiskSource.getPolicies(USER_ID) } returns listOf(storedPolicy)
+        every {
+            authSdkSource.filterPolicies(any(), any(), any())
+        } returns listOf(expectedPolicy).asSuccess()
 
         assertEquals(
-            listOf(policy),
-            policyManager.getActivePolicies(type = PolicyTypeJson.MASTER_PASSWORD),
+            listOf(expectedPolicy),
+            policyManager.getActivePolicies(type = PolicyType.MASTER_PASSWORD),
         )
     }
 
@@ -192,8 +358,18 @@ class PolicyManagerTest {
                 type = PolicyTypeJson.PASSWORD_GENERATOR,
             ),
         )
+        every {
+            authSdkSource.filterPolicies(any(), any(), any())
+        } returns listOf(
+            createMockPolicyView(
+                organizationId = "mockId-3",
+                enabled = true,
+                type = PolicyType.PASSWORD_GENERATOR,
+            ),
+        )
+            .asSuccess()
 
-        assertTrue(policyManager.getActivePolicies(type = PolicyTypeJson.PASSWORD_GENERATOR).any())
+        assertTrue(policyManager.getActivePolicies(type = PolicyType.PASSWORD_GENERATOR).any())
     }
 
     @Test
@@ -220,25 +396,33 @@ class PolicyManagerTest {
                 type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
             ),
         )
+        every {
+            authSdkSource.filterPolicies(any(), any(), any())
+        } returns listOf(
+            createMockPolicyView(
+                organizationId = "mockId-3",
+                enabled = true,
+                type = PolicyType.RESTRICTED_ITEM_TYPES,
+            ),
+        )
+            .asSuccess()
 
-        assertTrue(policyManager.getActivePolicies(type = PolicyTypeJson.RESTRICT_ITEM_TYPES).any())
+        assertTrue(
+            policyManager.getActivePolicies(type = PolicyType.RESTRICTED_ITEM_TYPES).any(),
+        )
     }
 
     @Test
     fun `getUserPolicies returns empty list if policies is null`() {
-        every {
-            authDiskSource.userState
-        } returns null
-
-        every {
-            authDiskSource.getPolicies(USER_ID)
-        } returns null
+        every { authDiskSource.userState } returns null
+        every { authDiskSource.getPolicies(USER_ID) } returns null
+        every { authDiskSource.getOrganizations(USER_ID) } returns null
 
         assertEquals(
             emptyList<SyncResponseJson.Policy>(),
             policyManager.getUserPolicies(
                 userId = USER_ID,
-                type = PolicyTypeJson.PERSONAL_OWNERSHIP,
+                type = PolicyType.ORGANIZATION_DATA_OWNERSHIP,
             ),
         )
     }
@@ -260,22 +444,32 @@ class PolicyManagerTest {
             ),
         )
 
-        val listOfPolicies = listOf(
+        val storedListOfPolicies = listOf(
             createMockPolicy(
                 organizationId = "mockId-3",
                 isEnabled = true,
                 type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
             ),
         )
+        val expectedListOfPolicies = listOf(
+            createMockPolicyView(
+                organizationId = "mockId-3",
+                enabled = true,
+                type = PolicyType.DISABLE_PERSONAL_VAULT_EXPORT,
+            ),
+        )
         every {
             authDiskSource.getPolicies(USER_ID)
-        } returns listOfPolicies
+        } returns storedListOfPolicies
+        every {
+            authSdkSource.filterPolicies(any(), any(), any())
+        } returns expectedListOfPolicies.asSuccess()
 
         assertEquals(
-            listOfPolicies,
+            expectedListOfPolicies,
             policyManager.getUserPolicies(
                 userId = USER_ID,
-                type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
+                type = PolicyType.DISABLE_PERSONAL_VAULT_EXPORT,
             ),
         )
     }
@@ -324,6 +518,13 @@ class PolicyManagerTest {
                 type = PolicyTypeJson.PERSONAL_OWNERSHIP,
             ),
         )
+        every {
+            authSdkSource.filterPolicies(
+                policies = any(),
+                organizations = any(),
+                policyType = any(),
+            )
+        } returns emptyList<PolicyView>().asSuccess()
 
         assertNull(policyManager.getPersonalOwnershipPolicyOrganizationId())
     }
@@ -354,6 +555,15 @@ class PolicyManagerTest {
                 type = PolicyTypeJson.PERSONAL_OWNERSHIP,
             ),
         )
+        every {
+            authSdkSource.filterPolicies(any(), any(), any())
+        } returns listOf(
+            createMockPolicyView(
+                organizationId = expectedOrganizationId,
+                enabled = true,
+            ),
+        )
+            .asSuccess()
 
         assertEquals(
             expectedOrganizationId,
@@ -421,6 +631,29 @@ class PolicyManagerTest {
                 revisionDate = middleRevisionDate,
             ),
         )
+        every {
+            authSdkSource.filterPolicies(any(), any(), any())
+        } returns listOf(
+            createMockPolicyView(
+                number = 3,
+                organizationId = "mockId-3",
+                enabled = true,
+                revisionDate = latestRevisionDate,
+            ),
+            createMockPolicyView(
+                number = 1,
+                organizationId = expectedOrganizationId,
+                enabled = true,
+                revisionDate = earliestRevisionDate,
+            ),
+            createMockPolicyView(
+                number = 2,
+                organizationId = "mockId-2",
+                enabled = true,
+                revisionDate = middleRevisionDate,
+            ),
+        )
+            .asSuccess()
 
         assertEquals(
             expectedOrganizationId,
@@ -473,6 +706,17 @@ class PolicyManagerTest {
                 revisionDate = laterRevisionDate,
             ),
         )
+        every {
+            authSdkSource.filterPolicies(any(), any(), any())
+        } returns listOf(
+            createMockPolicyView(
+                number = 2,
+                organizationId = expectedOrganizationId,
+                enabled = true,
+                revisionDate = laterRevisionDate,
+            ),
+        )
+            .asSuccess()
 
         // Should return mockId-2 because mockId-1's organization doesn't enforce policies
         assertEquals(

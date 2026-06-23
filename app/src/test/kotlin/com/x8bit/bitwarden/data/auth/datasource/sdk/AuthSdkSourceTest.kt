@@ -13,12 +13,17 @@ import com.bitwarden.core.KeyConnectorResponse
 import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.core.RegisterTdeKeyResponse
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
+import com.bitwarden.policies.OrganizationUserPolicyContext
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import com.bitwarden.sdk.AuthClient
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.PlatformClient
+import com.bitwarden.sdk.PoliciesClient
 import com.bitwarden.sdk.RegistrationClient
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
@@ -41,15 +46,19 @@ class AuthSdkSourceTest {
     private val clientPlatform = mockk<PlatformClient> {
         coEvery { loadFlags(any()) } just runs
     }
+    private val clientPolicies = mockk<PoliciesClient>()
     private val client = mockk<Client> {
         every { auth() } returns clientAuth
         every { platform() } returns clientPlatform
+        every { policies() } returns clientPolicies
     }
     private val sdkClientManager = mockk<SdkClientManager> {
+        every { globalClient } returns client
         coEvery { getOrCreateClient(userId = any()) } returns client
     }
 
     private val authSkdSource: AuthSdkSource = AuthSdkSourceImpl(
+        dispatcherManager = FakeDispatcherManager(),
         sdkClientManager = sdkClientManager,
     )
 
@@ -517,6 +526,37 @@ class AuthSdkSourceTest {
                     password = password,
                     strength = rawStrength,
                     policy = policy,
+                )
+            }
+        }
+
+    @Test
+    fun `filterPolicies should call SDK and return a Result with the correct data`() =
+        runBlocking {
+            val policies = listOf(mockk<PolicyView>())
+            val organizations = listOf(mockk<OrganizationUserPolicyContext>())
+            val policyType = mockk<PolicyType>()
+            val expectedResult = listOf(mockk<PolicyView>())
+            coEvery {
+                clientPolicies.filterByType(
+                    policies = policies,
+                    organizationUserPolicyContexts = organizations,
+                    policyType = policyType,
+                )
+            } returns expectedResult
+
+            val result = authSkdSource.filterPolicies(
+                policies = policies,
+                organizations = organizations,
+                policyType = policyType,
+            )
+
+            assertEquals(expectedResult.asSuccess(), result)
+            coVerify(exactly = 1) {
+                clientPolicies.filterByType(
+                    policies = policies,
+                    organizationUserPolicyContexts = organizations,
+                    policyType = policyType,
                 )
             }
         }

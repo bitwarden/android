@@ -53,6 +53,7 @@ class CookieAcquisitionScreenTest : BitwardenComposeTest() {
                 webAuthn = mockk(),
                 cookie = cookieLauncher,
                 premiumCheckout = mockk(),
+                stripePortal = mockk(),
             ),
             intentManager = intentManager,
         ) {

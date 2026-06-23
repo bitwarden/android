@@ -5,10 +5,12 @@ import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.MasterPasswordUnlockDataJson
 import com.bitwarden.network.model.OrganizationType
-import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UserDecryptionOptionsJson
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.base.util.toHexColorRepresentation
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfRequestModel
@@ -33,7 +35,10 @@ fun UserStateJson.toRemovedPasswordUserStateJson(
     val profile = account.profile
     val updatedUserDecryptionOptions = profile
         .userDecryptionOptions
-        ?.copy(hasMasterPassword = false)
+        ?.copy(
+            hasMasterPassword = false,
+            masterPasswordUnlock = null,
+        )
         ?: UserDecryptionOptionsJson(
             hasMasterPassword = false,
             trustedDeviceUserDecryptionOptions = null,
@@ -67,7 +72,10 @@ fun UserStateJson.toUpdatedUserStateJson(
         ?.let { syncUserDecryption ->
             profile
                 .userDecryptionOptions
-                ?.copy(masterPasswordUnlock = syncUserDecryption.masterPasswordUnlock)
+                ?.copy(
+                    hasMasterPassword = syncUserDecryption.masterPasswordUnlock != null,
+                    masterPasswordUnlock = syncUserDecryption.masterPasswordUnlock,
+                )
                 ?: UserDecryptionOptionsJson(
                     hasMasterPassword = syncUserDecryption.masterPasswordUnlock != null,
                     trustedDeviceUserDecryptionOptions = null,
@@ -77,34 +85,52 @@ fun UserStateJson.toUpdatedUserStateJson(
         }
         ?: profile
             .userDecryptionOptions
-            ?.copy(masterPasswordUnlock = null)
-
-    val updatedProfile = profile
-        .copy(
-            avatarColorHex = syncProfile.avatarColor,
-            stamp = syncProfile.securityStamp,
-            hasPremium = syncProfile.isPremium || syncProfile.isPremiumFromOrganization,
-            isTwoFactorEnabled = syncProfile.isTwoFactorEnabled,
-            creationDate = syncProfile.creationDate,
-            userDecryptionOptions = userDecryptionOptions,
-            kdfType = masterPasswordUnlockKdf?.kdfType
-                ?: profile.kdfType,
-            kdfIterations = masterPasswordUnlockKdf?.iterations
-                ?: profile.kdfIterations,
-            kdfMemory = masterPasswordUnlockKdf?.memory
-                ?: profile.kdfMemory,
-            kdfParallelism = masterPasswordUnlockKdf?.parallelism
-                ?: profile.kdfParallelism,
-        )
+            ?.copy(
+                hasMasterPassword = false,
+                masterPasswordUnlock = null,
+            )
+    val forcePasswordResetReason = syncProfile.getForcePasswordResetReason(
+        userDecryptionOptions = userDecryptionOptions,
+        previousForcePasswordResetReason = profile.forcePasswordResetReason,
+    )
+    val updatedProfile = profile.copy(
+        forcePasswordResetReason = forcePasswordResetReason,
+        avatarColorHex = syncProfile.avatarColor,
+        stamp = syncProfile.securityStamp,
+        hasPremiumPersonally = syncProfile.isPremium,
+        hasPremiumFromOrganization = syncProfile.isPremiumFromOrganization,
+        isTwoFactorEnabled = syncProfile.isTwoFactorEnabled,
+        creationDate = syncProfile.creationDate,
+        userDecryptionOptions = userDecryptionOptions,
+        kdfType = masterPasswordUnlockKdf?.kdfType ?: profile.kdfType,
+        kdfIterations = masterPasswordUnlockKdf?.iterations ?: profile.kdfIterations,
+        kdfMemory = masterPasswordUnlockKdf?.memory ?: profile.kdfMemory,
+        kdfParallelism = masterPasswordUnlockKdf?.parallelism ?: profile.kdfParallelism,
+    )
     val updatedAccount = account.copy(profile = updatedProfile)
-    return this
-        .copy(
-            accounts = accounts
-                .toMutableMap()
-                .apply {
-                    replace(userId, updatedAccount)
-                },
-        )
+    return this.copy(
+        accounts = accounts
+            .toMutableMap()
+            .apply { replace(userId, updatedAccount) },
+    )
+}
+
+private fun SyncResponseJson.Profile.getForcePasswordResetReason(
+    userDecryptionOptions: UserDecryptionOptionsJson?,
+    previousForcePasswordResetReason: ForcePasswordResetReason?,
+): ForcePasswordResetReason? {
+    val hasManageResetPasswordPermission = this.organizations.orEmpty().any {
+        it.type == OrganizationType.OWNER ||
+            it.type == OrganizationType.ADMIN ||
+            it.permissions.shouldManageResetPassword
+    }
+    return ForcePasswordResetReason
+        .TDE_USER_WITHOUT_PASSWORD_HAS_PASSWORD_RESET_PERMISSION
+        .takeIf {
+            userDecryptionOptions?.hasMasterPassword == false &&
+                hasManageResetPasswordPermission
+        }
+        ?: previousForcePasswordResetReason
 }
 
 /**
@@ -112,20 +138,16 @@ fun UserStateJson.toUpdatedUserStateJson(
  * their password.
  */
 fun UserStateJson.toUserStateJsonWithPassword(
-    masterPasswordUnlock: MasterPasswordUnlockData?,
+    masterPasswordUnlock: MasterPasswordUnlockData,
 ): UserStateJson {
     val account = this.activeAccount
     val profile = account.profile
     val userDecryptionOptions = profile.userDecryptionOptions
-    val masterPasswordUnlockJson = masterPasswordUnlock
-        ?.let {
-            MasterPasswordUnlockDataJson(
-                salt = it.salt,
-                kdf = it.kdf.toKdfRequestModel(),
-                masterKeyWrappedUserKey = it.masterKeyWrappedUserKey,
-            )
-        }
-        ?: userDecryptionOptions?.masterPasswordUnlock
+    val masterPasswordUnlockJson = MasterPasswordUnlockDataJson(
+        salt = masterPasswordUnlock.salt,
+        kdf = masterPasswordUnlock.kdf.toKdfRequestModel(),
+        masterKeyWrappedUserKey = masterPasswordUnlock.masterKeyWrappedUserKey,
+    )
     val updatedProfile = profile
         .copy(
             forcePasswordResetReason = null,
@@ -191,7 +213,7 @@ fun UserStateJson.toUserState(
     isBiometricsEnabledProvider: (userId: String) -> Boolean,
     vaultUnlockTypeProvider: (userId: String) -> VaultUnlockType,
     isDeviceTrustedProvider: (userId: String) -> Boolean,
-    getUserPolicies: (userId: String, policy: PolicyTypeJson) -> List<SyncResponseJson.Policy>,
+    getUserPolicies: (userId: String, policy: PolicyType) -> List<PolicyView>,
 ): UserState =
     UserState(
         activeUserId = this.activeUserId,
@@ -234,15 +256,15 @@ fun UserStateJson.toUserState(
 
                 val hasPersonalOwnershipRestrictedOrg = getUserPolicies(
                     userId,
-                    PolicyTypeJson.PERSONAL_OWNERSHIP,
+                    PolicyType.ORGANIZATION_DATA_OWNERSHIP,
                 )
-                    .any { it.isEnabled }
+                    .any { it.enabled }
 
                 val hasPersonalVaultExportRestrictedOrg = getUserPolicies(
                     userId,
-                    PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
+                    PolicyType.DISABLE_PERSONAL_VAULT_EXPORT,
                 )
-                    .any { it.isEnabled }
+                    .any { it.enabled }
 
                 UserState.Account(
                     userId = userId,
@@ -253,7 +275,9 @@ fun UserStateJson.toUserState(
                         .settings
                         .environmentUrlData
                         .toEnvironmentUrlsOrDefault(),
-                    isPremium = profile.hasPremium == true,
+                    isPremium = profile.hasPremiumPersonally == true ||
+                        profile.hasPremiumFromOrganization == true,
+                    isPremiumFromSelf = profile.hasPremiumPersonally == true,
                     isLoggedIn = userAccountTokens
                         .find { it.userId == userId }
                         ?.isLoggedIn == true,

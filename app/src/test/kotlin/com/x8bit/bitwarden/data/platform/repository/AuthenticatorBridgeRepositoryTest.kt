@@ -6,6 +6,7 @@ import com.bitwarden.authenticatorbridge.util.toSymmetricEncryptionKeyData
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
@@ -19,11 +20,9 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
-import com.x8bit.bitwarden.data.platform.repository.util.sanitizeTotpUri
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.ScopedVaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
-import com.x8bit.bitwarden.data.vault.repository.util.createWrappedAccountCryptographicState
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -81,18 +80,19 @@ class AuthenticatorBridgeRepositoryTest {
             userId = USER_2_ID,
             authenticatorSyncUnlockKey = USER_2_UNLOCK_KEY,
         )
-        fakeAuthDiskSource.storePrivateKey(userId = USER_1_ID, privateKey = USER_1_PRIVATE_KEY)
-        fakeAuthDiskSource.storePrivateKey(userId = USER_2_ID, privateKey = USER_2_PRIVATE_KEY)
+        fakeAuthDiskSource.storeAccountCryptographicState(
+            userId = USER_1_ID,
+            accountCryptographicState = USER_1_ACCOUNT_CRYPTOGRAPHIC_STATE,
+        )
+        fakeAuthDiskSource.storeAccountCryptographicState(
+            userId = USER_2_ID,
+            accountCryptographicState = USER_2_ACCOUNT_CRYPTOGRAPHIC_STATE,
+        )
         coEvery {
             scopedVaultSdkSource.initializeCrypto(
                 userId = USER_1_ID,
                 request = InitUserCryptoRequest(
-                    accountCryptographicState = createWrappedAccountCryptographicState(
-                        privateKey = USER_1_PRIVATE_KEY,
-                        securityState = null,
-                        signedPublicKey = null,
-                        signingKey = null,
-                    ),
+                    accountCryptographicState = USER_1_ACCOUNT_CRYPTOGRAPHIC_STATE,
                     userId = USER_1_ID,
                     kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
                     email = USER_1_EMAIL,
@@ -107,12 +107,7 @@ class AuthenticatorBridgeRepositoryTest {
             scopedVaultSdkSource.initializeCrypto(
                 userId = USER_2_ID,
                 request = InitUserCryptoRequest(
-                    accountCryptographicState = createWrappedAccountCryptographicState(
-                        privateKey = USER_2_PRIVATE_KEY,
-                        securityState = null,
-                        signedPublicKey = null,
-                        signingKey = null,
-                    ),
+                    accountCryptographicState = USER_2_ACCOUNT_CRYPTOGRAPHIC_STATE,
                     userId = USER_2_ID,
                     kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
                     email = USER_2_EMAIL,
@@ -166,10 +161,6 @@ class AuthenticatorBridgeRepositoryTest {
         coEvery {
             scopedVaultSdkSource.decryptCipher(USER_2_ID, USER_2_ENCRYPTED_SDK_TOTP_CIPHER)
         } returns USER_2_DECRYPTED_TOTP_CIPHER.asSuccess()
-        mockkStatic(String::sanitizeTotpUri)
-        every {
-            any<String>().sanitizeTotpUri(any(), any())
-        } returns "totp"
     }
 
     @AfterEach
@@ -178,7 +169,6 @@ class AuthenticatorBridgeRepositoryTest {
         unmockkStatic(
             SyncResponseJson.Cipher::toEncryptedSdkCipher,
             EnvironmentUrlDataJson::toEnvironmentUrlsOrDefault,
-            String::sanitizeTotpUri,
         )
     }
 
@@ -209,12 +199,7 @@ class AuthenticatorBridgeRepositoryTest {
                 scopedVaultSdkSource.initializeCrypto(
                     userId = USER_2_ID,
                     request = InitUserCryptoRequest(
-                        accountCryptographicState = createWrappedAccountCryptographicState(
-                            privateKey = USER_2_PRIVATE_KEY,
-                            securityState = null,
-                            signedPublicKey = null,
-                            signingKey = null,
-                        ),
+                        accountCryptographicState = USER_2_ACCOUNT_CRYPTOGRAPHIC_STATE,
                         userId = USER_2_ID,
                         kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
                         email = USER_2_EMAIL,
@@ -252,12 +237,7 @@ class AuthenticatorBridgeRepositoryTest {
                 scopedVaultSdkSource.initializeCrypto(
                     userId = USER_1_ID,
                     request = InitUserCryptoRequest(
-                        accountCryptographicState = createWrappedAccountCryptographicState(
-                            privateKey = USER_1_PRIVATE_KEY,
-                            securityState = null,
-                            signedPublicKey = null,
-                            signingKey = null,
-                        ),
+                        accountCryptographicState = USER_1_ACCOUNT_CRYPTOGRAPHIC_STATE,
                         userId = USER_1_ID,
                         kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
                         email = USER_1_EMAIL,
@@ -279,12 +259,7 @@ class AuthenticatorBridgeRepositoryTest {
                 scopedVaultSdkSource.initializeCrypto(
                     userId = USER_2_ID,
                     request = InitUserCryptoRequest(
-                        accountCryptographicState = createWrappedAccountCryptographicState(
-                            privateKey = USER_2_PRIVATE_KEY,
-                            securityState = null,
-                            signedPublicKey = null,
-                            signingKey = null,
-                        ),
+                        accountCryptographicState = USER_2_ACCOUNT_CRYPTOGRAPHIC_STATE,
                         userId = USER_2_ID,
                         kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
                         email = USER_2_EMAIL,
@@ -318,12 +293,7 @@ class AuthenticatorBridgeRepositoryTest {
                 scopedVaultSdkSource.initializeCrypto(
                     userId = USER_1_ID,
                     request = InitUserCryptoRequest(
-                        accountCryptographicState = createWrappedAccountCryptographicState(
-                            privateKey = USER_1_PRIVATE_KEY,
-                            securityState = null,
-                            signedPublicKey = null,
-                            signingKey = null,
-                        ),
+                        accountCryptographicState = USER_1_ACCOUNT_CRYPTOGRAPHIC_STATE,
                         userId = USER_1_ID,
                         kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
                         email = USER_1_EMAIL,
@@ -344,12 +314,7 @@ class AuthenticatorBridgeRepositoryTest {
                 scopedVaultSdkSource.initializeCrypto(
                     userId = USER_1_ID,
                     request = InitUserCryptoRequest(
-                        accountCryptographicState = createWrappedAccountCryptographicState(
-                            privateKey = USER_1_PRIVATE_KEY,
-                            securityState = null,
-                            signedPublicKey = null,
-                            signingKey = null,
-                        ),
+                        accountCryptographicState = USER_1_ACCOUNT_CRYPTOGRAPHIC_STATE,
                         userId = USER_1_ID,
                         kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
                         email = USER_1_EMAIL,
@@ -362,12 +327,7 @@ class AuthenticatorBridgeRepositoryTest {
                 scopedVaultSdkSource.initializeCrypto(
                     userId = USER_2_ID,
                     request = InitUserCryptoRequest(
-                        accountCryptographicState = createWrappedAccountCryptographicState(
-                            privateKey = USER_2_PRIVATE_KEY,
-                            securityState = null,
-                            signedPublicKey = null,
-                            signingKey = null,
-                        ),
+                        accountCryptographicState = USER_2_ACCOUNT_CRYPTOGRAPHIC_STATE,
                         userId = USER_2_ID,
                         kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
                         email = USER_2_EMAIL,
@@ -446,7 +406,13 @@ private const val USER_1_EMAIL = "john@doe.com"
 private const val USER_2_EMAIL = "jane@doe.com"
 
 private const val USER_1_PRIVATE_KEY = "user1PrivateKey"
+private val USER_1_ACCOUNT_CRYPTOGRAPHIC_STATE = WrappedAccountCryptographicState.V1(
+    privateKey = USER_1_PRIVATE_KEY,
+)
 private const val USER_2_PRIVATE_KEY = "user2PrivateKey"
+private val USER_2_ACCOUNT_CRYPTOGRAPHIC_STATE = WrappedAccountCryptographicState.V1(
+    privateKey = USER_2_PRIVATE_KEY,
+)
 
 private const val USER_1_UNLOCK_KEY = "user1UnlockKey"
 private const val USER_2_UNLOCK_KEY = "user2UnlockKey"
@@ -557,7 +523,6 @@ private val USER_2_DECRYPTED_TOTP_CIPHER = mockk<CipherView> {
 private val USER_1_EXPECTED_CIPHER_LIST = listOf(
     SharedAccountData.CipherData(
         uri = "totp",
-        legacyUri = "totp",
         id = "id1",
         name = "cipher1",
         username = "username",
@@ -567,7 +532,6 @@ private val USER_1_EXPECTED_CIPHER_LIST = listOf(
 private val USER_2_EXPECTED_CIPHER_LIST = listOf(
     SharedAccountData.CipherData(
         uri = "totp",
-        legacyUri = "totp",
         id = "id2",
         name = "cipher1",
         username = "username",

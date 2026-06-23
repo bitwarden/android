@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
+import com.x8bit.bitwarden.data.auth.repository.model.createMockWrappedAccountCryptographicState
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
@@ -731,6 +732,7 @@ class VaultSyncManagerTest {
                         profile = MOCK_PROFILE.copy(
                             avatarColorHex = "mockAvatarColor-1",
                             stamp = "mockSecurityStamp-1",
+                            hasPremiumFromOrganization = false,
                             kdfType = KdfTypeJson.PBKDF2_SHA256,
                             kdfIterations = 600000,
                             kdfMemory = null,
@@ -746,8 +748,10 @@ class VaultSyncManagerTest {
                 ),
             )
             fakeAuthDiskSource.assertUserState(userState = updatedUserState)
-            fakeAuthDiskSource.assertUserKey(userId = userId, userKey = "mockKey-1")
-            fakeAuthDiskSource.assertPrivateKey(userId = userId, privateKey = "mockPrivateKey-1")
+            fakeAuthDiskSource.assertAccountCryptographicState(
+                userId = userId,
+                accountCryptographicState = createMockWrappedAccountCryptographicState(number = 1),
+            )
             fakeAuthDiskSource.assertOrganizationKeys(
                 userId = userId,
                 organizationKeys = mapOf(userId to "mockKey-1"),
@@ -1321,7 +1325,8 @@ private val MOCK_PROFILE = AccountJson.Profile(
     stamp = "mockSecurityStamp-1",
     organizationId = null,
     avatarColorHex = null,
-    hasPremium = false,
+    hasPremiumPersonally = false,
+    hasPremiumFromOrganization = null,
     forcePasswordResetReason = null,
     kdfType = null,
     kdfIterations = null,

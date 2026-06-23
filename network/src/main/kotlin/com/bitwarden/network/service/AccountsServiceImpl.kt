@@ -10,7 +10,6 @@ import com.bitwarden.network.model.DeleteAccountRequestJson
 import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.KeyConnectorKeyRequestJson
 import com.bitwarden.network.model.KeyConnectorMasterKeyRequestJson
-import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
 import com.bitwarden.network.model.PasswordHintRequestJson
 import com.bitwarden.network.model.PasswordHintResponseJson
 import com.bitwarden.network.model.ResendEmailRequestJson
@@ -32,7 +31,7 @@ import kotlinx.serialization.json.Json
  * The default implementation of the [AccountsService].
  */
 @Suppress("TooManyFunctions")
-internal class AccountsServiceImpl constructor(
+internal class AccountsServiceImpl(
     private val unauthenticatedAccountsApi: UnauthenticatedAccountsApi,
     private val authenticatedAccountsApi: AuthenticatedAccountsApi,
     private val unauthenticatedKeyConnectorApi: UnauthenticatedKeyConnectorApi,
@@ -176,17 +175,6 @@ internal class AccountsServiceImpl constructor(
     ): Result<Unit> = authenticatedAccountsApi
         .setPassword(body)
         .toResult()
-
-    override suspend fun getMasterKeyFromKeyConnector(
-        url: String,
-        accessToken: String,
-    ): Result<KeyConnectorMasterKeyResponseJson> =
-        unauthenticatedKeyConnectorApi
-            .getMasterKeyFromKeyConnector(
-                url = "$url/user-keys",
-                bearerToken = "$HEADER_VALUE_BEARER_PREFIX$accessToken",
-            )
-            .toResult()
 
     override suspend fun storeMasterKeyToKeyConnector(
         url: String,

@@ -99,6 +99,7 @@ fun AddEditSendAuthTypeChooser(
             } else {
                 CardStyle.Top()
             },
+            modifier = Modifier.testTag("SendVisibilityChooser"),
         )
 
         when (sendAuth) {
@@ -188,10 +189,11 @@ private fun ColumnScope.SpecificPeopleEmailContent(
                         onClick = {
                             onRemoveEmailClick(authEmail)
                         },
+                        modifier = Modifier.testTag("RemoveRecipientEmailButton"),
                     )
                 }
             },
-            textFieldTestTag = "SendEmailEntry",
+            textFieldTestTag = "SendRecipientEmailEntry",
             cardStyle = CardStyle.Middle(),
             modifier = Modifier.fillMaxWidth(),
         )

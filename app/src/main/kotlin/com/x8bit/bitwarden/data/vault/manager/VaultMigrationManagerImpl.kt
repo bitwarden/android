@@ -8,10 +8,11 @@ import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.network.model.BulkShareCiphersJsonRequest
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.OrganizationStatusType
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.toCipherWithIdJsonRequest
 import com.bitwarden.network.service.CiphersService
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
@@ -144,6 +145,7 @@ class VaultMigrationManagerImpl(
 
             val orgName = authDiskSource
                 .getOrganizations(userId = userId)
+                ?.filter { it.status == OrganizationStatusType.CONFIRMED }
                 ?.firstOrNull { it.id == orgId }
                 ?.name
                 ?: return@update VaultMigrationData.NoMigrationRequired
@@ -167,9 +169,7 @@ class VaultMigrationManagerImpl(
         hasPersonalCiphers: Boolean,
         isNetworkConnected: Boolean,
     ): Boolean =
-        policyManager
-            .getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP)
-            .any() &&
+        policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP).any() &&
             featureFlagManager.getFeatureFlag(FlagKey.MigrateMyVaultToMyItems) &&
             isNetworkConnected &&
             hasPersonalCiphers

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.billing.repository
 
+import com.bitwarden.network.model.GetSubscriptionResponse
 import com.bitwarden.network.service.BillingService
 import com.x8bit.bitwarden.data.billing.manager.PlayBillingManager
 import com.x8bit.bitwarden.data.billing.repository.model.CheckoutSessionResult
@@ -54,10 +55,14 @@ class BillingRepositoryImpl(
         billingService
             .getSubscription()
             .fold(
-                onSuccess = {
-                    SubscriptionResult.Success(
-                        subscription = it.toSubscriptionInfo(),
-                    )
+                onSuccess = { response ->
+                    when (response) {
+                        is GetSubscriptionResponse.Success -> SubscriptionResult.Success(
+                            subscription = response.subscription.toSubscriptionInfo(),
+                        )
+
+                        is GetSubscriptionResponse.NotFound -> SubscriptionResult.NotFound
+                    }
                 },
                 onFailure = { SubscriptionResult.Error(error = it) },
             )

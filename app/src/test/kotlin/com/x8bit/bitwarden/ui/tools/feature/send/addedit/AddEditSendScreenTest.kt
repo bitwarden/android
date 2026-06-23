@@ -26,6 +26,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.manager.exit.ExitManager
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.isEditableText
@@ -208,15 +209,13 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `on copyPassword click should send PasswordCopyClick when passwordInput is not empty`() {
-        // Expand options section:
-        composeTestRule
-            .onNodeWithText("Additional options")
-            .performScrollTo()
-            .performClick()
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
-                    common = DEFAULT_COMMON_STATE.copy(passwordInput = "somePass"),
+                    common = DEFAULT_COMMON_STATE.copy(
+                        sendAuth = SendAuth.Password,
+                        passwordInput = "somePass",
+                    ),
                 ),
             )
         }
@@ -227,25 +226,20 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                AddEditSendAction.PasswordCopyClick(
-                    "somePass",
-                ),
+                AddEditSendAction.PasswordCopyClick(password = "somePass"),
             )
         }
     }
 
     @Test
     fun `on copyPassword click should not send PasswordCopyClick when passwordInput is empty`() {
-        // Expand options section:
-        composeTestRule
-            .onNodeWithText("Additional options")
-            .performScrollTo()
-            .performClick()
-
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
-                    common = DEFAULT_COMMON_STATE.copy(passwordInput = ""),
+                    common = DEFAULT_COMMON_STATE.copy(
+                        sendAuth = SendAuth.Password,
+                        passwordInput = "",
+                    ),
                 ),
             )
         }
@@ -254,20 +248,22 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .performScrollTo()
             .performClick()
         verify(exactly = 0) {
-            viewModel.trySendAction(
-                AddEditSendAction.PasswordCopyClick(password = ""),
-            )
+            viewModel.trySendAction(any())
         }
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `on generatePassword click should send OpenPasswordGeneratorClick when passwordInput is empty`() {
-        // Expand options section:
-        composeTestRule
-            .onNodeWithText("Additional options")
-            .performScrollTo()
-            .performClick()
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        sendAuth = SendAuth.Password,
+                    ),
+                ),
+            )
+        }
         composeTestRule
             .onNodeWithTag(testTag = "RegeneratePasswordButton")
             .performScrollTo()
@@ -282,15 +278,13 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `on generatePassword click should show Password Overwrite dialog when passwordInput is not empty`() {
-        // Expand options section:
-        composeTestRule
-            .onNodeWithText("Additional options")
-            .performScrollTo()
-            .performClick()
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
-                    common = DEFAULT_COMMON_STATE.copy(passwordInput = "somePass"),
+                    common = DEFAULT_COMMON_STATE.copy(
+                        sendAuth = SendAuth.Password,
+                        passwordInput = "somePass",
+                    ),
                 ),
             )
         }
@@ -637,9 +631,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Maximum access count")
             .assertExists()
         composeTestRule
-            .onNodeWithText("New password")
-            .assertExists()
-        composeTestRule
             .onNodeWithText("Private notes")
             .assertExists()
         composeTestRule
@@ -699,40 +690,28 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `on password input change should send PasswordChange`() = runTest {
-        // Expand options section:
-        composeTestRule
-            .onNodeWithText("Additional options")
-            .performScrollTo()
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText("New password")
-            .performTextInput("input")
-        verify { viewModel.trySendAction(AddEditSendAction.PasswordChange("input")) }
-    }
-
-    @Test
     fun `password input should change according to the state`() {
-        // Expand options section:
+        val commonState = DEFAULT_COMMON_STATE.copy(
+            sendAuth = SendAuth.Password,
+            passwordInput = "",
+        )
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_VIEW_STATE.copy(common = commonState))
+        }
         composeTestRule
-            .onNodeWithText("Additional options")
-            .performScrollTo()
-            .performClick()
-        composeTestRule
-            .onNodeWithText("New password")
-            .assertTextEquals("New password", "")
+            .onNodeWithText("Password")
+            .assertTextEquals("Password", "")
 
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
-                    common = DEFAULT_COMMON_STATE.copy(passwordInput = "input"),
+                    common = commonState.copy(passwordInput = "input"),
                 ),
             )
         }
         composeTestRule
-            .onNodeWithText("New password")
-            .assertTextEquals("New password", "•••••")
+            .onNodeWithText("Password")
+            .assertTextEquals("Password", "•••••")
     }
 
     @Test
@@ -945,7 +924,11 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                dialogState = AddEditSendState.DialogState.EmailAuthRequiresPremium,
+                dialogState = AddEditSendState.DialogState.PremiumRequired(
+                    message = BitwardenString
+                        .sharing_with_specific_people_is_a_premium_feature
+                        .asText(),
+                ),
             )
         }
 
@@ -966,7 +949,11 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     fun `EmailAuthRequiresPremium dialog Cancel click should send DismissDialogClick`() {
         mutableStateFlow.update {
             it.copy(
-                dialogState = AddEditSendState.DialogState.EmailAuthRequiresPremium,
+                dialogState = AddEditSendState.DialogState.PremiumRequired(
+                    message = BitwardenString
+                        .sharing_with_specific_people_is_a_premium_feature
+                        .asText(),
+                ),
             )
         }
 
@@ -981,7 +968,11 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     fun `EmailAuthRequiresPremium dialog Upgrade click should send UpgradeToPremiumClick`() {
         mutableStateFlow.update {
             it.copy(
-                dialogState = AddEditSendState.DialogState.EmailAuthRequiresPremium,
+                dialogState = AddEditSendState.DialogState.PremiumRequired(
+                    message = BitwardenString
+                        .sharing_with_specific_people_is_a_premium_feature
+                        .asText(),
+                ),
             )
         }
 
@@ -1034,51 +1025,11 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     //region Authentication UI Tests
 
     @Test
-    fun `auth type chooser should be displayed when feature flag is enabled`() {
-        mutableStateFlow.update {
-            it.copy(
-                viewState = DEFAULT_VIEW_STATE.copy(
-                    common = DEFAULT_COMMON_STATE.copy(
-                        isSendEmailVerificationEnabled = true,
-                    ),
-                ),
-            )
-        }
-
-        composeTestRule
-            .onNodeWithTag("SendAuthTypeChooser")
-            .performScrollTo()
-            .assertIsDisplayed()
-
-        composeTestRule
-            .onNodeWithText("Who can view")
-            .assertIsDisplayed()
-    }
-
-    @Test
-    fun `auth type chooser should not be displayed when feature flag is disabled`() {
-        mutableStateFlow.update {
-            it.copy(
-                viewState = DEFAULT_VIEW_STATE.copy(
-                    common = DEFAULT_COMMON_STATE.copy(
-                        isSendEmailVerificationEnabled = false,
-                    ),
-                ),
-            )
-        }
-
-        composeTestRule
-            .onNodeWithTag("SendAuthTypeChooser")
-            .assertDoesNotExist()
-    }
-
-    @Test
     fun `selecting EMAIL auth type should display email fields`() {
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
-                        isSendEmailVerificationEnabled = true,
                         sendAuth = SendAuth.None,
                     ),
                 ),
@@ -1112,7 +1063,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
-                        isSendEmailVerificationEnabled = true,
                         hasPassword = false,
                         sendAuth = SendAuth.None,
                     ),
@@ -1147,7 +1097,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         hasPassword = false,
-                        isSendEmailVerificationEnabled = true,
                         passwordInput = "",
                         sendAuth = SendAuth.None,
                     ),
@@ -1169,7 +1118,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
-                        isSendEmailVerificationEnabled = true,
                         passwordInput = "",
                         sendAuth = SendAuth.Password,
                     ),
@@ -1192,7 +1140,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
-                        isSendEmailVerificationEnabled = true,
                         sendAuth = SendAuth.None,
                     ),
                 ),
@@ -1214,7 +1161,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
-                        isSendEmailVerificationEnabled = true,
                         sendAuth = SendAuth.Email(emails = persistentListOf(testEmail)),
                     ),
                 ),
@@ -1222,7 +1168,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTag("SendEmailEntry")
+            .onNodeWithTag("SendRecipientEmailEntry")
             .performTextInput("test@example.com")
 
         verify {
@@ -1244,7 +1190,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         hasPassword = false,
-                        isSendEmailVerificationEnabled = true,
                         sendAuth = SendAuth.Email(
                             emails = persistentListOf(
                                 AuthEmail(
@@ -1277,7 +1222,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
                         hasPassword = false,
-                        isSendEmailVerificationEnabled = true,
                         sendAuth = SendAuth.Email(emails = persistentListOf(email1, email2)),
                     ),
                 ),
@@ -1298,7 +1242,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
-                        isSendEmailVerificationEnabled = true,
                         sendAuth = SendAuth.Email(
                             emails = persistentListOf(email1, email2),
                         ),
@@ -1331,7 +1274,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                 isPremium = true,
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
-                        isSendEmailVerificationEnabled = true,
                         sendAuth = SendAuth.None,
                     ),
                 ),
@@ -1351,46 +1293,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `legacy password field should be hidden when auth chooser is displayed`() {
-        // Expand options section
-        composeTestRule
-            .onNodeWithText("Additional options")
-            .performScrollTo()
-            .performClick()
-
-        // With feature flag OFF, legacy password field should be visible
-        mutableStateFlow.update {
-            it.copy(
-                viewState = DEFAULT_VIEW_STATE.copy(
-                    common = DEFAULT_COMMON_STATE.copy(
-                        isSendEmailVerificationEnabled = false,
-                    ),
-                ),
-            )
-        }
-
-        composeTestRule
-            .onNodeWithText("New password")
-            .performScrollTo()
-            .assertIsDisplayed()
-
-        // With feature flag ON, legacy password field should be hidden
-        mutableStateFlow.update {
-            it.copy(
-                viewState = DEFAULT_VIEW_STATE.copy(
-                    common = DEFAULT_COMMON_STATE.copy(
-                        isSendEmailVerificationEnabled = true,
-                    ),
-                ),
-            )
-        }
-
-        composeTestRule
-            .onNodeWithText("New password")
-            .assertDoesNotExist()
-    }
-
-    @Test
     fun `email fields should display provided emails from state`() {
         val email1 = AuthEmail(id = "id1", value = "user1@example.com")
         val email2 = AuthEmail(id = "id2", value = "user2@example.com")
@@ -1398,7 +1300,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
-                        isSendEmailVerificationEnabled = true,
                         sendAuth = SendAuth.Email(emails = persistentListOf(email1, email2)),
                     ),
                 ),
@@ -1420,7 +1321,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
-                        isSendEmailVerificationEnabled = true,
                         sendAuth = SendAuth.Email(emails = persistentListOf(email1, email2)),
                     ),
                 ),
@@ -1439,7 +1339,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
-                        isSendEmailVerificationEnabled = true,
                         sendAuth = SendAuth.None,
                     ),
                 ),
@@ -1461,7 +1360,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
-                        isSendEmailVerificationEnabled = true,
                         sendAuth = SendAuth.Email(
                             emails = persistentListOf(
                                 AuthEmail(
@@ -1489,7 +1387,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
-                        isSendEmailVerificationEnabled = true,
                         passwordInput = "",
                         sendAuth = SendAuth.Password,
                     ),
@@ -1514,7 +1411,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
-                        isSendEmailVerificationEnabled = true,
                         passwordInput = "existing-password",
                         sendAuth = SendAuth.Password,
                     ),
@@ -1546,7 +1442,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
-                        isSendEmailVerificationEnabled = true,
                         passwordInput = "existing-password",
                         sendAuth = SendAuth.Password,
                     ),
@@ -1578,7 +1473,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
-                        isSendEmailVerificationEnabled = true,
                         passwordInput = "existing-password",
                         sendAuth = SendAuth.Password,
                     ),
@@ -1610,7 +1504,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
-                        isSendEmailVerificationEnabled = true,
                         passwordInput = "test-password",
                         sendAuth = SendAuth.Password,
                     ),
@@ -1635,7 +1528,6 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
-                        isSendEmailVerificationEnabled = true,
                         passwordInput = "",
                         sendAuth = SendAuth.Password,
                     ),
@@ -1665,7 +1557,6 @@ private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
     sendUrl = null,
     hasPassword = true,
     isHideEmailAddressEnabled = true,
-    isSendEmailVerificationEnabled = false,
     sendAuth = SendAuth.None,
 )
 

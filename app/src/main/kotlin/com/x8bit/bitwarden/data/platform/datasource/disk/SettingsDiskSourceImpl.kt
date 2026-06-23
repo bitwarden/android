@@ -35,6 +35,7 @@ private const val ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY = "accountBiometricInteg
 private const val CRASH_LOGGING_ENABLED_KEY = "crashLoggingEnabled"
 private const val CLEAR_CLIPBOARD_INTERVAL_KEY = "clearClipboard"
 private const val INITIAL_AUTOFILL_DIALOG_SHOWN = "addSitePromptShown"
+private const val HAS_SHOWN_ACCESSIBILITY_DISCLAIMER_KEY = "hasShownAccessibilityDisclaimer"
 private const val HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY = "hasUserLoggedInOrCreatedAccount"
 private const val SHOW_AUTOFILL_SETTING_BADGE = "showAutofillSettingBadge"
 private const val SHOW_BROWSER_AUTOFILL_SETTING_BADGE = "showBrowserAutofillSettingBadge"
@@ -57,11 +58,13 @@ private const val UPGRADED_TO_PREMIUM_CARD_CONSUMED =
     "upgradedToPremiumCardConsumed"
 private const val UPGRADED_TO_PREMIUM_CARD_PENDING =
     "upgradedToPremiumCardPending"
+private const val PREMIUM_UPGRADE_PENDING =
+    "premiumUpgradePending"
 
 /**
  * Primary implementation of [SettingsDiskSource].
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LargeClass")
 class SettingsDiskSourceImpl(
     private val sharedPreferences: SharedPreferences,
     private val json: Json,
@@ -107,6 +110,9 @@ class SettingsDiskSourceImpl(
     private val mutableUpgradedToPremiumCardPendingFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
+    private val mutablePremiumUpgradePendingFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
     private val mutableIsIconLoadingDisabledFlow = bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableIsCrashLoggingEnabledFlow = bufferedMutableSharedFlow<Boolean?>()
@@ -122,6 +128,8 @@ class SettingsDiskSourceImpl(
     private val mutableVaultRegisteredForExportFlow = bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableIsDynamicColorsEnabledFlow = bufferedMutableSharedFlow<Boolean?>()
+
+    private val mutableHasShownAccessibilityDisclaimerFlow = bufferedMutableSharedFlow<Boolean?>()
 
     init {
         migrateScreenCaptureSetting()
@@ -161,6 +169,17 @@ class SettingsDiskSourceImpl(
                 value = value,
             )
         }
+
+    override var hasShownAccessibilityDisclaimer: Boolean?
+        set(value) {
+            putBoolean(HAS_SHOWN_ACCESSIBILITY_DISCLAIMER_KEY, value)
+            mutableHasShownAccessibilityDisclaimerFlow.tryEmit(value)
+        }
+        get() = getBoolean(HAS_SHOWN_ACCESSIBILITY_DISCLAIMER_KEY)
+
+    override val hasShownAccessibilityDisclaimerFlow: Flow<Boolean?>
+        get() = mutableHasShownAccessibilityDisclaimerFlow
+            .onSubscription { emit(hasShownAccessibilityDisclaimer) }
 
     override var systemBiometricIntegritySource: String?
         get() = getString(key = SYSTEM_BIOMETRIC_INTEGRITY_SOURCE_KEY)
@@ -264,6 +283,8 @@ class SettingsDiskSourceImpl(
         // - Premium upgrade banner dismissed
         // - Upgraded to Premium action card consumed
         // - Upgraded to Premium action card pending
+        // - Premium upgrade pending
+        // - Has shown accessibility disclaimer dialog
     }
 
     override fun getIntroducingArchiveActionCardDismissed(userId: String): Boolean? =
@@ -345,6 +366,26 @@ class SettingsDiskSourceImpl(
     override fun getUpgradedToPremiumCardPendingFlow(userId: String): Flow<Boolean?> =
         getMutableUpgradedToPremiumCardPendingFlow(userId = userId)
             .onSubscription { emit(getUpgradedToPremiumCardPending(userId = userId)) }
+
+    override fun getPremiumUpgradePending(userId: String): Boolean? =
+        getBoolean(
+            key = PREMIUM_UPGRADE_PENDING.appendIdentifier(identifier = userId),
+        )
+
+    override fun storePremiumUpgradePending(
+        userId: String,
+        isPending: Boolean?,
+    ) {
+        putBoolean(
+            key = PREMIUM_UPGRADE_PENDING.appendIdentifier(identifier = userId),
+            value = isPending,
+        )
+        getMutablePremiumUpgradePendingFlow(userId = userId).tryEmit(isPending)
+    }
+
+    override fun getPremiumUpgradePendingFlow(userId: String): Flow<Boolean?> =
+        getMutablePremiumUpgradePendingFlow(userId = userId)
+            .onSubscription { emit(getPremiumUpgradePending(userId = userId)) }
 
     override fun getAccountBiometricIntegrityValidity(
         userId: String,
@@ -708,6 +749,13 @@ class SettingsDiskSourceImpl(
         userId: String,
     ): MutableSharedFlow<Boolean?> =
         mutableUpgradedToPremiumCardPendingFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutablePremiumUpgradePendingFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutablePremiumUpgradePendingFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 

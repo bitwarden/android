@@ -36,7 +36,9 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditBankAcc
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLicenseTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditPassportTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
 
 /**
@@ -54,6 +56,8 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
     cardItemTypeHandlers: VaultAddEditCardTypeHandlers,
     sshKeyItemTypeHandlers: VaultAddEditSshKeyTypeHandlers,
     bankAccountItemTypeHandlers: VaultAddEditBankAccountTypeHandlers,
+    licenseItemTypeHandlers: VaultAddEditLicenseTypeHandlers,
+    passportItemTypeHandlers: VaultAddEditPassportTypeHandlers,
     isCardScannerEnabled: Boolean,
     cardHolderNameFocusRequester: FocusRequester,
     modifier: Modifier = Modifier,
@@ -288,8 +292,19 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
                 )
             }
 
-            is VaultAddEditState.ViewState.Content.ItemType.License -> Unit
-            is VaultAddEditState.ViewState.Content.ItemType.Passport -> Unit
+            is VaultAddEditState.ViewState.Content.ItemType.License -> {
+                vaultAddEditLicenseItems(
+                    licenseState = state.type,
+                    licenseHandlers = licenseItemTypeHandlers,
+                )
+            }
+
+            is VaultAddEditState.ViewState.Content.ItemType.Passport -> {
+                vaultAddEditPassportItems(
+                    passportState = state.type,
+                    passportHandlers = passportItemTypeHandlers,
+                )
+            }
         }
 
         vaultAddEditAdditionalOptions(

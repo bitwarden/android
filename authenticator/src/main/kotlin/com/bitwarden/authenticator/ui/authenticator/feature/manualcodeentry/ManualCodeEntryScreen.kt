@@ -173,8 +173,8 @@ private fun ManualCodeEntryContent(
             value = state.issuer,
             onValueChange = onNameChange,
             cardStyle = CardStyle.Top(),
+            textFieldTestTag = "NameTextField",
             modifier = Modifier
-                .testTag(tag = "NameTextField")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
@@ -184,8 +184,8 @@ private fun ManualCodeEntryContent(
             value = state.code,
             onValueChange = onKeyChange,
             cardStyle = CardStyle.Bottom,
+            passwordFieldTestTag = "KeyTextField",
             modifier = Modifier
-                .testTag(tag = "KeyTextField")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
@@ -215,7 +215,8 @@ private fun ManualCodeEntryContent(
             modifier = Modifier
                 .wrapContentWidth()
                 .align(alignment = Alignment.CenterHorizontally)
-                .standardHorizontalMargin(),
+                .standardHorizontalMargin()
+                .testTag("ScanQRCodeButton"),
         )
         Spacer(modifier = Modifier.height(height = 16.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())

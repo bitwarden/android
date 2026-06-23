@@ -101,6 +101,8 @@ enum class ItemListingType {
     CARD,
     SSH_KEY,
     BANK_ACCOUNT,
+    LICENSE,
+    PASSPORT,
     TRASH,
     FOLDER,
     COLLECTION,
@@ -119,6 +121,7 @@ data class VaultItemListingArgs(
 /**
  * Constructs a [VaultItemListingArgs] from the [SavedStateHandle] and internal route data.
  */
+@Suppress("CyclomaticComplexMethod")
 fun SavedStateHandle.toVaultItemListingArgs(): VaultItemListingArgs {
     val route = this.toRoute<VaultItemListingRoute>()
     return VaultItemListingArgs(
@@ -130,6 +133,8 @@ fun SavedStateHandle.toVaultItemListingArgs(): VaultItemListingArgs {
             ItemListingType.SECURE_NOTE -> VaultItemListingType.SecureNote
             ItemListingType.SSH_KEY -> VaultItemListingType.SshKey
             ItemListingType.BANK_ACCOUNT -> VaultItemListingType.BankAccount
+            ItemListingType.LICENSE -> VaultItemListingType.License
+            ItemListingType.PASSPORT -> VaultItemListingType.Passport
             ItemListingType.TRASH -> VaultItemListingType.Trash
             ItemListingType.SEND_FILE -> VaultItemListingType.SendFile
             ItemListingType.SEND_TEXT -> VaultItemListingType.SendText
@@ -316,6 +321,8 @@ private fun VaultItemListingType.toItemListingType(): ItemListingType {
         is VaultItemListingType.SendText -> ItemListingType.SEND_TEXT
         is VaultItemListingType.SshKey -> ItemListingType.SSH_KEY
         is VaultItemListingType.BankAccount -> ItemListingType.BANK_ACCOUNT
+        is VaultItemListingType.License -> ItemListingType.LICENSE
+        is VaultItemListingType.Passport -> ItemListingType.PASSPORT
     }
 }
 
@@ -333,4 +340,6 @@ private fun VaultItemListingType.toIdOrNull(): String? =
         is VaultItemListingType.SendText -> null
         is VaultItemListingType.SshKey -> null
         is VaultItemListingType.BankAccount -> null
+        is VaultItemListingType.License -> null
+        is VaultItemListingType.Passport -> null
     }

@@ -95,6 +95,28 @@ fun CipherListView.toOverflowActions(
                                 CopyableCipherFields.BANK_ACCOUNT_ROUTING_NUMBER,
                             )
                     },
+                ListingItemOverflowAction.VaultAction
+                    .CopyLicenseNumberClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = hasMasterPassword,
+                    )
+                    .takeIf {
+                        this.type is CipherListViewType.DriversLicense &&
+                            this.copyableFields.contains(
+                                CopyableCipherFields.DRIVERS_LICENSE_LICENSE_NUMBER,
+                            )
+                    },
+                ListingItemOverflowAction.VaultAction
+                    .CopyPassportNumberClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = hasMasterPassword,
+                    )
+                    .takeIf {
+                        this.type is CipherListViewType.Passport &&
+                            this.copyableFields.contains(
+                                CopyableCipherFields.PASSPORT_PASSPORT_NUMBER,
+                            )
+                    },
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = cipherId,
                     cipherType = this.type.toSdkCipherType(),

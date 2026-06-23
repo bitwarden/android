@@ -5,6 +5,7 @@ import com.bitwarden.network.interceptor.AuthTokenManager
 import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.network.interceptor.CookieInterceptor
 import com.bitwarden.network.interceptor.HeadersInterceptor
+import com.bitwarden.network.interceptor.PermissionInterceptor
 import com.bitwarden.network.model.BitwardenServiceClientConfig
 import com.bitwarden.network.provider.CookieProvider
 import com.bitwarden.network.provider.RefreshTokenProvider
@@ -28,6 +29,8 @@ import com.bitwarden.network.service.DownloadService
 import com.bitwarden.network.service.DownloadServiceImpl
 import com.bitwarden.network.service.EventService
 import com.bitwarden.network.service.EventServiceImpl
+import com.bitwarden.network.service.FillAssistService
+import com.bitwarden.network.service.FillAssistServiceImpl
 import com.bitwarden.network.service.FolderService
 import com.bitwarden.network.service.FolderServiceImpl
 import com.bitwarden.network.service.HaveIBeenPwnedService
@@ -70,6 +73,9 @@ internal class BitwardenServiceClientImpl(
             ),
             cookieInterceptor = CookieInterceptor(
                 cookieProvider = cookieProvider,
+            ),
+            permissionInterceptor = PermissionInterceptor(
+                permissionProvider = bitwardenServiceClientConfig.permissionProvider,
             ),
             headersInterceptor = HeadersInterceptor(
                 userAgent = bitwardenServiceClientConfig.clientData.userAgent,
@@ -117,7 +123,7 @@ internal class BitwardenServiceClientImpl(
 
     override val configService: ConfigService by lazy {
         ConfigServiceImpl(
-            configApi = retrofits.unauthenticatedApiRetrofit.create(),
+            configApi = retrofits.authenticatedApiRetrofit.create(),
         )
     }
 
@@ -149,6 +155,10 @@ internal class BitwardenServiceClientImpl(
             foldersApi = retrofits.authenticatedApiRetrofit.create(),
             json = clientJson,
         )
+    }
+
+    override val fillAssistService: FillAssistService by lazy {
+        FillAssistServiceImpl(api = retrofits.fillAssistRetrofit.create())
     }
 
     override val haveIBeenPwnedService: HaveIBeenPwnedService by lazy {

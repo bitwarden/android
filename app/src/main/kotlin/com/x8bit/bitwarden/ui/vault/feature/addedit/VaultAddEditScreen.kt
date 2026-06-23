@@ -86,9 +86,11 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditBankAcc
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLicenseTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditUserVerificationHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.rememberVaultAddEditPassportTypeHandlers
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
@@ -240,6 +242,12 @@ fun VaultAddEditScreen(
     val bankAccountItemTypeHandlers = remember(viewModel) {
         VaultAddEditBankAccountTypeHandlers.create(viewModel = viewModel)
     }
+
+    val licenseItemTypeHandlers = remember(viewModel) {
+        VaultAddEditLicenseTypeHandlers.create(viewModel = viewModel)
+    }
+
+    val passportItemTypeHandlers = rememberVaultAddEditPassportTypeHandlers(viewModel = viewModel)
 
     val archiveClickAction = { viewModel.trySendAction(VaultAddEditAction.Common.ArchiveClick) }
 
@@ -423,6 +431,8 @@ fun VaultAddEditScreen(
                         cardItemTypeHandlers = cardItemTypeHandlers,
                         sshKeyItemTypeHandlers = sshKeyItemTypeHandlers,
                         bankAccountItemTypeHandlers = bankAccountItemTypeHandlers,
+                        licenseItemTypeHandlers = licenseItemTypeHandlers,
+                        passportItemTypeHandlers = passportItemTypeHandlers,
                         isCardScannerEnabled = state.isCardScannerEnabled,
                         cardHolderNameFocusRequester = cardHolderNameFocusRequester,
                         lazyListState = lazyListState,
@@ -490,7 +500,7 @@ private fun VaultAddEditItemDialogs(
     when (dialogState) {
         is VaultAddEditState.DialogState.ArchiveRequiresPremium -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(id = BitwardenString.archive_unavailable),
+                title = stringResource(id = BitwardenString.premium_subscription_required),
                 message = stringResource(id = BitwardenString.archiving_items_is_a_premium_feature),
                 confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
                 dismissButtonText = stringResource(id = BitwardenString.cancel),

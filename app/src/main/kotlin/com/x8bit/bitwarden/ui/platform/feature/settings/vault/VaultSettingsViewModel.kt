@@ -2,18 +2,15 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.BuildInfoManager
-import com.bitwarden.core.data.manager.model.FlagKey
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -29,17 +26,13 @@ class VaultSettingsViewModel @Inject constructor(
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val buildInfoManager: BuildInfoManager,
     private val firstTimeActionManager: FirstTimeActionManager,
-    private val featureFlagManager: FeatureFlagManager,
     private val policyManager: PolicyManager,
 ) : BaseViewModel<VaultSettingsState, VaultSettingsEvent, VaultSettingsAction>(
     initialState = run {
         val firstTimeState = firstTimeActionManager.currentOrDefaultUserFirstTimeState
         VaultSettingsState(
             showImportActionCard = firstTimeState.showImportLoginsCardInSettings,
-            showImportItemsChevron = !buildInfoManager.isFdroid &&
-                featureFlagManager.getFeatureFlag(
-                    key = FlagKey.CredentialExchangeProtocolImport,
-                ),
+            showImportItemsChevron = !buildInfoManager.isFdroid,
         )
     },
 ) {
@@ -60,15 +53,11 @@ class VaultSettingsViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        featureFlagManager
-            .getFeatureFlagFlow(key = FlagKey.CredentialExchangeProtocolImport)
-            .combine(
-                policyManager.getActivePoliciesFlow(type = PolicyTypeJson.PERSONAL_OWNERSHIP),
-            ) { isEnabled, policies ->
+        policyManager
+            .getActivePoliciesFlow(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
+            .map { policies ->
                 VaultSettingsAction.Internal.CredentialExchangeAvailabilityChanged(
-                    isEnabled = isEnabled &&
-                        !buildInfoManager.isFdroid &&
-                        policies.isEmpty(),
+                    isEnabled = !buildInfoManager.isFdroid && policies.isEmpty(),
                 )
             }
             .onEach(::sendAction)
@@ -144,8 +133,7 @@ class VaultSettingsViewModel @Inject constructor(
 
     private fun handleImportItemsClicked() {
         if (!buildInfoManager.isFdroid &&
-            featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport) &&
-            policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP).isEmpty()
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP).isEmpty()
         ) {
             sendEvent(VaultSettingsEvent.NavigateToImportItems)
         } else {

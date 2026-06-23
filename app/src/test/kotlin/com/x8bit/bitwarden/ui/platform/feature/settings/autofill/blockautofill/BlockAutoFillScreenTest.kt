@@ -105,7 +105,7 @@ class BlockAutoFillScreenTest : BitwardenComposeTest() {
     @Test
     fun `on FAB button click should send AddUriClick`() {
         composeTestRule
-            .onNodeWithContentDescription("Add Item")
+            .onNodeWithContentDescription("Add item")
             .performClick()
 
         verify { viewModel.trySendAction(BlockAutoFillAction.AddUriClick) }

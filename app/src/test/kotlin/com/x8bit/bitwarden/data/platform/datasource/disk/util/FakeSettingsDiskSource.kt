@@ -70,6 +70,7 @@ class FakeSettingsDiskSource(
     private var storedPremiumUpgradeBannerDismissed = mutableMapOf<String, Boolean?>()
     private val storedUpgradedToPremiumCardConsumed = mutableMapOf<String, Boolean?>()
     private val storedUpgradedToPremiumCardPending = mutableMapOf<String, Boolean?>()
+    private val storedPremiumUpgradePending = mutableMapOf<String, Boolean?>()
     private val storedInlineAutofillEnabled = mutableMapOf<String, Boolean?>()
     private val storedBlockedAutofillUris = mutableMapOf<String, List<String>?>()
     private var storedIsIconLoadingDisabled: Boolean? = null
@@ -92,6 +93,7 @@ class FakeSettingsDiskSource(
     private var hasSeenAddLoginCoachMark: Boolean? = null
     private var hasSeenGeneratorCoachMark: Boolean? = null
     private var storedIsDynamicColorsEnabled: Boolean? = null
+    private var storedHasShownAccessibilityDisclaimer: Boolean? = null
     private var storedBrowserAutofillDialogReshowTime: Instant? = null
 
     private val mutableShowAutoFillSettingBadgeFlowMap =
@@ -109,6 +111,8 @@ class FakeSettingsDiskSource(
     private val mutableIsDynamicColorsEnabled =
         bufferedMutableSharedFlow<Boolean?>()
 
+    private val mutableHasShownAccessibilityDisclaimerFlow = bufferedMutableSharedFlow<Boolean?>()
+
     private val mutableVaultRegisteredForExportFlow =
         bufferedMutableSharedFlow<Boolean?>()
 
@@ -122,6 +126,9 @@ class FakeSettingsDiskSource(
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutableUpgradedToPremiumCardPendingFlow =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutablePremiumUpgradePendingFlow =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     override var appLanguage: AppLanguage?
@@ -156,6 +163,18 @@ class FakeSettingsDiskSource(
     override val isDynamicColorsEnabledFlow: Flow<Boolean?>
         get() = mutableIsDynamicColorsEnabled.onSubscription {
             emit(isDynamicColorsEnabled)
+        }
+
+    override var hasShownAccessibilityDisclaimer: Boolean?
+        get() = storedHasShownAccessibilityDisclaimer
+        set(value) {
+            storedHasShownAccessibilityDisclaimer = value
+            mutableHasShownAccessibilityDisclaimerFlow.tryEmit(value)
+        }
+
+    override val hasShownAccessibilityDisclaimerFlow: Flow<Boolean?>
+        get() = mutableHasShownAccessibilityDisclaimerFlow.onSubscription {
+            emit(hasShownAccessibilityDisclaimer)
         }
 
     override var screenCaptureAllowed: Boolean?
@@ -389,6 +408,18 @@ class FakeSettingsDiskSource(
         getMutableUpgradedToPremiumCardPendingFlow(userId = userId)
             .onSubscription { emit(getUpgradedToPremiumCardPending(userId = userId)) }
 
+    override fun getPremiumUpgradePending(userId: String): Boolean? =
+        storedPremiumUpgradePending[userId]
+
+    override fun storePremiumUpgradePending(userId: String, isPending: Boolean?) {
+        storedPremiumUpgradePending[userId] = isPending
+        getMutablePremiumUpgradePendingFlow(userId = userId).tryEmit(isPending)
+    }
+
+    override fun getPremiumUpgradePendingFlow(userId: String): Flow<Boolean?> =
+        getMutablePremiumUpgradePendingFlow(userId = userId)
+            .onSubscription { emit(getPremiumUpgradePending(userId = userId)) }
+
     override fun getInlineAutofillEnabled(userId: String): Boolean? =
         storedInlineAutofillEnabled[userId]
 
@@ -568,6 +599,13 @@ class FakeSettingsDiskSource(
     }
 
     /**
+     * Asserts that the stored "Premium upgrade pending" value matches the [expected] one.
+     */
+    fun assertPremiumUpgradePending(userId: String, expected: Boolean?) {
+        assertEquals(expected, storedPremiumUpgradePending[userId])
+    }
+
+    /**
      * Asserts that the stored last sync time matches the [expected] one.
      */
     fun assertLastSyncTime(userId: String, expected: Instant?) {
@@ -649,6 +687,13 @@ class FakeSettingsDiskSource(
         userId: String,
     ): MutableSharedFlow<Boolean?> =
         mutableUpgradedToPremiumCardPendingFlow.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutablePremiumUpgradePendingFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutablePremiumUpgradePendingFlow.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 

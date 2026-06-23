@@ -366,7 +366,7 @@ private fun VaultScreenScaffold(
                         message = stringResource(
                             BitwardenString.the_vault_protects_more_than_just_passwords,
                         ),
-                        buttonText = stringResource(BitwardenString.new_login),
+                        buttonText = stringResource(id = BitwardenString.add_login),
                         policyDisablesSend = false,
                         addItemClickAction = {
                             vaultHandlers.addItemClickAction(CreateVaultItemType.LOGIN)
@@ -397,7 +397,7 @@ private fun VaultDialogs(
     when (dialogState) {
         VaultState.DialogState.ArchiveRequiresPremium -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(id = BitwardenString.archive_unavailable),
+                title = stringResource(id = BitwardenString.premium_subscription_required),
                 message = stringResource(id = BitwardenString.archiving_items_is_a_premium_feature),
                 confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
                 dismissButtonText = stringResource(id = BitwardenString.cancel),

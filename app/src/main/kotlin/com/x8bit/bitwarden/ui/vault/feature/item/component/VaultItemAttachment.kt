@@ -121,7 +121,7 @@ fun VaultItemAttachment(
 
     if (shouldShowPremiumWarningDialog) {
         BitwardenTwoButtonDialog(
-            title = stringResource(id = BitwardenString.attachments_unavailable),
+            title = stringResource(id = BitwardenString.premium_subscription_required),
             message = stringResource(id = BitwardenString.attachments_are_a_premium_feature),
             confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
             dismissButtonText = stringResource(id = BitwardenString.cancel),

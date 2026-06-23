@@ -8,7 +8,7 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -127,7 +127,7 @@ class SearchViewModel @Inject constructor(
                     is SearchType.Sends -> null
                     is SearchType.Vault -> userState.activeAccount.toVaultFilterData(
                         isIndividualVaultDisabled = policyManager
-                            .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+                            .getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
                             .any(),
                     )
                 },
@@ -156,7 +156,7 @@ class SearchViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         policyManager
-            .getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            .getActivePoliciesFlow(type = PolicyType.RESTRICTED_ITEM_TYPES)
             .map { policies -> policies.map { it.organizationId } }
             .map { SearchAction.Internal.RestrictItemTypesPolicyUpdateReceive(it) }
             .onEach(::sendAction)
@@ -322,6 +322,7 @@ class SearchViewModel @Inject constructor(
         }
     }
 
+    @Suppress("LongMethod")
     private fun handleOverflowItemClick(action: SearchAction.OverflowOptionClick) {
         when (val overflowAction = action.overflowAction) {
             is ListingItemOverflowAction.SendAction.CopyUrlClick -> {
@@ -356,6 +357,14 @@ class SearchViewModel @Inject constructor(
 
             is ListingItemOverflowAction.VaultAction.CopyRoutingNumberClick -> {
                 handleCopyRoutingNumberClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyLicenseNumberClick -> {
+                handleCopyLicenseNumberClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyPassportNumberClick -> {
+                handleCopyPassportNumberClick(overflowAction)
             }
 
             is ListingItemOverflowAction.VaultAction.CopyPasswordClick -> {
@@ -567,6 +576,40 @@ class SearchViewModel @Inject constructor(
                     clipboardManager.setText(
                         text = it,
                         toastDescriptorOverride = BitwardenString.routing_number.asText(),
+                    )
+                }
+        }
+    }
+
+    private fun handleCopyLicenseNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyLicenseNumberClick,
+    ) {
+        viewModelScope.launch {
+            decryptCipherViewOrNull(action.cipherId)
+                ?.driversLicense
+                ?.licenseNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    clipboardManager.setText(
+                        text = it,
+                        toastDescriptorOverride = BitwardenString.license_number.asText(),
+                    )
+                }
+        }
+    }
+
+    private fun handleCopyPassportNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyPassportNumberClick,
+    ) {
+        viewModelScope.launch {
+            decryptCipherViewOrNull(action.cipherId)
+                ?.passport
+                ?.passportNumber
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    clipboardManager.setText(
+                        text = it,
+                        toastDescriptorOverride = BitwardenString.passport_number.asText(),
                     )
                 }
         }
@@ -1344,6 +1387,26 @@ sealed class SearchTypeData : Parcelable {
         data object BankAccounts : Vault() {
             override val title: Text
                 get() = BitwardenString.search_x.asText(BitwardenString.bank_accounts.asText())
+        }
+
+        /**
+         * Indicates that we should be searching only license ciphers.
+         */
+        data object Licenses : Vault() {
+            override val title: Text
+                get() = BitwardenString
+                    .search_x
+                    .asText(BitwardenString.licenses.asText())
+        }
+
+        /**
+         * Indicates that we should be searching only passport ciphers.
+         */
+        data object Passports : Vault() {
+            override val title: Text
+                get() = BitwardenString
+                    .search_x
+                    .asText(BitwardenString.passports.asText())
         }
 
         /**

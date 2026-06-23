@@ -20,8 +20,10 @@ fun createMockCipherJsonRequest(
     card: SyncResponseJson.Cipher.Card? = createMockCard(number = number),
     sshKey: SyncResponseJson.Cipher.SshKey? = createMockSshKey(number = number),
     bankAccount: SyncResponseJson.Cipher.BankAccount? = createMockBankAccount(number = number),
-    driversLicense: SyncResponseJson.Cipher.DriversLicense? = null,
-    passport: SyncResponseJson.Cipher.Passport? = null,
+    driversLicense: SyncResponseJson.Cipher.DriversLicense? = createMockDriversLicense(
+        number = number,
+    ),
+    passport: SyncResponseJson.Cipher.Passport? = createMockPassport(number = number),
     identity: SyncResponseJson.Cipher.Identity? = createMockIdentity(number = number),
     secureNote: SyncResponseJson.Cipher.SecureNote? = createMockSecureNote(),
     fields: List<SyncResponseJson.Cipher.Field>? = listOf(createMockField(number = number)),

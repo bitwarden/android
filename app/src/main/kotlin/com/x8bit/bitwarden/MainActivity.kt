@@ -15,13 +15,13 @@ import androidx.browser.auth.AuthTabIntent
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.core.os.LocaleListCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -36,13 +36,11 @@ import com.x8bit.bitwarden.data.platform.manager.util.ObserveScreenDataEffect
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.composition.LocalManagerProvider
-import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.cookieAcquisitionDestination
-import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.navigateToCookieAcquisition
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.debugMenuDestination
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.manager.DebugMenuLaunchManager
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.navigateToDebugMenuScreen
-import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavigationRoute
-import com.x8bit.bitwarden.ui.platform.feature.rootnav.rootNavDestination
+import com.x8bit.bitwarden.ui.platform.feature.overlaynav.OverlayNavRoute
+import com.x8bit.bitwarden.ui.platform.feature.overlaynav.overlayNavDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 import com.x8bit.bitwarden.ui.platform.util.appLanguage
@@ -93,6 +91,21 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.trySendAction(MainAction.PremiumCheckoutResult(it))
     }
 
+    private val stripePortalLauncher = AuthTabIntent.registerActivityResultLauncher(this) {
+        mainViewModel.trySendAction(MainAction.StripePortalResult(it))
+    }
+
+    private val authTabLaunchers by lazy {
+        AuthTabLaunchers(
+            duo = duoLauncher,
+            sso = ssoLauncher,
+            webAuthn = webAuthnLauncher,
+            cookie = cookieLauncher,
+            premiumCheckout = premiumCheckoutLauncher,
+            stripePortal = stripePortalLauncher,
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         intent = intent.validate()
         var shouldShowSplashScreen = true
@@ -113,47 +126,13 @@ class MainActivity : AppCompatActivity() {
             SetupEventsEffect(navController = navController)
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
             updateScreenCapture(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
-            LocalManagerProvider(
-                featureFlagsState = state.featureFlagsState,
-                authTabLaunchers = AuthTabLaunchers(
-                    duo = duoLauncher,
-                    sso = ssoLauncher,
-                    webAuthn = webAuthnLauncher,
-                    cookie = cookieLauncher,
-                    premiumCheckout = premiumCheckoutLauncher,
-                ),
-            ) {
-                ObserveScreenDataEffect(
-                    onDataUpdate = remember(mainViewModel) {
-                        { mainViewModel.trySendAction(MainAction.ResumeScreenDataReceived(it)) }
-                    },
-                )
-                BitwardenTheme(
-                    theme = state.theme,
-                    dynamicColor = state.isDynamicColorsEnabled,
-                ) {
-                    NavHost(
-                        navController = navController,
-                        startDestination = RootNavigationRoute,
-                        modifier = Modifier
-                            .background(color = BitwardenTheme.colorScheme.background.primary),
-                    ) {
-                        // Root navigation, debug menu, and cookie acquisition exist at
-                        // this top level. They can appear on top of the rest of the app
-                        // without interacting with the state-based navigation used by
-                        // RootNavScreen.
-                        rootNavDestination { shouldShowSplashScreen = false }
-                        debugMenuDestination(
-                            onNavigateBack = { navController.popBackStack() },
-                            onSplashScreenRemoved = { shouldShowSplashScreen = false },
-                        )
-                        cookieAcquisitionDestination(
-                            onDismiss = { navController.popBackStack() },
-                            onSplashScreenRemoved = { shouldShowSplashScreen = false },
-                        )
-                    }
-                }
-            }
+            MainActivityContent(
+                state = state,
+                authTabLaunchers = authTabLaunchers,
+                navController = navController,
+                sendAction = mainViewModel::trySendAction,
+                onSplashScreenRemoved = { shouldShowSplashScreen = false },
+            )
         }
     }
 
@@ -185,7 +164,7 @@ class MainActivity : AppCompatActivity() {
                 locales.get(0)?.appLanguage
             }
         } else {
-            // For older versions, use what ever language is available from the repository.
+            // For older versions, use whatever language is available from the repository.
             settingsRepository.appLanguage
         }
 
@@ -234,8 +213,6 @@ class MainActivity : AppCompatActivity() {
                 is MainEvent.CompleteAutofill -> handleCompleteAutofill(event)
                 MainEvent.Recreate -> handleRecreate()
                 MainEvent.NavigateToDebugMenu -> navController.navigateToDebugMenuScreen()
-                MainEvent.NavigateToCookieAcquisition -> navController.navigateToCookieAcquisition()
-
                 is MainEvent.UpdateAppLocale -> {
                     AppCompatDelegate.setApplicationLocales(
                         LocaleListCompat.forLanguageTags(event.localeName),
@@ -276,6 +253,41 @@ class MainActivity : AppCompatActivity() {
             window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         } else {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        }
+    }
+}
+
+@OmitFromCoverage
+@Composable
+private fun MainActivityContent(
+    state: MainState,
+    authTabLaunchers: AuthTabLaunchers,
+    navController: NavHostController,
+    sendAction: (MainAction) -> Unit,
+    onSplashScreenRemoved: () -> Unit,
+) {
+    LocalManagerProvider(
+        featureFlagsState = state.featureFlagsState,
+        authTabLaunchers = authTabLaunchers,
+    ) {
+        ObserveScreenDataEffect { sendAction(MainAction.ResumeScreenDataReceived(it)) }
+        BitwardenTheme(
+            theme = state.theme,
+            dynamicColor = state.isDynamicColorsEnabled,
+        ) {
+            NavHost(
+                navController = navController,
+                startDestination = OverlayNavRoute,
+                modifier = Modifier.background(BitwardenTheme.colorScheme.background.primary),
+            ) {
+                // The OverlayNav and Debug destinations are the only UIs that can be
+                // displayed here, everything else should be inside the OverlayNav.
+                overlayNavDestination(onSplashScreenRemoved = onSplashScreenRemoved)
+                debugMenuDestination(
+                    onNavigateBack = { navController.popBackStack() },
+                    onSplashScreenRemoved = onSplashScreenRemoved,
+                )
+            }
         }
     }
 }

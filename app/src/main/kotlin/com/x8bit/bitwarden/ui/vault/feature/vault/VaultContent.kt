@@ -297,6 +297,46 @@ fun VaultContent(
             )
         }
 
+        if (state.showLicenseGroup) {
+            item(key = "licenses_group") {
+                BitwardenGroupItem(
+                    startIcon = IconData.Local(
+                        iconRes = BitwardenDrawable.ic_id_card,
+                        testTag = "LicenseCipherIcon",
+                    ),
+                    label = stringResource(id = BitwardenString.type_license),
+                    supportingLabel = state.licenseItemsCount.toString(),
+                    onClick = vaultHandlers.licenseGroupClick,
+                    cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
+                    modifier = Modifier
+                        .animateItem()
+                        .fillMaxWidth()
+                        .testTag("LicenseFilter")
+                        .standardHorizontalMargin(),
+                )
+            }
+        }
+
+        if (state.showPassportGroup) {
+            item(key = "passports_group") {
+                BitwardenGroupItem(
+                    startIcon = IconData.Local(
+                        iconRes = BitwardenDrawable.ic_passport,
+                        testTag = "PassportCipherIcon",
+                    ),
+                    label = stringResource(id = BitwardenString.type_passport),
+                    supportingLabel = state.passportItemsCount.toString(),
+                    onClick = vaultHandlers.passportGroupClick,
+                    cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
+                    modifier = Modifier
+                        .animateItem()
+                        .fillMaxWidth()
+                        .testTag("PassportFilter")
+                        .standardHorizontalMargin(),
+                )
+            }
+        }
+
         item(key = "notes_group") {
             BitwardenGroupItem(
                 startIcon = IconData.Local(
@@ -522,6 +562,7 @@ fun VaultContent(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun ActionCard(
     actionCardState: VaultState.ActionCardState,
@@ -536,6 +577,7 @@ private fun ActionCard(
                     id = BitwardenString.you_now_have_access_to_all_advanced_security_features,
                 ),
                 actionText = stringResource(id = BitwardenString.learn_more),
+                isExternalLink = true,
                 leadingContent = {
                     Icon(
                         painter = rememberVectorPainter(id = BitwardenDrawable.ic_star),
@@ -558,9 +600,19 @@ private fun ActionCard(
                     id = BitwardenString
                         .a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control,
                 ),
-                actionText = stringResource(id = BitwardenString.upgrade_to_premium),
+                actionText = stringResource(id = BitwardenString.learn_more),
                 onActionClick = { vaultHandlers.actionCardClick(actionCardState) },
                 onDismissClick = { vaultHandlers.dismissActionCardClick(actionCardState) },
+                modifier = modifier,
+            )
+        }
+
+        VaultState.ActionCardState.PremiumNeedsAttention -> {
+            BitwardenActionCard(
+                cardTitle = stringResource(id = BitwardenString.your_subscription_needs_attention),
+                cardSubtitle = stringResource(id = BitwardenString.check_your_plan_for_details),
+                actionText = stringResource(id = BitwardenString.view_plan),
+                onActionClick = { vaultHandlers.actionCardClick(actionCardState) },
                 modifier = modifier,
             )
         }

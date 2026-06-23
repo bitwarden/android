@@ -1,17 +1,24 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import android.os.Build
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.util.concurrentMapOf
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.manager.NativeLibraryManager
 import com.bitwarden.sdk.Client
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 
 /**
  * Primary implementation of [SdkClientManager].
  */
 class SdkClientManagerImpl(
     nativeLibraryManager: NativeLibraryManager,
+    dispatcherManager: DispatcherManager,
     sdkRepoFactory: SdkRepositoryFactory,
     sdkPlatformApiFactory: SdkPlatformApiFactory,
     private val featureFlagManager: FeatureFlagManager,
@@ -38,7 +45,9 @@ class SdkClientManagerImpl(
             }
     },
 ) : SdkClientManager {
-    private val userIdToClientMap = mutableMapOf<String, Client>()
+    private val userIdToClientMap = concurrentMapOf<String, Client>()
+    private val ioScope = CoroutineScope(context = dispatcherManager.io)
+    private val globalClientDeferred: Deferred<Client>
 
     init {
         // The SDK requires access to Android APIs that were not made public until API 31. In order
@@ -47,7 +56,12 @@ class SdkClientManagerImpl(
         if (!isBuildVersionAtLeast(Build.VERSION_CODES.S)) {
             nativeLibraryManager.loadLibrary("bitwarden_uniffi")
         }
+        // Initialize this now, so that we can access it synchronously later on.
+        globalClientDeferred = ioScope.async { clientProvider(null, null) }
     }
+
+    override val globalClient: Client
+        get() = runBlocking { globalClientDeferred.await() }
 
     override suspend fun getOrCreateClient(
         userId: String,

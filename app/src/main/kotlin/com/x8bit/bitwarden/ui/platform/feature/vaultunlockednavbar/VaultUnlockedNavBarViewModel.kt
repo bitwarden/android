@@ -2,17 +2,20 @@ package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.model.VaultUnlockedNavBarTab
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
@@ -25,12 +28,16 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
     authRepository: AuthRepository,
     specialCircumstancesManager: SpecialCircumstanceManager,
     firstTimeActionManager: FirstTimeActionManager,
+    policyManager: PolicyManager,
 ) : BaseViewModel<VaultUnlockedNavBarState, VaultUnlockedNavBarEvent, VaultUnlockedNavBarAction>(
     initialState = VaultUnlockedNavBarState(
         vaultNavBarLabelRes = BitwardenString.my_vault,
         notificationState = VaultUnlockedNavBarNotificationState(
             settingsTabNotificationCount = firstTimeActionManager.allSettingsBadgeCountFlow.value,
         ),
+        areSendsDisabled = policyManager
+            .getActivePolicies(type = PolicyType.DISABLE_SEND)
+            .any(),
     ),
 ) {
     init {
@@ -46,6 +53,12 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
             .onEach {
                 sendAction(VaultUnlockedNavBarAction.Internal.SettingsNotificationCountUpdate(it))
             }
+            .launchIn(viewModelScope)
+
+        policyManager
+            .getActivePoliciesFlow(type = PolicyType.DISABLE_SEND)
+            .map { VaultUnlockedNavBarAction.Internal.SendPolicyUpdateReceive(it.any()) }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
 
         when (specialCircumstancesManager.specialCircumstance) {
@@ -111,6 +124,10 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
             is VaultUnlockedNavBarAction.Internal.SettingsNotificationCountUpdate -> {
                 handleSettingsNotificationCountUpdate(action)
             }
+
+            is VaultUnlockedNavBarAction.Internal.SendPolicyUpdateReceive -> {
+                handleSendPolicyUpdateReceive(action)
+            }
         }
     }
     // #region BottomTabViewModel Action Handlers
@@ -175,6 +192,12 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
             )
         }
     }
+
+    private fun handleSendPolicyUpdateReceive(
+        action: VaultUnlockedNavBarAction.Internal.SendPolicyUpdateReceive,
+    ) {
+        mutableStateFlow.update { it.copy(areSendsDisabled = action.hasPolicy) }
+    }
     // #endregion BottomTabViewModel Action Handlers
 }
 
@@ -184,6 +207,7 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
 data class VaultUnlockedNavBarState(
     @field:StringRes val vaultNavBarLabelRes: Int,
     val notificationState: VaultUnlockedNavBarNotificationState,
+    val areSendsDisabled: Boolean,
 )
 
 /**
@@ -230,6 +254,11 @@ sealed class VaultUnlockedNavBarAction {
          * Indicates a change to the count of settings notifications to show
          */
         data class SettingsNotificationCountUpdate(val count: Int) : Internal()
+
+        /**
+         * Indicates a change to the count of settings notifications to show
+         */
+        data class SendPolicyUpdateReceive(val hasPolicy: Boolean) : Internal()
     }
 }
 

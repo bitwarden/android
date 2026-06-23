@@ -11,9 +11,11 @@ import com.bitwarden.network.model.createMockCard
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCipherJsonRequest
 import com.bitwarden.network.model.createMockCipherMiniResponse
+import com.bitwarden.network.model.createMockDriversLicense
 import com.bitwarden.network.model.createMockField
 import com.bitwarden.network.model.createMockIdentity
 import com.bitwarden.network.model.createMockLogin
+import com.bitwarden.network.model.createMockPassport
 import com.bitwarden.network.model.createMockPasswordHistory
 import com.bitwarden.network.model.createMockSecureNote
 import com.bitwarden.network.model.createMockSshKey
@@ -39,7 +41,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSshKey
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkUri
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.jupiter.api.assertNull
@@ -85,8 +86,6 @@ class VaultSdkCipherExtensionsTest {
             createMockCipherJsonRequest(
                 number = 1,
                 login = createMockLogin(number = 1, uri = null),
-                driversLicense = null,
-                passport = null,
                 archivedDate = FIXED_CLOCK.instant(),
             ),
             syncCipher,
@@ -225,13 +224,13 @@ class VaultSdkCipherExtensionsTest {
     }
 
     @Test
-    fun `toEncryptedNetworkCipher should always emit null driversLicense and passport`() {
+    fun `toEncryptedNetworkCipher should map driversLicense and passport`() {
         val sdkCipher = createMockSdkCipher(number = 1, clock = FIXED_CLOCK)
 
         val request = sdkCipher.toEncryptedNetworkCipher(encryptedFor = "mockEncryptedFor-1")
 
-        assertNull(request.driversLicense)
-        assertNull(request.passport)
+        assertEquals(createMockDriversLicense(number = 1), request.driversLicense)
+        assertEquals(createMockPassport(number = 1), request.passport)
     }
 
     @Test
@@ -357,21 +356,20 @@ class VaultSdkCipherExtensionsTest {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `toSdkCipherType should throw for DRIVERS_LICENSE since SDK mapping is not yet available`() {
-        val error = assertThrows(IllegalArgumentException::class.java) {
-            CipherTypeJson.DRIVERS_LICENSE.toSdkCipherType()
-        }
-        assertEquals("SDK mapping not yet available for DRIVERS_LICENSE", error.message)
+    fun `toSdkCipherType should map LICENSE to the SDK LICENSE type`() {
+        assertEquals(
+            CipherType.DRIVERS_LICENSE,
+            CipherTypeJson.DRIVERS_LICENSE.toSdkCipherType(),
+        )
     }
 
     @Test
-    fun `toSdkCipherType should throw for PASSPORT since SDK mapping is not yet available`() {
-        val error = assertThrows(IllegalArgumentException::class.java) {
-            CipherTypeJson.PASSPORT.toSdkCipherType()
-        }
-        assertEquals("SDK mapping not yet available for PASSPORT", error.message)
+    fun `toSdkCipherType should map PASSPORT to the SDK PASSPORT type`() {
+        assertEquals(
+            CipherType.PASSPORT,
+            CipherTypeJson.PASSPORT.toSdkCipherType(),
+        )
     }
 
     @Test
@@ -450,8 +448,6 @@ class VaultSdkCipherExtensionsTest {
             createMockCipherJsonRequest(
                 number = 1,
                 login = createMockLogin(number = 1, uri = null),
-                driversLicense = null,
-                passport = null,
                 archivedDate = FIXED_CLOCK.instant(),
             ),
             encryptionContext.toEncryptedNetworkCipher(),

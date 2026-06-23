@@ -45,7 +45,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2Credenti
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidAttestationResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidFido2PublicKeyCredential
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.fold
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
@@ -65,11 +64,9 @@ class BitwardenCredentialManagerImpl(
     private val vaultRepository: VaultRepository,
     private val cipherMatchingManager: CipherMatchingManager,
     private val passkeyAttestationOptionsSanitizer: PasskeyAttestationOptionsSanitizer,
-    dispatcherManager: DispatcherManager,
+    private val dispatcherManager: DispatcherManager,
 ) : BitwardenCredentialManager,
     Fido2CredentialStore by fido2CredentialStore {
-
-    private val ioScope = CoroutineScope(dispatcherManager.io)
 
     override var isUserVerified: Boolean = false
 
@@ -179,7 +176,7 @@ class BitwardenCredentialManagerImpl(
 
     override suspend fun getCredentialEntries(
         getCredentialsRequest: GetCredentialsRequest,
-    ): Result<List<CredentialEntry>> = withContext(ioScope.coroutineContext) {
+    ): Result<List<CredentialEntry>> = withContext(dispatcherManager.io) {
         val cipherListViews = vaultRepository
             .decryptCipherListResultStateFlow
             .takeUntilLoaded()

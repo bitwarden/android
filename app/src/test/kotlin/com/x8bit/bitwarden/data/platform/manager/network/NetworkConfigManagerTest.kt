@@ -8,6 +8,7 @@ import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.BitwardenServiceClient
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -29,10 +30,12 @@ class NetworkConfigManagerTest {
         unconfined = testDispatcher,
     )
     private val mutableAuthStateFlow = MutableStateFlow<AuthState>(AuthState.Uninitialized)
+    private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val mutableEnvironmentStateFlow = MutableStateFlow<Environment>(Environment.Us)
 
     private val authRepository: AuthRepository = mockk {
         every { authStateFlow } returns mutableAuthStateFlow
+        every { userStateFlow } returns mutableUserStateFlow
     }
     private val environmentRepository: EnvironmentRepository = mockk {
         every { environmentStateFlow } returns mutableEnvironmentStateFlow
@@ -57,10 +60,13 @@ class NetworkConfigManagerTest {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `changes in the Environment should call getServerConfig after debounce period`() {
-        mutableEnvironmentStateFlow.value = Environment.Us
+    fun `changes in the Environment or active user ID should call getServerConfig after debounce period`() {
         mutableEnvironmentStateFlow.value = Environment.Eu
+        mutableUserStateFlow.value = mockk { every { activeUserId } returns "userId" }
+        mutableEnvironmentStateFlow.value = Environment.Us
+        mutableUserStateFlow.value = null
         testDispatcher.advanceTimeByAndRunCurrent(delayTimeMillis = 500L)
         coVerify(exactly = 1) {
             serverConfigRepository.getServerConfig(forceRefresh = true)

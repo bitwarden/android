@@ -87,6 +87,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.time.LocalDate
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType as UriMatchTypeModel
 
 @Suppress("LargeClass")
@@ -313,7 +314,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithText(text = "Archive unavailable")
+            .onNodeWithText(text = "Premium subscription required")
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
     }
@@ -2780,6 +2781,532 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `in ItemType_License changing first name should trigger FirstNameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "First name")
+            .performTextInput(text = "Missy")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.FirstNameTextChange(
+                    firstName = "Missy",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_License changing middle name should trigger MiddleNameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Middle name")
+            .performTextInput(text = "Anne")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.MiddleNameTextChange(
+                    middleName = "Anne",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_License changing last name should trigger LastNameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Last name")
+            .performTextInput(text = "Katner")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.LastNameTextChange(
+                    lastName = "Katner",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_License changing the license number text field should trigger LicenseNumberTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "License number")
+            .performTextInput(text = "K123-456-789")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.LicenseNumberTextChange(
+                    licenseNumber = "K123-456-789",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_License changing the issuing country text field should trigger IssuingCountryTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Issuing country")
+            .performTextInput(text = "USA")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssuingCountryTextChange(
+                    country = "USA",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_License changing the issuing state text field should trigger IssuingStateTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Issuing state / province")
+            .performTextInput(text = "Wisconsin")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssuingStateTextChange(
+                    state = "Wisconsin",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_License changing the issuing authority text field should trigger IssuingAuthorityTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Issuing authority")
+            .performTextInput(text = "DMV")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssuingAuthorityTextChange(
+                    authority = "DMV",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_License changing license class should trigger LicenseClassTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "License class")
+            .performTextInput(text = "Class D")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.LicenseClassTextChange(
+                    licenseClass = "Class D",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_License the date of birth should display the selected date from the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Date of birth")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateLicenseType(currentState) {
+                copy(dateOfBirth = LocalDate.of(1990, 8, 10))
+            }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "August 10, 1990. Date of birth")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_License clicking the date of birth clear button should trigger DateOfBirthChange with null`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Date of birth")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Clear")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.DateOfBirthChange(dateOfBirth = null),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_License the issue date should display the selected date from the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Issue date")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateLicenseType(currentState) {
+                copy(issueDate = LocalDate.of(2020, 1, 15))
+            }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "January 15, 2020. Issue date")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_License clicking the issue date clear button should trigger IssueDateChange with null`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Issue date")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Clear")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssueDateChange(issueDate = null),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_License the expiration date should display the selected date from the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Expiration date")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateLicenseType(currentState) {
+                copy(expirationDate = LocalDate.of(2025, 12, 31))
+            }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "December 31, 2025. Expiration date")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_License clicking the expiration date clear button should trigger ExpirationDateChange with null`() {
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Expiration date")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Clear")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.ExpirationDateChange(
+                    expirationDate = null,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Passport changing first name should trigger GivenNameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "First name")
+            .performTextInput(text = "Bruce")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.GivenNameTextChange(
+                    givenName = "Bruce",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Passport changing last name should trigger SurnameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Last name")
+            .performTextInput(text = "Wayne")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.SurnameTextChange(
+                    surname = "Wayne",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Passport changing sex should trigger SexTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Sex")
+            .performTextInput(text = "M")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.SexTextChange(sex = "M"),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Passport changing birth place should trigger BirthPlaceTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Birth place")
+            .performTextInput(text = "Gotham City")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.BirthPlaceTextChange(
+                    birthPlace = "Gotham City",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Passport changing nationality should trigger NationalityTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Nationality")
+            .performTextInput(text = "American")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.NationalityTextChange(
+                    nationality = "American",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport changing the passport number text field should trigger PassportNumberTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Passport number")
+            .performTextInput(text = "X12345678")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.PassportNumberTextChange(
+                    passportNumber = "X12345678",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Passport changing passport type should trigger PassportTypeTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Passport type")
+            .performTextInput(text = "Regular")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.PassportTypeTextChange(
+                    passportType = "Regular",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport changing the national identification number text field should trigger NationalIdentificationNumberTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "National identification number")
+            .performTextInput(text = "987-65-4321")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction
+                    .ItemType
+                    .PassportType
+                    .NationalIdentificationNumberTextChange(
+                        nationalIdentificationNumber = "987-65-4321",
+                    ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport changing the issuing country text field should trigger IssuingCountryTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Issuing country")
+            .performTextInput(text = "USA")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.IssuingCountryTextChange(
+                    country = "USA",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport changing the issuing authority text field should trigger IssuingAuthorityTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Issuing authority")
+            .performTextInput(text = "U.S. Department of State")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.IssuingAuthorityTextChange(
+                    authority = "U.S. Department of State",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Passport the date of birth should display the selected date from the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Date of birth")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updatePassportType(currentState) {
+                copy(dateOfBirth = LocalDate.of(1990, 8, 10))
+            }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "August 10, 1990. Date of birth")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport clicking the date of birth clear button should trigger DateOfBirthChange with null`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Date of birth")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Clear")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.DateOfBirthChange(dateOfBirth = null),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport the issue date should display the selected date from the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Issue date")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updatePassportType(currentState) {
+                copy(issueDate = LocalDate.of(2021, 3, 20))
+            }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "March 20, 2021. Issue date")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport clicking the issue date clear button should trigger IssueDateChange with null`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Issue date")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Clear")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.IssueDateChange(issueDate = null),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport the expiration date should display the selected date from the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Expiration date")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updatePassportType(currentState) {
+                copy(expirationDate = LocalDate.of(2031, 3, 20))
+            }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "March 20, 2031. Expiration date")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Passport clicking the expiration date clear button should trigger ExpirationDateChange with null`() {
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "null. Expiration date")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Clear")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.ExpirationDateChange(
+                    expirationDate = null,
+                ),
+            )
+        }
+    }
+
+    @Test
     fun `clicking Add field button should allow creation of Linked type`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN
 
@@ -4806,6 +5333,52 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
     }
 
+    private fun updateLicenseType(
+        currentState: VaultAddEditState,
+        transform: VaultAddEditState.ViewState.Content.ItemType.License.() ->
+        VaultAddEditState.ViewState.Content.ItemType.License,
+    ): VaultAddEditState {
+        val updatedType = when (val viewState = currentState.viewState) {
+            is VaultAddEditState.ViewState.Content -> {
+                when (val type = viewState.type) {
+                    is VaultAddEditState.ViewState.Content.ItemType.License -> {
+                        viewState.copy(
+                            type = type.transform(),
+                        )
+                    }
+
+                    else -> viewState
+                }
+            }
+
+            else -> viewState
+        }
+        return currentState.copy(viewState = updatedType)
+    }
+
+    private fun updatePassportType(
+        currentState: VaultAddEditState,
+        transform: VaultAddEditState.ViewState.Content.ItemType.Passport.() ->
+        VaultAddEditState.ViewState.Content.ItemType.Passport,
+    ): VaultAddEditState {
+        val updatedType = when (val viewState = currentState.viewState) {
+            is VaultAddEditState.ViewState.Content -> {
+                when (val type = viewState.type) {
+                    is VaultAddEditState.ViewState.Content.ItemType.Passport -> {
+                        viewState.copy(
+                            type = type.transform(),
+                        )
+                    }
+
+                    else -> viewState
+                }
+            }
+
+            else -> viewState
+        }
+        return currentState.copy(viewState = updatedType)
+    }
+
     //endregion Helper functions
 
     companion object {
@@ -4879,6 +5452,38 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.BankAccount(),
+                isIndividualVaultDisabled = false,
+            ),
+            dialog = null,
+            bottomSheetState = null,
+            shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isCardScannerEnabled = false,
+        )
+
+        private val DEFAULT_STATE_LICENSE = VaultAddEditState(
+            vaultAddEditType = VaultAddEditType.AddItem,
+            cipherType = VaultItemCipherType.DRIVERS_LICENSE,
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.License(),
+                isIndividualVaultDisabled = false,
+            ),
+            dialog = null,
+            bottomSheetState = null,
+            shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
+            hasPremium = false,
+            isCardScannerEnabled = false,
+        )
+
+        private val DEFAULT_STATE_PASSPORT = VaultAddEditState(
+            vaultAddEditType = VaultAddEditType.AddItem,
+            cipherType = VaultItemCipherType.PASSPORT,
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.Passport(),
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,

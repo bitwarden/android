@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager.util
 
-import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.policies.PolicyType
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.map
  */
 inline fun <reified T : PolicyInformation> PolicyManager.getActivePolicies(): List<T> =
     this
-        .getActivePolicies(type = getPolicyTypeJson<T>())
+        .getActivePolicies(type = getPolicyType<T>())
         .mapNotNull { it.policyInformation as? T }
 
 /**
@@ -20,21 +20,21 @@ inline fun <reified T : PolicyInformation> PolicyManager.getActivePolicies(): Li
  */
 inline fun <reified T : PolicyInformation> PolicyManager.getActivePoliciesFlow(): Flow<List<T>> =
     this
-        .getActivePoliciesFlow(type = getPolicyTypeJson<T>())
+        .getActivePoliciesFlow(type = getPolicyType<T>())
         .map { policies ->
             policies.mapNotNull { policy -> policy.policyInformation as? T }
         }
 
 /**
- * Helper method for mapping a specific [PolicyInformation] type to its [PolicyTypeJson]
+ * Helper method for mapping a specific [PolicyInformation] type to its [PolicyType]
  * counterpart.
  */
-inline fun <reified T : PolicyInformation> getPolicyTypeJson(): PolicyTypeJson =
+inline fun <reified T : PolicyInformation> getPolicyType(): PolicyType =
     when (T::class.java) {
-        PolicyInformation.MasterPassword::class.java -> PolicyTypeJson.MASTER_PASSWORD
-        PolicyInformation.PasswordGenerator::class.java -> PolicyTypeJson.PASSWORD_GENERATOR
-        PolicyInformation.SendOptions::class.java -> PolicyTypeJson.SEND_OPTIONS
-        PolicyInformation.VaultTimeout::class.java -> PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT
+        PolicyInformation.MasterPassword::class.java -> PolicyType.MASTER_PASSWORD
+        PolicyInformation.PasswordGenerator::class.java -> PolicyType.PASSWORD_GENERATOR
+        PolicyInformation.SendOptions::class.java -> PolicyType.SEND_OPTIONS
+        PolicyInformation.VaultTimeout::class.java -> PolicyType.MAXIMUM_VAULT_TIMEOUT
 
         else -> {
             throw IllegalStateException(
@@ -43,9 +43,10 @@ inline fun <reified T : PolicyInformation> getPolicyTypeJson(): PolicyTypeJson =
             )
         }
     }
+
 /**
  * Helper method for verifying if user has enabled the restrict item policy.
  */
 fun PolicyManager.hasRestrictItemTypes(): Boolean =
-    getActivePolicies(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
-        .any { it.isEnabled }
+    getActivePolicies(type = PolicyType.RESTRICTED_ITEM_TYPES)
+        .any { it.enabled }

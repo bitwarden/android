@@ -138,11 +138,12 @@ fun LazyListScope.vaultAddEditIdentityItems(
         )
     }
     item {
-        BitwardenTextField(
+        BitwardenPasswordField(
             label = stringResource(id = BitwardenString.passport_number),
             value = identityState.passportNumber,
             onValueChange = identityItemTypeHandlers.onPassportNumberTextChange,
-            textFieldTestTag = "IdentityPassportNumberEntry",
+            showPasswordTestTag = "IdentityShowPassportNumberButton",
+            passwordFieldTestTag = "IdentityPassportNumberEntry",
             cardStyle = CardStyle.Middle(),
             modifier = Modifier
                 .fillMaxWidth()

@@ -268,8 +268,9 @@ private val DEFAULT_STATE = RemovePasswordState(
     input = "",
     dialogState = null,
     description = BitwardenString
-        .password_no_longer_required_confirm_domain.asText(),
-    labelOrg = BitwardenString.key_connector_organization.asText(),
+        .your_organization_no_longer_requires_a_master_password
+        .asText(),
+    labelOrg = BitwardenString.organization.asText(),
     orgName = ORGANIZATION_NAME.asText(),
     labelDomain = BitwardenString.key_connector_domain.asText(),
     domainName = KEY_CONNECTOR_URL.asText(),
@@ -284,6 +285,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     environment = Environment.Us,
     avatarColorHex = "#aa00aa",
     isPremium = true,
+    isPremiumFromSelf = true,
     isLoggedIn = true,
     isVaultUnlocked = true,
     needsPasswordReset = false,

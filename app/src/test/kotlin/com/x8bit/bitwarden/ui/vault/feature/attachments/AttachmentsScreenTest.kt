@@ -36,6 +36,7 @@ import org.junit.Test
 class AttachmentsScreenTest : BitwardenComposeTest() {
     private var onNavigateBackCalled = false
     private var onNavigateToPreviewCalled = false
+    private var onNavigateToPlanCalled = false
 
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val mutableEventFlow = bufferedMutableSharedFlow<AttachmentsEvent>()
@@ -55,6 +56,7 @@ class AttachmentsScreenTest : BitwardenComposeTest() {
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToPreview = { onNavigateToPreviewCalled = true },
+                onNavigateToPlan = { onNavigateToPlanCalled = true },
             )
         }
     }
@@ -72,6 +74,12 @@ class AttachmentsScreenTest : BitwardenComposeTest() {
         verify(exactly = 1) {
             intentManager.launchUri(uriString.toUri())
         }
+    }
+
+    @Test
+    fun `NavigateToPlanModal should call onNavigateToPlan`() {
+        mutableEventFlow.tryEmit(AttachmentsEvent.NavigateToPlanModal)
+        assertTrue(onNavigateToPlanCalled)
     }
 
     @Test
@@ -254,7 +262,7 @@ class AttachmentsScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `requires Premium dialog should be displayed according to state`() {
-        val requiresPremiumMessage = "Attachments unavailable"
+        val requiresPremiumMessage = "Premium subscription required"
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
         composeTestRule.onNodeWithText(requiresPremiumMessage).assertDoesNotExist()
 

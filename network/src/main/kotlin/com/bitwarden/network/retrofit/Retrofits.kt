@@ -37,6 +37,12 @@ internal interface Retrofits {
     val unauthenticatedIdentityRetrofit: Retrofit
 
     /**
+     * Allows access to fill-assist calls. The base URL is determined dynamically via the
+     * [BaseUrlInterceptors.fillAssistInterceptor].
+     */
+    val fillAssistRetrofit: Retrofit
+
+    /**
      * Allows access to static API calls (ex: external APIs).
      *
      * @param isAuthenticated Indicates if the [Retrofit] instance should use authentication.

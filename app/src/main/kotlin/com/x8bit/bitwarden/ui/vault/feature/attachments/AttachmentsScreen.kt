@@ -45,6 +45,7 @@ fun AttachmentsScreen(
     intentManager: IntentManager = LocalIntentManager.current,
     onNavigateBack: () -> Unit,
     onNavigateToPreview: (route: PreviewAttachmentRoute) -> Unit,
+    onNavigateToPlan: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val attachmentsHandlers = remember(viewModel) { AttachmentsHandlers.create(viewModel) }
@@ -57,6 +58,7 @@ fun AttachmentsScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             AttachmentsEvent.NavigateBack -> onNavigateBack()
+            AttachmentsEvent.NavigateToPlanModal -> onNavigateToPlan()
             is AttachmentsEvent.NavigateToUri -> intentManager.launchUri(event.uri.toUri())
             AttachmentsEvent.ShowChooserSheet -> {
                 fileChooserLauncher.launch(
@@ -138,7 +140,7 @@ private fun AttachmentsDialogs(
 ) {
     when (dialogState) {
         AttachmentsState.DialogState.RequiresPremium -> BitwardenTwoButtonDialog(
-            title = stringResource(id = BitwardenString.attachments_unavailable),
+            title = stringResource(id = BitwardenString.premium_subscription_required),
             message = stringResource(id = BitwardenString.attachments_are_a_premium_feature),
             confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
             onConfirmClick = attachmentsHandlers.onUpgradeToPremiumClick,

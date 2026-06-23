@@ -10,9 +10,7 @@ import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
-import com.x8bit.bitwarden.data.auth.repository.util.toAccountCryptographicState
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
-import com.x8bit.bitwarden.data.platform.repository.util.sanitizeTotpUri
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.ScopedVaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
@@ -104,11 +102,6 @@ class AuthenticatorBridgeRepositoryImpl(
                                 decryptedCipher.login?.totp?.let { rawTotp ->
                                     SharedAccountData.CipherData(
                                         uri = rawTotp,
-                                        // TODO: PM-34085 Remove the legacyUri.
-                                        legacyUri = rawTotp.sanitizeTotpUri(
-                                            issuer = cipherName,
-                                            username = username,
-                                        ),
                                         id = cipherId,
                                         name = cipherName,
                                         username = username,
@@ -141,20 +134,17 @@ class AuthenticatorBridgeRepositoryImpl(
         account: AccountJson,
         decryptedUserKey: String,
     ): VaultUnlockResult {
-        val accountKeys = authDiskSource.getAccountKeys(userId = userId)
-        val privateKey = accountKeys?.publicKeyEncryptionKeyPair?.wrappedPrivateKey
-            ?: authDiskSource.getPrivateKey(userId = userId)
+        val accountCryptographicState = authDiskSource
+            .getAccountCryptographicState(userId = userId)
             ?: return VaultUnlockResult.InvalidStateError(
-                MissingPropertyException("Private key"),
+                error = MissingPropertyException("Account Cryptographic State"),
             )
 
         return scopedVaultSdkSource
             .initializeCrypto(
                 userId = userId,
                 request = InitUserCryptoRequest(
-                    accountCryptographicState = accountKeys.toAccountCryptographicState(
-                        privateKey = privateKey,
-                    ),
+                    accountCryptographicState = accountCryptographicState,
                     userId = userId,
                     kdfParams = account.profile.toSdkParams(),
                     email = account.profile.email,

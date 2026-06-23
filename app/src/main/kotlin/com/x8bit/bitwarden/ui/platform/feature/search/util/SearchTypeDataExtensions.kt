@@ -72,6 +72,8 @@ fun SearchTypeData.updateWithAdditionalDataIfNecessary(
         SearchTypeData.Vault.VerificationCodes -> this
         SearchTypeData.Vault.SshKeys -> this
         SearchTypeData.Vault.BankAccounts -> this
+        SearchTypeData.Vault.Licenses -> this
+        SearchTypeData.Vault.Passports -> this
     }
 
 /**
@@ -128,6 +130,14 @@ private fun CipherListView.filterBySearchType(
         is SearchTypeData.Vault.SshKeys -> type is CipherListViewType.SshKey && isActive
         is SearchTypeData.Vault.BankAccounts -> {
             type is CipherListViewType.BankAccount && isActive
+        }
+
+        is SearchTypeData.Vault.Licenses -> {
+            type is CipherListViewType.DriversLicense && isActive
+        }
+
+        is SearchTypeData.Vault.Passports -> {
+            type is CipherListViewType.Passport && isActive
         }
 
         is SearchTypeData.Vault.VerificationCodes -> login?.totp != null && isActive
@@ -273,7 +283,7 @@ private val CipherListViewType.iconRes: Int
         CipherListViewType.SshKey -> BitwardenDrawable.ic_ssh_key
         CipherListViewType.BankAccount -> BitwardenDrawable.ic_payment_card
         CipherListViewType.DriversLicense -> BitwardenDrawable.ic_note
-        CipherListViewType.Passport -> BitwardenDrawable.ic_note
+        CipherListViewType.Passport -> BitwardenDrawable.ic_passport
     }
 
 /**

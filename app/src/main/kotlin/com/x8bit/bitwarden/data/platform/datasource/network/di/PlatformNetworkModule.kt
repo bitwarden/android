@@ -7,6 +7,7 @@ import com.bitwarden.network.interceptor.BaseUrlsProvider
 import com.bitwarden.network.model.BitwardenServiceClientConfig
 import com.bitwarden.network.service.ConfigService
 import com.bitwarden.network.service.EventService
+import com.bitwarden.network.service.FillAssistService
 import com.bitwarden.network.service.PushService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.AuthTokenManager
@@ -15,6 +16,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_CL
 import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_USER_AGENT
 import com.x8bit.bitwarden.data.platform.manager.CertificateManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,6 +32,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object PlatformNetworkModule {
+
+    @Provides
+    @Singleton
+    fun providesFillAssistService(
+        bitwardenServiceClient: BitwardenServiceClient,
+    ): FillAssistService = bitwardenServiceClient.fillAssistService
 
     @Provides
     @Singleton
@@ -58,6 +66,7 @@ object PlatformNetworkModule {
         certificateManager: CertificateManager,
         buildInfoManager: BuildInfoManager,
         networkCookieManager: NetworkCookieManager,
+        networkPermissionManager: NetworkPermissionManager,
         clock: Clock,
     ): BitwardenServiceClientConfig = BitwardenServiceClientConfig(
         clock = clock,
@@ -72,6 +81,7 @@ object PlatformNetworkModule {
         certificateProvider = certificateManager,
         enableHttpBodyLogging = buildInfoManager.isDevBuild,
         cookieProvider = networkCookieManager,
+        permissionProvider = networkPermissionManager,
     )
 
     @Provides

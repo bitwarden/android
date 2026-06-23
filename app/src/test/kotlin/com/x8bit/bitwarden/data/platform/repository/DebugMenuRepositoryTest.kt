@@ -105,8 +105,8 @@ class DebugMenuRepositoryTest {
             debugMenuRepository.resetFeatureFlagOverrides()
             verify(exactly = 1) {
                 mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
-                    FlagKey.CredentialExchangeProtocolImport,
-                    FlagKey.CredentialExchangeProtocolImport.defaultValue,
+                    FlagKey.AttachmentUpdates,
+                    FlagKey.AttachmentUpdates.defaultValue,
                 )
             }
             debugMenuRepository.featureFlagOverridesUpdatedFlow.test {
@@ -175,6 +175,7 @@ class DebugMenuRepositoryTest {
             mockSettingsDiskSource.storeShouldShowAddLoginCoachMark(shouldShow = null)
         }
     }
+
     @Test
     fun `clearSsoCookies should call clearCookies on CookieDiskSource`() {
         debugMenuRepository.clearSsoCookies()

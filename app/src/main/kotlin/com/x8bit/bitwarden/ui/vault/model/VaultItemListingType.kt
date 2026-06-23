@@ -41,6 +41,16 @@ sealed class VaultItemListingType {
     data object BankAccount : VaultItemListingType()
 
     /**
+     * A License listing.
+     */
+    data object License : VaultItemListingType()
+
+    /**
+     * A Passport listing.
+     */
+    data object Passport : VaultItemListingType()
+
+    /**
      * A Trash listing.
      */
     data object Trash : VaultItemListingType()

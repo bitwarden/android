@@ -14,8 +14,7 @@ import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.PolicyType
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
@@ -71,6 +70,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createManageCollectio
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipherPermissions
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createViewCollectionView
@@ -129,6 +129,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneOffset
 import java.util.UUID
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType as UriMatchTypeModel
@@ -175,7 +176,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     }
     private val policyManager: PolicyManager = mockk {
         every {
-            getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+            getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns emptyList()
     }
     private val bitwardenCredentialManager = mockk<BitwardenCredentialManager> {
@@ -300,7 +301,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
         }
         verify {
-            policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         }
     }
 
@@ -329,14 +330,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Test
     fun `initial add state should be correct with individual vault disabled`() = runTest {
         every {
-            policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns listOf(
-            createMockPolicy(
+            createMockPolicyView(
                 organizationId = "Test Org",
                 id = "testId",
-                type = PolicyTypeJson.PERSONAL_OWNERSHIP,
-                isEnabled = true,
-                data = null,
+                type = PolicyType.ORGANIZATION_DATA_OWNERSHIP,
+                enabled = true,
             ),
         )
         val vaultAddEditType = VaultAddEditType.AddItem
@@ -381,7 +381,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             vaultRepository.vaultDataStateFlow
         }
         verify {
-            policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+            policyManager.getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         }
     }
 
@@ -2408,140 +2408,33 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `in add mode, SaveClick with a Drivers License item should emit ShowSnackbar without saving`() =
-        runTest {
-            mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
-            val licenseState = createVaultAddItemState(
-                vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
-                commonContentViewState = createCommonContentViewState(name = "mockName-1"),
-                typeContentViewState =
-                    VaultAddEditState.ViewState.Content.ItemType.License(),
-            )
-            val viewModel = createAddVaultItemViewModel(
-                createSavedStateHandleWithState(
-                    state = licenseState,
-                    vaultAddEditType = VaultAddEditType.AddItem,
-                    vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
-                ),
-            )
-
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
-                assertEquals(
-                    VaultAddEditEvent.ShowSnackbar(
-                        message = BitwardenString.an_error_has_occurred.asText(),
-                    ),
-                    awaitItem(),
-                )
-            }
-            assertEquals(licenseState, viewModel.stateFlow.value)
-            coVerify(exactly = 0) {
-                vaultRepository.createCipher(any())
-                vaultRepository.createCipherInOrganization(any(), any())
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `in add mode, SaveClick with a Passport item should emit ShowSnackbar without saving`() =
-        runTest {
-            mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
-            val passportState = createVaultAddItemState(
-                vaultItemCipherType = VaultItemCipherType.PASSPORT,
-                commonContentViewState = createCommonContentViewState(name = "mockName-1"),
-                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Passport(),
-            )
-            val viewModel = createAddVaultItemViewModel(
-                createSavedStateHandleWithState(
-                    state = passportState,
-                    vaultAddEditType = VaultAddEditType.AddItem,
-                    vaultItemCipherType = VaultItemCipherType.PASSPORT,
-                ),
-            )
-
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
-                assertEquals(
-                    VaultAddEditEvent.ShowSnackbar(
-                        message = BitwardenString.an_error_has_occurred.asText(),
-                    ),
-                    awaitItem(),
-                )
-            }
-            assertEquals(passportState, viewModel.stateFlow.value)
-            coVerify(exactly = 0) {
-                vaultRepository.createCipher(any())
-                vaultRepository.createCipherInOrganization(any(), any())
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `in add mode, SaveClick with a Bank Account item should not short-circuit and should run validation`() =
-        runTest {
-            mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
-            val bankAccountState = createVaultAddItemState(
-                vaultItemCipherType = VaultItemCipherType.BANK_ACCOUNT,
-                commonContentViewState = createCommonContentViewState(name = ""),
-                typeContentViewState =
-                    VaultAddEditState.ViewState.Content.ItemType.BankAccount(),
-            )
-            val expectedValidationDialogState = bankAccountState.copy(
-                dialog = VaultAddEditState.DialogState.Generic(
-                    title = BitwardenString.an_error_has_occurred.asText(),
-                    message = BitwardenString.validation_field_required
-                        .asText(BitwardenString.name.asText()),
-                ),
-            )
-            val viewModel = createAddVaultItemViewModel(
-                createSavedStateHandleWithState(
-                    state = bankAccountState,
-                    vaultAddEditType = VaultAddEditType.AddItem,
-                    vaultItemCipherType = VaultItemCipherType.BANK_ACCOUNT,
-                ),
-            )
-
-            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
-                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
-                assertEquals(bankAccountState, stateFlow.awaitItem())
-                assertEquals(expectedValidationDialogState, stateFlow.awaitItem())
-                eventFlow.expectNoEvents()
-            }
-        }
-
-    @Test
-    fun `ItemType BankAccount should expose BANK_ACCOUNT itemTypeOption and be SDK supported`() {
+    fun `ItemType BankAccount should expose BANK_ACCOUNT itemTypeOption`() {
         val itemType = VaultAddEditState.ViewState.Content.ItemType.BankAccount()
         assertEquals(
             VaultAddEditState.ItemTypeOption.BANK_ACCOUNT,
             itemType.itemTypeOption,
         )
-        assertTrue(itemType.isSdkSupported)
         assertTrue(itemType.vaultLinkedFieldTypes.isEmpty())
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `ItemType DriversLicense should expose DRIVERS_LICENSE itemTypeOption and not be SDK supported`() {
+    fun `ItemType License should expose DRIVERS_LICENSE itemTypeOption`() {
         val itemType = VaultAddEditState.ViewState.Content.ItemType.License()
         assertEquals(
-            VaultAddEditState.ItemTypeOption.DRIVERS_LICENSE,
+            VaultAddEditState.ItemTypeOption.LICENSE,
             itemType.itemTypeOption,
         )
-        assertFalse(itemType.isSdkSupported)
         assertTrue(itemType.vaultLinkedFieldTypes.isEmpty())
     }
 
     @Test
-    fun `ItemType Passport should expose PASSPORT itemTypeOption and not be SDK supported`() {
+    fun `ItemType Passport should expose PASSPORT itemTypeOption`() {
         val itemType = VaultAddEditState.ViewState.Content.ItemType.Passport()
         assertEquals(
             VaultAddEditState.ItemTypeOption.PASSPORT,
             itemType.itemTypeOption,
         )
-        assertFalse(itemType.isSdkSupported)
         assertTrue(itemType.vaultLinkedFieldTypes.isEmpty())
     }
 
@@ -2550,15 +2443,15 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     fun `screenDisplayName should resolve new title strings for new vault item types in add mode`() {
         val baseAddState = createVaultAddItemState(vaultAddEditType = VaultAddEditType.AddItem)
         assertEquals(
-            BitwardenString.new_bank_account.asText(),
+            BitwardenString.add_bank_account.asText(),
             baseAddState.copy(cipherType = VaultItemCipherType.BANK_ACCOUNT).screenDisplayName,
         )
         assertEquals(
-            BitwardenString.new_drivers_license.asText(),
+            BitwardenString.add_license.asText(),
             baseAddState.copy(cipherType = VaultItemCipherType.DRIVERS_LICENSE).screenDisplayName,
         )
         assertEquals(
-            BitwardenString.new_passport.asText(),
+            BitwardenString.add_passport.asText(),
             baseAddState.copy(cipherType = VaultItemCipherType.PASSPORT).screenDisplayName,
         )
     }
@@ -2574,7 +2467,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             baseEditState.copy(cipherType = VaultItemCipherType.BANK_ACCOUNT).screenDisplayName,
         )
         assertEquals(
-            BitwardenString.edit_drivers_license.asText(),
+            BitwardenString.edit_license.asText(),
             baseEditState.copy(cipherType = VaultItemCipherType.DRIVERS_LICENSE).screenDisplayName,
         )
         assertEquals(
@@ -2590,15 +2483,15 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             vaultAddEditType = VaultAddEditType.CloneItem(DEFAULT_EDIT_ITEM_ID),
         )
         assertEquals(
-            BitwardenString.new_bank_account.asText(),
+            BitwardenString.add_bank_account.asText(),
             baseCloneState.copy(cipherType = VaultItemCipherType.BANK_ACCOUNT).screenDisplayName,
         )
         assertEquals(
-            BitwardenString.new_drivers_license.asText(),
+            BitwardenString.add_license.asText(),
             baseCloneState.copy(cipherType = VaultItemCipherType.DRIVERS_LICENSE).screenDisplayName,
         )
         assertEquals(
-            BitwardenString.new_passport.asText(),
+            BitwardenString.add_passport.asText(),
             baseCloneState.copy(cipherType = VaultItemCipherType.PASSPORT).screenDisplayName,
         )
     }
@@ -4189,6 +4082,423 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Nested
+    inner class VaultAddEditLicenseTypeItemActions {
+        private lateinit var viewModel: VaultAddEditViewModel
+        private lateinit var vaultAddItemInitialState: VaultAddEditState
+        private lateinit var licenseInitialSavedStateHandle: SavedStateHandle
+
+        @BeforeEach
+        fun setup() {
+            mutableVaultDataFlow.value = DataState.Loaded(
+                createVaultData(cipherListView = createMockCipherListView(1)),
+            )
+            vaultAddItemInitialState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
+                typeContentViewState =
+                    VaultAddEditState.ViewState.Content.ItemType.License(),
+            )
+            licenseInitialSavedStateHandle = createSavedStateHandleWithState(
+                state = vaultAddItemInitialState,
+                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
+            )
+            viewModel = createAddVaultItemViewModel(
+                savedStateHandle = licenseInitialSavedStateHandle,
+            )
+        }
+
+        private fun expectedLicense(
+            block: VaultAddEditState.ViewState.Content.ItemType.License.() ->
+            VaultAddEditState.ViewState.Content.ItemType.License,
+        ): VaultAddEditState =
+            createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
+                typeContentViewState = VaultAddEditState
+                    .ViewState
+                    .Content
+                    .ItemType
+                    .License()
+                    .block(),
+            )
+
+        @Test
+        fun `FirstNameTextChange should update first name`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.FirstNameTextChange(
+                    firstName = "Missy",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(firstName = "Missy") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `MiddleNameTextChange should update middle name`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.MiddleNameTextChange(
+                    middleName = "Anne",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(middleName = "Anne") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `LastNameTextChange should update last name`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.LastNameTextChange(
+                    lastName = "Katner",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(lastName = "Katner") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `LicenseNumberTextChange should update license number`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.LicenseNumberTextChange(
+                    licenseNumber = "K123-456-789",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(licenseNumber = "K123-456-789") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssuingCountryTextChange should update issuing country`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssuingCountryTextChange(
+                    country = "USA",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(issuingCountry = "USA") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssuingStateTextChange should update issuing state`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssuingStateTextChange(
+                    state = "Wisconsin",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(issuingState = "Wisconsin") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssuingAuthorityTextChange should update issuing authority`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssuingAuthorityTextChange(
+                    authority = "DMV",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(issuingAuthority = "DMV") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `LicenseClassTextChange should update license class`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.LicenseClassTextChange(
+                    licenseClass = "Class D",
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(licenseClass = "Class D") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `DateOfBirthChange should update date of birth`() = runTest {
+            val localDate = LocalDate.of(1990, 8, 10)
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.DateOfBirthChange(dateOfBirth = localDate),
+            )
+
+            assertEquals(
+                expectedLicense { copy(dateOfBirth = localDate) },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssueDateChange should update issue date`() = runTest {
+            val localDate = LocalDate.of(2020, 1, 15)
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.IssueDateChange(issueDate = localDate),
+            )
+
+            assertEquals(
+                expectedLicense { copy(issueDate = localDate) },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `ExpirationDateChange should update expiration date`() = runTest {
+            val localDate = LocalDate.of(2025, 12, 31)
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LicenseType.ExpirationDateChange(
+                    expirationDate = localDate,
+                ),
+            )
+
+            assertEquals(
+                expectedLicense { copy(expirationDate = localDate) },
+                viewModel.stateFlow.value,
+            )
+        }
+    }
+
+    @Nested
+    inner class VaultAddEditPassportTypeItemActions {
+        private lateinit var viewModel: VaultAddEditViewModel
+        private lateinit var vaultAddItemInitialState: VaultAddEditState
+        private lateinit var passportInitialSavedStateHandle: SavedStateHandle
+
+        @BeforeEach
+        fun setup() {
+            mutableVaultDataFlow.value = DataState.Loaded(
+                createVaultData(cipherListView = createMockCipherListView(1)),
+            )
+            vaultAddItemInitialState = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.PASSPORT,
+                typeContentViewState =
+                    VaultAddEditState.ViewState.Content.ItemType.Passport(),
+            )
+            passportInitialSavedStateHandle = createSavedStateHandleWithState(
+                state = vaultAddItemInitialState,
+                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultItemCipherType = VaultItemCipherType.PASSPORT,
+            )
+            viewModel = createAddVaultItemViewModel(
+                savedStateHandle = passportInitialSavedStateHandle,
+            )
+        }
+
+        private fun expectedPassport(
+            block: VaultAddEditState.ViewState.Content.ItemType.Passport.() ->
+            VaultAddEditState.ViewState.Content.ItemType.Passport,
+        ): VaultAddEditState =
+            createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.PASSPORT,
+                typeContentViewState = VaultAddEditState
+                    .ViewState
+                    .Content
+                    .ItemType
+                    .Passport()
+                    .block(),
+            )
+
+        @Test
+        fun `GivenNameTextChange should update given name`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.GivenNameTextChange(
+                    givenName = "Bruce",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(givenName = "Bruce") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `SurnameTextChange should update surname`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.SurnameTextChange(
+                    surname = "Wayne",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(surname = "Wayne") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `SexTextChange should update sex`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.SexTextChange(sex = "M"),
+            )
+
+            assertEquals(
+                expectedPassport { copy(sex = "M") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `BirthPlaceTextChange should update birth place`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.BirthPlaceTextChange(
+                    birthPlace = "Gotham City",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(birthPlace = "Gotham City") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `NationalityTextChange should update nationality`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.NationalityTextChange(
+                    nationality = "American",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(nationality = "American") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `PassportNumberTextChange should update passport number`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.PassportNumberTextChange(
+                    passportNumber = "X12345678",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(passportNumber = "X12345678") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `PassportTypeTextChange should update passport type`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.PassportTypeTextChange(
+                    passportType = "Regular",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(passportType = "Regular") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `NationalIdentificationNumberTextChange should update national id number`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction
+                    .ItemType
+                    .PassportType
+                    .NationalIdentificationNumberTextChange(
+                        nationalIdentificationNumber = "987-65-4321",
+                    ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(nationalIdentificationNumber = "987-65-4321") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssuingCountryTextChange should update issuing country`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.IssuingCountryTextChange(
+                    country = "USA",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(issuingCountry = "USA") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssuingAuthorityTextChange should update issuing authority`() = runTest {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.IssuingAuthorityTextChange(
+                    authority = "U.S. Department of State",
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(issuingAuthority = "U.S. Department of State") },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `DateOfBirthChange should update date of birth`() = runTest {
+            val localDate = LocalDate.of(1990, 8, 10)
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.DateOfBirthChange(dateOfBirth = localDate),
+            )
+
+            assertEquals(
+                expectedPassport { copy(dateOfBirth = localDate) },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `IssueDateChange should update issue date`() = runTest {
+            val localDate = LocalDate.of(2021, 3, 20)
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.IssueDateChange(issueDate = localDate),
+            )
+
+            assertEquals(
+                expectedPassport { copy(issueDate = localDate) },
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `ExpirationDateChange should update expiration date`() = runTest {
+            val localDate = LocalDate.of(2031, 3, 20)
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.PassportType.ExpirationDateChange(
+                    expirationDate = localDate,
+                ),
+            )
+
+            assertEquals(
+                expectedPassport { copy(expirationDate = localDate) },
+                viewModel.stateFlow.value,
+            )
+        }
+    }
+
     @Test
     fun `NumberVisibilityChange should log an event when in edit mode and password is visible`() =
         runTest {
@@ -4904,14 +5214,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         fun `CollectionSelect should update selectedOwnerId when isIndividualVaultDisabled is true`() =
             runTest {
                 every {
-                    policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+                    policyManager.getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
                 } returns listOf(
-                    createMockPolicy(
+                    createMockPolicyView(
                         organizationId = "Test Org",
                         id = "testId",
-                        type = PolicyTypeJson.PERSONAL_OWNERSHIP,
-                        isEnabled = true,
-                        data = null,
+                        type = PolicyType.ORGANIZATION_DATA_OWNERSHIP,
+                        enabled = true,
                     ),
                 )
 
@@ -6142,6 +6451,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     avatarColorHex = "#ffecbc49",
                     environment = Environment.Eu,
                     isPremium = true,
+                    isPremiumFromSelf = true,
                     isLoggedIn = false,
                     isVaultUnlocked = false,
                     needsPasswordReset = false,

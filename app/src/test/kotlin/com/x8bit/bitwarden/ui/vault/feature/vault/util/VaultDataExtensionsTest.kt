@@ -145,11 +145,15 @@ class VaultDataExtensionsTest {
                 itemTypesCount = CipherType.entries.size,
                 sshKeyItemsCount = 0,
                 bankAccountItemsCount = 0,
+                licenseItemsCount = 0,
+                passportItemsCount = 0,
                 archivedItemsCount = 1,
                 archiveSubText = null,
                 archiveEndIcon = null,
                 showCardGroup = true,
                 showBankAccountGroup = false,
+                showLicenseGroup = false,
+                showPassportGroup = false,
             ),
             actual,
         )
@@ -203,11 +207,15 @@ class VaultDataExtensionsTest {
                 itemTypesCount = CipherType.entries.size,
                 sshKeyItemsCount = 0,
                 bankAccountItemsCount = 0,
+                licenseItemsCount = 0,
+                passportItemsCount = 0,
                 archivedItemsCount = 0,
                 archiveSubText = null,
                 archiveEndIcon = null,
                 showCardGroup = true,
                 showBankAccountGroup = false,
+                showLicenseGroup = false,
+                showPassportGroup = false,
             ),
             actual,
         )
@@ -281,11 +289,15 @@ class VaultDataExtensionsTest {
                 itemTypesCount = CipherType.entries.size,
                 sshKeyItemsCount = 0,
                 bankAccountItemsCount = 0,
+                licenseItemsCount = 0,
+                passportItemsCount = 0,
                 archivedItemsCount = 0,
                 archiveSubText = null,
                 archiveEndIcon = null,
                 showCardGroup = true,
                 showBankAccountGroup = false,
+                showLicenseGroup = false,
+                showPassportGroup = false,
             ),
             actual,
         )
@@ -388,11 +400,15 @@ class VaultDataExtensionsTest {
                 itemTypesCount = CipherType.entries.size,
                 sshKeyItemsCount = 0,
                 bankAccountItemsCount = 0,
+                licenseItemsCount = 0,
+                passportItemsCount = 0,
                 archivedItemsCount = 0,
                 archiveSubText = null,
                 archiveEndIcon = null,
                 showCardGroup = true,
                 showBankAccountGroup = false,
+                showLicenseGroup = false,
+                showPassportGroup = false,
             ),
             actual,
         )
@@ -437,11 +453,15 @@ class VaultDataExtensionsTest {
                 itemTypesCount = CipherType.entries.size,
                 sshKeyItemsCount = 0,
                 bankAccountItemsCount = 0,
+                licenseItemsCount = 0,
+                passportItemsCount = 0,
                 archivedItemsCount = null,
                 archiveSubText = BitwardenString.premium_subscription_required.asText(),
                 archiveEndIcon = BitwardenDrawable.ic_locked,
                 showCardGroup = true,
                 showBankAccountGroup = false,
+                showLicenseGroup = false,
+                showPassportGroup = false,
             ),
             actual,
         )
@@ -488,11 +508,15 @@ class VaultDataExtensionsTest {
                 itemTypesCount = CipherType.entries.size,
                 sshKeyItemsCount = 0,
                 bankAccountItemsCount = 0,
+                licenseItemsCount = 0,
+                passportItemsCount = 0,
                 archivedItemsCount = null,
                 archiveSubText = BitwardenString.premium_subscription_required.asText(),
                 archiveEndIcon = BitwardenDrawable.ic_locked,
                 showCardGroup = true,
                 showBankAccountGroup = false,
+                showLicenseGroup = false,
+                showPassportGroup = false,
             ),
             actual,
         )
@@ -539,11 +563,15 @@ class VaultDataExtensionsTest {
                 itemTypesCount = CipherType.entries.size,
                 sshKeyItemsCount = 0,
                 bankAccountItemsCount = 0,
+                licenseItemsCount = 0,
+                passportItemsCount = 0,
                 archivedItemsCount = null,
                 archiveSubText = BitwardenString.premium_subscription_required.asText(),
                 archiveEndIcon = BitwardenDrawable.ic_locked,
                 showCardGroup = true,
                 showBankAccountGroup = false,
+                showLicenseGroup = false,
+                showPassportGroup = false,
             ),
             actual,
         )
@@ -774,11 +802,15 @@ class VaultDataExtensionsTest {
                 itemTypesCount = CipherType.entries.size,
                 sshKeyItemsCount = 0,
                 bankAccountItemsCount = 0,
+                licenseItemsCount = 0,
+                passportItemsCount = 0,
                 archivedItemsCount = 0,
                 archiveSubText = null,
                 archiveEndIcon = null,
                 showCardGroup = true,
                 showBankAccountGroup = false,
+                showLicenseGroup = false,
+                showPassportGroup = false,
             ),
             actual,
         )
@@ -825,11 +857,15 @@ class VaultDataExtensionsTest {
                 itemTypesCount = CipherType.entries.size,
                 sshKeyItemsCount = 0,
                 bankAccountItemsCount = 0,
+                licenseItemsCount = 0,
+                passportItemsCount = 0,
                 archivedItemsCount = 0,
                 archiveSubText = null,
                 archiveEndIcon = null,
                 showCardGroup = true,
                 showBankAccountGroup = false,
+                showLicenseGroup = false,
+                showPassportGroup = false,
             ),
             actual,
         )
@@ -885,11 +921,15 @@ class VaultDataExtensionsTest {
                 itemTypesCount = CipherType.entries.size,
                 sshKeyItemsCount = 0,
                 bankAccountItemsCount = 0,
+                licenseItemsCount = 0,
+                passportItemsCount = 0,
                 archivedItemsCount = 0,
                 archiveSubText = null,
                 archiveEndIcon = null,
                 showCardGroup = true,
                 showBankAccountGroup = false,
+                showLicenseGroup = false,
+                showPassportGroup = false,
             ),
             actual,
         )
@@ -958,11 +998,15 @@ class VaultDataExtensionsTest {
                 itemTypesCount = CipherType.entries.size,
                 sshKeyItemsCount = 0,
                 bankAccountItemsCount = 0,
+                licenseItemsCount = 0,
+                passportItemsCount = 0,
                 archivedItemsCount = 0,
                 archiveSubText = null,
                 archiveEndIcon = null,
                 showCardGroup = true,
                 showBankAccountGroup = false,
+                showLicenseGroup = false,
+                showPassportGroup = false,
             ),
             actual,
         )
@@ -1051,11 +1095,15 @@ class VaultDataExtensionsTest {
                 itemTypesCount = CipherType.entries.size,
                 sshKeyItemsCount = 0,
                 bankAccountItemsCount = 0,
+                licenseItemsCount = 0,
+                passportItemsCount = 0,
                 archivedItemsCount = 0,
                 archiveSubText = null,
                 archiveEndIcon = null,
                 showCardGroup = true,
                 showBankAccountGroup = false,
+                showLicenseGroup = false,
+                showPassportGroup = false,
             ),
             actual,
         )
@@ -1113,6 +1161,8 @@ class VaultDataExtensionsTest {
                 secureNoteItemsCount = 0,
                 sshKeyItemsCount = 0,
                 bankAccountItemsCount = 0,
+                licenseItemsCount = 0,
+                passportItemsCount = 0,
                 favoriteItems = listOf(),
                 collectionItems = listOf(),
                 folderItems = listOf(),
@@ -1125,6 +1175,8 @@ class VaultDataExtensionsTest {
                 archiveEndIcon = null,
                 showCardGroup = true,
                 showBankAccountGroup = false,
+                showLicenseGroup = false,
+                showPassportGroup = false,
             ),
             actual,
         )
@@ -1178,6 +1230,8 @@ class VaultDataExtensionsTest {
                 secureNoteItemsCount = 0,
                 sshKeyItemsCount = 0,
                 bankAccountItemsCount = 0,
+                licenseItemsCount = 0,
+                passportItemsCount = 0,
                 favoriteItems = listOf(),
                 collectionItems = listOf(),
                 folderItems = listOf(),
@@ -1190,6 +1244,8 @@ class VaultDataExtensionsTest {
                 archiveEndIcon = null,
                 showCardGroup = false,
                 showBankAccountGroup = false,
+                showLicenseGroup = false,
+                showPassportGroup = false,
             ),
             actual,
         )
@@ -1230,6 +1286,8 @@ class VaultDataExtensionsTest {
                 // Verify SSH key vault items are counted
                 sshKeyItemsCount = 1,
                 bankAccountItemsCount = 0,
+                licenseItemsCount = 0,
+                passportItemsCount = 0,
                 favoriteItems = listOf(),
                 collectionItems = listOf(),
                 folderItems = listOf(),
@@ -1243,6 +1301,8 @@ class VaultDataExtensionsTest {
                 archiveEndIcon = null,
                 showCardGroup = true,
                 showBankAccountGroup = false,
+                showLicenseGroup = false,
+                showPassportGroup = false,
             ),
             actual,
         )
@@ -1296,6 +1356,8 @@ class VaultDataExtensionsTest {
                 secureNoteItemsCount = 0,
                 sshKeyItemsCount = 3,
                 bankAccountItemsCount = 0,
+                licenseItemsCount = 0,
+                passportItemsCount = 0,
                 favoriteItems = listOf(createMockSshKeyVaultItem(number = 1)),
                 collectionItems = listOf(),
                 folderItems = listOf(),
@@ -1313,6 +1375,8 @@ class VaultDataExtensionsTest {
                 archiveEndIcon = null,
                 showCardGroup = true,
                 showBankAccountGroup = false,
+                showLicenseGroup = false,
+                showPassportGroup = false,
             ),
             actual,
         )
@@ -1366,6 +1430,8 @@ class VaultDataExtensionsTest {
                 secureNoteItemsCount = 0,
                 sshKeyItemsCount = 0,
                 bankAccountItemsCount = 3,
+                licenseItemsCount = 0,
+                passportItemsCount = 0,
                 favoriteItems = listOf(createMockBankAccountVaultItem(number = 1)),
                 collectionItems = listOf(),
                 folderItems = listOf(),
@@ -1383,6 +1449,156 @@ class VaultDataExtensionsTest {
                 archiveEndIcon = null,
                 showCardGroup = true,
                 showBankAccountGroup = true,
+                showLicenseGroup = true,
+                showPassportGroup = true,
+            ),
+            actual,
+        )
+    }
+
+    @Test
+    fun `toViewState should count drivers license vault items in licenseItemsCount`() {
+        val vaultData = VaultData(
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(
+                        number = 1,
+                        type = CipherListViewType.DriversLicense,
+                        favorite = true,
+                        folderId = null,
+                    ),
+                    createMockCipherListView(
+                        number = 2,
+                        type = CipherListViewType.DriversLicense,
+                        reprompt = CipherRepromptType.PASSWORD,
+                        folderId = null,
+                    ),
+                    createMockCipherListView(
+                        number = 3,
+                        type = CipherListViewType.DriversLicense,
+                        folderId = null,
+                    ),
+                ),
+            ),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+        )
+        val actual = vaultData.toViewState(
+            isPremium = true,
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = emptyList(),
+            validTotpIds = emptySet(),
+            isNewItemTypesEnabled = true,
+        )
+
+        assertEquals(
+            VaultState.ViewState.Content(
+                loginItemsCount = 0,
+                cardItemsCount = 0,
+                identityItemsCount = 0,
+                secureNoteItemsCount = 0,
+                sshKeyItemsCount = 0,
+                bankAccountItemsCount = 0,
+                licenseItemsCount = 3,
+                passportItemsCount = 0,
+                favoriteItems = listOf(createMockLicenseVaultItem(number = 1)),
+                collectionItems = listOf(),
+                folderItems = listOf(),
+                noFolderItems = listOf(
+                    createMockLicenseVaultItem(number = 1),
+                    createMockLicenseVaultItem(number = 2)
+                        .copy(shouldShowMasterPasswordReprompt = true),
+                    createMockLicenseVaultItem(number = 3),
+                ),
+                trashItemsCount = 0,
+                totpItemsCount = 0,
+                itemTypesCount = CipherType.entries.size,
+                archivedItemsCount = 0,
+                archiveSubText = null,
+                archiveEndIcon = null,
+                showCardGroup = true,
+                showBankAccountGroup = true,
+                showLicenseGroup = true,
+                showPassportGroup = true,
+            ),
+            actual,
+        )
+    }
+
+    @Test
+    fun `toViewState should count passport vault items in passportItemsCount`() {
+        val vaultData = VaultData(
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(
+                        number = 1,
+                        type = CipherListViewType.Passport,
+                        favorite = true,
+                        folderId = null,
+                    ),
+                    createMockCipherListView(
+                        number = 2,
+                        type = CipherListViewType.Passport,
+                        reprompt = CipherRepromptType.PASSWORD,
+                        folderId = null,
+                    ),
+                    createMockCipherListView(
+                        number = 3,
+                        type = CipherListViewType.Passport,
+                        folderId = null,
+                    ),
+                ),
+            ),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+        )
+        val actual = vaultData.toViewState(
+            isPremium = true,
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = emptyList(),
+            validTotpIds = emptySet(),
+            isNewItemTypesEnabled = true,
+        )
+
+        assertEquals(
+            VaultState.ViewState.Content(
+                loginItemsCount = 0,
+                cardItemsCount = 0,
+                identityItemsCount = 0,
+                secureNoteItemsCount = 0,
+                sshKeyItemsCount = 0,
+                bankAccountItemsCount = 0,
+                licenseItemsCount = 0,
+                passportItemsCount = 3,
+                favoriteItems = listOf(createMockPassportVaultItem(number = 1)),
+                collectionItems = listOf(),
+                folderItems = listOf(),
+                noFolderItems = listOf(
+                    createMockPassportVaultItem(number = 1),
+                    createMockPassportVaultItem(number = 2)
+                        .copy(shouldShowMasterPasswordReprompt = true),
+                    createMockPassportVaultItem(number = 3),
+                ),
+                trashItemsCount = 0,
+                totpItemsCount = 0,
+                itemTypesCount = CipherType.entries.size,
+                archivedItemsCount = 0,
+                archiveSubText = null,
+                archiveEndIcon = null,
+                showCardGroup = true,
+                showBankAccountGroup = true,
+                showLicenseGroup = true,
+                showPassportGroup = true,
             ),
             actual,
         )
@@ -1445,6 +1661,80 @@ private fun createMockBankAccountVaultItem(
         ),
         startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_payment_card),
         startIconTestTag = "BankAccountCipherIcon",
+        extraIconList = persistentListOf(
+            IconData.Local(
+                iconRes = BitwardenDrawable.ic_collections,
+                contentDescription = BitwardenString.collections.asText(),
+                testTag = "CipherInCollectionIcon",
+            ),
+            IconData.Local(
+                iconRes = BitwardenDrawable.ic_paperclip,
+                contentDescription = BitwardenString.attachments.asText(),
+                testTag = "CipherWithAttachmentsIcon",
+            ),
+        ),
+        shouldShowMasterPasswordReprompt = false,
+        hasDecryptionError = false,
+    )
+
+private fun createMockLicenseVaultItem(
+    number: Int,
+): VaultState.ViewState.VaultItem.License =
+    VaultState.ViewState.VaultItem.License(
+        id = "mockId-$number",
+        name = "mockName-$number".asText(),
+        overflowOptions = persistentListOf(
+            ListingItemOverflowAction.VaultAction.ViewClick(
+                cipherId = "mockId-$number",
+                cipherType = CipherType.DRIVERS_LICENSE,
+                requiresPasswordReprompt = true,
+            ),
+            ListingItemOverflowAction.VaultAction.EditClick(
+                cipherId = "mockId-$number",
+                cipherType = CipherType.DRIVERS_LICENSE,
+                requiresPasswordReprompt = true,
+            ),
+            ListingItemOverflowAction.VaultAction.ArchiveClick(cipherId = "mockId-$number"),
+        ),
+        startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_id_card),
+        startIconTestTag = "LicenseCipherIcon",
+        extraIconList = persistentListOf(
+            IconData.Local(
+                iconRes = BitwardenDrawable.ic_collections,
+                contentDescription = BitwardenString.collections.asText(),
+                testTag = "CipherInCollectionIcon",
+            ),
+            IconData.Local(
+                iconRes = BitwardenDrawable.ic_paperclip,
+                contentDescription = BitwardenString.attachments.asText(),
+                testTag = "CipherWithAttachmentsIcon",
+            ),
+        ),
+        shouldShowMasterPasswordReprompt = false,
+        hasDecryptionError = false,
+    )
+
+private fun createMockPassportVaultItem(
+    number: Int,
+): VaultState.ViewState.VaultItem.Passport =
+    VaultState.ViewState.VaultItem.Passport(
+        id = "mockId-$number",
+        name = "mockName-$number".asText(),
+        overflowOptions = persistentListOf(
+            ListingItemOverflowAction.VaultAction.ViewClick(
+                cipherId = "mockId-$number",
+                cipherType = CipherType.PASSPORT,
+                requiresPasswordReprompt = true,
+            ),
+            ListingItemOverflowAction.VaultAction.EditClick(
+                cipherId = "mockId-$number",
+                cipherType = CipherType.PASSPORT,
+                requiresPasswordReprompt = true,
+            ),
+            ListingItemOverflowAction.VaultAction.ArchiveClick(cipherId = "mockId-$number"),
+        ),
+        startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_passport),
+        startIconTestTag = "PassportCipherIcon",
         extraIconList = persistentListOf(
             IconData.Local(
                 iconRes = BitwardenDrawable.ic_collections,

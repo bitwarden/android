@@ -26,6 +26,14 @@ fun VaultItemListingState.ItemListingType.toSearchType(): SearchType =
             SearchType.Vault.BankAccounts
         }
 
+        is VaultItemListingState.ItemListingType.Vault.License -> {
+            SearchType.Vault.Licenses
+        }
+
+        is VaultItemListingState.ItemListingType.Vault.Passport -> {
+            SearchType.Vault.Passports
+        }
+
         is VaultItemListingState.ItemListingType.Vault.Trash -> SearchType.Vault.Trash
         is VaultItemListingState.ItemListingType.Vault.Collection -> {
             SearchType.Vault.Collection(collectionId = collectionId)
@@ -55,6 +63,14 @@ fun VaultItemListingState.ItemListingType.Vault.toVaultItemCipherType(): VaultIt
         is VaultItemListingState.ItemListingType.Vault.SshKey -> VaultItemCipherType.SSH_KEY
         is VaultItemListingState.ItemListingType.Vault.BankAccount -> {
             VaultItemCipherType.BANK_ACCOUNT
+        }
+
+        is VaultItemListingState.ItemListingType.Vault.License -> {
+            VaultItemCipherType.DRIVERS_LICENSE
+        }
+
+        is VaultItemListingState.ItemListingType.Vault.Passport -> {
+            VaultItemCipherType.PASSPORT
         }
 
         is VaultItemListingState.ItemListingType.Vault.Login -> VaultItemCipherType.LOGIN

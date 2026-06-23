@@ -154,6 +154,10 @@ class SettingsDiskSourceTest {
             userId = userId,
             isPending = true,
         )
+        settingsDiskSource.storePremiumUpgradePending(
+            userId = userId,
+            isPending = true,
+        )
         settingsDiskSource.storeInlineAutofillEnabled(
             userId = userId,
             isInlineAutofillEnabled = true,
@@ -195,6 +199,9 @@ class SettingsDiskSourceTest {
         )
         assertTrue(
             settingsDiskSource.getUpgradedToPremiumCardPending(userId = userId) ?: false,
+        )
+        assertTrue(
+            settingsDiskSource.getPremiumUpgradePending(userId = userId) ?: false,
         )
 
         // These should be cleared
@@ -465,6 +472,42 @@ class SettingsDiskSourceTest {
             assertFalse(awaitItem() ?: true)
         }
     }
+
+    @Test
+    fun `hasShownAccessibilityDisclaimer should pull from and update SharedPreferences`() {
+        val hasShownAccessibilityDisclaimerKey =
+            "bwPreferencesStorage:hasShownAccessibilityDisclaimer"
+        val expected = true
+
+        assertNull(settingsDiskSource.hasShownAccessibilityDisclaimer)
+
+        fakeSharedPreferences.edit {
+            putBoolean(hasShownAccessibilityDisclaimerKey, expected)
+        }
+
+        assertEquals(
+            expected,
+            settingsDiskSource.hasShownAccessibilityDisclaimer,
+        )
+
+        settingsDiskSource.hasShownAccessibilityDisclaimer = false
+        assertFalse(fakeSharedPreferences.getBoolean(hasShownAccessibilityDisclaimerKey, true))
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `hasShownAccessibilityDisclaimerFlow should react to changes in hasShownAccessibilityDisclaimer`() =
+        runTest {
+            settingsDiskSource.hasShownAccessibilityDisclaimerFlow.test {
+                // The initial values of the Flow and the property are in sync
+                assertNull(settingsDiskSource.hasShownAccessibilityDisclaimer)
+                assertNull(awaitItem())
+                settingsDiskSource.hasShownAccessibilityDisclaimer = true
+                assertEquals(true, awaitItem())
+                settingsDiskSource.hasShownAccessibilityDisclaimer = false
+                assertEquals(false, awaitItem())
+            }
+        }
 
     @Test
     fun `getVaultTimeoutInMinutes when values are present should pull from SharedPreferences`() {
@@ -952,6 +995,70 @@ class SettingsDiskSourceTest {
                         isPending = true,
                     )
                     assertEquals(true, awaitItem())
+                }
+        }
+
+    @Test
+    fun `getPremiumUpgradePending when values are present should pull from SharedPreferences`() {
+        val baseKey = "bwPreferencesStorage:premiumUpgradePending"
+        val mockUserId = "mockUserId"
+        val key = "${baseKey}_$mockUserId"
+        assertNull(settingsDiskSource.getPremiumUpgradePending(userId = mockUserId))
+        fakeSharedPreferences.edit { putBoolean(key, true) }
+        assertEquals(
+            true,
+            settingsDiskSource.getPremiumUpgradePending(userId = mockUserId),
+        )
+    }
+
+    @Test
+    fun `storePremiumUpgradePending for non-null values should update SharedPreferences`() {
+        val baseKey = "bwPreferencesStorage:premiumUpgradePending"
+        val mockUserId = "mockUserId"
+        val key = "${baseKey}_$mockUserId"
+        settingsDiskSource.storePremiumUpgradePending(
+            userId = mockUserId,
+            isPending = true,
+        )
+        assertTrue(fakeSharedPreferences.getBoolean(key, false))
+    }
+
+    @Test
+    fun `storePremiumUpgradePending for null values should clear SharedPreferences`() {
+        val baseKey = "bwPreferencesStorage:premiumUpgradePending"
+        val mockUserId = "mockUserId"
+        val key = "${baseKey}_$mockUserId"
+        fakeSharedPreferences.edit { putBoolean(key, true) }
+        settingsDiskSource.storePremiumUpgradePending(
+            userId = mockUserId,
+            isPending = null,
+        )
+        assertFalse(fakeSharedPreferences.contains(key))
+    }
+
+    @Test
+    fun `getPremiumUpgradePendingFlow should react to changes in storePremiumUpgradePending`() =
+        runTest {
+            val mockUserId = "mockUserId"
+            settingsDiskSource
+                .getPremiumUpgradePendingFlow(userId = mockUserId)
+                .test {
+                    assertNull(
+                        settingsDiskSource.getPremiumUpgradePending(userId = mockUserId),
+                    )
+                    assertNull(awaitItem())
+
+                    settingsDiskSource.storePremiumUpgradePending(
+                        userId = mockUserId,
+                        isPending = true,
+                    )
+                    assertEquals(true, awaitItem())
+
+                    settingsDiskSource.storePremiumUpgradePending(
+                        userId = mockUserId,
+                        isPending = false,
+                    )
+                    assertEquals(false, awaitItem())
                 }
         }
 

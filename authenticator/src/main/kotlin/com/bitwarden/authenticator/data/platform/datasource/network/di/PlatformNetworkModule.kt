@@ -13,6 +13,7 @@ import com.bitwarden.network.model.AuthTokenData
 import com.bitwarden.network.model.BitwardenServiceClientConfig
 import com.bitwarden.network.model.NetworkCookie
 import com.bitwarden.network.provider.CookieProvider
+import com.bitwarden.network.provider.PermissionProvider
 import com.bitwarden.network.service.ConfigService
 import com.bitwarden.network.service.DownloadService
 import com.bitwarden.network.ssl.CertificateProvider
@@ -75,11 +76,20 @@ object PlatformNetworkModule {
                 override fun getPrivateKey(alias: String?): PrivateKey? = null
             },
             cookieProvider = object : CookieProvider {
+                override val errorMessageString: String get() = "Error"
+
                 override fun needsBootstrap(hostname: String): Boolean = false
 
                 override fun getCookies(hostname: String): List<NetworkCookie> = emptyList()
 
                 override fun acquireCookies(hostname: String): Unit = Unit
+            },
+            permissionProvider = object : PermissionProvider {
+                override val errorMessageString: String get() = "Error"
+
+                override val hasLocalNetworkAccessPermission: Boolean get() = false
+
+                override fun acquireLocalNetworkAccessPermission(): Unit = Unit
             },
         )
 

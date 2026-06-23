@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.tools.generator.datasource.sdk.di
 
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.tools.generator.datasource.sdk.GeneratorSdkSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.sdk.GeneratorSdkSourceImpl
@@ -19,6 +20,10 @@ object GeneratorSdkModule {
     @Provides
     @Singleton
     fun provideGeneratorSdkSource(
+        dispatcherManager: DispatcherManager,
         sdkClientManager: SdkClientManager,
-    ): GeneratorSdkSource = GeneratorSdkSourceImpl(sdkClientManager = sdkClientManager)
+    ): GeneratorSdkSource = GeneratorSdkSourceImpl(
+        dispatcherManager = dispatcherManager,
+        sdkClientManager = sdkClientManager,
+    )
 }

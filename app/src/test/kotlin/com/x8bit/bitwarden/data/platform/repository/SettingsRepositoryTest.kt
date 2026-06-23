@@ -4,6 +4,7 @@ import android.view.autofill.AutofillManager
 import app.cash.turbine.test
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
 import com.bitwarden.core.EnrollPinResponse
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
@@ -11,11 +12,10 @@ import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
 import com.bitwarden.network.model.KdfTypeJson
-import com.bitwarden.network.model.PolicyTypeJson
-import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.bitwarden.network.model.UserDecryptionOptionsJson
-import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.PolicyType
+import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -23,7 +23,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.createMockVaultTimeoutPolicy
-import com.x8bit.bitwarden.data.auth.repository.model.createMockVaultTimeoutPolicyJsonObject
+import com.x8bit.bitwarden.data.auth.repository.model.createMockVaultTimeoutPolicyJsonString
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.FakeAccessibilityEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManagerImpl
@@ -36,6 +36,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -68,13 +69,16 @@ class SettingsRepositoryTest {
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeSettingsDiskSource = FakeSettingsDiskSource()
     private val vaultSdkSource: VaultSdkSource = mockk()
-    private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Policy>>()
+    private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<PolicyView>>()
     private val policyManager: PolicyManager = mockk {
         every {
-            getActivePoliciesFlow(type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT)
+            getActivePoliciesFlow(type = PolicyType.MAXIMUM_VAULT_TIMEOUT)
         } returns mutableActivePolicyFlow
     }
     private val flightRecorderManager = mockk<FlightRecorderManager>()
+    private val buildInfoManager: BuildInfoManager = mockk {
+        every { isFdroid } returns false
+    }
 
     private val settingsRepository = SettingsRepositoryImpl(
         autofillManager = autofillManager,
@@ -86,6 +90,7 @@ class SettingsRepositoryTest {
         dispatcherManager = FakeDispatcherManager(),
         policyManager = policyManager,
         flightRecorderManager = flightRecorderManager,
+        buildInfoManager = buildInfoManager,
     )
 
     @BeforeEach
@@ -1119,6 +1124,48 @@ class SettingsRepositoryTest {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `hasShownAccessibilityDisclaimerFlow should emit changes from SettingsDiskSource when fdroid is false`() =
+        runTest {
+            fakeSettingsDiskSource.hasShownAccessibilityDisclaimer = null
+            settingsRepository.hasShownAccessibilityDisclaimerFlow.test {
+                assertFalse(awaitItem())
+
+                fakeSettingsDiskSource.hasShownAccessibilityDisclaimer = true
+                assertTrue(awaitItem())
+
+                fakeSettingsDiskSource.hasShownAccessibilityDisclaimer = false
+                assertFalse(awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `hasShownAccessibilityDisclaimerFlow should emit changes from SettingsDiskSource when fdroid is true`() =
+        runTest {
+            every { buildInfoManager.isFdroid } returns true
+            fakeSettingsDiskSource.hasShownAccessibilityDisclaimer = null
+            settingsRepository.hasShownAccessibilityDisclaimerFlow.test {
+                assertTrue(awaitItem())
+
+                fakeSettingsDiskSource.hasShownAccessibilityDisclaimer = true
+                expectNoEvents()
+
+                fakeSettingsDiskSource.hasShownAccessibilityDisclaimer = false
+                expectNoEvents()
+            }
+        }
+
+    @Test
+    fun `accessibilityDisclaimerHasBeenShown should update SettingsDiskSource`() {
+        assertNull(fakeSettingsDiskSource.hasShownAccessibilityDisclaimer)
+
+        settingsRepository.accessibilityDisclaimerHasBeenShown()
+
+        assertTrue(fakeSettingsDiskSource.hasShownAccessibilityDisclaimer == true)
+    }
+
     @Test
     fun `clearClipboardFrequency should pull from and update SettingsDiskSource`() = runTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -1345,7 +1392,7 @@ class SettingsRepositoryTest {
             fakeSettingsDiskSource.assertVaultTimeoutAction(userId = USER_ID, expected = null)
             fakeSettingsDiskSource.assertVaultTimeoutInMinutes(userId = USER_ID, expected = null)
 
-            mutableActivePolicyFlow.emit(listOf(createMockPolicy()))
+            mutableActivePolicyFlow.emit(listOf(createMockPolicyView()))
             fakeSettingsDiskSource.assertVaultTimeoutAction(userId = USER_ID, expected = null)
             fakeSettingsDiskSource.assertVaultTimeoutInMinutes(userId = USER_ID, expected = null)
         }
@@ -1356,9 +1403,9 @@ class SettingsRepositoryTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             fakeSettingsDiskSource.assertVaultTimeoutAction(userId = USER_ID, expected = null)
 
-            val lockPolicy = createMockPolicy(
-                type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
-                data = createMockVaultTimeoutPolicyJsonObject(
+            val lockPolicy = createMockPolicyView(
+                type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
+                data = createMockVaultTimeoutPolicyJsonString(
                     vaultTimeout = createMockVaultTimeoutPolicy(
                         action = PolicyInformation.VaultTimeout.Action.LOCK,
                     ),
@@ -1370,9 +1417,9 @@ class SettingsRepositoryTest {
                 expected = VaultTimeoutAction.LOCK,
             )
 
-            val logoutPolicy = createMockPolicy(
-                type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
-                data = createMockVaultTimeoutPolicyJsonObject(
+            val logoutPolicy = createMockPolicyView(
+                type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
+                data = createMockVaultTimeoutPolicyJsonString(
                     vaultTimeout = createMockVaultTimeoutPolicy(
                         action = PolicyInformation.VaultTimeout.Action.LOGOUT,
                     ),
@@ -1396,18 +1443,18 @@ class SettingsRepositoryTest {
                 vaultTimeoutInMinutes = 100,
             )
 
-            val nullTypeWithMinutesPolicy = createMockPolicy(
-                type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
-                data = createMockVaultTimeoutPolicyJsonObject(
+            val nullTypeWithMinutesPolicy = createMockPolicyView(
+                type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
+                data = createMockVaultTimeoutPolicyJsonString(
                     vaultTimeout = createMockVaultTimeoutPolicy(minutes = 5),
-                ),
+                ).apply { println(this) },
             )
             mutableActivePolicyFlow.emit(listOf(nullTypeWithMinutesPolicy))
             fakeSettingsDiskSource.assertVaultTimeoutInMinutes(userId = USER_ID, expected = 5)
 
-            val customMinutesPolicy = createMockPolicy(
-                type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
-                data = createMockVaultTimeoutPolicyJsonObject(
+            val customMinutesPolicy = createMockPolicyView(
+                type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
+                data = createMockVaultTimeoutPolicyJsonString(
                     vaultTimeout = createMockVaultTimeoutPolicy(
                         minutes = 10,
                         type = PolicyInformation.VaultTimeout.Type.CUSTOM,
@@ -1418,9 +1465,9 @@ class SettingsRepositoryTest {
             // No change since 5 is within the range
             fakeSettingsDiskSource.assertVaultTimeoutInMinutes(userId = USER_ID, expected = 5)
 
-            val onSystemLockPolicy = createMockPolicy(
-                type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
-                data = createMockVaultTimeoutPolicyJsonObject(
+            val onSystemLockPolicy = createMockPolicyView(
+                type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
+                data = createMockVaultTimeoutPolicyJsonString(
                     vaultTimeout = createMockVaultTimeoutPolicy(
                         minutes = 10,
                         type = PolicyInformation.VaultTimeout.Type.ON_SYSTEM_LOCK,
@@ -1431,9 +1478,9 @@ class SettingsRepositoryTest {
             // Set to on app restart
             fakeSettingsDiskSource.assertVaultTimeoutInMinutes(userId = USER_ID, expected = -1)
 
-            val onAppRestartPolicy = createMockPolicy(
-                type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
-                data = createMockVaultTimeoutPolicyJsonObject(
+            val onAppRestartPolicy = createMockPolicyView(
+                type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
+                data = createMockVaultTimeoutPolicyJsonString(
                     vaultTimeout = createMockVaultTimeoutPolicy(
                         minutes = 10,
                         type = PolicyInformation.VaultTimeout.Type.ON_APP_RESTART,
@@ -1444,9 +1491,9 @@ class SettingsRepositoryTest {
             // No change, ON_APP_RESTART is treated the same as ON_SYSTEM_RESTART
             fakeSettingsDiskSource.assertVaultTimeoutInMinutes(userId = USER_ID, expected = -1)
 
-            val immediatePolicy = createMockPolicy(
-                type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
-                data = createMockVaultTimeoutPolicyJsonObject(
+            val immediatePolicy = createMockPolicyView(
+                type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
+                data = createMockVaultTimeoutPolicyJsonString(
                     vaultTimeout = createMockVaultTimeoutPolicy(
                         minutes = 10,
                         type = PolicyInformation.VaultTimeout.Type.IMMEDIATELY,
@@ -1457,9 +1504,9 @@ class SettingsRepositoryTest {
             // Set to Immediate
             fakeSettingsDiskSource.assertVaultTimeoutInMinutes(userId = USER_ID, expected = 0)
 
-            val neverPolicy = createMockPolicy(
-                type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
-                data = createMockVaultTimeoutPolicyJsonObject(
+            val neverPolicy = createMockPolicyView(
+                type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
+                data = createMockVaultTimeoutPolicyJsonString(
                     vaultTimeout = createMockVaultTimeoutPolicy(
                         minutes = 10,
                         type = PolicyInformation.VaultTimeout.Type.NEVER,
@@ -1496,7 +1543,8 @@ private val MOCK_PROFILE = AccountJson.Profile(
     email = "test@bitwarden.com",
     isEmailVerified = true,
     name = "Bitwarden Tester",
-    hasPremium = false,
+    hasPremiumPersonally = false,
+    hasPremiumFromOrganization = null,
     stamp = null,
     organizationId = null,
     avatarColorHex = null,

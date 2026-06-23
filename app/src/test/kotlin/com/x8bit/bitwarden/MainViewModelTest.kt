@@ -4,8 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.browser.auth.AuthTabIntent
 import androidx.credentials.GetPublicKeyCredentialOption
-import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
-import com.x8bit.bitwarden.data.billing.util.getPremiumCheckoutCallbackResult
 import androidx.credentials.provider.BiometricPromptResult
 import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
@@ -48,6 +46,8 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
+import com.x8bit.bitwarden.data.billing.util.PremiumCheckoutCallbackResult
+import com.x8bit.bitwarden.data.billing.util.getPremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.credentials.manager.CredentialProviderRequestManager
 import com.x8bit.bitwarden.data.credentials.manager.model.CredentialProviderRequest
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
@@ -55,13 +55,11 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionReques
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
-import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
-import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -176,11 +174,6 @@ class MainViewModelTest : BaseViewModelTest() {
     private val toastManager: ToastManager = mockk {
         every { show(message = any(), duration = any()) } just runs
         every { show(messageId = any(), duration = any()) } just runs
-    }
-    private val mutableCookieAcquisitionRequestFlow =
-        MutableStateFlow<CookieAcquisitionRequest?>(null)
-    private val cookieAcquisitionRequestManager: CookieAcquisitionRequestManager = mockk {
-        every { cookieAcquisitionRequestFlow } returns mutableCookieAcquisitionRequestFlow
     }
     private val credentialProviderRequestManager: CredentialProviderRequestManager = mockk {
         every { getPendingCredentialRequest() } returns null
@@ -1292,38 +1285,20 @@ class MainViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `cookie acquisition should emit NavigateToCookieAcquisition when vault unlocked with matching hostname`() =
-        runTest {
-            mutableCookieAcquisitionRequestFlow.value = CookieAcquisitionRequest(
-                hostname = DEFAULT_US_WEB_VAULT_URL,
-            )
-            val viewModel = createViewModel()
+    fun `on StripePortalResult should set StripePortal special circumstance`() {
+        val authResult = mockk<AuthTabIntent.AuthResult>()
+        val viewModel = createViewModel()
 
-            viewModel.eventFlow.test {
-                // Skip init events (appLanguage + appTheme)
-                skipItems(2)
-                mutableUserStateFlow.value = DEFAULT_USER_STATE
-                assertEquals(
-                    MainEvent.NavigateToCookieAcquisition,
-                    awaitItem(),
-                )
-            }
-        }
+        viewModel.trySendAction(
+            MainAction.StripePortalResult(authResult = authResult),
+        )
 
-    @Test
-    fun `cookie acquisition should not emit event when conditions are false`() =
-        runTest {
-            mutableCookieAcquisitionRequestFlow.value = null
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                // Skip init events (appLanguage + appTheme)
-                skipItems(2)
-                mutableUserStateFlow.value = DEFAULT_USER_STATE
-                expectNoEvents()
-            }
-        }
+        assertEquals(
+            SpecialCircumstance.StripePortal,
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
 
     @Test
     fun `on handleResizeHasBeenRequested should set hasResizeBeenRequested as true`() = runTest {
@@ -1351,11 +1326,10 @@ class MainViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(
         initialSpecialCircumstance: SpecialCircumstance? = null,
-    ) = MainViewModel(
+    ): MainViewModel = MainViewModel(
         accessibilitySelectionManager = accessibilitySelectionManager,
         addTotpItemFromAuthenticatorManager = addTotpItemAuthenticatorManager,
         autofillSelectionManager = autofillSelectionManager,
-        cookieAcquisitionRequestManager = cookieAcquisitionRequestManager,
         specialCircumstanceManager = specialCircumstanceManager,
         garbageCollectionManager = garbageCollectionManager,
         credentialProviderRequestManager = credentialProviderRequestManager,
@@ -1386,7 +1360,6 @@ private val DEFAULT_FIRST_TIME_STATE = FirstTimeState(
 
 private const val SPECIAL_CIRCUMSTANCE_KEY: String = "special-circumstance"
 private const val ACTIVE_USER_ID: String = "activeUserId"
-private const val DEFAULT_US_WEB_VAULT_URL: String = "https://vault.bitwarden.com"
 private val DEFAULT_ACCOUNT = UserState.Account(
     userId = ACTIVE_USER_ID,
     name = "Active User",
@@ -1394,6 +1367,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     environment = Environment.Us,
     avatarColorHex = "#aa00aa",
     isPremium = true,
+    isPremiumFromSelf = true,
     isLoggedIn = true,
     isVaultUnlocked = true,
     needsPasswordReset = false,

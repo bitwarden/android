@@ -147,6 +147,10 @@ fun VaultData.toViewState(
                 .count { it.type is CipherListViewType.SshKey },
             bankAccountItemsCount = activeCipherViews
                 .count { it.type is CipherListViewType.BankAccount },
+            licenseItemsCount = activeCipherViews
+                .count { it.type is CipherListViewType.DriversLicense },
+            passportItemsCount = activeCipherViews
+                .count { it.type is CipherListViewType.Passport },
             favoriteItems = activeDecryptedCipherViews
                 .filter { it.favorite }
                 .mapNotNull {
@@ -221,6 +225,8 @@ fun VaultData.toViewState(
                 .takeIf { !isPremium && archiveCount == 0 },
             showCardGroup = cardCount != 0 || restrictItemTypesPolicyOrgIds.isEmpty(),
             showBankAccountGroup = isNewItemTypesEnabled,
+            showLicenseGroup = isNewItemTypesEnabled,
+            showPassportGroup = isNewItemTypesEnabled,
         )
     }
 }
@@ -379,9 +385,31 @@ private fun CipherListView.toVaultItemOrNull(
             hasDecryptionError = hasDecryptionError,
         )
 
-        // TODO: [PM-32009] Map License/Passport when their UIs are wired.
-        CipherListViewType.DriversLicense -> null
-        CipherListViewType.Passport -> null
+        CipherListViewType.DriversLicense -> VaultState.ViewState.VaultItem.License(
+            id = id,
+            name = name.asText(),
+            overflowOptions = toOverflowActions(
+                hasMasterPassword = hasMasterPassword,
+                isPremiumUser = isPremiumUser,
+            ),
+            extraIconList = toLabelIcons(),
+            shouldShowMasterPasswordReprompt = hasMasterPassword &&
+                reprompt == CipherRepromptType.PASSWORD,
+            hasDecryptionError = hasDecryptionError,
+        )
+
+        CipherListViewType.Passport -> VaultState.ViewState.VaultItem.Passport(
+            id = id,
+            name = name.asText(),
+            overflowOptions = toOverflowActions(
+                hasMasterPassword = hasMasterPassword,
+                isPremiumUser = isPremiumUser,
+            ),
+            extraIconList = toLabelIcons(),
+            shouldShowMasterPasswordReprompt = hasMasterPassword &&
+                reprompt == CipherRepromptType.PASSWORD,
+            hasDecryptionError = hasDecryptionError,
+        )
     }
 }
 

@@ -408,8 +408,20 @@ private fun VaultItemListingDialogs(
 
         is VaultItemListingState.DialogState.ArchiveRequiresPremium -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(id = BitwardenString.archive_unavailable),
+                title = stringResource(id = BitwardenString.premium_subscription_required),
                 message = stringResource(id = BitwardenString.archiving_items_is_a_premium_feature),
+                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
+                onConfirmClick = vaultItemListingHandlers.upgradeToPremiumClick,
+                onDismissClick = vaultItemListingHandlers.dismissDialogRequest,
+                onDismissRequest = vaultItemListingHandlers.dismissDialogRequest,
+            )
+        }
+
+        is VaultItemListingState.DialogState.FileTypeRequiresPremium -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = BitwardenString.premium_subscription_required),
+                message = stringResource(id = BitwardenString.send_file_premium_required),
                 confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
                 dismissButtonText = stringResource(id = BitwardenString.cancel),
                 onConfirmClick = vaultItemListingHandlers.upgradeToPremiumClick,

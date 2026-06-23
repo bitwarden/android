@@ -4,10 +4,12 @@ import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.data.datasource.disk.util.FakeConfigDiskSource
 import com.bitwarden.network.model.ConfigResponseJson
 import com.bitwarden.network.model.NetworkCookie
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.CookieConfigurationData
 import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
+import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -20,6 +22,9 @@ import org.junit.jupiter.api.Test
 
 class NetworkCookieManagerTest {
 
+    private val resourceManager: ResourceManager = mockk {
+        every { getString(resId = any()) } returns ERROR_MESSAGE
+    }
     private val fakeConfigDiskSource = FakeConfigDiskSource()
     private val mockCookieDiskSource: CookieDiskSource = mockk()
     private val mockCookieAcquisitionRequestManager: CookieAcquisitionRequestManager =
@@ -28,10 +33,24 @@ class NetworkCookieManagerTest {
         }
 
     private val manager = NetworkCookieManagerImpl(
+        resourceManager = resourceManager,
         configDiskSource = fakeConfigDiskSource,
         cookieDiskSource = mockCookieDiskSource,
         cookieAcquisitionRequestManager = mockCookieAcquisitionRequestManager,
     )
+
+    @Test
+    fun `errorMessageString should return appropriate message`() {
+        val result = manager.errorMessageString
+
+        assertEquals(ERROR_MESSAGE, result)
+        verify(exactly = 1) {
+            resourceManager.getString(
+                resId = BitwardenString
+                    .your_request_was_interrupted_because_the_app_needed_to_reauthenticate,
+            )
+        }
+    }
 
     @Test
     fun `needsBootstrap should return false when serverConfig is null`() {
@@ -284,3 +303,5 @@ private fun createCookieConfig(
     hostname = hostname,
     cookies = cookies,
 )
+
+private const val ERROR_MESSAGE: String = "Error Message"

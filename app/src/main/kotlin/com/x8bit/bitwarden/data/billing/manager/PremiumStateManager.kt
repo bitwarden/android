@@ -1,5 +1,8 @@
 package com.x8bit.bitwarden.data.billing.manager
 
+import com.x8bit.bitwarden.data.billing.model.PremiumCard
+import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionStatusState
+import com.x8bit.bitwarden.data.billing.repository.model.UpgradeLifecycleState
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -14,10 +17,9 @@ const val UPGRADED_TO_PREMIUM_LEARN_MORE_URL: String =
 interface PremiumStateManager {
 
     /**
-     * Emits `true` when the current user is eligible to see the Premium upgrade banner,
-     * or `false` otherwise.
+     * Emits a [PremiumCard] for the current user indicating what Premium card should be displayed.
      */
-    val isPremiumUpgradeBannerEligibleFlow: StateFlow<Boolean>
+    val premiumCardStateFlow: StateFlow<PremiumCard>
 
     /**
      * Emits `true` while the active user is eligible to see the "Upgraded to Premium" action
@@ -25,6 +27,34 @@ interface PremiumStateManager {
      * consumes the card via [dismissUpgradedToPremiumCard].
      */
     val isUpgradedToPremiumCardEligibleFlow: StateFlow<Boolean>
+
+    /**
+     * Emits `true` when the active user is eligible to see the Plan row in Settings, or `false`
+     * otherwise.
+     */
+    val isPlanRowEligibleFlow: StateFlow<Boolean>
+
+    /**
+     * Emits the active user's latest [SubscriptionStatusState].
+     */
+    val subscriptionStatusStateFlow: StateFlow<SubscriptionStatusState>
+
+    /**
+     * Emits the active user's current [UpgradeLifecycleState].
+     */
+    val upgradeLifecycleStateFlow: StateFlow<UpgradeLifecycleState>
+
+    /**
+     * Emits whether the current state should be treated as self-hosted for premium upgrade
+     * gating. Reactive equivalent of [isSelfHosted].
+     */
+    val isSelfHostedFlow: StateFlow<Boolean>
+
+    /**
+     * `true` when the current state should be treated as self-hosted for premium upgrade
+     * gating, or `false` otherwise.
+     */
+    val isSelfHosted: Boolean
 
     /**
      * Returns `true` when the in-app upgrade flow is available, or `false` otherwise.
@@ -42,4 +72,10 @@ interface PremiumStateManager {
      * never re-appears for that user.
      */
     fun dismissUpgradedToPremiumCard()
+
+    /**
+     * Marks the active user as having a Premium upgrade in flight (Stripe checkout completed
+     * but the server has not yet flipped `isPremium`).
+     */
+    fun markPremiumUpgradePending(userId: String)
 }

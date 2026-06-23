@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager
 
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.manager.NativeLibraryManager
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
@@ -99,6 +100,7 @@ class SdkClientManagerTest {
     }
 
     private fun createSdkClientManager(): SdkClientManagerImpl = SdkClientManagerImpl(
+        dispatcherManager = FakeDispatcherManager(),
         clientProvider = { _, _ -> mockk(relaxed = true) },
         nativeLibraryManager = mockNativeLibraryManager,
         featureFlagManager = mockk(),

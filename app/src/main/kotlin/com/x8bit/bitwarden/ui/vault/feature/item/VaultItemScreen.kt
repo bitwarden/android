@@ -49,7 +49,9 @@ import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHan
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultDriversLicenseItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultPassportItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultSshKeyItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.rememberVaultPassportItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 
 /**
@@ -292,6 +294,9 @@ fun VaultItemScreen(
             vaultDriversLicenseItemTypeHandlers = remember(viewModel) {
                 VaultDriversLicenseItemTypeHandlers.create(viewModel = viewModel)
             },
+            vaultPassportItemTypeHandlers = rememberVaultPassportItemTypeHandlers(
+                viewModel = viewModel,
+            ),
         )
     }
 }
@@ -308,7 +313,7 @@ private fun VaultItemDialogs(
     when (dialog) {
         is VaultItemState.DialogState.ArchiveRequiresPremium -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(id = BitwardenString.archive_unavailable),
+                title = stringResource(id = BitwardenString.premium_subscription_required),
                 message = stringResource(id = BitwardenString.archiving_items_is_a_premium_feature),
                 confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
                 dismissButtonText = stringResource(id = BitwardenString.cancel),
@@ -378,6 +383,7 @@ private fun VaultItemContent(
     vaultIdentityItemTypeHandlers: VaultIdentityItemTypeHandlers,
     vaultBankAccountItemTypeHandlers: VaultBankAccountItemTypeHandlers,
     vaultDriversLicenseItemTypeHandlers: VaultDriversLicenseItemTypeHandlers,
+    vaultPassportItemTypeHandlers: VaultPassportItemTypeHandlers,
     modifier: Modifier = Modifier,
 ) {
     when (viewState) {
@@ -462,12 +468,11 @@ private fun VaultItemContent(
                 }
 
                 is VaultItemState.ViewState.Content.ItemType.Passport -> {
-                    // TODO(PM-32806): Render dedicated content for Passport once the UI ships
-                    //  in its Story slice. Until then this branch is gated behind the
-                    //  pm-32009-new-item-types feature flag and cannot be received.
-                    VaultItemSecureNoteContent(
+                    VaultItemPassportContent(
                         commonState = viewState.common,
+                        passportState = viewState.type,
                         vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+                        vaultPassportItemTypeHandlers = vaultPassportItemTypeHandlers,
                         modifier = modifier,
                     )
                 }
