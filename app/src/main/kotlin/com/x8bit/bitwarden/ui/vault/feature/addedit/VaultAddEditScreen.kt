@@ -299,6 +299,9 @@ fun VaultAddEditScreen(
         onUpgradeToPremiumClick = {
             viewModel.trySendAction(VaultAddEditAction.Common.UpgradeToPremiumClick)
         },
+        onNavigateToPlanClick = {
+            viewModel.trySendAction(VaultAddEditAction.Common.NavigateToPlanClick)
+        },
         onCameraPermissionSettingsClick = {
             viewModel.trySendAction(
                 VaultAddEditAction.Common.CameraPermissionSettingsClick,
@@ -495,6 +498,7 @@ private fun VaultAddEditItemDialogs(
     onRetryPinSetUpFido2Verification: () -> Unit,
     onDismissFido2Verification: () -> Unit,
     onUpgradeToPremiumClick: () -> Unit,
+    onNavigateToPlanClick: () -> Unit,
     onCameraPermissionSettingsClick: () -> Unit,
 ) {
     when (dialogState) {
@@ -504,7 +508,21 @@ private fun VaultAddEditItemDialogs(
                 message = stringResource(id = BitwardenString.archiving_items_is_a_premium_feature),
                 confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
                 dismissButtonText = stringResource(id = BitwardenString.cancel),
-                onConfirmClick = onUpgradeToPremiumClick,
+                onConfirmClick = onNavigateToPlanClick,
+                onDismissClick = onDismissRequest,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is VaultAddEditState.DialogState.TotpRequiresPremium -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = BitwardenString.premium_subscription_required),
+                message = stringResource(
+                    id = BitwardenString.authenticator_key_is_a_premium_feature,
+                ),
+                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
+                onConfirmClick = onNavigateToPlanClick,
                 onDismissClick = onDismissRequest,
                 onDismissRequest = onDismissRequest,
             )

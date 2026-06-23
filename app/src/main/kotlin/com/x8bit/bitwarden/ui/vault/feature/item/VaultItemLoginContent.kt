@@ -147,6 +147,8 @@ fun VaultItemLoginContent(
                     onCopyTotpClick = vaultLoginItemTypeHandlers.onCopyTotpCodeClick,
                     onAuthenticatorHelpToolTipClick = vaultLoginItemTypeHandlers
                         .onAuthenticatorHelpToolTipClick,
+                    onPremiumRequiredClick = vaultLoginItemTypeHandlers
+                        .onTotpRequiresPremiumClick,
                     modifier = Modifier
                         .standardHorizontalMargin()
                         .fillMaxWidth()
@@ -285,12 +287,14 @@ private fun PasswordField(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun TotpField(
     totpCodeItemData: TotpCodeItemData,
     enabled: Boolean,
     onCopyTotpClick: () -> Unit,
     onAuthenticatorHelpToolTipClick: () -> Unit,
+    onPremiumRequiredClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (enabled) {
@@ -333,7 +337,19 @@ private fun TotpField(
                 contentDescription = stringResource(id = BitwardenString.authenticator_key_help),
                 isExternalLink = true,
             ),
-            supportingText = stringResource(id = BitwardenString.premium_subscription_required),
+            supportingContentPadding = PaddingValues(),
+            supportingContent = {
+                BitwardenClickableText(
+                    label = stringResource(id = BitwardenString.premium_subscription_required),
+                    onClick = onPremiumRequiredClick,
+                    style = BitwardenTheme.typography.labelMedium,
+                    innerPadding = PaddingValues(all = 16.dp),
+                    cornerSize = 0.dp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("LoginTotpPremiumRequired"),
+                )
+            },
             enabled = false,
             singleLine = false,
             onValueChange = { },

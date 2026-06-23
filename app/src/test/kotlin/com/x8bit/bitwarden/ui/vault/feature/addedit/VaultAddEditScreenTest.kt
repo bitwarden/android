@@ -321,7 +321,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ArchiveRequiresPremium dialog on upgrade to Premium click should emit UpgradeToPremiumClick`() {
+    fun `ArchiveRequiresPremium dialog on upgrade to Premium click should emit NavigateToPlanClick`() {
         composeTestRule.assertNoDialogExists()
         mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
             dialog = VaultAddEditState.DialogState.ArchiveRequiresPremium,
@@ -333,7 +333,58 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         verify(exactly = 1) {
-            viewModel.trySendAction(VaultAddEditAction.Common.UpgradeToPremiumClick)
+            viewModel.trySendAction(VaultAddEditAction.Common.NavigateToPlanClick)
+        }
+    }
+
+    @Test
+    fun `TotpRequiresPremium dialog should display based on state`() {
+        composeTestRule.assertNoDialogExists()
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
+            dialog = VaultAddEditState.DialogState.TotpRequiresPremium,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Premium subscription required")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `TotpRequiresPremium dialog on upgrade to Premium click should emit NavigateToPlanClick`() {
+        composeTestRule.assertNoDialogExists()
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
+            dialog = VaultAddEditState.DialogState.TotpRequiresPremium,
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Upgrade to Premium")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultAddEditAction.Common.NavigateToPlanClick)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login state, premium-gated TOTP supporting text click should send TotpRequiresPremiumClick`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) {
+                copy(isAuthenticatorKeyPremiumGated = true)
+            }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Premium subscription required")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.TotpRequiresPremiumClick,
+            )
         }
     }
 

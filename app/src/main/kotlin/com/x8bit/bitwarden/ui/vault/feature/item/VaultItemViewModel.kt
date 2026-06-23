@@ -304,6 +304,7 @@ class VaultItemViewModel @Inject constructor(
             VaultItemAction.Common.ArchiveClick -> handleArchiveClick()
             VaultItemAction.Common.UnarchiveClick -> handleUnarchiveClick()
             VaultItemAction.Common.UpgradeToPremiumClick -> handleUpgradeToPremiumClick()
+            VaultItemAction.Common.NavigateToPlanClick -> handleNavigateToPlanClick()
         }
     }
 
@@ -616,6 +617,10 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.ItemType.Login.PasswordVisibilityClicked -> {
                 handlePasswordVisibilityClicked(action)
             }
+
+            is VaultItemAction.ItemType.Login.TotpRequiresPremiumClick -> {
+                handleTotpRequiresPremiumClick()
+            }
         }
     }
 
@@ -625,6 +630,10 @@ class VaultItemViewModel @Inject constructor(
                 uri = "https://bitwarden.com/help/integrated-authenticator",
             ),
         )
+    }
+
+    private fun handleTotpRequiresPremiumClick() {
+        updateDialogState(VaultItemState.DialogState.TotpRequiresPremium)
     }
 
     private fun handleCheckForBreachClick() {
@@ -753,6 +762,11 @@ class VaultItemViewModel @Inject constructor(
             val uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium"
             sendEvent(VaultItemEvent.NavigateToUri(uri = uri))
         }
+    }
+
+    private fun handleNavigateToPlanClick() {
+        updateDialogState(dialog = null)
+        sendEvent(VaultItemEvent.NavigateToPlanModal)
     }
 
     private fun handlePasswordVisibilityClicked(
@@ -2341,6 +2355,13 @@ data class VaultItemState(
         data object ArchiveRequiresPremium : DialogState()
 
         /**
+         * Displays a dialog to the user indicating that the authenticator key (TOTP) requires a
+         * Premium account.
+         */
+        @Parcelize
+        data object TotpRequiresPremium : DialogState()
+
+        /**
          * Displays a generic dialog to the user.
          */
         @Parcelize
@@ -2504,6 +2525,11 @@ sealed class VaultItemAction {
          * The user has clicked the upgrade to Premium button.
          */
         data object UpgradeToPremiumClick : Common()
+
+        /**
+         * The user has clicked an upgrade CTA that should always navigate to the Plan screen.
+         */
+        data object NavigateToPlanClick : Common()
 
         /**
          * The user has clicked the close button.
@@ -2684,6 +2710,12 @@ sealed class VaultItemAction {
             data class PasswordVisibilityClicked(
                 val isVisible: Boolean,
             ) : Login()
+
+            /**
+             * The user has clicked the Premium subscription required CTA shown in place of the
+             * authenticator key when the active account lacks the Premium entitlement.
+             */
+            data object TotpRequiresPremiumClick : Login()
         }
 
         /**

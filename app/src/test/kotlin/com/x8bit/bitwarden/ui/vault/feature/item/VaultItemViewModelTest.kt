@@ -266,6 +266,33 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             }
 
         @Test
+        fun `NavigateToPlanClick should emit NavigateToPlanModal regardless of in-app upgrade`() =
+            runTest {
+                every { premiumStateManager.isInAppUpgradeAvailable() } returns false
+                val viewModel = createViewModel(state = null)
+                viewModel.eventFlow.test {
+                    viewModel.trySendAction(VaultItemAction.Common.NavigateToPlanClick)
+                    assertEquals(
+                        VaultItemEvent.NavigateToPlanModal,
+                        awaitItem(),
+                    )
+                }
+            }
+
+        @Test
+        fun `NavigateToPlanClick should clear the active dialog`() = runTest {
+            val viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(
+                    dialog = VaultItemState.DialogState.TotpRequiresPremium,
+                ),
+            )
+
+            viewModel.trySendAction(VaultItemAction.Common.NavigateToPlanClick)
+
+            assertEquals(null, viewModel.stateFlow.value.dialog)
+        }
+
+        @Test
         fun `ArchiveClick without Premium should show ArchiveRequiresPremium dialog`() = runTest {
             mutableUserStateFlow.update {
                 it?.copy(accounts = listOf(DEFAULT_USER_ACCOUNT.copy(isPremium = false)))
@@ -1968,6 +1995,18 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     awaitItem(),
                 )
             }
+        }
+
+        @Test
+        fun `on TotpRequiresPremiumClick should show TotpRequiresPremium dialog`() {
+            viewModel.trySendAction(
+                action = VaultItemAction.ItemType.Login.TotpRequiresPremiumClick,
+            )
+
+            assertEquals(
+                VaultItemState.DialogState.TotpRequiresPremium,
+                viewModel.stateFlow.value.dialog,
+            )
         }
 
         @Test
