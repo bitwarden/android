@@ -13,7 +13,6 @@ on:
         type: string
 
 jobs:
-  jobs:
   deploy:
     name: Trigger publish via deploy repo
     runs-on: ubuntu-24.04
