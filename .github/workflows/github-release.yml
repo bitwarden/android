@@ -26,6 +26,6 @@ jobs:
           azure_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
           azure_client_id: ${{ secrets.AZURE_CLIENT_ID }}
           artifact_run_id: ${{ github.event.inputs.artifact-run-id }}
-          release_ticket_id: ${{ github.event.inputs.release-ticket-id }} }}
+          release_ticket_id: ${{ github.event.inputs.release-ticket-id }}
           task: release-android
           description: "Trigger release of Android artifacts"
