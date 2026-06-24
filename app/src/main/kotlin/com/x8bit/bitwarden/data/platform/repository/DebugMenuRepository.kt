@@ -44,6 +44,11 @@ interface DebugMenuRepository {
     fun resetCoachMarkTourStatuses()
 
     /**
+     * Resets the value for displaying the accessibility disclaimer.
+     */
+    fun resetAccessibilityDisclaimer()
+
+    /**
      * Manipulates the state to force showing the onboarding carousel.
      *
      * @param userStateUpdateTrigger A passable lambda to trigger a user state update.

@@ -160,6 +160,17 @@ class DebugMenuRepositoryTest {
     }
 
     @Test
+    fun `resetAccessibilityDisclaimer calls settings disk source setting value back to null`() {
+        every { mockSettingsDiskSource.hasShownAccessibilityDisclaimer = null } just runs
+
+        debugMenuRepository.resetAccessibilityDisclaimer()
+
+        verify(exactly = 1) {
+            mockSettingsDiskSource.hasShownAccessibilityDisclaimer = null
+        }
+    }
+
+    @Test
     fun `resetCoachMarkTourStatuses calls settings disk source setting values back to null`() {
         every {
             mockSettingsDiskSource.storeShouldShowGeneratorCoachMark(shouldShow = any())

@@ -63,8 +63,8 @@ fun AccessibilityDisclosureScreen(
             .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
     ) {
         AccessibilityDisclosureContent(
-            onAcceptClick = {
-                viewModel.trySendAction(AccessibilityDisclosureAction.AcceptClicked)
+            iUnderstandClick = {
+                viewModel.trySendAction(AccessibilityDisclosureAction.IUnderstandClick)
             },
             onCloseAppClick = {
                 viewModel.trySendAction(AccessibilityDisclosureAction.CloseAppClick)
@@ -74,9 +74,10 @@ fun AccessibilityDisclosureScreen(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun AccessibilityDisclosureContent(
-    onAcceptClick: () -> Unit,
+    iUnderstandClick: () -> Unit,
     onCloseAppClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -111,8 +112,32 @@ private fun AccessibilityDisclosureContent(
         Spacer(modifier = Modifier.height(height = 12.dp))
 
         Text(
-            text = stringResource(id = BitwardenString.accessibility_disclosure_start_up_text),
+            text = stringResource(id = BitwardenString.accessibility_disclosure_start_up_text_1),
             style = BitwardenTheme.typography.bodyMedium,
+            color = BitwardenTheme.colorScheme.text.secondary,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+
+        Spacer(modifier = Modifier.height(height = 12.dp))
+
+        Text(
+            text = stringResource(id = BitwardenString.accessibility_disclosure_start_up_text_2),
+            style = BitwardenTheme.typography.bodySmall,
+            color = BitwardenTheme.colorScheme.text.primary,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+
+        Spacer(modifier = Modifier.height(height = 12.dp))
+
+        Text(
+            text = stringResource(id = BitwardenString.accessibility_disclosure_start_up_text_3),
+            style = BitwardenTheme.typography.bodySmall,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
             modifier = Modifier
@@ -123,8 +148,8 @@ private fun AccessibilityDisclosureContent(
         Spacer(modifier = Modifier.height(height = 24.dp))
 
         BitwardenFilledButton(
-            label = stringResource(id = BitwardenString.accept),
-            onClick = onAcceptClick,
+            label = stringResource(id = BitwardenString.i_understand),
+            onClick = iUnderstandClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -150,7 +175,7 @@ private fun AccessibilityDisclosureContent(
 private fun AccessibilityDisclosureContent_preview() {
     BitwardenTheme {
         AccessibilityDisclosureContent(
-            onAcceptClick = {},
+            iUnderstandClick = {},
             onCloseAppClick = {},
             modifier = Modifier.fillMaxSize(),
         )
