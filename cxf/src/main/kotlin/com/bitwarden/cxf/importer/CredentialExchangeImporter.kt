@@ -7,6 +7,13 @@ import com.bitwarden.cxf.importer.model.ImportCredentialsSelectionResult
  */
 interface CredentialExchangeImporter {
     /**
+     * Returns `true` if credential exchange import is available on the current build, or `false`
+     * if it is unsupported (e.g. on builds without the Credential Exchange backend). Callers
+     * should hide or disable import entry points when this returns `false`.
+     */
+    fun isSupported(): Boolean
+
+    /**
      * Starts the import process by requesting selection of a source credential provider.
      *
      * @param credentialTypes The types of credentials to import.

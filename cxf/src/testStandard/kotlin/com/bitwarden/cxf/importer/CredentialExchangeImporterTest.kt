@@ -58,6 +58,11 @@ class CredentialExchangeImporterTest {
     }
 
     @Test
+    fun `isSupported should return true`() {
+        assertTrue(importer.isSupported())
+    }
+
+    @Test
     fun `importCredentials should return Success when provider returns valid response`() =
         runTest {
             val mockCallingAppInfo = mockk<CallingAppInfo>()
