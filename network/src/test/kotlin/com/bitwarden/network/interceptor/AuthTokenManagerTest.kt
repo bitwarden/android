@@ -110,6 +110,15 @@ class AuthTokenManagerTest {
         }
 
         @Test
+        fun `returns null when no token is available`() {
+            assertNull(authTokenManager.authenticate(null, RESPONSE_401_NO_TOKEN))
+
+            verify(exactly = 0) {
+                refreshTokenProvider.refreshAccessTokenSynchronously(any())
+            }
+        }
+
+        @Test
         fun `returns null when refresh is failure`() {
             every { parseJwtTokenDataOrNull(JWT_ACCESS_TOKEN) } returns JTW_TOKEN
             every {
@@ -306,6 +315,17 @@ private val JTW_TOKEN = JwtTokenDataJson(
 )
 
 private const val JWT_ACCESS_TOKEN = "jwt"
+
+private val RESPONSE_401_NO_TOKEN = Response.Builder()
+    .code(401)
+    .request(
+        request = Request.Builder()
+            .url("https://www.bitwarden.com")
+            .build(),
+    )
+    .protocol(Protocol.HTTP_2)
+    .message("Unauthenticated")
+    .build()
 
 private val RESPONSE_401 = Response.Builder()
     .code(401)
