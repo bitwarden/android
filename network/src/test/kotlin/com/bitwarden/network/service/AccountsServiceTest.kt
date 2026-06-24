@@ -166,11 +166,26 @@ class AccountsServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `resetPassword with empty response is success`() = runTest {
+    fun `resetPassword with v1 request and empty response is success`() = runTest {
         val response = MockResponse().setBody("")
         server.enqueue(response)
         val result = service.resetPassword(
-            body = ResetPasswordRequestJson(
+            body = ResetPasswordRequestJson.V1(
+                currentPasswordHash = "",
+                newPasswordHash = "",
+                passwordHint = null,
+                key = "",
+            ),
+        )
+        assertTrue(result.isSuccess)
+    }
+
+    @Test
+    fun `resetPassword with v2 request and empty response is success`() = runTest {
+        val response = MockResponse().setBody("")
+        server.enqueue(response)
+        val result = service.resetPassword(
+            body = ResetPasswordRequestJson.V2(
                 currentPasswordHash = "",
                 passwordHint = null,
                 kdf = KdfJson(
@@ -188,26 +203,43 @@ class AccountsServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `resetPassword with empty response and null current password is success`() = runTest {
-        val response = MockResponse().setBody("")
-        server.enqueue(response)
-        val result = service.resetPassword(
-            body = ResetPasswordRequestJson(
-                currentPasswordHash = null,
-                passwordHint = null,
-                kdf = KdfJson(
-                    iterations = 7,
-                    memory = 1,
-                    parallelism = 2,
-                    kdfType = KdfTypeJson.ARGON2_ID,
+    fun `resetPassword with v1 request and empty response and null current password is success`() =
+        runTest {
+            val response = MockResponse().setBody("")
+            server.enqueue(response)
+            val result = service.resetPassword(
+                body = ResetPasswordRequestJson.V1(
+                    currentPasswordHash = null,
+                    newPasswordHash = "",
+                    passwordHint = null,
+                    key = "",
                 ),
-                salt = "",
-                masterPasswordAuthenticationHash = "",
-                masterKeyWrappedUserKey = "",
-            ),
-        )
-        assertTrue(result.isSuccess)
-    }
+            )
+            assertTrue(result.isSuccess)
+        }
+
+    @Test
+    fun `resetPassword with v2 request and empty response and null current password is success`() =
+        runTest {
+            val response = MockResponse().setBody("")
+            server.enqueue(response)
+            val result = service.resetPassword(
+                body = ResetPasswordRequestJson.V2(
+                    currentPasswordHash = null,
+                    passwordHint = null,
+                    kdf = KdfJson(
+                        iterations = 7,
+                        memory = 1,
+                        parallelism = 2,
+                        kdfType = KdfTypeJson.ARGON2_ID,
+                    ),
+                    salt = "",
+                    masterPasswordAuthenticationHash = "",
+                    masterKeyWrappedUserKey = "",
+                ),
+            )
+            assertTrue(result.isSuccess)
+        }
 
     @Test
     fun `setPassword with v1 request and empty response is success`() = runTest {
