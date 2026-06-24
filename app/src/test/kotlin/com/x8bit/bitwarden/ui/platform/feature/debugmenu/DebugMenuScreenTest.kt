@@ -172,6 +172,18 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `reset accessibility disclaimer should send ResetAccessibilityDisclaimer action`() {
+        composeTestRule
+            .onNodeWithText("Reset accessibility disclaimer")
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(DebugMenuAction.ResetAccessibilityDisclaimer)
+        }
+    }
+
+    @Test
     fun `reset all coach mark tours should send ResetCoachMarkTourStatuses action`() {
         composeTestRule
             .onNodeWithText("Reset all coach mark tours")
