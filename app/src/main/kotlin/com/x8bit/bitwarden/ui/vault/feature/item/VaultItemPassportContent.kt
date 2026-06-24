@@ -541,6 +541,7 @@ private val PREVIEW_COMMON_HANDLERS: VaultCommonItemTypeHandlers =
         onAttachmentPreviewClick = {},
         onCopyNotesClick = {},
         onPasswordHistoryClick = {},
+        onPremiumRequiredClick = {},
         onUpgradeToPremiumClick = {},
     )
 
