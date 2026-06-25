@@ -133,7 +133,8 @@ class PolicyManagerImpl(
                     ?.filter {
                         @Suppress("MaxLineLength")
                         it.organizationUserPolicyContext.usePolicies &&
-                            it.organizationUserPolicyContext.status >= OrganizationUserStatusType.ACCEPTED &&
+                            (it.organizationUserPolicyContext.status == OrganizationUserStatusType.ACCEPTED ||
+                                it.organizationUserPolicyContext.status == OrganizationUserStatusType.CONFIRMED) &&
                             !it.isOrganizationExemptFromPolicies(policyType = type)
                     }
                     ?.map { it.organizationUserPolicyContext.id }
