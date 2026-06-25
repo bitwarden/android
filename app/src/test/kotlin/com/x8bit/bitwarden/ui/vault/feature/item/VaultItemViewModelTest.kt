@@ -266,7 +266,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             }
 
         @Test
-        fun `ArchiveClick without Premium should show ArchiveRequiresPremium dialog`() = runTest {
+        fun `ArchiveClick without Premium should show RequiresPremium dialog`() = runTest {
             mutableUserStateFlow.update {
                 it?.copy(accounts = listOf(DEFAULT_USER_ACCOUNT.copy(isPremium = false)))
             }
@@ -277,7 +277,25 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     hasPremium = false,
-                    dialog = VaultItemState.DialogState.ArchiveRequiresPremium,
+                    dialog = VaultItemState.DialogState.RequiresPremium(
+                        message = BitwardenString.archiving_items_is_a_premium_feature.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `PremiumRequiredClick should show RequiresPremium dialog`() = runTest {
+            val viewModel = createViewModel(state = null)
+
+            viewModel.trySendAction(VaultItemAction.Common.PremiumRequiredClick)
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultItemState.DialogState.RequiresPremium(
+                        message = BitwardenString.totp_is_a_premium_feature.asText(),
+                    ),
                 ),
                 viewModel.stateFlow.value,
             )

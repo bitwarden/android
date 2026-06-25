@@ -131,7 +131,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.CookieCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
-import com.x8bit.bitwarden.data.auth.repository.util.toKdfRequestModel
 import com.x8bit.bitwarden.data.auth.repository.util.toRemovedPasswordUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
@@ -5059,7 +5058,6 @@ class AuthRepositoryTest {
         val newPassword = "newPassword"
         val newPasswordHash = "newPasswordHash"
         val newKey = "newKey"
-        val kdf = ACCOUNT_1.profile.toKdfRequestModel()
         val email = ACCOUNT_1.profile.email
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         coEvery {
@@ -5082,13 +5080,11 @@ class AuthRepositoryTest {
             .asSuccess()
         coEvery {
             accountsService.resetPassword(
-                body = ResetPasswordRequestJson(
+                body = ResetPasswordRequestJson.V1(
                     currentPasswordHash = currentPasswordHash,
+                    newPasswordHash = newPasswordHash,
                     passwordHint = null,
-                    kdf = kdf,
-                    salt = email,
-                    masterPasswordAuthenticationHash = newPasswordHash,
-                    masterKeyWrappedUserKey = newKey,
+                    key = newKey,
                 ),
             )
         } returns Unit.asSuccess()
@@ -5123,13 +5119,11 @@ class AuthRepositoryTest {
                 newPassword = newPassword,
             )
             accountsService.resetPassword(
-                body = ResetPasswordRequestJson(
+                body = ResetPasswordRequestJson.V1(
                     currentPasswordHash = currentPasswordHash,
+                    newPasswordHash = newPasswordHash,
                     passwordHint = null,
-                    kdf = kdf,
-                    salt = email,
-                    masterPasswordAuthenticationHash = newPasswordHash,
-                    masterKeyWrappedUserKey = newKey,
+                    key = newKey,
                 ),
             )
         }
@@ -5752,13 +5746,16 @@ class AuthRepositoryTest {
             passwordHash = passwordHash,
             newKey = encryptedUserKey,
         )
-        val setPasswordRequestJson = SetPasswordRequestJson.V2(
+        val setPasswordRequestJson = SetPasswordRequestJson.V1(
             passwordHint = passwordHint,
             organizationIdentifier = organizationIdentifier,
-            kdf = profile.toKdfRequestModel(),
-            salt = EMAIL,
-            masterPasswordAuthenticationHash = passwordHash,
-            masterKeyWrappedUserKey = encryptedUserKey,
+            kdfType = profile.kdfType,
+            kdfIterations = profile.kdfIterations,
+            kdfMemory = profile.kdfMemory,
+            kdfParallelism = profile.kdfParallelism,
+            passwordHash = passwordHash,
+            key = encryptedUserKey,
+            keys = null,
         )
         fakeAuthDiskSource.userState = userState
         coEvery {

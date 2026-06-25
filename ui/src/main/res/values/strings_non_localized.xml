@@ -27,6 +27,7 @@
     <string name="restart_onboarding_carousel">Show Onboarding Carousel</string>
     <string name="restart_onboarding_carousel_details">This will force the change to app state which will cause the first time carousel to show. The carousel will continue to show for any \"new\" account until a login is completed. May need to exit debug menu manually.</string>
     <string name="reset_coach_mark_tour_status">Reset all coach mark tours</string>
+    <string name="reset_accessibility_disclaimer">Reset accessibility disclaimer</string>
     <string name="generate_crash">Generate crash</string>
     <string name="generate_error_report">Generate error report</string>
     <string name="error_reports">Error reports</string>

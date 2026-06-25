@@ -265,11 +265,19 @@ class SendViewModel @Inject constructor(
     private fun handleSendDataReceive(action: SendAction.Internal.SendDataReceive) {
         when (val dataState = action.sendDataState) {
             is DataState.Error -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        viewState = SendState.ViewState.Error(
-                            message = BitwardenString.generic_error_message.asText(),
-                        ),
+                mutableStateFlow.update { state ->
+                    state.copy(
+                        viewState = dataState
+                            .data
+                            ?.toViewState(
+                                baseWebSendUrl = environmentRepo
+                                    .environment
+                                    .environmentUrlData
+                                    .baseWebSendUrl,
+                            )
+                            ?: SendState.ViewState.Error(
+                                message = BitwardenString.generic_error_message.asText(),
+                            ),
                         dialogState = null,
                         isRefreshing = false,
                     )
@@ -279,9 +287,7 @@ class SendViewModel @Inject constructor(
             is DataState.NoNetwork,
             is DataState.Loaded,
                 -> {
-                val data = dataState
-                    .data
-                    ?: SendData(sendViewList = emptyList())
+                val data = dataState.data ?: SendData(sendViewList = emptyList())
                 mutableStateFlow.update {
                     it.copy(
                         viewState = data.toViewState(

@@ -464,7 +464,7 @@ fun SyncResponseJson.Cipher.toEncryptedSdkCipher(): Cipher =
         folderId = folderId,
         collectionIds = collectionIds.orEmpty(),
         key = key,
-        name = name.orEmpty(),
+        name = name,
         notes = notes,
         type = type.toSdkCipherType(),
         login = login?.toSdkLogin(),
@@ -829,7 +829,7 @@ fun Cipher.toFailureCipherListView(): CipherListView =
         folderId = folderId,
         collectionIds = collectionIds,
         key = key,
-        name = name,
+        name = name.orEmpty(),
         subtitle = "",
         type = when (type) {
             CipherType.LOGIN -> CipherListViewType.Login(

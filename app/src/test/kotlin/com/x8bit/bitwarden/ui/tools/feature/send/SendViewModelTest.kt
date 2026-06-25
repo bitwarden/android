@@ -48,6 +48,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import kotlin.time.Duration.Companion.milliseconds
 
 @Suppress("LargeClass")
 class SendViewModelTest : BaseViewModelTest() {
@@ -550,26 +551,58 @@ class SendViewModelTest : BaseViewModelTest() {
         assertEquals(initialState.copy(dialogState = null), viewModel.stateFlow.value)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `VaultRepository SendData Error should update view state to Error`() = runTest {
-        val dialogState = SendState.DialogState.Loading(BitwardenString.syncing.asText())
-        val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
+    fun `VaultRepository SendData Error should update view state to Error when there is no data`() =
+        runTest {
+            val dialogState = SendState.DialogState.Loading(BitwardenString.syncing.asText())
+            val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
 
-        viewModel.eventFlow.test {
-            mutableSendDataFlow.value = DataState.Error(Throwable("Fail"))
+            viewModel.eventFlow.test {
+                mutableSendDataFlow.value = DataState.Error(Throwable("Fail"))
+            }
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    viewState = SendState.ViewState.Error(
+                        message = BitwardenString.generic_error_message.asText(),
+                    ),
+                    dialogState = null,
+                    isRefreshing = false,
+                ),
+                viewModel.stateFlow.value,
+            )
         }
 
-        assertEquals(
-            DEFAULT_STATE.copy(
-                viewState = SendState.ViewState.Error(
-                    message = BitwardenString.generic_error_message.asText(),
+    @Suppress("MaxLineLength")
+    @Test
+    fun `VaultRepository SendData Error should update view state to data view state when there is data`() =
+        runTest {
+            val dialogState = SendState.DialogState.Loading(BitwardenString.syncing.asText())
+            val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
+            val viewState = mockk<SendState.ViewState.Content>()
+            val sendData = mockk<SendData> {
+                every {
+                    toViewState(Environment.Us.environmentUrlData.baseWebSendUrl)
+                } returns viewState
+            }
+
+            viewModel.eventFlow.test {
+                mutableSendDataFlow.value = DataState.Error(
+                    error = Throwable("Fail"),
+                    data = sendData,
+                )
+            }
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    viewState = viewState,
+                    dialogState = null,
+                    isRefreshing = false,
                 ),
-                dialogState = null,
-                isRefreshing = false,
-            ),
-            viewModel.stateFlow.value,
-        )
-    }
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Test
     fun `VaultRepository SendData Loaded should update view state`() = runTest {
@@ -656,7 +689,7 @@ class SendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.trySendAction(SendAction.RefreshPull)
-        advanceTimeBy(300)
+        advanceTimeBy(300.milliseconds)
         verify(exactly = 1) {
             vaultRepo.sync(forced = false)
         }
@@ -671,7 +704,7 @@ class SendViewModelTest : BaseViewModelTest() {
         } returns false
 
         viewModel.trySendAction(SendAction.RefreshPull)
-        advanceTimeBy(300)
+        advanceTimeBy(300.milliseconds)
         assertEquals(
             DEFAULT_STATE.copy(
                 isRefreshing = false,

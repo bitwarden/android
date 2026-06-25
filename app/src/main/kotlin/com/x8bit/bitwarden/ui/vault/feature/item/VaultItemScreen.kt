@@ -311,10 +311,10 @@ private fun VaultItemDialogs(
     onUpgradeToPremiumClick: () -> Unit,
 ) {
     when (dialog) {
-        is VaultItemState.DialogState.ArchiveRequiresPremium -> {
+        is VaultItemState.DialogState.RequiresPremium -> {
             BitwardenTwoButtonDialog(
                 title = stringResource(id = BitwardenString.premium_subscription_required),
-                message = stringResource(id = BitwardenString.archiving_items_is_a_premium_feature),
+                message = dialog.message(),
                 confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
                 dismissButtonText = stringResource(id = BitwardenString.cancel),
                 onConfirmClick = onUpgradeToPremiumClick,

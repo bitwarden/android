@@ -109,7 +109,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.toAccountCryptographicState
 import com.x8bit.bitwarden.data.auth.repository.util.toDeviceInfo
-import com.x8bit.bitwarden.data.auth.repository.util.toKdfRequestModel
 import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
 import com.x8bit.bitwarden.data.auth.repository.util.toRemovedPasswordUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
@@ -1103,13 +1102,11 @@ class AuthRepositoryImpl(
             )
             .flatMap { response ->
                 accountsService.resetPassword(
-                    body = ResetPasswordRequestJson(
+                    body = ResetPasswordRequestJson.V1(
                         currentPasswordHash = currentPasswordHash,
+                        newPasswordHash = response.passwordHash,
                         passwordHint = passwordHint,
-                        kdf = profile.toKdfRequestModel(),
-                        salt = profile.email,
-                        masterPasswordAuthenticationHash = response.passwordHash,
-                        masterKeyWrappedUserKey = response.newKey,
+                        key = response.newKey,
                     ),
                 )
             }
@@ -1168,13 +1165,16 @@ class AuthRepositoryImpl(
             .flatMap { response ->
                 accountsService
                     .setPassword(
-                        body = SetPasswordRequestJson.V2(
+                        body = SetPasswordRequestJson.V1(
                             passwordHint = passwordHint,
                             organizationIdentifier = organizationIdentifier,
-                            kdf = profile.toKdfRequestModel(),
-                            salt = profile.email,
-                            masterPasswordAuthenticationHash = response.passwordHash,
-                            masterKeyWrappedUserKey = response.newKey,
+                            kdfIterations = profile.kdfIterations,
+                            kdfMemory = profile.kdfMemory,
+                            kdfParallelism = profile.kdfParallelism,
+                            kdfType = profile.kdfType,
+                            key = response.newKey,
+                            passwordHash = response.passwordHash,
+                            keys = null,
                         ),
                     )
                     .map { response }
