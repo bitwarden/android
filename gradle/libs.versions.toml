@@ -9,7 +9,6 @@ appVersionName = "2026.6.0"
 compileSdk = "37"
 targetSdk = "37"
 minSdk = "29"
-minSdkBwa = "28"
 
 # Dependency Versions
 androidGradlePlugin = "9.2.1"
