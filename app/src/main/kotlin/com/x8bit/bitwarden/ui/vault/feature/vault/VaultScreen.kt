@@ -76,6 +76,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 private const val APP_REVIEW_DELAY = 3000L
 
@@ -121,7 +122,7 @@ fun VaultScreen(
     val launchPrompt = remember {
         {
             scope.launch {
-                delay(APP_REVIEW_DELAY)
+                delay(APP_REVIEW_DELAY.milliseconds)
                 appReviewManager.promptForReview()
             }
         }
@@ -489,6 +490,18 @@ private fun VaultDialogs(
                 onConfirmClick = {
                     vaultHandlers.onKdfUpdatePasswordRepromptSubmit(it)
                 },
+                onDismissRequest = vaultHandlers.dialogDismiss,
+            )
+        }
+
+        is VaultState.DialogState.SyncError -> {
+            BitwardenTwoButtonDialog(
+                title = dialogState.title(),
+                message = dialogState.message(),
+                confirmButtonText = stringResource(id = BitwardenString.try_again),
+                dismissButtonText = stringResource(id = BitwardenString.not_now),
+                onConfirmClick = vaultHandlers.tryAgainClick,
+                onDismissClick = vaultHandlers.dialogDismiss,
                 onDismissRequest = vaultHandlers.dialogDismiss,
             )
         }
