@@ -23,6 +23,9 @@
         <!-- OCSP Responder Servers -->
         <domain includeSubdomains="true">o.pki.goog</domain>
         <domain includeSubdomains="true">ocsp.sectigo.com</domain>
+
+        <!-- Additionally trust user added CAs -->
+        <certificates src="user" />
     </domain-config>
 
     <domain-config cleartextTrafficPermitted="false">
@@ -32,6 +35,9 @@
         <trust-anchors>
             <!-- Only trust pre-installed CAs for Bitwarden domains and all subdomains -->
             <certificates src="system" />
+
+            <!-- Additionally trust user added CAs -->
+            <certificates src="user" />
         </trust-anchors>
     </domain-config>
 
