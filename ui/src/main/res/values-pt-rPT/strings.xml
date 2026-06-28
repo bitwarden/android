@@ -610,8 +610,11 @@ A leitura será efetuada automaticamente.</string>
     <string name="catch_all_email_description">Utilize a caixa de entrada de captura geral configurada para o seu domínio.</string>
     <string name="forwarded_email_description">Gerar um alias de e-mail com um serviço de reencaminhamento externo.</string>
     <string name="accessibility_service_disclosure">Divulgação do serviço de acessibilidade</string>
-    <string name="accessibility_disclosure_text">O Bitwarden utiliza o Serviço de acessibilidade para procurar campos de início de sessão em aplicações e sites e, em seguida, estabelece os IDs de campo adequados para introduzir um nome de utilizador e palavra-passe quando é encontrada uma correspondência para a aplicação ou site. Não armazenamos nenhuma das informações que nos são apresentadas pelo serviço, nem fazemos qualquer tentativa de controlar quaisquer elementos no ecrã para além da introdução de texto das credenciais.</string>
-    <string name="accessibility_disclosure_start_up_text">O Bitwarden disponibiliza um método opcional de preenchimento automático que utiliza o serviço de acessibilidade do Android para detetar campos de credenciais em apps e sites. Se optar por ativá-lo, o Bitwarden identificará os campos adequados e introduzirá as suas credenciais quando for encontrada uma correspondência. Não armazenamos qualquer informação observada pelo serviço nem controlamos quaisquer elementos apresentados no ecrã para além da introdução de credenciais.</string>
+    <string name="accessibility_disclosure_text">O Bitwarden utiliza o serviço de acessibilidade para procurar campos de início de sessão em aplicações e sites e, em seguida, estabelece os IDs de campo adequados para introduzir um nome de utilizador e palavra-passe quando é encontrada uma correspondência para a aplicação ou site. Não armazenamos nenhuma das informações que nos são apresentadas pelo serviço, nem fazemos qualquer tentativa de controlar quaisquer elementos no ecrã para além da introdução de texto das credenciais.</string>
+    <string name="accessibility_disclosure_start_up_text_1">Este aviso é obrigatório para que o Bitwarden possa disponibilizar o preenchimento automático através de funcionalidades de acessibilidade.</string>
+    <string name="accessibility_disclosure_start_up_text_2">O Bitwarden disponibiliza um método opcional de preenchimento automático que utiliza o serviço de acessibilidade do Android para detetar campos de início de sessão. Se o ativar, o Bitwarden identificará os campos adequados e preencherá as suas credenciais quando encontrar uma correspondência.</string>
+    <string name="accessibility_disclosure_start_up_text_3">Não armazenamos qualquer informação sobre o que está no ecrã enquanto utiliza o serviço de acessibilidade, nem controlamos quaisquer elementos no ecrã para além da introdução de credenciais.</string>
+    <string name="i_understand">Compreendo</string>
     <string name="accept">Aceitar</string>
     <string name="decline">Recusar</string>
     <string name="login_request_has_already_expired">O pedido de início de sessão já expirou.</string>
@@ -1210,6 +1213,7 @@ Pretende mudar para esta conta?</string>
     <string name="item_moved_to_archived">Item movido para o arquivo</string>
     <string name="item_moved_to_vault">Item movido para o cofre</string>
     <string name="archiving_items_is_a_premium_feature">O arquivo de itens é uma funcionalidade Premium. O seu plano atual não inclui acesso a esta funcionalidade.</string>
+    <string name="totp_is_a_premium_feature">A chave de autenticação (TOTP) é uma funcionalidade Premium. O seu plano atual não inclui acesso a esta funcionalidade.</string>
     <string name="upgrade_to_premium">Atualize para o Premium</string>
     <string name="plan">Plano</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Para gerir a sua subscrição Premium, terá de iniciar sessão no seu cofre web num computador.</string>
@@ -1324,7 +1328,6 @@ Pretende mudar para esta conta?</string>
     <string name="loading_portal">A carregar portal…</string>
     <string name="portal_error">Alguma coisa correu mal</string>
     <string name="trouble_loading_portal">Tivemos problemas ao carregar o portal de gestão, por isso tente novamente.</string>
-    <string name="subscription_error">Erro de subscrição</string>
     <string name="trouble_loading_subscription">Não foi possível carregar os detalhes da sua subscrição. Por favor, tente novamente.</string>
     <string name="view_bank_account">Ver conta bancária</string>
     <string name="view_license">Ver carta de condução</string>

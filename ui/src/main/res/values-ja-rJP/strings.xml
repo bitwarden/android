@@ -608,7 +608,10 @@
     <string name="forwarded_email_description">外部転送サービスを使用してメールエイリアスを生成します。</string>
     <string name="accessibility_service_disclosure">アクセシビリティサービスの開示</string>
     <string name="accessibility_disclosure_text">Bitwarden は、アプリやウェブサイトのログインフィールドを検索し、該当するアプリやサイトが見つかった場合にユーザー名とパスワードを入力するための適切なフィールドIDを確立するためにユーザー補助を使用しています。私たちはサービスから提供された情報を保存することはありませんし、資格情報のテキスト入力以外の画面要素の制御をしようとすることもありません。</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden は Android のユーザー補助サービスを利用してアプリやウェブサイトのログインフィールドを検出する、オプションの自動入力機能を提供しています。この機能を有効にすると Bitwarden は適切なフィールドを識別し、一致するフィールドが見つかった場合に認証情報を入力します。当社はこのサービスによって収集された情報を一切保存せず、認証情報の入力以外の画面上の要素を制御することもありません。</string>
+    <string name="accessibility_disclosure_start_up_text_1">Bitwarden がユーザー補助ベースの自動入力を提供する前に、この通知が必要です。</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden はログインフィールドを検出するために Android のユーザー補助サービスを使うオプションの自動入力方法を提供します。 有効にすると Bitwarden は適切なフィールドを特定し、一致するフィールドが見つかったときに資格情報を入力します。</string>
+    <string name="accessibility_disclosure_start_up_text_3">ユーザー補助サービスを使用している間、私たちは画面上の情報を保存することはありません。また、資格情報の入力以外の画面上の要素を制御することもありません。</string>
+    <string name="i_understand">理解しました</string>
     <string name="accept">同意</string>
     <string name="decline">拒否</string>
     <string name="login_request_has_already_expired">ログインリクエストの有効期限が切れています。</string>
@@ -1201,6 +1204,7 @@
     <string name="item_moved_to_archived">Item moved to archive</string>
     <string name="item_moved_to_vault">Item moved to vault</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
+    <string name="totp_is_a_premium_feature">認証キー（TOTP）はプレミアム機能です。現在のプランにはこの機能へのアクセス権が含まれていません。</string>
     <string name="upgrade_to_premium">Upgrade to Premium</string>
     <string name="plan">プラン</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">プレミアムサブスクリプションを管理するには、PC でウェブ保管庫にログインする必要があります。</string>
@@ -1314,7 +1318,6 @@
     <string name="loading_portal">Loading portal…</string>
     <string name="portal_error">何らかのエラーが発生しました</string>
     <string name="trouble_loading_portal">We had trouble loading the management portal, so try again.</string>
-    <string name="subscription_error">Subscription error</string>
     <string name="trouble_loading_subscription">We couldn’t load your subscription details. Please try again.</string>
     <string name="view_bank_account">銀行口座を表示</string>
     <string name="view_license">免許証を表示</string>

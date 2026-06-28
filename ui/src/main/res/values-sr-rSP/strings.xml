@@ -616,7 +616,10 @@
     <string name="forwarded_email_description">Генеришите псеудоним е-поште помоћу екстерне услуге прослеђивања.</string>
     <string name="accessibility_service_disclosure">Откривање услуге приступачности</string>
     <string name="accessibility_disclosure_text">Битварден користи услугу приступачности да тражи поља за пријаву у апликацијама и веб локацијама, а затим успоставља одговарајуће ИД-ове поља за уношење корисничког имена и лозинке када се пронађе подударање за апликацију или сајт. Не чувамо ниједну информацију коју нам пружа услуга, нити покушавамо да контролишемо било које елементе на екрану осим уноса текста акредитива.</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields in apps and websites. If you choose to enable it, Bitwarden will identify the appropriate fields and enter your credentials when a match is found. We do not store any information observed by the service, and we do not control any on-screen elements beyond credential entry.</string>
+    <string name="accessibility_disclosure_start_up_text_1">This notice is required before Bitwarden can offer accessibility-based autofill.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields. If you enable it, Bitwarden will identify the appropriate fields and fill in your credentials when a match is found.</string>
+    <string name="accessibility_disclosure_start_up_text_3">We don’t store any information about what’s onscreen while you use the Accessibility Service, and we don’t control any onscreen elements beyond credential entry.</string>
+    <string name="i_understand">I understand</string>
     <string name="accept">Прихвати</string>
     <string name="decline">Одбиј</string>
     <string name="login_request_has_already_expired">Захтев за пријаву је већ истекао.</string>
@@ -1221,6 +1224,7 @@
     <string name="item_moved_to_archived">Ставка је премештена у архиву</string>
     <string name="item_moved_to_vault">Item moved to vault</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
+    <string name="totp_is_a_premium_feature">Authenticator key (TOTP) is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Upgrade to Premium</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
@@ -1336,7 +1340,6 @@
     <string name="loading_portal">Loading portal…</string>
     <string name="portal_error">Нешто није у реду</string>
     <string name="trouble_loading_portal">We had trouble loading the management portal, so try again.</string>
-    <string name="subscription_error">Subscription error</string>
     <string name="trouble_loading_subscription">We couldn’t load your subscription details. Please try again.</string>
     <string name="view_bank_account">View bank account</string>
     <string name="view_license">View license</string>

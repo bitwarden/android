@@ -608,7 +608,10 @@ chọn Thêm TOTP để lưu khóa an toàn</string>
     <string name="forwarded_email_description">Tạo một địa chỉ email ảo bằng dịch vụ chuyển tiếp email bên ngoài.</string>
     <string name="accessibility_service_disclosure">Thông báo về Dịch vụ Trợ năng</string>
     <string name="accessibility_disclosure_text">Bitwarden sử dụng Dịch vụ trợ năng để tìm kiếm các trường đăng nhập trong ứng dụng và trang web, sau đó thiết lập ID trường thích hợp để nhập tên đăng nhập &amp; mật khẩu khi tìm thấy ứng dụng hoặc trang web tương ứng. Chúng tôi không lưu trữ bất kỳ thông tin nào được dịch vụ cung cấp, cũng như không cố gắng kiểm soát bất kỳ yếu tố nào trên màn hình ngoài việc nhập thông tin đăng nhập.</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields in apps and websites. If you choose to enable it, Bitwarden will identify the appropriate fields and enter your credentials when a match is found. We do not store any information observed by the service, and we do not control any on-screen elements beyond credential entry.</string>
+    <string name="accessibility_disclosure_start_up_text_1">This notice is required before Bitwarden can offer accessibility-based autofill.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields. If you enable it, Bitwarden will identify the appropriate fields and fill in your credentials when a match is found.</string>
+    <string name="accessibility_disclosure_start_up_text_3">We don’t store any information about what’s onscreen while you use the Accessibility Service, and we don’t control any onscreen elements beyond credential entry.</string>
+    <string name="i_understand">I understand</string>
     <string name="accept">Đồng ý</string>
     <string name="decline">Từ chối</string>
     <string name="login_request_has_already_expired">Yêu cầu đăng nhập đã hết hạn.</string>
@@ -1205,6 +1208,7 @@ các vấn đề.</string>
     <string name="item_moved_to_archived">Mục đã chuyển vào Lưu trữ</string>
     <string name="item_moved_to_vault">Item moved to vault</string>
     <string name="archiving_items_is_a_premium_feature">Lưu trữ mục là một tính năng Cao cấp. Gói hiện tại của bạn không bao gồm quyền truy cập tính năng này.</string>
+    <string name="totp_is_a_premium_feature">Authenticator key (TOTP) is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Nâng cấp lên bản cao cấp</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
@@ -1318,7 +1322,6 @@ các vấn đề.</string>
     <string name="loading_portal">Loading portal…</string>
     <string name="portal_error">Đã xảy ra lỗi</string>
     <string name="trouble_loading_portal">We had trouble loading the management portal, so try again.</string>
-    <string name="subscription_error">Subscription error</string>
     <string name="trouble_loading_subscription">We couldn’t load your subscription details. Please try again.</string>
     <string name="view_bank_account">View bank account</string>
     <string name="view_license">View license</string>
