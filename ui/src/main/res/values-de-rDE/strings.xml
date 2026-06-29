@@ -611,7 +611,10 @@ Das Scannen erfolgt automatisch.</string>
     <string name="forwarded_email_description">Generiere ein E-Mail-Alias mit einem externen Weiterleitungsdienst.</string>
     <string name="accessibility_service_disclosure">Bedienungshilfen Offenlegung</string>
     <string name="accessibility_disclosure_text">Bitwarden verwendet die Bedienungshilfen, um nach Anmeldefeldern in Apps und auf Webseiten zu suchen und legt dann die entsprechenden Feld-IDs fest, um einen Benutzernamen und Passwort einzugeben, wenn eine Übereinstimmung mit der App oder der Seite gefunden wird. Wir speichern keine der Informationen, die uns der Dienst zur Verfügung stellt. Ebenso wenig versuchen wir beliebige Elemente auf dem Bildschirm außer der Texteingabe von Anmeldedaten zu kontrollieren.</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden bietet eine optionale Auto-Ausfüllen-Methode an, die den Android-Bedienungshilfendienst verwendet, um Anmeldefelder in Apps und Websites zu erkennen. Wenn du ihn aktivierst, wird Bitwarden die entsprechenden Felder identifizieren und deine Zugangsdaten eingeben, wenn eine Übereinstimmung gefunden wird. Wir speichern keine vom Dienst erfassten Informationen und haben keine Kontrolle über Bildschirmelemente, die über die Eingabe der Zugangsdaten hinausgehen.</string>
+    <string name="accessibility_disclosure_start_up_text_1">Diese Benachrichtigung ist erforderlich, bevor Bitwarden Auto-Ausfüllen auf Basis der Barrierefreiheit anbieten kann.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden bietet eine optionale Funktion zum automatischen Ausfüllen an, die den Android-Bedienungshilfendienst nutzt, um Anmeldefelder zu erkennen. Wenn du diese Funktion aktivierst, erkennt Bitwarden die entsprechenden Felder und füllt deine Zugangsdaten aus, sobald eine Übereinstimmung gefunden wurde.</string>
+    <string name="accessibility_disclosure_start_up_text_3">Wir speichern keine Informationen darüber, was während der Nutzung des Bedienungshilfendienstes auf dem Bildschirm angezeigt wird und wir haben keine Kontrolle über Bildschirmelemente, die über die Eingabe von Zugangsdaten hinausgehen.</string>
+    <string name="i_understand">Verstanden</string>
     <string name="accept">Akzeptieren</string>
     <string name="decline">Ablehnen</string>
     <string name="login_request_has_already_expired">Anmeldeanfrage ist bereits abgelaufen.</string>
@@ -1209,6 +1212,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="item_moved_to_archived">Eintrag in das Archiv verschoben</string>
     <string name="item_moved_to_vault">Eintrag in Tresor verschoben</string>
     <string name="archiving_items_is_a_premium_feature">Das Archivieren von Einträgen ist eine Premium-Funktion. Dein aktueller Tarif umfasst keinen Zugriff auf diese Funktion.</string>
+    <string name="totp_is_a_premium_feature">Authentifizierungsschlüssel (TOTP) sind eine Premium-Funktion. Dein aktueller Tarif enthält keinen Zugriff auf diese Funktion.</string>
     <string name="upgrade_to_premium">Auf Premium upgraden</string>
     <string name="plan">Tarif</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Um dein Premium-Abonnement zu verwalten, musst du dich bei deinem Web-Tresor auf einem Computer anmelden.</string>
@@ -1323,7 +1327,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="loading_portal">Portal wird geladen…</string>
     <string name="portal_error">Etwas ist schiefgelaufen</string>
     <string name="trouble_loading_portal">Wir hatten Probleme beim Laden des Verwaltungsportals. Bitte versuche es erneut.</string>
-    <string name="subscription_error">Abonnement-Fehler</string>
     <string name="trouble_loading_subscription">Wir konnten deine Abonnementdetails nicht laden. Bitte versuche es erneut.</string>
     <string name="view_bank_account">Bankkonto anzeigen</string>
     <string name="view_license">Führerschein anzeigen</string>

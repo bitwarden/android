@@ -620,7 +620,10 @@
     <string name="forwarded_email_description">Создать псевдоним электронной почты для внешней службы пересылки.</string>
     <string name="accessibility_service_disclosure">Раскрытие информации о службе специальных возможностей</string>
     <string name="accessibility_disclosure_text">Bitwarden использует службу специальных возможностей для поиска полей авторизации в приложениях и на сайтах, после чего определяет подходящие идентификаторы полей для заполнения логина и пароля если совпадение найдено. Мы не храним никакую информацию, предоставленную нам службой, и не предпринимаем никаких попыток контролировать какие-либо элементы на экране, кроме заполнения учетных данных в текстовом виде.</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden предлагает дополнительную возможность автозаполнения, которая использует службу доступности Android для обнаружения полей ввода учетных данных в приложениях и на веб-сайтах. Если вы решите включить эту функцию, Bitwarden будет определять соответствующие поля и вводить ваши учетные данные при обнаружении совпадения. Мы не храним никакую информацию, собираемую этой службой, и не контролируем никакие элементы на экране, кроме полей ввода учетных данных.</string>
+    <string name="accessibility_disclosure_start_up_text_1">Это уведомление необходимо для того, чтобы Bitwarden смог предложить автозаполнение на основе специальных возможностей.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden предлагает дополнительный метод автозаполнения, который использует службу специальных возможностей Android для определения полей для логина. Если вы включите его, Bitwarden определит соответствующие поля и введет ваши учетные данные, когда будет найдено совпадение.</string>
+    <string name="accessibility_disclosure_start_up_text_3">Мы не храним никакой информации о том, что отображается на экране, пока вы пользуетесь службой специальных возможностей, и мы не контролируем никакие элементы на экране, кроме ввода учетных данных.</string>
+    <string name="i_understand">Я понимаю</string>
     <string name="accept">Принять</string>
     <string name="decline">Отклонить</string>
     <string name="login_request_has_already_expired">Запрос на вход истек.</string>
@@ -1228,6 +1231,7 @@
     <string name="item_moved_to_archived">Элемент перемещен в архив</string>
     <string name="item_moved_to_vault">Элемент перемещен в хранилище</string>
     <string name="archiving_items_is_a_premium_feature">Архивирование элементов является Премиум функцией. Она не входит в ваш текущий тарифный план.</string>
+    <string name="totp_is_a_premium_feature">Аутентификатор ключей (TOTP) - это функция, доступная только в плане Премиум. Она не входит в ваш текущий тарифный план.</string>
     <string name="upgrade_to_premium">Обновить до Премиум</string>
     <string name="plan">План</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Чтобы управлять подпиской Премиум, вам необходимо войти в свое веб-хранилище на компьютере.</string>
@@ -1344,7 +1348,6 @@
     <string name="loading_portal">Загрузка портала…</string>
     <string name="portal_error">Что-то пошло не так</string>
     <string name="trouble_loading_portal">У нас возникли проблемы с загрузкой портала управления, поэтому попробуйте еще раз.</string>
-    <string name="subscription_error">Ошибка подписки</string>
     <string name="trouble_loading_subscription">Не удалось загрузить данные вашей подписки. Попробуйте еще раз.</string>
     <string name="view_bank_account">Просмотреть банковский счет</string>
     <string name="view_license">Просмотреть водительское удостоверение</string>

@@ -609,7 +609,10 @@
     <string name="forwarded_email_description">使用外部轉寄服務產生一個電子郵件別名。</string>
     <string name="accessibility_service_disclosure">無障礙服務聲明</string>
     <string name="accessibility_disclosure_text">Bitwarden 使用無障礙服務搜寻應用程式和網站中的登入欄位，然後建立適當的欄位 ID，以便在找到應用程式或網站的匹配項目時輸入用戶名和密碼。 我們不會存儲此服務提供給我們的任何資訊，也不會試圖控制憑證文字輸入以外的任何荧幕元素。</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden 提供一種可選的自動填入方式，透過 Android 的無障礙服務偵測應用程式與網站中的登入欄位。若您選擇啟用，Bitwarden 會在找到相符項目時識別適當欄位並填入您的登入憑證。我們不會儲存此服務所觀察到的任何資訊，也不會控制除輸入憑證以外的任何畫面元素。</string>
+    <string name="accessibility_disclosure_start_up_text_1">This notice is required before Bitwarden can offer accessibility-based autofill.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields. If you enable it, Bitwarden will identify the appropriate fields and fill in your credentials when a match is found.</string>
+    <string name="accessibility_disclosure_start_up_text_3">We don’t store any information about what’s onscreen while you use the Accessibility Service, and we don’t control any onscreen elements beyond credential entry.</string>
+    <string name="i_understand">I understand</string>
     <string name="accept">接受</string>
     <string name="decline">拒絕</string>
     <string name="login_request_has_already_expired">登入要求已逾期。</string>
@@ -1202,6 +1205,7 @@
     <string name="item_moved_to_archived">項目已移至封存</string>
     <string name="item_moved_to_vault">項目已移至密碼庫</string>
     <string name="archiving_items_is_a_premium_feature">封存項目為進階版功能。您目前的方案不包含此功能。</string>
+    <string name="totp_is_a_premium_feature">Authenticator key (TOTP) is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">升級到 Premium</string>
     <string name="plan">方案</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">若要管理您的 Premium 訂閱，您需要在電腦上登入您的網頁保管庫。</string>
@@ -1315,7 +1319,6 @@
     <string name="loading_portal">正在載入入口網站…</string>
     <string name="portal_error">出了點問題</string>
     <string name="trouble_loading_portal">載入管理入口網站時發生問題，請再試一次。</string>
-    <string name="subscription_error">訂閱錯誤</string>
     <string name="trouble_loading_subscription">無法載入您的訂閱詳細資訊。請再試一次。</string>
     <string name="view_bank_account">檢視銀行帳戶</string>
     <string name="view_license">檢視駕照</string>

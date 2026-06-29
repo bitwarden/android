@@ -620,7 +620,10 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</string>
     <string name="forwarded_email_description">Vytvoriť e-mailový alias pomocou externej služby presmerovania.</string>
     <string name="accessibility_service_disclosure">Vyhlásenie o prístupnosti</string>
     <string name="accessibility_disclosure_text">Bitwarden používa službu dostupnosti na vyhľadávanie prihlasovacích polí v aplikáciách a na webových stránkach a potom vytvára príslušné ID polí na zadanie používateľského mena a hesla, keď sa nájde zhoda s aplikáciou alebo webom. Neuchovávame žiadne informácie, ktoré nám poskytuje služba, ani sa nepokúšame ovládať žiadne prvky na obrazovke okrem zadávania textu prihlasovacích údajov.</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden ponúka voliteľnú funkciu automatického vypĺňania, ktorá využíva službu prístupnosti systému Android na rozpoznávanie prihlasovacích polí v aplikáciách a na webových stránkach. Ak sa rozhodnete túto funkciu zapnúť, Bitwarden identifikuje príslušné polia a po nájdení zhody do nich zadá vaše prihlasovacie údaje. Neukladáme žiadne informácie zaznamenané touto službou, ani nekontrolujeme žiadne prvky na obrazovke okrem zadávania prihlasovacích údajov.</string>
+    <string name="accessibility_disclosure_start_up_text_1">Toto upozornenie je potrebné, aby mohol Bitwarden ponúkať automatické vypĺňanie na základe dostupnosti.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden ponúka voliteľnú funkciu automatického vypĺňania, ktorá na detekciu prihlasovacích polí využíva službu dostupnosti Androidu. Ak túto funkciu povolíte, Bitwarden identifikuje príslušné polia a po nájdení zhody do nich vyplní vaše prihlasovacie údaje.</string>
+    <string name="accessibility_disclosure_start_up_text_3">Počas používania služby dostupnosti neukladáme žiadne informácie o obsahu obrazovky a okrem zadávania prihlasovacích údajov nemáme kontrolu nad žiadnymi prvkami na obrazovke.</string>
+    <string name="i_understand">Rozumiem</string>
     <string name="accept">Prijať</string>
     <string name="decline">Odmietnuť</string>
     <string name="login_request_has_already_expired">Platnosť žiadosti o prihlásenie už vypršala.</string>
@@ -1228,6 +1231,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="item_moved_to_archived">Položka bola presunutá do archívu</string>
     <string name="item_moved_to_vault">Položka bola presunutá do trezoru</string>
     <string name="archiving_items_is_a_premium_feature">Archivovanie položiek je prémiová funkcia. Váš aktuálny plán nezahŕňa prístup k tejto funkcii.</string>
+    <string name="totp_is_a_premium_feature">Kľúč overovacej aplikácie (TOTP) je prémiová funkcia. Váš súčasný plán nezahŕňa prístup k tejto funkcii.</string>
     <string name="upgrade_to_premium">Upgradovať na Prémium</string>
     <string name="plan">Plán</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Ak chcete spravovať prémiové predplatné, budete sa musieť prihlásiť do svojho trezora na počítači.</string>
@@ -1344,7 +1348,6 @@ Chcete prepnúť na tento účet?</string>
     <string name="loading_portal">Načítava sa portál…</string>
     <string name="portal_error">Niečo sa pokazilo</string>
     <string name="trouble_loading_portal">Mali sme problémy s načítaním portálu pre správu, skúste to znova.</string>
-    <string name="subscription_error">Chyba predplatného</string>
     <string name="trouble_loading_subscription">Nepodarilo sa nám načítať údaje o vašom predplatnom. Skúste to znova.</string>
     <string name="view_bank_account">Zobraziť bankový účet</string>
     <string name="view_license">Zobraziť vodičský preukaz</string>

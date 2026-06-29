@@ -619,7 +619,10 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="forwarded_email_description">Wygeneruj alias za pomocą zewnętrznej usługi.</string>
     <string name="accessibility_service_disclosure">Omówienie usługi ułatwienia dostępu</string>
     <string name="accessibility_disclosure_text">Bitwarden używa usługi ułatwienia dostępu do wyszukiwania pól logowania w aplikacjach i stronach internetowych, a następnie ustanawia odpowiednie identyfikatory pól do nazwy użytkownika i hasła. Nie przechowujemy żadnych informacji przedstawionych nam przez usługę, ani nie podejmujemy żadnych prób kontrolowania jakichkolwiek innych elementów na ekranie.</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields in apps and websites. If you choose to enable it, Bitwarden will identify the appropriate fields and enter your credentials when a match is found. We do not store any information observed by the service, and we do not control any on-screen elements beyond credential entry.</string>
+    <string name="accessibility_disclosure_start_up_text_1">This notice is required before Bitwarden can offer accessibility-based autofill.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields. If you enable it, Bitwarden will identify the appropriate fields and fill in your credentials when a match is found.</string>
+    <string name="accessibility_disclosure_start_up_text_3">Nie przechowujemy żadnych informacji dotyczących zawartości ekranu podczas korzystania z usługi ułatwienia dostępu. Nie kontrolujemy żadnych elementów wyświetlanych na ekranie poza polem logowania.</string>
+    <string name="i_understand">Rozumiem</string>
     <string name="accept">Akceptuj</string>
     <string name="decline">Odrzuć</string>
     <string name="login_request_has_already_expired">Prośba logowania wygasła.</string>
@@ -1227,13 +1230,14 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="item_moved_to_archived">Element został przeniesiony do archiwum</string>
     <string name="item_moved_to_vault">Element został przeniesiony do archiwum</string>
     <string name="archiving_items_is_a_premium_feature">Archiwizowanie elementów jest funkcją Premium. Twój obecny plan nie zawiera tej funkcji.</string>
+    <string name="totp_is_a_premium_feature">Authenticator key (TOTP) is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Kup konto Premium</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Aby zarządzać subskrypcją Premium, zaloguj się do sejfu internetowego na komputerze.</string>
     <string name="unlock_advanced_security_features">Odblokuj zaawansowane funkcje bezpieczeństwa</string>
-    <string name="your_subscription_needs_attention">Your subscription needs attention</string>
-    <string name="check_your_plan_for_details">Check your plan for details.</string>
-    <string name="view_plan">View plan</string>
+    <string name="your_subscription_needs_attention">Subskrypcja wymaga uwagi</string>
+    <string name="check_your_plan_for_details">Sprawdź plan, aby uzyskać szczegóły.</string>
+    <string name="view_plan">Pokaż plan</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Plan Premium zapewnia więcej narzędzi, które pomogą Ci zachować bezpieczeństwo i kontrolę.</string>
     <string name="this_item_is_archived">Element jest zarchiwizowany.</string>
     <string name="introducing_archive">Przedstawiamy archiwum</string>
@@ -1343,7 +1347,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="loading_portal">Ładowanie…</string>
     <string name="portal_error">Coś poszło nie tak</string>
     <string name="trouble_loading_portal">Mieliśmy problem z załadowaniem płatności. Spróbuj ponownie.</string>
-    <string name="subscription_error">Błąd subskrypcji</string>
     <string name="trouble_loading_subscription">Nie mogliśmy załadować szczegółów subskrypcji. Spróbuj ponownie.</string>
     <string name="view_bank_account">Pokaż konto bankowe</string>
     <string name="view_license">Pokaż prawo jazdy</string>

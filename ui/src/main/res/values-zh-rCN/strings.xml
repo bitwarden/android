@@ -608,7 +608,10 @@
     <string name="forwarded_email_description">使用外部转发服务生成电子邮箱别名。</string>
     <string name="accessibility_service_disclosure">无障碍服务声明</string>
     <string name="accessibility_disclosure_text">Bitwarden 使用无障碍服务在 App 和网站中搜索登录字段，当找到与 App 或网站相匹配的用户名 &amp; 密码时，建立适当的字段 ID 以输入它们。我们不会通过此服务存储提供给我们的任何信息，也不会尝试控制除凭据文本输入之外的任何屏幕元素。</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden 提供一种可选的自动填充方式，该方式使用 Android 无障碍服务检测 App 和网站中的登录字段。启用后，Bitwarden 将自动识别相应字段，并在找到匹配的项目时自动填入您的凭据。我们不会存储此服务获取到的任何信息，也不会控制除凭据输入之外的任何屏幕元素。</string>
+    <string name="accessibility_disclosure_start_up_text_1">在 Bitwarden 提供基于无障碍的自动填充之前，必须先展示此声明。</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden 提供一种可选的自动填充方式，即使用 Android 的无障碍服务来检测登录字段。启用后，当找到匹配字段时，Bitwarden 将识别相应的字段并填充您的凭据。</string>
+    <string name="accessibility_disclosure_start_up_text_3">在您使用无障碍服务时，我们不会存储屏幕上的任何信息，也不会控制除凭据输入之外的任何屏幕元素。</string>
+    <string name="i_understand">我明白</string>
     <string name="accept">接受</string>
     <string name="decline">拒绝</string>
     <string name="login_request_has_already_expired">登录请求已过期。</string>
@@ -1202,6 +1205,7 @@
     <string name="item_moved_to_archived">项目已移动到归档</string>
     <string name="item_moved_to_vault">项目已移动到密码库</string>
     <string name="archiving_items_is_a_premium_feature">归档项目是高级版功能。您的当前方案不包含对此功能的访问权限。</string>
+    <string name="totp_is_a_premium_feature">验证器密钥 (TOTP) 是高级版功能。您的当前方案不包含对此功能的访问权限。</string>
     <string name="upgrade_to_premium">升级到高级版</string>
     <string name="plan">方案</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">要管理您的高级版订阅，您需要在计算机上登录到您的网页密码库。</string>
@@ -1315,7 +1319,6 @@
     <string name="loading_portal">正在加载门户…</string>
     <string name="portal_error">出错了</string>
     <string name="trouble_loading_portal">加载管理门户时出现问题，请重试。</string>
-    <string name="subscription_error">订阅错误</string>
     <string name="trouble_loading_subscription">我们无法加载您的订阅详细信息。请重试。</string>
     <string name="view_bank_account">查看银行账户</string>
     <string name="view_license">查看驾驶证</string>

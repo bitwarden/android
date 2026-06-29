@@ -611,7 +611,10 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="forwarded_email_description">Harici bir yönlendirme servisiyle e-posta maskesi oluştur.</string>
     <string name="accessibility_service_disclosure">Erişilebilirlik Hizmeti Beyanı</string>
     <string name="accessibility_disclosure_text">Bitwarden; uygulamalarda ve web sitelerinde giriş alanlarını bulmak ve eşleşme bulunduğunda kullanıcı adı ve parolayı doldurmak için erişilebilirlik hizmetini kullanır. Hizmetin bize sunduğu hiçbir bilgiyi saklamayız ve hesap bilgilerinin girilmesi dışında ekrandaki öğeleri değiştirmek için herhangi bir girişimde bulunmayız.</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden, uygulamalarda ve sitelerde oturum açma alanlarını tespit etmek için Android’in Erişilebilirlik Hizmeti’ni kullanan isteğe bağlı bir otomatik doldurma yöntemi sunar. Bu özelliği etkinleştirirseniz Bitwarden uygun alanları tespit eder ve eşleşme bulunduğunda hesap bilgilerinizi girer. Tespit edilen hiçbir bilgi saklanmaz ve hesap bilgilerinizin girilmesi dışında ekrandaki hiçbir öğe üzerinde işlem yapılmaz.</string>
+    <string name="accessibility_disclosure_start_up_text_1">This notice is required before Bitwarden can offer accessibility-based autofill.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields. If you enable it, Bitwarden will identify the appropriate fields and fill in your credentials when a match is found.</string>
+    <string name="accessibility_disclosure_start_up_text_3">We don’t store any information about what’s onscreen while you use the Accessibility Service, and we don’t control any onscreen elements beyond credential entry.</string>
+    <string name="i_understand">Anladım</string>
     <string name="accept">Kabul et</string>
     <string name="decline">Reddet</string>
     <string name="login_request_has_already_expired">Giriş isteğinin süresi doldu.</string>
@@ -1209,6 +1212,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="item_moved_to_archived">Kayıt arşive taşındı</string>
     <string name="item_moved_to_vault">Kayıt kasaya taşındı</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
+    <string name="totp_is_a_premium_feature">Kimlik doğrulama anahtarı (TOTP) premium bir özelliktir. Mevcut paketiniz bu özelliği içermiyor.</string>
     <string name="upgrade_to_premium">Premium’a yükselt</string>
     <string name="plan">Paket</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
@@ -1323,7 +1327,6 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="loading_portal">Loading portal…</string>
     <string name="portal_error">Bir sorun oluştu</string>
     <string name="trouble_loading_portal">We had trouble loading the management portal, so try again.</string>
-    <string name="subscription_error">Subscription error</string>
     <string name="trouble_loading_subscription">We couldn’t load your subscription details. Please try again.</string>
     <string name="view_bank_account">Banka hesabını görüntüle</string>
     <string name="view_license">View license</string>
