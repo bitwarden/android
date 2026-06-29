@@ -18,7 +18,7 @@ configure<LibraryExtension> {
         // Set the minimum SDK version to the SDK version used by Authenticator, which is the lowest
         // universally supported SDK version.
         minSdk {
-            version = release(libs.versions.minSdkBwa.get().toInt())
+            version = release(libs.versions.minSdk.get().toInt())
         }
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
