@@ -23,14 +23,12 @@ class FillAssistViewNodeExtensionsTest {
 
     @BeforeEach
     fun setup() {
-        mockkStatic(AssistStructure.ViewNode::website)
         mockkStatic(AssistStructure.ViewNode::toAutofillViewData)
         mockkStatic(HtmlInfo::matchesSelectorClause)
     }
 
     @AfterEach
     fun teardown() {
-        unmockkStatic(AssistStructure.ViewNode::website)
         unmockkStatic(AssistStructure.ViewNode::toAutofillViewData)
         unmockkStatic(HtmlInfo::matchesSelectorClause)
     }

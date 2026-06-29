@@ -79,7 +79,8 @@ class RootNavViewModel @Inject constructor(
 
             userState?.activeAccount?.needsMasterPassword == true -> RootNavState.SetPassword
 
-            userState?.activeAccount?.needsPasswordReset == true -> RootNavState.ResetPassword
+            userState?.activeAccount?.isVaultUnlocked == true &&
+                userState.activeAccount.needsPasswordReset -> RootNavState.ResetPassword
 
             specialCircumstance is SpecialCircumstance.RegistrationEvent -> {
                 getRegistrationEventNavState(specialCircumstance)

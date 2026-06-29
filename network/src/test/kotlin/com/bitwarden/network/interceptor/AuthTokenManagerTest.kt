@@ -110,6 +110,15 @@ class AuthTokenManagerTest {
         }
 
         @Test
+        fun `returns null when no token is available`() {
+            assertNull(authTokenManager.authenticate(null, RESPONSE_401_NO_TOKEN))
+
+            verify(exactly = 0) {
+                refreshTokenProvider.refreshAccessTokenSynchronously(any())
+            }
+        }
+
+        @Test
         fun `returns null when refresh is failure`() {
             every { parseJwtTokenDataOrNull(JWT_ACCESS_TOKEN) } returns JTW_TOKEN
             every {
@@ -270,16 +279,19 @@ class AuthTokenManagerTest {
         }
 
         @Test
-        fun `intercept should throw an exception when an auth token data is missing`() {
-            val throwable = assertThrows(IOException::class.java) {
-                authTokenManager.intercept(
-                    chain = FakeInterceptorChain(request = request),
-                )
+        fun `intercept should proceed without token when an auth token data is missing`() {
+            val token = "token"
+            authTokenManager.refreshTokenProvider = object : RefreshTokenProvider {
+                override fun refreshAccessTokenSynchronously(
+                    userId: String,
+                ): Result<String> = token.asSuccess()
             }
-            assertEquals(
-                "Auth token is missing!",
-                throwable.cause?.message,
+            every { mockAuthTokenProvider.getAuthTokenDataOrNull() } returns null
+
+            val response = authTokenManager.intercept(
+                chain = FakeInterceptorChain(request = request),
             )
+            assertNull(response.request.header("Authorization"))
         }
     }
 }
@@ -303,6 +315,17 @@ private val JTW_TOKEN = JwtTokenDataJson(
 )
 
 private const val JWT_ACCESS_TOKEN = "jwt"
+
+private val RESPONSE_401_NO_TOKEN = Response.Builder()
+    .code(401)
+    .request(
+        request = Request.Builder()
+            .url("https://www.bitwarden.com")
+            .build(),
+    )
+    .protocol(Protocol.HTTP_2)
+    .message("Unauthenticated")
+    .build()
 
 private val RESPONSE_401 = Response.Builder()
     .code(401)
