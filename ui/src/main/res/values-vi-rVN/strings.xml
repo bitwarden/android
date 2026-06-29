@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Dịch vụ tự động điền Bitwarden</string>
     <string name="change_master_password">Thay đổi mật khẩu chính</string>
     <string name="close">Đóng</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">Tiếp tục</string>
     <string name="create_account">Tạo tài khoản</string>
     <string name="create_an_account">Tạo một tài khoản</string>
@@ -199,7 +200,6 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="copy_totp_automatically">Tự động sao chép mã TOTP</string>
     <string name="premium_required">Cần là thành viên Cao cấp để sử dụng tính năng này.</string>
     <string name="attachment_deleted">Đã xóa tệp đính kèm</string>
-    <string name="attachments_unavailable">Attachments unavailable</string>
     <string name="attachments_are_a_premium_feature">Tệp đính kèm là một tính năng Cao cấp. Gói hiện tại của bạn không bao gồm quyền truy cập tính năng này.</string>
     <string name="choose_file">Chọn tệp</string>
     <string name="file">Tập tin</string>
@@ -1204,12 +1204,14 @@ các vấn đề.</string>
     <string name="unarchiving">Đang bỏ lưu trữ</string>
     <string name="item_moved_to_archived">Mục đã chuyển vào Lưu trữ</string>
     <string name="item_moved_to_vault">Item moved to vault</string>
-    <string name="archive_unavailable">Lưu trữ không khả dụng</string>
     <string name="archiving_items_is_a_premium_feature">Lưu trữ mục là một tính năng Cao cấp. Gói hiện tại của bạn không bao gồm quyền truy cập tính năng này.</string>
     <string name="upgrade_to_premium">Nâng cấp lên bản cao cấp</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
     <string name="unlock_advanced_security_features">Mở khóa các tính năng bảo mật nâng cao</string>
+    <string name="your_subscription_needs_attention">Your subscription needs attention</string>
+    <string name="check_your_plan_for_details">Check your plan for details.</string>
+    <string name="view_plan">View plan</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Gói Cao cấp cung cấp thêm nhiều công cụ để giúp bạn luôn an toàn và kiểm soát tốt hơn.</string>
     <string name="this_item_is_archived">Mục này đã được lưu trữ.</string>
     <string name="introducing_archive">Introducing archive</string>

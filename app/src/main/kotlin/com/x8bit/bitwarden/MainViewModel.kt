@@ -31,13 +31,11 @@ import com.x8bit.bitwarden.data.billing.util.getPremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.credentials.manager.CredentialProviderRequestManager
 import com.x8bit.bitwarden.data.credentials.manager.model.CredentialProviderRequest
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
-import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.isAddTotpLoginItemFromAuthenticator
@@ -57,7 +55,6 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -81,8 +78,6 @@ private const val ANIMATION_DEBOUNCE_DELAY_MS = 500L
 class MainViewModel @Inject constructor(
     accessibilitySelectionManager: AccessibilitySelectionManager,
     autofillSelectionManager: AutofillSelectionManager,
-    cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
-    networkPermissionManager: NetworkPermissionManager,
     private val addTotpItemFromAuthenticatorManager: AddTotpItemFromAuthenticatorManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val garbageCollectionManager: GarbageCollectionManager,
@@ -152,12 +147,6 @@ class MainViewModel @Inject constructor(
             .onEach(::trySendAction)
             .launchIn(viewModelScope)
 
-        settingsRepository
-            .hasShownAccessibilityDisclaimerFlow
-            .map { MainAction.Internal.HasShownAccessibilityDisclaimerUpdate(it) }
-            .onEach(::trySendAction)
-            .launchIn(viewModelScope)
-
         merge(
             authRepository
                 .userStateFlow
@@ -174,20 +163,6 @@ class MainViewModel @Inject constructor(
             // delay to give animations time to finish (ex: account switcher).
             .debounce(timeoutMillis = ANIMATION_DEBOUNCE_DELAY_MS)
             .map { MainAction.Internal.CurrentUserOrVaultStateChange }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        networkPermissionManager
-            .isLocalNetworkAccessRequiredStateFlow
-            .filter { it }
-            .map { MainAction.Internal.LocalNetworkAccessRequired }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        cookieAcquisitionRequestManager
-            .cookieAcquisitionRequestFlow
-            .filterNotNull()
-            .map { MainAction.Internal.CookieAcquisitionReady }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -239,20 +214,7 @@ class MainViewModel @Inject constructor(
             is MainAction.Internal.ScreenCaptureUpdate -> handleScreenCaptureUpdate(action)
             is MainAction.Internal.ThemeUpdate -> handleAppThemeUpdated(action)
             is MainAction.Internal.DynamicColorsUpdate -> handleDynamicColorsUpdate(action)
-            is MainAction.Internal.CookieAcquisitionReady -> handleCookieAcquisitionReady()
-            is MainAction.Internal.LocalNetworkAccessRequired -> handleLocalNetworkAccessRequired()
             is MainAction.Internal.ResizeHasBeenRequested -> handleResizeHasBeenRequested()
-            is MainAction.Internal.HasShownAccessibilityDisclaimerUpdate -> {
-                handleHasShownAccessibilityDisclaimerUpdate(action)
-            }
-        }
-    }
-
-    private fun handleHasShownAccessibilityDisclaimerUpdate(
-        action: MainAction.Internal.HasShownAccessibilityDisclaimerUpdate,
-    ) {
-        if (!action.hasBeenShown) {
-            sendEvent(MainEvent.NavigateToAccessibilityDisclosure)
         }
     }
 
@@ -331,14 +293,6 @@ class MainViewModel @Inject constructor(
 
     private fun handleDynamicColorsUpdate(action: MainAction.Internal.DynamicColorsUpdate) {
         mutableStateFlow.update { it.copy(isDynamicColorsEnabled = action.isDynamicColorsEnabled) }
-    }
-
-    private fun handleCookieAcquisitionReady() {
-        sendEvent(MainEvent.NavigateToCookieAcquisition)
-    }
-
-    private fun handleLocalNetworkAccessRequired() {
-        sendEvent(MainEvent.NavigateToLocalNetworkAccess)
     }
 
     private fun handleResizeHasBeenRequested() {
@@ -696,25 +650,9 @@ sealed class MainAction {
         ) : Internal()
 
         /**
-         * Indicates that the cookie acquisition conditions are met and navigation
-         * should proceed.
-         */
-        data object CookieAcquisitionReady : Internal()
-
-        /**
-         * Indicates that the local network access is required.
-         */
-        data object LocalNetworkAccessRequired : Internal()
-
-        /**
          * Indicates that resize has been requested on the Activity
          */
         data object ResizeHasBeenRequested : Internal()
-
-        /**
-         * Indicates that the accessibility disclaimer has been displayed.
-         */
-        data class HasShownAccessibilityDisclaimerUpdate(val hasBeenShown: Boolean) : Internal()
     }
 }
 
@@ -743,21 +681,6 @@ sealed class MainEvent {
      * Navigate to the debug menu.
      */
     data object NavigateToDebugMenu : MainEvent()
-
-    /**
-     * Navigate to the cookie acquisition screen.
-     */
-    data object NavigateToCookieAcquisition : MainEvent()
-
-    /**
-     * Navigate to the local network access screen.
-     */
-    data object NavigateToLocalNetworkAccess : MainEvent()
-
-    /**
-     * Navigate to the accessibility disclosure screen.
-     */
-    data object NavigateToAccessibilityDisclosure : MainEvent()
 
     /**
      * Indicates that the app language has been updated.

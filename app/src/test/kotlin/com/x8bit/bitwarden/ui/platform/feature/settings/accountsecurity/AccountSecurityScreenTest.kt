@@ -1571,7 +1571,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithText("fingerprint-placeholder")
+            .onNodeWithText(text = "fingerprint-placeholder", substring = true)
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
     }

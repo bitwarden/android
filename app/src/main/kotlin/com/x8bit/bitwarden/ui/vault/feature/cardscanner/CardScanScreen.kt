@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -186,7 +185,7 @@ private fun ScanHintBanner(
             .semantics { liveRegion = LiveRegionMode.Polite }
             .background(
                 color = BitwardenTheme.colorScheme.background.scrim,
-                shape = RoundedCornerShape(size = 8.dp),
+                shape = BitwardenTheme.shapes.content,
             )
             .padding(horizontal = 16.dp, vertical = 12.dp),
     )

@@ -6,8 +6,12 @@ import com.bitwarden.network.BitwardenServiceClient
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
 private const val ENVIRONMENT_DEBOUNCE_TIMEOUT_MS: Long = 500L
@@ -26,9 +30,11 @@ class NetworkConfigManagerImpl(
     private val collectionScope = CoroutineScope(dispatcherManager.unconfined)
 
     init {
-        @Suppress("OPT_IN_USAGE")
-        environmentRepository
-            .environmentStateFlow
+        @OptIn(FlowPreview::class)
+        combine(
+            environmentRepository.environmentStateFlow,
+            authRepository.userStateFlow.map { it?.activeUserId }.distinctUntilChanged(),
+        ) { _, _ -> }
             .debounce(timeoutMillis = ENVIRONMENT_DEBOUNCE_TIMEOUT_MS)
             .onEach { _ ->
                 // This updates the stored service configuration by performing a network request.

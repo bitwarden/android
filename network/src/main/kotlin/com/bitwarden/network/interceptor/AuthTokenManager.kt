@@ -19,7 +19,6 @@ import java.time.Clock
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
-private const val MISSING_TOKEN_MESSAGE: String = "Auth token is missing!"
 private const val MISSING_PROVIDER_MESSAGE: String = "Refresh token provider is missing!"
 private const val EXPIRATION_OFFSET_MINUTES: Long = 5L
 
@@ -48,12 +47,11 @@ internal class AuthTokenManager(
             // If the same request keeps failing, let's just let the 401 pass through.
             return null
         }
-        val accessToken = requireNotNull(
-            response
-                .request
-                .header(name = HEADER_KEY_AUTHORIZATION)
-                ?.substringAfter(delimiter = HEADER_VALUE_BEARER_PREFIX),
-        )
+        val accessToken = response
+            .request
+            .header(name = HEADER_KEY_AUTHORIZATION)
+            ?.substringAfter(delimiter = HEADER_VALUE_BEARER_PREFIX)
+            ?: return null
         return when (val userId = parseJwtTokenDataOrNull(accessToken)?.userId) {
             null -> {
                 // We are unable to get the user ID, let's just let the 401 pass through.
@@ -83,8 +81,10 @@ internal class AuthTokenManager(
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
-        val token = getAccessToken()
-            ?: throw IOException(IllegalStateException(MISSING_TOKEN_MESSAGE))
+        val token = getAccessToken() ?: run {
+            Timber.w("Auth token is missing! Proceeding without token.")
+            return chain.proceed(chain.request())
+        }
         val request = chain
             .request()
             .newBuilder()

@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwarden 自动填充服务</string>
     <string name="change_master_password">更改主密码</string>
     <string name="close">关闭</string>
+    <string name="close_app">关闭 App</string>
     <string name="continue_text">继续</string>
     <string name="create_account">创建账户</string>
     <string name="create_an_account">创建账户</string>
@@ -199,7 +200,6 @@
     <string name="copy_totp_automatically">自动复制 TOTP</string>
     <string name="premium_required">需要高级版成员资格才能使用此功能。</string>
     <string name="attachment_deleted">附件已删除</string>
-    <string name="attachments_unavailable">附件功能不可用</string>
     <string name="attachments_are_a_premium_feature">附件是高级版功能。您的当前方案不包含对此功能的访问权限。</string>
     <string name="choose_file">选择文件</string>
     <string name="file">文件</string>
@@ -417,8 +417,8 @@
     <string name="account_biometric_invalidated">在验证主密码之前，此账户的生物识别解锁将禁用。</string>
     <string name="enable_sync_on_refresh">启用刷新时同步</string>
     <string name="enable_sync_on_refresh_description">使用下拉手势同步密码库。</string>
-    <string name="log_in_sso">企业单点登录</string>
-    <string name="log_in_sso_summary">使用您组织的单点登录门户快速登录。请输入您组织的标识符以开始。</string>
+    <string name="log_in_sso">企业单点登录 (SSO)</string>
+    <string name="log_in_sso_summary">使用您组织的单点登录 (SSO) 门户快速登录。请输入您组织的标识符以开始。</string>
     <string name="org_identifier">组织标识符</string>
     <string name="login_sso_error">当前无法使用 SSO 登录</string>
     <string name="set_master_password">设置主密码</string>
@@ -500,7 +500,7 @@
     <string name="send_options_policy_in_effect">一个或多个组织策略正在影响您的 Send 设置。</string>
     <string name="send_file_premium_required">免费账户仅限于共享文本。需要高级版成员资格才能使用文件 Send。</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">与指定人员共享是高级版功能。您的当前方案不包含对此功能的访问权限。</string>
-    <string name="password_prompt">主密码重新提示</string>
+    <string name="password_prompt">主密码二次验证</string>
     <string name="password_confirmation">确认主密码</string>
     <string name="password_confirmation_desc">此操作受到保护，要继续，请重新输入主密码以验证您的身份。</string>
     <string name="update_master_password">更新主密码</string>
@@ -656,7 +656,7 @@
     <string name="passkey">通行密钥</string>
     <string name="passkey_will_not_be_copied">通行密钥不会被复制</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">通行密钥将不会被复制到克隆的项目。要继续克隆这个项目吗？</string>
-    <string name="master_password_re_prompt_help">主密码重新提示帮助</string>
+    <string name="master_password_re_prompt_help">主密码二次验证帮助</string>
     <string name="admin_approval_requested">已请求管理员批准</string>
     <string name="your_request_has_been_sent_to_your_admin">您的请求已发送给您的管理员。</string>
     <string name="you_will_be_notified_once_approved">批准后，您将收到通知。</string>
@@ -1201,12 +1201,14 @@
     <string name="unarchiving">正在取消存档</string>
     <string name="item_moved_to_archived">项目已移动到归档</string>
     <string name="item_moved_to_vault">项目已移动到密码库</string>
-    <string name="archive_unavailable">归档功能不可用</string>
     <string name="archiving_items_is_a_premium_feature">归档项目是高级版功能。您的当前方案不包含对此功能的访问权限。</string>
     <string name="upgrade_to_premium">升级到高级版</string>
     <string name="plan">方案</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">要管理您的高级版订阅，您需要在计算机上登录到您的网页密码库。</string>
     <string name="unlock_advanced_security_features">解锁高级安全功能</string>
+    <string name="your_subscription_needs_attention">您的订阅需要关注</string>
+    <string name="check_your_plan_for_details">检查您的方案以了解详细信息。</string>
+    <string name="view_plan">查看方案</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">高级版方案为您提供更多工具，助您保持安全并掌控一切。</string>
     <string name="this_item_is_archived">此项目已归档。</string>
     <string name="introducing_archive">归档介绍</string>
