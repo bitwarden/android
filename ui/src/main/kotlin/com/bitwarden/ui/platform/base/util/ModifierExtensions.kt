@@ -186,7 +186,7 @@ fun Modifier.topDivider(
         if (enabled) {
             val (startX, endX) = when (layoutDirection) {
                 LayoutDirection.Ltr -> paddingStart.toPx() to (size.width - paddingEnd.toPx())
-                LayoutDirection.Rtl -> (size.width - paddingEnd.toPx()) to paddingStart.toPx()
+                LayoutDirection.Rtl -> (size.width - paddingStart.toPx()) to paddingEnd.toPx()
             }
             drawLine(
                 alpha = alpha,
@@ -218,7 +218,7 @@ fun Modifier.bottomDivider(
         if (enabled) {
             val (startX, endX) = when (layoutDirection) {
                 LayoutDirection.Ltr -> paddingStart.toPx() to (size.width - paddingEnd.toPx())
-                LayoutDirection.Rtl -> (size.width - paddingEnd.toPx()) to paddingStart.toPx()
+                LayoutDirection.Rtl -> (size.width - paddingStart.toPx()) to paddingEnd.toPx()
             }
             drawLine(
                 alpha = alpha,
