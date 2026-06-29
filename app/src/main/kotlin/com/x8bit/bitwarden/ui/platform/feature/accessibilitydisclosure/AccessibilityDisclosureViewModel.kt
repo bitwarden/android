@@ -22,12 +22,12 @@ class AccessibilityDisclosureViewModel @Inject constructor(
 ) {
     override fun handleAction(action: AccessibilityDisclosureAction) {
         when (action) {
-            AccessibilityDisclosureAction.AcceptClicked -> handleAcceptClicked()
+            AccessibilityDisclosureAction.IUnderstandClick -> handleIUnderstandClick()
             AccessibilityDisclosureAction.CloseAppClick -> handleCloseAppClick()
         }
     }
 
-    private fun handleAcceptClicked() {
+    private fun handleIUnderstandClick() {
         settingsRepository.accessibilityDisclaimerHasBeenShown()
         sendEvent(AccessibilityDisclosureEvent.Dismiss)
     }
@@ -63,9 +63,9 @@ sealed class AccessibilityDisclosureEvent {
  */
 sealed class AccessibilityDisclosureAction {
     /**
-     * User clicked the accept button.
+     * User clicked the "I understand" button.
      */
-    data object AcceptClicked : AccessibilityDisclosureAction()
+    data object IUnderstandClick : AccessibilityDisclosureAction()
 
     /**
      * User clicked the close app button.

@@ -408,7 +408,7 @@ private fun VaultItemListingDialogs(
 
         is VaultItemListingState.DialogState.ArchiveRequiresPremium -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(id = BitwardenString.archive_unavailable),
+                title = stringResource(id = BitwardenString.premium_subscription_required),
                 message = stringResource(id = BitwardenString.archiving_items_is_a_premium_feature),
                 confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
                 dismissButtonText = stringResource(id = BitwardenString.cancel),

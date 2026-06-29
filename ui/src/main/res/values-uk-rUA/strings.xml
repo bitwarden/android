@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Служба автозаповнення Bitwarden</string>
     <string name="change_master_password">Змінити головний пароль</string>
     <string name="close">Закрити</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">Продовжити</string>
     <string name="create_account">Створити обліковий запис</string>
     <string name="create_an_account">Створити обліковий запис</string>
@@ -202,7 +203,6 @@
     <string name="copy_totp_automatically">Автоматично копіювати коди TOTP</string>
     <string name="premium_required">Для використання цієї функції необхідна передплата Premium.</string>
     <string name="attachment_deleted">Вкладення видалено</string>
-    <string name="attachments_unavailable">Вкладення недоступні</string>
     <string name="attachments_are_a_premium_feature">Вкладення – це функція Premium. Ваш поточний тарифний план не передбачає доступ до цієї функції.</string>
     <string name="choose_file">Обрати файл</string>
     <string name="file">Файл</string>
@@ -1229,12 +1229,14 @@
     <string name="unarchiving">Видобування</string>
     <string name="item_moved_to_archived">Запис переміщено до архіву</string>
     <string name="item_moved_to_vault">Запис переміщено до сховища</string>
-    <string name="archive_unavailable">Архів недоступний</string>
     <string name="archiving_items_is_a_premium_feature">Архівування записів є функцією Premium. Ваш поточний тарифний план не передбачає доступ до цієї функції.</string>
     <string name="upgrade_to_premium">Покращити до Premium</string>
     <string name="plan">План</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
     <string name="unlock_advanced_security_features">Розблокуйте розширені функції безпеки</string>
+    <string name="your_subscription_needs_attention">Your subscription needs attention</string>
+    <string name="check_your_plan_for_details">Check your plan for details.</string>
+    <string name="view_plan">View plan</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">З передплатою Premium ви матимете більше інструментів безпеки та контролю.</string>
     <string name="this_item_is_archived">Цей запис архівовано.</string>
     <string name="introducing_archive">Представляємо архів</string>
@@ -1311,8 +1313,8 @@
     <string name="pricing_unavailable">Ціни недоступні</string>
     <string name="current_plan">Current plan</string>
     <string name="premium_plan_name">Premium</string>
-    <string name="billing_amount">Сума для оплати</string>
-    <string name="storage_cost">Вартість зберігання</string>
+    <string name="billing_amount">Сума до сплати</string>
+    <string name="storage_cost">Вартість сховища</string>
     <string name="discount">Знижка</string>
     <string name="estimated_tax">Estimated tax</string>
     <string name="total">Total</string>
@@ -1322,7 +1324,7 @@
     <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Manage your subscription plan in the Bitwarden web app.</string>
     <string name="cancel_premium">Скасувати Premium</string>
     <string name="subscription_status_active">Активний</string>
-    <string name="subscription_status_canceled">Скасований</string>
+    <string name="subscription_status_canceled">Скасовано</string>
     <string name="subscription_status_expired">Термін дії завершився</string>
     <string name="subscription_status_past_due">Протерміновано</string>
     <string name="subscription_status_paused">Paused</string>

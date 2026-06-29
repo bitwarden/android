@@ -5,8 +5,10 @@ import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.model.Environment
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
+import com.x8bit.bitwarden.data.billing.model.PremiumCard
 import com.x8bit.bitwarden.data.billing.repository.BillingRepository
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStatus
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionResult
@@ -50,7 +52,7 @@ class PremiumStateManagerImpl(
     private val settingsDiskSource: SettingsDiskSource,
     vaultRepository: VaultRepository,
     private val featureFlagManager: FeatureFlagManager,
-    private val environmentRepository: EnvironmentRepository,
+    environmentRepository: EnvironmentRepository,
     pushManager: PushManager,
     private val clock: Clock,
     dispatcherManager: DispatcherManager,
@@ -123,62 +125,69 @@ class PremiumStateManagerImpl(
             )
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val isPremiumUpgradeBannerEligibleFlow: StateFlow<Boolean> =
+    override val premiumCardStateFlow: StateFlow<PremiumCard> =
         combine(
-            authDiskSource.userStateFlow,
+            authDiskSource.userStateFlow.map { it?.activeAccount },
             billingRepository.isInAppBillingSupportedFlow,
             featureFlagManager.getFeatureFlagFlow(FlagKey.MobilePremiumUpgrade),
-            authDiskSource.activeUserIdChangesFlow
-                .flatMapLatest { userId ->
-                    userId
-                        ?.let { id ->
-                            settingsDiskSource
-                                .getPremiumUpgradeBannerDismissedFlow(id)
-                                .map { it ?: false }
-                        }
-                        ?: flowOf(false)
-                },
+            authDiskSource.activeUserIdChangesFlow.flatMapLatest { userId ->
+                userId
+                    ?.let { id ->
+                        settingsDiskSource
+                            .getPremiumUpgradeBannerDismissedFlow(id)
+                            .map { it ?: false }
+                    }
+                    ?: flowOf(false)
+            },
             vaultRepository.vaultDataStateFlow,
         ) {
-                userState,
+                account,
                 isInAppBillingSupported,
                 featureFlagEnabled,
-                isDismissed,
+                isUpgradeCardDismissed,
                 vaultDataState,
             ->
             BannerInputs(
-                userState = userState,
+                account = account,
                 isInAppBillingSupported = isInAppBillingSupported,
                 featureFlagEnabled = featureFlagEnabled,
-                isDismissed = isDismissed,
+                isUpgradeCardDismissed = isUpgradeCardDismissed,
                 vaultDataState = vaultDataState,
             )
         }
             .combine(upgradeLifecycleStateFlow) { inputs, lifecycle ->
-                val profile = inputs.userState?.activeAccount?.profile
-                    ?: return@combine false
-                val isAccountOldEnough = profile.creationDate.isOlderThanDays(
-                    days = PREMIUM_UPGRADE_MINIMUM_ACCOUNT_AGE_DAYS,
-                    clock = clock,
-                )
-                val itemCount = inputs.vaultDataState.activeVaultItemCount()
-                val lifecycleAllowsBanner = lifecycle is UpgradeLifecycleState.Free ||
-                    (
-                        lifecycle is UpgradeLifecycleState.Premium &&
-                            lifecycle.subscriptionStatus.isInTroubleState()
+                val profile = inputs.account?.profile ?: return@combine PremiumCard.NONE
+                if (!inputs.featureFlagEnabled) return@combine PremiumCard.NONE
+                val initialCard = when (lifecycle) {
+                    UpgradeLifecycleState.Free -> PremiumCard.UPGRADE
+                    UpgradeLifecycleState.UpgradePending -> PremiumCard.NONE
+                    is UpgradeLifecycleState.Premium -> {
+                        lifecycle.subscriptionStatus.premiumCardState()
+                    }
+                }
+                when (initialCard) {
+                    PremiumCard.UPGRADE -> {
+                        val isAccountOldEnough = profile.creationDate.isOlderThanDays(
+                            days = PREMIUM_UPGRADE_MINIMUM_ACCOUNT_AGE_DAYS,
+                            clock = clock,
                         )
+                        val itemCount = inputs.vaultDataState.activeVaultItemCount()
+                        val showCard = inputs.isInAppBillingSupported &&
+                            isAccountOldEnough &&
+                            itemCount >= PREMIUM_UPGRADE_MINIMUM_VAULT_ITEMS &&
+                            !inputs.isUpgradeCardDismissed
+                        initialCard.takeIf { showCard } ?: PremiumCard.NONE
+                    }
 
-                lifecycleAllowsBanner &&
-                    inputs.isInAppBillingSupported &&
-                    inputs.featureFlagEnabled &&
-                    !inputs.isDismissed &&
-                    isAccountOldEnough &&
-                    itemCount >= PREMIUM_UPGRADE_MINIMUM_VAULT_ITEMS
+                    PremiumCard.NEEDS_ATTENTION,
+                    PremiumCard.NONE,
+                        -> initialCard
+                }
             }
             .stateIn(
                 scope = unconfinedScope,
                 started = SharingStarted.Eagerly,
-                initialValue = false,
+                initialValue = PremiumCard.NONE,
             )
 
     override val isSelfHostedFlow: StateFlow<Boolean> =
@@ -389,31 +398,40 @@ class PremiumStateManagerImpl(
 }
 
 private data class BannerInputs(
-    val userState: UserStateJson?,
+    val account: AccountJson?,
     val isInAppBillingSupported: Boolean,
     val featureFlagEnabled: Boolean,
-    val isDismissed: Boolean,
+    val isUpgradeCardDismissed: Boolean,
     val vaultDataState: DataState<VaultData>,
 )
 
 /**
- * Returns `true` when the given [SubscriptionStatusState] represents a subscription substate
- * that should disqualify a user from being treated as effectively premium.
+ * Returns a [PremiumCard] for the given [SubscriptionStatusState] and subscription substate.
  */
-private fun SubscriptionStatusState.isInTroubleState(): Boolean =
-    this is SubscriptionStatusState.Available &&
-        when (this.status) {
-            PremiumSubscriptionStatus.CANCELED,
-            PremiumSubscriptionStatus.EXPIRED,
-            PremiumSubscriptionStatus.PAST_DUE,
-            PremiumSubscriptionStatus.PAUSED,
-            PremiumSubscriptionStatus.UPDATE_PAYMENT,
-                -> true
+private fun SubscriptionStatusState.premiumCardState(): PremiumCard =
+    when (this) {
+        is SubscriptionStatusState.Available -> {
+            when (this.status) {
+                PremiumSubscriptionStatus.PAST_DUE,
+                PremiumSubscriptionStatus.UPDATE_PAYMENT,
+                    -> PremiumCard.NEEDS_ATTENTION
 
-            PremiumSubscriptionStatus.ACTIVE,
-            PremiumSubscriptionStatus.PENDING_CANCELLATION,
-                -> false
+                PremiumSubscriptionStatus.EXPIRED,
+                PremiumSubscriptionStatus.PAUSED,
+                    -> PremiumCard.UPGRADE
+
+                PremiumSubscriptionStatus.ACTIVE,
+                PremiumSubscriptionStatus.CANCELED,
+                PremiumSubscriptionStatus.PENDING_CANCELLATION,
+                    -> PremiumCard.NONE
+            }
         }
+
+        is SubscriptionStatusState.Error,
+        SubscriptionStatusState.Loading,
+        SubscriptionStatusState.NoSubscription,
+            -> PremiumCard.NONE
+    }
 
 /**
  * Returns `true` if this [Instant] is older than the given number of [days] based on

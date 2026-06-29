@@ -19,8 +19,11 @@
         <domain includeSubdomains="true">bitwarden.eu</domain>
         <domain includeSubdomains="true">bitwarden.pw</domain>
         <trust-anchors>
-            <!-- Only trust pre-installed CAs for Bitwarden domains and all subdomains -->
+            <!-- Trust pre-installed CAs for Bitwarden domains and all subdomains -->
             <certificates src="system" />
+
+            <!-- Additionally trust user added CAs -->
+            <certificates src="user" />
         </trust-anchors>
     </domain-config>
 

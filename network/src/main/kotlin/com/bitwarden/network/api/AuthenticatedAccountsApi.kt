@@ -11,6 +11,7 @@ import com.bitwarden.network.model.VerifyOtpRequestJson
 import retrofit2.http.Body
 import retrofit2.http.HTTP
 import retrofit2.http.POST
+import retrofit2.http.PUT
 
 /**
  * Defines raw calls under the /accounts API with authentication applied.
@@ -54,13 +55,13 @@ internal interface AuthenticatedAccountsApi {
     /**
      * Resets the temporary password.
      */
-    @HTTP(method = "PUT", path = "/accounts/update-temp-password", hasBody = true)
+    @PUT("/accounts/update-temp-password")
     suspend fun resetTempPassword(@Body body: ResetPasswordRequestJson): NetworkResult<Unit>
 
     /**
      * Resets the password.
      */
-    @HTTP(method = "POST", path = "/accounts/password", hasBody = true)
+    @POST("/accounts/password")
     suspend fun resetPassword(@Body body: ResetPasswordRequestJson): NetworkResult<Unit>
 
     /**

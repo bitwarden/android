@@ -1,12 +1,25 @@
 package com.bitwarden.network.interceptor
 
+import okhttp3.Authenticator
+import okhttp3.Cache
 import okhttp3.Call
+import okhttp3.CertificatePinner
 import okhttp3.Connection
+import okhttp3.ConnectionPool
+import okhttp3.CookieJar
+import okhttp3.Dns
+import okhttp3.EventListener
 import okhttp3.Interceptor
 import okhttp3.Protocol
 import okhttp3.Request
 import okhttp3.Response
+import java.net.Proxy
+import java.net.ProxySelector
 import java.util.concurrent.TimeUnit
+import javax.net.SocketFactory
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.X509TrustManager
 
 /**
  * Helper class for implementing a [Interceptor.Chain] in a way that a [Request] passed in to
@@ -17,6 +30,69 @@ class FakeInterceptorChain(
     private val request: Request,
     private val responseProvider: (Request) -> Response = DEFAULT_RESPONSE_PROVIDER,
 ) : Interceptor.Chain {
+    override val authenticator: Authenticator get() = notImplemented()
+    override val cache: Cache get() = notImplemented()
+    override val certificatePinner: CertificatePinner get() = notImplemented()
+    override val connectionPool: ConnectionPool get() = notImplemented()
+    override val cookieJar: CookieJar get() = notImplemented()
+    override val dns: Dns get() = notImplemented()
+    override val eventListener: EventListener get() = notImplemented()
+    override val followRedirects: Boolean get() = notImplemented()
+    override val followSslRedirects: Boolean get() = notImplemented()
+    override val hostnameVerifier: HostnameVerifier get() = notImplemented()
+    override val proxy: Proxy get() = notImplemented()
+    override val proxyAuthenticator: Authenticator get() = notImplemented()
+    override val proxySelector: ProxySelector get() = notImplemented()
+    override val retryOnConnectionFailure: Boolean get() = notImplemented()
+    override val socketFactory: SocketFactory get() = notImplemented()
+    override val sslSocketFactoryOrNull: SSLSocketFactory get() = notImplemented()
+    override val x509TrustManagerOrNull: X509TrustManager get() = notImplemented()
+
+    override fun withAuthenticator(
+        authenticator: Authenticator,
+    ): Interceptor.Chain = notImplemented()
+
+    override fun withCache(cache: Cache?): Interceptor.Chain = notImplemented()
+
+    override fun withCertificatePinner(
+        certificatePinner: CertificatePinner,
+    ): Interceptor.Chain = notImplemented()
+
+    override fun withConnectionPool(
+        connectionPool: ConnectionPool,
+    ): Interceptor.Chain = notImplemented()
+
+    override fun withCookieJar(cookieJar: CookieJar): Interceptor.Chain = notImplemented()
+
+    override fun withDns(dns: Dns): Interceptor.Chain = notImplemented()
+
+    override fun withHostnameVerifier(
+        hostnameVerifier: HostnameVerifier,
+    ): Interceptor.Chain = notImplemented()
+
+    override fun withProxy(proxy: Proxy?): Interceptor.Chain = notImplemented()
+
+    override fun withProxyAuthenticator(
+        proxyAuthenticator: Authenticator,
+    ): Interceptor.Chain = notImplemented()
+
+    override fun withProxySelector(
+        proxySelector: ProxySelector,
+    ): Interceptor.Chain = notImplemented()
+
+    override fun withRetryOnConnectionFailure(
+        retryOnConnectionFailure: Boolean,
+    ): Interceptor.Chain = notImplemented()
+
+    override fun withSocketFactory(
+        socketFactory: SocketFactory,
+    ): Interceptor.Chain = notImplemented()
+
+    override fun withSslSocketFactory(
+        sslSocketFactory: SSLSocketFactory?,
+        x509TrustManager: X509TrustManager?,
+    ): Interceptor.Chain = notImplemented()
+
     override fun request(): Request = request
 
     override fun proceed(request: Request): Response = responseProvider(request)

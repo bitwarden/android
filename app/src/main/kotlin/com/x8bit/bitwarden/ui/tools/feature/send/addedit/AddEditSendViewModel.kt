@@ -548,7 +548,13 @@ class AddEditSendViewModel @Inject constructor(
         // Check if user is trying to select Email auth without Premium
         if (action.sendAuth is SendAuth.Email && !state.isPremium) {
             mutableStateFlow.update {
-                it.copy(dialogState = AddEditSendState.DialogState.EmailAuthRequiresPremium)
+                it.copy(
+                    dialogState = AddEditSendState.DialogState.PremiumRequired(
+                        message = BitwardenString
+                            .sharing_with_specific_people_is_a_premium_feature
+                            .asText(),
+                    ),
+                )
             }
             return
         }
@@ -701,8 +707,7 @@ class AddEditSendViewModel @Inject constructor(
                         // check just in case.
                         mutableStateFlow.update {
                             it.copy(
-                                dialogState = AddEditSendState.DialogState.Error(
-                                    title = BitwardenString.send.asText(),
+                                dialogState = AddEditSendState.DialogState.PremiumRequired(
                                     message = BitwardenString.send_file_premium_required.asText(),
                                 ),
                             )
@@ -1036,11 +1041,12 @@ data class AddEditSendState(
         ) : DialogState()
 
         /**
-         * Displays a dialog to the user indicating that email authentication requires
-         * a Premium account.
+         * Displays a dialog to the user indicating that a Premium account is required.
          */
         @Parcelize
-        data object EmailAuthRequiresPremium : DialogState()
+        data class PremiumRequired(
+            val message: Text,
+        ) : DialogState()
     }
 }
 

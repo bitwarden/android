@@ -2164,26 +2164,29 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleVaultDataReceive(action: VaultAddEditAction.Internal.VaultDataReceive) {
         when (val vaultDataState = action.vaultData) {
             is DataState.Error -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        viewState = VaultAddEditState.ViewState.Error(
-                            message = BitwardenString.generic_error_message.asText(),
-                        ),
-                    )
-                }
-            }
-
-            is DataState.Loaded -> {
-                viewModelScope.launch {
-                    sendAction(
-                        VaultAddEditAction.Internal.DetermineContentStateResultReceive(
-                            vaultAddEditState = state.determineContentState(
-                                vaultData = vaultDataState.data,
-                                userData = action.userData,
-                            ),
-                        ),
-                    )
-                }
+                vaultDataState
+                    .data?.let {
+                        viewModelScope.launch {
+                            sendAction(
+                                VaultAddEditAction.Internal.DetermineContentStateResultReceive(
+                                    vaultAddEditState = state.determineContentState(
+                                        vaultData = it,
+                                        userData = action.userData,
+                                    ),
+                                ),
+                            )
+                        }
+                    }
+                    ?: run {
+                        // No data to display, so let's just show the error state
+                        mutableStateFlow.update {
+                            it.copy(
+                                viewState = VaultAddEditState.ViewState.Error(
+                                    message = BitwardenString.generic_error_message.asText(),
+                                ),
+                            )
+                        }
+                    }
             }
 
             DataState.Loading -> {
@@ -2196,24 +2199,14 @@ class VaultAddEditViewModel @Inject constructor(
                 }
             }
 
-            is DataState.NoNetwork -> {
+            is DataState.NoNetwork,
+            is DataState.Pending,
+            is DataState.Loaded,
+                -> {
                 viewModelScope.launch {
                     sendAction(
                         VaultAddEditAction.Internal.DetermineContentStateResultReceive(
-                            state.determineContentState(
-                                vaultData = vaultDataState.data,
-                                userData = action.userData,
-                            ),
-                        ),
-                    )
-                }
-            }
-
-            is DataState.Pending -> {
-                viewModelScope.launch {
-                    sendAction(
-                        VaultAddEditAction.Internal.DetermineContentStateResultReceive(
-                            state.determineContentState(
+                            vaultAddEditState = state.determineContentState(
                                 vaultData = vaultDataState.data,
                                 userData = action.userData,
                             ),

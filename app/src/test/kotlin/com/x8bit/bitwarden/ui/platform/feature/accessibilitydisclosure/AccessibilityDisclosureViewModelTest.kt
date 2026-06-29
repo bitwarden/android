@@ -25,10 +25,10 @@ class AccessibilityDisclosureViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `AcceptClicked should mark disclaimer as shown and emit Dismiss event`() = runTest {
+    fun `IUnderstandClick should mark disclaimer as shown and emit Dismiss event`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(AccessibilityDisclosureAction.AcceptClicked)
+            viewModel.trySendAction(AccessibilityDisclosureAction.IUnderstandClick)
             assertEquals(AccessibilityDisclosureEvent.Dismiss, awaitItem())
         }
         verify(exactly = 1) {

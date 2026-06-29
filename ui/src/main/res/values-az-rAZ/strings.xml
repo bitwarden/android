@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwarden avto-doldurma xidməti</string>
     <string name="change_master_password">Ana parolu dəyişdir</string>
     <string name="close">Bağla</string>
+    <string name="close_app">Tətbiqi bağla</string>
     <string name="continue_text">Davam</string>
     <string name="create_account">Hesab yarat</string>
     <string name="create_an_account">Bir hesab yarat</string>
@@ -200,7 +201,6 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="copy_totp_automatically">TOTP-ni avtomatik kopyala</string>
     <string name="premium_required">Bu özəlliyi istifadə etmək üçün premium üzvlük lazımdır.</string>
     <string name="attachment_deleted">Qoşma silindi</string>
-    <string name="attachments_unavailable">Qoşma mövcud deyil</string>
     <string name="attachments_are_a_premium_feature">Qoşmalar, Premium bir özəllikdir. Hazırkı planınızda bu özəlliyə erişim yoxdur.</string>
     <string name="choose_file">Fayl seç</string>
     <string name="file">Fayl</string>
@@ -611,7 +611,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="forwarded_email_description">Xarici yönləndirmə xidməti ilə e-poçt ləqəbi yaradın.</string>
     <string name="accessibility_service_disclosure">Erişiləbilənlik Xidməti açıqlaması</string>
     <string name="accessibility_disclosure_text">Bitwarden, tətbiqlərdə və veb saytlarda giriş xanalarını axtarmaq üçün Erişiləbilənlik Xidmətini istifadə edir, daha sonra tətbiq və ya sayt üçün uyuşma tapdıqda istifadəçi adı və parolun daxil edilməsi üçün müvafiq xana kimliklərini yaradır. Xidmət tərəfindən bizə təqdim edilən məlumatların heç birini saxlamırıq, kimlik məlumatlarının daxil edilməsindən kənar ekrandakı hər hansısa elementə nəzarət etməyə cəhd etmirik.</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields in apps and websites. If you choose to enable it, Bitwarden will identify the appropriate fields and enter your credentials when a match is found. We do not store any information observed by the service, and we do not control any on-screen elements beyond credential entry.</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden, tətbiqlərdə və veb saytlarda giriş xanalarını aşkarlamaq üçün Android-in Erişiləbilənlik Xidmətini istifadə edən istəyə bağlı bir avto-doldurma metodu təklif edir. Bu özəlliyi fəallaşdırsanız, Bitwarden uyğun xanaları müəyyən edəcək və uyuşma tapıldığı zaman kimlik məlumatlarınızı daxil edəcək. Xidmət tərəfindən aşkarlanan heç bir məlumatı saxlamırıq və kimlik məlumatlarınızın daxil edilməsi xaricində ekrandakı heç bir element üzərində nəzarətimiz yoxdur.</string>
     <string name="accept">Qəbul et</string>
     <string name="decline">Rədd et</string>
     <string name="login_request_has_already_expired">Giriş tələbinin müddəti artıq bitib.</string>
@@ -1210,12 +1210,14 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="unarchiving">Arxivdən çıxarılır</string>
     <string name="item_moved_to_archived">Element arxivə daşındı</string>
     <string name="item_moved_to_vault">Element seyfə daşındı</string>
-    <string name="archive_unavailable">Arxiv əlçatmazdır</string>
     <string name="archiving_items_is_a_premium_feature">Elementləri arxivləmə, Premium bir özəllikdir. Hazırkı planınızda bu özəlliyə erişim yoxdur.</string>
     <string name="upgrade_to_premium">\"Premium\"a yüksəlt</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Premium abunəliyinizi idarə etmək üçün kompüterinizdə veb seyfinizə giriş etməlisiniz.</string>
     <string name="unlock_advanced_security_features">Qabaqcıl təhlükəsizlik özəlliklərinin kilidini aç</string>
+    <string name="your_subscription_needs_attention">Your subscription needs attention</string>
+    <string name="check_your_plan_for_details">Check your plan for details.</string>
+    <string name="view_plan">View plan</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Premium plan, güvəndə qalmağınız və nəzarəti əlinizdə saxlamağınız üçün sizə daha çox alət verir</string>
     <string name="this_item_is_archived">Bu element arxivləndi.</string>
     <string name="introducing_archive">Tanış olun, Arxivləmə</string>

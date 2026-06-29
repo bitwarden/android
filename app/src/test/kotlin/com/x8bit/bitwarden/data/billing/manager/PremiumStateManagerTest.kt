@@ -10,6 +10,7 @@ import com.bitwarden.vault.DecryptCipherListResult
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
+import com.x8bit.bitwarden.data.billing.model.PremiumCard
 import com.x8bit.bitwarden.data.billing.repository.BillingRepository
 import com.x8bit.bitwarden.data.billing.repository.model.PlanCadence
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStatus
@@ -108,160 +109,160 @@ class PremiumStateManagerTest {
     )
 
     @Test
-    fun `eligible when all conditions met should emit true`() = runTest {
+    fun `eligible when all conditions met should emit UPGRADE`() = runTest {
         val manager = createManager()
-        manager.isPremiumUpgradeBannerEligibleFlow.test {
-            assertTrue(awaitItem())
+        manager.premiumCardStateFlow.test {
+            assertEquals(PremiumCard.UPGRADE, awaitItem())
         }
     }
 
     @Test
-    fun `ineligible when user is Premium should emit false`() = runTest {
+    fun `ineligible when user is Premium should emit NONE`() = runTest {
         fakeAuthDiskSource.userState = userStateJsonWith(
             account = createAccountJson(hasPremiumPersonally = true),
         )
         val manager = createManager()
-        manager.isPremiumUpgradeBannerEligibleFlow.test {
-            assertFalse(awaitItem())
+        manager.premiumCardStateFlow.test {
+            assertEquals(PremiumCard.NONE, awaitItem())
         }
     }
 
     @Test
-    fun `ineligible when in-app billing is not supported should emit false`() =
+    fun `ineligible when in-app billing is not supported should emit NONE`() =
         runTest {
             mutableIsInAppBillingSupportedFlow.value = false
             val manager = createManager()
-            manager.isPremiumUpgradeBannerEligibleFlow.test {
-                assertFalse(awaitItem())
+            manager.premiumCardStateFlow.test {
+                assertEquals(PremiumCard.NONE, awaitItem())
             }
         }
 
     @Test
-    fun `ineligible when feature flag is disabled should emit false`() = runTest {
+    fun `ineligible when feature flag is disabled should emit NONE`() = runTest {
         mutableMobilePremiumUpgradeFlagFlow.value = false
         val manager = createManager()
-        manager.isPremiumUpgradeBannerEligibleFlow.test {
-            assertFalse(awaitItem())
+        manager.premiumCardStateFlow.test {
+            assertEquals(PremiumCard.NONE, awaitItem())
         }
     }
 
     @Test
-    fun `ineligible when banner is dismissed should emit false`() = runTest {
+    fun `ineligible when banner is dismissed should emit NONE`() = runTest {
         fakeSettingsDiskSource.storePremiumUpgradeBannerDismissed(
             userId = ACTIVE_USER_ID,
             isDismissed = true,
         )
         val manager = createManager()
-        manager.isPremiumUpgradeBannerEligibleFlow.test {
-            assertFalse(awaitItem())
+        manager.premiumCardStateFlow.test {
+            assertEquals(PremiumCard.NONE, awaitItem())
         }
     }
 
     @Test
-    fun `ineligible when account is too new should emit false`() = runTest {
+    fun `ineligible when account is too new should emit NONE`() = runTest {
         fakeAuthDiskSource.userState = userStateJsonWith(
             account = createAccountJson(
                 creationDate = Instant.parse("2023-10-25T12:00:00Z"),
             ),
         )
         val manager = createManager()
-        manager.isPremiumUpgradeBannerEligibleFlow.test {
-            assertFalse(awaitItem())
+        manager.premiumCardStateFlow.test {
+            assertEquals(PremiumCard.NONE, awaitItem())
         }
     }
 
     @Test
-    fun `ineligible when creation date is null should emit false`() = runTest {
+    fun `ineligible when creation date is null should emit NONE`() = runTest {
         fakeAuthDiskSource.userState = userStateJsonWith(
             account = createAccountJson(creationDate = null),
         )
         val manager = createManager()
-        manager.isPremiumUpgradeBannerEligibleFlow.test {
-            assertFalse(awaitItem())
+        manager.premiumCardStateFlow.test {
+            assertEquals(PremiumCard.NONE, awaitItem())
         }
     }
 
     @Test
-    fun `ineligible when vault has fewer than 5 items should emit false`() = runTest {
+    fun `ineligible when vault has fewer than 5 items should emit NONE`() = runTest {
         mutableVaultDataStateFlow.value = DataState.Loaded(
             createVaultDataWithItemCount(count = 4),
         )
         val manager = createManager()
-        manager.isPremiumUpgradeBannerEligibleFlow.test {
-            assertFalse(awaitItem())
+        manager.premiumCardStateFlow.test {
+            assertEquals(PremiumCard.NONE, awaitItem())
         }
     }
 
     @Test
-    fun `ineligible when userState is null should emit false`() = runTest {
+    fun `ineligible when userState is null should emit NONE`() = runTest {
         fakeAuthDiskSource.userState = null
         val manager = createManager()
-        manager.isPremiumUpgradeBannerEligibleFlow.test {
-            assertFalse(awaitItem())
+        manager.premiumCardStateFlow.test {
+            assertEquals(PremiumCard.NONE, awaitItem())
         }
     }
 
     @Test
-    fun `vault data Loading should emit false`() = runTest {
+    fun `vault data Loading should emit NONE`() = runTest {
         mutableVaultDataStateFlow.value = DataState.Loading
         val manager = createManager()
-        manager.isPremiumUpgradeBannerEligibleFlow.test {
-            assertFalse(awaitItem())
+        manager.premiumCardStateFlow.test {
+            assertEquals(PremiumCard.NONE, awaitItem())
         }
     }
 
     @Test
-    fun `vault data Pending with enough items should emit true`() = runTest {
+    fun `vault data Pending with enough items should emit UPGRADE`() = runTest {
         mutableVaultDataStateFlow.value = DataState.Pending(
             createVaultDataWithItemCount(count = 5),
         )
         val manager = createManager()
-        manager.isPremiumUpgradeBannerEligibleFlow.test {
-            assertTrue(awaitItem())
+        manager.premiumCardStateFlow.test {
+            assertEquals(PremiumCard.UPGRADE, awaitItem())
         }
     }
 
     @Test
-    fun `vault data NoNetwork with enough items should emit true`() = runTest {
+    fun `vault data NoNetwork with enough items should emit UPGRADE`() = runTest {
         mutableVaultDataStateFlow.value = DataState.NoNetwork(
             createVaultDataWithItemCount(count = 5),
         )
         val manager = createManager()
-        manager.isPremiumUpgradeBannerEligibleFlow.test {
-            assertTrue(awaitItem())
+        manager.premiumCardStateFlow.test {
+            assertEquals(PremiumCard.UPGRADE, awaitItem())
         }
     }
 
     @Test
-    fun `vault data Error with enough items should emit true`() = runTest {
+    fun `vault data Error with enough items should emit UPGRADE`() = runTest {
         mutableVaultDataStateFlow.value = DataState.Error(
             error = IllegalStateException("test"),
             data = createVaultDataWithItemCount(count = 5),
         )
         val manager = createManager()
-        manager.isPremiumUpgradeBannerEligibleFlow.test {
-            assertTrue(awaitItem())
+        manager.premiumCardStateFlow.test {
+            assertEquals(PremiumCard.UPGRADE, awaitItem())
         }
     }
 
     @Test
-    fun `vault data NoNetwork without data should emit false`() = runTest {
+    fun `vault data NoNetwork without data should emit NONE`() = runTest {
         mutableVaultDataStateFlow.value = DataState.NoNetwork(data = null)
         val manager = createManager()
-        manager.isPremiumUpgradeBannerEligibleFlow.test {
-            assertFalse(awaitItem())
+        manager.premiumCardStateFlow.test {
+            assertEquals(PremiumCard.NONE, awaitItem())
         }
     }
 
     @Test
-    fun `vault data Error without data should emit false`() = runTest {
+    fun `vault data Error without data should emit NONE`() = runTest {
         mutableVaultDataStateFlow.value = DataState.Error(
             error = IllegalStateException("test"),
             data = null,
         )
         val manager = createManager()
-        manager.isPremiumUpgradeBannerEligibleFlow.test {
-            assertFalse(awaitItem())
+        manager.premiumCardStateFlow.test {
+            assertEquals(PremiumCard.NONE, awaitItem())
         }
     }
 
@@ -283,8 +284,8 @@ class PremiumStateManagerTest {
                 ),
             )
             val manager = createManager()
-            manager.isPremiumUpgradeBannerEligibleFlow.test {
-                assertFalse(awaitItem())
+            manager.premiumCardStateFlow.test {
+                assertEquals(PremiumCard.NONE, awaitItem())
             }
         }
 
@@ -306,13 +307,13 @@ class PremiumStateManagerTest {
                 ),
             )
             val manager = createManager()
-            manager.isPremiumUpgradeBannerEligibleFlow.test {
-                assertFalse(awaitItem())
+            manager.premiumCardStateFlow.test {
+                assertEquals(PremiumCard.NONE, awaitItem())
             }
         }
 
     @Test
-    fun `eligible when account age is exactly 7 days should emit true`() =
+    fun `eligible when account age is exactly 7 days should emit UPGRADE`() =
         runTest {
             fakeAuthDiskSource.userState = userStateJsonWith(
                 account = createAccountJson(
@@ -320,33 +321,33 @@ class PremiumStateManagerTest {
                 ),
             )
             val manager = createManager()
-            manager.isPremiumUpgradeBannerEligibleFlow.test {
-                assertTrue(awaitItem())
+            manager.premiumCardStateFlow.test {
+                assertEquals(PremiumCard.UPGRADE, awaitItem())
             }
         }
 
     @Test
-    fun `eligible when vault items exactly 5 should emit true`() = runTest {
+    fun `eligible when vault items exactly 5 should emit UPGRADE`() = runTest {
         mutableVaultDataStateFlow.value = DataState.Loaded(
             createVaultDataWithItemCount(count = 5),
         )
         val manager = createManager()
-        manager.isPremiumUpgradeBannerEligibleFlow.test {
-            assertTrue(awaitItem())
+        manager.premiumCardStateFlow.test {
+            assertEquals(PremiumCard.UPGRADE, awaitItem())
         }
     }
 
     @Test
     fun `eligibility should update when upstream flows change`() = runTest {
         val manager = createManager()
-        manager.isPremiumUpgradeBannerEligibleFlow.test {
-            assertTrue(awaitItem())
+        manager.premiumCardStateFlow.test {
+            assertEquals(PremiumCard.UPGRADE, awaitItem())
 
             mutableIsInAppBillingSupportedFlow.value = false
-            assertFalse(awaitItem())
+            assertEquals(PremiumCard.NONE, awaitItem())
 
             mutableIsInAppBillingSupportedFlow.value = true
-            assertTrue(awaitItem())
+            assertEquals(PremiumCard.UPGRADE, awaitItem())
         }
     }
 
@@ -833,14 +834,14 @@ class PremiumStateManagerTest {
             isPending = true,
         )
         val manager = createManager()
-        manager.isPremiumUpgradeBannerEligibleFlow.test {
-            assertFalse(awaitItem())
+        manager.premiumCardStateFlow.test {
+            assertEquals(PremiumCard.NONE, awaitItem())
             // Clearing pending re-enables the banner.
             fakeSettingsDiskSource.storePremiumUpgradePending(
                 userId = ACTIVE_USER_ID,
                 isPending = false,
             )
-            assertTrue(awaitItem())
+            assertEquals(PremiumCard.UPGRADE, awaitItem())
         }
     }
 
@@ -1026,18 +1027,40 @@ class PremiumStateManagerTest {
             subscription = createSubscriptionInfo(status = PremiumSubscriptionStatus.ACTIVE),
         )
         val manager = createManager()
-        manager.isPremiumUpgradeBannerEligibleFlow.test {
-            assertFalse(awaitItem())
+        manager.premiumCardStateFlow.test {
+            assertEquals(PremiumCard.NONE, awaitItem())
         }
     }
 
     @Test
-    fun `banner eligible when account is premium but status is in a trouble state`() = runTest {
+    fun `premium account with an EXPIRED or PAUSED status should emit UPGRADE`() = runTest {
         listOf(
-            PremiumSubscriptionStatus.CANCELED,
             PremiumSubscriptionStatus.EXPIRED,
-            PremiumSubscriptionStatus.PAST_DUE,
             PremiumSubscriptionStatus.PAUSED,
+        ).forEach { status ->
+            fakeAuthDiskSource.userState = userStateJsonWith(
+                account = createAccountJson(hasPremiumPersonally = true),
+            )
+            coEvery {
+                billingRepository.getSubscription()
+            } returns SubscriptionResult.Success(
+                subscription = createSubscriptionInfo(status = status),
+            )
+            val manager = createManager()
+            manager.premiumCardStateFlow.test {
+                assertEquals(
+                    PremiumCard.UPGRADE,
+                    awaitItem(),
+                    "Expected UPGRADE for status=$status",
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `premium account with a payment-trouble status should emit NEEDS_ATTENTION`() = runTest {
+        listOf(
+            PremiumSubscriptionStatus.PAST_DUE,
             PremiumSubscriptionStatus.UPDATE_PAYMENT,
         ).forEach { status ->
             fakeAuthDiskSource.userState = userStateJsonWith(
@@ -1049,11 +1072,69 @@ class PremiumStateManagerTest {
                 subscription = createSubscriptionInfo(status = status),
             )
             val manager = createManager()
-            manager.isPremiumUpgradeBannerEligibleFlow.test {
-                assertTrue(awaitItem(), "Expected banner eligible for status=$status")
+            manager.premiumCardStateFlow.test {
+                assertEquals(
+                    PremiumCard.NEEDS_ATTENTION,
+                    awaitItem(),
+                    "Expected NEEDS_ATTENTION for status=$status",
+                )
             }
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `premium account with a payment-trouble status emits NEEDS_ATTENTION when billing unsupported`() =
+        runTest {
+            // The NEEDS_ATTENTION card is not gated on in-app billing support (unlike the UPGRADE
+            // card) — the user must resolve the payment issue regardless of platform billing.
+            mutableIsInAppBillingSupportedFlow.value = false
+            listOf(
+                PremiumSubscriptionStatus.PAST_DUE,
+                PremiumSubscriptionStatus.UPDATE_PAYMENT,
+            ).forEach { status ->
+                fakeAuthDiskSource.userState = userStateJsonWith(
+                    account = createAccountJson(hasPremiumPersonally = true),
+                )
+                coEvery {
+                    billingRepository.getSubscription()
+                } returns SubscriptionResult.Success(
+                    subscription = createSubscriptionInfo(status = status),
+                )
+                val manager = createManager()
+                manager.premiumCardStateFlow.test {
+                    assertEquals(
+                        PremiumCard.NEEDS_ATTENTION,
+                        awaitItem(),
+                        "Expected NEEDS_ATTENTION for status=$status",
+                    )
+                }
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `premium account with an ACTIVE, CANCELED, or PENDING_CANCELLATION status should emit NONE`() =
+        runTest {
+            listOf(
+                PremiumSubscriptionStatus.ACTIVE,
+                PremiumSubscriptionStatus.CANCELED,
+                PremiumSubscriptionStatus.PENDING_CANCELLATION,
+            ).forEach { status ->
+                fakeAuthDiskSource.userState = userStateJsonWith(
+                    account = createAccountJson(hasPremiumPersonally = true),
+                )
+                coEvery {
+                    billingRepository.getSubscription()
+                } returns SubscriptionResult.Success(
+                    subscription = createSubscriptionInfo(status = status),
+                )
+                val manager = createManager()
+                manager.premiumCardStateFlow.test {
+                    assertEquals(PremiumCard.NONE, awaitItem(), "Expected NONE for status=$status")
+                }
+            }
+        }
 
     @Test
     fun `banner ineligible when account is premium and substate is still loading`() = runTest {
@@ -1066,10 +1147,10 @@ class PremiumStateManagerTest {
             kotlinx.coroutines.awaitCancellation()
         }
         val manager = createManager()
-        manager.isPremiumUpgradeBannerEligibleFlow.test {
+        manager.premiumCardStateFlow.test {
             // Loading is not treated as a trouble state so a premium user is still effectively
             // premium during the initial fetch.
-            assertFalse(awaitItem())
+            assertEquals(PremiumCard.NONE, awaitItem())
         }
     }
 }

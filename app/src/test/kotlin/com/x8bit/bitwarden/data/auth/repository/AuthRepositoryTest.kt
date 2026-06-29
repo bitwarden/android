@@ -5058,10 +5058,11 @@ class AuthRepositoryTest {
         val newPassword = "newPassword"
         val newPasswordHash = "newPasswordHash"
         val newKey = "newKey"
+        val email = ACCOUNT_1.profile.email
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         coEvery {
             authSdkSource.hashPassword(
-                email = ACCOUNT_1.profile.email,
+                email = email,
                 password = currentPassword,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
@@ -5079,7 +5080,7 @@ class AuthRepositoryTest {
             .asSuccess()
         coEvery {
             accountsService.resetPassword(
-                body = ResetPasswordRequestJson(
+                body = ResetPasswordRequestJson.V1(
                     currentPasswordHash = currentPasswordHash,
                     newPasswordHash = newPasswordHash,
                     passwordHint = null,
@@ -5089,7 +5090,7 @@ class AuthRepositoryTest {
         } returns Unit.asSuccess()
         coEvery {
             authSdkSource.hashPassword(
-                email = ACCOUNT_1.profile.email,
+                email = email,
                 password = newPassword,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
                 purpose = HashPurpose.LOCAL_AUTHORIZATION,
@@ -5108,7 +5109,7 @@ class AuthRepositoryTest {
         )
         coVerify {
             authSdkSource.hashPassword(
-                email = ACCOUNT_1.profile.email,
+                email = email,
                 password = currentPassword,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
@@ -5118,7 +5119,7 @@ class AuthRepositoryTest {
                 newPassword = newPassword,
             )
             accountsService.resetPassword(
-                body = ResetPasswordRequestJson(
+                body = ResetPasswordRequestJson.V1(
                     currentPasswordHash = currentPasswordHash,
                     newPasswordHash = newPasswordHash,
                     passwordHint = null,
@@ -5126,10 +5127,6 @@ class AuthRepositoryTest {
                 ),
             )
         }
-        fakeAuthDiskSource.assertMasterPasswordHash(
-            userId = USER_ID_1,
-            passwordHash = newPasswordHash,
-        )
         verify(exactly = 1) {
             toastManager.show(messageId = BitwardenString.updated_master_password)
             userLogoutManager.logout(
@@ -5582,7 +5579,7 @@ class AuthRepositoryTest {
                 encryptedUserKey = encryptedUserKey,
                 keys = RsaKeyPair(public = publicRsaKey, private = privateRsaKey),
             )
-            val setPasswordRequestJson = SetPasswordRequestJson(
+            val setPasswordRequestJson = SetPasswordRequestJson.V1(
                 passwordHash = passwordHash,
                 passwordHint = passwordHint,
                 organizationIdentifier = organizationId,
@@ -5591,7 +5588,7 @@ class AuthRepositoryTest {
                 kdfParallelism = profile.kdfParallelism,
                 kdfType = profile.kdfType,
                 key = encryptedUserKey,
-                keys = SetPasswordRequestJson.Keys(
+                keys = SetPasswordRequestJson.V1.Keys(
                     publicKey = publicRsaKey,
                     encryptedPrivateKey = privateRsaKey,
                 ),
@@ -5640,7 +5637,7 @@ class AuthRepositoryTest {
                 encryptedUserKey = encryptedUserKey,
                 keys = RsaKeyPair(public = publicRsaKey, private = privateRsaKey),
             )
-            val setPasswordRequestJson = SetPasswordRequestJson(
+            val setPasswordRequestJson = SetPasswordRequestJson.V1(
                 passwordHash = passwordHash,
                 passwordHint = passwordHint,
                 organizationIdentifier = organizationIdentifier,
@@ -5649,7 +5646,7 @@ class AuthRepositoryTest {
                 kdfParallelism = profile.kdfParallelism,
                 kdfType = profile.kdfType,
                 key = encryptedUserKey,
-                keys = SetPasswordRequestJson.Keys(
+                keys = SetPasswordRequestJson.V1.Keys(
                     publicKey = publicRsaKey,
                     encryptedPrivateKey = privateRsaKey,
                 ),
@@ -5749,14 +5746,14 @@ class AuthRepositoryTest {
             passwordHash = passwordHash,
             newKey = encryptedUserKey,
         )
-        val setPasswordRequestJson = SetPasswordRequestJson(
-            passwordHash = passwordHash,
+        val setPasswordRequestJson = SetPasswordRequestJson.V1(
             passwordHint = passwordHint,
             organizationIdentifier = organizationIdentifier,
+            kdfType = profile.kdfType,
             kdfIterations = profile.kdfIterations,
             kdfMemory = profile.kdfMemory,
             kdfParallelism = profile.kdfParallelism,
-            kdfType = profile.kdfType,
+            passwordHash = passwordHash,
             key = encryptedUserKey,
             keys = null,
         )
@@ -5795,9 +5792,6 @@ class AuthRepositoryTest {
                 userId = profile.userId,
             )
         } returns resetPasswordKey.asSuccess()
-        coEvery {
-            vaultRepository.unlockVaultWithMasterPassword(password)
-        } returns VaultUnlockResult.Success
 
         val result = repository.setPassword(
             organizationIdentifier = organizationIdentifier,
@@ -5822,7 +5816,6 @@ class AuthRepositoryTest {
                 passwordHash = passwordHash,
                 resetPasswordKey = resetPasswordKey,
             )
-            vaultRepository.unlockVaultWithMasterPassword(password)
             vaultSdkSource.getResetPasswordKey(
                 orgPublicKey = publicOrgKey,
                 userId = profile.userId,
@@ -5853,7 +5846,7 @@ class AuthRepositoryTest {
                 encryptedUserKey = encryptedUserKey,
                 keys = RsaKeyPair(public = publicRsaKey, private = privateRsaKey),
             )
-            val setPasswordRequestJson = SetPasswordRequestJson(
+            val setPasswordRequestJson = SetPasswordRequestJson.V1(
                 passwordHash = passwordHash,
                 passwordHint = passwordHint,
                 organizationIdentifier = organizationIdentifier,
@@ -5862,7 +5855,7 @@ class AuthRepositoryTest {
                 kdfParallelism = profile.kdfParallelism,
                 kdfType = profile.kdfType,
                 key = encryptedUserKey,
-                keys = SetPasswordRequestJson.Keys(
+                keys = SetPasswordRequestJson.V1.Keys(
                     publicKey = publicRsaKey,
                     encryptedPrivateKey = privateRsaKey,
                 ),
@@ -7481,7 +7474,7 @@ class AuthRepositoryTest {
                 masterPasswordUnlock = MasterPasswordUnlockDataJson(
                     kdf = BASE_PROFILE_1.toSdkParams().toKdfRequestModel(),
                     masterKeyWrappedUserKey = ENCRYPTED_USER_KEY,
-                    salt = "mockSalt",
+                    salt = EMAIL,
                 ),
             ),
         )
@@ -7533,7 +7526,7 @@ class AuthRepositoryTest {
                             masterPasswordUnlock = MasterPasswordUnlockDataJson(
                                 kdf = BASE_PROFILE_1.toSdkParams().toKdfRequestModel(),
                                 masterKeyWrappedUserKey = ENCRYPTED_USER_KEY,
-                                salt = "mockSalt",
+                                salt = EMAIL,
                             ),
                         ),
                     ),

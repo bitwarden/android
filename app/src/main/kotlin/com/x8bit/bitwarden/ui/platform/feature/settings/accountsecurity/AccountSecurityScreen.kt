@@ -12,9 +12,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -28,6 +26,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -37,7 +37,6 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.account.dialog.BitwardenLogoutConfirmationDialog
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
-import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -635,50 +634,23 @@ private fun FingerPrintPhraseDialog(
     onDismissRequest: () -> Unit,
     onLearnMore: () -> Unit,
 ) {
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        dismissButton = {
-            BitwardenTextButton(
-                label = stringResource(id = BitwardenString.close),
-                onClick = onDismissRequest,
-            )
-        },
-        confirmButton = {
-            BitwardenTextButton(
-                label = stringResource(id = BitwardenString.learn_more),
-                isExternalLink = true,
-                onClick = onLearnMore,
-            )
-        },
-        title = {
-            Text(
-                text = stringResource(id = BitwardenString.fingerprint_phrase),
-                color = BitwardenTheme.colorScheme.text.primary,
-                style = BitwardenTheme.typography.headlineSmall,
-                modifier = Modifier.fillMaxWidth(),
-            )
-        },
-        text = {
-            Column {
-                Text(
-                    text = "${stringResource(id = BitwardenString.your_accounts_fingerprint)}:",
-                    color = BitwardenTheme.colorScheme.text.primary,
-                    style = BitwardenTheme.typography.bodyMedium,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-                Spacer(modifier = Modifier.height(24.dp))
-                Text(
-                    text = fingerprintPhrase(),
-                    color = BitwardenTheme.colorScheme.text.codePink,
-                    style = BitwardenTheme.typography.sensitiveInfoSmall,
-                    modifier = Modifier.fillMaxWidth(),
-                )
+    BitwardenTwoButtonDialog(
+        title = stringResource(id = BitwardenString.fingerprint_phrase),
+        message = buildAnnotatedString {
+            append("${stringResource(id = BitwardenString.your_accounts_fingerprint)}:\n\n")
+            withStyle(
+                style = BitwardenTheme.typography.sensitiveInfoSmall
+                    .toSpanStyle()
+                    .copy(color = BitwardenTheme.colorScheme.text.codePink),
+            ) {
+                append(fingerprintPhrase())
             }
         },
-        containerColor = BitwardenTheme.colorScheme.background.primary,
-        iconContentColor = BitwardenTheme.colorScheme.icon.secondary,
-        titleContentColor = BitwardenTheme.colorScheme.text.primary,
-        textContentColor = BitwardenTheme.colorScheme.text.primary,
+        confirmButtonText = stringResource(id = BitwardenString.learn_more),
+        dismissButtonText = stringResource(id = BitwardenString.close),
+        onConfirmClick = onLearnMore,
+        onDismissClick = onDismissRequest,
+        onDismissRequest = onDismissRequest,
     )
 }
 

@@ -268,24 +268,35 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `ArchiveRequiresPremium dialog should display based on state`() {
+    fun `RequiresPremium dialog should display based on state`() {
         composeTestRule.assertNoDialogExists()
         mutableStateFlow.update {
-            it.copy(dialog = VaultItemState.DialogState.ArchiveRequiresPremium)
+            it.copy(
+                dialog = VaultItemState.DialogState.RequiresPremium(
+                    message = "You need Premium".asText(),
+                ),
+            )
         }
 
         composeTestRule
-            .onNodeWithText(text = "Archive unavailable")
+            .onNodeWithText(text = "Premium subscription required")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "You need Premium")
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `ArchiveRequiresPremium dialog on upgrade to Premium click should emit UpgradeToPremiumClick`() {
+    fun `RequiresPremium dialog on upgrade to Premium click should emit UpgradeToPremiumClick`() {
         composeTestRule.assertNoDialogExists()
         mutableStateFlow.update {
-            it.copy(dialog = VaultItemState.DialogState.ArchiveRequiresPremium)
+            it.copy(
+                dialog = VaultItemState.DialogState.RequiresPremium(
+                    message = "You need Premium".asText(),
+                ),
+            )
         }
 
         composeTestRule
@@ -2371,6 +2382,28 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
         verify {
             viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyTotpClick)
+        }
+    }
+
+    @Test
+    fun `in login state, on premium required click should send PremiumRequiredClick`() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE.copy(
+                    type = DEFAULT_LOGIN.copy(
+                        canViewTotpCode = false,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule.onNodeWithTextAfterScroll(text = "Authenticator key")
+        composeTestRule
+            .onNodeWithText(text = "Premium subscription required")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.Common.PremiumRequiredClick)
         }
     }
 

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.billing.manager
 
+import com.x8bit.bitwarden.data.billing.model.PremiumCard
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionStatusState
 import com.x8bit.bitwarden.data.billing.repository.model.UpgradeLifecycleState
 import kotlinx.coroutines.flow.StateFlow
@@ -16,10 +17,9 @@ const val UPGRADED_TO_PREMIUM_LEARN_MORE_URL: String =
 interface PremiumStateManager {
 
     /**
-     * Emits `true` when the current user is eligible to see the Premium upgrade banner,
-     * or `false` otherwise.
+     * Emits a [PremiumCard] for the current user indicating what Premium card should be displayed.
      */
-    val isPremiumUpgradeBannerEligibleFlow: StateFlow<Boolean>
+    val premiumCardStateFlow: StateFlow<PremiumCard>
 
     /**
      * Emits `true` while the active user is eligible to see the "Upgraded to Premium" action
