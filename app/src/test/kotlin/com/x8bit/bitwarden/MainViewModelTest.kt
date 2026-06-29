@@ -55,17 +55,14 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionReques
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
-import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
-import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.isAddTotpLoginItemFromAuthenticator
@@ -114,7 +111,6 @@ class MainViewModelTest : BaseViewModelTest() {
     private val mutableAppLanguageFlow = MutableStateFlow(AppLanguage.DEFAULT)
     private val mutableScreenCaptureAllowedFlow = MutableStateFlow(true)
     private val mutableIsDynamicColorsEnabledFlow = MutableStateFlow(false)
-    private val mutableHasShownAccessibilityDisclaimerFlow = MutableStateFlow(true)
     private val settingsRepository = mockk<SettingsRepository> {
         every { appTheme } returns AppTheme.DEFAULT
         every { appThemeStateFlow } returns mutableAppThemeFlow
@@ -125,10 +121,6 @@ class MainViewModelTest : BaseViewModelTest() {
         every { appLanguage = any() } just runs
         every { isDynamicColorsEnabled } returns false
         every { isDynamicColorsEnabledFlow } returns mutableIsDynamicColorsEnabledFlow
-        every {
-            hasShownAccessibilityDisclaimerFlow
-        } returns mutableHasShownAccessibilityDisclaimerFlow
-        every { accessibilityDisclaimerHasBeenShown() } just runs
     }
     private val authRepository = mockk<AuthRepository> {
         every { activeUserId } returns DEFAULT_USER_STATE.activeUserId
@@ -182,17 +174,6 @@ class MainViewModelTest : BaseViewModelTest() {
     private val toastManager: ToastManager = mockk {
         every { show(message = any(), duration = any()) } just runs
         every { show(messageId = any(), duration = any()) } just runs
-    }
-    private val mutableCookieAcquisitionRequestFlow =
-        MutableStateFlow<CookieAcquisitionRequest?>(null)
-    private val cookieAcquisitionRequestManager: CookieAcquisitionRequestManager = mockk {
-        every { cookieAcquisitionRequestFlow } returns mutableCookieAcquisitionRequestFlow
-    }
-    private val mutableIsLocalNetworkAccessRequiredStateFlow = MutableStateFlow(false)
-    private val networkPermissionManager: NetworkPermissionManager = mockk {
-        every {
-            isLocalNetworkAccessRequiredStateFlow
-        } returns mutableIsLocalNetworkAccessRequiredStateFlow
     }
     private val credentialProviderRequestManager: CredentialProviderRequestManager = mockk {
         every { getPendingCredentialRequest() } returns null
@@ -1319,53 +1300,6 @@ class MainViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `cookie acquisition should emit NavigateToCookieAcquisition when vault unlocked with matching hostname`() =
-        runTest {
-            mutableCookieAcquisitionRequestFlow.value = CookieAcquisitionRequest(
-                hostname = DEFAULT_US_WEB_VAULT_URL,
-            )
-            val viewModel = createViewModel()
-
-            viewModel.eventFlow.test {
-                // Skip init events (appLanguage + appTheme)
-                skipItems(2)
-                mutableUserStateFlow.value = DEFAULT_USER_STATE
-                assertEquals(
-                    MainEvent.NavigateToCookieAcquisition,
-                    awaitItem(),
-                )
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `local network access required should emit NavigateToLocalNetworkAccess when stateflow emits`() =
-        runTest {
-            mutableIsLocalNetworkAccessRequiredStateFlow.value = true
-            val viewModel = createViewModel()
-
-            viewModel.eventFlow.test {
-                // Skip init events (appLanguage + appTheme)
-                skipItems(2)
-                assertEquals(MainEvent.NavigateToLocalNetworkAccess, awaitItem())
-            }
-        }
-
-    @Test
-    fun `cookie acquisition should not emit event when conditions are false`() =
-        runTest {
-            mutableCookieAcquisitionRequestFlow.value = null
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                // Skip init events (appLanguage + appTheme)
-                skipItems(2)
-                mutableUserStateFlow.value = DEFAULT_USER_STATE
-                expectNoEvents()
-            }
-        }
-
     @Test
     fun `on handleResizeHasBeenRequested should set hasResizeBeenRequested as true`() = runTest {
         val viewModel = createViewModel()
@@ -1390,31 +1324,12 @@ class MainViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on HasShownAccessibilityDisclaimerUpdate with false should show the accessibility disclosure`() =
-        runTest {
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                // We skip the first 2 events because they are the default appTheme and appLanguage
-                skipItems(2)
-
-                mutableHasShownAccessibilityDisclaimerFlow.value = false
-                assertEquals(MainEvent.NavigateToAccessibilityDisclosure, awaitItem())
-
-                mutableHasShownAccessibilityDisclaimerFlow.value = true
-                expectNoEvents()
-            }
-        }
-
     private fun createViewModel(
         initialSpecialCircumstance: SpecialCircumstance? = null,
     ): MainViewModel = MainViewModel(
         accessibilitySelectionManager = accessibilitySelectionManager,
         addTotpItemFromAuthenticatorManager = addTotpItemAuthenticatorManager,
         autofillSelectionManager = autofillSelectionManager,
-        cookieAcquisitionRequestManager = cookieAcquisitionRequestManager,
-        networkPermissionManager = networkPermissionManager,
         specialCircumstanceManager = specialCircumstanceManager,
         garbageCollectionManager = garbageCollectionManager,
         credentialProviderRequestManager = credentialProviderRequestManager,
@@ -1445,7 +1360,6 @@ private val DEFAULT_FIRST_TIME_STATE = FirstTimeState(
 
 private const val SPECIAL_CIRCUMSTANCE_KEY: String = "special-circumstance"
 private const val ACTIVE_USER_ID: String = "activeUserId"
-private const val DEFAULT_US_WEB_VAULT_URL: String = "https://vault.bitwarden.com"
 private val DEFAULT_ACCOUNT = UserState.Account(
     userId = ACTIVE_USER_ID,
     name = "Active User",

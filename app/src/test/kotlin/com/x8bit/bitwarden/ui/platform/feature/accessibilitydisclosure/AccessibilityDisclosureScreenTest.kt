@@ -40,13 +40,13 @@ class AccessibilityDisclosureScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `accept button click should send AcceptClicked action`() {
+    fun `i understand button click should send IUnderstandClick action`() {
         composeTestRule
-            .onNodeWithText(text = "Accept")
+            .onNodeWithText(text = "I understand")
             .performScrollTo()
             .performClick()
         verify(exactly = 1) {
-            viewModel.trySendAction(AccessibilityDisclosureAction.AcceptClicked)
+            viewModel.trySendAction(AccessibilityDisclosureAction.IUnderstandClick)
         }
     }
 

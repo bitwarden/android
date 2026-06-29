@@ -20,6 +20,7 @@ data class VaultCommonItemTypeHandlers(
     val onAttachmentPreviewClick: (VaultItemState.ViewState.Content.Common.AttachmentItem) -> Unit,
     val onCopyNotesClick: () -> Unit,
     val onPasswordHistoryClick: () -> Unit,
+    val onPremiumRequiredClick: () -> Unit,
     val onUpgradeToPremiumClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
@@ -60,6 +61,9 @@ data class VaultCommonItemTypeHandlers(
                 },
                 onPasswordHistoryClick = {
                     viewModel.trySendAction(VaultItemAction.Common.PasswordHistoryClick)
+                },
+                onPremiumRequiredClick = {
+                    viewModel.trySendAction(VaultItemAction.Common.PremiumRequiredClick)
                 },
                 onUpgradeToPremiumClick = {
                     viewModel.trySendAction(VaultItemAction.Common.UpgradeToPremiumClick)

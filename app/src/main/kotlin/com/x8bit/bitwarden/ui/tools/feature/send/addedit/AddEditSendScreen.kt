@@ -201,12 +201,10 @@ private fun AddEditSendDialogs(
     onUpgradeToPremiumClick: () -> Unit,
 ) {
     when (dialogState) {
-        is AddEditSendState.DialogState.EmailAuthRequiresPremium -> {
+        is AddEditSendState.DialogState.PremiumRequired -> {
             BitwardenTwoButtonDialog(
                 title = stringResource(id = BitwardenString.premium_subscription_required),
-                message = stringResource(
-                    id = BitwardenString.sharing_with_specific_people_is_a_premium_feature,
-                ),
+                message = dialogState.message(),
                 confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
                 dismissButtonText = stringResource(id = BitwardenString.cancel),
                 onConfirmClick = onUpgradeToPremiumClick,

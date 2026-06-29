@@ -92,17 +92,16 @@ class FillAssistManagerImpl(
         syncJob = ioScope.launch { sync(serverUrl) }
     }
 
-    private suspend fun sync(serverUrl: String) = runCatching {
+    private suspend fun sync(serverUrl: String) {
         val manifest = fillAssistService
             .getManifest()
             .getOrNull()
-            ?: return@runCatching
+            ?: return
 
         val versionEntry = manifest.maps.forms[CURRENT_FORMS_VERSION]
-            ?: error("Version $CURRENT_FORMS_VERSION not found in manifest")
-
-        if (versionEntry.deprecated == true) {
-            Timber.w("Fill-assist forms $CURRENT_FORMS_VERSION is deprecated")
+        if (versionEntry == null) {
+            Timber.w("Version $CURRENT_FORMS_VERSION not found in manifest")
+            return
         }
 
         if (versionEntry.cid == fillAssistDiskSource.getLastKnownCid(serverUrl)) {
@@ -110,13 +109,13 @@ class FillAssistManagerImpl(
                 serverUrl = serverUrl,
                 timestamp = clock.millis(),
             )
-            return@runCatching
+            return
         }
 
         val forms = fillAssistService
             .getForms(filename = versionEntry.filename)
             .getOrNull()
-            ?: return@runCatching
+            ?: return
 
         val schemaMajor = forms.schemaVersion.substringBefore('.')
         if (schemaMajor != EXPECTED_SCHEMA_MAJOR) {
@@ -125,7 +124,7 @@ class FillAssistManagerImpl(
                 serverUrl = serverUrl,
                 timestamp = clock.millis(),
             )
-            return@runCatching
+            return
         }
 
         val rules = parseForms(forms)
@@ -136,7 +135,6 @@ class FillAssistManagerImpl(
             timestamp = clock.millis(),
         )
     }
-        .onFailure { Timber.w(it, "Fill-assist sync failed") }
 
     override fun getFillAssistRules(): FillAssistRules? {
         val serverUrl = serverConfigRepository

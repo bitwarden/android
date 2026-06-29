@@ -4,6 +4,7 @@ import android.view.autofill.AutofillManager
 import app.cash.turbine.test
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
 import com.bitwarden.core.EnrollPinResponse
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
@@ -75,6 +76,9 @@ class SettingsRepositoryTest {
         } returns mutableActivePolicyFlow
     }
     private val flightRecorderManager = mockk<FlightRecorderManager>()
+    private val buildInfoManager: BuildInfoManager = mockk {
+        every { isFdroid } returns false
+    }
 
     private val settingsRepository = SettingsRepositoryImpl(
         autofillManager = autofillManager,
@@ -86,6 +90,7 @@ class SettingsRepositoryTest {
         dispatcherManager = FakeDispatcherManager(),
         policyManager = policyManager,
         flightRecorderManager = flightRecorderManager,
+        buildInfoManager = buildInfoManager,
     )
 
     @BeforeEach
@@ -1119,8 +1124,9 @@ class SettingsRepositoryTest {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `hasShownAccessibilityDisclaimerFlow should emit changes from SettingsDiskSource`() =
+    fun `hasShownAccessibilityDisclaimerFlow should emit changes from SettingsDiskSource when fdroid is false`() =
         runTest {
             fakeSettingsDiskSource.hasShownAccessibilityDisclaimer = null
             settingsRepository.hasShownAccessibilityDisclaimerFlow.test {
@@ -1131,6 +1137,23 @@ class SettingsRepositoryTest {
 
                 fakeSettingsDiskSource.hasShownAccessibilityDisclaimer = false
                 assertFalse(awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `hasShownAccessibilityDisclaimerFlow should emit changes from SettingsDiskSource when fdroid is true`() =
+        runTest {
+            every { buildInfoManager.isFdroid } returns true
+            fakeSettingsDiskSource.hasShownAccessibilityDisclaimer = null
+            settingsRepository.hasShownAccessibilityDisclaimerFlow.test {
+                assertTrue(awaitItem())
+
+                fakeSettingsDiskSource.hasShownAccessibilityDisclaimer = true
+                expectNoEvents()
+
+                fakeSettingsDiskSource.hasShownAccessibilityDisclaimer = false
+                expectNoEvents()
             }
         }
 

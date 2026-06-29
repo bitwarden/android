@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.repository
 
 import android.view.autofill.AutofillManager
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
 import com.bitwarden.policies.PolicyType
@@ -51,6 +52,7 @@ class SettingsRepositoryImpl(
     private val autofillManager: AutofillManager,
     private val autofillEnabledManager: AutofillEnabledManager,
     private val authDiskSource: AuthDiskSource,
+    private val buildInfoManager: BuildInfoManager,
     private val settingsDiskSource: SettingsDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     flightRecorderManager: FlightRecorderManager,
@@ -375,11 +377,12 @@ class SettingsRepositoryImpl(
     override val hasShownAccessibilityDisclaimerFlow: StateFlow<Boolean>
         get() = settingsDiskSource
             .hasShownAccessibilityDisclaimerFlow
-            .map { it ?: false }
+            .map { buildInfoManager.isFdroid || it ?: false }
             .stateIn(
                 scope = unconfinedScope,
                 started = SharingStarted.Lazily,
-                initialValue = settingsDiskSource.hasShownAccessibilityDisclaimer ?: false,
+                initialValue = buildInfoManager.isFdroid ||
+                    settingsDiskSource.hasShownAccessibilityDisclaimer ?: false,
             )
 
     init {

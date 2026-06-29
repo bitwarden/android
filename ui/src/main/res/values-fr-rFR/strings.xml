@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Service de saisie automatique Bitwarden</string>
     <string name="change_master_password">Changer le mot de passe principal</string>
     <string name="close">Fermer</string>
+    <string name="close_app">Fermer l\'application</string>
     <string name="continue_text">Continuer</string>
     <string name="create_account">Créer un compte</string>
     <string name="create_an_account">Créez un compte</string>
@@ -182,13 +183,13 @@
     <string name="send_verification_code_again">Envoyer à nouveau le courriel de code de vérification</string>
     <string name="verification_email_not_sent">Impossible d\'envoyer le courriel de vérification. Essayez à nouveau.</string>
     <string name="verification_email_sent">Courriel de vérification envoyé</string>
-    <string name="yubi_key_instruction">Pour continuer, maintenez votre clé de sécurité Yubico à l\'arrière de l\'appareil ou insérez-la dans le port USB de votre appareil, puis appuyez sur son bouton.</string>
+    <string name="yubi_key_instruction">Pour continuer, placez votre clé de sécurité Yubico au dos de l\'appareil ou insérez-la dans son port USB, puis appuyez sur son bouton.</string>
     <string name="yubi_key_title">Clé de sécurité YubiKey NEO</string>
     <string name="add_new_attachment">Ajouter une nouvelle pièce jointe</string>
     <string name="attachments">Pièces jointes</string>
     <string name="unable_to_download_file">Impossible de télécharger le fichier.</string>
     <string name="downloading">Téléchargement…</string>
-    <string name="attachment_large_warning">Cette pièce jointe est d\'une taille de %1$s. Êtes-sûr de vouloir la télécharger sur votre appareil ?</string>
+    <string name="attachment_large_warning">Ce fichier est <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Souhaitez-vous le télécharger ?</string>
     <string name="authenticator_key">Clé d\'authentification (TOTP)</string>
     <string name="verification_code_totp">Code de vérification (TOTP)</string>
     <string name="authenticator_key_added">Clé d\'authentification ajoutée.</string>
@@ -200,7 +201,6 @@ La numérisation se fera automatiquement.</string>
     <string name="copy_totp_automatically">Copier le TOTP automatiquement</string>
     <string name="premium_required">Une adhésion Premium est requise pour utiliser cette fonctionnalité.</string>
     <string name="attachment_deleted">Pièce jointe supprimée</string>
-    <string name="attachments_unavailable">Pièces jointes non disponibles</string>
     <string name="attachments_are_a_premium_feature">Les pièces jointes sont une fonctionnalité Premium. Votre abonnement actuel n\'inclut pas l\'accès à cette fonctionnalité.</string>
     <string name="choose_file">Choisir un fichier</string>
     <string name="file">Fichier</string>
@@ -287,7 +287,7 @@ La numérisation se fera automatiquement.</string>
     <string name="no_items_folder">Il n\'y a aucun élément dans ce dossier.</string>
     <string name="no_items_trash">Il n\'y a aucun élément dans la corbeille.</string>
     <string name="autofill_accessibility_summary">Aide à remplir les champs de nom d\'utilisateur et de mot de passe dans d\'autres applications et sur le Web.</string>
-    <string name="autofill_service_description">Le service de saisie automatique Bitwarden utilise Android Autofill Framework pour aider à la saisie des informations de connexion dans d\'autres applications sur votre appareil.</string>
+    <string name="autofill_service_description">Le service de saisie automatique Bitwarden utilise le framework de saisie automatique d\'Android pour vous aider à remplir les informations de connexion dans les autres applications de votre appareil.</string>
     <string name="bitwarden_autofill_go_to_settings">Nous n\'avons pas pu ouvrir automatiquement le menu des paramètres de saisie automatique d\'Android. Vous pouvez manuellement naviguer vers le menu des paramètres de saisie automatique à partir des paramètres Android &gt; Système &gt; Langues et saisie &gt; Paramètres avancés &gt; Service de saisie automatique.</string>
     <string name="custom_field_name">Nom du champ personnalisé</string>
     <string name="field_type_boolean">Booléen</string>
@@ -611,7 +611,7 @@ sélectionnez « Ajouter un TOTP » pour stocker la clé en toute sécurité</
     <string name="catch_all_email_description">Utilisez la boîte de réception du collecteur (catch-all) configurée de votre domaine.</string>
     <string name="forwarded_email_description">Générer un alias de courriel avec un service de transfert externe.</string>
     <string name="accessibility_service_disclosure">Divulgation du service d\'accessibilité</string>
-    <string name="accessibility_disclosure_text">Bitwarden utilise le service d\'accessibilité pour rechercher les champs de connexion dans les applications et les sites web, puis établit les identifiants de champ appropriés pour la saisie d\'un nom d\'utilisateur et d\'un mot de passe lorsqu\'une correspondance est trouvée pour l\'application ou le site. Nous ne stockons aucune des informations qui nous sont présentées par le service, et nous ne tentons pas de contrôler les éléments à l\'écran au-delà de la saisie des informations d\'identification.</string>
+    <string name="accessibility_disclosure_text">Bitwarden utilise le service d\'accessibilité pour rechercher les champs de connexion dans les applications et les sites Web, puis établir les identifiants de champ (field IDs) appropriés pour saisir l\'identifiant &amp; le mot de passe lorsqu\'une correspondance pour l\'application ou le site est trouvée. Nous ne stockons aucune information fournie par ce service et nous ne tentons pas de contrôler les éléments à l\'écran au-delà de la saisie textuelle des identifiants.</string>
     <string name="accessibility_disclosure_start_up_text">Bitwarden propose une méthode facultative de saisie automatique utilisant le service d\'accessibilité d\'Android pour détecter les champs de connexion dans les apps et sur les sites web. Si vous choisissez de l\'activer, Bitwarden identifiera les champs appropriés en saisira vos identifiants lorsqu\'une correspondance est trouvée. Nous ne stockons aucune information observée par le service, et nous ne contrôlons aucun élément à l\'écran au-delà de la saisie des identifiants.</string>
     <string name="accept">Accepter</string>
     <string name="decline">Refuser</string>
@@ -1209,15 +1209,17 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="unarchiving">En cours de désarchivage</string>
     <string name="item_moved_to_archived">Élément envoyé à l\'archive</string>
     <string name="item_moved_to_vault">Élément déplacé vers le coffre</string>
-    <string name="archive_unavailable">Archive indisponible</string>
     <string name="archiving_items_is_a_premium_feature">L\'archivage est une fonctionnalité Premium. Votre abonnement actuel n\'inclut pas l\'accès à cette fonctionnalité.</string>
     <string name="upgrade_to_premium">Mettre à niveau vers la version Premium</string>
     <string name="plan">Abonnement</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Pour gérer votre abonnement Premium, vous devez vous connecter à votre coffre-fort web depuis un ordinateur.</string>
     <string name="unlock_advanced_security_features">Débloquer les fonctionnalités de sécurité avancées</string>
+    <string name="your_subscription_needs_attention">Your subscription needs attention</string>
+    <string name="check_your_plan_for_details">Check your plan for details.</string>
+    <string name="view_plan">View plan</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Un abonnement Premium vous donne plus d\'outils pour rester en sécurité et en contrôle</string>
     <string name="this_item_is_archived">Cet élément est archivé.</string>
-    <string name="introducing_archive">Ajout aux archives</string>
+    <string name="introducing_archive">Introduction de l\'archive</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Gardez les éléments dont vous n\'avez pas besoin pour le moment en sécurité mais hors de vue.</string>
     <string name="go_to_archive">Accéder aux archives</string>
     <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Cet élément est archivé. L\'enregistrement des modifications le restaurera dans votre coffre-fort.</string>

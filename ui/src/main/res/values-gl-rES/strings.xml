@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Servizo de autoenchido de Bitwarden</string>
     <string name="change_master_password">Cambiar o contrasinal mestre</string>
     <string name="close">Pechar</string>
+    <string name="close_app">Close app</string>
     <string name="continue_text">Continuar</string>
     <string name="create_account">Crea unha conta</string>
     <string name="create_an_account">Crear unha conta</string>
@@ -200,7 +201,6 @@ Escanearase automaticamente.</string>
     <string name="copy_totp_automatically">Copiar TOTP automaticamente</string>
     <string name="premium_required">Requírese un plan Prémium para poder empregar esta función.</string>
     <string name="attachment_deleted">Anexo eliminado</string>
-    <string name="attachments_unavailable">Attachments unavailable</string>
     <string name="attachments_are_a_premium_feature">Attachments are a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="choose_file">Seleccionar arquivo</string>
     <string name="file">Arquivo</string>
@@ -1209,12 +1209,14 @@ Queres comprobalo dende esa conta?</string>
     <string name="unarchiving">Unarchiving</string>
     <string name="item_moved_to_archived">Item moved to archive</string>
     <string name="item_moved_to_vault">Item moved to vault</string>
-    <string name="archive_unavailable">Archive unavailable</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Upgrade to Premium</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
     <string name="unlock_advanced_security_features">Unlock advanced security features</string>
+    <string name="your_subscription_needs_attention">Your subscription needs attention</string>
+    <string name="check_your_plan_for_details">Check your plan for details.</string>
+    <string name="view_plan">View plan</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">A Premium plan gives you more tools to stay secure and in control.</string>
     <string name="this_item_is_archived">This item is archived.</string>
     <string name="introducing_archive">Introducing archive</string>

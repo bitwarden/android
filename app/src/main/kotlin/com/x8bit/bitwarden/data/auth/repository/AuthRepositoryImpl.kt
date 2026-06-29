@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.repository
 
 import com.bitwarden.core.AuthRequestMethod
 import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.MasterPasswordUnlockData
 import com.bitwarden.core.RegisterTdeKeyResponse
 import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
@@ -1078,16 +1079,14 @@ class AuthRepositoryImpl(
         newPassword: String,
         passwordHint: String?,
     ): ResetPasswordResult {
-        val activeAccount = authDiskSource
-            .userState
-            ?.activeAccount
+        val profile = authDiskSource.userState?.activeAccount?.profile
             ?: return ResetPasswordResult.Error(error = NoActiveUserException())
         val currentPasswordHash = currentPassword?.let { password ->
             authSdkSource
                 .hashPassword(
-                    email = activeAccount.profile.email,
+                    email = profile.email,
                     password = password,
-                    kdf = activeAccount.profile.toSdkParams(),
+                    kdf = profile.toSdkParams(),
                     purpose = HashPurpose.SERVER_AUTHORIZATION,
                 )
                 .fold(
@@ -1095,48 +1094,30 @@ class AuthRepositoryImpl(
                     onSuccess = { it },
                 )
         }
-        val userId = activeAccount.profile.userId
+        val userId = profile.userId
         return vaultSdkSource
             .updatePassword(
                 userId = userId,
                 newPassword = newPassword,
             )
-            .flatMap { updatePasswordResponse ->
-                accountsService
-                    .resetPassword(
-                        body = ResetPasswordRequestJson(
-                            currentPasswordHash = currentPasswordHash,
-                            newPasswordHash = updatePasswordResponse.passwordHash,
-                            passwordHint = passwordHint,
-                            key = updatePasswordResponse.newKey,
-                        ),
-                    )
+            .flatMap { response ->
+                accountsService.resetPassword(
+                    body = ResetPasswordRequestJson.V1(
+                        currentPasswordHash = currentPasswordHash,
+                        newPasswordHash = response.passwordHash,
+                        passwordHint = passwordHint,
+                        key = response.newKey,
+                    ),
+                )
+            }
+            .onSuccess {
+                toastManager.show(BitwardenString.updated_master_password)
+                // Log out the user after successful password reset. This clears all
+                // user data, so there is no need to store any of the updated info.
+                logout(reason = LogoutReason.PasswordReset, userId = userId)
             }
             .fold(
-                onSuccess = {
-                    // Update the saved master password hash.
-                    authSdkSource
-                        .hashPassword(
-                            email = activeAccount.profile.email,
-                            password = newPassword,
-                            kdf = activeAccount.profile.toSdkParams(),
-                            purpose = HashPurpose.LOCAL_AUTHORIZATION,
-                        )
-                        .onSuccess { passwordHash ->
-                            authDiskSource.storeMasterPasswordHash(
-                                userId = userId,
-                                passwordHash = passwordHash,
-                            )
-                        }
-
-                    toastManager.show(BitwardenString.updated_master_password)
-                    // Log out the user after successful password reset.
-                    // This clears all user state including forcePasswordResetReason.
-                    logout(reason = LogoutReason.PasswordReset, userId = userId)
-
-                    // Return the success.
-                    ResetPasswordResult.Success
-                },
+                onSuccess = { ResetPasswordResult.Success },
                 onFailure = { ResetPasswordResult.Error(error = it) },
             )
     }
@@ -1145,10 +1126,10 @@ class AuthRepositoryImpl(
         organizationIdentifier: String,
         password: String,
         passwordHint: String?,
-    ): SetPasswordResult {
+    ): SetPasswordResult = userStateManager.userStateTransaction {
         val profile = authDiskSource.userState?.activeAccount?.profile
-            ?: return SetPasswordResult.Error(error = NoActiveUserException())
-        return when (profile.forcePasswordResetReason) {
+            ?: return@userStateTransaction SetPasswordResult.Error(error = NoActiveUserException())
+        return@userStateTransaction when (profile.forcePasswordResetReason) {
             ForcePasswordResetReason.TDE_USER_WITHOUT_PASSWORD_HAS_PASSWORD_RESET_PERMISSION -> {
                 setUpdatedPassword(
                     profile = profile,
@@ -1184,8 +1165,7 @@ class AuthRepositoryImpl(
             .flatMap { response ->
                 accountsService
                     .setPassword(
-                        body = SetPasswordRequestJson(
-                            passwordHash = response.passwordHash,
+                        body = SetPasswordRequestJson.V1(
                             passwordHint = passwordHint,
                             organizationIdentifier = organizationIdentifier,
                             kdfIterations = profile.kdfIterations,
@@ -1193,32 +1173,28 @@ class AuthRepositoryImpl(
                             kdfParallelism = profile.kdfParallelism,
                             kdfType = profile.kdfType,
                             key = response.newKey,
+                            passwordHash = response.passwordHash,
                             keys = null,
                         ),
                     )
-                    .map { response.passwordHash }
+                    .map { response }
             }
-            .flatMap { masterPasswordHash ->
-                when (val result = vaultRepository.unlockVaultWithMasterPassword(password)) {
-                    is VaultUnlockResult.Success -> {
-                        enrollUserInPasswordReset(
-                            userId = userId,
-                            organizationIdentifier = organizationIdentifier,
-                            passwordHash = masterPasswordHash,
-                        )
-                    }
-
-                    is VaultUnlockError -> {
-                        (result.error ?: IllegalStateException("Failed to unlock vault"))
-                            .asFailure()
-                    }
-                }
-            }
-            .onSuccess {
+            .onSuccess { response ->
                 authDiskSource.userState = authDiskSource.userState?.toUserStateJsonWithPassword(
-                    masterPasswordUnlock = null,
+                    masterPasswordUnlock = MasterPasswordUnlockData(
+                        kdf = profile.toSdkParams(),
+                        masterKeyWrappedUserKey = response.newKey,
+                        salt = profile.email,
+                    ),
                 )
                 this.organizationIdentifier = null
+            }
+            .flatMap { response ->
+                enrollUserInPasswordReset(
+                    userId = userId,
+                    organizationIdentifier = organizationIdentifier,
+                    passwordHash = response.passwordHash,
+                )
             }
             .fold(
                 onFailure = { SetPasswordResult.Error(error = it) },
@@ -1304,7 +1280,7 @@ class AuthRepositoryImpl(
             .flatMap { response ->
                 accountsService
                     .setPassword(
-                        body = SetPasswordRequestJson(
+                        body = SetPasswordRequestJson.V1(
                             passwordHash = response.masterPasswordHash,
                             passwordHint = passwordHint,
                             organizationIdentifier = organizationIdentifier,
@@ -1313,7 +1289,7 @@ class AuthRepositoryImpl(
                             kdfParallelism = profile.kdfParallelism,
                             kdfType = profile.kdfType,
                             key = response.encryptedUserKey,
-                            keys = SetPasswordRequestJson.Keys(
+                            keys = SetPasswordRequestJson.V1.Keys(
                                 publicKey = response.keys.public,
                                 encryptedPrivateKey = response.keys.private,
                             ),
@@ -1326,16 +1302,26 @@ class AuthRepositoryImpl(
                                 privateKey = response.keys.private,
                             ),
                         )
+                        authDiskSource.userState = authDiskSource
+                            .userState
+                            ?.toUserStateJsonWithPassword(
+                                masterPasswordUnlock = MasterPasswordUnlockData(
+                                    kdf = profile.toSdkParams(),
+                                    masterKeyWrappedUserKey = response.encryptedUserKey,
+                                    salt = profile.email,
+                                ),
+                            )
+                        this.organizationIdentifier = null
                     }
-                    .map { response.masterPasswordHash }
+                    .map { response }
             }
-            .flatMap { masterPasswordHash ->
+            .flatMap { response ->
                 when (val result = vaultRepository.unlockVaultWithMasterPassword(password)) {
                     is VaultUnlockResult.Success -> {
                         enrollUserInPasswordReset(
                             userId = userId,
                             organizationIdentifier = organizationIdentifier,
-                            passwordHash = masterPasswordHash,
+                            passwordHash = response.masterPasswordHash,
                         )
                     }
 
@@ -1344,12 +1330,6 @@ class AuthRepositoryImpl(
                             .asFailure()
                     }
                 }
-            }
-            .onSuccess {
-                authDiskSource.userState = authDiskSource.userState?.toUserStateJsonWithPassword(
-                    masterPasswordUnlock = null,
-                )
-                this.organizationIdentifier = null
             }
             .fold(
                 onFailure = { SetPasswordResult.Error(error = it) },

@@ -2,7 +2,7 @@
 <resources>
     <string name="about">Über</string>
     <string name="add_folder">Ordner hinzufügen</string>
-    <string name="add_item">Neuer Eintrag</string>
+    <string name="add_item">Eintrag hinzufügen</string>
     <string name="an_error_has_occurred">Es ist ein Fehler aufgetreten</string>
     <string name="apply">Anwenden</string>
     <string name="back">Zurück</string>
@@ -78,6 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwarden Auto-Ausfüllen Funktion</string>
     <string name="change_master_password">Master-Passwort ändern</string>
     <string name="close">Schließen</string>
+    <string name="close_app">App schließen</string>
     <string name="continue_text">Fortsetzen</string>
     <string name="create_account">Konto erstellen</string>
     <string name="create_an_account">Ein Konto erstellen</string>
@@ -200,7 +201,6 @@ Das Scannen erfolgt automatisch.</string>
     <string name="copy_totp_automatically">TOTP automatisch kopieren</string>
     <string name="premium_required">Für diese Funktion benötigst du eine Premiummitgliedschaft.</string>
     <string name="attachment_deleted">Anhang entfernt</string>
-    <string name="attachments_unavailable">Anhänge sind nicht verfügbar</string>
     <string name="attachments_are_a_premium_feature">Anhänge sind eine Premium-Funktion. Dein aktueller Tarif enthält keinen Zugriff auf diese Funktion.</string>
     <string name="choose_file">Datei auswählen</string>
     <string name="file">Datei</string>
@@ -611,7 +611,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="forwarded_email_description">Generiere ein E-Mail-Alias mit einem externen Weiterleitungsdienst.</string>
     <string name="accessibility_service_disclosure">Bedienungshilfen Offenlegung</string>
     <string name="accessibility_disclosure_text">Bitwarden verwendet die Bedienungshilfen, um nach Anmeldefeldern in Apps und auf Webseiten zu suchen und legt dann die entsprechenden Feld-IDs fest, um einen Benutzernamen und Passwort einzugeben, wenn eine Übereinstimmung mit der App oder der Seite gefunden wird. Wir speichern keine der Informationen, die uns der Dienst zur Verfügung stellt. Ebenso wenig versuchen wir beliebige Elemente auf dem Bildschirm außer der Texteingabe von Anmeldedaten zu kontrollieren.</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields in apps and websites. If you choose to enable it, Bitwarden will identify the appropriate fields and enter your credentials when a match is found. We do not store any information observed by the service, and we do not control any on-screen elements beyond credential entry.</string>
+    <string name="accessibility_disclosure_start_up_text">Bitwarden bietet eine optionale Auto-Ausfüllen-Methode an, die den Android-Bedienungshilfendienst verwendet, um Anmeldefelder in Apps und Websites zu erkennen. Wenn du ihn aktivierst, wird Bitwarden die entsprechenden Felder identifizieren und deine Zugangsdaten eingeben, wenn eine Übereinstimmung gefunden wird. Wir speichern keine vom Dienst erfassten Informationen und haben keine Kontrolle über Bildschirmelemente, die über die Eingabe der Zugangsdaten hinausgehen.</string>
     <string name="accept">Akzeptieren</string>
     <string name="decline">Ablehnen</string>
     <string name="login_request_has_already_expired">Anmeldeanfrage ist bereits abgelaufen.</string>
@@ -1208,12 +1208,14 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="unarchiving">Wird aus dem Archiv entfernt</string>
     <string name="item_moved_to_archived">Eintrag in das Archiv verschoben</string>
     <string name="item_moved_to_vault">Eintrag in Tresor verschoben</string>
-    <string name="archive_unavailable">Archiv nicht verfügbar</string>
     <string name="archiving_items_is_a_premium_feature">Das Archivieren von Einträgen ist eine Premium-Funktion. Dein aktueller Tarif umfasst keinen Zugriff auf diese Funktion.</string>
     <string name="upgrade_to_premium">Auf Premium upgraden</string>
     <string name="plan">Tarif</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Um dein Premium-Abonnement zu verwalten, musst du dich bei deinem Web-Tresor auf einem Computer anmelden.</string>
     <string name="unlock_advanced_security_features">Erweiterte Sicherheitsfunktionen freischalten</string>
+    <string name="your_subscription_needs_attention">Dein Abonnement benötigt Aufmerksamkeit</string>
+    <string name="check_your_plan_for_details">Überprüfe deinen Tarif für Details.</string>
+    <string name="view_plan">Tarif anzeigen</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Mit einem Premium-Tarif stehen dir mehr Werkzeuge zur Verfügung, um sicher zu bleiben und die Kontrolle zu behalten.</string>
     <string name="this_item_is_archived">Dieser Eintrag ist archiviert.</string>
     <string name="introducing_archive">Einführung des Archivs</string>
