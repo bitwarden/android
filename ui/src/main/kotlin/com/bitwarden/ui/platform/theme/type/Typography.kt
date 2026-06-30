@@ -217,6 +217,18 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
+    labelLargeEmphasis = TextStyle(
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        fontFamily = FontFamily(Font(R.font.dm_sans_semi_bold)),
+        fontWeight = FontWeight.W700,
+        letterSpacing = 0.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
+    ),
     labelLargeRegular = TextStyle(
         fontSize = 14.sp,
         lineHeight = 20.sp,
@@ -338,6 +350,8 @@ private fun BitwardenTypography_preview() {
             Text(text = "Body medium emphasis", style = bitwardenTypography.bodyMediumEmphasis)
             Text(text = "Body small", style = bitwardenTypography.bodySmall)
             Text(text = "Label large", style = bitwardenTypography.labelLarge)
+            Text(text = "Label large emphasis", style = bitwardenTypography.labelLargeEmphasis)
+            Text(text = "Label large regular", style = bitwardenTypography.labelLargeRegular)
             Text(text = "Label medium", style = bitwardenTypography.labelMedium)
             Text(text = "Label small", style = bitwardenTypography.labelSmall)
             Text(text = "Sensitive info small", style = bitwardenTypography.sensitiveInfoSmall)

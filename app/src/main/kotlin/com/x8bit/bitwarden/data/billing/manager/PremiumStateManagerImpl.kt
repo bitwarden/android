@@ -413,6 +413,7 @@ private fun SubscriptionStatusState.premiumCardState(): PremiumCard =
         is SubscriptionStatusState.Available -> {
             when (this.status) {
                 PremiumSubscriptionStatus.PAST_DUE,
+                PremiumSubscriptionStatus.UNPAID,
                 PremiumSubscriptionStatus.UPDATE_PAYMENT,
                     -> PremiumCard.NEEDS_ATTENTION
 
