@@ -47,7 +47,7 @@ private val DEFAULT_IS_SCREEN_CAPTURE_ALLOWED = BuildConfig.DEBUG
 /**
  * Primary implementation of [SettingsRepository].
  */
-@Suppress("TooManyFunctions", "LongParameterList")
+@Suppress("LargeClass", "LongParameterList", "TooManyFunctions")
 class SettingsRepositoryImpl(
     private val autofillManager: AutofillManager,
     private val autofillEnabledManager: AutofillEnabledManager,
@@ -313,6 +313,18 @@ class SettingsRepositoryImpl(
             settingsDiskSource.storeInlineAutofillEnabled(
                 userId = userId,
                 isInlineAutofillEnabled = value,
+            )
+        }
+
+    override var isFillAssistEnabled: Boolean
+        get() = activeUserId
+            ?.let { settingsDiskSource.getFillAssistEnabled(userId = it) }
+            ?: false
+        set(value) {
+            val userId = activeUserId ?: return
+            settingsDiskSource.storeFillAssistEnabled(
+                userId = userId,
+                isFillAssistEnabled = value,
             )
         }
 

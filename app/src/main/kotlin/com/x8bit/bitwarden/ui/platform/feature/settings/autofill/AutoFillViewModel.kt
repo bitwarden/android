@@ -4,15 +4,18 @@ import android.os.Build
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -33,11 +36,13 @@ private const val KEY_STATE = "state"
 /**
  * View model for the auto-fill screen.
  */
-@Suppress("TooManyFunctions")
+@Suppress("LongParameterList", "TooManyFunctions")
 @HiltViewModel
 class AutoFillViewModel @Inject constructor(
     authRepository: AuthRepository,
     browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
+    featureFlagManager: FeatureFlagManager,
+    private val fillAssistManager: FillAssistManager,
     private val savedStateHandle: SavedStateHandle,
     private val settingsRepository: SettingsRepository,
     private val firstTimeActionManager: FirstTimeActionManager,
@@ -47,6 +52,9 @@ class AutoFillViewModel @Inject constructor(
             val userId = requireNotNull(authRepository.userStateFlow.value).activeUserId
             val firstTimeState = firstTimeActionManager.currentOrDefaultUserFirstTimeState
             AutoFillState(
+                showFillAssistOption = featureFlagManager
+                    .getFeatureFlag(FlagKey.FillAssistTargetingRules),
+                isFillAssistEnabled = settingsRepository.isFillAssistEnabled,
                 isAskToAddLoginEnabled = !settingsRepository.isAutofillSavePromptDisabled,
                 isAccessibilityAutofillEnabled = settingsRepository
                     .isAccessibilityEnabledStateFlow
@@ -109,6 +117,8 @@ class AutoFillViewModel @Inject constructor(
     }
 
     override fun handleAction(action: AutoFillAction) = when (action) {
+        is AutoFillAction.FillAssistToggleClick -> handleFillAssistToggleClick(action)
+        AutoFillAction.FillAssistInfoClick -> handleFillAssistInfoClick()
         is AutoFillAction.AskToAddLoginClick -> handleAskToAddLoginClick(action)
         is AutoFillAction.AutoFillServicesClick -> handleAutoFillServicesClick(action)
         AutoFillAction.BackClick -> handleBackClick()
@@ -215,6 +225,18 @@ class AutoFillViewModel @Inject constructor(
         }
     }
 
+    private fun handleFillAssistToggleClick(action: AutoFillAction.FillAssistToggleClick) {
+        settingsRepository.isFillAssistEnabled = action.isEnabled
+        mutableStateFlow.update { it.copy(isFillAssistEnabled = action.isEnabled) }
+        if (action.isEnabled) {
+            fillAssistManager.syncIfNecessary()
+        }
+    }
+
+    private fun handleFillAssistInfoClick() {
+        sendEvent(AutoFillEvent.NavigateToFillAssistHelp)
+    }
+
     private fun handleAskToAddLoginClick(action: AutoFillAction.AskToAddLoginClick) {
         settingsRepository.isAutofillSavePromptDisabled = !action.isEnabled
         mutableStateFlow.update { it.copy(isAskToAddLoginEnabled = action.isEnabled) }
@@ -293,6 +315,8 @@ class AutoFillViewModel @Inject constructor(
  */
 @Parcelize
 data class AutoFillState(
+    val showFillAssistOption: Boolean,
+    val isFillAssistEnabled: Boolean,
     val isAskToAddLoginEnabled: Boolean,
     val isAccessibilityAutofillEnabled: Boolean,
     val isAutoFillServicesEnabled: Boolean,
@@ -422,12 +446,29 @@ sealed class AutoFillEvent {
      * Navigate to the autofill help page.
      */
     data object NavigateToAutofillHelp : AutoFillEvent()
+
+    /**
+     * Navigate to the fill assist help page.
+     */
+    data object NavigateToFillAssistHelp : AutoFillEvent()
 }
 
 /**
  * Models actions for the auto-fill screen.
  */
 sealed class AutoFillAction {
+    /**
+     * User toggled the fill assist switch.
+     */
+    data class FillAssistToggleClick(
+        val isEnabled: Boolean,
+    ) : AutoFillAction()
+
+    /**
+     * User clicked the fill assist info icon.
+     */
+    data object FillAssistInfoClick : AutoFillAction()
+
     /**
      * User clicked ask to add login button.
      */

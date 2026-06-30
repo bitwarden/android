@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.autofill.model.FillAssistRules
 import com.x8bit.bitwarden.data.autofill.model.FillAssistRules.SelectorClause
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.filterNotNull
@@ -57,6 +58,7 @@ class FillAssistManagerImpl(
     private val fillAssistDiskSource: FillAssistDiskSource,
     private val featureFlagManager: FeatureFlagManager,
     private val serverConfigRepository: ServerConfigRepository,
+    private val settingsRepository: SettingsRepository,
     private val environmentDiskSource: EnvironmentDiskSource,
     private val clock: Clock,
     dispatcherManager: DispatcherManager,
@@ -78,7 +80,11 @@ class FillAssistManagerImpl(
     }
 
     override fun syncIfNecessary() {
-        if (!featureFlagManager.getFeatureFlag(FlagKey.FillAssistTargetingRules)) return
+        if (!featureFlagManager.getFeatureFlag(FlagKey.FillAssistTargetingRules) ||
+            !settingsRepository.isFillAssistEnabled
+        ) {
+            return
+        }
         val serverUrl = serverConfigRepository
             .serverConfigStateFlow
             .value
@@ -87,8 +93,11 @@ class FillAssistManagerImpl(
             ?.fillAssistRulesUrl
             ?: return
         val lastFetch = fillAssistDiskSource.getLastFetchTimestamp(serverUrl) ?: 0L
-        if (clock.millis() - lastFetch < UPDATE_INTERVAL_MS) return
-        if (!syncJob.isCompleted) return
+        if (clock.millis() - lastFetch < UPDATE_INTERVAL_MS ||
+            !syncJob.isCompleted
+        ) {
+            return
+        }
         syncJob = ioScope.launch { sync(serverUrl) }
     }
 

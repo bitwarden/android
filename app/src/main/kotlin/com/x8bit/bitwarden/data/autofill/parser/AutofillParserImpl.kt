@@ -137,13 +137,20 @@ class AutofillParserImpl(
             return AutofillRequest.Unfillable
         }
 
-        val effectiveViews = resolveEffectiveViews(
-            assistStructure = assistStructure,
-            autofillViews = autofillViews,
-            uri = uri,
-            focusedView = focusedView,
-            urlBarWebsite = urlBarWebsite,
-        )
+        val isFillAssistEnabled = featureFlagManager
+            .getFeatureFlag(FlagKey.FillAssistTargetingRules) &&
+            settingsRepository.isFillAssistEnabled
+        val effectiveViews = if (isFillAssistEnabled) {
+            resolveEffectiveViews(
+                assistStructure = assistStructure,
+                autofillViews = autofillViews,
+                uri = uri,
+                focusedView = focusedView,
+                urlBarWebsite = urlBarWebsite,
+            )
+        } else {
+            autofillViews
+        }
 
         val effectiveFocusedView = effectiveViews
             .firstOrNull { it.data.isFocused }
@@ -198,8 +205,8 @@ class AutofillParserImpl(
 
     /**
      * Returns the effective [AutofillView] list for filling. Applies fill-assist targeting rules
-     * when the feature flag is enabled and the host rules cover the current partition type;
-     * otherwise returns the heuristic [autofillViews].
+     * when the host rules cover the current partition type; otherwise returns the heuristic
+     * [autofillViews].
      */
     private fun resolveEffectiveViews(
         assistStructure: AssistStructure,
@@ -212,7 +219,6 @@ class AutofillParserImpl(
             ?.takeUnless { it.startsWith("androidapp://") }
             ?.toUri()
             ?.host
-            ?.takeIf { featureFlagManager.getFeatureFlag(FlagKey.FillAssistTargetingRules) }
             ?.let { host ->
                 fillAssistManager.getFillAssistRules()?.hostRules?.get(host.removePrefix("www."))
             }
