@@ -3,6 +3,7 @@ package com.x8bit.bitwarden
 import android.app.Application
 import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestNotificationManager
+import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConfigManager
@@ -20,6 +21,9 @@ import javax.inject.Inject
 class BitwardenApplication : Application() {
     // Inject classes here that must be triggered on startup but are not otherwise consumed by
     // other callers.
+    @Inject
+    lateinit var fillAssistManager: FillAssistManager
+
     @Inject
     lateinit var logsManager: LogsManager
 
