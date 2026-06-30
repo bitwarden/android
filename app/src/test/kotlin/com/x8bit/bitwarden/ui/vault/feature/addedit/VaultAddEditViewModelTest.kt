@@ -546,6 +546,40 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `vault data Error with data should determine the content state from the available data`() =
+        runTest {
+            val stateWithName = createVaultAddItemState(
+                commonContentViewState = createCommonContentViewState(name = "mockName-1"),
+            )
+            mutableVaultDataFlow.value = DataState.Error(
+                error = Throwable("Fail"),
+                data = createVaultData(),
+            )
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.LOGIN,
+                ),
+            )
+
+            assertEquals(stateWithName, viewModel.stateFlow.value)
+        }
+
+    @Test
+    fun `vault data Error without data should update view state to Error`() = runTest {
+        mutableVaultDataFlow.value = DataState.Error(error = Throwable("Fail"))
+        val viewModel = createAddVaultItemViewModel()
+
+        assertEquals(
+            VaultAddEditState.ViewState.Error(
+                message = BitwardenString.generic_error_message.asText(),
+            ),
+            viewModel.stateFlow.value.viewState,
+        )
+    }
+
+    @Test
     fun `CloseClick should emit NavigateBack`() = runTest {
         val viewModel = createAddVaultItemViewModel()
         viewModel.eventFlow.test {
@@ -6526,40 +6560,36 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         initialState: VaultAddEditState,
         type: CustomFieldType,
     ) {
-        lateinit var expectedCustomField: VaultAddEditState.Custom
-        lateinit var action: VaultAddEditAction.Common
-        lateinit var expectedState: VaultAddEditState.ViewState.Content
-
-        when (type) {
+        val expectedCustomField: VaultAddEditState.Custom = when (type) {
             CustomFieldType.LINKED -> {
-                expectedCustomField = VaultAddEditState.Custom.LinkedField(
-                    "TestId 4",
-                    "Linked Field",
-                    VaultLinkedFieldType.PASSWORD,
+                VaultAddEditState.Custom.LinkedField(
+                    itemId = "TestId 4",
+                    name = "Linked Field",
+                    vaultLinkedFieldType = VaultLinkedFieldType.PASSWORD,
                 )
             }
 
             CustomFieldType.HIDDEN -> {
-                expectedCustomField = VaultAddEditState.Custom.HiddenField(
-                    "TestId 2",
-                    "Test Hidden",
-                    "Updated Test Text",
+                VaultAddEditState.Custom.HiddenField(
+                    itemId = "TestId 2",
+                    name = "Test Hidden",
+                    value = "Updated Test Text",
                 )
             }
 
             CustomFieldType.BOOLEAN -> {
-                expectedCustomField = VaultAddEditState.Custom.BooleanField(
-                    "TestId 3",
-                    "Boolean Field",
-                    false,
+                VaultAddEditState.Custom.BooleanField(
+                    itemId = "TestId 3",
+                    name = "Boolean Field",
+                    value = false,
                 )
             }
 
             CustomFieldType.TEXT -> {
-                expectedCustomField = VaultAddEditState.Custom.TextField(
-                    "TestId 1",
-                    "Test Text",
-                    "Updated Test Text",
+                VaultAddEditState.Custom.TextField(
+                    itemId = "TestId 1",
+                    name = "Test Text",
+                    value = "Updated Test Text",
                 )
             }
         }
@@ -6574,13 +6604,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         val currentContentState =
             (viewModel.stateFlow.value.viewState as VaultAddEditState.ViewState.Content)
-        action = VaultAddEditAction.Common.CustomFieldValueChange(expectedCustomField)
-        expectedState = currentContentState
-            .copy(
-                common = currentContentState.common.copy(
-                    customFieldData = listOf(expectedCustomField),
-                ),
-            )
+        val action = VaultAddEditAction.Common.CustomFieldValueChange(expectedCustomField)
+        val expectedState = currentContentState.copy(
+            common = currentContentState.common.copy(
+                customFieldData = listOf(expectedCustomField),
+            ),
+        )
 
         viewModel.trySendAction(action)
 

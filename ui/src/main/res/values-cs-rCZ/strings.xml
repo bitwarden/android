@@ -510,7 +510,7 @@ Načtení proběhne automaticky.</string>
     <string name="password_confirmation">Potvrzení hlavního hesla</string>
     <string name="password_confirmation_desc">Tato akce je chráněna. Chcete-li pokračovat, zadejte znovu Vaše hlavní heslo, abychom ověřili Vaši totožnost.</string>
     <string name="update_master_password">Aktualizovat hlavní heslo</string>
-    <string name="update_master_password_warning">Administrátor v organizaci nedávno změnil Vaše hlavní heslo. Pro přístup k trezoru jej nyní musíte změnit. Pokračování Vás odhlásí z Vaší aktuální relace a bude nutné se znovu přihlásit. Aktivní relace na jiných zařízeních mohou zůstat aktivní až po dobu jedné hodiny.</string>
+    <string name="update_master_password_warning">Správce v organizaci nedávno změnil Vaše hlavní heslo. Pro přístup k trezoru jej nyní musíte změnit. Pokračování Vás odhlásí z Vaší aktuální relace a bude nutné se znovu přihlásit. Aktivní relace na jiných zařízeních mohou zůstat aktivní až po dobu jedné hodiny.</string>
     <string name="updating_password">Aktualizování hesla</string>
     <string name="remove_master_password">Odebrat hlavní heslo</string>
     <string name="leave_organization">Opustit organizaci</string>
@@ -619,7 +619,10 @@ Načtení proběhne automaticky.</string>
     <string name="forwarded_email_description">Vygeneruje alias e-mailu pomocí externí přeposílací služby.</string>
     <string name="accessibility_service_disclosure">Prohlášení služby usnadnění přístupu</string>
     <string name="accessibility_disclosure_text">Bitwarden používá službu usnadnění přístupu k hledání přihlašovacích polí v aplikacích a webových stránkách a pokud bude nalezena shoda pro aplikaci nebo stránku, pak vytvoří odpovídající ID pole pro zadání uživatelského jména a hesla. Neukládáme žádné informace, které nám služba poskytla, ani se nepokoušíme kontrolovat jakékoli prvky na obrazovce mimo zadání textových údajů.</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden nabízí volitelnou metodu automatického vyplňování, která používá službu Dostupnost operačního systému Android k detekci přihlašovacích polí v aplikacích a webových stránkách. Pokud se to rozhodnete povolit, Bitwarden identifikuje příslušná pole a zadá Vaše přihlašovací údaje, jakmile bude nalezena shoda. Neukládáme žádné informace pozorované službou ani nekontrolujeme žádné prvky na obrazovce mimo zadání přihlašovacích údajů.</string>
+    <string name="accessibility_disclosure_start_up_text_1">Toto upozornění je nutné, aby Bitwarden mohl nabídnout automatické vyplňování na základě funkcí usnadnění přístupu.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden nabízí volitelnou funkci automatického vyplňování, která k rozpoznání přihlašovacích polí využívá službu usnadnění přístupu systému Android. Pokud tuto funkci zapnete, Bitwarden rozpozná příslušná pole a po nalezení shody do nich vyplní Vaše přihlašovací údaje.</string>
+    <string name="accessibility_disclosure_start_up_text_3">Během používání služby pro usnadnění přístupu neukládáme žádné informace o obsahu obrazovky a kromě zadávání přihlašovacích údajů nemáme kontrolu nad žádnými prvky na obrazovce.</string>
+    <string name="i_understand">Rozumím</string>
     <string name="accept">Potvrdit</string>
     <string name="decline">Zamítnout</string>
     <string name="login_request_has_already_expired">Požadavek na přihlášení již vypršel.</string>
@@ -1006,7 +1009,7 @@ při opakování problémů.</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Opravdu chcete smazat všechny zaznamenané logy?</string>
     <string name="confirm_key_connector_domain">Potvrdit doménu Key Connectoru</string>
     <string name="key_connector_domain">Doména Key Connectoru</string>
-    <string name="your_organization_no_longer_requires_a_master_password">Vaše organizace již pro své členy nevyžaduje hlavní heslo. Pro pokračování ověřte doménu níže s administrátorem a zadejte hlavní heslo.</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Vaše organizace již pro své členy nevyžaduje hlavní heslo. Pro pokračování ověřte doménu níže se správcem a zadejte hlavní heslo.</string>
     <string name="please_confirm_domain_with_admin">Potvrďte níže uvedenou doménu u správce Vaší organizace.\n\nDoména Key Connectoru:\n%1$s</string>
     <string name="flight_recorder_banner_title">Letový zapisovač je zapnutý</string>
     <string name="flight_recorder_banner_message">Letový zapisovač bude aktivní do %1$s, %2$s. Pro deaktivování se vraťte do nastavení.</string>
@@ -1229,6 +1232,7 @@ při opakování problémů.</string>
     <string name="item_moved_to_archived">Položka byla přesunuta do archivu</string>
     <string name="item_moved_to_vault">Položka byla přesunuta do trezoru</string>
     <string name="archiving_items_is_a_premium_feature">Archivace položek je prémiová funkce. Váš aktuální plán nezahrnuje přístup k této funkci.</string>
+    <string name="totp_is_a_premium_feature">Ověřovací klíč (TOTP) je funkce Premium. Váš aktuální plán nezahrnuje přístup k této funkci.</string>
     <string name="upgrade_to_premium">Aktualizovat na Premium</string>
     <string name="plan">Plán</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Pro správu předplatného Premium se musíte přihlásit do svého webového trezoru na počítači.</string>
@@ -1345,7 +1349,6 @@ při opakování problémů.</string>
     <string name="loading_portal">Načítání portálu...</string>
     <string name="portal_error">Něco se pokazilo</string>
     <string name="trouble_loading_portal">Měli jsme potíže s načítáním portálu pro správu, zkuste to znovu.</string>
-    <string name="subscription_error">Chyba předplatného</string>
     <string name="trouble_loading_subscription">Nemohli jsme načíst údaje o předplatném. Zkuste to znovu.</string>
     <string name="view_bank_account">Zobrazit bankovní účet</string>
     <string name="view_license">Zobrazit řidičský průkaz</string>

@@ -54,7 +54,7 @@ jobs:
 
     steps:
       - name: Check out repo
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
 
@@ -89,7 +89,7 @@ jobs:
 
       - name: Upload to codecov.io
         if: always() && matrix.group != 'static-analysis' && (github.event_name == 'push' || github.event_name == 'pull_request')
-        uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2 # v6.0.0
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v6.0.2
         continue-on-error: true
         with:
           os: linux
@@ -120,7 +120,7 @@ jobs:
     steps:
       - name: Notify Codecov that all uploads are complete
         id: codecov-notify
-        uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2 # v6.0.0
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v6.0.2
         continue-on-error: true
         with:
           run_command: send-notifications

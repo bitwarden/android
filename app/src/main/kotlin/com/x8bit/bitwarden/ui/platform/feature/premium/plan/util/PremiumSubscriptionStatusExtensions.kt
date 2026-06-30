@@ -21,6 +21,7 @@ fun PremiumSubscriptionStatus.labelRes(): Int = when (this) {
 
     PremiumSubscriptionStatus.PAST_DUE -> BitwardenString.subscription_status_past_due
     PremiumSubscriptionStatus.PAUSED -> BitwardenString.subscription_status_paused
+    PremiumSubscriptionStatus.UNPAID -> BitwardenString.subscription_status_unpaid
     PremiumSubscriptionStatus.UPDATE_PAYMENT -> BitwardenString.subscription_status_update_payment
 }
 
@@ -38,6 +39,7 @@ fun PremiumSubscriptionStatus.showsFeatureList(): Boolean = when (this) {
     PremiumSubscriptionStatus.PAST_DUE,
     PremiumSubscriptionStatus.PAUSED,
     PremiumSubscriptionStatus.PENDING_CANCELLATION,
+    PremiumSubscriptionStatus.UNPAID,
     PremiumSubscriptionStatus.UPDATE_PAYMENT,
         -> false
 }
@@ -52,6 +54,7 @@ fun PremiumSubscriptionStatus.badgeColors(): BitwardenColorScheme.StatusBadgeVar
         PremiumSubscriptionStatus.ACTIVE -> BitwardenTheme.colorScheme.statusBadge.success
         PremiumSubscriptionStatus.CANCELED,
         PremiumSubscriptionStatus.EXPIRED,
+        PremiumSubscriptionStatus.UNPAID,
             -> BitwardenTheme.colorScheme.statusBadge.error
 
         PremiumSubscriptionStatus.PAST_DUE,

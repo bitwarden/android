@@ -47,12 +47,11 @@ internal class AuthTokenManager(
             // If the same request keeps failing, let's just let the 401 pass through.
             return null
         }
-        val accessToken = requireNotNull(
-            response
-                .request
-                .header(name = HEADER_KEY_AUTHORIZATION)
-                ?.substringAfter(delimiter = HEADER_VALUE_BEARER_PREFIX),
-        )
+        val accessToken = response
+            .request
+            .header(name = HEADER_KEY_AUTHORIZATION)
+            ?.substringAfter(delimiter = HEADER_VALUE_BEARER_PREFIX)
+            ?: return null
         return when (val userId = parseJwtTokenDataOrNull(accessToken)?.userId) {
             null -> {
                 // We are unable to get the user ID, let's just let the 401 pass through.

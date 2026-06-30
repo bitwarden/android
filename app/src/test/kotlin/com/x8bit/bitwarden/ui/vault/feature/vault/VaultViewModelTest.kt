@@ -108,6 +108,7 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
+import kotlin.time.Duration.Companion.milliseconds
 
 @Suppress("LargeClass")
 class VaultViewModelTest : BaseViewModelTest() {
@@ -910,7 +911,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     data = vaultData,
                 ),
             )
-            advanceTimeBy(1500)
+            advanceTimeBy(1500.milliseconds)
             viewModel.trySendAction(
                 action = VaultAction.ShareAllCipherDecryptionErrorsClick,
             )
@@ -1615,7 +1616,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 // Allow time for state to update
-                advanceTimeBy(1500)
+                advanceTimeBy(1500.milliseconds)
                 assertEquals(expectedState, viewModel.stateFlow.value)
                 assertEquals(
                     VaultEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
@@ -1670,7 +1671,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 // Allow time for state to update
-                advanceTimeBy(1500)
+                advanceTimeBy(1500.milliseconds)
                 assertEquals(expectedState, viewModel.stateFlow.value)
                 assertEquals(
                     VaultEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
@@ -1790,7 +1791,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             createMockVaultState(
                 viewState = VaultState.ViewState.Error(
-                    message = BitwardenString.generic_error_message.asText(),
+                    message = BitwardenString.vault_sync_failed_description.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1885,9 +1886,9 @@ class VaultViewModelTest : BaseViewModelTest() {
                         showLicenseGroup = false,
                         showPassportGroup = false,
                     ),
-                    dialog = VaultState.DialogState.Error(
-                        title = BitwardenString.an_error_has_occurred.asText(),
-                        message = BitwardenString.generic_error_message.asText(),
+                    dialog = VaultState.DialogState.SyncError(
+                        title = BitwardenString.vault_sync_unsuccessful.asText(),
+                        message = BitwardenString.vault_sync_failed_description.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -1960,8 +1961,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                         showLicenseGroup = false,
                         showPassportGroup = false,
                     ),
-                    dialog = VaultState.DialogState.Error(
-                        title = BitwardenString.an_error_has_occurred.asText(),
+                    dialog = VaultState.DialogState.SyncError(
+                        title = BitwardenString.vault_sync_unsuccessful.asText(),
                         message = (
                             "Your request was interrupted because the app needed to " +
                                 "re-authenticate. Please try again."
@@ -1994,9 +1995,9 @@ class VaultViewModelTest : BaseViewModelTest() {
             assertEquals(
                 createMockVaultState(
                     viewState = VaultState.ViewState.NoItems,
-                    dialog = VaultState.DialogState.Error(
-                        title = BitwardenString.an_error_has_occurred.asText(),
-                        message = BitwardenString.generic_error_message.asText(),
+                    dialog = VaultState.DialogState.SyncError(
+                        title = BitwardenString.vault_sync_unsuccessful.asText(),
+                        message = BitwardenString.vault_sync_failed_description.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -2713,7 +2714,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             mutableVaultDataStateFlow.tryEmit(value = dataState)
 
             // Advance time to allow state updates
-            advanceTimeBy(1500)
+            advanceTimeBy(1500.milliseconds)
 
             assertEquals(
                 createMockVaultState(
@@ -2780,9 +2781,9 @@ class VaultViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val initialState = DEFAULT_STATE.copy(
             viewState = VaultState.ViewState.NoItems,
-            dialog = VaultState.DialogState.Error(
-                title = BitwardenString.an_error_has_occurred.asText(),
-                message = BitwardenString.generic_error_message.asText(),
+            dialog = VaultState.DialogState.SyncError(
+                title = BitwardenString.vault_sync_unsuccessful.asText(),
+                message = BitwardenString.vault_sync_failed_description.asText(),
             ),
         )
         assertEquals(
@@ -2803,7 +2804,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     fun `RefreshPull should call vault repository sync`() = runTest {
         val viewModel = createViewModel()
         viewModel.trySendAction(VaultAction.RefreshPull)
-        advanceTimeBy(300)
+        advanceTimeBy(300.milliseconds)
         verify(exactly = 1) {
             vaultRepository.sync(forced = false)
         }
@@ -2818,7 +2819,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         } returns false
 
         viewModel.trySendAction(VaultAction.RefreshPull)
-        advanceTimeBy(300)
+        advanceTimeBy(300.milliseconds)
         assertEquals(
             DEFAULT_STATE.copy(
                 isRefreshing = false,

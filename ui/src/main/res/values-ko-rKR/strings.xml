@@ -608,7 +608,10 @@
     <string name="forwarded_email_description">Generate an email alias with an external forwarding service.</string>
     <string name="accessibility_service_disclosure">Accessibility Service Disclosure</string>
     <string name="accessibility_disclosure_text">Bitwarden은 접근성 서비스를 사용하여 앱 및 웹사이트에서 로그인 필드를 찾아내고 일치하는 항목이 발견되면 사용자 이름과 비밀번호를 입력합니다. Bitwarden은 서비스에서 제공하는 어떠한 정보도 저장하지 않으며, 자격 증명 이외의 화면 요소를 제어하려고 시도하지 않습니다.</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields in apps and websites. If you choose to enable it, Bitwarden will identify the appropriate fields and enter your credentials when a match is found. We do not store any information observed by the service, and we do not control any on-screen elements beyond credential entry.</string>
+    <string name="accessibility_disclosure_start_up_text_1">This notice is required before Bitwarden can offer accessibility-based autofill.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields. If you enable it, Bitwarden will identify the appropriate fields and fill in your credentials when a match is found.</string>
+    <string name="accessibility_disclosure_start_up_text_3">We don’t store any information about what’s onscreen while you use the Accessibility Service, and we don’t control any onscreen elements beyond credential entry.</string>
+    <string name="i_understand">I understand</string>
     <string name="accept">승인</string>
     <string name="decline">거부</string>
     <string name="login_request_has_already_expired">이미 만료된 로그인 요청입니다.</string>
@@ -1201,6 +1204,7 @@
     <string name="item_moved_to_archived">Item moved to archive</string>
     <string name="item_moved_to_vault">항목을 보관함으로 이동함</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
+    <string name="totp_is_a_premium_feature">Authenticator key (TOTP) is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Upgrade to Premium</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
@@ -1314,7 +1318,6 @@
     <string name="loading_portal">Loading portal…</string>
     <string name="portal_error">Something went wrong</string>
     <string name="trouble_loading_portal">We had trouble loading the management portal, so try again.</string>
-    <string name="subscription_error">Subscription error</string>
     <string name="trouble_loading_subscription">We couldn’t load your subscription details. Please try again.</string>
     <string name="view_bank_account">View bank account</string>
     <string name="view_license">View license</string>

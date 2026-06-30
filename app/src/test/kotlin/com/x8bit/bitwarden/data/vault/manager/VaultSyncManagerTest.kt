@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
+import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.createMockWrappedAccountCryptographicState
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
@@ -144,7 +145,12 @@ class VaultSyncManagerTest {
         every { databaseSchemeChangeFlow } returns mutableDatabaseSchemeChangeFlow
     }
 
+    private val fillAssistManager: FillAssistManager = mockk {
+        every { syncIfNecessary() } just runs
+    }
+
     private val vaultSyncManager: VaultSyncManager = VaultSyncManagerImpl(
+        fillAssistManager = fillAssistManager,
         syncService = syncService,
         settingsDiskSource = settingsDiskSource,
         authDiskSource = fakeAuthDiskSource,
@@ -777,6 +783,7 @@ class VaultSyncManagerTest {
                     ),
                 )
             }
+            verify(exactly = 1) { fillAssistManager.syncIfNecessary() }
         }
 
     @Suppress("MaxLineLength")
@@ -817,6 +824,7 @@ class VaultSyncManagerTest {
                     ),
                 )
             }
+            verify(exactly = 0) { fillAssistManager.syncIfNecessary() }
         }
 
     @Test
@@ -1183,6 +1191,7 @@ class VaultSyncManagerTest {
 
             val syncResult = vaultSyncManager.syncForResult()
             assertEquals(SyncVaultDataResult.Success(itemsAvailable = true), syncResult)
+            verify(exactly = 1) { fillAssistManager.syncIfNecessary() }
         }
 
     @Suppress("MaxLineLength")
@@ -1214,6 +1223,7 @@ class VaultSyncManagerTest {
 
             val syncResult = vaultSyncManager.syncForResult()
             assertEquals(SyncVaultDataResult.Success(itemsAvailable = false), syncResult)
+            verify(exactly = 1) { fillAssistManager.syncIfNecessary() }
         }
 
     @Test
@@ -1263,6 +1273,7 @@ class VaultSyncManagerTest {
                 )
             }
             coVerify(exactly = 0) { syncService.sync() }
+            verify(exactly = 0) { fillAssistManager.syncIfNecessary() }
         }
 
     //region Helper functions

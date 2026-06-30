@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,21 +29,20 @@ fun BitwardenStatusBadge(
     colors: BitwardenColorScheme.StatusBadgeVariantColors,
     modifier: Modifier = Modifier,
 ) {
-    val shape = RoundedCornerShape(size = 12.dp)
     Surface(
-        shape = shape,
+        shape = BitwardenTheme.shapes.badge,
         color = colors.background,
         modifier = modifier
             .height(24.dp)
             .border(
                 width = 1.dp,
                 color = colors.border,
-                shape = shape,
+                shape = BitwardenTheme.shapes.badge,
             ),
     ) {
         Text(
             text = label,
-            style = BitwardenTheme.typography.labelSmall,
+            style = BitwardenTheme.typography.labelMedium,
             color = colors.text,
             modifier = Modifier.padding(
                 horizontal = 8.dp,

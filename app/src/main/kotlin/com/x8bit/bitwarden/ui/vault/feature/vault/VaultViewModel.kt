@@ -84,7 +84,6 @@ import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
@@ -95,6 +94,7 @@ import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.time.Clock
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 private const val VAULT_DATA_RECEIVED_DELAY: Long = 550L
 private const val LOGIN_SUCCESS_SNACKBAR_DELAY: Long = 550L
@@ -219,7 +219,7 @@ class VaultViewModel @Inject constructor(
             .onEach {
                 // When the vault data is received, the current activity is about to
                 // be recreated. Adding this delay prevents the dialogs from disappearing.
-                delay(VAULT_DATA_RECEIVED_DELAY)
+                delay(VAULT_DATA_RECEIVED_DELAY.milliseconds)
                 trySendAction(it)
             }
             .launchIn(viewModelScope)
@@ -741,6 +741,9 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleTryAgainClick() {
+        mutableStateFlow.update {
+            it.copy(dialog = VaultState.DialogState.Syncing)
+        }
         vaultRepository.sync(forced = true)
     }
 
@@ -754,7 +757,7 @@ class VaultViewModel @Inject constructor(
     private fun handleRefreshPull() {
         mutableStateFlow.update { it.copy(isRefreshing = true) }
         viewModelScope.launch {
-            delay(250)
+            delay(250.milliseconds)
             if (networkConnectionManager.isNetworkConnected) {
                 vaultRepository.sync(forced = false)
             } else {
@@ -1453,21 +1456,40 @@ class VaultViewModel @Inject constructor(
         vaultData: DataState.Error<VaultData>,
         validTotpIds: Set<String>,
     ) {
-        mutableStateFlow.updateToErrorStateOrDialog(
-            baseIconUrl = state.baseIconUrl,
-            vaultData = vaultData.data,
-            vaultFilterType = vaultFilterTypeOrDefault,
-            isIconLoadingDisabled = state.isIconLoadingDisabled,
-            isPremium = state.isPremium,
-            hasMasterPassword = state.hasMasterPassword,
-            errorTitle = BitwardenString.an_error_has_occurred.asText(),
-            errorMessage = vaultData.error.userFriendlyMessage?.asText()
-                ?: BitwardenString.generic_error_message.asText(),
-            isRefreshing = false,
-            restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
-            validTotpIds = validTotpIds,
-            isNewItemTypesEnabled = state.isNewItemTypesEnabled,
-        )
+        val errorMessage = vaultData.error.userFriendlyMessage?.asText()
+            ?: BitwardenString.vault_sync_failed_description.asText()
+        mutableStateFlow.update { currentVaultState ->
+            vaultData
+                .data
+                ?.let {
+                    currentVaultState.copy(
+                        viewState = it.toViewState(
+                            baseIconUrl = state.baseIconUrl,
+                            isPremium = state.isPremium,
+                            hasMasterPassword = state.hasMasterPassword,
+                            vaultFilterType = vaultFilterTypeOrDefault,
+                            isIconLoadingDisabled = state.isIconLoadingDisabled,
+                            restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
+                            validTotpIds = validTotpIds,
+                            isNewItemTypesEnabled = state.isNewItemTypesEnabled,
+                        ),
+                        dialog = VaultState.DialogState.SyncError(
+                            title = BitwardenString.vault_sync_unsuccessful.asText(),
+                            message = errorMessage,
+                        ),
+                        isRefreshing = false,
+                        validTotpIds = validTotpIds.toImmutableSet(),
+                    )
+                }
+                ?: currentVaultState.copy(
+                    viewState = VaultState.ViewState.Error(
+                        message = errorMessage,
+                    ),
+                    dialog = null,
+                    isRefreshing = false,
+                    validTotpIds = validTotpIds.toImmutableSet(),
+                )
+        }
     }
 
     private fun vaultLoadedReceive(
@@ -2267,6 +2289,15 @@ data class VaultState(
             val message: Text,
             val error: Throwable? = null,
         ) : DialogState()
+
+        /**
+         * Represents an error dialog with the given [title] and [message].
+         */
+        @Parcelize
+        data class SyncError(
+            val title: Text,
+            val message: Text,
+        ) : DialogState()
     }
 }
 
@@ -2775,53 +2806,5 @@ sealed class VaultAction {
         data class UpgradedToPremiumCardEligibilityReceive(
             val isEligible: Boolean,
         ) : Internal()
-    }
-}
-
-@Suppress("LongParameterList")
-private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
-    baseIconUrl: String,
-    vaultData: VaultData?,
-    vaultFilterType: VaultFilterType,
-    isIconLoadingDisabled: Boolean,
-    isPremium: Boolean,
-    hasMasterPassword: Boolean,
-    errorTitle: Text,
-    errorMessage: Text,
-    isRefreshing: Boolean,
-    restrictItemTypesPolicyOrgIds: List<String>,
-    validTotpIds: Set<String>,
-    isNewItemTypesEnabled: Boolean,
-) {
-    this.update {
-        if (vaultData != null) {
-            it.copy(
-                viewState = vaultData.toViewState(
-                    baseIconUrl = baseIconUrl,
-                    isPremium = isPremium,
-                    hasMasterPassword = hasMasterPassword,
-                    vaultFilterType = vaultFilterType,
-                    isIconLoadingDisabled = isIconLoadingDisabled,
-                    restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
-                    validTotpIds = validTotpIds,
-                    isNewItemTypesEnabled = isNewItemTypesEnabled,
-                ),
-                dialog = VaultState.DialogState.Error(
-                    title = errorTitle,
-                    message = errorMessage,
-                ),
-                isRefreshing = isRefreshing,
-                validTotpIds = validTotpIds.toImmutableSet(),
-            )
-        } else {
-            it.copy(
-                viewState = VaultState.ViewState.Error(
-                    message = errorMessage,
-                ),
-                dialog = null,
-                isRefreshing = isRefreshing,
-                validTotpIds = validTotpIds.toImmutableSet(),
-            )
-        }
     }
 }

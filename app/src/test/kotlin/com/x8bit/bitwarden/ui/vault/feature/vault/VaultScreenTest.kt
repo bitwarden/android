@@ -529,6 +529,71 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `sync error dialog should be shown or hidden according to the state`() {
+        val errorTitle = "Error title"
+        val errorMessage = "Error message"
+        composeTestRule.assertNoDialogExists()
+        composeTestRule.onNodeWithText(text = errorTitle).assertDoesNotExist()
+        composeTestRule.onNodeWithText(text = errorMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.SyncError(
+                    title = errorTitle.asText(),
+                    message = errorMessage.asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(text = errorTitle)
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = errorMessage)
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `Try again button click in sync error dialog should send SyncClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.SyncError(
+                    title = "Error title".asText(),
+                    message = "Error message".asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(text = "Try again")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) { viewModel.trySendAction(VaultAction.TryAgainClick) }
+    }
+
+    @Test
+    fun `Not now button click in sync error dialog should send DialogDismiss`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.SyncError(
+                    title = "Error title".asText(),
+                    message = "Error message".asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(text = "Not now")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) { viewModel.trySendAction(VaultAction.DialogDismiss) }
+    }
+
+    @Test
     fun `ThirdPartyBrowserAutofill should be displayed according to state`() {
         composeTestRule.assertNoDialogExists()
         mutableStateFlow.update {
