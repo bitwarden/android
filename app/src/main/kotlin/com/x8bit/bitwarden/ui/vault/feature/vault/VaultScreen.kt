@@ -39,7 +39,6 @@ import com.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionI
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.appbar.model.TopAppBarDividerStyle
 import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
-import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
@@ -340,19 +339,14 @@ private fun VaultScreenScaffold(
                 )
 
                 is VaultState.ViewState.NoItems -> {
-                    AnimatedVisibility(
-                        visible = state.showImportActionCard,
+                    AnimateNullableContentVisibility(
+                        targetState = state.actionCard,
                         exit = actionCardExitAnimation(),
                         label = "VaultNoItemsActionCard",
-                    ) {
-                        BitwardenActionCard(
-                            cardTitle = stringResource(BitwardenString.import_saved_logins),
-                            cardSubtitle = stringResource(
-                                BitwardenString.use_a_computer_to_import_logins,
-                            ),
-                            actionText = stringResource(BitwardenString.get_started),
-                            onActionClick = vaultHandlers.importActionCardClick,
-                            onDismissClick = vaultHandlers.dismissImportActionCard,
+                    ) { actionCard ->
+                        VaultActionCard(
+                            actionCardState = actionCard,
+                            vaultHandlers = vaultHandlers,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .standardHorizontalMargin()

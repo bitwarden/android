@@ -358,8 +358,6 @@ class VaultViewModel @Inject constructor(
             }
 
             is VaultAction.Internal -> handleInternalAction(action)
-            VaultAction.DismissImportActionCard -> handleDismissImportActionCard()
-            VaultAction.ImportActionCardClick -> handleImportActionCardClick()
             VaultAction.LifecycleResumed -> handleLifecycleResumed()
             VaultAction.SelectAddItemType -> handleSelectAddItemType()
             VaultAction.DismissFlightRecorderSnackbar -> handleDismissFlightRecorderSnackbar()
@@ -457,6 +455,12 @@ class VaultViewModel @Inject constructor(
             VaultState.ActionCardState.IntroducingArchive -> {
                 settingsRepository.dismissIntroducingArchiveActionCard()
             }
+
+            VaultState.ActionCardState.ImportItems -> {
+                firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = true)
+                if (!state.showImportActionCard) return
+                firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
+            }
         }
     }
 
@@ -477,9 +481,11 @@ class VaultViewModel @Inject constructor(
 
             VaultState.ActionCardState.IntroducingArchive -> {
                 settingsRepository.dismissIntroducingArchiveActionCard()
-                sendEvent(
-                    VaultEvent.NavigateToItemListing(VaultItemListingType.Archive),
-                )
+                sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.Archive))
+            }
+
+            VaultState.ActionCardState.ImportItems -> {
+                sendEvent(VaultEvent.NavigateToImportLogins)
             }
         }
     }
@@ -524,16 +530,6 @@ class VaultViewModel @Inject constructor(
         if (reviewPromptManager.shouldPromptForAppReview()) {
             sendEvent(VaultEvent.PromptForAppReview)
         }
-    }
-
-    private fun handleImportActionCardClick() {
-        sendEvent(VaultEvent.NavigateToImportLogins)
-    }
-
-    private fun handleDismissImportActionCard() {
-        firstTimeActionManager.storeShowImportLoginsSettingsBadge(true)
-        if (!state.showImportActionCard) return
-        firstTimeActionManager.storeShowImportLogins(false)
     }
 
     private fun handleIconLoadingSettingReceive(
@@ -1789,16 +1785,30 @@ data class VaultState(
      * Indicates what action card to display.
      */
     val actionCard: ActionCardState?
-        get() = (viewState as? ViewState.Content)?.let {
-            ActionCardState.UpgradedToPremium
-                .takeIf { isUpgradedToPremiumCardEligible }
-                ?: ActionCardState.UpgradePremium.takeIf { premiumCard == PremiumCard.UPGRADE }
-                ?: ActionCardState.PremiumNeedsAttention.takeIf {
-                    premiumCard == PremiumCard.NEEDS_ATTENTION
-                }
-                ?: ActionCardState.IntroducingArchive.takeIf {
-                    isPremium && !isIntroducingArchiveActionCardDismissed
-                }
+        get() = when (viewState) {
+            is ViewState.Content -> {
+                ActionCardState.UpgradedToPremium
+                    .takeIf { isUpgradedToPremiumCardEligible }
+                    ?: ActionCardState.UpgradePremium.takeIf { premiumCard == PremiumCard.UPGRADE }
+                    ?: ActionCardState.PremiumNeedsAttention.takeIf {
+                        premiumCard == PremiumCard.NEEDS_ATTENTION
+                    }
+                    ?: ActionCardState.IntroducingArchive.takeIf {
+                        isPremium && !isIntroducingArchiveActionCardDismissed
+                    }
+            }
+
+            ViewState.NoItems -> {
+                ActionCardState.UpgradePremium.takeIf { premiumCard == PremiumCard.UPGRADE }
+                    ?: ActionCardState.PremiumNeedsAttention.takeIf {
+                        premiumCard == PremiumCard.NEEDS_ATTENTION
+                    }
+                    ?: ActionCardState.ImportItems.takeIf { showImportActionCard }
+            }
+
+            is ViewState.Error,
+            ViewState.Loading,
+                -> null
         }
 
     /**
@@ -2211,6 +2221,11 @@ data class VaultState(
          * Indicates that the archive feature is ready for use.
          */
         data object IntroducingArchive : ActionCardState()
+
+        /**
+         * Indicates that the import items card should be displayed.
+         */
+        data object ImportItems : ActionCardState()
     }
 
     /**
@@ -2598,16 +2613,6 @@ sealed class VaultAction {
      * User clicked the Try Again button when there is an error displayed.
      */
     data object TryAgainClick : VaultAction()
-
-    /**
-     * The user has dismissed the import action card.
-     */
-    data object DismissImportActionCard : VaultAction()
-
-    /**
-     * The user has clicked the import action card.
-     */
-    data object ImportActionCardClick : VaultAction()
 
     /**
      * User clicked an overflow action.

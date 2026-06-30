@@ -2498,7 +2498,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `when import action card is showing, clicking it should send ImportLoginsClick action`() {
+    fun `when import action card is showing, clicking it should send ActionCardClick action`() {
         mutableStateFlow.update {
             it.copy(
                 viewState = VaultState.ViewState.NoItems,
@@ -2509,12 +2509,16 @@ class VaultScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Get started")
             .performClick()
 
-        verify { viewModel.trySendAction(VaultAction.ImportActionCardClick) }
+        verify {
+            viewModel.trySendAction(
+                VaultAction.ActionCardClick(VaultState.ActionCardState.ImportItems),
+            )
+        }
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `when import action card is showing, dismissing it should send DismissImportActionCard action`() {
+    fun `when import action card is showing, dismissing it should send DismissActionCardClick action`() {
         mutableStateFlow.update {
             it.copy(
                 viewState = VaultState.ViewState.NoItems,
@@ -2524,7 +2528,11 @@ class VaultScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithContentDescription("Close")
             .performClick()
-        verify { viewModel.trySendAction(VaultAction.DismissImportActionCard) }
+        verify {
+            viewModel.trySendAction(
+                VaultAction.DismissActionCardClick(VaultState.ActionCardState.ImportItems),
+            )
+        }
     }
 
     @Test
