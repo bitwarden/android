@@ -80,6 +80,7 @@ class AutofillParserTests {
     private val inlinePresentationSpecs: List<InlinePresentationSpec> = mockk()
     private val settingsRepository: SettingsRepository = mockk {
         every { isInlineAutofillEnabled } answers { mockIsInlineAutofillEnabled }
+        every { isFillAssistEnabled } answers { mockIsFillAssistEnabled }
         every { blockedAutofillUris } returns emptyList()
     }
     private val fillAssistManager: FillAssistManager = mockk()
