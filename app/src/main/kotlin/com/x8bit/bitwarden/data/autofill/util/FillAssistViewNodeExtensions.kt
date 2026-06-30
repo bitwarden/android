@@ -53,6 +53,7 @@ private fun AssistStructure.ViewNode.traverseForFillAssist(
 
 private fun String.toAutofillViewForFieldKey(data: AutofillView.Data): AutofillView? = when (this) {
     "username" -> AutofillView.Login.Username(data = data)
+    "email" -> AutofillView.Login.Email(data = data)
     "password", "newPassword" -> AutofillView.Login.Password(data = data)
     "cardNumber" -> AutofillView.Card.Number(data = data)
     "cardholderName" -> AutofillView.Card.CardholderName(data = data)
