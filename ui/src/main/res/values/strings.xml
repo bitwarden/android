@@ -1153,6 +1153,8 @@ Do you want to switch to this account?</string>
     <string name="no_items_imported">No items imported</string>
     <string name="no_items_received_from_the_selected_app">No items received from the selected app.</string>
     <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="vault_sync_unsuccessful">Sync unsuccessful</string>
+    <string name="vault_sync_failed_description">We couldn’t sync your vault with the server. Your vault may not reflect your latest changes. You can try again now or it will sync automatically later.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but they will not be visible in your vault until sync is performed.</string>
     <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
     <string name="saving_items">Saving items…</string>
