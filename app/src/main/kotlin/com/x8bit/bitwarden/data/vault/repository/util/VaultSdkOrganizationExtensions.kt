@@ -36,6 +36,7 @@ private val OrganizationStatusType.toSdkOrganizationUserStatusType: Organization
         OrganizationStatusType.INVITED -> OrganizationUserStatusType.INVITED
         OrganizationStatusType.ACCEPTED -> OrganizationUserStatusType.ACCEPTED
         OrganizationStatusType.CONFIRMED -> OrganizationUserStatusType.CONFIRMED
+        OrganizationStatusType.STAGED -> OrganizationUserStatusType.STAGED
     }
 
 private val OrganizationType.toSdkOrganizationUserType: OrganizationUserType

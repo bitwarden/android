@@ -64,6 +64,7 @@ private val STATUS_TYPE_MAP: Map<OrganizationStatusType, OrganizationUserStatusT
     OrganizationStatusType.INVITED to OrganizationUserStatusType.INVITED,
     OrganizationStatusType.ACCEPTED to OrganizationUserStatusType.ACCEPTED,
     OrganizationStatusType.CONFIRMED to OrganizationUserStatusType.CONFIRMED,
+    OrganizationStatusType.STAGED to OrganizationUserStatusType.STAGED,
 )
 
 private val ORGANIZATION_TYPE_MAP: Map<OrganizationType, OrganizationUserType> = mapOf(
