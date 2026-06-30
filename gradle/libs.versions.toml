@@ -42,7 +42,7 @@ googleProtoBufJava = "4.35.1"
 googleProtoBufPlugin = "0.10.0"
 googleServices = "4.4.4"
 googleReview = "2.0.2"
-hilt = "2.59.2"
+hilt = "2.60"
 junit = "6.1.0"
 jvmTarget = "21"
 kotlin = "2.4.0"
@@ -126,6 +126,7 @@ kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collec
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
+kotlin-metadata = { module = "org.jetbrains.kotlin:kotlin-metadata-jvm", version.ref = "kotlin" }
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 mockk-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 robolectric-robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
