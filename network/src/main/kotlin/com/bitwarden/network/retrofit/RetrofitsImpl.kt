@@ -26,7 +26,7 @@ internal class RetrofitsImpl(
     authTokenManager: AuthTokenManager,
     baseUrlInterceptors: BaseUrlInterceptors,
     cookieInterceptor: CookieInterceptor,
-    headersInterceptor: HeadersInterceptor,
+    private val headersInterceptor: HeadersInterceptor,
     json: Json,
     private val permissionInterceptor: PermissionInterceptor,
     private val certificateProvider: CertificateProvider,
@@ -67,7 +67,7 @@ internal class RetrofitsImpl(
     //region Fill-Assist Retrofit
 
     override val fillAssistRetrofit: Retrofit by lazy {
-        createUnauthenticatedRetrofit(
+        createFillAssistRetrofit(
             baseUrlInterceptor = baseUrlInterceptors.fillAssistInterceptor,
         )
     }
@@ -108,6 +108,14 @@ internal class RetrofitsImpl(
     private val baseOkHttpClient: OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(headersInterceptor)
         .addNetworkInterceptor(cookieInterceptor)
+        .configureSsl(certificateProvider = certificateProvider)
+        .build()
+
+    // Fill-assist might use HTTP 302 redirects for content delivery.
+    // CookieInterceptor treats all 302s as auth redirects and PermissionInterceptor does a DNS
+    // preflight that can fail spuriously — both must be excluded from this client.
+    private val fillAssistOkHttpClient: OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(headersInterceptor)
         .configureSsl(certificateProvider = certificateProvider)
         .build()
 
@@ -158,6 +166,20 @@ internal class RetrofitsImpl(
                     .addInterceptor(baseUrlInterceptor)
                     .addInterceptor(loggingInterceptor)
                     .addInterceptor(permissionInterceptor)
+                    .build(),
+            )
+            .build()
+
+    private fun createFillAssistRetrofit(
+        baseUrlInterceptor: BaseUrlInterceptor,
+    ): Retrofit =
+        baseRetrofit
+            .newBuilder()
+            .client(
+                fillAssistOkHttpClient
+                    .newBuilder()
+                    .addInterceptor(baseUrlInterceptor)
+                    .addInterceptor(loggingInterceptor)
                     .build(),
             )
             .build()
