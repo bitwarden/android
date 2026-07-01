@@ -3950,9 +3950,11 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `when DismissImportActionCard is sent, repository called to showImportLogins to false and storeShowImportLoginsBadge to true`() {
+    fun `DismissActionCardClick with ImportItems should call storeShowImportLogins false and storeShowImportLoginsSettingsBadge true`() {
         val viewModel = createViewModel()
-        viewModel.trySendAction(VaultAction.DismissImportActionCard)
+        viewModel.trySendAction(
+            VaultAction.DismissActionCardClick(VaultState.ActionCardState.ImportItems),
+        )
         verify(exactly = 1) {
             firstTimeActionManager.storeShowImportLogins(false)
             firstTimeActionManager.storeShowImportLoginsSettingsBadge(true)
@@ -3961,7 +3963,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `when DismissImportActionCard is sent, repository is not called if value is already false`() {
+    fun `DismissActionCardClick with ImportItems should not call storeShowImportLogins if value is already false`() {
         mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
             accounts = DEFAULT_USER_STATE.accounts.map {
                 it.copy(
@@ -3972,18 +3974,25 @@ class VaultViewModelTest : BaseViewModelTest() {
             },
         )
         val viewModel = createViewModel()
-        viewModel.trySendAction(VaultAction.DismissImportActionCard)
+        viewModel.trySendAction(
+            VaultAction.DismissActionCardClick(VaultState.ActionCardState.ImportItems),
+        )
+        verify(exactly = 1) {
+            firstTimeActionManager.storeShowImportLoginsSettingsBadge(true)
+        }
         verify(exactly = 0) {
             firstTimeActionManager.storeShowImportLogins(false)
         }
     }
 
     @Test
-    fun `when ImportActionCardClick is sent, NavigateToImportLogins event is sent`() =
+    fun `ActionCardClick with ImportItems should emit NavigateToImportLogins`() =
         runTest {
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
-                viewModel.trySendAction(VaultAction.ImportActionCardClick)
+                viewModel.trySendAction(
+                    VaultAction.ActionCardClick(VaultState.ActionCardState.ImportItems),
+                )
                 assertEquals(VaultEvent.NavigateToImportLogins, awaitItem())
             }
             verify(exactly = 0) {
@@ -3991,22 +4000,76 @@ class VaultViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `when ImportActionCardClick is sent, repository is not called if value is already false`() {
-        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-            accounts = DEFAULT_USER_STATE.accounts.map {
-                it.copy(
-                    firstTimeState = DEFAULT_FIRST_TIME_STATE.copy(
-                        showImportLoginsCard = false,
-                    ),
-                )
-            },
+    fun `actionCard should return ImportItems when NoItems is showing and showImportActionCard is true`() {
+        val state = createMockVaultState(viewState = VaultState.ViewState.NoItems).copy(
+            premiumCard = PremiumCard.NONE,
+            showImportActionCard = true,
         )
-        val viewModel = createViewModel()
-        viewModel.trySendAction(VaultAction.ImportActionCardClick)
-        verify(exactly = 0) {
-            firstTimeActionManager.storeShowImportLogins(false)
-        }
+
+        assertEquals(
+            VaultState.ActionCardState.ImportItems,
+            state.actionCard,
+        )
+    }
+
+    @Test
+    fun `actionCard should return UpgradePremium when NoItems is showing and eligible`() {
+        val state = createMockVaultState(viewState = VaultState.ViewState.NoItems).copy(
+            premiumCard = PremiumCard.UPGRADE,
+            showImportActionCard = true,
+        )
+
+        assertEquals(
+            VaultState.ActionCardState.UpgradePremium,
+            state.actionCard,
+        )
+    }
+
+    @Test
+    fun `actionCard should return PremiumNeedsAttention when NoItems is showing and eligible`() {
+        val state = createMockVaultState(viewState = VaultState.ViewState.NoItems).copy(
+            premiumCard = PremiumCard.NEEDS_ATTENTION,
+            showImportActionCard = true,
+        )
+
+        assertEquals(
+            VaultState.ActionCardState.PremiumNeedsAttention,
+            state.actionCard,
+        )
+    }
+
+    @Test
+    fun `actionCard should return null when NoItems is showing and not eligible for any card`() {
+        val state = createMockVaultState(viewState = VaultState.ViewState.NoItems).copy(
+            premiumCard = PremiumCard.NONE,
+            showImportActionCard = false,
+        )
+
+        assertNull(state.actionCard)
+    }
+
+    @Test
+    fun `actionCard should return null when Loading is showing`() {
+        val state = createMockVaultState(viewState = VaultState.ViewState.Loading).copy(
+            premiumCard = PremiumCard.UPGRADE,
+            showImportActionCard = true,
+        )
+
+        assertNull(state.actionCard)
+    }
+
+    @Test
+    fun `actionCard should return null when Error is showing`() {
+        val state = createMockVaultState(
+            viewState = VaultState.ViewState.Error(message = "error".asText()),
+        ).copy(
+            premiumCard = PremiumCard.UPGRADE,
+            showImportActionCard = true,
+        )
+
+        assertNull(state.actionCard)
     }
 
     @Test
