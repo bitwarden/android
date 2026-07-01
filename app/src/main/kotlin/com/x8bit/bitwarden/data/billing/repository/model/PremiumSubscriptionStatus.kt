@@ -20,5 +20,6 @@ enum class PremiumSubscriptionStatus {
     PENDING_CANCELLATION,
     PAST_DUE,
     PAUSED,
+    UNPAID,
     UPDATE_PAYMENT,
 }

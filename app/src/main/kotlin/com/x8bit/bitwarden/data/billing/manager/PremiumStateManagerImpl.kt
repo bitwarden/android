@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -382,12 +383,20 @@ class PremiumStateManagerImpl(
             .flatMapLatest {
                 flow {
                     emit(SubscriptionStatusState.Loading)
-                    emit(fetchSubscriptionStatusOnce())
+                    emit(billingRepository.getSubscription().toSubscriptionStatusState())
+                    // This is here to ensure that other places that call
+                    // getSubscription also update this flow
+                    emitAll(
+                        billingRepository
+                            .getSubscriptionFlow()
+                            .map { it.toSubscriptionStatusState() },
+                    )
                 }
             }
+            .distinctUntilChanged()
 
-    private suspend fun fetchSubscriptionStatusOnce(): SubscriptionStatusState =
-        when (val result = billingRepository.getSubscription()) {
+    private fun SubscriptionResult.toSubscriptionStatusState(): SubscriptionStatusState =
+        when (val result = this) {
             is SubscriptionResult.Success -> {
                 SubscriptionStatusState.Available(status = result.subscription.status)
             }
@@ -413,6 +422,7 @@ private fun SubscriptionStatusState.premiumCardState(): PremiumCard =
         is SubscriptionStatusState.Available -> {
             when (this.status) {
                 PremiumSubscriptionStatus.PAST_DUE,
+                PremiumSubscriptionStatus.UNPAID,
                 PremiumSubscriptionStatus.UPDATE_PAYMENT,
                     -> PremiumCard.NEEDS_ATTENTION
 
