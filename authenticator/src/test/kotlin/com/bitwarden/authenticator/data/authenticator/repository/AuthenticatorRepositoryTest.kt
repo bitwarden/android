@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.data.authenticator.repository
 
 import android.net.Uri
+import android.text.TextUtils
 import app.cash.turbine.test
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.util.FakeAuthenticatorDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.entity.createMockAuthenticatorItemEntity
@@ -24,6 +25,8 @@ import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
 import com.bitwarden.authenticatorbridge.model.SharedAccountData
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.util.asFailure
+import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.mockBuilder
 import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.ui.platform.model.FileData
@@ -86,6 +89,8 @@ class AuthenticatorRepositoryTest {
         mockBuilder<Uri.Builder> { it.appendPath(any()) }
         mockBuilder<Uri.Builder> { it.appendQueryParameter(any(), any()) }
         every { anyConstructed<Uri.Builder>().build() } returns mockBuiltUri
+        mockkStatic(TextUtils::htmlEncode)
+        every { TextUtils.htmlEncode(any()) } returns ""
     }
 
     @AfterEach
@@ -93,6 +98,7 @@ class AuthenticatorRepositoryTest {
         unmockkStatic(Uri::class)
         unmockkStatic(List<SharedAccountData.Account>::toAuthenticatorItems)
         unmockkConstructor(Uri.Builder::class)
+        unmockkStatic(TextUtils::htmlEncode)
     }
 
     @Test
@@ -396,7 +402,7 @@ class AuthenticatorRepositoryTest {
 
         coEvery {
             mockFileManager.uriToByteArray(mockUri)
-        } returns Result.success(testByteArray)
+        } returns testByteArray.asSuccess()
 
         coEvery {
             mockImportManager.import(
@@ -424,7 +430,7 @@ class AuthenticatorRepositoryTest {
 
         coEvery {
             mockFileManager.uriToByteArray(mockUri)
-        } returns Result.failure(RuntimeException("File read error"))
+        } returns RuntimeException("File read error").asFailure()
 
         val result = authenticatorRepository.importVaultData(
             format = ImportFileFormat.BITWARDEN_JSON,
@@ -446,7 +452,7 @@ class AuthenticatorRepositoryTest {
 
         coEvery {
             mockFileManager.uriToByteArray(mockUri)
-        } returns Result.success(testByteArray)
+        } returns testByteArray.asSuccess()
 
         coEvery {
             mockImportManager.import(
