@@ -343,6 +343,23 @@ class LandingScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `allowCreateAccount state should show and hide CreateAccount UI`() {
+        composeTestRule
+            .onNodeWithText(text = "Create an account")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(selectedEnvironmentType = Environment.Type.FED_RAMP) }
+        composeTestRule.onNodeWithText(text = "Create an account").assertDoesNotExist()
+
+        mutableStateFlow.update { it.copy(selectedEnvironmentType = Environment.Type.EU) }
+        composeTestRule
+            .onNodeWithText(text = "Create an account")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
     fun `selecting environment should send EnvironmentOptionSelect action`() {
         val selectedEnvironment = Environment.Eu
 
@@ -506,4 +523,5 @@ private val DEFAULT_STATE = LandingState(
     selectedEnvironmentLabel = Environment.Us.label,
     dialog = null,
     accountSummaries = emptyList(),
+    isFedRampEnabled = true,
 )

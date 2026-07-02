@@ -7,15 +7,21 @@ import java.net.URI
 
 private const val DEFAULT_US_API_URL: String = "https://api.bitwarden.com"
 private const val DEFAULT_EU_API_URL: String = "https://api.bitwarden.eu"
+private const val DEFAULT_FED_RAMP_API_URL: String = "https://api.bitwarden-gov.com"
 private const val DEFAULT_US_EVENTS_URL: String = "https://events.bitwarden.com"
 private const val DEFAULT_EU_EVENTS_URL: String = "https://events.bitwarden.eu"
+private const val DEFAULT_FED_RAMP_EVENTS_URL: String = "https://events.bitwarden-gov.com"
 private const val DEFAULT_US_IDENTITY_URL: String = "https://identity.bitwarden.com"
 private const val DEFAULT_EU_IDENTITY_URL: String = "https://identity.bitwarden.eu"
+private const val DEFAULT_FED_RAMP_IDENTITY_URL: String = "https://identity.bitwarden-gov.com"
 private const val DEFAULT_US_WEB_VAULT_URL: String = "https://vault.bitwarden.com"
 private const val DEFAULT_EU_WEB_VAULT_URL: String = "https://vault.bitwarden.eu"
+private const val DEFAULT_FED_RAMP_WEB_VAULT_URL: String = "https://vault.bitwarden-gov.com"
 private const val DEFAULT_US_WEB_SEND_URL: String = "https://send.bitwarden.com/#"
+private const val DEFAULT_FED_RAMP_WEB_SEND_URL: String = "https://send.bitwarden-gov.com/#"
 private const val DEFAULT_US_ICON_URL: String = "https://icons.bitwarden.net"
 private const val DEFAULT_EU_ICON_URL: String = "https://icons.bitwarden.eu"
+private const val DEFAULT_FED_RAMP_ICON_URL: String = "https://icons.bitwarden-gov.com"
 
 /**
  * Returns the base api URL or the default value if one is not present.
@@ -24,6 +30,7 @@ val EnvironmentUrlDataJson.baseApiUrl: String
     get() = when (this.environmentRegion) {
         EnvironmentRegion.UNITED_STATES -> DEFAULT_US_API_URL
         EnvironmentRegion.EUROPEAN_UNION -> DEFAULT_EU_API_URL
+        EnvironmentRegion.FED_RAMP -> DEFAULT_FED_RAMP_API_URL
         EnvironmentRegion.INTERNAL,
         EnvironmentRegion.SELF_HOSTED,
             -> {
@@ -40,6 +47,7 @@ val EnvironmentUrlDataJson.appLinksScheme: String
     get() = when (this.environmentRegion) {
         EnvironmentRegion.UNITED_STATES,
         EnvironmentRegion.EUROPEAN_UNION,
+        EnvironmentRegion.FED_RAMP,
         EnvironmentRegion.INTERNAL,
             -> "https"
 
@@ -53,6 +61,7 @@ val EnvironmentUrlDataJson.baseEventsUrl: String
     get() = when (this.environmentRegion) {
         EnvironmentRegion.UNITED_STATES -> DEFAULT_US_EVENTS_URL
         EnvironmentRegion.EUROPEAN_UNION -> DEFAULT_EU_EVENTS_URL
+        EnvironmentRegion.FED_RAMP -> DEFAULT_FED_RAMP_EVENTS_URL
         EnvironmentRegion.INTERNAL,
         EnvironmentRegion.SELF_HOSTED,
             -> {
@@ -69,6 +78,7 @@ val EnvironmentUrlDataJson.baseIdentityUrl: String
     get() = when (this.environmentRegion) {
         EnvironmentRegion.UNITED_STATES -> DEFAULT_US_IDENTITY_URL
         EnvironmentRegion.EUROPEAN_UNION -> DEFAULT_EU_IDENTITY_URL
+        EnvironmentRegion.FED_RAMP -> DEFAULT_FED_RAMP_IDENTITY_URL
         EnvironmentRegion.INTERNAL,
         EnvironmentRegion.SELF_HOSTED,
             -> {
@@ -87,6 +97,7 @@ val EnvironmentUrlDataJson.baseWebVaultUrlOrNull: String?
     get() = when (this.environmentRegion) {
         EnvironmentRegion.UNITED_STATES -> DEFAULT_US_WEB_VAULT_URL
         EnvironmentRegion.EUROPEAN_UNION -> DEFAULT_EU_WEB_VAULT_URL
+        EnvironmentRegion.FED_RAMP -> DEFAULT_FED_RAMP_WEB_VAULT_URL
         EnvironmentRegion.INTERNAL,
         EnvironmentRegion.SELF_HOSTED,
             -> this.webVault.sanitizeUrl ?: this.base.sanitizeUrl
@@ -106,6 +117,7 @@ val EnvironmentUrlDataJson.baseWebVaultUrlOrDefault: String
 val EnvironmentUrlDataJson.baseWebSendUrl: String
     get() = when (this.environmentRegion) {
         EnvironmentRegion.UNITED_STATES -> DEFAULT_US_WEB_SEND_URL
+        EnvironmentRegion.FED_RAMP -> DEFAULT_FED_RAMP_WEB_SEND_URL
         EnvironmentRegion.EUROPEAN_UNION,
         EnvironmentRegion.INTERNAL,
         EnvironmentRegion.SELF_HOSTED,
@@ -128,6 +140,7 @@ val EnvironmentUrlDataJson.baseIconUrl: String
     get() = when (this.environmentRegion) {
         EnvironmentRegion.UNITED_STATES -> DEFAULT_US_ICON_URL
         EnvironmentRegion.EUROPEAN_UNION -> DEFAULT_EU_ICON_URL
+        EnvironmentRegion.FED_RAMP -> DEFAULT_FED_RAMP_ICON_URL
         EnvironmentRegion.INTERNAL,
         EnvironmentRegion.SELF_HOSTED,
             -> {
@@ -139,7 +152,7 @@ val EnvironmentUrlDataJson.baseIconUrl: String
 
 /**
  * Returns the appropriate pre-defined labels for environments matching the known US/EU values.
- * Otherwise returns the host of the custom base URL.
+ * Otherwise, returns the host of the custom base URL.
  *
  * @see getSelfHostedUrlOrNull
  */
@@ -147,6 +160,7 @@ val EnvironmentUrlDataJson.labelOrBaseUrlHost: String
     get() = when (this) {
         EnvironmentUrlDataJson.DEFAULT_US -> Environment.Us.label
         EnvironmentUrlDataJson.DEFAULT_EU -> Environment.Eu.label
+        EnvironmentUrlDataJson.DEFAULT_FED_RAMP -> Environment.FedRamp.label
         else -> {
             // Grab the domain
             // Ex:
@@ -189,6 +203,7 @@ fun EnvironmentUrlDataJson.toEnvironmentUrls(): Environment =
         EnvironmentUrlDataJson.DEFAULT_LEGACY_EU,
             -> Environment.Eu
 
+        EnvironmentUrlDataJson.DEFAULT_FED_RAMP -> Environment.FedRamp
         else -> Environment.SelfHosted(environmentUrlData = this)
     }
 

@@ -125,6 +125,11 @@ class StartRegistrationViewModel @Inject constructor(
                 sendEvent(StartRegistrationEvent.NavigateToEnvironment)
                 return
             }
+
+            Environment.Type.FED_RAMP -> {
+                // New account creation is not supported with FedRAMP.
+                return
+            }
         }
 
         // Update the environment in the repo; the VM state will update accordingly because it is
@@ -296,7 +301,10 @@ data class StartRegistrationState(
      * The selectable environments.
      */
     val environmentTypeOptions: ImmutableList<Environment.Type>
-        get() = Environment.Type.entries.toImmutableList()
+        get() = Environment.Type
+            .entries
+            .filterNot { it == Environment.Type.FED_RAMP }
+            .toImmutableList()
 }
 
 /**
