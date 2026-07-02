@@ -26,7 +26,7 @@ internal class RetrofitsImpl(
     authTokenManager: AuthTokenManager,
     baseUrlInterceptors: BaseUrlInterceptors,
     cookieInterceptor: CookieInterceptor,
-    private val headersInterceptor: HeadersInterceptor,
+    headersInterceptor: HeadersInterceptor,
     json: Json,
     private val permissionInterceptor: PermissionInterceptor,
     private val certificateProvider: CertificateProvider,
@@ -112,8 +112,7 @@ internal class RetrofitsImpl(
         .build()
 
     // Fill-assist might use HTTP 302 redirects for content delivery.
-    // CookieInterceptor treats all 302s as auth redirects and PermissionInterceptor does a DNS
-    // preflight that can fail spuriously — both must be excluded from this client.
+    // CookieInterceptor treats all 302s as auth redirects.
     private val fillAssistOkHttpClient: OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(headersInterceptor)
         .configureSsl(certificateProvider = certificateProvider)
@@ -180,6 +179,7 @@ internal class RetrofitsImpl(
                     .newBuilder()
                     .addInterceptor(baseUrlInterceptor)
                     .addInterceptor(loggingInterceptor)
+                    .addInterceptor(permissionInterceptor)
                     .build(),
             )
             .build()
