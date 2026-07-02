@@ -44,6 +44,11 @@ private val ID_SHORTHAND_REGEX = Regex("""#([^.\[#\s]+)""")
 // Extracts the leading tag name from a selector (e.g. "input", "select", "form").
 private val TAG_REGEX = Regex("""^([a-zA-Z][a-zA-Z0-9]*)""")
 
+// Splits on whitespace that is outside [...] attribute brackets, so that descendant selectors
+// like "div#container input#field" are split correctly while attribute values containing spaces
+// (e.g. [placeholder='Email address']) are preserved intact.
+private val DESCENDANT_SEPARATOR_REGEX = Regex("""\s+(?![^\[]*])""")
+
 /**
  * Primary implementation of [FillAssistManager].
  */
@@ -213,13 +218,13 @@ private fun parseCompositeSelectorArray(element: JsonElement): List<SelectorClau
 }
 
 internal fun parseSingleSelector(selector: String): SelectorClause? {
-    // For shadow DOM / iframe selectors (>>>), extract the last segment — the actual target
-    // element. Android's autofill framework may expose these elements via htmlInfo when they
-    // are reachable (e.g. open shadow roots), so we parse their attributes for matching.
-    val effective = if (selector.contains(">>>")) {
-        selector.substringAfterLast(">>>").trim()
-    } else {
-        selector
+    // For descendant selectors, only the last segment describes the target element — earlier
+    // parts describe ancestors that are not represented as view nodes by the autofill framework.
+    // Shadow DOM (>>>) and space-separated CSS descendant selectors are both handled this way.
+    // Whitespace inside [...] is part of an attribute value and must not be treated as a separator.
+    val effective = when {
+        selector.contains(">>>") -> selector.substringAfterLast(">>>").trim()
+        else -> selector.split(DESCENDANT_SEPARATOR_REGEX).last().trim()
     }
     if (effective.trimStart().startsWith(".")) return null
 

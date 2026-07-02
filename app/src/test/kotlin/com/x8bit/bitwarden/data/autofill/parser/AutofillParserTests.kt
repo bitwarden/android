@@ -1,28 +1,38 @@
 package com.x8bit.bitwarden.data.autofill.parser
 
 import android.app.assist.AssistStructure
+import android.net.Uri
+import android.net.Uri.parse
 import android.service.autofill.FillContext
 import android.service.autofill.FillRequest
 import android.view.View
+import android.view.ViewStructure.HtmlInfo
 import android.view.autofill.AutofillId
 import android.widget.inline.InlinePresentationSpec
+import com.bitwarden.core.data.manager.model.FlagKey
+import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
+import com.x8bit.bitwarden.data.autofill.model.FillAssistRules
 import com.x8bit.bitwarden.data.autofill.model.ViewNodeTraversalData
 import com.x8bit.bitwarden.data.autofill.util.buildPackageNameOrNull
 import com.x8bit.bitwarden.data.autofill.util.buildUriOrNull
 import com.x8bit.bitwarden.data.autofill.util.getInlinePresentationSpecs
 import com.x8bit.bitwarden.data.autofill.util.getMaxInlineSuggestionsCount
+import com.x8bit.bitwarden.data.autofill.util.matchesSelectorClause
 import com.x8bit.bitwarden.data.autofill.util.toAutofillView
+import com.x8bit.bitwarden.data.autofill.util.toAutofillViewData
 import com.x8bit.bitwarden.data.autofill.util.website
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -40,6 +50,7 @@ class AutofillParserTests {
         every { this@mockk.autofillHints } returns arrayOf(cardAutofillHint)
         every { this@mockk.autofillId } returns cardAutofillId
         every { this@mockk.childCount } returns 0
+        every { this@mockk.htmlInfo } returns mockk(relaxed = true)
         every { this@mockk.idPackage } returns ID_PACKAGE
         every { this@mockk.idEntry } returns null
     }
@@ -49,6 +60,7 @@ class AutofillParserTests {
         every { this@mockk.autofillHints } returns arrayOf(loginAutofillHint)
         every { this@mockk.autofillId } returns loginAutofillId
         every { this@mockk.childCount } returns 0
+        every { this@mockk.htmlInfo } returns mockk(relaxed = true)
         every { this@mockk.idPackage } returns ID_PACKAGE
         every { this@mockk.idEntry } returns null
     }
@@ -70,13 +82,40 @@ class AutofillParserTests {
         every { isInlineAutofillEnabled } answers { mockIsInlineAutofillEnabled }
         every { blockedAutofillUris } returns emptyList()
     }
+    private val fillAssistManager: FillAssistManager = mockk()
+    private val mutableFillAssistFlagFlow = MutableStateFlow(false)
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every {
+            getFeatureFlag(FlagKey.FillAssistTargetingRules)
+        } answers {
+            mutableFillAssistFlagFlow.value
+        }
+        every { getFeatureFlagFlow(FlagKey.ManageDevices) } returns mutableFillAssistFlagFlow
+    }
 
     private var mockIsInlineAutofillEnabled = true
+    private var mockIsFillAssistEnabled = false
 
     @BeforeEach
     fun setup() {
+        mockIsFillAssistEnabled = false
+        // toAutofillView, website, and toAutofillViewData all compile into the same
+        // ViewNodeExtensionsKt class, so one mockkStatic call covers all three.
         mockkStatic(AssistStructure.ViewNode::toAutofillView)
-        mockkStatic(AssistStructure.ViewNode::website)
+        // Default stub for toAutofillViewData (same mocked class — no separate mockkStatic needed).
+        every {
+            any<AssistStructure.ViewNode>().toAutofillViewData(autofillId = any(), website = any())
+        } answers {
+            AutofillView.Data(
+                autofillId = firstArg(),
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = false,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = secondArg(),
+            )
+        }
         mockkStatic(
             FillRequest::getMaxInlineSuggestionsCount,
             FillRequest::getInlinePresentationSpecs,
@@ -127,13 +166,23 @@ class AutofillParserTests {
         every { any<AutofillView>().buildUriOrNull(PACKAGE_NAME) } returns URI
         parser = AutofillParserImpl(
             settingsRepository = settingsRepository,
+            fillAssistManager = fillAssistManager,
+            featureFlagManager = featureFlagManager,
         )
+
+        mockkStatic(Uri::parse)
+        every { parse(any()) } returns mockk {
+            every { host } returns FILL_ASSIST_URI
+        }
+        mockkStatic(HtmlInfo::matchesSelectorClause)
+        every { any<HtmlInfo>().matchesSelectorClause(any()) } returns false
     }
 
     @AfterEach
     fun teardown() {
         unmockkStatic(AssistStructure.ViewNode::toAutofillView)
-        unmockkStatic(AssistStructure.ViewNode::website)
+        unmockkStatic(Uri::parse)
+        unmockkStatic(HtmlInfo::matchesSelectorClause)
         unmockkStatic(
             FillRequest::getMaxInlineSuggestionsCount,
             FillRequest::getInlinePresentationSpecs,
@@ -545,10 +594,9 @@ class AutofillParserTests {
         val rootViewNode: AssistStructure.ViewNode = mockk {
             every { this@mockk.autofillHints } returns emptyArray()
             every { this@mockk.autofillId } returns rootAutofillId
-            every { this@mockk.childCount } returns 0
+            every { this@mockk.childCount } returns 2
             every { this@mockk.idPackage } returns ID_PACKAGE
             every { this@mockk.website } returns WEBSITE
-            every { this@mockk.childCount } returns 2
             every { this@mockk.getChildAt(0) } returns hiddenUserNameViewNode
             every { this@mockk.getChildAt(1) } returns passwordViewNode
         }
@@ -947,6 +995,273 @@ class AutofillParserTests {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `parse should fall back to heuristics when fill-assist rules exist but only cover login and a card view is focused`() {
+        // Setup: fill-assist enabled with login-only rules, but a card view is focused.
+        mutableFillAssistFlagFlow.value = true
+        mockIsFillAssistEnabled = true
+        every {
+            any<AutofillView>().buildUriOrNull(PACKAGE_NAME)
+        } returns FILL_ASSIST_URI
+        every { fillAssistManager.getFillAssistRules() } returns FillAssistRules(
+            hostRules = mapOf(
+                FILL_ASSIST_URI to listOf(
+                    FillAssistRules.HostRule(
+                        category = "account-login",
+                        fields = mapOf(
+                            "username" to listOf(
+                                FillAssistRules.SelectorClause(
+                                    tag = "input",
+                                    id = "user",
+                                    name = null,
+                                    type = null,
+                                    role = null,
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        )
+        every { assistStructure.windowNodeCount } returns 1
+        every { assistStructure.getWindowNodeAt(0) } returns cardWindowNode
+        val cardAutofillView = AutofillView.Card.ExpirationYear(
+            data = AutofillView.Data(
+                autofillId = cardAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = FILL_ASSIST_URI,
+            ),
+            yearValue = null,
+        )
+        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
+
+        // Test
+        val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
+
+        // Verify: heuristic card view used
+        val expected = AutofillRequest.Fillable(
+            ignoreAutofillIds = emptyList(),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = PACKAGE_NAME,
+            partition = AutofillPartition.Card(views = listOf(cardAutofillView)),
+            uri = FILL_ASSIST_URI,
+        )
+        assertEquals(expected, actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `parse should fall back to heuristics when fill-assist rules exist but only cover payment-card and a login view is focused`() {
+        // Setup: fill-assist enabled with card-only rules, but a login view is focused.
+        mutableFillAssistFlagFlow.value = true
+        mockIsFillAssistEnabled = true
+        every { any<AutofillView>().buildUriOrNull(PACKAGE_NAME) } returns FILL_ASSIST_URI
+        every { fillAssistManager.getFillAssistRules() } returns FillAssistRules(
+            hostRules = mapOf(
+                FILL_ASSIST_URI to listOf(
+                    FillAssistRules.HostRule(
+                        category = "payment-card",
+                        fields = mapOf(
+                            "cardNumber" to listOf(
+                                FillAssistRules.SelectorClause(
+                                    tag = "input",
+                                    id = "card-number",
+                                    name = null,
+                                    type = null,
+                                    role = null,
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        )
+        every { assistStructure.windowNodeCount } returns 1
+        every { assistStructure.getWindowNodeAt(0) } returns loginWindowNode
+        val loginAutofillView = AutofillView.Login.Username(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = FILL_ASSIST_URI,
+            ),
+        )
+        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+
+        // Test
+        val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
+
+        // Verify: heuristic login view used
+        val expected = AutofillRequest.Fillable(
+            ignoreAutofillIds = emptyList(),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = PACKAGE_NAME,
+            partition = AutofillPartition.Login(views = listOf(loginAutofillView)),
+            uri = FILL_ASSIST_URI,
+        )
+        assertEquals(expected, actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `parse should use fill-assist views when rules cover login and a login view is focused`() {
+        // Setup: fill-assist with login rules, login view focused.
+        // The heuristic and fill-assist paths produce views with DIFFERENT autofillIds so the
+        // assertion proves which path was actually taken. If heuristics are used the partition
+        // contains loginAutofillId; if fill-assist is used it contains fillAssistAutofillId.
+        mutableFillAssistFlagFlow.value = true
+        mockIsFillAssistEnabled = true
+        every { any<AutofillView>().buildUriOrNull(PACKAGE_NAME) } returns FILL_ASSIST_URI
+        every { fillAssistManager.getFillAssistRules() } returns FillAssistRules(
+            hostRules = mapOf(
+                FILL_ASSIST_URI to listOf(
+                    FillAssistRules.HostRule(
+                        category = "account-login",
+                        fields = mapOf(
+                            "username" to listOf(
+                                FillAssistRules.SelectorClause(
+                                    tag = "input",
+                                    id = "user",
+                                    name = null,
+                                    type = null,
+                                    role = null,
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        )
+        val heuristicLoginView = AutofillView.Login.Username(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = FILL_ASSIST_URI,
+            ),
+        )
+        val fillAssistAutofillId: AutofillId = mockk()
+        val fillAssistLoginData = AutofillView.Data(
+            autofillId = fillAssistAutofillId,
+            autofillOptions = emptyList(),
+            autofillType = AUTOFILL_TYPE,
+            isFocused = true,
+            textValue = null,
+            hasPasswordTerms = false,
+            website = WEBSITE,
+        )
+        every { any<HtmlInfo>().matchesSelectorClause(any()) } returns true
+        every {
+            loginViewNode.toAutofillViewData(autofillId = loginAutofillId, website = WEBSITE)
+        } returns fillAssistLoginData
+        every { assistStructure.windowNodeCount } returns 1
+        every { assistStructure.getWindowNodeAt(0) } returns loginWindowNode
+        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns heuristicLoginView
+
+        // Test
+        val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
+
+        // Verify: fill-assist views used — partition contains fillAssistAutofillId.
+        // Heuristics would have produced loginAutofillId
+        val expected = AutofillRequest.Fillable(
+            ignoreAutofillIds = emptyList(),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = PACKAGE_NAME,
+            partition = AutofillPartition.Login(
+                views = listOf(AutofillView.Login.Username(data = fillAssistLoginData)),
+            ),
+            uri = FILL_ASSIST_URI,
+        )
+        assertEquals(expected, actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `parse should use fill-assist when rules cover payment-card and a card view is focused`() {
+        mutableFillAssistFlagFlow.value = true
+        mockIsFillAssistEnabled = true
+        every { any<AutofillView>().buildUriOrNull(PACKAGE_NAME) } returns FILL_ASSIST_URI
+        every { fillAssistManager.getFillAssistRules() } returns FillAssistRules(
+            hostRules = mapOf(
+                FILL_ASSIST_URI to listOf(
+                    FillAssistRules.HostRule(
+                        category = "payment-card",
+                        fields = mapOf(
+                            "cardNumber" to listOf(
+                                FillAssistRules.SelectorClause(
+                                    tag = "input",
+                                    id = "card-number",
+                                    name = null,
+                                    type = null,
+                                    role = null,
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        )
+        val heuristicCardView = AutofillView.Card.ExpirationYear(
+            data = AutofillView.Data(
+                autofillId = cardAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = FILL_ASSIST_URI,
+            ),
+            yearValue = null,
+        )
+        val fillAssistAutofillId: AutofillId = mockk()
+        val fillAssistCardData = AutofillView.Data(
+            autofillId = fillAssistAutofillId,
+            autofillOptions = emptyList(),
+            autofillType = AUTOFILL_TYPE,
+            isFocused = true,
+            textValue = null,
+            hasPasswordTerms = false,
+            website = WEBSITE,
+        )
+        every { any<HtmlInfo>().matchesSelectorClause(any()) } returns true
+        every {
+            cardViewNode.toAutofillViewData(autofillId = cardAutofillId, website = WEBSITE)
+        } returns fillAssistCardData
+        every { assistStructure.windowNodeCount } returns 1
+        every { assistStructure.getWindowNodeAt(0) } returns cardWindowNode
+        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns heuristicCardView
+
+        // Test
+        val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
+
+        // Verify: fill-assist views used — partition contains fillAssistAutofillId.
+        val expected = AutofillRequest.Fillable(
+            ignoreAutofillIds = emptyList(),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = PACKAGE_NAME,
+            partition = AutofillPartition.Card(
+                views = listOf(AutofillView.Card.Number(data = fillAssistCardData)),
+            ),
+            uri = FILL_ASSIST_URI,
+        )
+        assertEquals(expected, actual)
+    }
+
     /**
      * Setup [assistStructure] to return window nodes with each [AutofillView] type (card and login)
      * so we can test how different window node configurations produce different partitions.
@@ -957,6 +1272,8 @@ class AutofillParserTests {
         every { assistStructure.getWindowNodeAt(1) } returns loginWindowNode
     }
 }
+
+private const val FILL_ASSIST_URI: String = "https://example.com"
 
 private val BLOCK_LISTED_URIS: List<String> = listOf(
     "androidapp://android",
