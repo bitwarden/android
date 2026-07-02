@@ -135,6 +135,21 @@ class RestrictionManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `initialize with baseEnvironmentUrl bundle data matching the current FedRAMP environment should set the environment to FedRAMP`() {
+        every {
+            restrictionsManager.applicationRestrictions
+        } returns mockBundle("baseEnvironmentUrl" to "https://vault.bitwarden-gov.com")
+
+        restrictionManager.initialize()
+
+        verify(exactly = 1) {
+            restrictionsManager.applicationRestrictions
+        }
+        assertEquals(Environment.FedRamp, fakeEnvironmentRepository.environment)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `initialize with baseEnvironmentUrl bundle data matching the current self-hosted environment should set the environment to self-hosted`() {
         val baseUrl = "https://vault.qa.bitwarden.pw"
         val environment = Environment.SelfHosted(

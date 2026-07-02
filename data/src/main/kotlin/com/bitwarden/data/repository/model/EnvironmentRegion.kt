@@ -6,6 +6,7 @@ package com.bitwarden.data.repository.model
 enum class EnvironmentRegion {
     UNITED_STATES,
     EUROPEAN_UNION,
+    FED_RAMP,
     INTERNAL,
     SELF_HOSTED,
 }
