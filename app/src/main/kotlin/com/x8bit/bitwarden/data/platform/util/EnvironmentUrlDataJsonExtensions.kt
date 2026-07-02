@@ -43,6 +43,13 @@ private fun EnvironmentUrlDataJson.authTabData(
         )
     }
 
+    EnvironmentRegion.FED_RAMP -> {
+        AuthTabData.HttpsScheme(
+            host = "bitwarden-gov.com",
+            path = "$kind-callback",
+        )
+    }
+
     EnvironmentRegion.SELF_HOSTED -> {
         AuthTabData.CustomScheme(
             callbackUrl = "bitwarden://$kind-callback",
