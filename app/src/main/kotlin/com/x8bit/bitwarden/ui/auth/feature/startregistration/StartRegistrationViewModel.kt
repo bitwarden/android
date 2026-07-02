@@ -4,7 +4,6 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.data.repository.model.Environment
-import com.bitwarden.data.repository.model.Environment.Type
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isValidEmail
@@ -19,6 +18,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResul
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -40,15 +41,17 @@ class StartRegistrationViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
 ) : BaseViewModel<StartRegistrationState, StartRegistrationEvent, StartRegistrationAction>(
-    initialState = savedStateHandle[KEY_STATE]
-        ?: StartRegistrationState(
+    initialState = savedStateHandle[KEY_STATE] ?: run {
+        val environmentType = environmentRepository.environment.type
+        StartRegistrationState(
             emailInput = "",
             nameInput = "",
-            isReceiveMarketingEmailsToggled = environmentRepository.environment.type == Type.US,
+            isReceiveMarketingEmailsToggled = environmentType == Environment.Type.US,
             isContinueButtonEnabled = false,
-            selectedEnvironmentType = environmentRepository.environment.type,
+            selectedEnvironmentType = environmentType,
             dialog = null,
-        ),
+        )
+    },
 ) {
 
     init {
@@ -115,9 +118,9 @@ class StartRegistrationViewModel @Inject constructor(
 
     private fun handleEnvironmentTypeSelect(action: StartRegistrationAction.EnvironmentTypeSelect) {
         val environment = when (action.environmentType) {
-            Type.US -> Environment.Us
-            Type.EU -> Environment.Eu
-            Type.SELF_HOSTED -> {
+            Environment.Type.US -> Environment.Us
+            Environment.Type.EU -> Environment.Eu
+            Environment.Type.SELF_HOSTED -> {
                 // Launch the self-hosted screen and select the full environment details there.
                 sendEvent(StartRegistrationEvent.NavigateToEnvironment)
                 return
@@ -286,9 +289,15 @@ data class StartRegistrationState(
     val nameInput: String,
     val isReceiveMarketingEmailsToggled: Boolean,
     val isContinueButtonEnabled: Boolean,
-    val selectedEnvironmentType: Type,
+    val selectedEnvironmentType: Environment.Type,
     val dialog: StartRegistrationDialog?,
-) : Parcelable
+) : Parcelable {
+    /**
+     * The selectable environments.
+     */
+    val environmentTypeOptions: ImmutableList<Environment.Type>
+        get() = Environment.Type.entries.toImmutableList()
+}
 
 /**
  * Models dialogs that can be displayed on the start registration screen.
@@ -397,7 +406,7 @@ sealed class StartRegistrationAction {
      * Indicates that the selection from the region drop down has changed.
      */
     data class EnvironmentTypeSelect(
-        val environmentType: Type,
+        val environmentType: Environment.Type,
     ) : StartRegistrationAction()
 
     /**

@@ -21,6 +21,8 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -283,6 +285,12 @@ data class LandingState(
     val dialog: DialogState?,
     val accountSummaries: List<AccountSummary>,
 ) : Parcelable {
+    /**
+     * The selectable environments.
+     */
+    val environmentTypeOptions: ImmutableList<Environment.Type>
+        get() = Environment.Type.entries.toImmutableList()
+
     /**
      * Determines whether the app bar should be visible based on the presence of account summaries.
      */

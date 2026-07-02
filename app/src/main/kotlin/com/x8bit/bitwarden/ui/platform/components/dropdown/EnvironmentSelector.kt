@@ -29,6 +29,7 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.displayLabel
+import kotlinx.collections.immutable.ImmutableList
 
 /**
  * A dropdown selector UI component specific to region url selection.
@@ -39,6 +40,7 @@ import com.x8bit.bitwarden.ui.platform.util.displayLabel
  *
  * @param labelText The text displayed near the selector button.
  * @param dialogTitle The title displayed in the selection dialog.
+ * @param options The options displayed in the selection dialog.
  * @param selectedOption The currently selected environment option.
  * @param onOptionSelected A callback that gets invoked when an environment option is selected
  * and passes the selected option as an argument.
@@ -51,13 +53,13 @@ import com.x8bit.bitwarden.ui.platform.util.displayLabel
 fun EnvironmentSelector(
     labelText: String,
     dialogTitle: String,
+    options: ImmutableList<Environment.Type>,
     selectedOption: Environment.Type,
     onOptionSelected: (Environment.Type) -> Unit,
     onHelpClick: () -> Unit,
     modifier: Modifier = Modifier,
     isHelpEnabled: Boolean = true,
 ) {
-    val options = Environment.Type.entries.toTypedArray()
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
 
     Row(

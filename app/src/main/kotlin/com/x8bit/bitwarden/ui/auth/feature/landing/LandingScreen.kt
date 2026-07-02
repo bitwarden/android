@@ -235,6 +235,7 @@ private fun LandingScreenContent(
                 EnvironmentSelector(
                     labelText = stringResource(id = BitwardenString.logging_in_on_with_colon),
                     dialogTitle = stringResource(id = BitwardenString.logging_in_on),
+                    options = state.environmentTypeOptions,
                     selectedOption = state.selectedEnvironmentType,
                     onOptionSelected = onEnvironmentTypeSelect,
                     isHelpEnabled = false,
