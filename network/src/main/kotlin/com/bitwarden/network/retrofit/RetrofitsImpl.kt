@@ -111,9 +111,10 @@ internal class RetrofitsImpl(
         .configureSsl(certificateProvider = certificateProvider)
         .build()
 
-    // Fill-assist might use HTTP 302 redirects for content delivery.
-    // CookieInterceptor treats all 302s as auth redirects.
-    private val fillAssistOkHttpClient: OkHttpClient = OkHttpClient.Builder()
+    // For requests to external (non-Bitwarden) URLs. CookieInterceptor must be excluded because
+    // it treats all 302s as Bitwarden load-balancer auth redirects, which is only correct for
+    // Bitwarden's own infrastructure.
+    private val externalOkHttpClient: OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(headersInterceptor)
         .configureSsl(certificateProvider = certificateProvider)
         .build()
@@ -175,7 +176,7 @@ internal class RetrofitsImpl(
         baseRetrofit
             .newBuilder()
             .client(
-                fillAssistOkHttpClient
+                externalOkHttpClient
                     .newBuilder()
                     .addInterceptor(baseUrlInterceptor)
                     .addInterceptor(loggingInterceptor)
