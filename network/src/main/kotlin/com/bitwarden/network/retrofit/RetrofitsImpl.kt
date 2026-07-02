@@ -113,7 +113,7 @@ internal class RetrofitsImpl(
 
     // For requests to external (non-Bitwarden) URLs. CookieInterceptor must be excluded because
     // it treats all 302s as Bitwarden load-balancer auth redirects, which is only correct for
-    // Bitwarden own infrastructure.
+    // Bitwarden's own infrastructure.
     private val externalOkHttpClient: OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(headersInterceptor)
         .configureSsl(certificateProvider = certificateProvider)
