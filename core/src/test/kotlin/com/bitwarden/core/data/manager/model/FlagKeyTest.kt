@@ -60,6 +60,10 @@ class FlagKeyTest {
             FlagKey.PoliciesInAcceptedState.keyName,
             "pm-34145-policies-in-accepted-state",
         )
+        assertEquals(
+            FlagKey.FedRamp.keyName,
+            "fedramp-gov-region",
+        )
     }
 
     @Test
@@ -79,6 +83,7 @@ class FlagKeyTest {
                 FlagKey.FillAssistTargetingRules,
                 FlagKey.ManageDevices,
                 FlagKey.PoliciesInAcceptedState,
+                FlagKey.FedRamp,
             ).all {
                 !it.defaultValue
             },
