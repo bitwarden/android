@@ -47,6 +47,9 @@ class RetrofitsTest {
         every { eventsInterceptor } returns mockk {
             mockIntercept { isEventsInterceptorCalled = true }
         }
+        every { fillAssistInterceptor } returns mockk {
+            mockIntercept { isFillAssistInterceptorCalled = true }
+        }
     }
     private val cookieInterceptor = mockk<CookieInterceptor> {
         mockIntercept { isCookieInterceptorCalled = true }
@@ -82,6 +85,7 @@ class RetrofitsTest {
     private var isHeadersInterceptorCalled = false
     private var isIdentityInterceptorCalled = false
     private var isEventsInterceptorCalled = false
+    private var isFillAssistInterceptorCalled = false
     private var isRefreshAuthenticatorCalled = false
 
     @Before
@@ -249,6 +253,27 @@ class RetrofitsTest {
     }
 
     @Test
+    fun `fillAssistRetrofit should invoke the correct interceptors`() = runBlocking {
+        val testApi = retrofits
+            .fillAssistRetrofit
+            .createMockRetrofit()
+            .create<TestApi>()
+
+        server.enqueue(MockResponse().setBody("""{}"""))
+
+        testApi.test()
+
+        assertFalse(isAuthInterceptorCalled)
+        assertFalse(isApiInterceptorCalled)
+        assertFalse(isCookieInterceptorCalled)
+        assertTrue(isPermissionInterceptorCalled)
+        assertTrue(isHeadersInterceptorCalled)
+        assertFalse(isIdentityInterceptorCalled)
+        assertFalse(isEventsInterceptorCalled)
+        assertTrue(isFillAssistInterceptorCalled)
+    }
+
+    @Test
     fun `createStaticRetrofit when authenticated should invoke the correct interceptors`() =
         runBlocking {
             val testApi = retrofits
@@ -312,7 +337,7 @@ class RetrofitsTest {
 
             retrofits.createStaticRetrofit()
 
-            verify(exactly = 1) {
+            verify(exactly = 2) {
                 anyConstructed<OkHttpClient.Builder>().sslSocketFactory(any(), any())
             }
         }
