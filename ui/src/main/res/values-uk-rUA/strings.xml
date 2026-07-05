@@ -1171,6 +1171,8 @@
     <string name="no_items_imported">Записи не імпортовано</string>
     <string name="no_items_received_from_the_selected_app">З вибраної програми не отримано жодного запису.</string>
     <string name="vault_sync_failed">Помилка синхронізації сховища</string>
+    <string name="vault_sync_unsuccessful">Sync unsuccessful</string>
+    <string name="vault_sync_failed_description">We couldn’t sync your vault with the server. Your vault may not reflect your latest changes. You can try again now or it will sync automatically later.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Ваші записи успішно імпортовано, але вони не з\'являться у сховищі доки не виконається синхронізація.</string>
     <string name="there_was_a_problem_importing_your_items">Виникла проблема під час імпортування ваших записів. Повторіть спробу. Якщо проблема не зникне, зверніться до служби підтримки.</string>
     <string name="saving_items">Збереження записів…</string>
@@ -1332,11 +1334,13 @@
     <string name="subscription_status_expired">Термін дії завершився</string>
     <string name="subscription_status_past_due">Протерміновано</string>
     <string name="subscription_status_paused">Paused</string>
+    <string name="subscription_status_unpaid">Unpaid</string>
     <string name="subscription_status_update_payment">Оновити платіж</string>
     <string name="subscription_status_pending_cancellation">Pending cancellation</string>
     <string name="subscription_pending_cancellation_description">Your subscription is scheduled to cancel on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. You can reinstate it anytime before then.</string>
     <string name="premium_next_charge_summary">Your next charge is for <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD due on <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
     <string name="subscription_canceled_description">Your subscription was canceled on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using Premium features.</string>
+    <string name="subscription_unpaid_description">Your subscription was suspended on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. To reactivate, please resolve your past due invoices.</string>
     <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment method before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">You have a grace period of <annotation arg="0">%1$d</annotation> day from your subscription expiration date. Please resolve the past due invoices by <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>

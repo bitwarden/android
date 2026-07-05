@@ -619,8 +619,8 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="forwarded_email_description">Wygeneruj alias za pomocą zewnętrznej usługi.</string>
     <string name="accessibility_service_disclosure">Omówienie usługi ułatwienia dostępu</string>
     <string name="accessibility_disclosure_text">Bitwarden używa usługi ułatwienia dostępu do wyszukiwania pól logowania w aplikacjach i stronach internetowych, a następnie ustanawia odpowiednie identyfikatory pól do nazwy użytkownika i hasła. Nie przechowujemy żadnych informacji przedstawionych nam przez usługę, ani nie podejmujemy żadnych prób kontrolowania jakichkolwiek innych elementów na ekranie.</string>
-    <string name="accessibility_disclosure_start_up_text_1">This notice is required before Bitwarden can offer accessibility-based autofill.</string>
-    <string name="accessibility_disclosure_start_up_text_2">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields. If you enable it, Bitwarden will identify the appropriate fields and fill in your credentials when a match is found.</string>
+    <string name="accessibility_disclosure_start_up_text_1">Przed uruchomieniem autouzupełniania konieczne jest wyświetlenie tego powiadomienia.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden oferuje opcjonalną metodę autouzupełniania, która wykorzystuje usługę ułatwienia dostępu. Jeśli ją włączysz, Bitwarden zidentyfikuje odpowiednie pola i uzupełni dane logowania.</string>
     <string name="accessibility_disclosure_start_up_text_3">Nie przechowujemy żadnych informacji dotyczących zawartości ekranu podczas korzystania z usługi ułatwienia dostępu. Nie kontrolujemy żadnych elementów wyświetlanych na ekranie poza polem logowania.</string>
     <string name="i_understand">Rozumiem</string>
     <string name="accept">Akceptuj</string>
@@ -1007,7 +1007,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Czy na pewno chcesz usunąć wszystkie zarejestrowane logi?</string>
     <string name="confirm_key_connector_domain">Potwierdź domenę Key Connector</string>
     <string name="key_connector_domain">Domena Key Connector</string>
-    <string name="your_organization_no_longer_requires_a_master_password">Your organization no longer requires a master password for its members. Please verify the domain below with your admin and enter your master password to continue.</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Twoja organizacja nie wymaga już od swoich użytkowników podawania hasła głównego. Zweryfikuj domenę u administratora i wpisz hasło główne, aby kontynuować.</string>
     <string name="please_confirm_domain_with_admin">Potwierdź domenę przy pomocy administratora organizacji.\n\nDomena Key Connector:\n%1$s</string>
     <string name="flight_recorder_banner_title">Rejestrator zdarzeń jest włączony</string>
     <string name="flight_recorder_banner_message">Rejestrator zdarzeń będzie aktywny do %1$s %2$s. Przejdź do ustawień, aby wyłączyć go teraz.</string>
@@ -1168,6 +1168,8 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="no_items_imported">Brak zaimportowanych elementów</string>
     <string name="no_items_received_from_the_selected_app">Nie odebrano żadnych elementów z wybranej aplikacji.</string>
     <string name="vault_sync_failed">Synchronizacja sejfu nie powiodła się</string>
+    <string name="vault_sync_unsuccessful">Synchronizacja nie powiodła się</string>
+    <string name="vault_sync_failed_description">Nie mogliśmy zsynchronizować sejfu z serwerem. Sejf może nie zawierać najnowszych zmian. Spróbuj ponownie lub poczekaj na automatyczną synchronizację.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Elementy zostały zaimportowane, ale nie można zsynchronizować sejfu. Zaimportowane elementy będą widoczne w sejfie dopiero po synchronizacji.</string>
     <string name="there_was_a_problem_importing_your_items">Wystąpił problem z importowaniem elementów. Spróbuj ponownie. Jeśli problem się powtarza, skontaktuj się z pomocą techniczną.</string>
     <string name="saving_items">Zapisywanie elementów…</string>
@@ -1230,7 +1232,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="item_moved_to_archived">Element został przeniesiony do archiwum</string>
     <string name="item_moved_to_vault">Element został przeniesiony do archiwum</string>
     <string name="archiving_items_is_a_premium_feature">Archiwizowanie elementów jest funkcją Premium. Twój obecny plan nie zawiera tej funkcji.</string>
-    <string name="totp_is_a_premium_feature">Authenticator key (TOTP) is a Premium feature. Your current plan does not include access to this feature.</string>
+    <string name="totp_is_a_premium_feature">Klucz uwierzytelniający (TOTP) jest funkcją Premium. Twój obecny plan nie zawiera tej funkcji.</string>
     <string name="upgrade_to_premium">Kup konto Premium</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Aby zarządzać subskrypcją Premium, zaloguj się do sejfu internetowego na komputerze.</string>
@@ -1329,11 +1331,13 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="subscription_status_expired">Wygasła</string>
     <string name="subscription_status_past_due">Termin przekroczony</string>
     <string name="subscription_status_paused">Wstrzymano</string>
+    <string name="subscription_status_unpaid">Nieopłacone</string>
     <string name="subscription_status_update_payment">Zaktualizuj płatność</string>
     <string name="subscription_status_pending_cancellation">Oczekiwanie na anulowanie</string>
     <string name="subscription_pending_cancellation_description">Twoja subskrypcja zostanie anulowana <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Możesz ją odnowić w dowolnym momencie.</string>
     <string name="premium_next_charge_summary">Następna płatność <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation> w kwocie <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD.</string>
     <string name="subscription_canceled_description">Twoja subskrypcja została anulowana <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Zasubskrybuj ponownie, aby kontynuować korzystanie z funkcji Premium.</string>
+    <string name="subscription_unpaid_description">Twoja subskrypcja została zawieszona <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Aby ją reaktywować, opłać zaległe faktury.</string>
     <string name="subscription_update_payment_description">Nie mogliśmy przetworzyć płatności. Zaktualizuj metodę płatności przed <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Masz <annotation arg="0">%1$d</annotation> dzień od daty wygaśnięcia subskrypcji na uregulowanie płatności. Zapłać zaległe faktury do <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>

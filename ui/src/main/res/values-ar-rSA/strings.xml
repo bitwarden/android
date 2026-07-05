@@ -81,7 +81,7 @@
     <string name="close_app">إغلاق التطبيق</string>
     <string name="continue_text">متابعة</string>
     <string name="create_account">إنشاء حساب</string>
-    <string name="create_an_account">أنشئ حساب</string>
+    <string name="create_an_account">إنشاء حساب</string>
     <string name="edit_item">تعديل العنصر</string>
     <string name="edit_login">تعديل تسجيل الدخول</string>
     <string name="edit_card">تحرير البطاقة</string>
@@ -309,7 +309,7 @@
     <string name="starts_with">يبدأ بـ</string>
     <string name="uri_match_detection">كشف مطابقة URI</string>
     <string name="match_detection">كشف المطابقة</string>
-    <string name="autofill_and_save">التعبئة التلقائية والحفظ</string>
+    <string name="autofill_and_save">الملء التلقائي والحفظ</string>
     <string name="organization">المؤسسة</string>
     <string name="try_again">حاول مرة أخرى</string>
     <string name="created">تم إنشاء: %1$s</string>
@@ -339,8 +339,8 @@
     <string name="password_history_count"><annotation link="passwordHistory">سجل كلمة المرور: <annotation arg="0">%1$s</annotation></annotation></string>
     <string name="types">أنواع</string>
     <string name="no_passwords_to_list">لا توجد كلمات مرور للقائمة.</string>
-    <string name="search_file_sends">إرسال ملف البحث</string>
-    <string name="search_text_sends">إرسال نص البحث</string>
+    <string name="search_file_sends">البحث في ملف Sends</string>
+    <string name="search_text_sends">البحث في نص Sends</string>
     <string name="type">نوع</string>
     <string name="move_down">تحريك للأسفل</string>
     <string name="move_up">التحريك للاعلى</string>
@@ -395,7 +395,7 @@
     <string name="login_expired">انتهت صَلاحِيَة جَلسة تسجيل دخولك.</string>
     <string name="biometrics_direction">المصادقة البيومترية</string>
     <string name="device_verification">التحقق من الجهاز</string>
-    <string name="biometrics_failed">فشل القياسات الحيوية</string>
+    <string name="biometrics_failed">فشل المصادقة البيومترية</string>
     <string name="biometrics_decoding_failure">تسجيل الدخول باستخدام كلمة المرور الرئيسية أو رمز PIN ثم إعادة تمكين تسجيل الدخول الحيوي في الإعدادات.</string>
     <string name="use_biometrics_to_unlock">استخدام القياسات الحيوية للفتح</string>
     <string name="file_format">صيغة الملف</string>
@@ -442,10 +442,10 @@
     <string name="master_password_policy_validation_title">كلمة المرور غير صالحة</string>
     <string name="master_password_policy_validation_message">كلمة المرور لا تفي بمتطلبات المؤسسة. الرجاء التحقق من معلومات السياسة وحاول مرة أخرى.</string>
     <string name="loading">جار التحميل</string>
-    <string name="terms_of_service">اتفاقية خدمة المستخدم</string>
+    <string name="terms_of_service">شروط الخدمة</string>
     <string name="privacy_policy">سياسة الخصوصيّة</string>
     <string name="passkey_management">إدارة مفتاح المرور</string>
-    <string name="autofill_services">خدمات التعبئة التلقائية</string>
+    <string name="autofill_services">خدمات الملء التلقائي</string>
     <string name="display_autofill_suggestions">عرض اقتراحات التعبئة التلقائية</string>
     <string name="autofill_suggestions_inline">مضمن (يهر في لوحة المفاتيح)</string>
     <string name="autofill_suggestions_popup">منبثق (يظهر فوق حقل الإدخال)</string>
@@ -470,7 +470,7 @@
     <string name="specific_people_verification_info">بعد مشاركة رابط الإرسال هذا، سيحتاج الأفراد إلى التحقق من بريدهم الإلكتروني مع رمز لعرض هذا الإرسال</string>
     <string name="anyone_with_password">أي شخص لديه كلمة مرور محددة من قبلك</string>
     <string name="add_email">إضافة بريد إلكتروني</string>
-    <string name="pending_delete">في انتظار الحذف</string>
+    <string name="pending_delete">قيد انتظار الحذف</string>
     <string name="expired">منتهي الصلاحية</string>
     <string name="expires_at">تنتهي الصلاحية في %s</string>
     <string name="expires_tomorrow">تنتهي الصلاحية غدا</string>
@@ -628,10 +628,10 @@
     <string name="forwarded_email_description">إنشاء بريد إلكتروني مستعار مع خدمة إعادة توجيه خارجية.</string>
     <string name="accessibility_service_disclosure">كشف خدمة إمكانية الوصول</string>
     <string name="accessibility_disclosure_text">يستخدم Bitwarden خدمة إمكانية الوصول للبحث عن حقول تسجيل الدخول في التطبيقات ومواقع الويب،ثم تحديد IDs الحقول المناسبة لإدخال اسم المستخدم &amp; كلمة المرور عند العثور على تطابق للموقع أو التطبيق. نحن لا نخزن أيا من المعلومات التي تقدمها لنا الخدمة، ولا نحاول التحكم في أي عناصر على الشاشة باستثناء إدخال نص بيانات الحساب.</string>
-    <string name="accessibility_disclosure_start_up_text_1">This notice is required before Bitwarden can offer accessibility-based autofill.</string>
-    <string name="accessibility_disclosure_start_up_text_2">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields. If you enable it, Bitwarden will identify the appropriate fields and fill in your credentials when a match is found.</string>
-    <string name="accessibility_disclosure_start_up_text_3">We don’t store any information about what’s onscreen while you use the Accessibility Service, and we don’t control any onscreen elements beyond credential entry.</string>
-    <string name="i_understand">I understand</string>
+    <string name="accessibility_disclosure_start_up_text_1">هذا الإشعار مطلوب قبل أن يتمكن Bitwarden من تقديم الملء التلقائي المستند إلى إمكانيات الوصول.</string>
+    <string name="accessibility_disclosure_start_up_text_2">يقدم Bitwarden طريقة اختيارية للملء التلقائي تستخدم خدمة إمكانيات الوصول في أندرويد للتعرف على حقول تسجيل الدخول. وإذا قمت بتفعيلها، فسيحدد Bitwarden الحقول المناسبة ويملأ بيانات الحساب الخاصة بك عند العثور على مطابقة.</string>
+    <string name="accessibility_disclosure_start_up_text_3">نحن لا نخزن أي معلومات حول ما يظهر على الشاشة أثناء استخدامك لخدمة إمكانيات الوصول، ولا نتحكم في أي عناصر على الشاشة تقع خارج نطاق إدخال بيانات الحساب.</string>
+    <string name="i_understand">فهمت ذلك</string>
     <string name="accept">قبول</string>
     <string name="decline">رفض</string>
     <string name="login_request_has_already_expired">انتهت صلاحية طلب تسجيل الدخول.</string>
@@ -687,7 +687,7 @@
     <string name="block_auto_fill">حظر التعبئة التلقائية</string>
     <string name="no_uris_blocked">لا يوجد URIs محظورة</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">لن يتم تقديم التعبئة التلقائية لعناوين الـ URIs هذه.</string>
-    <string name="edit_blocked_uri">تعديل الURI المحظور</string>
+    <string name="edit_blocked_uri">تعديل URI المحظور</string>
     <string name="new_blocked_uri">عنوان URL جديد محظور</string>
     <string name="invalid_format_use_https_http_or_android_app">تنسيق غير صالح. استخدم https:// أو http:// أو androidapp://</string>
     <string name="enter_uri">إدخال URI</string>
@@ -1063,7 +1063,7 @@
     <string name="installed_apps">التطبيقات المثبتة</string>
     <string name="delete_x">حذف %s</string>
     <string name="failed_to_decrypt_cipher_contact_support">فشل فك تشفير الشفرة. اتصل بالدعم.</string>
-    <string name="decryption_error">خطأ فك التشفير</string>
+    <string name="decryption_error">خطأ في فك التشفير</string>
     <string name="scan_a_qr_code">مسح رمز QR ضوئيا</string>
     <string name="cannot_add_authenticator_key">لا يمكن إضافة مفتاح المصادقة؟</string>
     <string name="enable_camera_permission_to_use_the_scanner">تفعيل إذن الكاميرا لاستخدام الماسح الضوئي</string>
@@ -1134,7 +1134,7 @@
     <string name="sync_with_bitwarden_action_card_message">السماح لمزامنة تطبيق المصادقة في الإعدادات لعرض جميع رموز التحقق الخاصة بك هنا.</string>
     <string name="take_me_to_app_settings">خذني إلى إعدادات التطبيق</string>
     <string name="something_went_wrong">حدث خطأ ما</string>
-    <string name="please_try_again">الرجاء المحاولة مرة أخرى</string>
+    <string name="please_try_again">يرجى المحاولة مرة أخرى</string>
     <string name="copy_to_bitwarden_vault">نسخ إلى مخزن Bitwarden</string>
     <string name="default_save_option">خيار الحفظ الافتراضي</string>
     <string name="save_to_bitwarden">حفظ إلى Bitwarden</string>
@@ -1186,6 +1186,8 @@
     <string name="no_items_imported">لا توجد عناصر مستوردة</string>
     <string name="no_items_received_from_the_selected_app">لم يتم استلام أي عناصر من التطبيق المحدد.</string>
     <string name="vault_sync_failed">فشلت مزامنة الخزن</string>
+    <string name="vault_sync_unsuccessful">فشلت عملية المزامنة</string>
+    <string name="vault_sync_failed_description">لم نتمكن من مزامنة خزنتك مع الخادم. قد لا تظهر خزنتك أحدث التغييرات التي أجريتها. يمكنك المحاولة مرة أخرى الآن، أو ستتم المزامنة تلقائيًا لاحقًا.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">تم استيراد العناصر الخاصة بك بنجاح، ولكن لن تكون مرئية في خزنتك حتى يتم تنفيذ المزامنة.</string>
     <string name="there_was_a_problem_importing_your_items">حدثت مشكلة أثناء استيراد العناصر الخاصة بك. الرجاء المحاولة مرة أخرى. إذا استمرت المشكلة، اتصل بالدعم.</string>
     <string name="saving_items">جاري حفظ العناصر…</string>
@@ -1250,7 +1252,7 @@
     <string name="item_moved_to_archived">تم نقل العنصر إلى الأرشيف</string>
     <string name="item_moved_to_vault">تم نقل العنصر إلى المخزن</string>
     <string name="archiving_items_is_a_premium_feature">أرشفة العناصر ميزة في الباقة Premium. باقتك الحالية لا تتضمن الوصول إليها.</string>
-    <string name="totp_is_a_premium_feature">Authenticator key (TOTP) is a Premium feature. Your current plan does not include access to this feature.</string>
+    <string name="totp_is_a_premium_feature">مفتاح المصادقة (TOTP) ميزة مخصصة لباقة Premium. باقتك الحالية لا تشمل صلاحية الوصول إلى هذه الميزة.</string>
     <string name="upgrade_to_premium">الترقية إلى Premium</string>
     <string name="plan">باقة</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">لإدارة اشتراكك في باقة Premium، ستحتاج إلى تسجيل الدخول إلى خزنتك على الويب من جهاز حاسوب.</string>
@@ -1349,11 +1351,13 @@
     <string name="subscription_status_expired">منتهي الصلاحية</string>
     <string name="subscription_status_past_due">متأخر الدفع</string>
     <string name="subscription_status_paused">متوقف مؤقتا</string>
+    <string name="subscription_status_unpaid">غير مدفوع</string>
     <string name="subscription_status_update_payment">تحديث بيانات الدفع</string>
     <string name="subscription_status_pending_cancellation">قيد الإلغاء</string>
     <string name="subscription_pending_cancellation_description">تمت جدولة إلغاء اشتراكك في <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. يمكنك إعادته في أي وقت قبل ذلك.</string>
     <string name="premium_next_charge_summary">سيتم تحصيل <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> دولار أمريكي بتاريخ <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
     <string name="subscription_canceled_description">تم إلغاء اشتراكك في <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. أعد الاشتراك للاستمرار في استخدام ميزات باقة Premium.</string>
+    <string name="subscription_unpaid_description">تم تعليق اشتراكك في <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. لإعادة التفعيل، يرجى تسوية الفواتير المستحقة المتأخرة.</string>
     <string name="subscription_update_payment_description">تعذر معالجة دفعتك. يرجى تحديث طريقة الدفع قبل انتهاء اشتراكك بتاريخ <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="zero">لديك فترة سماح مدتها <annotation arg="0">%1$d</annotation> يوم من تاريخ انتهاء اشتراكك. يرجى تسوية الفواتير المتأخرة بحلول <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
