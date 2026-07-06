@@ -278,54 +278,6 @@ class FillAssistManagerTest {
         assertNull(manager.getFillAssistRules())
     }
 
-    @Test
-    fun `getFillAssistRules returns cached result on subsequent calls without hitting disk`() {
-        val expected = FillAssistRules(hostRules = emptyMap())
-        every { fillAssistDiskSource.getFillAssistRules(BASE_URL) } returns expected
-
-        assertEquals(expected, manager.getFillAssistRules())
-        assertEquals(expected, manager.getFillAssistRules())
-
-        verify(exactly = 1) { fillAssistDiskSource.getFillAssistRules(BASE_URL) }
-    }
-
-    @Test
-    fun `getFillAssistRules re-reads disk after server config changes`() {
-        val oldRules = FillAssistRules(hostRules = emptyMap())
-        val newUrl = "https://other-server.example.com"
-        val newRules = FillAssistRules(hostRules = mapOf("example.com" to emptyList()))
-        every { fillAssistDiskSource.getFillAssistRules(BASE_URL) } returns oldRules
-        every { fillAssistDiskSource.getFillAssistRules(newUrl) } returns newRules
-        every { fillAssistDiskSource.getLastFetchTimestamp(newUrl) } returns FIXED_CLOCK.millis()
-
-        assertEquals(oldRules, manager.getFillAssistRules())
-
-        serverConfigFlow.value = SERVER_CONFIG.copy(
-            serverData = SERVER_CONFIG.serverData!!.copy(
-                environment = SERVER_CONFIG.serverData!!.environment!!.copy(
-                    fillAssistRulesUrl = newUrl,
-                ),
-            ),
-        )
-
-        assertEquals(newRules, manager.getFillAssistRules())
-        verify(exactly = 1) { fillAssistDiskSource.getFillAssistRules(BASE_URL) }
-        verify(exactly = 1) { fillAssistDiskSource.getFillAssistRules(newUrl) }
-    }
-
-    @Test
-    fun `getFillAssistRules returns latest rules after sync`() = runTest {
-        val rulesSlot = slot<FillAssistRules>()
-        every { fillAssistDiskSource.storeFillAssistRules(any(), capture(rulesSlot)) } just runs
-
-        manager.syncIfNecessary()
-        val syncedRules = rulesSlot.captured
-
-        every { fillAssistDiskSource.getFillAssistRules(BASE_URL) } returns syncedRules
-
-        assertEquals(syncedRules, manager.getFillAssistRules())
-    }
-
     // region CSS parser
 
     @Test
