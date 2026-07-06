@@ -1152,6 +1152,8 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="no_items_imported">Nem lett elem importálva.</string>
     <string name="no_items_received_from_the_selected_app">A kiválasztott alkalmazásból nem érkezett elem.</string>
     <string name="vault_sync_failed">A széf szinkronizálás sikertelen volt.</string>
+    <string name="vault_sync_unsuccessful">A szinkronizáció sikertelen volt.</string>
+    <string name="vault_sync_failed_description">Nem lehetett szinkronizálni a széfet a szerverrel. Előfordulhat, hogy a széf nem tükrözi a legújabb változtatásokat. Most újra próbálkozhatunk vagy később automatikusan szinkronizálódik.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Az elemek sikeresen importálásra kerültek, de nem lehetett szinkronizálni a széfet. Az importált elemek a szinkronizálás végrehajtásáig nem lesznek láthatók a széfben.</string>
     <string name="there_was_a_problem_importing_your_items">Probléma volt az elemek importálásával. Próbáljuk újra. Ha a probléma továbbra is fennáll, forduljunk a támogatáshoz.</string>
     <string name="saving_items">Elemek mentése…</string>
@@ -1311,11 +1313,13 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="subscription_status_expired">Lejárt</string>
     <string name="subscription_status_past_due">Határidőn túl</string>
     <string name="subscription_status_paused">Felfüggesztve</string>
+    <string name="subscription_status_unpaid">Nincs fizetve</string>
     <string name="subscription_status_update_payment">Fizetés frissítése</string>
     <string name="subscription_status_pending_cancellation">Függőben lévő lemondás</string>
     <string name="subscription_pending_cancellation_description">Az előfizetés lemondás időzítése: <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Ezt megelőzően bármikor visszaállíthatjuk.</string>
     <string name="premium_next_charge_summary">A következő %1$s USD díj esedékessége: %2$s.</string>
     <string name="subscription_canceled_description">Az előfizetés %1$s időponttal törlésre került. Iratkozzunk fel újra a prémium funkciók használatának folytatásához.</string>
+    <string name="subscription_unpaid_description">Az előfizetés felfüggesztésre került: &lt;annotation highcent=„bold“&gt;&lt;annotation arg=„0“&gt;%1$s&lt;/annotation&gt;&lt;/annotation&gt;. Az újra aktiváláshoz rendezzük a múltbeli esedékes számlákat.</string>
     <string name="subscription_update_payment_description">Nem lehetett feldolgozni a fizetést Frissítsük a fizetési módot, mielőtt az előfizetés lejár: <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Az előfizetés lejárati dátumától számítva %1$d türelmi idő áll rendelkezésre. Rendezzük a múltbeli esedékes számlákat %2$s határidőig.</item>

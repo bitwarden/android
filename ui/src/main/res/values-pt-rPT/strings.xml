@@ -1153,6 +1153,8 @@ Pretende mudar para esta conta?</string>
     <string name="no_items_imported">Nenhum item importado</string>
     <string name="no_items_received_from_the_selected_app">Não foram recebidos itens da app selecionada.</string>
     <string name="vault_sync_failed">Falha na sincronização do cofre</string>
+    <string name="vault_sync_unsuccessful">Falha na sincronização</string>
+    <string name="vault_sync_failed_description">Não foi possível sincronizar o seu cofre com o servidor. O seu cofre poderá não refletir as alterações mais recentes. Pode tentar novamente agora ou a sincronização será efetuada automaticamente mais tarde.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Os seus itens foram importados com sucesso, mas não serão visíveis no seu cofre até que a sincronização seja efetuada.</string>
     <string name="there_was_a_problem_importing_your_items">Ocorreu um problema ao importar os seus itens. Por favor, tente novamente. Se o problema persistir, contacte o suporte.</string>
     <string name="saving_items">A guardar itens…</string>
@@ -1312,11 +1314,13 @@ Pretende mudar para esta conta?</string>
     <string name="subscription_status_expired">Expirado</string>
     <string name="subscription_status_past_due">Caducado</string>
     <string name="subscription_status_paused">Em pausa</string>
+    <string name="subscription_status_unpaid">Por pagar</string>
     <string name="subscription_status_update_payment">Atualizar pagamento</string>
     <string name="subscription_status_pending_cancellation">Cancelamento pendente</string>
     <string name="subscription_pending_cancellation_description">A sua subscrição está agendada para ser cancelada em <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Pode reativá-la a qualquer momento até essa data.</string>
     <string name="premium_next_charge_summary">O seu próximo pagamento será de <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD, com vencimento em <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
     <string name="subscription_canceled_description">A sua subscrição foi cancelada a <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Volte a subscrever para continuar a utilizar funcionalidades Premium.</string>
+    <string name="subscription_unpaid_description">A sua subscrição foi suspensa em <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Para a reativar, regularize as faturas em atraso.</string>
     <string name="subscription_update_payment_description">Não foi possível processar o seu pagamento. Atualize o seu método de pagamento antes de a sua subscrição terminar a <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Dispõe de um período de tolerância de <annotation arg="0">%1$d</annotation> dia a partir da data de expiração da sua subscrição. Por favor, resolva as faturas em atraso até <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>

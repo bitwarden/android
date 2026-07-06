@@ -1161,6 +1161,8 @@ bilo kakav problem.</string>
     <string name="no_items_imported">Niti jedna stavka nije uvezena</string>
     <string name="no_items_received_from_the_selected_app">Niti jedna stavka nije primljena iz odabrane aplikacije.</string>
     <string name="vault_sync_failed">Sinkronizacija trezora nije uspjela</string>
+    <string name="vault_sync_unsuccessful">Sync unsuccessful</string>
+    <string name="vault_sync_failed_description">We couldn’t sync your vault with the server. Your vault may not reflect your latest changes. You can try again now or it will sync automatically later.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Tvoje stavke su uspješno uvezene, ali neće biti vidljive u tvojem trezoru dok se ne izvrši sinkronizacija.</string>
     <string name="there_was_a_problem_importing_your_items">Došlo je do problema s uvozom tvojih stavki. Pokušaj ponovno. Ako se problem nastavi, obrati se podršci.</string>
     <string name="saving_items">Spremanje stavki…</string>
@@ -1321,11 +1323,13 @@ bilo kakav problem.</string>
     <string name="subscription_status_expired">Isteklo</string>
     <string name="subscription_status_past_due">Prekoračeno dospijeće</string>
     <string name="subscription_status_paused">Pauzirano</string>
+    <string name="subscription_status_unpaid">Unpaid</string>
     <string name="subscription_status_update_payment">Ažuriraj plaćanje</string>
     <string name="subscription_status_pending_cancellation">Pending cancellation</string>
     <string name="subscription_pending_cancellation_description">Your subscription is scheduled to cancel on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. You can reinstate it anytime before then.</string>
     <string name="premium_next_charge_summary">Iznos tvoje sljedeće naplate je %1$s USD, dospijeva %2$s.</string>
     <string name="subscription_canceled_description">Tvoja je preplata otkazana %1$s. Ponovno se pretplati za nastavak korištenja Premium značajki.</string>
+    <string name="subscription_unpaid_description">Your subscription was suspended on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. To reactivate, please resolve your past due invoices.</string>
     <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment method before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Imaš razdoblje odgode od %1$d dana od datuma isteka tvoje pretplate. Molimo plati nepodmireni iznos do %2$s.</item>

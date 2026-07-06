@@ -1153,6 +1153,8 @@ Wilt u naar dit account wisselen?</string>
     <string name="no_items_imported">Geen items geïmporteerd</string>
     <string name="no_items_received_from_the_selected_app">Geen items ontvangen van de geselecteerde app.</string>
     <string name="vault_sync_failed">Kluissynchronisatie mislukt</string>
+    <string name="vault_sync_unsuccessful">Synchronisatie mislukt</string>
+    <string name="vault_sync_failed_description">We konden je kluis niet met de server synchroniseren. Je kluis geeft mogelijk niet je laatste wijzigingen weer. Je kunt het opnieuw proberen of het zal later automatisch worden gesynchroniseerd.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Uw items zijn met succes geïmporteerd, maar konden de kluis niet synchroniseren. Geïmporteerde items zijn niet zichtbaar in uw kluis totdat de synchronisatie is uitgevoerd.</string>
     <string name="there_was_a_problem_importing_your_items">Er ging iets mis bij het importeren van je items. Probeer het opnieuw. Als het probleem aanhoudt, neem dan contact op met support.</string>
     <string name="saving_items">Items opslaan…</string>
@@ -1312,11 +1314,13 @@ Wilt u naar dit account wisselen?</string>
     <string name="subscription_status_expired">Verlopen</string>
     <string name="subscription_status_past_due">Verlopen</string>
     <string name="subscription_status_paused">Paused</string>
+    <string name="subscription_status_unpaid">Openstaand</string>
     <string name="subscription_status_update_payment">Betalingswijze bijwerken</string>
     <string name="subscription_status_pending_cancellation">In afwachting van opzegging</string>
     <string name="subscription_pending_cancellation_description">Je abonnement verloopt op <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Je kunt het op elk gewenst moment hervatten.</string>
     <string name="premium_next_charge_summary">Je volgende rekening wordt %1$s USD voor %2$s.</string>
     <string name="subscription_canceled_description">Je abonnement is op %1$s geannuleerd. Activeer je abonnement opnieuw om gebruik te blijven maken van premium-functies.</string>
+    <string name="subscription_unpaid_description">Je abonnement is geschorst op <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Om te reactiveren, moet je je achterstallige facturen betalen.</string>
     <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment method before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Je hebt gratie voor een periode van %1$d dag vanaf de vervaldatum van je abonnement. Betaal de achterstallige facturen vóór **%2$s**.</item>

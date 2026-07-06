@@ -1153,6 +1153,8 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="no_items_imported">Aucun élément importé</string>
     <string name="no_items_received_from_the_selected_app">Aucun élément reçu de l\'application sélectionnée.</string>
     <string name="vault_sync_failed">La synchronisation du coffre a échoué</string>
+    <string name="vault_sync_unsuccessful">Sync unsuccessful</string>
+    <string name="vault_sync_failed_description">We couldn’t sync your vault with the server. Your vault may not reflect your latest changes. You can try again now or it will sync automatically later.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Vos éléments ont été importés avec succès, mais ils ne seront pas visibles dans votre coffre tant que la synchronisation n\'aura pas été effectuée.</string>
     <string name="there_was_a_problem_importing_your_items">Un problème est survenu lors de l\'importation de vos éléments. Veuillez réessayer. Si le problème persiste, contactez le support.</string>
     <string name="saving_items">Enregistrement des éléments…</string>
@@ -1312,11 +1314,13 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="subscription_status_expired">Expiré</string>
     <string name="subscription_status_past_due">Échéance dépassée</string>
     <string name="subscription_status_paused">En pause</string>
+    <string name="subscription_status_unpaid">Unpaid</string>
     <string name="subscription_status_update_payment">Mettre à jour le paiement</string>
     <string name="subscription_status_pending_cancellation">Résiliation en attente</string>
     <string name="subscription_pending_cancellation_description">Votre abonnement est prévu d\'être annulé le <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Vous pouvez le rétablir à tout moment avant cette date.</string>
     <string name="premium_next_charge_summary">Votre prochain prélèvement est de <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD, prévu le <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
     <string name="subscription_canceled_description">Votre abonnement a été annulé le <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Réabonnez-vous pour continuer à utiliser les fonctionnalités Premium.</string>
+    <string name="subscription_unpaid_description">Your subscription was suspended on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. To reactivate, please resolve your past due invoices.</string>
     <string name="subscription_update_payment_description">Nous n\'avons pas pu traiter votre paiement. Mettez à jour votre mode de paiement avant la fin de votre abonnement le <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Vous avez une période de grâce de <annotation arg="0">%1$d</annotation> jour à compter de la date d\'expiration de votre abonnement. Veuillez régulariser les factures impayées avant le <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>

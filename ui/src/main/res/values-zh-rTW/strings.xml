@@ -1146,6 +1146,8 @@
     <string name="no_items_imported">未匯入任何項目</string>
     <string name="no_items_received_from_the_selected_app">未從所選應用程式接收到項目。</string>
     <string name="vault_sync_failed">密碼庫同步失敗</string>
+    <string name="vault_sync_unsuccessful">Sync unsuccessful</string>
+    <string name="vault_sync_failed_description">We couldn’t sync your vault with the server. Your vault may not reflect your latest changes. You can try again now or it will sync automatically later.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">您的項目已成功匯入，但在執行同步之前，不會顯示於您的密碼庫中。</string>
     <string name="there_was_a_problem_importing_your_items">匯入項目時發生問題。請再試一次。若問題持續，請聯絡支援。</string>
     <string name="saving_items">儲存物件</string>
@@ -1304,11 +1306,13 @@
     <string name="subscription_status_expired">已逾期</string>
     <string name="subscription_status_past_due">逾期</string>
     <string name="subscription_status_paused">已暫停</string>
+    <string name="subscription_status_unpaid">Unpaid</string>
     <string name="subscription_status_update_payment">更新付款方式</string>
     <string name="subscription_status_pending_cancellation">待取消</string>
     <string name="subscription_pending_cancellation_description">您的訂閱預計將於 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 取消。在此之前，您隨時都可以恢復訂閱。</string>
     <string name="premium_next_charge_summary">您的下一筆扣款為 %1$s USD，將於 %2$s 到期。</string>
     <string name="subscription_canceled_description">您的訂閱已於 %1$s 取消。重新訂閱以繼續使用 Premium 功能。</string>
+    <string name="subscription_unpaid_description">Your subscription was suspended on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. To reactivate, please resolve your past due invoices.</string>
     <string name="subscription_update_payment_description">我們無法處理您的付款。請在您的訂閱於 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 結束前更新付款方式。</string>
     <plurals name="subscription_past_due_description">
         <item quantity="other">自訂閱到期日起，您有 %1$d 天的寬限期。請於 %2$s 前完成逾期款項付款。</item>
