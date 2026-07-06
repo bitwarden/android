@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.landing
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -274,28 +275,35 @@ private fun LandingScreenContent(
 
         Spacer(modifier = Modifier.height(height = 24.dp))
 
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .standardHorizontalMargin()
-                .fillMaxWidth()
-                .wrapContentHeight(),
+        AnimatedVisibility(
+            visible = state.allowCreateAccount,
+            label = "CreateAccountAnimatedVisibility",
         ) {
-            Text(
-                text = stringResource(id = BitwardenString.new_to_bitwarden),
-                style = BitwardenTheme.typography.bodyMedium,
-                color = BitwardenTheme.colorScheme.text.secondary,
-            )
+            Column {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                ) {
+                    Text(
+                        text = stringResource(id = BitwardenString.new_to_bitwarden),
+                        style = BitwardenTheme.typography.bodyMedium,
+                        color = BitwardenTheme.colorScheme.text.secondary,
+                    )
 
-            BitwardenTextButton(
-                label = stringResource(id = BitwardenString.create_an_account),
-                onClick = onCreateAccountClick,
-                modifier = Modifier
-                    .testTag("CreateAccountLabel"),
-            )
+                    BitwardenTextButton(
+                        label = stringResource(id = BitwardenString.create_an_account),
+                        onClick = onCreateAccountClick,
+                        modifier = Modifier
+                            .testTag("CreateAccountLabel"),
+                    )
+                }
+                Spacer(modifier = Modifier.height(height = 8.dp))
+            }
         }
-        Spacer(modifier = Modifier.height(height = 8.dp))
         BitwardenTextButton(
             label = stringResource(id = BitwardenString.app_settings),
             onClick = onAppSettingsClick,
