@@ -3,8 +3,12 @@
   "extends": [
     "github>bitwarden/renovate-config"
   ],
-  "labels": ["t:deps"],
-  "ignoreDeps": ["com.bitwarden:sdk-android"],
+  "labels": [
+    "t:deps"
+  ],
+  "ignoreDeps": [
+    "com.bitwarden:sdk-android"
+  ],
   "enabledManagers": [
     "github-actions",
     "gradle",
@@ -22,14 +26,24 @@
       ]
     },
     {
+      "groupName": "firebase",
+      "description": "Firebase dependencies that must be updated together to maintain compatibility.",
+      "matchManagers": [
+        "gradle"
+      ],
+      "matchPackageNames": [
+        "/com.google.firebase.*/",
+        "/com.google.firebase:*/",
+        "/com.google.gms.google-services/"
+      ]
+    },
+    {
       "groupName": "kotlin",
       "description": "Kotlin and Compose dependencies that must be updated together to maintain compatibility.",
       "matchManagers": [
         "gradle"
       ],
       "matchPackageNames": [
-        "/androidx.compose:compose-bom/",
-        "/androidx.lifecycle:*/",
         "/org.jetbrains.kotlin.*/",
         "/com.google.devtools.ksp/"
       ]
