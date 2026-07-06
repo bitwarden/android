@@ -66,11 +66,16 @@ class FillAssistManagerImpl(
     private val ioScope = CoroutineScope(dispatcherManager.io)
     private var syncJob: Job = Job().apply { complete() }
 
+    // In-memory cache to avoid re-deserializing the full rules blob on every autofill parse.
+    // Populated lazily on first read; updated in-place when a sync stores new rules.
+    private var cachedRules: FillAssistRules? = null
+
     init {
         serverConfigRepository.serverConfigStateFlow
             .onEach { config ->
                 environmentDiskSource.fillAssistRulesUrl =
                     config?.serverData?.environment?.fillAssistRulesUrl
+                cachedRules = null
             }
             .filterNotNull()
             .onEach { syncIfNecessary() }
@@ -129,6 +134,7 @@ class FillAssistManagerImpl(
 
         val rules = parseForms(forms)
         fillAssistDiskSource.storeFillAssistRules(serverUrl = serverUrl, rules = rules)
+        cachedRules = null
         fillAssistDiskSource.storeLastKnownCid(serverUrl = serverUrl, cid = versionEntry.cid)
         fillAssistDiskSource.storeLastFetchTimestamp(
             serverUrl = serverUrl,
@@ -137,6 +143,7 @@ class FillAssistManagerImpl(
     }
 
     override fun getFillAssistRules(): FillAssistRules? {
+        cachedRules?.let { return it }
         val serverUrl = serverConfigRepository
             .serverConfigStateFlow
             .value
@@ -145,6 +152,7 @@ class FillAssistManagerImpl(
             ?.fillAssistRulesUrl
             ?: return null
         return fillAssistDiskSource.getFillAssistRules(serverUrl = serverUrl)
+            ?.also { cachedRules = it }
     }
 }
 
