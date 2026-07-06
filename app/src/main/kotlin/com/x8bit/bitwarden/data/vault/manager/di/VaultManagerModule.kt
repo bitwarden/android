@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
+import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
@@ -44,7 +45,6 @@ import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManagerImpl
-import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManagerImpl
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
