@@ -10,13 +10,14 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
+import com.x8bit.bitwarden.data.autofill.model.FillAssistRules
 import com.x8bit.bitwarden.data.autofill.model.ViewNodeTraversalData
-import com.x8bit.bitwarden.data.autofill.util.buildFillAssistViews
 import com.x8bit.bitwarden.data.autofill.util.buildPackageNameOrNull
 import com.x8bit.bitwarden.data.autofill.util.buildUriOrNull
 import com.x8bit.bitwarden.data.autofill.util.getInlinePresentationSpecs
 import com.x8bit.bitwarden.data.autofill.util.getMaxInlineSuggestionsCount
 import com.x8bit.bitwarden.data.autofill.util.toAutofillView
+import com.x8bit.bitwarden.data.autofill.util.toFillAssistView
 import com.x8bit.bitwarden.data.autofill.util.website
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -118,8 +119,16 @@ class AutofillParserImpl(
         fillRequest: FillRequest?,
     ): AutofillRequest {
         Timber.d("Parsing AssistStructure -- ${fillRequest?.id}")
-        // Parse the `assistStructure` into internal models.
-        val traversalDataList = assistStructure.traverse()
+
+        // Pre-compute fill-assist rules once. If the feature flag is off or no rules are loaded,
+        // allFillAssistRules is null and fill-assist matching is skipped during traversal.
+        val allFillAssistRules: Map<String, List<FillAssistRules.HostRule>>? =
+            fillAssistManager.getFillAssistRules()
+                ?.takeIf { featureFlagManager.getFeatureFlag(FlagKey.FillAssistTargetingRules) }
+                ?.hostRules
+
+        // Single pass: collects both heuristic and fill-assist views simultaneously.
+        val traversalDataList = assistStructure.traverse(allFillAssistRules = allFillAssistRules)
         val urlBarWebsite = traversalDataList
             .flatMap { it.urlBarWebsites }
             .firstOrNull()
@@ -143,11 +152,12 @@ class AutofillParserImpl(
             return AutofillRequest.Unfillable
         }
 
+        val hostRules = traversalDataList.firstNotNullOfOrNull { it.fillAssistHostRules }
+        val fillAssistViews = traversalDataList.flatMap { it.fillAssistViews }
         val effectiveViews = autofillViews.toEffectiveViews(
-            assistStructure = assistStructure,
-            uri = uri,
+            fillAssistViews = fillAssistViews,
+            hostRules = hostRules,
             focusedView = focusedView,
-            urlBarWebsite = urlBarWebsite,
         )
 
         val effectiveFocusedView = effectiveViews
@@ -203,55 +213,45 @@ class AutofillParserImpl(
     }
 
     /**
-     * Returns the effective [AutofillView] list for filling. Applies fill-assist targeting rules
-     * when the feature flag is enabled and the host rules cover the current partition type;
-     * otherwise returns the heuristic autofillViews [this].
+     * Returns the effective [AutofillView] list for filling. Uses the pre-collected
+     * [fillAssistViews] when the [hostRules] cover the current partition; otherwise returns
+     * [this] (heuristic).
      */
     private fun List<AutofillView>.toEffectiveViews(
-        assistStructure: AssistStructure,
-        uri: String?,
+        fillAssistViews: List<AutofillView>,
+        hostRules: List<FillAssistRules.HostRule>?,
         focusedView: AutofillView,
-        urlBarWebsite: String?,
     ): List<AutofillView> {
-        val hostRules = uri
-            ?.takeUnless { it.startsWith("androidapp://") }
-            ?.toUri()
-            ?.host
-            ?.takeIf { featureFlagManager.getFeatureFlag(FlagKey.FillAssistTargetingRules) }
-            ?.let { host ->
-                fillAssistManager.getFillAssistRules()?.hostRules?.get(host.removePrefix("www."))
-            }
-            ?: return this
-
-        val coversCurrentPartition = hostRules.any { rule ->
+        val rules = hostRules ?: return this
+        val coversCurrentPartition = rules.any { rule ->
             when (focusedView) {
                 is AutofillView.Card -> rule.category in CARD_FILL_ASSIST_CATEGORIES
                 is AutofillView.Login -> rule.category in LOGIN_FILL_ASSIST_CATEGORIES
                 is AutofillView.Unused -> false
             }
         }
-
-        return if (coversCurrentPartition) {
-            assistStructure.buildFillAssistViews(
-                hostRules = hostRules,
-                urlBarWebsite = urlBarWebsite,
-            )
-        } else {
-            this
-        }
+        return if (coversCurrentPartition) fillAssistViews else this
     }
 }
 
 /**
  * Traverse the [AssistStructure] and convert it into a list of [ViewNodeTraversalData]s.
+ * When [allFillAssistRules] is non-null, fill-assist views are also collected in a single pass.
  */
-private fun AssistStructure.traverse(): List<ViewNodeTraversalData> =
+private fun AssistStructure.traverse(
+    allFillAssistRules: Map<String, List<FillAssistRules.HostRule>>?,
+): List<ViewNodeTraversalData> =
     (0 until windowNodeCount)
         .map { getWindowNodeAt(it) }
         .mapNotNull { windowNode ->
             windowNode
                 .rootViewNode
-                ?.traverse(parentWebsite = null)
+                ?.traverse(
+                    heuristicParentWebsite = null,
+                    fillAssistParentWebsite = null,
+                    parentFillAssistHostRules = null,
+                    allFillAssistRules = allFillAssistRules,
+                )
                 ?.updateForMissingPasswordFields()
                 ?.updateForMissingUsernameFields()
         }
@@ -349,12 +349,24 @@ private fun ViewNodeTraversalData.copyAndMapAutofillViews(
 /**
  * Recursively traverse this [AssistStructure.ViewNode] and all of its descendants. Convert the
  * data into [ViewNodeTraversalData].
+ *
+ * [heuristicParentWebsite] is the direct parent's website, used only for the heuristic
+ * [AutofillView] path (no cascading beyond one level). [fillAssistParentWebsite] cascades down the
+ * tree so that web-view nodes with no explicit [AssistStructure.ViewNode.website] inherit their
+ * ancestor's domain for fill-assist matching. [parentFillAssistHostRules] is the already-resolved
+ * rules for the current host; re-resolved only when this node introduces a new website, avoiding
+ * redundant map lookups for every node in the same web-view subtree.
  */
+@Suppress("CyclomaticComplexMethod")
 private fun AssistStructure.ViewNode.traverse(
-    parentWebsite: String?,
+    heuristicParentWebsite: String?,
+    fillAssistParentWebsite: String?,
+    parentFillAssistHostRules: List<FillAssistRules.HostRule>?,
+    allFillAssistRules: Map<String, List<FillAssistRules.HostRule>>?,
 ): ViewNodeTraversalData {
     // Set up mutable lists for collecting valid AutofillViews and ignorable view ids.
     val mutableAutofillViewList: MutableList<AutofillView> = mutableListOf()
+    val mutableFillAssistViewList: MutableList<AutofillView> = mutableListOf()
     val mutableIgnoreAutofillIdList: MutableList<AutofillId> = mutableListOf()
     // OS sometimes defaults node.idPackage to "android", which is not a valid
     // package name so it is ignored to prevent auto-filling unknown applications.
@@ -366,24 +378,60 @@ private fun AssistStructure.ViewNode.traverse(
         ?.let { mutableListOf(it) }
         ?: mutableListOf()
 
+    // For fill-assist, cascade the website so that child nodes without an explicit website
+    // inherit the nearest ancestor's domain. Heuristic uses only the direct parent's website.
+    val fillAssistWebsite = this.website ?: fillAssistParentWebsite
+
+    // Only re-resolve host rules when this node introduces a new website (origin boundary).
+    // Otherwise inherit the parent's already-resolved rules to avoid redundant lookups.
+    val hostRules = if (this.website != null) {
+        this.website
+            ?.toUri()
+            ?.host
+            ?.removePrefix("www.")
+            ?.let { host -> allFillAssistRules?.get(host) }
+    } else {
+        parentFillAssistHostRules
+    }
+    var storedFillAssistHostRules: List<FillAssistRules.HostRule>? = hostRules
+
     // Try converting this `ViewNode` into an `AutofillView`. If a valid instance is returned, add
     // it to the list. Otherwise, ignore the `AutofillId` associated with this `ViewNode`.
-    toAutofillView(parentWebsite = parentWebsite)
+    toAutofillView(parentWebsite = heuristicParentWebsite)
         ?.run(mutableAutofillViewList::add)
         ?: autofillId?.run(mutableIgnoreAutofillIdList::add)
+
+    // When fill-assist rules match this node, collect the resulting view.
+    hostRules?.let { rules ->
+        toFillAssistView(rules, fillAssistWebsite)?.run(mutableFillAssistViewList::add)
+    }
 
     // Recursively traverse all of this view node's children.
     for (i in 0 until childCount) {
         // Extract the traversal data from each child view node and add it to the lists.
         getChildAt(i)
-            .traverse(parentWebsite = website)
+            .traverse(
+                // Heuristic: pass this node's own website (no grandparent cascade).
+                heuristicParentWebsite = website,
+                // Fill-assist: pass the cascaded website so web-view subtrees stay associated
+                // with their ancestor's domain.
+                fillAssistParentWebsite = fillAssistWebsite,
+                parentFillAssistHostRules = hostRules,
+                allFillAssistRules = allFillAssistRules,
+            )
             .let { viewNodeTraversalData ->
                 viewNodeTraversalData.autofillViews.forEach(mutableAutofillViewList::add)
+                viewNodeTraversalData.fillAssistViews.forEach(mutableFillAssistViewList::add)
                 viewNodeTraversalData.ignoreAutofillIds.forEach(mutableIgnoreAutofillIdList::add)
 
                 // Get the first non-null idPackage.
                 if (storedIdPackage == null) {
                     storedIdPackage = viewNodeTraversalData.idPackage
+                }
+                // Bubble up the first fill-assist host rules encountered in the subtree so
+                // parseInternal can use them without re-deriving from the URI.
+                if (storedFillAssistHostRules == null) {
+                    storedFillAssistHostRules = viewNodeTraversalData.fillAssistHostRules
                 }
                 // Add all url bar websites. We will deal with this later if
                 // there is somehow more than one.
@@ -395,6 +443,8 @@ private fun AssistStructure.ViewNode.traverse(
     // descendant's.
     return ViewNodeTraversalData(
         autofillViews = mutableAutofillViewList,
+        fillAssistViews = mutableFillAssistViewList,
+        fillAssistHostRules = storedFillAssistHostRules,
         idPackage = storedIdPackage,
         urlBarWebsites = storedUrlBarWebsites,
         ignoreAutofillIds = mutableIgnoreAutofillIdList,

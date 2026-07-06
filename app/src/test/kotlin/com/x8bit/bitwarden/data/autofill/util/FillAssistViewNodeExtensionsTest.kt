@@ -12,11 +12,10 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-@Suppress("LargeClass")
 class FillAssistViewNodeExtensionsTest {
 
     private val autofillId: AutofillId = mockk()
@@ -34,99 +33,92 @@ class FillAssistViewNodeExtensionsTest {
     }
 
     @Test
-    fun `buildFillAssistViews should return empty list when there are no window nodes`() {
-        val assistStructure: AssistStructure = mockk {
-            every { windowNodeCount } returns 0
-        }
+    fun `toFillAssistView should return null when autofillId is null`() {
+        val viewNode = createViewNode(htmlInfo = createHtmlInfo(), autofillId = null)
 
-        val actual = assistStructure.buildFillAssistViews(
-            hostRules = emptyList(),
-            urlBarWebsite = null,
-        )
-
-        assertEquals(emptyList<AutofillView>(), actual)
-    }
-
-    @Test
-    fun `buildFillAssistViews should exclude node with null htmlInfo`() {
-        val viewNode = createViewNode(htmlInfo = null)
-        val assistStructure = createAssistStructure(viewNode)
-
-        val actual = assistStructure.buildFillAssistViews(
+        val actual = viewNode.toFillAssistView(
             hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
-            urlBarWebsite = null,
+            website = null,
         )
 
-        assertEquals(emptyList<AutofillView>(), actual)
+        assertNull(actual)
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `buildFillAssistViews should return Login Username when htmlInfo matches username clause`() {
+    fun `toFillAssistView should return null when htmlInfo is null`() {
+        val viewNode = createViewNode(htmlInfo = null)
+
+        val actual = viewNode.toFillAssistView(
+            hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
+            website = null,
+        )
+
+        assertNull(actual)
+    }
+
+    @Test
+    fun `toFillAssistView should return null when htmlInfo does not match`() {
+        val viewNode = createViewNode(htmlInfo = createHtmlInfo(matches = false))
+
+        val actual = viewNode.toFillAssistView(
+            hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
+            website = null,
+        )
+
+        assertNull(actual)
+    }
+
+    @Test
+    fun `toFillAssistView should return Login Username when htmlInfo matches username clause`() {
         val htmlInfo = createHtmlInfo()
         val viewNode = createViewNode(htmlInfo = htmlInfo)
-        val assistStructure = createAssistStructure(viewNode)
         val data = autofillData()
         every { viewNode.toAutofillViewData(autofillId = autofillId, website = null) } returns data
 
-        val actual = assistStructure.buildFillAssistViews(
+        val actual = viewNode.toFillAssistView(
             hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
-            urlBarWebsite = null,
+            website = null,
         )
 
-        assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
+        assertEquals(AutofillView.Login.Username(data = data), actual)
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `buildFillAssistViews should return Login Password when htmlInfo matches password clause`() {
+    fun `toFillAssistView should return Login Password when htmlInfo matches password clause`() {
         val htmlInfo = createHtmlInfo()
         val viewNode = createViewNode(htmlInfo = htmlInfo)
-        val assistStructure = createAssistStructure(viewNode)
         val data = autofillData()
         every { viewNode.toAutofillViewData(autofillId = autofillId, website = null) } returns data
 
         val hostRule = FillAssistRules.HostRule(
             category = "account-login",
-            fields = mapOf(
-                "password" to listOf(selectorClause(tag = "input", id = "pass")),
-            ),
+            fields = mapOf("password" to listOf(selectorClause(tag = "input", id = "pass"))),
         )
 
-        val actual = assistStructure.buildFillAssistViews(
-            hostRules = listOf(hostRule),
-            urlBarWebsite = null,
-        )
+        val actual = viewNode.toFillAssistView(hostRules = listOf(hostRule), website = null)
 
-        assertEquals(listOf(AutofillView.Login.Password(data = data)), actual)
+        assertEquals(AutofillView.Login.Password(data = data), actual)
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `buildFillAssistViews should return Login Password when htmlInfo matches newPassword clause`() {
+    fun `toFillAssistView should return Login Password when htmlInfo matches newPassword clause`() {
         val htmlInfo = createHtmlInfo()
         val viewNode = createViewNode(htmlInfo = htmlInfo)
-        val assistStructure = createAssistStructure(viewNode)
         val data = autofillData()
         every { viewNode.toAutofillViewData(autofillId = autofillId, website = null) } returns data
 
         val hostRule = FillAssistRules.HostRule(
             category = "account-registration",
-            fields = mapOf(
-                "newPassword" to listOf(selectorClause(tag = "input", id = "new-pass")),
-            ),
+            fields = mapOf("newPassword" to listOf(selectorClause(tag = "input", id = "new-pass"))),
         )
 
-        val actual = assistStructure.buildFillAssistViews(
-            hostRules = listOf(hostRule),
-            urlBarWebsite = null,
-        )
+        val actual = viewNode.toFillAssistView(hostRules = listOf(hostRule), website = null)
 
-        assertEquals(listOf(AutofillView.Login.Password(data = data)), actual)
+        assertEquals(AutofillView.Login.Password(data = data), actual)
     }
 
     @Test
-    fun `buildFillAssistViews should map all card field keys to correct AutofillView subtypes`() {
+    fun `toFillAssistView should map all card field keys to correct AutofillView subtypes`() {
         val cardFieldExpectations: List<Pair<String, AutofillView>> = listOf(
             "cardNumber" to AutofillView.Card.Number(data = autofillData()),
             "cardholderName" to AutofillView.Card.CardholderName(data = autofillData()),
@@ -146,7 +138,6 @@ class FillAssistViewNodeExtensionsTest {
         cardFieldExpectations.forEach { (fieldKey, expectedView) ->
             val htmlInfo = createHtmlInfo()
             val viewNode = createViewNode(htmlInfo = htmlInfo)
-            val assistStructure = createAssistStructure(viewNode)
             val data = autofillData()
             every {
                 viewNode.toAutofillViewData(autofillId = autofillId, website = null)
@@ -159,53 +150,35 @@ class FillAssistViewNodeExtensionsTest {
                 ),
             )
 
-            val actual = assistStructure.buildFillAssistViews(
-                hostRules = listOf(hostRule),
-                urlBarWebsite = null,
-            )
+            val actual = viewNode.toFillAssistView(hostRules = listOf(hostRule), website = null)
 
-            assertEquals(
-                listOf(expectedView),
-                actual,
-                "Failed for field key: $fieldKey",
-            )
+            assertEquals(expectedView, actual, "Failed for field key: $fieldKey")
         }
     }
 
     @Test
-    fun `buildFillAssistViews should exclude node whose matched field key is unknown`() {
+    fun `toFillAssistView should return null when matched field key is unknown`() {
         val htmlInfo = createHtmlInfo()
         val viewNode = createViewNode(htmlInfo = htmlInfo)
-        val assistStructure = createAssistStructure(viewNode)
         every {
             viewNode.toAutofillViewData(autofillId = autofillId, website = null)
         } returns autofillData()
 
         val hostRule = FillAssistRules.HostRule(
             category = "unknown",
-            fields = mapOf(
-                "unknownFieldKey" to listOf(selectorClause(tag = "input", id = "mystery")),
-            ),
+            fields = mapOf("unknownFieldKey" to listOf(selectorClause(tag = "input", id = "x"))),
         )
 
-        val actual = assistStructure.buildFillAssistViews(
-            hostRules = listOf(hostRule),
-            urlBarWebsite = null,
-        )
+        val actual = viewNode.toFillAssistView(hostRules = listOf(hostRule), website = null)
 
-        assertEquals(emptyList<AutofillView>(), actual)
+        assertNull(actual)
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `buildFillAssistViews should pick first mapped key when multiple keys match the same node`() {
-        // Two field keys ("email" - unknown - and "username") both match the same node. The
-        // implementation iterates in insertion order and selects the first key whose mapping is
-        // non-null. Since "email" is unknown, "username" wins; this also demonstrates that an
-        // earlier known key wins over a later one.
+    fun `toFillAssistView should pick first mapped key when multiple keys match the same node`() {
         val htmlInfo = createHtmlInfo()
         val viewNode = createViewNode(htmlInfo = htmlInfo)
-        val assistStructure = createAssistStructure(viewNode)
         val data = autofillData()
         every { viewNode.toAutofillViewData(autofillId = autofillId, website = null) } returns data
 
@@ -217,113 +190,35 @@ class FillAssistViewNodeExtensionsTest {
             ),
         )
 
-        val actual = assistStructure.buildFillAssistViews(
-            hostRules = listOf(hostRule),
-            urlBarWebsite = null,
-        )
+        val actual = viewNode.toFillAssistView(hostRules = listOf(hostRule), website = null)
 
-        assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
-    }
-
-    @Test
-    fun `buildFillAssistViews should traverse child nodes recursively`() {
-        val childHtmlInfo = createHtmlInfo()
-        val childViewNode = createViewNode(htmlInfo = childHtmlInfo)
-        val childData = autofillData()
-        every {
-            childViewNode.toAutofillViewData(autofillId = autofillId, website = null)
-        } returns childData
-
-        val rootHtmlInfo = createHtmlInfo(matches = false)
-        val rootViewNode = createViewNode(
-            htmlInfo = rootHtmlInfo,
-            children = listOf(childViewNode),
-        )
-
-        val assistStructure = createAssistStructure(rootViewNode)
-
-        val actual = assistStructure.buildFillAssistViews(
-            hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
-            urlBarWebsite = null,
-        )
-
-        assertEquals(listOf(AutofillView.Login.Username(data = childData)), actual)
+        assertEquals(AutofillView.Login.Username(data = data), actual)
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `buildFillAssistViews should propagate urlBarWebsite as website when node has no website`() {
-        val urlBarWebsite = "https://example.com"
+    fun `toFillAssistView should use provided website when building AutofillView Data`() {
+        val website = "https://example.com"
         val htmlInfo = createHtmlInfo()
         val viewNode = createViewNode(htmlInfo = htmlInfo, website = null)
-        val assistStructure = createAssistStructure(viewNode)
-        val data = autofillData(website = urlBarWebsite)
+        val data = autofillData(website = website)
         every {
-            viewNode.toAutofillViewData(autofillId = autofillId, website = urlBarWebsite)
+            viewNode.toAutofillViewData(autofillId = autofillId, website = website)
         } returns data
 
-        val actual = assistStructure.buildFillAssistViews(
+        val actual = viewNode.toFillAssistView(
             hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
-            urlBarWebsite = urlBarWebsite,
+            website = website,
         )
 
-        assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
-    }
-
-    @Test
-    fun `buildFillAssistViews should prefer node's own website over urlBarWebsite`() {
-        val nodeWebsite = "https://node.example.com"
-        val urlBarWebsite = "https://urlbar.example.com"
-        val htmlInfo = createHtmlInfo()
-        val viewNode = createViewNode(htmlInfo = htmlInfo, website = nodeWebsite)
-        val assistStructure = createAssistStructure(viewNode)
-        val data = autofillData(website = nodeWebsite)
-        every {
-            viewNode.toAutofillViewData(autofillId = autofillId, website = nodeWebsite)
-        } returns data
-
-        val actual = assistStructure.buildFillAssistViews(
-            hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
-            urlBarWebsite = urlBarWebsite,
-        )
-
-        assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
-    }
-
-    @Test
-    fun `buildFillAssistViews should exclude node with no autofillId`() {
-        val htmlInfo = createHtmlInfo()
-        val viewNode = createViewNode(htmlInfo = htmlInfo, autofillId = null)
-        val assistStructure = createAssistStructure(viewNode)
-
-        val actual = assistStructure.buildFillAssistViews(
-            hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
-            urlBarWebsite = null,
-        )
-
-        assertEquals(emptyList<AutofillView>(), actual)
-    }
-
-    @Test
-    fun `buildFillAssistViews should not match when htmlInfo tag differs from clause tag`() {
-        val htmlInfo = createHtmlInfo(matches = false)
-        val viewNode = createViewNode(htmlInfo = htmlInfo)
-        val assistStructure = createAssistStructure(viewNode)
-
-        val actual = assistStructure.buildFillAssistViews(
-            hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
-            urlBarWebsite = null,
-        )
-
-        assertEquals(emptyList<AutofillView>(), actual)
+        assertEquals(AutofillView.Login.Username(data = data), actual)
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `buildFillAssistViews should match when htmlInfo has no attributes and all clause attrs are null`() {
+    fun `toFillAssistView should match when htmlInfo has no attributes and all clause attrs are null`() {
         val htmlInfo = createHtmlInfo()
         val viewNode = createViewNode(htmlInfo = htmlInfo)
-        val assistStructure = createAssistStructure(viewNode)
         val data = autofillData()
         every { viewNode.toAutofillViewData(autofillId = autofillId, website = null) } returns data
 
@@ -342,65 +237,16 @@ class FillAssistViewNodeExtensionsTest {
             ),
         )
 
-        val actual = assistStructure.buildFillAssistViews(
-            hostRules = listOf(hostRule),
-            urlBarWebsite = null,
-        )
+        val actual = viewNode.toFillAssistView(hostRules = listOf(hostRule), website = null)
 
-        assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
+        assertEquals(AutofillView.Login.Username(data = data), actual)
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `buildFillAssistViews should not match when htmlInfo has no attributes but clause requires id`() {
-        val htmlInfo = createHtmlInfo(matches = false)
-        val viewNode = createViewNode(htmlInfo = htmlInfo)
-        val assistStructure = createAssistStructure(viewNode)
-
-        val actual = assistStructure.buildFillAssistViews(
-            hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
-            urlBarWebsite = null,
-        )
-
-        assertEquals(emptyList<AutofillView>(), actual)
-    }
-
-    @Test
-    fun `buildFillAssistViews should match when htmlInfo has correct id attribute`() {
+    fun `toFillAssistView should require all non-null clause attributes to match (AND logic)`() {
         val htmlInfo = createHtmlInfo()
         val viewNode = createViewNode(htmlInfo = htmlInfo)
-        val assistStructure = createAssistStructure(viewNode)
-        val data = autofillData()
-        every { viewNode.toAutofillViewData(autofillId = autofillId, website = null) } returns data
-
-        val actual = assistStructure.buildFillAssistViews(
-            hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
-            urlBarWebsite = null,
-        )
-
-        assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
-    }
-
-    @Test
-    fun `buildFillAssistViews should not match when htmlInfo id attribute is wrong`() {
-        val htmlInfo = createHtmlInfo(matches = false)
-        val viewNode = createViewNode(htmlInfo = htmlInfo)
-        val assistStructure = createAssistStructure(viewNode)
-
-        val actual = assistStructure.buildFillAssistViews(
-            hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
-            urlBarWebsite = null,
-        )
-
-        assertEquals(emptyList<AutofillView>(), actual)
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `buildFillAssistViews should require all non-null clause attributes to match (AND logic)`() {
-        val htmlInfo = createHtmlInfo()
-        val viewNode = createViewNode(htmlInfo = htmlInfo)
-        val assistStructure = createAssistStructure(viewNode)
         val data = autofillData()
         every { viewNode.toAutofillViewData(autofillId = autofillId, website = null) } returns data
 
@@ -419,20 +265,16 @@ class FillAssistViewNodeExtensionsTest {
             ),
         )
 
-        val actual = assistStructure.buildFillAssistViews(
-            hostRules = listOf(hostRule),
-            urlBarWebsite = null,
-        )
+        val actual = viewNode.toFillAssistView(hostRules = listOf(hostRule), website = null)
 
-        assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
+        assertEquals(AutofillView.Login.Username(data = data), actual)
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `buildFillAssistViews should not match when one of multiple required attributes is wrong`() {
+    fun `toFillAssistView should return null when one of multiple required attributes is wrong`() {
         val htmlInfo = createHtmlInfo(matches = false)
         val viewNode = createViewNode(htmlInfo = htmlInfo)
-        val assistStructure = createAssistStructure(viewNode)
 
         val hostRule = FillAssistRules.HostRule(
             category = "account-login",
@@ -449,36 +291,15 @@ class FillAssistViewNodeExtensionsTest {
             ),
         )
 
-        val actual = assistStructure.buildFillAssistViews(
-            hostRules = listOf(hostRule),
-            urlBarWebsite = null,
-        )
+        val actual = viewNode.toFillAssistView(hostRules = listOf(hostRule), website = null)
 
-        assertEquals(emptyList<AutofillView>(), actual)
+        assertNull(actual)
     }
 
     @Test
-    fun `buildFillAssistViews should skip null clause attributes (not required)`() {
-        // Clause only requires tag + id; node has extra attributes which should be ignored.
+    fun `toFillAssistView should match when clause has null tag (tag check skipped)`() {
         val htmlInfo = createHtmlInfo()
         val viewNode = createViewNode(htmlInfo = htmlInfo)
-        val assistStructure = createAssistStructure(viewNode)
-        val data = autofillData()
-        every { viewNode.toAutofillViewData(autofillId = autofillId, website = null) } returns data
-
-        val actual = assistStructure.buildFillAssistViews(
-            hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
-            urlBarWebsite = null,
-        )
-
-        assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
-    }
-
-    @Test
-    fun `buildFillAssistViews should match when clause has null tag (tag check skipped)`() {
-        val htmlInfo = createHtmlInfo()
-        val viewNode = createViewNode(htmlInfo = htmlInfo)
-        val assistStructure = createAssistStructure(viewNode)
         val data = autofillData()
         every { viewNode.toAutofillViewData(autofillId = autofillId, website = null) } returns data
 
@@ -497,49 +318,9 @@ class FillAssistViewNodeExtensionsTest {
             ),
         )
 
-        val actual = assistStructure.buildFillAssistViews(
-            hostRules = listOf(hostRule),
-            urlBarWebsite = null,
-        )
+        val actual = viewNode.toFillAssistView(hostRules = listOf(hostRule), website = null)
 
-        assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
-    }
-
-    @Test
-    fun `buildFillAssistViews should return views from all children when only some match`() {
-        val matchingChildHtmlInfo = createHtmlInfo()
-        val matchingChild = createViewNode(htmlInfo = matchingChildHtmlInfo)
-        val matchingChildData = autofillData()
-        every {
-            matchingChild.toAutofillViewData(autofillId = autofillId, website = null)
-        } returns matchingChildData
-
-        val nonMatchingChildHtmlInfo = createHtmlInfo(matches = false)
-        val nonMatchingChild = createViewNode(htmlInfo = nonMatchingChildHtmlInfo)
-
-        val rootHtmlInfo = createHtmlInfo(matches = false)
-        val rootViewNode = createViewNode(
-            htmlInfo = rootHtmlInfo,
-            children = listOf(matchingChild, nonMatchingChild),
-        )
-
-        val assistStructure = createAssistStructure(rootViewNode)
-
-        val actual = assistStructure.buildFillAssistViews(
-            hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
-            urlBarWebsite = null,
-        )
-
-        assertEquals(
-            listOf(
-                AutofillView.Login.Username(
-                    data = matchingChildData,
-                ),
-            ),
-            actual,
-        )
-        // Sanity check that traversal visited multiple children.
-        assertTrue(actual.size == 1)
+        assertEquals(AutofillView.Login.Username(data = data), actual)
     }
 
     private fun autofillData(website: String? = null): AutofillView.Data = AutofillView.Data(
@@ -557,9 +338,7 @@ class FillAssistViewNodeExtensionsTest {
         id: String?,
     ): FillAssistRules.HostRule = FillAssistRules.HostRule(
         category = "account-login",
-        fields = mapOf(
-            "username" to listOf(selectorClause(tag = tag, id = id)),
-        ),
+        fields = mapOf("username" to listOf(selectorClause(tag = tag, id = id))),
     )
 
     private fun selectorClause(
@@ -584,26 +363,9 @@ class FillAssistViewNodeExtensionsTest {
         htmlInfo: HtmlInfo?,
         autofillId: AutofillId? = this.autofillId,
         website: String? = null,
-        children: List<AssistStructure.ViewNode> = emptyList(),
     ): AssistStructure.ViewNode = mockk {
         every { this@mockk.htmlInfo } returns htmlInfo
         every { this@mockk.autofillId } returns autofillId
         every { this@mockk.website } returns website
-        every { this@mockk.childCount } returns children.size
-        children.forEachIndexed { index, child ->
-            every { this@mockk.getChildAt(index) } returns child
-        }
-    }
-
-    private fun createAssistStructure(
-        rootViewNode: AssistStructure.ViewNode,
-    ): AssistStructure {
-        val windowNode: AssistStructure.WindowNode = mockk {
-            every { this@mockk.rootViewNode } returns rootViewNode
-        }
-        return mockk {
-            every { windowNodeCount } returns 1
-            every { getWindowNodeAt(0) } returns windowNode
-        }
     }
 }
