@@ -114,13 +114,11 @@ internal fun HtmlInfo.matchesSelectorClause(clause: FillAssistRules.SelectorClau
             clause.role == null
 
     fun hasAttr(key: String, value: String) = attrs.any { it.first == key && it.second == value }
-    return mapOf(
-        clause.id to HTML_ATTR_ID,
-        clause.name to HTML_ATTR_NAME,
-        clause.type to HTML_ATTR_TYPE,
-        clause.role to HTML_ATTR_ROLE,
-    )
-        .all { (value, key) -> value == null || hasAttr(key, value) }
+    fun matchesAttr(value: String?, key: String) = value == null || hasAttr(key, value)
+    return matchesAttr(clause.id, HTML_ATTR_ID) &&
+        matchesAttr(clause.name, HTML_ATTR_NAME) &&
+        matchesAttr(clause.type, HTML_ATTR_TYPE) &&
+        matchesAttr(clause.role, HTML_ATTR_ROLE)
 }
 
 /**
