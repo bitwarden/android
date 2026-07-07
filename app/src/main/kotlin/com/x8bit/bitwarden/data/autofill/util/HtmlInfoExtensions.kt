@@ -5,6 +5,11 @@ package com.x8bit.bitwarden.data.autofill.util
 import android.view.ViewStructure.HtmlInfo
 import com.x8bit.bitwarden.data.autofill.model.FillAssistRules
 
+private const val HTML_ATTR_ID = "id"
+private const val HTML_ATTR_NAME = "name"
+private const val HTML_ATTR_TYPE = "type"
+private const val HTML_ATTR_ROLE = "role"
+
 /**
  * Whether this [HtmlInfo] represents a password field.
  */
@@ -95,7 +100,7 @@ fun HtmlInfo?.hints(): List<String> = this
 val HtmlInfo?.isInputField: Boolean get() = this?.tag == "input"
 
 /**
- * Whether this [HtmlInfo] matches the given [SelectorClause].
+ * Whether this [HtmlInfo] matches the given [FillAssistRules.SelectorClause].
  *
  * This function is untestable as [HtmlInfo] contains [android.util.Pair] which requires
  * instrumentation testing.
@@ -107,12 +112,13 @@ internal fun HtmlInfo.matchesSelectorClause(clause: FillAssistRules.SelectorClau
             clause.name == null &&
             clause.type == null &&
             clause.role == null
+
     fun hasAttr(key: String, value: String) = attrs.any { it.first == key && it.second == value }
-    return listOf(
-        clause.id to "id",
-        clause.name to "name",
-        clause.type to "type",
-        clause.role to "role",
+    return mapOf(
+        clause.id to HTML_ATTR_ID,
+        clause.name to HTML_ATTR_NAME,
+        clause.type to HTML_ATTR_TYPE,
+        clause.role to HTML_ATTR_ROLE,
     )
         .all { (value, key) -> value == null || hasAttr(key, value) }
 }
