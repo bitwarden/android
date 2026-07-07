@@ -19,9 +19,9 @@ configure<ApplicationExtension> {
 
     defaultConfig {
         applicationId = "com.bitwarden.testharness"
-        // API 28 - CredentialManager with Play Services support
+        // API 29 - CredentialManager with Play Services support
         minSdk {
-            version = release(libs.versions.minSdkBwa.get().toInt())
+            version = release(libs.versions.minSdk.get().toInt())
         }
         targetSdk {
             version = release(libs.versions.targetSdk.get().toInt())

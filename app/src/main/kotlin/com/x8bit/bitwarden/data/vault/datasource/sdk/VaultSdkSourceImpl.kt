@@ -5,12 +5,14 @@ import com.bitwarden.collections.CollectionId
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.DeriveKeyConnectorException
 import com.bitwarden.core.DeriveKeyConnectorRequest
+import com.bitwarden.core.EncryptionSettingsException
 import com.bitwarden.core.EnrollPinResponse
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.exporters.Account
@@ -194,12 +196,32 @@ class VaultSdkSourceImpl(
                     getClient(userId = userId).crypto().initializeUserCrypto(req = request)
                 }
                 InitializeCryptoResult.Success
-            } catch (exception: BitwardenException) {
-                // The only truly expected error from the SDK is an incorrect key/password.
-                InitializeCryptoResult.AuthenticationError(
-                    message = exception.message,
-                    error = exception,
-                )
+            } catch (exception: BitwardenException.EncryptionSettings) {
+                when (val error = exception.v1) {
+                    is EncryptionSettingsException.Crypto,
+                    is EncryptionSettingsException.WrongPin,
+                        -> {
+                        InitializeCryptoResult.AuthenticationError(
+                            message = error.message,
+                            error = error,
+                        )
+                    }
+
+                    is EncryptionSettingsException.CryptoInitialization,
+                    is EncryptionSettingsException.InvalidUpgradeToken,
+                    is EncryptionSettingsException.KeyConnectorRetrievalFailed,
+                    is EncryptionSettingsException.LocalUserDataKeyInitFailed,
+                    is EncryptionSettingsException.LocalUserDataKeyLoadFailed,
+                    is EncryptionSettingsException.LocalUserDataMigrationFailed,
+                    is EncryptionSettingsException.MissingPrivateKey,
+                    is EncryptionSettingsException.UserIdAlreadySet,
+                    is EncryptionSettingsException.UserKeyStateRetrievalFailed,
+                    is EncryptionSettingsException.UserKeyStateUpdateFailed,
+                        -> {
+                        Timber.w(error, "initializeCrypto error")
+                        return error.asFailure()
+                    }
+                }
             }
         }
 
@@ -209,11 +231,9 @@ class VaultSdkSourceImpl(
     ): Result<InitializeCryptoResult> =
         runCatchingWithLogs {
             try {
-                getClient(userId = userId)
-                    .crypto()
-                    .initializeOrgCrypto(req = request)
+                getClient(userId = userId).crypto().initializeOrgCrypto(req = request)
                 InitializeCryptoResult.Success
-            } catch (exception: BitwardenException) {
+            } catch (exception: BitwardenException.EncryptionSettings) {
                 // The only truly expected error from the SDK is for incorrect keys.
                 InitializeCryptoResult.AuthenticationError(
                     message = exception.message,

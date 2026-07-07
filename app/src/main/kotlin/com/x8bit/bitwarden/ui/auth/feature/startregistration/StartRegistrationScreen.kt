@@ -129,11 +129,7 @@ fun StartRegistrationScreen(
         },
     ) {
         StartRegistrationContent(
-            emailInput = state.emailInput,
-            selectedEnvironmentType = state.selectedEnvironmentType,
-            nameInput = state.nameInput,
-            isReceiveMarketingEmailsToggled = state.isReceiveMarketingEmailsToggled,
-            isContinueButtonEnabled = state.isContinueButtonEnabled,
+            state = state,
             handler = handler,
         )
     }
@@ -165,11 +161,7 @@ private fun StartRegistrationDialogs(
 @Suppress("LongMethod")
 @Composable
 private fun StartRegistrationContent(
-    emailInput: String,
-    selectedEnvironmentType: Environment.Type,
-    nameInput: String,
-    isReceiveMarketingEmailsToggled: Boolean,
-    isContinueButtonEnabled: Boolean,
+    state: StartRegistrationState,
     handler: StartRegistrationHandler,
     modifier: Modifier = Modifier,
 ) {
@@ -195,7 +187,7 @@ private fun StartRegistrationContent(
 
         BitwardenTextField(
             label = stringResource(id = BitwardenString.email_address_required),
-            value = emailInput,
+            value = state.emailInput,
             onValueChange = handler.onEmailInputChange,
             keyboardType = KeyboardType.Email,
             textFieldTestTag = "EmailAddressEntry",
@@ -204,7 +196,8 @@ private fun StartRegistrationContent(
                 EnvironmentSelector(
                     labelText = stringResource(id = BitwardenString.create_account_on_with_colon),
                     dialogTitle = stringResource(id = BitwardenString.create_account_on),
-                    selectedOption = selectedEnvironmentType,
+                    options = state.environmentTypeOptions,
+                    selectedOption = state.selectedEnvironmentType,
                     onOptionSelected = handler.onEnvironmentTypeSelect,
                     onHelpClick = handler.onServerGeologyHelpClick,
                     modifier = Modifier
@@ -222,7 +215,7 @@ private fun StartRegistrationContent(
 
         BitwardenTextField(
             label = stringResource(id = BitwardenString.name),
-            value = nameInput,
+            value = state.nameInput,
             onValueChange = handler.onNameInputChange,
             textFieldTestTag = "NameEntry",
             cardStyle = CardStyle.Full,
@@ -231,10 +224,10 @@ private fun StartRegistrationContent(
                 .standardHorizontalMargin(),
         )
 
-        if (selectedEnvironmentType != Environment.Type.SELF_HOSTED) {
+        if (state.selectedEnvironmentType != Environment.Type.SELF_HOSTED) {
             Spacer(modifier = Modifier.height(8.dp))
             ReceiveMarketingEmailsSwitch(
-                isChecked = isReceiveMarketingEmailsToggled,
+                isChecked = state.isReceiveMarketingEmailsToggled,
                 onCheckedChange = handler.onReceiveMarketingEmailsToggle,
                 onUnsubscribeClick = handler.onUnsubscribeMarketingEmailsClick,
                 modifier = Modifier
@@ -248,7 +241,7 @@ private fun StartRegistrationContent(
         BitwardenFilledButton(
             label = stringResource(id = BitwardenString.continue_text),
             onClick = handler.onContinueClick,
-            isEnabled = isContinueButtonEnabled,
+            isEnabled = state.isContinueButtonEnabled,
             modifier = Modifier
                 .testTag("ContinueButton")
                 .standardHorizontalMargin()
@@ -365,11 +358,14 @@ private fun ReceiveMarketingEmailsSwitch(
 private fun StartRegistrationContentFilledOut_preview() {
     BitwardenTheme {
         StartRegistrationContent(
-            emailInput = "e@mail.com",
-            selectedEnvironmentType = Environment.Type.US,
-            nameInput = "Test User",
-            isReceiveMarketingEmailsToggled = true,
-            isContinueButtonEnabled = true,
+            state = StartRegistrationState(
+                emailInput = "e@mail.com",
+                selectedEnvironmentType = Environment.Type.US,
+                nameInput = "Test User",
+                isReceiveMarketingEmailsToggled = true,
+                isContinueButtonEnabled = true,
+                dialog = null,
+            ),
             handler = StartRegistrationHandler(
                 onEmailInputChange = {},
                 onNameInputChange = {},
@@ -391,11 +387,14 @@ private fun StartRegistrationContentFilledOut_preview() {
 private fun StartRegistrationContentEmpty_preview() {
     BitwardenTheme {
         StartRegistrationContent(
-            emailInput = "",
-            selectedEnvironmentType = Environment.Type.US,
-            nameInput = "",
-            isReceiveMarketingEmailsToggled = false,
-            isContinueButtonEnabled = false,
+            state = StartRegistrationState(
+                emailInput = "",
+                selectedEnvironmentType = Environment.Type.US,
+                nameInput = "",
+                isReceiveMarketingEmailsToggled = false,
+                isContinueButtonEnabled = false,
+                dialog = null,
+            ),
             handler = StartRegistrationHandler(
                 onEmailInputChange = {},
                 onNameInputChange = {},

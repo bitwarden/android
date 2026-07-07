@@ -25,6 +25,13 @@ class EnvironmentUrlDataJsonExtensionsTest {
         )
         assertEquals(
             AuthTabData.HttpsScheme(
+                host = "bitwarden-gov.com",
+                path = "duo-callback",
+            ),
+            EnvironmentUrlDataJson.DEFAULT_FED_RAMP.duoAuthTabData,
+        )
+        assertEquals(
+            AuthTabData.HttpsScheme(
                 host = "bitwarden.pw",
                 path = "duo-callback",
             ),
@@ -57,6 +64,13 @@ class EnvironmentUrlDataJsonExtensionsTest {
         )
         assertEquals(
             AuthTabData.HttpsScheme(
+                host = "bitwarden-gov.com",
+                path = "webauthn-callback",
+            ),
+            EnvironmentUrlDataJson.DEFAULT_FED_RAMP.webAuthnAuthTabData,
+        )
+        assertEquals(
+            AuthTabData.HttpsScheme(
                 host = "bitwarden.pw",
                 path = "webauthn-callback",
             ),
@@ -86,6 +100,13 @@ class EnvironmentUrlDataJsonExtensionsTest {
                 path = "sso-callback",
             ),
             EnvironmentUrlDataJson.DEFAULT_EU.ssoAuthTabData,
+        )
+        assertEquals(
+            AuthTabData.HttpsScheme(
+                host = "bitwarden-gov.com",
+                path = "sso-callback",
+            ),
+            EnvironmentUrlDataJson.DEFAULT_FED_RAMP.ssoAuthTabData,
         )
         assertEquals(
             AuthTabData.HttpsScheme(

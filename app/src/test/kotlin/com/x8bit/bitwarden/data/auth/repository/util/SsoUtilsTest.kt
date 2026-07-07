@@ -2,13 +2,14 @@ package com.x8bit.bitwarden.data.auth.repository.util
 
 import android.content.Intent
 import android.net.Uri
+import com.bitwarden.ui.platform.base.BaseRobolectricTest
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Test
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Test
 
-class SsoUtilsTest {
+class SsoUtilsTest : BaseRobolectricTest() {
 
     @Test
     fun `generateUriForSso should generate the correct URI`() {
@@ -20,7 +21,7 @@ class SsoUtilsTest {
         val codeVerifier = "test_code_verifier"
         val expectedUrl = "https://identity.bitwarden.com/connect/authorize" +
             "?client_id=mobile" +
-            "&redirect_uri=bitwarden%3A%2F%2Fsso-callback" +
+            "&redirect_uri=https%3A%2F%2Fbitwarden.com%2Fsso-callback" +
             "&response_type=code" +
             "&scope=api%20offline_access" +
             "&state=test_state" +

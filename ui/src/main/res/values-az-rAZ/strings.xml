@@ -611,7 +611,10 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="forwarded_email_description">Xarici yönləndirmə xidməti ilə e-poçt ləqəbi yaradın.</string>
     <string name="accessibility_service_disclosure">Erişiləbilənlik Xidməti açıqlaması</string>
     <string name="accessibility_disclosure_text">Bitwarden, tətbiqlərdə və veb saytlarda giriş xanalarını axtarmaq üçün Erişiləbilənlik Xidmətini istifadə edir, daha sonra tətbiq və ya sayt üçün uyuşma tapdıqda istifadəçi adı və parolun daxil edilməsi üçün müvafiq xana kimliklərini yaradır. Xidmət tərəfindən bizə təqdim edilən məlumatların heç birini saxlamırıq, kimlik məlumatlarının daxil edilməsindən kənar ekrandakı hər hansısa elementə nəzarət etməyə cəhd etmirik.</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden, tətbiqlərdə və veb saytlarda giriş xanalarını aşkarlamaq üçün Android-in Erişiləbilənlik Xidmətini istifadə edən istəyə bağlı bir avto-doldurma metodu təklif edir. Bu özəlliyi fəallaşdırsanız, Bitwarden uyğun xanaları müəyyən edəcək və uyuşma tapıldığı zaman kimlik məlumatlarınızı daxil edəcək. Xidmət tərəfindən aşkarlanan heç bir məlumatı saxlamırıq və kimlik məlumatlarınızın daxil edilməsi xaricində ekrandakı heç bir element üzərində nəzarətimiz yoxdur.</string>
+    <string name="accessibility_disclosure_start_up_text_1">Bitwarden-in erişiləbilənlik əsaslı avto-doldurma xidmətini təklif etməsi üçün bu bildiriş tələb olunur.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden, Android-in Erişiləbilənlik Xidmətini istifadə edərək giriş xanalarını aşkarlamaq üçün ixtiyari bir avto-doldurma üsulu təklif edir. Bunu fəallaşdırsanız, Bitwarden müvafiq xanaları müəyyənləşdirəcək və uyuşma tapıldığı zama giriş məlumatlarınızı dolduracaq.</string>
+    <string name="accessibility_disclosure_start_up_text_3">Erişiləbilənlik Xidmətini istifadə etdiyiniz zaman ekrandakı heç bir məlumatı saxlamırıq və ekrandakı giriş məlumatlarını daxil etmə elementləri istisna olmaqla heç nəyi idarə etmirik.</string>
+    <string name="i_understand">Anladım</string>
     <string name="accept">Qəbul et</string>
     <string name="decline">Rədd et</string>
     <string name="login_request_has_already_expired">Giriş tələbinin müddəti artıq bitib.</string>
@@ -1151,6 +1154,8 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="no_items_imported">Heç bir element daxilə köçürülmədi</string>
     <string name="no_items_received_from_the_selected_app">Seçilmiş tətbiqdən heç bir element alınmadı.</string>
     <string name="vault_sync_failed">Seyf sinxronlaşdırılmadı</string>
+    <string name="vault_sync_unsuccessful">Sync unsuccessful</string>
+    <string name="vault_sync_failed_description">We couldn’t sync your vault with the server. Your vault may not reflect your latest changes. You can try again now or it will sync automatically later.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Elementləriniz uğurla daxilə köçürüldü, ancaq sinxronlaşdırma həyata keçirilənə qədər seyfinizdə görünməyəcək.</string>
     <string name="there_was_a_problem_importing_your_items">Elementlərinizin daxilə köçürülməsi bağlı bir problem var. Lütfən yenidən sınayın. Əgər problem davam edərsə, dəstəklə əlaqə saxlayın.</string>
     <string name="saving_items">Elementlər saxlanılır…</string>
@@ -1211,13 +1216,14 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="item_moved_to_archived">Element arxivə daşındı</string>
     <string name="item_moved_to_vault">Element seyfə daşındı</string>
     <string name="archiving_items_is_a_premium_feature">Elementləri arxivləmə, Premium bir özəllikdir. Hazırkı planınızda bu özəlliyə erişim yoxdur.</string>
+    <string name="totp_is_a_premium_feature">Authenticator açarı (TOTP) Premium bir özəllikdir. Hazırkı planınızda bu özəlliyə erişim yoxdur.</string>
     <string name="upgrade_to_premium">\"Premium\"a yüksəlt</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Premium abunəliyinizi idarə etmək üçün kompüterinizdə veb seyfinizə giriş etməlisiniz.</string>
     <string name="unlock_advanced_security_features">Qabaqcıl təhlükəsizlik özəlliklərinin kilidini aç</string>
-    <string name="your_subscription_needs_attention">Your subscription needs attention</string>
-    <string name="check_your_plan_for_details">Check your plan for details.</string>
-    <string name="view_plan">View plan</string>
+    <string name="your_subscription_needs_attention">Abunəliyinizə nəzər salın</string>
+    <string name="check_your_plan_for_details">Detallar üçün planınızı yoxlayın.</string>
+    <string name="view_plan">Plana bax</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Premium plan, güvəndə qalmağınız və nəzarəti əlinizdə saxlamağınız üçün sizə daha çox alət verir</string>
     <string name="this_item_is_archived">Bu element arxivləndi.</string>
     <string name="introducing_archive">Tanış olun, Arxivləmə</string>
@@ -1309,11 +1315,13 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="subscription_status_expired">Müddəti bitib</string>
     <string name="subscription_status_past_due">Vaxtı keçmiş</string>
     <string name="subscription_status_paused">Fasilə verilib</string>
+    <string name="subscription_status_unpaid">Unpaid</string>
     <string name="subscription_status_update_payment">Ödənişi güncəllə</string>
     <string name="subscription_status_pending_cancellation">Ləğvi gözlənilir</string>
     <string name="subscription_pending_cancellation_description"><annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> tarixində abunəliyinizin ləğv edilməsi planlanıb. Abunəliyinizi bu tarixdən əvvəl təkrar aktivləşdirə bilərsiniz.</string>
     <string name="premium_next_charge_summary">%1$s USD məbləğindəki növbəti ödənişinizin tarixi: %2$s.</string>
     <string name="subscription_canceled_description">Abunəliyiniz %1$s tarixində ləğv ediləcək. Premium özəllikləri istifadə etməyə davam etmək üçün yenidən abunə olun.</string>
+    <string name="subscription_unpaid_description">Your subscription was suspended on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. To reactivate, please resolve your past due invoices.</string>
     <string name="subscription_update_payment_description">Ödənişinizi emal edə bilmədik. Abunəliyiniz <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> tarixində bitməzdən əvvəl ödəniş üsulunuzu güncəlləyin.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Abunəliyinizin bitmə tarixindən etibarən %1$d günlük güzəşt dövrünüz var. Lütfən %2$s tarixinə qədər vaxtı keçmiş fakturaları həll edin.</item>
@@ -1325,7 +1333,6 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="loading_portal">Portal yüklənir…</string>
     <string name="portal_error">Nəsə səhv getdi</string>
     <string name="trouble_loading_portal">İdarəetmə portalını açmaqla bağlı çətinliyimiz var, yenidən sınayın.</string>
-    <string name="subscription_error">Abunəlik xətası</string>
     <string name="trouble_loading_subscription">Abunəlik məlumatlarınız yüklənə bilmədi. Lütfən yenidən sınayın.</string>
     <string name="view_bank_account">Bank hesabına bax</string>
     <string name="view_license">Sür. vəsiqəsinə bax</string>

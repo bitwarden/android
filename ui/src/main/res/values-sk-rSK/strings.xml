@@ -620,7 +620,10 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</string>
     <string name="forwarded_email_description">Vytvoriť e-mailový alias pomocou externej služby presmerovania.</string>
     <string name="accessibility_service_disclosure">Vyhlásenie o prístupnosti</string>
     <string name="accessibility_disclosure_text">Bitwarden používa službu dostupnosti na vyhľadávanie prihlasovacích polí v aplikáciách a na webových stránkach a potom vytvára príslušné ID polí na zadanie používateľského mena a hesla, keď sa nájde zhoda s aplikáciou alebo webom. Neuchovávame žiadne informácie, ktoré nám poskytuje služba, ani sa nepokúšame ovládať žiadne prvky na obrazovke okrem zadávania textu prihlasovacích údajov.</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden ponúka voliteľnú funkciu automatického vypĺňania, ktorá využíva službu prístupnosti systému Android na rozpoznávanie prihlasovacích polí v aplikáciách a na webových stránkach. Ak sa rozhodnete túto funkciu zapnúť, Bitwarden identifikuje príslušné polia a po nájdení zhody do nich zadá vaše prihlasovacie údaje. Neukladáme žiadne informácie zaznamenané touto službou, ani nekontrolujeme žiadne prvky na obrazovke okrem zadávania prihlasovacích údajov.</string>
+    <string name="accessibility_disclosure_start_up_text_1">Toto upozornenie je potrebné, aby mohol Bitwarden ponúkať automatické vypĺňanie na základe dostupnosti.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden ponúka voliteľnú funkciu automatického vypĺňania, ktorá na detekciu prihlasovacích polí využíva službu dostupnosti Androidu. Ak túto funkciu povolíte, Bitwarden identifikuje príslušné polia a po nájdení zhody do nich vyplní vaše prihlasovacie údaje.</string>
+    <string name="accessibility_disclosure_start_up_text_3">Počas používania služby dostupnosti neukladáme žiadne informácie o obsahu obrazovky a okrem zadávania prihlasovacích údajov nemáme kontrolu nad žiadnymi prvkami na obrazovke.</string>
+    <string name="i_understand">Rozumiem</string>
     <string name="accept">Prijať</string>
     <string name="decline">Odmietnuť</string>
     <string name="login_request_has_already_expired">Platnosť žiadosti o prihlásenie už vypršala.</string>
@@ -1166,6 +1169,8 @@ Chcete prepnúť na tento účet?</string>
     <string name="no_items_imported">Žiadne položky neboli importované</string>
     <string name="no_items_received_from_the_selected_app">Z vybranej aplikácie neboli získané žiadne položky.</string>
     <string name="vault_sync_failed">Synchronizácia trezora zlyhala</string>
+    <string name="vault_sync_unsuccessful">Synchronizácia zlyhala</string>
+    <string name="vault_sync_failed_description">Nepodarilo sa nám synchronizovať váš trezor so serverom. Je možné, že váš trezor nezahŕňa vaše najnovšie zmeny. Môžete to skúsiť znova teraz, alebo sa synchronizácia vykoná automaticky neskôr.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Položky boli úspešne importované, ale nebudú viditeľné vo vašom trezore, kým sa nevykoná synchronizácia.</string>
     <string name="there_was_a_problem_importing_your_items">Pri importe vašich položiek došlo k problému. Skúste to znova. Ak problém pretrváva, kontaktujte podporu.</string>
     <string name="saving_items">Ukladajú sa položky…</string>
@@ -1228,6 +1233,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="item_moved_to_archived">Položka bola presunutá do archívu</string>
     <string name="item_moved_to_vault">Položka bola presunutá do trezoru</string>
     <string name="archiving_items_is_a_premium_feature">Archivovanie položiek je prémiová funkcia. Váš aktuálny plán nezahŕňa prístup k tejto funkcii.</string>
+    <string name="totp_is_a_premium_feature">Kľúč overovacej aplikácie (TOTP) je prémiová funkcia. Váš súčasný plán nezahŕňa prístup k tejto funkcii.</string>
     <string name="upgrade_to_premium">Upgradovať na Prémium</string>
     <string name="plan">Plán</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Ak chcete spravovať prémiové predplatné, budete sa musieť prihlásiť do svojho trezora na počítači.</string>
@@ -1326,11 +1332,13 @@ Chcete prepnúť na tento účet?</string>
     <string name="subscription_status_expired">Exspirované</string>
     <string name="subscription_status_past_due">Po splatnosti</string>
     <string name="subscription_status_paused">Pozastavené</string>
+    <string name="subscription_status_unpaid">Nezaplatené</string>
     <string name="subscription_status_update_payment">Aktualizovať platbu</string>
     <string name="subscription_status_pending_cancellation">Čaká na zrušenie</string>
     <string name="subscription_pending_cancellation_description">Vaše predplatné má naplánovaný koniec na <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Kedykoľvek predtým ho môžete obnoviť.</string>
     <string name="premium_next_charge_summary">Vaša ďalšia platba vo výške<annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD je splatná <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
     <string name="subscription_canceled_description">Vaše predplatné bolo zrušené <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Obnovte si predplatné, ak chcete naďalej využívať prémiové funkcie.</string>
+    <string name="subscription_unpaid_description">Vaše predplatné bolo pozastavené <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Ak ho chcete opäť aktivovať, uhraďte nezaplatené faktúry.</string>
     <string name="subscription_update_payment_description">Vašu platbu sa nám nepodarilo spracovať. Aktualizujte spôsob platby ešte pred uplynutím platnosti vášho predplatného <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Máte bezplatnú skúšobnú lehotu <annotation arg="0">%1$d</annotation> deň od vypršania predplatného. Prosím, uhraďte faktúru do <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
@@ -1344,7 +1352,6 @@ Chcete prepnúť na tento účet?</string>
     <string name="loading_portal">Načítava sa portál…</string>
     <string name="portal_error">Niečo sa pokazilo</string>
     <string name="trouble_loading_portal">Mali sme problémy s načítaním portálu pre správu, skúste to znova.</string>
-    <string name="subscription_error">Chyba predplatného</string>
     <string name="trouble_loading_subscription">Nepodarilo sa nám načítať údaje o vašom predplatnom. Skúste to znova.</string>
     <string name="view_bank_account">Zobraziť bankový účet</string>
     <string name="view_license">Zobraziť vodičský preukaz</string>
