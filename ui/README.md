@@ -22,10 +22,11 @@ All drawables should be named with the appropriate prefix to identify what they 
 
 | Prefix  | Description   |
 |---------|---------------|
+| `bg_`   | backgrounds   |
 | `gif_`  | gifs          |
 | `ic_`   | Icons         |
-| `img_`  | Raster Images |
 | `ill_`  | Illustrations |
+| `img_`  | Raster Images |
 | `logo_` | Brand Imagery |
 
 #### Multi-tonal Illustrations
