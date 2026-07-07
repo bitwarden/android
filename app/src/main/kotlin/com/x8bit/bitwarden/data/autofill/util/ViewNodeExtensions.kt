@@ -98,7 +98,7 @@ private data class AutofillableChild(val autofillId: AutofillId, val autofillTyp
 private fun AssistStructure.ViewNode.findFirstAutofillableChild(): AutofillableChild? {
     for (i in 0 until childCount) {
         val child = getChildAt(i)
-        if (child.autofillType != android.view.View.AUTOFILL_TYPE_NONE) {
+        if (child.autofillType == View.AUTOFILL_TYPE_TEXT) {
             val id = child.autofillId ?: continue
             return AutofillableChild(autofillId = id, autofillType = child.autofillType)
         }
