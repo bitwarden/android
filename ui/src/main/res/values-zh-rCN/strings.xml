@@ -1146,6 +1146,8 @@
     <string name="no_items_imported">未导入任何项目</string>
     <string name="no_items_received_from_the_selected_app">没有从所选 App 接收到任何项目。</string>
     <string name="vault_sync_failed">密码库同步失败</string>
+    <string name="vault_sync_unsuccessful">同步失败</string>
+    <string name="vault_sync_failed_description">我们无法将您的密码库与服务器同步。您的密码库可能无法反映您的最新更改。您可以现在重试，或稍后它将自动同步。</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">您的项目已成功导入，但在执行同步之前，它们不会显示在您的密码库中。</string>
     <string name="there_was_a_problem_importing_your_items">导入您的项目时出现问题。请重试。如果问题仍然存在，请联系支持。</string>
     <string name="saving_items">正在保存项目…</string>
@@ -1285,7 +1287,7 @@
     <string name="see_upcoming_codes_in_the_list">查看列表中的后续代码</string>
     <string name="next_code_x">下一个代码，%1$s</string>
     <string name="archive_item">归档项目</string>
-    <string name="once_archived_this_item_will_be_excluded">归档后，此项目将被排除在一般搜索结果和自动填充建议之外。</string>
+    <string name="once_archived_this_item_will_be_excluded">归档后，此项目将被排除在搜索结果和自动填充建议之外。</string>
     <string name="pricing_unavailable">定价不可用</string>
     <string name="current_plan">当前方案</string>
     <string name="premium_plan_name">高级版</string>
@@ -1304,11 +1306,13 @@
     <string name="subscription_status_expired">已过期</string>
     <string name="subscription_status_past_due">逾期未支付</string>
     <string name="subscription_status_paused">已暂停</string>
+    <string name="subscription_status_unpaid">未支付</string>
     <string name="subscription_status_update_payment">更新付款信息</string>
     <string name="subscription_status_pending_cancellation">待取消</string>
     <string name="subscription_pending_cancellation_description">您的订阅将于 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 取消。在此日期之前，您可以随时恢复订阅。</string>
     <string name="premium_next_charge_summary">您的下一笔费用为 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD，到期日期为 <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>。</string>
     <string name="subscription_canceled_description">您的订阅被取消于 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>。重新订阅以继续使用高级版功能。</string>
+    <string name="subscription_unpaid_description">您的订阅被暂停于 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>。要重新激活，请处理逾期未支付的账单。</string>
     <string name="subscription_update_payment_description">我们无法处理您的付款。请在 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 您的订阅结束前更新您的付款方式。</string>
     <plurals name="subscription_past_due_description">
         <item quantity="other">从您的订阅到期之日起，您有 <annotation arg="0">%1$d</annotation> 天的宽限期。请在 <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation> 之前处理逾期未支付的款项。</item>

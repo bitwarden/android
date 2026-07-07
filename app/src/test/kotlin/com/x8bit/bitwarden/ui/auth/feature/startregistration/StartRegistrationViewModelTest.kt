@@ -251,22 +251,34 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `EnvironmentTypeSelect should update value of selected region for US or EU`() = runTest {
-        val inputEnvironmentType = Environment.Type.EU
-        val viewModel = createViewModel()
-        viewModel.stateFlow.test {
-            awaitItem()
-            viewModel.trySendAction(
-                EnvironmentTypeSelect(
-                    inputEnvironmentType,
-                ),
-            )
-            assertEquals(
-                DEFAULT_STATE.copy(selectedEnvironmentType = Environment.Type.EU),
-                awaitItem(),
-            )
+    fun `EnvironmentTypeSelect should update value of selected region for UE, US, and FedRAMP`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                skipItems(count = 1)
+
+                viewModel.trySendAction(
+                    EnvironmentTypeSelect(environmentType = Environment.Type.EU),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(selectedEnvironmentType = Environment.Type.EU),
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(
+                    EnvironmentTypeSelect(environmentType = Environment.Type.US),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(selectedEnvironmentType = Environment.Type.US),
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(
+                    EnvironmentTypeSelect(environmentType = Environment.Type.FED_RAMP),
+                )
+                expectNoEvents()
+            }
         }
-    }
 
     @Test
     fun `EnvironmentTypeSelect should emit NavigateToEnvironment for self-hosted`() = runTest {

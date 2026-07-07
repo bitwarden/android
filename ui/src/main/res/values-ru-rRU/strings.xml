@@ -1169,6 +1169,8 @@
     <string name="no_items_imported">Элементы не импортированы</string>
     <string name="no_items_received_from_the_selected_app">Из выбранного приложения не было получено ни одного элемента.</string>
     <string name="vault_sync_failed">Сбой синхронизации хранилища</string>
+    <string name="vault_sync_unsuccessful">Синхронизация не удалась</string>
+    <string name="vault_sync_failed_description">Нам не удалось синхронизировать ваше хранилище с сервером. Возможно, в хранилище не отражены ваши последние изменения. Вы можете повторить попытку сейчас или дождаться автоматической синхронизации позже.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Ваши элементы были успешно импортированы, но они не будут отображаться в хранилище до тех пор, пока не будет выполнена синхронизация.</string>
     <string name="there_was_a_problem_importing_your_items">Возникла проблема с импортом ваших элементов. Пожалуйста, попробуйте снова. Если проблема повторится, обратитесь в службу поддержки.</string>
     <string name="saving_items">Сохранение элементов…</string>
@@ -1330,11 +1332,13 @@
     <string name="subscription_status_expired">Срок истек</string>
     <string name="subscription_status_past_due">Просрочен</string>
     <string name="subscription_status_paused">Приостановлена</string>
+    <string name="subscription_status_unpaid">Не оплачено</string>
     <string name="subscription_status_update_payment">Обновить платежную информацию</string>
     <string name="subscription_status_pending_cancellation">Ожидание отмены</string>
     <string name="subscription_pending_cancellation_description">Ваша подписка будет отменена <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Вы сможете восстановить ее в любое время до этого момента.</string>
     <string name="premium_next_charge_summary">Следующий платеж на сумму <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD должен быть выполнен <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
     <string name="subscription_canceled_description">Ваша подписка была отменена <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Подпишитесь заново, чтобы продолжить пользоваться возможностями Премиум.</string>
+    <string name="subscription_unpaid_description">Ваша подписка была приостановлена <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Чтобы возобновить подписку, пожалуйста, оплатите просроченные счета.</string>
     <string name="subscription_update_payment_description">Нам не удалось обработать ваш платеж. Обновите способ оплаты до истечения срока подписки <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">У вас имеется льготный период продолжительностью <annotation arg="0">%1$d</annotation> день с даты истечения срока действия подписки. Просим вас оплатить просроченные счета до <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation></item>

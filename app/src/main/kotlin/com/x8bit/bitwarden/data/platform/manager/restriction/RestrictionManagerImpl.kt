@@ -33,6 +33,9 @@ class RestrictionManagerImpl(
             // If the baseEnvironmentUrl matches the predefined EU environment, assume it is the
             // default EU environment.
             Environment.Eu.environmentUrlData.base -> Environment.Eu
+            // If the baseEnvironmentUrl matches the predefined FedRAMP environment, assume it is
+            // the default FedRAMP environment.
+            Environment.FedRamp.environmentUrlData.base -> Environment.FedRamp
             // Otherwise make a custom self-host environment.
             else -> Environment.SelfHosted(EnvironmentUrlDataJson(baseEnvironmentUrl))
         }

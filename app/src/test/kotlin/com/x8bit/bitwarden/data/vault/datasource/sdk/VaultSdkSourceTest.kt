@@ -4,6 +4,7 @@ import com.bitwarden.collections.Collection
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.DeriveKeyConnectorException
 import com.bitwarden.core.DeriveKeyConnectorRequest
+import com.bitwarden.core.EncryptionSettingsException
 import com.bitwarden.core.EnrollPinResponse
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoRequest
@@ -554,19 +555,38 @@ class VaultSdkSourceTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `initializeUserCrypto with BitwardenException failure should return AuthenticationError with message`() =
+    fun `initializeUserCrypto with BitwardenException EncryptionSettings MissingPrivateKey failure should return an error result`() =
+        runBlocking {
+            val userId = "userId"
+            val mockInitCryptoRequest = mockk<InitUserCryptoRequest>()
+            val expectedException = EncryptionSettingsException.MissingPrivateKey("Whoopsy")
+            val bitwardenException = BitwardenException.EncryptionSettings(v1 = expectedException)
+            coEvery {
+                clientCrypto.initializeUserCrypto(req = mockInitCryptoRequest)
+            } throws bitwardenException
+            val result = vaultSdkSource.initializeCrypto(
+                userId = userId,
+                request = mockInitCryptoRequest,
+            )
+            assertEquals(expectedException.asFailure(), result)
+            coVerify {
+                clientCrypto.initializeUserCrypto(req = mockInitCryptoRequest)
+                sdkClientManager.getOrCreateClient(userId = userId)
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `initializeUserCrypto with BitwardenException EncryptionSettings Crypto failure should return AuthenticationError with message`() =
         runBlocking {
             val userId = "userId"
             val mockInitCryptoRequest = mockk<InitUserCryptoRequest>()
             val expectedErrorMessage = "Whoopsy"
-            val expectedException = BitwardenException.Crypto(
-                CryptoException.InvalidKey(expectedErrorMessage),
-            )
+            val expectedException = EncryptionSettingsException.Crypto(expectedErrorMessage)
+            val bitwardenException = BitwardenException.EncryptionSettings(v1 = expectedException)
             coEvery {
-                clientCrypto.initializeUserCrypto(
-                    req = mockInitCryptoRequest,
-                )
-            } throws expectedException
+                clientCrypto.initializeUserCrypto(req = mockInitCryptoRequest)
+            } throws bitwardenException
             val result = vaultSdkSource.initializeCrypto(
                 userId = userId,
                 request = mockInitCryptoRequest,
@@ -581,11 +601,9 @@ class VaultSdkSourceTest {
                 result,
             )
             coVerify {
-                clientCrypto.initializeUserCrypto(
-                    req = mockInitCryptoRequest,
-                )
+                clientCrypto.initializeUserCrypto(req = mockInitCryptoRequest)
+                sdkClientManager.getOrCreateClient(userId = userId)
             }
-            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
@@ -642,13 +660,13 @@ class VaultSdkSourceTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `initializeOrgCrypto with BitwardenException failure should return AuthenticationError with correct message`() =
+    fun `initializeOrgCrypto with BitwardenException EncryptionSettingsException failure should return AuthenticationError with correct message`() =
         runBlocking {
             val userId = "userId"
             val mockInitCryptoRequest = mockk<InitOrgCryptoRequest>()
             val expectedErrorMessage = "Whoopsy2"
-            val expectedException = BitwardenException.Crypto(
-                CryptoException.InvalidKey(expectedErrorMessage),
+            val expectedException = BitwardenException.EncryptionSettings(
+                v1 = EncryptionSettingsException.Crypto(expectedErrorMessage),
             )
             coEvery {
                 clientCrypto.initializeOrgCrypto(

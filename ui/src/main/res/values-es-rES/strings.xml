@@ -1156,6 +1156,8 @@ cualquier problema.</string>
     <string name="no_items_imported">No se han importado elementos</string>
     <string name="no_items_received_from_the_selected_app">No se han recibido elementos de la aplicación seleccionada.</string>
     <string name="vault_sync_failed">Error en la sincronización de almacén la caja fuerte</string>
+    <string name="vault_sync_unsuccessful">Sync unsuccessful</string>
+    <string name="vault_sync_failed_description">We couldn’t sync your vault with the server. Your vault may not reflect your latest changes. You can try again now or it will sync automatically later.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Tus elementos se han importado correctamente, pero no serán visibles en tu caja fuerte hasta que se realice la sincronización.</string>
     <string name="there_was_a_problem_importing_your_items">Ha habido un problema al importar tus elementos. Inténtalo de nuevo. Si el problema persiste, ponte en contacto con el servicio de asistencia.</string>
     <string name="saving_items">Guardando elementos…</string>
@@ -1315,11 +1317,13 @@ cualquier problema.</string>
     <string name="subscription_status_expired">Caducó</string>
     <string name="subscription_status_past_due">Past due</string>
     <string name="subscription_status_paused">En pausa</string>
+    <string name="subscription_status_unpaid">Unpaid</string>
     <string name="subscription_status_update_payment">Update payment</string>
     <string name="subscription_status_pending_cancellation">Pendiente de cancelación</string>
     <string name="subscription_pending_cancellation_description">Su suscripción está programada para cancelar el <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Puede reinstalarla en cualquier momento antes de esa fecha.</string>
     <string name="premium_next_charge_summary">El siguiente cargo es por <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD que vence el <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
     <string name="subscription_canceled_description">Tu suscripción ha sido cancelada en <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Suscríbete para seguir usando funciones premium.</string>
+    <string name="subscription_unpaid_description">Your subscription was suspended on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. To reactivate, please resolve your past due invoices.</string>
     <string name="subscription_update_payment_description">No pudimos procesar tu pago. Actualiza tu pago antes de que tu suscripción termine el <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Tienes un período de gracia de <annotation arg="0">%1$d</annotation> día desde la fecha de caducidad de tu suscripción. Por favor, resuelva el importe vencido por <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>

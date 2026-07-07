@@ -1155,6 +1155,8 @@
     <string name="no_items_imported">Не бяха внесени никакви елементи</string>
     <string name="no_items_received_from_the_selected_app">Не са получени никакви данни от избраното приложение.</string>
     <string name="vault_sync_failed">Синхронизирането на трезора беше неуспешно</string>
+    <string name="vault_sync_unsuccessful">Синхронизирането беше неуспешно</string>
+    <string name="vault_sync_failed_description">Трезорът не беше синхронизиран със сървъра. Последните промени може да не се виждат в трезора. По-късно ще се направи нов опит за синхронизиране, но може да опитате отново и още сега.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Данните бяха внесени успешно, но трезорът не може да бъде синхронизиран. Внесените елементи няма да бъдат видими в трезора, докато не се извърши синхронизиране.</string>
     <string name="there_was_a_problem_importing_your_items">Имаше проблем при внасянето на данните. Моля, опитайте отново. Ако това се повтори, свържете се с поддръжката.</string>
     <string name="saving_items">Запазване на елементите…</string>
@@ -1314,11 +1316,13 @@
     <string name="subscription_status_expired">Изтекъл</string>
     <string name="subscription_status_past_due">Просрочено</string>
     <string name="subscription_status_paused">На пауза</string>
+    <string name="subscription_status_unpaid">Дължимо</string>
     <string name="subscription_status_update_payment">Актуализиране на плащанията</string>
     <string name="subscription_status_pending_cancellation">Предстоящо прекратяване на абонамента</string>
     <string name="subscription_pending_cancellation_description">Абонаментът Ви по план ще бъде преустановен на <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.. Можете да го подновите по всяко време преди това.</string>
     <string name="premium_next_charge_summary">Следващото плащане ще бъде %1$s USD, на дата %2$s.</string>
     <string name="subscription_canceled_description">Абонаментът беше прекратен на %1$s. Ако искате да продължите да ползвате предимствата на платения план, ще трябва да се абонирате отново.</string>
+    <string name="subscription_unpaid_description">Вашият абонамент беше прекъснат на <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. За да го подновите, ще трябва да платите старите си задължения.</string>
     <string name="subscription_update_payment_description">Плащането не беше успешно. Обновете плащането си, преди абонаментът да бъде прекратен на <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">След като просрочите периода на абонамента си, разполагате с още %1$d ден. Моля, заплатете старите фактури до %2$s.</item>

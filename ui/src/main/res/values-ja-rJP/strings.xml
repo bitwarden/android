@@ -1145,6 +1145,8 @@
     <string name="no_items_imported">インポートされたアイテムはありません</string>
     <string name="no_items_received_from_the_selected_app">No items received from the selected app.</string>
     <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="vault_sync_unsuccessful">同期に失敗しました</string>
+    <string name="vault_sync_failed_description">サーバーとあなたの保管庫を同期できませんでした。あなたの保管庫は最新の変更を反映していない可能性があります。 後で自動的に同期しますが、今すぐ再試行することもできます。</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but they will not be visible in your vault until sync is performed.</string>
     <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
     <string name="saving_items">アイテムを保存中…</string>
@@ -1303,11 +1305,13 @@
     <string name="subscription_status_expired">有効期限切れ</string>
     <string name="subscription_status_past_due">期限切れ</string>
     <string name="subscription_status_paused">Paused</string>
+    <string name="subscription_status_unpaid">未払い</string>
     <string name="subscription_status_update_payment">支払方法を更新</string>
     <string name="subscription_status_pending_cancellation">キャンセル保留中</string>
     <string name="subscription_pending_cancellation_description">あなたのサブスクリプションは <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>でキャンセルが予定されています。それ以前ならいつでも再開できます。</string>
     <string name="premium_next_charge_summary">Your next charge is for <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD due on <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
     <string name="subscription_canceled_description">Your subscription was canceled on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using Premium features.</string>
+    <string name="subscription_unpaid_description">あなたのサブスクリプションは <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>で停止されました。再度有効にするには、期限切れの支払いを解決してください。</string>
     <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment method before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="other">You have a grace period of <annotation arg="0">%1$d</annotation> days from your subscription expiration date. Please resolve the past due invoices by <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>

@@ -12,7 +12,12 @@ import kotlinx.serialization.json.put
 import java.net.URLEncoder
 import java.util.Base64
 
-private val BITWARDEN_HOSTS: List<String> = listOf("bitwarden.com", "bitwarden.eu", "bitwarden.pw")
+private val BITWARDEN_HOSTS: List<String> = listOf(
+    "bitwarden.com",
+    "bitwarden.eu",
+    "bitwarden.pw",
+    "bitwarden-gov.com",
+)
 private const val APP_LINK_SCHEME: String = "https"
 private const val DEEPLINK_SCHEME: String = "bitwarden"
 private const val CALLBACK: String = "webauthn-callback"

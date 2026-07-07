@@ -1169,6 +1169,8 @@ Chcete prepnúť na tento účet?</string>
     <string name="no_items_imported">Žiadne položky neboli importované</string>
     <string name="no_items_received_from_the_selected_app">Z vybranej aplikácie neboli získané žiadne položky.</string>
     <string name="vault_sync_failed">Synchronizácia trezora zlyhala</string>
+    <string name="vault_sync_unsuccessful">Synchronizácia zlyhala</string>
+    <string name="vault_sync_failed_description">Nepodarilo sa nám synchronizovať váš trezor so serverom. Je možné, že váš trezor nezahŕňa vaše najnovšie zmeny. Môžete to skúsiť znova teraz, alebo sa synchronizácia vykoná automaticky neskôr.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Položky boli úspešne importované, ale nebudú viditeľné vo vašom trezore, kým sa nevykoná synchronizácia.</string>
     <string name="there_was_a_problem_importing_your_items">Pri importe vašich položiek došlo k problému. Skúste to znova. Ak problém pretrváva, kontaktujte podporu.</string>
     <string name="saving_items">Ukladajú sa položky…</string>
@@ -1330,11 +1332,13 @@ Chcete prepnúť na tento účet?</string>
     <string name="subscription_status_expired">Exspirované</string>
     <string name="subscription_status_past_due">Po splatnosti</string>
     <string name="subscription_status_paused">Pozastavené</string>
+    <string name="subscription_status_unpaid">Nezaplatené</string>
     <string name="subscription_status_update_payment">Aktualizovať platbu</string>
     <string name="subscription_status_pending_cancellation">Čaká na zrušenie</string>
     <string name="subscription_pending_cancellation_description">Vaše predplatné má naplánovaný koniec na <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Kedykoľvek predtým ho môžete obnoviť.</string>
     <string name="premium_next_charge_summary">Vaša ďalšia platba vo výške<annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD je splatná <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
     <string name="subscription_canceled_description">Vaše predplatné bolo zrušené <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Obnovte si predplatné, ak chcete naďalej využívať prémiové funkcie.</string>
+    <string name="subscription_unpaid_description">Vaše predplatné bolo pozastavené <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Ak ho chcete opäť aktivovať, uhraďte nezaplatené faktúry.</string>
     <string name="subscription_update_payment_description">Vašu platbu sa nám nepodarilo spracovať. Aktualizujte spôsob platby ešte pred uplynutím platnosti vášho predplatného <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Máte bezplatnú skúšobnú lehotu <annotation arg="0">%1$d</annotation> deň od vypršania predplatného. Prosím, uhraďte faktúru do <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>

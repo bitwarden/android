@@ -2,14 +2,15 @@ package com.x8bit.bitwarden.data.auth.repository.util
 
 import android.content.Intent
 import android.net.Uri
+import com.bitwarden.ui.platform.base.BaseRobolectricTest
 import com.bitwarden.ui.platform.manager.intent.model.AuthTabData
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.serialization.json.JsonObject
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import org.junit.Assert.assertEquals
+import org.junit.Test
 
-class WebAuthUtilsTest {
+class WebAuthUtilsTest : BaseRobolectricTest() {
 
     @Test
     fun `generateUriForWebAuth should return valid Uri`() {

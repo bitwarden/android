@@ -13,4 +13,5 @@ val Environment.Type.displayLabel: Text
         Environment.Type.US -> Environment.Us.label.asText()
         Environment.Type.EU -> Environment.Eu.label.asText()
         Environment.Type.SELF_HOSTED -> BitwardenString.self_hosted.asText()
+        Environment.Type.FED_RAMP -> Environment.FedRamp.label.asText()
     }

@@ -33,6 +33,12 @@ enum class OrganizationStatusType {
      */
     @SerialName("2")
     CONFIRMED,
+
+    /**
+     * The user has been staged for provisioning but has not yet been invited.
+     */
+    @SerialName("3")
+    STAGED,
 }
 
 @Keep
