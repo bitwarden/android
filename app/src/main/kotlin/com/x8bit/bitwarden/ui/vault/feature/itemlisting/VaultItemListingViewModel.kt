@@ -2933,7 +2933,7 @@ class VaultItemListingViewModel @Inject constructor(
 data class VaultItemListingState(
     val itemListingType: ItemListingType,
     val activeAccountSummary: AccountSummary,
-    val accountSummaries: List<AccountSummary>,
+    val accountSummaries: ImmutableList<AccountSummary>,
     val viewState: ViewState,
     val vaultFilterType: VaultFilterType,
     val baseWebSendUrl: String,

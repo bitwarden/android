@@ -28,6 +28,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -659,6 +660,6 @@ private val DEFAULT_STATE = LandingState(
     selectedEnvironmentType = Environment.Type.US,
     selectedEnvironmentLabel = Environment.Us.label,
     dialog = null,
-    accountSummaries = emptyList(),
+    accountSummaries = persistentListOf(),
     isFedRampEnabled = true,
 )

@@ -310,7 +310,7 @@ private fun VaultScreenScaffold(
         overlay = {
             BitwardenAccountSwitcher(
                 isVisible = accountMenuVisible,
-                accountSummaries = state.accountSummaries.toImmutableList(),
+                accountSummaries = state.accountSummaries,
                 onSwitchAccountClick = vaultHandlers.accountSwitchClickAction,
                 onLockAccountClick = vaultHandlers.accountLockClickAction,
                 onLogoutAccountClick = vaultHandlers.accountLogoutClickAction,

@@ -50,7 +50,6 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 
 /**
  * The top level composable for the Login screen.
@@ -134,7 +133,7 @@ fun LoginScreen(
         overlay = {
             BitwardenAccountSwitcher(
                 isVisible = isAccountMenuVisible,
-                accountSummaries = state.accountSummaries.toImmutableList(),
+                accountSummaries = state.accountSummaries,
                 onSwitchAccountClick = {
                     viewModel.trySendAction(LoginAction.SwitchAccountClick(it))
                 },

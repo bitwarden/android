@@ -36,6 +36,8 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -71,7 +73,7 @@ class VaultUnlockViewModel @Inject constructor(
             // get us out of here.
             UserState.EMPTY_ACCOUNT
         }
-        val accountSummaries = userState?.toAccountSummaries().orEmpty()
+        val accountSummaries = userState?.toAccountSummaries().orEmpty().toImmutableList()
         val activeAccountSummary = activeAccount.toAccountSummary(isActive = true)
         val vaultUnlockType = activeAccount.vaultUnlockType
         val hasNoMasterPassword = !activeAccount.hasMasterPassword
@@ -445,7 +447,7 @@ class VaultUnlockViewModel @Inject constructor(
  */
 @Parcelize
 data class VaultUnlockState(
-    val accountSummaries: List<AccountSummary>,
+    val accountSummaries: ImmutableList<AccountSummary>,
     private val avatarColorString: String,
     val hideInput: Boolean,
     val initials: String,
