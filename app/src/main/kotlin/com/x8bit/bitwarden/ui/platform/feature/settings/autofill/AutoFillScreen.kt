@@ -346,6 +346,7 @@ private fun AutoFillScreenContent(
             onClick = autoFillHandlers.onBlockAutoFillClick,
             cardStyle = CardStyle.Full,
             modifier = Modifier
+                .testTag("BlockAutoFillButton")
                 .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
