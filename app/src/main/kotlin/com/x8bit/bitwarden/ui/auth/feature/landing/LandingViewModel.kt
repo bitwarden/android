@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.landing
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -16,11 +17,14 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -41,6 +45,7 @@ class LandingViewModel @Inject constructor(
     private val environmentRepository: EnvironmentRepository,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     savedStateHandle: SavedStateHandle,
+    featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<LandingState, LandingEvent, LandingAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: LandingState(
@@ -51,12 +56,13 @@ class LandingViewModel @Inject constructor(
             selectedEnvironmentLabel = environmentRepository.environment.label,
             dialog = null,
             accountSummaries = authRepository.userStateFlow.value?.toAccountSummaries().orEmpty(),
+            isFedRampEnabled = featureFlagManager.getFeatureFlag(FlagKey.FedRamp),
         ),
 ) {
 
     /**
      * Returns the [AccountSummary] from the current state that matches the current email input and
-     * the the current environment, or `null` if there is no match.
+     * the current environment, or `null` if there is no match.
      */
     private val matchingAccountSummary: AccountSummary?
         get() {
@@ -104,6 +110,12 @@ class LandingViewModel @Inject constructor(
             .map { LandingAction.Internal.SnackbarDataReceived(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.FedRamp)
+            .map { LandingAction.Internal.FedRampFeatureUpdated(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: LandingAction) {
@@ -134,6 +146,7 @@ class LandingViewModel @Inject constructor(
             }
 
             is LandingAction.Internal.SnackbarDataReceived -> handleSnackbarDataReceived(action)
+            is LandingAction.Internal.FedRampFeatureUpdated -> handleFedRampFeatureUpdated(action)
         }
     }
 
@@ -229,6 +242,7 @@ class LandingViewModel @Inject constructor(
         val environment = when (action.environmentType) {
             Environment.Type.US -> Environment.Us
             Environment.Type.EU -> Environment.Eu
+            Environment.Type.FED_RAMP -> Environment.FedRamp
             Environment.Type.SELF_HOSTED -> {
                 // Launch the self-hosted screen and select the full environment details there.
                 sendEvent(LandingEvent.NavigateToEnvironment)
@@ -254,6 +268,10 @@ class LandingViewModel @Inject constructor(
 
     private fun handleSnackbarDataReceived(action: LandingAction.Internal.SnackbarDataReceived) {
         sendEvent(LandingEvent.ShowSnackbar(action.data))
+    }
+
+    private fun handleFedRampFeatureUpdated(action: LandingAction.Internal.FedRampFeatureUpdated) {
+        mutableStateFlow.update { it.copy(isFedRampEnabled = action.isEnabled) }
     }
 
     /**
@@ -282,7 +300,23 @@ data class LandingState(
     val selectedEnvironmentLabel: String,
     val dialog: DialogState?,
     val accountSummaries: List<AccountSummary>,
+    val isFedRampEnabled: Boolean,
 ) : Parcelable {
+    /**
+     * The selectable environments.
+     */
+    val environmentTypeOptions: ImmutableList<Environment.Type>
+        get() = Environment.Type
+            .entries
+            .filterNot { it == Environment.Type.FED_RAMP && !isFedRampEnabled }
+            .toImmutableList()
+
+    /**
+     * Determines if the user should be allowed to create a new account.
+     */
+    val allowCreateAccount: Boolean
+        get() = selectedEnvironmentType != Environment.Type.FED_RAMP
+
     /**
      * Determines whether the app bar should be visible based on the presence of account summaries.
      */
@@ -445,5 +479,12 @@ sealed class LandingAction {
          * Internal action to update the email input state from a non-user action
          */
         data class UpdateEmailState(val emailInput: String) : Internal()
+
+        /**
+         * Indicates that FedRamp feature has been enabled or disabled.
+         */
+        data class FedRampFeatureUpdated(
+            val isEnabled: Boolean,
+        ) : Internal()
     }
 }

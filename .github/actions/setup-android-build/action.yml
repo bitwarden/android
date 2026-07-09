@@ -9,15 +9,15 @@ runs:
   using: 'composite'
   steps:
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e # v6.1.0
+      uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6.2.0
 
     - name: Configure Ruby
-      uses: ruby/setup-ruby@6aaa311d81eba98ae12eaffbcb63296ace0efcde # v1.307.0
+      uses: ruby/setup-ruby@9eb537ca036ebaed86729dcb9309076e4c5c3b74 # v1.314.0
       with:
         bundler-cache: true
 
     - name: Configure JDK
-      uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+      uses: actions/setup-java@ad2b38190b15e4d6bdf0c97fb4fca8412226d287 # v5.3.0
       with:
         distribution: "temurin"
         java-version: ${{ inputs.java-version }}

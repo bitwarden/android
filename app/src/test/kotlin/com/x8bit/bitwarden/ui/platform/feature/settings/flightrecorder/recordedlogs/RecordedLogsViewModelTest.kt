@@ -56,6 +56,7 @@ class RecordedLogsViewModelTest : BaseViewModelTest() {
             File::toURI,
             Uri::parse,
         )
+        every { Uri.parse(any()) } returns mockk()
     }
 
     @AfterEach

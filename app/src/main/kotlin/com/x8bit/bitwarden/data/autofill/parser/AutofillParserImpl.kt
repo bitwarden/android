@@ -125,14 +125,20 @@ class AutofillParserImpl(
             .firstOrNull()
         val autofillViews = traversalDataList.toAutofillViews(urlBarWebsite = urlBarWebsite)
 
-        val focusedView = autofillViews.firstOrNull { it.data.isFocused }
+        // Find the focused view, or fallback to the first fillable item on the screen (so
+        // we at least have something to hook into)
+        val focusedView = autofillViews
+            .firstOrNull { it.data.isFocused }
             ?: autofillViews.firstOrNull()
+            // The view is unfillable if there are no focused views.
             ?: return AutofillRequest.Unfillable
 
-        val packageName =
-            traversalDataList.buildPackageNameOrNull(assistStructure = assistStructure)
+        val packageName = traversalDataList.buildPackageNameOrNull(
+            assistStructure = assistStructure,
+        )
         val uri = focusedView.buildUriOrNull(packageName = packageName)
 
+        // The view is unfillable if the URI is block listed.
         if ((settingsRepository.blockedAutofillUris + BLOCK_LISTED_URIS).contains(uri)) {
             return AutofillRequest.Unfillable
         }
@@ -141,9 +147,8 @@ class AutofillParserImpl(
             .getFeatureFlag(FlagKey.FillAssistTargetingRules) &&
             settingsRepository.isFillAssistEnabled
         val effectiveViews = if (isFillAssistEnabled) {
-            resolveEffectiveViews(
+            autofillViews.toEffectiveViews(
                 assistStructure = assistStructure,
-                autofillViews = autofillViews,
                 uri = uri,
                 focusedView = focusedView,
                 urlBarWebsite = urlBarWebsite,
@@ -184,6 +189,7 @@ class AutofillParserImpl(
 
         // Get inline information if available
         val isInlineAutofillEnabled = settingsRepository.isInlineAutofillEnabled
+        Timber.d("Autofill request isInlineEnabled=$isInlineAutofillEnabled -- ${fillRequest?.id}")
         val maxInlineSuggestionsCount = fillRequest.getMaxInlineSuggestionsCount(
             autofillAppInfo = autofillAppInfo,
             isInlineAutofillEnabled = isInlineAutofillEnabled,
@@ -205,12 +211,11 @@ class AutofillParserImpl(
 
     /**
      * Returns the effective [AutofillView] list for filling. Applies fill-assist targeting rules
-     * when the host rules cover the current partition type; otherwise returns the heuristic
-     * [autofillViews].
+     * when the feature flag is enabled and the host rules cover the current partition type;
+     * otherwise returns the heuristic autofillViews [this].
      */
-    private fun resolveEffectiveViews(
+    private fun List<AutofillView>.toEffectiveViews(
         assistStructure: AssistStructure,
-        autofillViews: List<AutofillView>,
         uri: String?,
         focusedView: AutofillView,
         urlBarWebsite: String?,
@@ -222,7 +227,7 @@ class AutofillParserImpl(
             ?.let { host ->
                 fillAssistManager.getFillAssistRules()?.hostRules?.get(host.removePrefix("www."))
             }
-            ?: return autofillViews
+            ?: return this
 
         val coversCurrentPartition = hostRules.any { rule ->
             when (focusedView) {
@@ -238,7 +243,7 @@ class AutofillParserImpl(
                 urlBarWebsite = urlBarWebsite,
             )
         } else {
-            autofillViews
+            this
         }
     }
 }

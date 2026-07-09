@@ -54,9 +54,13 @@ class PremiumStateManagerTest {
     }
 
     private val mutableIsInAppBillingSupportedFlow = MutableStateFlow(true)
+    private val mutableSubscriptionResultFlow = MutableSharedFlow<SubscriptionResult>(
+        extraBufferCapacity = 1,
+    )
     private val billingRepository: BillingRepository = mockk {
         every { isInAppBillingSupportedFlow } returns mutableIsInAppBillingSupportedFlow
         coEvery { getSubscription() } returns SubscriptionResult.NotFound
+        every { getSubscriptionFlow() } returns mutableSubscriptionResultFlow
     }
 
     private val fakeSettingsDiskSource = FakeSettingsDiskSource()
@@ -1011,6 +1015,40 @@ class PremiumStateManagerTest {
                     SubscriptionStatusState.Available(
                         status = PremiumSubscriptionStatus.PAST_DUE,
                     ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `subscriptionStatusStateFlow updates when BillingRepository getSubscriptionFlow emits`() =
+        runTest {
+            fakeAuthDiskSource.userState = userStateJsonWith(
+                account = createAccountJson(hasPremiumPersonally = true),
+            )
+            coEvery {
+                billingRepository.getSubscription()
+            } returns SubscriptionResult.Success(
+                subscription = createSubscriptionInfo(
+                    status = PremiumSubscriptionStatus.ACTIVE,
+                ),
+            )
+            val manager = createManager()
+            manager.subscriptionStatusStateFlow.test {
+                assertEquals(
+                    SubscriptionStatusState.Available(status = PremiumSubscriptionStatus.ACTIVE),
+                    awaitItem(),
+                )
+                // A getSubscription() call from elsewhere re-emits through the shared flow.
+                mutableSubscriptionResultFlow.emit(
+                    SubscriptionResult.Success(
+                        subscription = createSubscriptionInfo(
+                            status = PremiumSubscriptionStatus.PAST_DUE,
+                        ),
+                    ),
+                )
+                assertEquals(
+                    SubscriptionStatusState.Available(status = PremiumSubscriptionStatus.PAST_DUE),
                     awaitItem(),
                 )
             }

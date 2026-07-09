@@ -56,6 +56,7 @@
     <string name="fill_assist_targeting_rules">Fill Assist Targeting Rules</string>
     <string name="debug_disable_self_host_premium_check">Debug: Disable self-host premium check</string>
     <string name="policies_in_accepted_state">Policies in accepted state</string>
+    <string name="fed_ramp">FedRAMP</string>
 
     <!-- endregion Debug Menu -->
 </resources>

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.billing.repository
 
+import app.cash.turbine.test
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.network.model.BitwardenSubscriptionResponseJson
@@ -220,6 +221,86 @@ class BillingRepositoryTest {
                 SubscriptionResult.Error(error = exception),
                 result,
             )
+        }
+
+    @Test
+    fun `getSubscriptionFlow should emit Success when getSubscription returns Success`() =
+        runTest {
+            coEvery {
+                billingService.getSubscription()
+            } returns GetSubscriptionResponse.Success(ACTIVE_SUBSCRIPTION_RESPONSE).asSuccess()
+
+            repository.getSubscriptionFlow().test {
+                repository.getSubscription()
+
+                assertEquals(
+                    SubscriptionResult.Success(
+                        subscription = SubscriptionInfo(
+                            status = PremiumSubscriptionStatus.ACTIVE,
+                            cadence = PlanCadence.ANNUALLY,
+                            seatsCost = BigDecimal("19.80"),
+                            storageCost = null,
+                            discountAmount = null,
+                            estimatedTax = BigDecimal.ZERO,
+                            nextChargeTotal = BigDecimal("19.80"),
+                            nextCharge = null,
+                            cancelAt = null,
+                            canceledDate = null,
+                            suspensionDate = null,
+                            gracePeriodDays = null,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `getSubscriptionFlow should emit NotFound when getSubscription returns NotFound`() =
+        runTest {
+            coEvery {
+                billingService.getSubscription()
+            } returns GetSubscriptionResponse.NotFound.asSuccess()
+
+            repository.getSubscriptionFlow().test {
+                expectNoEvents()
+
+                repository.getSubscription()
+                assertEquals(SubscriptionResult.NotFound, awaitItem())
+            }
+        }
+
+    @Test
+    fun `getSubscriptionFlow should emit Error when getSubscription returns failure`() =
+        runTest {
+            val exception = RuntimeException("Network error")
+            coEvery { billingService.getSubscription() } returns exception.asFailure()
+
+            repository.getSubscriptionFlow().test {
+                expectNoEvents()
+
+                repository.getSubscription()
+                assertEquals(SubscriptionResult.Error(error = exception), awaitItem())
+            }
+        }
+
+    @Test
+    fun `getSubscriptionFlow should emit a result for each call to getSubscription`() =
+        runTest {
+            val exception = RuntimeException("Network error")
+            coEvery {
+                billingService.getSubscription()
+            } returns GetSubscriptionResponse.NotFound.asSuccess() andThen exception.asFailure()
+
+            repository.getSubscriptionFlow().test {
+                expectNoEvents()
+
+                repository.getSubscription()
+                assertEquals(SubscriptionResult.NotFound, awaitItem())
+
+                repository.getSubscription()
+                assertEquals(SubscriptionResult.Error(error = exception), awaitItem())
+            }
         }
 }
 

@@ -55,6 +55,7 @@ class CertificateManagerTest {
         environmentRepository = mockEnvironmentRepository,
         context = mockContext,
     )
+
     @BeforeEach
     fun setUp() {
         mockkStatic(KeyStore::class, KeyChain::class)
@@ -130,6 +131,9 @@ class CertificateManagerTest {
 
     @Test
     fun `mutualTlsCertificate should return null when keyUri is invalid`() {
+        every {
+            mockEnvironment.environmentUrlData
+        } returns DEFAULT_ENV_URL_DATA.copy(keyUri = null)
         assertNull(certificateManager.mutualTlsCertificate)
     }
 
@@ -667,6 +671,7 @@ class CertificateManagerTest {
 
     @Test
     fun `getCertificateChain should return null when mutualTlsCertificate is null`() {
+        setupMockUri(authority = "")
         assertNull(certificateManager.getCertificateChain("mockAlias"))
     }
 
@@ -684,6 +689,7 @@ class CertificateManagerTest {
 
     @Test
     fun `getPrivateKey should return null when mutualTlsCertificate is null`() {
+        setupMockUri(authority = "")
         assertNull(certificateManager.getPrivateKey("mockAlias"))
     }
 
