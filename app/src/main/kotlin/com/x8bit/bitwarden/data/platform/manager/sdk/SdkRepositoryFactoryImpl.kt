@@ -35,6 +35,7 @@ class SdkRepositoryFactoryImpl(
             ),
             ephemeralPinEnvelopeState = null,
             organizationSharedKey = null,
+            send = null,
         )
 
     override fun getClientManagedTokens(

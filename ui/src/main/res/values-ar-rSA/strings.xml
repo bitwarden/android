@@ -4,14 +4,14 @@
     <string name="add_folder">إضافة مجلّد</string>
     <string name="add_item">إضافة عنصر</string>
     <string name="an_error_has_occurred">لقد حدث خطأ</string>
-    <string name="apply">طبّق</string>
+    <string name="apply">تطبيق</string>
     <string name="back">رجوع</string>
     <string name="cancel">إلغاء</string>
     <string name="copy">نسخ</string>
     <string name="copy_password">نسخ كلمة المرور</string>
     <string name="copy_username">انسخ اسم المستخدم</string>
     <string name="delete">حذف</string>
-    <string name="preview">عرض مُسبق</string>
+    <string name="preview">معاينة</string>
     <string name="deleting">جاري الحذف…</string>
     <string name="do_you_really_want_to_delete">هل تريد حقا أن تحذف؟ هذا لا يمكن التراجع عنها.</string>
     <string name="edit">تعديل</string>
@@ -50,7 +50,7 @@
     <string name="send_name_required">إرسال الاسم (مطلوب)</string>
     <string name="no">لا</string>
     <string name="notes">ملاحظات</string>
-    <string name="private_notes">ملاحظات خاصة</string>
+    <string name="private_notes">ملاحظات خاص</string>
     <string name="okay">حسنا</string>
     <string name="password">كلمة المرور</string>
     <string name="save">حفظ</string>
@@ -81,7 +81,7 @@
     <string name="close_app">إغلاق التطبيق</string>
     <string name="continue_text">متابعة</string>
     <string name="create_account">إنشاء حساب</string>
-    <string name="create_an_account">أنشئ حساب</string>
+    <string name="create_an_account">إنشاء حساب</string>
     <string name="edit_item">تعديل العنصر</string>
     <string name="edit_login">تعديل تسجيل الدخول</string>
     <string name="edit_card">تحرير البطاقة</string>
@@ -99,11 +99,11 @@
     <string name="length">الطول</string>
     <string name="lock">قفل</string>
     <string name="fifteen_minutes">15 دقيقة</string>
-    <string name="one_hour">ساعة واحدة</string>
+    <string name="one_hour">ساعة 1</string>
     <string name="one_minute">1 دقيقة</string>
     <string name="four_hours">4 ساعات</string>
     <string name="immediately">فورًا</string>
-    <string name="vault_timeout_log_out_confirmation_title">تعيين مهلة الجَلسة إلى \"تسجيل الخروج\"؟</string>
+    <string name="vault_timeout_log_out_confirmation_title">تعيين مهلة انتهاء الجلسة إلى \"تسجيل الخروج\"؟</string>
     <string name="vault_timeout_log_out_confirmation_message">بعد انتهاء المهلة، سيتم تسجيل الخروج. سوف تحتاج إلى الاتصال بالإنترنت لتسجيل الدخول والوصول إلى المخزن الخاص بك مرة أخرى. لن تتغير الإعدادات الخاصة بك والرقم السري المحفوظين على هذا الجهاز.</string>
     <string name="logging_in">جار تسجيل الدخول…</string>
     <string name="login_to_bitwarden">تسجيل الدخول إلى Bitwarden</string>
@@ -112,12 +112,12 @@
     <string name="master_password_hint">فهرس كلمة المرور الرئيسية (اختياري)</string>
     <string name="master_password_hint_description">يمكن أن تساعدك فكرة كلمة المرور الرئيسية على تذكر كلمة المرور الخاصة بك إذا نسيت.</string>
     <plurals name="master_password_length_val_message_x">
-        <item quantity="zero">يجب ألا يقل طول كلمة المرور الرئيسية عن %d حرفاً.</item>
-        <item quantity="one">يجب ألا يقل طول كلمة المرور الرئيسية عن %d حرفاً.</item>
-        <item quantity="two">يجب ألا يقل طول كلمة المرور الرئيسية عن %d حرفاً.</item>
-        <item quantity="few">يجب ألا يقل طول كلمة المرور الرئيسية عن %d حرفاً.</item>
-        <item quantity="many">يجب ألا يقل طول كلمة المرور الرئيسية عن %d حرفاً.</item>
-        <item quantity="other">يجب ألا يقل طول كلمة المرور الرئيسية عن %d حرفاً.</item>
+        <item quantity="zero">يجب ألا يقل طول كلمة المرور الرئيسية عن %d حرف.</item>
+        <item quantity="one">يجب ألا يقل طول كلمة المرور الرئيسية عن %d حرف.</item>
+        <item quantity="two">يجب ألا يقل طول كلمة المرور الرئيسية عن حرفين %d.</item>
+        <item quantity="few">يجب ألا يقل طول كلمة المرور الرئيسية عن %d أحرف.</item>
+        <item quantity="many">يجب ألا يقل طول كلمة المرور الرئيسية عن %d حرفا.</item>
+        <item quantity="other">يجب ألا يقل طول كلمة المرور الرئيسية عن %d حرف.</item>
     </plurals>
     <string name="min_numbers">الحد الأدنى للأرقام</string>
     <string name="min_special">الحد الأدنى من الأحرف الخاصة</string>
@@ -156,7 +156,7 @@
     <string name="syncing">جاري المزامنة…</string>
     <string name="syncing_complete">اكتمال المزامنة.</string>
     <string name="two_step_login">تحديد المصادقة الثنائية</string>
-    <string name="unlock_with_biometrics">فتح القفل بالمقاييس الحيوية</string>
+    <string name="unlock_with_biometrics">فتح القفل بالمصادقة البيومترية</string>
     <string name="unlock_with_pin">إلغاء القفل باستخدام رقم التعريف الشخصي</string>
     <string name="verification_code">رمز التحقق</string>
     <string name="view_login">عرض تسجيل الدخول</string>
@@ -170,7 +170,7 @@
     <string name="no_items_for_uri">لا توجد عناصر في خزنتك لـ %1$s.</string>
     <string name="no_items_for_vault">لا توجد عناصر في خزنتك تطابق \"%1$s”</string>
     <string name="search_for_a_login_or_add_a_new_login">البحث عن تسجيل الدخول أو إضافة تسجيل دخول جديد</string>
-    <string name="disabled">تعطيل</string>
+    <string name="disabled">معطل</string>
     <string name="bitwarden_autofill_service_alert2">أسهل طريقة لإضافة تسجيلات دخول جديدة إلى خزنتك هي من خدمة التعبئة التلقائية Bitwarden تعرف على المزيد حول استخدام خدمة الملء التلقائي لـ Bitwarden عن طريق الانتقال إلى شاشة \"إعدادات\".</string>
     <string name="autofill_noun">ملء تلقائي</string>
     <string name="autofill_verb">ملء تلقائي</string>
@@ -198,12 +198,12 @@
     <string name="verification_code_totp">رمز التحقق (TOTP)</string>
     <string name="authenticator_key_added">تم إضافة مفتاح المصادقة.</string>
     <string name="authenticator_key_read_error">لا يمكن قراءة مفتاح المصادقة.</string>
-    <string name="point_your_camera_at_the_qr_code">وجّه الكاميرا نحو رمز QR.
-سيتم المسح تلقائيًا.</string>
+    <string name="point_your_camera_at_the_qr_code">وجه الكاميرا نحو رمز QR.
+سيتم المسح تلقائيا.</string>
     <string name="copy_totp">نسخ TOTP</string>
     <string name="copy_totp_automatically_description">إذا كان تسجيل الدخول يحتوي على مفتاح مصادقة، انسخ رمز التحقق TOTP إلى الحافظة الخاصة بك عند ملء تسجيل الدخول تلقائيا.</string>
     <string name="copy_totp_automatically">نسخ TOTP تلقائياً</string>
-    <string name="premium_required">يلزم وجود اشتراك Premium لاستخدام هذه الميزة.</string>
+    <string name="premium_required">يطلب وجود اشتراك Premium لاستخدام هذه الميزة.</string>
     <string name="attachment_deleted">تم حذف المرفق</string>
     <string name="attachments_are_a_premium_feature">المرفقات ميزة في الباقة Premium. باقتك الحالية لا تتضمن الوصول إليها.</string>
     <string name="choose_file">اختيار ملف</string>
@@ -231,9 +231,9 @@
     <string name="copy_security_code">نسخ رمز الأمان</string>
     <string name="number">رقم</string>
     <string name="security_code">رمز الأمان</string>
-    <string name="scan_card">مسح البطاقة</string>
-    <string name="scan_card_instruction">ضع بطاقتك داخل الإطار لمسحها.</string>
-    <string name="hold_steady_and_ensure_all_card_details_are_visible">ثبّت جهازك و تحقق مِن ظهور جميع تفاصيل البطاقة بوضوح</string>
+    <string name="scan_card">مسح البطاقة ضوئيا</string>
+    <string name="scan_card_instruction">ضع بطاقتك ضمن الإطار لمسحها ضوئيا.</string>
+    <string name="hold_steady_and_ensure_all_card_details_are_visible">ثبت جهازك و تحقق من ظهور جميع تفاصيل البطاقة بوضوح</string>
     <string name="type_card">بطاقة</string>
     <string name="type_identity">الهوية</string>
     <string name="type_login">تسجيل الدخول</string>
@@ -245,7 +245,7 @@
     <string name="august">أغسطس</string>
     <string name="brand">العلامة التجارية</string>
     <string name="card_details">تفاصيل البطاقة</string>
-    <string name="card_scanned">تم مسح البطاقة</string>
+    <string name="card_scanned">تم مسح البطاقة ضوئيا</string>
     <string name="cardholder_name">اسم حامل البطاقة</string>
     <string name="city_town">المدينة / البلدة</string>
     <string name="company">الشركة</string>
@@ -285,7 +285,7 @@
     <string name="show_website_icons_description">إظهار صورة قابلة للتعرف بجانب كل تسجيل دخول</string>
     <string name="icons_url">رابط ملقم الأيقونات</string>
     <string name="vault_is_locked">الخزنة مقفلة</string>
-    <string name="go_to_my_vault">اذهب لخزنتي</string>
+    <string name="go_to_my_vault">الانتقال إلى خزنتي</string>
     <string name="collections">المختارات</string>
     <string name="no_items_collection">لا توجد عناصر في هذه المجموعة.</string>
     <string name="no_items_folder">لا توجد عناصر في هذا المجلد.</string>
@@ -309,7 +309,7 @@
     <string name="starts_with">يبدأ بـ</string>
     <string name="uri_match_detection">كشف مطابقة URI</string>
     <string name="match_detection">كشف المطابقة</string>
-    <string name="autofill_and_save">التعبئة التلقائية والحفظ</string>
+    <string name="autofill_and_save">الملء التلقائي والحفظ</string>
     <string name="organization">المؤسسة</string>
     <string name="try_again">حاول مرة أخرى</string>
     <string name="created">تم إنشاء: %1$s</string>
@@ -339,8 +339,8 @@
     <string name="password_history_count"><annotation link="passwordHistory">سجل كلمة المرور: <annotation arg="0">%1$s</annotation></annotation></string>
     <string name="types">أنواع</string>
     <string name="no_passwords_to_list">لا توجد كلمات مرور للقائمة.</string>
-    <string name="search_file_sends">إرسال ملف البحث</string>
-    <string name="search_text_sends">إرسال نص البحث</string>
+    <string name="search_file_sends">البحث في ملف Sends</string>
+    <string name="search_text_sends">البحث في نص Sends</string>
     <string name="type">نوع</string>
     <string name="move_down">تحريك للأسفل</string>
     <string name="move_up">التحريك للاعلى</string>
@@ -375,7 +375,7 @@
     <string name="ten_seconds">10 ثوانِ</string>
     <string name="thirty_seconds">30 ثانية</string>
     <string name="twenty_seconds">20 ثانية</string>
-    <string name="two_minutes">دقيقتان</string>
+    <string name="two_minutes">دقيقتان 2</string>
     <string name="clear_clipboard">مسح الحافظة</string>
     <string name="clear_clipboard_description">مسح القيم المنسوخة تلقائيًا من حافظتك.</string>
     <string name="default_uri_match_detection">كشف تطابق الرابط الافتراضي</string>
@@ -385,7 +385,7 @@
     <string name="copy_notes">نسخ الملاحظة</string>
     <string name="require_master_password_on_app_restart">تتطلب كلمة مرور رئيسية عند إعادة تشغيل التطبيق؟</string>
     <string name="pin_require_master_password_restart">هل تريد طلب إلغاء القفل باستخدام كلمة المرور الرئيسية عند إعادة تشغيل التطبيق؟</string>
-    <string name="ask_to_add_item">اطلب إضافة عنصر</string>
+    <string name="ask_to_add_item">طلب إضافة عنصر</string>
     <string name="ask_to_add_item_description">اطلب إضافة عنصر إذا لم يُعثر عليه في خزنتك.</string>
     <string name="on_restart">عند إعادة تشغيل التطبيق</string>
     <string name="capitalize">كبّر الحروف</string>
@@ -395,7 +395,7 @@
     <string name="login_expired">انتهت صَلاحِيَة جَلسة تسجيل دخولك.</string>
     <string name="biometrics_direction">المصادقة البيومترية</string>
     <string name="device_verification">التحقق من الجهاز</string>
-    <string name="biometrics_failed">فشل القياسات الحيوية</string>
+    <string name="biometrics_failed">فشل المصادقة البيومترية</string>
     <string name="biometrics_decoding_failure">تسجيل الدخول باستخدام كلمة المرور الرئيسية أو رمز PIN ثم إعادة تمكين تسجيل الدخول الحيوي في الإعدادات.</string>
     <string name="use_biometrics_to_unlock">استخدام القياسات الحيوية للفتح</string>
     <string name="file_format">صيغة الملف</string>
@@ -442,10 +442,10 @@
     <string name="master_password_policy_validation_title">كلمة المرور غير صالحة</string>
     <string name="master_password_policy_validation_message">كلمة المرور لا تفي بمتطلبات المؤسسة. الرجاء التحقق من معلومات السياسة وحاول مرة أخرى.</string>
     <string name="loading">جار التحميل</string>
-    <string name="terms_of_service">اتفاقية خدمة المستخدم</string>
+    <string name="terms_of_service">شروط الخدمة</string>
     <string name="privacy_policy">سياسة الخصوصيّة</string>
     <string name="passkey_management">إدارة مفتاح المرور</string>
-    <string name="autofill_services">خدمات التعبئة التلقائية</string>
+    <string name="autofill_services">خدمات الملء التلقائي</string>
     <string name="display_autofill_suggestions">عرض اقتراحات التعبئة التلقائية</string>
     <string name="autofill_suggestions_inline">مضمن (يهر في لوحة المفاتيح)</string>
     <string name="autofill_suggestions_popup">منبثق (يظهر فوق حقل الإدخال)</string>
@@ -453,7 +453,7 @@
     <string name="accessibility_description5">مطلوب لاستخدام خط التشغيل السريع للتعبئة التلقائية.</string>
     <string name="personal_ownership_policy_in_effect">تؤثر سياسة مؤسسة على خيارات الملكية الخاصة بك.</string>
     <string name="send">إرسال</string>
-    <string name="send_details">إرسال التفاصيل</string>
+    <string name="send_details">تفاصيل Send</string>
     <string name="all_sends">كل الإرسالات</string>
     <string name="text">نص</string>
     <string name="text_to_share">نص للمشاركة</string>
@@ -470,11 +470,11 @@
     <string name="specific_people_verification_info">بعد مشاركة رابط الإرسال هذا، سيحتاج الأفراد إلى التحقق من بريدهم الإلكتروني مع رمز لعرض هذا الإرسال</string>
     <string name="anyone_with_password">أي شخص لديه كلمة مرور محددة من قبلك</string>
     <string name="add_email">إضافة بريد إلكتروني</string>
-    <string name="pending_delete">في انتظار الحذف</string>
-    <string name="expired">منتهية الصلاحية</string>
-    <string name="expires_at">تنتهي صلاحيتها في %s</string>
+    <string name="pending_delete">قيد انتظار الحذف</string>
+    <string name="expired">منتهي الصلاحية</string>
+    <string name="expires_at">تنتهي الصلاحية في %s</string>
     <string name="expires_tomorrow">تنتهي الصلاحية غدا</string>
-    <string name="expires_on">تنتهي صلاحيتها في %s</string>
+    <string name="expires_on">تنتهي الصلاحية بتاريخ %s</string>
     <string name="stops_logging_on">إيقاف تسجيل الدخول في %1$s عند %2$s</string>
     <string name="maximum_access_count">الحد الأقصى لعدد الوصول</string>
     <string name="maximum_access_count_info">في حالة التعيين، لن يتمكن المستخدمون من الوصول إلى هذا الإرسال بمجرد الوصول إلى الحد الأقصى لعدد الوصول.</string>
@@ -487,20 +487,20 @@
     <string name="copy_link">نسخ الرابط</string>
     <string name="share_link">مشاركة الرّابط</string>
     <string name="send_link">إرسال رابط</string>
-    <string name="search_sends">بحث عن الإرسالات</string>
-    <string name="edit_send">عدّل الإرسال</string>
+    <string name="search_sends">بحث في Sends</string>
+    <string name="edit_send">تعديل Send</string>
     <string name="edit_file_send">تعديل ملف Send</string>
     <string name="edit_text_send">تعديل نص Send</string>
-    <string name="add_file_send">إرسال ملف جديد</string>
-    <string name="add_text_send">إرسال نص جديد</string>
+    <string name="add_file_send">ملف جديد Send</string>
+    <string name="add_text_send">نص جديد Send</string>
     <string name="are_you_sure_delete_send">هل أنت متأكد من أنك تريد حذف هذا الإرسال؟</string>
     <string name="send_deleted">تم حذف الإرسال.</string>
     <string name="send_updated">تم تحديث Send</string>
-    <string name="one_day">يوم واحد</string>
-    <string name="two_days">يومان</string>
+    <string name="one_day">يوم 1</string>
+    <string name="two_days">يومان 2</string>
     <string name="three_days">3 أيام</string>
     <string name="seven_days">7 أيام</string>
-    <string name="thirty_days">30 يوماً</string>
+    <string name="thirty_days">30 يوما</string>
     <string name="custom">مُخصّص</string>
     <string name="custom_timeout">مهلة مخصصة</string>
     <string name="add_this_authenticator_key_to_a_login">أضف مفتاح المصادقة هذا إلى تسجيل دخول موجود أو أنشئ تسجيل دخول جديدا.</string>
@@ -520,34 +520,34 @@
     <string name="leave_organization">مغادرة المؤسسة</string>
     <string name="leave_organization_name">مغادرة %1$s؟</string>
     <string name="are_you_sure_you_want_to_leave_organization">هل أنت متأكد أنك تريد المغادرة؟</string>
-    <string name="leave_organization_button">مغادرة %1$s]</string>
+    <string name="leave_organization_button">مغادرة %1$s</string>
     <string name="leave_organization_warning">إذا رفضت، ستبقى أغراضك الشخصية في حسابك، لكنك ستفقد الوصول إلى العناصر المشتركة وميزات التنظيم. <annotation link="learnMore">للمزيد من المعلومات</annotation></string>
     <string name="contact_your_admin_to_regain_access">تواصل مع المسؤول لاستعادة الوصول.</string>
     <string name="fido2_authenticate_web_authn">مصادقة WebAuthn</string>
     <string name="fido2_return_to_app">الرجوع إلى التطبيق</string>
     <string name="reset_password_auto_enroll_invite_warning">هذه المؤسسة لديها سياسة الشركة التي ستقوم تلقائياً بتسجيلك في إعادة تعيين كلمة المرور. التسجيل سيسمح لمسؤولي المؤسسة بتغيير كلمة المرور الرئيسية الخاصة بك.</string>
-    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s: %2$s</string>
+    <string name="hours_minutes_format" comment="Used to display a number of hours and minutes">%1$s، %2$s</string>
     <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
         <item quantity="zero">%1$d ساعة</item>
         <item quantity="one">%1$d ساعة</item>
-        <item quantity="two">%1$d ساعتين</item>
+        <item quantity="two">%1$d ساعتان</item>
         <item quantity="few">%1$d ساعات</item>
-        <item quantity="many">%1$d ساعات</item>
+        <item quantity="many">%1$d ساعة</item>
         <item quantity="other">%1$d ساعات</item>
     </plurals>
     <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
         <item quantity="zero">%1$d دقيقة</item>
-        <item quantity="one">%1$d دقيقة</item>
-        <item quantity="two">%1$d دقيقتين</item>
+        <item quantity="one">دقيقة %1$d</item>
+        <item quantity="two">دقيقتان %1$d</item>
         <item quantity="few">%1$d دقائق</item>
-        <item quantity="many">%1$d دقائق</item>
-        <item quantity="other">%1$d دقائق</item>
+        <item quantity="many">%1$d دقيقة</item>
+        <item quantity="other">%1$d دقيقة</item>
     </plurals>
-    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">لقد حددت مؤسستك الحد الأقصى لوقت الجلسة إلى %1$s و %2$s.</string>
-    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">لقد حددت مؤسستك الحد الأقصى لمهلة الجلسة إلى %1$s.</string>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">لقد حددت منظمتك الحد الأقصى لمهلة انتهاء الجلسة إلى %1$s و %2$s.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">لقد حددت منظمتك الحد الأقصى لمهلة انتهاء الجلسة إلى %1$s.</string>
     <string name="this_setting_is_managed_by_your_organization">يتم إدارة هذا الإعداد من قبل مؤسستك.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_never">قامت مؤسستك بتعيين مهلة الجَلسة الافتراضية إلى على الإطلاق.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">قامت مؤسستك بتعيين مهلة الجلسة الافتراضية عند إعادة تشغيل التطبيق.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">حددت منظمتك مهلة انتهاء الجلسة الافتراضية إلى \"مطلقا\".</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">حددت منظمتك مهلة انتهاء الجلسة الافتراضية عند إعادة تشغيل التطبيق.</string>
     <string name="vault_timeout_to_large">مهلة خزنتك تتجاوز القيود التي تضعها مؤسستك.</string>
     <string name="disable_personal_vault_export_policy_in_effect">واحدة أو أكثر من سياسات المؤسسة تمنعك من تصدير خزنتك الشخصية.</string>
     <string name="add_account">إضافة حساب</string>
@@ -561,7 +561,7 @@
     <string name="your_account_has_been_permanently_deleted">تم حذف حسابك بشكل دائم</string>
     <string name="invalid_verification_code">رقم التحقق خاطئ</string>
     <string name="send_code">إرسال الرمز</string>
-    <string name="sending">جار الإرسال</string>
+    <string name="sending">جاري الإرسال</string>
     <string name="resend_code">إعادة إرسال الرمز</string>
     <string name="a_verification_code_was_sent_to_your_email">تم إرسال رمز التحقق إلى بريدك الإلكتروني</string>
     <string name="submit_crash_logs">إرسال سجلات الأعطال</string>
@@ -580,8 +580,8 @@
     <string name="verification_codes">رموز التحقق</string>
     <string name="premium_subscription_required">الاشتراك المميز مطلوب</string>
     <string name="cannot_add_authenticator_key_scan_qr_code">لا يمكن إضافة مفتاح المصادقة؟ <annotation link="scanQrCode">مسح رمز QR</annotation></string>
-    <string name="scan_qr_code"><annotation link="scanQrCode">Scan QR code</annotation></string>
-    <string name="cannot_scan_qr_code_enter_key_manually">لا يمكن مسح رمز QR؟ <annotation link="enterKeyManually">أدخل المفتاح يدوياً</annotation></string>
+    <string name="scan_qr_code"><annotation link="scanQrCode">مسح رمز QR</annotation></string>
+    <string name="cannot_scan_qr_code_enter_key_manually">لا يمكن مسح رمز QR؟ <annotation link="enterKeyManually">أدخل المفتاح يدويا</annotation></string>
     <string name="authenticator_key_scanner">مفتاح المصادقة</string>
     <string name="authenticator_key_help">مساعدة مفتاح المصادقة</string>
     <string name="enter_key_manually">أدخل المفتاح يدوياً</string>
@@ -627,8 +627,11 @@
     <string name="catch_all_email_description">استخدم علبة البريد الإلكتروني الشاملة التي تم إعدادها في نطاقك.</string>
     <string name="forwarded_email_description">إنشاء بريد إلكتروني مستعار مع خدمة إعادة توجيه خارجية.</string>
     <string name="accessibility_service_disclosure">كشف خدمة إمكانية الوصول</string>
-    <string name="accessibility_disclosure_text">يستخدم Bitwarden خدمة إمكانية الوصول للبحث عن حقول تسجيل الدخول في التطبيقات ومواقع الويب،ثم تحديد معرفات الحقول المناسبة لإدخال اسم المستخدم &amp; كلمة المرور عند العثور على تطابق للموقع أو التطبيق. نحن لا نخزن أيا من المعلومات التي تقدمها لنا الخدمة، ولا نحاول التحكم في أي عناصر على الشاشة باستثناء إدخال نص بيانات الحساب.</string>
-    <string name="accessibility_disclosure_start_up_text">يوفر Bitwarden طريقة ملء تلقائي اختيارية تستخدم خدمة إمكانية الوصول في Android للكشف عن حقول تسجيل الدخول في التطبيقات والمواقع. إذا اخترت تفعيلها، سيحدد Bitwarden الحقول المناسبة ويدخل بياناتك عند العثور على تطابق. لا نقوم بتخزين أي معلومات يطّلع عليها النظام، ولا نتحكم في أي عناصر على الشاشة خارج نطاق إدخال بيانات تسجيل الدخول.</string>
+    <string name="accessibility_disclosure_text">يستخدم Bitwarden خدمة إمكانية الوصول للبحث عن حقول تسجيل الدخول في التطبيقات ومواقع الويب،ثم تحديد IDs الحقول المناسبة لإدخال اسم المستخدم &amp; كلمة المرور عند العثور على تطابق للموقع أو التطبيق. نحن لا نخزن أيا من المعلومات التي تقدمها لنا الخدمة، ولا نحاول التحكم في أي عناصر على الشاشة باستثناء إدخال نص بيانات الحساب.</string>
+    <string name="accessibility_disclosure_start_up_text_1">هذا الإشعار مطلوب قبل أن يتمكن Bitwarden من تقديم الملء التلقائي المستند إلى إمكانيات الوصول.</string>
+    <string name="accessibility_disclosure_start_up_text_2">يقدم Bitwarden طريقة اختيارية للملء التلقائي تستخدم خدمة إمكانيات الوصول في أندرويد للتعرف على حقول تسجيل الدخول. وإذا قمت بتفعيلها، فسيحدد Bitwarden الحقول المناسبة ويملأ بيانات الحساب الخاصة بك عند العثور على مطابقة.</string>
+    <string name="accessibility_disclosure_start_up_text_3">نحن لا نخزن أي معلومات حول ما يظهر على الشاشة أثناء استخدامك لخدمة إمكانيات الوصول، ولا نتحكم في أي عناصر على الشاشة تقع خارج نطاق إدخال بيانات الحساب.</string>
+    <string name="i_understand">فهمت ذلك</string>
     <string name="accept">قبول</string>
     <string name="decline">رفض</string>
     <string name="login_request_has_already_expired">انتهت صلاحية طلب تسجيل الدخول.</string>
@@ -649,7 +652,7 @@
     <string name="decline_all_requests">رفض جميع الطلبات</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">هل أنت متأكد من أنك تريد رفض جميع طلبات تسجيل الدخول المعلقة؟</string>
     <string name="no_pending_requests">لا توجد طلبات معلقة</string>
-    <string name="enable_camer_permission_to_use_the_scanner">تمكين إذن الكاميرا لاستخدام الماسح الضوئي</string>
+    <string name="enable_camer_permission_to_use_the_scanner">تفعيل إذن الكاميرا لاستخدام الماسح الضوئي</string>
     <string name="language">اللّغة</string>
     <string name="language_change_x_description">تم تغيير اللغة إلى %1$s. الرجاء إعادة تشغيل التطبيق لرؤية التغيير</string>
     <string name="default_system">الافتراضي (النظام)</string>
@@ -665,7 +668,7 @@
     <string name="weak_password_identified_and_found_in_a_data_breach_alert_description">كلمة مرور ضعيفة محددة وموجودة في خرق البيانات. استخدم كلمة مرور قوية وفريدة لحماية حسابك. هل أنت متأكد من أنك تريد استخدام كلمة المرور هذه؟</string>
     <string name="there_are_no_items_that_match_the_search">لا توجد عناصر تطابق البحث</string>
     <string name="self_hosted">استضافة ذاتية</string>
-    <string name="region">المنطقة</string>
+    <string name="region">منطقة</string>
     <string name="update_weak_master_password_warning">كلمة المرور الرئيسية الخاصة بك لا تفي بواحدة أو أكثر من سياسات مؤسستك. من أجل الوصول إلى الخزنة، يجب عليك تحديث كلمة المرور الرئيسية الآن. سيتم تسجيل خروجك من الجلسة الحالية، مما يتطلب منك تسجيل الدخول مرة أخرى. وقد تظل الجلسات النشطة على أجهزة أخرى نشطة لمدة تصل إلى ساعة واحدة.</string>
     <string name="current_master_password_required">كلمة المرور الرئيسية الحالية (مطلوب)</string>
     <string name="approve_with_my_other_device">الموافقة بجهازي الآخر</string>
@@ -684,12 +687,12 @@
     <string name="block_auto_fill">حظر التعبئة التلقائية</string>
     <string name="no_uris_blocked">لا يوجد URIs محظورة</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">لن يتم تقديم التعبئة التلقائية لعناوين الـ URIs هذه.</string>
-    <string name="edit_blocked_uri">تعديل الURI المحظور</string>
+    <string name="edit_blocked_uri">تعديل URI المحظور</string>
     <string name="new_blocked_uri">عنوان URL جديد محظور</string>
     <string name="invalid_format_use_https_http_or_android_app">تنسيق غير صالح. استخدم https:// أو http:// أو androidapp://</string>
     <string name="enter_uri">إدخال URI</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">التنسيق: %1$s. افصل العديد من عناوين URIs بفاصلة.</string>
-    <string name="invalid_uri">الرابط غير صالح</string>
+    <string name="invalid_uri">URI غير صالح</string>
     <string name="the_urix_is_already_blocked">تم حظر URI %1$s بالفعل</string>
     <string name="login_approved">تمت الموافقة على تسجيل الدخول</string>
     <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">تسجيل الدخول باستخدام الجهاز يجب إعداده في إعدادات تطبيق Bitwarden.</string>
@@ -757,7 +760,7 @@
     <string name="check_your_email">تحقق من بريدك الإلكتروني</string>
     <string name="open_email_app">افتح تطبيق البريد الإلكتروني</string>
     <string name="email_verified">تم التحقق من البريد الإلكتروني</string>
-    <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">الحصول على رسائل بريد إلكتروني من Bitwarden للإعلانات، والنصائح، وفرص البحث. <annotation link="unsubscribe">إلغاء الاشتراك</annotation> في أي وقت.</string>
+    <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">الحصول على رسائل بريد إلكتروني من Bitwarden للإعلانات، والنصائح، وفرص البحث. <annotation link="unsubscribe">يمكنك إلغاء الاشتراك</annotation> في أي وقت.</string>
     <string name="security_prioritized">الأمن، مرتب حسب الأولوية</string>
     <string name="welcome_message_1">حفظ تسجيلات الدخول والبطاقات والهويات إلى خزنتك الآمنة. يستخدم Bitwarden المعرفة الصفرية، التشفير من النهاية إلى النهاية لحماية ما هو مهم بالنسبة لك.</string>
     <string name="welcome_message_2">قم بإعداد فتح القفل الحيوي والتعبئة التلقائية لتسجيل الدخول إلى حساباتك دون كتابة حرف واحد.</string>
@@ -801,11 +804,11 @@
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">اختر كلمة مرور فريدة وقوية للحفاظ على سلامة معلوماتك.</string>
     <plurals name="minimum_characters">
         <item quantity="zero">%d حرف</item>
-        <item quantity="one">%d حرف</item>
-        <item quantity="two">%d حرفين</item>
+        <item quantity="one">حرف %d</item>
+        <item quantity="two">حرفين %d</item>
         <item quantity="few">%d أحرف</item>
-        <item quantity="many">%d أحرف</item>
-        <item quantity="other">%d أحرف</item>
+        <item quantity="many">%d حرف</item>
+        <item quantity="other">%d حرف</item>
     </plurals>
     <string name="expired_link">رابط منتهي الصلاحية</string>
     <string name="please_restart_registration_or_try_logging_in">الرجاء إعادة تشغيل التسجيل أو محاولة تسجيل الدخول. قد يكون لديك حساب بالفعل.</string>
@@ -814,12 +817,12 @@
     <string name="allow_bitwarden_authenticator_syncing">السماح بمزامنة المصادقة</string>
     <string name="there_was_an_issue_validating_the_registration_token">حدثت مشكلة أثناء التحقق من صحة رمز التسجيل.</string>
     <string name="turn_on_autofill">تشغيل التعبئة التلقائية</string>
-    <string name="autofill_setup">إعداد التعبئة التلقائية</string>
+    <string name="autofill_setup">إعداد الملء التلقائي</string>
     <string name="turn_on_browser_autofill_integration">تفعيل دمج الملء التلقائي للمتصفح</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">أنت تستخدم متصفحًا يتطلب أذونات خاصة لـ Bitwarden لملء كلمات المرور الخاصة بك تلقائياً.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">أنت تستخدم المتصفحات التي تتطلب أذونات خاصة لـ Bitwarden لملء كلمات المرور الخاصة بك تلقائياً.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">أنت تستخدم متصفحًا يتطلب أذونات خاصة لـ Bitwarden لملء كلمات المرور الخاصة بك تلقائيًا. قم بتفعيل التكامل التلقائي المفضل أدناه.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">أنت تستخدم المتصفحات التي تتطلب صلاحيات خاصة لـ Bitwarden لملء كلمات المرور الخاصة بك. تمكين الملء التلقائي لجميع المتصفحات المثبتة للمتابعة.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_plural">أنت تستخدم المتصفحات التي تتطلب صلاحيات خاصة لـ Bitwarden لملء كلمات مرورك. يرجى تفعيل الملء التلقائي لجميع المتصفحات المثبتة للمتابعة.</string>
     <string name="use_autofill_to_log_into_your_accounts">استخدم التعبئة التلقائية لتسجيل الدخول إلى حساباتك بنقرة واحدة.</string>
     <string name="turn_on_later">التفعيل في وقت لاحق</string>
     <string name="turn_on_autofill_later">هل تريد تفعيل الملء التلقائي في وقت لاحق؟</string>
@@ -833,7 +836,7 @@
     <string name="get_started">ابدأ الآن</string>
     <string name="save_and_protect_your_data">حفظ وحماية البيانات الخاصة بك</string>
     <string name="the_vault_protects_more_than_just_passwords">المخزن يحمي أكثر من مجرد كلمات المرور. خزّن تسجيلات الدخول الآمنة والمعرفات والبطاقات والملاحظات بشكل آمن هنا.</string>
-    <string name="add_login">إضافة تسجيل دخول جديد</string>
+    <string name="add_login">إضافة تسجيل دخول</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">مشاركة الملفات والبيانات بشكل آمن مع أي شخص، على أي منصة. ستبقى معلوماتك مشفرة من النهاية إلى النهاية مع الحد من التعرض.</string>
     <string name="send_sensitive_information_safely">إرسال معلومات حساسة بأمان</string>
     <string name="import_saved_logins">استيراد تسجيلات الدخول المحفوظة</string>
@@ -843,14 +846,14 @@
     <string name="import_logins_later_dialog_title">استيراد تسجيلات الدخول لاحقاً؟</string>
     <string name="do_you_have_a_computer_available">هل لديك جهاز كمبيوتر متوفر؟</string>
     <string name="the_following_instructions_will_guide_you_through_importing_logins">الإرشادات التالية سوف توجهك من خلال استيراد تسجيلات الدخول من حاسوبك المكتبي أو الكمبيوتر المحمول</string>
-    <string name="import_logins">استيراد تسجيلات الدخول</string>
+    <string name="import_logins">استيراد بيانات تسجيل الدخول</string>
     <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">من جهاز الكمبيوتر الخاص بك، اتبع هذه التعليمات لتصدير كلمات المرور المحفوظة من متصفحك أو من مدير كلمة المرور آخر. ثم قم باستيرادها بأمان إلى Bitwarden.</string>
     <string name="give_your_vault_a_head_start">اعطِ خزنتك السبق</string>
     <string name="class_3_biometrics_description">إلغاء القفل باستخدام القياسات الحيوية يتطلب مصادقة حيوية قوية وقد لا تكون متوافقة مع جميع خيارات القياسات الحيوية على هذا الجهاز.</string>
     <string name="class_2_biometrics_description">إلغاء القفل باستخدام القياسات الحيوية يتطلب مصادقة حيوية قوية، وهو غير متوافق مع خيارات القياسات الحيوية المتاحة على هذا الجهاز.</string>
-    <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">على جهاز الكمبيوتر الخاص بك، <annotation emphasis="bold">سجل الدخول</annotation> إلى متصفحك الحالي أو مدير كلمات المرور</string>
-    <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">تصدير كلمات المرور الخاصة بك.</annotation> عادة ما تجد هذا الخيار في الإعدادات الخاصة بك.</string>
-    <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing">حدد <annotation emphasis="bold">استيراد البيانات</annotation> في تطبيق الويب، ثم اختر تم أدناه لإنهاء المزامنة.</string>
+    <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">على جهاز الكمبيوتر الخاص بك، <annotation emphasis="bold">سجل الدخول إلى متصفحك الحالي أو مدير كلمات المرور.</annotation></string>
+    <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">تصدير كلمات المرور الخاصة بك.</annotation> عادة ما تجد هذا الخيار في إعداداتك الخاصة.</string>
+    <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">حدد استيراد البيانات</annotation> في تطبيق الويب، ثم اختر تم أدناه لإنهاء المزامنة.</string>
     <string name="step_1_of_3">الخطوة 1 من 3</string>
     <string name="export_your_saved_logins">تصدير تسجيلاتك المحفوظة</string>
     <string name="delete_this_file_after_import_is_complete">سوف تحذف هذا الملف بعد اكتمال الاستيراد.</string>
@@ -865,8 +868,8 @@
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">للأمان الخاص بك، تأكد من <annotation emphasis="bold">حذف ملف كلمات المرور المحفوظة.</annotation></string>
     <string name="need_help_check_out_import_help">بحاجة إلى مساعدة؟ تحقق من <annotation link="importHelp">تعليمات الاستيراد
 </annotation>.</string>
-    <string name="import_help">مساعدة الاستيراد</string>
-    <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">حفظ الملف المصدر</annotation> في مكان ما على جهاز الكمبيوتر الخاص بك يمكنك العثور عليه بسهولة.</string>
+    <string name="import_help">مساعدة في الاستيراد</string>
+    <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">احفظ الملف المصدر</annotation> في مكان ما على جهاز الكمبيوتر الخاص بك أين يمكنك العثور عليه بسهولة.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">هذا ليس خادم Bitwarden المعترف به. قد تحتاج إلى التحقق مع المزود الخاص بك أو تحديث الخادم الخاص بك.</string>
     <string name="syncing_logins_loading_message">مزامنة تسجيلات الدخول…</string>
     <string name="download_the_browser_extension">تحميل ملحق المتصفح</string>
@@ -904,7 +907,7 @@
     <string name="done_text">تم</string>
     <string name="page_number_x_of_y">%1$s من %2$s</string>
     <string name="copy_identity_name">نسخ اسم الهوية</string>
-    <string name="copy_company">نسخ شركة</string>
+    <string name="copy_company">نسخ الشركة</string>
     <string name="copy_ssn">نسخ رقم الضمان الاجتماعي</string>
     <string name="copy_passport_number">نسخ رقم جواز السفر</string>
     <string name="copy_first_name">نسخ الاسم</string>
@@ -940,7 +943,7 @@
     <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">تعرف على المزيد حول توليد بيانات حساب آمنة من خلال جولة إرشادية.</string>
     <string name="import_client_certificate">استيراد شهادة العميل</string>
     <string name="enter_the_client_certificate_password_and_alias">أدخل كلمة مرور شهادة العميل و الاسم المستعار المرغوب لهذه الشهادة.</string>
-    <string name="alias">إسم مستعار</string>
+    <string name="alias">اسم مستعار</string>
     <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">استخدم المولد لإنشاء كلمات مرور وعبارات مرور وأسماء مستخدمين آمنة.</string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">عبارات المرور هي كلمات مرور قوية غالبا ما تكون أسهل للتذكر وكتابة كلمات مرور عشوائية. إنها مفيدة لتسجيل الدخول إلى الحسابات حيث لا تتوفر خدمة التعبئة التلقائية، مثل خدمة البث على التلفزيون الخاص بك.</string>
     <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">تضيف أسماء المستخدمين الفريدة طبقة أمان إضافية، ويمكن أن تساعد في منع المخترقين من العثور على حساباتك.</string>
@@ -1004,12 +1007,12 @@
     <string name="for_details_on_what_is_and_isnt_logged">للحصول على تفاصيل حول ما هو ولا يتم تسجيله، قم بزيارة\n<annotation link="helpCenter">Bitwarden مركز المساعدة.</annotation></string>
     <string name="logging_duration">مدة التسجيل</string>
     <string name="flight_recorder_one_hour">ساعة واحدة</string>
-    <string name="flight_recorder_eight_hours">8ساعات</string>
+    <string name="flight_recorder_eight_hours">8 ساعات</string>
     <string name="flight_recorder_twenty_four_hours">24 ساعة</string>
-    <string name="flight_recorder_one_week">أسبوع واحد</string>
+    <string name="flight_recorder_one_week">أسبوع 1</string>
     <string name="delete_all">حذف الكل</string>
     <string name="share_all">مشاركة الكل</string>
-    <string name="unable_to_share">غير قادر على المشاركة</string>
+    <string name="unable_to_share">تعذرت المشاركة</string>
     <string name="please_try_again_or_select_a_different_log">الرجاء المحاولة مرة أخرى أو تحديد سجل مختلف.</string>
     <string name="the_log_file_you_are_trying_to_share_has_been_removed">تم إزالة ملف السجل الذي تحاول مشاركته.</string>
     <string name="delete_log">حذف السجل</string>
@@ -1018,7 +1021,7 @@
     <string name="do_you_really_want_to_delete_all_recorded_logs">هل تريد حقاً حذف جميع السجلات المسجلة؟</string>
     <string name="confirm_key_connector_domain">تأكيد نطاق موصل المفتاح</string>
     <string name="key_connector_domain">نطاق Key Connector</string>
-    <string name="your_organization_no_longer_requires_a_master_password">لم تعد مؤسستك تشترط كلمة مرور رئيسية لأعضائها. يُرجى التحقق من النطاق أدناه مع المسؤول وإدخال كلمة مرورك الرئيسية للمتابعة.</string>
+    <string name="your_organization_no_longer_requires_a_master_password">لم تعد منظمتك تشترط كلمة مرور رئيسية لأعضائها. يرجى التحقق من النطاق أدناه مع المسؤول وإدخال كلمة مرورك الرئيسية للمتابعة.</string>
     <string name="please_confirm_domain_with_admin">يرجى تأكيد المجال أدناه مع مسؤول شركتك.\n\nمجال رابط المفتاح:\n%1$s</string>
     <string name="flight_recorder_banner_title">تشغيل مسجل الطيران</string>
     <string name="flight_recorder_banner_message">مسجل الطيران سوف يكون نشطاً حتى %1$s عند %2$s. العودة إلى الإعدادات لإلغاء تنشيط الآن.</string>
@@ -1042,17 +1045,17 @@
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">الألوان الديناميكية تستخدم ألوان النظام وقد لا تفي بجميع المبادئ التوجيهية المتعلقة بإمكانية الوصول.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">فشلت عملية مفتاح المرور بسبب عدم التعرف على المتصفح (%1$s). حدد \"الثقة\" لإضافة %1$s إلى قائمة التطبيقات الموثوق بها محليا.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">فشلت عملية مفتاح المرور لأن المتصفح غير موثوق به.</string>
-    <string name="trust">موثوق به</string>
+    <string name="trust">وثوق</string>
     <string name="trusted_by_you_learn_more">هذه تطبيقات أو متصفحات لا يثق بها Bitwarden بشكل افتراضي، لكنك تثق بهم في تنفيذ عمليات مفتاح المرور.</string>
     <string name="trusted_by_community_learn_more">هذه تطبيقات غير مدرجة في متجر Google Play لكن شركة Bitwarden تثق للقيام بعمليات مفتاح المرور بعد أن يستخدمها أفراد المجتمع ويبلغهم عن أنها آمنة.</string>
     <string name="trusted_by_google_learn_more">هذه تطبيقات تعتبر آمنة في Google وهي متاحة في متجر اللعب لGoogle.</string>
-    <string name="trusted_by_you">موثوق بك من قبل</string>
+    <string name="trusted_by_you">جهات موثوقة</string>
     <string name="trusted_by_the_community">موثوق به من قبل المجتمع</string>
     <string name="trusted_by_google">موثوق به من قبل Google</string>
     <string name="privileged_apps_description">لحماية المستخدمين من محاولات التصيد، بشكل افتراضي، يكمل Bitwarden عمليات مفتاح المرور فقط من خلال التطبيقات أو متصفحات الويب الموثوق بها من قبل Google أو مجتمع Bitwarden.</string>
     <string name="about_privileged_applications">حول التطبيقات المتميزة</string>
     <string name="learn_more_about_privileged_apps">معرفة المزيد عن التطبيقات المتميزة</string>
-    <string name="privileged_apps">التطبيقات المميزة</string>
+    <string name="privileged_apps">تطبيقات ذات صلاحيات</string>
     <string name="unrecognized_browser">متصفح غير معروف</string>
     <string name="learn_more_about_using_passkeys_with_bitwarden">تعرف على المزيد حول استخدام مفاتيح المرور مع Bitwarden.</string>
     <string name="all_trusted_apps">جميع التطبيقات الموثوق بها</string>
@@ -1060,10 +1063,10 @@
     <string name="installed_apps">التطبيقات المثبتة</string>
     <string name="delete_x">حذف %s</string>
     <string name="failed_to_decrypt_cipher_contact_support">فشل فك تشفير الشفرة. اتصل بالدعم.</string>
-    <string name="decryption_error">خطأ فك التشفير</string>
-    <string name="scan_a_qr_code">امسح كود الاستجابة السريع ضوئيًا</string>
+    <string name="decryption_error">خطأ في فك التشفير</string>
+    <string name="scan_a_qr_code">مسح رمز QR ضوئيا</string>
     <string name="cannot_add_authenticator_key">لا يمكن إضافة مفتاح المصادقة؟</string>
-    <string name="enable_camera_permission_to_use_the_scanner">تمكين إذن الكاميرا لاستخدام الماسح الضوئي</string>
+    <string name="enable_camera_permission_to_use_the_scanner">تفعيل إذن الكاميرا لاستخدام الماسح الضوئي</string>
     <string name="empty_item_list">قائمة العناصر فارغة</string>
     <string name="you_dont_have_items_to_display">ليس لديك أي عناصر لعرضها.</string>
     <string name="empty_item_list_instruction">أضف رمزا جديدا لتأمين حساباتك.</string>
@@ -1077,10 +1080,10 @@
     <plurals name="refresh_period_seconds">
         <item quantity="zero">%d ثانية</item>
         <item quantity="one">%d ثانية</item>
-        <item quantity="two">%d ثانيتين</item>
-        <item quantity="few">%d ثواني</item>
-        <item quantity="many">%d ثواني</item>
-        <item quantity="other">%d ثواني</item>
+        <item quantity="two">ثانيتان %d</item>
+        <item quantity="few">%d ثوان</item>
+        <item quantity="many">%d ثانية</item>
+        <item quantity="other">%d ثانية</item>
     </plurals>
     <string name="item_saved">تم حفظ العنصر</string>
     <string name="information">معلومات</string>
@@ -1088,7 +1091,7 @@
     <string name="search_codes">ابحث عن رموز</string>
     <string name="secure_your_accounts_with_bitwarden_authenticator">تأمين حساباتك مع مصادق Bitwarden</string>
     <string name="get_verification_codes_for_all_your_accounts">احصل على رموز التحقق لجميع حساباتك التي تدعم التحقق بخطوتين.</string>
-    <string name="use_your_device_camera_to_scan_codes">استخدم كاميرا جهازك لمسح الرموز</string>
+    <string name="use_your_device_camera_to_scan_codes">استخدم كاميرا جهازك لمسح الرموز ضوئيا</string>
     <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">امسح رمز QR في إعدادات التحقق من خطوتين لأي حساب.</string>
     <string name="sign_in_using_unique_codes">تسجيل الدخول باستخدام الرموز الفريدة</string>
     <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">عند استخدام التحقق بخطوتين، ستدخل اسم المستخدم وكلمة المرور الخاصة بك وكلمة المرور التي أنشئت في هذا التطبيق.</string>
@@ -1116,7 +1119,7 @@
     <string name="import_vault">استيراد</string>
     <string name="import_success">تم استيراد الخزنة بنجاح</string>
     <string name="key_is_invalid">المفتاح غير صالح.</string>
-    <string name="backup">النسخ الاحتياطي</string>
+    <string name="backup">نسخ احتياطي</string>
     <string name="data_backup_title">النسخ الاحتياطي للبيانات</string>
     <string name="data_backup_message">يتم النسخ الاحتياطي لبيانات مصادقة Bitwarden ويمكن استعادتها مع النسخ الاحتياطية لجهازك المجدولة بانتظام.</string>
     <string name="import_2fas_password_protected_not_supported">الاستيراد من الملفات المحمية بكلمة مرور 2FAS غير مدعوم. حاول مرة أخرى مع ملف مصدَّر غير محمي بكلمة المرور.</string>
@@ -1131,12 +1134,12 @@
     <string name="sync_with_bitwarden_action_card_message">السماح لمزامنة تطبيق المصادقة في الإعدادات لعرض جميع رموز التحقق الخاصة بك هنا.</string>
     <string name="take_me_to_app_settings">خذني إلى إعدادات التطبيق</string>
     <string name="something_went_wrong">حدث خطأ ما</string>
-    <string name="please_try_again">الرجاء المحاولة مرة أخرى</string>
+    <string name="please_try_again">يرجى المحاولة مرة أخرى</string>
     <string name="copy_to_bitwarden_vault">نسخ إلى مخزن Bitwarden</string>
     <string name="default_save_option">خيار الحفظ الافتراضي</string>
     <string name="save_to_bitwarden">حفظ إلى Bitwarden</string>
     <string name="save_here">حفظ هنا</string>
-    <string name="none">لا شَيْء</string>
+    <string name="none">لا شيء</string>
     <string name="default_save_options_subtitle">حدد المكان الذي ترغب في حفظ رموز التحقق الجديدة.</string>
     <string name="verification_code_created">أُنشئَ رمز التحقق</string>
     <string name="choose_save_location_message">احفظ مفتاح المصادقة هذا هنا، أو أضفه إلى تسجيل الدخول في تطبيق Bitwarden الخاص بك.</string>
@@ -1157,12 +1160,12 @@
     <string name="copy_error_report">نسخ تقرير الخطأ</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">تعذر على Bitwarden فك تشفير عنصر الخزنة هذا. انسخ تقرير الخطأ هذا وشاركه مع دعم العملاء لتجنب خسارة إضافية للبيانات.</string>
     <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
-        <item quantity="zero">تعذر على Bitwarden فك تشفير %1$d عنصر خزنة. انسخ وشارك تقرير الخطأ هذا مع نجاح العميل لتجنب خسارة البيانات الإضافية.</item>
-        <item quantity="one">تعذر على Bitwarden فك تشفير %1$d عنصر خزنة. انسخ وشارك تقرير الخطأ هذا مع نجاح العميل لتجنب خسارة البيانات الإضافية.</item>
-        <item quantity="two">تعذر على Bitwarden فك تشفير %1$d عنصري خزنة. انسخ وشارك تقرير الخطأ هذا مع نجاح العميل لتجنب خسارة البيانات الإضافية.</item>
-        <item quantity="few">تعذر على Bitwarden فك تشفير %1$d عناصر خزنة. انسخ وشارك تقرير الخطأ هذا مع نجاح العميل لتجنب خسارة البيانات الإضافية.</item>
-        <item quantity="many">تعذر على Bitwarden فك تشفير %1$d عناصر خزنة. انسخ وشارك تقرير الخطأ هذا مع نجاح العميل لتجنب خسارة البيانات الإضافية.</item>
-        <item quantity="other">تعذر على Bitwarden فك تشفير %1$d عناصر خزنة. انسخ وشارك تقرير الخطأ هذا مع نجاح العميل لتجنب خسارة البيانات الإضافية.</item>
+        <item quantity="zero">تعذر على Bitwarden فك تشفير %1$d عنصر خزنة. انسخ وشارك تقرير الخطأ هذا مع دعم العملاء لتجنب خسارة البيانات الإضافية.</item>
+        <item quantity="one">تعذر على Bitwarden فك تشفير %1$d عنصر خزنة. انسخ وشارك تقرير الخطأ هذا مع دعم العملاء لتجنب خسارة البيانات الإضافية.</item>
+        <item quantity="two">تعذر على Bitwarden فك تشفير %1$d عنصري خزنة. انسخ وشارك تقرير الخطأ هذا مع دعم العملاء لتجنب خسارة البيانات الإضافية.</item>
+        <item quantity="few">تعذر على Bitwarden فك تشفير %1$d عناصر خزنة. انسخ وشارك تقرير الخطأ هذا مع دعم العملاء لتجنب خسارة البيانات الإضافية.</item>
+        <item quantity="many">تعذر على Bitwarden فك تشفير %1$d عناصر خزنة. انسخ وشارك تقرير الخطأ هذا مع ندعم العملاء لتجنب خسارة البيانات الإضافية.</item>
+        <item quantity="other">تعذر على Bitwarden فك تشفير %1$d عناصر خزنة. انسخ وشارك تقرير الخطأ هذا مع دعم العملاء لتجنب خسارة البيانات الإضافية.</item>
     </plurals>
     <string name="select_a_card_for_x">حدد بطاقة %s</string>
     <string name="advanced_options">الخيارات المتقدمة</string>
@@ -1174,7 +1177,7 @@
     <string name="default_uri_match_detection_description_advanced_options">كم اكتشاف التطابقات في كيفية تحديد Bitwarden لاقتراحات التعبئة التلقائية.\n<annotation emphasis="bold">تحذير:</annotation> ”يبدأ من أجل“ هو خيار متقدم مع يزيد خطر الكشف عن بيانات الحساب إذا استخدمت بشكل غير صحيح.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">و”يبدأ من أجل“ هو خيار متقدم مع يزيد خطر الكشف عن بيانات الحساب إذا استخدمت بشكل غير صحيح.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"التعبير العادي\" هو خيار متقدم مع يزيد خطر الكشف عن بيانات الحساب إذا استخدمت بشكل غير صحيح.</string>
-    <string name="later">لاحقاً</string>
+    <string name="later">لاحقا</string>
     <string name="encryption_settings_updated">تم تحديث إعدادات التشفير</string>
     <string name="update_your_encryption_settings">تحديث إعدادات التشفير</string>
     <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">إعدادات التشفير الجديدة الموصى بها ستحسن أمن حسابك. أدخل كلمة المرور الرئيسية للتحديث الآن.</string>
@@ -1183,9 +1186,11 @@
     <string name="no_items_imported">لا توجد عناصر مستوردة</string>
     <string name="no_items_received_from_the_selected_app">لم يتم استلام أي عناصر من التطبيق المحدد.</string>
     <string name="vault_sync_failed">فشلت مزامنة الخزن</string>
+    <string name="vault_sync_unsuccessful">فشلت عملية المزامنة</string>
+    <string name="vault_sync_failed_description">لم نتمكن من مزامنة خزنتك مع الخادم. قد لا تظهر خزنتك أحدث التغييرات التي أجريتها. يمكنك المحاولة مرة أخرى الآن، أو ستتم المزامنة تلقائيًا لاحقًا.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">تم استيراد العناصر الخاصة بك بنجاح، ولكن لن تكون مرئية في خزنتك حتى يتم تنفيذ المزامنة.</string>
     <string name="there_was_a_problem_importing_your_items">حدثت مشكلة أثناء استيراد العناصر الخاصة بك. الرجاء المحاولة مرة أخرى. إذا استمرت المشكلة، اتصل بالدعم.</string>
-    <string name="saving_items">جارٍ حفظ العناصر…</string>
+    <string name="saving_items">جاري حفظ العناصر…</string>
     <string name="unable_to_import_your_items">غير قادر على استيراد العناصر الخاصة بك</string>
     <string name="import_from_computer">استيراد من الكمبيوتر</string>
     <string name="import_from_another_app">استيراد من تطبيق آخر</string>
@@ -1209,7 +1214,7 @@
     <string name="having_trouble_with_autofill">هل تواجه مشكلة في الملء التلقائي؟</string>
     <string name="access_help_and_troubleshooting_documentation_here">الوصول إلى وثائق المساعدة واستكشاف الأخطاء وإصلاحها هنا</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">استيراد كلمات السر، ومفاتيح المرور، وأنواع السلع الأخرى من خزنة Bitwarden الخاصة بك.</string>
-    <string name="items_to_import">العناصر المراد استيرادها</string>
+    <string name="items_to_import">عناصر للاستيراد</string>
     <string name="exporting_items">تصدير العناصر…</string>
     <string name="export_failed">فشل التصدير</string>
     <string name="passwords">كلمات المرور</string>
@@ -1235,10 +1240,10 @@
     <string name="migrating_items_to_x">نقل العناصر إلى %s</string>
     <string name="failed_to_migrate_items_to_x">فشل في نقل العناصر إلى %s</string>
     <string name="search_archive">البحث في الأرشيف</string>
-    <string name="archive_noun">الأرشيف</string>
-    <string name="archive_verb">الأرشيف</string>
+    <string name="archive_noun">أرشفة</string>
+    <string name="archive_verb">أرشفة</string>
     <string name="unarchive">إزالة من الأرشيف</string>
-    <string name="archived">إلغاء الأرشفة</string>
+    <string name="archived">مؤرشف</string>
     <string name="hidden_items">العناصر المخفية</string>
     <string name="unable_to_archive_selected_item">غير قادر على أرشفة العنصر المحدد.</string>
     <string name="unable_to_unarchive_selected_item">غير قادر على إلغاء أرشفة العنصر المحدد.</string>
@@ -1247,9 +1252,10 @@
     <string name="item_moved_to_archived">تم نقل العنصر إلى الأرشيف</string>
     <string name="item_moved_to_vault">تم نقل العنصر إلى المخزن</string>
     <string name="archiving_items_is_a_premium_feature">أرشفة العناصر ميزة في الباقة Premium. باقتك الحالية لا تتضمن الوصول إليها.</string>
+    <string name="totp_is_a_premium_feature">مفتاح المصادقة (TOTP) ميزة مخصصة لباقة Premium. باقتك الحالية لا تشمل صلاحية الوصول إلى هذه الميزة.</string>
     <string name="upgrade_to_premium">الترقية إلى Premium</string>
     <string name="plan">باقة</string>
-    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">لإدارة اشتراكك المميز، ستحتاج تسجيل الدخول إلى خزنتك على الويب من جهاز الحاسوب.</string>
+    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">لإدارة اشتراكك في باقة Premium، ستحتاج إلى تسجيل الدخول إلى خزنتك على الويب من جهاز حاسوب.</string>
     <string name="unlock_advanced_security_features">فتح ميزات الأمان المتقدمة</string>
     <string name="your_subscription_needs_attention">اشتراكك يحتاج إلى مراجعة</string>
     <string name="check_your_plan_for_details">تحقق من باقتك لمعرفة التفاصيل.</string>
@@ -1262,7 +1268,7 @@
     <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">تم أرشفة هذا العنصر. حفظ التغييرات سيتم استعادته إلى المخزن الخاص بك.</string>
     <string name="your_premium_subscription_ended">إنتهاء اشتراكك Premium</string>
     <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">لاستعادة الوصول إلى الأرشيف الخاص بك، أعد تشغيل باقة Premium. إذا قمت بتعديل تفاصيل عنصر أرشيف قبل إعادة التشغيل، فسيتم نقله مرة أخرى إلى خزانك.</string>
-    <string name="restart_premium">إعادة تشغيل Premium</string>
+    <string name="restart_premium">إعادة تشغيل باقة Premium</string>
     <string name="items_transferred">تم نقل العناصر</string>
     <string name="updated_master_password">تحديث كلمة المرور الرئيسية</string>
     <string name="invalid_email_addresses">عناوين البريد الإلكتروني غير صالحة</string>
@@ -1273,7 +1279,7 @@
     <string name="sync_with_browser_description">للاتصال بـ %1$s، قم بمزامنة متصفحك الافتراضي مع تطبيق Bitwarden للجوال. وعند فتح متصفحك، أكمل تسجيل الدخول إذا طلب منك ذلك.\nوبمجرد اكتمال المزامنة، سيتم إرجاعك إلى هذا التطبيق.</string>
     <string name="launch_browser">تشغيل المتصفح</string>
     <string name="continue_without_syncing">المتابعة بدون المزامنة</string>
-    <string name="external_link">الرابط الخارجي</string>
+    <string name="external_link">رابط خارجي</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s، الرابط الخارجي</string>
     <string name="devices">الأجهزة</string>
     <string name="mobile_platform">الجوال - %1$s</string>
@@ -1284,9 +1290,9 @@
     <string name="sdk">SDK</string>
     <string name="server">الخادم</string>
     <string name="unknown_device">جهاز غير معروف</string>
-    <string name="first_login_date"><annotation emphasis="bold">أول تسجيل دخول:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="first_login_date"><annotation emphasis="bold">أول تسجيل دخول::</annotation> <annotation arg="0">%1$s</annotation></string>
     <string name="current_session">الجلسة الحالية</string>
-    <string name="pending_request">طلب معلق</string>
+    <string name="pending_request">طلب قيد الانتظار</string>
     <string name="today">اليوم</string>
     <string name="past_seven_days">آخر 7 أيام</string>
     <string name="past_fourteen_days">آخر 14 يوما</string>
@@ -1313,13 +1319,13 @@
     <string name="secure_file_storage">تخزين الملفات الآمن</string>
     <string name="breach_monitoring">رصد الاختراقات</string>
     <string name="upgrade_now">قم بالترقية الآن</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">ستنتقل إلى صفحة الدفع الآمن في Stripe لإتمام عملية الشراء.</string>
+    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">سيتم توجيهك لصفحة الدفع الآمن في Stripe لإتمام عملية الشراء.</string>
     <string name="opening_checkout">فتح الدفع…</string>
     <string name="secure_checkout_didnt_load">لم يتم تحميل الدفع الآمن</string>
     <string name="trouble_opening_payment_page">واجهنا مشكلة في فتح صفحة الدفع، لذا حاول مرة أخرى.</string>
     <string name="payment_not_received_yet">لم يتم استلام الدفع بعد</string>
     <string name="return_to_stripe_to_finish">العودة إلى Stripe في المتصفح الخاص بك لإنهاء الترقية.</string>
-    <string name="go_back">الرجوع</string>
+    <string name="go_back">الرجوع إلى الخلف</string>
     <string name="allow_camera_access">السماح بالوصول إلى الكاميرا</string>
     <string name="to_scan_your_card_we_need_access_to_your_camera">لفحص بطاقتك ، سنحتاج إلى الوصول إلى الكاميرا الخاصة بك. يمكنك تغيير هذا في أي وقت من إعدادات جهازك.</string>
     <string name="show_next_code">إظهار الكود التالي</string>
@@ -1342,31 +1348,32 @@
     <string name="cancel_premium">إلغاء Premium</string>
     <string name="subscription_status_active">نشط</string>
     <string name="subscription_status_canceled">ملغى</string>
-    <string name="subscription_status_expired">منتهية الصلاحية</string>
+    <string name="subscription_status_expired">منتهي الصلاحية</string>
     <string name="subscription_status_past_due">متأخر الدفع</string>
-    <string name="subscription_status_paused">متوقف مؤقتاً</string>
+    <string name="subscription_status_paused">متوقف مؤقتا</string>
+    <string name="subscription_status_unpaid">غير مدفوع</string>
     <string name="subscription_status_update_payment">تحديث بيانات الدفع</string>
-    <string name="subscription_status_pending_cancellation">في انتظار الإلغاء</string>
-    <string name="subscription_pending_cancellation_description">من المقرر إلغاء اشتراكك في <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. يمكنك استعادته في أي وقت قبل ذلك.</string>
+    <string name="subscription_status_pending_cancellation">قيد الإلغاء</string>
+    <string name="subscription_pending_cancellation_description">تمت جدولة إلغاء اشتراكك في <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. يمكنك إعادته في أي وقت قبل ذلك.</string>
     <string name="premium_next_charge_summary">سيتم تحصيل <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> دولار أمريكي بتاريخ <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
-    <string name="subscription_canceled_description">تم إلغاء اشتراكك في <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. أعد الاشتراك للاستمرار في استخدام ميزات الخُطة المميزة.</string>
-    <string name="subscription_update_payment_description">تعذّر معالجة دفعتك. يُرجى تحديث طريقة الدفع قبل انتهاء اشتراكك بتاريخ <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
+    <string name="subscription_canceled_description">تم إلغاء اشتراكك في <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. أعد الاشتراك للاستمرار في استخدام ميزات باقة Premium.</string>
+    <string name="subscription_unpaid_description">تم تعليق اشتراكك في <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. لإعادة التفعيل، يرجى تسوية الفواتير المستحقة المتأخرة.</string>
+    <string name="subscription_update_payment_description">تعذر معالجة دفعتك. يرجى تحديث طريقة الدفع قبل انتهاء اشتراكك بتاريخ <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
-        <item quantity="zero">لديك فِترة سماح مدتها <annotation arg="0">%1$d</annotation> يوم من تاريخ انتهاء اشتراكك. يُرجى تسوية الفواتير المتأخرة بحلول <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
-        <item quantity="one">لديك فِترة سماح مدتها <annotation arg="0">%1$d</annotation> يوم من تاريخ انتهاء اشتراكك. يُرجى تسوية الفواتير المتأخرة بحلول <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
-        <item quantity="two">لديك فِترة سماح مدتها <annotation arg="0">%1$d</annotation> يومين من تاريخ انتهاء اشتراكك. يُرجى تسوية الفواتير المتأخرة بحلول <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
-        <item quantity="few">لديك فِترة سماح مدتها <annotation arg="0">%1$d</annotation> أيام من تاريخ انتهاء اشتراكك. يُرجى تسوية الفواتير المتأخرة بحلول <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
-        <item quantity="many">لديك فِترة سماح مدتها <annotation arg="0">%1$d</annotation> يومًا من تاريخ انتهاء اشتراكك. يُرجى تسوية الفواتير المتأخرة بحلول <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
-        <item quantity="other">لديك فِترة سماح مدتها <annotation arg="0">%1$d</annotation> يوم من تاريخ انتهاء اشتراكك. يُرجى تسوية الفواتير المتأخرة بحلول <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="zero">لديك فترة سماح مدتها <annotation arg="0">%1$d</annotation> يوم من تاريخ انتهاء اشتراكك. يرجى تسوية الفواتير المتأخرة بحلول <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="one">لديك فترة سماح مدتها <annotation arg="0">%1$d</annotation> يوم من تاريخ انتهاء اشتراكك. يرجى تسوية الفواتير المتأخرة بحلول <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="two">لديك فترة سماح مدتها يومين<annotation arg="0">%1$d</annotation> من تاريخ انتهاء اشتراكك. يرجى تسوية الفواتير المتأخرة بحلول <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="few">لديك فترة سماح مدتها <annotation arg="0">%1$d</annotation> أيام من تاريخ انتهاء اشتراكك. يرجى تسوية الفواتير المتأخرة بحلول <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="many">لديك فترة سماح مدتها <annotation arg="0">%1$d</annotation> يوما من تاريخ انتهاء اشتراكك. يرجى تسوية الفواتير المتأخرة بحلول <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="other">لديك فترة سماح مدتها <annotation arg="0">%1$d</annotation> يوم من تاريخ انتهاء اشتراكك. يرجى تسوية الفواتير المتأخرة بحلول <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
     </plurals>
-    <string name="subscription_paused_description">اشتراكك موقوف مؤقتاً. استأنفه للاستمرار في استخدام ميزات الخُطة المميزة.</string>
-    <string name="subscription_expired_description">انتهى اشتراكك بتاريخ <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. أعد الاشتراك للاستمرار في استخدام ميزات الخُطة المميزة.</string>
-    <string name="loading_subscription">جارٍ تحميل الاشتراك…</string>
-    <string name="loading_portal">جارٍ تحميل البوابة…</string>
+    <string name="subscription_paused_description">اشتراكك موقوف مؤقتا. استأنفه للاستمرار في استخدام ميزات باقة Premium.</string>
+    <string name="subscription_expired_description">انتهى اشتراكك بتاريخ <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. أعد الاشتراك للاستمرار في استخدام ميزات باقة Premium.</string>
+    <string name="loading_subscription">جاري تحميل الاشتراك…</string>
+    <string name="loading_portal">جاري تحميل البوابة…</string>
     <string name="portal_error">حدث خطأ ما</string>
-    <string name="trouble_loading_portal">تعذّر تحميل بوابة الإدارة، يُرجى المحاولة مجدداً.</string>
-    <string name="subscription_error">خطأ في الاشتراك</string>
-    <string name="trouble_loading_subscription">تعذّر تحميل تفاصيل اشتراكك. يُرجى المحاولة مجدداً.</string>
+    <string name="trouble_loading_portal">تعذر تحميل صفحة الإدارة، يرجى المحاولة مجددا.</string>
+    <string name="trouble_loading_subscription">تعذر تحميل تفاصيل اشتراكك. يرجى المحاولة مجددا.</string>
     <string name="view_bank_account">عرض الحساب البنكي</string>
     <string name="view_license">عرض الترخيص</string>
     <string name="view_passport">عرض جواز السفر</string>
@@ -1381,30 +1388,30 @@
     <string name="type_passport">جواز السفر</string>
     <string name="bank_accounts">الحسابات البنكية</string>
     <string name="passports">جوازات السفر</string>
-    <string name="bank_name">اسم البَنك</string>
+    <string name="bank_name">اسم البنك</string>
     <string name="name_on_account">الاسم على الحساب</string>
     <string name="account_type">نوع الحساب</string>
-    <string name="account_number">رَقم الحساب</string>
-    <string name="routing_number">رَقم التوجيه</string>
-    <string name="branch_number">رَقم الفرع</string>
+    <string name="account_number">رقم الحساب</string>
+    <string name="routing_number">رقم التوجيه</string>
+    <string name="branch_number">رقم الفرع</string>
     <string name="swift_code">رمز SWIFT</string>
     <string name="iban">IBAN</string>
-    <string name="bank_contact_phone">رَقم هاتف البَنك</string>
+    <string name="bank_contact_phone">رقم هاتف البنك</string>
     <string name="copy_name_on_account">نسخ الاسم على الحساب</string>
-    <string name="copy_account_number">نسخ رَقم الحساب</string>
-    <string name="copy_routing_number">نسخ رَقم التوجيه</string>
-    <string name="copy_branch_number">نسخ رَقم الفرع</string>
+    <string name="copy_account_number">نسخ رقم الحساب</string>
+    <string name="copy_routing_number">نسخ رقم التوجيه</string>
+    <string name="copy_branch_number">نسخ رقم الفرع</string>
     <string name="copy_pin">نسخ رمز PIN</string>
     <string name="copy_swift_code">نسخ رمز SWIFT</string>
     <string name="copy_iban">نسخ رمز IBAN</string>
-    <string name="copy_bank_contact_phone">نسخ رَقم هاتف البَنك</string>
+    <string name="copy_bank_contact_phone">نسخ رقم هاتف البنك</string>
     <string name="checking">التحقق</string>
     <string name="savings">المدخرات</string>
     <string name="certificate_of_deposit">شهادة إيداع</string>
     <string name="line_of_credit">خط ائتمان</string>
     <string name="investment_brokerage">استثمار/وساطة مالية</string>
     <string name="money_market">سوق النقد</string>
-    <string name="issuing_country">بلد ألإصدار</string>
+    <string name="issuing_country">بلد الإصدار</string>
     <string name="issuing_state">جهة الإصدار الولاية / المقاطعة</string>
     <string name="license_class">فئة الرخصة</string>
     <string name="surname">اللقب</string>
@@ -1420,21 +1427,21 @@
     <string name="no_bank_accounts">لا توجد حسابات بنكية في خزنتك.</string>
     <string name="license_details">تفاصيل الرخصة</string>
     <string name="licenses">التراخيص</string>
-    <string name="no_licenses">لا تحتوي خزنتك على أي تراخيص.</string>
-    <string name="no_passports">لا توجد جوازات سفر في خزانك.</string>
+    <string name="no_licenses">لا توجد تراخيص في خزنتك.</string>
+    <string name="no_passports">لا توجد جوازات سفر في خزنتك.</string>
     <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">تعذر إكمال طلبك بسبب حاجة التطبيق إلى إعادة تسجيل الدخول لتأكيد الهوية. يرجى المحاولة مجددا.</string>
     <string name="passport_details">تفاصيل جواز السفر</string>
     <string name="sex">الجنس</string>
     <string name="birth_place">مكان الميلاد</string>
-    <string name="national_identification_number">رَقْم الهُوِيَّة الوطنية</string>
-    <string name="copy_national_identification_number">نسخ رَقَم الهُوِيَّة الوطني</string>
-    <string name="access_your_local_network">صَلاحِيَة الوصول إلى الشبكة المحلية</string>
-    <string name="local_network_access_required">مطلوب صلاحِية الوصول إلى الشبكة المحلية</string>
-    <string name="ask_again_later">اسأل مرة أخرى لاحقاً</string>
+    <string name="national_identification_number">رقم الهوية الوطنية</string>
+    <string name="copy_national_identification_number">نسخ رقم الهوية الوطني</string>
+    <string name="access_your_local_network">صلاحية الوصول إلى الشبكة المحلية</string>
+    <string name="local_network_access_required">مطلوب صلاحية الوصول إلى الشبكة المحلية</string>
+    <string name="ask_again_later">اسأل مرة أخرى لاحقا</string>
     <string name="enable_local_network_access">تفعيل الوصول إلى الشبكة المحلية</string>
-    <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">يتطلب Bitwarden صَلاحِيَة الوصول للشبكة المحلية لمزامنة البيانات مع السير فر الخاص بك. في حال عدم منح هذا الإذن، لن يستطيع التطبيق الاتصال.</string>
-    <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">بدون هذا الإذن، لن يتمكن Bitwarden من الاتصال والمزامنة مع خادمك. يمكنك تفعيله في إعدادات جهازك.</string>
-    <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">تعذر إكمال طلبك بسبب حاجة التطبيق للاتصال بالشبكة المحلية. مكنك تفعيله في إعدادات جهازك.</string>
+    <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">يتطلب Bitwarden صلاحية الوصول للشبكة المحلية لمزامنة البيانات مع خادمك. وفي حال عدم منح هذا الإذن، لن يستطيع التطبيق الاتصال.</string>
+    <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">بدون هذا الإذن، لن يتمكن Bitwarden من الاتصال والمزامنة مع خادمك. ويمكنك تفعيله في إعدادات جهازك.</string>
+    <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">تعذر إكمال طلبك بسبب حاجة التطبيق للاتصال بالشبكة المحلية. ويمكنك تفعيله في إعدادات جهازك.</string>
     <string name="continue_to_stripe">المتابعة إلى Stripe؟</string>
-    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">سيتم نقلك إلى Stripe لإدارة إلغاء اشتراكك.</string>
+    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">سيتم توجيهك لصفحة Stripe لإدارة إلغاء اشتراكك.</string>
 </resources>

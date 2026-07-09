@@ -8,6 +8,9 @@ import com.x8bit.bitwarden.data.billing.repository.model.CustomerPortalResult
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumPlanPricingResult
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionResult
 import com.x8bit.bitwarden.data.billing.repository.util.toSubscriptionInfo
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -17,6 +20,11 @@ class BillingRepositoryImpl(
     playBillingManager: PlayBillingManager,
     private val billingService: BillingService,
 ) : BillingRepository {
+
+    private val mutableSubscriptionResultFlow = MutableSharedFlow<SubscriptionResult>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
+    )
 
     override val isInAppBillingSupportedFlow: StateFlow<Boolean> =
         playBillingManager.isInAppBillingSupportedFlow
@@ -66,4 +74,7 @@ class BillingRepositoryImpl(
                 },
                 onFailure = { SubscriptionResult.Error(error = it) },
             )
+            .also { mutableSubscriptionResultFlow.emit(it) }
+
+    override fun getSubscriptionFlow(): Flow<SubscriptionResult> = mutableSubscriptionResultFlow
 }

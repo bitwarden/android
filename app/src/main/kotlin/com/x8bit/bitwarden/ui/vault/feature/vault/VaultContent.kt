@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,15 +18,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
-import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
@@ -107,7 +103,7 @@ fun VaultContent(
 
         actionCardState?.let {
             item(key = "action_card") {
-                ActionCard(
+                VaultActionCard(
                     actionCardState = it,
                     vaultHandlers = vaultHandlers,
                     modifier = Modifier
@@ -558,83 +554,6 @@ fun VaultContent(
         item(key = "bottom_padding") {
             Spacer(modifier = Modifier.height(height = 88.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
-        }
-    }
-}
-
-@Suppress("LongMethod")
-@Composable
-private fun ActionCard(
-    actionCardState: VaultState.ActionCardState,
-    vaultHandlers: VaultHandlers,
-    modifier: Modifier = Modifier,
-) {
-    when (actionCardState) {
-        VaultState.ActionCardState.UpgradedToPremium -> {
-            BitwardenActionCard(
-                cardTitle = stringResource(id = BitwardenString.upgraded_to_premium),
-                cardSubtitle = stringResource(
-                    id = BitwardenString.you_now_have_access_to_all_advanced_security_features,
-                ),
-                actionText = stringResource(id = BitwardenString.learn_more),
-                isExternalLink = true,
-                leadingContent = {
-                    Icon(
-                        painter = rememberVectorPainter(id = BitwardenDrawable.ic_star),
-                        contentDescription = null,
-                        tint = BitwardenTheme.colorScheme.icon.secondary,
-                    )
-                },
-                onActionClick = { vaultHandlers.actionCardClick(actionCardState) },
-                onDismissClick = { vaultHandlers.dismissActionCardClick(actionCardState) },
-                modifier = modifier,
-            )
-        }
-
-        VaultState.ActionCardState.UpgradePremium -> {
-            BitwardenActionCard(
-                cardTitle = stringResource(
-                    id = BitwardenString.unlock_advanced_security_features,
-                ),
-                cardSubtitle = stringResource(
-                    id = BitwardenString
-                        .a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control,
-                ),
-                actionText = stringResource(id = BitwardenString.learn_more),
-                onActionClick = { vaultHandlers.actionCardClick(actionCardState) },
-                onDismissClick = { vaultHandlers.dismissActionCardClick(actionCardState) },
-                modifier = modifier,
-            )
-        }
-
-        VaultState.ActionCardState.PremiumNeedsAttention -> {
-            BitwardenActionCard(
-                cardTitle = stringResource(id = BitwardenString.your_subscription_needs_attention),
-                cardSubtitle = stringResource(id = BitwardenString.check_your_plan_for_details),
-                actionText = stringResource(id = BitwardenString.view_plan),
-                onActionClick = { vaultHandlers.actionCardClick(actionCardState) },
-                modifier = modifier,
-            )
-        }
-
-        VaultState.ActionCardState.IntroducingArchive -> {
-            BitwardenActionCard(
-                cardTitle = stringResource(id = BitwardenString.introducing_archive),
-                cardSubtitle = stringResource(
-                    id = BitwardenString.keep_items_you_dont_need_right_now_safe_but_out_sight,
-                ),
-                actionText = stringResource(id = BitwardenString.go_to_archive),
-                leadingContent = {
-                    Icon(
-                        painter = rememberVectorPainter(id = BitwardenDrawable.ic_archive),
-                        contentDescription = null,
-                        tint = BitwardenTheme.colorScheme.icon.secondary,
-                    )
-                },
-                onActionClick = { vaultHandlers.actionCardClick(actionCardState) },
-                onDismissClick = { vaultHandlers.dismissActionCardClick(actionCardState) },
-                modifier = modifier,
-            )
         }
     }
 }

@@ -18,6 +18,7 @@
         <domain includeSubdomains="true">bitwarden.com</domain>
         <domain includeSubdomains="true">bitwarden.eu</domain>
         <domain includeSubdomains="true">bitwarden.pw</domain>
+        <domain includeSubdomains="true">bitwarden-gov.com</domain>
         <trust-anchors>
             <!-- Trust pre-installed CAs for Bitwarden domains and all subdomains -->
             <certificates src="system" />

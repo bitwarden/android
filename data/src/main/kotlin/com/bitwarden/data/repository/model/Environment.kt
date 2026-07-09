@@ -46,6 +46,17 @@ sealed class Environment {
     }
 
     /**
+     * The default FedRAMP environment.
+     */
+    data object FedRamp : Environment() {
+        override val type: Type get() = Type.FED_RAMP
+        override val environmentUrlData: EnvironmentUrlDataJson
+            get() = EnvironmentUrlDataJson.DEFAULT_FED_RAMP
+        override val label: String
+            get() = "bitwarden-gov.com"
+    }
+
+    /**
      * A custom self-hosted environment with a fully configurable [environmentUrlData].
      */
     data class SelfHosted(
@@ -63,6 +74,7 @@ sealed class Environment {
     enum class Type {
         US,
         EU,
+        FED_RAMP,
         SELF_HOSTED,
     }
 }

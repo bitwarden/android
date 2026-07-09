@@ -52,6 +52,10 @@ class FillAssistManagerTest {
         every { getFeatureFlag(FlagKey.FillAssistTargetingRules) } returns true
     }
 
+    private val settingsRepository: SettingsRepository = mockk {
+        every { isFillAssistEnabled } returns true
+    }
+
     private val serverConfigFlow = MutableStateFlow<ServerConfig?>(SERVER_CONFIG)
 
     private val serverConfigRepository: ServerConfigRepository = mockk {
@@ -74,10 +78,6 @@ class FillAssistManagerTest {
 
     private val environmentDiskSource: EnvironmentDiskSource = mockk {
         every { fillAssistRulesUrl = any() } just runs
-    }
-
-    private val settingsRepository: SettingsRepository = mockk {
-        every { isFillAssistEnabled } returns true
     }
 
     private val manager = FillAssistManagerImpl(
@@ -121,14 +121,15 @@ class FillAssistManagerTest {
     }
 
     @Test
-    fun `sync returns success and does nothing when fill assist is disabled by user`() = runTest {
-        every { settingsRepository.isFillAssistEnabled } returns false
+    fun `sync returns success and does nothing when fill assist is disabled in settings`() =
+        runTest {
+            every { settingsRepository.isFillAssistEnabled } returns false
 
-        manager.syncIfNecessary()
+            manager.syncIfNecessary()
 
-        coVerify(exactly = 0) { fillAssistService.getManifest() }
-        verify(exactly = 0) { fillAssistDiskSource.storeFillAssistRules(any(), any()) }
-    }
+            coVerify(exactly = 0) { fillAssistService.getManifest() }
+            verify(exactly = 0) { fillAssistDiskSource.storeFillAssistRules(any(), any()) }
+        }
 
     @Test
     fun `sync returns success and does nothing when fillAssistRulesUrl is null`() = runTest {

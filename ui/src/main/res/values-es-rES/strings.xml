@@ -612,7 +612,10 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="forwarded_email_description">Generar un alias de correo electrónico con un servicio de reenvío externo.</string>
     <string name="accessibility_service_disclosure">Revelación del servicio de accesibilidad</string>
     <string name="accessibility_disclosure_text">Bitwarden utiliza el Servicio de Accesibilidad para buscar campos de inicio de sesión en aplicaciones y sitios web, establecer los identificadores de campo apropiados para introducir un nombre de usuario y contraseña cuando se encuentre una coincidencia para la aplicación o el sitio. No almacenamos ninguna de las informaciones presentadas por el servicio, tampoco intentamos controlar ningún elemento en pantalla más allá de la introducción de credenciales de texto.</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden ofrece un método de autocompletado opcional que utiliza el Servicio de Accesibilidad de Android para detectar campos de inicio de sesión en aplicaciones y sitios web. Si decides activarlo, Bitwarden identificará los campos correspondientes e introducirá tus credenciales cuando encuentre una coincidencia. No almacenamos ninguna información detectada por el servicio, y no controlamos ningún elemento en pantalla más allá de la introducción de credenciales.</string>
+    <string name="accessibility_disclosure_start_up_text_1">This notice is required before Bitwarden can offer accessibility-based autofill.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields. If you enable it, Bitwarden will identify the appropriate fields and fill in your credentials when a match is found.</string>
+    <string name="accessibility_disclosure_start_up_text_3">We don’t store any information about what’s onscreen while you use the Accessibility Service, and we don’t control any onscreen elements beyond credential entry.</string>
+    <string name="i_understand">I understand</string>
     <string name="accept">Aceptar</string>
     <string name="decline">Rechazar</string>
     <string name="login_request_has_already_expired">La solicitud de acceso ya ha caducado.</string>
@@ -1153,6 +1156,8 @@ cualquier problema.</string>
     <string name="no_items_imported">No se han importado elementos</string>
     <string name="no_items_received_from_the_selected_app">No se han recibido elementos de la aplicación seleccionada.</string>
     <string name="vault_sync_failed">Error en la sincronización de almacén la caja fuerte</string>
+    <string name="vault_sync_unsuccessful">Sync unsuccessful</string>
+    <string name="vault_sync_failed_description">We couldn’t sync your vault with the server. Your vault may not reflect your latest changes. You can try again now or it will sync automatically later.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Tus elementos se han importado correctamente, pero no serán visibles en tu caja fuerte hasta que se realice la sincronización.</string>
     <string name="there_was_a_problem_importing_your_items">Ha habido un problema al importar tus elementos. Inténtalo de nuevo. Si el problema persiste, ponte en contacto con el servicio de asistencia.</string>
     <string name="saving_items">Guardando elementos…</string>
@@ -1213,6 +1218,7 @@ cualquier problema.</string>
     <string name="item_moved_to_archived">Item moved to archive</string>
     <string name="item_moved_to_vault">Elemento trasladado a la caja fuerte</string>
     <string name="archiving_items_is_a_premium_feature">El archivado de elementos es una funcionalidad Premium. Tu plan actual no incluye acceso a esta función.</string>
+    <string name="totp_is_a_premium_feature">Authenticator key (TOTP) is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Mejorar a premium</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Para administrar tu suscripción Premium, tendrás que iniciar sesión en tu caja fuerte web en un ordenador.</string>
@@ -1311,11 +1317,13 @@ cualquier problema.</string>
     <string name="subscription_status_expired">Caducó</string>
     <string name="subscription_status_past_due">Past due</string>
     <string name="subscription_status_paused">En pausa</string>
+    <string name="subscription_status_unpaid">Unpaid</string>
     <string name="subscription_status_update_payment">Update payment</string>
     <string name="subscription_status_pending_cancellation">Pendiente de cancelación</string>
     <string name="subscription_pending_cancellation_description">Su suscripción está programada para cancelar el <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Puede reinstalarla en cualquier momento antes de esa fecha.</string>
     <string name="premium_next_charge_summary">El siguiente cargo es por <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD que vence el <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
     <string name="subscription_canceled_description">Tu suscripción ha sido cancelada en <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Suscríbete para seguir usando funciones premium.</string>
+    <string name="subscription_unpaid_description">Your subscription was suspended on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. To reactivate, please resolve your past due invoices.</string>
     <string name="subscription_update_payment_description">No pudimos procesar tu pago. Actualiza tu pago antes de que tu suscripción termine el <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Tienes un período de gracia de <annotation arg="0">%1$d</annotation> día desde la fecha de caducidad de tu suscripción. Por favor, resuelva el importe vencido por <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
@@ -1327,7 +1335,6 @@ cualquier problema.</string>
     <string name="loading_portal">Cargando portal…</string>
     <string name="portal_error">Algo salió mal</string>
     <string name="trouble_loading_portal">Tuvimos problemas al cargar el portal de gestión, así que inténtelo de nuevo.</string>
-    <string name="subscription_error">Error de suscripción</string>
     <string name="trouble_loading_subscription">No pudimos cargar los datos de tu suscripción. Por favor, inténtalo de nuevo.</string>
     <string name="view_bank_account">Ver cuenta bancaria</string>
     <string name="view_license">Ver licencia</string>

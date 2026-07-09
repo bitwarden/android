@@ -263,6 +263,7 @@ class FakeSettingsDiskSource(
         storedDisableAutofillSavePrompt.remove(userId)
         storedPullToRefreshEnabled.remove(userId)
         storedInlineAutofillEnabled.remove(userId)
+        storedFillAssistEnabled.remove(userId)
         storedBlockedAutofillUris.remove(userId)
         storedClearClipboardFrequency.remove(userId)
 

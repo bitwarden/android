@@ -45,6 +45,7 @@ sealed class FlagKey<out T : Any> {
                 DebugDisableSelfHostPremiumCheck,
                 FillAssistTargetingRules,
                 PoliciesInAcceptedState,
+                FedRamp,
             )
         }
     }
@@ -167,6 +168,14 @@ sealed class FlagKey<out T : Any> {
      */
     data object PoliciesInAcceptedState : FlagKey<Boolean>() {
         override val keyName: String get() = "pm-34145-policies-in-accepted-state"
+        override val defaultValue: Boolean get() = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the FedRAMP feature.
+     */
+    data object FedRamp : FlagKey<Boolean>() {
+        override val keyName: String get() = "fedramp-gov-region"
         override val defaultValue: Boolean get() = false
     }
 

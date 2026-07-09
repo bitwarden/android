@@ -608,7 +608,10 @@
     <string name="forwarded_email_description">使用外部转发服务生成电子邮箱别名。</string>
     <string name="accessibility_service_disclosure">无障碍服务声明</string>
     <string name="accessibility_disclosure_text">Bitwarden 使用无障碍服务在 App 和网站中搜索登录字段，当找到与 App 或网站相匹配的用户名 &amp; 密码时，建立适当的字段 ID 以输入它们。我们不会通过此服务存储提供给我们的任何信息，也不会尝试控制除凭据文本输入之外的任何屏幕元素。</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden 提供一种可选的自动填充方式，该方式使用 Android 无障碍服务检测 App 和网站中的登录字段。启用后，Bitwarden 将自动识别相应字段，并在找到匹配的项目时自动填入您的凭据。我们不会存储此服务获取到的任何信息，也不会控制除凭据输入之外的任何屏幕元素。</string>
+    <string name="accessibility_disclosure_start_up_text_1">在 Bitwarden 提供基于无障碍的自动填充之前，必须先展示此声明。</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden 提供一种可选的自动填充方式，即使用 Android 的无障碍服务来检测登录字段。启用后，当找到匹配字段时，Bitwarden 将识别相应的字段并填充您的凭据。</string>
+    <string name="accessibility_disclosure_start_up_text_3">在您使用无障碍服务时，我们不会存储屏幕上的任何信息，也不会控制除凭据输入之外的任何屏幕元素。</string>
+    <string name="i_understand">我明白</string>
     <string name="accept">接受</string>
     <string name="decline">拒绝</string>
     <string name="login_request_has_already_expired">登录请求已过期。</string>
@@ -1143,6 +1146,8 @@
     <string name="no_items_imported">未导入任何项目</string>
     <string name="no_items_received_from_the_selected_app">没有从所选 App 接收到任何项目。</string>
     <string name="vault_sync_failed">密码库同步失败</string>
+    <string name="vault_sync_unsuccessful">同步失败</string>
+    <string name="vault_sync_failed_description">我们无法将您的密码库与服务器同步。您的密码库可能无法反映您的最新更改。您可以现在重试，或稍后它将自动同步。</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">您的项目已成功导入，但在执行同步之前，它们不会显示在您的密码库中。</string>
     <string name="there_was_a_problem_importing_your_items">导入您的项目时出现问题。请重试。如果问题仍然存在，请联系支持。</string>
     <string name="saving_items">正在保存项目…</string>
@@ -1202,6 +1207,7 @@
     <string name="item_moved_to_archived">项目已移动到归档</string>
     <string name="item_moved_to_vault">项目已移动到密码库</string>
     <string name="archiving_items_is_a_premium_feature">归档项目是高级版功能。您的当前方案不包含对此功能的访问权限。</string>
+    <string name="totp_is_a_premium_feature">验证器密钥 (TOTP) 是高级版功能。您的当前方案不包含对此功能的访问权限。</string>
     <string name="upgrade_to_premium">升级到高级版</string>
     <string name="plan">方案</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">要管理您的高级版订阅，您需要在计算机上登录到您的网页密码库。</string>
@@ -1281,7 +1287,7 @@
     <string name="see_upcoming_codes_in_the_list">查看列表中的后续代码</string>
     <string name="next_code_x">下一个代码，%1$s</string>
     <string name="archive_item">归档项目</string>
-    <string name="once_archived_this_item_will_be_excluded">归档后，此项目将被排除在一般搜索结果和自动填充建议之外。</string>
+    <string name="once_archived_this_item_will_be_excluded">归档后，此项目将被排除在搜索结果和自动填充建议之外。</string>
     <string name="pricing_unavailable">定价不可用</string>
     <string name="current_plan">当前方案</string>
     <string name="premium_plan_name">高级版</string>
@@ -1300,11 +1306,13 @@
     <string name="subscription_status_expired">已过期</string>
     <string name="subscription_status_past_due">逾期未支付</string>
     <string name="subscription_status_paused">已暂停</string>
+    <string name="subscription_status_unpaid">未支付</string>
     <string name="subscription_status_update_payment">更新付款信息</string>
     <string name="subscription_status_pending_cancellation">待取消</string>
     <string name="subscription_pending_cancellation_description">您的订阅将于 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 取消。在此日期之前，您可以随时恢复订阅。</string>
     <string name="premium_next_charge_summary">您的下一笔费用为 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD，到期日期为 <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>。</string>
     <string name="subscription_canceled_description">您的订阅被取消于 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>。重新订阅以继续使用高级版功能。</string>
+    <string name="subscription_unpaid_description">您的订阅被暂停于 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>。要重新激活，请处理逾期未支付的账单。</string>
     <string name="subscription_update_payment_description">我们无法处理您的付款。请在 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 您的订阅结束前更新您的付款方式。</string>
     <plurals name="subscription_past_due_description">
         <item quantity="other">从您的订阅到期之日起，您有 <annotation arg="0">%1$d</annotation> 天的宽限期。请在 <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation> 之前处理逾期未支付的款项。</item>
@@ -1315,7 +1323,6 @@
     <string name="loading_portal">正在加载门户…</string>
     <string name="portal_error">出错了</string>
     <string name="trouble_loading_portal">加载管理门户时出现问题，请重试。</string>
-    <string name="subscription_error">订阅错误</string>
     <string name="trouble_loading_subscription">我们无法加载您的订阅详细信息。请重试。</string>
     <string name="view_bank_account">查看银行账户</string>
     <string name="view_license">查看驾驶证</string>

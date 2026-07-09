@@ -91,7 +91,9 @@ class AutofillParserTests {
         } answers {
             mutableFillAssistFlagFlow.value
         }
-        every { getFeatureFlagFlow(FlagKey.ManageDevices) } returns mutableFillAssistFlagFlow
+        every {
+            getFeatureFlagFlow(FlagKey.FillAssistTargetingRules)
+        } returns mutableFillAssistFlagFlow
     }
 
     private var mockIsInlineAutofillEnabled = true

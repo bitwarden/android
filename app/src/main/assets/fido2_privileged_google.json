@@ -891,6 +891,18 @@
           }
         ]
       }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "net.waterfox.android.release",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "29:39:99:7A:2D:8F:07:30:3C:EB:37:AD:68:10:AF:EF:0B:DA:71:0B:E2:11:64:76:E3:52:5A:73:79:EC:2E:1A"
+          }
+        ]
+      }
     }
   ]
 }

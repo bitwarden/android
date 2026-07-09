@@ -179,6 +179,7 @@ private fun OrganizationStatusType.toSdkOrganizationUserStatusType(): Organizati
         OrganizationStatusType.INVITED -> OrganizationUserStatusType.INVITED
         OrganizationStatusType.ACCEPTED -> OrganizationUserStatusType.ACCEPTED
         OrganizationStatusType.CONFIRMED -> OrganizationUserStatusType.CONFIRMED
+        OrganizationStatusType.STAGED -> OrganizationUserStatusType.STAGED
     }
 
 private fun OrganizationType.toSdkOrganizationUserType(): OrganizationUserType =

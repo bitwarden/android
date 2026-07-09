@@ -267,6 +267,7 @@ class SettingsDiskSourceImpl(
         storeAutofillSavePromptDisabled(userId = userId, isAutofillSavePromptDisabled = null)
         storePullToRefreshEnabled(userId = userId, isPullToRefreshEnabled = null)
         storeInlineAutofillEnabled(userId = userId, isInlineAutofillEnabled = null)
+        storeFillAssistEnabled(userId = userId, isFillAssistEnabled = null)
         storeBlockedAutofillUris(userId = userId, blockedAutofillUris = null)
         storeLastSyncTime(userId = userId, lastSyncTime = null)
         storeClearClipboardFrequencySeconds(userId = userId, frequency = null)
