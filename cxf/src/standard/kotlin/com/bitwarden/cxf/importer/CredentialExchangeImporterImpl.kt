@@ -24,8 +24,6 @@ internal class CredentialExchangeImporterImpl(
         ProviderEventsManager.create(activity),
 ) : CredentialExchangeImporter {
 
-    override fun isSupported(): Boolean = true
-
     override suspend fun importCredentials(
         credentialTypes: List<String>,
     ): ImportCredentialsSelectionResult = try {

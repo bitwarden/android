@@ -16,8 +16,6 @@ internal class CredentialExchangeImporterImpl(
     activity: Context,
 ) : CredentialExchangeImporter {
 
-    override fun isSupported(): Boolean = false
-
     override suspend fun importCredentials(
         credentialTypes: List<String>,
     ): ImportCredentialsSelectionResult = ImportCredentialsSelectionResult.Failure(

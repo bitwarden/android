@@ -13,12 +13,7 @@ class CredentialExchangeImporterTest {
     private val importer = CredentialExchangeImporterImpl(
         activity = mockk<Activity>(relaxed = true),
     )
-
-    @Test
-    fun `isSupported should return false`() {
-        assertFalse(importer.isSupported())
-    }
-
+    
     @Test
     fun `importCredentials should return Failure`() = runTest {
         val result = importer.importCredentials(listOf("basic-auth"))
