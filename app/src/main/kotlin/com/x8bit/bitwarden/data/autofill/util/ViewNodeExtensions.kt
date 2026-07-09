@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.autofill.util
 
 import android.app.assist.AssistStructure
 import android.view.View
+import android.view.autofill.AutofillId
 import android.widget.EditText
 import androidx.annotation.VisibleForTesting
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
@@ -53,15 +54,32 @@ fun AssistStructure.ViewNode.toAutofillView(
     parentWebsite: String?,
 ): AutofillView? {
     val nonNullAutofillId = this.autofillId ?: return null
-    if (this.supportedAutofillHint == null && !this.isInputField) return null
+    val hint = this.supportedAutofillHint
+    val isInput = this.isInputField
+    if (hint == null && !isInput) return null
+
+    // When a container (autofillType=NONE) is classified with a semantic hint, the container
+    // itself cannot receive an autofill value. Redirect to the first autofillable child so the
+    // fill reaches the inner EditText instead of silently failing on the wrapper.
+    // The child's autofillType must also be used — the container's type=0 (NONE) would cause
+    // buildFilledItemOrNull to return null and drop the field from the fill dataset entirely.
+    val autofillableChild =
+        if (hint != null && autofillType == View.AUTOFILL_TYPE_NONE) {
+            findFirstAutofillableChild()
+        } else {
+            null
+        }
+    val effectiveAutofillId = autofillableChild?.autofillId ?: nonNullAutofillId
+    val effectiveAutofillType = autofillableChild?.autofillType ?: autofillType
+
     val autofillOptions = this
         .autofillOptions
         .orEmpty()
         .map { it.toString() }
     val autofillViewData = AutofillView.Data(
-        autofillId = nonNullAutofillId,
+        autofillId = effectiveAutofillId,
         autofillOptions = autofillOptions,
-        autofillType = this.autofillType,
+        autofillType = effectiveAutofillType,
         isFocused = this.isFocused,
         textValue = this.autofillValue?.extractTextValue(),
         hasPasswordTerms = this.hasPasswordTerms(),
@@ -70,8 +88,22 @@ fun AssistStructure.ViewNode.toAutofillView(
     return buildAutofillView(
         autofillOptions = autofillOptions,
         autofillViewData = autofillViewData,
-        autofillHint = this.supportedAutofillHint,
+        autofillHint = hint,
     )
+}
+
+private data class AutofillableChild(val autofillId: AutofillId, val autofillType: Int)
+
+private fun AssistStructure.ViewNode.findFirstAutofillableChild(): AutofillableChild? {
+    for (i in 0 until childCount) {
+        val child = getChildAt(i)
+        if (child.autofillType == View.AUTOFILL_TYPE_TEXT) {
+            val id = child.autofillId ?: continue
+            return AutofillableChild(autofillId = id, autofillType = child.autofillType)
+        }
+        child.findFirstAutofillableChild()?.let { return it }
+    }
+    return null
 }
 
 /**
