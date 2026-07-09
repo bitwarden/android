@@ -315,12 +315,13 @@ private fun AssistStructure.ViewNode.traverse(
                     .filter { view ->
                         val id = view.data.autofillId
                         if (id in claimedAutofillIds) {
-                            return@filter false
-                        }
-                        if (view !is AutofillView.Unused) {
+                            false
+                        } else if (view !is AutofillView.Unused) {
                             claimedAutofillIds.add(id)
+                            true
+                        } else {
+                            true
                         }
-                        true
                     }
                     .forEach(mutableAutofillViewList::add)
                 viewNodeTraversalData.ignoreAutofillIds

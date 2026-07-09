@@ -85,12 +85,11 @@ fun AssistStructure.ViewNode.toAutofillView(
         hasPasswordTerms = this.hasPasswordTerms(),
         website = this.website ?: parentWebsite,
     )
-    val view = buildAutofillView(
+    return buildAutofillView(
         autofillOptions = autofillOptions,
         autofillViewData = autofillViewData,
         autofillHint = hint,
     )
-    return view
 }
 
 private data class AutofillableChild(val autofillId: AutofillId, val autofillType: Int)
