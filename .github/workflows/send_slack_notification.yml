@@ -40,7 +40,7 @@ jobs:
           COMMIT_URL: ${{ github.event.head_commit.url }}
           COMMIT_SHA: ${{ github.event.head_commit.id }}
         run: |
-          echo "text=:cherry-pick: <${COMMIT_URL}|${COMMIT_SHA}> into *${GITHUB_REF_NAME}*\ncc <!subteam^S022CDR7W2Z> <@U06538MSPJP>" >> "$GITHUB_OUTPUT"
+          echo "text=:cherry-pick: <${COMMIT_URL}|${COMMIT_SHA}> into *${GITHUB_REF_NAME}*\ncc <!subteam^S0BG74ZATUM> <@U06538MSPJP>" >> "$GITHUB_OUTPUT"
 
       - name: Send slack notification
         uses: slackapi/slack-github-action@af78098f536edbc4de71162a307590698245be95 # v3.0.1
