@@ -49,6 +49,7 @@ data class EnvironmentUrlDataJson(
         get() = when (base) {
             DEFAULT_US.base -> EnvironmentRegion.UNITED_STATES
             DEFAULT_EU.base -> EnvironmentRegion.EUROPEAN_UNION
+            DEFAULT_FED_RAMP.base -> EnvironmentRegion.FED_RAMP
             else -> {
                 if (base.contains(BITWARDEN_INTERNAL_DOMAIN)) {
                     EnvironmentRegion.INTERNAL
@@ -106,5 +107,11 @@ data class EnvironmentUrlDataJson(
             webVault = "https://vault.bitwarden.eu",
             events = "https://events.bitwarden.eu",
         )
+
+        /**
+         * Default [EnvironmentUrlDataJson] for the FedRAMP environment.
+         */
+        val DEFAULT_FED_RAMP: EnvironmentUrlDataJson =
+            EnvironmentUrlDataJson(base = "https://vault.bitwarden-gov.com")
     }
 }

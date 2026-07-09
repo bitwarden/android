@@ -14,8 +14,8 @@
 
 ## Compatibility
 
-- **Minimum SDK**: 28 (Android 9)
-- **Target SDK**: 36 (Android 16)
+- **Minimum SDK**: 29 (Android 10)
+- **Target SDK**: 37 (Android 17)
 
 ## Building
 

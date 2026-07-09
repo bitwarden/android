@@ -50,6 +50,7 @@ class EnvironmentViewModel @Inject constructor(
         val environmentUrlData = when (val environment = environmentRepository.environment) {
             Environment.Us,
             Environment.Eu,
+            Environment.FedRamp,
                 -> EnvironmentUrlDataJson(base = "")
 
             is Environment.SelfHosted -> environment.environmentUrlData

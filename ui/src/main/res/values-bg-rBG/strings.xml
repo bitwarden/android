@@ -612,7 +612,10 @@
     <string name="forwarded_email_description">Създайте псевдоним на е-поща с външна услуга за препращане.</string>
     <string name="accessibility_service_disclosure">Използване на услугата за достъпност</string>
     <string name="accessibility_disclosure_text">Битуорден използва услугата за достъпност, за да разпознава полета за вписване в приложенията и уеб сайтовете и, ако в трезора има съвпадение, да попълва потребителското име и паролата. Никаква информация, предоставена ни от услугата, не се запазва, както и не правим опити да контролираме елементите на екрана, освен въвеждането на данните за идентификация.</string>
-    <string name="accessibility_disclosure_start_up_text">Битуорден предлага и начин за автоматично попълване, който използва услугата за улеснен достъп на Андроид за разпознаване на полетата за вписване в приложения и уеб сайтове. Ако решите да включите това, Битуорден ще намира подходящите полета и ще въвежда данните Ви, когато открие съвпадение. Ние не съхраняваме никаква информация получена от услугата, нито можем да управляваме елементите на екрана, освен тези, в които се въвеждат данните за вписване.</string>
+    <string name="accessibility_disclosure_start_up_text_1">Тази забележка е задължителна, преди Битуорден да може да предложи автоматично попълване основавано на системата за улеснен достъп.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Битуорден предлага и начин за автоматично попълване, който използва системата за улеснен достъп, за да разпознава полетата за вписване. Ако включите това, Битуорден ще разпознава правилните полета и ще попълва данните Ви, когато открие съвпадение.</string>
+    <string name="accessibility_disclosure_start_up_text_3">Не се запазва никаква информация относно това, което се вижда на екрана, когато се ползва системата за улеснен достъп. Също така, ние не контролираме никакви елементи по екрана, освен тези за въвеждането на данните за вписване.</string>
+    <string name="i_understand">Разбирам</string>
     <string name="accept">Приемане</string>
     <string name="decline">Отказване</string>
     <string name="login_request_has_already_expired">Заявката за вписване вече е изтекла.</string>
@@ -1152,6 +1155,8 @@
     <string name="no_items_imported">Не бяха внесени никакви елементи</string>
     <string name="no_items_received_from_the_selected_app">Не са получени никакви данни от избраното приложение.</string>
     <string name="vault_sync_failed">Синхронизирането на трезора беше неуспешно</string>
+    <string name="vault_sync_unsuccessful">Синхронизирането беше неуспешно</string>
+    <string name="vault_sync_failed_description">Трезорът не беше синхронизиран със сървъра. Последните промени може да не се виждат в трезора. По-късно ще се направи нов опит за синхронизиране, но може да опитате отново и още сега.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Данните бяха внесени успешно, но трезорът не може да бъде синхронизиран. Внесените елементи няма да бъдат видими в трезора, докато не се извърши синхронизиране.</string>
     <string name="there_was_a_problem_importing_your_items">Имаше проблем при внасянето на данните. Моля, опитайте отново. Ако това се повтори, свържете се с поддръжката.</string>
     <string name="saving_items">Запазване на елементите…</string>
@@ -1212,13 +1217,14 @@
     <string name="item_moved_to_archived">Елементът е преместен в архива</string>
     <string name="item_moved_to_vault">Елементът е преместен в трезора</string>
     <string name="archiving_items_is_a_premium_feature">Архивирането на елементи е платена функционалност. Текущият Ви план не включва достъп до нея.</string>
+    <string name="totp_is_a_premium_feature">Удостоверителният ключ (TOTP) е платена функционалност. Текущият Ви план не включва достъп до нея.</string>
     <string name="upgrade_to_premium">Надградете до Платения план</string>
     <string name="plan">План</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">За да управлявате своя платен абонамент, ще трябва да се впишете в трезора си чрез уеб браузър на компютър.</string>
     <string name="unlock_advanced_security_features">Отключване на разширените функционалности по сигурността</string>
-    <string name="your_subscription_needs_attention">Your subscription needs attention</string>
-    <string name="check_your_plan_for_details">Check your plan for details.</string>
-    <string name="view_plan">View plan</string>
+    <string name="your_subscription_needs_attention">Абонаментът Ви се туждае от внимание</string>
+    <string name="check_your_plan_for_details">Проверете плана си за подробности.</string>
+    <string name="view_plan">Преглед на плана</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Платеният план предоставя повече инструменти за защита и управление.</string>
     <string name="this_item_is_archived">Този елемент е архивиран.</string>
     <string name="introducing_archive">Представяме архива</string>
@@ -1310,11 +1316,13 @@
     <string name="subscription_status_expired">Изтекъл</string>
     <string name="subscription_status_past_due">Просрочено</string>
     <string name="subscription_status_paused">На пауза</string>
+    <string name="subscription_status_unpaid">Дължимо</string>
     <string name="subscription_status_update_payment">Актуализиране на плащанията</string>
     <string name="subscription_status_pending_cancellation">Предстоящо прекратяване на абонамента</string>
     <string name="subscription_pending_cancellation_description">Абонаментът Ви по план ще бъде преустановен на <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.. Можете да го подновите по всяко време преди това.</string>
     <string name="premium_next_charge_summary">Следващото плащане ще бъде %1$s USD, на дата %2$s.</string>
     <string name="subscription_canceled_description">Абонаментът беше прекратен на %1$s. Ако искате да продължите да ползвате предимствата на платения план, ще трябва да се абонирате отново.</string>
+    <string name="subscription_unpaid_description">Вашият абонамент беше прекъснат на <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. За да го подновите, ще трябва да платите старите си задължения.</string>
     <string name="subscription_update_payment_description">Плащането не беше успешно. Обновете плащането си, преди абонаментът да бъде прекратен на <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">След като просрочите периода на абонамента си, разполагате с още %1$d ден. Моля, заплатете старите фактури до %2$s.</item>
@@ -1326,7 +1334,6 @@
     <string name="loading_portal">Зареждане на портала…</string>
     <string name="portal_error">Нещо се обърка</string>
     <string name="trouble_loading_portal">Имаше проблем при зареждането на портала за управление. Опитайте отново.</string>
-    <string name="subscription_error">Грешка в абонамента</string>
     <string name="trouble_loading_subscription">Зареждането на подробностите за абонамента на беше успешно. Опитайте отново.</string>
     <string name="view_bank_account">Преглед на банковата сметка</string>
     <string name="view_license">Преглед на лиценза</string>

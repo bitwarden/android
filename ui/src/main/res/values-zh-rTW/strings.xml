@@ -609,7 +609,10 @@
     <string name="forwarded_email_description">使用外部轉寄服務產生一個電子郵件別名。</string>
     <string name="accessibility_service_disclosure">無障礙服務聲明</string>
     <string name="accessibility_disclosure_text">Bitwarden 使用無障礙服務搜寻應用程式和網站中的登入欄位，然後建立適當的欄位 ID，以便在找到應用程式或網站的匹配項目時輸入用戶名和密碼。 我們不會存儲此服務提供給我們的任何資訊，也不會試圖控制憑證文字輸入以外的任何荧幕元素。</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden 提供一種可選的自動填入方式，透過 Android 的無障礙服務偵測應用程式與網站中的登入欄位。若您選擇啟用，Bitwarden 會在找到相符項目時識別適當欄位並填入您的登入憑證。我們不會儲存此服務所觀察到的任何資訊，也不會控制除輸入憑證以外的任何畫面元素。</string>
+    <string name="accessibility_disclosure_start_up_text_1">This notice is required before Bitwarden can offer accessibility-based autofill.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields. If you enable it, Bitwarden will identify the appropriate fields and fill in your credentials when a match is found.</string>
+    <string name="accessibility_disclosure_start_up_text_3">We don’t store any information about what’s onscreen while you use the Accessibility Service, and we don’t control any onscreen elements beyond credential entry.</string>
+    <string name="i_understand">I understand</string>
     <string name="accept">接受</string>
     <string name="decline">拒絕</string>
     <string name="login_request_has_already_expired">登入要求已逾期。</string>
@@ -1143,6 +1146,8 @@
     <string name="no_items_imported">未匯入任何項目</string>
     <string name="no_items_received_from_the_selected_app">未從所選應用程式接收到項目。</string>
     <string name="vault_sync_failed">密碼庫同步失敗</string>
+    <string name="vault_sync_unsuccessful">Sync unsuccessful</string>
+    <string name="vault_sync_failed_description">We couldn’t sync your vault with the server. Your vault may not reflect your latest changes. You can try again now or it will sync automatically later.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">您的項目已成功匯入，但在執行同步之前，不會顯示於您的密碼庫中。</string>
     <string name="there_was_a_problem_importing_your_items">匯入項目時發生問題。請再試一次。若問題持續，請聯絡支援。</string>
     <string name="saving_items">儲存物件</string>
@@ -1202,6 +1207,7 @@
     <string name="item_moved_to_archived">項目已移至封存</string>
     <string name="item_moved_to_vault">項目已移至密碼庫</string>
     <string name="archiving_items_is_a_premium_feature">封存項目為進階版功能。您目前的方案不包含此功能。</string>
+    <string name="totp_is_a_premium_feature">Authenticator key (TOTP) is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">升級到 Premium</string>
     <string name="plan">方案</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">若要管理您的 Premium 訂閱，您需要在電腦上登入您的網頁保管庫。</string>
@@ -1300,11 +1306,13 @@
     <string name="subscription_status_expired">已逾期</string>
     <string name="subscription_status_past_due">逾期</string>
     <string name="subscription_status_paused">已暫停</string>
+    <string name="subscription_status_unpaid">Unpaid</string>
     <string name="subscription_status_update_payment">更新付款方式</string>
     <string name="subscription_status_pending_cancellation">待取消</string>
     <string name="subscription_pending_cancellation_description">您的訂閱預計將於 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 取消。在此之前，您隨時都可以恢復訂閱。</string>
     <string name="premium_next_charge_summary">您的下一筆扣款為 %1$s USD，將於 %2$s 到期。</string>
     <string name="subscription_canceled_description">您的訂閱已於 %1$s 取消。重新訂閱以繼續使用 Premium 功能。</string>
+    <string name="subscription_unpaid_description">Your subscription was suspended on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. To reactivate, please resolve your past due invoices.</string>
     <string name="subscription_update_payment_description">我們無法處理您的付款。請在您的訂閱於 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 結束前更新付款方式。</string>
     <plurals name="subscription_past_due_description">
         <item quantity="other">自訂閱到期日起，您有 %1$d 天的寬限期。請於 %2$s 前完成逾期款項付款。</item>
@@ -1315,7 +1323,6 @@
     <string name="loading_portal">正在載入入口網站…</string>
     <string name="portal_error">出了點問題</string>
     <string name="trouble_loading_portal">載入管理入口網站時發生問題，請再試一次。</string>
-    <string name="subscription_error">訂閱錯誤</string>
     <string name="trouble_loading_subscription">無法載入您的訂閱詳細資訊。請再試一次。</string>
     <string name="view_bank_account">檢視銀行帳戶</string>
     <string name="view_license">檢視駕照</string>

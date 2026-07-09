@@ -27,6 +27,7 @@
     <string name="restart_onboarding_carousel">Show Onboarding Carousel</string>
     <string name="restart_onboarding_carousel_details">This will force the change to app state which will cause the first time carousel to show. The carousel will continue to show for any \"new\" account until a login is completed. May need to exit debug menu manually.</string>
     <string name="reset_coach_mark_tour_status">Reset all coach mark tours</string>
+    <string name="reset_accessibility_disclaimer">Reset accessibility disclaimer</string>
     <string name="generate_crash">Generate crash</string>
     <string name="generate_error_report">Generate error report</string>
     <string name="error_reports">Error reports</string>
@@ -55,6 +56,7 @@
     <string name="fill_assist_targeting_rules">Fill Assist Targeting Rules</string>
     <string name="debug_disable_self_host_premium_check">Debug: Disable self-host premium check</string>
     <string name="policies_in_accepted_state">Policies in accepted state</string>
+    <string name="fed_ramp">FedRAMP</string>
 
     <!-- endregion Debug Menu -->
 </resources>

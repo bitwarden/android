@@ -256,7 +256,7 @@
     <string name="june">Junho</string>
     <string name="last_name">Sobrenome</string>
     <string name="full_name">Nome completo</string>
-    <string name="license_number">Número da licença</string>
+    <string name="license_number">Número da CNH</string>
     <string name="march">Março</string>
     <string name="may">Maio</string>
     <string name="middle_name">Nome do meio</string>
@@ -611,7 +611,10 @@ toque em Adicionar TOTP para armazenar a chave de forma segura</string>
     <string name="forwarded_email_description">Gere um alias de e-mail com um serviço de encaminhamento externo.</string>
     <string name="accessibility_service_disclosure">Comunicado sobre o serviço de acessibilidade</string>
     <string name="accessibility_disclosure_text">O Bitwarden utiliza o Serviço de Acessibilidade para procurar campos de autenticação em aplicativos e sites, e então identificar os IDs de campo apropriados para digitar um nome de usuário e senha quando uma correspondência para o aplicativo ou site for encontrada. Não armazenamos nenhuma das informações que nos são apresentadas pelo serviço, nem fazemos qualquer tentativa de controlar quaisquer elementos na tela além da entrada de credenciais em texto.</string>
-    <string name="accessibility_disclosure_start_up_text">O Bitwarden oferece um método opcional de preenchimento automático que utiliza o Serviço de Acessibilidade do Android para detectar campos de login em aplicativos e sites. Se você optar por ativá-lo, o Bitwarden identificará os campos apropriados e inserirá suas credenciais quando for encontrada uma correspondência. Não armazenamos nenhuma informação captada pelo serviço e não controlamos nenhum elemento na tela além da inserção das credenciais.</string>
+    <string name="accessibility_disclosure_start_up_text_1">Esse aviso é necessário antes que o Bitwarden possa oferecer o preenchimento automático baseado em acessibilidade.</string>
+    <string name="accessibility_disclosure_start_up_text_2">O Bitwarden oferece um método de preenchimento automático opcional que usa o Serviço de Acessibilidade do Android para detectar campos de autenticação. Se quiser ativá-lo, o Bitwarden identificará os campos apropriados e preencherá seus credenciais quando uma correspondência for encontrada.</string>
+    <string name="accessibility_disclosure_start_up_text_3">Não armazenamos nenhuma informação sobre o que está na tela enquanto usa o Serviço de Acessibilidade, e não controlamos quaisquer elementos na tela além da digitação de credenciais.</string>
+    <string name="i_understand">Entendo</string>
     <string name="accept">Aceitar</string>
     <string name="decline">Recusar</string>
     <string name="login_request_has_already_expired">A solicitação de acesso já expirou.</string>
@@ -883,7 +886,7 @@ Deseja trocar para esta conta?</string>
     <string name="copy_passport_number">Copiar número do passaporte</string>
     <string name="copy_first_name">Copiar primeiro nome</string>
     <string name="copy_last_name">Copiar sobrenome</string>
-    <string name="copy_license_number">Copiar número da licença</string>
+    <string name="copy_license_number">Copiar número da CNH</string>
     <string name="copy_middle_name">Copiar nome do meio</string>
     <string name="copy_email">Copiar e-mail</string>
     <string name="copy_phone">Copiar número de telefone</string>
@@ -1149,6 +1152,8 @@ Deseja trocar para esta conta?</string>
     <string name="no_items_imported">Nenhum item importado</string>
     <string name="no_items_received_from_the_selected_app">Nenhum item recebido do aplicativo selecionado.</string>
     <string name="vault_sync_failed">Falha na sincronização do cofre</string>
+    <string name="vault_sync_unsuccessful">Falha ao sincronizar</string>
+    <string name="vault_sync_failed_description">Não foi possível sincronizar seu cofre com o servidor. O seu cofre pode não refletir as últimas alterações. Você pode tentar novamente agora ou será sincronizado automaticamente mais tarde.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Seus itens foram importados com sucesso, mas eles não estarão visíveis no seu cofre até que a sincronização seja concluída.</string>
     <string name="there_was_a_problem_importing_your_items">Houve um problema ao importar seus itens. Tente novamente. Se o problema persistir, contate o suporte.</string>
     <string name="saving_items">Salvando itens…</string>
@@ -1209,13 +1214,14 @@ Deseja trocar para esta conta?</string>
     <string name="item_moved_to_archived">Item movido para o arquivo</string>
     <string name="item_moved_to_vault">Item movido para o cofre</string>
     <string name="archiving_items_is_a_premium_feature">O arquivamento de itens é um recurso do Premium. O seu plano atual não inclui o acesso a este recurso.</string>
+    <string name="totp_is_a_premium_feature">A chave do autenticador (TOTP) é um recurso do Premium. O seu plano atual não inclui o acesso a este recurso.</string>
     <string name="upgrade_to_premium">Fazer upgrade ao Premium</string>
     <string name="plan">Plano</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Para gerenciar sua assinatura Premium, você precisará entrar no seu cofre web em um computador.</string>
     <string name="unlock_advanced_security_features">Desbloqueie recursos avançados de segurança</string>
-    <string name="your_subscription_needs_attention">Your subscription needs attention</string>
-    <string name="check_your_plan_for_details">Check your plan for details.</string>
-    <string name="view_plan">View plan</string>
+    <string name="your_subscription_needs_attention">A sua assinatura requer atenção</string>
+    <string name="check_your_plan_for_details">Confira seu plano para mais detalhes.</string>
+    <string name="view_plan">Ver plano</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Um plano Premium te dá mais ferramentas para se manter seguro e em controle.</string>
     <string name="this_item_is_archived">Este item está arquivado.</string>
     <string name="introducing_archive">Apresentando o arquivo</string>
@@ -1300,36 +1306,37 @@ Deseja trocar para esta conta?</string>
     <string name="billing_rate_per_year">%1$s / ano</string>
     <string name="billing_rate_per_month">%1$s / mês</string>
     <string name="manage_plan">Gerenciar plano</string>
-    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Gerencie seu plano de assinatura no aplicativo da web do Bitwarden.</string>
+    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Gerencie seu plano no aplicativo web do Bitwarden.</string>
     <string name="cancel_premium">Cancelar Premium</string>
     <string name="subscription_status_active">Ativo</string>
     <string name="subscription_status_canceled">Cancelado</string>
     <string name="subscription_status_expired">Vencido</string>
     <string name="subscription_status_past_due">Atrasado</string>
     <string name="subscription_status_paused">Pausada</string>
+    <string name="subscription_status_unpaid">Não paga</string>
     <string name="subscription_status_update_payment">Atualizar pagamento</string>
     <string name="subscription_status_pending_cancellation">Cancelamento pendente</string>
-    <string name="subscription_pending_cancellation_description">Sua assinatura está agendada para cancelar em <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Você pode reativá-la a qualquer momento antes disso.</string>
-    <string name="premium_next_charge_summary">Sua próxima cobrança é de %1$s USD, para até %2$s.</string>
-    <string name="subscription_canceled_description">Sua assinatura foi cancelada em %1$s. Reinscreva-se para continuar usando os recursos do Premium.</string>
+    <string name="subscription_pending_cancellation_description">Sua assinatura está agendada para ser cancelada em <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Você pode restabelecê-la a qualquer momento antes disso.</string>
+    <string name="premium_next_charge_summary">Sua próxima cobrança é de <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD, para até <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
+    <string name="subscription_canceled_description">Sua assinatura foi cancelada em <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Reinscreva-se para continuar usando os recursos do Premium.</string>
+    <string name="subscription_unpaid_description">Sua assinatura foi suspensa em <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Para reativá-la, resolva suas faturas pendentes.</string>
     <string name="subscription_update_payment_description">Não foi possível processar seu pagamento. Atualize seu método de pagamento antes que sua assinatura termine em <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
-        <item quantity="one">Você tem um período de tolerância de %1$d dia desde a data de expiração da sua assinatura. Resolva as faturas em atraso até %2$s.</item>
-        <item quantity="other">Você tem um período de tolerância de %1$d dias desde a data de expiração da sua assinatura. Resolva as faturas em atraso até %2$s.</item>
+        <item quantity="one">Você tem um período de tolerância de <annotation arg="0">%1$d</annotation> dia desde a data de expiração da sua assinatura. Resolva as faturas em atraso até <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="other">Você tem um período de tolerância de <annotation arg="0">%1$d</annotation> dias desde a data de expiração da sua assinatura. Resolva as faturas em atraso até <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
     </plurals>
     <string name="subscription_paused_description">Sua assinatura foi pausada. Reinscreva-se para continuar com os recursos do Premium.</string>
-    <string name="subscription_expired_description">Sua assinatura expirou em <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Inscreva-se novamente para continuar usando os recursos Premium.</string>
+    <string name="subscription_expired_description">Sua assinatura expirou em <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Reinscreva-se para continuar usando os recursos do Premium.</string>
     <string name="loading_subscription">Carregando assinatura…</string>
     <string name="loading_portal">Carregando portal…</string>
     <string name="portal_error">Algo deu errado</string>
     <string name="trouble_loading_portal">Tivemos problemas carregando a página do portal de gerenciamento, tente novamente.</string>
-    <string name="subscription_error">Erro de assinatura</string>
     <string name="trouble_loading_subscription">Não foi possível carregar os detalhes da sua assinatura. Tente novamente.</string>
     <string name="view_bank_account">Ver conta bancária</string>
     <string name="view_license">Ver carteira de habilitação</string>
     <string name="view_passport">Ver passaporte</string>
     <string name="add_bank_account">Adicionar conta bancária</string>
-    <string name="add_license">Adicionar licença</string>
+    <string name="add_license">Adicionar habilitação</string>
     <string name="add_passport">Adicionar passaporte</string>
     <string name="edit_bank_account">Editar conta bancária</string>
     <string name="edit_license">Editar carteira de habilitação</string>
@@ -1366,7 +1373,7 @@ Deseja trocar para esta conta?</string>
     <string name="issuing_state">Estado de emissão</string>
     <string name="license_class">Classe da carteira de habilitação</string>
     <string name="surname">Sobrenome</string>
-    <string name="given_name">Nome</string>
+    <string name="given_name">Nome dado</string>
     <string name="date_of_birth">Data de nascimento</string>
     <string name="nationality">Nacionalidade</string>
     <string name="passport_type">Tipo do passaporte</string>
@@ -1375,7 +1382,7 @@ Deseja trocar para esta conta?</string>
     <string name="expiration_date">Data de validade</string>
     <string name="details">Detalhes</string>
     <string name="account_details">Detalhes da conta</string>
-    <string name="no_bank_accounts">Não há contas de banco no seu cofre.</string>
+    <string name="no_bank_accounts">Não há contas bancárias no seu cofre.</string>
     <string name="license_details">Detalhes da habilitação</string>
     <string name="licenses">Carteiras de habilitação</string>
     <string name="no_licenses">Não há carteiras de habilitação no seu cofre.</string>
@@ -1386,13 +1393,13 @@ Deseja trocar para esta conta?</string>
     <string name="birth_place">Local de nascimento</string>
     <string name="national_identification_number">Número da carteira de identidade nacional</string>
     <string name="copy_national_identification_number">Copiar número de identificação nacional</string>
-    <string name="access_your_local_network">Acesse sua rede local</string>
+    <string name="access_your_local_network">Acessar sua rede local</string>
     <string name="local_network_access_required">Acesso à rede local necessário</string>
-    <string name="ask_again_later">Pergunte novamente depois</string>
-    <string name="enable_local_network_access">Habilitar acesso à rede local</string>
+    <string name="ask_again_later">Perguntar novamente depois</string>
+    <string name="enable_local_network_access">Ativar acesso à rede local</string>
     <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">O Bitwarden precisa de acesso à rede local para sincronizar com o seu servidor. Sem esta permissão, o aplicativo não poderá se conectar.</string>
     <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Sem esta permissão, o Bitwarden não será capaz de se conectar e sincronizar com o seu servidor. Você pode ativar isso nas configurações do seu dispositivo.</string>
-    <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Sua solicitação foi interrompida porque o aplicativo precisa de acesso à rede local. Você pode habilitar essa função nas configurações do seu dispositivo.</string>
-    <string name="continue_to_stripe">Continuar para o Stripe?</string>
+    <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Sua solicitação foi interrompida porque o aplicativo precisa de acesso à rede local. Você pode ativar isso nas configurações do seu dispositivo.</string>
+    <string name="continue_to_stripe">Continuar no Stripe?</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Você será levado para o Stripe para gerenciar o cancelamento de sua assinatura.</string>
 </resources>

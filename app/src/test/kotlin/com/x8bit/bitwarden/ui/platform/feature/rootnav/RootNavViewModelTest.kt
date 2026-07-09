@@ -157,7 +157,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         isPremium = true,
                         isPremiumFromSelf = true,
                         isLoggedIn = false,
-                        isVaultUnlocked = false,
+                        isVaultUnlocked = true,
                         needsPasswordReset = true,
                         isBiometricsEnabled = false,
                         organizations = emptyList(),

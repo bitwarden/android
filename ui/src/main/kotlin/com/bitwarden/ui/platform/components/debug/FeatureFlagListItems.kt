@@ -39,6 +39,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.FillAssistTargetingRules,
     FlagKey.DebugDisableSelfHostPremiumCheck,
     FlagKey.PoliciesInAcceptedState,
+    FlagKey.FedRamp,
         -> {
         @Suppress("UNCHECKED_CAST")
         BooleanFlagItem(
@@ -101,4 +102,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.DebugDisableSelfHostPremiumCheck -> {
         stringResource(BitwardenString.debug_disable_self_host_premium_check)
     }
+
+    FlagKey.FedRamp -> stringResource(BitwardenString.fed_ramp)
 }

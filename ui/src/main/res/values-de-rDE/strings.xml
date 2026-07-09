@@ -611,7 +611,10 @@ Das Scannen erfolgt automatisch.</string>
     <string name="forwarded_email_description">Generiere ein E-Mail-Alias mit einem externen Weiterleitungsdienst.</string>
     <string name="accessibility_service_disclosure">Bedienungshilfen Offenlegung</string>
     <string name="accessibility_disclosure_text">Bitwarden verwendet die Bedienungshilfen, um nach Anmeldefeldern in Apps und auf Webseiten zu suchen und legt dann die entsprechenden Feld-IDs fest, um einen Benutzernamen und Passwort einzugeben, wenn eine Übereinstimmung mit der App oder der Seite gefunden wird. Wir speichern keine der Informationen, die uns der Dienst zur Verfügung stellt. Ebenso wenig versuchen wir beliebige Elemente auf dem Bildschirm außer der Texteingabe von Anmeldedaten zu kontrollieren.</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden bietet eine optionale Auto-Ausfüllen-Methode an, die den Android-Bedienungshilfendienst verwendet, um Anmeldefelder in Apps und Websites zu erkennen. Wenn du ihn aktivierst, wird Bitwarden die entsprechenden Felder identifizieren und deine Zugangsdaten eingeben, wenn eine Übereinstimmung gefunden wird. Wir speichern keine vom Dienst erfassten Informationen und haben keine Kontrolle über Bildschirmelemente, die über die Eingabe der Zugangsdaten hinausgehen.</string>
+    <string name="accessibility_disclosure_start_up_text_1">Diese Benachrichtigung ist erforderlich, bevor Bitwarden Auto-Ausfüllen auf Basis der Barrierefreiheit anbieten kann.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden bietet eine optionale Funktion zum automatischen Ausfüllen an, die den Android-Bedienungshilfendienst nutzt, um Anmeldefelder zu erkennen. Wenn du diese Funktion aktivierst, erkennt Bitwarden die entsprechenden Felder und füllt deine Zugangsdaten aus, sobald eine Übereinstimmung gefunden wurde.</string>
+    <string name="accessibility_disclosure_start_up_text_3">Wir speichern keine Informationen darüber, was während der Nutzung des Bedienungshilfendienstes auf dem Bildschirm angezeigt wird und wir haben keine Kontrolle über Bildschirmelemente, die über die Eingabe von Zugangsdaten hinausgehen.</string>
+    <string name="i_understand">Verstanden</string>
     <string name="accept">Akzeptieren</string>
     <string name="decline">Ablehnen</string>
     <string name="login_request_has_already_expired">Anmeldeanfrage ist bereits abgelaufen.</string>
@@ -1149,6 +1152,8 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="no_items_imported">Keine Einträge importiert</string>
     <string name="no_items_received_from_the_selected_app">Keine Einträge von der ausgewählten App erhalten.</string>
     <string name="vault_sync_failed">Synchronisation des Tresors fehlgeschlagen</string>
+    <string name="vault_sync_unsuccessful">Synchronisation fehlgeschlagen</string>
+    <string name="vault_sync_failed_description">Wir konnten deinen Tresor nicht mit dem Server synchronisieren. Möglicherweise sind deine letzten Änderungen noch nicht im Tresor enthalten. Du kannst es jetzt erneut versuchen oder die Synchronisierung erfolgt später automatisch.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Deine Einträge wurden erfolgreich importiert, aber sie werden erst in deinem Tresor sichtbar sein, wenn eine Synchronisation durchgeführt wurde.</string>
     <string name="there_was_a_problem_importing_your_items">Beim Importieren deiner Einträge ist ein Problem aufgetreten. Bitte versuch es erneut. Wenn das Problem weiterhin besteht, kontaktiere den Support.</string>
     <string name="saving_items">Einträge werden gespeichert…</string>
@@ -1209,6 +1214,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="item_moved_to_archived">Eintrag in das Archiv verschoben</string>
     <string name="item_moved_to_vault">Eintrag in Tresor verschoben</string>
     <string name="archiving_items_is_a_premium_feature">Das Archivieren von Einträgen ist eine Premium-Funktion. Dein aktueller Tarif umfasst keinen Zugriff auf diese Funktion.</string>
+    <string name="totp_is_a_premium_feature">Authentifizierungsschlüssel (TOTP) sind eine Premium-Funktion. Dein aktueller Tarif enthält keinen Zugriff auf diese Funktion.</string>
     <string name="upgrade_to_premium">Auf Premium upgraden</string>
     <string name="plan">Tarif</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Um dein Premium-Abonnement zu verwalten, musst du dich bei deinem Web-Tresor auf einem Computer anmelden.</string>
@@ -1307,11 +1313,13 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="subscription_status_expired">Abgelaufen</string>
     <string name="subscription_status_past_due">Überfällig</string>
     <string name="subscription_status_paused">Pausiert</string>
+    <string name="subscription_status_unpaid">Offen</string>
     <string name="subscription_status_update_payment">Zahlungsmethode aktualisieren</string>
     <string name="subscription_status_pending_cancellation">Ausstehende Kündigung</string>
     <string name="subscription_pending_cancellation_description">Dein Abonnement läuft am <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> ab. Du kannst es jederzeit vor diesem Datum wieder aktivieren.</string>
     <string name="premium_next_charge_summary">Deine nächste Abbuchung in Höhe von %1$s USD ist am %2$s fällig.</string>
     <string name="subscription_canceled_description">Dein Abonnement wurde am %1$s gekündigt. Abonniere erneut, um die Premium-Funktionen weiterhin nutzen zu können.</string>
+    <string name="subscription_unpaid_description">Dein Abonnement wurde am <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> ausgesetz. Um es wieder zu aktivieren, begleiche bitte deine überfälligen Rechnungen.</string>
     <string name="subscription_update_payment_description">Deine Zahlung konnte nicht bearbeitet werden. Aktualisiere deine Zahlungsmethode, bevor dein Abonnement am <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> endet.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Du hast eine Nachfrist von %1$d Tag ab dem Ablaufdatum deines Abonnements. Bitte begleiche den ausstehenden Betrag bis zum %2$s.</item>
@@ -1323,7 +1331,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="loading_portal">Portal wird geladen…</string>
     <string name="portal_error">Etwas ist schiefgelaufen</string>
     <string name="trouble_loading_portal">Wir hatten Probleme beim Laden des Verwaltungsportals. Bitte versuche es erneut.</string>
-    <string name="subscription_error">Abonnement-Fehler</string>
     <string name="trouble_loading_subscription">Wir konnten deine Abonnementdetails nicht laden. Bitte versuche es erneut.</string>
     <string name="view_bank_account">Bankkonto anzeigen</string>
     <string name="view_license">Führerschein anzeigen</string>

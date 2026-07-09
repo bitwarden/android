@@ -96,6 +96,7 @@ fun AddEditBlockedUriDialog(
                     onValueChange = onUriChange,
                     keyboardType = KeyboardType.Uri,
                     cardStyle = CardStyle.Full,
+                    textFieldTestTag = "BlockedUriEntry",
                     modifier = Modifier
                         .standardHorizontalMargin()
                         .fillMaxWidth(),

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -422,7 +423,9 @@ private fun ColumnScope.PremiumFeatureRows() {
             ),
             headerTextStyle = BitwardenTheme.typography.titleMedium,
             showDivider = index != features.lastIndex,
-            modifier = Modifier.padding(vertical = 8.dp),
+            modifier = Modifier
+                .defaultMinSize(minHeight = 60.dp)
+                .padding(vertical = 8.dp),
         )
     }
 }
@@ -597,10 +600,9 @@ private fun SubscriptionCard(
             canceledDateText = viewState.canceledDateText,
             suspensionDateText = viewState.suspensionDateText,
             gracePeriodDays = viewState.gracePeriodDays,
-            modifier = Modifier
-                .padding(bottom = 16.dp)
-                .standardHorizontalMargin(),
+            modifier = Modifier.standardHorizontalMargin(),
         )
+        Spacer(modifier = Modifier.height(height = 16.dp))
 
         if (viewState.status?.showsFeatureList() == true) {
             PremiumFeatureRows()
@@ -611,20 +613,17 @@ private fun SubscriptionCard(
 }
 
 @Composable
-private fun SubscriptionLineItems(
+private fun ColumnScope.SubscriptionLineItems(
     viewState: PlanState.ViewState.Content.Premium,
 ) {
-    val rowModifier = Modifier
-        .fillMaxWidth()
-        .standardHorizontalMargin()
-
     BitwardenHorizontalDivider()
-
     SubscriptionLineItem(
         label = stringResource(id = BitwardenString.billing_amount),
         value = viewState.billingAmountText(),
         testTag = "BillingAmountRow",
-        modifier = rowModifier,
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
     )
 
     viewState.storageCostText?.let { storageCostText ->
@@ -633,7 +632,9 @@ private fun SubscriptionLineItems(
             label = stringResource(id = BitwardenString.storage_cost),
             value = storageCostText,
             testTag = "StorageCostRow",
-            modifier = rowModifier,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
     }
 
@@ -643,28 +644,32 @@ private fun SubscriptionLineItems(
             label = stringResource(id = BitwardenString.discount),
             value = discountAmountText,
             testTag = "DiscountRow",
-            modifier = rowModifier,
             valueColor = BitwardenTheme.colorScheme.statusBadge.success.text,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
     }
 
     BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
-
     SubscriptionLineItem(
         label = stringResource(id = BitwardenString.estimated_tax),
         value = viewState.estimatedTaxText,
         testTag = "EstimatedTaxRow",
-        modifier = rowModifier,
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
     )
 
     BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
-
     SubscriptionLineItem(
         label = stringResource(id = BitwardenString.total),
         value = viewState.totalText(),
         testTag = "TotalRow",
-        modifier = rowModifier,
         labelStyle = BitwardenTheme.typography.bodyLargeEmphasis,
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
     )
 }
 
@@ -709,7 +714,7 @@ private fun SubscriptionHeader(
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = it,
-                style = BitwardenTheme.typography.bodyMedium,
+                style = BitwardenTheme.typography.labelLargeRegular,
                 color = BitwardenTheme.colorScheme.text.secondary,
             )
         }
@@ -729,11 +734,11 @@ private fun subscriptionDescriptionText(
 ): AnnotatedString? {
     val baseStyle = spanStyleOf(
         color = BitwardenTheme.colorScheme.text.secondary,
-        textStyle = BitwardenTheme.typography.bodyMedium,
+        textStyle = BitwardenTheme.typography.labelLargeRegular,
     )
     val emphasisStyle = spanStyleOf(
         color = BitwardenTheme.colorScheme.text.secondary,
-        textStyle = BitwardenTheme.typography.bodyMediumEmphasis,
+        textStyle = BitwardenTheme.typography.labelLargeEmphasis,
     )
     return when (status) {
         PremiumSubscriptionStatus.ACTIVE -> annotatedStringResource(
@@ -756,6 +761,13 @@ private fun subscriptionDescriptionText(
         PremiumSubscriptionStatus.PENDING_CANCELLATION -> annotatedStringResource(
             id = BitwardenString.subscription_pending_cancellation_description,
             args = arrayOf(cancelAtDateText ?: PLACEHOLDER_TEXT),
+            style = baseStyle,
+            emphasisHighlightStyle = emphasisStyle,
+        )
+
+        PremiumSubscriptionStatus.UNPAID -> annotatedStringResource(
+            id = BitwardenString.subscription_unpaid_description,
+            args = arrayOf(suspensionDateText ?: PLACEHOLDER_TEXT),
             style = baseStyle,
             emphasisHighlightStyle = emphasisStyle,
         )
@@ -802,15 +814,16 @@ private fun SubscriptionLineItem(
     modifier: Modifier = Modifier,
     labelStyle: TextStyle = BitwardenTheme.typography.bodyLarge,
     labelColor: Color = BitwardenTheme.colorScheme.text.secondary,
-    valueStyle: TextStyle = BitwardenTheme.typography.bodyLarge,
+    valueStyle: TextStyle = BitwardenTheme.typography.bodyMedium,
     valueColor: Color = BitwardenTheme.colorScheme.text.primary,
 ) {
     Row(
-        modifier = modifier
-            .padding(vertical = 16.dp)
-            .testTag(testTag),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .defaultMinSize(minHeight = 60.dp)
+            .padding(vertical = 16.dp)
+            .testTag(tag = testTag),
     ) {
         Text(
             text = label,

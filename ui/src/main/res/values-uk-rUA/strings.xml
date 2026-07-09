@@ -620,7 +620,10 @@
     <string name="forwarded_email_description">Згенеруйте псевдонім е-пошти зі стороннім сервісом пересилання.</string>
     <string name="accessibility_service_disclosure">Пояснення про службу підтримки доступності</string>
     <string name="accessibility_disclosure_text">Bitwarden використовує службу підтримки доступності для пошуку полів входу в програмах і на вебсайтах, після чого встановлює належні ідентифікатори полів для введення імені користувача й пароля під час виявлення збігу в програмі чи на вебсайті. Ми не зберігаємо жодної інформації, що обробляється нашою службою, і не намагаємося контролювати жодних екранних об\'єктів, окрім текстового введення облікових даних.</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields in apps and websites. If you choose to enable it, Bitwarden will identify the appropriate fields and enter your credentials when a match is found. We do not store any information observed by the service, and we do not control any on-screen elements beyond credential entry.</string>
+    <string name="accessibility_disclosure_start_up_text_1">This notice is required before Bitwarden can offer accessibility-based autofill.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields. If you enable it, Bitwarden will identify the appropriate fields and fill in your credentials when a match is found.</string>
+    <string name="accessibility_disclosure_start_up_text_3">We don’t store any information about what’s onscreen while you use the Accessibility Service, and we don’t control any onscreen elements beyond credential entry.</string>
+    <string name="i_understand">I understand</string>
     <string name="accept">Погодитись</string>
     <string name="decline">Відмовитись</string>
     <string name="login_request_has_already_expired">Термін дії запиту на вхід завершився.</string>
@@ -1168,6 +1171,8 @@
     <string name="no_items_imported">Записи не імпортовано</string>
     <string name="no_items_received_from_the_selected_app">З вибраної програми не отримано жодного запису.</string>
     <string name="vault_sync_failed">Помилка синхронізації сховища</string>
+    <string name="vault_sync_unsuccessful">Sync unsuccessful</string>
+    <string name="vault_sync_failed_description">We couldn’t sync your vault with the server. Your vault may not reflect your latest changes. You can try again now or it will sync automatically later.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Ваші записи успішно імпортовано, але вони не з\'являться у сховищі доки не виконається синхронізація.</string>
     <string name="there_was_a_problem_importing_your_items">Виникла проблема під час імпортування ваших записів. Повторіть спробу. Якщо проблема не зникне, зверніться до служби підтримки.</string>
     <string name="saving_items">Збереження записів…</string>
@@ -1230,6 +1235,7 @@
     <string name="item_moved_to_archived">Запис переміщено до архіву</string>
     <string name="item_moved_to_vault">Запис переміщено до сховища</string>
     <string name="archiving_items_is_a_premium_feature">Архівування записів є функцією Premium. Ваш поточний тарифний план не передбачає доступ до цієї функції.</string>
+    <string name="totp_is_a_premium_feature">Authenticator key (TOTP) is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Покращити до Premium</string>
     <string name="plan">План</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
@@ -1328,11 +1334,13 @@
     <string name="subscription_status_expired">Термін дії завершився</string>
     <string name="subscription_status_past_due">Протерміновано</string>
     <string name="subscription_status_paused">Paused</string>
+    <string name="subscription_status_unpaid">Unpaid</string>
     <string name="subscription_status_update_payment">Оновити платіж</string>
     <string name="subscription_status_pending_cancellation">Pending cancellation</string>
     <string name="subscription_pending_cancellation_description">Your subscription is scheduled to cancel on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. You can reinstate it anytime before then.</string>
     <string name="premium_next_charge_summary">Your next charge is for <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD due on <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
     <string name="subscription_canceled_description">Your subscription was canceled on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using Premium features.</string>
+    <string name="subscription_unpaid_description">Your subscription was suspended on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. To reactivate, please resolve your past due invoices.</string>
     <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment method before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">You have a grace period of <annotation arg="0">%1$d</annotation> day from your subscription expiration date. Please resolve the past due invoices by <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
@@ -1346,7 +1354,6 @@
     <string name="loading_portal">Loading portal…</string>
     <string name="portal_error">Щось пішло не так</string>
     <string name="trouble_loading_portal">We had trouble loading the management portal, so try again.</string>
-    <string name="subscription_error">Subscription error</string>
     <string name="trouble_loading_subscription">We couldn’t load your subscription details. Please try again.</string>
     <string name="view_bank_account">View bank account</string>
     <string name="view_license">View license</string>

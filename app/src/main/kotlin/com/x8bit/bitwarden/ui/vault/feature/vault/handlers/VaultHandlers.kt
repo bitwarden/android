@@ -44,8 +44,6 @@ data class VaultHandlers(
         String,
     ) -> Unit,
     val masterPasswordRepromptSubmit: (VaultState.ViewState.VaultItem, String) -> Unit,
-    val dismissImportActionCard: () -> Unit,
-    val importActionCardClick: () -> Unit,
     val flightRecorderGoToSettingsClick: () -> Unit,
     val dismissFlightRecorderSnackbar: () -> Unit,
     val onShareCipherDecryptionErrorClick: (selectedCipherId: String) -> Unit,
@@ -130,12 +128,6 @@ data class VaultHandlers(
                             password = password,
                         ),
                     )
-                },
-                dismissImportActionCard = {
-                    viewModel.trySendAction(VaultAction.DismissImportActionCard)
-                },
-                importActionCardClick = {
-                    viewModel.trySendAction(VaultAction.ImportActionCardClick)
                 },
                 flightRecorderGoToSettingsClick = {
                     viewModel.trySendAction(VaultAction.FlightRecorderGoToSettingsClick)

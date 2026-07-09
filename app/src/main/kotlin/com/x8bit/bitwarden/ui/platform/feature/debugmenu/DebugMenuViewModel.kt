@@ -67,7 +67,12 @@ class DebugMenuViewModel @Inject constructor(
             DebugMenuAction.ClearSsoCookies -> handleClearSsoCookies()
             DebugMenuAction.ResetPremiumUpgradeBanner -> handleResetPremiumUpgradeBanner()
             DebugMenuAction.ShowUpgradedToPremiumCard -> handleShowUpgradedToPremiumCard()
+            DebugMenuAction.ResetAccessibilityDisclaimer -> handleResetAccessibilityDisclaimer()
         }
+    }
+
+    private fun handleResetAccessibilityDisclaimer() {
+        debugMenuRepository.resetAccessibilityDisclaimer()
     }
 
     private fun handleShowUpgradedToPremiumCard() {
@@ -185,6 +190,11 @@ sealed class DebugMenuAction {
      * The user has clicked the restart onboarding button for the onboarding section.
      */
     data object RestartOnboarding : DebugMenuAction()
+
+    /**
+     * The user has clicked the reset accessibility disclaimer button.
+     */
+    data object ResetAccessibilityDisclaimer : DebugMenuAction()
 
     /**
      * The user has clicked the restart onboarding button for the onboarding section.

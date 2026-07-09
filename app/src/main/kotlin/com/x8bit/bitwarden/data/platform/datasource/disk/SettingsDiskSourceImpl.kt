@@ -21,6 +21,7 @@ private const val APP_LANGUAGE_KEY = "appLocale"
 private const val APP_THEME_KEY = "theme"
 private const val PULL_TO_REFRESH_KEY = "syncOnRefresh"
 private const val INLINE_AUTOFILL_ENABLED_KEY = "inlineAutofillEnabled"
+private const val FILL_ASSIST_ENABLED_KEY = "fillAssistEnabled"
 private const val BLOCKED_AUTOFILL_URIS_KEY = "autofillBlacklistedUris"
 private const val VAULT_LAST_SYNC_TIME = "vaultLastSyncTime"
 private const val VAULT_TIMEOUT_ACTION_KEY = "vaultTimeoutAction"
@@ -266,6 +267,7 @@ class SettingsDiskSourceImpl(
         storeAutofillSavePromptDisabled(userId = userId, isAutofillSavePromptDisabled = null)
         storePullToRefreshEnabled(userId = userId, isPullToRefreshEnabled = null)
         storeInlineAutofillEnabled(userId = userId, isInlineAutofillEnabled = null)
+        storeFillAssistEnabled(userId = userId, isFillAssistEnabled = null)
         storeBlockedAutofillUris(userId = userId, blockedAutofillUris = null)
         storeLastSyncTime(userId = userId, lastSyncTime = null)
         storeClearClipboardFrequencySeconds(userId = userId, frequency = null)
@@ -540,6 +542,16 @@ class SettingsDiskSourceImpl(
         putBoolean(
             key = INLINE_AUTOFILL_ENABLED_KEY.appendIdentifier(userId),
             value = isInlineAutofillEnabled,
+        )
+    }
+
+    override fun getFillAssistEnabled(userId: String): Boolean? =
+        getBoolean(key = FILL_ASSIST_ENABLED_KEY.appendIdentifier(userId))
+
+    override fun storeFillAssistEnabled(userId: String, isFillAssistEnabled: Boolean?) {
+        putBoolean(
+            key = FILL_ASSIST_ENABLED_KEY.appendIdentifier(userId),
+            value = isFillAssistEnabled,
         )
     }
 

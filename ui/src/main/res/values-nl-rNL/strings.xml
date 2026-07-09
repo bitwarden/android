@@ -612,7 +612,10 @@ kies je TOTP toevoegen om de sleutel veilig op te slaan</string>
     <string name="forwarded_email_description">E-mailadres genereren met een externe doorstuurdienst.</string>
     <string name="accessibility_service_disclosure">Toegankelijksheidsservice-melding</string>
     <string name="accessibility_disclosure_text">Bitwarden gebruikt de toegankelijkheidsservice om inlogvelden in apps en op websites te vinden, de juiste veld ID\'s te bepalen om de gebruikersnaam en het wachtwoord in te voeren wanneer een bijpassend paar gevonden is voor de app of site. We slaan geen informatie op die de service ons levert, ook controleren we geen elementen op het scherm naast de tekstinvoer van inloggegevens.</string>
-    <string name="accessibility_disclosure_start_up_text">Bitwarden biedt een optionele automatisch invulmethode die Android Toegankelijkheids Service gebruikt om inlogvelden in apps en websites te detecteren. Als je dit inschakelt, zal Bitwarden de juiste velden identificeren en je inloggegevens invoeren als er een match wordt gevonden. We slaan geen informatie op die door de dienst wordt waargenomen en we bedienen ook geen elementen op het scherm buiten het invoeren van inloggegevens.</string>
+    <string name="accessibility_disclosure_start_up_text_1">This notice is required before Bitwarden can offer accessibility-based autofill.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields. If you enable it, Bitwarden will identify the appropriate fields and fill in your credentials when a match is found.</string>
+    <string name="accessibility_disclosure_start_up_text_3">We don’t store any information about what’s onscreen while you use the Accessibility Service, and we don’t control any onscreen elements beyond credential entry.</string>
+    <string name="i_understand">I understand</string>
     <string name="accept">Accepteren</string>
     <string name="decline">Weigeren</string>
     <string name="login_request_has_already_expired">Inlogverzoek is al verlopen.</string>
@@ -1150,6 +1153,8 @@ Wilt u naar dit account wisselen?</string>
     <string name="no_items_imported">Geen items geïmporteerd</string>
     <string name="no_items_received_from_the_selected_app">Geen items ontvangen van de geselecteerde app.</string>
     <string name="vault_sync_failed">Kluissynchronisatie mislukt</string>
+    <string name="vault_sync_unsuccessful">Synchronisatie mislukt</string>
+    <string name="vault_sync_failed_description">We konden je kluis niet met de server synchroniseren. Je kluis geeft mogelijk niet je laatste wijzigingen weer. Je kunt het opnieuw proberen of het zal later automatisch worden gesynchroniseerd.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Uw items zijn met succes geïmporteerd, maar konden de kluis niet synchroniseren. Geïmporteerde items zijn niet zichtbaar in uw kluis totdat de synchronisatie is uitgevoerd.</string>
     <string name="there_was_a_problem_importing_your_items">Er ging iets mis bij het importeren van je items. Probeer het opnieuw. Als het probleem aanhoudt, neem dan contact op met support.</string>
     <string name="saving_items">Items opslaan…</string>
@@ -1210,6 +1215,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="item_moved_to_archived">Item verplaatst naar archief</string>
     <string name="item_moved_to_vault">Item verplaatst naar kluis</string>
     <string name="archiving_items_is_a_premium_feature">Het archiveren van items is een Premium-functie. Toegang tot deze functie is niet inbegrepen in je huidige abonnement.</string>
+    <string name="totp_is_a_premium_feature">Authenticatiesleutel (TOTP) is een Premium-functie. Toegang tot deze functie is niet inbegrepen in je huidige abonnement.</string>
     <string name="upgrade_to_premium">Naar Premium upgraden</string>
     <string name="plan">Abonnement</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Meld je aan bij je webkluis op een computer om je Premium-abonnement te beheren.</string>
@@ -1219,8 +1225,8 @@ Wilt u naar dit account wisselen?</string>
     <string name="view_plan">Abonnement bekijken</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Een Premium-abonnement geeft je meer tools om veilig en in controle te blijven.</string>
     <string name="this_item_is_archived">Dit item is gearchiveerd.</string>
-    <string name="introducing_archive">Archief introduceren</string>
-    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Houd voorwerpen die je nu niet nodig hebt, veilig maar uit zicht.</string>
+    <string name="introducing_archive">Kennismaken met archiven</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Houd voorwerpen die je nu niet nodig hebt veilig, maar uit zicht.</string>
     <string name="go_to_archive">Ga naar archief</string>
     <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Dit item is gearchiveerd. Als je de wijzigingen opslaat, wordt het in je kluis hersteld.</string>
     <string name="your_premium_subscription_ended">Je Premium-abonnement is afgelopen</string>
@@ -1308,11 +1314,13 @@ Wilt u naar dit account wisselen?</string>
     <string name="subscription_status_expired">Verlopen</string>
     <string name="subscription_status_past_due">Verlopen</string>
     <string name="subscription_status_paused">Paused</string>
+    <string name="subscription_status_unpaid">Openstaand</string>
     <string name="subscription_status_update_payment">Betalingswijze bijwerken</string>
     <string name="subscription_status_pending_cancellation">In afwachting van opzegging</string>
     <string name="subscription_pending_cancellation_description">Je abonnement verloopt op <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Je kunt het op elk gewenst moment hervatten.</string>
     <string name="premium_next_charge_summary">Je volgende rekening wordt %1$s USD voor %2$s.</string>
     <string name="subscription_canceled_description">Je abonnement is op %1$s geannuleerd. Activeer je abonnement opnieuw om gebruik te blijven maken van premium-functies.</string>
+    <string name="subscription_unpaid_description">Je abonnement is geschorst op <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Om te reactiveren, moet je je achterstallige facturen betalen.</string>
     <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment method before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Je hebt gratie voor een periode van %1$d dag vanaf de vervaldatum van je abonnement. Betaal de achterstallige facturen vóór **%2$s**.</item>
@@ -1324,7 +1332,6 @@ Wilt u naar dit account wisselen?</string>
     <string name="loading_portal">Loading portal…</string>
     <string name="portal_error">Er is iets fout gegaan</string>
     <string name="trouble_loading_portal">We had trouble loading the management portal, so try again.</string>
-    <string name="subscription_error">Subscription error</string>
     <string name="trouble_loading_subscription">We couldn’t load your subscription details. Please try again.</string>
     <string name="view_bank_account">Bankrekening weergeven</string>
     <string name="view_license">Rijbewijs weergeven</string>

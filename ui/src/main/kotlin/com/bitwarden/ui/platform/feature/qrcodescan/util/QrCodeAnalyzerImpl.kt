@@ -29,9 +29,10 @@ class QrCodeAnalyzerImpl : QrCodeAnalyzer {
         if (isQrCodeInAnalysis) return
         isQrCodeInAnalysis = true
 
+        val plane = image.planes[0]
         val source = PlanarYUVLuminanceSource(
-            image.planes[0].buffer.toByteArray(),
-            image.width,
+            plane.buffer.toByteArray(),
+            plane.rowStride,
             image.height,
             0,
             0,

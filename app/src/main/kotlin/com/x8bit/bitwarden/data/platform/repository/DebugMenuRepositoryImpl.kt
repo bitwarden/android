@@ -64,6 +64,10 @@ class DebugMenuRepositoryImpl(
         settingsDiskSource.storeShouldShowAddLoginCoachMark(shouldShow = null)
     }
 
+    override fun resetAccessibilityDisclaimer() {
+        settingsDiskSource.hasShownAccessibilityDisclaimer = null
+    }
+
     override fun modifyStateToShowOnboardingCarousel(
         userStateUpdateTrigger: () -> Unit,
     ) {

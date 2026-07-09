@@ -1,0 +1,51 @@
+name: Send Slack Notification
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - release/**/*
+
+permissions:
+  id-token: write
+
+jobs:
+  send_notification:
+    name: Send Slack Notification
+    runs-on: ubuntu-24.04
+    # Only run on pushes that carry new commits (or a manual dispatch);
+    # skip bare branch-creation pushes that have no commits
+    if: ${{ github.event_name != 'push' || github.event.head_commit != null }}
+    steps:
+      - name: Log in to Azure
+        uses: bitwarden/gh-actions/azure-login@main
+        with:
+          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          client_id: ${{ secrets.AZURE_CLIENT_ID }}
+
+      - name: Retrieve Slack secrets
+        id: retrieve-slack-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: gh-android
+          secrets: "SLACK-WEBHOOK-TEAM-ENG-MOBILE"
+
+      - name: Log out from Azure
+        uses: bitwarden/gh-actions/azure-logout@main
+
+      - name: Build message
+        id: msg
+        env:
+          COMMIT_URL: ${{ github.event.head_commit.url }}
+          COMMIT_SHA: ${{ github.event.head_commit.id }}
+        run: |
+          echo "text=:cherry-pick: <${COMMIT_URL}|${COMMIT_SHA}> into *${GITHUB_REF_NAME}*\ncc <!subteam^S0BG74ZATUM> <@U06538MSPJP>" >> "$GITHUB_OUTPUT"
+
+      - name: Send slack notification
+        uses: slackapi/slack-github-action@af78098f536edbc4de71162a307590698245be95 # v3.0.1
+        with:
+          webhook: ${{ steps.retrieve-slack-secrets.outputs.SLACK-WEBHOOK-TEAM-ENG-MOBILE }}
+          webhook-type: incoming-webhook
+          payload: |
+            text: "${{ steps.msg.outputs.text }}"

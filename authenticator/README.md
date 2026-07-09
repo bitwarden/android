@@ -10,8 +10,8 @@ Bitwarden Authenticator allows you easily store and generate two-factor authenti
 
 ## Compatibility
 
-- **Minimum SDK**: 28 (Android 9)
-- **Target SDK**: 36 (Android 16)
+- **Minimum SDK**: 29 (Android 10)
+- **Target SDK**: 37 (Android 17)
 - **Device Types Supported**: Phone and Tablet
 - **Orientations Supported**: Portrait and Landscape
 

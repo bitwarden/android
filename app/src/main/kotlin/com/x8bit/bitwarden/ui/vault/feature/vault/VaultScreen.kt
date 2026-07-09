@@ -39,7 +39,6 @@ import com.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionI
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.appbar.model.TopAppBarDividerStyle
 import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
-import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
@@ -76,6 +75,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 private const val APP_REVIEW_DELAY = 3000L
 
@@ -121,7 +121,7 @@ fun VaultScreen(
     val launchPrompt = remember {
         {
             scope.launch {
-                delay(APP_REVIEW_DELAY)
+                delay(APP_REVIEW_DELAY.milliseconds)
                 appReviewManager.promptForReview()
             }
         }
@@ -310,7 +310,7 @@ private fun VaultScreenScaffold(
         overlay = {
             BitwardenAccountSwitcher(
                 isVisible = accountMenuVisible,
-                accountSummaries = state.accountSummaries.toImmutableList(),
+                accountSummaries = state.accountSummaries,
                 onSwitchAccountClick = vaultHandlers.accountSwitchClickAction,
                 onLockAccountClick = vaultHandlers.accountLockClickAction,
                 onLogoutAccountClick = vaultHandlers.accountLogoutClickAction,
@@ -339,19 +339,14 @@ private fun VaultScreenScaffold(
                 )
 
                 is VaultState.ViewState.NoItems -> {
-                    AnimatedVisibility(
-                        visible = state.showImportActionCard,
+                    AnimateNullableContentVisibility(
+                        targetState = state.actionCard,
                         exit = actionCardExitAnimation(),
                         label = "VaultNoItemsActionCard",
-                    ) {
-                        BitwardenActionCard(
-                            cardTitle = stringResource(BitwardenString.import_saved_logins),
-                            cardSubtitle = stringResource(
-                                BitwardenString.use_a_computer_to_import_logins,
-                            ),
-                            actionText = stringResource(BitwardenString.get_started),
-                            onActionClick = vaultHandlers.importActionCardClick,
-                            onDismissClick = vaultHandlers.dismissImportActionCard,
+                    ) { actionCard ->
+                        VaultActionCard(
+                            actionCardState = actionCard,
+                            vaultHandlers = vaultHandlers,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .standardHorizontalMargin()
@@ -489,6 +484,18 @@ private fun VaultDialogs(
                 onConfirmClick = {
                     vaultHandlers.onKdfUpdatePasswordRepromptSubmit(it)
                 },
+                onDismissRequest = vaultHandlers.dialogDismiss,
+            )
+        }
+
+        is VaultState.DialogState.SyncError -> {
+            BitwardenTwoButtonDialog(
+                title = dialogState.title(),
+                message = dialogState.message(),
+                confirmButtonText = stringResource(id = BitwardenString.try_again),
+                dismissButtonText = stringResource(id = BitwardenString.not_now),
+                onConfirmClick = vaultHandlers.tryAgainClick,
+                onDismissClick = vaultHandlers.dialogDismiss,
                 onDismissRequest = vaultHandlers.dialogDismiss,
             )
         }

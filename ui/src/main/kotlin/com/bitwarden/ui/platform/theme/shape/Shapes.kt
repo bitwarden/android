@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
  */
 val bitwardenShapes: BitwardenShapes = BitwardenShapes(
     actionCard = RoundedCornerShape(size = 12.dp),
+    badge = RoundedCornerShape(size = 12.dp),
     bottomSheet = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
     coachmark = RoundedCornerShape(size = 8.dp),
     content = RoundedCornerShape(size = 8.dp),

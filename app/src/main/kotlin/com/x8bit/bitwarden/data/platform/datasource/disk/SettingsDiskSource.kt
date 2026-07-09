@@ -358,6 +358,16 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     fun storeInlineAutofillEnabled(userId: String, isInlineAutofillEnabled: Boolean?)
 
     /**
+     * Gets the value determining if fill assist is enabled for the given [userId].
+     */
+    fun getFillAssistEnabled(userId: String): Boolean?
+
+    /**
+     * Stores the given [isFillAssistEnabled] value for the given [userId].
+     */
+    fun storeFillAssistEnabled(userId: String, isFillAssistEnabled: Boolean?)
+
+    /**
      * Gets a list of blocked autofill URI's for the given [userId].
      */
     fun getBlockedAutofillUris(userId: String): List<String>?

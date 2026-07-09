@@ -68,7 +68,6 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListin
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Displays the vault item listing screen.
@@ -501,7 +500,7 @@ private fun VaultItemListingScaffold(
         overlay = {
             BitwardenAccountSwitcher(
                 isVisible = isAccountMenuVisible,
-                accountSummaries = state.accountSummaries.toImmutableList(),
+                accountSummaries = state.accountSummaries,
                 onSwitchAccountClick = vaultItemListingHandlers.switchAccountClick,
                 onLockAccountClick = vaultItemListingHandlers.lockAccountClick,
                 onLogoutAccountClick = vaultItemListingHandlers.logoutAccountClick,
