@@ -98,7 +98,6 @@ fun ImportItemsScreen(
         onNavigateBack = handler.onNavigateBack,
         onImportFromComputerClick = handler.onImportFromComputerClick,
         onImportFromAnotherAppClick = handler.onImportFromAnotherAppClick,
-        isImportFromAnotherAppSupported = credentialExchangeImporter.isSupported(),
         snackbarHostState = snackbarHostState,
     )
 }
@@ -109,7 +108,6 @@ private fun ImportItemsScaffold(
     onNavigateBack: () -> Unit,
     onImportFromComputerClick: () -> Unit,
     onImportFromAnotherAppClick: () -> Unit,
-    isImportFromAnotherAppSupported: Boolean,
     modifier: Modifier = Modifier,
     snackbarHostState: BitwardenSnackbarHostState = rememberBitwardenSnackbarHostState(),
 ) {
@@ -138,7 +136,6 @@ private fun ImportItemsScaffold(
         ImportItemsContent(
             onImportFromComputerClick = onImportFromComputerClick,
             onImportFromAnotherAppClick = onImportFromAnotherAppClick,
-            isImportFromAnotherAppSupported = isImportFromAnotherAppSupported,
             modifier = Modifier
                 .fillMaxSize()
                 .standardHorizontalMargin(),
@@ -150,7 +147,6 @@ private fun ImportItemsScaffold(
 private fun ImportItemsContent(
     onImportFromComputerClick: () -> Unit,
     onImportFromAnotherAppClick: () -> Unit,
-    isImportFromAnotherAppSupported: Boolean,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -163,25 +159,19 @@ private fun ImportItemsContent(
             BitwardenTextRow(
                 text = stringResource(BitwardenString.import_from_computer),
                 onClick = onImportFromComputerClick,
-                cardStyle = if (isImportFromAnotherAppSupported) {
-                    CardStyle.Top()
-                } else {
-                    CardStyle.Full
-                },
+                cardStyle = CardStyle.Top(),
                 modifier = Modifier.fillMaxWidth(),
             )
         }
 
-        if (isImportFromAnotherAppSupported) {
-            item {
-                BitwardenTextRow(
-                    text = stringResource(BitwardenString.import_from_another_app),
-                    onClick = onImportFromAnotherAppClick,
-                    isExternalLink = true,
-                    cardStyle = CardStyle.Bottom,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-            }
+        item {
+            BitwardenTextRow(
+                text = stringResource(BitwardenString.import_from_another_app),
+                onClick = onImportFromAnotherAppClick,
+                isExternalLink = true,
+                cardStyle = CardStyle.Bottom,
+                modifier = Modifier.fillMaxWidth(),
+            )
         }
 
         item { Spacer(Modifier.height(16.dp)) }
@@ -222,7 +212,6 @@ private fun ImportItemsContent_preview() {
             onNavigateBack = {},
             onImportFromComputerClick = {},
             onImportFromAnotherAppClick = {},
-            isImportFromAnotherAppSupported = true,
         )
     }
 }

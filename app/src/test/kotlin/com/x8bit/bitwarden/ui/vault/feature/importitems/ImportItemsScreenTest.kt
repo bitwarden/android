@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 
 class ImportItemsScreenTest : BitwardenComposeTest() {
@@ -42,8 +43,8 @@ class ImportItemsScreenTest : BitwardenComposeTest() {
         every { trySendAction(any()) } just runs
     }
 
-    private fun setUpContent(isImportSupported: Boolean = true) {
-        every { credentialExchangeImporter.isSupported() } returns isImportSupported
+    @Before
+    fun setUp() {
         setContent(
             credentialExchangeImporter = credentialExchangeImporter,
         ) {
@@ -57,7 +58,6 @@ class ImportItemsScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `initial state should be correct`() = runTest {
-        setUpContent()
         assertEquals(
             DEFAULT_STATE,
             viewModel.stateFlow.value,
@@ -73,28 +73,13 @@ class ImportItemsScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `import from another app should not display when import is not supported`() = runTest {
-        setUpContent(isImportSupported = false)
-
-        composeTestRule
-            .onNodeWithText("Import from computer")
-            .assertExists()
-
-        composeTestRule
-            .onNodeWithText("Import from another app")
-            .assertDoesNotExist()
-    }
-
-    @Test
     fun `NavigateBack should call onNavigateBack`() {
-        setUpContent()
         mockEventFlow.tryEmit(ImportItemsEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
     }
 
     @Test
     fun `onBackClick should send BackClick`() {
-        setUpContent()
         composeTestRule.onNodeWithContentDescription("Back").performClick()
         verify(exactly = 1) {
             viewModel.trySendAction(ImportItemsAction.BackClick)
@@ -104,7 +89,6 @@ class ImportItemsScreenTest : BitwardenComposeTest() {
     @Test
     fun `ImportFromComputer click should send NavigateToImportFromComputer action`() =
         runTest {
-            setUpContent()
             composeTestRule
                 .onNodeWithText("Import from computer")
                 .performClick()
@@ -116,7 +100,6 @@ class ImportItemsScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `NavigateToImportFromComputer should call onNavigateToImportFromComputer`() {
-        setUpContent()
         mockEventFlow.tryEmit(ImportItemsEvent.NavigateToImportFromComputer)
         assertTrue(onNavigateToImportFromComputerCalled)
     }
@@ -124,7 +107,6 @@ class ImportItemsScreenTest : BitwardenComposeTest() {
     @Test
     fun `ImportFromAnotherApp click should send NavigateToImportFromAnotherApp action`() =
         runTest {
-            setUpContent()
             composeTestRule
                 .onNodeWithText("Import from another app")
                 .performClick()
@@ -135,7 +117,6 @@ class ImportItemsScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `ShowRegisteredImportSources should call CredentialExchangeImporter`() = runTest {
-        setUpContent()
         val importCredentialsSelectionResult = ImportCredentialsSelectionResult.Success(
             response = "mockResponse",
             callingAppInfo = mockk(relaxed = true),
@@ -160,7 +141,6 @@ class ImportItemsScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `General dialog should display based on state`() = runTest {
-        setUpContent()
         mockkStateFlow.tryEmit(ImportItemsState())
 
         composeTestRule
@@ -184,7 +164,6 @@ class ImportItemsScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `General dialog dismiss should send DismissDialog`() = runTest {
-        setUpContent()
         mockkStateFlow.tryEmit(
             ImportItemsState(
                 dialog = ImportItemsState.DialogState.General(
@@ -206,7 +185,6 @@ class ImportItemsScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `BitwardenLoadingDialog should display based on state`() = runTest {
-        setUpContent()
         mockkStateFlow.tryEmit(
             ImportItemsState(
                 dialog = ImportItemsState.DialogState.Loading(message = "message".asText()),
