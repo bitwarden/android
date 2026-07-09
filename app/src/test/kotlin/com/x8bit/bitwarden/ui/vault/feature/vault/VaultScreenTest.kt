@@ -384,7 +384,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         // Show the lock-or-logout dialog
         val activeAccountSummary = ACTIVE_ACCOUNT_SUMMARY.copy(isLoggedIn = false)
         mutableStateFlow.update {
-            it.copy(accountSummaries = listOf(activeAccountSummary))
+            it.copy(accountSummaries = persistentListOf(activeAccountSummary))
         }
         composeTestRule.performAccountIconClick()
         composeTestRule.performAccountLongClick(activeAccountSummary)
@@ -400,7 +400,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         // Show the remove account confirmation dialog
         val activeAccountSummary = ACTIVE_ACCOUNT_SUMMARY.copy(isLoggedIn = false)
         mutableStateFlow.update {
-            it.copy(accountSummaries = listOf(activeAccountSummary))
+            it.copy(accountSummaries = persistentListOf(activeAccountSummary))
         }
         composeTestRule.performAccountIconClick()
         composeTestRule.performAccountLongClick(activeAccountSummary)

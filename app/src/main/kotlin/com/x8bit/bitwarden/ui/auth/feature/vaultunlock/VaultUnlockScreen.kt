@@ -64,7 +64,6 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalCredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import javax.crypto.Cipher
 
@@ -222,7 +221,7 @@ fun VaultUnlockScreen(
         overlay = {
             BitwardenAccountSwitcher(
                 isVisible = accountMenuVisible,
-                accountSummaries = state.accountSummaries.toImmutableList(),
+                accountSummaries = state.accountSummaries,
                 onSwitchAccountClick = {
                     viewModel.trySendAction(VaultUnlockAction.SwitchAccountClick(it))
                 },

@@ -4,17 +4,17 @@ import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import java.util.Locale
 
 /**
  * Converts the given [UserState] to a list of [AccountSummary].
  */
-fun UserState.toAccountSummaries(): List<AccountSummary> =
-    accounts.map { account ->
-        account.toAccountSummary(
-            isActive = this.activeUserId == account.userId,
-        )
-    }
+fun UserState.toAccountSummaries(): ImmutableList<AccountSummary> =
+    accounts
+        .map { it.toAccountSummary(isActive = this.activeUserId == it.userId) }
+        .toImmutableList()
 
 /**
  * Converts the given [UserState] to an [AccountSummary] with a [AccountSummary.status] of

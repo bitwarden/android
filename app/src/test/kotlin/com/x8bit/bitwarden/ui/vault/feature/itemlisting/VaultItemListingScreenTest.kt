@@ -372,7 +372,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         val activeAccountSummary = ACTIVE_ACCOUNT_SUMMARY.copy(isLoggedIn = false)
         mutableStateFlow.update {
             it.copy(
-                accountSummaries = listOf(activeAccountSummary),
+                accountSummaries = persistentListOf(activeAccountSummary),
                 autofillSelectionData = AUTOFILL_SELECTION_DATA,
             )
         }
@@ -391,7 +391,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         val activeAccountSummary = ACTIVE_ACCOUNT_SUMMARY.copy(isLoggedIn = false)
         mutableStateFlow.update {
             it.copy(
-                accountSummaries = listOf(activeAccountSummary),
+                accountSummaries = persistentListOf(activeAccountSummary),
                 autofillSelectionData = AUTOFILL_SELECTION_DATA,
             )
         }
@@ -2651,7 +2651,7 @@ private val LOCKED_ACCOUNT_SUMMARY = AccountSummary(
     isVaultUnlocked = false,
 )
 
-private val ACCOUNT_SUMMARIES = listOf(
+private val ACCOUNT_SUMMARIES = persistentListOf(
     ACTIVE_ACCOUNT_SUMMARY,
     LOCKED_ACCOUNT_SUMMARY,
 )

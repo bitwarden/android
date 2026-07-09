@@ -55,7 +55,6 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.components.dropdown.EnvironmentSelector
-import kotlinx.collections.immutable.toImmutableList
 
 /**
  * The top level composable for the Landing screen.
@@ -139,7 +138,7 @@ fun LandingScreen(
         overlay = {
             BitwardenAccountSwitcher(
                 isVisible = isAccountMenuVisible,
-                accountSummaries = state.accountSummaries.toImmutableList(),
+                accountSummaries = state.accountSummaries,
                 onSwitchAccountClick = {
                     viewModel.trySendAction(LandingAction.SwitchAccountClick(it))
                 },

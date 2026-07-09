@@ -49,6 +49,7 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
@@ -344,7 +345,7 @@ class VaultUnlockScreenTest : BitwardenComposeTest() {
         // Show the lock-or-logout dialog
         val activeAccountSummary = ACTIVE_ACCOUNT_SUMMARY.copy(isLoggedIn = false)
         mutableStateFlow.update {
-            it.copy(accountSummaries = listOf(activeAccountSummary))
+            it.copy(accountSummaries = persistentListOf(activeAccountSummary))
         }
         composeTestRule.performAccountIconClick()
         composeTestRule.performAccountLongClick(activeAccountSummary)
@@ -360,7 +361,7 @@ class VaultUnlockScreenTest : BitwardenComposeTest() {
         // Show the remove account confirmation dialog
         val activeAccountSummary = ACTIVE_ACCOUNT_SUMMARY.copy(isLoggedIn = false)
         mutableStateFlow.update {
-            it.copy(accountSummaries = listOf(activeAccountSummary))
+            it.copy(accountSummaries = persistentListOf(activeAccountSummary))
         }
         composeTestRule.performAccountIconClick()
         composeTestRule.performAccountLongClick(activeAccountSummary)
@@ -628,7 +629,7 @@ private val LOCKED_ACCOUNT_SUMMARY = AccountSummary(
     isVaultUnlocked = false,
 )
 
-private val ACCOUNT_SUMMARIES = listOf(
+private val ACCOUNT_SUMMARIES = persistentListOf(
     ACTIVE_ACCOUNT_SUMMARY,
     LOCKED_ACCOUNT_SUMMARY,
 )

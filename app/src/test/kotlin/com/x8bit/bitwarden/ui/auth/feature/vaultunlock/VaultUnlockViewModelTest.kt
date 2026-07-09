@@ -36,6 +36,7 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
@@ -119,7 +120,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         assertEquals(
             DEFAULT_STATE.copy(
-                accountSummaries = emptyList(),
+                accountSummaries = persistentListOf(),
                 avatarColorString = "#ff000000",
                 initials = "",
                 email = "",
@@ -326,7 +327,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                 avatarColorString = "#00aaaa",
                 initials = "OU",
                 email = "active+test@bitwarden.com",
-                accountSummaries = listOf(
+                accountSummaries = persistentListOf(
                     AccountSummary(
                         userId = "activeUserId",
                         name = "Other User",
@@ -349,8 +350,9 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         val password = "abc1234"
         val initialState = DEFAULT_STATE.copy(
             input = password,
-            accountSummaries = listOf(
-                DEFAULT_ACCOUNT.copy(isVaultUnlocked = false)
+            accountSummaries = persistentListOf(
+                DEFAULT_ACCOUNT
+                    .copy(isVaultUnlocked = false)
                     .toAccountSummary(true),
             ),
         )
@@ -379,8 +381,9 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         val mockFido2GetCredentialsRequest = createMockGetCredentialsRequest(number = 1)
         val initialState = DEFAULT_STATE.copy(
             getCredentialsRequest = mockFido2GetCredentialsRequest,
-            accountSummaries = listOf(
-                DEFAULT_ACCOUNT.copy(isVaultUnlocked = false)
+            accountSummaries = persistentListOf(
+                DEFAULT_ACCOUNT
+                    .copy(isVaultUnlocked = false)
                     .toAccountSummary(isActive = true),
             ),
         )
@@ -412,8 +415,9 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
         val initialState = DEFAULT_STATE.copy(
             getCredentialsRequest = mockFido2GetCredentialsRequest,
-            accountSummaries = listOf(
-                DEFAULT_ACCOUNT.copy(isVaultUnlocked = false)
+            accountSummaries = persistentListOf(
+                DEFAULT_ACCOUNT
+                    .copy(isVaultUnlocked = false)
                     .toAccountSummary(isActive = true),
             ),
             userId = mockFido2GetCredentialsRequest.userId,
@@ -444,8 +448,9 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             createMockFido2CredentialAssertionRequest(number = 1)
         val initialState = DEFAULT_STATE.copy(
             fido2CredentialAssertionRequest = mockFido2CredentialAssertionRequest,
-            accountSummaries = listOf(
-                DEFAULT_ACCOUNT.copy(isVaultUnlocked = false)
+            accountSummaries = persistentListOf(
+                DEFAULT_ACCOUNT
+                    .copy(isVaultUnlocked = false)
                     .toAccountSummary(isActive = true),
             ),
         )
@@ -478,8 +483,9 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             )
         val initialState = DEFAULT_STATE.copy(
             fido2CredentialAssertionRequest = mockFido2CredentialAssertionRequest,
-            accountSummaries = listOf(
-                DEFAULT_ACCOUNT.copy(isVaultUnlocked = false)
+            accountSummaries = persistentListOf(
+                DEFAULT_ACCOUNT
+                    .copy(isVaultUnlocked = false)
                     .toAccountSummary(isActive = true),
             ),
             userId = mockFido2CredentialAssertionRequest.userId,
@@ -1365,7 +1371,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
 private val CIPHER = mockk<Cipher>()
 private const val USER_ID: String = "activeUserId"
 private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
-    accountSummaries = listOf(
+    accountSummaries = persistentListOf(
         AccountSummary(
             userId = "activeUserId",
             name = "Active User",
