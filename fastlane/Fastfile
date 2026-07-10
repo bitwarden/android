@@ -351,19 +351,6 @@ platform :android do
       json_key = "secrets/play_creds.json"
     end
 
-    # Get release information for the track
-    releases = google_play_track_release_names(
-      package_name: package_name,
-      track: track,
-      json_key: json_key,
-    )
-
-    version_codes = google_play_track_version_codes(
-      package_name: package_name,
-      track: track,
-      json_key: json_key,
-    )
-
     # Use supply to get detailed release status
     require 'supply'
     require 'supply/options'
@@ -378,21 +365,24 @@ platform :android do
     )
 
     client = Supply::Client.make_from_config
-    track_info = client.track_version_codes(track: track)
+
+    # Begin edit to access track information
+    client.begin_edit(package_name: package_name)
+    tracks = client.tracks(track)
+    track_obj = tracks.first
+    client.abort_current_edit
 
     # Check if there's a completed release (status "completed" means it's live)
     # With managed publishing, only completed releases are actually available to users
-    if track_info && track_info.releases
-      completed_release = track_info.releases.find { |r| r.status == "completed" }
+    if track_obj && track_obj.releases
+      completed_release = track_obj.releases.find { |r| r.status == "completed" }
 
       if completed_release && completed_release.version_codes && !completed_release.version_codes.empty?
         # Get the highest version code from the completed release
         live_version_code = completed_release.version_codes.max
 
-        # Find the corresponding version name
-        # Note: version_codes and releases arrays should be parallel
-        index = version_codes.index(live_version_code)
-        live_version_name = index ? releases[index] : releases.first
+        # Get the corresponding version name from the release
+        live_version_name = completed_release.name
 
         UI.message("Live version_name: #{live_version_name}")
         UI.message("Live version_number: #{live_version_code}")
