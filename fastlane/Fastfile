@@ -335,6 +335,83 @@ platform :android do
     UI.message("version_number: #{latest_version_number}")
   end
 
+  desc "Get the version that's actually live/published to users on Google Play"
+  lane :getLivePlayStoreVersion do |options|
+    package_name = options[:package_name]
+    track = options[:track]
+
+    # Determine credentials file based on package name
+    case package_name
+    when "com.x8bit.bitwarden", "com.x8bit.bitwarden.beta"
+      json_key = "secrets/play_creds.json"
+    when "com.bitwarden.authenticator"
+      json_key = "secrets/authenticator_play_store-creds.json"
+    else
+      UI.important "Unexpected package name: #{package_name}, using default play store json key"
+      json_key = "secrets/play_creds.json"
+    end
+
+    # Get release information for the track
+    releases = google_play_track_release_names(
+      package_name: package_name,
+      track: track,
+      json_key: json_key,
+    )
+
+    version_codes = google_play_track_version_codes(
+      package_name: package_name,
+      track: track,
+      json_key: json_key,
+    )
+
+    # Use supply to get detailed release status
+    require 'supply'
+    require 'supply/options'
+
+    Supply.config = FastlaneCore::Configuration.create(
+      Supply::Options.available_options,
+      {
+        package_name: package_name,
+        track: track,
+        json_key: json_key
+      }
+    )
+
+    client = Supply::Client.make_from_config
+    track_info = client.track_version_codes(track: track)
+
+    # Check if there's a completed release (status "completed" means it's live)
+    # With managed publishing, only completed releases are actually available to users
+    if track_info && track_info.releases
+      completed_release = track_info.releases.find { |r| r.status == "completed" }
+
+      if completed_release && completed_release.version_codes && !completed_release.version_codes.empty?
+        # Get the highest version code from the completed release
+        live_version_code = completed_release.version_codes.max
+
+        # Find the corresponding version name
+        # Note: version_codes and releases arrays should be parallel
+        index = version_codes.index(live_version_code)
+        live_version_name = index ? releases[index] : releases.first
+
+        UI.message("Live version_name: #{live_version_name}")
+        UI.message("Live version_number: #{live_version_code}")
+
+        # Output in the same format as getLatestPlayStoreVersion for compatibility
+        UI.message("version_name: #{live_version_name}")
+        UI.message("version_number: #{live_version_code}")
+      else
+        UI.message("No completed release found on track: #{track}")
+        UI.message("version_name: ")
+        UI.message("version_number: ")
+      end
+    else
+      UI.message("No releases found on track: #{track}")
+      UI.message("version_name: ")
+      UI.message("version_number: ")
+    end
+  end
+
   desc "Assemble debug variants"
   lane :buildAuthenticatorDebug do
     gradle(
