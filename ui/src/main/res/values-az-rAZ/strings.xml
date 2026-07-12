@@ -1154,8 +1154,8 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="no_items_imported">Heç bir element daxilə köçürülmədi</string>
     <string name="no_items_received_from_the_selected_app">Seçilmiş tətbiqdən heç bir element alınmadı.</string>
     <string name="vault_sync_failed">Seyf sinxronlaşdırılmadı</string>
-    <string name="vault_sync_unsuccessful">Sync unsuccessful</string>
-    <string name="vault_sync_failed_description">We couldn’t sync your vault with the server. Your vault may not reflect your latest changes. You can try again now or it will sync automatically later.</string>
+    <string name="vault_sync_unsuccessful">Sinxr. uğursuz oldu</string>
+    <string name="vault_sync_failed_description">Seyfinizi serverlə sinxronlaşdıra bilmədik. Seyfinizdə son dəyişikliklər əks olunmaya bilər. İndi yenidən sınaya bilərsiniz, ya da daha sonra avtomatik sinxronlaşdırılacaq.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Elementləriniz uğurla daxilə köçürüldü, ancaq sinxronlaşdırma həyata keçirilənə qədər seyfinizdə görünməyəcək.</string>
     <string name="there_was_a_problem_importing_your_items">Elementlərinizin daxilə köçürülməsi bağlı bir problem var. Lütfən yenidən sınayın. Əgər problem davam edərsə, dəstəklə əlaqə saxlayın.</string>
     <string name="saving_items">Elementlər saxlanılır…</string>
@@ -1315,13 +1315,13 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="subscription_status_expired">Müddəti bitib</string>
     <string name="subscription_status_past_due">Vaxtı keçmiş</string>
     <string name="subscription_status_paused">Fasilə verilib</string>
-    <string name="subscription_status_unpaid">Unpaid</string>
+    <string name="subscription_status_unpaid">Ödənilməmiş</string>
     <string name="subscription_status_update_payment">Ödənişi güncəllə</string>
     <string name="subscription_status_pending_cancellation">Ləğvi gözlənilir</string>
     <string name="subscription_pending_cancellation_description"><annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> tarixində abunəliyinizin ləğv edilməsi planlanıb. Abunəliyinizi bu tarixdən əvvəl təkrar aktivləşdirə bilərsiniz.</string>
     <string name="premium_next_charge_summary">%1$s USD məbləğindəki növbəti ödənişinizin tarixi: %2$s.</string>
     <string name="subscription_canceled_description">Abunəliyiniz %1$s tarixində ləğv ediləcək. Premium özəllikləri istifadə etməyə davam etmək üçün yenidən abunə olun.</string>
-    <string name="subscription_unpaid_description">Your subscription was suspended on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. To reactivate, please resolve your past due invoices.</string>
+    <string name="subscription_unpaid_description">Abunəliyinizin fəaliyyəti <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> tarixində dayandırılıb. Təkrar aktivləşdirmək üçün lütfən vaxtı keçmiş fakturaları ödəyin.</string>
     <string name="subscription_update_payment_description">Ödənişinizi emal edə bilmədik. Abunəliyiniz <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> tarixində bitməzdən əvvəl ödəniş üsulunuzu güncəlləyin.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Abunəliyinizin bitmə tarixindən etibarən %1$d günlük güzəşt dövrünüz var. Lütfən %2$s tarixinə qədər vaxtı keçmiş fakturaları həll edin.</item>
