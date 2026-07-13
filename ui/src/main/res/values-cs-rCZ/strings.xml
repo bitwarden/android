@@ -192,7 +192,7 @@
     <string name="unable_to_download_file">Nelze stáhnout soubor.</string>
     <string name="downloading">Stahování...</string>
     <string name="attachment_large_warning">Tento soubor je <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Opravdu jej chcete stáhnout?</string>
-    <string name="authenticator_key">Autentizační klíč (TOTP)</string>
+    <string name="authenticator_key">Ověřovací klíč (TOTP)</string>
     <string name="verification_code_totp">Ověřovací kód (TOTP)</string>
     <string name="authenticator_key_added">Byl přidán ověřovací klíč.</string>
     <string name="authenticator_key_read_error">Nelze přečíst ověřovací klíč.</string>
@@ -574,7 +574,7 @@ Načtení proběhne automaticky.</string>
     <string name="cannot_add_authenticator_key_scan_qr_code">Nelze přidat ověřovací klíč? <annotation link="scanQrCode">Naskenovat QR kód</annotation></string>
     <string name="scan_qr_code"><annotation link="scanQrCode">Naskenovat QR kód</annotation></string>
     <string name="cannot_scan_qr_code_enter_key_manually">Nelze naskenovat QR kód? <annotation link="enterKeyManually">Zadejte klíč ručně</annotation></string>
-    <string name="authenticator_key_scanner">Autentizační klíč</string>
+    <string name="authenticator_key_scanner">Ověřovací klíč</string>
     <string name="authenticator_key_help">Nápověda pro ověřovací klíč</string>
     <string name="enter_key_manually">Zadat klíč ručně</string>
     <string name="add_totp">Přidat TOTP</string>
