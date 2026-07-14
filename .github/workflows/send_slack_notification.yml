@@ -43,15 +43,16 @@ jobs:
           REPO_URL: ${{ github.event.repository.html_url }}
         run: |
           PR_NUMBER=$(printf '%s' "$COMMIT_MESSAGE" | head -n1 | grep -oE '#[0-9]+' | tail -n1 | tr -d '#' || true)
-          SHORT_SHA="${COMMIT_SHA:0:8}"
-          SHA_LINE="<${COMMIT_URL}|${SHORT_SHA}>"
-          DEST_LINE="into *${GITHUB_REF_NAME}* for *Android*"
-          CC_LINE="cc <!subteam^S0BG74ZATUM> <@U06538MSPJP>"
+          PR_LINE=""
           if [ -n "$PR_NUMBER" ]; then
-            echo "text=:cherry-pick: ${REPO_URL}/pull/${PR_NUMBER} ${DEST_LINE}\ncommit: ${SHA_LINE}\n${CC_LINE}" >> "$GITHUB_OUTPUT"
+            PR_LINE="<${REPO_URL}/pull/${PR_NUMBER}|android#${PR_NUMBER}> *${COMMIT_MESSAGE}* by *${COMMIT_AUTHOR}*"
           else
-            echo "text=:cherry-pick: ${SHA_LINE} ${DEST_LINE}\n${CC_LINE}" >> "$GITHUB_OUTPUT"
+            PR_LINE="*${COMMIT_MESSAGE}* by *${COMMIT_AUTHOR}*"
           fi
+          SHORT_SHA="${COMMIT_SHA:0:8}"
+          COMMIT_LINE="<${COMMIT_URL}|android/${GITHUB_REF_NAME}@${SHORT_SHA}>"
+          CC_LINE="<!subteam^S0BG74ZATUM> <@U06538MSPJP>"
+          echo "text=:cherry-pick: ${PR_LINE}\n:bricks: commit: ${COMMIT_LINE}\n:bitwarden-love: ${CC_LINE}" >> "$GITHUB_OUTPUT"
 
       - name: Send slack notification
         uses: slackapi/slack-github-action@af78098f536edbc4de71162a307590698245be95 # v3.0.1
