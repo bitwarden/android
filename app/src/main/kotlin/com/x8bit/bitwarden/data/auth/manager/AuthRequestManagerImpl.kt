@@ -27,7 +27,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.isActive
 import java.time.Clock
+import java.time.Instant
 import javax.inject.Singleton
+import kotlin.time.Duration.Companion.milliseconds
 
 private const val PASSWORDLESS_NOTIFICATION_TIMEOUT_MILLIS: Long = 15L * 60L * 1_000L
 private const val PASSWORDLESS_NOTIFICATION_RETRY_INTERVAL_MILLIS: Long = 4L * 1_000L
@@ -154,32 +156,49 @@ class AuthRequestManagerImpl(
         }
     }
 
+    @Suppress("LongMethod")
     private fun getAuthRequest(
         initialRequest: suspend () -> AuthRequestUpdatesResult,
     ): Flow<AuthRequestUpdatesResult> = flow {
-        val result = initialRequest()
-        emit(result)
-        if (result is AuthRequestUpdatesResult.Error) return@flow
+        val initialResult = initialRequest()
+        emit(initialResult)
+        if (initialResult !is AuthRequestUpdatesResult.Update) return@flow
+        val initialAuthRequest = initialResult.authRequest
         var isComplete = false
         while (currentCoroutineContext().isActive && !isComplete) {
-            delay(PASSWORDLESS_APPROVER_INTERVAL_MILLIS)
-            val updateResult = result as AuthRequestUpdatesResult.Update
+            delay(PASSWORDLESS_APPROVER_INTERVAL_MILLIS.milliseconds)
             authRequestsService
-                .getAuthRequest(result.authRequest.id)
-                .map { request ->
-                    AuthRequest(
-                        id = request.id,
-                        publicKey = request.publicKey,
-                        platform = request.platform,
-                        ipAddress = request.ipAddress,
-                        key = request.key,
-                        masterPasswordHash = request.masterPasswordHash,
-                        creationDate = request.creationDate,
-                        responseDate = request.responseDate,
-                        requestApproved = request.requestApproved ?: false,
-                        originUrl = request.originUrl,
-                        fingerprint = updateResult.authRequest.fingerprint,
-                    )
+                .getAuthRequest(requestId = initialResult.authRequest.id)
+                .flatMap { request ->
+                    getFingerprintPhrase(publicKey = request.publicKey).map { fingerprint ->
+                        val isRequestApproved: Boolean
+                        val responseDate: Instant?
+                        if (fingerprint == initialAuthRequest.fingerprint) {
+                            // Fingerprint is valid, so we process the valid response.
+                            isRequestApproved = request.requestApproved ?: false
+                            responseDate = request.responseDate
+                        } else {
+                            // We cannot gaurentee the authenticity of the response, so we will
+                            // hard-decline the request.
+                            isRequestApproved = false
+                            responseDate = clock.instant()
+                        }
+                        AuthRequest(
+                            id = request.id,
+                            platform = request.platform,
+                            ipAddress = request.ipAddress,
+                            key = request.key,
+                            masterPasswordHash = request.masterPasswordHash,
+                            creationDate = request.creationDate,
+                            originUrl = request.originUrl,
+                            responseDate = responseDate,
+                            requestApproved = isRequestApproved,
+                            // The PublicKey and Fingerprint should be frozen in place to
+                            // ensure no funny-business happens between multiple requests.
+                            publicKey = initialAuthRequest.publicKey,
+                            fingerprint = initialAuthRequest.fingerprint,
+                        )
+                    }
                 }
                 .fold(
                     onFailure = { emit(AuthRequestUpdatesResult.Error(error = it)) },
