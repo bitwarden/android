@@ -158,6 +158,7 @@ class PolicyManagerImpl(
                 this.organizationUserPolicyContext.role == OrganizationUserType.OWNER
             }
 
+            PolicyType.MASTER_PASSWORD,
             PolicyType.PASSWORD_GENERATOR,
             PolicyType.REMOVE_UNLOCK_WITH_PIN,
             PolicyType.RESTRICTED_ITEM_TYPES,
