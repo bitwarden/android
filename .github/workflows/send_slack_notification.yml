@@ -42,7 +42,7 @@ jobs:
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
           REPO_URL: ${{ github.event.repository.html_url }}
         run: |
-          PR_NUMBER=$(printf '%s' "$COMMIT_MESSAGE" | head -n1 | grep -oE '#[0-9]+' | tail -n1 | tr -d '#')
+          PR_NUMBER=$(printf '%s' "$COMMIT_MESSAGE" | head -n1 | grep -oE '#[0-9]+' | tail -n1 | tr -d '#' || true)
           SHORT_SHA="${COMMIT_SHA:0:8}"
           SHA_LINE="<${COMMIT_URL}|${SHORT_SHA}>"
           DEST_LINE="into *${GITHUB_REF_NAME}* for *Android*"
