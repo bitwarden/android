@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.model.UnregisterExportResult
+import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManager
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
@@ -63,6 +64,9 @@ class UserLogoutManagerTest {
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager = mockk {
         coEvery { unregister() } returns UnregisterExportResult.Success
     }
+    private val passwordPolicyManager: PasswordPolicyManager = mockk {
+        every { removePasswordToCheck(userId = any()) } just runs
+    }
 
     private val userLogoutManager: UserLogoutManager =
         UserLogoutManagerImpl(
@@ -76,6 +80,7 @@ class UserLogoutManagerTest {
             vaultSdkSource = vaultSdkSource,
             dispatcherManager = FakeDispatcherManager(),
             credentialExchangeRegistryManager = credentialExchangeRegistryManager,
+            passwordPolicyManager = passwordPolicyManager,
         )
 
     @Suppress("MaxLineLength")
@@ -265,13 +270,16 @@ class UserLogoutManagerTest {
     }
 
     private fun assertDataCleared(userId: String) {
-        verify { vaultSdkSource.clearCrypto(userId = userId) }
-        verify { authDiskSource.clearData(userId = userId) }
-        verify { generatorDiskSource.clearData(userId = userId) }
-        verify { pushDiskSource.clearData(userId = userId) }
-        verify { settingsDiskSource.clearData(userId = userId) }
-        coVerify { passwordHistoryDiskSource.clearPasswordHistories(userId = userId) }
-        coVerify {
+        verify(exactly = 1) {
+            passwordPolicyManager.removePasswordToCheck(userId = userId)
+            vaultSdkSource.clearCrypto(userId = userId)
+            authDiskSource.clearData(userId = userId)
+            generatorDiskSource.clearData(userId = userId)
+            pushDiskSource.clearData(userId = userId)
+            settingsDiskSource.clearData(userId = userId)
+        }
+        coVerify(exactly = 1) {
+            passwordHistoryDiskSource.clearPasswordHistories(userId = userId)
             vaultDiskSource.deleteVaultData(userId = userId)
         }
     }

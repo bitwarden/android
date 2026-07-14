@@ -51,8 +51,6 @@ import com.bitwarden.network.service.HaveIBeenPwnedService
 import com.bitwarden.network.service.IdentityService
 import com.bitwarden.network.service.OrganizationService
 import com.bitwarden.network.util.isSslHandShakeError
-import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
@@ -61,7 +59,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetRea
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeviceDataModel
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
-import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toInt
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.KdfManager
@@ -83,7 +80,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
-import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.RemovePasswordResult
@@ -105,14 +101,12 @@ import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
-import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.toAccountCryptographicState
 import com.x8bit.bitwarden.data.auth.repository.util.toDeviceInfo
 import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.repository.util.updateMasterPasswordUnlock
-import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
@@ -121,9 +115,8 @@ import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
-import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
-import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
+import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.appLinksScheme
@@ -142,13 +135,10 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -181,18 +171,19 @@ class AuthRepositoryImpl(
     private val keyConnectorManager: KeyConnectorManager,
     private val trustedDeviceManager: TrustedDeviceManager,
     private val userLogoutManager: UserLogoutManager,
-    private val policyManager: PolicyManager,
     private val userStateManager: UserStateManager,
     private val kdfManager: KdfManager,
     private val toastManager: ToastManager,
     private val featureFlagManager: FeatureFlagManager,
     logsManager: LogsManager,
     pushManager: PushManager,
+    passwordPolicyManager: PasswordPolicyManager,
     dispatcherManager: DispatcherManager,
 ) : AuthRepository,
     AuthRequestManager by authRequestManager,
     BiometricsEncryptionManager by biometricsEncryptionManager,
     KdfManager by kdfManager,
+    PasswordPolicyManager by passwordPolicyManager,
     UserStateManager by userStateManager {
     /**
      * A scope intended for use when simply collecting multiple flows in order to combine them. The
@@ -229,12 +220,6 @@ class AuthRepositoryImpl(
     private var resendNewDeviceOtpRequestJson: ResendNewDeviceOtpRequestJson? = null
 
     private var organizationIdentifier: String? = null
-
-    /**
-     * The password that needs to be checked against any organization policies before
-     * the user can complete the login flow. This value is stored using the user ID.
-     */
-    private var passwordsToCheckMap = mutableMapOf<String, String>()
 
     private var keyConnectorResponse: GetTokenResponseJson.Success? = null
 
@@ -298,16 +283,6 @@ class AuthRepositoryImpl(
             }
         }
 
-    override val passwordPolicies: List<PolicyInformation.MasterPassword>
-        get() = policyManager.getActivePolicies()
-
-    override val passwordResetReason: ForcePasswordResetReason?
-        get() = authDiskSource
-            .userState
-            ?.activeAccount
-            ?.profile
-            ?.forcePasswordResetReason
-
     override val organizations: List<Organization>
         get() = activeUserId
             ?.let { authDiskSource.getOrganizations(it) }
@@ -362,52 +337,6 @@ class AuthRepositoryImpl(
         pushManager
             .logoutFlow
             .onEach { logout(userId = it.userId, reason = LogoutReason.Notification) }
-            .launchIn(unconfinedScope)
-
-        // When the policies for the user have been set, complete the login process.
-        policyManager
-            .getActivePoliciesFlow(type = PolicyType.MASTER_PASSWORD)
-            .onEach { policies ->
-                val userId = activeUserId ?: return@onEach
-
-                // If the user is logging on without a password, the check should complete.
-                val passwordToCheck = passwordsToCheckMap.remove(key = userId) ?: return@onEach
-
-                // If the password already has to be reset for some other reason, there's no
-                // need to check the password policies.
-                if (passwordResetReason != null) return@onEach
-
-                // Otherwise check the user's password against the policies and set or
-                // clear the force reset reason accordingly.
-                storeUserResetPasswordReason(
-                    userId = userId,
-                    reason = ForcePasswordResetReason
-                        .WEAK_MASTER_PASSWORD_ON_LOGIN
-                        .takeIf {
-                            !passwordPassesPolicies(
-                                password = passwordToCheck,
-                                policies = policies,
-                            )
-                        },
-                )
-            }
-            .launchIn(unconfinedScope)
-
-        // Clear the cached password whenever the user is no longer active
-        // or the vault is locked for that user.
-        merge(
-            authDiskSource
-                .userSwitchingChangesFlow
-                .mapNotNull { it.previousActiveUserId },
-            vaultRepository
-                .vaultUnlockDataStateFlow
-                .filter { vaultUnlockDataList ->
-                    // Clear if the active user is not currently unlocking or unlocked
-                    vaultUnlockDataList.none { it.userId == activeUserId }
-                }
-                .mapNotNull { activeUserId },
-        )
-            .onEach { userId -> passwordsToCheckMap.remove(key = userId) }
             .launchIn(unconfinedScope)
     }
 
@@ -1529,11 +1458,6 @@ class AuthRepositoryImpl(
             )
     }
 
-    override suspend fun validatePasswordAgainstPolicies(
-        password: String,
-    ): Boolean = passwordPolicies
-        .all { validatePasswordAgainstPolicy(password, it) }
-
     override suspend fun sendVerificationEmail(
         email: String,
         name: String,
@@ -1611,62 +1535,6 @@ class AuthRepositoryImpl(
             onFailure = { RevokeFromOrganizationResult.Error(error = it) },
         )
 
-    @Suppress("CyclomaticComplexMethod")
-    private suspend fun validatePasswordAgainstPolicy(
-        password: String,
-        policy: PolicyInformation.MasterPassword,
-    ): Boolean {
-        // Check the password against all the enforced rules in the policy.
-        policy.minLength?.let { minLength ->
-            if (minLength > 0 && password.length < minLength) return false
-        }
-        policy.minComplexity?.let { minComplexity ->
-            // If there was a problem checking the complexity of the password, ignore
-            // the complexity checks and continue checking the other aspects of the policy.
-            val profile = authDiskSource.userState?.activeAccount?.profile ?: return@let
-            val passwordStrengthResult = getPasswordStrength(profile.email, password)
-            val passwordStrength = (passwordStrengthResult as? PasswordStrengthResult.Success)
-                ?.passwordStrength
-                ?.toInt()
-                ?: return@let
-            if (minComplexity > 0 && passwordStrength < minComplexity) return false
-        }
-        policy.requireUpper?.let { requiresUpper ->
-            if (requiresUpper && !password.any { it.isUpperCase() }) return false
-        }
-        policy.requireLower?.let { requiresLower ->
-            if (requiresLower && !password.any { it.isLowerCase() }) return false
-        }
-        policy.requireNumbers?.let { requiresNumbers ->
-            if (requiresNumbers && !password.any { it.isDigit() }) return false
-        }
-        policy.requireSpecial?.let { requiresSpecial ->
-            if (requiresSpecial && !password.contains("^.*[!@#$%\\^&*].*$".toRegex())) return false
-        }
-
-        return true
-    }
-
-    /**
-     * Return true if there are any [PolicyInformation.MasterPassword] policies that the user's
-     * master password has failed to pass.
-     */
-    private suspend fun passwordPassesPolicies(
-        password: String,
-        policies: List<PolicyView>,
-    ): Boolean {
-        // If there are no master password policies that are enabled and should be
-        // enforced on login, the check should complete.
-        val passwordPolicies = policies
-            .mapNotNull { it.policyInformation as? PolicyInformation.MasterPassword }
-            .filter { it.enforceOnLogin == true }
-
-        // Check the password against all the policies.
-        return passwordPolicies.all { policy ->
-            validatePasswordAgainstPolicy(password, policy)
-        }
-    }
-
     /**
      * Enrolls the active user in password reset if their organization requires it.
      */
@@ -1711,26 +1579,6 @@ class AuthRepositoryImpl(
                 remember = false,
             )
         }
-
-    /**
-     * Update the saved state with the force password reset reason.
-     */
-    private fun storeUserResetPasswordReason(userId: String, reason: ForcePasswordResetReason?) {
-        val accounts = authDiskSource
-            .userState
-            ?.accounts
-            ?.toMutableMap()
-            ?: return
-        val account = accounts[userId] ?: return
-        val updatedProfile = account
-            .profile
-            .copy(forcePasswordResetReason = reason)
-        accounts[userId] = account.copy(profile = updatedProfile)
-        authDiskSource.userState = authDiskSource
-            .userState
-            ?.copy(accounts = accounts)
-    }
-
     //region LoginCommon
 
     /**
@@ -1906,7 +1754,7 @@ class AuthRepositoryImpl(
                 }
 
             // Cache the password to verify against any password policies after the sync completes.
-            passwordsToCheckMap.put(userId, it)
+            storePasswordToCheck(userId = userId, password = it)
         }
 
         settingsRepository.hasUserLoggedInOrCreatedAccount = true

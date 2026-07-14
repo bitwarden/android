@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.core.content.getSystemService
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManagerImpl
+import com.bitwarden.core.data.manager.encryption.EncryptionManager
 import com.bitwarden.core.data.manager.realtime.RealtimeManager
 import com.bitwarden.core.data.manager.realtime.RealtimeManagerImpl
 import com.bitwarden.core.data.manager.toast.ToastManager
@@ -77,6 +78,8 @@ import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManager
+import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManager
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
@@ -271,6 +274,22 @@ object PlatformManagerModule {
         authDiskSource = authDiskSource,
         authSdkSource = authSdkSource,
         featureFlagManager = featureFlagManager,
+    )
+
+    @Provides
+    @Singleton
+    fun providePasswordPolicyManager(
+        authDiskSource: AuthDiskSource,
+        authSdkSource: AuthSdkSource,
+        policyManager: PolicyManager,
+        encryptionManager: EncryptionManager,
+        dispatcherManager: DispatcherManager,
+    ): PasswordPolicyManager = PasswordPolicyManagerImpl(
+        authDiskSource = authDiskSource,
+        authSdkSource = authSdkSource,
+        policyManager = policyManager,
+        encryptionManager = encryptionManager,
+        dispatcherManager = dispatcherManager,
     )
 
     @Provides

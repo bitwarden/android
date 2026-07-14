@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
+import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManager
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
@@ -36,6 +37,7 @@ class UserLogoutManagerImpl(
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager,
+    private val passwordPolicyManager: PasswordPolicyManager,
     dispatcherManager: DispatcherManager,
 ) : UserLogoutManager {
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
@@ -111,6 +113,7 @@ class UserLogoutManagerImpl(
     }
 
     private fun clearData(userId: String) {
+        passwordPolicyManager.removePasswordToCheck(userId = userId)
         vaultSdkSource.clearCrypto(userId = userId)
         authDiskSource.clearData(userId = userId)
         generatorDiskSource.clearData(userId = userId)

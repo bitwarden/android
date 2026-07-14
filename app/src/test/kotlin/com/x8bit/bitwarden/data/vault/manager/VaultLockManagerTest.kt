@@ -30,6 +30,7 @@ import com.x8bit.bitwarden.data.auth.manager.model.LogoutEvent
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
+import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -116,6 +117,10 @@ class VaultLockManagerTest {
     private val pinProtectedUserKeyManager: PinProtectedUserKeyManager = mockk {
         coEvery { migratePinProtectedUserKeyIfNeeded(userId = any()) } just runs
     }
+    private val passwordPolicyManager: PasswordPolicyManager = mockk {
+        every { storePasswordToCheck(userId = any(), password = any()) } just runs
+        every { removePasswordToCheck(userId = any()) } just runs
+    }
 
     private val vaultLockManager: VaultLockManager = VaultLockManagerImpl(
         context = context,
@@ -131,6 +136,7 @@ class VaultLockManagerTest {
         dispatcherManager = fakeDispatcherManager,
         kdfManager = kdfManager,
         pinProtectedUserKeyManager = pinProtectedUserKeyManager,
+        passwordPolicyManager = passwordPolicyManager,
     )
 
     @Test
@@ -260,6 +266,7 @@ class VaultLockManagerTest {
         // Will be used within each loop to reset the test to a suitable initial state.
         fun resetTest(vaultTimeout: VaultTimeout) {
             clearVerifications(userLogoutManager)
+            clearVerifications(passwordPolicyManager)
             mutableVaultTimeoutStateFlow.value = vaultTimeout
             fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
             verifyUnlockedVaultBlocking(userId = USER_ID)
@@ -433,6 +440,7 @@ class VaultLockManagerTest {
 
         // Will be used within each loop to reset the test to a suitable initial state.
         fun resetTest(vaultTimeout: VaultTimeout) {
+            clearVerifications(passwordPolicyManager)
             mutableVaultTimeoutStateFlow.value = vaultTimeout
             fakeAppStateManager.appCreationState = AppCreationState.Destroyed
             clearVerifications(userLogoutManager)
@@ -515,6 +523,7 @@ class VaultLockManagerTest {
 
         // Will be used within each loop to reset the test to a suitable initial state.
         fun resetTest(vaultTimeout: VaultTimeout) {
+            clearVerifications(passwordPolicyManager)
             mutableVaultTimeoutStateFlow.value = vaultTimeout
             fakeAppStateManager.appCreationState = AppCreationState.Destroyed
             clearVerifications(userLogoutManager)
@@ -568,6 +577,7 @@ class VaultLockManagerTest {
         // Will be used within each loop to reset the test to a suitable initial state.
         fun resetTest(vaultTimeout: VaultTimeout) {
             clearVerifications(userLogoutManager)
+            clearVerifications(passwordPolicyManager)
             mutableVaultTimeoutStateFlow.value = vaultTimeout
             verifyUnlockedVaultBlocking(userId = USER_ID)
             verifyUnlockedVaultBlocking(userId = userId2)
@@ -874,7 +884,10 @@ class VaultLockManagerTest {
                 emptyList<VaultUnlockData>(),
                 vaultLockManager.vaultUnlockDataStateFlow.value,
             )
-            verify { vaultSdkSource.clearCrypto(userId = USER_ID) }
+            verify(exactly = 1) {
+                passwordPolicyManager.removePasswordToCheck(userId = USER_ID)
+                vaultSdkSource.clearCrypto(userId = USER_ID)
+            }
         }
 
     @Suppress("MaxLineLength")
@@ -995,6 +1008,10 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeOrganizationCrypto(
                     userId = USER_ID,
                     request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
+                )
+                passwordPolicyManager.storePasswordToCheck(
+                    userId = USER_ID,
+                    password = masterPassword,
                 )
                 trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
                 kdfManager.updateKdfToMinimumsIfNeeded(masterPassword)
@@ -1559,6 +1576,7 @@ class VaultLockManagerTest {
             // Confirm the vault is still locked
             assertFalse(vaultLockManager.isVaultUnlocked(userId = USER_ID))
             coVerify(exactly = 1) {
+                passwordPolicyManager.removePasswordToCheck(userId = USER_ID)
                 vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
             }
         }
@@ -1901,6 +1919,9 @@ class VaultLockManagerTest {
                     upgradeToken = null,
                 ),
             )
+        }
+        verify(exactly = 1) {
+            passwordPolicyManager.storePasswordToCheck(userId = USER_ID, password = masterPassword)
         }
     }
 

@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
+import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -181,6 +182,7 @@ object VaultManagerModule {
         trustedDeviceManager: TrustedDeviceManager,
         kdfManager: KdfManager,
         pinProtectedUserKeyManager: PinProtectedUserKeyManager,
+        passwordPolicyManager: PasswordPolicyManager,
     ): VaultLockManager =
         VaultLockManagerImpl(
             context = context,
@@ -196,6 +198,7 @@ object VaultManagerModule {
             trustedDeviceManager = trustedDeviceManager,
             kdfManager = kdfManager,
             pinProtectedUserKeyManager = pinProtectedUserKeyManager,
+            passwordPolicyManager = passwordPolicyManager,
         )
 
     @Provides
