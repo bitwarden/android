@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
+import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -69,7 +70,7 @@ object AuthRepositoryModule {
         trustedDeviceManager: TrustedDeviceManager,
         userLogoutManager: UserLogoutManager,
         pushManager: PushManager,
-        policyManager: PolicyManager,
+        passwordPolicyManager: PasswordPolicyManager,
         logsManager: LogsManager,
         userStateManager: UserStateManager,
         kdfManager: KdfManager,
@@ -97,7 +98,7 @@ object AuthRepositoryModule {
         trustedDeviceManager = trustedDeviceManager,
         userLogoutManager = userLogoutManager,
         pushManager = pushManager,
-        policyManager = policyManager,
+        passwordPolicyManager = passwordPolicyManager,
         logsManager = logsManager,
         userStateManager = userStateManager,
         kdfManager = kdfManager,
