@@ -1264,6 +1264,73 @@ class AutofillParserTests {
         assertEquals(expected, actual)
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `parse should deduplicate when a child node returns an AutofillView with the same autofillId already claimed by a non-Unused parent view`() {
+        // Setup
+        val sharedAutofillId: AutofillId = mockk()
+        val childViewNode: AssistStructure.ViewNode = mockk {
+            every { this@mockk.childCount } returns 0
+            every { this@mockk.idPackage } returns null
+            every { this@mockk.website } returns null
+        }
+        val parentViewNode: AssistStructure.ViewNode = mockk {
+            every { this@mockk.childCount } returns 1
+            every { this@mockk.getChildAt(0) } returns childViewNode
+            every { this@mockk.idPackage } returns ID_PACKAGE
+            every { this@mockk.website } returns WEBSITE
+        }
+        val windowNode: AssistStructure.WindowNode = mockk {
+            every { this@mockk.rootViewNode } returns parentViewNode
+        }
+        every { assistStructure.windowNodeCount } returns 1
+        every { assistStructure.getWindowNodeAt(0) } returns windowNode
+
+        val sharedAutofillView = AutofillView.Login.Password(
+            data = AutofillView.Data(
+                autofillId = sharedAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = URI,
+            ),
+        )
+        every { parentViewNode.toAutofillView(parentWebsite = any()) } returns sharedAutofillView
+        every { childViewNode.toAutofillView(parentWebsite = any()) } returns sharedAutofillView
+
+        val expected = AutofillRequest.Fillable(
+            ignoreAutofillIds = emptyList(),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = PACKAGE_NAME,
+            partition = AutofillPartition.Login(views = listOf(sharedAutofillView)),
+            uri = URI,
+        )
+
+        // Test
+        val actual = parser.parse(
+            autofillAppInfo = autofillAppInfo,
+            fillRequest = fillRequest,
+        )
+
+        // Verify
+        assertEquals(expected, actual)
+        verify(exactly = 1) {
+            fillRequest.getInlinePresentationSpecs(
+                autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
+            )
+            fillRequest.getMaxInlineSuggestionsCount(
+                autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
+            )
+            any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
+            any<AutofillView>().buildUriOrNull(PACKAGE_NAME)
+        }
+    }
+
     /**
      * Setup [assistStructure] to return window nodes with each [AutofillView] type (card and login)
      * so we can test how different window node configurations produce different partitions.

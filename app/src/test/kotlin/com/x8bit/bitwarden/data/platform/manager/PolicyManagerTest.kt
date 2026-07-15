@@ -419,7 +419,7 @@ class PolicyManagerTest {
         every { authDiskSource.getOrganizations(USER_ID) } returns null
 
         assertEquals(
-            emptyList<SyncResponseJson.Policy>(),
+            emptyList<PolicyView>(),
             policyManager.getUserPolicies(
                 userId = USER_ID,
                 type = PolicyType.ORGANIZATION_DATA_OWNERSHIP,

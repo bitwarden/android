@@ -265,7 +265,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         assertEquals(
             DEFAULT_STATE.copy(
-                accountSummaries = emptyList(),
+                accountSummaries = persistentListOf(),
                 avatarColorString = "#ff000000",
                 initials = "",
                 showImportActionCard = false,
@@ -681,7 +681,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 appBarTitle = BitwardenString.vaults.asText(),
                 avatarColorString = "#00aaaa",
                 initials = "OU",
-                accountSummaries = listOf(
+                accountSummaries = persistentListOf(
                     AccountSummary(
                         userId = "activeUserId",
                         name = "Other User",
@@ -768,7 +768,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 appBarTitle = BitwardenString.vaults.asText(),
                 avatarColorString = "#00aaaa",
                 initials = "OU",
-                accountSummaries = listOf(
+                accountSummaries = persistentListOf(
                     AccountSummary(
                         userId = "activeUserId",
                         name = "Other User",
@@ -4735,7 +4735,7 @@ private fun createMockVaultState(
         appBarTitle = BitwardenString.my_vault.asText(),
         avatarColorString = "#aa00aa",
         initials = "AU",
-        accountSummaries = listOf(
+        accountSummaries = persistentListOf(
             AccountSummary(
                 userId = "activeUserId",
                 name = "Active User",

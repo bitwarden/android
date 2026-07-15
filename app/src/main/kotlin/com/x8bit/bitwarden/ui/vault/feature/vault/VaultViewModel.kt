@@ -127,7 +127,7 @@ class VaultViewModel @Inject constructor(
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
         val userState = authRepository.userStateFlow.value
-        val accountSummaries = userState?.toAccountSummaries().orEmpty()
+        val accountSummaries = userState?.toAccountSummaries().orEmpty().toImmutableList()
         val activeAccount = userState?.activeAccount ?: run {
             // We use this empty account to avoid a crash that can occur during a race condition.
             // The state-based navigation brought us here but the UserState has now been set to
@@ -1756,7 +1756,7 @@ data class VaultState(
     val appBarTitle: Text,
     private val avatarColorString: String,
     val initials: String,
-    val accountSummaries: List<AccountSummary>,
+    val accountSummaries: ImmutableList<AccountSummary>,
     val vaultFilterData: VaultFilterData? = null,
     val viewState: ViewState,
     val dialog: DialogState? = null,

@@ -78,7 +78,7 @@
     <string name="bitwarden_autofill_service">Dịch vụ tự động điền Bitwarden</string>
     <string name="change_master_password">Thay đổi mật khẩu chính</string>
     <string name="close">Đóng</string>
-    <string name="close_app">Close app</string>
+    <string name="close_app">Đóng ứng dụng</string>
     <string name="continue_text">Tiếp tục</string>
     <string name="create_account">Tạo tài khoản</string>
     <string name="create_an_account">Tạo một tài khoản</string>
@@ -119,13 +119,13 @@
     <string name="never">Không bao giờ</string>
     <string name="new_item_created">Đã thêm mục</string>
     <string name="no_cards">Không có thẻ nào trong kho lưu trữ.</string>
-    <string name="add_card">Add card</string>
+    <string name="add_card">Thêm thẻ</string>
     <string name="no_logins">Không có tài khoản đăng nhập nào trong kho của bạn.</string>
     <string name="no_identities">Không có danh tính nào trong kho của bạn.</string>
-    <string name="add_identity">Add identity</string>
+    <string name="add_identity">Thêm danh tính</string>
     <string name="no_notes">Không có ghi chú nào trong kho của bạn.</string>
-    <string name="add_note">Add note</string>
-    <string name="add_ssh_key">Add SSH key</string>
+    <string name="add_note">Thêm ghi chú</string>
+    <string name="add_ssh_key">Thêm khóa SSH</string>
     <string name="no_text_sends">Không có Send văn bản nào trong kho của bạn.</string>
     <string name="no_file_sends">Không có Send tập tin nào trong kho của bạn.</string>
     <string name="no_ssh_keys">Không có khóa SSH nào trong kho của bạn.</string>
@@ -182,13 +182,14 @@
     <string name="send_verification_code_again">Gửi lại mã</string>
     <string name="verification_email_not_sent">Không thể gửi email xác minh. Thử lại.</string>
     <string name="verification_email_sent">Đã gửi email xác minh</string>
-    <string name="yubi_key_instruction">Để tiếp tục, hãy giữ khóa bảo mật Yubico của bạn áp vào mặt sau thiết bị hoặc cắm nó vào cổng USB, rồi chạm vào nút trên khóa.</string>
+    <string name="yubi_key_instruction">Để tiếp tục, hãy giữ khóa bảo mật Yubico của bạn áp vào mặt sau thiết bị hoặc cắm nó vào cổng USB, rồi chạm vào nút trên khóa.
+</string>
     <string name="yubi_key_title">Khóa bảo mật Yubico</string>
     <string name="add_new_attachment">Thêm tệp đính kèm mới</string>
     <string name="attachments">Tệp đính kèm</string>
     <string name="unable_to_download_file">Không thể tải về tệp tin.</string>
     <string name="downloading">Đang tải về…</string>
-    <string name="attachment_large_warning">Tệp tin đính kèm này có kích thước %1$s. Bạn có chắc muốn tải nó xuống thiết bị của mình?</string>
+    <string name="attachment_large_warning">Tệp này là <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Bạn có muốn tải xuống không?</string>
     <string name="authenticator_key">Khóa xác thực</string>
     <string name="verification_code_totp">Mã xác thực (TOTP)</string>
     <string name="authenticator_key_added">Đã thêm khóa xác thực.</string>
@@ -228,7 +229,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="security_code">Mã bảo mật</string>
     <string name="scan_card">Quét thẻ</string>
     <string name="scan_card_instruction">Đặt thẻ của bạn bên trong khung hình để quét.</string>
-    <string name="hold_steady_and_ensure_all_card_details_are_visible">Hold steady and ensure all card details are visible</string>
+    <string name="hold_steady_and_ensure_all_card_details_are_visible">Giữ ổn định và đảm bảo nhìn rõ mọi chi tiết trên thẻ</string>
     <string name="type_card">Thẻ</string>
     <string name="type_identity">Danh tính</string>
     <string name="type_login">Đăng nhập</string>
@@ -240,7 +241,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="august">Tháng 8</string>
     <string name="brand">Thương hiệu</string>
     <string name="card_details">Thông tin Thẻ</string>
-    <string name="card_scanned">Card scanned</string>
+    <string name="card_scanned">Đã quét thẻ</string>
     <string name="cardholder_name">Tên chủ thẻ</string>
     <string name="city_town">Xã / Phường</string>
     <string name="company">Công ty</string>
@@ -455,10 +456,10 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="deletion_date_info">Send sẽ được xóa vĩnh viễn vào ngày và giờ chỉ định.</string>
     <string name="who_can_view">Ai có thể xem</string>
     <string name="anyone_with_the_link">Bất kỳ ai có liên kết</string>
-    <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
+    <string name="anyone_with_link_can_view_send">Bất kỳ ai có liên kết đều có thể xem Send này</string>
     <string name="specific_people">Người cụ thể</string>
-    <string name="specific_people_verification_info">After sharing this Send link, individuals will need to verify their email with a code to view this Send</string>
-    <string name="anyone_with_password">Bất kỳ ai có mật khẩu được đặt bởi bạn</string>
+    <string name="specific_people_verification_info">Sau khi chia sẻ liên kết Send này, các cá nhân sẽ cần xác minh email của họ bằng một mã để xem Send này</string>
+    <string name="anyone_with_password">Bất kỳ ai có mật khẩu do bạn đặt</string>
     <string name="add_email">Thêm email</string>
     <string name="pending_delete">Đang chờ xóa</string>
     <string name="expired">Đã hết hạn</string>
@@ -509,9 +510,9 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="remove_master_password">Xóa mật khẩu chính</string>
     <string name="leave_organization">Rời khỏi tổ chức</string>
     <string name="leave_organization_name">Rời khỏi %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Bạn có chắc chắn muốn rời khỏi [%1$s] không?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Bạn có chắc chắn muốn rời đi không?</string>
     <string name="leave_organization_button">Rời khỏi %1$s</string>
-    <string name="leave_organization_warning">Bằng cách từ chối, các mục cá nhân sẽ ở lại trong tài khoản của bạn, nhưng bạn sẽ mất quyền truy cập vào các mục được chia sẻ và tính năng tổ chức.\n\nLiên hệ với quản trị viên của bạn để lấy lại quyền truy cập.</string>
+    <string name="leave_organization_warning">Nếu từ chối, các mục cá nhân của bạn sẽ vẫn được giữ trong tài khoản, nhưng bạn sẽ mất quyền truy cập vào các mục được chia sẻ và các tính năng của tổ chức. <annotation link="learnMore">Tìm hiểu thêm</annotation></string>
     <string name="contact_your_admin_to_regain_access">Liên hệ quản trị viên của bạn để lấy lại quyền truy cập.</string>
     <string name="fido2_authenticate_web_authn">Xác thực WebAuthn</string>
     <string name="fido2_return_to_app">Quay lại ứng dụng</string>
@@ -608,10 +609,10 @@ chọn Thêm TOTP để lưu khóa an toàn</string>
     <string name="forwarded_email_description">Tạo một địa chỉ email ảo bằng dịch vụ chuyển tiếp email bên ngoài.</string>
     <string name="accessibility_service_disclosure">Thông báo về Dịch vụ Trợ năng</string>
     <string name="accessibility_disclosure_text">Bitwarden sử dụng Dịch vụ trợ năng để tìm kiếm các trường đăng nhập trong ứng dụng và trang web, sau đó thiết lập ID trường thích hợp để nhập tên đăng nhập &amp; mật khẩu khi tìm thấy ứng dụng hoặc trang web tương ứng. Chúng tôi không lưu trữ bất kỳ thông tin nào được dịch vụ cung cấp, cũng như không cố gắng kiểm soát bất kỳ yếu tố nào trên màn hình ngoài việc nhập thông tin đăng nhập.</string>
-    <string name="accessibility_disclosure_start_up_text_1">This notice is required before Bitwarden can offer accessibility-based autofill.</string>
-    <string name="accessibility_disclosure_start_up_text_2">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields. If you enable it, Bitwarden will identify the appropriate fields and fill in your credentials when a match is found.</string>
-    <string name="accessibility_disclosure_start_up_text_3">We don’t store any information about what’s onscreen while you use the Accessibility Service, and we don’t control any onscreen elements beyond credential entry.</string>
-    <string name="i_understand">I understand</string>
+    <string name="accessibility_disclosure_start_up_text_1">Thông báo này là bắt buộc trước khi Bitwarden có thể cung cấp tính năng tự động điền dựa trên khả năng tiếp cận.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden cung cấp một phương thức tự động điền tùy chọn sử dụng Dịch vụ trợ năng của Android để phát hiện các trường đăng nhập. Nếu bật phương thức này, Bitwarden sẽ xác định các trường phù hợp và tự động điền thông tin xác thực của bạn khi tìm thấy mục khớp.</string>
+    <string name="accessibility_disclosure_start_up_text_3">Chúng tôi không lưu trữ bất kỳ thông tin nào về những gì hiển thị trên màn hình khi bạn sử dụng Dịch vụ trợ năng và không kiểm soát bất kỳ yếu tố nào trên màn hình ngoài việc nhập thông tin đăng nhập.</string>
+    <string name="i_understand">Tôi đã hiểu</string>
     <string name="accept">Đồng ý</string>
     <string name="decline">Từ chối</string>
     <string name="login_request_has_already_expired">Yêu cầu đăng nhập đã hết hạn.</string>
@@ -773,7 +774,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="write_this_password_down_and_keep_it_somewhere_safe">Hãy ghi lại mật khẩu này và giữ ở nơi an toàn.</string>
     <string name="learn_about_other_ways_to_prevent_account_lockout">Tìm hiểu thêm các cách khác để ngăn ngừa việc tài khoản bị khóa</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Tìm hiểu cách tránh bị khóa tài khoản</annotation></string>
-    <string name="help_with_server_geolocations">Trợ giúp về vị trí địa lý của máy chủ.</string>
+    <string name="help_with_server_geolocations">Trợ giúp về vị trí địa lý của máy chủ</string>
     <string name="email_address_required">Địa chỉ email (bắt buộc)</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Nhấn vào liên kết trong email để xác minh địa chỉ email của bạn và tiếp tục tạo tài khoản.</string>
     <string name="change_email_address">Thay đổi địa chỉ email</string>
@@ -811,7 +812,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="get_started">Bắt đầu</string>
     <string name="save_and_protect_your_data">Lưu và bảo vệ dữ liệu của bạn</string>
     <string name="the_vault_protects_more_than_just_passwords">Kho lưu trữ không chỉ bảo vệ mật khẩu. Bạn có thể lưu trữ an toàn các thông tin đăng nhập, ID, thẻ và ghi chú tại đây.</string>
-    <string name="add_login">Add login</string>
+    <string name="add_login">Thêm đăng nhập</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">Chia sẻ tệp tin và dữ liệu một cách an toàn với bất kỳ ai, trên bất kỳ nền tảng nào. Thông tin của bạn sẽ được mã hóa đầu cuối để hạn chế rủi ro bị lộ.</string>
     <string name="send_sensitive_information_safely">Gửi thông tin nhạy cảm một cách an toàn</string>
     <string name="import_saved_logins">Nhập các thông tin đăng nhập đã lưu</string>
@@ -842,7 +843,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="fill_out_the_form_and_import_your_saved_password_file">Điền vào biểu mẫu và <annotation emphasis="bold">nhập tệp mật khẩu đã lưu của bạn.</annotation></string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Để đảm bảo an toàn cho bạn, hãy chắc chắn rằng bạn đã <annotation emphasis="bold">xóa tệp mật khẩu đã lưu của mình.</annotation></string>
     <string name="need_help_check_out_import_help">Cần trợ giúp? Hãy xem <annotation link="importHelp">hướng dẫn nhập dữ liệu</annotation>.</string>
-    <string name="import_help">import help</string>
+    <string name="import_help">trợ giúp nhập</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Lưu tệp đã xuất</annotation> ở một vị trí trên máy tính của bạn mà bạn có thể dễ dàng tìm thấy.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Đây không phải là máy chủ Bitwarden được công nhận. Bạn có thể cần liên hệ với nhà cung cấp dịch vụ hoặc cập nhật máy chủ của mình.</string>
     <string name="syncing_logins_loading_message">Đang đồng bộ đăng nhập…</string>
@@ -868,7 +869,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="copy_fingerprint">Sao chép vân tay</string>
     <string name="enable_notifications">Bật thông báo</string>
     <plurals name="notifications_content_description">
-        <item quantity="other">%d notifications</item>
+        <item quantity="other">%d thông báo</item>
     </plurals>
     <string name="log_in_quickly_and_easily_across_devices">Đăng nhập nhanh và dễ dàng trên mọi thiết bị</string>
     <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden có thể thông báo cho bạn mỗi khi nhận được yêu cầu đăng nhập mới từ một thiết bị khác.</string>
@@ -879,10 +880,10 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="copy_company">Sao chép công ty</string>
     <string name="copy_ssn">Sao chép số bảo hiểm xã hội</string>
     <string name="copy_passport_number">Sao chép số hộ chiếu</string>
-    <string name="copy_first_name">Copy first name</string>
-    <string name="copy_last_name">Copy last name</string>
+    <string name="copy_first_name">Sao chép tên</string>
+    <string name="copy_last_name">Sao chép họ</string>
     <string name="copy_license_number">Sao chép số giấy phép</string>
-    <string name="copy_middle_name">Copy middle name</string>
+    <string name="copy_middle_name">Sao chép tên đệm</string>
     <string name="copy_email">Sao chép email</string>
     <string name="copy_phone">Sao chép số điện thoại</string>
     <string name="copy_address">Sao chép địa chỉ</string>
@@ -944,7 +945,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Vận hành mã khóa không thành công vì không có mục nào được chọn.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Vận hành mã khóa không thành công vì yêu cầu không được hỗ trợ.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Thay đổi mật khẩu thất bại vì mục đã chọn không tồn tại.</string>
-    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Không thể thực hiện thao tác với mật khẩu vì mục đã chọn không có mật khẩu hợp lệ.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Nhập mật khẩu thất bại vì không có mục nào được chọn.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Thao tác thông tin đăng nhập thất bại vì yêu cầu không hợp lệ.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Thao tác thông tin đăng nhập thất bại vì yêu cầu không được hỗ trợ.</string>
@@ -991,8 +992,8 @@ các vấn đề.</string>
     <string name="delete_logs">Xóa các nhật ký</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Bạn thực sự muốn xóa tất cả các bản ghi đã ghi lại?</string>
     <string name="confirm_key_connector_domain">Xác nhận tên miền Key Connector</string>
-    <string name="key_connector_domain">Tên miền Key Connector:</string>
-    <string name="your_organization_no_longer_requires_a_master_password">Your organization no longer requires a master password for its members. Please verify the domain below with your admin and enter your master password to continue.</string>
+    <string name="key_connector_domain">Tên miền Key Connector</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Tổ chức của bạn không còn yêu cầu mật khẩu chính đối với các thành viên nữa. Vui lòng xác minh miền bên dưới với quản trị viên của bạn và nhập mật khẩu chính của bạn để tiếp tục.</string>
     <string name="please_confirm_domain_with_admin">Vui lòng xác nhận tên miền bên dưới với quản trị viên tổ chức của bạn.\n\nTên miền kết Key Connector:\n%1$s</string>
     <string name="flight_recorder_banner_title">Bản ghi nhật ký bật</string>
     <string name="flight_recorder_banner_message">Bản ghi nhật ký sẽ kích hoạt cho tới %1$s vào %2$s. Đến Cài đặt để hủy kích hoạt ngay.</string>
@@ -1071,11 +1072,11 @@ các vấn đề.</string>
     <string name="export_confirmation_title">Xác nhận xuất</string>
     <string name="export_success">Đã xuất dữ liệu thành công</string>
     <string name="included_in_this_export">Bao gồm trong bản xuất này</string>
-    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Chỉ các mã được lưu cục bộ trên thiết bị này mới được xuất. Các mã đã đồng bộ sẽ không được bao gồm.</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Chỉ các mã được lưu cục bộ trên thiết bị này mới được xuất. Các mã đã đồng bộ sẽ không được bao gồm</string>
     <string name="security">Bảo mật</string>
     <string name="too_many_failed_biometric_attempts">Xác thực sinh trắc thất bại quá nhiều lần.</string>
     <string name="version">Phiên bản</string>
-    <string name="version_x" comment="%1$s is the version string (e.g. 2025.1.0 (1234)).">Version: %1$s</string>
+    <string name="version_x" comment="%1$s is the version string (e.g. 2025.1.0 (1234)).">Phiên bản: %1$s</string>
     <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">Tìm hiểu thêm về cách sử dụng Bitwarden trong Trung tâm trợ giúp.</string>
     <string name="key">Khóa</string>
     <string name="create_verification_code">Tạo mã xác minh</string>
@@ -1149,8 +1150,8 @@ các vấn đề.</string>
     <string name="no_items_imported">Không có mục nào được nhập</string>
     <string name="no_items_received_from_the_selected_app">Không nhận được mục nào từ ứng dụng được chọn.</string>
     <string name="vault_sync_failed">Đồng bộ hóa kho thất bại</string>
-    <string name="vault_sync_unsuccessful">Sync unsuccessful</string>
-    <string name="vault_sync_failed_description">We couldn’t sync your vault with the server. Your vault may not reflect your latest changes. You can try again now or it will sync automatically later.</string>
+    <string name="vault_sync_unsuccessful">Đồng bộ hóa không thành công</string>
+    <string name="vault_sync_failed_description">Chúng tôi không thể đồng bộ hóa kho lưu trữ của bạn với máy chủ. Kho lưu trữ của bạn có thể không phản ánh các thay đổi mới nhất. Bạn có thể thử lại ngay bây giờ hoặc nó sẽ tự động đồng bộ hóa sau.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Các mục của bạn đã được nhập thành công, nhưng chúng sẽ không hiển thị trong kho của bạn cho đến khi thực hiện đồng bộ hóa.</string>
     <string name="there_was_a_problem_importing_your_items">Đã xảy ra sự cố khi nhập các mục của bạn. Vui lòng thử lại. Nếu sự cố vẫn tiếp diễn, hãy liên hệ bộ phận hỗ trợ.</string>
     <string name="saving_items">Đang lưu các mục…</string>
@@ -1192,7 +1193,7 @@ các vấn đề.</string>
     <string name="resending">Đang gửi lại</string>
     <string name="you_left_the_organization">Bạn đã rời khỏi tổ chức</string>
     <string name="transfer_items_to_org">Chuyển các mục đến %1$s</string>
-    <string name="transfer_items_description">%1$s yêu cầu tất cả các mục phải thuộc sở hữu của tổ chức để đảm bảo bảo mật và tuân thủ. Nhấp chấp nhận để chuyển quyền sở hữu các mục của bạn.</string>
+    <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> yêu cầu mọi mục phải thuộc quyền sở hữu của tổ chức nhằm đáp ứng các yêu cầu về bảo mật và tuân thủ. Nhấp vào Chấp nhận để chuyển quyền sở hữu các mục của bạn. <annotation link="learnMore">Tìm hiểu thêm</annotation></string>
     <string name="decline_and_leave">Từ chối và rời đi</string>
     <string name="why_am_i_seeing_this">Tại sao tôi thấy điều này?</string>
     <string name="migrating_items_to_x">Đang di chuyển các mục đến %s</string>
@@ -1208,65 +1209,65 @@ các vấn đề.</string>
     <string name="archiving">Đang lưu trữ</string>
     <string name="unarchiving">Đang bỏ lưu trữ</string>
     <string name="item_moved_to_archived">Mục đã chuyển vào Lưu trữ</string>
-    <string name="item_moved_to_vault">Item moved to vault</string>
+    <string name="item_moved_to_vault">Mục đã được chuyển vào kho lưu trữ</string>
     <string name="archiving_items_is_a_premium_feature">Lưu trữ mục là một tính năng Cao cấp. Gói hiện tại của bạn không bao gồm quyền truy cập tính năng này.</string>
-    <string name="totp_is_a_premium_feature">Authenticator key (TOTP) is a Premium feature. Your current plan does not include access to this feature.</string>
-    <string name="upgrade_to_premium">Nâng cấp lên bản cao cấp</string>
-    <string name="plan">Plan</string>
-    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
+    <string name="totp_is_a_premium_feature">Khóa xác thực (TOTP) là một tính năng Cao cấp. Gói hiện tại của bạn không bao gồm quyền truy cập tính năng này.</string>
+    <string name="upgrade_to_premium">Nâng cấp lên gói Cao cấp</string>
+    <string name="plan">Gói</string>
+    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Để quản lý gói đăng ký Cao cấp của bạn, bạn cần đăng nhập vào kho lưu trữ web trên máy tính.</string>
     <string name="unlock_advanced_security_features">Mở khóa các tính năng bảo mật nâng cao</string>
-    <string name="your_subscription_needs_attention">Your subscription needs attention</string>
-    <string name="check_your_plan_for_details">Check your plan for details.</string>
-    <string name="view_plan">View plan</string>
+    <string name="your_subscription_needs_attention">Gói đăng ký của bạn cần được xử lý</string>
+    <string name="check_your_plan_for_details">Kiểm tra gói của bạn để biết chi tiết.</string>
+    <string name="view_plan">Xem gói</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Gói Cao cấp cung cấp thêm nhiều công cụ để giúp bạn luôn an toàn và kiểm soát tốt hơn.</string>
     <string name="this_item_is_archived">Mục này đã được lưu trữ.</string>
-    <string name="introducing_archive">Introducing archive</string>
-    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Keep items you don’t need right now safe but out of sight.</string>
-    <string name="go_to_archive">Go to archive</string>
+    <string name="introducing_archive">Giới thiệu tính năng lưu trữ</string>
+    <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Giữ các mục bạn chưa cần dùng tới hiện tại an toàn nhưng khuất khỏi tầm nhìn.</string>
+    <string name="go_to_archive">Đi đến kho lưu trữ</string>
     <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Mục này đã được lưu trữ. Lưu thay đổi sẽ khôi phục mục này về kho của bạn.</string>
     <string name="your_premium_subscription_ended">Gói đăng ký Cao cấp của bạn đã kết thúc</string>
-    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">To regain access to your archive, restart your Premium subscription. If you edit details for an archived item before restarting, it’ll be moved back into your vault.</string>
-    <string name="restart_premium">Restart Premium</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Để lấy lại quyền truy cập vào lưu trữ của bạn, hãy khởi động lại gói đăng ký Cao cấp. Nếu bạn chỉnh sửa chi tiết cho một mục đã lưu trữ trước khi khởi động lại, mục đó sẽ được chuyển trở lại kho của bạn.</string>
+    <string name="restart_premium">Khởi động lại gói Cao cấp</string>
     <string name="items_transferred">Các mục đã chuyển</string>
     <string name="updated_master_password">Mật khẩu chính đã được cập nhật</string>
     <string name="invalid_email_addresses">Địa chỉ email không hợp lệ</string>
     <string name="one_or_more_email_addresses_are_incorrect">Một hoặc nhiều địa chỉ email chưa chính xác. Vui lòng kiểm tra và thử lại.</string>
     <string name="no_email_addresses_entered">Chưa nhập địa chỉ email</string>
-    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
+    <string name="enter_at_least_one_valid_email_address_to_share_this_send">Nhập ít nhất một địa chỉ email hợp lệ để chia sẻ Send này.</string>
     <string name="sync_with_browser">Đồng bộ với trình duyệt</string>
     <string name="sync_with_browser_description">Để kết nối với %1$s, đồng bộ trình duyệt mặc định của bạn với ứng dụng Bitwarden. Khi trình duyệt mở lên, thực hiện đăng nhập nếu được yêu cầu\nSau khi đồng bộ hoàn tất, bạn sẽ được đưa trở lại ứng dụng này.</string>
     <string name="launch_browser">Mở trình duyệt</string>
     <string name="continue_without_syncing">Tiếp tục mà không đồng bộ</string>
     <string name="external_link">Liên kết bên ngoài</string>
     <string name="external_link_format" comment="Used for accessibility to indicate that tapping this item will leave the app">%1$s, Liên kết bên ngoài</string>
-    <string name="devices">Devices</string>
-    <string name="mobile_platform">Mobile - %1$s</string>
-    <string name="extension_platform">Extension - %1$s</string>
+    <string name="devices">Thiết bị</string>
+    <string name="mobile_platform">Di động - %1$s</string>
+    <string name="extension_platform">Tiện ích mở rộng - %1$s</string>
     <string name="web_platform">Web - %1$s</string>
-    <string name="desktop_platform">Desktop - %1$s</string>
+    <string name="desktop_platform">Máy tính - %1$s</string>
     <string name="cli_platform">CLI - %1$s</string>
     <string name="sdk">SDK</string>
-    <string name="server">Server</string>
-    <string name="unknown_device">Unknown device</string>
-    <string name="first_login_date"><annotation emphasis="bold">First login:</annotation> <annotation arg="0">%1$s</annotation></string>
-    <string name="current_session">Current session</string>
-    <string name="pending_request">Pending request</string>
-    <string name="today">Today</string>
-    <string name="past_seven_days">Past 7 days</string>
-    <string name="past_fourteen_days">Past 14 days</string>
-    <string name="past_thirty_days">Past 30 days</string>
-    <string name="over_thirty_days_ago">Over 30 days ago</string>
-    <string name="recently_active"><annotation emphasis="bold">Recently active:</annotation> <annotation arg="0">%1$s</annotation></string>
-    <string name="trusted">Trusted</string>
-    <string name="preview_not_available_for_files">Preview unavailable for %1$s files. You can still download it to view on your device.</string>
+    <string name="server">Máy chủ</string>
+    <string name="unknown_device">Thiết bị không xác định</string>
+    <string name="first_login_date"><annotation emphasis="bold">Đăng nhập lần đầu:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="current_session">Phiên hiện tại</string>
+    <string name="pending_request">Yêu cầu đang chờ xử lý</string>
+    <string name="today">Hôm nay</string>
+    <string name="past_seven_days">7 ngày qua</string>
+    <string name="past_fourteen_days">14 ngày qua</string>
+    <string name="past_thirty_days">30 ngày qua</string>
+    <string name="over_thirty_days_ago">Hơn 30 ngày trước</string>
+    <string name="recently_active"><annotation emphasis="bold">Hoạt động gần đây:</annotation> <annotation arg="0">%1$s</annotation></string>
+    <string name="trusted">Đáng tin cậy</string>
+    <string name="preview_not_available_for_files">Không thể xem trước tệp %1$s. Bạn vẫn có thể tải xuống để xem trên thiết bị của mình.</string>
     <string name="this_file_is_too_large_to_preview">Không thể xem trước tập tin vì kích thước quá lớn. Bạn có thể tải về để xem trên thiết bị của mình.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Không thể hiển thị bản xem trước vì Bitwarden không thể giải mã tập tin này.</string>
     <string name="preview_unavailable_for_this_file">Bản xem trước của tập tin này không khả dụng. Bạn có thể tải về để xem trên thiết bị của mình.</string>
     <string name="preview_unavailable">Bản xem trước không khả dụng</string>
-    <string name="download_attachment">Download Attachment</string>
-    <string name="upgraded_to_premium">Upgraded to Premium</string>
-    <string name="you_now_have_access_to_all_advanced_security_features">You now have access to all advanced security features.</string>
-    <string name="you_now_have_access_to_advanced_security_features_learn_more_about_premium">You now have access to advanced security features. Learn more about what’s included with Premium.</string>
+    <string name="download_attachment">Tải xuống tệp đính kèm</string>
+    <string name="upgraded_to_premium">Đã nâng cấp lên gói Cao cấp</string>
+    <string name="you_now_have_access_to_all_advanced_security_features">Hiện tại bạn đã có quyền truy cập vào tất cả các tính năng bảo mật nâng cao.</string>
+    <string name="you_now_have_access_to_advanced_security_features_learn_more_about_premium">Hiện tại bạn đã có quyền truy cập vào các tính năng bảo mật nâng cao. Tìm hiểu thêm về những gì được bao gồm trong gói Cao cấp.</string>
     <string name="confirming_your_upgrade">Xác nhận nâng cấp</string>
     <string name="upgrade_pending">Đang nâng cấp</string>
     <string name="upgrade_pending_message">Nâng cấp của bạn đang được xử lý. Bạn sẽ tiếp tục sử dụng gói miễn phí cho đến khi quá trình này hoàn tất. Đồng bộ ngay bây giờ để kiểm tra, hoặc tiếp tục để tự động cập nhật.</string>
@@ -1277,12 +1278,12 @@ các vấn đề.</string>
     <string name="secure_file_storage">Lưu trữ tệp an toàn</string>
     <string name="breach_monitoring">Giám sát vi phạm</string>
     <string name="upgrade_now">Nâng cấp ngay</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
-    <string name="opening_checkout">Opening checkout…</string>
-    <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
+    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">Bạn sẽ được chuyển đến trang thanh toán an toàn của Stripe để hoàn tất việc mua hàng.</string>
+    <string name="opening_checkout">Đang mở trang thanh toán…</string>
+    <string name="secure_checkout_didnt_load">Không thể tải trang thanh toán an toàn</string>
     <string name="trouble_opening_payment_page">Chúng tôi gặp vấn đề khi mở trang thanh toán, hãy thử lại.</string>
-    <string name="payment_not_received_yet">Payment not received yet</string>
-    <string name="return_to_stripe_to_finish">Return to Stripe in your browser to finish your upgrade.</string>
+    <string name="payment_not_received_yet">Chưa nhận được thanh toán</string>
+    <string name="return_to_stripe_to_finish">Quay lại Stripe trên trình duyệt của bạn để hoàn tất nâng cấp.</string>
     <string name="go_back">Quay lại</string>
     <string name="allow_camera_access">Cho phép truy cập vào máy ảnh</string>
     <string name="to_scan_your_card_we_need_access_to_your_camera">Để quét thẻ của bạn, chúng tôi cần quyền truy cập vào máy ảnh. Bạn có thể thay đổi điều này bất cứ khi nào thông qua cài đặt của thiết bị.</string>
@@ -1291,110 +1292,110 @@ các vấn đề.</string>
     <string name="next_code_x">Mã tiếp theo, %1$s</string>
     <string name="archive_item">Lưu trữ mục</string>
     <string name="once_archived_this_item_will_be_excluded">Khi đã lưu trữ, mục này sẽ bị loại khỏi kết quả tìm kiếm và gợi ý tự động điền.</string>
-    <string name="pricing_unavailable">Pricing unavailable</string>
-    <string name="current_plan">Current plan</string>
-    <string name="premium_plan_name">Premium</string>
-    <string name="billing_amount">Billing amount</string>
-    <string name="storage_cost">Storage cost</string>
-    <string name="discount">Discount</string>
-    <string name="estimated_tax">Estimated tax</string>
-    <string name="total">Total</string>
-    <string name="billing_rate_per_year">%1$s / year</string>
-    <string name="billing_rate_per_month">%1$s / month</string>
-    <string name="manage_plan">Manage plan</string>
-    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Manage your subscription plan in the Bitwarden web app.</string>
-    <string name="cancel_premium">Cancel Premium</string>
-    <string name="subscription_status_active">Active</string>
-    <string name="subscription_status_canceled">Canceled</string>
+    <string name="pricing_unavailable">Không có thông tin giá cả</string>
+    <string name="current_plan">Gói hiện tại</string>
+    <string name="premium_plan_name">Cao cấp</string>
+    <string name="billing_amount">Số tiền thanh toán</string>
+    <string name="storage_cost">Chi phí dung lượng lưu trữ</string>
+    <string name="discount">Giảm giá</string>
+    <string name="estimated_tax">Thuế ước tính</string>
+    <string name="total">Tổng</string>
+    <string name="billing_rate_per_year">%1$s / năm</string>
+    <string name="billing_rate_per_month">%1$s / tháng</string>
+    <string name="manage_plan">Quản lý gói</string>
+    <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Quản lý gói đăng ký của bạn trong ứng dụng web Bitwarden.</string>
+    <string name="cancel_premium">Hủy gói Cao cấp</string>
+    <string name="subscription_status_active">Đang hoạt động</string>
+    <string name="subscription_status_canceled">Đã hủy</string>
     <string name="subscription_status_expired">Đã hết hạn</string>
-    <string name="subscription_status_past_due">Past due</string>
-    <string name="subscription_status_paused">Paused</string>
-    <string name="subscription_status_unpaid">Unpaid</string>
-    <string name="subscription_status_update_payment">Update payment</string>
-    <string name="subscription_status_pending_cancellation">Pending cancellation</string>
-    <string name="subscription_pending_cancellation_description">Your subscription is scheduled to cancel on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. You can reinstate it anytime before then.</string>
-    <string name="premium_next_charge_summary">Your next charge is for <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD due on <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
-    <string name="subscription_canceled_description">Your subscription was canceled on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using Premium features.</string>
-    <string name="subscription_unpaid_description">Your subscription was suspended on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. To reactivate, please resolve your past due invoices.</string>
-    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment method before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
+    <string name="subscription_status_past_due">Quá hạn</string>
+    <string name="subscription_status_paused">Đã tạm dừng</string>
+    <string name="subscription_status_unpaid">Chưa thanh toán</string>
+    <string name="subscription_status_update_payment">Cập nhật thanh toán</string>
+    <string name="subscription_status_pending_cancellation">Đang chờ hủy</string>
+    <string name="subscription_pending_cancellation_description">Gói đăng ký của bạn được lịch hủy vào ngày <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Bạn có thể khôi phục lại gói bất kỳ lúc nào trước thời điểm đó.</string>
+    <string name="premium_next_charge_summary">Khoản phí tiếp theo của bạn là <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD đến hạn vào ngày <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
+    <string name="subscription_canceled_description">Gói đăng ký của bạn đã bị hủy vào ngày <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Vui lòng đăng ký lại để tiếp tục sử dụng các tính năng Cao cấp.</string>
+    <string name="subscription_unpaid_description">Gói đăng ký của bạn đã bị tạm đình chỉ vào ngày <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Để kích hoạt lại, vui lòng giải quyết các hóa đơn quá hạn của bạn.</string>
+    <string name="subscription_update_payment_description">Chúng tôi không thể xử lý thanh toán của bạn. Vui lòng cập nhật phương thức thanh toán trước khi gói đăng ký của bạn kết thúc vào ngày <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
-        <item quantity="other">You have a grace period of <annotation arg="0">%1$d</annotation> days from your subscription expiration date. Please resolve the past due invoices by <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="other">Bạn có thời gian gia hạn là <annotation arg="0">%1$d</annotation> ngày kể từ ngày hết hạn gói đăng ký. Vui lòng giải quyết các hóa đơn quá hạn trước ngày <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
     </plurals>
-    <string name="subscription_paused_description">Your subscription is paused. Resume to continue using premium features.</string>
-    <string name="subscription_expired_description">Your subscription expired on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Resubscribe to continue using Premium features.</string>
-    <string name="loading_subscription">Loading subscription…</string>
-    <string name="loading_portal">Loading portal…</string>
+    <string name="subscription_paused_description">Gói đăng ký của bạn đang bị tạm dừng. Hãy tiếp tục để tiếp tục sử dụng các tính năng cao cấp.</string>
+    <string name="subscription_expired_description">Gói đăng ký của bạn đã hết hạn vào ngày <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Vui lòng đăng ký lại để tiếp tục sử dụng các tính năng Cao cấp.</string>
+    <string name="loading_subscription">Đang tải gói đăng ký…</string>
+    <string name="loading_portal">Đang tải cổng thông tin…</string>
     <string name="portal_error">Đã xảy ra lỗi</string>
-    <string name="trouble_loading_portal">We had trouble loading the management portal, so try again.</string>
-    <string name="trouble_loading_subscription">We couldn’t load your subscription details. Please try again.</string>
-    <string name="view_bank_account">View bank account</string>
-    <string name="view_license">View license</string>
-    <string name="view_passport">View passport</string>
-    <string name="add_bank_account">Add bank account</string>
-    <string name="add_license">Add license</string>
-    <string name="add_passport">Add passport</string>
-    <string name="edit_bank_account">Edit bank account</string>
-    <string name="edit_license">Edit license</string>
-    <string name="edit_passport">Edit passport</string>
-    <string name="type_bank_account">Bank account</string>
-    <string name="type_license">License</string>
-    <string name="type_passport">Passport</string>
-    <string name="bank_accounts">Bank accounts</string>
-    <string name="passports">Passports</string>
-    <string name="bank_name">Bank name</string>
-    <string name="name_on_account">Name on account</string>
-    <string name="account_type">Account type</string>
-    <string name="account_number">Account number</string>
-    <string name="routing_number">Routing number</string>
-    <string name="branch_number">Branch number</string>
-    <string name="swift_code">SWIFT code</string>
-    <string name="iban">IBAN</string>
-    <string name="bank_contact_phone">Bank contact phone</string>
-    <string name="copy_name_on_account">Copy name on account</string>
-    <string name="copy_account_number">Copy account number</string>
-    <string name="copy_routing_number">Copy routing number</string>
-    <string name="copy_branch_number">Copy branch number</string>
-    <string name="copy_pin">Copy PIN</string>
-    <string name="copy_swift_code">Copy SWIFT code</string>
-    <string name="copy_iban">Copy IBAN</string>
-    <string name="copy_bank_contact_phone">Copy bank contact phone</string>
-    <string name="checking">Checking</string>
-    <string name="savings">Savings</string>
-    <string name="certificate_of_deposit">Certificate of deposit</string>
-    <string name="line_of_credit">Line of credit</string>
-    <string name="investment_brokerage">Investment/brokerage</string>
-    <string name="money_market">Money market</string>
-    <string name="issuing_country">Issuing country</string>
-    <string name="issuing_state">Issuing state / province</string>
-    <string name="license_class">License class</string>
-    <string name="surname">Surname</string>
-    <string name="given_name">Given name</string>
-    <string name="date_of_birth">Date of birth</string>
-    <string name="nationality">Nationality</string>
-    <string name="passport_type">Passport type</string>
-    <string name="issuing_authority">Issuing authority</string>
-    <string name="issue_date">Issue date</string>
-    <string name="expiration_date">Expiration date</string>
-    <string name="details">Details</string>
-    <string name="account_details">Account details</string>
-    <string name="no_bank_accounts">There are no bank accounts in your vault.</string>
-    <string name="license_details">License details</string>
-    <string name="licenses">Licenses</string>
-    <string name="no_licenses">There are no licenses in your vault.</string>
-    <string name="no_passports">There are no passports in your vault.</string>
-    <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">Your request was interrupted because the app needed to re-authenticate. Please try again.</string>
-    <string name="passport_details">Passport details</string>
-    <string name="sex">Sex</string>
-    <string name="birth_place">Birth place</string>
-    <string name="national_identification_number">National identification number</string>
-    <string name="copy_national_identification_number">Copy national identification number</string>
-    <string name="access_your_local_network">Access your local network</string>
-    <string name="local_network_access_required">Local network access required</string>
-    <string name="ask_again_later">Ask again later</string>
-    <string name="enable_local_network_access">Enable local network access</string>
-    <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Bitwarden needs local network access to sync with your server. Without this permission, the app won’t be able to connect.</string>
-    <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Without this permission, Bitwarden won’t be able to connect and sync with your server. You can enable this in your device settings.</string>
-    <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Your request was interrupted because the app needs local network access. You can enable this in your device settings.</string>
-    <string name="continue_to_stripe">Continue to Stripe?</string>
-    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">You’ll be taken to Stripe to manage your subscription cancellation.</string>
+    <string name="trouble_loading_portal">Chúng tôi gặp sự cố khi tải cổng quản lý, vì vậy vui lòng thử lại.</string>
+    <string name="trouble_loading_subscription">Chúng tôi không thể tải chi tiết gói đăng ký của bạn. Vui lòng thử lại.</string>
+    <string name="view_bank_account">Xem tài khoản ngân hàng</string>
+    <string name="view_license">Xem giấy phép</string>
+    <string name="view_passport">Xem hộ chiếu</string>
+    <string name="add_bank_account">Thêm tài khoản ngân hàng</string>
+    <string name="add_license">Thêm giấy phép</string>
+    <string name="add_passport">Thêm hộ chiếu</string>
+    <string name="edit_bank_account">Chỉnh sửa tài khoản ngân hàng</string>
+    <string name="edit_license">Chỉnh sửa giấy phép</string>
+    <string name="edit_passport">Chỉnh sửa hộ chiếu</string>
+    <string name="type_bank_account">Tài khoản ngân hàng</string>
+    <string name="type_license">Giấy phép</string>
+    <string name="type_passport">Hộ chiếu</string>
+    <string name="bank_accounts">Tài khoản ngân hàng</string>
+    <string name="passports">Hộ chiếu</string>
+    <string name="bank_name">Tên ngân hàng</string>
+    <string name="name_on_account">Tên trên tài khoản</string>
+    <string name="account_type">Loại tài khoản</string>
+    <string name="account_number">Số tài khoản</string>
+    <string name="routing_number">Số định tuyến ngân hàng</string>
+    <string name="branch_number">Mã chi nhánh</string>
+    <string name="swift_code">Mã SWIFT</string>
+    <string name="iban">Số IBAN</string>
+    <string name="bank_contact_phone">Số điện thoại liên hệ ngân hàng</string>
+    <string name="copy_name_on_account">Sao chép tên trên tài khoản</string>
+    <string name="copy_account_number">Sao chép số tài khoản</string>
+    <string name="copy_routing_number">Sao chép mã định tuyến</string>
+    <string name="copy_branch_number">Sao chép mã chi nhánh</string>
+    <string name="copy_pin">Sao chép mã PIN</string>
+    <string name="copy_swift_code">Sao chép mã SWIFT</string>
+    <string name="copy_iban">Sao chép số IBAN</string>
+    <string name="copy_bank_contact_phone">Sao chép số điện thoại liên hệ ngân hàng</string>
+    <string name="checking">Tài khoản thanh toán</string>
+    <string name="savings">Tài khoản tiết kiệm</string>
+    <string name="certificate_of_deposit">Chứng chỉ tiền gửi</string>
+    <string name="line_of_credit">Hạn mức tín dụng</string>
+    <string name="investment_brokerage">Đầu tư/môi giới</string>
+    <string name="money_market">Thị trường tiền tệ</string>
+    <string name="issuing_country">Quốc gia cấp</string>
+    <string name="issuing_state">Tiểu bang / tỉnh cấp</string>
+    <string name="license_class">Hạng giấy phép</string>
+    <string name="surname">Họ</string>
+    <string name="given_name">Tên</string>
+    <string name="date_of_birth">Ngày sinh</string>
+    <string name="nationality">Quốc tịch</string>
+    <string name="passport_type">Loại hộ chiếu</string>
+    <string name="issuing_authority">Cơ quan cấp</string>
+    <string name="issue_date">Ngày cấp</string>
+    <string name="expiration_date">Ngày hết hạn</string>
+    <string name="details">Chi tiết</string>
+    <string name="account_details">Chi tiết tài khoản</string>
+    <string name="no_bank_accounts">Không có tài khoản ngân hàng nào trong kho lưu trữ của bạn.</string>
+    <string name="license_details">Chi tiết giấy phép</string>
+    <string name="licenses">Giấy phép</string>
+    <string name="no_licenses">Không có giấy phép nào trong kho lưu trữ của bạn.</string>
+    <string name="no_passports">Không có hộ chiếu nào trong kho lưu trữ của bạn.</string>
+    <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">Yêu cầu của bạn đã bị gián đoạn do ứng dụng cần xác thực lại. Vui lòng thử lại.</string>
+    <string name="passport_details">Chi tiết hộ chiếu</string>
+    <string name="sex">Giới tính</string>
+    <string name="birth_place">Nơi sinh</string>
+    <string name="national_identification_number">Số căn cước</string>
+    <string name="copy_national_identification_number">Sao chép số căn cước</string>
+    <string name="access_your_local_network">Truy cập mạng cục bộ của bạn</string>
+    <string name="local_network_access_required">Yêu cầu quyền truy cập mạng cục bộ</string>
+    <string name="ask_again_later">Hỏi lại sau</string>
+    <string name="enable_local_network_access">Bật quyền truy cập mạng cục bộ</string>
+    <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Bitwarden cần quyền truy cập mạng cục bộ để đồng bộ hóa với máy chủ của bạn. Nếu không có quyền này, ứng dụng sẽ không thể kết nối.</string>
+    <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Nếu không có quyền này, Bitwarden sẽ không thể kết nối và đồng bộ hóa với máy chủ của bạn. Bạn có thể bật tính năng này trong cài đặt thiết bị của mình.</string>
+    <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Yêu cầu của bạn đã bị gián đoạn vì ứng dụng cần quyền truy cập mạng cục bộ. Bạn có thể bật tính năng này trong cài đặt thiết bị của mình.</string>
+    <string name="continue_to_stripe">Tiếp tục chuyển đến Stripe?</string>
+    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Bạn sẽ được chuyển đến Stripe để quản lý việc hủy gói đăng ký của mình.</string>
 </resources>
