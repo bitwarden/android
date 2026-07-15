@@ -55,7 +55,12 @@ class LandingViewModel @Inject constructor(
             selectedEnvironmentType = environmentRepository.environment.type,
             selectedEnvironmentLabel = environmentRepository.environment.label,
             dialog = null,
-            accountSummaries = authRepository.userStateFlow.value?.toAccountSummaries().orEmpty(),
+            accountSummaries = authRepository
+                .userStateFlow
+                .value
+                ?.toAccountSummaries()
+                .orEmpty()
+                .toImmutableList(),
             isFedRampEnabled = featureFlagManager.getFeatureFlag(FlagKey.FedRamp),
         ),
 ) {
@@ -68,12 +73,9 @@ class LandingViewModel @Inject constructor(
         get() {
             val currentEmail = state.emailInput
             val currentEnvironmentLabel = state.selectedEnvironmentLabel
-            val accountSummaries = state.accountSummaries
-            return accountSummaries
-                .find {
-                    it.email == currentEmail &&
-                        it.environmentLabel == currentEnvironmentLabel
-                }
+            return state
+                .accountSummaries
+                .find { it.email == currentEmail && it.environmentLabel == currentEnvironmentLabel }
                 ?.takeUnless { !it.isLoggedIn }
         }
 
@@ -299,7 +301,7 @@ data class LandingState(
     val selectedEnvironmentType: Environment.Type,
     val selectedEnvironmentLabel: String,
     val dialog: DialogState?,
-    val accountSummaries: List<AccountSummary>,
+    val accountSummaries: ImmutableList<AccountSummary>,
     val isFedRampEnabled: Boolean,
 ) : Parcelable {
     /**

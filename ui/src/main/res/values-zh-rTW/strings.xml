@@ -78,7 +78,7 @@
     <string name="bitwarden_autofill_service">Bitwarden 自動填入服務</string>
     <string name="change_master_password">變更主密碼</string>
     <string name="close">關閉</string>
-    <string name="close_app">Close app</string>
+    <string name="close_app">關閉應用程式</string>
     <string name="continue_text">繼續</string>
     <string name="create_account">建立帳戶</string>
     <string name="create_an_account">建立帳戶</string>
@@ -609,10 +609,10 @@
     <string name="forwarded_email_description">使用外部轉寄服務產生一個電子郵件別名。</string>
     <string name="accessibility_service_disclosure">無障礙服務聲明</string>
     <string name="accessibility_disclosure_text">Bitwarden 使用無障礙服務搜寻應用程式和網站中的登入欄位，然後建立適當的欄位 ID，以便在找到應用程式或網站的匹配項目時輸入用戶名和密碼。 我們不會存儲此服務提供給我們的任何資訊，也不會試圖控制憑證文字輸入以外的任何荧幕元素。</string>
-    <string name="accessibility_disclosure_start_up_text_1">This notice is required before Bitwarden can offer accessibility-based autofill.</string>
-    <string name="accessibility_disclosure_start_up_text_2">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields. If you enable it, Bitwarden will identify the appropriate fields and fill in your credentials when a match is found.</string>
-    <string name="accessibility_disclosure_start_up_text_3">We don’t store any information about what’s onscreen while you use the Accessibility Service, and we don’t control any onscreen elements beyond credential entry.</string>
-    <string name="i_understand">I understand</string>
+    <string name="accessibility_disclosure_start_up_text_1">在 Bitwarden 提供以無障礙功能為基礎的自動填入前，必須先顯示此通知。</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden 提供一種選用的自動填入方式，透過 Android 的無障礙服務偵測登入欄位。啟用後，Bitwarden 會辨識適當的欄位，並在找到相符項目時填入您的登入資料。</string>
+    <string name="accessibility_disclosure_start_up_text_3">使用無障礙服務期間，我們不會儲存任何螢幕顯示內容的資訊，也不會控制登入資料輸入以外的任何螢幕元素。</string>
+    <string name="i_understand">我了解</string>
     <string name="accept">接受</string>
     <string name="decline">拒絕</string>
     <string name="login_request_has_already_expired">登入要求已逾期。</string>
@@ -1131,7 +1131,8 @@
     <string name="advanced_options">進階選項</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">深入了解匹配偵測</annotation></string>
     <string name="keep_your_credential_secure">保護您的憑證安全</string>
-    <string name="learn_more_about_how_to_keep_credentirals_secure">瞭解在使用「%1$s」時如何確保憑證安全。</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">瞭解在使用「%1$s」時如何確保憑證安全。
+</string>
     <string name="are_you_sure_you_want_to_use">您確定要使用「%1$s」嗎？</string>
     <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI 比對偵測可控制 Bitwarden 如何識別自動填入建議。\n<annotation emphasis="bold">警告：</annotation>「正規表示式」為進階選項，若使用不當，可能增加憑證外洩的風險。</string>
     <string name="default_uri_match_detection_description_advanced_options">URI 比對偵測可控制 Bitwarden 如何識別自動填入建議。\n<annotation emphasis="bold">警告：</annotation>「開頭符合」為進階選項，可能增加憑證外洩的風險。</string>
@@ -1146,8 +1147,8 @@
     <string name="no_items_imported">未匯入任何項目</string>
     <string name="no_items_received_from_the_selected_app">未從所選應用程式接收到項目。</string>
     <string name="vault_sync_failed">密碼庫同步失敗</string>
-    <string name="vault_sync_unsuccessful">Sync unsuccessful</string>
-    <string name="vault_sync_failed_description">We couldn’t sync your vault with the server. Your vault may not reflect your latest changes. You can try again now or it will sync automatically later.</string>
+    <string name="vault_sync_unsuccessful">同步失敗</string>
+    <string name="vault_sync_failed_description">無法將您的保管庫與伺服器同步。您的保管庫可能未反映最新變更。您可以立即重試，或稍後等待系統自動同步。</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">您的項目已成功匯入，但在執行同步之前，不會顯示於您的密碼庫中。</string>
     <string name="there_was_a_problem_importing_your_items">匯入項目時發生問題。請再試一次。若問題持續，請聯絡支援。</string>
     <string name="saving_items">儲存物件</string>
@@ -1207,14 +1208,14 @@
     <string name="item_moved_to_archived">項目已移至封存</string>
     <string name="item_moved_to_vault">項目已移至密碼庫</string>
     <string name="archiving_items_is_a_premium_feature">封存項目為進階版功能。您目前的方案不包含此功能。</string>
-    <string name="totp_is_a_premium_feature">Authenticator key (TOTP) is a Premium feature. Your current plan does not include access to this feature.</string>
+    <string name="totp_is_a_premium_feature">驗證器金鑰（TOTP）為 Premium 功能。您目前的方案未包含此功能。</string>
     <string name="upgrade_to_premium">升級到 Premium</string>
     <string name="plan">方案</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">若要管理您的 Premium 訂閱，您需要在電腦上登入您的網頁保管庫。</string>
     <string name="unlock_advanced_security_features">解鎖進階安全功能</string>
-    <string name="your_subscription_needs_attention">Your subscription needs attention</string>
-    <string name="check_your_plan_for_details">Check your plan for details.</string>
-    <string name="view_plan">View plan</string>
+    <string name="your_subscription_needs_attention">您的訂閱需要處理</string>
+    <string name="check_your_plan_for_details">請查看您的方案以了解詳情。</string>
+    <string name="view_plan">查看方案</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Premium 方案可提供更多工具，讓您保持安全並掌控一切。</string>
     <string name="this_item_is_archived">此項目已被封存。</string>
     <string name="introducing_archive">封存功能介紹</string>
@@ -1306,13 +1307,13 @@
     <string name="subscription_status_expired">已逾期</string>
     <string name="subscription_status_past_due">逾期</string>
     <string name="subscription_status_paused">已暫停</string>
-    <string name="subscription_status_unpaid">Unpaid</string>
+    <string name="subscription_status_unpaid">未付款</string>
     <string name="subscription_status_update_payment">更新付款方式</string>
     <string name="subscription_status_pending_cancellation">待取消</string>
     <string name="subscription_pending_cancellation_description">您的訂閱預計將於 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 取消。在此之前，您隨時都可以恢復訂閱。</string>
     <string name="premium_next_charge_summary">您的下一筆扣款為 %1$s USD，將於 %2$s 到期。</string>
     <string name="subscription_canceled_description">您的訂閱已於 %1$s 取消。重新訂閱以繼續使用 Premium 功能。</string>
-    <string name="subscription_unpaid_description">Your subscription was suspended on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. To reactivate, please resolve your past due invoices.</string>
+    <string name="subscription_unpaid_description">您的訂閱已於 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 暫停。若要重新啟用，請先繳清逾期帳單。</string>
     <string name="subscription_update_payment_description">我們無法處理您的付款。請在您的訂閱於 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 結束前更新付款方式。</string>
     <plurals name="subscription_past_due_description">
         <item quantity="other">自訂閱到期日起，您有 %1$d 天的寬限期。請於 %2$s 前完成逾期款項付款。</item>

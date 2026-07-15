@@ -787,7 +787,7 @@ data class PlanState(
      */
     @get:StringRes
     val title: Int
-        get() = if (showsPremiumView) BitwardenString.plan else BitwardenString.upgrade_to_premium
+        get() = if (showsPremiumView) BitwardenString.plan else BitwardenString.premium
 
     /**
      * Models the content state of the plan screen.

@@ -362,6 +362,9 @@ private fun AssistStructure.ViewNode.traverse(
     // Set up mutable lists for collecting valid AutofillViews and ignorable view ids.
     val mutableAutofillViewList: MutableList<AutofillView> = mutableListOf()
     val mutableIgnoreAutofillIdList: MutableList<AutofillId> = mutableListOf()
+    // Tracks autofill IDs already claimed by a non-Unused view so that child nodes whose IDs
+    // were redirected to by a container ancestor are not added a second time.
+    val claimedAutofillIds: MutableSet<AutofillId> = mutableSetOf()
     // OS sometimes defaults node.idPackage to "android", which is not a valid
     // package name so it is ignored to prevent auto-filling unknown applications.
     var storedIdPackage: String? = this.idPackage?.takeUnless { it.isBlank() || it == "android" }
@@ -375,7 +378,12 @@ private fun AssistStructure.ViewNode.traverse(
     // Try converting this `ViewNode` into an `AutofillView`. If a valid instance is returned, add
     // it to the list. Otherwise, ignore the `AutofillId` associated with this `ViewNode`.
     toAutofillView(parentWebsite = parentWebsite)
-        ?.run(mutableAutofillViewList::add)
+        ?.also { view ->
+            if (view !is AutofillView.Unused) {
+                claimedAutofillIds.add(view.data.autofillId)
+            }
+            mutableAutofillViewList.add(view)
+        }
         ?: autofillId?.run(mutableIgnoreAutofillIdList::add)
 
     // Recursively traverse all of this view node's children.
@@ -384,8 +392,23 @@ private fun AssistStructure.ViewNode.traverse(
         getChildAt(i)
             .traverse(parentWebsite = website)
             .let { viewNodeTraversalData ->
-                viewNodeTraversalData.autofillViews.forEach(mutableAutofillViewList::add)
-                viewNodeTraversalData.ignoreAutofillIds.forEach(mutableIgnoreAutofillIdList::add)
+                viewNodeTraversalData.autofillViews
+                    // filter out existing AutofillIds to avoid duplicates
+                    .filter { view ->
+                        val id = view.data.autofillId
+                        if (id in claimedAutofillIds) {
+                            false
+                        } else if (view !is AutofillView.Unused) {
+                            claimedAutofillIds.add(id)
+                            true
+                        } else {
+                            true
+                        }
+                    }
+                    .forEach(mutableAutofillViewList::add)
+                viewNodeTraversalData.ignoreAutofillIds
+                    .filter { it !in claimedAutofillIds }
+                    .forEach(mutableIgnoreAutofillIdList::add)
 
                 // Get the first non-null idPackage.
                 if (storedIdPackage == null) {

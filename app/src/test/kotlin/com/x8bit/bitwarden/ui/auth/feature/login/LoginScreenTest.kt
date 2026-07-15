@@ -37,6 +37,7 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import junit.framework.TestCase.assertTrue
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Before
@@ -83,7 +84,7 @@ class LoginScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithContentDescription("Account").assertDoesNotExist()
 
         mutableStateFlow.update {
-            it.copy(accountSummaries = listOf(ACTIVE_ACCOUNT_SUMMARY))
+            it.copy(accountSummaries = persistentListOf(ACTIVE_ACCOUNT_SUMMARY))
         }
 
         composeTestRule.onNodeWithContentDescription("Account").assertIsDisplayed()
@@ -91,7 +92,7 @@ class LoginScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `account menu icon click should show the account switcher`() {
-        val accountSummaries = listOf(ACTIVE_ACCOUNT_SUMMARY)
+        val accountSummaries = persistentListOf(ACTIVE_ACCOUNT_SUMMARY)
         mutableStateFlow.update {
             it.copy(accountSummaries = accountSummaries)
         }
@@ -107,7 +108,7 @@ class LoginScreenTest : BitwardenComposeTest() {
     @Test
     fun `account click in the account switcher should send SwitchAccountClick and close switcher`() {
         // Show the account switcher
-        val accountSummaries = listOf(ACTIVE_ACCOUNT_SUMMARY)
+        val accountSummaries = persistentListOf(ACTIVE_ACCOUNT_SUMMARY)
         mutableStateFlow.update {
             it.copy(accountSummaries = accountSummaries)
         }
@@ -127,7 +128,7 @@ class LoginScreenTest : BitwardenComposeTest() {
     @Test
     fun `add account click in the account switcher should send AddAccountClick and close switcher`() {
         // Open the Account Switcher
-        val accountSummaries = listOf(ACTIVE_ACCOUNT_SUMMARY)
+        val accountSummaries = persistentListOf(ACTIVE_ACCOUNT_SUMMARY)
         mutableStateFlow.update {
             it.copy(accountSummaries = accountSummaries)
         }
@@ -145,7 +146,7 @@ class LoginScreenTest : BitwardenComposeTest() {
     @Test
     fun `account long click in the account switcher should show the lock-or-logout dialog and close the switcher`() {
         // Show the account switcher
-        val accountSummaries = listOf(ACTIVE_ACCOUNT_SUMMARY)
+        val accountSummaries = persistentListOf(ACTIVE_ACCOUNT_SUMMARY)
         mutableStateFlow.update {
             it.copy(accountSummaries = accountSummaries)
         }
@@ -165,7 +166,7 @@ class LoginScreenTest : BitwardenComposeTest() {
     @Test
     fun `lock button click in the lock-or-logout dialog should send LockAccountClick action and close the dialog`() {
         // Show the lock-or-logout dialog
-        val accountSummaries = listOf(ACTIVE_ACCOUNT_SUMMARY)
+        val accountSummaries = persistentListOf(ACTIVE_ACCOUNT_SUMMARY)
         mutableStateFlow.update {
             it.copy(accountSummaries = accountSummaries)
         }
@@ -182,7 +183,7 @@ class LoginScreenTest : BitwardenComposeTest() {
     @Test
     fun `logout button click in the lock-or-logout dialog should show the logout confirmation dialog and hide the lock-or-logout dialog`() {
         // Show the lock-or-logout dialog
-        val accountSummaries = listOf(ACTIVE_ACCOUNT_SUMMARY)
+        val accountSummaries = persistentListOf(ACTIVE_ACCOUNT_SUMMARY)
         mutableStateFlow.update {
             it.copy(accountSummaries = accountSummaries)
         }
@@ -200,7 +201,7 @@ class LoginScreenTest : BitwardenComposeTest() {
     @Test
     fun `logout button click in the logout confirmation dialog should send LogoutAccountClick action and close the dialog`() {
         // Show the logout confirmation dialog
-        val accountSummaries = listOf(ACTIVE_ACCOUNT_SUMMARY)
+        val accountSummaries = persistentListOf(ACTIVE_ACCOUNT_SUMMARY)
         mutableStateFlow.update {
             it.copy(accountSummaries = accountSummaries)
         }
@@ -220,7 +221,7 @@ class LoginScreenTest : BitwardenComposeTest() {
         // Show the lock-or-logout dialog
         val activeAccountSummary = ACTIVE_ACCOUNT_SUMMARY.copy(isLoggedIn = false)
         mutableStateFlow.update {
-            it.copy(accountSummaries = listOf(activeAccountSummary))
+            it.copy(accountSummaries = persistentListOf(activeAccountSummary))
         }
         composeTestRule.performAccountIconClick()
         composeTestRule.performAccountLongClick(activeAccountSummary)
@@ -236,7 +237,7 @@ class LoginScreenTest : BitwardenComposeTest() {
         // Show the remove account confirmation dialog
         val activeAccountSummary = ACTIVE_ACCOUNT_SUMMARY.copy(isLoggedIn = false)
         mutableStateFlow.update {
-            it.copy(accountSummaries = listOf(activeAccountSummary))
+            it.copy(accountSummaries = persistentListOf(activeAccountSummary))
         }
         composeTestRule.performAccountIconClick()
         composeTestRule.performAccountLongClick(activeAccountSummary)
@@ -355,6 +356,6 @@ private val DEFAULT_STATE =
         passwordInput = "",
         environmentLabel = "",
         dialogState = null,
-        accountSummaries = emptyList(),
+        accountSummaries = persistentListOf(),
         shouldShowLoginWithDevice = false,
     )
