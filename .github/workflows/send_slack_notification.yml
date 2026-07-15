@@ -2,11 +2,17 @@ name: Send Slack Notification
 
 on:
   workflow_dispatch:
+    inputs:
+      commit:
+        description: "Commit SHA to build the test notification"
+        required: true
+        type: string
   push:
     branches:
       - release/**/*
 
 permissions:
+  contents: read
   id-token: write
 
 jobs:
@@ -29,7 +35,7 @@ jobs:
         uses: bitwarden/gh-actions/get-keyvault-secrets@main
         with:
           keyvault: gh-android
-          secrets: "SLACK-WEBHOOK-TEAM-ENG-MOBILE"
+          secrets: "SLACK-WEBHOOK-TEAM-ENG-MOBILE,SLACK-WEBHOOK-AUTOMATIONS-TEST-CHANNEL"
 
       - name: Log out from Azure
         uses: bitwarden/gh-actions/azure-logout@main
@@ -37,29 +43,45 @@ jobs:
       - name: Build message
         id: msg
         env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_COMMIT: ${{ github.event.inputs.commit }}
+          REPO: ${{ github.repository }}
+          REPO_NAME: ${{ github.event.repository.name }}
           COMMIT_URL: ${{ github.event.head_commit.url }}
           COMMIT_SHA: ${{ github.event.head_commit.id }}
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
           COMMIT_AUTHOR: ${{ github.event.head_commit.author.name }}
           REPO_URL: ${{ github.event.repository.html_url }}
         run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            COMMIT_SHA="$INPUT_COMMIT"
+            REPO_URL="${GITHUB_SERVER_URL}/${REPO}"
+            COMMIT_URL="${REPO_URL}/commit/${COMMIT_SHA}"
+            COMMIT_MESSAGE="$(gh api "repos/${REPO}/commits/${COMMIT_SHA}" --jq '.commit.message')"
+            COMMIT_AUTHOR="$(gh api "repos/${REPO}/commits/${COMMIT_SHA}" --jq '.commit.author.name')"
+          fi
           COMMIT_SUBJECT="$(printf '%s' "$COMMIT_MESSAGE" | head -n1)"
           PR_NUMBER=$(printf '%s' "$COMMIT_MESSAGE" | head -n1 | grep -oE '#[0-9]+' | tail -n1 | tr -d '#' || true)
           PR_LINE=""
           if [ -n "$PR_NUMBER" ]; then
-            PR_LINE="<${REPO_URL}/pull/${PR_NUMBER}|android#${PR_NUMBER}> *${COMMIT_SUBJECT}* by *${COMMIT_AUTHOR}*"
+            PR_LINE="<${REPO_URL}/pull/${PR_NUMBER}|${REPO_NAME}#${PR_NUMBER}> *${COMMIT_SUBJECT}* by *${COMMIT_AUTHOR}*"
           else
             PR_LINE="*${COMMIT_SUBJECT}* by *${COMMIT_AUTHOR}*"
           fi
           SHORT_SHA="${COMMIT_SHA:0:8}"
-          COMMIT_LINE="<${COMMIT_URL}|android/${GITHUB_REF_NAME}@${SHORT_SHA}>"
-          CC_LINE="<!subteam^S0BG74ZATUM> <@U06538MSPJP>"
+          COMMIT_LINE="<${COMMIT_URL}|${REPO_NAME}/${GITHUB_REF_NAME}@${SHORT_SHA}>"
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            CC_LINE="[slack users]"
+          else
+            CC_LINE="<!subteam^S0BG74ZATUM> <@U06538MSPJP>"
+          fi
           echo "text=:cherry-pick: ${PR_LINE}\n:bricks: commit: ${COMMIT_LINE}\n:bitwarden-love: ${CC_LINE}" >> "$GITHUB_OUTPUT"
 
       - name: Send slack notification
         uses: slackapi/slack-github-action@af78098f536edbc4de71162a307590698245be95 # v3.0.1
         with:
-          webhook: ${{ steps.retrieve-slack-secrets.outputs.SLACK-WEBHOOK-TEAM-ENG-MOBILE }}
+          webhook: ${{ github.event_name == 'workflow_dispatch' && steps.retrieve-slack-secrets.outputs.SLACK-WEBHOOK-AUTOMATIONS-TEST-CHANNEL || steps.retrieve-slack-secrets.outputs.SLACK-WEBHOOK-TEAM-ENG-MOBILE }}
           webhook-type: incoming-webhook
           payload: |
             text: "${{ steps.msg.outputs.text }}"
