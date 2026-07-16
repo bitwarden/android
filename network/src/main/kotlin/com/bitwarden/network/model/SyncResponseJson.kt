@@ -774,6 +774,9 @@ data class SyncResponseJson(
         @SerialName("archivedDate")
         @Contextual
         val archivedDate: Instant?,
+
+        @SerialName("data")
+        val data: String?,
     ) {
         /**
          * Represents an attachment in the vault response.
