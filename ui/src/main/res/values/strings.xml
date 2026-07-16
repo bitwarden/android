@@ -1277,6 +1277,7 @@ Do you want to switch to this account?</string>
     <string name="upgrade_pending_message">Your upgrade is being processed. You’ll remain on the free plan until it’s complete. Sync now to check, or continue and it will update automatically.</string>
     <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
     <string name="per_month_cancel_anytime">/ month · Cancel anytime</string>
+    <string name="per_month_cancel_anytime_content_description">%1$s per month, cancel anytime</string>
     <string name="built_in_authenticator">Built-in authenticator</string>
     <string name="emergency_access">Emergency access</string>
     <string name="secure_file_storage">Secure file storage</string>

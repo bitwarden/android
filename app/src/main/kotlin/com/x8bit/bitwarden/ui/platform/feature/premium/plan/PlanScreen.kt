@@ -38,6 +38,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -366,22 +369,33 @@ private fun PriceRow(
     rate: String,
     modifier: Modifier = Modifier,
 ) {
+    val formattedContentDescription = stringResource(
+        id = BitwardenString.per_month_cancel_anytime_content_description,
+        formatArgs = arrayOf(rate),
+    )
     Row(
         horizontalArrangement = Arrangement.Center,
-        modifier = modifier,
+        modifier = modifier
+            .semantics(mergeDescendants = true) {
+                contentDescription = formattedContentDescription
+            },
     ) {
         Text(
             text = rate,
             style = BitwardenTheme.typography.labelMedium,
             color = BitwardenTheme.colorScheme.text.primary,
-            modifier = Modifier.alignByBaseline(),
+            modifier = Modifier
+                .semantics { hideFromAccessibility() }
+                .alignByBaseline(),
         )
         Spacer(modifier = Modifier.width(width = 4.dp))
         Text(
             text = stringResource(id = BitwardenString.per_month_cancel_anytime),
             style = BitwardenTheme.typography.labelSmall,
             color = BitwardenTheme.colorScheme.text.primary,
-            modifier = Modifier.alignByBaseline(),
+            modifier = Modifier
+                .semantics { hideFromAccessibility() }
+                .alignByBaseline(),
         )
     }
 }
