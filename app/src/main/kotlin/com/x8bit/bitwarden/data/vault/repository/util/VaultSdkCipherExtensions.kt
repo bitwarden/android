@@ -15,6 +15,7 @@ import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UriMatchTypeJson
 import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.BankAccount
+import com.bitwarden.vault.BankAccountListView
 import com.bitwarden.vault.Card
 import com.bitwarden.vault.CardListView
 import com.bitwarden.vault.Cipher
@@ -844,14 +845,20 @@ fun Cipher.toFailureCipherListView(): CipherListView =
 
             CipherType.SECURE_NOTE -> CipherListViewType.SecureNote
             CipherType.CARD -> CipherListViewType.Card(
-                CardListView(
+                v1 = CardListView(
                     brand = null,
                 ),
             )
 
             CipherType.IDENTITY -> CipherListViewType.Identity
             CipherType.SSH_KEY -> CipherListViewType.SshKey
-            CipherType.BANK_ACCOUNT -> CipherListViewType.BankAccount
+            CipherType.BANK_ACCOUNT -> CipherListViewType.BankAccount(
+                v1 = BankAccountListView(
+                    accountNumber = null,
+                    accountType = null,
+                ),
+            )
+
             CipherType.DRIVERS_LICENSE -> CipherListViewType.DriversLicense
             CipherType.PASSPORT -> CipherListViewType.Passport
         },

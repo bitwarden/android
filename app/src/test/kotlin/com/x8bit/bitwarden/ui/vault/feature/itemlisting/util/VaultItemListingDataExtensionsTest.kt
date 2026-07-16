@@ -14,6 +14,7 @@ import com.bitwarden.ui.platform.model.TotpData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
+import com.bitwarden.vault.BankAccountListView
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -404,7 +405,12 @@ class VaultItemListingDataExtensionsTest {
         val cipherView = createMockCipherListView(
             number = 1,
             isDeleted = false,
-            type = CipherListViewType.BankAccount,
+            type = CipherListViewType.BankAccount(
+                v1 = BankAccountListView(
+                    accountNumber = null,
+                    accountType = null,
+                ),
+            ),
         )
 
         mapOf(
