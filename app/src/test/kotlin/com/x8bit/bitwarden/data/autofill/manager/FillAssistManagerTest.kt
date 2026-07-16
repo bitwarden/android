@@ -433,6 +433,25 @@ class FillAssistManagerTest {
         )
     }
 
+    @Test
+    fun `parseSingleSelector returns null when only constraint is a class qualifier`() {
+        assertNull(parseSingleSelector("input.hidden"))
+    }
+
+    @Test
+    fun `parseSingleSelector ignores a class qualifier when a supported attribute is present`() {
+        assertEquals(
+            FillAssistRules.SelectorClause(
+                tag = "input",
+                id = null,
+                name = "password",
+                type = null,
+                role = null,
+            ),
+            parseSingleSelector("input.hidden[name='password']"),
+        )
+    }
+
     // endregion
 }
 

@@ -44,6 +44,11 @@ private val ID_SHORTHAND_REGEX = Regex("""#([^.\[#\s]+)""")
 // Extracts the leading tag name from a selector (e.g. "input", "select", "form").
 private val TAG_REGEX = Regex("""^([a-zA-Z][a-zA-Z0-9]*)""")
 
+// Matches a CSS class qualifier (e.g. ".hidden" in "input.hidden") outside any [...] attribute
+// brackets, so a literal "." inside an attribute value (e.g. [title='Enter your email.']) isn't
+// mistaken for one.
+private val CLASS_QUALIFIER_REGEX = Regex("""\.[a-zA-Z][\w-]*(?![^\[]*])""")
+
 // Splits on whitespace that is outside [...] attribute brackets, so that descendant selectors
 // like "div#container input#field" are split correctly while attribute values containing spaces
 // (e.g. [placeholder='Email address']) are preserved intact.
@@ -257,15 +262,19 @@ internal fun parseSingleSelector(selector: String): SelectorClause? {
         id = ID_SHORTHAND_REGEX.find(effective)?.groupValues?.get(1)
     }
 
-    // If the selector's only constraint is an attribute we can't represent, dropping it here
-    // would otherwise leave a tag-only clause that matches every element with that tag.
+    // A residual class qualifier (e.g. "input.hidden") is just as unrepresentable as an
+    // unsupported attribute — it must not be allowed to fall back to a tag-only match either.
+    val hasClassQualifier = CLASS_QUALIFIER_REGEX.containsMatchIn(effective)
+
+    // If the selector's only constraint is an attribute or class we can't represent, dropping it
+    // here would otherwise leave a tag-only clause that matches every element with that tag.
     val noAttributeConstraints = hasNoAttributeConstraints(
         id = id,
         name = name,
         type = type,
         role = role,
     )
-    if (hasUnsupportedAttribute && noAttributeConstraints) {
+    if ((hasUnsupportedAttribute || hasClassQualifier) && noAttributeConstraints) {
         return null
     }
 
