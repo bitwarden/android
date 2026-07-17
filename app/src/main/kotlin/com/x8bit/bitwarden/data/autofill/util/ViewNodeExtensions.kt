@@ -107,6 +107,23 @@ private fun AssistStructure.ViewNode.findFirstAutofillableChild(): AutofillableC
 }
 
 /**
+ * Builds an [AutofillView.Data] for this [AssistStructure.ViewNode] using the given [autofillId]
+ * and [website].
+ */
+internal fun AssistStructure.ViewNode.toAutofillViewData(
+    autofillId: AutofillId,
+    website: String?,
+): AutofillView.Data = AutofillView.Data(
+    autofillId = autofillId,
+    autofillOptions = autofillOptions?.map { it.toString() }.orEmpty(),
+    autofillType = autofillType,
+    isFocused = isFocused,
+    textValue = autofillValue?.extractTextValue(),
+    hasPasswordTerms = hasPasswordTerms(),
+    website = website,
+)
+
+/**
  * The first supported autofill hint for this view node, or null if none are found.
  */
 private val AssistStructure.ViewNode.supportedAutofillHint: AutofillHint?
