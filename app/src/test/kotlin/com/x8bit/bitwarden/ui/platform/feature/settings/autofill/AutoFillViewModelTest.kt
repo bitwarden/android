@@ -58,8 +58,16 @@ class AutoFillViewModelTest : BaseViewModelTest() {
             every { browserThirdPartyAutofillStatus } returns DEFAULT_AUTOFILL_STATUS
         }
 
+    private val mutableFillAssistTargetingRulesFlagFlow = MutableStateFlow(false)
     private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(FlagKey.FillAssistTargetingRules) } returns false
+        every {
+            getFeatureFlag(FlagKey.FillAssistTargetingRules)
+        } answers {
+            mutableFillAssistTargetingRulesFlagFlow.value
+        }
+        every {
+            getFeatureFlagFlow(FlagKey.FillAssistTargetingRules)
+        } returns mutableFillAssistTargetingRulesFlagFlow
     }
 
     private val fillAssistManager: FillAssistManager = mockk(relaxed = true)
@@ -547,6 +555,17 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         verify { settingsRepository.isFillAssistEnabled = false }
         verify(exactly = 0) { fillAssistManager.syncIfNecessary() }
     }
+
+    @Test
+    fun `when FillAssistTargetingRules flag updates, should update showFillAssistOption state`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                mutableFillAssistTargetingRulesFlagFlow.value = true
+                assertEquals(DEFAULT_STATE.copy(showFillAssistOption = true), awaitItem())
+            }
+        }
 
     @Test
     fun `FillAssistInfoClick emits NavigateToFillAssistHelp event`() = runTest {
