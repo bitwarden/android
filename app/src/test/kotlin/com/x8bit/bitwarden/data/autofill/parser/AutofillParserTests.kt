@@ -1115,7 +1115,6 @@ class AutofillParserTests {
         assertEquals(expected, actual)
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `parse should use fill-assist views when rules cover login and a login view is focused`() {
         // Setup: fill-assist with login rules, login view focused.
@@ -1192,7 +1191,6 @@ class AutofillParserTests {
         assertEquals(expected, actual)
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `parse should use fill-assist when rules cover payment-card and a card view is focused`() {
         mutableFillAssistFlagFlow.value = true

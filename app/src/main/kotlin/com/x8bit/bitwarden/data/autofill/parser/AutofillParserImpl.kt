@@ -272,15 +272,15 @@ private fun List<ViewNodeTraversalData>.toAutofillViews(
     urlBarWebsite: String?,
 ): List<AutofillView> {
     val viewsLists = map { it.autofillViews }
-    return (viewsLists
+    val autofillViewLists = viewsLists
         .filter { views -> views.any { it.data.isFocused } }
         .flatten()
         .filter { it !is AutofillView.Unused }
         .takeUnless { it.isEmpty() }
         ?: viewsLists
             .flatten()
-            .filter { it !is AutofillView.Unused })
-        .map { it.updateWebsiteIfNecessary(website = urlBarWebsite) }
+            .filter { it !is AutofillView.Unused }
+    return autofillViewLists.map { it.updateWebsiteIfNecessary(website = urlBarWebsite) }
 }
 
 /**
