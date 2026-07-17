@@ -1007,13 +1007,13 @@ data class SyncResponseJson(
         @Serializable
         data class SshKey(
             @SerialName("publicKey")
-            val publicKey: String,
+            val publicKey: String?,
 
             @SerialName("privateKey")
             val privateKey: String,
 
             @SerialName("keyFingerprint")
-            val keyFingerprint: String,
+            val keyFingerprint: String?,
         )
 
         /**
