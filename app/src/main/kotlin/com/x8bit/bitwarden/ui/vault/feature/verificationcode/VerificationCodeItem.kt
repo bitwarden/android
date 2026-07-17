@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -109,7 +110,9 @@ fun VaultVerificationCodeItem(
                 text = authCode
                     .chunked(size = 3) { it.padEnd(length = 3, padChar = ' ') }
                     .joinToString(separator = " "),
-                style = BitwardenTheme.typography.sensitiveInfoSmall,
+                style = BitwardenTheme.typography.sensitiveInfoSmall.copy(
+                    textDirection = TextDirection.Ltr,
+                ),
                 color = BitwardenTheme.colorScheme.text.primary,
             )
 
