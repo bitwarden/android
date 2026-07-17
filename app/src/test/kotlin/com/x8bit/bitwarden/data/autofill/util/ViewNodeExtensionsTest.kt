@@ -34,10 +34,12 @@ class ViewNodeExtensionsTest {
     private val testAutofillValue: AutofillValue = mockk()
     private val mockHtmlInfo: HtmlInfo = mockk {
         every { attributes } returns emptyList()
+        every { tag } returns ""
     }
 
     private val viewNode: AssistStructure.ViewNode = mockk {
         every { autofillId } returns expectedAutofillId
+        every { className } returns null
         every { idEntry } returns null
         every { hint } returns null
         every { autofillOptions } returns AUTOFILL_OPTIONS_ARRAY
@@ -1234,6 +1236,104 @@ class ViewNodeExtensionsTest {
 
         // Verify
         assertNull(actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should redirect autofillId and autofillType to first autofillable child when container has AUTOFILL_TYPE_NONE and a supported hint`() {
+        // Setup
+        val childAutofillId: AutofillId = mockk()
+        val childAutofillType = View.AUTOFILL_TYPE_TEXT
+        val childNode: AssistStructure.ViewNode = mockk {
+            every { autofillId } returns childAutofillId
+            every { autofillType } returns childAutofillType
+            every { childCount } returns 0
+            every { className } returns null
+            every { htmlInfo } returns mockHtmlInfo
+        }
+        every { viewNode.autofillHints } returns arrayOf(View.AUTOFILL_HINT_PASSWORD)
+        every { viewNode.autofillType } returns View.AUTOFILL_TYPE_NONE
+        every { viewNode.childCount } returns 1
+        every { viewNode.getChildAt(0) } returns childNode
+        val expected = AutofillView.Login.Password(
+            data = autofillViewData.copy(
+                autofillId = childAutofillId,
+                autofillType = childAutofillType,
+            ),
+        )
+
+        // Test
+        val actual = viewNode.toAutofillView(parentWebsite = null)
+
+        // Verify
+        assertEquals(expected, actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should redirect to nested grandchild when direct child has AUTOFILL_TYPE_NONE`() {
+        // Setup
+        val grandchildAutofillId: AutofillId = mockk()
+        val grandchildAutofillType = View.AUTOFILL_TYPE_TEXT
+        val grandchildNode: AssistStructure.ViewNode = mockk {
+            every { autofillId } returns grandchildAutofillId
+            every { autofillType } returns grandchildAutofillType
+            every { childCount } returns 0
+            every { className } returns null
+            every { htmlInfo } returns mockHtmlInfo
+        }
+        val intermediateChildNode: AssistStructure.ViewNode = mockk {
+            every { autofillId } returns mockk()
+            every { autofillType } returns View.AUTOFILL_TYPE_NONE
+            every { childCount } returns 1
+            every { getChildAt(0) } returns grandchildNode
+            every { className } returns null
+            every { htmlInfo } returns mockHtmlInfo
+        }
+        every { viewNode.autofillHints } returns arrayOf(View.AUTOFILL_HINT_PASSWORD)
+        every { viewNode.autofillType } returns View.AUTOFILL_TYPE_NONE
+        every { viewNode.childCount } returns 1
+        every { viewNode.getChildAt(0) } returns intermediateChildNode
+        val expected = AutofillView.Login.Password(
+            data = autofillViewData.copy(
+                autofillId = grandchildAutofillId,
+                autofillType = grandchildAutofillType,
+            ),
+        )
+
+        // Test
+        val actual = viewNode.toAutofillView(parentWebsite = null)
+
+        // Verify
+        assertEquals(expected, actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should fall back to container own autofillId when AUTOFILL_TYPE_NONE and hint present but no autofillable child exists`() {
+        // Setup
+        val nonAutofillableChildNode: AssistStructure.ViewNode = mockk {
+            every { autofillId } returns mockk()
+            every { autofillType } returns View.AUTOFILL_TYPE_NONE
+            every { childCount } returns 0
+            every { className } returns null
+            every { htmlInfo } returns mockHtmlInfo
+        }
+        every { viewNode.autofillHints } returns arrayOf(View.AUTOFILL_HINT_PASSWORD)
+        every { viewNode.autofillType } returns View.AUTOFILL_TYPE_NONE
+        every { viewNode.childCount } returns 1
+        every { viewNode.getChildAt(0) } returns nonAutofillableChildNode
+        val expected = AutofillView.Login.Password(
+            data = autofillViewData.copy(
+                autofillType = View.AUTOFILL_TYPE_NONE,
+            ),
+        )
+
+        // Test
+        val actual = viewNode.toAutofillView(parentWebsite = null)
+
+        // Verify
+        assertEquals(expected, actual)
     }
 
     /**

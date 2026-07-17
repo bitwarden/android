@@ -8,6 +8,7 @@ import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasScrollAction
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -151,30 +152,43 @@ class PlanScreenTest : BitwardenComposeTest() {
     fun `price and subtitle should render from state`() {
         composeTestRule
             .onNodeWithText("\$1.65")
+            .performScrollTo()
             .assertExists()
         composeTestRule
-            .onNodeWithText("/ month")
+            .onNodeWithText("/ month · Cancel anytime")
+            .performScrollTo()
             .assertExists()
         composeTestRule
-            .onNodeWithText(
-                "Unlock more advanced features with a Premium plan.",
-            )
+            .onNodeWithText("You’ll complete the purchase with Stripe secure checkout.")
+            .performScrollTo()
             .assertExists()
     }
 
     @Test
     fun `feature list items should render`() {
         composeTestRule
-            .onNodeWithText("Built-in authenticator")
+            .onNodeWithText("Breeze through 2FA with built-in codes")
             .assertExists()
         composeTestRule
-            .onNodeWithText("Emergency access")
+            .onNodeWithText("Run reports to find risky passwords")
             .assertExists()
         composeTestRule
-            .onNodeWithText("Secure file storage")
+            .onNodeWithText("Keep documents safe and encrypted")
             .assertExists()
         composeTestRule
-            .onNodeWithText("Breach monitoring")
+            .onNodeWithText("Add a trusted emergency contact")
+            .assertExists()
+        composeTestRule
+            .onNodeWithText("Identify unsecure websites")
+            .assertExists()
+        composeTestRule
+            .onNodeWithText("Flag accounts with inactive 2FA")
+            .assertExists()
+        composeTestRule
+            .onNodeWithText("Share files securely with anyone using Send")
+            .assertExists()
+        composeTestRule
+            .onNodeWithText("Receive 24/7 priority support")
             .assertExists()
     }
 
@@ -492,7 +506,9 @@ class PlanScreenTest : BitwardenComposeTest() {
     fun `premium plan name should render`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_PREMIUM_VIEW_STATE) }
         composeTestRule
-            .onNodeWithText("Premium")
+            .onAllNodesWithText("Premium")
+            .filterToOne(hasAnyAncestor(hasScrollAction()))
+            .performScrollTo()
             .assertIsDisplayed()
     }
 

@@ -387,6 +387,20 @@ class FillAssistManagerTest {
     }
 
     @Test
+    fun `parseSingleSelector splits on descendant whitespace remaining after a shadow boundary`() {
+        assertEquals(
+            FillAssistRules.SelectorClause(
+                tag = "input",
+                id = null,
+                name = "email",
+                type = null,
+                role = null,
+            ),
+            parseSingleSelector("custom-element >>> div.wrapper input[name='email']"),
+        )
+    }
+
+    @Test
     fun `parseSingleSelector handles select element`() {
         assertEquals(
             FillAssistRules.SelectorClause(
@@ -397,6 +411,44 @@ class FillAssistManagerTest {
                 role = null,
             ),
             parseSingleSelector("select#state"),
+        )
+    }
+
+    @Test
+    fun `parseSingleSelector returns null when only constraint is an unsupported attribute`() {
+        assertNull(parseSingleSelector("input[autocomplete='current-password']"))
+    }
+
+    @Test
+    fun `parseSingleSelector ignores an unsupported attribute when a supported one is present`() {
+        assertEquals(
+            FillAssistRules.SelectorClause(
+                tag = "input",
+                id = null,
+                name = "password",
+                type = null,
+                role = null,
+            ),
+            parseSingleSelector("input[name='password'][autocomplete='current-password']"),
+        )
+    }
+
+    @Test
+    fun `parseSingleSelector returns null when only constraint is a class qualifier`() {
+        assertNull(parseSingleSelector("input.hidden"))
+    }
+
+    @Test
+    fun `parseSingleSelector ignores a class qualifier when a supported attribute is present`() {
+        assertEquals(
+            FillAssistRules.SelectorClause(
+                tag = "input",
+                id = null,
+                name = "password",
+                type = null,
+                role = null,
+            ),
+            parseSingleSelector("input.hidden[name='password']"),
         )
     }
 

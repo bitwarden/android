@@ -12,7 +12,7 @@
     <string name="copy_username">Felhasználónév másolása</string>
     <string name="delete">Törlés</string>
     <string name="preview">Előnézet</string>
-    <string name="deleting">Deleting…</string>
+    <string name="deleting">Törlés…</string>
     <string name="do_you_really_want_to_delete">Tényleg törölni akarod? Ezt nem lehet visszavonni.</string>
     <string name="edit">Szerkesztés</string>
     <string name="edit_folder">Mappa szerkesztése</string>
@@ -139,7 +139,7 @@
     <string name="other">Egyéb</string>
     <string name="password_generator">Jelszógenerátor</string>
     <string name="password_hint">Jelszó emlékeztető</string>
-    <string name="password_hint_alert">We’ve sent you an email with your master password hint.</string>
+    <string name="password_hint_alert">Elküldtünk neked egy mesterjelszó emlékeztetődet tartalmazó E-mailt.</string>
     <string name="password_override_alert">Biztosan felül akarod írni a jelenlegi jelszót?</string>
     <string name="retype_master_password">Mesterjelszó ismételt beírása</string>
     <string name="retype_new_master_password_required">Az új mesterjelszó ismételt megadása (kötelező)</string>
@@ -149,7 +149,7 @@
     <string name="item_details">Elem részletek</string>
     <string name="item_updated">Az elem frissítésre került.</string>
     <string name="submitting">Beküldés…</string>
-    <string name="syncing">Syncing…</string>
+    <string name="syncing">Szinkronizálás…</string>
     <string name="syncing_complete">A szinkronizálás kész.</string>
     <string name="two_step_login">Kétlépcsős bejelentkezés</string>
     <string name="unlock_with_biometrics">Biometrikus feloldás</string>
@@ -406,7 +406,7 @@
     <string name="save_attachment_success">A melléklet sikeresen mentésre került.</string>
     <string name="autofill_tile_accessibility_required">Please turn on “Autofill Accessibility Service” from Bitwarden Settings to use the Autofill tile.</string>
     <string name="autofill_tile_uri_not_found">Nincs érzékelt jelszó mező.</string>
-    <string name="soft_deleting">Sending to trash…</string>
+    <string name="soft_deleting">A lomtárba küldés folyamatban van…</string>
     <string name="item_soft_deleted">Az elem a lomtárba került.</string>
     <string name="restore">Visszaállítás</string>
     <string name="restoring">Visszaállítás…</string>

@@ -332,7 +332,7 @@
         <item quantity="many">تم كشف كلمة المرور هذه %d مرة في عمليات اختراق البيانات. يجب عليك تغييرها.</item>
         <item quantity="other">تم كشف كلمة المرور هذه %d مرة في عمليات اختراق البيانات. يجب عليك تغييرها.</item>
     </plurals>
-    <string name="password_safe">لم يتم العثور على كلمة المرور هذه في أي عمليات اختراق للبيانات معروفة. يجب أن تكون آمنة للاستخدام.</string>
+    <string name="password_safe">لم يتم العثور على كلمة المرور هذه في أي تسريبات معروفة للبيانات. ينبغي أن تكون آمنة للاستخدام.</string>
     <string name="identity_name">اسم الهوية</string>
     <string name="value">القيمة</string>
     <string name="password_history">سجل كلمة المرور</string>
@@ -723,7 +723,7 @@
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">تعرف على المزيد حول كيفية استخدام Bitwarden في مركز المساعدة.</string>
     <string name="privacy_policy_description_long">اطلع على سياستنا للخصوصية على bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">استكشف المزيد من الميزات لحساب Bitwarden الخاص بك على تطبيق الويب.</string>
-    <string name="learn_about_organizations_description_long">يتيح لك Bitwarden مشاركة عناصر خزنتك مع الآخرين باستخدام حساب المؤسسة. تعرف على المزيد على موقع bitwarden.com على شبكة الإنترنت.</string>
+    <string name="learn_about_organizations_description_long">يتيح لك Bitwarden مشاركة عناصر خزنتك مع الآخرين باستخدام حساب المنظمة. تعرف على المزيد على موقع bitwarden.com.</string>
     <string name="created_x">تم إنشاء %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">تتطلب مؤسستك تعيين كلمة مرور رئيسية.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">أعدنّ ميزة إلغاء القُفْل لتغيير إجراء مهلة المخزن الخاص بك.</string>

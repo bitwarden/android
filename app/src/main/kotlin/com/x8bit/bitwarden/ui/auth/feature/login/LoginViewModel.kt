@@ -20,6 +20,8 @@ import com.x8bit.bitwarden.data.platform.util.toUriOrNull
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
@@ -52,7 +54,8 @@ class LoginViewModel @Inject constructor(
                     .userStateFlow
                     .value
                     ?.toAccountSummaries()
-                    .orEmpty(),
+                    .orEmpty()
+                    .toImmutableList(),
                 shouldShowLoginWithDevice = false,
             )
         },
@@ -296,7 +299,7 @@ data class LoginState(
     val environmentLabel: String,
     val isLoginButtonEnabled: Boolean,
     val dialogState: DialogState?,
-    val accountSummaries: List<AccountSummary>,
+    val accountSummaries: ImmutableList<AccountSummary>,
     val shouldShowLoginWithDevice: Boolean,
 ) : Parcelable {
     /**
