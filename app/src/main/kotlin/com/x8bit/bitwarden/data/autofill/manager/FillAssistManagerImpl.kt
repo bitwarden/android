@@ -98,11 +98,8 @@ class FillAssistManagerImpl(
             ?.fillAssistRulesUrl
             ?: return
         val lastFetch = fillAssistDiskSource.getLastFetchTimestamp(serverUrl) ?: 0L
-        if (clock.millis() - lastFetch < UPDATE_INTERVAL_MS ||
-            !syncJob.isCompleted
-        ) {
-            return
-        }
+        if (clock.millis() - lastFetch < UPDATE_INTERVAL_MS) return
+        if (!syncJob.isCompleted) return
         syncJob = ioScope.launch { sync(serverUrl) }
     }
 
