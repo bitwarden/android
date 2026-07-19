@@ -1277,13 +1277,13 @@
     <string name="upgrade_pending">ارتقا در انتظار انجام</string>
     <string name="upgrade_pending_message">ارتقاء شما در حال پردازش است. تا زمان تکمیل، در طرح رایگان باقی خواهید ماند. اکنون برای بررسی همگام‌سازی کنید، یا ادامه دهید تا به‌طور خودکار به‌روزرسانی شود.</string>
     <string name="unlock_premium_features">با طرح پریمیوم، ویژگی‌های پیشرفته‌تری را باز کنید.</string>
-    <string name="per_month">/ ماه</string>
+    <string name="per_month_cancel_anytime">/ ماه · لغو در هر زمان</string>
+    <string name="per_month_cancel_anytime_content_description">%1$s per month, cancel anytime</string>
     <string name="built_in_authenticator">تولیدکننده رمز دوعاملی داخلی</string>
     <string name="emergency_access">دسترسی اضطراری</string>
     <string name="secure_file_storage">ذخیره‌سازی امن پرونده</string>
     <string name="breach_monitoring">پایش نشت اطلاعات</string>
-    <string name="upgrade_now">هم‌اکنون ارتقا دهید</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">برای خرید تکمیلی خود به صفحه پرداخت امن Stripe می‌رود.</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">شما خرید را با پرداخت امن Stripe تکمیل خواهید کرد.</string>
     <string name="opening_checkout">افتتاح حساب…</string>
     <string name="secure_checkout_didnt_load">پرداخت امن بارگیری نشد</string>
     <string name="trouble_opening_payment_page">ما در باز کردن صفحه پرداخت مشکل داشتیم، بنابراین دوباره امتحان کنید.</string>
@@ -1404,4 +1404,13 @@
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">درخواست شما به دلیل نیاز برنامه به دسترسی به شبکه محلی قطع شد. می‌توانید این مورد را در تنظیمات دستگاه خود فعال کنید.</string>
     <string name="continue_to_stripe">ادامه دادن به Stripe؟</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">برای مدیریت لغو اشتراک خود به Stripe منتقل خواهید شد.</string>
+    <string name="unlock_advanced_protection">قفل محافظت پیشرفته را باز کنید</string>
+    <string name="breeze_through_2fa_with_built_in_codes">با کدهای داخلی، از طریق احراز هویت دو مرحله‌ای به راحتی عبور کنید</string>
+    <string name="run_reports_to_find_risky_passwords">اجرای گزارش‌ها برای یافتن کلمات عبور پرخطر</string>
+    <string name="add_a_trusted_emergency_contact">یک مخاطب اضطراری مورد اعتماد اضافه کنید</string>
+    <string name="identify_unsecure_websites">شناسایی وب‌سایت‌های ناامن</string>
+    <string name="flag_accounts_with_inactive_2fa">حساب‌های دارای 2FA غیرفعال را علامت‌گذاری کنید</string>
+    <string name="keep_documents_safe_and_encrypted">اسناد را ایمن و رمزگذاری شده نگه دارید</string>
+    <string name="share_files_securely_with_anyone_using_send">پرونده‌ها را با استفاده از ارسال به صورت ایمن با هر کسی به اشتراک بگذارید</string>
+    <string name="receive_24_7_priority_support">پشتیبانی اولویت‌دار ۲۴ ساعته و ۷ روز هفته دریافت کنید</string>
 </resources>
