@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.model
 
+import com.bitwarden.network.model.SendTypeJson
+import com.bitwarden.network.model.SendWhoCanAccessTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -111,6 +113,42 @@ sealed class PolicyInformation {
     data class SendOptions(
         @SerialName("disableHideEmail")
         val shouldDisableHideEmail: Boolean?,
+    ) : PolicyInformation()
+
+    /**
+     * Represents a policy enforcing rules on the creation and sharing of Sends. Supersedes the
+     * disable-send policy and [SendOptions] when the `pm-31885-send-controls` feature flag is
+     * active.
+     *
+     * @property disableSend Whether the ability to create and edit Sends is disabled.
+     * @property disableHideEmail Whether the user should have the ability to hide their email
+     * address from Send recipients.
+     * @property whoCanAccess The access type Sends are restricted to, if any.
+     * @property allowedDomains A comma-separated list of email domains recipients must belong to
+     * when [whoCanAccess] is [SendWhoCanAccessTypeJson.SPECIFIC_PEOPLE].
+     * @property deletionHours The number of hours until a Send is deleted, if enforced.
+     * @property allowedSendTypes The types of Sends that are allowed to be created, if
+     * restricted.
+     */
+    @Serializable
+    data class SendControls(
+        @SerialName("disableSend")
+        val disableSend: Boolean?,
+
+        @SerialName("disableHideEmail")
+        val disableHideEmail: Boolean?,
+
+        @SerialName("whoCanAccess")
+        val whoCanAccess: SendWhoCanAccessTypeJson?,
+
+        @SerialName("allowedDomains")
+        val allowedDomains: String?,
+
+        @SerialName("deletionHours")
+        val deletionHours: Int?,
+
+        @SerialName("allowedSendTypes")
+        val allowedSendTypes: List<SendTypeJson>?,
     ) : PolicyInformation()
 
     /**

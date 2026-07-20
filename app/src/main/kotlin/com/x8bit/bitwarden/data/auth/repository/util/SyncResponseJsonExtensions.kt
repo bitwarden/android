@@ -153,6 +153,10 @@ val PolicyView.policyInformation: PolicyInformation?
                 JSON.decodeFromStringOrNull<PolicyInformation.SendOptions>(it)
             }
 
+            PolicyType.SEND_CONTROLS -> {
+                JSON.decodeFromStringOrNull<PolicyInformation.SendControls>(it)
+            }
+
             else -> null
         }
     }
