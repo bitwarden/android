@@ -9,14 +9,19 @@ import com.bitwarden.data.repository.util.labelOrBaseUrlHost
  */
 sealed class Environment {
     /**
-     * The [Type] of the environment.
+     * A type that can be enumerated over indicating the high-level type of environment.
      */
     abstract val type: Type
 
     /**
-     * The raw [environmentUrlData] that contains specific base URLs for each relevant domain.
+     * The raw [EnvironmentUrlDataJson] that contains specific base URLs for each relevant domain.
      */
     abstract val environmentUrlData: EnvironmentUrlDataJson
+
+    /**
+     * Indicates if the environment is used for FedRamp.
+     */
+    abstract val isFedRamp: Boolean
 
     /**
      * A human-readable label for the environment based in some way on its base URL.
@@ -24,36 +29,41 @@ sealed class Environment {
     abstract val label: String
 
     /**
-     * The default US environment.
+     * Represents a production environment.
      */
-    data object Us : Environment() {
-        override val type: Type get() = Type.US
-        override val environmentUrlData: EnvironmentUrlDataJson
-            get() = EnvironmentUrlDataJson.DEFAULT_US
-        override val label: String
-            get() = "bitwarden.com"
-    }
+    sealed class Prod : Environment() {
+        /**
+         * The production US environment.
+         */
+        data object Us : Prod() {
+            override val type: Type get() = Type.US
+            override val label: String get() = "bitwarden.com"
+            override val isFedRamp: Boolean get() = false
+            override val environmentUrlData: EnvironmentUrlDataJson
+                get() = EnvironmentUrlDataJson.DEFAULT_US
+        }
 
-    /**
-     * The default EU environment.
-     */
-    data object Eu : Environment() {
-        override val type: Type get() = Type.EU
-        override val environmentUrlData: EnvironmentUrlDataJson
-            get() = EnvironmentUrlDataJson.DEFAULT_EU
-        override val label: String
-            get() = "bitwarden.eu"
-    }
+        /**
+         * The production EU environment.
+         */
+        data object Eu : Prod() {
+            override val type: Type get() = Type.EU
+            override val label: String get() = "bitwarden.eu"
+            override val isFedRamp: Boolean get() = false
+            override val environmentUrlData: EnvironmentUrlDataJson
+                get() = EnvironmentUrlDataJson.DEFAULT_EU
+        }
 
-    /**
-     * The default FedRAMP environment.
-     */
-    data object FedRamp : Environment() {
-        override val type: Type get() = Type.FED_RAMP
-        override val environmentUrlData: EnvironmentUrlDataJson
-            get() = EnvironmentUrlDataJson.DEFAULT_FED_RAMP
-        override val label: String
-            get() = "bitwarden-gov.com"
+        /**
+         * The production FedRamp environment.
+         */
+        data object FedRamp : Prod() {
+            override val type: Type get() = Type.FED_RAMP
+            override val label: String get() = "bitwarden-gov.com"
+            override val isFedRamp: Boolean get() = true
+            override val environmentUrlData: EnvironmentUrlDataJson
+                get() = EnvironmentUrlDataJson.DEFAULT_FED_RAMP
+        }
     }
 
     /**
@@ -63,13 +73,13 @@ sealed class Environment {
         override val environmentUrlData: EnvironmentUrlDataJson,
     ) : Environment() {
         override val type: Type get() = Type.SELF_HOSTED
-        override val label: String
-            get() = environmentUrlData.labelOrBaseUrlHost
+        override val label: String get() = this.labelOrBaseUrlHost
+        override val isFedRamp: Boolean get() = environmentUrlData.isFedRamp
+        val isInternal: Boolean get() = environmentUrlData.isInternal
     }
 
     /**
-     * A summary of the various types that can be enumerated over and which contains a
-     * human-readable [label].
+     * A summary of the various types that can be enumerated over.
      */
     enum class Type {
         US,

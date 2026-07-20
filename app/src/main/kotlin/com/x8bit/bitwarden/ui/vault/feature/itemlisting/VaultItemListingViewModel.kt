@@ -175,8 +175,8 @@ class VaultItemListingViewModel @Inject constructor(
             accountSummaries = accountSummaries,
             viewState = VaultItemListingState.ViewState.Loading,
             vaultFilterType = vaultRepository.vaultFilterType,
-            baseWebSendUrl = environmentRepository.environment.environmentUrlData.baseWebSendUrl,
-            baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
+            baseWebSendUrl = environmentRepository.environment.baseWebSendUrl,
+            baseIconUrl = environmentRepository.environment.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
             dialogState = providerCreateCredentialRequest
@@ -670,10 +670,7 @@ class VaultItemListingViewModel @Inject constructor(
         if (premiumStateManager.isInAppUpgradeAvailable()) {
             sendEvent(VaultItemListingEvent.NavigateToPlanModal)
         } else {
-            val baseUrl = environmentRepository
-                .environment
-                .environmentUrlData
-                .baseWebVaultUrlOrDefault
+            val baseUrl = environmentRepository.environment.baseWebVaultUrlOrDefault
             val url = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium"
             sendEvent(VaultItemListingEvent.NavigateToUrl(url = url))
         }

@@ -242,9 +242,9 @@ class LandingViewModel @Inject constructor(
 
     private fun handleEnvironmentTypeSelect(action: LandingAction.EnvironmentTypeSelect) {
         val environment = when (action.environmentType) {
-            Environment.Type.US -> Environment.Us
-            Environment.Type.EU -> Environment.Eu
-            Environment.Type.FED_RAMP -> Environment.FedRamp
+            Environment.Type.US -> Environment.Prod.Us
+            Environment.Type.EU -> Environment.Prod.Eu
+            Environment.Type.FED_RAMP -> Environment.Prod.FedRamp
             Environment.Type.SELF_HOSTED -> {
                 // Launch the self-hosted screen and select the full environment details there.
                 sendEvent(LandingEvent.NavigateToEnvironment)

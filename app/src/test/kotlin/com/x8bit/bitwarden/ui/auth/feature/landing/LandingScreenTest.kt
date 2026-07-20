@@ -362,11 +362,11 @@ class LandingScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `selecting environment should send EnvironmentOptionSelect action`() {
-        val selectedEnvironment = Environment.Eu
+        val selectedEnvironment = Environment.Prod.Eu
 
         // Clicking to open dialog
         composeTestRule
-            .onNodeWithText(Environment.Us.label)
+            .onNodeWithText(Environment.Prod.Us.label)
             .performClick()
 
         // Clicking item on dialog
@@ -521,7 +521,7 @@ private val DEFAULT_STATE = LandingState(
     isContinueButtonEnabled = true,
     isRememberEmailEnabled = false,
     selectedEnvironmentType = Environment.Type.US,
-    selectedEnvironmentLabel = Environment.Us.label,
+    selectedEnvironmentLabel = Environment.Prod.Us.label,
     dialog = null,
     accountSummaries = persistentListOf(),
     isFedRampEnabled = true,

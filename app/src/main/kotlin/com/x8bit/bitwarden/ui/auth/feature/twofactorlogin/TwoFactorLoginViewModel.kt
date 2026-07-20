@@ -82,10 +82,7 @@ class TwoFactorLoginViewModel @Inject constructor(
 
     private val recover2faUri: Uri
         get() {
-            val baseUrl = environmentRepository
-                .environment
-                .environmentUrlData
-                .baseWebVaultUrlOrDefault
+            val baseUrl = environmentRepository.environment.baseWebVaultUrlOrDefault
             return "$baseUrl/#/recover-2fa".toUri()
         }
 
@@ -205,11 +202,10 @@ class TwoFactorLoginViewModel @Inject constructor(
             .twoFactorDuoAuthUrl
             ?.toUri()
             ?.let {
-                val environmentData = environmentRepository.environment.environmentUrlData
                 sendEvent(
                     event = TwoFactorLoginEvent.NavigateToDuo(
                         uri = it,
-                        authTabData = environmentData.duoAuthTabData,
+                        authTabData = environmentRepository.environment.duoAuthTabData,
                     ),
                 )
             }
@@ -236,10 +232,10 @@ class TwoFactorLoginViewModel @Inject constructor(
                 ?.authMethodsData
                 ?.get(TwoFactorAuthMethod.WEB_AUTH)
                 ?.let {
-                    val environmentData = environmentRepository.environment.environmentUrlData
-                    val authTabData = environmentData.webAuthnAuthTabData
+                    val environment = environmentRepository.environment
+                    val authTabData = environment.webAuthnAuthTabData
                     val uri = generateUriForWebAuth(
-                        baseUrl = environmentData.baseWebVaultUrlOrDefault,
+                        baseUrl = environment.baseWebVaultUrlOrDefault,
                         authTabData = authTabData,
                         data = it,
                         headerText = resourceManager.getString(

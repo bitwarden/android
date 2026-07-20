@@ -322,10 +322,7 @@ class PlanViewModel @Inject constructor(
     // region Premium user handlers
 
     private fun handleManagePlanClick() {
-        val webVaultBaseUrl = environmentRepository
-            .environment
-            .environmentUrlData
-            .baseWebVaultUrlOrDefault
+        val webVaultBaseUrl = environmentRepository.environment.baseWebVaultUrlOrDefault
         sendEvent(PlanEvent.LaunchUri(url = "$webVaultBaseUrl/#/settings/subscription/premium"))
     }
 

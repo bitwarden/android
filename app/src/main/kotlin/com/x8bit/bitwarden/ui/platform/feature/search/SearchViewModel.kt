@@ -131,8 +131,8 @@ class SearchViewModel @Inject constructor(
                             .any(),
                     )
                 },
-                baseWebSendUrl = environmentRepo.environment.environmentUrlData.baseWebSendUrl,
-                baseIconUrl = environmentRepo.environment.environmentUrlData.baseIconUrl,
+                baseWebSendUrl = environmentRepo.environment.baseWebSendUrl,
+                baseIconUrl = environmentRepo.environment.baseIconUrl,
                 isIconLoadingDisabled = settingsRepo.isIconLoadingDisabled,
                 autofillSelectionData = specialCircumstance?.toAutofillSelectionDataOrNull(),
                 totpData = specialCircumstance?.toTotpDataOrNull(),
@@ -313,10 +313,7 @@ class SearchViewModel @Inject constructor(
         if (premiumStateManager.isInAppUpgradeAvailable()) {
             sendEvent(SearchEvent.NavigateToPlanModal)
         } else {
-            val baseUrl = environmentRepo
-                .environment
-                .environmentUrlData
-                .baseWebVaultUrlOrDefault
+            val baseUrl = environmentRepo.environment.baseWebVaultUrlOrDefault
             val url = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium"
             sendEvent(SearchEvent.NavigateToUrl(url = url))
         }
