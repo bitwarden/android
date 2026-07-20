@@ -569,7 +569,7 @@
     <string name="set_up_authenticator_key">设置验证器密钥</string>
     <string name="once_the_key_is_successfully_entered">成功输入密钥后，
 选择「添加 TOTP」以安全地存储此密钥</string>
-    <string name="never_lock_warning">将锁定选项设置为「从不」可让任何能够访问您的设备的人都可以使用您的密码库。如果您使用此选项，则应确保您的设备得到妥善的保护。</string>
+    <string name="never_lock_warning">将锁定选项设置为「从不」会让任何能够访问您的设备的人都可以使用您的密码库。如果使用此选项，您应确保您的设备已受到妥善保护。</string>
     <string name="environment_page_urls_error">输入的一个或多个 URL 无效。请修改后再次尝试保存。</string>
     <string name="generic_error_message">我们无法处理您的请求。请重试或联系我们。</string>
     <string name="allow_screen_capture">允许屏幕截图</string>
@@ -1268,13 +1268,13 @@
     <string name="upgrade_pending">升级待处理</string>
     <string name="upgrade_pending_message">您的升级正在处理中。完成之前，您将继续使用免费版方案。立即同步以检查升级进度，或继续操作，它将自动更新。</string>
     <string name="unlock_premium_features">使用高级版方案解锁更多高级功能。</string>
-    <string name="per_month">/月</string>
+    <string name="per_month_cancel_anytime">/月 · 随时取消</string>
+    <string name="per_month_cancel_anytime_content_description">%1$s /月，随时取消</string>
     <string name="built_in_authenticator">内置身份验证器</string>
     <string name="emergency_access">紧急访问</string>
     <string name="secure_file_storage">安全文件存储</string>
     <string name="breach_monitoring">数据泄露监测</string>
-    <string name="upgrade_now">立即升级</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">您将前往 Stripe 的安全结账页面完成购买。</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">您将通过 Stripe 的安全结账页面完成购买。</string>
     <string name="opening_checkout">正在打开结账页面…</string>
     <string name="secure_checkout_didnt_load">安全结账页面未能加载</string>
     <string name="trouble_opening_payment_page">打开付款页面时出现问题，请重试。</string>
@@ -1301,7 +1301,7 @@
     <string name="manage_plan">管理方案</string>
     <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">在 Bitwarden 网页 App 中管理您的订阅方案。</string>
     <string name="cancel_premium">取消高级版</string>
-    <string name="subscription_status_active">启用</string>
+    <string name="subscription_status_active">激活</string>
     <string name="subscription_status_canceled">已取消</string>
     <string name="subscription_status_expired">已过期</string>
     <string name="subscription_status_past_due">逾期未支付</string>
@@ -1394,4 +1394,13 @@
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">由于 App 需要本地网络访问权限，您的请求已中断。您可以在您的设备设置中启用该权限。</string>
     <string name="continue_to_stripe">前往 Stripe 吗？</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">您将被引导至 Stripe 以管理您的订阅取消操作。</string>
+    <string name="unlock_advanced_protection">解锁高级保护</string>
+    <string name="breeze_through_2fa_with_built_in_codes">使用内置验证码，轻松完成 2FA</string>
+    <string name="run_reports_to_find_risky_passwords">运行报告以查找存在风险的密码</string>
+    <string name="add_a_trusted_emergency_contact">添加信任的紧急联系人</string>
+    <string name="identify_unsecure_websites">识别不安全的网站</string>
+    <string name="flag_accounts_with_inactive_2fa">标记未激活 2FA 的账户</string>
+    <string name="keep_documents_safe_and_encrypted">保持文档安全和加密</string>
+    <string name="share_files_securely_with_anyone_using_send">使用 Send，与任何人安全地分享文件</string>
+    <string name="receive_24_7_priority_support">享受 7×24 小时优先支持</string>
 </resources>

@@ -813,7 +813,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="save_and_protect_your_data">Lưu và bảo vệ dữ liệu của bạn</string>
     <string name="the_vault_protects_more_than_just_passwords">Kho lưu trữ không chỉ bảo vệ mật khẩu. Bạn có thể lưu trữ an toàn các thông tin đăng nhập, ID, thẻ và ghi chú tại đây.</string>
     <string name="add_login">Thêm đăng nhập</string>
-    <string name="share_files_and_data_securely_with_anyone_on_any_platform">Chia sẻ tệp tin và dữ liệu một cách an toàn với bất kỳ ai, trên bất kỳ nền tảng nào. Thông tin của bạn sẽ được mã hóa đầu cuối để hạn chế rủi ro bị lộ.</string>
+    <string name="share_files_and_data_securely_with_anyone_on_any_platform">Chia sẻ tệp tin và dữ liệu một cách an toàn với bất kỳ ai trên mọi nền tảng. Thông tin của bạn luôn được mã hóa đầu cuối để giảm nguy cơ bị lộ.</string>
     <string name="send_sensitive_information_safely">Gửi thông tin nhạy cảm một cách an toàn</string>
     <string name="import_saved_logins">Nhập các thông tin đăng nhập đã lưu</string>
     <string name="use_a_computer_to_import_logins">Sử dụng máy tính để nhập thông tin đăng nhập từ trình quản lý mật khẩu hiện có</string>
@@ -1272,13 +1272,13 @@ các vấn đề.</string>
     <string name="upgrade_pending">Đang nâng cấp</string>
     <string name="upgrade_pending_message">Nâng cấp của bạn đang được xử lý. Bạn sẽ tiếp tục sử dụng gói miễn phí cho đến khi quá trình này hoàn tất. Đồng bộ ngay bây giờ để kiểm tra, hoặc tiếp tục để tự động cập nhật.</string>
     <string name="unlock_premium_features">Mở khoá các tính năng nâng cao với gói Cao cấp</string>
-    <string name="per_month">/ tháng</string>
+    <string name="per_month_cancel_anytime">/ tháng · Hủy bất cứ lúc nào</string>
+    <string name="per_month_cancel_anytime_content_description">%1$s/tháng, hủy bất cứ lúc nào</string>
     <string name="built_in_authenticator">Trình xác thực tích hợp</string>
     <string name="emergency_access">Truy cập khẩn cấp</string>
     <string name="secure_file_storage">Lưu trữ tệp an toàn</string>
     <string name="breach_monitoring">Giám sát vi phạm</string>
-    <string name="upgrade_now">Nâng cấp ngay</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">Bạn sẽ được chuyển đến trang thanh toán an toàn của Stripe để hoàn tất việc mua hàng.</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">Bạn sẽ hoàn tất giao dịch qua hệ thống thanh toán an toàn của Stripe.</string>
     <string name="opening_checkout">Đang mở trang thanh toán…</string>
     <string name="secure_checkout_didnt_load">Không thể tải trang thanh toán an toàn</string>
     <string name="trouble_opening_payment_page">Chúng tôi gặp vấn đề khi mở trang thanh toán, hãy thử lại.</string>
@@ -1398,4 +1398,13 @@ các vấn đề.</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Yêu cầu của bạn đã bị gián đoạn vì ứng dụng cần quyền truy cập mạng cục bộ. Bạn có thể bật tính năng này trong cài đặt thiết bị của mình.</string>
     <string name="continue_to_stripe">Tiếp tục chuyển đến Stripe?</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Bạn sẽ được chuyển đến Stripe để quản lý việc hủy gói đăng ký của mình.</string>
+    <string name="unlock_advanced_protection">Mở khóa các tính năng bảo vệ nâng cao</string>
+    <string name="breeze_through_2fa_with_built_in_codes">Dễ dàng sử dụng xác thực hai yếu tố với mã tích hợp</string>
+    <string name="run_reports_to_find_risky_passwords">Chạy báo cáo để tìm các mật khẩu có rủi ro</string>
+    <string name="add_a_trusted_emergency_contact">Thêm liên hệ khẩn cấp đáng tin cậy</string>
+    <string name="identify_unsecure_websites">Xác định các trang web không an toàn</string>
+    <string name="flag_accounts_with_inactive_2fa">Đánh dấu các tài khoản chưa bật xác thực hai yếu tố</string>
+    <string name="keep_documents_safe_and_encrypted">Giữ tài liệu an toàn và được mã hóa</string>
+    <string name="share_files_securely_with_anyone_using_send">Chia sẻ tệp an toàn với mọi người bằng Send</string>
+    <string name="receive_24_7_priority_support">Nhận hỗ trợ ưu tiên 24/7</string>
 </resources>
