@@ -809,7 +809,7 @@ private fun OwnerSelectionBottomSheet(
         mutableStateOf(state.selectedOwner?.name.orEmpty())
     }
     BitwardenModalBottomSheet(
-        sheetTitle = stringResource(BitwardenString.owner),
+        sheetTitle = stringResource(BitwardenString.select_vault),
         onDismiss = handlers.onDismissBottomSheet,
         topBarActions = { animatedOnDismiss ->
             BitwardenTextButton(

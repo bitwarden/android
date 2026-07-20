@@ -214,6 +214,7 @@ fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
                     collectionViewList = collectionViewList,
                     cipherView = currentContentState.common.originalCipher,
                     isIndividualVaultDisabled = isIndividualVaultDisabled,
+                    resourceManager = resourceManager,
                     selectedCollectionId = currentContentState.common.selectedCollectionId
                         ?: collectionViewList
                             .getDefaultCollectionViewOrNull(
@@ -301,12 +302,13 @@ private fun UserState.Account.toAvailableOwners(
     collectionViewList: List<CollectionView>,
     cipherView: CipherView?,
     isIndividualVaultDisabled: Boolean,
+    resourceManager: ResourceManager,
     selectedCollectionId: String? = null,
 ): List<VaultAddEditState.Owner> =
     listOfNotNull(
         VaultAddEditState
             .Owner(
-                name = email,
+                name = resourceManager.getString(BitwardenString.my_vault),
                 id = null,
                 collections = emptyList(),
             )
