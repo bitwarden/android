@@ -114,6 +114,20 @@ class AutoFillViewModel @Inject constructor(
             .map { AutoFillAction.Internal.BrowserAutofillStatusReceive(status = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.FillAssistTargetingRules)
+            .map { AutoFillAction.Internal.FillAssistTargetingRulesFlagUpdateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        settingsRepository
+            .isFillAssistEnabledFlow
+            .map {
+                AutoFillAction.Internal.FillAssistEnabledUpdateReceive(isFillAssistEnabled = it)
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: AutoFillAction) = when (action) {
@@ -175,6 +189,14 @@ class AutoFillViewModel @Inject constructor(
             is AutoFillAction.Internal.BrowserAutofillStatusReceive -> {
                 handleBrowserAutofillStatusReceive(action)
             }
+
+            is AutoFillAction.Internal.FillAssistTargetingRulesFlagUpdateReceive -> {
+                handleFillAssistTargetingRulesFlagUpdateReceive(action)
+            }
+
+            is AutoFillAction.Internal.FillAssistEnabledUpdateReceive -> {
+                handleFillAssistEnabledUpdateReceive(action)
+            }
         }
     }
 
@@ -225,9 +247,20 @@ class AutoFillViewModel @Inject constructor(
         }
     }
 
+    private fun handleFillAssistTargetingRulesFlagUpdateReceive(
+        action: AutoFillAction.Internal.FillAssistTargetingRulesFlagUpdateReceive,
+    ) {
+        mutableStateFlow.update { it.copy(showFillAssistOption = action.isEnabled) }
+    }
+
+    private fun handleFillAssistEnabledUpdateReceive(
+        action: AutoFillAction.Internal.FillAssistEnabledUpdateReceive,
+    ) {
+        mutableStateFlow.update { it.copy(isFillAssistEnabled = action.isFillAssistEnabled) }
+    }
+
     private fun handleFillAssistToggleClick(action: AutoFillAction.FillAssistToggleClick) {
         settingsRepository.isFillAssistEnabled = action.isEnabled
-        mutableStateFlow.update { it.copy(isFillAssistEnabled = action.isEnabled) }
         if (action.isEnabled) {
             fillAssistManager.syncIfNecessary()
         }
@@ -597,6 +630,20 @@ sealed class AutoFillAction {
          */
         data class BrowserAutofillStatusReceive(
             val status: BrowserThirdPartyAutofillStatus,
+        ) : Internal()
+
+        /**
+         * An update for changes in the [FlagKey.FillAssistTargetingRules] value.
+         */
+        data class FillAssistTargetingRulesFlagUpdateReceive(
+            val isEnabled: Boolean,
+        ) : Internal()
+
+        /**
+         * An update for changes in the [SettingsRepository.isFillAssistEnabled] value.
+         */
+        data class FillAssistEnabledUpdateReceive(
+            val isFillAssistEnabled: Boolean,
         ) : Internal()
     }
 }

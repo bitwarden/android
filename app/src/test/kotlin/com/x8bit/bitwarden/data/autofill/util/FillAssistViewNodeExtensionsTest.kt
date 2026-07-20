@@ -77,7 +77,6 @@ class FillAssistViewNodeExtensionsTest {
         assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `buildFillAssistViews should return Login Email when htmlInfo matches email clause`() {
         val htmlInfo = createHtmlInfo()

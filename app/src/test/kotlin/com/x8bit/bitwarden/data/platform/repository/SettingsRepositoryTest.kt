@@ -684,6 +684,36 @@ class SettingsRepositoryTest {
     }
 
     @Test
+    fun `isFillAssistEnabled should pull from and update SettingsDiskSource`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        assertFalse(settingsRepository.isFillAssistEnabled)
+
+        // Updates to the disk source change the repository value.
+        fakeSettingsDiskSource.storeFillAssistEnabled(
+            userId = USER_ID,
+            isFillAssistEnabled = true,
+        )
+        assertTrue(settingsRepository.isFillAssistEnabled)
+
+        // Updates to the repository change the disk source value
+        settingsRepository.isFillAssistEnabled = false
+        assertFalse(fakeSettingsDiskSource.getFillAssistEnabled(userId = USER_ID)!!)
+    }
+
+    @Test
+    fun `isFillAssistEnabledFlow should react to changes in SettingsDiskSource`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        settingsRepository.isFillAssistEnabledFlow.test {
+            assertFalse(awaitItem())
+            fakeSettingsDiskSource.storeFillAssistEnabled(
+                userId = USER_ID,
+                isFillAssistEnabled = true,
+            )
+            assertTrue(awaitItem())
+        }
+    }
+
+    @Test
     fun `isAutoCopyTotpDisabled should pull from and update SettingsDiskSource`() {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         assertFalse(settingsRepository.isAutoCopyTotpDisabled)

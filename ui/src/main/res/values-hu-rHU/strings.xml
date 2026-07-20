@@ -1275,13 +1275,13 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="upgrade_pending">Függő áttérés</string>
     <string name="upgrade_pending_message">Az áttérés feldolgozása folyamatban van. Az ingyenes csomag marad, amíg az be nem fejeződik. Szinkronizáljunk most az ellenőrzéshez vagy a folytatáshoz, és az áttérés automatikus.</string>
     <string name="unlock_premium_features">Fejlettebb funkciók feloldása Prémium csomaggal.</string>
-    <string name="per_month">/ hónap</string>
+    <string name="per_month_cancel_anytime">/ hónap · Bármikor lemondható</string>
+    <string name="per_month_cancel_anytime_content_description">%1$s havonta, bármikor lemondható</string>
     <string name="built_in_authenticator">Beépített hitelesítő</string>
     <string name="emergency_access">Sürgősségi hozzáférés</string>
     <string name="secure_file_storage">Biztonságos fájl tárolás</string>
     <string name="breach_monitoring">Adatszivárgás figyelés</string>
-    <string name="upgrade_now">Áttérés most</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">A vásárlás befejezéséhez keressük fel a Stripe biztonságos pénztárát.</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">A vásárlást a Stripe biztonságos pénztárral fejezzük be.</string>
     <string name="opening_checkout">Pénztár megnyitása…</string>
     <string name="secure_checkout_didnt_load">A biztonságos pénztár nem töltődött be.</string>
     <string name="trouble_opening_payment_page">Problémák adódtak a fizetési oldal megnyitásával, úgyhogy próbáljuk újra.</string>
@@ -1402,4 +1402,13 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">A kérés megszakadt, mert az alkalmazásnak helyi hálózati hozzáférésre van szüksége. Ezt az eszköz beállításaiban engedélyezhetjük.</string>
     <string name="continue_to_stripe">Tovább a Stripe-hoz?</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">A Stripe-ba kerülünk át az előfizetés törlésének kezeléséhez.</string>
+    <string name="unlock_advanced_protection">Fejlett védelem feloldása</string>
+    <string name="breeze_through_2fa_with_built_in_codes">Könnyedén kezelhető a 2FA segítségével beépített kódokkal</string>
+    <string name="run_reports_to_find_risky_passwords">Jelentések futtatása a kockázatos jelszavak megtalálásához</string>
+    <string name="add_a_trusted_emergency_contact">Megbízható sürgősségi kapcsolat hozzáadása</string>
+    <string name="identify_unsecure_websites">Nem biztonságos webhelyek azonosítása</string>
+    <string name="flag_accounts_with_inactive_2fa">Fiókok megjelölése inaktív 2FA-val</string>
+    <string name="keep_documents_safe_and_encrypted">Dokumentumok biztonságban és titkosítva tartása</string>
+    <string name="share_files_securely_with_anyone_using_send">Fájlok biztonságos megosztása bárkivel, aki a Send elemet használja</string>
+    <string name="receive_24_7_priority_support">Kiemelt támogatás fogadása a teljes héten 24 órában</string>
 </resources>

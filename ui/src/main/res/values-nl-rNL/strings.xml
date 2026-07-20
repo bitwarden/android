@@ -1276,13 +1276,13 @@ Wilt u naar dit account wisselen?</string>
     <string name="upgrade_pending">Upgrade in behandeling</string>
     <string name="upgrade_pending_message">Je upgrade wordt verwerkt. Je werkt met het gratis abonnement totdat het is afgerond. Synchroniseer nu om te controleren, of ga door waarna de upgrade automatisch zal worden verwerkt.</string>
     <string name="unlock_premium_features">Ontgrendel meer geavanceerde functies met een Premium-abonnement.</string>
-    <string name="per_month">/ maand</string>
+    <string name="per_month_cancel_anytime">/ maand · Op elk moment te annuleren</string>
+    <string name="per_month_cancel_anytime_content_description">%1$s per maand, op elk moment te annuleren</string>
     <string name="built_in_authenticator">Ingebouwde authenticator</string>
     <string name="emergency_access">Noodtoegang</string>
     <string name="secure_file_storage">Beveiligde bestandsopslag</string>
     <string name="breach_monitoring">Lek-monitoring</string>
-    <string name="upgrade_now">Nu upgraden</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">Je gaat naar Stripe\'s beveiligde checkout voor het afronden van je aankoop.</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">Je rondt de aankoop af met een beveiligde Stripe-checkout.</string>
     <string name="opening_checkout">Checkout openen…</string>
     <string name="secure_checkout_didnt_load">Beveiligde checkout werd niet geladen</string>
     <string name="trouble_opening_payment_page">We hebben problemen gehad met het openen van de betaalpagina, dus probeer het opnieuw.</string>
@@ -1403,4 +1403,13 @@ Wilt u naar dit account wisselen?</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Je verzoek is onderbroken omdat de app lokale netwerktoegang nodig heeft. Je kunt dit inschakelen in je apparaatinstellingen.</string>
     <string name="continue_to_stripe">Doorgaan naar Stripe?</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Je wordt naar Stripe geleid voor het beheren van de opzegging van je abonnement.</string>
+    <string name="unlock_advanced_protection">Geavanceerde beveiliging ontgrendelen</string>
+    <string name="breeze_through_2fa_with_built_in_codes">Flits door 2FA met ingebouwde codes</string>
+    <string name="run_reports_to_find_risky_passwords">Draai rapporten om riskante wachtwoorden te vinden</string>
+    <string name="add_a_trusted_emergency_contact">Voeg een vertrouwd noodcontact toe</string>
+    <string name="identify_unsecure_websites">Identificeer onveilige websites</string>
+    <string name="flag_accounts_with_inactive_2fa">Markeer accounts met inactieve 2FA</string>
+    <string name="keep_documents_safe_and_encrypted">Behoud documenten veilig en versleuteld</string>
+    <string name="share_files_securely_with_anyone_using_send">Deel bestanden veilig met iedereen met behulp van Send</string>
+    <string name="receive_24_7_priority_support">Ontvang 24/7 prioriteitsondersteuning</string>
 </resources>
