@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillView
 import com.x8bit.bitwarden.data.autofill.model.FillAssistRules
 
 private const val FIELD_KEY_USERNAME = "username"
+private const val FIELD_KEY_EMAIL = "email"
 private const val FIELD_KEY_PASSWORD = "password"
 private const val FIELD_KEY_NEW_PASSWORD = "newPassword"
 private const val FIELD_KEY_CARD_NUMBER = "cardNumber"
@@ -64,6 +65,7 @@ private fun AssistStructure.ViewNode.traverseForFillAssist(
 
 private fun String.toAutofillViewForFieldKey(data: AutofillView.Data): AutofillView? = when (this) {
     FIELD_KEY_USERNAME -> AutofillView.Login.Username(data = data)
+    FIELD_KEY_EMAIL -> AutofillView.Login.Email(data = data)
     FIELD_KEY_PASSWORD, FIELD_KEY_NEW_PASSWORD -> AutofillView.Login.Password(data = data)
     FIELD_KEY_CARD_NUMBER -> AutofillView.Card.Number(data = data)
     FIELD_KEY_CARDHOLDER_NAME -> AutofillView.Card.CardholderName(data = data)

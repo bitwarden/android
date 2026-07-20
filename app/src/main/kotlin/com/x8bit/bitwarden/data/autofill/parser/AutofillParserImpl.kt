@@ -445,6 +445,7 @@ private fun AutofillView.updateWebsiteIfNecessary(website: String?): AutofillVie
         is AutofillView.Card.ExpirationYear -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Card.Number -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Card.SecurityCode -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Login.Email -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Login.Password -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Login.Username -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Unused -> this.copy(data = this.data.copy(website = site))
