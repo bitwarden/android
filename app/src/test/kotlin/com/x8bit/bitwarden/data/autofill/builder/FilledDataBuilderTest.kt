@@ -136,7 +136,6 @@ class FilledDataBuilderTest {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `build should fill email field when cipher username is a valid email address`() =
         runTest {
@@ -180,8 +179,9 @@ class FilledDataBuilderTest {
                 vaultItemInlinePresentationSpec = null,
                 isVaultLocked = false,
             )
-            coEvery { autofillCipherProvider.getLoginAutofillCiphers(uri = URI) } returns
-                listOf(autofillCipher)
+            coEvery {
+                autofillCipherProvider.getLoginAutofillCiphers(uri = URI)
+            } returns listOf(autofillCipher)
 
             // Test
             val actual = filledDataBuilder.build(autofillRequest = autofillRequest)
@@ -191,7 +191,6 @@ class FilledDataBuilderTest {
             verify(exactly = 1) { autofillViewEmail.buildFilledItemOrNull(emailUsername) }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `build should not fill email field when cipher username is not a valid email address`() =
         runTest {
@@ -228,8 +227,8 @@ class FilledDataBuilderTest {
                 vaultItemInlinePresentationSpec = null,
                 isVaultLocked = false,
             )
-            coEvery { autofillCipherProvider.getLoginAutofillCiphers(uri = URI) } returns
-                listOf(autofillCipher)
+            coEvery { autofillCipherProvider.getLoginAutofillCiphers(uri = URI)
+            } returns listOf(autofillCipher)
 
             // Test
             val actual = filledDataBuilder.build(autofillRequest = autofillRequest)
