@@ -170,6 +170,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     )
     private val resourceManager: ResourceManager = mockk {
         every { getString(BitwardenString.folder_none) } returns "No Folder"
+        every { getString(BitwardenString.my_vault) } returns "My vault"
     }
     private val clipboardManager: BitwardenClipboardManager = mockk {
         every { setText(text = any<String>(), toastDescriptorOverride = any<Text>()) } just runs
@@ -6519,7 +6520,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         listOf(
             VaultAddEditState.Owner(
                 id = null,
-                name = "activeEmail",
+                name = "My vault",
                 collections = emptyList(),
             ),
             VaultAddEditState.Owner(

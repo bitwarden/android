@@ -55,6 +55,7 @@ class CipherViewExtensionsTest {
     private val resourceManager: ResourceManager = mockk {
         every { getString(BitwardenString.clone) } returns "Clone"
         every { getString(BitwardenString.folder_none) } returns "No Folder"
+        every { getString(BitwardenString.my_vault) } returns "My vault"
     }
 
     @BeforeEach
@@ -1009,6 +1010,6 @@ private val ORGANIZATION_OWNER_DEFAULT_COLLECTION = VaultAddEditState.Owner(
 )
 private val USER_OWNER = VaultAddEditState.Owner(
     id = null,
-    name = "activeEmail",
+    name = "My vault",
     collections = emptyList(),
 )

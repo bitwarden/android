@@ -3354,7 +3354,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         // Opens the menu
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "placeholder@email.com. Owner",
+                label = "My vault. Vault",
             )
             .performClick()
 
@@ -3372,7 +3372,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Owner")
+            .onNodeWithText("Select vault")
             .assertIsDisplayed()
     }
 
@@ -3383,7 +3383,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Owner")
+            .onNodeWithText("Select vault")
             .assertIsDisplayed()
 
         composeTestRule
@@ -3438,7 +3438,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         updateStateWithOwners()
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "placeholder@email.com. Owner",
+                label = "My vault. Vault",
             )
             .assertIsDisplayed()
 
@@ -3447,7 +3447,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "mockOwnerName-2. Owner")
+            .onNodeWithContentDescriptionAfterScroll(label = "mockOwnerName-2. Vault")
             .assertIsDisplayed()
     }
 
@@ -3486,7 +3486,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             availableOwners = listOf(
                 VaultAddEditState.Owner(
                     id = null,
-                    name = "placeholder@email.com",
+                    name = "My vault",
                     collections = DEFAULT_COLLECTIONS,
                 ),
             ),
@@ -3876,7 +3876,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "placeholder@email.com. Owner",
+                label = "My vault. Vault",
             )
             .assertIsDisplayed()
 
@@ -3886,7 +3886,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "mockOwnerName-2. Owner",
+                label = "mockOwnerName-2. Vault",
             )
             .assertIsDisplayed()
     }
@@ -5564,7 +5564,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         private val ALTERED_OWNERS = listOf(
             VaultAddEditState.Owner(
                 id = null,
-                name = "placeholder@email.com",
+                name = "My vault",
                 collections = emptyList(),
             ),
             VaultAddEditState.Owner(
@@ -5591,7 +5591,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         private val DEFAULT_OWNERS = listOf(
             VaultAddEditState.Owner(
                 id = null,
-                name = "placeholder@email.com",
+                name = "My vault",
                 collections = emptyList(),
             ),
             VaultAddEditState.Owner(
