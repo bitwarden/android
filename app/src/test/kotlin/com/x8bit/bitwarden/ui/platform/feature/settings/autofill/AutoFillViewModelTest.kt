@@ -72,6 +72,7 @@ class AutoFillViewModelTest : BaseViewModelTest() {
 
     private val fillAssistManager: FillAssistManager = mockk(relaxed = true)
 
+    private val mutableIsFillAssistEnabledFlow = MutableStateFlow(false)
     private val settingsRepository: SettingsRepository = mockk {
         every { isInlineAutofillEnabled } returns true
         every { isInlineAutofillEnabled = any() } just runs
@@ -79,8 +80,11 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         every { isAutoCopyTotpDisabled = any() } just runs
         every { isAutofillSavePromptDisabled } returns true
         every { isAutofillSavePromptDisabled = any() } just runs
-        every { isFillAssistEnabled } returns false
-        every { isFillAssistEnabled = any() } just runs
+        every { isFillAssistEnabled } answers { mutableIsFillAssistEnabledFlow.value }
+        every {
+            isFillAssistEnabled = any()
+        } answers { mutableIsFillAssistEnabledFlow.value = firstArg() }
+        every { isFillAssistEnabledFlow } returns mutableIsFillAssistEnabledFlow
         every { defaultUriMatchType } returns UriMatchType.DOMAIN
         every { defaultUriMatchType = any() } just runs
         every { isAccessibilityEnabledStateFlow } returns mutableIsAccessibilityEnabledStateFlow
@@ -545,6 +549,7 @@ class AutoFillViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `FillAssistToggleClick with isEnabled false persists setting and skips sync`() = runTest {
+        mutableIsFillAssistEnabledFlow.value = true
         val enabledState = DEFAULT_STATE.copy(isFillAssistEnabled = true)
         val viewModel = createViewModel(state = enabledState)
         viewModel.stateFlow.test {
@@ -554,6 +559,16 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         }
         verify { settingsRepository.isFillAssistEnabled = false }
         verify(exactly = 0) { fillAssistManager.syncIfNecessary() }
+    }
+
+    @Test
+    fun `when isFillAssistEnabled updates in the repository, should update state`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+            mutableIsFillAssistEnabledFlow.value = true
+            assertEquals(DEFAULT_STATE.copy(isFillAssistEnabled = true), awaitItem())
+        }
     }
 
     @Test
