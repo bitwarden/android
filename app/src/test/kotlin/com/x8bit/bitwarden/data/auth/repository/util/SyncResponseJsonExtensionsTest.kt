@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.network.model.SendTypeJson
+import com.bitwarden.network.model.SendWhoCanAccessTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.bitwarden.network.model.createMockPermissions
@@ -163,6 +165,27 @@ class SyncResponseJsonExtensionsTest {
         )
         val policy = createMockPolicyView(
             type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
+            data = Json.encodeToString(policyInformation),
+        )
+
+        assertEquals(
+            policyInformation,
+            policy.policyInformation,
+        )
+    }
+
+    @Test
+    fun `policyInformation converts the SendControls Json data to policy information`() {
+        val policyInformation = PolicyInformation.SendControls(
+            disableSend = false,
+            disableHideEmail = true,
+            whoCanAccess = SendWhoCanAccessTypeJson.SPECIFIC_PEOPLE,
+            allowedDomains = "bitwarden.com",
+            deletionHours = 168,
+            allowedSendTypes = listOf(SendTypeJson.TEXT),
+        )
+        val policy = createMockPolicyView(
+            type = PolicyType.SEND_CONTROLS,
             data = Json.encodeToString(policyInformation),
         )
 

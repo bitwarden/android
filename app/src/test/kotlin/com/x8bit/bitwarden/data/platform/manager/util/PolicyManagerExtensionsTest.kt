@@ -71,6 +71,14 @@ class PolicyManagerExtensionsTest {
     }
 
     @Test
+    fun `getPolicyType with SendControls should map to appropriate PolicyTypeJson`() {
+        assertEquals(
+            PolicyType.SEND_CONTROLS,
+            getPolicyType<PolicyInformation.SendControls>(),
+        )
+    }
+
+    @Test
     fun `getPolicyType with VaultTimeout should map to appropriate PolicyTypeJson`() {
         assertEquals(
             PolicyType.MAXIMUM_VAULT_TIMEOUT,
