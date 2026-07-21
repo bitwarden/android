@@ -7,6 +7,7 @@ import androidx.room.Room
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.data.datasource.disk.FlightRecorderDiskSource
 import com.bitwarden.data.datasource.disk.di.EncryptedPreferences
+import com.bitwarden.data.datasource.disk.di.KeystoreEncryptedPreferences
 import com.bitwarden.data.datasource.disk.di.UnencryptedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSourceImpl
@@ -162,10 +163,12 @@ object PlatformDiskModule {
     @Singleton
     fun provideCookieDiskSource(
         @UnencryptedPreferences sharedPreferences: SharedPreferences,
+        @KeystoreEncryptedPreferences keystoreEncryptedPreferences: SharedPreferences,
         @EncryptedPreferences encryptedSharedPreferences: SharedPreferences,
         json: Json,
     ): CookieDiskSource = CookieDiskSourceImpl(
         sharedPreferences = sharedPreferences,
+        keystoreEncryptedPreferences = keystoreEncryptedPreferences,
         encryptedSharedPreferences = encryptedSharedPreferences,
         json = json,
     )

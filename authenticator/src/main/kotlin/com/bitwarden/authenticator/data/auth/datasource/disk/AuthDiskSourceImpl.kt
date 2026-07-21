@@ -18,13 +18,20 @@ private const val UNIQUE_APP_ID_KEY = "appId"
  */
 class AuthDiskSourceImpl(
     encryptedSharedPreferences: SharedPreferences,
+    keystoreEncryptedPreferences: SharedPreferences,
     sharedPreferences: SharedPreferences,
 ) : BaseEncryptedDiskSource(
     encryptedSharedPreferences = encryptedSharedPreferences,
+    keystoreEncryptedPreferences = keystoreEncryptedPreferences,
     sharedPreferences = sharedPreferences,
 ),
     AuthDiskSource {
     private val mutableUserBiometricUnlockKeyFlow = bufferedMutableSharedFlow<String?>(replay = 1)
+
+    init {
+        // Migrate to the Keystore Encrypted SharedPreferences.
+        migrateToKeystoreEncryption()
+    }
 
     override val uniqueAppId: String
         get() = getString(key = UNIQUE_APP_ID_KEY) ?: generateAndStoreUniqueAppId()
@@ -86,4 +93,10 @@ class AuthDiskSourceImpl(
             .also {
                 putString(key = UNIQUE_APP_ID_KEY, value = it)
             }
+
+    private fun migrateToKeystoreEncryption() {
+        migrateKeyByPrefix(keyPrefix = BIOMETRICS_UNLOCK_KEY)
+        migrateKeyByPrefix(keyPrefix = BIOMETRICS_INIT_VECTOR_KEY)
+        migrateKeyByPrefix(keyPrefix = AUTHENTICATOR_SYNC_SYMMETRIC_KEY)
+    }
 }

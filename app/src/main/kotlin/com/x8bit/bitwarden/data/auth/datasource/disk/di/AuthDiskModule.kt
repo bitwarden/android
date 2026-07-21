@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.disk.di
 
 import android.content.SharedPreferences
 import com.bitwarden.data.datasource.disk.di.EncryptedPreferences
+import com.bitwarden.data.datasource.disk.di.KeystoreEncryptedPreferences
 import com.bitwarden.data.datasource.disk.di.UnencryptedPreferences
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSourceImpl
@@ -24,12 +25,14 @@ object AuthDiskModule {
     @Singleton
     fun provideAuthDiskSource(
         @EncryptedPreferences encryptedSharedPreferences: SharedPreferences,
+        @KeystoreEncryptedPreferences keystoreEncryptedPreferences: SharedPreferences,
         @UnencryptedPreferences sharedPreferences: SharedPreferences,
         legacySecureStorageMigrator: LegacySecureStorageMigrator,
         json: Json,
     ): AuthDiskSource =
         AuthDiskSourceImpl(
             encryptedSharedPreferences = encryptedSharedPreferences,
+            keystoreEncryptedPreferences = keystoreEncryptedPreferences,
             sharedPreferences = sharedPreferences,
             legacySecureStorageMigrator = legacySecureStorageMigrator,
             json = json,
