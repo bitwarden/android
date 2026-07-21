@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.ui.auth.feature.startregistration
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.data.datasource.disk.model.ServerConfig
+import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -38,6 +40,7 @@ private const val KEY_STATE = "state"
 class StartRegistrationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
+    serverConfigRepository: ServerConfigRepository,
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
 ) : BaseViewModel<StartRegistrationState, StartRegistrationEvent, StartRegistrationAction>(
@@ -69,6 +72,11 @@ class StartRegistrationViewModel @Inject constructor(
         snackbarRelayManager
             .getSnackbarDataFlow(SnackbarRelay.ENVIRONMENT_SAVED)
             .map { StartRegistrationAction.Internal.SnackbarDataReceived(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+        serverConfigRepository
+            .serverConfigStateFlow
+            .map { StartRegistrationAction.Internal.ServerConfigReceived(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -108,6 +116,10 @@ class StartRegistrationViewModel @Inject constructor(
 
             is StartRegistrationAction.Internal.UpdatedEnvironmentReceive -> {
                 handleUpdatedEnvironmentReceive(action)
+            }
+
+            is StartRegistrationAction.Internal.ServerConfigReceived -> {
+                handleServerConfigReceived(action)
             }
         }
     }
@@ -150,6 +162,25 @@ class StartRegistrationViewModel @Inject constructor(
             it.copy(
                 selectedEnvironmentType = action.environment.type,
             )
+        }
+    }
+
+    private fun handleServerConfigReceived(
+        action: StartRegistrationAction.Internal.ServerConfigReceived,
+    ) {
+        val serverData = action.serverConfig?.serverData ?: return
+        if (serverData.settings?.disableUserRegistration == true) {
+            // Show the dialog informing the user that they cannot create an account.
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = StartRegistrationDialog.Error(
+                        title = BitwardenString.account_creation_restricted.asText(),
+                        message = BitwardenString
+                            .only_allows_invited_users_to_create_accounts
+                            .asText(serverData.environment?.vaultUrl.orEmpty()),
+                    ),
+                )
+            }
         }
     }
 
@@ -470,6 +501,13 @@ sealed class StartRegistrationAction {
          */
         data class UpdatedEnvironmentReceive(
             val environment: Environment,
+        ) : Internal()
+
+        /**
+         * Indicates that an updated [serverConfig] has been received.
+         */
+        data class ServerConfigReceived(
+            val serverConfig: ServerConfig?,
         ) : Internal()
     }
 }

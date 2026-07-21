@@ -7586,6 +7586,7 @@ class AuthRepositoryTest {
                 ),
                 featureStates = emptyMap(),
                 communication = null,
+                settings = null,
             ),
         )
 
