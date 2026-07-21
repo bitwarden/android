@@ -30,8 +30,6 @@ import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType.Companion.fromId
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
 import java.time.Clock
-import java.time.LocalDate
-import java.time.format.DateTimeParseException
 import java.time.format.FormatStyle
 import java.util.UUID
 import kotlinx.collections.immutable.ImmutableList
@@ -126,18 +124,18 @@ fun CipherView.toViewState(
                     licenseNumber = driversLicense?.licenseNumber.orEmpty(),
                     issuingCountry = driversLicense?.issuingCountry.orEmpty(),
                     issuingState = driversLicense?.issuingState.orEmpty(),
-                    expirationDate = driversLicense?.expirationDate?.toLocalDate(),
+                    expirationDate = driversLicense?.expirationDate,
                     licenseClass = driversLicense?.licenseClass.orEmpty(),
-                    dateOfBirth = driversLicense?.dateOfBirth?.toLocalDate(),
+                    dateOfBirth = driversLicense?.dateOfBirth,
                     issuingAuthority = driversLicense?.issuingAuthority.orEmpty(),
-                    issueDate = driversLicense?.issueDate?.toLocalDate(),
+                    issueDate = driversLicense?.issueDate,
                 )
             }
 
             CipherType.PASSPORT -> VaultAddEditState.ViewState.Content.ItemType.Passport(
                 givenName = passport?.givenName.orEmpty(),
                 surname = passport?.surname.orEmpty(),
-                dateOfBirth = passport?.dateOfBirth?.toLocalDate(),
+                dateOfBirth = passport?.dateOfBirth,
                 sex = passport?.sex.orEmpty(),
                 birthPlace = passport?.birthPlace.orEmpty(),
                 nationality = passport?.nationality.orEmpty(),
@@ -146,8 +144,8 @@ fun CipherView.toViewState(
                 nationalIdentificationNumber = passport?.nationalIdentificationNumber.orEmpty(),
                 issuingCountry = passport?.issuingCountry.orEmpty(),
                 issuingAuthority = passport?.issuingAuthority.orEmpty(),
-                issueDate = passport?.issueDate?.toLocalDate(),
-                expirationDate = passport?.expirationDate?.toLocalDate(),
+                issueDate = passport?.issueDate,
+                expirationDate = passport?.expirationDate,
             )
         },
         common = VaultAddEditState.ViewState.Content.Common(
@@ -176,12 +174,6 @@ fun CipherView.toViewState(
         ),
         isIndividualVaultDisabled = isIndividualVaultDisabled,
     )
-
-private fun String.toLocalDate(): LocalDate? = try {
-    LocalDate.parse(this)
-} catch (_: DateTimeParseException) {
-    null
-}
 
 /**
  * Adds Folder and Owner data to [VaultAddEditState.ViewState].

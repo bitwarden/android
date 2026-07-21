@@ -961,7 +961,7 @@ private val DEFAULT_PASSPORT_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.
     passport = PassportView(
         surname = "the surname",
         givenName = "the given name",
-        dateOfBirth = "1990-08-10",
+        dateOfBirth = LocalDate.parse("1990-08-10"),
         birthPlace = "the birth place",
         sex = "the sex",
         nationality = "the nationality",
@@ -969,8 +969,8 @@ private val DEFAULT_PASSPORT_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.
         passportType = "the passport type",
         issuingCountry = "the issuing country",
         issuingAuthority = "the issuing authority",
-        issueDate = "2021-03-20",
-        expirationDate = "2031-03-20",
+        issueDate = LocalDate.parse("2021-03-20"),
+        expirationDate = LocalDate.parse("2031-03-20"),
         nationalIdentificationNumber = "the national identification number",
     ),
 )

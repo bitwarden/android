@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
+import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CardView
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -15,7 +16,6 @@ import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SecureNoteView
 import com.bitwarden.vault.SshKeyView
-import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
@@ -609,7 +609,7 @@ class VaultAddItemStateExtensionsTest {
                 passport = PassportView(
                     surname = "Wayne",
                     givenName = "Bruce",
-                    dateOfBirth = "1939-05-27",
+                    dateOfBirth = LocalDate.parse("1939-05-27"),
                     birthPlace = "Gotham City",
                     sex = "M",
                     nationality = "American",
@@ -617,8 +617,8 @@ class VaultAddItemStateExtensionsTest {
                     passportType = "Regular",
                     issuingCountry = "USA",
                     issuingAuthority = "U.S. Department of State",
-                    issueDate = "2020-01-15",
-                    expirationDate = "2030-01-15",
+                    issueDate = LocalDate.parse("2020-01-15"),
+                    expirationDate = LocalDate.parse("2030-01-15"),
                     nationalIdentificationNumber = "987-65-4321",
                 ),
                 favorite = false,
@@ -690,13 +690,13 @@ class VaultAddItemStateExtensionsTest {
                     firstName = "Bruce",
                     middleName = "Thomas",
                     lastName = "Wayne",
-                    dateOfBirth = "1939-05-27",
+                    dateOfBirth = LocalDate.parse("1939-05-27"),
                     licenseNumber = "DL12345678",
                     issuingCountry = "USA",
                     issuingState = "NJ",
-                    issueDate = "2020-01-15",
+                    issueDate = LocalDate.parse("2020-01-15"),
                     issuingAuthority = "NJ MVC",
-                    expirationDate = "2030-01-15",
+                    expirationDate = LocalDate.parse("2030-01-15"),
                     licenseClass = "D",
                 ),
                 passport = null,
