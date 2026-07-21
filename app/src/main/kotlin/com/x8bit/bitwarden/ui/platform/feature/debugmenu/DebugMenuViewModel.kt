@@ -123,10 +123,7 @@ class DebugMenuViewModel @Inject constructor(
     private fun handleTriggerCookieAcquisition() {
         cookieAcquisitionRequestManager.setPendingCookieAcquisition(
             data = CookieAcquisitionRequest(
-                hostname = environmentRepository
-                    .environment
-                    .environmentUrlData
-                    .baseWebVaultUrlOrDefault,
+                hostname = environmentRepository.environment.baseWebVaultUrlOrDefault,
             ),
         )
     }

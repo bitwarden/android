@@ -205,11 +205,11 @@ class StartRegistrationScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `when environment selected in dialog should send EnvironmentTypeSelect action`() {
-        val selectedEnvironment = Environment.Eu
+        val selectedEnvironment = Environment.Prod.Eu
 
         // Clicking to open dialog
         composeTestRule
-            .onNodeWithText(Environment.Us.label)
+            .onNodeWithText(Environment.Prod.Us.label)
             .performScrollTo()
             .performClick()
 

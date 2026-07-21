@@ -749,7 +749,7 @@ class CipherViewExtensionsTest {
             name = "activeName",
             email = "activeEmail",
             avatarColorHex = "#ffecbc49",
-            environment = Environment.Eu,
+            environment = Environment.Prod.Eu,
             isPremium = true,
             isPremiumFromSelf = true,
             isLoggedIn = false,

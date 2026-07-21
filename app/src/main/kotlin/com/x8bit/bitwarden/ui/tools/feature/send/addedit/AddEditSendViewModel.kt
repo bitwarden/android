@@ -147,7 +147,7 @@ class AddEditSendViewModel @Inject constructor(
                 is AddEditSendType.EditItem -> AddEditSendState.ViewState.Loading
             },
             dialogState = null,
-            baseWebSendUrl = environmentRepo.environment.environmentUrlData.baseWebSendUrl,
+            baseWebSendUrl = environmentRepo.environment.baseWebSendUrl,
             policyDisablesSend = policyManager
                 .getActivePolicies(type = PolicyType.DISABLE_SEND)
                 .any(),
@@ -402,10 +402,7 @@ class AddEditSendViewModel @Inject constructor(
                         viewState = sendDataState
                             .data
                             ?.toViewState(
-                                baseWebSendUrl = environmentRepo
-                                    .environment
-                                    .environmentUrlData
-                                    .baseWebSendUrl,
+                                baseWebSendUrl = environmentRepo.environment.baseWebSendUrl,
                                 isHideEmailAddressEnabled = isHideEmailAddressEnabled,
                             )
                             ?: AddEditSendState.ViewState.Error(
@@ -442,10 +439,7 @@ class AddEditSendViewModel @Inject constructor(
                         viewState = sendDataState
                             .data
                             ?.toViewState(
-                                baseWebSendUrl = environmentRepo
-                                    .environment
-                                    .environmentUrlData
-                                    .baseWebSendUrl,
+                                baseWebSendUrl = environmentRepo.environment.baseWebSendUrl,
                                 isHideEmailAddressEnabled = isHideEmailAddressEnabled,
                             )
                             ?: AddEditSendState.ViewState.Error(
@@ -638,10 +632,7 @@ class AddEditSendViewModel @Inject constructor(
         if (premiumStateManager.isInAppUpgradeAvailable()) {
             sendEvent(AddEditSendEvent.NavigateToPlanModal)
         } else {
-            val baseUrl = environmentRepo
-                .environment
-                .environmentUrlData
-                .baseWebVaultUrlOrDefault
+            val baseUrl = environmentRepo.environment.baseWebVaultUrlOrDefault
             sendEvent(
                 AddEditSendEvent.NavigateToPremium(
                     uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium",
