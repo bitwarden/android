@@ -168,6 +168,7 @@ private val SERVER_CONFIG = ServerConfig(
             "flexible-collections-v-1" to JsonPrimitive(false),
         ),
         communication = null,
+        settings = null,
     ),
 )
 
@@ -193,4 +194,5 @@ private val CONFIG_RESPONSE_JSON = ConfigResponseJson(
         "flexible-collections-v-1" to JsonPrimitive(false),
     ),
     communication = null,
+    settings = null,
 )

@@ -791,5 +791,6 @@ private val SERVER_CONFIG = ServerConfig(
         ),
         featureStates = null,
         communication = null,
+        settings = null,
     ),
 )
