@@ -58,8 +58,9 @@ jobs:
             COMMIT_SHA="$INPUT_COMMIT"
             REPO_URL="${GITHUB_SERVER_URL}/${REPO}"
             COMMIT_URL="${REPO_URL}/commit/${COMMIT_SHA}"
-            COMMIT_MESSAGE="$(gh api "repos/${REPO}/commits/${COMMIT_SHA}" --jq '.commit.message')"
-            COMMIT_AUTHOR="$(gh api "repos/${REPO}/commits/${COMMIT_SHA}" --jq '.commit.author.name')"
+            COMMIT_JSON="$(gh api "repos/${REPO}/commits/${COMMIT_SHA}")"
+            COMMIT_MESSAGE="$(jq -r '.commit.message' <<< "$COMMIT_JSON")"
+            COMMIT_AUTHOR="$(jq -r '.commit.author.name' <<< "$COMMIT_JSON")"
           fi
           COMMIT_SUBJECT="$(printf '%s' "$COMMIT_MESSAGE" | head -n1)"
           PR_NUMBER=$(printf '%s' "$COMMIT_MESSAGE" | head -n1 | grep -oE '#[0-9]+' | tail -n1 | tr -d '#' || true)
