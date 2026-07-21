@@ -5,6 +5,7 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 import com.bitwarden.collections.CollectionType
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
+import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.model.TotpData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
@@ -33,6 +34,8 @@ import java.time.LocalDate
 import java.time.format.DateTimeParseException
 import java.time.format.FormatStyle
 import java.util.UUID
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * Transforms [CipherView] into [VaultAddEditState.ViewState].
@@ -156,7 +159,7 @@ fun CipherView.toViewState(
             favorite = this.favorite,
             masterPasswordReprompt = this.reprompt == CipherRepromptType.PASSWORD,
             notes = this.notes.orEmpty(),
-            availableOwners = emptyList(),
+            availableOwners = persistentListOf(),
             hasOrganizations = false,
             customFieldData = this.fields.orEmpty().map { it.toCustomField() },
             canDelete = canDelete,
@@ -302,11 +305,11 @@ private fun UserState.Account.toAvailableOwners(
     cipherView: CipherView?,
     isIndividualVaultDisabled: Boolean,
     selectedCollectionId: String? = null,
-): List<VaultAddEditState.Owner> =
-    listOfNotNull(
+): ImmutableList<VaultAddEditState.Owner> =
+    persistentListOfNotNull(
         VaultAddEditState
             .Owner(
-                name = email,
+                name = BitwardenString.my_vault.asText(),
                 id = null,
                 collections = emptyList(),
             )
@@ -314,7 +317,7 @@ private fun UserState.Account.toAvailableOwners(
         *organizations
             .map {
                 VaultAddEditState.Owner(
-                    name = it.name,
+                    name = it.name.asText(),
                     id = it.id,
                     collections = collectionViewList
                         .filter { collection ->
