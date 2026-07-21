@@ -543,7 +543,7 @@ private val USER_1_SHARED_ACCOUNT = SharedAccountData.Account(
     userId = ACCOUNT_JSON_1.profile.userId,
     name = ACCOUNT_JSON_1.profile.name,
     email = ACCOUNT_JSON_1.profile.email,
-    environmentLabel = Environment.Us.label,
+    environmentLabel = Environment.Prod.Us.label,
     cipherData = USER_1_EXPECTED_CIPHER_LIST,
 )
 
@@ -551,7 +551,7 @@ private val USER_2_SHARED_ACCOUNT = SharedAccountData.Account(
     userId = ACCOUNT_JSON_2.profile.userId,
     name = ACCOUNT_JSON_2.profile.name,
     email = ACCOUNT_JSON_2.profile.email,
-    environmentLabel = Environment.Us.label,
+    environmentLabel = Environment.Prod.Us.label,
     cipherData = USER_2_EXPECTED_CIPHER_LIST,
 )
 

@@ -48,11 +48,7 @@ class EnvironmentViewModel @Inject constructor(
 ) : BaseViewModel<EnvironmentState, EnvironmentEvent, EnvironmentAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val environmentUrlData = when (val environment = environmentRepository.environment) {
-            Environment.Us,
-            Environment.Eu,
-            Environment.FedRamp,
-                -> EnvironmentUrlDataJson(base = "")
-
+            is Environment.Prod -> EnvironmentUrlDataJson(base = "")
             is Environment.SelfHosted -> environment.environmentUrlData
         }
         val keyUri = environmentUrlData.keyUri?.toUri()

@@ -30,7 +30,7 @@ class RestrictionManagerTest {
         verify(exactly = 1) {
             restrictionsManager.applicationRestrictions
         }
-        assertEquals(Environment.Us, fakeEnvironmentRepository.environment)
+        assertEquals(Environment.Prod.Us, fakeEnvironmentRepository.environment)
     }
 
     @Test
@@ -42,7 +42,7 @@ class RestrictionManagerTest {
         verify(exactly = 1) {
             restrictionsManager.applicationRestrictions
         }
-        assertEquals(Environment.Us, fakeEnvironmentRepository.environment)
+        assertEquals(Environment.Prod.Us, fakeEnvironmentRepository.environment)
     }
 
     @Test
@@ -56,7 +56,7 @@ class RestrictionManagerTest {
         verify(exactly = 1) {
             restrictionsManager.applicationRestrictions
         }
-        assertEquals(Environment.Us, fakeEnvironmentRepository.environment)
+        assertEquals(Environment.Prod.Us, fakeEnvironmentRepository.environment)
     }
 
     @Suppress("MaxLineLength")
@@ -71,7 +71,7 @@ class RestrictionManagerTest {
         verify(exactly = 1) {
             restrictionsManager.applicationRestrictions
         }
-        assertEquals(Environment.Us, fakeEnvironmentRepository.environment)
+        assertEquals(Environment.Prod.Us, fakeEnvironmentRepository.environment)
     }
 
     @Suppress("MaxLineLength")
@@ -89,7 +89,7 @@ class RestrictionManagerTest {
         }
         assertEquals(
             Environment.SelfHosted(
-                environmentUrlData = Environment.Us.environmentUrlData.copy(base = baseUrl),
+                environmentUrlData = Environment.Prod.Us.environmentUrlData.copy(base = baseUrl),
             ),
             fakeEnvironmentRepository.environment,
         )
@@ -98,7 +98,7 @@ class RestrictionManagerTest {
     @Suppress("MaxLineLength")
     @Test
     fun `initialize with baseEnvironmentUrl bundle data matching the current EU environment should set the environment to EU`() {
-        fakeEnvironmentRepository.environment = Environment.Eu
+        fakeEnvironmentRepository.environment = Environment.Prod.Eu
         every {
             restrictionsManager.applicationRestrictions
         } returns mockBundle("baseEnvironmentUrl" to "https://vault.bitwarden.eu")
@@ -108,14 +108,14 @@ class RestrictionManagerTest {
         verify(exactly = 1) {
             restrictionsManager.applicationRestrictions
         }
-        assertEquals(Environment.Eu, fakeEnvironmentRepository.environment)
+        assertEquals(Environment.Prod.Eu, fakeEnvironmentRepository.environment)
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `initialize with baseEnvironmentUrl bundle data not matching the current EU environment should set the environment to self-hosted`() {
         val baseUrl = "https://other.bitwarden.eu"
-        fakeEnvironmentRepository.environment = Environment.Eu
+        fakeEnvironmentRepository.environment = Environment.Prod.Eu
         every {
             restrictionsManager.applicationRestrictions
         } returns mockBundle("baseEnvironmentUrl" to baseUrl)
@@ -127,7 +127,7 @@ class RestrictionManagerTest {
         }
         assertEquals(
             Environment.SelfHosted(
-                environmentUrlData = Environment.Eu.environmentUrlData.copy(base = baseUrl),
+                environmentUrlData = Environment.Prod.Eu.environmentUrlData.copy(base = baseUrl),
             ),
             fakeEnvironmentRepository.environment,
         )
@@ -145,7 +145,7 @@ class RestrictionManagerTest {
         verify(exactly = 1) {
             restrictionsManager.applicationRestrictions
         }
-        assertEquals(Environment.FedRamp, fakeEnvironmentRepository.environment)
+        assertEquals(Environment.Prod.FedRamp, fakeEnvironmentRepository.environment)
     }
 
     @Suppress("MaxLineLength")

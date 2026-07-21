@@ -173,10 +173,7 @@ class AttachmentsViewModel @Inject constructor(
         if (premiumStateManager.isInAppUpgradeAvailable()) {
             sendEvent(AttachmentsEvent.NavigateToPlanModal)
         } else {
-            val baseUrl = environmentRepo
-                .environment
-                .environmentUrlData
-                .baseWebVaultUrlOrDefault
+            val baseUrl = environmentRepo.environment.baseWebVaultUrlOrDefault
             sendEvent(
                 AttachmentsEvent.NavigateToUri(
                     uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium",

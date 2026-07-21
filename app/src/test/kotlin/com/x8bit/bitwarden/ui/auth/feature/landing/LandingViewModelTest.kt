@@ -92,7 +92,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                     name = "name",
                     email = "email",
                     avatarColorHex = "avatarColorHex",
-                    environment = Environment.Us,
+                    environment = Environment.Prod.Us,
                     isPremium = true,
                     isPremiumFromSelf = true,
                     isLoggedIn = true,
@@ -260,7 +260,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             name = "name",
             email = rememberedEmail,
             avatarColorHex = "avatarColorHex",
-            environment = Environment.Us,
+            environment = Environment.Prod.Us,
             isPremium = true,
             isPremiumFromSelf = true,
             isLoggedIn = true,
@@ -320,7 +320,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                 name = "name",
                 email = rememberedEmail,
                 avatarColorHex = "avatarColorHex",
-                environment = Environment.Us,
+                environment = Environment.Prod.Us,
                 isPremium = true,
                 isPremiumFromSelf = true,
                 isLoggedIn = true,
@@ -358,11 +358,13 @@ class LandingViewModelTest : BaseViewModelTest() {
             )
 
             viewModel.eventFlow.test {
-                viewModel.trySendAction(LandingAction.EnvironmentTypeSelect(Environment.Eu.type))
+                viewModel.trySendAction(
+                    LandingAction.EnvironmentTypeSelect(Environment.Prod.Eu.type),
+                )
                 assertEquals(
                     initialState.copy(
-                        selectedEnvironmentLabel = Environment.Eu.label,
-                        selectedEnvironmentType = Environment.Eu.type,
+                        selectedEnvironmentLabel = Environment.Prod.Eu.label,
+                        selectedEnvironmentType = Environment.Prod.Eu.type,
                     ),
                     viewModel.stateFlow.value,
                 )
@@ -384,7 +386,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                 name = "name",
                 email = rememberedEmail,
                 avatarColorHex = "avatarColorHex",
-                environment = Environment.Us,
+                environment = Environment.Prod.Us,
                 isPremium = true,
                 isPremiumFromSelf = true,
                 isLoggedIn = false,
@@ -519,7 +521,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     selectedEnvironmentType = Environment.Type.EU,
-                    selectedEnvironmentLabel = Environment.Eu.label,
+                    selectedEnvironmentLabel = Environment.Prod.Eu.label,
                 ),
                 awaitItem(),
             )
@@ -549,7 +551,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             name = null,
             email = expectedEmail,
             avatarColorHex = "lorem",
-            environment = Environment.Us,
+            environment = Environment.Prod.Us,
             isPremium = false,
             isPremiumFromSelf = false,
             isLoggedIn = false,
@@ -588,7 +590,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             name = null,
             email = expectedEmail,
             avatarColorHex = "lorem",
-            environment = Environment.Us,
+            environment = Environment.Prod.Us,
             isPremium = false,
             isPremiumFromSelf = false,
             isLoggedIn = false,
@@ -658,7 +660,7 @@ private val DEFAULT_STATE = LandingState(
     isContinueButtonEnabled = false,
     isRememberEmailEnabled = false,
     selectedEnvironmentType = Environment.Type.US,
-    selectedEnvironmentLabel = Environment.Us.label,
+    selectedEnvironmentLabel = Environment.Prod.Us.label,
     dialog = null,
     accountSummaries = persistentListOf(),
     isFedRampEnabled = true,
