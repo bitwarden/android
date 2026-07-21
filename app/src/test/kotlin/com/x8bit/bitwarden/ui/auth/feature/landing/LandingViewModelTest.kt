@@ -4,7 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.data.datasource.disk.model.ServerConfig
+import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.network.model.ConfigResponseJson
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
@@ -44,6 +47,10 @@ class LandingViewModelTest : BaseViewModelTest() {
         every { lockVault(any(), any()) } just runs
     }
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
+    private val mutableServerConfigFlow = MutableStateFlow<ServerConfig?>(null)
+    private val serverConfigRepository: ServerConfigRepository = mockk {
+        every { serverConfigStateFlow } returns mutableServerConfigFlow
+    }
     private val mutableSnackbarSharedFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
     private val snackbarRelayManager = mockk<SnackbarRelayManager<SnackbarRelay>> {
         every {
@@ -131,6 +138,32 @@ class LandingViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel(savedStateHandle = handle)
         viewModel.stateFlow.test {
             assertEquals(expectedState, awaitItem())
+        }
+    }
+
+    @Test
+    fun `initial state should be correct when user registration is disabled`() = runTest {
+        mutableServerConfigFlow.value = createServerConfig(disableUserRegistration = true)
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE.copy(disableCreateAccount = true), awaitItem())
+        }
+    }
+
+    @Test
+    fun `server config changes should update state`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+            mutableServerConfigFlow.value = createServerConfig(disableUserRegistration = true)
+            assertEquals(DEFAULT_STATE.copy(disableCreateAccount = true), awaitItem())
+            mutableServerConfigFlow.value = createServerConfig(disableUserRegistration = false)
+            assertEquals(DEFAULT_STATE.copy(disableCreateAccount = false), awaitItem())
+            mutableServerConfigFlow.value = createServerConfig(disableUserRegistration = true)
+            assertEquals(DEFAULT_STATE.copy(disableCreateAccount = true), awaitItem())
+            mutableServerConfigFlow.value = null
+            assertEquals(DEFAULT_STATE.copy(disableCreateAccount = false), awaitItem())
         }
     }
 
@@ -647,6 +680,7 @@ class LandingViewModelTest : BaseViewModelTest() {
         },
         vaultRepository = vaultRepository,
         environmentRepository = fakeEnvironmentRepository,
+        serverConfigRepository = serverConfigRepository,
         snackbarRelayManager = snackbarRelayManager,
         featureFlagManager = featureFlagManager,
         savedStateHandle = savedStateHandle,
@@ -664,4 +698,23 @@ private val DEFAULT_STATE = LandingState(
     dialog = null,
     accountSummaries = persistentListOf(),
     isFedRampEnabled = true,
+    disableCreateAccount = false,
+)
+
+private fun createServerConfig(
+    disableUserRegistration: Boolean,
+): ServerConfig = ServerConfig(
+    lastSync = 0L,
+    serverData = ConfigResponseJson(
+        type = null,
+        version = null,
+        gitHash = null,
+        server = null,
+        environment = null,
+        featureStates = null,
+        communication = null,
+        settings = ConfigResponseJson.SettingJson(
+            disableUserRegistration = disableUserRegistration,
+        ),
+    ),
 )

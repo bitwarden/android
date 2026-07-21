@@ -358,6 +358,15 @@ class LandingScreenTest : BitwardenComposeTest() {
             .onNodeWithText(text = "Create an account")
             .performScrollTo()
             .assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(disableCreateAccount = true) }
+        composeTestRule.onNodeWithText(text = "Create an account").assertDoesNotExist()
+
+        mutableStateFlow.update { it.copy(disableCreateAccount = false) }
+        composeTestRule
+            .onNodeWithText(text = "Create an account")
+            .performScrollTo()
+            .assertIsDisplayed()
     }
 
     @Test
@@ -525,4 +534,5 @@ private val DEFAULT_STATE = LandingState(
     dialog = null,
     accountSummaries = persistentListOf(),
     isFedRampEnabled = true,
+    disableCreateAccount = false,
 )
