@@ -60,7 +60,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
             .onNodeWithText(text = "Collections")
             .assertIsNotDisplayed()
         composeTestRule
-            .onNodeWithText(text = "Move to Organization")
+            .onNodeWithText(text = "Move to vault")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -68,7 +68,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Move to Organization")
+            .onNodeWithText(text = "Move to vault")
             .assertIsNotDisplayed()
         composeTestRule
             .onNodeWithText(text = "Collections")
@@ -121,7 +121,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
     @Test
     fun `the organization option field description should update according to state`() {
         composeTestRule
-            .onNodeWithText(text = "Choose an organization that", substring = true)
+            .onNodeWithText(text = "Choose a vault that", substring = true)
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -130,7 +130,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
 
         composeTestRule
         composeTestRule
-            .onNodeWithText(text = "Choose an organization that", substring = true)
+            .onNodeWithText(text = "Choose a vault that", substring = true)
             .assertIsNotDisplayed()
     }
 
