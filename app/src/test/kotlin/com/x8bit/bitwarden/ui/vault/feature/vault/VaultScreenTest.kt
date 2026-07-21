@@ -1855,7 +1855,7 @@ class VaultScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `collection data should update according to the state`() {
-        val collectionsHeader = "COLLECTIONS (1)"
+        val collectionsHeader = "SHARED FOLDERS (1)"
         val collectionName = "Test Collection"
         val collectionCount = 3
         val collectionItem = VaultState.ViewState.CollectionItem(

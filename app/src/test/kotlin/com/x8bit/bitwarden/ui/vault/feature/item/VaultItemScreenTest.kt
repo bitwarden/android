@@ -1599,7 +1599,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
         // Confirm overflow is closed on initial load
         composeTestRule
-            .onAllNodesWithText("Collections")
+            .onAllNodesWithText("Shared folders")
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
 
@@ -1610,7 +1610,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
         // Confirm Collections option is present
         composeTestRule
-            .onAllNodesWithText("Collections")
+            .onAllNodesWithText("Shared folders")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsDisplayed()
 
@@ -1625,7 +1625,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onAllNodesWithText("Collections")
+            .onAllNodesWithText("Shared folders")
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
     }
@@ -1643,7 +1643,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
         // Confirm dropdown version of item is absent
         composeTestRule
-            .onAllNodesWithText("Collections")
+            .onAllNodesWithText("Shared folders")
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
         // Open the overflow menu
@@ -1652,7 +1652,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .performClick()
         // Click on the move to organization hint item in the dropdown
         composeTestRule
-            .onAllNodesWithText("Collections")
+            .onAllNodesWithText("Shared folders")
             .filterToOne(hasAnyAncestor(isPopup()))
             .performClick()
 
@@ -1686,7 +1686,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Collections")
+            .onAllNodesWithText("Shared folders")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsDisplayed()
 
@@ -1734,7 +1734,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Collections")
+            .onAllNodesWithText("Shared folders")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertDoesNotExist()
     }
