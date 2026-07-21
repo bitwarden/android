@@ -1294,13 +1294,13 @@
     <string name="upgrade_pending">Ожидание перехода</string>
     <string name="upgrade_pending_message">Ваш переход на платный тарифный план находится в процессе обработки. До завершения перехода вы будете пользоваться бесплатным тарифным планом. Вы можете синхронизировать данные прямо сейчас, чтобы проверить, или продолжить — обновление произойдет автоматически.</string>
     <string name="unlock_premium_features">Разблокировать дополнительные возможности с Премиум.</string>
-    <string name="per_month">/ месяц</string>
+    <string name="per_month_cancel_anytime">/ месяц · Отмена в любое время</string>
+    <string name="per_month_cancel_anytime_content_description">%1$s в месяц, можно отменить в любой момент</string>
     <string name="built_in_authenticator">Встроенный аутентификатор</string>
     <string name="emergency_access">Экстренный доступ</string>
     <string name="secure_file_storage">Защищенное хранилище файлов</string>
     <string name="breach_monitoring">Мониторинг нарушений</string>
-    <string name="upgrade_now">Изменить сейчас</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">Вас перенаправит на защищенную страницу оформления заказа Stripe для завершения покупки.</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">Вы сможете оформить покупку с помощью безопасной системы оплаты Stripe.</string>
     <string name="opening_checkout">Начинается оформление заказа…</string>
     <string name="secure_checkout_didnt_load">Защищенная оплата не загрузилась</string>
     <string name="trouble_opening_payment_page">У нас возникли проблемы с открытием страницы оплаты, поэтому попробуйте еще раз.</string>
@@ -1423,4 +1423,13 @@
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Ваш запрос был прерван, поскольку приложению требуется доступ к локальной сети. Вы можете включить его в настройках устройства.</string>
     <string name="continue_to_stripe">Продолжить на Stripe?</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Вы будете перенаправлены на сайт Stripe, где сможете отменить подписку.</string>
+    <string name="unlock_advanced_protection">Разблокируйте продвинутую защиту</string>
+    <string name="breeze_through_2fa_with_built_in_codes">С легкостью проходите двухэтапную аутентификацию с помощью встроенных кодов</string>
+    <string name="run_reports_to_find_risky_passwords">Генерируйте отчеты о паролях, подверженных риску</string>
+    <string name="add_a_trusted_emergency_contact">Добавляйте доверенный контакт для экстренных случаев</string>
+    <string name="identify_unsecure_websites">Выявляйте небезопасные сайты</string>
+    <string name="flag_accounts_with_inactive_2fa">Помечайте аккаунты с неактивной двухэтапной аутентификацией</string>
+    <string name="keep_documents_safe_and_encrypted">Храните документы в безопасности и зашифрованном виде</string>
+    <string name="share_files_securely_with_anyone_using_send">Делитесь файлами безопасно со всеми использующими Send</string>
+    <string name="receive_24_7_priority_support">Получите приоритетную поддержку 24/7</string>
 </resources>

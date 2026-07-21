@@ -76,7 +76,7 @@ class PlanViewModelTest : BaseViewModelTest() {
         every { upgradeLifecycleStateFlow } returns mutableLifecycleStateFlow
         every { isSelfHosted } answers { mockIsSelfHosted }
     }
-    private val mutableEnvironmentFlow = MutableStateFlow<Environment>(Environment.Us)
+    private val mutableEnvironmentFlow = MutableStateFlow<Environment>(Environment.Prod.Us)
     private val mockEnvironmentRepository: EnvironmentRepository = mockk {
         every { environment } answers { mutableEnvironmentFlow.value }
         every { environmentStateFlow } returns mutableEnvironmentFlow

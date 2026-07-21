@@ -1269,13 +1269,13 @@
     <string name="upgrade_pending">升級處理中</string>
     <string name="upgrade_pending_message">您的升級正在處理中。在完成之前，您將維持免費方案。立即同步以進行檢查，或繼續操作，系統將自動更新。</string>
     <string name="unlock_premium_features">透過 Premium 方案解鎖更多進階功能。</string>
-    <string name="per_month">/ 月</string>
+    <string name="per_month_cancel_anytime">/ month · Cancel anytime</string>
+    <string name="per_month_cancel_anytime_content_description">%1$s per month, cancel anytime</string>
     <string name="built_in_authenticator">內建驗證器</string>
     <string name="emergency_access">緊急存取</string>
     <string name="secure_file_storage">安全檔案儲存</string>
     <string name="breach_monitoring">外洩監控</string>
-    <string name="upgrade_now">立即升級</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">您將前往 Stripe 的安全結帳頁面完成購買。</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">You’ll complete the purchase with Stripe secure checkout.</string>
     <string name="opening_checkout">正在開啟結帳頁面…</string>
     <string name="secure_checkout_didnt_load">安全結帳頁面未成功載入</string>
     <string name="trouble_opening_payment_page">開啟付款頁面時發生問題，請再試一次。</string>
@@ -1395,4 +1395,13 @@
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">您的要求已中斷，因為應用程式需要本機網路存取權限。您可以在裝置設定中啟用此權限。</string>
     <string name="continue_to_stripe">要前往 Stripe 嗎？</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">您將前往 Stripe 管理您的訂閱取消事宜。</string>
+    <string name="unlock_advanced_protection">Unlock advanced protection</string>
+    <string name="breeze_through_2fa_with_built_in_codes">Breeze through 2FA with built-in codes</string>
+    <string name="run_reports_to_find_risky_passwords">Run reports to find risky passwords</string>
+    <string name="add_a_trusted_emergency_contact">Add a trusted emergency contact</string>
+    <string name="identify_unsecure_websites">Identify unsecure websites</string>
+    <string name="flag_accounts_with_inactive_2fa">Flag accounts with inactive 2FA</string>
+    <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
+    <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
+    <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
 </resources>

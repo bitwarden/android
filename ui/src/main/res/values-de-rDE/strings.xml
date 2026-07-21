@@ -1275,13 +1275,13 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="upgrade_pending">Upgrade ausstehend</string>
     <string name="upgrade_pending_message">Dein Upgrade wird gerade bearbeitet. Bis zum Abschluss des Vorgangs bleibst du im kostenlosen Tarif. Führe jetzt eine Synchronisierung durch, um den Status zu überprüfen, oder fahre fort und die Aktualisierung erfolgt dann automatisch.</string>
     <string name="unlock_premium_features">Schalte mehr erweiterte Funktionen mit einem Premium-Tarif frei.</string>
-    <string name="per_month">/ Monat</string>
+    <string name="per_month_cancel_anytime">/ month · Cancel anytime</string>
+    <string name="per_month_cancel_anytime_content_description">%1$s per month, cancel anytime</string>
     <string name="built_in_authenticator">Integrierter Authenticator</string>
     <string name="emergency_access">Notfallzugriff</string>
     <string name="secure_file_storage">Sichere Dateispeicherung</string>
     <string name="breach_monitoring">Datendiebstahl-Überwachung</string>
-    <string name="upgrade_now">Jetzt upgraden</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">Du wirst zur sicheren Kaufabwicklung von Stripe weitergeleitet, um deinen Kauf abzuschließen.</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">You’ll complete the purchase with Stripe secure checkout.</string>
     <string name="opening_checkout">Kaufabwicklung wird geöffnet…</string>
     <string name="secure_checkout_didnt_load">Die sichere Kaufabwicklung wurde nicht geladen</string>
     <string name="trouble_opening_payment_page">Wir hatten Probleme beim Öffnen der Zahlungsseite. Bitte versuche es erneut.</string>
@@ -1402,4 +1402,13 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Deine Anfrage wurde unterbrochen, da die App lokalen Netzwerkzugriff benötigt. Du kannst dies in deinen Geräteeinstellungen aktivieren.</string>
     <string name="continue_to_stripe">Weiter zu Stripe?</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Du wirst zu Stripe weitergeleitet, um die Kündigung deines Abonnements vorzunehmen.</string>
+    <string name="unlock_advanced_protection">Unlock advanced protection</string>
+    <string name="breeze_through_2fa_with_built_in_codes">Breeze through 2FA with built-in codes</string>
+    <string name="run_reports_to_find_risky_passwords">Run reports to find risky passwords</string>
+    <string name="add_a_trusted_emergency_contact">Add a trusted emergency contact</string>
+    <string name="identify_unsecure_websites">Identify unsecure websites</string>
+    <string name="flag_accounts_with_inactive_2fa">Flag accounts with inactive 2FA</string>
+    <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
+    <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
+    <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
 </resources>

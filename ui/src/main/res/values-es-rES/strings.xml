@@ -1279,13 +1279,13 @@ cualquier problema.</string>
     <string name="upgrade_pending">Actualización pendiente</string>
     <string name="upgrade_pending_message">Tu actualización está siendo procesada. Permanecerás en el plan gratuito hasta que se complete. Sincroniza ahora para comprobar, o continuar y se actualizará automáticamente.</string>
     <string name="unlock_premium_features">Desbloquea funciones más avanzadas con un plan Premium.</string>
-    <string name="per_month">/ mes</string>
+    <string name="per_month_cancel_anytime">/ month · Cancel anytime</string>
+    <string name="per_month_cancel_anytime_content_description">%1$s per month, cancel anytime</string>
     <string name="built_in_authenticator">Autenticador integrado</string>
     <string name="emergency_access">Acceso de emergencia</string>
     <string name="secure_file_storage">Almacenamiento seguro de archivos</string>
     <string name="breach_monitoring">Supervisión de incidencias</string>
-    <string name="upgrade_now">Actualizar ahora</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">Accederás a la caja segura de Stripe para completar tu compra.</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">You’ll complete the purchase with Stripe secure checkout.</string>
     <string name="opening_checkout">Iniciando el proceso de pago…</string>
     <string name="secure_checkout_didnt_load">No se ha cargado la página de pago seguro</string>
     <string name="trouble_opening_payment_page">Tuvimos problemas al cargar el portal de gestión, así que inténtelo de nuevo.</string>
@@ -1406,4 +1406,13 @@ cualquier problema.</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access"></string>
     <string name="continue_to_stripe">¿Quieres continuar con Stripe?</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Serás llevado a Stripe para administrar la cancelación de tu suscripción.</string>
+    <string name="unlock_advanced_protection">Unlock advanced protection</string>
+    <string name="breeze_through_2fa_with_built_in_codes">Breeze through 2FA with built-in codes</string>
+    <string name="run_reports_to_find_risky_passwords">Run reports to find risky passwords</string>
+    <string name="add_a_trusted_emergency_contact">Add a trusted emergency contact</string>
+    <string name="identify_unsecure_websites">Identify unsecure websites</string>
+    <string name="flag_accounts_with_inactive_2fa">Flag accounts with inactive 2FA</string>
+    <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
+    <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
+    <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
 </resources>

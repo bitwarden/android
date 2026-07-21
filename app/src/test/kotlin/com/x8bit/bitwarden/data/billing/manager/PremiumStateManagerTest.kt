@@ -385,7 +385,7 @@ class PremiumStateManagerTest {
 
     @Test
     fun `isSelfHosted should return false on cloud environment regardless of flag`() {
-        fakeEnvironmentRepository.environment = Environment.Us
+        fakeEnvironmentRepository.environment = Environment.Prod.Us
         val manager = createManager()
         mutableDebugDisableSelfHostPremiumCheckFlagFlow.value = false
         assertFalse(manager.isSelfHosted)
@@ -415,7 +415,7 @@ class PremiumStateManagerTest {
 
     @Test
     fun `isSelfHostedFlow should emit false on cloud environment regardless of flag`() = runTest {
-        fakeEnvironmentRepository.environment = Environment.Us
+        fakeEnvironmentRepository.environment = Environment.Prod.Us
         val manager = createManager()
         manager.isSelfHostedFlow.test {
             assertFalse(awaitItem())

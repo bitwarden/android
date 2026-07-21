@@ -77,6 +77,34 @@ class FillAssistViewNodeExtensionsTest {
         assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
     }
 
+    @Test
+    fun `buildFillAssistViews should return Login Email when htmlInfo matches email clause`() {
+        val htmlInfo = createHtmlInfo()
+        val viewNode = createViewNode(htmlInfo = htmlInfo)
+        val assistStructure = createAssistStructure(viewNode)
+        val data = autofillData()
+        every {
+            viewNode.toAutofillViewData(
+                autofillId = autofillId,
+                website = null,
+            )
+        } returns data
+
+        val hostRule = FillAssistRules.HostRule(
+            category = "account-login",
+            fields = mapOf(
+                "email" to listOf(selectorClause(tag = "input", id = "email")),
+            ),
+        )
+
+        val actual = assistStructure.buildFillAssistViews(
+            hostRules = listOf(hostRule),
+            urlBarWebsite = null,
+        )
+
+        assertEquals(listOf(AutofillView.Login.Email(data = data)), actual)
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `buildFillAssistViews should return Login Password when htmlInfo matches password clause`() {
@@ -199,10 +227,9 @@ class FillAssistViewNodeExtensionsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `buildFillAssistViews should pick first mapped key when multiple keys match the same node`() {
-        // Two field keys ("email" - unknown - and "username") both match the same node. The
-        // implementation iterates in insertion order and selects the first key whose mapping is
-        // non-null. Since "email" is unknown, "username" wins; this also demonstrates that an
-        // earlier known key wins over a later one.
+        // Two field keys ("email" and "username") both match the same node. The implementation
+        // iterates in insertion order and selects the first key whose mapping is non-null.
+        // Since "email" is listed first, it wins and produces a Login.Email view.
         val htmlInfo = createHtmlInfo()
         val viewNode = createViewNode(htmlInfo = htmlInfo)
         val assistStructure = createAssistStructure(viewNode)
@@ -222,7 +249,7 @@ class FillAssistViewNodeExtensionsTest {
             urlBarWebsite = null,
         )
 
-        assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
+        assertEquals(listOf(AutofillView.Login.Email(data = data)), actual)
     }
 
     @Test

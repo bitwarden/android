@@ -60,7 +60,7 @@ class SendViewModelTest : BaseViewModelTest() {
         every { setText(text = any<String>(), toastDescriptorOverride = any<Text>()) } just runs
     }
     private val environmentRepo: EnvironmentRepository = mockk {
-        every { environment } returns Environment.Us
+        every { environment } returns Environment.Prod.Us
     }
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepo: AuthRepository = mockk {
@@ -582,9 +582,7 @@ class SendViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
             val viewState = mockk<SendState.ViewState.Content>()
             val sendData = mockk<SendData> {
-                every {
-                    toViewState(Environment.Us.environmentUrlData.baseWebSendUrl)
-                } returns viewState
+                every { toViewState(Environment.Prod.Us.baseWebSendUrl) } returns viewState
             }
 
             viewModel.eventFlow.test {
@@ -610,9 +608,7 @@ class SendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
         val viewState = mockk<SendState.ViewState.Content>()
         val sendData = mockk<SendData> {
-            every {
-                toViewState(Environment.Us.environmentUrlData.baseWebSendUrl)
-            } returns viewState
+            every { toViewState(Environment.Prod.Us.baseWebSendUrl) } returns viewState
         }
 
         viewModel.eventFlow.test {
@@ -669,9 +665,7 @@ class SendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
         val viewState = mockk<SendState.ViewState.Content>()
         val sendData = mockk<SendData> {
-            every {
-                toViewState(Environment.Us.environmentUrlData.baseWebSendUrl)
-            } returns viewState
+            every { toViewState(Environment.Prod.Us.baseWebSendUrl) } returns viewState
         }
 
         mutableSendDataFlow.value = DataState.Pending(sendData)
@@ -834,7 +828,7 @@ private val DEFAULT_USER_ACCOUNT_STATE = UserState.Account(
     name = "Bit",
     email = "bitwarden@gmail.com",
     avatarColorHex = "#ff00ff",
-    environment = Environment.Us,
+    environment = Environment.Prod.Us,
     isPremium = false,
     isPremiumFromSelf = false,
     isLoggedIn = true,

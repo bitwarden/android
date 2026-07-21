@@ -143,12 +143,19 @@ class AutofillParserImpl(
             return AutofillRequest.Unfillable
         }
 
-        val effectiveViews = autofillViews.toEffectiveViews(
-            assistStructure = assistStructure,
-            uri = uri,
-            focusedView = focusedView,
-            urlBarWebsite = urlBarWebsite,
-        )
+        val isFillAssistEnabled = featureFlagManager
+            .getFeatureFlag(FlagKey.FillAssistTargetingRules) &&
+            settingsRepository.isFillAssistEnabled
+        val effectiveViews = if (isFillAssistEnabled) {
+            autofillViews.toEffectiveViews(
+                assistStructure = assistStructure,
+                uri = uri,
+                focusedView = focusedView,
+                urlBarWebsite = urlBarWebsite,
+            )
+        } else {
+            autofillViews
+        }
 
         val effectiveFocusedView = effectiveViews
             .firstOrNull { it.data.isFocused }
@@ -217,7 +224,6 @@ class AutofillParserImpl(
             ?.takeUnless { it.startsWith("androidapp://") }
             ?.toUri()
             ?.host
-            ?.takeIf { featureFlagManager.getFeatureFlag(FlagKey.FillAssistTargetingRules) }
             ?.let { host ->
                 fillAssistManager.getFillAssistRules()?.hostRules?.get(host.removePrefix("www."))
             }
@@ -439,6 +445,7 @@ private fun AutofillView.updateWebsiteIfNecessary(website: String?): AutofillVie
         is AutofillView.Card.ExpirationYear -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Card.Number -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Card.SecurityCode -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Login.Email -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Login.Password -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Login.Username -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Unused -> this.copy(data = this.data.copy(website = site))

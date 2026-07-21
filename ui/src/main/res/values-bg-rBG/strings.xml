@@ -1278,13 +1278,13 @@
     <string name="upgrade_pending">Има чакащо надграждане</string>
     <string name="upgrade_pending_message">Надграждането се обработва. Докато не бъде завършено, ще останете на безплатния план. Синхронизирайте сега, ако искате да направите проверка, или продължите и ще се опресни автоматично.</string>
     <string name="unlock_premium_features">Отключете още разширени функционалности с Платения план.</string>
-    <string name="per_month">/ месец</string>
+    <string name="per_month_cancel_anytime">/ месец · Прекратяване по всяко време</string>
+    <string name="per_month_cancel_anytime_content_description">%1$s на месец, отказване по всяко време</string>
     <string name="built_in_authenticator">Вграден удостоверител</string>
     <string name="emergency_access">Авариен достъп</string>
     <string name="secure_file_storage">Сигурно съхранение на файлове</string>
     <string name="breach_monitoring">Наблюдение за пробиви</string>
-    <string name="upgrade_now">Надграждане сега</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">Ще бъдете прехвърлен(а) към страницата за сигурни разплащания на Stripe, за да завършите покупката си.</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">Ще завършите покупката със защитената обработка на Stripe.</string>
     <string name="opening_checkout">Отваряне на страницата за разплащания…</string>
     <string name="secure_checkout_didnt_load">Страницата за разплащания не може да бъде заредена</string>
     <string name="trouble_opening_payment_page">Имаше проблем при отварянето на страницата за разплащания. Моля, опитайте отново.</string>
@@ -1405,4 +1405,13 @@
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Вашата заявка беше прекъсната, тъй като приложението има нужда от достъп до локалната мрежа. Можете да включите това в настройките на устройството си.</string>
     <string name="continue_to_stripe">Продължаване към Stripe?</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Ще бъдете прехвърлен(а) към Stripe, където ще можете да прекратите абонамента си.</string>
+    <string name="unlock_advanced_protection">Отключете допълнителна защита</string>
+    <string name="breeze_through_2fa_with_built_in_codes">Безпроблемно двустепенно удостоверяване чрез вградените кодове</string>
+    <string name="run_reports_to_find_risky_passwords">Създавайте доклади, за да намирате слабите пароли</string>
+    <string name="add_a_trusted_emergency_contact">Добавете доверен контакт за спешни случаи</string>
+    <string name="identify_unsecure_websites">Разпознавайте опасните уеб сайтове</string>
+    <string name="flag_accounts_with_inactive_2fa">Отбелязвайте акаунтите с неактивно двустепенно удостоверяване</string>
+    <string name="keep_documents_safe_and_encrypted">Пазете документите си на сигурно място, шифровани</string>
+    <string name="share_files_securely_with_anyone_using_send">Споделяйте файлове сигурно с всеки чрез Изпращанията</string>
+    <string name="receive_24_7_priority_support">Получавайте 24-часова приоритетна поддръжка</string>
 </resources>

@@ -9,6 +9,7 @@ import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -866,9 +867,57 @@ class AutoFillScreenTest : BitwardenComposeTest() {
             intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
         }
     }
+
+    @Test
+    fun `fill assist switch should not be displayed when showFillAssistOption is false`() {
+        mutableStateFlow.update { it.copy(showFillAssistOption = false) }
+        composeTestRule
+            .onNodeWithTag("FillAssistSwitch")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `fill assist switch should be displayed when showFillAssistOption is true`() {
+        mutableStateFlow.update { it.copy(showFillAssistOption = true) }
+        composeTestRule
+            .onNodeWithTag("FillAssistSwitch")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `fill assist switch toggles should send FillAssistToggleClick action`() {
+        mutableStateFlow.update {
+            it.copy(
+                showFillAssistOption = true,
+                isFillAssistEnabled = false,
+            )
+        }
+        composeTestRule
+            .onNodeWithTag("FillAssistSwitch")
+            .performScrollTo()
+            .performClick()
+        verify {
+            viewModel.trySendAction(
+                AutoFillAction.FillAssistToggleClick(
+                    isEnabled = true,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `on NavigateToFillAssistHelp should call launchUri`() {
+        mutableEventFlow.tryEmit(AutoFillEvent.NavigateToFillAssistHelp)
+        verify(exactly = 1) {
+            intentManager.launchUri("https://bitwarden.com/help/fill-assist/".toUri())
+        }
+    }
 }
 
 private val DEFAULT_STATE: AutoFillState = AutoFillState(
+    showFillAssistOption = false,
+    isFillAssistEnabled = false,
     isAskToAddLoginEnabled = false,
     isAccessibilityAutofillEnabled = false,
     isAutoFillServicesEnabled = false,

@@ -1267,13 +1267,13 @@
     <string name="upgrade_pending">アップグレードを保留中</string>
     <string name="upgrade_pending_message">アップグレードは現在処理中です。完了するまで無料プランのままになります。今すぐ同期して確認するか、続行して自動的に更新させてください。</string>
     <string name="unlock_premium_features">プレミアムプランでより高度な機能をアンロックしましょう。</string>
-    <string name="per_month">/ 月</string>
+    <string name="per_month_cancel_anytime">/ 月 · いつでもキャンセル</string>
+    <string name="per_month_cancel_anytime_content_description">%1$s /月、いつでもキャンセル可能</string>
     <string name="built_in_authenticator">認証機能を内蔵</string>
     <string name="emergency_access">緊急アクセス</string>
     <string name="secure_file_storage">セキュアなファイルストレージ</string>
     <string name="breach_monitoring">情報漏洩の監視</string>
-    <string name="upgrade_now">今すぐアップグレード</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">Stripe の安全なチェックアウトで購入できます。</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">Stripe の安全なチェックアウトで購入を完了します。</string>
     <string name="opening_checkout">チェックアウトを開いています…</string>
     <string name="secure_checkout_didnt_load">セキュアなチェックアウトが読み込まれませんでした</string>
     <string name="trouble_opening_payment_page">支払いページを開く際に問題がありました。もう一度やり直してください。</string>
@@ -1393,4 +1393,13 @@
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">アプリがローカルネットワークにアクセスする必要があるため、リクエストが中断されました。デバイスの設定で有効にできます。</string>
     <string name="continue_to_stripe">Stripe へ進みますか？</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">サブスクリプションのキャンセルを管理するために Stripe に移動します。</string>
+    <string name="unlock_advanced_protection">高度な保護をアンロックする</string>
+    <string name="breeze_through_2fa_with_built_in_codes">内蔵コードで二要素認証もスムーズに</string>
+    <string name="run_reports_to_find_risky_passwords">危険なパスワードを見つけるためのレポートを実行</string>
+    <string name="add_a_trusted_emergency_contact">信頼できる緊急連絡先を追加</string>
+    <string name="identify_unsecure_websites">セキュリティ保護されていないウェブサイトを特定する</string>
+    <string name="flag_accounts_with_inactive_2fa">非アクティブな二要素認証アカウントにフラグを付ける</string>
+    <string name="keep_documents_safe_and_encrypted">ドキュメントを安全に暗号化する</string>
+    <string name="share_files_securely_with_anyone_using_send">Send を使用して誰でも安全にファイルを共有</string>
+    <string name="receive_24_7_priority_support">24時間年中無休の優先サポートを受ける</string>
 </resources>

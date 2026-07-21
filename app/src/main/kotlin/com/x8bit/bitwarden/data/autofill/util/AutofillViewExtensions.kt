@@ -90,6 +90,7 @@ private fun AutofillView.buildListAutofillValueOrNull(
         is AutofillView.Card.ExpirationDate,
         is AutofillView.Card.Number,
         is AutofillView.Card.SecurityCode,
+        is AutofillView.Login.Email,
         is AutofillView.Login.Password,
         is AutofillView.Login.Username,
         is AutofillView.Unused,

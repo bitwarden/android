@@ -122,7 +122,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     @Test
     fun `SaveClick should show the error dialog when any URLs are invalid`() = runTest {
         assertEquals(
-            Environment.Us,
+            Environment.Prod.Us,
             fakeEnvironmentRepository.environment,
         )
 
@@ -154,7 +154,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
 
         // The Environment has not been updated
         assertEquals(
-            Environment.Us,
+            Environment.Prod.Us,
             fakeEnvironmentRepository.environment,
         )
     }
@@ -164,7 +164,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     fun `SaveClick should emit NavigateBack, send a snackbar to the ENVIRONMENT SAVED relay, and update the environment when all URLs are valid`() =
         runTest {
             assertEquals(
-                Environment.Us,
+                Environment.Prod.Us,
                 fakeEnvironmentRepository.environment,
             )
 
@@ -230,7 +230,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     fun `SaveClick should emit NavigateBack, send a snackbar to the ENVIRONMENT SAVED relay, and update the environment when some URLs are valid and others are null`() =
         runTest {
             assertEquals(
-                Environment.Us,
+                Environment.Prod.Us,
                 fakeEnvironmentRepository.environment,
             )
 
