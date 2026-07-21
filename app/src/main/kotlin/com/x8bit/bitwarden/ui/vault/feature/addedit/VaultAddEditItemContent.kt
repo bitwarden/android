@@ -204,7 +204,7 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
             item {
                 BitwardenTextSelectionButton(
                     label = stringResource(id = BitwardenString.vault),
-                    selectedOption = state.common.selectedOwner?.name,
+                    selectedOption = state.common.selectedOwner?.name?.invoke(),
                     onClick = commonTypeHandlers.onPresentOwnerOptions,
                     cardStyle = if (collections.isNotEmpty()) {
                         CardStyle.Middle()

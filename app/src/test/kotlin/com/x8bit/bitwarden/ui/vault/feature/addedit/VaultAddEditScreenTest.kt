@@ -46,6 +46,7 @@ import com.bitwarden.core.data.util.advanceTimeByAndRunCurrent
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.manager.exit.ExitManager
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.assertScrollableNodeDoesNotExist
@@ -80,6 +81,9 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
@@ -3409,10 +3413,11 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                     availableOwners = listOf(
                         VaultAddEditState.Owner(
                             id = ownerId,
-                            name = ownerName,
+                            name = ownerName.asText(),
                             collections = DEFAULT_COLLECTIONS,
                         ),
-                    ),
+                    )
+                        .toImmutableList(),
                 )
             }
                 .copy(bottomSheetState = VaultAddEditState.BottomSheetState.OwnerSelection)
@@ -3486,10 +3491,11 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             availableOwners = listOf(
                 VaultAddEditState.Owner(
                     id = null,
-                    name = "My vault",
+                    name = BitwardenString.my_vault.asText(),
                     collections = DEFAULT_COLLECTIONS,
                 ),
-            ),
+            )
+                .toImmutableList(),
             hasOrganizations = false,
         )
 
@@ -5130,7 +5136,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
     private fun updateStateWithOwners(
         selectedOwnerId: String? = null,
-        availableOwners: List<VaultAddEditState.Owner> = DEFAULT_OWNERS,
+        availableOwners: ImmutableList<VaultAddEditState.Owner> = DEFAULT_OWNERS,
         hasOrganizations: Boolean = true,
     ) {
         mutableStateFlow.update { currentState ->
@@ -5561,20 +5567,20 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             ),
         )
 
-        private val ALTERED_OWNERS = listOf(
+        private val ALTERED_OWNERS = persistentListOf(
             VaultAddEditState.Owner(
                 id = null,
-                name = "My vault",
+                name = BitwardenString.my_vault.asText(),
                 collections = emptyList(),
             ),
             VaultAddEditState.Owner(
                 id = "mockOwnerId-1",
-                name = "mockOwnerName-1",
+                name = "mockOwnerName-1".asText(),
                 collections = emptyList(),
             ),
             VaultAddEditState.Owner(
                 id = "mockOwnerId-2",
-                name = "mockOwnerName-2",
+                name = "mockOwnerName-2".asText(),
                 collections = ALTERED_COLLECTIONS,
             ),
         )
@@ -5588,20 +5594,20 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             ),
         )
 
-        private val DEFAULT_OWNERS = listOf(
+        private val DEFAULT_OWNERS = persistentListOf(
             VaultAddEditState.Owner(
                 id = null,
-                name = "My vault",
+                name = BitwardenString.my_vault.asText(),
                 collections = emptyList(),
             ),
             VaultAddEditState.Owner(
                 id = "mockOwnerId-1",
-                name = "mockOwnerName-1",
+                name = "mockOwnerName-1".asText(),
                 collections = emptyList(),
             ),
             VaultAddEditState.Owner(
                 id = "mockOwnerId-2",
-                name = "mockOwnerName-2",
+                name = "mockOwnerName-2".asText(),
                 collections = DEFAULT_COLLECTIONS,
             ),
         )

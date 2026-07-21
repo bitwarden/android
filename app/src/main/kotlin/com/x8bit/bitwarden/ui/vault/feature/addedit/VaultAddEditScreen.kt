@@ -826,7 +826,7 @@ private fun OwnerSelectionBottomSheet(
         modifier = modifier.statusBarsPadding(),
     ) {
         OwnerSelectionBottomSheetContent(
-            options = state.availableOwners.toImmutableList(),
+            options = state.availableOwners,
             selectedOwner = selectedOwner,
             onOptionSelected = {
                 selectedOwner = it
@@ -863,7 +863,7 @@ private fun OwnerSelectionBottomSheetContent(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = option.name,
+                    text = option.name(),
                     color = BitwardenTheme.colorScheme.text.primary,
                     style = BitwardenTheme.typography.bodyLarge,
                     modifier = Modifier

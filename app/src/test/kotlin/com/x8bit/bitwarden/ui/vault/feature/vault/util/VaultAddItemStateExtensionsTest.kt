@@ -15,6 +15,7 @@ import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SecureNoteView
 import com.bitwarden.vault.SshKeyView
+import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
@@ -24,13 +25,14 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotEquals
-import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneOffset
+import kotlinx.collections.immutable.persistentListOf
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
+import org.junit.jupiter.api.Test
 
 @Suppress("LargeClass")
 class VaultAddItemStateExtensionsTest {
@@ -1151,10 +1153,10 @@ class VaultAddItemStateExtensionsTest {
             common = VaultAddEditState.ViewState.Content.Common(
                 name = "mockName-1",
                 selectedOwnerId = "mockOwnerId-1",
-                availableOwners = listOf(
+                availableOwners = persistentListOf(
                     VaultAddEditState.Owner(
                         id = "mockOwnerId-1",
-                        name = "Mock Organization",
+                        name = "Mock Organization".asText(),
                         collections = listOf(
                             VaultCollection(
                                 id = "collection-1",
@@ -1243,10 +1245,10 @@ class VaultAddItemStateExtensionsTest {
                 originalCipher = cipherView,
                 name = "mockName-1",
                 selectedOwnerId = "mockOwnerId-1",
-                availableOwners = listOf(
+                availableOwners = persistentListOf(
                     VaultAddEditState.Owner(
                         id = "mockOwnerId-1",
-                        name = "Mock Organization",
+                        name = "Mock Organization".asText(),
                         collections = listOf(
                             VaultCollection(
                                 id = "collection-1",

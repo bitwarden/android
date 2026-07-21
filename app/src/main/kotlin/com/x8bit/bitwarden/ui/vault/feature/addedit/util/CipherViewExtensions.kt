@@ -33,6 +33,9 @@ import java.time.LocalDate
 import java.time.format.DateTimeParseException
 import java.time.format.FormatStyle
 import java.util.UUID
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Transforms [CipherView] into [VaultAddEditState.ViewState].
@@ -156,7 +159,7 @@ fun CipherView.toViewState(
             favorite = this.favorite,
             masterPasswordReprompt = this.reprompt == CipherRepromptType.PASSWORD,
             notes = this.notes.orEmpty(),
-            availableOwners = emptyList(),
+            availableOwners = persistentListOf(),
             hasOrganizations = false,
             customFieldData = this.fields.orEmpty().map { it.toCustomField() },
             canDelete = canDelete,
@@ -214,7 +217,6 @@ fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
                     collectionViewList = collectionViewList,
                     cipherView = currentContentState.common.originalCipher,
                     isIndividualVaultDisabled = isIndividualVaultDisabled,
-                    resourceManager = resourceManager,
                     selectedCollectionId = currentContentState.common.selectedCollectionId
                         ?: collectionViewList
                             .getDefaultCollectionViewOrNull(
@@ -302,13 +304,12 @@ private fun UserState.Account.toAvailableOwners(
     collectionViewList: List<CollectionView>,
     cipherView: CipherView?,
     isIndividualVaultDisabled: Boolean,
-    resourceManager: ResourceManager,
     selectedCollectionId: String? = null,
-): List<VaultAddEditState.Owner> =
+): ImmutableList<VaultAddEditState.Owner> =
     listOfNotNull(
         VaultAddEditState
             .Owner(
-                name = resourceManager.getString(BitwardenString.my_vault),
+                name = BitwardenString.my_vault.asText(),
                 id = null,
                 collections = emptyList(),
             )
@@ -316,7 +317,7 @@ private fun UserState.Account.toAvailableOwners(
         *organizations
             .map {
                 VaultAddEditState.Owner(
-                    name = it.name,
+                    name = it.name.asText(),
                     id = it.id,
                     collections = collectionViewList
                         .filter { collection ->
@@ -340,6 +341,7 @@ private fun UserState.Account.toAvailableOwners(
             }
             .toTypedArray(),
     )
+        .toImmutableList()
 
 private fun FieldView.toCustomField() =
     when (this.type) {

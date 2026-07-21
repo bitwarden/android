@@ -97,6 +97,7 @@ import com.x8bit.bitwarden.ui.vault.util.detectCardBrand
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -2669,7 +2670,7 @@ class VaultAddEditViewModel @Inject constructor(
     private fun List<VaultAddEditState.Owner>.toUpdatedOwners(
         selectedOwnerId: String?,
         selectedCollectionId: String,
-    ): List<VaultAddEditState.Owner> =
+    ): ImmutableList<VaultAddEditState.Owner> =
         map { owner ->
             if (owner.id != selectedOwnerId) return@map owner
             owner.copy(
@@ -2678,6 +2679,7 @@ class VaultAddEditViewModel @Inject constructor(
                     .toUpdatedCollections(selectedCollectionId = selectedCollectionId),
             )
         }
+            .toImmutableList()
 
     private fun List<VaultCollection>.toUpdatedCollections(
         selectedCollectionId: String,
@@ -2929,7 +2931,7 @@ data class VaultAddEditState(
                 val selectedFolderId: String? = null,
                 val availableFolders: List<Folder> = emptyList(),
                 val selectedOwnerId: String? = null,
-                val availableOwners: List<Owner> = emptyList(),
+                val availableOwners: ImmutableList<Owner> = persistentListOf(),
                 val hasOrganizations: Boolean = false,
                 val canDelete: Boolean = true,
                 val canAssignToCollections: Boolean = true,
@@ -3315,7 +3317,7 @@ data class VaultAddEditState(
     @Parcelize
     data class Owner(
         val id: String?,
-        val name: String,
+        val name: Text,
         val collections: List<VaultCollection>,
     ) : Parcelable
 
