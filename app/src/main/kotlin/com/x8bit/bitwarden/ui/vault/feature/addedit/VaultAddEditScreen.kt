@@ -382,7 +382,7 @@ fun VaultAddEditScreen(
                                 )
                                     .takeUnless { !state.shouldShowMoveToOrganization },
                                 OverflowMenuItemData(
-                                    text = stringResource(id = BitwardenString.collections),
+                                    text = stringResource(id = BitwardenString.shared_folders),
                                     onClick = {
                                         viewModel.trySendAction(
                                             VaultAddEditAction.Common.CollectionsClick,
