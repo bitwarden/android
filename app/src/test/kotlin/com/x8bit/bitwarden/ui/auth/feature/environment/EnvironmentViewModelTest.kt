@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.environment
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.manager.file.FileManager
@@ -40,6 +41,9 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     private val mockFileManager = mockk<FileManager>()
     private val snackbarRelayManager = mockk<SnackbarRelayManager<SnackbarRelay>> {
         every { sendSnackbarData(data = any(), relay = any()) } just runs
+    }
+    private val buildInfoManager: BuildInfoManager = mockk {
+        every { isReleaseBuild } returns true
     }
 
     @Suppress("MaxLineLength")
@@ -817,21 +821,21 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
             certificateManager = mockCertificateManager,
             fileManager = mockFileManager,
             snackbarRelayManager = snackbarRelayManager,
+            buildInfoManager = buildInfoManager,
             savedStateHandle = savedStateHandle,
         )
 
     //endregion Helper methods
-
-    companion object {
-        private val DEFAULT_STATE = EnvironmentState(
-            serverUrl = "",
-            keyAlias = "",
-            webVaultServerUrl = "",
-            apiServerUrl = "",
-            identityServerUrl = "",
-            iconsServerUrl = "",
-            keyHost = null,
-            dialog = null,
-        )
-    }
 }
+
+private val DEFAULT_STATE: EnvironmentState = EnvironmentState(
+    serverUrl = "",
+    keyAlias = "",
+    webVaultServerUrl = "",
+    apiServerUrl = "",
+    identityServerUrl = "",
+    iconsServerUrl = "",
+    keyHost = null,
+    dialog = null,
+    isRelease = true,
+)

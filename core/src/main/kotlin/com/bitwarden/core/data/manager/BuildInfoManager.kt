@@ -30,6 +30,11 @@ interface BuildInfoManager {
     val isDevBuild: Boolean
 
     /**
+     * A boolean property that indicates whether the current build is a release build.
+     */
+    val isReleaseBuild: Boolean
+
+    /**
      * A string that represents a displayable app version.
      */
     val versionData: String
