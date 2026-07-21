@@ -805,38 +805,31 @@ private fun OwnerSelectionBottomSheet(
     modifier: Modifier = Modifier,
 ) {
 
-    var selectedOptionState by rememberSaveable {
-        mutableStateOf(state.selectedOwner?.name.orEmpty())
+    var selectedOwner by rememberSaveable {
+        mutableStateOf(state.selectedOwner)
     }
     BitwardenModalBottomSheet(
-        sheetTitle = stringResource(BitwardenString.owner),
+        sheetTitle = stringResource(BitwardenString.select_vault),
         onDismiss = handlers.onDismissBottomSheet,
         topBarActions = { animatedOnDismiss ->
             BitwardenTextButton(
                 label = stringResource(BitwardenString.save),
                 onClick = {
                     handlers.onDismissBottomSheet()
-                    state
-                        .availableOwners
-                        .firstOrNull {
-                            it.name == selectedOptionState
-                        }
-                        ?.run {
-                            handlers.onOwnerSelected(this.id)
-                        }
+                    selectedOwner?.let { handlers.onOwnerSelected(it.id) }
                     animatedOnDismiss()
                 },
-                isEnabled = selectedOptionState.isNotBlank(),
+                isEnabled = selectedOwner != null,
             )
         },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         modifier = modifier.statusBarsPadding(),
     ) {
         OwnerSelectionBottomSheetContent(
-            options = state.availableOwners.map { it.name }.toImmutableList(),
-            selectedOption = selectedOptionState,
+            options = state.availableOwners,
+            selectedOwner = selectedOwner,
             onOptionSelected = {
-                selectedOptionState = it
+                selectedOwner = it
             },
         )
     }
@@ -844,9 +837,9 @@ private fun OwnerSelectionBottomSheet(
 
 @Composable
 private fun OwnerSelectionBottomSheetContent(
-    options: ImmutableList<String>,
-    selectedOption: String,
-    onOptionSelected: (String) -> Unit,
+    options: ImmutableList<VaultAddEditState.Owner>,
+    selectedOwner: VaultAddEditState.Owner?,
+    onOptionSelected: (VaultAddEditState.Owner) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -870,7 +863,7 @@ private fun OwnerSelectionBottomSheetContent(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = option,
+                    text = option.name(),
                     color = BitwardenTheme.colorScheme.text.primary,
                     style = BitwardenTheme.typography.bodyLarge,
                     modifier = Modifier
@@ -878,7 +871,7 @@ private fun OwnerSelectionBottomSheetContent(
                         .padding(horizontal = 16.dp),
                 )
                 BitwardenRadioButton(
-                    isSelected = selectedOption == option,
+                    isSelected = selectedOwner == option,
                     onClick = {
                         onOptionSelected(option)
                     },
