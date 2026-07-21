@@ -372,7 +372,7 @@ fun VaultAddEditScreen(
                                     .takeUnless { state.isAddItemMode },
                                 OverflowMenuItemData(
                                     text = stringResource(
-                                        id = BitwardenString.move_to_organization,
+                                        id = BitwardenString.move_to_vault,
                                     ),
                                     onClick = {
                                         viewModel.trySendAction(
