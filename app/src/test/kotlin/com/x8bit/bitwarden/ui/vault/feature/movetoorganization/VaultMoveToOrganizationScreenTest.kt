@@ -104,7 +104,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
     fun `the organization option field should update according to state`() {
         composeTestRule
             .onNodeWithContentDescription(
-                label = "mockOrganizationName-1. Organization",
+                label = "mockOrganizationName-1. Vault",
                 substring = true,
             )
             .assertIsDisplayed()
@@ -114,7 +114,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription(label = "mockOrganizationName-1. Organization")
+            .onNodeWithContentDescription(label = "mockOrganizationName-1. Vault")
             .assertIsNotDisplayed()
     }
 
@@ -168,7 +168,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
     @Test
     fun `selecting an organization should send OrganizationSelect action`() {
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-1. Organization")
+            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-1. Vault")
             .performClick()
         // Choose the option from the menu
         composeTestRule
@@ -200,7 +200,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
     @Test
     fun `the organization option field should display according to state`() {
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-1. Organization")
+            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-1. Vault")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -213,7 +213,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-2. Organization")
+            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-2. Vault")
             .assertIsDisplayed()
     }
 
