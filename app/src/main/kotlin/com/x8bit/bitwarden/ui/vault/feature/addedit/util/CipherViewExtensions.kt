@@ -5,6 +5,7 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 import com.bitwarden.collections.CollectionType
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
+import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.model.TotpData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
@@ -35,7 +36,6 @@ import java.time.format.FormatStyle
 import java.util.UUID
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Transforms [CipherView] into [VaultAddEditState.ViewState].
@@ -306,7 +306,7 @@ private fun UserState.Account.toAvailableOwners(
     isIndividualVaultDisabled: Boolean,
     selectedCollectionId: String? = null,
 ): ImmutableList<VaultAddEditState.Owner> =
-    listOfNotNull(
+    persistentListOfNotNull(
         VaultAddEditState
             .Owner(
                 name = BitwardenString.my_vault.asText(),
@@ -341,7 +341,6 @@ private fun UserState.Account.toAvailableOwners(
             }
             .toTypedArray(),
     )
-        .toImmutableList()
 
 private fun FieldView.toCustomField() =
     when (this.type) {
