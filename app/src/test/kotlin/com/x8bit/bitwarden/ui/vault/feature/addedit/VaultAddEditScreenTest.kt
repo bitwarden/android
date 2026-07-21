@@ -4417,7 +4417,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Collections")
+            .onAllNodesWithText("Shared folders")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsDisplayed()
 
@@ -4448,7 +4448,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
         // Confirm overflow is closed on initial load
         composeTestRule
-            .onAllNodesWithText("Collections")
+            .onAllNodesWithText("Shared folders")
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
 
@@ -4459,7 +4459,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         // Confirm Collections option is present
         composeTestRule
-            .onAllNodesWithText("Collections")
+            .onAllNodesWithText("Shared folders")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsDisplayed()
 
@@ -4478,7 +4478,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onAllNodesWithText("Collections")
+            .onAllNodesWithText("Shared folders")
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
     }
@@ -4515,7 +4515,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Collections")
+            .onAllNodesWithText("Shared folders")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertDoesNotExist()
 
