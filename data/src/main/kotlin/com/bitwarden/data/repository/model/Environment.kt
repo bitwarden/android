@@ -87,4 +87,19 @@ sealed class Environment {
         FED_RAMP,
         SELF_HOSTED,
     }
+
+    @Suppress("UndocumentedPublicClass")
+    companion object {
+        /**
+         * List of all primary development environment base URLs.
+         */
+        val DEFAULT_INTERNAL_ENVIRONMENTS: List<String> = listOf(
+            "https://vault.qa.bitwarden.pw",
+            "https://qa-team.sh.bitwarden.pw",
+            "https://vault.usdev.bitwarden.pw",
+            "https://fedramp.usdev.bitwarden.pw",
+            "https://gw.dev.bitwarden.pw",
+            "https://gw.stg.bitwarden.pw",
+        )
+    }
 }
