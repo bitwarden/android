@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
-import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CardView
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
