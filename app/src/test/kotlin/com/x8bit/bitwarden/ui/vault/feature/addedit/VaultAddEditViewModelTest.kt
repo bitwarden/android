@@ -114,6 +114,7 @@ import io.mockk.runs
 import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -360,7 +361,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         availableOwners = listOf(
                             VaultAddEditState.Owner(
                                 id = "organizationId",
-                                name = "organizationName",
+                                name = "organizationName".asText(),
                                 collections = emptyList(),
                             ),
                         ),
@@ -5281,7 +5282,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                             availableOwners = listOf(
                                 VaultAddEditState.Owner(
                                     id = "organizationId",
-                                    name = "organizationName",
+                                    name = "organizationName".asText(),
                                     collections = emptyList(),
                                 ),
                             ),
@@ -6387,7 +6388,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             selectedOwnerId = selectedOwnerId,
             originalCipher = originalCipher,
             availableFolders = availableFolders,
-            availableOwners = availableOwners,
+            availableOwners = availableOwners.toImmutableList(),
             hasOrganizations = hasOrganizations,
             canDelete = canDelete,
             canAssignToCollections = canAssociateToCollections,
@@ -6519,12 +6520,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         listOf(
             VaultAddEditState.Owner(
                 id = null,
-                name = "activeEmail",
+                name = BitwardenString.my_vault.asText(),
                 collections = emptyList(),
             ),
             VaultAddEditState.Owner(
                 id = "organizationId",
-                name = "organizationName",
+                name = "organizationName".asText(),
                 collections = if (hasCollection) {
                     listOf(
                         VaultCollection(
