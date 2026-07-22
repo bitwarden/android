@@ -43,7 +43,7 @@ sealed class VaultItemLocation : Parcelable {
         override val name: String,
     ) : VaultItemLocation() {
         override val icon: Int
-            get() = BitwardenDrawable.ic_shared_folder
+            get() = BitwardenDrawable.ic_collections
     }
 
     /**
