@@ -341,9 +341,9 @@ Scanning will happen automatically.</string>
     <string name="moved_item_to_org">%1$s moved to %2$s.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Share</string>
-    <string name="move_to_vault">Move to vault</string>
-    <string name="no_vaults_to_list">No vaults to list.</string>
-    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
+    <string name="move_to_organization">Move to Organization</string>
+    <string name="no_orgs_to_list">No organizations to list.</string>
+    <string name="move_to_org_desc">Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Number of words</string>
     <string name="passphrase">Passphrase</string>
     <string name="word_separator">Word separator</string>

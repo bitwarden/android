@@ -60,7 +60,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
             .onNodeWithText(text = "Shared folders")
             .assertIsNotDisplayed()
         composeTestRule
-            .onNodeWithText(text = "Move to vault")
+            .onNodeWithText(text = "Move to Organization")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -68,7 +68,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Move to vault")
+            .onNodeWithText(text = "Move to Organization")
             .assertIsNotDisplayed()
         composeTestRule
             .onNodeWithText(text = "Shared folders")
@@ -104,7 +104,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
     fun `the organization option field should update according to state`() {
         composeTestRule
             .onNodeWithContentDescription(
-                label = "mockOrganizationName-1. Vault",
+                label = "mockOrganizationName-1. Organization",
                 substring = true,
             )
             .assertIsDisplayed()
@@ -114,14 +114,14 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription(label = "mockOrganizationName-1. Vault")
+            .onNodeWithContentDescription(label = "mockOrganizationName-1. Organization")
             .assertIsNotDisplayed()
     }
 
     @Test
     fun `the organization option field description should update according to state`() {
         composeTestRule
-            .onNodeWithText(text = "Choose a vault that", substring = true)
+            .onNodeWithText(text = "Choose an organization that", substring = true)
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -129,7 +129,8 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Choose a vault that", substring = true)
+        composeTestRule
+            .onNodeWithText(text = "Choose an organization that", substring = true)
             .assertIsNotDisplayed()
     }
 
@@ -168,7 +169,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
     @Test
     fun `selecting an organization should send OrganizationSelect action`() {
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-1. Vault")
+            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-1. Organization")
             .performClick()
         // Choose the option from the menu
         composeTestRule
@@ -200,7 +201,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
     @Test
     fun `the organization option field should display according to state`() {
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-1. Vault")
+            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-1. Organization")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -213,7 +214,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-2. Vault")
+            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-2. Organization")
             .assertIsDisplayed()
     }
 
