@@ -26,7 +26,7 @@ fun VaultMoveToOrganizationEmpty(modifier: Modifier = Modifier) {
     ) {
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = stringResource(id = BitwardenString.no_orgs_to_list),
+            text = stringResource(id = BitwardenString.no_vaults_to_list),
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.secondary,
             textAlign = TextAlign.Center,
