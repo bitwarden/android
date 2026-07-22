@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.datasource.disk.util
 import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.V2UpgradeTokenJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -71,6 +72,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         mutableMapOf<String, MutableSharedFlow<String?>>()
     private val mutablePersistentPinProtectedUserKeyEnvelopesFlowMap =
         mutableMapOf<String, MutableSharedFlow<String?>>()
+    private val storedV2UpgradeTokens = mutableMapOf<String, V2UpgradeTokenJson?>()
 
     override var userState: UserStateJson? = null
         set(value) {
@@ -97,6 +99,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedPersistentPinProtectedUserKeyEnvelopes.remove(userId)
         storedEncryptedPins.remove(userId)
         storedPinProtectedUserKeys.remove(userId)
+        storedV2UpgradeTokens.remove(userId)
 
         mutableShouldUseKeyConnectorFlowMap.remove(userId)
         mutableOrganizationsFlowMap.remove(userId)
@@ -158,6 +161,13 @@ class FakeAuthDiskSource : AuthDiskSource {
         accountCryptographicState: WrappedAccountCryptographicState?,
     ) {
         storedAccountCryptographicState[userId] = accountCryptographicState
+    }
+
+    override fun getV2UpgradeToken(userId: String): V2UpgradeTokenJson? =
+        storedV2UpgradeTokens[userId]
+
+    override fun storeV2UpgradeToken(userId: String, v2UpgradeToken: V2UpgradeTokenJson?) {
+        storedV2UpgradeTokens[userId] = v2UpgradeToken
     }
 
     override fun getTwoFactorToken(email: String): String? = storedTwoFactorTokens[email]
@@ -437,6 +447,13 @@ class FakeAuthDiskSource : AuthDiskSource {
         accountCryptographicState: WrappedAccountCryptographicState?,
     ) {
         assertEquals(accountCryptographicState, storedAccountCryptographicState[userId])
+    }
+
+    /**
+     * Assert that the [v2UpgradeToken] was stored successfully using the [userId].
+     */
+    fun assertV2UpgradeToken(userId: String, v2UpgradeToken: V2UpgradeTokenJson?) {
+        assertEquals(v2UpgradeToken, storedV2UpgradeTokens[userId])
     }
 
     /**
