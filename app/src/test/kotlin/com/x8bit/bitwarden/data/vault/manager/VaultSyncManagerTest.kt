@@ -24,6 +24,7 @@ import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.network.model.createMockProfile
 import com.bitwarden.network.model.createMockSend
 import com.bitwarden.network.model.createMockSyncResponse
+import com.bitwarden.network.model.createMockV2UpgradeToken
 import com.bitwarden.network.service.SyncService
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.DecryptCipherListResult
@@ -34,9 +35,9 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
-import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.createMockWrappedAccountCryptographicState
+import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
@@ -757,6 +758,10 @@ class VaultSyncManagerTest {
             fakeAuthDiskSource.assertAccountCryptographicState(
                 userId = userId,
                 accountCryptographicState = createMockWrappedAccountCryptographicState(number = 1),
+            )
+            fakeAuthDiskSource.assertV2UpgradeToken(
+                userId = userId,
+                v2UpgradeToken = createMockV2UpgradeToken(number = 1),
             )
             fakeAuthDiskSource.assertOrganizationKeys(
                 userId = userId,

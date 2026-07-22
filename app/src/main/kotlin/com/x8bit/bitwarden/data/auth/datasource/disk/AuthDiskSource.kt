@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.disk
 
 import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.V2UpgradeTokenJson
 import com.bitwarden.network.provider.AppIdProvider
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -384,4 +385,14 @@ interface AuthDiskSource : AppIdProvider {
      * Stores the last lock timestamp for the given [userId].
      */
     fun storeLastLockTimestamp(userId: String, lastLockTimestamp: Instant?)
+
+    /**
+     * Gets the v2 upgrade token for the given [userId].
+     */
+    fun getV2UpgradeToken(userId: String): V2UpgradeTokenJson?
+
+    /**
+     * Stores the v2 upgrade token for the given [userId].
+     */
+    fun storeV2UpgradeToken(userId: String, v2UpgradeToken: V2UpgradeTokenJson?)
 }
