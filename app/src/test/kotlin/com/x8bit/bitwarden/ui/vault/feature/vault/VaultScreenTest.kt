@@ -123,6 +123,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                     onNavigateToAddFolderCalled = true
                     onNavigateToAddFolderParentFolderName = folderName
                 },
+                onNavigateToEditFolderScreen = {},
                 onNavigateToAboutScreen = { onNavigateToAboutCalled = true },
                 onNavigateToAutofillScreen = { onNavigateToAutofillCalled = true },
                 onNavigateToPlan = { onNavigateToPlanCalled = true },

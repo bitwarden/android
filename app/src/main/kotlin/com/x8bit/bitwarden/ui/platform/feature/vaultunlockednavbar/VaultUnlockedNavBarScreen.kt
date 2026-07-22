@@ -68,6 +68,7 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToRecordedLogs: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
+    onNavigateToEditFolderScreen: (folderId: String) -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
     onNavigateToManageDevices: () -> Unit,
     onNavigateToPlan: () -> Unit,
@@ -109,6 +110,7 @@ fun VaultUnlockedNavBarScreen(
         onNavigateToSetupBrowserAutofill = onNavigateToSetupBrowserAutofill,
         onNavigateToImportLogins = onNavigateToImportLogins,
         onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
+        onNavigateToEditFolderScreen = onNavigateToEditFolderScreen,
         onNavigateToFlightRecorder = onNavigateToFlightRecorder,
         onNavigateToRecordedLogs = onNavigateToRecordedLogs,
         onNavigateToAboutPrivilegedApps = onNavigateToAboutPrivilegedApps,
@@ -149,6 +151,7 @@ private fun VaultUnlockedNavBarScaffold(
     onNavigateToRecordedLogs: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
+    onNavigateToEditFolderScreen: (folderId: String) -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
     onNavigateToManageDevices: () -> Unit,
     onNavigateToPlan: () -> Unit,
@@ -203,6 +206,7 @@ private fun VaultUnlockedNavBarScaffold(
                 onDimBottomNavBarRequest = { shouldDim -> shouldDimNavBar = shouldDim },
                 onNavigateToImportLogins = onNavigateToImportLogins,
                 onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
+                onNavigateToEditFolderScreen = onNavigateToEditFolderScreen,
                 onNavigateToAboutScreen = {
                     navController.navigateToSettingsGraphRoot()
                     navController.navigateToAbout(isPreAuth = false)

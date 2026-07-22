@@ -54,6 +54,7 @@ import com.x8bit.bitwarden.data.platform.util.userFriendlyMessage
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -325,6 +326,9 @@ class VaultViewModel @Inject constructor(
             is VaultAction.AddItemClick -> handleAddItemClick(action)
             is VaultAction.CardGroupClick -> handleCardClick()
             is VaultAction.FolderClick -> handleFolderItemClick(action)
+            is VaultAction.FolderEditClick -> handleFolderEditClick(action)
+            is VaultAction.FolderDeleteClick -> handleFolderDeleteClick(action)
+            VaultAction.ConfirmDeleteFolderClick -> handleConfirmDeleteFolderClick()
             is VaultAction.CollectionClick -> handleCollectionItemClick(action)
             is VaultAction.IdentityGroupClick -> handleIdentityClick()
             is VaultAction.VerificationCodesClick -> handleVerificationCodeClick()
@@ -587,6 +591,65 @@ class VaultViewModel @Inject constructor(
                 VaultItemListingType.Folder(action.folderItem.id),
             ),
         )
+    }
+
+    private fun handleFolderEditClick(action: VaultAction.FolderEditClick) {
+        val folderId = action.folderItem.id ?: return
+        sendEvent(VaultEvent.NavigateToEditFolder(folderId = folderId))
+    }
+
+    private fun handleFolderDeleteClick(action: VaultAction.FolderDeleteClick) {
+        val folderId = action.folderItem.id ?: return
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.DeleteFolderConfirmation(
+                    folderId = folderId,
+                    folderName = action.folderItem.name,
+                ),
+            )
+        }
+    }
+
+    private fun handleConfirmDeleteFolderClick() {
+        val dialog = state.dialog as? VaultState.DialogState.DeleteFolderConfirmation ?: return
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.Loading(
+                    message = BitwardenString.deleting.asText(),
+                ),
+            )
+        }
+        viewModelScope.launch {
+            sendAction(
+                VaultAction.Internal.DeleteFolderResultReceive(
+                    result = vaultRepository.deleteFolder(folderId = dialog.folderId),
+                ),
+            )
+        }
+    }
+
+    private fun handleDeleteFolderResultReceive(
+        action: VaultAction.Internal.DeleteFolderResultReceive,
+    ) {
+        when (val result = action.result) {
+            is DeleteFolderResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VaultState.DialogState.Error(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = result.errorMessage?.asText()
+                                ?: BitwardenString.generic_error_message.asText(),
+                            error = result.error,
+                        ),
+                    )
+                }
+            }
+
+            DeleteFolderResult.Success -> {
+                mutableStateFlow.update { it.copy(dialog = null) }
+                sendEvent(VaultEvent.ShowSnackbar(BitwardenString.folder_deleted.asText()))
+            }
+        }
     }
 
     private fun handleCollectionItemClick(action: VaultAction.CollectionClick) {
@@ -1141,6 +1204,7 @@ class VaultViewModel @Inject constructor(
 
             is VaultAction.Internal.ArchiveCipherReceive -> handleArchiveCipherReceive(action)
             is VaultAction.Internal.UnarchiveCipherReceive -> handleUnarchiveCipherReceive(action)
+            is VaultAction.Internal.DeleteFolderResultReceive -> handleDeleteFolderResultReceive(action)
             is VaultAction.Internal.IntroducingArchiveActionCardDismissedFlowReceive -> {
                 handleIntroducingArchiveActionCardDismissedFlowReceive(action)
             }
@@ -2240,6 +2304,15 @@ data class VaultState(
         data object ArchiveRequiresPremium : DialogState()
 
         /**
+         * Represents a dialog prompting the user to confirm deleting a folder.
+         */
+        @Parcelize
+        data class DeleteFolderConfirmation(
+            val folderId: String,
+            val folderName: Text,
+        ) : DialogState()
+
+        /**
          * Displays a dialog with a loading indicator.
          */
         @Parcelize
@@ -2409,6 +2482,13 @@ sealed class VaultEvent {
     data object NavigateToAddFolder : VaultEvent()
 
     /**
+     * Navigate to the edit folder screen.
+     */
+    data class NavigateToEditFolder(
+        val folderId: String,
+    ) : VaultEvent()
+
+    /**
      * Navigate to settings.
      */
     data object NavigateToAbout : VaultEvent()
@@ -2512,6 +2592,25 @@ sealed class VaultAction {
     data class FolderClick(
         val folderItem: VaultState.ViewState.FolderItem,
     ) : VaultAction()
+
+    /**
+     * Action to trigger when editing a folder from the overflow menu.
+     */
+    data class FolderEditClick(
+        val folderItem: VaultState.ViewState.FolderItem,
+    ) : VaultAction()
+
+    /**
+     * Action to trigger when deleting a folder from the overflow menu.
+     */
+    data class FolderDeleteClick(
+        val folderItem: VaultState.ViewState.FolderItem,
+    ) : VaultAction()
+
+    /**
+     * Action to confirm deleting the folder shown in the confirmation dialog.
+     */
+    data object ConfirmDeleteFolderClick : VaultAction()
 
     /**
      * Action to trigger when a specific collection item is clicked.
@@ -2782,6 +2881,13 @@ sealed class VaultAction {
          */
         data class ArchiveCipherReceive(
             val result: ArchiveCipherResult,
+        ) : Internal()
+
+        /**
+         * Indicates that the delete folder result has been received.
+         */
+        data class DeleteFolderResultReceive(
+            val result: DeleteFolderResult,
         ) : Internal()
 
         /**

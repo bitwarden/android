@@ -26,8 +26,10 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
+import com.x8bit.bitwarden.ui.platform.components.listitem.SelectionItemData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
+import kotlinx.collections.immutable.persistentListOf
 
 private const val TOTP_TYPES_COUNT: Int = 1
 private const val HIDDEN_TYPES_COUNT: Int = 2
@@ -396,6 +398,20 @@ fun VaultContent(
                     label = folder.name(),
                     supportingLabel = folder.itemCount.toString(),
                     onClick = { vaultHandlers.folderClick(folder) },
+                    selectionDataList = folder.id
+                        ?.let {
+                            persistentListOf(
+                                SelectionItemData(
+                                    text = stringResource(id = BitwardenString.edit),
+                                    onClick = { vaultHandlers.folderEditClick(folder) },
+                                ),
+                                SelectionItemData(
+                                    text = stringResource(id = BitwardenString.delete),
+                                    onClick = { vaultHandlers.folderDeleteClick(folder) },
+                                ),
+                            )
+                        }
+                        ?: persistentListOf(),
                     cardStyle = state
                         .folderItems
                         .toListItemCardStyle(index = index, dividerPadding = 56.dp),
