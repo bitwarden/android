@@ -4,6 +4,7 @@ import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Context
 import android.provider.Settings
 import android.view.accessibility.AccessibilityManager
+import androidx.core.content.getSystemService
 import com.x8bit.bitwarden.LEGACY_ACCESSIBILITY_SERVICE_NAME
 import com.x8bit.bitwarden.LEGACY_SHORT_ACCESSIBILITY_SERVICE_NAME
 import com.x8bit.bitwarden.data.autofill.accessibility.BitwardenAccessibilityService
@@ -21,16 +22,15 @@ val Context.isAccessibilityServiceEnabled: Boolean
         val appContext = this.applicationContext
 
         // Primary check: AccessibilityManager API (Android 16+ compatible).
-        val accessibilityManager =
-            appContext.getSystemService(Context.ACCESSIBILITY_SERVICE) as? AccessibilityManager
-        val enabledServices = accessibilityManager?.getEnabledAccessibilityServiceList(
-            AccessibilityServiceInfo.FEEDBACK_ALL_MASK,
-        )
-        val isEnabledViaManager = enabledServices?.any { service ->
-            val serviceInfo = service.resolveInfo?.serviceInfo
-            serviceInfo?.packageName == appContext.packageName &&
-                serviceInfo.name == BitwardenAccessibilityService::class.java.name
-        } ?: false
+        val isEnabledViaManager = appContext
+            .getSystemService<AccessibilityManager>()
+            ?.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
+            ?.any { service ->
+                val serviceInfo = service.resolveInfo?.serviceInfo
+                serviceInfo?.packageName == appContext.packageName &&
+                    serviceInfo.name == BitwardenAccessibilityService::class.java.name
+            }
+            ?: false
 
         if (isEnabledViaManager) return true
 
