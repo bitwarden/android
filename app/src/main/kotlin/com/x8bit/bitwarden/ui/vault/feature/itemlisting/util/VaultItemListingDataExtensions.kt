@@ -225,7 +225,7 @@ fun VaultData.toViewState(
                     }
 
                     is VaultItemListingState.ItemListingType.Vault.Collection -> {
-                        BitwardenString.there_are_no_items_in_this_shared_folder
+                        BitwardenString.no_items_collection
                     }
 
                     VaultItemListingState.ItemListingType.Vault.Trash -> {

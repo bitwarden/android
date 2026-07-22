@@ -382,7 +382,7 @@ fun VaultAddEditScreen(
                                 )
                                     .takeUnless { !state.shouldShowMoveToOrganization },
                                 OverflowMenuItemData(
-                                    text = stringResource(id = BitwardenString.shared_folders),
+                                    text = stringResource(id = BitwardenString.collections),
                                     onClick = {
                                         viewModel.trySendAction(
                                             VaultAddEditAction.Common.CollectionsClick,
@@ -805,31 +805,38 @@ private fun OwnerSelectionBottomSheet(
     modifier: Modifier = Modifier,
 ) {
 
-    var selectedOwner by rememberSaveable {
-        mutableStateOf(state.selectedOwner)
+    var selectedOptionState by rememberSaveable {
+        mutableStateOf(state.selectedOwner?.name.orEmpty())
     }
     BitwardenModalBottomSheet(
-        sheetTitle = stringResource(BitwardenString.select_vault),
+        sheetTitle = stringResource(BitwardenString.owner),
         onDismiss = handlers.onDismissBottomSheet,
         topBarActions = { animatedOnDismiss ->
             BitwardenTextButton(
                 label = stringResource(BitwardenString.save),
                 onClick = {
                     handlers.onDismissBottomSheet()
-                    selectedOwner?.let { handlers.onOwnerSelected(it.id) }
+                    state
+                        .availableOwners
+                        .firstOrNull {
+                            it.name == selectedOptionState
+                        }
+                        ?.run {
+                            handlers.onOwnerSelected(this.id)
+                        }
                     animatedOnDismiss()
                 },
-                isEnabled = selectedOwner != null,
+                isEnabled = selectedOptionState.isNotBlank(),
             )
         },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         modifier = modifier.statusBarsPadding(),
     ) {
         OwnerSelectionBottomSheetContent(
-            options = state.availableOwners,
-            selectedOwner = selectedOwner,
+            options = state.availableOwners.map { it.name }.toImmutableList(),
+            selectedOption = selectedOptionState,
             onOptionSelected = {
-                selectedOwner = it
+                selectedOptionState = it
             },
         )
     }
@@ -837,9 +844,9 @@ private fun OwnerSelectionBottomSheet(
 
 @Composable
 private fun OwnerSelectionBottomSheetContent(
-    options: ImmutableList<VaultAddEditState.Owner>,
-    selectedOwner: VaultAddEditState.Owner?,
-    onOptionSelected: (VaultAddEditState.Owner) -> Unit,
+    options: ImmutableList<String>,
+    selectedOption: String,
+    onOptionSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -863,7 +870,7 @@ private fun OwnerSelectionBottomSheetContent(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = option.name(),
+                    text = option,
                     color = BitwardenTheme.colorScheme.text.primary,
                     style = BitwardenTheme.typography.bodyLarge,
                     modifier = Modifier
@@ -871,7 +878,7 @@ private fun OwnerSelectionBottomSheetContent(
                         .padding(horizontal = 16.dp),
                 )
                 BitwardenRadioButton(
-                    isSelected = selectedOwner == option,
+                    isSelected = selectedOption == option,
                     onClick = {
                         onOptionSelected(option)
                     },

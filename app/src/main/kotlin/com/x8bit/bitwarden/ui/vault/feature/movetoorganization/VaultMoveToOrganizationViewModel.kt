@@ -127,7 +127,7 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
                     mutableStateFlow.update {
                         it.copy(
                             dialogState = VaultMoveToOrganizationState.DialogState.Error(
-                                message = BitwardenString.you_must_select_at_least_one_shared_folder.asText(),
+                                message = BitwardenString.select_one_collection.asText(),
                             ),
                         )
                     }
@@ -349,7 +349,7 @@ data class VaultMoveToOrganizationState(
 
     val appBarText: Text
         get() = if (onlyShowCollections) {
-            BitwardenString.shared_folders.asText()
+            BitwardenString.collections.asText()
         } else {
             BitwardenString.move_to_vault.asText()
         }

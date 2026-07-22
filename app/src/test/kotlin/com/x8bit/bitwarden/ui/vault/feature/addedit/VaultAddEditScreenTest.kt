@@ -46,7 +46,6 @@ import com.bitwarden.core.data.util.advanceTimeByAndRunCurrent
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.manager.exit.ExitManager
-import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.assertScrollableNodeDoesNotExist
@@ -81,9 +80,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
@@ -3358,7 +3354,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         // Opens the menu
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "My vault. Vault",
+                label = "placeholder@email.com. Owner",
             )
             .performClick()
 
@@ -3376,7 +3372,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Select vault")
+            .onNodeWithText("Owner")
             .assertIsDisplayed()
     }
 
@@ -3387,7 +3383,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Select vault")
+            .onNodeWithText("Owner")
             .assertIsDisplayed()
 
         composeTestRule
@@ -3413,11 +3409,10 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                     availableOwners = listOf(
                         VaultAddEditState.Owner(
                             id = ownerId,
-                            name = ownerName.asText(),
+                            name = ownerName,
                             collections = DEFAULT_COLLECTIONS,
                         ),
-                    )
-                        .toImmutableList(),
+                    ),
                 )
             }
                 .copy(bottomSheetState = VaultAddEditState.BottomSheetState.OwnerSelection)
@@ -3443,7 +3438,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         updateStateWithOwners()
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "My vault. Vault",
+                label = "placeholder@email.com. Owner",
             )
             .assertIsDisplayed()
 
@@ -3452,7 +3447,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "mockOwnerName-2. Vault")
+            .onNodeWithContentDescriptionAfterScroll(label = "mockOwnerName-2. Owner")
             .assertIsDisplayed()
     }
 
@@ -3491,11 +3486,10 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             availableOwners = listOf(
                 VaultAddEditState.Owner(
                     id = null,
-                    name = BitwardenString.my_vault.asText(),
+                    name = "placeholder@email.com",
                     collections = DEFAULT_COLLECTIONS,
                 ),
-            )
-                .toImmutableList(),
+            ),
             hasOrganizations = false,
         )
 
@@ -3882,7 +3876,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "My vault. Vault",
+                label = "placeholder@email.com. Owner",
             )
             .assertIsDisplayed()
 
@@ -3892,7 +3886,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "mockOwnerName-2. Vault",
+                label = "mockOwnerName-2. Owner",
             )
             .assertIsDisplayed()
     }
@@ -4417,7 +4411,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Shared folders")
+            .onAllNodesWithText("Collections")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsDisplayed()
 
@@ -4448,7 +4442,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
         // Confirm overflow is closed on initial load
         composeTestRule
-            .onAllNodesWithText("Shared folders")
+            .onAllNodesWithText("Collections")
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
 
@@ -4459,7 +4453,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         // Confirm Collections option is present
         composeTestRule
-            .onAllNodesWithText("Shared folders")
+            .onAllNodesWithText("Collections")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsDisplayed()
 
@@ -4478,7 +4472,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onAllNodesWithText("Shared folders")
+            .onAllNodesWithText("Collections")
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
     }
@@ -4515,7 +4509,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Shared folders")
+            .onAllNodesWithText("Collections")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertDoesNotExist()
 
@@ -5136,7 +5130,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
     private fun updateStateWithOwners(
         selectedOwnerId: String? = null,
-        availableOwners: ImmutableList<VaultAddEditState.Owner> = DEFAULT_OWNERS,
+        availableOwners: List<VaultAddEditState.Owner> = DEFAULT_OWNERS,
         hasOrganizations: Boolean = true,
     ) {
         mutableStateFlow.update { currentState ->
@@ -5567,20 +5561,20 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             ),
         )
 
-        private val ALTERED_OWNERS = persistentListOf(
+        private val ALTERED_OWNERS = listOf(
             VaultAddEditState.Owner(
                 id = null,
-                name = BitwardenString.my_vault.asText(),
+                name = "placeholder@email.com",
                 collections = emptyList(),
             ),
             VaultAddEditState.Owner(
                 id = "mockOwnerId-1",
-                name = "mockOwnerName-1".asText(),
+                name = "mockOwnerName-1",
                 collections = emptyList(),
             ),
             VaultAddEditState.Owner(
                 id = "mockOwnerId-2",
-                name = "mockOwnerName-2".asText(),
+                name = "mockOwnerName-2",
                 collections = ALTERED_COLLECTIONS,
             ),
         )
@@ -5594,20 +5588,20 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             ),
         )
 
-        private val DEFAULT_OWNERS = persistentListOf(
+        private val DEFAULT_OWNERS = listOf(
             VaultAddEditState.Owner(
                 id = null,
-                name = BitwardenString.my_vault.asText(),
+                name = "placeholder@email.com",
                 collections = emptyList(),
             ),
             VaultAddEditState.Owner(
                 id = "mockOwnerId-1",
-                name = "mockOwnerName-1".asText(),
+                name = "mockOwnerName-1",
                 collections = emptyList(),
             ),
             VaultAddEditState.Owner(
                 id = "mockOwnerId-2",
-                name = "mockOwnerName-2".asText(),
+                name = "mockOwnerName-2",
                 collections = DEFAULT_COLLECTIONS,
             ),
         )

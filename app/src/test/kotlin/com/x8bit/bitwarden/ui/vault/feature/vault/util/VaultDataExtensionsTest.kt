@@ -1642,8 +1642,8 @@ private fun createMockSshKeyVaultItem(number: Int): VaultState.ViewState.VaultIt
         startIconTestTag = "SshKeyCipherIcon",
         extraIconList = persistentListOf(
             IconData.Local(
-                iconRes = BitwardenDrawable.ic_shared_folder,
-                contentDescription = BitwardenString.shared_folders.asText(),
+                iconRes = BitwardenDrawable.ic_collections,
+                contentDescription = BitwardenString.collections.asText(),
                 testTag = "CipherInCollectionIcon",
             ),
             IconData.Local(
@@ -1679,8 +1679,8 @@ private fun createMockBankAccountVaultItem(
         startIconTestTag = "BankAccountCipherIcon",
         extraIconList = persistentListOf(
             IconData.Local(
-                iconRes = BitwardenDrawable.ic_shared_folder,
-                contentDescription = BitwardenString.shared_folders.asText(),
+                iconRes = BitwardenDrawable.ic_collections,
+                contentDescription = BitwardenString.collections.asText(),
                 testTag = "CipherInCollectionIcon",
             ),
             IconData.Local(
@@ -1716,8 +1716,8 @@ private fun createMockLicenseVaultItem(
         startIconTestTag = "LicenseCipherIcon",
         extraIconList = persistentListOf(
             IconData.Local(
-                iconRes = BitwardenDrawable.ic_shared_folder,
-                contentDescription = BitwardenString.shared_folders.asText(),
+                iconRes = BitwardenDrawable.ic_collections,
+                contentDescription = BitwardenString.collections.asText(),
                 testTag = "CipherInCollectionIcon",
             ),
             IconData.Local(
@@ -1753,8 +1753,8 @@ private fun createMockPassportVaultItem(
         startIconTestTag = "PassportCipherIcon",
         extraIconList = persistentListOf(
             IconData.Local(
-                iconRes = BitwardenDrawable.ic_shared_folder,
-                contentDescription = BitwardenString.shared_folders.asText(),
+                iconRes = BitwardenDrawable.ic_collections,
+                contentDescription = BitwardenString.collections.asText(),
                 testTag = "CipherInCollectionIcon",
             ),
             IconData.Local(
