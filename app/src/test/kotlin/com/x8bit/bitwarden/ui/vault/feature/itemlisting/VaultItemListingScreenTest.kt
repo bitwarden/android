@@ -902,7 +902,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `Collections text should be displayed according to state`() {
-        val collectionName = "Shared folders"
+        val collectionName = "Collections"
         mutableStateFlow.update { DEFAULT_STATE }
         composeTestRule
             .onNodeWithText(text = collectionName)
@@ -932,7 +932,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     fun `Collection text count should be displayed according to state`() {
         mutableStateFlow.update { DEFAULT_STATE }
         composeTestRule
-            .onNodeWithText(text = "SHARED FOLDERS (3)")
+            .onNodeWithText(text = "COLLECTIONS (3)")
             .assertDoesNotExist()
 
         mutableStateFlow.update {
@@ -961,7 +961,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "SHARED FOLDERS (3)")
+            .onNodeWithTextAfterScroll(text = "COLLECTIONS (3)")
             .assertIsDisplayed()
 
         mutableStateFlow.update {
@@ -981,7 +981,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "SHARED FOLDERS (1)")
+            .onNodeWithTextAfterScroll(text = "COLLECTIONS (1)")
             .assertIsDisplayed()
     }
 

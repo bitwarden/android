@@ -43,8 +43,8 @@ fun createMockDisplayItemForCipher(
                 iconData = iconData,
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = BitwardenDrawable.ic_shared_folder,
-                        contentDescription = BitwardenString.shared_folders.asText(),
+                        iconRes = BitwardenDrawable.ic_collections,
+                        contentDescription = BitwardenString.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
@@ -101,8 +101,8 @@ fun createMockDisplayItemForCipher(
                 iconData = IconData.Local(BitwardenDrawable.ic_note),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = BitwardenDrawable.ic_shared_folder,
-                        contentDescription = BitwardenString.shared_folders.asText(),
+                        iconRes = BitwardenDrawable.ic_collections,
+                        contentDescription = BitwardenString.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
@@ -149,8 +149,8 @@ fun createMockDisplayItemForCipher(
                 iconData = IconData.Local(BitwardenDrawable.ic_payment_card),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = BitwardenDrawable.ic_shared_folder,
-                        contentDescription = BitwardenString.shared_folders.asText(),
+                        iconRes = BitwardenDrawable.ic_collections,
+                        contentDescription = BitwardenString.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
@@ -201,8 +201,8 @@ fun createMockDisplayItemForCipher(
                 iconData = IconData.Local(BitwardenDrawable.ic_id_card),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = BitwardenDrawable.ic_shared_folder,
-                        contentDescription = BitwardenString.shared_folders.asText(),
+                        iconRes = BitwardenDrawable.ic_collections,
+                        contentDescription = BitwardenString.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
@@ -245,8 +245,8 @@ fun createMockDisplayItemForCipher(
                 iconData = IconData.Local(BitwardenDrawable.ic_ssh_key),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = BitwardenDrawable.ic_shared_folder,
-                        contentDescription = BitwardenString.shared_folders.asText(),
+                        iconRes = BitwardenDrawable.ic_collections,
+                        contentDescription = BitwardenString.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
@@ -289,8 +289,8 @@ fun createMockDisplayItemForCipher(
                 iconData = IconData.Local(BitwardenDrawable.ic_payment_card),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = BitwardenDrawable.ic_shared_folder,
-                        contentDescription = BitwardenString.shared_folders.asText(),
+                        iconRes = BitwardenDrawable.ic_collections,
+                        contentDescription = BitwardenString.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
@@ -333,8 +333,8 @@ fun createMockDisplayItemForCipher(
                 iconData = IconData.Local(BitwardenDrawable.ic_note),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = BitwardenDrawable.ic_shared_folder,
-                        contentDescription = BitwardenString.shared_folders.asText(),
+                        iconRes = BitwardenDrawable.ic_collections,
+                        contentDescription = BitwardenString.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
@@ -377,8 +377,8 @@ fun createMockDisplayItemForCipher(
                 iconData = IconData.Local(BitwardenDrawable.ic_note),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = BitwardenDrawable.ic_shared_folder,
-                        contentDescription = BitwardenString.shared_folders.asText(),
+                        iconRes = BitwardenDrawable.ic_collections,
+                        contentDescription = BitwardenString.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
@@ -535,8 +535,8 @@ fun createMockDisplayItemForDecryptionError(
     iconTestTag = "LoginCipherIcon",
     extraIconList = persistentListOf(
         IconData.Local(
-            iconRes = BitwardenDrawable.ic_shared_folder,
-            contentDescription = BitwardenString.shared_folders.asText(),
+            iconRes = BitwardenDrawable.ic_collections,
+            contentDescription = BitwardenString.collections.asText(),
             testTag = "CipherInCollectionIcon",
         ),
     ),

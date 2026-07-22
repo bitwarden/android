@@ -57,7 +57,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Shared folders")
+            .onNodeWithText(text = "Collections")
             .assertIsNotDisplayed()
         composeTestRule
             .onNodeWithText(text = "Move to Organization")
@@ -71,7 +71,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
             .onNodeWithText(text = "Move to Organization")
             .assertIsNotDisplayed()
         composeTestRule
-            .onNodeWithText(text = "Shared folders")
+            .onNodeWithText(text = "Collections")
             .assertIsDisplayed()
     }
 

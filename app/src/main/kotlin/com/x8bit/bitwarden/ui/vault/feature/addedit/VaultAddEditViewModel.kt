@@ -515,7 +515,7 @@ class VaultAddEditViewModel @Inject constructor(
             content.common.selectedOwner?.collections?.all { !it.isSelected } == true
         ) {
             showGenericErrorDialog(
-                message = BitwardenString.you_must_select_at_least_one_shared_folder.asText(),
+                message = BitwardenString.select_one_collection.asText(),
             )
             true
         } else if (

@@ -214,7 +214,7 @@ fun VaultItemScreen(
                                         !state.hasOrganizations
                                 },
                             OverflowMenuItemData(
-                                text = stringResource(id = BitwardenString.shared_folders),
+                                text = stringResource(id = BitwardenString.collections),
                                 onClick = {
                                     viewModel.trySendAction(VaultItemAction.Common.CollectionsClick)
                                 },
