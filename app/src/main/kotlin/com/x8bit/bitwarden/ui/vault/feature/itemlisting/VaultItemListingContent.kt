@@ -134,7 +134,7 @@ fun VaultItemListingContent(
             item(key = "collections_header") {
                 Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = BitwardenString.shared_folders),
+                    label = stringResource(id = BitwardenString.collections),
                     supportingLabel = state.displayCollectionList.count().toString(),
                     modifier = Modifier
                         .animateItem()
@@ -150,7 +150,7 @@ fun VaultItemListingContent(
                 key = { _, collection -> "collection_${collection.id}" },
             ) { index, collection ->
                 BitwardenGroupItem(
-                    startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_shared_folder),
+                    startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_collections),
                     label = collection.name,
                     supportingLabel = collection.count.toString(),
                     onClick = { vaultItemListingHandlers.collectionClick(collection.id) },

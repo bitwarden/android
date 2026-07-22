@@ -33,7 +33,7 @@ fun LazyListScope.collectionItemsSelector(
     if (isCollectionsTitleVisible) {
         item {
             BitwardenListHeaderText(
-                label = stringResource(id = BitwardenString.shared_folders),
+                label = stringResource(id = BitwardenString.collections),
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
@@ -76,7 +76,7 @@ fun LazyListScope.collectionItemsSelector(
                     .standardHorizontalMargin(),
             ) {
                 Text(
-                    text = stringResource(id = BitwardenString.there_are_no_shared_folders_to_list),
+                    text = stringResource(id = BitwardenString.no_collections_to_list),
                     style = BitwardenTheme.typography.bodyMedium,
                     color = BitwardenTheme.colorScheme.text.primary,
                 )

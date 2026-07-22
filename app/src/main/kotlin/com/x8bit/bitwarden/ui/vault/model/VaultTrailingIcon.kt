@@ -15,8 +15,8 @@ enum class VaultTrailingIcon(
     val testTag: String,
 ) {
     COLLECTION(
-        iconRes = BitwardenDrawable.ic_shared_folder,
-        contentDescription = BitwardenString.shared_folders.asText(),
+        iconRes = BitwardenDrawable.ic_collections,
+        contentDescription = BitwardenString.collections.asText(),
         testTag = "CipherInCollectionIcon",
     ),
     ATTACHMENT(
