@@ -11,6 +11,7 @@ import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorUserDecryptionOptionsJson
 import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.bitwarden.network.model.UserDecryptionOptionsJson
+import com.bitwarden.network.model.V2UpgradeTokenJson
 import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.bitwarden.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
@@ -482,6 +483,46 @@ class AuthDiskSourceTest {
                 WrappedAccountCryptographicStateSerializer(),
                 mockAccountCryptographicState,
             ),
+            json.parseToJsonElement(requireNotNull(actual)),
+        )
+    }
+
+    @Test
+    fun `getV2UpgradeToken should pull from SharedPreferences`() {
+        val v2UpgradeTokenBaseKey = "bwPreferencesStorage:v2UpgradeToken"
+        val mockUserId = "mockUserId"
+        val mockV2UpgradeToken = V2UpgradeTokenJson(
+            wrappedUserKey1 = "wrappedUserKey1",
+            wrappedUserKey2 = "wrappedUserKey2",
+        )
+        fakeSharedPreferences.edit {
+            putString(
+                "${v2UpgradeTokenBaseKey}_$mockUserId",
+                json.encodeToString(mockV2UpgradeToken),
+            )
+        }
+        val actual = authDiskSource.getV2UpgradeToken(userId = mockUserId)
+        assertEquals(mockV2UpgradeToken, actual)
+    }
+
+    @Test
+    fun `storeV2UpgradeToken should update SharedPreferences`() {
+        val v2UpgradeTokenBaseKey = "bwPreferencesStorage:v2UpgradeToken"
+        val mockUserId = "mockUserId"
+        val mockV2UpgradeToken = V2UpgradeTokenJson(
+            wrappedUserKey1 = "wrappedUserKey1",
+            wrappedUserKey2 = "wrappedUserKey2",
+        )
+        authDiskSource.storeV2UpgradeToken(
+            userId = mockUserId,
+            v2UpgradeToken = mockV2UpgradeToken,
+        )
+        val actual = fakeSharedPreferences.getString(
+            "${v2UpgradeTokenBaseKey}_$mockUserId",
+            null,
+        )
+        assertEquals(
+            json.encodeToJsonElement(mockV2UpgradeToken),
             json.parseToJsonElement(requireNotNull(actual)),
         )
     }

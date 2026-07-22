@@ -8,6 +8,7 @@ import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.bitwarden.data.datasource.disk.BaseEncryptedDiskSource
 import com.bitwarden.network.model.AccountKeysJson
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.V2UpgradeTokenJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
@@ -58,6 +59,7 @@ private const val SHOW_IMPORT_LOGINS_KEY = "showImportLogins"
 private const val LAST_LOCK_TIMESTAMP = "lastLockTimestamp"
 private const val PROFILE_ACCOUNT_KEYS_KEY = "profileAccountKeys"
 private const val ACCOUNT_CRYPTOGRAPHIC_STATE_KEY = "accountCryptographicState"
+private const val V2_UPGRADE_TOKEN = "v2UpgradeToken"
 
 /**
  * Primary implementation of [AuthDiskSource].
@@ -571,6 +573,20 @@ class AuthDiskSourceImpl(
         putLong(
             key = LAST_LOCK_TIMESTAMP.appendIdentifier(userId),
             value = lastLockTimestamp?.toEpochMilli(),
+        )
+    }
+
+    override fun getV2UpgradeToken(
+        userId: String,
+    ): V2UpgradeTokenJson? =
+        getString(key = V2_UPGRADE_TOKEN.appendIdentifier(identifier = userId))?.let {
+            json.decodeFromStringOrNull<V2UpgradeTokenJson>(string = it)
+        }
+
+    override fun storeV2UpgradeToken(userId: String, v2UpgradeToken: V2UpgradeTokenJson?) {
+        putString(
+            key = V2_UPGRADE_TOKEN.appendIdentifier(identifier = userId),
+            value = json.encodeToString(value = v2UpgradeToken),
         )
     }
 

@@ -596,6 +596,10 @@ private const val SYNC_SUCCESS_JSON = """
       },
       "masterKeyWrappedUserKey": "mockMasterKeyWrappedUserKey-1",
       "salt": "mockSalt-1"
+    },
+    "v2UpgradeToken": {
+      "wrappedUserKey1": "mockWrappedUserKey1-1",
+      "wrappedUserKey2": "mockWrappedUserKey2-1",
     }
   }
 }

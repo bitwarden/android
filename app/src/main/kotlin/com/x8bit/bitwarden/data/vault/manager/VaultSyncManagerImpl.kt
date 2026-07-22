@@ -328,6 +328,10 @@ class VaultSyncManagerImpl(
                     authDiskSource.userState = authDiskSource.userState?.toUpdatedUserStateJson(
                         syncResponse = syncResponse,
                     )
+                    authDiskSource.storeV2UpgradeToken(
+                        userId = userId,
+                        v2UpgradeToken = syncResponse.userDecryption?.v2UpgradeToken,
+                    )
 
                     unlockVaultForOrganizationsIfNecessary(syncResponse = syncResponse)
                     storeProfileData(syncResponse = syncResponse)

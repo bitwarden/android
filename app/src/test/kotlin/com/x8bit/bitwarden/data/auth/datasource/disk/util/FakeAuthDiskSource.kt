@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.datasource.disk.util
 import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.V2UpgradeTokenJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -65,6 +66,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedLastLockTimestampState = mutableMapOf<String, Instant?>()
     private val storedAccountCryptographicState =
         mutableMapOf<String, WrappedAccountCryptographicState?>()
+    private val storedV2UpgradeTokens = mutableMapOf<String, V2UpgradeTokenJson?>()
     private val storedPinProtectedUserKeyEnvelopes = mutableMapOf<String, Pair<String?, Boolean>>()
     private val mutablePinProtectedUserKeyEnvelopesFlowMap =
         mutableMapOf<String, MutableSharedFlow<String?>>()
@@ -159,6 +161,13 @@ class FakeAuthDiskSource : AuthDiskSource {
         accountCryptographicState: WrappedAccountCryptographicState?,
     ) {
         storedAccountCryptographicState[userId] = accountCryptographicState
+    }
+
+    override fun getV2UpgradeToken(userId: String): V2UpgradeTokenJson? =
+        storedV2UpgradeTokens[userId]
+
+    override fun storeV2UpgradeToken(userId: String, v2UpgradeToken: V2UpgradeTokenJson?) {
+        storedV2UpgradeTokens[userId] = v2UpgradeToken
     }
 
     override fun getTwoFactorToken(email: String): String? = storedTwoFactorTokens[email]
@@ -418,6 +427,13 @@ class FakeAuthDiskSource : AuthDiskSource {
     }
 
     /**
+     * Assert that the [v2UpgradeToken] was stored successfully using the [userId].
+     */
+    fun assertV2UpgradeToken(userId: String, v2UpgradeToken: V2UpgradeTokenJson?) {
+        assertEquals(v2UpgradeToken, storedV2UpgradeTokens[userId])
+    }
+
+    /**
      * Assert that the [twoFactorToken] was stored successfully using the [email].
      */
     fun assertTwoFactorToken(email: String, twoFactorToken: String?) {
@@ -464,7 +480,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     }
 
     /**
-     * Assert the the [organizationKeys] was stored successfully using the [userId].
+     * Assert the [organizationKeys] was stored successfully using the [userId].
      */
     fun assertOrganizationKeys(userId: String, organizationKeys: Map<String, String>?) {
         assertEquals(organizationKeys, storedOrganizationKeys[userId])
