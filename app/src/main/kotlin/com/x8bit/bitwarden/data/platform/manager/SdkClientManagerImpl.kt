@@ -16,7 +16,7 @@ import kotlinx.coroutines.runBlocking
 /**
  * Primary implementation of [SdkClientManager].
  */
-class SdkClientManagerImpl(
+internal class SdkClientManagerImpl(
     nativeLibraryManager: NativeLibraryManager,
     dispatcherManager: DispatcherManager,
     sdkRepoFactory: SdkRepositoryFactory,
@@ -42,6 +42,9 @@ class SdkClientManagerImpl(
                 platform().state().registerClientManagedRepositories(
                     repositories = sdkRepoFactory.getRepositories(userId = userId),
                 )
+                userId?.let {
+                    kmStateBridge().registerBridgeImpl(sdkRepoFactory.getStateBridge(userId = it))
+                }
             }
     },
 ) : SdkClientManager {

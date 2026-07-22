@@ -54,6 +54,21 @@ class SdkRepositoryFactoryTests {
     )
 
     @Test
+    fun `getStateBridge should create a new bridge`() {
+        val userId = "userId"
+        val firstBridge = sdkRepoFactory.getStateBridge(userId = userId)
+
+        // Additional calls for the same userId should create a new bridge
+        val secondBridge = sdkRepoFactory.getStateBridge(userId = userId)
+        assertNotEquals(firstBridge, secondBridge)
+
+        // Additional calls for different userIds should return a different bridge
+        val otherUserId = "otherUserId"
+        val thirdBridge = sdkRepoFactory.getStateBridge(userId = otherUserId)
+        assertNotEquals(firstBridge, thirdBridge)
+    }
+
+    @Test
     fun `getRepositories should create a new client`() {
         val userId = "userId"
         val firstClient = sdkRepoFactory.getRepositories(userId = userId)
