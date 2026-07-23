@@ -9,13 +9,11 @@ import android.os.Build
 import androidx.core.os.persistableBundleOf
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.util.isBuildVersionAtLeast
 
 /**
  * A worker to clear the clipboard manager.
  */
-@OmitFromCoverage
 class ClearClipboardWorker(
     appContext: Context,
     workerParams: WorkerParameters,
@@ -38,9 +36,7 @@ class ClearClipboardWorker(
                     )
                 },
         )
-        if (isBuildVersionAtLeast(version = Build.VERSION_CODES.P)) {
-            clipboardManager.clearPrimaryClip()
-        }
+        clipboardManager.clearPrimaryClip()
         return Result.success()
     }
 }
