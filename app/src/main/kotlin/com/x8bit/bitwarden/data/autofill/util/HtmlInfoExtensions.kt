@@ -66,6 +66,108 @@ fun HtmlInfo?.isCardBrandField(): Boolean = isInputField &&
     hints().containsAnyTerms(SUPPORTED_RAW_CARD_BRAND_HINTS)
 
 /**
+ * Whether this [HtmlInfo] represents an email field.
+ */
+fun HtmlInfo?.isEmailField(): Boolean = isInputField &&
+    hints().containsAnyTerms(SUPPORTED_RAW_EMAIL_HINTS)
+
+/**
+ * Whether this [HtmlInfo] represents a full person name field.
+ */
+fun HtmlInfo?.isPersonNameFullField(): Boolean = isInputField &&
+    hints().containsAnyTerms(SUPPORTED_RAW_PERSON_NAME_FULL_HINTS)
+
+/**
+ * Whether this [HtmlInfo] represents a person name prefix field.
+ */
+fun HtmlInfo?.isPersonNamePrefixField(): Boolean = isInputField &&
+    hints().containsAnyTerms(SUPPORTED_RAW_PERSON_NAME_PREFIX_HINTS)
+
+/**
+ * Whether this [HtmlInfo] represents a given (first) name field.
+ */
+fun HtmlInfo?.isPersonNameGivenField(): Boolean = isInputField &&
+    hints().containsAnyTerms(SUPPORTED_RAW_PERSON_NAME_GIVEN_HINTS)
+
+/**
+ * Whether this [HtmlInfo] represents a middle name field.
+ */
+fun HtmlInfo?.isPersonNameMiddleField(): Boolean = isInputField &&
+    hints().containsAnyTerms(SUPPORTED_RAW_PERSON_NAME_MIDDLE_HINTS)
+
+/**
+ * Whether this [HtmlInfo] represents a family (last) name field.
+ */
+fun HtmlInfo?.isPersonNameFamilyField(): Boolean = isInputField &&
+    hints().containsAnyTerms(SUPPORTED_RAW_PERSON_NAME_FAMILY_HINTS)
+
+/**
+ * Whether this [HtmlInfo] represents a full postal address field.
+ */
+fun HtmlInfo?.isPostalAddressFullField(): Boolean = isInputField &&
+    hints().containsAnyTerms(SUPPORTED_RAW_POSTAL_ADDRESS_FULL_HINTS)
+
+/**
+ * Whether this [HtmlInfo] represents a street address field.
+ */
+fun HtmlInfo?.isAddressStreetField(): Boolean = isInputField &&
+    hints().containsAnyTerms(SUPPORTED_RAW_ADDRESS_STREET_HINTS)
+
+/**
+ * Whether this [HtmlInfo] represents a locality (city) field.
+ */
+fun HtmlInfo?.isAddressLocalityField(): Boolean = isInputField &&
+    hints().containsAnyTerms(SUPPORTED_RAW_ADDRESS_LOCALITY_HINTS)
+
+/**
+ * Whether this [HtmlInfo] represents a region (state/province) field.
+ */
+fun HtmlInfo?.isAddressRegionField(): Boolean = isInputField &&
+    hints().containsAnyTerms(SUPPORTED_RAW_ADDRESS_REGION_HINTS)
+
+/**
+ * Whether this [HtmlInfo] represents a country field.
+ */
+fun HtmlInfo?.isAddressCountryField(): Boolean = isInputField &&
+    hints().containsAnyTerms(SUPPORTED_RAW_ADDRESS_COUNTRY_HINTS)
+
+/**
+ * Whether this [HtmlInfo] represents a postal code field.
+ */
+fun HtmlInfo?.isPostalCodeField(): Boolean = isInputField &&
+    hints().containsAnyTerms(SUPPORTED_RAW_POSTAL_CODE_HINTS)
+
+/**
+ * Whether this [HtmlInfo] represents a phone number field.
+ */
+fun HtmlInfo?.isPhoneField(): Boolean = isInputField &&
+    hints().containsAnyTerms(SUPPORTED_RAW_PHONE_HINTS)
+
+/**
+ * Whether this [HtmlInfo] represents a company field.
+ */
+fun HtmlInfo?.isCompanyField(): Boolean = isInputField &&
+    hints().containsAnyTerms(SUPPORTED_RAW_COMPANY_HINTS)
+
+/**
+ * Whether this [HtmlInfo] represents a social security number field.
+ */
+fun HtmlInfo?.isSsnField(): Boolean = isInputField &&
+    hints().containsAnyTerms(SUPPORTED_RAW_SSN_HINTS)
+
+/**
+ * Whether this [HtmlInfo] represents a passport number field.
+ */
+fun HtmlInfo?.isPassportNumberField(): Boolean = isInputField &&
+    hints().containsAnyTerms(SUPPORTED_RAW_PASSPORT_HINTS)
+
+/**
+ * Whether this [HtmlInfo] represents a license number field.
+ */
+fun HtmlInfo?.isLicenseNumberField(): Boolean = isInputField &&
+    hints().containsAnyTerms(SUPPORTED_RAW_LICENSE_HINTS)
+
+/**
  * Attributes that can be used as hints to determine the type of data the associated node expects.
  *
  * This function is untestable as [HtmlInfo] contains [android.util.Pair] which requires
@@ -158,6 +260,11 @@ private fun List<String>.containsAnyTerms(terms: List<String>): Boolean =
 
 /**
  * The supported attribute keys whose value can represent an autofill hint.
+ *
+ * `autocomplete` is the standards-based signal both Chrome and Firefox populate directly with
+ * tokens like `given-name`/`street-address`/`tel` (see the WHATWG HTML spec) — more reliable than
+ * guessing from `name`/`id`/`label` text, and browser-agnostic since it isn't tied to any single
+ * browser's naming conventions.
  */
 private val SUPPORTED_HTML_ATTRIBUTE_HINTS: List<String> = listOf(
     "name",
@@ -165,4 +272,5 @@ private val SUPPORTED_HTML_ATTRIBUTE_HINTS: List<String> = listOf(
     "type",
     "hint",
     "autofill",
+    "autocomplete",
 )

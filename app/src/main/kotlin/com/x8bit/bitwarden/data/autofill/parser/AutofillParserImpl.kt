@@ -16,6 +16,8 @@ import com.x8bit.bitwarden.data.autofill.util.buildPackageNameOrNull
 import com.x8bit.bitwarden.data.autofill.util.buildUriOrNull
 import com.x8bit.bitwarden.data.autofill.util.getInlinePresentationSpecs
 import com.x8bit.bitwarden.data.autofill.util.getMaxInlineSuggestionsCount
+import com.x8bit.bitwarden.data.autofill.util.isEmailField
+import com.x8bit.bitwarden.data.autofill.util.isPhoneField
 import com.x8bit.bitwarden.data.autofill.util.toAutofillView
 import com.x8bit.bitwarden.data.autofill.util.website
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
@@ -187,8 +189,7 @@ class AutofillParserImpl(
             }
 
             is AutofillView.Identity -> {
-                // Identity partition construction is wired up in a later phase; treating it as
-                // unfillable for now is a no-op since nothing yet classifies a view as Identity.
+                // Identity partition construction lands in Phase D. Unfillable until then.
                 return AutofillRequest.Unfillable
             }
 
@@ -389,6 +390,7 @@ private fun ViewNodeTraversalData.copyAndMapAutofillViews(
  * Recursively traverse this [AssistStructure.ViewNode] and all of its descendants. Convert the
  * data into [ViewNodeTraversalData].
  */
+@Suppress("CyclomaticComplexMethod")
 private fun AssistStructure.ViewNode.traverse(
     parentWebsite: String?,
 ): ViewNodeTraversalData {
@@ -416,6 +418,21 @@ private fun AssistStructure.ViewNode.traverse(
                 claimedAutofillIds.add(view.data.autofillId)
             }
             mutableAutofillViewList.add(view)
+
+            // An email-hinted or email-heuristic field is offered as both a Login candidate
+            // (above) and an Identity candidate, since the two partitions aren't mutually
+            // exclusive for this field. Reuses the same (container-redirect-corrected) data as
+            // the primary view rather than re-deriving it.
+            if (view is AutofillView.Login.Username && this.isEmailField) {
+                mutableAutofillViewList.add(AutofillView.Identity.Email(data = view.data))
+            }
+
+            // Some phone hints (e.g. "mobilephone") also match the username heuristic's "phone"
+            // term and resolve to Login.Username above, so they need the same dual-classification
+            // as email.
+            if (view is AutofillView.Login.Username && this.isPhoneField) {
+                mutableAutofillViewList.add(AutofillView.Identity.PhoneFull(data = view.data))
+            }
         }
         ?: autofillId?.run(mutableIgnoreAutofillIdList::add)
 
