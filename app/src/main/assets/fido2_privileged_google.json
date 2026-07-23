@@ -355,6 +355,18 @@
     {
       "type": "android",
       "info": {
+        "package_name": "com.tencent.mtt",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "D8:A4:DB:56:B7:EB:C3:9F:E5:F3:00:42:15:F0:E0:DE:CB:43:B9:CF:CB:E9:B2:D9:48:38:3F:ED:D4:34:E7:D9"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
         "package_name": "com.vivaldi.browser",
         "signatures": [
           {
