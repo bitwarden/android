@@ -1293,13 +1293,13 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="upgrade_pending">Trwa ulepszanie</string>
     <string name="upgrade_pending_message">Ulepszenie jest przetwarzane. Do czasu jego zakończenia będziesz korzystać z darmowego planu. Zsynchronizuj, aby sprawdzić status lub kontynuuj. Aktualizacja nastąpi automatycznie.</string>
     <string name="unlock_premium_features">Odblokuj więcej zaawansowanych funkcji za pomocą planu Premium.</string>
-    <string name="per_month">/ miesiąc</string>
+    <string name="per_month_cancel_anytime">/ month · Cancel anytime</string>
+    <string name="per_month_cancel_anytime_content_description">%1$s per month, cancel anytime</string>
     <string name="built_in_authenticator">Wbudowana aplikacja uwierzytelniająca</string>
     <string name="emergency_access">Dostęp awaryjny</string>
     <string name="secure_file_storage">Bezpieczne przechowywanie plików</string>
     <string name="breach_monitoring">Monitorowanie naruszeń</string>
-    <string name="upgrade_now">Ulepsz teraz</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">Zostaniesz przekierowany do płatności Stripe, aby zakończyć zakup.</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">You’ll complete the purchase with Stripe secure checkout.</string>
     <string name="opening_checkout">Otwieranie zamówienia…</string>
     <string name="secure_checkout_didnt_load">Nie udało się załadować płatności</string>
     <string name="trouble_opening_payment_page">Mieliśmy problem z otwarciem płatności. Spróbuj ponownie.</string>
@@ -1422,4 +1422,13 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Żądanie zostało przerwane, ponieważ aplikacja wymaga dostępu do sieci lokalnej. Możesz włączyć tę opcję w ustawieniach urządzenia.</string>
     <string name="continue_to_stripe">Kontynuować przejście do Stripe?</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Zostaniesz przekierowany do płatności Stripe, aby anulować subskrypcję.</string>
+    <string name="unlock_advanced_protection">Unlock advanced protection</string>
+    <string name="breeze_through_2fa_with_built_in_codes">Breeze through 2FA with built-in codes</string>
+    <string name="run_reports_to_find_risky_passwords">Run reports to find risky passwords</string>
+    <string name="add_a_trusted_emergency_contact">Add a trusted emergency contact</string>
+    <string name="identify_unsecure_websites">Identify unsecure websites</string>
+    <string name="flag_accounts_with_inactive_2fa">Flag accounts with inactive 2FA</string>
+    <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
+    <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
+    <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
 </resources>

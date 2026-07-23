@@ -44,6 +44,16 @@ private val ID_SHORTHAND_REGEX = Regex("""#([^.\[#\s]+)""")
 // Extracts the leading tag name from a selector (e.g. "input", "select", "form").
 private val TAG_REGEX = Regex("""^([a-zA-Z][a-zA-Z0-9]*)""")
 
+// Matches a CSS class qualifier (e.g. ".hidden" in "input.hidden") outside any [...] attribute
+// brackets, so a literal "." inside an attribute value (e.g. [title='Enter your email.']) isn't
+// mistaken for one.
+private val CLASS_QUALIFIER_REGEX = Regex("""\.[a-zA-Z][\w-]*(?![^\[]*])""")
+
+// Splits on whitespace that is outside [...] attribute brackets, so that descendant selectors
+// like "div#container input#field" are split correctly while attribute values containing spaces
+// (e.g. [placeholder='Email address']) are preserved intact.
+private val DESCENDANT_SEPARATOR_REGEX = Regex("""\s+(?![^\[]*])""")
+
 /**
  * Primary implementation of [FillAssistManager].
  */
@@ -213,14 +223,14 @@ private fun parseCompositeSelectorArray(element: JsonElement): List<SelectorClau
 }
 
 internal fun parseSingleSelector(selector: String): SelectorClause? {
-    // For shadow DOM / iframe selectors (>>>), extract the last segment — the actual target
-    // element. Android's autofill framework may expose these elements via htmlInfo when they
-    // are reachable (e.g. open shadow roots), so we parse their attributes for matching.
-    val effective = if (selector.contains(">>>")) {
-        selector.substringAfterLast(">>>").trim()
-    } else {
-        selector
-    }
+    // For descendant selectors, only the last segment describes the target element — earlier
+    // parts describe ancestors that are not represented as view nodes by the autofill framework.
+    // Shadow DOM (>>>) boundaries are stripped first since they aren't view-node-represented
+    // either, then the remainder is still split on descendant whitespace — the segment after a
+    // shadow boundary can itself contain further ancestor segments (e.g. "host >>> form input").
+    // Whitespace inside [...] is part of an attribute value and must not be treated as a separator.
+    val afterShadowBoundary = selector.substringAfterLast(">>>").trim()
+    val effective = afterShadowBoundary.split(DESCENDANT_SEPARATOR_REGEX).last().trim()
     if (effective.trimStart().startsWith(".")) return null
 
     val tag = TAG_REGEX.find(effective)?.groupValues?.get(1)
@@ -229,6 +239,8 @@ internal fun parseSingleSelector(selector: String): SelectorClause? {
     var name: String? = null
     var type: String? = null
     var role: String? = null
+
+    var hasUnsupportedAttribute = false
 
     // For e.g. "[type='password']": groupValues[0]="[type='password']", [1]="type", [2]="password".
     ATTRIBUTE_REGEX.findAll(effective).forEach { match ->
@@ -239,6 +251,9 @@ internal fun parseSingleSelector(selector: String): SelectorClause? {
             NAME -> name = attrValue
             TYPE -> type = attrValue
             ROLE -> role = attrValue
+            // Attributes we can't represent as a SelectorClause constraint (e.g. autocomplete,
+            // placeholder) are tracked so we know not to fall back to a tag-only match below.
+            else -> hasUnsupportedAttribute = true
         }
     }
 
@@ -247,7 +262,30 @@ internal fun parseSingleSelector(selector: String): SelectorClause? {
         id = ID_SHORTHAND_REGEX.find(effective)?.groupValues?.get(1)
     }
 
+    // A residual class qualifier (e.g. "input.hidden") is just as unrepresentable as an
+    // unsupported attribute — it must not be allowed to fall back to a tag-only match either.
+    val hasClassQualifier = CLASS_QUALIFIER_REGEX.containsMatchIn(effective)
+
+    // If the selector's only constraint is an attribute or class we can't represent, dropping it
+    // here would otherwise leave a tag-only clause that matches every element with that tag.
+    val noAttributeConstraints = hasNoAttributeConstraints(
+        id = id,
+        name = name,
+        type = type,
+        role = role,
+    )
+    if ((hasUnsupportedAttribute || hasClassQualifier) && noAttributeConstraints) {
+        return null
+    }
+
     return SelectorClause(tag = tag, id = id, name = name, type = type, role = role)
 }
+
+private fun hasNoAttributeConstraints(
+    id: String?,
+    name: String?,
+    type: String?,
+    role: String?,
+): Boolean = id == null && name == null && type == null && role == null
 
 // endregion

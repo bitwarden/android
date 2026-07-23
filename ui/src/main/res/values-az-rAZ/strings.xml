@@ -1277,13 +1277,13 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="upgrade_pending">Yüksəltmə gözlənilir</string>
     <string name="upgrade_pending_message">Yüksəltmə prosesiniz emal olunur. Tamamlanana qədər ödənişsiz planda qalacaqsınız. Yoxlamaq üçün indi sinxronlaşdırın və ya davam edin və özü avtomatik güncəllənəcək.</string>
     <string name="unlock_premium_features">Premium planla daha qabaqcıl özəlliklərin kilidini açın.</string>
-    <string name="per_month">/ ay</string>
+    <string name="per_month_cancel_anytime">/ ay · İstənilən vaxt ləğv et</string>
+    <string name="per_month_cancel_anytime_content_description">Aylıq %1$s, istənilən vaxt ləğv et</string>
     <string name="built_in_authenticator">Daxili kimlik doğrulayıcı</string>
     <string name="emergency_access">Fövqəladə hal erişimi</string>
     <string name="secure_file_storage">Güvənli fayl anbarı</string>
     <string name="breach_monitoring">Pozuntu monitorinqi</string>
-    <string name="upgrade_now">İndi yüksəlt</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">Satın almanı tamamlamaq üçün Stripe-ın güvənli ödəniş səhifəsinə yönləndiriləcəksiniz.</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">Satın alma prosesini Stripe təhlükəsiz ödəmə ilə tamamlayacaqsınız.</string>
     <string name="opening_checkout">Ödəmə səhifəsi açılır…</string>
     <string name="secure_checkout_didnt_load">Güvənli ödəmə səhifəsi yüklənmədi</string>
     <string name="trouble_opening_payment_page">Ödəniş səhifəsini açmaqla bağlı çətinliyimiz var, yenidən sınayın.</string>
@@ -1404,4 +1404,13 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Sorğunuz yarımçıq dayandırıldı, çünki tətbiqin lokal şəbəkəyə erişməsi lazımdır. Bunu cihazınızın ayarlarında fəallaşdıra bilərsiniz.</string>
     <string name="continue_to_stripe">Stripe ilə davam edilsin?</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Abunəliyinizin ləğvi üçün Stripe-a yönləndiriləcəksiniz.</string>
+    <string name="unlock_advanced_protection">Qabaqcıl qorumanın kilidini aç</string>
+    <string name="breeze_through_2fa_with_built_in_codes">Daxili kodlar vasitəsilə 2FA-nı icra et</string>
+    <string name="run_reports_to_find_risky_passwords">Riskli parolları tapmaq üçün hesabatları çalışdır</string>
+    <string name="add_a_trusted_emergency_contact">Güvənilən fövqəladə hal kontaktı əlavə et</string>
+    <string name="identify_unsecure_websites">Güvənli olmayan veb saytları müəyyənləşdir</string>
+    <string name="flag_accounts_with_inactive_2fa">2FA aktiv olmayan hesabları işarələ</string>
+    <string name="keep_documents_safe_and_encrypted">Sənədləri əmniyyətdə və şifrələnmiş saxla</string>
+    <string name="share_files_securely_with_anyone_using_send">Send istifadəsi ilə faylları istədiyiniz şəxslə təhlükəsiz formatda paylaşın</string>
+    <string name="receive_24_7_priority_support">24/7 prioritet dəstək alın</string>
 </resources>

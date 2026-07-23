@@ -482,6 +482,42 @@ class AutofillPartitionExtensionsTest {
         // Verify
         assertEquals(TEXT_VALUE, actual)
     }
+
+    @Test
+    fun `usernameSaveValue should return text value when has email view with textValue`() {
+        // Setup
+        val autofillPartition = AutofillPartition.Login(
+            views = listOf(
+                AutofillView.Login.Email(
+                    data = autofillDataValidText,
+                ),
+            ),
+        )
+
+        // Test
+        val actual = autofillPartition.usernameSaveValue
+
+        // Verify
+        assertEquals(TEXT_VALUE, actual)
+    }
+
+    @Test
+    fun `usernameSaveValue should return null when has email view but no textValue`() {
+        // Setup
+        val autofillPartition = AutofillPartition.Login(
+            views = listOf(
+                AutofillView.Login.Email(
+                    data = autofillDataEmptyText,
+                ),
+            ),
+        )
+
+        // Test
+        val actual = autofillPartition.usernameSaveValue
+
+        // Verify
+        assertNull(actual)
+    }
     //endregion Login tests
 }
 

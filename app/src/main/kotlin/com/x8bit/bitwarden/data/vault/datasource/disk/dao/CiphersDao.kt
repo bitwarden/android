@@ -48,10 +48,10 @@ interface CiphersDao {
     ): List<CipherEntity>
 
     /**
-     * Retrieves all ciphers from the database for a given [userId].
+     * Retrieves all login type ciphers from the database for a given [userId].
      */
-    @Query("SELECT * FROM ciphers WHERE user_id = :userId AND has_totp = 1")
-    suspend fun getAllTotpCiphers(
+    @Query("SELECT * FROM ciphers WHERE user_id = :userId AND cipher_type = 1")
+    suspend fun getAllLoginCiphers(
         userId: String,
     ): List<CipherEntity>
 

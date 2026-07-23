@@ -143,7 +143,14 @@ platform :android do
 
   desc "Run library module tests for specified modules"
   lane :testLibraries do |options|
-    tasks = options[:target].split(" ").map { |mod| "#{mod}:testDebugUnitTest" }
+    # Modules with product flavors expose per-flavor test tasks instead of `testDebugUnitTest`.
+    # For those, run every flavor so both the standard and F-Droid sources are covered.
+    flavored_module_tasks = {
+      ":cxf" => ["testStandardDebugUnitTest", "testFdroidDebugUnitTest"],
+    }
+    tasks = options[:target].split(" ").flat_map { |mod|
+      (flavored_module_tasks[mod] || ["testDebugUnitTest"]).map { |task| "#{mod}:#{task}" }
+    }
     gradle(tasks: tasks)
   end
 
@@ -438,6 +445,21 @@ platform :android do
           "android.injected.signing.key.password" => options[:keyPassword]
         },
         print_command: false,
+    )
+  end
+
+  desc "Assemble and sign release Test Harness APK"
+  lane :buildTestHarnessRelease do |options|
+    gradle(
+      task: "testharness:assemble",
+      build_type: "Release",
+      properties: {
+        "android.injected.signing.store.file" => options[:storeFile],
+        "android.injected.signing.store.password" => options[:storePassword],
+        "android.injected.signing.key.alias" => options[:keyAlias],
+        "android.injected.signing.key.password" => options[:keyPassword]
+      },
+      print_command: false,
     )
   end
 

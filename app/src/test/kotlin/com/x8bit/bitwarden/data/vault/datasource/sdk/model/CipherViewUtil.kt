@@ -22,6 +22,7 @@ import com.bitwarden.vault.SshKeyView
 import com.bitwarden.vault.UriMatchType
 import java.time.Clock
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneOffset
 
 /**
@@ -272,13 +273,13 @@ fun createMockDriversLicenseView(
     firstName: String? = "mockFirstName-$number",
     middleName: String? = "mockMiddleName-$number",
     lastName: String? = "mockLastName-$number",
-    dateOfBirth: String? = "2006-05-11",
+    dateOfBirth: LocalDate? = LocalDate.parse("2006-05-11"),
     licenseNumber: String? = "mockLicenseNumber-$number",
     issuingCountry: String? = "mockIssuingCountry-$number",
     issuingState: String? = "mockIssuingState-$number",
     issuingAuthority: String? = "mockIssuingAuthority-$number",
-    issueDate: String? = "2024-06-15",
-    expirationDate: String? = "2031-11-25",
+    issueDate: LocalDate? = LocalDate.parse("2024-06-15"),
+    expirationDate: LocalDate? = LocalDate.parse("2031-11-25"),
     licenseClass: String? = "mockLicenseClass-$number",
 ): DriversLicenseView =
     DriversLicenseView(
@@ -303,7 +304,7 @@ fun createMockPassportView(
     number: Int,
     surname: String? = "mockSurname-$number",
     givenName: String? = "mockGivenName-$number",
-    dateOfBirth: String? = "2006-05-11",
+    dateOfBirth: LocalDate? = LocalDate.parse("2006-05-11"),
     birthPlace: String? = "mockBirthPlace-$number",
     sex: String? = "mockSex-$number",
     nationality: String? = "mockNationality-$number",
@@ -311,8 +312,8 @@ fun createMockPassportView(
     passportType: String? = "mockPassportType-$number",
     issuingCountry: String? = "mockIssuingCountry-$number",
     issuingAuthority: String? = "mockIssuingAuthority-$number",
-    issueDate: String? = "2024-06-15",
-    expirationDate: String? = "2031-11-25",
+    issueDate: LocalDate? = LocalDate.parse("2024-06-15"),
+    expirationDate: LocalDate? = LocalDate.parse("2031-11-25"),
     nationalIdentificationNumber: String? = "mockNationalIdentificationNumber-$number",
 ): PassportView =
     PassportView(

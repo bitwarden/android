@@ -198,7 +198,7 @@ class AuthRepositoryTest {
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeSettingsDiskSource = FakeSettingsDiskSource()
     private val fakeEnvironmentRepository = FakeEnvironmentRepository().apply {
-        environment = Environment.Us
+        environment = Environment.Prod.Us
     }
     private val settingsRepository: SettingsRepository = mockk {
         every { setDefaultsIfNecessary(any()) } just runs
@@ -6317,7 +6317,7 @@ class AuthRepositoryTest {
     fun `switchAccount when the given userId is the same as the current activeUserId should reset any pending account additions`() {
         val originalUserId = USER_ID_1
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        fakeEnvironmentRepository.environment = Environment.Eu
+        fakeEnvironmentRepository.environment = Environment.Prod.Eu
         repository.hasPendingAccountAddition = true
 
         assertEquals(
@@ -6325,7 +6325,7 @@ class AuthRepositoryTest {
             repository.switchAccount(userId = originalUserId),
         )
 
-        assertEquals(Environment.Us, fakeEnvironmentRepository.environment)
+        assertEquals(Environment.Prod.Us, fakeEnvironmentRepository.environment)
         verify(exactly = 1) {
             userStateManager.hasPendingAccountAddition = false
         }
@@ -6336,14 +6336,14 @@ class AuthRepositoryTest {
     fun `switchAccount when the given userId does not correspond to a saved account should do nothing`() {
         val invalidId = "invalidId"
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        fakeEnvironmentRepository.environment = Environment.Eu
+        fakeEnvironmentRepository.environment = Environment.Prod.Eu
 
         assertEquals(
             SwitchAccountResult.NoChange,
             repository.switchAccount(userId = invalidId),
         )
 
-        assertEquals(Environment.Us, fakeEnvironmentRepository.environment)
+        assertEquals(Environment.Prod.Us, fakeEnvironmentRepository.environment)
     }
 
     @Suppress("MaxLineLength")
@@ -6351,7 +6351,7 @@ class AuthRepositoryTest {
     fun `switchAccount when the userId is valid should update the current UserState and reset any pending account additions`() {
         val updatedUserId = USER_ID_2
         fakeAuthDiskSource.userState = MULTI_USER_STATE
-        fakeEnvironmentRepository.environment = Environment.Eu
+        fakeEnvironmentRepository.environment = Environment.Prod.Eu
         repository.hasPendingAccountAddition = true
 
         assertEquals(
@@ -6359,7 +6359,7 @@ class AuthRepositoryTest {
             repository.switchAccount(userId = updatedUserId),
         )
 
-        assertEquals(Environment.Eu, fakeEnvironmentRepository.environment)
+        assertEquals(Environment.Prod.Eu, fakeEnvironmentRepository.environment)
         verify(exactly = 1) {
             userStateManager.hasPendingAccountAddition = false
         }
@@ -7586,6 +7586,7 @@ class AuthRepositoryTest {
                 ),
                 featureStates = emptyMap(),
                 communication = null,
+                settings = null,
             ),
         )
 

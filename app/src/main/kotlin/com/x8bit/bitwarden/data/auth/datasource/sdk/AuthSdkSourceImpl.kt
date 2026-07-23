@@ -123,6 +123,7 @@ class AuthSdkSourceImpl(
                         acceptEmergencyAccessId = null,
                         providerInviteToken = null,
                         providerUserId = null,
+                        salesAssistedToken = null,
                     ),
                 )
             }

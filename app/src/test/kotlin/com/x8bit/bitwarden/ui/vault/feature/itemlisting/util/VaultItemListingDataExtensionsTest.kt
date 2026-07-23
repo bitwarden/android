@@ -14,6 +14,7 @@ import com.bitwarden.ui.platform.model.TotpData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
+import com.bitwarden.vault.BankAccountListView
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -404,7 +405,12 @@ class VaultItemListingDataExtensionsTest {
         val cipherView = createMockCipherListView(
             number = 1,
             isDeleted = false,
-            type = CipherListViewType.BankAccount,
+            type = CipherListViewType.BankAccount(
+                v1 = BankAccountListView(
+                    accountNumber = null,
+                    accountType = null,
+                ),
+            ),
         )
 
         mapOf(
@@ -674,7 +680,7 @@ class VaultItemListingDataExtensionsTest {
             itemListingType = VaultItemListingState.ItemListingType.Vault.Folder("mockId-1"),
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            baseIconUrl = Environment.Prod.Us.baseIconUrl,
             isIconLoadingDisabled = false,
             autofillSelectionData = null,
             createCredentialRequestData = null,
@@ -766,7 +772,7 @@ class VaultItemListingDataExtensionsTest {
             itemListingType = VaultItemListingState.ItemListingType.Vault.Folder("mockId-1"),
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            baseIconUrl = Environment.Prod.Us.baseIconUrl,
             isIconLoadingDisabled = false,
             autofillSelectionData = AutofillSelectionData(
                 type = AutofillSelectionData.Type.LOGIN,
@@ -852,7 +858,7 @@ class VaultItemListingDataExtensionsTest {
             itemListingType = VaultItemListingState.ItemListingType.Vault.Folder("mockId-1"),
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = false,
-            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            baseIconUrl = Environment.Prod.Us.baseIconUrl,
             isIconLoadingDisabled = false,
             autofillSelectionData = AutofillSelectionData(
                 type = AutofillSelectionData.Type.LOGIN,
@@ -925,7 +931,7 @@ class VaultItemListingDataExtensionsTest {
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Trash,
                 vaultFilterType = VaultFilterType.AllVaults,
                 hasMasterPassword = true,
-                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                baseIconUrl = Environment.Prod.Us.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
                 createCredentialRequestData = null,
@@ -948,7 +954,7 @@ class VaultItemListingDataExtensionsTest {
                 ),
                 vaultFilterType = VaultFilterType.AllVaults,
                 hasMasterPassword = true,
-                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                baseIconUrl = Environment.Prod.Us.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
                 createCredentialRequestData = null,
@@ -969,7 +975,7 @@ class VaultItemListingDataExtensionsTest {
                 itemListingType = VaultItemListingState.ItemListingType.Vault.SshKey,
                 vaultFilterType = VaultFilterType.AllVaults,
                 hasMasterPassword = true,
-                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                baseIconUrl = Environment.Prod.Us.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
                 createCredentialRequestData = null,
@@ -990,7 +996,7 @@ class VaultItemListingDataExtensionsTest {
                 itemListingType = VaultItemListingState.ItemListingType.Vault.BankAccount,
                 vaultFilterType = VaultFilterType.AllVaults,
                 hasMasterPassword = true,
-                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                baseIconUrl = Environment.Prod.Us.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
                 createCredentialRequestData = null,
@@ -1011,7 +1017,7 @@ class VaultItemListingDataExtensionsTest {
                 itemListingType = VaultItemListingState.ItemListingType.Vault.License,
                 vaultFilterType = VaultFilterType.AllVaults,
                 hasMasterPassword = true,
-                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                baseIconUrl = Environment.Prod.Us.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
                 createCredentialRequestData = null,
@@ -1032,7 +1038,7 @@ class VaultItemListingDataExtensionsTest {
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Passport,
                 vaultFilterType = VaultFilterType.AllVaults,
                 hasMasterPassword = true,
-                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                baseIconUrl = Environment.Prod.Us.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
                 createCredentialRequestData = null,
@@ -1054,7 +1060,7 @@ class VaultItemListingDataExtensionsTest {
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
                 vaultFilterType = VaultFilterType.AllVaults,
                 hasMasterPassword = true,
-                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                baseIconUrl = Environment.Prod.Us.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
                 createCredentialRequestData = null,
@@ -1075,7 +1081,7 @@ class VaultItemListingDataExtensionsTest {
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Card,
                 vaultFilterType = VaultFilterType.AllVaults,
                 hasMasterPassword = true,
-                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                baseIconUrl = Environment.Prod.Us.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
                 createCredentialRequestData = null,
@@ -1096,7 +1102,7 @@ class VaultItemListingDataExtensionsTest {
                 itemListingType = VaultItemListingState.ItemListingType.Vault.SecureNote,
                 vaultFilterType = VaultFilterType.AllVaults,
                 hasMasterPassword = true,
-                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                baseIconUrl = Environment.Prod.Us.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
                 createCredentialRequestData = null,
@@ -1117,7 +1123,7 @@ class VaultItemListingDataExtensionsTest {
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Identity,
                 vaultFilterType = VaultFilterType.AllVaults,
                 hasMasterPassword = true,
-                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                baseIconUrl = Environment.Prod.Us.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
                 createCredentialRequestData = null,
@@ -1140,7 +1146,7 @@ class VaultItemListingDataExtensionsTest {
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Archive,
                 vaultFilterType = VaultFilterType.AllVaults,
                 hasMasterPassword = true,
-                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                baseIconUrl = Environment.Prod.Us.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
                 createCredentialRequestData = null,
@@ -1161,7 +1167,7 @@ class VaultItemListingDataExtensionsTest {
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
                 vaultFilterType = VaultFilterType.AllVaults,
                 hasMasterPassword = true,
-                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                baseIconUrl = Environment.Prod.Us.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = AutofillSelectionData(
                     type = AutofillSelectionData.Type.LOGIN,
@@ -1186,7 +1192,7 @@ class VaultItemListingDataExtensionsTest {
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
                 vaultFilterType = VaultFilterType.AllVaults,
                 hasMasterPassword = true,
-                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                baseIconUrl = Environment.Prod.Us.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
                 createCredentialRequestData = CreateCredentialRequest(
@@ -1213,7 +1219,7 @@ class VaultItemListingDataExtensionsTest {
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Trash,
                 vaultFilterType = VaultFilterType.AllVaults,
                 hasMasterPassword = true,
-                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                baseIconUrl = Environment.Prod.Us.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
                 createCredentialRequestData = null,
@@ -1244,7 +1250,7 @@ class VaultItemListingDataExtensionsTest {
 
             val result = sendViewList.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Send.SendFile,
-                baseWebSendUrl = Environment.Us.environmentUrlData.baseWebSendUrl,
+                baseWebSendUrl = Environment.Prod.Us.baseWebSendUrl,
                 clock = clock,
             )
 
@@ -1266,7 +1272,7 @@ class VaultItemListingDataExtensionsTest {
     fun `toViewState should return NoLogins state for empty SendFile list`() {
         val result = emptyList<SendView>().toViewState(
             itemListingType = VaultItemListingState.ItemListingType.Send.SendFile,
-            baseWebSendUrl = Environment.Us.environmentUrlData.baseWebSendUrl,
+            baseWebSendUrl = Environment.Prod.Us.baseWebSendUrl,
             clock = clock,
         )
 
@@ -1284,7 +1290,7 @@ class VaultItemListingDataExtensionsTest {
     fun `toViewState should return NoLogins state for empty SendText list`() {
         val result = emptyList<SendView>().toViewState(
             itemListingType = VaultItemListingState.ItemListingType.Send.SendText,
-            baseWebSendUrl = Environment.Us.environmentUrlData.baseWebSendUrl,
+            baseWebSendUrl = Environment.Prod.Us.baseWebSendUrl,
             clock = clock,
         )
 
@@ -1479,7 +1485,7 @@ class VaultItemListingDataExtensionsTest {
             itemListingType = VaultItemListingState.ItemListingType.Vault.Folder("1"),
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            baseIconUrl = Environment.Prod.Us.baseIconUrl,
             isIconLoadingDisabled = false,
             autofillSelectionData = null,
             createCredentialRequestData = null,
@@ -1526,7 +1532,7 @@ class VaultItemListingDataExtensionsTest {
             itemListingType = VaultItemListingState.ItemListingType.Vault.Collection("mockId-1"),
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            baseIconUrl = Environment.Prod.Us.baseIconUrl,
             isIconLoadingDisabled = false,
             autofillSelectionData = null,
             createCredentialRequestData = null,
@@ -1605,7 +1611,7 @@ class VaultItemListingDataExtensionsTest {
             itemListingType = VaultItemListingState.ItemListingType.Vault.Card,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            baseIconUrl = Environment.Prod.Us.baseIconUrl,
             isIconLoadingDisabled = false,
             autofillSelectionData = null,
             createCredentialRequestData = null,
@@ -1654,7 +1660,7 @@ class VaultItemListingDataExtensionsTest {
             itemListingType = VaultItemListingState.ItemListingType.Vault.Card,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            baseIconUrl = Environment.Prod.Us.baseIconUrl,
             isIconLoadingDisabled = false,
             autofillSelectionData = null,
             createCredentialRequestData = null,

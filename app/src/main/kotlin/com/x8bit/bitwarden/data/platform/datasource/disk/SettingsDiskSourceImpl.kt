@@ -87,6 +87,9 @@ class SettingsDiskSourceImpl(
     private val mutablePullToRefreshEnabledFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
+    private val mutableFillAssistEnabledFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
     private val mutableShowBrowserAutofillSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
@@ -548,11 +551,16 @@ class SettingsDiskSourceImpl(
     override fun getFillAssistEnabled(userId: String): Boolean? =
         getBoolean(key = FILL_ASSIST_ENABLED_KEY.appendIdentifier(userId))
 
+    override fun getFillAssistEnabledFlow(userId: String): Flow<Boolean?> =
+        getMutableFillAssistEnabledFlow(userId = userId)
+            .onSubscription { emit(getFillAssistEnabled(userId = userId)) }
+
     override fun storeFillAssistEnabled(userId: String, isFillAssistEnabled: Boolean?) {
         putBoolean(
             key = FILL_ASSIST_ENABLED_KEY.appendIdentifier(userId),
             value = isFillAssistEnabled,
         )
+        getMutableFillAssistEnabledFlow(userId = userId).tryEmit(isFillAssistEnabled)
     }
 
     override fun getBlockedAutofillUris(userId: String): List<String>? =
@@ -796,6 +804,13 @@ class SettingsDiskSourceImpl(
         userId: String,
     ): MutableSharedFlow<Boolean?> =
         mutablePullToRefreshEnabledFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableFillAssistEnabledFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutableFillAssistEnabledFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 

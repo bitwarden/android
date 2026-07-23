@@ -24,6 +24,9 @@ class AuthenticatorBuildInfoManagerImpl : BuildInfoManager {
     override val isDevBuild: Boolean
         get() = BuildConfig.BUILD_TYPE == "debug"
 
+    override val isReleaseBuild: Boolean
+        get() = BuildConfig.BUILD_TYPE == "release"
+
     override val versionData: String
         get() = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
 

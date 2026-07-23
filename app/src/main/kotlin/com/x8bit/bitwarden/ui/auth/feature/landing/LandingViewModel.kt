@@ -4,6 +4,8 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.model.FlagKey
+import com.bitwarden.data.datasource.disk.model.ServerConfig
+import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -37,12 +39,13 @@ private const val KEY_STATE = "state"
 /**
  * Manages application state for the initial landing screen.
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LongParameterList")
 @HiltViewModel
 class LandingViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
     private val environmentRepository: EnvironmentRepository,
+    serverConfigRepository: ServerConfigRepository,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     savedStateHandle: SavedStateHandle,
     featureFlagManager: FeatureFlagManager,
@@ -62,6 +65,12 @@ class LandingViewModel @Inject constructor(
                 .orEmpty()
                 .toImmutableList(),
             isFedRampEnabled = featureFlagManager.getFeatureFlag(FlagKey.FedRamp),
+            disableCreateAccount = serverConfigRepository
+                .serverConfigStateFlow
+                .value
+                ?.serverData
+                ?.settings
+                ?.disableUserRegistration == true,
         ),
 ) {
 
@@ -118,6 +127,12 @@ class LandingViewModel @Inject constructor(
             .map { LandingAction.Internal.FedRampFeatureUpdated(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        serverConfigRepository
+            .serverConfigStateFlow
+            .map { LandingAction.Internal.ServerConfigReceived(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: LandingAction) {
@@ -149,6 +164,7 @@ class LandingViewModel @Inject constructor(
 
             is LandingAction.Internal.SnackbarDataReceived -> handleSnackbarDataReceived(action)
             is LandingAction.Internal.FedRampFeatureUpdated -> handleFedRampFeatureUpdated(action)
+            is LandingAction.Internal.ServerConfigReceived -> handleServerConfigReceived(action)
         }
     }
 
@@ -242,9 +258,9 @@ class LandingViewModel @Inject constructor(
 
     private fun handleEnvironmentTypeSelect(action: LandingAction.EnvironmentTypeSelect) {
         val environment = when (action.environmentType) {
-            Environment.Type.US -> Environment.Us
-            Environment.Type.EU -> Environment.Eu
-            Environment.Type.FED_RAMP -> Environment.FedRamp
+            Environment.Type.US -> Environment.Prod.Us
+            Environment.Type.EU -> Environment.Prod.Eu
+            Environment.Type.FED_RAMP -> Environment.Prod.FedRamp
             Environment.Type.SELF_HOSTED -> {
                 // Launch the self-hosted screen and select the full environment details there.
                 sendEvent(LandingEvent.NavigateToEnvironment)
@@ -276,6 +292,18 @@ class LandingViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(isFedRampEnabled = action.isEnabled) }
     }
 
+    private fun handleServerConfigReceived(action: LandingAction.Internal.ServerConfigReceived) {
+        mutableStateFlow.update {
+            it.copy(
+                disableCreateAccount = action
+                    .serverConfig
+                    ?.serverData
+                    ?.settings
+                    ?.disableUserRegistration == true,
+            )
+        }
+    }
+
     /**
      * If the user state account is changed to an active but not "logged in" account we can
      * pre-populate the email field with this account.
@@ -303,6 +331,7 @@ data class LandingState(
     val dialog: DialogState?,
     val accountSummaries: ImmutableList<AccountSummary>,
     val isFedRampEnabled: Boolean,
+    val disableCreateAccount: Boolean,
 ) : Parcelable {
     /**
      * The selectable environments.
@@ -317,7 +346,7 @@ data class LandingState(
      * Determines if the user should be allowed to create a new account.
      */
     val allowCreateAccount: Boolean
-        get() = selectedEnvironmentType != Environment.Type.FED_RAMP
+        get() = !disableCreateAccount && selectedEnvironmentType != Environment.Type.FED_RAMP
 
     /**
      * Determines whether the app bar should be visible based on the presence of account summaries.
@@ -481,6 +510,13 @@ sealed class LandingAction {
          * Internal action to update the email input state from a non-user action
          */
         data class UpdateEmailState(val emailInput: String) : Internal()
+
+        /**
+         * Indicates that an updated [serverConfig] has been received.
+         */
+        data class ServerConfigReceived(
+            val serverConfig: ServerConfig?,
+        ) : Internal()
 
         /**
          * Indicates that FedRamp feature has been enabled or disabled.

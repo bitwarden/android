@@ -12,14 +12,8 @@ import com.bitwarden.network.interceptor.BaseUrlsProvider
  */
 @OmitFromCoverage
 object BaseUrlsProviderImpl : BaseUrlsProvider {
-    override fun getBaseApiUrl(): String =
-        Environment.Us.environmentUrlData.baseApiUrl
-
-    override fun getBaseIdentityUrl(): String =
-        Environment.Us.environmentUrlData.baseIdentityUrl
-
-    override fun getBaseEventsUrl(): String =
-        Environment.Us.environmentUrlData.baseEventsUrl
-
+    override fun getBaseApiUrl(): String = Environment.Prod.Us.baseApiUrl
+    override fun getBaseIdentityUrl(): String = Environment.Prod.Us.baseIdentityUrl
+    override fun getBaseEventsUrl(): String = Environment.Prod.Us.baseEventsUrl
     override fun getBaseFillAssistUrl(): String? = null
 }

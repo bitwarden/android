@@ -143,8 +143,8 @@ class AuthenticatorBridgeRepositoryTest {
 
         // Add some ciphers to vaultDiskSource for each user,
         // and setup mock decryption for them:
-        coEvery { vaultDiskSource.getTotpCiphers(USER_1_ID) } returns USER_1_CIPHERS
-        coEvery { vaultDiskSource.getTotpCiphers(USER_2_ID) } returns USER_2_CIPHERS
+        coEvery { vaultDiskSource.getLoginCiphers(USER_1_ID) } returns USER_1_CIPHERS
+        coEvery { vaultDiskSource.getLoginCiphers(USER_2_ID) } returns USER_2_CIPHERS
         mockkStatic(
             SyncResponseJson.Cipher::toEncryptedSdkCipher,
             EnvironmentUrlDataJson::toEnvironmentUrlsOrDefault,
@@ -213,7 +213,7 @@ class AuthenticatorBridgeRepositoryTest {
                     userId = USER_2_ID,
                     request = InitOrgCryptoRequest(organizationKeys = USER_2_ORG_KEYS),
                 )
-                vaultDiskSource.getTotpCiphers(userId = USER_2_ID)
+                vaultDiskSource.getLoginCiphers(userId = USER_2_ID)
                 scopedVaultSdkSource.decryptCipher(
                     userId = USER_2_ID,
                     cipher = USER_2_ENCRYPTED_SDK_TOTP_CIPHER,
@@ -251,7 +251,7 @@ class AuthenticatorBridgeRepositoryTest {
                     userId = USER_1_ID,
                     request = InitOrgCryptoRequest(organizationKeys = USER_1_ORG_KEYS),
                 )
-                vaultDiskSource.getTotpCiphers(userId = USER_1_ID)
+                vaultDiskSource.getLoginCiphers(userId = USER_1_ID)
                 scopedVaultSdkSource.decryptCipher(
                     userId = USER_1_ID,
                     cipher = USER_1_ENCRYPTED_SDK_TOTP_CIPHER,
@@ -273,7 +273,7 @@ class AuthenticatorBridgeRepositoryTest {
                     userId = USER_2_ID,
                     request = InitOrgCryptoRequest(organizationKeys = USER_2_ORG_KEYS),
                 )
-                vaultDiskSource.getTotpCiphers(userId = USER_2_ID)
+                vaultDiskSource.getLoginCiphers(userId = USER_2_ID)
                 scopedVaultSdkSource.decryptCipher(
                     userId = USER_2_ID,
                     cipher = USER_2_ENCRYPTED_SDK_TOTP_CIPHER,
@@ -341,7 +341,7 @@ class AuthenticatorBridgeRepositoryTest {
                     userId = USER_2_ID,
                     request = InitOrgCryptoRequest(organizationKeys = USER_2_ORG_KEYS),
                 )
-                vaultDiskSource.getTotpCiphers(userId = USER_2_ID)
+                vaultDiskSource.getLoginCiphers(userId = USER_2_ID)
                 scopedVaultSdkSource.decryptCipher(
                     userId = USER_2_ID,
                     cipher = USER_2_ENCRYPTED_SDK_TOTP_CIPHER,
@@ -543,7 +543,7 @@ private val USER_1_SHARED_ACCOUNT = SharedAccountData.Account(
     userId = ACCOUNT_JSON_1.profile.userId,
     name = ACCOUNT_JSON_1.profile.name,
     email = ACCOUNT_JSON_1.profile.email,
-    environmentLabel = Environment.Us.label,
+    environmentLabel = Environment.Prod.Us.label,
     cipherData = USER_1_EXPECTED_CIPHER_LIST,
 )
 
@@ -551,7 +551,7 @@ private val USER_2_SHARED_ACCOUNT = SharedAccountData.Account(
     userId = ACCOUNT_JSON_2.profile.userId,
     name = ACCOUNT_JSON_2.profile.name,
     email = ACCOUNT_JSON_2.profile.email,
-    environmentLabel = Environment.Us.label,
+    environmentLabel = Environment.Prod.Us.label,
     cipherData = USER_2_EXPECTED_CIPHER_LIST,
 )
 

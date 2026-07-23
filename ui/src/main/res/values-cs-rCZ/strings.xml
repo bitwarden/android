@@ -1295,13 +1295,13 @@ při opakování problémů.</string>
     <string name="upgrade_pending">Nevyřízená aktualizace</string>
     <string name="upgrade_pending_message">Vaše aktualizace je zpracovávána. Zůstanete na bezplatném tarifu, dokud nebude dokončena. Synchronizujte pro kontrolu, nebo pokračujte a aktualizace se provede automaticky.</string>
     <string name="unlock_premium_features">Odemkněte pokročilejší funkce s předplatným Premium.</string>
-    <string name="per_month">/ měsíčně</string>
+    <string name="per_month_cancel_anytime">/ měsíčně · Lze zrušit kdykoli</string>
+    <string name="per_month_cancel_anytime_content_description">%1$s měsíčně, lze kdykoli zrušit</string>
     <string name="built_in_authenticator">Vestavěný autentifikátor</string>
     <string name="emergency_access">Nouzový přístup</string>
     <string name="secure_file_storage">Zabezpečené úložiště souborů</string>
     <string name="breach_monitoring">Sledování úniků</string>
-    <string name="upgrade_now">Aktualizovat nyní</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">Pro dokončení nákupu přejdete do zabezpečené pokladny Stripe.</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">Nákup dokončíte prostřednictvím zabezpečené platební brány Stripe.</string>
     <string name="opening_checkout">Otevírání pokladny...</string>
     <string name="secure_checkout_didnt_load">Zabezpečená pokladna se nenačetla</string>
     <string name="trouble_opening_payment_page">Měli jsme potíže s otevřením platební stránky, zkuste to znovu.</string>
@@ -1424,4 +1424,13 @@ při opakování problémů.</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Váš požadavek byl přerušen, protože aplikace potřebuje přístup k místní síti. Toto můžete povolit v nastavení zařízení.</string>
     <string name="continue_to_stripe">Pokračovat do Stripe?</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Budete přesměrováni na Stripe ke správě zrušení předplatného.</string>
+    <string name="unlock_advanced_protection">Odemknout pokročilou ochranu</string>
+    <string name="breeze_through_2fa_with_built_in_codes">Díky integrovaným kódům hravě zvládnete dvoufaktorové ověření</string>
+    <string name="run_reports_to_find_risky_passwords">Spouštějte přehledy a vyhledejte riziková hesla</string>
+    <string name="add_a_trusted_emergency_contact">Přidejte důvěryhodný nouzový kontakt</string>
+    <string name="identify_unsecure_websites">Identifikujte nezabezpečené webové stránky</string>
+    <string name="flag_accounts_with_inactive_2fa">Označte účty s neaktivním 2FA</string>
+    <string name="keep_documents_safe_and_encrypted">Uchovávejte dokumenty v bezpečí a zašifrované</string>
+    <string name="share_files_securely_with_anyone_using_send">Sdílejte soubory bezpečně s kýmkoli pomocí funkce Send</string>
+    <string name="receive_24_7_priority_support">Získejte přednostní podporu 24/7</string>
 </resources>

@@ -1275,13 +1275,13 @@ Deseja trocar para esta conta?</string>
     <string name="upgrade_pending">Upgrade pendente</string>
     <string name="upgrade_pending_message">Seu upgrade está sendo processado. Você continuará no plano grátis até que seja concluído. Sincronize agora para conferir, ou continue e será atualizado automaticamente.</string>
     <string name="unlock_premium_features">Desbloqueie recursos mais avançados com um plano Premium.</string>
-    <string name="per_month">/ mês</string>
+    <string name="per_month_cancel_anytime">/ mês · Cancele quando quiser</string>
+    <string name="per_month_cancel_anytime_content_description">%1$s por mês, cancele quando quiser</string>
     <string name="built_in_authenticator">Autenticador integrado</string>
     <string name="emergency_access">Acesso de emergência</string>
     <string name="secure_file_storage">Armazenamento seguro de arquivos</string>
     <string name="breach_monitoring">Monitoramento de vazamentos</string>
-    <string name="upgrade_now">Atualizar agora</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">Você irá ao pagamento seguro do Stripe para concluir sua compra.</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">Você realizará a compra com o Stripe.</string>
     <string name="opening_checkout">Abrindo checkout…</string>
     <string name="secure_checkout_didnt_load">O pagamento seguro não carregou</string>
     <string name="trouble_opening_payment_page">Tivemos problemas abrindo a página de pagamento, tente novamente.</string>
@@ -1402,4 +1402,13 @@ Deseja trocar para esta conta?</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Sua solicitação foi interrompida porque o aplicativo precisa de acesso à rede local. Você pode ativar isso nas configurações do seu dispositivo.</string>
     <string name="continue_to_stripe">Continuar no Stripe?</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Você será levado para o Stripe para gerenciar o cancelamento de sua assinatura.</string>
+    <string name="unlock_advanced_protection">Desbloquear proteção avançada</string>
+    <string name="breeze_through_2fa_with_built_in_codes">Passe direto pela 2FA com códigos embutidos</string>
+    <string name="run_reports_to_find_risky_passwords">Execute relatorios para encontrar senhas em risco</string>
+    <string name="add_a_trusted_emergency_contact">Adicione um contato confiado de emergência</string>
+    <string name="identify_unsecure_websites">Identifique sites inseguros</string>
+    <string name="flag_accounts_with_inactive_2fa">Sinalize contas sem 2FA ativo</string>
+    <string name="keep_documents_safe_and_encrypted">Mantenha documentos seguros e criptografados</string>
+    <string name="share_files_securely_with_anyone_using_send">Compartilhe arquivos com segurança com qualquer um usando o Send</string>
+    <string name="receive_24_7_priority_support">Receba suporte 24h com prioridade</string>
 </resources>

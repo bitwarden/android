@@ -5,6 +5,7 @@ import android.os.Parcelable
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.data.repository.model.Environment
@@ -25,6 +26,9 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -45,14 +49,11 @@ class EnvironmentViewModel @Inject constructor(
     private val certificateManager: CertificateManager,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val savedStateHandle: SavedStateHandle,
+    buildInfoManager: BuildInfoManager,
 ) : BaseViewModel<EnvironmentState, EnvironmentEvent, EnvironmentAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val environmentUrlData = when (val environment = environmentRepository.environment) {
-            Environment.Us,
-            Environment.Eu,
-            Environment.FedRamp,
-                -> EnvironmentUrlDataJson(base = "")
-
+            is Environment.Prod -> EnvironmentUrlDataJson(base = "")
             is Environment.SelfHosted -> environment.environmentUrlData
         }
         val keyUri = environmentUrlData.keyUri?.toUri()
@@ -67,6 +68,7 @@ class EnvironmentViewModel @Inject constructor(
             keyAlias = keyAlias,
             keyHost = keyHost,
             dialog = null,
+            isRelease = buildInfoManager.isReleaseBuild,
         )
     },
 ) {
@@ -449,7 +451,17 @@ data class EnvironmentState(
     val dialog: DialogState?,
     // internal
     private val keyHost: MutualTlsKeyHost?,
+    private val isRelease: Boolean,
 ) : Parcelable {
+    /**
+     * The environments that should be available via the UI's autocomplete.
+     */
+    val autocompleteEnvironments: ImmutableList<String>
+        get() = if (isRelease) {
+            persistentListOf()
+        } else {
+            Environment.DEFAULT_INTERNAL_ENVIRONMENTS.toImmutableList()
+        }
 
     val keyUri: String?
         get() = "cert://$keyHost/$keyAlias"

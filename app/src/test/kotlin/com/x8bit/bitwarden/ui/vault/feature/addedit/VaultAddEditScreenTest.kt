@@ -4416,7 +4416,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Move to Organization")
+            .onAllNodesWithText("Move to vault")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertDoesNotExist()
 
@@ -4504,7 +4504,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Move to Organization")
+            .onAllNodesWithText("Move to vault")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsDisplayed()
 
@@ -5175,7 +5175,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         // Confirm dropdown version of item is absent
         composeTestRule
-            .onAllNodesWithText("Move to Organization")
+            .onAllNodesWithText("Move to vault")
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
         // Open the overflow menu
@@ -5185,7 +5185,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         // Confirm it does not exist
         composeTestRule
-            .onAllNodesWithText("Move to Organization")
+            .onAllNodesWithText("Move to vault")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsNotDisplayed()
     }
@@ -5210,7 +5210,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         // Confirm dropdown version of item is absent
         composeTestRule
-            .onAllNodesWithText("Move to Organization")
+            .onAllNodesWithText("Move to vault")
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
 
@@ -5219,7 +5219,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Move to Organization")
+            .onAllNodesWithText("Move to vault")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsDisplayed()
     }

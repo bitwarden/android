@@ -351,7 +351,7 @@ data class VaultMoveToOrganizationState(
         get() = if (onlyShowCollections) {
             BitwardenString.collections.asText()
         } else {
-            BitwardenString.move_to_organization.asText()
+            BitwardenString.move_to_vault.asText()
         }
 
     val appBarButtonText: Text

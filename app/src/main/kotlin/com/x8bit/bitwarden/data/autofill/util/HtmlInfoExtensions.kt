@@ -2,7 +2,14 @@
 
 package com.x8bit.bitwarden.data.autofill.util
 
+import android.util.Pair
 import android.view.ViewStructure.HtmlInfo
+import com.x8bit.bitwarden.data.autofill.model.FillAssistRules
+
+private const val HTML_ATTR_ID = "id"
+private const val HTML_ATTR_NAME = "name"
+private const val HTML_ATTR_TYPE = "type"
+private const val HTML_ATTR_ROLE = "role"
 
 /**
  * Whether this [HtmlInfo] represents a password field.
@@ -92,6 +99,46 @@ fun HtmlInfo?.hints(): List<String> = this
  * Whether this [HtmlInfo] represents an input field.
  */
 val HtmlInfo?.isInputField: Boolean get() = this?.tag == "input"
+
+/**
+ * Whether this [HtmlInfo] matches the given [FillAssistRules.SelectorClause].
+ *
+ * This function is untestable as [HtmlInfo] contains [android.util.Pair] which requires
+ * instrumentation testing.
+ */
+internal fun HtmlInfo.matchesSelectorClause(clause: FillAssistRules.SelectorClause): Boolean {
+    // A clause with no usable constraint must not match every node with the same tag.
+    if (clause.isUnconstrained) return false
+    if (clause.tag != null && clause.tag != tag) return false
+    val attrs = attributes ?: return clause.hasNoAttributeConstraints
+
+    return matchesAttr(attrs, clause.id, HTML_ATTR_ID) &&
+        matchesAttr(attrs, clause.name, HTML_ATTR_NAME) &&
+        matchesAttr(attrs, clause.type, HTML_ATTR_TYPE) &&
+        matchesAttr(attrs, clause.role, HTML_ATTR_ROLE)
+}
+
+/**
+ * Whether this [FillAssistRules.SelectorClause] has no tag or attribute constraint, and would
+ * therefore vacuously match every node if not explicitly rejected.
+ */
+private val FillAssistRules.SelectorClause.isUnconstrained: Boolean
+    get() = tag == null && hasNoAttributeConstraints
+
+/**
+ * Whether this [FillAssistRules.SelectorClause] has no `id`/`name`/`type`/`role` constraint.
+ */
+private val FillAssistRules.SelectorClause.hasNoAttributeConstraints: Boolean
+    get() = id == null && name == null && type == null && role == null
+
+/**
+ * Whether [value] is unconstrained, or [attrs] contains an attribute named [key] with [value].
+ */
+private fun matchesAttr(
+    attrs: List<Pair<String, String>>,
+    value: String?,
+    key: String,
+): Boolean = value == null || attrs.any { it.first == key && it.second == value }
 
 /**
  * Checks if the list of strings contains any of the specified patterns.

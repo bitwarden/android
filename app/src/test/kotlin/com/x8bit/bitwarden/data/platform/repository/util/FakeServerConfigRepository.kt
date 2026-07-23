@@ -56,5 +56,6 @@ private val SERVER_CONFIG = ServerConfig(
             "dummy-boolean" to JsonPrimitive(true),
         ),
         communication = null,
+        settings = null,
     ),
 )
