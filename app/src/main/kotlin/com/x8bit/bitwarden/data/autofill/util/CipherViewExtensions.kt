@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.data.autofill.util
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
+import com.x8bit.bitwarden.data.platform.util.identityAddress
+import com.x8bit.bitwarden.data.platform.util.identityName
 import com.x8bit.bitwarden.data.platform.util.isActive
 import com.x8bit.bitwarden.data.platform.util.subtitle
 
@@ -43,6 +45,36 @@ fun CipherView.toAutofillCipherProvider(): AutofillCipherProvider =
                     subtitle = subtitle.orEmpty(),
                     username = login.username.orEmpty(),
                     website = uri,
+                ),
+            )
+        }
+
+        override suspend fun getIdentityAutofillCiphers(): List<AutofillCipher.Identity> {
+            val identityView = this@toAutofillCipherProvider.identity ?: return emptyList()
+            return listOf(
+                AutofillCipher.Identity(
+                    cipherId = id,
+                    name = name,
+                    subtitle = subtitle.orEmpty(),
+                    fullName = identityView.identityName.orEmpty(),
+                    fullAddress = identityView.identityAddress.orEmpty(),
+                    title = identityView.title.orEmpty(),
+                    firstName = identityView.firstName.orEmpty(),
+                    middleName = identityView.middleName.orEmpty(),
+                    lastName = identityView.lastName.orEmpty(),
+                    address1 = identityView.address1.orEmpty(),
+                    address2 = identityView.address2.orEmpty(),
+                    address3 = identityView.address3.orEmpty(),
+                    city = identityView.city.orEmpty(),
+                    state = identityView.state.orEmpty(),
+                    postalCode = identityView.postalCode.orEmpty(),
+                    country = identityView.country.orEmpty(),
+                    company = identityView.company.orEmpty(),
+                    email = identityView.email.orEmpty(),
+                    phone = identityView.phone.orEmpty(),
+                    ssn = identityView.ssn.orEmpty(),
+                    passportNumber = identityView.passportNumber.orEmpty(),
+                    licenseNumber = identityView.licenseNumber.orEmpty(),
                 ),
             )
         }

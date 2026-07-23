@@ -252,6 +252,14 @@ private fun AssistStructure.ViewNode.buildAutofillView(
             data = autofillViewData,
         )
     }
+
+    // Identity hint detection/dispatch is wired up in a later phase; treating these as Unused for
+    // now is a no-op since nothing yet produces an IDENTITY_* hint.
+    else -> {
+        AutofillView.Unused(
+            data = autofillViewData,
+        )
+    }
 }
 
 /**
