@@ -131,9 +131,9 @@ import com.x8bit.bitwarden.data.auth.repository.util.CookieCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
-import com.x8bit.bitwarden.data.auth.repository.util.toRemovedPasswordUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
+import com.x8bit.bitwarden.data.auth.repository.util.updateMasterPasswordUnlock
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
@@ -330,7 +330,7 @@ class AuthRepositoryTest {
     fun beforeEach() {
         mockkStatic(
             GetTokenResponseJson.Success::toUserState,
-            UserStateJson::toRemovedPasswordUserStateJson,
+            UserStateJson::updateMasterPasswordUnlock,
         )
         mockkConstructor(
             NoActiveUserException::class,
@@ -348,7 +348,7 @@ class AuthRepositoryTest {
     fun tearDown() {
         unmockkStatic(
             GetTokenResponseJson.Success::toUserState,
-            UserStateJson::toRemovedPasswordUserStateJson,
+            UserStateJson::updateMasterPasswordUnlock,
         )
         mockkConstructor(
             NoActiveUserException::class,
@@ -5036,7 +5036,10 @@ class AuthRepositoryTest {
                 )
             } returns MigrateExistingUserToKeyConnectorResult.Success.asSuccess()
             every {
-                SINGLE_USER_STATE_1.toRemovedPasswordUserStateJson(userId = USER_ID_1)
+                SINGLE_USER_STATE_1.updateMasterPasswordUnlock(
+                    userId = USER_ID_1,
+                    masterPasswordUnlock = null,
+                )
             } returns SINGLE_USER_STATE_1
             every { vaultRepository.sync() } just runs
             every { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) } just runs
@@ -5045,7 +5048,10 @@ class AuthRepositoryTest {
 
             assertEquals(RemovePasswordResult.Success, result)
             verify(exactly = 1) {
-                SINGLE_USER_STATE_1.toRemovedPasswordUserStateJson(userId = USER_ID_1)
+                SINGLE_USER_STATE_1.updateMasterPasswordUnlock(
+                    userId = USER_ID_1,
+                    masterPasswordUnlock = null,
+                )
                 vaultRepository.sync()
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
             }

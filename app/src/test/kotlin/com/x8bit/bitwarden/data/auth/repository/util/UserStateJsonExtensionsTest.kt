@@ -59,20 +59,23 @@ class UserStateJsonExtensionsTest {
     }
 
     @Test
-    fun `toRemovedPasswordUserStateJson should do nothing for a non-matching account`() {
+    fun `updateMasterPasswordUnlock should do nothing for a non-matching account`() {
         val originalUserState = UserStateJson(
             activeUserId = "activeUserId",
             accounts = mapOf("activeUserId" to mockk()),
         )
         assertEquals(
             originalUserState,
-            originalUserState.toRemovedPasswordUserStateJson(userId = "nonActiveUserId"),
+            originalUserState.updateMasterPasswordUnlock(
+                userId = "nonActiveUserId",
+                masterPasswordUnlock = null,
+            ),
         )
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toRemovedPasswordUserStateJson should create user decryption options without a password if not present`() {
+    fun `updateMasterPasswordUnlock should create user decryption options without a password if not present`() {
         val originalProfile = AccountJson.Profile(
             userId = "activeUserId",
             email = "email",
@@ -118,13 +121,16 @@ class UserStateJsonExtensionsTest {
                     ),
                 ),
             ),
-            originalUserState.toRemovedPasswordUserStateJson(userId = "activeUserId"),
+            originalUserState.updateMasterPasswordUnlock(
+                userId = "activeUserId",
+                masterPasswordUnlock = null,
+            ),
         )
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toRemovedPasswordUserStateJson should update user decryption options to not have a password`() {
+    fun `updateMasterPasswordUnlock should update user decryption options to not have a password`() {
         val originalProfile = AccountJson.Profile(
             userId = "activeUserId",
             email = "email",
@@ -179,7 +185,10 @@ class UserStateJsonExtensionsTest {
                     ),
                 ),
             ),
-            originalUserState.toRemovedPasswordUserStateJson(userId = "activeUserId"),
+            originalUserState.updateMasterPasswordUnlock(
+                userId = "activeUserId",
+                masterPasswordUnlock = null,
+            ),
         )
     }
 
@@ -420,7 +429,7 @@ class UserStateJsonExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toUserStateJsonWithPassword with masterPasswordUnlock should update active account to set hasMasterPassword and masterPasswordUnlock`() {
+    fun `updateMasterPasswordUnlock with masterPasswordUnlock should update account to set hasMasterPassword and masterPasswordUnlock`() {
         val originalProfile = AccountJson.Profile(
             userId = "activeUserId",
             email = "email",
@@ -481,7 +490,10 @@ class UserStateJsonExtensionsTest {
                     "activeUserId" to originalAccount,
                 ),
             )
-                .toUserStateJsonWithPassword(masterPasswordUnlock = masterPasswordUnlock),
+                .updateMasterPasswordUnlock(
+                    userId = "activeUserId",
+                    masterPasswordUnlock = masterPasswordUnlock,
+                ),
         )
     }
 
