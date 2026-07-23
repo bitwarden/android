@@ -94,7 +94,7 @@ class FilledDataBuilderImpl(
 
             is AutofillPartition.Identity -> {
                 // Filling an identity partition is wired up in a later phase; this is a no-op
-                // today since an identity partition is never constructed yet.
+                // today since nothing yet classifies a view as Identity.
                 emptyList()
             }
         }
