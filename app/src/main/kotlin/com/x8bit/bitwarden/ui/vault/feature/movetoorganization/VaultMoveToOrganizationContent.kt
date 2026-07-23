@@ -40,6 +40,7 @@ fun VaultMoveToOrganizationContent(
             item {
                 BitwardenMultiSelectButton(
                     label = stringResource(id = BitwardenString.vault),
+                    dialogTitle = stringResource(id = BitwardenString.filter_by_vault),
                     options = state
                         .organizations
                         .map { it.name }
