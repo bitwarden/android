@@ -8,8 +8,8 @@ import kotlinx.serialization.Serializable
 /**
  * Represents who is allowed to view a Send under the `SendControls` policy.
  */
-@Serializable(SendWhoCanAccessTypeSerializer::class)
-enum class SendWhoCanAccessTypeJson {
+@Serializable(SendAccessTypeSerializer::class)
+enum class SendAccessTypeJson {
     /**
      * Anyone with the link can view the Send.
      */
@@ -30,8 +30,8 @@ enum class SendWhoCanAccessTypeJson {
 }
 
 @Keep
-private class SendWhoCanAccessTypeSerializer :
-    BaseEnumeratedIntSerializer<SendWhoCanAccessTypeJson>(
-        className = "SendWhoCanAccessTypeJson",
-        values = SendWhoCanAccessTypeJson.entries.toTypedArray(),
+private class SendAccessTypeSerializer :
+    BaseEnumeratedIntSerializer<SendAccessTypeJson>(
+        className = "SendAccessTypeJson",
+        values = SendAccessTypeJson.entries.toTypedArray(),
     )

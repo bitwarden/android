@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.model
 
 import com.bitwarden.network.model.SendTypeJson
-import com.bitwarden.network.model.SendWhoCanAccessTypeJson
+import com.bitwarden.network.model.SendAccessTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -125,7 +125,7 @@ sealed class PolicyInformation {
      * address from Send recipients.
      * @property whoCanAccess The access type Sends are restricted to, if any.
      * @property allowedDomains A comma-separated list of email domains recipients must belong to
-     * when [whoCanAccess] is [SendWhoCanAccessTypeJson.SPECIFIC_PEOPLE].
+     * when [whoCanAccess] is [SendAccessTypeJson.SPECIFIC_PEOPLE].
      * @property deletionHours The number of hours until a Send is deleted, if enforced.
      * @property allowedSendTypes The types of Sends that are allowed to be created, if
      * restricted.
@@ -139,7 +139,7 @@ sealed class PolicyInformation {
         val disableHideEmail: Boolean?,
 
         @SerialName("whoCanAccess")
-        val whoCanAccess: SendWhoCanAccessTypeJson?,
+        val whoCanAccess: SendAccessTypeJson?,
 
         @SerialName("allowedDomains")
         val allowedDomains: String?,

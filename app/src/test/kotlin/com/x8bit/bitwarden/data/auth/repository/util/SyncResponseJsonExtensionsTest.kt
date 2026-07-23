@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.SendTypeJson
-import com.bitwarden.network.model.SendWhoCanAccessTypeJson
+import com.bitwarden.network.model.SendAccessTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.bitwarden.network.model.createMockPermissions
@@ -179,7 +179,7 @@ class SyncResponseJsonExtensionsTest {
         val policyInformation = PolicyInformation.SendControls(
             disableSend = false,
             disableHideEmail = true,
-            whoCanAccess = SendWhoCanAccessTypeJson.SPECIFIC_PEOPLE,
+            whoCanAccess = SendAccessTypeJson.SPECIFIC_PEOPLE,
             allowedDomains = "bitwarden.com",
             deletionHours = 168,
             allowedSendTypes = listOf(SendTypeJson.TEXT),
