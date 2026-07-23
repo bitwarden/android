@@ -10,6 +10,8 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.util.firstWithTimeoutOrNull
+import com.x8bit.bitwarden.data.platform.util.identityAddress
+import com.x8bit.bitwarden.data.platform.util.identityName
 import com.x8bit.bitwarden.data.platform.util.isActive
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
@@ -130,6 +132,54 @@ class AutofillCipherProviderImpl(
                     username = cipherView.login?.username.orEmpty(),
                     website = uri,
                 )
+            }
+    }
+
+    override suspend fun getIdentityAutofillCiphers(): List<AutofillCipher.Identity> {
+        val cipherListViews = getUnlockedCipherListViewsOrNull() ?: return emptyList()
+        return cipherListViews
+            .mapNotNull { cipherListView ->
+                cipherListView
+                    // We only care about non-deleted identity ciphers.
+                    .takeIf {
+                        // Must be identity type.
+                        it.type is CipherListViewType.Identity &&
+                            // Must still be active.
+                            it.isActive &&
+                            // Must not require a reprompt.
+                            it.reprompt == CipherRepromptType.NONE
+                    }
+                    ?.let { nonNullCipherListView ->
+                        nonNullCipherListView.id?.let { cipherId ->
+                            decryptCipherOrNull(cipherId = cipherId)?.let { cipherView ->
+                                val identityView = cipherView.identity
+                                AutofillCipher.Identity(
+                                    cipherId = cipherView.id,
+                                    name = cipherView.name,
+                                    subtitle = cipherView.subtitle.orEmpty(),
+                                    fullName = identityView?.identityName.orEmpty(),
+                                    fullAddress = identityView?.identityAddress.orEmpty(),
+                                    title = identityView?.title.orEmpty(),
+                                    firstName = identityView?.firstName.orEmpty(),
+                                    middleName = identityView?.middleName.orEmpty(),
+                                    lastName = identityView?.lastName.orEmpty(),
+                                    address1 = identityView?.address1.orEmpty(),
+                                    address2 = identityView?.address2.orEmpty(),
+                                    address3 = identityView?.address3.orEmpty(),
+                                    city = identityView?.city.orEmpty(),
+                                    state = identityView?.state.orEmpty(),
+                                    postalCode = identityView?.postalCode.orEmpty(),
+                                    country = identityView?.country.orEmpty(),
+                                    company = identityView?.company.orEmpty(),
+                                    email = identityView?.email.orEmpty(),
+                                    phone = identityView?.phone.orEmpty(),
+                                    ssn = identityView?.ssn.orEmpty(),
+                                    passportNumber = identityView?.passportNumber.orEmpty(),
+                                    licenseNumber = identityView?.licenseNumber.orEmpty(),
+                                )
+                            }
+                        }
+                    }
             }
     }
 

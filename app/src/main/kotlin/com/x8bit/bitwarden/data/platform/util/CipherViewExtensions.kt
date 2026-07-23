@@ -1,8 +1,12 @@
 package com.x8bit.bitwarden.data.platform.util
 
+import com.bitwarden.ui.platform.base.util.nullIfAllEqual
+import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.bitwarden.vault.CardView
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.IdentityView
+import java.util.Locale
 
 /**
  * If someone has multiple AMEX cards, they tend to have the same last 4 digits. So we provide a
@@ -80,3 +84,36 @@ private val CardView.subtitleCardNumber: String?
  */
 private val String?.isAmEx: Boolean
     get() = this?.startsWith("34") == true || this?.startsWith("37") == true
+
+/**
+ * The full postal address for an [IdentityView], joining its address parts.
+ */
+internal val IdentityView.identityAddress: String?
+    get() = listOfNotNull(
+        address1,
+        address2,
+        address3,
+        listOf(city ?: "-", state ?: "-", postalCode ?: "-")
+            .nullIfAllEqual("-")
+            ?.joinToString(", "),
+        country,
+    )
+        .joinToString("\n")
+        .orNullIfBlank()
+
+/**
+ * The full name for an [IdentityView], joining its name parts.
+ */
+internal val IdentityView.identityName: String?
+    get() = listOfNotNull(
+        title
+            ?.lowercase()
+            ?.replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+            },
+        firstName,
+        middleName,
+        lastName,
+    )
+        .joinToString(" ")
+        .orNullIfBlank()

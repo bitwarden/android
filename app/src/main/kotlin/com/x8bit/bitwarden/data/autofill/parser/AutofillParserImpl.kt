@@ -186,6 +186,12 @@ class AutofillParserImpl(
                 )
             }
 
+            is AutofillView.Identity -> {
+                // Identity partition construction is wired up in a later phase; treating it as
+                // unfillable for now is a no-op since nothing yet classifies a view as Identity.
+                return AutofillRequest.Unfillable
+            }
+
             is AutofillView.Unused -> {
                 // This will never happen: the heuristic path filters out Unused views, and the
                 // fill-assist path never constructs one (toAutofillViewForFieldKey has no Unused
@@ -248,6 +254,9 @@ class AutofillParserImpl(
                     rule.category in LOGIN_FILL_ASSIST_CATEGORIES ||
                         rule.category in CARD_FILL_ASSIST_CATEGORIES
                 }
+                // Fill-assist category coverage for Identity is added in a later phase; this is a
+                // no-op today since nothing yet classifies a view as Identity.
+                is AutofillView.Identity -> false
             }
         }
         if (!coversCurrentPartition) return this
@@ -458,6 +467,7 @@ private fun AssistStructure.ViewNode.traverse(
  * This updates the underlying [AutofillView.data] with the given [website] if it does not already
  * have a website associated with it.
  */
+@Suppress("CyclomaticComplexMethod")
 private fun AutofillView.updateWebsiteIfNecessary(website: String?): AutofillView {
     val site = website ?: return this
     if (this.data.website != null) return this
@@ -472,6 +482,47 @@ private fun AutofillView.updateWebsiteIfNecessary(website: String?): AutofillVie
         is AutofillView.Login.Email -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Login.Password -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Login.Username -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.AddressCountry -> {
+            this.copy(data = this.data.copy(website = site))
+        }
+        is AutofillView.Identity.AddressLocality -> {
+            this.copy(data = this.data.copy(website = site))
+        }
+        is AutofillView.Identity.AddressRegion -> {
+            this.copy(data = this.data.copy(website = site))
+        }
+        is AutofillView.Identity.AddressStreet -> {
+            this.copy(data = this.data.copy(website = site))
+        }
+        is AutofillView.Identity.Company -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.Email -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.LicenseNumber -> {
+            this.copy(data = this.data.copy(website = site))
+        }
+        is AutofillView.Identity.PassportNumber -> {
+            this.copy(data = this.data.copy(website = site))
+        }
+        is AutofillView.Identity.PersonNameFamily -> {
+            this.copy(data = this.data.copy(website = site))
+        }
+        is AutofillView.Identity.PersonNameFull -> {
+            this.copy(data = this.data.copy(website = site))
+        }
+        is AutofillView.Identity.PersonNameGiven -> {
+            this.copy(data = this.data.copy(website = site))
+        }
+        is AutofillView.Identity.PersonNameMiddle -> {
+            this.copy(data = this.data.copy(website = site))
+        }
+        is AutofillView.Identity.PersonNamePrefix -> {
+            this.copy(data = this.data.copy(website = site))
+        }
+        is AutofillView.Identity.PhoneFull -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.PostalAddressFull -> {
+            this.copy(data = this.data.copy(website = site))
+        }
+        is AutofillView.Identity.PostalCode -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.Ssn -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Unused -> this.copy(data = this.data.copy(website = site))
     }
 }

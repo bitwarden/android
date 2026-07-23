@@ -129,6 +129,135 @@ sealed class AutofillView {
     }
 
     /**
+     * A view that corresponds to the identity data partition for autofill fields.
+     */
+    sealed class Identity : AutofillView() {
+
+        /**
+         * The full name [AutofillView] for the [Identity] data partition, used for forms with a
+         * single combined name field.
+         */
+        data class PersonNameFull(
+            override val data: Data,
+        ) : Identity()
+
+        /**
+         * The name prefix (e.g. "Mr.", "Dr.") [AutofillView] for the [Identity] data partition.
+         */
+        data class PersonNamePrefix(
+            override val data: Data,
+        ) : Identity()
+
+        /**
+         * The given (first) name [AutofillView] for the [Identity] data partition.
+         */
+        data class PersonNameGiven(
+            override val data: Data,
+        ) : Identity()
+
+        /**
+         * The middle name [AutofillView] for the [Identity] data partition.
+         */
+        data class PersonNameMiddle(
+            override val data: Data,
+        ) : Identity()
+
+        /**
+         * The family (last) name [AutofillView] for the [Identity] data partition.
+         */
+        data class PersonNameFamily(
+            override val data: Data,
+        ) : Identity()
+
+        /**
+         * The full postal address [AutofillView] for the [Identity] data partition, used for forms
+         * with a single combined address field.
+         */
+        data class PostalAddressFull(
+            override val data: Data,
+        ) : Identity()
+
+        /**
+         * The street address [AutofillView] for the [Identity] data partition.
+         */
+        data class AddressStreet(
+            override val data: Data,
+        ) : Identity()
+
+        /**
+         * The locality (city) [AutofillView] for the [Identity] data partition.
+         */
+        data class AddressLocality(
+            override val data: Data,
+        ) : Identity()
+
+        /**
+         * The region (state/province) [AutofillView] for the [Identity] data partition.
+         */
+        data class AddressRegion(
+            override val data: Data,
+        ) : Identity()
+
+        /**
+         * The country [AutofillView] for the [Identity] data partition.
+         */
+        data class AddressCountry(
+            override val data: Data,
+        ) : Identity()
+
+        /**
+         * The postal code [AutofillView] for the [Identity] data partition.
+         */
+        data class PostalCode(
+            override val data: Data,
+        ) : Identity()
+
+        /**
+         * The full phone number [AutofillView] for the [Identity] data partition.
+         */
+        data class PhoneFull(
+            override val data: Data,
+        ) : Identity()
+
+        /**
+         * The company [AutofillView] for the [Identity] data partition.
+         */
+        data class Company(
+            override val data: Data,
+        ) : Identity()
+
+        /**
+         * The email [AutofillView] for the [Identity] data partition. This is distinct from
+         * [Login.Email] and may be offered alongside it when a field is ambiguous between the
+         * login and identity partitions.
+         */
+        data class Email(
+            override val data: Data,
+        ) : Identity()
+
+        /**
+         * The social security number [AutofillView] for the [Identity] data partition.
+         */
+        data class Ssn(
+            override val data: Data,
+        ) : Identity()
+
+        /**
+         * The passport number [AutofillView] for the [Identity] data partition.
+         */
+        data class PassportNumber(
+            override val data: Data,
+        ) : Identity()
+
+        /**
+         * The license number [AutofillView] for the [Identity] data partition.
+         */
+        data class LicenseNumber(
+            override val data: Data,
+        ) : Identity()
+    }
+
+    /**
      * A view that is an input field but does not correspond to any known autofill field.
      */
     data class Unused(
