@@ -17,9 +17,16 @@ on:
       patch_version:
         description: "Order 999 - Overrides Patch version"
         type: boolean
+      distribute-to-firebase:
+        description: "Optional. Distribute artifacts to Firebase."
+        required: false
+        default: true
+        type: boolean
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_ACTION_RUN_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+  DISTRIBUTE_TO_FIREBASE: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
 
 permissions:
   contents: read
@@ -78,6 +85,17 @@ jobs:
           az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
           --name testharness_apk-keystore.jks --file ${{ github.workspace }}/keystores/testharness_apk-keystore.jks --output none
 
+      - name: Download Firebase credentials
+        if: ${{ env.DISTRIBUTE_TO_FIREBASE }}
+        env:
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: mobile
+        run: |
+          mkdir -p ${{ github.workspace }}/secrets
+
+          az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
+          --name app_play_prod_firebase-creds.json --file ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json --output none
+
       - name: AZ Logout
         uses: bitwarden/gh-actions/azure-logout@main
 
@@ -119,3 +137,16 @@ jobs:
           name: com.bitwarden.testharness.apk-sha256.txt
           path: ./com.bitwarden.testharness.apk-sha256.txt
           if-no-files-found: error
+
+      - name: Install Firebase app distribution plugin
+        if: ${{ env.DISTRIBUTE_TO_FIREBASE }}
+        run: bundle exec fastlane add_plugin firebase_app_distribution
+
+      - name: Distribute to Firebase - testharness.apk
+        if: ${{ env.DISTRIBUTE_TO_FIREBASE }}
+        env:
+          APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json
+        run: |
+          bundle exec fastlane distributeTestHarnessReleaseToFirebase \
+          actionUrl:$GITHUB_ACTION_RUN_URL \
+          service_credentials_file:$APP_PLAY_FIREBASE_CREDS_PATH

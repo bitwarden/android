@@ -463,6 +463,22 @@ platform :android do
     )
   end
 
+  desc "Publish release Test Harness APK to Firebase App Distribution"
+  lane :distributeTestHarnessReleaseToFirebase do |options|
+    releaseNotes = generateReleaseNotes(
+      repoName: "android",
+      actionUrl: "#{options[:actionUrl]}"
+    )
+    firebase_app_distribution(
+      app: "1:1093287226212:android:12f84f87c883e8604b2871",
+      android_artifact_type: "APK",
+      android_artifact_path: "testharness/build/outputs/apk/release/com.bitwarden.testharness.apk",
+      service_credentials_file: options[:service_credentials_file],
+      groups: "internal-prod-group, livefront",
+      release_notes: "#{releaseNotes}",
+    )
+  end
+
   desc "Publish release AAB to Firebase"
   lane :distributeAuthenticatorReleaseBundleToFirebase do |options|
     release_notes = changelog_from_git_commits(
