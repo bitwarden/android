@@ -551,10 +551,7 @@ private fun AutofillView.updateWebsiteIfNecessary(website: String?): AutofillVie
         }
 
         is AutofillView.Identity.PhoneFull -> this.copy(data = this.data.copy(website = site))
-        is AutofillView.Identity.PostalAddressFull -> {
-            this.copy(data = this.data.copy(website = site))
-        }
-
+        is AutofillView.Identity.PostalAddressFull -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.PostalCode -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.Ssn -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Unused -> this.copy(data = this.data.copy(website = site))
