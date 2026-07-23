@@ -16,6 +16,22 @@ private const val FIELD_KEY_CARD_EXPIRATION_MONTH = "cardExpirationMonth"
 private const val FIELD_KEY_CARD_EXPIRATION_YEAR = "cardExpirationYear"
 private const val FIELD_KEY_CARD_CVV = "cardCvv"
 private const val FIELD_KEY_CARD_TYPE = "cardType"
+private const val FIELD_KEY_PERSON_NAME_FULL = "personNameFull"
+private const val FIELD_KEY_PERSON_NAME_PREFIX = "personNamePrefix"
+private const val FIELD_KEY_PERSON_NAME_GIVEN = "personNameGiven"
+private const val FIELD_KEY_PERSON_NAME_MIDDLE = "personNameMiddle"
+private const val FIELD_KEY_PERSON_NAME_FAMILY = "personNameFamily"
+private const val FIELD_KEY_POSTAL_ADDRESS_FULL = "postalAddressFull"
+private const val FIELD_KEY_ADDRESS_STREET = "addressStreet"
+private const val FIELD_KEY_ADDRESS_LOCALITY = "addressLocality"
+private const val FIELD_KEY_ADDRESS_REGION = "addressRegion"
+private const val FIELD_KEY_ADDRESS_COUNTRY = "addressCountry"
+private const val FIELD_KEY_POSTAL_CODE = "postalCode"
+private const val FIELD_KEY_PHONE_FULL = "phoneFull"
+private const val FIELD_KEY_COMPANY = "company"
+private const val FIELD_KEY_SSN = "ssn"
+private const val FIELD_KEY_PASSPORT_NUMBER = "passportNumber"
+private const val FIELD_KEY_LICENSE_NUMBER = "licenseNumber"
 
 /**
  * Traverses the [AssistStructure] and returns a list of [AutofillView]s classified by the
@@ -36,7 +52,7 @@ private fun AssistStructure.ViewNode.traverseForFillAssist(
     parentWebsite: String?,
 ): List<AutofillView> {
     val website = this.website ?: parentWebsite
-    val ownView = autofillId?.let { id ->
+    val ownViews = autofillId?.let { id ->
         hostRules
             .flatMap { it.fields.entries }
             .filter { (_, alternatives) ->
@@ -48,17 +64,27 @@ private fun AssistStructure.ViewNode.traverseForFillAssist(
             ?.let { matchingEntries ->
                 val data = toAutofillViewData(autofillId = id, website = website)
                 val candidateViews = matchingEntries.mapNotNull { (key, _) ->
-                    key.toAutofillViewForFieldKey(data = data)
+                    key.toAutofillViewForFieldKey(data = data)?.let { key to it }
                 }
                 // A single field can legitimately match both the "email" and "phone"/"username"
                 // keys (e.g. a combined phone-or-email login field). Login.Username has no format
                 // gate and fills any stored value, while Login.Email rejects non-email values via
                 // isValidEmail(). Preferring Username when both match avoids rejecting a phone
                 // number credential on a field that would have accepted it.
-                candidateViews.firstOrNull { it is AutofillView.Login.Username }
+                candidateViews.firstOrNull { (_, view) -> view is AutofillView.Login.Username }
                     ?: candidateViews.firstOrNull()
             }
-    }
+            ?.let { (key, view) ->
+                // An email field key is offered as both a Login candidate (primary) and an
+                // Identity candidate, mirroring the same dual-classification used by heuristic
+                // detection, since the two partitions aren't mutually exclusive for this field.
+                if (key == FIELD_KEY_EMAIL) {
+                    listOf(view, AutofillView.Identity.Email(data = view.data))
+                } else {
+                    listOf(view)
+                }
+            }
+    }.orEmpty()
     val childViews = (0 until childCount)
         .flatMap { index ->
             getChildAt(index).traverseForFillAssist(
@@ -66,27 +92,64 @@ private fun AssistStructure.ViewNode.traverseForFillAssist(
                 parentWebsite = website,
             )
         }
-    return listOfNotNull(ownView) + childViews
+    return ownViews + childViews
 }
 
-private fun String.toAutofillViewForFieldKey(data: AutofillView.Data): AutofillView? = when (this) {
-    FIELD_KEY_USERNAME, FIELD_KEY_PHONE -> AutofillView.Login.Username(data = data)
-    FIELD_KEY_EMAIL -> AutofillView.Login.Email(data = data)
-    FIELD_KEY_PASSWORD, FIELD_KEY_NEW_PASSWORD -> AutofillView.Login.Password(data = data)
-    FIELD_KEY_CARD_NUMBER -> AutofillView.Card.Number(data = data)
-    FIELD_KEY_CARDHOLDER_NAME -> AutofillView.Card.CardholderName(data = data)
-    FIELD_KEY_CARD_EXPIRATION_DATE -> AutofillView.Card.ExpirationDate(data = data)
-    FIELD_KEY_CARD_EXPIRATION_MONTH -> AutofillView.Card.ExpirationMonth(
-        data = data,
-        monthValue = null,
-    )
+/**
+ * Maps this field key to the [AutofillView] it represents, or null if this key is unrecognized.
+ * Delegates to a type-specific mapper ([toLoginViewForFieldKey], [toCardViewForFieldKey],
+ * [toIdentityViewForFieldKey]) grouped by the category the field key belongs to.
+ */
+private fun String.toAutofillViewForFieldKey(data: AutofillView.Data): AutofillView? =
+    toLoginViewForFieldKey(data = data)
+        ?: toCardViewForFieldKey(data = data)
+        ?: toIdentityViewForFieldKey(data = data)
 
-    FIELD_KEY_CARD_EXPIRATION_YEAR -> AutofillView.Card.ExpirationYear(
-        data = data,
-        yearValue = null,
-    )
+private fun String.toLoginViewForFieldKey(data: AutofillView.Data): AutofillView.Login? =
+    when (this) {
+        FIELD_KEY_USERNAME, FIELD_KEY_PHONE -> AutofillView.Login.Username(data = data)
+        FIELD_KEY_EMAIL -> AutofillView.Login.Email(data = data)
+        FIELD_KEY_PASSWORD, FIELD_KEY_NEW_PASSWORD -> AutofillView.Login.Password(data = data)
+        else -> null
+    }
 
-    FIELD_KEY_CARD_CVV -> AutofillView.Card.SecurityCode(data = data)
-    FIELD_KEY_CARD_TYPE -> AutofillView.Card.Brand(data = data, brandValue = null)
-    else -> null
-}
+private fun String.toCardViewForFieldKey(data: AutofillView.Data): AutofillView.Card? =
+    when (this) {
+        FIELD_KEY_CARD_NUMBER -> AutofillView.Card.Number(data = data)
+        FIELD_KEY_CARDHOLDER_NAME -> AutofillView.Card.CardholderName(data = data)
+        FIELD_KEY_CARD_EXPIRATION_DATE -> AutofillView.Card.ExpirationDate(data = data)
+        FIELD_KEY_CARD_EXPIRATION_MONTH -> AutofillView.Card.ExpirationMonth(
+            data = data,
+            monthValue = null,
+        )
+
+        FIELD_KEY_CARD_EXPIRATION_YEAR -> AutofillView.Card.ExpirationYear(
+            data = data,
+            yearValue = null,
+        )
+
+        FIELD_KEY_CARD_CVV -> AutofillView.Card.SecurityCode(data = data)
+        FIELD_KEY_CARD_TYPE -> AutofillView.Card.Brand(data = data, brandValue = null)
+        else -> null
+    }
+
+private fun String.toIdentityViewForFieldKey(data: AutofillView.Data): AutofillView.Identity? =
+    when (this) {
+        FIELD_KEY_PERSON_NAME_FULL -> AutofillView.Identity.PersonNameFull(data = data)
+        FIELD_KEY_PERSON_NAME_PREFIX -> AutofillView.Identity.PersonNamePrefix(data = data)
+        FIELD_KEY_PERSON_NAME_GIVEN -> AutofillView.Identity.PersonNameGiven(data = data)
+        FIELD_KEY_PERSON_NAME_MIDDLE -> AutofillView.Identity.PersonNameMiddle(data = data)
+        FIELD_KEY_PERSON_NAME_FAMILY -> AutofillView.Identity.PersonNameFamily(data = data)
+        FIELD_KEY_POSTAL_ADDRESS_FULL -> AutofillView.Identity.PostalAddressFull(data = data)
+        FIELD_KEY_ADDRESS_STREET -> AutofillView.Identity.AddressStreet(data = data)
+        FIELD_KEY_ADDRESS_LOCALITY -> AutofillView.Identity.AddressLocality(data = data)
+        FIELD_KEY_ADDRESS_REGION -> AutofillView.Identity.AddressRegion(data = data)
+        FIELD_KEY_ADDRESS_COUNTRY -> AutofillView.Identity.AddressCountry(data = data)
+        FIELD_KEY_POSTAL_CODE -> AutofillView.Identity.PostalCode(data = data)
+        FIELD_KEY_PHONE_FULL -> AutofillView.Identity.PhoneFull(data = data)
+        FIELD_KEY_COMPANY -> AutofillView.Identity.Company(data = data)
+        FIELD_KEY_SSN -> AutofillView.Identity.Ssn(data = data)
+        FIELD_KEY_PASSPORT_NUMBER -> AutofillView.Identity.PassportNumber(data = data)
+        FIELD_KEY_LICENSE_NUMBER -> AutofillView.Identity.LicenseNumber(data = data)
+        else -> null
+    }
