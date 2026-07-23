@@ -53,6 +53,7 @@ class AutofillParserTests {
         every { this@mockk.htmlInfo } returns mockk(relaxed = true)
         every { this@mockk.idPackage } returns ID_PACKAGE
         every { this@mockk.idEntry } returns null
+        every { this@mockk.hint } returns null
     }
     private val loginAutofillHint = View.AUTOFILL_HINT_USERNAME
     private val loginAutofillId: AutofillId = mockk()
@@ -63,6 +64,7 @@ class AutofillParserTests {
         every { this@mockk.htmlInfo } returns mockk(relaxed = true)
         every { this@mockk.idPackage } returns ID_PACKAGE
         every { this@mockk.idEntry } returns null
+        every { this@mockk.hint } returns null
     }
     private val cardWindowNode: AssistStructure.WindowNode = mockk {
         every { this@mockk.rootViewNode } returns cardViewNode
