@@ -523,57 +523,21 @@ private fun AutofillView.updateWebsiteIfNecessary(website: String?): AutofillVie
         is AutofillView.Login.Email -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Login.Password -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Login.Username -> this.copy(data = this.data.copy(website = site))
-        is AutofillView.Identity.AddressCountry -> {
-            this.copy(data = this.data.copy(website = site))
-        }
-
-        is AutofillView.Identity.AddressLocality -> {
-            this.copy(data = this.data.copy(website = site))
-        }
-
-        is AutofillView.Identity.AddressRegion -> {
-            this.copy(data = this.data.copy(website = site))
-        }
-
-        is AutofillView.Identity.AddressStreet -> {
-            this.copy(data = this.data.copy(website = site))
-        }
-
+        is AutofillView.Identity.AddressCountry -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.AddressLocality -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.AddressRegion -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.AddressStreet -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.Company -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.Email -> this.copy(data = this.data.copy(website = site))
-        is AutofillView.Identity.LicenseNumber -> {
-            this.copy(data = this.data.copy(website = site))
-        }
-
-        is AutofillView.Identity.PassportNumber -> {
-            this.copy(data = this.data.copy(website = site))
-        }
-
-        is AutofillView.Identity.PersonNameFamily -> {
-            this.copy(data = this.data.copy(website = site))
-        }
-
-        is AutofillView.Identity.PersonNameFull -> {
-            this.copy(data = this.data.copy(website = site))
-        }
-
-        is AutofillView.Identity.PersonNameGiven -> {
-            this.copy(data = this.data.copy(website = site))
-        }
-
-        is AutofillView.Identity.PersonNameMiddle -> {
-            this.copy(data = this.data.copy(website = site))
-        }
-
-        is AutofillView.Identity.PersonNamePrefix -> {
-            this.copy(data = this.data.copy(website = site))
-        }
-
+        is AutofillView.Identity.LicenseNumber -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.PassportNumber -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.PersonNameFamily -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.PersonNameFull -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.PersonNameGiven -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.PersonNameMiddle -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.PersonNamePrefix -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.PhoneFull -> this.copy(data = this.data.copy(website = site))
-        is AutofillView.Identity.PostalAddressFull -> {
-            this.copy(data = this.data.copy(website = site))
-        }
-
+        is AutofillView.Identity.PostalAddressFull -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.PostalCode -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.Ssn -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Unused -> this.copy(data = this.data.copy(website = site))
