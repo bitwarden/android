@@ -77,8 +77,9 @@ class FillAssistViewNodeExtensionsTest {
         assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `buildFillAssistViews should return Login Email when htmlInfo matches email clause`() {
+    fun `buildFillAssistViews should return Login Email and Identity Email when htmlInfo matches email clause`() {
         val htmlInfo = createHtmlInfo()
         val viewNode = createViewNode(htmlInfo = htmlInfo)
         val assistStructure = createAssistStructure(viewNode)
@@ -102,7 +103,13 @@ class FillAssistViewNodeExtensionsTest {
             urlBarWebsite = null,
         )
 
-        assertEquals(listOf(AutofillView.Login.Email(data = data)), actual)
+        assertEquals(
+            listOf(
+                AutofillView.Login.Email(data = data),
+                AutofillView.Identity.Email(data = data),
+            ),
+            actual,
+        )
     }
 
     @Test
@@ -210,6 +217,57 @@ class FillAssistViewNodeExtensionsTest {
 
             val hostRule = FillAssistRules.HostRule(
                 category = "payment-card",
+                fields = mapOf(
+                    fieldKey to listOf(selectorClause(tag = "input", id = "field-$fieldKey")),
+                ),
+            )
+
+            val actual = assistStructure.buildFillAssistViews(
+                hostRules = listOf(hostRule),
+                urlBarWebsite = null,
+            )
+
+            assertEquals(
+                listOf(expectedView),
+                actual,
+                "Failed for field key: $fieldKey",
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `buildFillAssistViews should map all identity field keys to correct AutofillView subtypes`() {
+        val identityFieldExpectations: List<Pair<String, AutofillView>> = listOf(
+            "personNameFull" to AutofillView.Identity.PersonNameFull(data = autofillData()),
+            "personNamePrefix" to AutofillView.Identity.PersonNamePrefix(data = autofillData()),
+            "personNameGiven" to AutofillView.Identity.PersonNameGiven(data = autofillData()),
+            "personNameMiddle" to AutofillView.Identity.PersonNameMiddle(data = autofillData()),
+            "personNameFamily" to AutofillView.Identity.PersonNameFamily(data = autofillData()),
+            "postalAddressFull" to AutofillView.Identity.PostalAddressFull(data = autofillData()),
+            "addressStreet" to AutofillView.Identity.AddressStreet(data = autofillData()),
+            "addressLocality" to AutofillView.Identity.AddressLocality(data = autofillData()),
+            "addressRegion" to AutofillView.Identity.AddressRegion(data = autofillData()),
+            "addressCountry" to AutofillView.Identity.AddressCountry(data = autofillData()),
+            "postalCode" to AutofillView.Identity.PostalCode(data = autofillData()),
+            "phoneFull" to AutofillView.Identity.PhoneFull(data = autofillData()),
+            "company" to AutofillView.Identity.Company(data = autofillData()),
+            "ssn" to AutofillView.Identity.Ssn(data = autofillData()),
+            "passportNumber" to AutofillView.Identity.PassportNumber(data = autofillData()),
+            "licenseNumber" to AutofillView.Identity.LicenseNumber(data = autofillData()),
+        )
+
+        identityFieldExpectations.forEach { (fieldKey, expectedView) ->
+            val htmlInfo = createHtmlInfo()
+            val viewNode = createViewNode(htmlInfo = htmlInfo)
+            val assistStructure = createAssistStructure(viewNode)
+            val data = autofillData()
+            every {
+                viewNode.toAutofillViewData(autofillId = autofillId, website = null)
+            } returns data
+
+            val hostRule = FillAssistRules.HostRule(
+                category = "identity-form",
                 fields = mapOf(
                     fieldKey to listOf(selectorClause(tag = "input", id = "field-$fieldKey")),
                 ),
