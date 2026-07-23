@@ -218,163 +218,63 @@ private fun String.toBitwardenAutofillHintOrNull(): AutofillHint? =
 
 /**
  * Attempt to convert this [AssistStructure.ViewNode] and [autofillViewData] into an [AutofillView].
+ * Dispatches to a type-specific builder ([buildCardView], [buildLoginView], [buildIdentityView])
+ * based on which category [autofillHint] belongs to. This `when` intentionally lists every
+ * [AutofillHint] value (rather than a single fallback per category) so the compiler still forces a
+ * decision here whenever a new hint is added, even though the actual construction logic lives in
+ * the category-specific builder.
  */
-@Suppress("LongMethod")
 private fun AssistStructure.ViewNode.buildAutofillView(
     autofillOptions: List<String>,
     autofillViewData: AutofillView.Data,
     autofillHint: AutofillHint?,
 ): AutofillView = when (autofillHint) {
-    AutofillHint.CARD_EXPIRATION_MONTH -> {
-        val monthValue = this
-            .autofillValue
-            ?.extractMonthValue(
-                autofillOptions = autofillOptions,
-            )
+    AutofillHint.CARD_EXPIRATION_MONTH,
+    AutofillHint.CARD_EXPIRATION_YEAR,
+    AutofillHint.CARD_EXPIRATION_DATE,
+    AutofillHint.CARD_NUMBER,
+    AutofillHint.CARD_SECURITY_CODE,
+    AutofillHint.CARD_CARDHOLDER,
+    AutofillHint.CARD_BRAND,
+        -> buildCardView(
+        autofillOptions = autofillOptions,
+        autofillViewData = autofillViewData,
+        autofillHint = autofillHint,
+    )
+        ?: AutofillView.Unused(data = autofillViewData)
 
-        AutofillView.Card.ExpirationMonth(
-            data = autofillViewData,
-            monthValue = monthValue,
-        )
-    }
+    AutofillHint.PASSWORD,
+    AutofillHint.USERNAME,
+        -> buildLoginView(
+        autofillViewData = autofillViewData,
+        autofillHint = autofillHint,
+    )
+        ?: AutofillView.Unused(data = autofillViewData)
 
-    AutofillHint.CARD_EXPIRATION_YEAR -> {
-        val yearValue = this
-            .autofillValue
-            ?.extractYearValue(
-                autofillOptions = autofillOptions,
-            )
+    AutofillHint.IDENTITY_PERSON_NAME_FULL,
+    AutofillHint.IDENTITY_PERSON_NAME_PREFIX,
+    AutofillHint.IDENTITY_PERSON_NAME_GIVEN,
+    AutofillHint.IDENTITY_PERSON_NAME_MIDDLE,
+    AutofillHint.IDENTITY_PERSON_NAME_FAMILY,
+    AutofillHint.IDENTITY_POSTAL_ADDRESS_FULL,
+    AutofillHint.IDENTITY_ADDRESS_STREET,
+    AutofillHint.IDENTITY_ADDRESS_LOCALITY,
+    AutofillHint.IDENTITY_ADDRESS_REGION,
+    AutofillHint.IDENTITY_ADDRESS_COUNTRY,
+    AutofillHint.IDENTITY_POSTAL_CODE,
+    AutofillHint.IDENTITY_PHONE_FULL,
+    AutofillHint.IDENTITY_COMPANY,
+    AutofillHint.IDENTITY_EMAIL,
+    AutofillHint.IDENTITY_SSN,
+    AutofillHint.IDENTITY_PASSPORT_NUMBER,
+    AutofillHint.IDENTITY_LICENSE_NUMBER,
+        -> buildIdentityView(
+        autofillViewData = autofillViewData,
+        autofillHint = autofillHint,
+    )
+        ?: AutofillView.Unused(data = autofillViewData)
 
-        AutofillView.Card.ExpirationYear(
-            data = autofillViewData,
-            yearValue = yearValue,
-        )
-    }
-
-    AutofillHint.CARD_EXPIRATION_DATE -> {
-        AutofillView.Card.ExpirationDate(
-            data = autofillViewData,
-        )
-    }
-
-    AutofillHint.CARD_NUMBER -> {
-        AutofillView.Card.Number(
-            data = autofillViewData,
-        )
-    }
-
-    AutofillHint.CARD_SECURITY_CODE -> {
-        AutofillView.Card.SecurityCode(
-            data = autofillViewData,
-        )
-    }
-
-    AutofillHint.CARD_CARDHOLDER -> {
-        AutofillView.Card.CardholderName(
-            data = autofillViewData,
-        )
-    }
-
-    AutofillHint.PASSWORD -> {
-        AutofillView.Login.Password(
-            data = autofillViewData,
-        )
-    }
-
-    AutofillHint.USERNAME -> {
-        AutofillView.Login.Username(
-            data = autofillViewData,
-        )
-    }
-
-    AutofillHint.CARD_BRAND -> {
-        val brandValue = this.autofillValue
-            ?.extractCardBrandValue(
-                autofillOptions = autofillOptions,
-            )
-        AutofillView.Card.Brand(
-            data = autofillViewData,
-            brandValue = brandValue,
-        )
-    }
-
-    AutofillHint.IDENTITY_PERSON_NAME_FULL -> {
-        AutofillView.Identity.PersonNameFull(data = autofillViewData)
-    }
-
-    AutofillHint.IDENTITY_PERSON_NAME_PREFIX -> {
-        AutofillView.Identity.PersonNamePrefix(data = autofillViewData)
-    }
-
-    AutofillHint.IDENTITY_PERSON_NAME_GIVEN -> {
-        AutofillView.Identity.PersonNameGiven(data = autofillViewData)
-    }
-
-    AutofillHint.IDENTITY_PERSON_NAME_MIDDLE -> {
-        AutofillView.Identity.PersonNameMiddle(data = autofillViewData)
-    }
-
-    AutofillHint.IDENTITY_PERSON_NAME_FAMILY -> {
-        AutofillView.Identity.PersonNameFamily(data = autofillViewData)
-    }
-
-    AutofillHint.IDENTITY_POSTAL_ADDRESS_FULL -> {
-        AutofillView.Identity.PostalAddressFull(data = autofillViewData)
-    }
-
-    AutofillHint.IDENTITY_ADDRESS_STREET -> {
-        AutofillView.Identity.AddressStreet(data = autofillViewData)
-    }
-
-    AutofillHint.IDENTITY_ADDRESS_LOCALITY -> {
-        AutofillView.Identity.AddressLocality(data = autofillViewData)
-    }
-
-    AutofillHint.IDENTITY_ADDRESS_REGION -> {
-        AutofillView.Identity.AddressRegion(data = autofillViewData)
-    }
-
-    AutofillHint.IDENTITY_ADDRESS_COUNTRY -> {
-        AutofillView.Identity.AddressCountry(data = autofillViewData)
-    }
-
-    AutofillHint.IDENTITY_POSTAL_CODE -> {
-        AutofillView.Identity.PostalCode(data = autofillViewData)
-    }
-
-    AutofillHint.IDENTITY_PHONE_FULL -> {
-        AutofillView.Identity.PhoneFull(data = autofillViewData)
-    }
-
-    AutofillHint.IDENTITY_COMPANY -> {
-        AutofillView.Identity.Company(data = autofillViewData)
-    }
-
-    AutofillHint.IDENTITY_EMAIL -> {
-        // Never actually produced via this dispatch — an identity email candidate is added
-        // alongside the primary Login.Username view in AutofillParserImpl's traverse(), not
-        // through this single-hint path. Handled here anyway to keep this `when` exhaustive and
-        // correct if that ever changes.
-        AutofillView.Identity.Email(data = autofillViewData)
-    }
-
-    AutofillHint.IDENTITY_SSN -> {
-        AutofillView.Identity.Ssn(data = autofillViewData)
-    }
-
-    AutofillHint.IDENTITY_PASSPORT_NUMBER -> {
-        AutofillView.Identity.PassportNumber(data = autofillViewData)
-    }
-
-    AutofillHint.IDENTITY_LICENSE_NUMBER -> {
-        AutofillView.Identity.LicenseNumber(data = autofillViewData)
-    }
-
-    null -> {
-        AutofillView.Unused(
-            data = autofillViewData,
-        )
-    }
+    null -> AutofillView.Unused(data = autofillViewData)
 }
 
 /**
