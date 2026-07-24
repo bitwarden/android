@@ -2,31 +2,44 @@ package com.bitwarden.data.datasource.disk
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import androidx.security.crypto.EncryptedSharedPreferences
+
+private const val LEGACY_PREFIX: String = "bwSecureStorage:"
 
 /**
- * Base class for simplifying interactions with [SharedPreferences] and
- * [EncryptedSharedPreferences].
+ * Base class for simplifying interactions with [SharedPreferences], this includes both regular
+ * and encrypted storage.
  */
 @Suppress("UnnecessaryAbstractClass")
 abstract class BaseEncryptedDiskSource(
     sharedPreferences: SharedPreferences,
     private val encryptedSharedPreferences: SharedPreferences,
-) : BaseDiskSource(
-    sharedPreferences = sharedPreferences,
-) {
+    private val keystoreEncryptedPreferences: SharedPreferences,
+) : BaseDiskSource(sharedPreferences = sharedPreferences) {
     protected fun getEncryptedString(
         key: String,
-        default: String? = null,
-    ): String? = encryptedSharedPreferences.getString(key.withBase(), default)
+    ): String? = keystoreEncryptedPreferences.getString(key, null)
 
     protected fun putEncryptedString(
         key: String,
         value: String?,
-    ): Unit = encryptedSharedPreferences.edit { putString(key.withBase(), value) }
-}
+    ) {
+        keystoreEncryptedPreferences.edit { putString(key, value) }
+    }
 
-/**
- * Helper method for prepending the key with the appropriate base storage key.
- */
-private fun String.withBase(): String = "bwSecureStorage:$this"
+    protected fun migrateKeyByPrefix(keyPrefix: String) {
+        encryptedSharedPreferences
+            .all
+            .keys
+            .filter { it.startsWith(prefix = "$LEGACY_PREFIX$keyPrefix") }
+            .forEach { key ->
+                // Move the value to the new file without the base prefix.
+                encryptedSharedPreferences.getString(key, null)?.let { value ->
+                    keystoreEncryptedPreferences.edit(commit = true) {
+                        putString(key.removePrefix(prefix = LEGACY_PREFIX), value)
+                    }
+                }
+                // Then ensure the original value is deleted.
+                encryptedSharedPreferences.edit(commit = true) { remove(key) }
+            }
+    }
+}
