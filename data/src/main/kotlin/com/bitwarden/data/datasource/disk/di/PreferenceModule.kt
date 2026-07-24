@@ -7,6 +7,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import com.bitwarden.core.data.manager.encryption.EncryptionManager
+import com.bitwarden.data.datasource.disk.KeystoreEncryptedSharedPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,6 +34,17 @@ object PreferenceModule {
             "${application.packageName}_preferences",
             Context.MODE_PRIVATE,
         )
+
+    @Provides
+    @Singleton
+    @KeystoreEncryptedPreferences
+    fun provideKeystoreEncryptedPreferences(
+        application: Application,
+        encryptionManager: EncryptionManager,
+    ): SharedPreferences = KeystoreEncryptedSharedPreferences(
+        app = application,
+        encryptionManager = encryptionManager,
+    )
 
     @Provides
     @Singleton
