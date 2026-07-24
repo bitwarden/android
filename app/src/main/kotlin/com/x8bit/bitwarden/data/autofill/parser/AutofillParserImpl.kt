@@ -238,6 +238,7 @@ class AutofillParserImpl(
         }
 
         return if (coversCurrentPartition) {
+            Timber.d("FillAssist invoked for this autofill attempt")
             assistStructure.buildFillAssistViews(
                 hostRules = hostRules,
                 urlBarWebsite = urlBarWebsite,
