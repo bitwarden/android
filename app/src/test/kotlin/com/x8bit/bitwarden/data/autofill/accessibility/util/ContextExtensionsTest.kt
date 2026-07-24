@@ -6,6 +6,8 @@ import android.content.pm.ResolveInfo
 import android.content.pm.ServiceInfo
 import android.provider.Settings
 import android.view.accessibility.AccessibilityManager
+import com.x8bit.bitwarden.LEGACY_ACCESSIBILITY_SERVICE_NAME
+import com.x8bit.bitwarden.LEGACY_SHORT_ACCESSIBILITY_SERVICE_NAME
 import com.x8bit.bitwarden.data.autofill.accessibility.BitwardenAccessibilityService
 import io.mockk.every
 import io.mockk.mockk
@@ -113,6 +115,48 @@ class ContextExtensionsTest {
                     createAccessibilityServiceInfo(
                         servicePackageName = "com.x8bit.bitwarden",
                         serviceName = BitwardenAccessibilityService::class.java.name,
+                    ),
+                ),
+            )
+        }
+
+        assertTrue(context.isAccessibilityServiceEnabled)
+    }
+
+    @Test
+    fun `isAccessibilityServiceEnabled with legacy enabled service name returns true`() {
+        val context: Context = mockk {
+            every { applicationContext } returns this
+            every { packageName } returns "com.x8bit.bitwarden"
+            every { contentResolver } returns mockk()
+            every {
+                getSystemService(AccessibilityManager::class.java)
+            } returns mockkAccessibilityManager(
+                enabledServices = listOf(
+                    createAccessibilityServiceInfo(
+                        servicePackageName = "com.x8bit.bitwarden",
+                        serviceName = LEGACY_ACCESSIBILITY_SERVICE_NAME,
+                    ),
+                ),
+            )
+        }
+
+        assertTrue(context.isAccessibilityServiceEnabled)
+    }
+
+    @Test
+    fun `isAccessibilityServiceEnabled with legacy short enabled service name returns true`() {
+        val context: Context = mockk {
+            every { applicationContext } returns this
+            every { packageName } returns "com.x8bit.bitwarden"
+            every { contentResolver } returns mockk()
+            every {
+                getSystemService(AccessibilityManager::class.java)
+            } returns mockkAccessibilityManager(
+                enabledServices = listOf(
+                    createAccessibilityServiceInfo(
+                        servicePackageName = "com.x8bit.bitwarden",
+                        serviceName = LEGACY_SHORT_ACCESSIBILITY_SERVICE_NAME,
                     ),
                 ),
             )

@@ -26,9 +26,16 @@ val Context.isAccessibilityServiceEnabled: Boolean
             .getSystemService<AccessibilityManager>()
             ?.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
             ?.any { service ->
-                val serviceInfo = service.resolveInfo?.serviceInfo
-                serviceInfo?.packageName == appContext.packageName &&
-                    serviceInfo.name == BitwardenAccessibilityService::class.java.name
+                val serviceInfo = service.resolveInfo?.serviceInfo ?: return@any false
+                if (serviceInfo.packageName != appContext.packageName) return@any false
+                when (serviceInfo.name) {
+                    BitwardenAccessibilityService::class.java.name,
+                    LEGACY_ACCESSIBILITY_SERVICE_NAME,
+                    LEGACY_SHORT_ACCESSIBILITY_SERVICE_NAME,
+                        -> true
+
+                    else -> false
+                }
             }
             ?: false
 
