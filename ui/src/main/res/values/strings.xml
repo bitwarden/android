@@ -21,6 +21,7 @@
     <string name="enter_pin">Enter your PIN code</string>
     <string name="favorites">Favorites</string>
     <string name="folder">Folder</string>
+    <string name="a_folder_with_this_name_already_exists">A folder with this name already exists.</string>
     <string name="folder_created">New folder created.</string>
     <string name="folder_deleted">Folder deleted.</string>
     <string name="folder_none">No Folder</string>

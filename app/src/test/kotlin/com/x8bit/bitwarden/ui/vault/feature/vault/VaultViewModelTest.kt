@@ -67,6 +67,7 @@ import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -2230,6 +2231,67 @@ class VaultViewModelTest : BaseViewModelTest() {
                 )
             }
         }
+
+    @Test
+    fun `FolderEditClick should emit NavigateToEditFolder`() = runTest {
+        val viewModel = createViewModel()
+        val folderId = "folder-id"
+        val folder = mockk<VaultState.ViewState.FolderItem> {
+            every { id } returns folderId
+        }
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultAction.FolderEditClick(folder))
+            assertEquals(
+                VaultEvent.NavigateToEditFolder(folderId = folderId),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `FolderDeleteClick should show DeleteFolderConfirmation dialog`() = runTest {
+        val viewModel = createViewModel()
+        val folderId = "folder-id"
+        val folderName = "Himalya".asText()
+        val folder = mockk<VaultState.ViewState.FolderItem> {
+            every { id } returns folderId
+            every { name } returns folderName
+        }
+
+        viewModel.trySendAction(VaultAction.FolderDeleteClick(folder))
+
+        assertEquals(
+            VaultState.DialogState.DeleteFolderConfirmation(
+                folderId = folderId,
+                folderName = folderName,
+            ),
+            viewModel.stateFlow.value.dialog,
+        )
+    }
+
+    @Test
+    fun `ConfirmDeleteFolderClick success should clear dialog and show snackbar`() = runTest {
+        val folderId = "folder-id"
+        val folderName = "Himalya".asText()
+        val folder = mockk<VaultState.ViewState.FolderItem> {
+            every { id } returns folderId
+            every { name } returns folderName
+        }
+        coEvery { vaultRepository.deleteFolder(folderId = folderId) } returns
+            DeleteFolderResult.Success
+        val viewModel = createViewModel()
+        viewModel.trySendAction(VaultAction.FolderDeleteClick(folder))
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultAction.ConfirmDeleteFolderClick)
+            assertEquals(
+                VaultEvent.ShowSnackbar(BitwardenString.folder_deleted.asText()),
+                awaitItem(),
+            )
+        }
+        assertEquals(null, viewModel.stateFlow.value.dialog)
+        coVerify(exactly = 1) { vaultRepository.deleteFolder(folderId = folderId) }
+    }
 
     @Suppress("MaxLineLength")
     @Test

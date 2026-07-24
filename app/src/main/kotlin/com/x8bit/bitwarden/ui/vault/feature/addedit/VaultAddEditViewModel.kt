@@ -947,6 +947,39 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleAddNewFolder(action: VaultAddEditAction.Common.AddNewFolder) {
+        val folderName = action.newFolderName.trim()
+        if (folderName.isEmpty()) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = VaultAddEditState.DialogState.Generic(
+                        message = BitwardenString.validation_field_required
+                            .asText(BitwardenString.name.asText()),
+                    ),
+                )
+            }
+            return
+        }
+        val existingFolderNames = (state.viewState as? VaultAddEditState.ViewState.Content)
+            ?.common
+            ?.availableFolders
+            ?.filter { it.id != null }
+            ?.map { it.name }
+            .orEmpty()
+            .ifEmpty {
+                vaultRepository.foldersStateFlow.value.data
+                    ?.map { it.name }
+                    .orEmpty()
+            }
+        if (existingFolderNames.any { it.equals(folderName, ignoreCase = true) }) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = VaultAddEditState.DialogState.Generic(
+                        message = BitwardenString.a_folder_with_this_name_already_exists.asText(),
+                    ),
+                )
+            }
+            return
+        }
         mutableStateFlow.update {
             it.copy(
                 dialog = VaultAddEditState.DialogState.Loading(BitwardenString.saving.asText()),
@@ -955,7 +988,7 @@ class VaultAddEditViewModel @Inject constructor(
         viewModelScope.launch {
             val result = vaultRepository.createFolder(
                 FolderView(
-                    name = action.newFolderName,
+                    name = folderName,
                     id = null,
                     revisionDate = clock.instant(),
                 ),
