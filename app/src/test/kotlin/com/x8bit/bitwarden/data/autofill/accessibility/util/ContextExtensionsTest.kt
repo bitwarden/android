@@ -229,6 +229,46 @@ class ContextExtensionsTest {
     }
 
     @Test
+    fun `isAccessibilityServiceEnabled with null enabled service list falls back to secure string`() {
+        val context: Context = mockk {
+            every { applicationContext } returns this
+            every { packageName } returns "com.x8bit.bitwarden"
+            every { contentResolver } returns mockk()
+            every {
+                getSystemService(AccessibilityManager::class.java)
+            } returns mockk {
+                every {
+                    getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
+                } returns null
+            }
+        }
+        mockkSettingsSecureGetString(value = null)
+
+        assertFalse(context.isAccessibilityServiceEnabled)
+    }
+
+    @Test
+    fun `isAccessibilityServiceEnabled with null serviceInfo falls back to secure string`() {
+        val context: Context = mockk {
+            every { applicationContext } returns this
+            every { packageName } returns "com.x8bit.bitwarden"
+            every { contentResolver } returns mockk()
+            every {
+                getSystemService(AccessibilityManager::class.java)
+            } returns mockkAccessibilityManager(
+                enabledServices = listOf(
+                    mockk<AccessibilityServiceInfo> {
+                        every { resolveInfo } returns ResolveInfo()
+                    },
+                ),
+            )
+        }
+        mockkSettingsSecureGetString(value = null)
+
+        assertFalse(context.isAccessibilityServiceEnabled)
+    }
+
+    @Test
     fun `isAccessibilityServiceEnabled with null resolveInfo falls back to secure string`() {
         val context: Context = mockk {
             every { applicationContext } returns this
