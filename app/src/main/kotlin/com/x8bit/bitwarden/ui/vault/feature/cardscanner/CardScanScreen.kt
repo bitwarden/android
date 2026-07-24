@@ -15,7 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.ui.platform.base.util.ColorSchemeOverride
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.StatusBarsAppearanceAffect
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -37,12 +37,11 @@ import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalCardTextAnalyzer
 import com.bitwarden.ui.platform.feature.cardscanner.util.CardTextAnalyzer
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.model.WindowSize
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.bitwarden.ui.platform.theme.LocalBitwardenColorScheme
-import com.bitwarden.ui.platform.theme.color.darkBitwardenColorScheme
 import com.bitwarden.ui.platform.util.rememberWindowSize
 
 /**
@@ -71,9 +70,7 @@ fun CardScanScreen(
     }
 
     // This screen should always look like it's in dark mode
-    CompositionLocalProvider(
-        LocalBitwardenColorScheme provides darkBitwardenColorScheme,
-    ) {
+    ColorSchemeOverride(appTheme = AppTheme.DARK) {
         StatusBarsAppearanceAffect()
         BitwardenScaffold(
             modifier = Modifier.fillMaxSize(),
