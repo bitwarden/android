@@ -71,8 +71,6 @@ import com.bitwarden.network.service.DevicesService
 import com.bitwarden.network.service.HaveIBeenPwnedService
 import com.bitwarden.network.service.IdentityService
 import com.bitwarden.network.service.OrganizationService
-import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -82,11 +80,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJso
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
-import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_0
-import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_1
-import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_2
-import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_3
-import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_4
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfRequestModel
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.KdfManager
@@ -110,7 +103,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
-import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.RemovePasswordResult
@@ -140,13 +132,12 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSo
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
-import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
+import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -255,15 +246,12 @@ class AuthRepositoryTest {
 
     private val mutableLogoutFlow = bufferedMutableSharedFlow<NotificationLogoutData>()
     private val mutableSyncOrgKeysFlow = bufferedMutableSharedFlow<String>()
-    private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<PolicyView>>()
     private val pushManager: PushManager = mockk {
         every { logoutFlow } returns mutableLogoutFlow
         every { syncOrgKeysFlow } returns mutableSyncOrgKeysFlow
     }
-    private val policyManager: PolicyManager = mockk {
-        every {
-            getActivePoliciesFlow(type = PolicyType.MASTER_PASSWORD)
-        } returns mutableActivePolicyFlow
+    private val passwordPolicyManager: PasswordPolicyManager = mockk {
+        every { storePasswordToCheck(userId = any(), password = any()) } just runs
     }
     private val logsManager: LogsManager = mockk {
         every { setUserData(userId = any(), environmentType = any()) } just runs
@@ -318,7 +306,7 @@ class AuthRepositoryTest {
         userLogoutManager = userLogoutManager,
         dispatcherManager = dispatcherManager,
         pushManager = pushManager,
-        policyManager = policyManager,
+        passwordPolicyManager = passwordPolicyManager,
         logsManager = logsManager,
         userStateManager = userStateManager,
         kdfManager = kdfManager,
@@ -403,124 +391,6 @@ class AuthRepositoryTest {
     }
 
     @Test
-    @Suppress("MaxLineLength")
-    fun `loading the policies should emit masterPasswordPolicyFlow if the password fails any checks`() =
-        runTest {
-            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
-            coEvery {
-                identityService.preLogin(email = EMAIL)
-            } returns PRE_LOGIN_SUCCESS.asSuccess()
-            coEvery {
-                identityService.getToken(
-                    email = EMAIL,
-                    authModel = IdentityTokenAuthModel.MasterPassword(
-                        username = EMAIL,
-                        password = PASSWORD_HASH,
-                    ),
-                    uniqueAppId = UNIQUE_APP_ID,
-                    deeplinkScheme = DEEPLINK_SCHEME,
-                )
-            } returns successResponse.asSuccess()
-            coEvery {
-                vaultRepository.unlockVault(
-                    accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
-                    userId = USER_ID_1,
-                    email = EMAIL,
-                    kdf = ACCOUNT_1.profile.toSdkParams(),
-                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
-                        password = PASSWORD,
-                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
-                    ),
-                    organizationKeys = null,
-                )
-            } returns VaultUnlockResult.Success
-            coEvery { vaultRepository.syncIfNecessary() } just runs
-            every {
-                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
-                    previousUserState = null,
-                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
-                )
-            } returns SINGLE_USER_STATE_1
-
-            // Start the login flow so that all the necessary data is cached.
-            val result = repository.login(email = EMAIL, password = PASSWORD)
-
-            // Set policies that will fail the password.
-            mutableActivePolicyFlow.emit(
-                listOf(
-                    createMockPolicyView(
-                        type = PolicyType.MASTER_PASSWORD,
-                        enabled = true,
-                        data = """
-                            {
-                              "minLength":100,
-                              "minComplexity":null,
-                              "requireUpper":null,
-                              "requireLower":null,
-                              "requireNumbers":null,
-                              "requireSpecial":null,
-                              "enforceOnLogin":true
-                            }
-                        """,
-                    ),
-                ),
-            )
-
-            // Verify the results.
-            assertEquals(LoginResult.Success, result)
-            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
-            coVerify { identityService.preLogin(email = EMAIL) }
-            fakeAuthDiskSource.assertAccountCryptographicState(
-                userId = USER_ID_1,
-                accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
-            )
-            fakeAuthDiskSource.assertMasterPasswordHash(
-                userId = USER_ID_1,
-                passwordHash = PASSWORD_HASH,
-            )
-            coVerify {
-                identityService.getToken(
-                    email = EMAIL,
-                    authModel = IdentityTokenAuthModel.MasterPassword(
-                        username = EMAIL,
-                        password = PASSWORD_HASH,
-                    ),
-                    uniqueAppId = UNIQUE_APP_ID,
-                    deeplinkScheme = DEEPLINK_SCHEME,
-                )
-                vaultRepository.unlockVault(
-                    accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
-                    userId = USER_ID_1,
-                    email = EMAIL,
-                    kdf = ACCOUNT_1.profile.toSdkParams(),
-                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
-                        password = PASSWORD,
-                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
-                    ),
-                    organizationKeys = null,
-                )
-                vaultRepository.syncIfNecessary()
-            }
-            assertEquals(
-                UserStateJson(
-                    activeUserId = USER_ID_1,
-                    accounts = mapOf(
-                        USER_ID_1 to ACCOUNT_1.copy(
-                            profile = ACCOUNT_1.profile.copy(
-                                forcePasswordResetReason = ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN,
-                            ),
-                        ),
-                    ),
-                ),
-                fakeAuthDiskSource.userState,
-            )
-            verify(exactly = 1) {
-                userStateManager.hasPendingAccountAddition = false
-                settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
-            }
-        }
-
-    @Test
     fun `rememberedEmailAddress should pull from and update AuthDiskSource`() {
         // AuthDiskSource and the repository start with the same value.
         assertNull(repository.rememberedEmailAddress)
@@ -576,25 +446,6 @@ class AuthRepositoryTest {
         // Updating AuthDiskSource updates the repository
         fakeAuthDiskSource.storeShouldTrustDevice(userId = USER_ID_1, shouldTrustDevice = false)
         assertEquals(false, repository.shouldTrustDevice)
-    }
-
-    @Test
-    fun `passwordResetReason should pull from the user's profile in AuthDiskSource`() = runTest {
-        val updatedProfile = ACCOUNT_1.profile.copy(
-            forcePasswordResetReason = ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN,
-        )
-        fakeAuthDiskSource.userState = UserStateJson(
-            activeUserId = USER_ID_1,
-            accounts = mapOf(
-                USER_ID_1 to ACCOUNT_1.copy(
-                    profile = updatedProfile,
-                ),
-            ),
-        )
-        assertEquals(
-            ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN,
-            repository.passwordResetReason,
-        )
     }
 
     @Test
@@ -2096,6 +1947,7 @@ class AuthRepositoryTest {
             verify(exactly = 1) {
                 userStateManager.hasPendingAccountAddition = false
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+                passwordPolicyManager.storePasswordToCheck(userId = USER_ID_1, password = PASSWORD)
             }
         }
 
@@ -2185,6 +2037,7 @@ class AuthRepositoryTest {
             )
             verify(exactly = 1) {
                 userStateManager.hasPendingAccountAddition = false
+                passwordPolicyManager.storePasswordToCheck(userId = USER_ID_1, password = PASSWORD)
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
             }
         }
@@ -2349,6 +2202,7 @@ class AuthRepositoryTest {
             )
             verify(exactly = 1) {
                 userStateManager.hasPendingAccountAddition = false
+                passwordPolicyManager.storePasswordToCheck(userId = USER_ID_1, password = PASSWORD)
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
             }
             coVerify(exactly = 0) {
@@ -2461,6 +2315,7 @@ class AuthRepositoryTest {
             verify(exactly = 1) {
                 userStateManager.hasPendingAccountAddition
                 userStateManager.hasPendingAccountAddition = true
+                passwordPolicyManager.storePasswordToCheck(userId = USER_ID_1, password = PASSWORD)
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
             }
         }
@@ -2596,6 +2451,7 @@ class AuthRepositoryTest {
             twoFactorToken = "twoFactorTokenToStore",
         )
         verify(exactly = 1) {
+            passwordPolicyManager.storePasswordToCheck(userId = USER_ID_1, password = PASSWORD)
             userStateManager.hasPendingAccountAddition = false
         }
     }
@@ -2780,6 +2636,7 @@ class AuthRepositoryTest {
         )
         verify(exactly = 1) {
             userStateManager.hasPendingAccountAddition = false
+            passwordPolicyManager.storePasswordToCheck(userId = USER_ID_1, password = PASSWORD)
             settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
             settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
         }
@@ -6486,54 +6343,6 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `getPasswordStrength returns expected results for various strength levels`() = runTest {
-        coEvery {
-            authSdkSource.passwordStrength(any(), eq("level_0"))
-        } returns LEVEL_0.asSuccess()
-
-        coEvery {
-            authSdkSource.passwordStrength(any(), eq("level_1"))
-        } returns LEVEL_1.asSuccess()
-
-        coEvery {
-            authSdkSource.passwordStrength(any(), eq("level_2"))
-        } returns LEVEL_2.asSuccess()
-
-        coEvery {
-            authSdkSource.passwordStrength(any(), eq("level_3"))
-        } returns LEVEL_3.asSuccess()
-
-        coEvery {
-            authSdkSource.passwordStrength(any(), eq("level_4"))
-        } returns LEVEL_4.asSuccess()
-
-        assertEquals(
-            PasswordStrengthResult.Success(LEVEL_0),
-            repository.getPasswordStrength(EMAIL, "level_0"),
-        )
-
-        assertEquals(
-            PasswordStrengthResult.Success(LEVEL_1),
-            repository.getPasswordStrength(EMAIL, "level_1"),
-        )
-
-        assertEquals(
-            PasswordStrengthResult.Success(LEVEL_2),
-            repository.getPasswordStrength(EMAIL, "level_2"),
-        )
-
-        assertEquals(
-            PasswordStrengthResult.Success(LEVEL_3),
-            repository.getPasswordStrength(EMAIL, "level_3"),
-        )
-
-        assertEquals(
-            PasswordStrengthResult.Success(LEVEL_4),
-            repository.getPasswordStrength(EMAIL, "level_4"),
-        )
-    }
-
-    @Test
     fun `validatePassword with no current user returns ValidatePasswordResult Error`() = runTest {
         val password = "password"
         fakeAuthDiskSource.userState = null
@@ -6854,66 +6663,6 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `validatePasswordAgainstPolicy validates password against policy requirements`() = runTest {
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-
-        // A helper method to set a policy with the given parameters.
-        fun setPolicy(
-            minLength: Int = 0,
-            minComplexity: Int? = null,
-            requireUpper: Boolean = false,
-            requireLower: Boolean = false,
-            requireNumbers: Boolean = false,
-            requireSpecial: Boolean = false,
-        ) {
-            every {
-                policyManager.getActivePolicies(type = PolicyType.MASTER_PASSWORD)
-            } returns listOf(
-                createMockPolicyView(
-                    type = PolicyType.MASTER_PASSWORD,
-                    enabled = true,
-                    data = """
-                      {
-                        "minLength":$minLength,
-                        "minComplexity":$minComplexity,
-                        "requireUpper":$requireUpper,
-                        "requireLower":$requireLower,
-                        "requireNumbers":$requireNumbers,
-                        "requireSpecial":$requireSpecial,
-                        "enforceOnLogin":true
-                      }
-                    """,
-                ),
-            )
-        }
-
-        setPolicy(minLength = 10)
-        assertFalse(repository.validatePasswordAgainstPolicies(password = "123"))
-
-        val password = "simple"
-        coEvery {
-            authSdkSource.passwordStrength(
-                email = SINGLE_USER_STATE_1.activeAccount.profile.email,
-                password = password,
-            )
-        } returns LEVEL_0.asSuccess()
-        setPolicy(minComplexity = 10)
-        assertFalse(repository.validatePasswordAgainstPolicies(password = password))
-
-        setPolicy(requireUpper = true)
-        assertFalse(repository.validatePasswordAgainstPolicies(password = "lower"))
-
-        setPolicy(requireLower = true)
-        assertFalse(repository.validatePasswordAgainstPolicies(password = "UPPER"))
-
-        setPolicy(requireNumbers = true)
-        assertFalse(repository.validatePasswordAgainstPolicies(password = "letters"))
-
-        setPolicy(requireSpecial = true)
-        assertFalse(repository.validatePasswordAgainstPolicies(password = "letters"))
-    }
-
-    @Test
     fun `sendVerificationEmail success should return success`() = runTest {
         coEvery {
             identityService.sendVerificationEmail(
@@ -7198,6 +6947,7 @@ class AuthRepositoryTest {
             assertNull(fakeAuthDiskSource.getOnboardingStatus(USER_ID_1))
             verify(exactly = 1) {
                 userStateManager.hasPendingAccountAddition = false
+                passwordPolicyManager.storePasswordToCheck(userId = USER_ID_1, password = PASSWORD)
             }
         }
 
@@ -7254,6 +7004,7 @@ class AuthRepositoryTest {
             )
             verify(exactly = 1) {
                 userStateManager.hasPendingAccountAddition = false
+                passwordPolicyManager.storePasswordToCheck(userId = USER_ID_1, password = PASSWORD)
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
             }
             assertNull(fakeAuthDiskSource.getOnboardingStatus(USER_ID_1))

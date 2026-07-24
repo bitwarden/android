@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.data.auth.repository
 
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.TwoFactorDataModel
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.KdfManager
@@ -19,8 +18,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
-import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
-import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.RemovePasswordResult
@@ -42,6 +39,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.AuthenticatorProvider
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -54,6 +52,7 @@ interface AuthRepository :
     AuthRequestManager,
     BiometricsEncryptionManager,
     KdfManager,
+    PasswordPolicyManager,
     UserStateManager {
     /**
      * Models the current auth state.
@@ -120,16 +119,6 @@ interface AuthRepository :
      * The currently persisted state indicating whether the user has trusted this device.
      */
     var shouldTrustDevice: Boolean
-
-    /**
-     * Return the cached password policies for the current user.
-     */
-    val passwordPolicies: List<PolicyInformation.MasterPassword>
-
-    /**
-     * The reason for resetting the password.
-     */
-    val passwordResetReason: ForcePasswordResetReason?
 
     /**
      * The organization for the active user.
@@ -374,13 +363,6 @@ interface AuthRepository :
     suspend fun getPasswordBreachCount(password: String): BreachCountResult
 
     /**
-     * Get the password strength for the given [email] and [password] combo.
-     * If no value is passed for the [email] will use the active email of the current active
-     * account via the [userStateFlow].
-     */
-    suspend fun getPasswordStrength(email: String? = null, password: String): PasswordStrengthResult
-
-    /**
      * Validates the master password for the current logged-in user.
      */
     suspend fun validatePassword(password: String): ValidatePasswordResult
@@ -389,12 +371,6 @@ interface AuthRepository :
      * Validates the PIN for the current logged-in user.
      */
     suspend fun validatePinUserKey(pin: String): ValidatePinResult
-
-    /**
-     * Validates the given [password] against the master password
-     * policies for the current user.
-     */
-    suspend fun validatePasswordAgainstPolicies(password: String): Boolean
 
     /**
      * Send a verification email.
