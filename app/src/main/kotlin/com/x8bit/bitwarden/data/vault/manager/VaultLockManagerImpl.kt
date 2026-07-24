@@ -42,6 +42,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.logTag
 import com.x8bit.bitwarden.data.vault.repository.util.statusFor
+import com.x8bit.bitwarden.data.vault.repository.util.toV2UpgradeToken
 import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.update
 import kotlinx.coroutines.CoroutineScope
@@ -192,7 +193,9 @@ class VaultLockManagerImpl(
                             email = email,
                             method = initUserCryptoMethod,
                             userId = userId,
-                            upgradeToken = null,
+                            upgradeToken = authDiskSource
+                                .getV2UpgradeToken(userId = userId)
+                                ?.toV2UpgradeToken(),
                         ),
                     )
                     .flatMap { result ->
