@@ -3,33 +3,26 @@ package com.x8bit.bitwarden.data.platform.manager.clipboard
 import android.content.ClipData
 import android.content.ClipDescription
 import android.content.ClipboardManager
-import android.content.Context
 import android.os.Build
+import androidx.core.content.getSystemService
 import androidx.work.ListenableWorker
 import com.bitwarden.ui.platform.base.BaseRobolectricTest
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Test
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 class ClearClipboardWorkerTest : BaseRobolectricTest() {
 
-    private lateinit var clipboardManager: ClipboardManager
-    private lateinit var worker: ClearClipboardWorker
-
-    @Before
-    fun setup() {
-        val context = RuntimeEnvironment.getApplication()
-        clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        worker = ClearClipboardWorker(
-            appContext = context,
-            workerParams = mockk(relaxed = true),
-        )
-    }
+    private val context = RuntimeEnvironment.getApplication()
+    private val clipboardManager = requireNotNull(context.getSystemService<ClipboardManager>())
+    private val worker: ClearClipboardWorker = ClearClipboardWorker(
+        appContext = context,
+        workerParams = mockk(relaxed = true),
+    )
 
     @Test
     fun `doWork should clear a populated clipboard and return success`() {
