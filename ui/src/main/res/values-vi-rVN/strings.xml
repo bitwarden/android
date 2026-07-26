@@ -340,9 +340,9 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="moved_item_to_org">%1$s đã di chuyển tới %2$s.</string>
     <string name="select_one_collection">Bạn phải chọn ít nhất một bộ sưu tập.</string>
     <string name="share">Chia sẻ</string>
-    <string name="move_to_organization">Chuyển tới Tổ chức</string>
-    <string name="no_orgs_to_list">Không có tổ chức.</string>
-    <string name="move_to_org_desc">Chọn một tổ chức mà bạn muốn chuyển mục này tới. Việc di chuyển đến một tổ chức sẽ chuyển quyền sở hữu của mục sang tổ chức mà bạn chọn. Bạn sẽ không còn là chủ sở hữu trực tiếp của mục này một khi nó đã được chuyển.</string>
+    <string name="move_to_vault">Chuyển vào kho lưu trữ</string>
+    <string name="no_vaults_to_list">Không có kho lưu trữ nào để liệt kê.</string>
+    <string name="move_to_vault_desc">Chọn một kho lưu trữ mà bạn muốn chuyển mục này đến. Việc chuyển sang kho lưu trữ khác sẽ chuyển quyền sở hữu mục này cho tổ chức đó. Bạn sẽ không còn là chủ sở hữu trực tiếp của mục này sau khi nó được di chuyển.</string>
     <string name="number_of_words">Số lượng từ</string>
     <string name="passphrase">Cụm mật khẩu</string>
     <string name="word_separator">Dấu phân cách từ</string>
@@ -378,6 +378,8 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="pin_require_master_password_restart">Bạn có chắc chắn muốn nhập mật khẩu chính để mở khóa mỗi khi mở lại ứng dụng không?</string>
     <string name="ask_to_add_item">Yêu cầu thêm mục</string>
     <string name="ask_to_add_item_description">Gợi ý thêm mục nếu không tìm thấy trong kho của bạn.</string>
+    <string name="turn_on_fill_assist">Bật hỗ trợ điền</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Tính năng hỗ trợ điền giúp tăng độ chính xác của tính năng tự động điền trên các trang web được hỗ trợ bằng các quy tắc riêng cho từng trang web.</string>
     <string name="on_restart">Khi khởi động lại ứng dụng</string>
     <string name="capitalize">Viết hoa</string>
     <string name="include_number">Bao gồm cả số</string>
@@ -1407,4 +1409,6 @@ các vấn đề.</string>
     <string name="keep_documents_safe_and_encrypted">Giữ tài liệu an toàn và được mã hóa</string>
     <string name="share_files_securely_with_anyone_using_send">Chia sẻ tệp an toàn với mọi người bằng Send</string>
     <string name="receive_24_7_priority_support">Nhận hỗ trợ ưu tiên 24/7</string>
+    <string name="account_creation_restricted">Hạn chế đăng ký tài khoản</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s chỉ cho phép người được mời tạo tài khoản.</string>
 </resources>

@@ -345,9 +345,9 @@
     <string name="moved_item_to_org">%1$s перемещено в %2$s.</string>
     <string name="select_one_collection">Необходимо выбрать хотя бы одну коллекцию.</string>
     <string name="share">Поделиться</string>
-    <string name="move_to_organization">Переместить в организацию</string>
-    <string name="no_orgs_to_list">Нет организаций для отображения.</string>
-    <string name="move_to_org_desc">Выберите организацию, в которую вы хотите переместить этот элемент. При перемещении в организацию право собственности на элемент переходит к этой организации. Вы больше не будете прямым владельцем этого элемента после его перемещения.</string>
+    <string name="move_to_vault">Переместить в хранилище</string>
+    <string name="no_vaults_to_list">Нет хранилища для отображения.</string>
+    <string name="move_to_vault_desc">Выберите хранилище, в которое вы хотите переместить этот элемент. Перемещение в хранилище передает права на элемент этой организации. Вы больше не будете непосредственным владельцем этого элемента после его перемещения.</string>
     <string name="number_of_words">Количество слов</string>
     <string name="passphrase">Парольная фраза</string>
     <string name="word_separator">Разделитель слов</string>
@@ -383,6 +383,8 @@
     <string name="pin_require_master_password_restart">Хотите, чтобы при перезапуске приложения требовалась разблокировка с помощью мастер-пароля?</string>
     <string name="ask_to_add_item">Запросить добавление элемента</string>
     <string name="ask_to_add_item_description">Запросить добавление элемента, если его нет в вашем хранилище.</string>
+    <string name="turn_on_fill_assist">Включить помощник по заполнению</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">С помощью правил сайта можно повысить точность автозаполнения на поддерживаемых сайтах.</string>
     <string name="on_restart">При перезапуске приложения</string>
     <string name="capitalize">С заглавной буквы</string>
     <string name="include_number">Добавить цифру</string>
@@ -1432,4 +1434,6 @@
     <string name="keep_documents_safe_and_encrypted">Храните документы в безопасности и зашифрованном виде</string>
     <string name="share_files_securely_with_anyone_using_send">Делитесь файлами безопасно со всеми использующими Send</string>
     <string name="receive_24_7_priority_support">Получите приоритетную поддержку 24/7</string>
+    <string name="account_creation_restricted">Создание аккаунта запрещено</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s позволяет создавать аккаунты только приглашенным пользователям.</string>
 </resources>

@@ -283,7 +283,7 @@ Skanning skjer automatisk.</string>
     <string name="vault_is_locked">Kvelvet er låst</string>
     <string name="go_to_my_vault">Gå til kvelvet mitt</string>
     <string name="collections">Samlingar</string>
-    <string name="no_items_collection">Det er ingen oppføringar i denne samlinga.</string>
+    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="no_items_folder">Det er ingen oppføringar i denne mappa.</string>
     <string name="no_items_trash">Det er ingen oppføringar i papirkorga.</string>
     <string name="autofill_accessibility_summary">Hjelp med å fylle ut brukarnamn og passordfelt i andre appar og på nettet.</string>
@@ -341,9 +341,9 @@ Skanning skjer automatisk.</string>
     <string name="moved_item_to_org">%1$s er flytta til %2$s.</string>
     <string name="select_one_collection">You must select at least one collection.</string>
     <string name="share">Del</string>
-    <string name="move_to_organization">Flytta til samskipnad</string>
-    <string name="no_orgs_to_list">Det er ingen samskipnader å syna.</string>
-    <string name="move_to_org_desc">Vel ei samskipnad du ynskjer å flytta denne oppføringa til. Ved å flytta ei oppføring til ei samskipnad fører ein eigarskapen til oppføringa til den samskipnaden. Du vil ikkje lenger ha bein eigarskap til denne oppføringa etter ho er flytta.</string>
+    <string name="move_to_vault">Move to vault</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Antal ord</string>
     <string name="passphrase">Passphrase</string>
     <string name="word_separator">Orddelar</string>
@@ -379,6 +379,8 @@ Skanning skjer automatisk.</string>
     <string name="pin_require_master_password_restart">Vil du krevje opplåsing med superpassordet ditt når programmet startast på nytt?</string>
     <string name="ask_to_add_item">Ask to add item</string>
     <string name="ask_to_add_item_description">Ask to add an item if one isn’t found in your vault.</string>
+    <string name="turn_on_fill_assist">Turn on fill assist</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill assist improves autofill accuracy on supported sites by using site specific rules.</string>
     <string name="on_restart">Ved oppstart av app å nyo</string>
     <string name="capitalize">Stor førebokstav</string>
     <string name="include_number">Inkluder tal</string>
@@ -1412,4 +1414,6 @@ Do you want to switch to this account?</string>
     <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
     <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
     <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
+    <string name="account_creation_restricted">Account creation restricted</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
 </resources>

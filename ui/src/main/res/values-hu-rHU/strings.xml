@@ -340,9 +340,9 @@
     <string name="moved_item_to_org">%1$s áthelyezésre került: %2$s.</string>
     <string name="select_one_collection">Legalább egy gyűjteményt ki kell választani.</string>
     <string name="share">Megosztás</string>
-    <string name="move_to_organization">Áthelyezés szervezetbe</string>
-    <string name="no_orgs_to_list">Nincs megjeleníthető szervezet.</string>
-    <string name="move_to_org_desc">Válasszunk egy szervezetet, ahová áthelyezni szeretnénk ezt az elemet. A szervezetbe áthelyezés átruházza az elem tulajdonjogát az adott szervezetre. Az áthelyezés után többé nem leszünk az elem közvetlen tulajdonosa.</string>
+    <string name="move_to_vault">Áthelyezés széfbe</string>
+    <string name="no_vaults_to_list">Nincsenek listázandó széfek.</string>
+    <string name="move_to_vault_desc">Válasszunk egy széfet, ahová áthelyezni szeretnénk ezt az elemet. A széfbe áthelyezés átruházza az elem tulajdonjogát az adott szervezetre. Az áthelyezés után többé nem leszünk az elem közvetlen tulajdonosa.</string>
     <string name="number_of_words">Szavak száma</string>
     <string name="passphrase">Kulcsszó</string>
     <string name="word_separator">Szóelválasztó</string>
@@ -378,6 +378,8 @@
     <string name="pin_require_master_password_restart">Szükséges a feloldás mesterjelszóval az alkalmazás újraindításakor?</string>
     <string name="ask_to_add_item">Ask to add item</string>
     <string name="ask_to_add_item_description">Ask to add an item if one isn’t found in your vault.</string>
+    <string name="turn_on_fill_assist">Kitöltési segéd bekapcsolása</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">A kitöltési segéd a webhely specifikus szabályok használatával javítja az automatikus kitöltési pontosságot a támogatott webhelyeken.</string>
     <string name="on_restart">Újraindításkor</string>
     <string name="capitalize">Nagy kezdőbetű</string>
     <string name="include_number">Szám is</string>
@@ -1411,4 +1413,6 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="keep_documents_safe_and_encrypted">Dokumentumok biztonságban és titkosítva tartása</string>
     <string name="share_files_securely_with_anyone_using_send">Fájlok biztonságos megosztása bárkivel, aki a Send elemet használja</string>
     <string name="receive_24_7_priority_support">Kiemelt támogatás fogadása a teljes héten 24 órában</string>
+    <string name="account_creation_restricted">A fiók létrehozása korlátozott.</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s csak a meghívott felhasználók számára teszi lehetővé fiókok létrehozását.</string>
 </resources>

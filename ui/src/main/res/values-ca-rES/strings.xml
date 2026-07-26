@@ -283,7 +283,7 @@ L\'escaneig es farà automàticament.</string>
     <string name="vault_is_locked">La caixa forta està bloquejada</string>
     <string name="go_to_my_vault">Vés a la meua caixa forta</string>
     <string name="collections">Col·leccions</string>
-    <string name="no_items_collection">No hi ha elements en aquesta col·lecció.</string>
+    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="no_items_folder">No hi ha elements en aquesta carpeta.</string>
     <string name="no_items_trash">No hi ha elements a la paperera.</string>
     <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
@@ -341,9 +341,9 @@ L\'escaneig es farà automàticament.</string>
     <string name="moved_item_to_org">%1$s desplaçat a %2$s.</string>
     <string name="select_one_collection">Heu d\'escollir com a mínim una col·lecció.</string>
     <string name="share">Comparteix</string>
-    <string name="move_to_organization">Desplaça a l\'organització</string>
-    <string name="no_orgs_to_list">No hi ha cap organització per llistar.</string>
-    <string name="move_to_org_desc">Trieu una organització a la qual vulgueu desplaçar aquest element. El trasllat a una organització transfereix la propietat de l\'element a aquesta organització. Ja no sereu el propietari directe d\'aquest element una vegada s\'haja mogut.</string>
+    <string name="move_to_vault">Move to vault</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Nombre de paraules</string>
     <string name="passphrase">Frase de pas</string>
     <string name="word_separator">Separador de paraules</string>
@@ -379,6 +379,8 @@ L\'escaneig es farà automàticament.</string>
     <string name="pin_require_master_password_restart">Voleu sol·licitar el desbloqueig amb la vostra contrasenya mestra quan es reinicie l’aplicació?</string>
     <string name="ask_to_add_item">Ask to add item</string>
     <string name="ask_to_add_item_description">Ask to add an item if one isn’t found in your vault.</string>
+    <string name="turn_on_fill_assist">Turn on fill assist</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill assist improves autofill accuracy on supported sites by using site specific rules.</string>
     <string name="on_restart">En reiniciar l\'aplicació</string>
     <string name="capitalize">Majúscules inicials</string>
     <string name="include_number">Inclou número</string>
@@ -1412,4 +1414,6 @@ Voleu canviar a aquest compte?</string>
     <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
     <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
     <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
+    <string name="account_creation_restricted">Account creation restricted</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
 </resources>

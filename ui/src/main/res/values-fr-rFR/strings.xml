@@ -341,9 +341,9 @@ La numérisation se fera automatiquement.</string>
     <string name="moved_item_to_org">%1$s déplacé vers %2$s</string>
     <string name="select_one_collection">Vous devez sélectionner au moins une collection.</string>
     <string name="share">Partager</string>
-    <string name="move_to_organization">Déplacer vers l\'organisation</string>
-    <string name="no_orgs_to_list">Aucune organisation à lister.</string>
-    <string name="move_to_org_desc">Choisissez une organisation vers laquelle vous souhaitez déplacer cet élément. Le déplacement vers une organisation transfère le Propriétaire de l\'élément à cette organisation. Vous ne serez plus le propriétaire direct de cet élément une fois qu\'il aura été déplacé.</string>
+    <string name="move_to_vault">Déplacer vers le coffre</string>
+    <string name="no_vaults_to_list">Aucun coffre à afficher.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Nombre de mots</string>
     <string name="passphrase">Phrase de passe</string>
     <string name="word_separator">Séparateur de mots</string>
@@ -379,6 +379,8 @@ La numérisation se fera automatiquement.</string>
     <string name="pin_require_master_password_restart">Voulez-vous exiger le déverrouillage avec votre mot de passe principal lorsque l\'application est redémarrée ?</string>
     <string name="ask_to_add_item">Demander à ajouter un article</string>
     <string name="ask_to_add_item_description">Demander d\'ajouter un élément si aucun n\'est trouvé dans votre coffre.</string>
+    <string name="turn_on_fill_assist">Turn on fill assist</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill assist improves autofill accuracy on supported sites by using site specific rules.</string>
     <string name="on_restart">Au redémarrage de l\'application</string>
     <string name="capitalize">Mettre une majuscule</string>
     <string name="include_number">Inclure un chiffre</string>
@@ -1282,7 +1284,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="emergency_access">Accès d\'urgence</string>
     <string name="secure_file_storage">Stockage sécurisé de fichier</string>
     <string name="breach_monitoring">Surveillance des fuites</string>
-    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">You’ll complete the purchase with Stripe secure checkout.</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">Vous allez terminer l\'achat avec le paiement sécurisé Stripe.</string>
     <string name="opening_checkout">Lancement du paiement</string>
     <string name="secure_checkout_didnt_load">Le paiement sécurisé n\'a pas été chargé</string>
     <string name="trouble_opening_payment_page">Nous avons eu des difficultés à ouvrir la page de paiement, essayez à nouveau.</string>
@@ -1314,13 +1316,13 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="subscription_status_expired">Expiré</string>
     <string name="subscription_status_past_due">Échéance dépassée</string>
     <string name="subscription_status_paused">En pause</string>
-    <string name="subscription_status_unpaid">Unpaid</string>
+    <string name="subscription_status_unpaid">Impayé</string>
     <string name="subscription_status_update_payment">Mettre à jour le paiement</string>
     <string name="subscription_status_pending_cancellation">Résiliation en attente</string>
     <string name="subscription_pending_cancellation_description">Votre abonnement est prévu d\'être annulé le <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Vous pouvez le rétablir à tout moment avant cette date.</string>
     <string name="premium_next_charge_summary">Votre prochain prélèvement est de <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD, prévu le <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</string>
     <string name="subscription_canceled_description">Votre abonnement a été annulé le <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Réabonnez-vous pour continuer à utiliser les fonctionnalités Premium.</string>
-    <string name="subscription_unpaid_description">Your subscription was suspended on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. To reactivate, please resolve your past due invoices.</string>
+    <string name="subscription_unpaid_description">Votre abonnement a été suspendu le <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Pour le réactiver, veuillez régler vos factures impayées.</string>
     <string name="subscription_update_payment_description">Nous n\'avons pas pu traiter votre paiement. Mettez à jour votre mode de paiement avant la fin de votre abonnement le <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Vous avez une période de grâce de <annotation arg="0">%1$d</annotation> jour à compter de la date d\'expiration de votre abonnement. Veuillez régulariser les factures impayées avant le <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
@@ -1405,11 +1407,13 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Une redirection vers Stripe va s\'effectuer pour gérer l\'annulation de votre abonnement.</string>
     <string name="unlock_advanced_protection">Unlock advanced protection</string>
     <string name="breeze_through_2fa_with_built_in_codes">Breeze through 2FA with built-in codes</string>
-    <string name="run_reports_to_find_risky_passwords">Run reports to find risky passwords</string>
-    <string name="add_a_trusted_emergency_contact">Add a trusted emergency contact</string>
-    <string name="identify_unsecure_websites">Identify unsecure websites</string>
-    <string name="flag_accounts_with_inactive_2fa">Flag accounts with inactive 2FA</string>
-    <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
-    <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
-    <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
+    <string name="run_reports_to_find_risky_passwords">Générer des rapports pour trouver les mots de passes à risque</string>
+    <string name="add_a_trusted_emergency_contact">Ajouter un contact d\'urgence de confiance</string>
+    <string name="identify_unsecure_websites">Identifier les sites web non sécurisés</string>
+    <string name="flag_accounts_with_inactive_2fa">Repérer les comptes sans double authentification</string>
+    <string name="keep_documents_safe_and_encrypted">Garder vos documents en sécurité et chiffrés</string>
+    <string name="share_files_securely_with_anyone_using_send">Partager des fichiers avec n\'importe qui en toute sécurité avec Send</string>
+    <string name="receive_24_7_priority_support">Recevoir une assistance prioritaire 24/7</string>
+    <string name="account_creation_restricted">Création de compte restreinte</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s ne permet qu\'aux utilisateurs invités de créer des comptes.</string>
 </resources>
