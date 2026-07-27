@@ -351,7 +351,7 @@ data class VaultMoveToOrganizationState(
         get() = if (onlyShowCollections) {
             BitwardenString.shared_folders.asText()
         } else {
-            BitwardenString.move_to_vault.asText()
+            BitwardenString.move.asText()
         }
 
     val appBarButtonText: Text
