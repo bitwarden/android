@@ -228,6 +228,7 @@ class ContextExtensionsTest {
         assertFalse(context.isAccessibilityServiceEnabled)
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `isAccessibilityServiceEnabled with null enabled service list falls back to secure string`() {
         val context: Context = mockk {
