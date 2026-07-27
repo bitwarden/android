@@ -3560,7 +3560,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "No Folder. Folder")
+            .onNodeWithContentDescriptionAfterScroll(label = "No Folder. My folder")
             .performClick()
 
         verify {
@@ -3575,7 +3575,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         updateStateWithFolders()
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "No Folder. Folder")
+            .onNodeWithContentDescriptionAfterScroll(label = "No Folder. My folder")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -3583,7 +3583,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "mockFolderName-1. Folder")
+            .onNodeWithContentDescriptionAfterScroll(label = "mockFolderName-1. My folder")
             .assertIsDisplayed()
     }
 

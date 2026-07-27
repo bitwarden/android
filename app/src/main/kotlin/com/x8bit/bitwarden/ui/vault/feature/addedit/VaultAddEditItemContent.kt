@@ -184,7 +184,7 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
         item {
             Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenTextSelectionButton(
-                label = stringResource(id = BitwardenString.folder),
+                label = stringResource(id = BitwardenString.my_folder),
                 selectedOption = state.common.selectedFolder?.name,
                 onClick = commonTypeHandlers.onSelectOrAddFolderForItem,
                 cardStyle = if (isAddItemMode && state.common.hasOrganizations) {
