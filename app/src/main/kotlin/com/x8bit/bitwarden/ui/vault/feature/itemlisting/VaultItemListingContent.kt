@@ -169,7 +169,7 @@ fun VaultItemListingContent(
             item(key = "folders_header") {
                 Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = BitwardenString.folders),
+                    label = stringResource(id = BitwardenString.my_folders),
                     supportingLabel = state.displayFolderList.count().toString(),
                     modifier = Modifier
                         .animateItem()

@@ -119,7 +119,7 @@ fun VaultSettingsScreen(
                 )
             }
             BitwardenTextRow(
-                text = stringResource(BitwardenString.folders),
+                text = stringResource(BitwardenString.my_folders),
                 onClick = { viewModel.trySendAction(VaultSettingsAction.FoldersButtonClick) },
                 withDivider = false,
                 cardStyle = CardStyle.Top(),

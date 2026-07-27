@@ -24,7 +24,6 @@
     <string name="folder_created">New folder created.</string>
     <string name="folder_deleted">Folder deleted.</string>
     <string name="folder_none">No Folder</string>
-    <string name="folders">Folders</string>
     <string name="folder_updated">Folder saved</string>
     <string name="hide">Hide</string>
     <string name="internet_connection_required_message">Please connect to the internet before continuing.</string>
@@ -44,6 +43,8 @@
     <string name="master_password_required">Master password (required)</string>
     <string name="new_master_password_required">New master password (required)</string>
     <string name="more_options">More options</string>
+    <string name="my_folder">My folder</string>
+    <string name="my_folders">My folders</string>
     <string name="my_vault">My vault</string>
     <string name="name">Name</string>
     <string name="item_name_required">Item name (required)</string>
