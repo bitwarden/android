@@ -24,7 +24,6 @@
     <string name="folder_created">New folder created.</string>
     <string name="folder_deleted">Folder deleted.</string>
     <string name="folder_none">No Folder</string>
-    <string name="folders">Folders</string>
     <string name="folder_updated">Folder saved</string>
     <string name="hide">Hide</string>
     <string name="internet_connection_required_message">Please connect to the internet before continuing.</string>
