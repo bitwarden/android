@@ -3594,7 +3594,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Folders")
+            .onNodeWithText("My folders")
             .assertIsDisplayed()
 
         composeTestRule
@@ -3609,7 +3609,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Folders")
+            .onNodeWithText("My folders")
             .assertIsDisplayed()
 
         composeTestRule
@@ -3633,7 +3633,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Folders")
+            .onNodeWithText("My folders")
             .assertIsDisplayed()
 
         composeTestRule
@@ -3656,7 +3656,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         val newFolderName = "newFolderName"
 
         composeTestRule
-            .onNodeWithText("Folders")
+            .onNodeWithText("My folders")
             .assertIsDisplayed()
 
         composeTestRule

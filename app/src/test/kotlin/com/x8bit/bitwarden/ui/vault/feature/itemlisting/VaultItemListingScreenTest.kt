@@ -792,7 +792,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `Folders text should be displayed according to state`() {
-        val folders = "FOLDERS (1)"
+        val folders = "MY FOLDERS (1)"
         mutableStateFlow.update { DEFAULT_STATE }
         composeTestRule
             .onNodeWithText(text = folders)
@@ -822,7 +822,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     fun `Folders text count should be displayed according to state`() {
         mutableStateFlow.update { DEFAULT_STATE }
         composeTestRule
-            .onNodeWithText(text = "FOLDERS (1)")
+            .onNodeWithText(text = "MY FOLDERS (1)")
             .assertDoesNotExist()
 
         mutableStateFlow.update {
@@ -837,7 +837,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "FOLDERS (1)")
+            .onNodeWithTextAfterScroll(text = "MY FOLDERS (1)")
             .assertIsDisplayed()
 
         mutableStateFlow.update {
@@ -867,7 +867,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "FOLDERS (3)")
+            .onNodeWithTextAfterScroll(text = "MY FOLDERS (3)")
             .assertIsDisplayed()
     }
 

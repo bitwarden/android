@@ -376,7 +376,7 @@ fun VaultContent(
         if (state.folderItems.isNotEmpty()) {
             item(key = "folders_header") {
                 BitwardenListHeaderText(
-                    label = stringResource(id = BitwardenString.folders),
+                    label = stringResource(id = BitwardenString.my_folders),
                     supportingLabel = state.folderItems.count().toString(),
                     modifier = Modifier
                         .animateItem()
