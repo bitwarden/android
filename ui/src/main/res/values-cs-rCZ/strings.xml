@@ -345,9 +345,9 @@ Načtení proběhne automaticky.</string>
     <string name="moved_item_to_org">Položka %1$s byla přesunuta do %2$s.</string>
     <string name="select_one_collection">Musíte vybrat alespoň jednu sbírku.</string>
     <string name="share">Sdílet</string>
-    <string name="move_to_organization">Přesunout do organizace</string>
-    <string name="no_orgs_to_list">Žádné organizace k zobrazení.</string>
-    <string name="move_to_org_desc">Vyberte organizaci, do které chcete tuto položku přesunout. Přesun do organizace převede vlastnictví položky této organizaci. Po přesunutí této položky již nebudete přímým vlastníkem této položky.</string>
+    <string name="move_to_vault">Přesunout do trezoru</string>
+    <string name="no_vaults_to_list">Žádné trezory k zobrazení.</string>
+    <string name="move_to_vault_desc">Vyberte úložiště, do kterého chcete tuto položku přesunout. Přesunutím do jiného úložiště se vlastnictví položky převede na danou organizaci. Jakmile bude položka přesunuta, přestanete být jejím přímým vlastníkem.</string>
     <string name="number_of_words">Počet slov</string>
     <string name="passphrase">Heslová fráze</string>
     <string name="word_separator">Oddělovač slov</string>
@@ -383,6 +383,8 @@ Načtení proběhne automaticky.</string>
     <string name="pin_require_master_password_restart">Chcete po restartování aplikace vyžadovat hlavní heslo pro odemknutí trezoru?</string>
     <string name="ask_to_add_item">Zeptat se na přidání položky</string>
     <string name="ask_to_add_item_description">Zeptá se na uložení údajů, pokud nebyly v trezoru nalezeny.</string>
+    <string name="turn_on_fill_assist">Zapnout Fill Assist</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill Assist zvyšuje přesnost automatického vyplňování na podporovaných webech pomocí pravidel specifických pro daný web.</string>
     <string name="on_restart">Při restartu aplikace</string>
     <string name="capitalize">Velká písmena na začátku slova</string>
     <string name="include_number">Zahrnout číslice</string>
@@ -1295,8 +1297,8 @@ při opakování problémů.</string>
     <string name="upgrade_pending">Nevyřízená aktualizace</string>
     <string name="upgrade_pending_message">Vaše aktualizace je zpracovávána. Zůstanete na bezplatném tarifu, dokud nebude dokončena. Synchronizujte pro kontrolu, nebo pokračujte a aktualizace se provede automaticky.</string>
     <string name="unlock_premium_features">Odemkněte pokročilejší funkce s předplatným Premium.</string>
-    <string name="per_month_cancel_anytime">/ měsíčně · Lze zrušit kdykoli</string>
-    <string name="per_month_cancel_anytime_content_description">%1$s měsíčně, lze kdykoli zrušit</string>
+    <string name="per_month_cancel_anytime">/ měsíčně · lze zrušit kdykoli</string>
+    <string name="per_month_cancel_anytime_content_description">%1$s měsíčně, lze zrušit kdykoli</string>
     <string name="built_in_authenticator">Vestavěný autentifikátor</string>
     <string name="emergency_access">Nouzový přístup</string>
     <string name="secure_file_storage">Zabezpečené úložiště souborů</string>
@@ -1433,4 +1435,6 @@ při opakování problémů.</string>
     <string name="keep_documents_safe_and_encrypted">Uchovávejte dokumenty v bezpečí a zašifrované</string>
     <string name="share_files_securely_with_anyone_using_send">Sdílejte soubory bezpečně s kýmkoli pomocí funkce Send</string>
     <string name="receive_24_7_priority_support">Získejte přednostní podporu 24/7</string>
+    <string name="account_creation_restricted">Vytvoření účtu omezeno</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s umožňuje vytvářet účty jen pozvaným uživatelům.</string>
 </resources>

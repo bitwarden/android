@@ -339,9 +339,9 @@
     <string name="moved_item_to_org">%1$s を %2$s に移動しました。</string>
     <string name="select_one_collection">コレクションを最低１つは選んでください。</string>
     <string name="share">共有</string>
-    <string name="move_to_organization">組織に移動</string>
-    <string name="no_orgs_to_list">表示する組織がありません。</string>
-    <string name="move_to_org_desc">このアイテムを移動する組織を選択してください。組織に移動すると、アイテムの所有権がその組織に移行します。 このアイテムが移動された後、あなたはこのアイテムの直接の所有者にはなりません。</string>
+    <string name="move_to_vault">保管庫に移動</string>
+    <string name="no_vaults_to_list">表示できる保管庫がありません。</string>
+    <string name="move_to_vault_desc">このアイテムを移動する保管庫を選択してください。別の保管庫に移動すると、アイテムの所有権はその組織に移ります。移動した後、あなたはこのアイテムの直接の所有者ではなくなります。</string>
     <string name="number_of_words">単語数</string>
     <string name="passphrase">パスフレーズ</string>
     <string name="word_separator">単語の区切り</string>
@@ -377,6 +377,8 @@
     <string name="pin_require_master_password_restart">アプリを再起動したときにマスターパスワードでのロック解除を必須としますか？</string>
     <string name="ask_to_add_item">Ask to add item</string>
     <string name="ask_to_add_item_description">Ask to add an item if one isn’t found in your vault.</string>
+    <string name="turn_on_fill_assist">入力アシストをオンにする</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">入力アシストは、サイト固有のルールを使用して対応サイトの自動入力の精度を向上させます。</string>
     <string name="on_restart">アプリ再起動時</string>
     <string name="capitalize">英単語の先頭を大文字にする</string>
     <string name="include_number">数字を含める</string>
@@ -1144,7 +1146,7 @@
     <string name="import_cancelled">インポートがキャンセルされました</string>
     <string name="no_items_imported">インポートされたアイテムはありません</string>
     <string name="no_items_received_from_the_selected_app">No items received from the selected app.</string>
-    <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="vault_sync_failed">保管庫の同期に失敗しました</string>
     <string name="vault_sync_unsuccessful">同期に失敗しました</string>
     <string name="vault_sync_failed_description">サーバーとあなたの保管庫を同期できませんでした。あなたの保管庫は最新の変更を反映していない可能性があります。 後で自動的に同期しますが、今すぐ再試行することもできます。</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but they will not be visible in your vault until sync is performed.</string>
@@ -1158,7 +1160,7 @@
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</string>
-    <string name="not_now">Not now</string>
+    <string name="not_now">後で</string>
     <string name="import_from_bitwarden">Bitwarden からインポート</string>
     <string name="select_account">アカウントを選択</string>
     <string name="no_accounts_available">利用可能なアカウントがありません</string>
@@ -1198,7 +1200,7 @@
     <string name="archive_verb">アーカイブ</string>
     <string name="unarchive">アーカイブ解除</string>
     <string name="archived">Archived</string>
-    <string name="hidden_items">Hidden items</string>
+    <string name="hidden_items">隠しファイル</string>
     <string name="unable_to_archive_selected_item">Unable to archive selected item.</string>
     <string name="unable_to_unarchive_selected_item">Unable to unarchive selected item.</string>
     <string name="archiving">Archiving</string>
@@ -1229,7 +1231,7 @@
     <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
     <string name="no_email_addresses_entered">No email addresses entered</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
-    <string name="sync_with_browser">Sync with browser</string>
+    <string name="sync_with_browser">ブラウザーと同期</string>
     <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>
     <string name="launch_browser">ブラウザーを起動</string>
     <string name="continue_without_syncing">同期せずに続行</string>
@@ -1288,7 +1290,7 @@
     <string name="archive_item">アイテムをアーカイブ</string>
     <string name="once_archived_this_item_will_be_excluded">アーカイブすると、このアイテムは検索結果と自動入力の候補から除外されます。</string>
     <string name="pricing_unavailable">料金が利用できません</string>
-    <string name="current_plan">Current plan</string>
+    <string name="current_plan">現在のプラン</string>
     <string name="premium_plan_name">プレミアム</string>
     <string name="billing_amount">請求額</string>
     <string name="storage_cost">ストレージコスト</string>
@@ -1318,7 +1320,7 @@
     </plurals>
     <string name="subscription_paused_description">Your subscription is paused. Resume to continue using premium features.</string>
     <string name="subscription_expired_description">あなたのサブスクリプションは <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>に失効しました。プレミアム機能を引き続き使用するには再加入してください。</string>
-    <string name="loading_subscription">Loading subscription…</string>
+    <string name="loading_subscription">サブスクリプションを読み込み中…</string>
     <string name="loading_portal">Loading portal…</string>
     <string name="portal_error">何らかのエラーが発生しました</string>
     <string name="trouble_loading_portal">We had trouble loading the management portal, so try again.</string>
@@ -1402,4 +1404,6 @@
     <string name="keep_documents_safe_and_encrypted">ドキュメントを安全に暗号化する</string>
     <string name="share_files_securely_with_anyone_using_send">Send を使用して誰でも安全にファイルを共有</string>
     <string name="receive_24_7_priority_support">24時間年中無休の優先サポートを受ける</string>
+    <string name="account_creation_restricted">アカウントの作成が制限されています</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s は招待されたユーザーのみアカウントを作成できます。</string>
 </resources>

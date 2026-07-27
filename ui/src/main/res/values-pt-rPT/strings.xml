@@ -330,26 +330,26 @@ A leitura será efetuada automaticamente.</string>
     <string name="password_history">Histórico de palavras-passe</string>
     <string name="password_history_count"><annotation link="passwordHistory">Histórico de palavras-passe: <annotation arg="0">%1$s</annotation></annotation></string>
     <string name="types">Tipos</string>
-    <string name="no_passwords_to_list">Não há palavras-passe a enumerar.</string>
+    <string name="no_passwords_to_list">Não existem palavras-passe para apresentar.</string>
     <string name="search_file_sends">Procurar Sends de ficheiros</string>
     <string name="search_text_sends">Procurar Sends de texto</string>
     <string name="type">Tipo</string>
     <string name="move_down">Mover para baixo</string>
     <string name="move_up">Mover para cima</string>
     <string name="owner">Proprietário</string>
-    <string name="no_collections_to_list">Não há coleções a enumerar.</string>
+    <string name="no_collections_to_list">Não existem coleções para apresentar.</string>
     <string name="moved_item_to_org">%1$s movido para %2$s.</string>
     <string name="select_one_collection">Deve selecionar pelo menos uma coleção.</string>
     <string name="share">Partilhar</string>
-    <string name="move_to_organization">Mover para organização</string>
-    <string name="no_orgs_to_list">Não há organizações a enumerar.</string>
-    <string name="move_to_org_desc">Escolha uma organização para a qual pretende mover este item. Mover para uma organização transfere a propriedade do item para essa organização. Deixará de ser o proprietário direto deste item depois de este ter sido movido.</string>
+    <string name="move_to_vault">Mover para o cofre</string>
+    <string name="no_vaults_to_list">Não existem cofres para apresentar.</string>
+    <string name="move_to_vault_desc">Escolha o cofre para o qual pretende mover este item. Ao movê-lo para outro cofre, a propriedade do item será transferida para essa organização. Deixará de ser o proprietário direto deste item após a transferência.</string>
     <string name="number_of_words">Número de palavras</string>
     <string name="passphrase">Frase de acesso</string>
     <string name="word_separator">Separador de palavras</string>
     <string name="clear">Limpar</string>
     <string name="generator">Gerador</string>
-    <string name="no_folders_to_list">Não há pastas a enumerar.</string>
+    <string name="no_folders_to_list">Não existem pastas para apresentar.</string>
     <string name="fingerprint_phrase">Frase de impressão digital</string>
     <string name="your_accounts_fingerprint">Frase de impressão digital da sua conta</string>
     <string name="export_vault">Exportar cofre</string>
@@ -379,6 +379,8 @@ A leitura será efetuada automaticamente.</string>
     <string name="pin_require_master_password_restart">Pretende exigir o desbloqueio com a sua palavra-passe mestra quando a aplicação é reiniciada?</string>
     <string name="ask_to_add_item">Pedir para adicionar um item</string>
     <string name="ask_to_add_item_description">Pedir para adicionar um item se não o encontrar no seu cofre.</string>
+    <string name="turn_on_fill_assist">Ativar assistência de preenchimento</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">A assistência de preenchimento melhora a precisão do preenchimento automático em sites suportados através da utilização de regras específicas para cada site.</string>
     <string name="on_restart">Ao reiniciar a app</string>
     <string name="capitalize">Capitalizar</string>
     <string name="include_number">Incluir número</string>
@@ -1412,4 +1414,6 @@ Pretende mudar para esta conta?</string>
     <string name="keep_documents_safe_and_encrypted">Mantenha os documentos seguros e encriptados</string>
     <string name="share_files_securely_with_anyone_using_send">Partilhe ficheiros de forma segura com qualquer pessoa através do Send</string>
     <string name="receive_24_7_priority_support">Receba suporte prioritário 24/7</string>
+    <string name="account_creation_restricted">Criação de conta restringida</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s apenas permite que utilizadores convidados criem contas.</string>
 </resources>

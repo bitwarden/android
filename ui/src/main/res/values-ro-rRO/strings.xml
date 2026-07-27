@@ -284,7 +284,7 @@ Scanarea se va face automat.</string>
     <string name="vault_is_locked">Seiful este blocat</string>
     <string name="go_to_my_vault">Deschidere seif personal</string>
     <string name="collections">Colecții</string>
-    <string name="no_items_collection">Nu există elemente în colecție.</string>
+    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="no_items_folder">Nu există elemente în acest dosar.</string>
     <string name="no_items_trash">Nu există articole în coșul de reciclare.</string>
     <string name="autofill_accessibility_summary">Asistă la completarea câmpurilor numelui de utilizator și a parolei în alte aplicații și pe web.</string>
@@ -343,9 +343,9 @@ Scanarea se va face automat.</string>
     <string name="moved_item_to_org">%1$s s-a mutat la %2$s.</string>
     <string name="select_one_collection">Trebuie să selectați cel puțin o colecție.</string>
     <string name="share">Partajare</string>
-    <string name="move_to_organization">Mutare la organizație</string>
-    <string name="no_orgs_to_list">Nicio organizație de afișat.</string>
-    <string name="move_to_org_desc">Alegeți o organizație la care doriți să mutați acest articol. Mutarea într-o organizație, transferă proprietatea asupra articolului către organizația respectivă. Nu veți mai fi proprietarul direct al acestui articol odată ce a fost mutat.</string>
+    <string name="move_to_vault">Move to vault</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Număr de cuvinte</string>
     <string name="passphrase">Frază de acces</string>
     <string name="word_separator">Separator de cuvinte</string>
@@ -381,6 +381,8 @@ Scanarea se va face automat.</string>
     <string name="pin_require_master_password_restart">Doriți să solicitați deblocarea cu parola principală atunci când aplicația este repornită?</string>
     <string name="ask_to_add_item">Ask to add item</string>
     <string name="ask_to_add_item_description">Ask to add an item if one isn’t found in your vault.</string>
+    <string name="turn_on_fill_assist">Turn on fill assist</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill assist improves autofill accuracy on supported sites by using site specific rules.</string>
     <string name="on_restart">La repornirea aplicației</string>
     <string name="capitalize">Se folosesc majuscule inițiale</string>
     <string name="include_number">Se includ cifre</string>
@@ -1422,4 +1424,6 @@ Doriți să comutați la acest cont?</string>
     <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
     <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
     <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
+    <string name="account_creation_restricted">Account creation restricted</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
 </resources>

@@ -341,9 +341,9 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="moved_item_to_org">%1$s, %2$s kuruluşuna taşındı.</string>
     <string name="select_one_collection">En az bir koleksiyon seçmelisiniz.</string>
     <string name="share">Paylaş</string>
-    <string name="move_to_organization">Kuruluşa taşı</string>
-    <string name="no_orgs_to_list">Listelenecek kuruluş yok.</string>
-    <string name="move_to_org_desc">Bu kaydı taşımak istediğiniz kuruluşu seçin. Taşıdığınız kaydın sahipliği seçtiğiniz kuruluşa aktarılacak. Artık bu kaydın doğrudan sahibi olmayacaksınız.</string>
+    <string name="move_to_vault">Kasaya taşı</string>
+    <string name="no_vaults_to_list">Listelenecek kasa yok.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Kelime sayısı</string>
     <string name="passphrase">Parola cümlesi</string>
     <string name="word_separator">Kelime ayracı</string>
@@ -379,6 +379,8 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="pin_require_master_password_restart">Uygulama yeniden başlatılınca ana parola girilmesine zorunlu tutmak ister misiniz?</string>
     <string name="ask_to_add_item">Hesap eklemeyi öner</string>
     <string name="ask_to_add_item_description">Kasamda kayıt bulunamazsa eklemeyi öner.</string>
+    <string name="turn_on_fill_assist">Doldurma yardımcısını etkinleştir</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Doldurma yardımcısı, desteklenen sitelere özel kurallarla otomatik doldurma netliğini artırır.</string>
     <string name="on_restart">Uygulama yeniden başlatılınca</string>
     <string name="capitalize">Baş harfleri büyük yap</string>
     <string name="include_number">Rakam ekle</string>
@@ -1411,4 +1413,6 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
     <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
     <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
+    <string name="account_creation_restricted">Account creation restricted</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
 </resources>

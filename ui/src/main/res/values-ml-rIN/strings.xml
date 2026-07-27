@@ -283,7 +283,7 @@
     <string name="vault_is_locked">വാൾട് പൂട്ടിയിരിക്കുന്നു</string>
     <string name="go_to_my_vault">എൻ്റെ  വാൾട്ടിലേക്ക് പോകുക</string>
     <string name="collections">കളക്ഷൻസ്</string>
-    <string name="no_items_collection">ഈ കളക്ഷനിൽ ഇനങ്ങൾ ഒന്നും ഇല്ല.</string>
+    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="no_items_folder">ഈ ഫോൾഡറിൽ ഇനങ്ങളൊന്നുമില്ല.</string>
     <string name="no_items_trash">ട്രാഷിൽ  ഇനങ്ങളൊന്നുമില്ല.</string>
     <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
@@ -341,9 +341,9 @@
     <string name="moved_item_to_org">%1$s %2$s-ലേക്ക് മാറ്റി</string>
     <string name="select_one_collection">നിങ്ങൾ ഒരു  കളക്ഷനെങ്കിലും  തിരഞ്ഞെടുക്കണം.</string>
     <string name="share">പങ്കിടുക</string>
-    <string name="move_to_organization">സംഘടനയിലേക്ക് മാറ്റുക</string>
-    <string name="no_orgs_to_list">പ്രദർശിപ്പിക്കാൻ സംഘടനകൾ  ഒന്നും ഇല്ല.</string>
-    <string name="move_to_org_desc">Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
+    <string name="move_to_vault">Move to vault</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">വാക്കുകളുടെ എണ്ണം</string>
     <string name="passphrase">രഹസ്യ വാചകം</string>
     <string name="word_separator">വേര്‍പെടുത്തുക</string>
@@ -379,6 +379,8 @@
     <string name="pin_require_master_password_restart">അപ്ലിക്കേഷൻ പുനരാരംഭിക്കുമ്പോൾ നിങ്ങളുടെപ്രാഥമിക പാസ്‌വേഡ് ഉപയോഗിച്ച് അൺലോക്കുചെയ്യാൻ ആഗ്രഹമുണ്ടോ?</string>
     <string name="ask_to_add_item">Ask to add item</string>
     <string name="ask_to_add_item_description">Ask to add an item if one isn’t found in your vault.</string>
+    <string name="turn_on_fill_assist">Turn on fill assist</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill assist improves autofill accuracy on supported sites by using site specific rules.</string>
     <string name="on_restart">അപ്ലിക്കേഷൻ പുനരാരംഭിക്കുമ്പോൾ</string>
     <string name="capitalize">വലിയഅക്ഷരമാകുക</string>
     <string name="include_number">നമ്പർ ഉൾപ്പെടുത്തുക</string>
@@ -1412,4 +1414,6 @@ Do you want to switch to this account?</string>
     <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
     <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
     <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
+    <string name="account_creation_restricted">Account creation restricted</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
 </resources>
