@@ -282,7 +282,7 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="vault_is_locked">Brankas terkunci</string>
     <string name="go_to_my_vault">Buka brankas saya</string>
     <string name="collections">Koleksi</string>
-    <string name="no_items_collection">Tidak ada item di koleksi ini.</string>
+    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="no_items_folder">Tidak ada item di folder ini.</string>
     <string name="no_items_trash">Tidak ada item di sampah.</string>
     <string name="autofill_accessibility_summary">Bantu mengisi kolom nama pengguna dan sandi di aplikasi lain serta di web.</string>
@@ -339,9 +339,9 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="moved_item_to_org">%1$s dipindahkan ke %2$s.</string>
     <string name="select_one_collection">Anda harus memilih setidaknya satu koleksi.</string>
     <string name="share">Bagikan</string>
-    <string name="move_to_organization">Pindah ke Organisasi</string>
-    <string name="no_orgs_to_list">Tidak ada organisasi untuk dicantumkan.</string>
-    <string name="move_to_org_desc">Pilih sebuah organisasi yang Anda inginkan untuk memindahkan item ini. Memindahkan berarti menyerahkan kepemilikan item kepada organisasi tersebut. Anda tidak akan lagi menjadi pemilik item ini.</string>
+    <string name="move_to_vault">Move to vault</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Jumlah kata</string>
     <string name="passphrase">Frasa Sandi</string>
     <string name="word_separator">Pemisah kata</string>
@@ -377,6 +377,8 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="pin_require_master_password_restart">You you want to require unlocking with your master password when the application is restarted?</string>
     <string name="ask_to_add_item">Tanya untuk menambah item</string>
     <string name="ask_to_add_item_description">Tanyakan untuk menambahkan item jika tidak ditemukan di brankas Anda.</string>
+    <string name="turn_on_fill_assist">Turn on fill assist</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill assist improves autofill accuracy on supported sites by using site specific rules.</string>
     <string name="on_restart">Saat apl dimulai ulang</string>
     <string name="capitalize">Huruf kapital</string>
     <string name="include_number">Sertakan nomor</string>
@@ -1403,4 +1405,6 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
     <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
     <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
+    <string name="account_creation_restricted">Account creation restricted</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
 </resources>

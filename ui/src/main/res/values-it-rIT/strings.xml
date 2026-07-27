@@ -281,8 +281,8 @@
     <string name="icons_url">URL del server di icone</string>
     <string name="vault_is_locked">La cassaforte è bloccata</string>
     <string name="go_to_my_vault">Vai alla cassaforte</string>
-    <string name="collections">Raccolte</string>
-    <string name="no_items_collection">Nessun elemento in questa raccolta</string>
+    <string name="collections">Collezioni</string>
+    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="no_items_folder">Nessun elemento in questa cartella</string>
     <string name="no_items_trash">Nessun elemento nel cestino</string>
     <string name="autofill_accessibility_summary">Assiste con il riempimento dei campi nome utente e password in altre applicazioni e nei siti web.</string>
@@ -336,13 +336,13 @@
     <string name="move_down">Sposta in basso</string>
     <string name="move_up">Sposta in alto</string>
     <string name="owner">Propriet.</string>
-    <string name="no_collections_to_list">Nessuna raccolta</string>
+    <string name="no_collections_to_list">Nessuna raccolta da mostrare.</string>
     <string name="moved_item_to_org">%1$s spostato in %2$s</string>
-    <string name="select_one_collection">Seleziona almeno una raccolta</string>
+    <string name="select_one_collection">Devi selezionare almeno una raccolta.</string>
     <string name="share">Condividi</string>
-    <string name="move_to_organization">Sposta in organizzazione</string>
-    <string name="no_orgs_to_list">Nessuna organizzazione</string>
-    <string name="move_to_org_desc">Scegli l\'organizzazione in cui vuoi spostare questo elemento. Ciò rimuove a te la proprietà dell\'elemento e la trasferisce all\'organizzazione.</string>
+    <string name="move_to_vault">Move to vault</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Numero di parole</string>
     <string name="passphrase">Passphrase</string>
     <string name="word_separator">Separatore delle parole</string>
@@ -378,6 +378,8 @@
     <string name="pin_require_master_password_restart">Vuoi richiedere lo sblocco con la password principale quando l\'app viene riavviata?</string>
     <string name="ask_to_add_item">Chiedi di aggiungere elementi</string>
     <string name="ask_to_add_item_description">Propone di aggiungere un login quando non è presente nella cassaforte.</string>
+    <string name="turn_on_fill_assist">Turn on fill assist</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill assist improves autofill accuracy on supported sites by using site specific rules.</string>
     <string name="on_restart">Dopo il riavvio dell\'app</string>
     <string name="capitalize">Iniziale maiuscola</string>
     <string name="include_number">Numero casuale</string>
@@ -1411,4 +1413,6 @@ Vuoi passare a questo account?</string>
     <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
     <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
     <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
+    <string name="account_creation_restricted">Account creation restricted</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
 </resources>

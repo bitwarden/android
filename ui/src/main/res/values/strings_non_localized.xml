@@ -57,6 +57,8 @@
     <string name="debug_disable_self_host_premium_check">Debug: Disable self-host premium check</string>
     <string name="policies_in_accepted_state">Policies in accepted state</string>
     <string name="fed_ramp">FedRAMP</string>
+    <string name="send_controls">Send Controls</string>
+    <string name="send_controls_existing_sends">Send Controls - Existing Sends</string>
 
     <!-- endregion Debug Menu -->
 </resources>

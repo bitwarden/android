@@ -282,10 +282,10 @@
     <string name="vault_is_locked">密码库已锁定</string>
     <string name="go_to_my_vault">前往我的密码库</string>
     <string name="collections">集合</string>
-    <string name="no_items_collection">此集合中没有项目。</string>
+    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="no_items_folder">此文件夹中没有项目。</string>
     <string name="no_items_trash">回收站中没有项目。</string>
-    <string name="autofill_accessibility_summary">在其他 App 和网站上协助填充用户名和密码字段。</string>
+    <string name="autofill_accessibility_summary">在其他 App 和网站上辅助填充用户名和密码字段。</string>
     <string name="autofill_service_description">Bitwarden 自动填充服务使用 Android 自动填充框架来协助将登录信息填充到您设备上的其他 App 中。</string>
     <string name="bitwarden_autofill_go_to_settings">我们无法为您自动打开 Android 自动填充设置菜单。您可以通过 Android 设置 &gt; 系统 &gt; 语言和输入 &gt; 高级 &gt; 自动填充服务，来手动导航到自动填充设置。</string>
     <string name="custom_field_name">自定义字段名称</string>
@@ -339,9 +339,9 @@
     <string name="moved_item_to_org">%1$s 已移动到 %2$s。</string>
     <string name="select_one_collection">您必须至少选择一个集合。</string>
     <string name="share">共享</string>
-    <string name="move_to_organization">移动到组织</string>
-    <string name="no_orgs_to_list">没有可列出的组织。</string>
-    <string name="move_to_org_desc">选择一个您想将此项目移至的组织。移动到组织会将该项目的所有权转让给该组织。移动后，您将不再是此项目的直接所有者。</string>
+    <string name="move_to_vault">Move to vault</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">选择一个您想将此项目移至的密码库。移动到其他密码库会将该项目的所有权转移给该组织。移动后，您将不再是此项目的直接所有者。</string>
     <string name="number_of_words">单词个数</string>
     <string name="passphrase">密码短语</string>
     <string name="word_separator">单词分隔符</string>
@@ -377,6 +377,8 @@
     <string name="pin_require_master_password_restart">您希望当应用程序重启时，要求使用主密码解锁吗？</string>
     <string name="ask_to_add_item">询问添加项目</string>
     <string name="ask_to_add_item_description">在密码库中找不到匹配项目时询问添加一个。</string>
+    <string name="turn_on_fill_assist">启用填充辅助</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">填充辅助通过使用站点特定的规则，提高在受支持站点上的自动填充的准确性。</string>
     <string name="on_restart">App 重启时</string>
     <string name="capitalize">首字母大写</string>
     <string name="include_number">包含数字</string>
@@ -1274,7 +1276,7 @@
     <string name="emergency_access">紧急访问</string>
     <string name="secure_file_storage">安全文件存储</string>
     <string name="breach_monitoring">数据泄露监测</string>
-    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">您将通过 Stripe 的安全结账页面完成购买。</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">您将通过 Stripe 安全结账页面完成购买。</string>
     <string name="opening_checkout">正在打开结账页面…</string>
     <string name="secure_checkout_didnt_load">安全结账页面未能加载</string>
     <string name="trouble_opening_payment_page">打开付款页面时出现问题，请重试。</string>
@@ -1403,4 +1405,6 @@
     <string name="keep_documents_safe_and_encrypted">保持文档安全和加密</string>
     <string name="share_files_securely_with_anyone_using_send">使用 Send，与任何人安全地分享文件</string>
     <string name="receive_24_7_priority_support">享受 7×24 小时优先支持</string>
+    <string name="account_creation_restricted">账户创建受限</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s 仅允许受邀用户创建账户。</string>
 </resources>

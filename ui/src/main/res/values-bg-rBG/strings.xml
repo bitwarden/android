@@ -341,9 +341,9 @@
     <string name="moved_item_to_org">%1$s се премести в %2$s.</string>
     <string name="select_one_collection">Изберете поне една колекция.</string>
     <string name="share">Споделяне</string>
-    <string name="move_to_organization">Преместване в организация</string>
-    <string name="no_orgs_to_list">Няма организации за показване.</string>
-    <string name="move_to_org_desc">Изберете организацията, в която искате да преместите записа. Преместването прехвърля собствеността му към новата организация. След това няма вече директно да го притежавате.</string>
+    <string name="move_to_vault">Преместване в трезора</string>
+    <string name="no_vaults_to_list">Няма трезори за показване.</string>
+    <string name="move_to_vault_desc">Изберете трезор, в която искате да преместите записа. Преместването към друг трезор прехвърля собствеността му към съответната организация. След това няма вече директно да го притежавате.</string>
     <string name="number_of_words">Брой думи</string>
     <string name="passphrase">Парола-фраза</string>
     <string name="word_separator">Разделител за думи</string>
@@ -379,6 +379,8 @@
     <string name="pin_require_master_password_restart">Искате ли да бъдете питани за главната парола при всяко пускане на Битуорден наново?</string>
     <string name="ask_to_add_item">Помолете за добавяне на елемент</string>
     <string name="ask_to_add_item_description">Помолете за добавяне на елемент, ако такъв не може да бъде намерен в трезора Ви.</string>
+    <string name="turn_on_fill_assist">Включване на асистираното попълване</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Асистираното попълване подобрява точността на автоматичното попълване в поддържаните уеб сайтове, като използва специфични за конкретните уеб сайтове правила.</string>
     <string name="on_restart">При рестартиране на приложението</string>
     <string name="capitalize">Главни букви</string>
     <string name="include_number">И цифри</string>
@@ -1414,4 +1416,6 @@
     <string name="keep_documents_safe_and_encrypted">Пазете документите си на сигурно място, шифровани</string>
     <string name="share_files_securely_with_anyone_using_send">Споделяйте файлове сигурно с всеки чрез Изпращанията</string>
     <string name="receive_24_7_priority_support">Получавайте 24-часова приоритетна поддръжка</string>
+    <string name="account_creation_restricted">Създаването на акаунти е ограничено</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s разрешава само на поканените потребители да създават акаунти.</string>
 </resources>

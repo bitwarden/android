@@ -345,9 +345,9 @@ Skenovanie prebehne automaticky.</string>
     <string name="moved_item_to_org">%1$s presunuté do %2$s.</string>
     <string name="select_one_collection">Musíte vybrať aspoň jednu zbierku.</string>
     <string name="share">Zdieľať</string>
-    <string name="move_to_organization">Presunúť do Organizácie</string>
-    <string name="no_orgs_to_list">Nenašli sa žiadne organizácie.</string>
-    <string name="move_to_org_desc">Vyberte organizáciu, do ktorej chcete presunúť túto položku. Presunom do organizácie sa vlastníctvo položky prenáša na túto organizáciu. Po presunutí už nebudete priamym vlastníkom danej položky.</string>
+    <string name="move_to_vault">Presunúť do trezoru</string>
+    <string name="no_vaults_to_list">Nie sú žiadne trezory na zobrazenie.</string>
+    <string name="move_to_vault_desc">Vyberte trezor, do ktorého chcete túto položku presunúť. Presunutím do iného trezoru sa vlastníctvo položky prevedie na danú organizáciu. Po presunutí už nebudete priamym vlastníkom tejto položky.</string>
     <string name="number_of_words">Počet slov</string>
     <string name="passphrase">Prístupová fráza</string>
     <string name="word_separator">Oddeľovač slov</string>
@@ -383,6 +383,8 @@ Skenovanie prebehne automaticky.</string>
     <string name="pin_require_master_password_restart">Chcete po reštarte aplikácie požadovať odomykanie vaším hlavným heslom?</string>
     <string name="ask_to_add_item">Opýtať sa na pridanie položky</string>
     <string name="ask_to_add_item_description">Požiada o pridanie položky, ak sa v trezore žiadna nenájde.</string>
+    <string name="turn_on_fill_assist">Zapnúť pomoc pri vypĺňaní</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Pomoc pri vypĺňaní zvyšuje presnosť automatického vypĺňania na podporovaných webových stránkach pomocou špecifických pravidiel pre konkrétnu stránku.</string>
     <string name="on_restart">Po reštarte aplikácie</string>
     <string name="capitalize">Prvé písmeno veľkým</string>
     <string name="include_number">Zahrnúť číslo</string>
@@ -1432,4 +1434,6 @@ Chcete prepnúť na tento účet?</string>
     <string name="keep_documents_safe_and_encrypted">Uchovávajte dokumenty v bezpečí a zašifrované</string>
     <string name="share_files_securely_with_anyone_using_send">Zdieľajte súbory bezpečne s kýmkoľvek pomocou Sendu</string>
     <string name="receive_24_7_priority_support">Získajte nonstop prioritnú podporu</string>
+    <string name="account_creation_restricted">Vytvorenie účtu je obmedzené</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s umožňuje vytvárať účty iba pozvaným používateľom.</string>
 </resources>

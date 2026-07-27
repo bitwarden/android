@@ -283,7 +283,7 @@
     <string name="vault_is_locked">گاوصندوق قفل شد</string>
     <string name="go_to_my_vault">برو به گاوصندوق من</string>
     <string name="collections">مجموعه‌ها</string>
-    <string name="no_items_collection">در این مجموعه موردی برای نمایش نیست.</string>
+    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="no_items_folder">در این پوشه موردی برای نمایش نیست.</string>
     <string name="no_items_trash">هیچ موردی در سطل زباله وجود ندارد.</string>
     <string name="autofill_accessibility_summary">در پر کردن فیلدهای نام کاربری و کلمه عبور در برنامه‌های دیگر و در وب کمک می‌کند.</string>
@@ -342,9 +342,9 @@
     <string name="moved_item_to_org">%1$s منتقل شد به %2$s.</string>
     <string name="select_one_collection">شما باید حداقل یک مجموعه را انتخاب کنید.</string>
     <string name="share">اشتراک گذاری</string>
-    <string name="move_to_organization">انتقال به سازمان</string>
-    <string name="no_orgs_to_list">هیچ سازمانی برای نمایش وجود ندارد.</string>
-    <string name="move_to_org_desc">سازمانی را انتخاب کنید که می‌خواهید این مورد را به آن منتقل کنید. انتقال به یک سازمان، مالکیت مورد را به آن سازمان منتقل می کند. پس از انتقال این مورد، دیگر مالک مستقیم آن نخواهید بود.</string>
+    <string name="move_to_vault">Move to vault</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">تعداد کلمات</string>
     <string name="passphrase">عبارت عبور</string>
     <string name="word_separator">جداکننده کلمات</string>
@@ -380,6 +380,8 @@
     <string name="pin_require_master_password_restart">آیا می‌خواهید هنگام راه‌اندازی مجدد برنامه، نیاز به باز کردن قفل با کلمه عبور اصلی خود داشته باشید؟</string>
     <string name="ask_to_add_item">درخواست افزودن مورد</string>
     <string name="ask_to_add_item_description">در صورتی که موردی در گاوصندوق شما پیدا نشد، درخواست اضافه کردن آن را بدهید.</string>
+    <string name="turn_on_fill_assist">Turn on fill assist</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill assist improves autofill accuracy on supported sites by using site specific rules.</string>
     <string name="on_restart">در راه‌اندازی مجدد برنامه</string>
     <string name="capitalize">بزرگ نوشتن حرف اول</string>
     <string name="include_number">شامل عدد</string>
@@ -1413,4 +1415,6 @@
     <string name="keep_documents_safe_and_encrypted">اسناد را ایمن و رمزگذاری شده نگه دارید</string>
     <string name="share_files_securely_with_anyone_using_send">پرونده‌ها را با استفاده از ارسال به صورت ایمن با هر کسی به اشتراک بگذارید</string>
     <string name="receive_24_7_priority_support">پشتیبانی اولویت‌دار ۲۴ ساعته و ۷ روز هفته دریافت کنید</string>
+    <string name="account_creation_restricted">Account creation restricted</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
 </resources>
