@@ -9,6 +9,7 @@ import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.MasterPasswordUnlockData
+import com.bitwarden.core.V2UpgradeToken
 import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.manager.realtime.RealtimeManager
@@ -38,6 +39,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResul
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.util.toV2UpgradeTokenJson
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -998,6 +1000,73 @@ class VaultLockManagerTest {
                 )
                 trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
                 kdfManager.updateKdfToMinimumsIfNeeded(masterPassword)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVault with a stored V2 upgrade token should pass the mapped token to initializeCrypto`() =
+        runTest {
+            val kdf = MOCK_PROFILE.toSdkParams()
+            val email = MOCK_PROFILE.email
+            val masterPassword = "mockValue"
+            val v2UpgradeToken = V2UpgradeToken(
+                wrappedUserKey1 = "wrappedUserKey1",
+                wrappedUserKey2 = "wrappedUserKey2",
+            )
+            fakeAuthDiskSource.storeV2UpgradeToken(
+                userId = USER_ID,
+                v2UpgradeToken = v2UpgradeToken.toV2UpgradeTokenJson(),
+            )
+            coEvery {
+                vaultSdkSource.initializeCrypto(
+                    userId = USER_ID,
+                    request = InitUserCryptoRequest(
+                        accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE,
+                        userId = USER_ID,
+                        kdfParams = kdf,
+                        email = email,
+                        method = InitUserCryptoMethod.MasterPasswordUnlock(
+                            password = masterPassword,
+                            masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
+                        ),
+                        upgradeToken = v2UpgradeToken,
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
+            } returns false.asSuccess()
+            mutableVaultTimeoutStateFlow.value = VaultTimeout.ThirtyMinutes
+
+            val result = vaultLockManager.unlockVault(
+                accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE,
+                userId = USER_ID,
+                email = email,
+                kdf = kdf,
+                initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
+                    password = masterPassword,
+                    masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
+                ),
+                organizationKeys = null,
+            )
+
+            assertEquals(VaultUnlockResult.Success, result)
+            coVerify(exactly = 1) {
+                vaultSdkSource.initializeCrypto(
+                    userId = USER_ID,
+                    request = InitUserCryptoRequest(
+                        accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE,
+                        userId = USER_ID,
+                        kdfParams = kdf,
+                        email = email,
+                        method = InitUserCryptoMethod.MasterPasswordUnlock(
+                            password = masterPassword,
+                            masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
+                        ),
+                        upgradeToken = v2UpgradeToken,
+                    ),
+                )
             }
         }
 
