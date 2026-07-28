@@ -1404,9 +1404,8 @@ class AutofillParserTests {
     @Suppress("MaxLineLength")
     @Test
     fun `parse should return Unfillable when heuristics classify the focused view as Unused and fill-assist matches nothing`() {
-        // Setup: same as the rescue case, but fill-assist doesn't actually match any fields for
-        // this page. It must not claim an empty result just because the host declares a known
-        // category -- that would let an unrelated host rule silently claim an unrelated form.
+        // Fill-assist takes over the attempt but matches no fields, and the Unused rescue path has
+        // no heuristic views to fall back to -- so the request ends up Unfillable.
         mutableFillAssistFlagFlow.value = true
         mockIsFillAssistEnabled = true
         every { any<AutofillView>().buildUriOrNull(PACKAGE_NAME) } returns FILL_ASSIST_URI
