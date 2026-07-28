@@ -123,7 +123,12 @@ class AutofillParserImpl(
         val urlBarWebsite = traversalDataList
             .flatMap { it.urlBarWebsites }
             .firstOrNull()
-        val autofillViews = traversalDataList.toAutofillViews(urlBarWebsite = urlBarWebsite)
+        // Heuristic views: the focused node's candidates with unfillable (Unused) fields removed,
+        // falling back to all fillable views when nothing has focus.
+        val autofillViews = traversalDataList
+            .selectCandidateAutofillViews(urlBarWebsite = urlBarWebsite) {
+                it !is AutofillView.Unused
+            }
 
         val isFillAssistEnabled = featureFlagManager
             .getFeatureFlag(FlagKey.FillAssistTargetingRules) &&
@@ -282,32 +287,24 @@ private fun AssistStructure.traverse(): List<ViewNodeTraversalData> =
 
 /**
  * Selects the autofill views from the node that currently has focus, or falls back to all
- * fillable views if nothing has focus. Unlike [toAutofillViews], this does not filter out
- * [AutofillView.Unused] views.
+ * fillable views if nothing has focus. The optional [predicate] filters the views *before* the
+ * emptiness/fallback check, so callers that only want fillable fields (e.g. excluding
+ * [AutofillView.Unused]) still get the multi-window fallback applied to the filtered set. By
+ * default no views are filtered out.
  */
 private fun List<ViewNodeTraversalData>.selectCandidateAutofillViews(
     urlBarWebsite: String?,
+    predicate: (AutofillView) -> Boolean = { true },
 ): List<AutofillView> {
     val viewsLists = map { it.autofillViews }
     val candidates = viewsLists
         .filter { views -> views.any { it.data.isFocused } }
         .flatten()
+        .filter(predicate)
         .takeUnless { it.isEmpty() }
-        ?: viewsLists.flatten()
+        ?: viewsLists.flatten().filter(predicate)
     return candidates.map { it.updateWebsiteIfNecessary(website = urlBarWebsite) }
 }
-
-/**
- * Assembles the [AutofillView] list from this [ViewNodeTraversalData] list.
- * Take only the autofill views from the node that currently has focus.
- * Then remove all the fields that cannot be filled with data.
- * We fall back to taking all the fillable views if nothing has focus.
- */
-private fun List<ViewNodeTraversalData>.toAutofillViews(
-    urlBarWebsite: String?,
-): List<AutofillView> =
-    selectCandidateAutofillViews(urlBarWebsite = urlBarWebsite)
-        .filter { it !is AutofillView.Unused }
 
 /**
  * Returns the focused [AutofillView], or falls back to the first entry if none is focused.

@@ -811,6 +811,71 @@ class AutofillParserTests {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `parse should fall back to another window's fillable view when the focused window yields only Unused views`() {
+        // Setup: two window nodes. The focused window (e.g. a browser url bar EditText with no
+        // hint) contributes only an Unused view, while a second, unfocused window holds the real
+        // Login.Username field -- a shape that occurs for the browsers in URL_BARS. The focused
+        // window's emptiness check must run AFTER Unused views are filtered out, so the request
+        // falls back to the fillable view in the other window instead of short-circuiting to
+        // Unfillable. Fill-assist stays disabled (default), so there is no rescue path.
+        val urlBarAutofillId: AutofillId = mockk()
+        val urlBarViewNode: AssistStructure.ViewNode = mockk {
+            every { this@mockk.autofillHints } returns emptyArray()
+            every { this@mockk.autofillId } returns urlBarAutofillId
+            every { this@mockk.childCount } returns 0
+            every { this@mockk.htmlInfo } returns mockk(relaxed = true)
+            every { this@mockk.idPackage } returns ID_PACKAGE
+            every { this@mockk.idEntry } returns null
+            every { this@mockk.website } returns null
+        }
+        val urlBarWindowNode: AssistStructure.WindowNode = mockk {
+            every { this@mockk.rootViewNode } returns urlBarViewNode
+        }
+        every { assistStructure.windowNodeCount } returns 2
+        every { assistStructure.getWindowNodeAt(0) } returns urlBarWindowNode
+        every { assistStructure.getWindowNodeAt(1) } returns loginWindowNode
+        val unusedFocusedView = AutofillView.Unused(
+            data = AutofillView.Data(
+                autofillId = urlBarAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = null,
+            ),
+        )
+        val loginAutofillView = AutofillView.Login.Username(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = false,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = URI,
+            ),
+        )
+        every { urlBarViewNode.toAutofillView(parentWebsite = any()) } returns unusedFocusedView
+        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+
+        // Test
+        val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
+
+        // Verify: the request falls back to the fillable Login.Username in the unfocused window.
+        val expected = AutofillRequest.Fillable(
+            ignoreAutofillIds = emptyList(),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = PACKAGE_NAME,
+            partition = AutofillPartition.Login(views = listOf(loginAutofillView)),
+            uri = URI,
+        )
+        assertEquals(expected, actual)
+    }
+
     @Test
     fun `parse should return empty inline suggestions when inline autofill is disabled`() {
         // Setup
