@@ -57,7 +57,7 @@ class CredentialExchangeImportManagerImpl(
     ): ImportCxfPayloadResult {
         val allCiphers = accountsJsonList.flatMap { accountJson ->
             vaultSdkSource
-                .importCxf(userId = userId, payload = accountJson)
+                .importCxf(userId = userId, payload = sanitizeTimestamps(accountJson))
                 .getOrElse { return ImportCxfPayloadResult.Error(error = it) }
         }
 
@@ -116,3 +116,20 @@ class CredentialExchangeImportManagerImpl(
             }
         }
 }
+
+private val NEGATIVE_TIMESTAMP_REGEX = Regex(
+    """("(?:creationAt|modifiedAt)"\s*:\s*)-\d+""",
+)
+
+/**
+ * Replace negative Unix timestamps in CXF account JSON with 0.
+ *
+ * Some credential managers (e.g., Google Password Manager on Windows) export
+ * timestamps as the Windows FILETIME epoch (-11644473600) when no real date
+ * exists. The Bitwarden SDK deserializes these fields as u64 and cannot
+ * handle negative values.
+ */
+internal fun sanitizeTimestamps(json: String): String =
+    NEGATIVE_TIMESTAMP_REGEX.replace(json) { match ->
+        "${match.groupValues[1]}0"
+    }
