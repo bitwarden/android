@@ -256,18 +256,13 @@ class AutofillParserImpl(
             hostRules = hostRules,
             urlBarWebsite = urlBarWebsite,
         )
-        // Heuristics found no signal at all for the Unused case, so there's no prior
-        // classification to trust. Only switch to fill-assist views if it actually matched
-        // something for this page -- otherwise an unrelated host rule (e.g. one covering a
-        // different pathname/category on the same host) would silently claim an unrelated
-        // form. Card/Login branches keep the existing "authoritative even if empty" behavior
-        // since those already carry real heuristic confirmation.
-        return if (focusedView is AutofillView.Unused && fillAssistViews.isEmpty()) {
-            this
-        } else {
-            Timber.d("FillAssist invoked for this autofill attempt")
-            fillAssistViews
-        }
+        // Fill-assist is authoritative for a partition its rules cover (guarded by
+        // coversCurrentPartition above), so its views are used even when empty: for Login/Card
+        // that discards the already heuristically-confirmed views, and for the Unused rescue path
+        // there were no heuristic views to fall back to. Reaching here means fill-assist has taken
+        // over this attempt (an empty result leaves the request Unfillable).
+        Timber.d("FillAssist invoked for this autofill attempt")
+        return fillAssistViews
     }
 }
 
