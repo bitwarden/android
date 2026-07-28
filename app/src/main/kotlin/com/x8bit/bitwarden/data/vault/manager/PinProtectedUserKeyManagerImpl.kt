@@ -67,7 +67,7 @@ internal class PinProtectedUserKeyManagerImpl(
                     userId = userId,
                     encryptedPin = null,
                     pinProtectedUserKeyEnvelope = null,
-                    inMemoryOnly = false,
+                    inMemoryOnly = inMemoryOnly,
                 )
             }
 
@@ -78,11 +78,17 @@ internal class PinProtectedUserKeyManagerImpl(
         inMemoryOnly: Boolean,
     ) {
         authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
-        authDiskSource.storePinProtectedUserKeyEnvelope(
-            userId = userId,
-            pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
-            inMemoryOnly = inMemoryOnly,
-        )
+        if (inMemoryOnly) {
+            authDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
+                userId = userId,
+                pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
+            )
+        } else {
+            authDiskSource.storePersistentPinProtectedUserKeyEnvelope(
+                userId = userId,
+                pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
+            )
+        }
         // This property is deprecated and we should be migrated to the PinProtectedUserKeyEnvelope.
         // Because of this, we always clear this value and it should always be cleared at the disk
         // level, not the in-memory level.

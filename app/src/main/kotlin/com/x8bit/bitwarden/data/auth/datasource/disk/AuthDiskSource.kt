@@ -199,15 +199,10 @@ interface AuthDiskSource : AppIdProvider {
      * Retrieves a pin-protected user key for the given [userId].
      */
     @Deprecated(
-        message = "Use getPinProtectedUserKeyEnvelope instead.",
-        replaceWith = ReplaceWith("getPinProtectedUserKeyEnvelope"),
+        message = "Use getEphemeralPinProtectedUserKeyEnvelope and " +
+            "getPersistentPinProtectedUserKeyEnvelope instead.",
     )
     fun getPinProtectedUserKey(userId: String): String?
-
-    /**
-     * Retrieves a pin-protected user key envelope for the given [userId].
-     */
-    fun getPinProtectedUserKeyEnvelope(userId: String): String?
 
     /**
      * Stores a pin-protected user key for the given [userId].
@@ -216,8 +211,8 @@ interface AuthDiskSource : AppIdProvider {
      * [getPinProtectedUserKey] during the current app session.
      */
     @Deprecated(
-        message = "Use storePinProtectedUserKeyEnvelope instead.",
-        replaceWith = ReplaceWith("storePinProtectedUserKeyEnvelope"),
+        message = "Use storeEphemeralPinProtectedUserKeyEnvelope and " +
+            "storePersistentPinProtectedUserKeyEnvelope instead.",
     )
     fun storePinProtectedUserKey(
         userId: String,
@@ -226,30 +221,61 @@ interface AuthDiskSource : AppIdProvider {
     )
 
     /**
-     * Stores a pin-protected user key envelope for the given [userId].
-     *
-     * When [inMemoryOnly] is `true`, the value will only be available via a call to
-     * [getPinProtectedUserKeyEnvelope] during the current app session.
-     */
-    fun storePinProtectedUserKeyEnvelope(
-        userId: String,
-        pinProtectedUserKeyEnvelope: String?,
-        inMemoryOnly: Boolean = false,
-    )
-
-    /**
      * Retrieves a flow for the pin-protected user key for the given [userId].
      */
     @Deprecated(
-        message = "Use getPinProtectedUserKeyEnvelopeFlow instead.",
-        replaceWith = ReplaceWith("getPinProtectedUserKeyEnvelopeFlow"),
+        message = "Use getEphemeralPinProtectedUserKeyEnvelopeFlow and " +
+            "getPersistentPinProtectedUserKeyEnvelopeFlow instead.",
     )
     fun getPinProtectedUserKeyFlow(userId: String): Flow<String?>
 
     /**
-     * Retrieves a flow for the pin-protected user key envelope for the given [userId].
+     * Retrieves the pin-protected user key envelope for the given [userId].
+     *
+     * This will return either the in-memory or persistent pin-protected user key, whichever is
+     * available.
      */
-    fun getPinProtectedUserKeyEnvelopeFlow(userId: String): Flow<String?>
+    fun getPinProtectedUserKeyEnvelope(userId: String): String?
+
+    /**
+     * Retrieves the ephemeral pin-protected user key envelope for the given [userId].
+     *
+     * This will always ignore the persistent pin-protected user key.
+     */
+    fun getEphemeralPinProtectedUserKeyEnvelope(userId: String): String?
+
+    /**
+     * Retrieves the persistent pin-protected user key envelope for the given [userId].
+     *
+     * This will always ignore the ephemeral pin-protected user key.
+     */
+    fun getPersistentPinProtectedUserKeyEnvelope(userId: String): String?
+
+    /**
+     * Stores an ephemeral pin-protected user key envelope for the given [userId].
+     */
+    fun storeEphemeralPinProtectedUserKeyEnvelope(
+        userId: String,
+        pinProtectedUserKeyEnvelope: String?,
+    )
+
+    /**
+     * Stores a persistent pin-protected user key envelope for the given [userId].
+     */
+    fun storePersistentPinProtectedUserKeyEnvelope(
+        userId: String,
+        pinProtectedUserKeyEnvelope: String?,
+    )
+
+    /**
+     * Retrieves a flow for the ephemeral pin-protected user key envelope for the given [userId].
+     */
+    fun getEphemeralPinProtectedUserKeyEnvelopeFlow(userId: String): Flow<String?>
+
+    /**
+     * Retrieves a flow for the persistent pin-protected user key envelope for the given [userId].
+     */
+    fun getPersistentPinProtectedUserKeyEnvelopeFlow(userId: String): Flow<String?>
 
     /**
      * Gets a two-factor auth token using a user's [email].

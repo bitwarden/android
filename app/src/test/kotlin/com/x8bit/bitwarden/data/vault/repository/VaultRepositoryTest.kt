@@ -675,7 +675,11 @@ class VaultRepositoryTest {
                 userId = "mockId-1",
                 pinProtectedUserKey = null,
             )
-            fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
+            fakeAuthDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
+                userId = "mockId-1",
+                pinProtectedUserKeyEnvelope = null,
+            )
+            fakeAuthDiskSource.storePersistentPinProtectedUserKeyEnvelope(
                 userId = "mockId-1",
                 pinProtectedUserKeyEnvelope = null,
             )
@@ -699,7 +703,11 @@ class VaultRepositoryTest {
             userId = "mockId-1",
             pinProtectedUserKey = "mockKey-1",
         )
-        fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
+        fakeAuthDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
+            userId = "mockId-1",
+            pinProtectedUserKeyEnvelope = null,
+        )
+        fakeAuthDiskSource.storePersistentPinProtectedUserKeyEnvelope(
             userId = "mockId-1",
             pinProtectedUserKeyEnvelope = null,
         )
@@ -754,7 +762,11 @@ class VaultRepositoryTest {
             val mockVaultUnlockResult = VaultUnlockResult.Success
             prepareStateForUnlocking(unlockResult = mockVaultUnlockResult)
 
-            fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
+            fakeAuthDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
+                userId = userId,
+                pinProtectedUserKeyEnvelope = null,
+            )
+            fakeAuthDiskSource.storePersistentPinProtectedUserKeyEnvelope(
                 userId = userId,
                 pinProtectedUserKeyEnvelope = null,
             )
@@ -1585,7 +1597,7 @@ class VaultRepositoryTest {
             userId = userId,
             pinProtectedUserKey = "mockKey-1",
         )
-        fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
+        fakeAuthDiskSource.storePersistentPinProtectedUserKeyEnvelope(
             userId = userId,
             pinProtectedUserKeyEnvelope = "mockKey-1",
         )
