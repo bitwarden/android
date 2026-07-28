@@ -123,14 +123,29 @@ class AutofillParserImpl(
         val urlBarWebsite = traversalDataList
             .flatMap { it.urlBarWebsites }
             .firstOrNull()
-        val autofillViews = traversalDataList.toAutofillViews(urlBarWebsite = urlBarWebsite)
+        // Heuristic views: the focused node's candidates with unfillable (Unused) fields removed,
+        // falling back to all fillable views when nothing has focus.
+        val autofillViews = traversalDataList
+            .selectCandidateAutofillViews(urlBarWebsite = urlBarWebsite) {
+                it !is AutofillView.Unused
+            }
+
+        val isFillAssistEnabled = featureFlagManager
+            .getFeatureFlag(FlagKey.FillAssistTargetingRules) &&
+            settingsRepository.isFillAssistEnabled
 
         // Find the focused view, or fallback to the first fillable item on the screen (so
-        // we at least have something to hook into)
-        val focusedView = autofillViews
-            .firstOrNull { it.data.isFocused }
-            ?: autofillViews.firstOrNull()
-            // The view is unfillable if there are no focused views.
+        // we at least have something to hook into). If heuristics found nothing at all, only
+        // give fill-assist a chance to rescue the page when it's actually enabled -- otherwise
+        // the view is unfillable since there are no focused views.
+        val focusedView = autofillViews.firstFocusedOrNull()
+            ?: if (isFillAssistEnabled) {
+                traversalDataList
+                    .selectCandidateAutofillViews(urlBarWebsite = urlBarWebsite)
+                    .firstFocusedOrNull()
+            } else {
+                null
+            }
             ?: return AutofillRequest.Unfillable
 
         val packageName = traversalDataList.buildPackageNameOrNull(
@@ -143,9 +158,6 @@ class AutofillParserImpl(
             return AutofillRequest.Unfillable
         }
 
-        val isFillAssistEnabled = featureFlagManager
-            .getFeatureFlag(FlagKey.FillAssistTargetingRules) &&
-            settingsRepository.isFillAssistEnabled
         val effectiveViews = if (isFillAssistEnabled) {
             autofillViews.toEffectiveViews(
                 assistStructure = assistStructure,
@@ -157,9 +169,7 @@ class AutofillParserImpl(
             autofillViews
         }
 
-        val effectiveFocusedView = effectiveViews
-            .firstOrNull { it.data.isFocused }
-            ?: effectiveViews.firstOrNull()
+        val effectiveFocusedView = effectiveViews.firstFocusedOrNull()
             ?: return AutofillRequest.Unfillable
 
         // Choose the first focused partition of data for fulfillment.
@@ -177,8 +187,9 @@ class AutofillParserImpl(
             }
 
             is AutofillView.Unused -> {
-                // The view is unfillable since the field is not meant to be used for autofill.
-                // This will never happen since we filter out all unused views above.
+                // This will never happen: the heuristic path filters out Unused views, and the
+                // fill-assist path never constructs one (toAutofillViewForFieldKey has no Unused
+                // case).
                 return AutofillRequest.Unfillable
             }
         }
@@ -233,19 +244,25 @@ class AutofillParserImpl(
             when (focusedView) {
                 is AutofillView.Card -> rule.category in CARD_FILL_ASSIST_CATEGORIES
                 is AutofillView.Login -> rule.category in LOGIN_FILL_ASSIST_CATEGORIES
-                is AutofillView.Unused -> false
+                is AutofillView.Unused -> {
+                    rule.category in LOGIN_FILL_ASSIST_CATEGORIES ||
+                        rule.category in CARD_FILL_ASSIST_CATEGORIES
+                }
             }
         }
+        if (!coversCurrentPartition) return this
 
-        return if (coversCurrentPartition) {
-            Timber.d("FillAssist invoked for this autofill attempt")
-            assistStructure.buildFillAssistViews(
-                hostRules = hostRules,
-                urlBarWebsite = urlBarWebsite,
-            )
-        } else {
-            this
-        }
+        val fillAssistViews = assistStructure.buildFillAssistViews(
+            hostRules = hostRules,
+            urlBarWebsite = urlBarWebsite,
+        )
+        // Fill-assist is authoritative for a partition its rules cover (guarded by
+        // coversCurrentPartition above), so its views are used even when empty: for Login/Card
+        // that discards the already heuristically-confirmed views, and for the Unused rescue path
+        // there were no heuristic views to fall back to. Reaching here means fill-assist has taken
+        // over this attempt (an empty result leaves the request Unfillable).
+        Timber.d("FillAssist invoked for this autofill attempt")
+        return fillAssistViews
     }
 }
 
@@ -264,25 +281,31 @@ private fun AssistStructure.traverse(): List<ViewNodeTraversalData> =
         }
 
 /**
- * Assembles the [AutofillView] list from this [ViewNodeTraversalData] list.
- * Take only the autofill views from the node that currently has focus.
- * Then remove all the fields that cannot be filled with data.
- * We fall back to taking all the fillable views if nothing has focus.
+ * Selects the autofill views from the node that currently has focus, or falls back to all
+ * fillable views if nothing has focus. The optional [predicate] filters the views *before* the
+ * emptiness/fallback check, so callers that only want fillable fields (e.g. excluding
+ * [AutofillView.Unused]) still get the multi-window fallback applied to the filtered set. By
+ * default no views are filtered out.
  */
-private fun List<ViewNodeTraversalData>.toAutofillViews(
+private fun List<ViewNodeTraversalData>.selectCandidateAutofillViews(
     urlBarWebsite: String?,
+    predicate: (AutofillView) -> Boolean = { true },
 ): List<AutofillView> {
     val viewsLists = map { it.autofillViews }
-    val autofillViewLists = viewsLists
+    val candidates = viewsLists
         .filter { views -> views.any { it.data.isFocused } }
         .flatten()
-        .filter { it !is AutofillView.Unused }
+        .filter(predicate)
         .takeUnless { it.isEmpty() }
-        ?: viewsLists
-            .flatten()
-            .filter { it !is AutofillView.Unused }
-    return autofillViewLists.map { it.updateWebsiteIfNecessary(website = urlBarWebsite) }
+        ?: viewsLists.flatten().filter(predicate)
+    return candidates.map { it.updateWebsiteIfNecessary(website = urlBarWebsite) }
 }
+
+/**
+ * Returns the focused [AutofillView], or falls back to the first entry if none is focused.
+ */
+private fun List<AutofillView>.firstFocusedOrNull(): AutofillView? =
+    firstOrNull { it.data.isFocused } ?: firstOrNull()
 
 /**
  * This helper function updates the [ViewNodeTraversalData] if necessary for missing password
