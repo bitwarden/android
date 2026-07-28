@@ -239,8 +239,10 @@ class AutofillParserImpl(
             when (focusedView) {
                 is AutofillView.Card -> rule.category in CARD_FILL_ASSIST_CATEGORIES
                 is AutofillView.Login -> rule.category in LOGIN_FILL_ASSIST_CATEGORIES
-                is AutofillView.Unused -> rule.category in LOGIN_FILL_ASSIST_CATEGORIES ||
-                    rule.category in CARD_FILL_ASSIST_CATEGORIES
+                is AutofillView.Unused -> {
+                    rule.category in LOGIN_FILL_ASSIST_CATEGORIES ||
+                        rule.category in CARD_FILL_ASSIST_CATEGORIES
+                }
             }
         }
         if (!coversCurrentPartition) return this
