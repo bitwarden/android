@@ -62,8 +62,6 @@ private val URL_BARS: Map<String, String> = mapOf(
  */
 private val LOGIN_FILL_ASSIST_CATEGORIES: List<String> = listOf(
     "account-login",
-    "account-creation",
-    "account-update",
 )
 
 /**
@@ -71,6 +69,17 @@ private val LOGIN_FILL_ASSIST_CATEGORIES: List<String> = listOf(
  */
 private val CARD_FILL_ASSIST_CATEGORIES: List<String> = listOf(
     "payment-card",
+)
+
+/**
+ * A list of categories from Fill Assist that are used for [AutofillView.Identity].
+ *
+ * Account creation and account update flows are where identity fields (name, address, phone,
+ * etc.) are curated alongside credential fields.
+ */
+private val IDENTITY_FILL_ASSIST_CATEGORIES: List<String> = listOf(
+    "account-creation",
+    "account-update",
 )
 
 /**
@@ -140,7 +149,7 @@ class AutofillParserImpl(
         // request to Unfillable.
         val autofillViews = traversalDataList
             .selectCandidateAutofillViews(urlBarWebsite = urlBarWebsite) {
-                it !is AutofillView.Unused && it !is AutofillView.Identity
+                it !is AutofillView.Unused
             }
 
         val isFillAssistEnabled = featureFlagManager
@@ -200,8 +209,14 @@ class AutofillParserImpl(
             }
 
             is AutofillView.Identity -> {
-                // Identity partition construction lands in Phase D. Unfillable until then.
-                return AutofillRequest.Unfillable
+                // Gated behind FlagKey.IdentityAutofill until the feature is ready for
+                // production; disabled matches this partition's pre-feature behavior.
+                if (!featureFlagManager.getFeatureFlag(FlagKey.IdentityAutofill)) {
+                    return AutofillRequest.Unfillable
+                }
+                AutofillPartition.Identity(
+                    views = effectiveViews.filterIsInstance<AutofillView.Identity>(),
+                )
             }
 
             is AutofillView.Unused -> {
@@ -266,9 +281,8 @@ class AutofillParserImpl(
                     rule.category in LOGIN_FILL_ASSIST_CATEGORIES ||
                         rule.category in CARD_FILL_ASSIST_CATEGORIES
                 }
-                // Fill-assist category coverage for Identity is added in a later phase; this is a
-                // no-op today since nothing yet classifies a view as Identity.
-                is AutofillView.Identity -> false
+
+                is AutofillView.Identity -> rule.category in IDENTITY_FILL_ASSIST_CATEGORIES
             }
         }
         if (!coversCurrentPartition) return this
@@ -467,17 +481,24 @@ private fun AssistStructure.ViewNode.traverse(
                 isIdentityAutofillEnabled = isIdentityAutofillEnabled,
             )
             .let { viewNodeTraversalData ->
+                // Flatten child views into this node, keeping the first view seen for each autofill
+                // id and dropping later duplicates (e.g. a container-redirect leftover).
                 viewNodeTraversalData.autofillViews
-                    // filter out existing AutofillIds to avoid duplicates
                     .filter { view ->
                         val id = view.data.autofillId
-                        if (id in claimedAutofillIds) {
-                            false
-                        } else if (view !is AutofillView.Unused) {
-                            claimedAutofillIds.add(id)
-                            true
-                        } else {
-                            true
+                        when (view) {
+                            // Never claims an id, so a real view for that id can still be kept.
+                            is AutofillView.Unused -> id !in claimedAutofillIds
+                            // Always kept: a primary field, or the email/phone dual-classification
+                            // sibling that intentionally shares a Login primary's already-claimed
+                            // id. Claims the id when it is the primary. Container redirect never
+                            // produces an Identity view, so keeping a claimed id is always safe.
+                            is AutofillView.Identity -> {
+                                claimedAutofillIds.add(id)
+                                true
+                            }
+                            // Kept only the first time its id is seen (add returns false if known).
+                            else -> claimedAutofillIds.add(id)
                         }
                     }
                     .forEach(mutableAutofillViewList::add)
