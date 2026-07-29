@@ -31,6 +31,7 @@ sealed interface AutofillHint {
      */
     enum class Identity : AutofillHint {
         ADDRESS_COUNTRY,
+        ADDRESS_EXTENDED,
         ADDRESS_LOCALITY,
         ADDRESS_REGION,
         ADDRESS_STREET,

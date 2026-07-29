@@ -246,6 +246,7 @@ class FillAssistViewNodeExtensionsTest {
             "personNameFamily" to AutofillView.Identity.PersonNameFamily(data = autofillData()),
             "postalAddressFull" to AutofillView.Identity.PostalAddressFull(data = autofillData()),
             "addressStreet" to AutofillView.Identity.AddressStreet(data = autofillData()),
+            "addressExtended" to AutofillView.Identity.AddressExtended(data = autofillData()),
             "addressLocality" to AutofillView.Identity.AddressLocality(data = autofillData()),
             "addressRegion" to AutofillView.Identity.AddressRegion(data = autofillData()),
             "addressCountry" to AutofillView.Identity.AddressCountry(data = autofillData()),

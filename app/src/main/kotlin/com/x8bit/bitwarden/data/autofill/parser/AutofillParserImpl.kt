@@ -537,7 +537,7 @@ private fun AssistStructure.ViewNode.traverse(
  * This updates the underlying [AutofillView.data] with the given [website] if it does not already
  * have a website associated with it.
  */
-@Suppress("CyclomaticComplexMethod")
+@Suppress("CyclomaticComplexMethod", "LongMethod")
 private fun AutofillView.updateWebsiteIfNecessary(website: String?): AutofillView {
     val site = website ?: return this
     if (this.data.website != null) return this
@@ -556,6 +556,7 @@ private fun AutofillView.updateWebsiteIfNecessary(website: String?): AutofillVie
         is AutofillView.Identity.AddressLocality -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.AddressRegion -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.AddressStreet -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.AddressExtended -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.Company -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.Email -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.LicenseNumber -> this.copy(data = this.data.copy(website = site))
