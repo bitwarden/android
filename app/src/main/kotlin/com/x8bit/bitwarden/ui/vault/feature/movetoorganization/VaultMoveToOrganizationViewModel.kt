@@ -386,7 +386,7 @@ data class VaultMoveToOrganizationState(
         } else if (isVfo1FoundationEnabled) {
             BitwardenString.move.asText()
         } else {
-            BitwardenString.move_to_vault.asText()
+            BitwardenString.move_to_organization.asText()
         }
 
     val appBarButtonText: Text

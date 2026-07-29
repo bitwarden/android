@@ -40,7 +40,9 @@ fun VaultMoveToOrganizationContent(
         if (!showOnlyCollections) {
             item {
                 BitwardenMultiSelectButton(
-                    label = stringResource(id = BitwardenString.vault),
+                    label = stringResource(
+                        id = vfo1Foundation(BitwardenString.vault, BitwardenString.organization),
+                    ),
                     dialogTitle = vfo1Foundation(
                         stringResource(id = BitwardenString.filter_by_vault),
                         null,
@@ -57,7 +59,12 @@ fun VaultMoveToOrganizationContent(
                                 .first { it.name == selectedString },
                         )
                     },
-                    supportingText = stringResource(id = BitwardenString.move_to_vault_desc),
+                    supportingText = stringResource(
+                        id = vfo1Foundation(
+                            BitwardenString.move_to_vault_desc,
+                            BitwardenString.move_to_org_desc,
+                        ),
+                    ),
                     cardStyle = CardStyle.Full,
                     modifier = Modifier
                         .testTag("OrganizationListDropdown")

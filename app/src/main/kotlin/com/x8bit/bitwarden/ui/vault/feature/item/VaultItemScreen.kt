@@ -206,7 +206,7 @@ fun VaultItemScreen(
                                 text = stringResource(
                                     id = vfo1Foundation(
                                         BitwardenString.move,
-                                        BitwardenString.move_to_vault,
+                                        BitwardenString.move_to_organization,
                                     ),
                                 ),
                                 onClick = {

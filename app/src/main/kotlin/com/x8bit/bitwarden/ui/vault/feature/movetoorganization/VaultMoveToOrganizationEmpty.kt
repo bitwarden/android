@@ -14,6 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.platform.composition.util.vfo1Foundation
 
 /**
  * Empty view for the [VaultMoveToOrganizationScreen].
@@ -26,7 +27,12 @@ fun VaultMoveToOrganizationEmpty(modifier: Modifier = Modifier) {
     ) {
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = stringResource(id = BitwardenString.no_vaults_to_list),
+            text = stringResource(
+                id = vfo1Foundation(
+                    BitwardenString.no_vaults_to_list,
+                    BitwardenString.no_orgs_to_list,
+                ),
+            ),
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.secondary,
             textAlign = TextAlign.Center,
