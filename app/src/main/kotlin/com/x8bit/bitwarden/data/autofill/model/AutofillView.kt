@@ -185,6 +185,14 @@ sealed class AutofillView {
         ) : Identity()
 
         /**
+         * The extended address (e.g. apartment/suite/unit, "address line 2") [AutofillView] for
+         * the [Identity] data partition.
+         */
+        data class AddressExtended(
+            override val data: Data,
+        ) : Identity()
+
+        /**
          * The locality (city) [AutofillView] for the [Identity] data partition.
          */
         data class AddressLocality(
