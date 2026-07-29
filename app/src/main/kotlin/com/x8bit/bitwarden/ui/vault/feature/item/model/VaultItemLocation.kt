@@ -41,10 +41,8 @@ sealed class VaultItemLocation : Parcelable {
     @Parcelize
     data class Collection(
         override val name: String,
-    ) : VaultItemLocation() {
-        override val icon: Int
-            get() = BitwardenDrawable.ic_shared_folder
-    }
+        @DrawableRes override val icon: Int = BitwardenDrawable.ic_shared_folder,
+    ) : VaultItemLocation()
 
     /**
      * Represents a folder assignment.

@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.combineDataStates
 import com.bitwarden.core.data.repository.util.mapNullable
@@ -16,6 +17,7 @@ import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
@@ -27,6 +29,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
@@ -83,6 +86,7 @@ class VaultItemViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val premiumStateManager: PremiumStateManager,
+    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultItemState, VaultItemEvent, VaultItemAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -190,9 +194,20 @@ class VaultItemViewModel @Inject constructor(
                                 folderState.data?.firstOrNull { folder -> folderId == folder.id }
                             }
                             ?.name
+                        val isVfo1FoundationEnabled = featureFlagManager
+                            .getFeatureFlag(FlagKey.Vfo1Foundation)
+                        val collectionIcon = if (isVfo1FoundationEnabled) {
+                            BitwardenDrawable.ic_shared_folder
+                        } else {
+                            BitwardenDrawable.ic_collections
+                        }
                         val relatedLocations = persistentListOfNotNull(
                             organizationName?.let { VaultItemLocation.Organization(it) },
-                            *collections.map { VaultItemLocation.Collection(it) }.toTypedArray(),
+                            *collections
+                                .map {
+                                    VaultItemLocation.Collection(name = it, icon = collectionIcon)
+                                }
+                                .toTypedArray(),
                             folderName?.let { VaultItemLocation.Folder(it) },
                         )
 

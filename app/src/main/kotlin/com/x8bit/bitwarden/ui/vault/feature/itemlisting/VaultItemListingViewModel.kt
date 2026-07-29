@@ -2743,6 +2743,8 @@ class VaultItemListingViewModel @Inject constructor(
                             totpData = state.totpData,
                             isPremiumUser = state.isPremium,
                             restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
+                            isVfo1FoundationEnabled = featureFlagManager
+                                .getFeatureFlag(FlagKey.Vfo1Foundation),
                         )
                     }
 

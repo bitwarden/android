@@ -308,6 +308,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     private val mutableNewItemTypesFlow = MutableStateFlow(false)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlag(FlagKey.NewItemTypes) } answers { mutableNewItemTypesFlow.value }
+        every { getFeatureFlag(FlagKey.Vfo1Foundation) } returns true
     }
 
     @BeforeEach

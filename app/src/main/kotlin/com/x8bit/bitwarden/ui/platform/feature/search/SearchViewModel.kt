@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
@@ -30,6 +31,7 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -101,6 +103,7 @@ class SearchViewModel @Inject constructor(
     private val authRepo: AuthRepository,
     private val environmentRepo: EnvironmentRepository,
     private val premiumStateManager: PremiumStateManager,
+    private val featureFlagManager: FeatureFlagManager,
     settingsRepo: SettingsRepository,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     specialCircumstanceManager: SpecialCircumstanceManager,
@@ -1088,6 +1091,8 @@ class SearchViewModel @Inject constructor(
                                 isIconLoadingDisabled = state.isIconLoadingDisabled,
                                 isAutofill = state.isAutofill,
                                 isPremiumUser = state.isPremium,
+                                isVfo1FoundationEnabled = featureFlagManager
+                                    .getFeatureFlag(FlagKey.Vfo1Foundation),
                             )
                     }
 
