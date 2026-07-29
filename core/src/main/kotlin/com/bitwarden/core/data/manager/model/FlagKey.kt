@@ -46,6 +46,7 @@ sealed class FlagKey<out T : Any> {
                 FillAssistTargetingRules,
                 PoliciesInAcceptedState,
                 FedRamp,
+                Vfo1Foundation,
             )
         }
     }
@@ -177,6 +178,15 @@ sealed class FlagKey<out T : Any> {
     data object FedRamp : FlagKey<Boolean>() {
         override val keyName: String get() = "fedramp-gov-region"
         override val defaultValue: Boolean get() = false
+    }
+
+    /**
+     * Data object holding the feature flag key for gating the VFO-1 naming (terminology rename)
+     * work.
+     */
+    data object Vfo1Foundation : FlagKey<Boolean>() {
+        override val keyName: String = "vfo1-foundation"
+        override val defaultValue: Boolean = false
     }
 
     /**

@@ -64,6 +64,10 @@ class FlagKeyTest {
             FlagKey.FedRamp.keyName,
             "fedramp-gov-region",
         )
+        assertEquals(
+            FlagKey.Vfo1Foundation.keyName,
+            "vfo1-foundation",
+        )
     }
 
     @Test
@@ -84,6 +88,7 @@ class FlagKeyTest {
                 FlagKey.ManageDevices,
                 FlagKey.PoliciesInAcceptedState,
                 FlagKey.FedRamp,
+                FlagKey.Vfo1Foundation,
             ).all {
                 !it.defaultValue
             },
