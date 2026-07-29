@@ -210,7 +210,7 @@ class SettingsRepositoryTest {
 
         // Updating the Vault settings values and calling setDefaultsIfNecessary again has no
         // effect on the currently stored values since we have a way to unlock the vault.
-        fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
+        fakeAuthDiskSource.storePersistentPinProtectedUserKeyEnvelope(
             userId = USER_ID,
             pinProtectedUserKeyEnvelope = "pinProtectedKey",
         )
@@ -1050,10 +1050,9 @@ class SettingsRepositoryTest {
                 userId = USER_ID,
                 encryptedPin = userKeyEncryptedPin,
             )
-            assertPinProtectedUserKeyEnvelope(
+            assertEphemeralPinProtectedUserKeyEnvelope(
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
-                inMemoryOnly = true,
             )
         }
         coVerify {
@@ -1092,10 +1091,9 @@ class SettingsRepositoryTest {
                 userId = USER_ID,
                 encryptedPin = userKeyEncryptedPin,
             )
-            assertPinProtectedUserKeyEnvelope(
+            assertPersistentPinProtectedUserKeyEnvelope(
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
-                inMemoryOnly = false,
             )
         }
         coVerify {
@@ -1115,7 +1113,11 @@ class SettingsRepositoryTest {
                 userId = USER_ID,
                 encryptedPin = "encryptedPin",
             )
-            storePinProtectedUserKeyEnvelope(
+            storeEphemeralPinProtectedUserKeyEnvelope(
+                userId = USER_ID,
+                pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope",
+            )
+            storePersistentPinProtectedUserKeyEnvelope(
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope",
             )
@@ -1128,7 +1130,11 @@ class SettingsRepositoryTest {
                 userId = USER_ID,
                 encryptedPin = null,
             )
-            assertPinProtectedUserKeyEnvelope(
+            assertEphemeralPinProtectedUserKeyEnvelope(
+                userId = USER_ID,
+                pinProtectedUserKeyEnvelope = null,
+            )
+            assertPersistentPinProtectedUserKeyEnvelope(
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = null,
             )

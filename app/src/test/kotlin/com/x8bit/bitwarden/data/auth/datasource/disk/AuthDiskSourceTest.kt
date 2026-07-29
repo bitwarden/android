@@ -283,9 +283,13 @@ class AuthDiskSourceTest {
             userId = userId,
             pinProtectedUserKey = "pinProtectedUserKey",
         )
-        authDiskSource.storePinProtectedUserKeyEnvelope(
+        authDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
             userId = userId,
-            pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope",
+            pinProtectedUserKeyEnvelope = "ephemeralPinProtectedUserKeyEnvelope",
+        )
+        authDiskSource.storePersistentPinProtectedUserKeyEnvelope(
+            userId = userId,
+            pinProtectedUserKeyEnvelope = "persistentPinProtectedUserKeyEnvelope",
         )
         authDiskSource.storeInvalidUnlockAttempts(
             userId = userId,
@@ -358,6 +362,8 @@ class AuthDiskSourceTest {
         assertNull(authDiskSource.getEncryptedPin(userId = userId))
         assertNull(authDiskSource.getPinProtectedUserKey(userId = userId))
         assertNull(authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId))
+        assertNull(authDiskSource.getEphemeralPinProtectedUserKeyEnvelope(userId = userId))
+        assertNull(authDiskSource.getPersistentPinProtectedUserKeyEnvelope(userId = userId))
     }
 
     @Test
@@ -813,13 +819,13 @@ class AuthDiskSourceTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `storePinProtectedUserKeyEnvelope should update result flow from getPinProtectedUserKeyEnvelopeFlow`() =
+    fun `storePersistentPinProtectedUserKeyEnvelope should update result flow from getPersistentPinProtectedUserKeyEnvelopeFlow`() =
         runTest {
             val topSecretKey = "topsecret"
             val mockUserId = "mockUserId"
-            authDiskSource.getPinProtectedUserKeyEnvelopeFlow(mockUserId).test {
+            authDiskSource.getPersistentPinProtectedUserKeyEnvelopeFlow(mockUserId).test {
                 assertNull(awaitItem())
-                authDiskSource.storePinProtectedUserKeyEnvelope(
+                authDiskSource.storePersistentPinProtectedUserKeyEnvelope(
                     userId = mockUserId,
                     pinProtectedUserKeyEnvelope = topSecretKey,
                 )
@@ -829,17 +835,16 @@ class AuthDiskSourceTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `storePinProtectedUserKeyEnvelope with inMemoryOnly true emits flow and stores only in memory`() =
+    fun `storeEphemeralPinProtectedUserKeyEnvelope emits flow and stores only in memory`() =
         runTest {
             val userId = "mockUserId"
             val envelope = "topSecretEnvelope"
 
-            authDiskSource.getPinProtectedUserKeyEnvelopeFlow(userId).test {
+            authDiskSource.getEphemeralPinProtectedUserKeyEnvelopeFlow(userId).test {
                 assertNull(awaitItem())
-                authDiskSource.storePinProtectedUserKeyEnvelope(
+                authDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
                     userId = userId,
                     pinProtectedUserKeyEnvelope = envelope,
-                    inMemoryOnly = true,
                 )
                 assertEquals(envelope, awaitItem())
                 assertEquals(envelope, authDiskSource.getPinProtectedUserKeyEnvelope(userId))
@@ -878,7 +883,7 @@ class AuthDiskSourceTest {
             "bwPreferencesStorage:pinKeyEncryptedUserKeyEnvelope"
         val mockUserId = "mockUserId"
         val mockPinProtectedUserKeyEnvelope = "mockPinProtectedUserKeyEnvelope"
-        authDiskSource.storePinProtectedUserKeyEnvelope(
+        authDiskSource.storePersistentPinProtectedUserKeyEnvelope(
             userId = mockUserId,
             pinProtectedUserKeyEnvelope = mockPinProtectedUserKeyEnvelope,
         )

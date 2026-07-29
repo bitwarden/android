@@ -6707,7 +6707,7 @@ class AuthRepositoryTest {
             val pinProtectedUserKey = "pinProtectedUserKey"
             val error = Throwable("Fail!")
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-            fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
+            fakeAuthDiskSource.storePersistentPinProtectedUserKeyEnvelope(
                 userId = SINGLE_USER_STATE_1.activeUserId,
                 pinProtectedUserKeyEnvelope = pinProtectedUserKey,
             )
@@ -6741,7 +6741,7 @@ class AuthRepositoryTest {
             val pin = "PIN"
             val pinProtectedUserKey = "pinProtectedUserKey"
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-            fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
+            fakeAuthDiskSource.storePersistentPinProtectedUserKeyEnvelope(
                 userId = SINGLE_USER_STATE_1.activeUserId,
                 pinProtectedUserKeyEnvelope = pinProtectedUserKey,
             )
@@ -6775,7 +6775,7 @@ class AuthRepositoryTest {
             val pin = "PIN"
             val pinProtectedUserKey = "pinProtectedUserKey"
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-            fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
+            fakeAuthDiskSource.storePersistentPinProtectedUserKeyEnvelope(
                 userId = SINGLE_USER_STATE_1.activeUserId,
                 pinProtectedUserKeyEnvelope = pinProtectedUserKey,
             )
