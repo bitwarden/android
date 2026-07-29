@@ -78,6 +78,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalCredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalPermissionsManager
+import com.x8bit.bitwarden.ui.platform.composition.util.vfo1Foundation
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.PinInputDialog
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
@@ -372,7 +373,10 @@ fun VaultAddEditScreen(
                                     .takeUnless { state.isAddItemMode },
                                 OverflowMenuItemData(
                                     text = stringResource(
-                                        id = BitwardenString.move,
+                                        id = vfo1Foundation(
+                                            BitwardenString.move,
+                                            BitwardenString.move_to_vault,
+                                        ),
                                     ),
                                     onClick = {
                                         viewModel.trySendAction(
@@ -382,7 +386,12 @@ fun VaultAddEditScreen(
                                 )
                                     .takeUnless { !state.shouldShowMoveToOrganization },
                                 OverflowMenuItemData(
-                                    text = stringResource(id = BitwardenString.shared_folders),
+                                    text = stringResource(
+                                        id = vfo1Foundation(
+                                            BitwardenString.shared_folders,
+                                            BitwardenString.collections,
+                                        ),
+                                    ),
                                     onClick = {
                                         viewModel.trySendAction(
                                             VaultAddEditAction.Common.CollectionsClick,
@@ -658,7 +667,9 @@ private fun FolderSelectionBottomSheet(
         mutableStateOf(state.selectedFolder?.name.orEmpty())
     }
     BitwardenModalBottomSheet(
-        sheetTitle = stringResource(BitwardenString.my_folders),
+        sheetTitle = stringResource(
+            vfo1Foundation(BitwardenString.my_folders, BitwardenString.folders),
+        ),
         onDismiss = handlers.onDismissBottomSheet,
         topBarActions = { animatedOnDismiss ->
             BitwardenTextButton(
@@ -809,7 +820,9 @@ private fun OwnerSelectionBottomSheet(
         mutableStateOf(state.selectedOwner)
     }
     BitwardenModalBottomSheet(
-        sheetTitle = stringResource(BitwardenString.select_vault),
+        sheetTitle = stringResource(
+            vfo1Foundation(BitwardenString.select_vault, BitwardenString.owner),
+        ),
         onDismiss = handlers.onDismissBottomSheet,
         topBarActions = { animatedOnDismiss ->
             BitwardenTextButton(

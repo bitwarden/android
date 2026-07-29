@@ -30,6 +30,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPassword
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.SelectionItemData
+import com.x8bit.bitwarden.ui.platform.composition.util.vfo1Foundation
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingHandlers
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import kotlinx.collections.immutable.toImmutableList
@@ -134,7 +135,12 @@ fun VaultItemListingContent(
             item(key = "collections_header") {
                 Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = BitwardenString.shared_folders),
+                    label = stringResource(
+                        id = vfo1Foundation(
+                            BitwardenString.shared_folders,
+                            BitwardenString.collections,
+                        ),
+                    ),
                     supportingLabel = state.displayCollectionList.count().toString(),
                     modifier = Modifier
                         .animateItem()
@@ -150,7 +156,12 @@ fun VaultItemListingContent(
                 key = { _, collection -> "collection_${collection.id}" },
             ) { index, collection ->
                 BitwardenGroupItem(
-                    startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_shared_folder),
+                    startIcon = IconData.Local(
+                        iconRes = vfo1Foundation(
+                            BitwardenDrawable.ic_shared_folder,
+                            BitwardenDrawable.ic_collections,
+                        ),
+                    ),
                     label = collection.name,
                     supportingLabel = collection.count.toString(),
                     onClick = { vaultItemListingHandlers.collectionClick(collection.id) },
@@ -169,7 +180,9 @@ fun VaultItemListingContent(
             item(key = "folders_header") {
                 Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = BitwardenString.my_folders),
+                    label = stringResource(
+                        id = vfo1Foundation(BitwardenString.my_folders, BitwardenString.folders),
+                    ),
                     supportingLabel = state.displayFolderList.count().toString(),
                     modifier = Modifier
                         .animateItem()

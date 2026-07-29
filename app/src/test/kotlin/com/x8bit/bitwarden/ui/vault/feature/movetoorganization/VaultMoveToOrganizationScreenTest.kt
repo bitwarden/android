@@ -324,4 +324,5 @@ private fun createVaultMoveToOrganizationState(): VaultMoveToOrganizationState =
         ),
         dialogState = null,
         onlyShowCollections = false,
+        isVfo1FoundationEnabled = true,
     )
