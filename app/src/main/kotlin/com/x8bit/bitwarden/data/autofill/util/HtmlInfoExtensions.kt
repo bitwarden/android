@@ -111,7 +111,17 @@ fun HtmlInfo?.isPostalAddressFullField(): Boolean = isInputField &&
  * Whether this [HtmlInfo] represents a street address field.
  */
 fun HtmlInfo?.isAddressStreetField(): Boolean = isInputField &&
-    hints().containsAnyTerms(SUPPORTED_RAW_ADDRESS_STREET_HINTS)
+    (
+        hints().containsAnyTerms(SUPPORTED_RAW_ADDRESS_STREET_HINTS) ||
+            hints().equalsAnyTerms(SUPPORTED_EXACT_ADDRESS_STREET_HINTS)
+    )
+
+/**
+ * Whether this [HtmlInfo] represents an extended/secondary address (e.g. apartment, suite, unit)
+ * field.
+ */
+fun HtmlInfo?.isAddressExtendedField(): Boolean = isInputField &&
+    hints().containsAnyTerms(SUPPORTED_RAW_ADDRESS_EXTENDED_HINTS)
 
 /**
  * Whether this [HtmlInfo] represents a locality (city) field.
@@ -257,6 +267,14 @@ private fun List<String>.containsAnyTerms(terms: List<String>): Boolean =
             .toLowerCaseAndStripNonAlpha()
             .containsAnyTerms(terms)
     }
+
+/**
+ * Checks if any string in the list, once normalized, is exactly equal to one of the [terms]. Used
+ * for terms too generic to match safely as a substring (e.g. "address" -- see
+ * [SUPPORTED_EXACT_ADDRESS_STREET_HINTS]).
+ */
+private fun List<String>.equalsAnyTerms(terms: List<String>): Boolean =
+    this.any { string -> string.toLowerCaseAndStripNonAlpha() in terms }
 
 /**
  * The supported attribute keys whose value can represent an autofill hint.
