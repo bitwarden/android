@@ -94,6 +94,7 @@ private fun AutofillView.buildListAutofillValueOrNull(
         is AutofillView.Login.Password,
         is AutofillView.Login.Username,
         is AutofillView.Identity.AddressCountry,
+        is AutofillView.Identity.AddressExtended,
         is AutofillView.Identity.AddressLocality,
         is AutofillView.Identity.AddressRegion,
         is AutofillView.Identity.AddressStreet,

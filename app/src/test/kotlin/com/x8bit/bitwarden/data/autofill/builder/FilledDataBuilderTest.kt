@@ -735,6 +735,7 @@ class FilledDataBuilderTest {
             // Setup
             val firstName = "John"
             val lastName = "Doe"
+            val addressExtended = "Apt. 42"
             val city = "Springfield"
             val autofillCipher = AutofillCipher.Identity(
                 cipherId = null,
@@ -747,7 +748,7 @@ class FilledDataBuilderTest {
                 middleName = "",
                 lastName = lastName,
                 address1 = "",
-                address2 = "",
+                address2 = addressExtended,
                 address3 = "",
                 city = city,
                 state = "",
@@ -762,12 +763,17 @@ class FilledDataBuilderTest {
             )
             val filledItemFirstName: FilledItem = mockk()
             val filledItemLastName: FilledItem = mockk()
+            val filledItemAddressExtended: FilledItem = mockk()
             val filledItemCity: FilledItem = mockk()
             val autofillViewFirstName: AutofillView.Identity.PersonNameGiven = mockk {
                 every { buildFilledItemOrNull(firstName) } returns filledItemFirstName
             }
             val autofillViewLastName: AutofillView.Identity.PersonNameFamily = mockk {
                 every { buildFilledItemOrNull(lastName) } returns filledItemLastName
+            }
+            // AddressExtended must map to address2, distinctly from AddressStreet's address1.
+            val autofillViewAddressExtended: AutofillView.Identity.AddressExtended = mockk {
+                every { buildFilledItemOrNull(addressExtended) } returns filledItemAddressExtended
             }
             val autofillViewCity: AutofillView.Identity.AddressLocality = mockk {
                 every { buildFilledItemOrNull(city) } returns filledItemCity
@@ -778,6 +784,7 @@ class FilledDataBuilderTest {
                 views = listOf(
                     autofillViewFirstName,
                     autofillViewLastName,
+                    autofillViewAddressExtended,
                     autofillViewCity,
                     autofillViewState,
                 ),
@@ -796,6 +803,7 @@ class FilledDataBuilderTest {
                 filledItems = listOf(
                     filledItemFirstName,
                     filledItemLastName,
+                    filledItemAddressExtended,
                     filledItemCity,
                 ),
                 inlinePresentationSpec = null,
