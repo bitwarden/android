@@ -1547,14 +1547,14 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
         // Confirm dropdown version of item is absent
         composeTestRule
-            .onAllNodesWithText("Move to vault")
+            .onAllNodesWithText("Move to Organization")
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
         // Open the overflow menu
         composeTestRule.onNodeWithContentDescription("More options").performClick()
         // Click on the move to organization hint item in the dropdown
         composeTestRule
-            .onAllNodesWithText("Move to vault")
+            .onAllNodesWithText("Move to Organization")
             .filterToOne(hasAnyAncestor(isPopup()))
             .performClick()
         verify {
@@ -1574,14 +1574,14 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
         // Confirm dropdown version of item is absent
         composeTestRule
-            .onAllNodesWithText("Move to vault")
+            .onAllNodesWithText("Move to Organization")
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
         // Open the overflow menu
         composeTestRule.onNodeWithContentDescription("More options").performClick()
         // Confirm it does not exist
         composeTestRule
-            .onAllNodesWithText("Move to vault")
+            .onAllNodesWithText("Move to Organization")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertDoesNotExist()
     }
@@ -1696,7 +1696,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Move to vault")
+            .onAllNodesWithText("Move to Organization")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertDoesNotExist()
 
@@ -1724,7 +1724,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Move to vault")
+            .onAllNodesWithText("Move to Organization")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsDisplayed()
 
