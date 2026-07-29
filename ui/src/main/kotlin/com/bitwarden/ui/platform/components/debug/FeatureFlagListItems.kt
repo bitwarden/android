@@ -42,6 +42,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.FedRamp,
     FlagKey.SendControls,
     FlagKey.SendControlsExistingSends,
+    FlagKey.IdentityAutofill,
         -> {
         @Suppress("UNCHECKED_CAST")
         BooleanFlagItem(
@@ -110,4 +111,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.SendControlsExistingSends -> {
         stringResource(BitwardenString.send_controls_existing_sends)
     }
+
+    FlagKey.IdentityAutofill -> stringResource(BitwardenString.identity_autofill)
 }
