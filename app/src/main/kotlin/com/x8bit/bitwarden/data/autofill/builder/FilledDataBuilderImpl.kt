@@ -285,6 +285,7 @@ private fun AutofillCipher.Identity.getAutofillValueOrNull(
         is AutofillView.Identity.PersonNameFamily -> lastName
         is AutofillView.Identity.PostalAddressFull -> fullAddress
         is AutofillView.Identity.AddressStreet -> address1
+        is AutofillView.Identity.AddressExtended -> address2
         is AutofillView.Identity.AddressLocality -> city
         is AutofillView.Identity.AddressRegion -> state
         is AutofillView.Identity.AddressCountry -> country
