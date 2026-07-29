@@ -239,9 +239,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val cardScanManager: CardScanManager = mockk {
         every { cardScanResultFlow } returns mutableCardScanResultFlow
     }
+    private val mutableVfo1FoundationFlow = MutableStateFlow(true)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlag(FlagKey.CardScanner) } answers { mutableCardScannerFlow.value }
         every { getFeatureFlagFlow(FlagKey.CardScanner) } returns mutableCardScannerFlow
+        every { getFeatureFlag(FlagKey.Vfo1Foundation) } answers { mutableVfo1FoundationFlow.value }
+        every { getFeatureFlagFlow(FlagKey.Vfo1Foundation) } returns mutableVfo1FoundationFlow
     }
     private val buildInfoManager: BuildInfoManager = mockk {
         every { isFdroid } returns false
@@ -287,6 +290,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = true,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -375,6 +379,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 defaultUriMatchType = UriMatchTypeModel.EXACT,
                 hasPremium = true,
                 isCardScannerEnabled = false,
+                isVfo1FoundationEnabled = true,
             ),
             viewModel.stateFlow.value,
         )
@@ -6355,6 +6360,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = hasPremium,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
     @Suppress("LongParameterList")
