@@ -202,7 +202,7 @@ fun VaultItemScreen(
                             )
                                 .takeUnless { state.isCipherInCollection },
                             OverflowMenuItemData(
-                                text = stringResource(id = BitwardenString.move_to_vault),
+                                text = stringResource(id = BitwardenString.move_to_organization),
                                 onClick = {
                                     viewModel.trySendAction(
                                         VaultItemAction.Common.MoveToOrganizationClick,
