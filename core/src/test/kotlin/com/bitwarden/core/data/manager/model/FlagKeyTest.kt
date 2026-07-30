@@ -72,6 +72,10 @@ class FlagKeyTest {
             FlagKey.SendControlsExistingSends.keyName,
             "pm-31885-send-controls-existing-sends",
         )
+        assertEquals(
+            FlagKey.IdentityAutofill.keyName,
+            "pm-38138-mobile-identity-autofill",
+        )
     }
 
     @Test
@@ -94,6 +98,7 @@ class FlagKeyTest {
                 FlagKey.FedRamp,
                 FlagKey.SendControls,
                 FlagKey.SendControlsExistingSends,
+                FlagKey.IdentityAutofill,
             ).all {
                 !it.defaultValue
             },

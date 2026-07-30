@@ -48,6 +48,7 @@ sealed class FlagKey<out T : Any> {
                 FedRamp,
                 SendControls,
                 SendControlsExistingSends,
+                IdentityAutofill,
             )
         }
     }
@@ -205,6 +206,15 @@ sealed class FlagKey<out T : Any> {
      */
     data object SendControlsExistingSends : FlagKey<Boolean>() {
         override val keyName: String = "pm-31885-send-controls-existing-sends"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for gating identity autofill (offering saved
+     * Identity items as autofill suggestions).
+     */
+    data object IdentityAutofill : FlagKey<Boolean>() {
+        override val keyName: String = "pm-38138-mobile-identity-autofill"
         override val defaultValue: Boolean = false
     }
 
