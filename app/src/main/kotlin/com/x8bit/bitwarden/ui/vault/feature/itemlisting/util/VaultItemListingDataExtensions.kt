@@ -188,8 +188,8 @@ fun VaultData.toViewState(
                     count = decryptCipherListResult
                         .successes
                         .count {
-                            it.deletedDate == null &&
-                                !it.id.isNullOrBlank() &&
+                            !it.id.isNullOrBlank() &&
+                                it.isActive &&
                                 folderView.id == it.folderId
                         },
                 )
@@ -201,7 +201,7 @@ fun VaultData.toViewState(
                     count = allFilteredCipherViewList
                         .count {
                             !it.id.isNullOrBlank() &&
-                                it.deletedDate == null &&
+                                it.isActive &&
                                 collectionView.id in it.collectionIds
                         },
                 )
