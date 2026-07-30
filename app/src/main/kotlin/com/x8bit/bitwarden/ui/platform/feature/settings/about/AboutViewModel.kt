@@ -4,10 +4,10 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.BuildInfoManager
+import com.bitwarden.core.data.manager.util.deviceData
 import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
-import com.bitwarden.core.data.manager.util.deviceData
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
@@ -160,7 +160,7 @@ class AboutViewModel @Inject constructor(
     private fun handleWebVaultClick() {
         sendEvent(
             AboutEvent.NavigateToWebVault(
-                environmentRepository.environment.environmentUrlData.baseWebVaultUrlOrDefault,
+                vaultUrl = environmentRepository.environment.baseWebVaultUrlOrDefault,
             ),
         )
     }

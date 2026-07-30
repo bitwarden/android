@@ -144,11 +144,7 @@ class LoginViewModel @Inject constructor(
     private fun handleReceiveLoginResult(action: LoginAction.Internal.ReceiveLoginResult) {
         when (val loginResult = action.loginResult) {
             is LoginResult.EncryptionKeyMigrationRequired -> {
-                val vaultUrl =
-                    environmentRepository
-                        .environment
-                        .environmentUrlData
-                        .baseWebVaultUrlOrDefault
+                val vaultUrl = environmentRepository.environment.baseWebVaultUrlOrDefault
 
                 mutableStateFlow.update {
                     it.copy(

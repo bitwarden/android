@@ -16,7 +16,6 @@ import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
-import com.bitwarden.data.repository.util.appLinksScheme
 import com.bitwarden.data.repository.util.toEnvironmentUrls
 import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
 import com.bitwarden.network.model.AccountKeysJson
@@ -110,10 +109,9 @@ import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.toAccountCryptographicState
 import com.x8bit.bitwarden.data.auth.repository.util.toDeviceInfo
 import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
-import com.x8bit.bitwarden.data.auth.repository.util.toRemovedPasswordUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
-import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJsonWithPassword
+import com.x8bit.bitwarden.data.auth.repository.util.updateMasterPasswordUnlock
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
@@ -128,6 +126,7 @@ import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.util.appLinksScheme
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockError
@@ -1058,7 +1057,10 @@ class AuthRepositoryImpl(
                     MigrateExistingUserToKeyConnectorResult.Success -> {
                         authDiskSource.userState = authDiskSource
                             .userState
-                            ?.toRemovedPasswordUserStateJson(userId = userId)
+                            ?.updateMasterPasswordUnlock(
+                                userId = userId,
+                                masterPasswordUnlock = null,
+                            )
                         vaultRepository.sync()
                         settingsRepository.setDefaultsIfNecessary(userId = userId)
                         RemovePasswordResult.Success
@@ -1180,7 +1182,8 @@ class AuthRepositoryImpl(
                     .map { response }
             }
             .onSuccess { response ->
-                authDiskSource.userState = authDiskSource.userState?.toUserStateJsonWithPassword(
+                authDiskSource.userState = authDiskSource.userState?.updateMasterPasswordUnlock(
+                    userId = userId,
                     masterPasswordUnlock = MasterPasswordUnlockData(
                         kdf = profile.toSdkParams(),
                         masterKeyWrappedUserKey = response.newKey,
@@ -1241,7 +1244,8 @@ class AuthRepositoryImpl(
                     userId = userId,
                     accountCryptographicState = response.accountCryptographicState,
                 )
-                authDiskSource.userState = authDiskSource.userState?.toUserStateJsonWithPassword(
+                authDiskSource.userState = authDiskSource.userState?.updateMasterPasswordUnlock(
+                    userId = userId,
                     masterPasswordUnlock = response.masterPasswordUnlock,
                 )
                 this.organizationIdentifier = null
@@ -1304,7 +1308,8 @@ class AuthRepositoryImpl(
                         )
                         authDiskSource.userState = authDiskSource
                             .userState
-                            ?.toUserStateJsonWithPassword(
+                            ?.updateMasterPasswordUnlock(
+                                userId = userId,
                                 masterPasswordUnlock = MasterPasswordUnlockData(
                                     kdf = profile.toSdkParams(),
                                     masterKeyWrappedUserKey = response.encryptedUserKey,
@@ -1744,7 +1749,7 @@ class AuthRepositoryImpl(
     ): LoginResult = identityService
         .getToken(
             uniqueAppId = authDiskSource.uniqueAppId,
-            deeplinkScheme = environmentRepository.environment.environmentUrlData.appLinksScheme,
+            deeplinkScheme = environmentRepository.environment.appLinksScheme,
             email = email,
             authModel = authModel,
             twoFactorData = twoFactorData ?: getRememberedTwoFactorData(email),

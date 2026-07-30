@@ -43,11 +43,9 @@ import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenClientCertificateDialog
 import com.x8bit.bitwarden.ui.platform.composition.LocalKeyChainManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.KeyChainManager
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 
 /**
@@ -206,15 +204,7 @@ fun EnvironmentScreen(
                     id = BitwardenString.self_hosted_environment_footer,
                 ),
                 onValueChange = { viewModel.trySendAction(EnvironmentAction.ServerUrlChange(it)) },
-                autoCompleteOptions = if (BuildConfig.BUILD_TYPE != "release") {
-                    persistentListOf(
-                        "https://vault.qa.bitwarden.pw",
-                        "https://qa-team.sh.bitwarden.pw",
-                        "https://vault.usdev.bitwarden.pw",
-                    )
-                } else {
-                    persistentListOf()
-                },
+                autoCompleteOptions = state.autocompleteEnvironments,
                 keyboardType = KeyboardType.Uri,
                 textFieldTestTag = "ServerUrlEntry",
                 cardStyle = CardStyle.Full,

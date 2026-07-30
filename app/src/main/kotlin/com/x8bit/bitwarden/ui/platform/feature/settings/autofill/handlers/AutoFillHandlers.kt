@@ -27,6 +27,8 @@ class AutoFillHandlers(
     val onAskToAddLoginClick: (isEnabled: Boolean) -> Unit,
     val onDefaultUriMatchTypeSelect: (defaultUriMatchType: UriMatchType) -> Unit,
     val onBlockAutoFillClick: () -> Unit,
+    val onFillAssistToggleClick: (isEnabled: Boolean) -> Unit,
+    val onFillAssistInfoClick: () -> Unit,
     val onLearnMoreClick: () -> Unit,
     val onHelpCardClick: () -> Unit,
 ) {
@@ -82,6 +84,12 @@ class AutoFillHandlers(
                 viewModel.trySendAction(AutoFillAction.DefaultUriMatchTypeSelect(it))
             },
             onBlockAutoFillClick = { viewModel.trySendAction(AutoFillAction.BlockAutoFillClick) },
+            onFillAssistToggleClick = {
+                viewModel.trySendAction(AutoFillAction.FillAssistToggleClick(it))
+            },
+            onFillAssistInfoClick = {
+                viewModel.trySendAction(AutoFillAction.FillAssistInfoClick)
+            },
             onLearnMoreClick = { viewModel.trySendAction(AutoFillAction.LearnMoreClick) },
             onHelpCardClick = { viewModel.trySendAction(AutoFillAction.HelpCardClick) },
         )

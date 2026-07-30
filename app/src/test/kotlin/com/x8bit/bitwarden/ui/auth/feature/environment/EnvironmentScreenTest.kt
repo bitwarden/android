@@ -427,17 +427,16 @@ class EnvironmentScreenTest : BitwardenComposeTest() {
             )
         }
     }
-
-    companion object {
-        val DEFAULT_STATE = EnvironmentState(
-            serverUrl = "",
-            keyAlias = "",
-            webVaultServerUrl = "",
-            apiServerUrl = "",
-            identityServerUrl = "",
-            iconsServerUrl = "",
-            keyHost = null,
-            dialog = null,
-        )
-    }
 }
+
+private val DEFAULT_STATE: EnvironmentState = EnvironmentState(
+    serverUrl = "",
+    keyAlias = "",
+    webVaultServerUrl = "",
+    apiServerUrl = "",
+    identityServerUrl = "",
+    iconsServerUrl = "",
+    keyHost = null,
+    dialog = null,
+    isRelease = true,
+)

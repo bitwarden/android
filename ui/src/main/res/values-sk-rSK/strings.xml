@@ -345,9 +345,9 @@ Skenovanie prebehne automaticky.</string>
     <string name="moved_item_to_org">%1$s presunuté do %2$s.</string>
     <string name="select_one_collection">Musíte vybrať aspoň jednu zbierku.</string>
     <string name="share">Zdieľať</string>
-    <string name="move_to_organization">Presunúť do Organizácie</string>
-    <string name="no_orgs_to_list">Nenašli sa žiadne organizácie.</string>
-    <string name="move_to_org_desc">Vyberte organizáciu, do ktorej chcete presunúť túto položku. Presunom do organizácie sa vlastníctvo položky prenáša na túto organizáciu. Po presunutí už nebudete priamym vlastníkom danej položky.</string>
+    <string name="move_to_vault">Presunúť do trezoru</string>
+    <string name="no_vaults_to_list">Nie sú žiadne trezory na zobrazenie.</string>
+    <string name="move_to_vault_desc">Vyberte trezor, do ktorého chcete túto položku presunúť. Presunutím do iného trezoru sa vlastníctvo položky prevedie na danú organizáciu. Po presunutí už nebudete priamym vlastníkom tejto položky.</string>
     <string name="number_of_words">Počet slov</string>
     <string name="passphrase">Prístupová fráza</string>
     <string name="word_separator">Oddeľovač slov</string>
@@ -383,6 +383,8 @@ Skenovanie prebehne automaticky.</string>
     <string name="pin_require_master_password_restart">Chcete po reštarte aplikácie požadovať odomykanie vaším hlavným heslom?</string>
     <string name="ask_to_add_item">Opýtať sa na pridanie položky</string>
     <string name="ask_to_add_item_description">Požiada o pridanie položky, ak sa v trezore žiadna nenájde.</string>
+    <string name="turn_on_fill_assist">Zapnúť pomoc pri vypĺňaní</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Pomoc pri vypĺňaní zvyšuje presnosť automatického vypĺňania na podporovaných webových stránkach pomocou špecifických pravidiel pre konkrétnu stránku.</string>
     <string name="on_restart">Po reštarte aplikácie</string>
     <string name="capitalize">Prvé písmeno veľkým</string>
     <string name="include_number">Zahrnúť číslo</string>
@@ -1294,13 +1296,13 @@ Chcete prepnúť na tento účet?</string>
     <string name="upgrade_pending">Čaká sa na upgrade</string>
     <string name="upgrade_pending_message">Váš upgrade sa práve spracúva. Do dokončenia tohto procesu budete naďalej využívať bezplatný plán. Synchronizujte teraz, aby ste to skontrolovali, alebo pokračujte a aktualizácia prebehne automaticky.</string>
     <string name="unlock_premium_features">S balíkom Prémium získate prístup k pokročilejším funkciám.</string>
-    <string name="per_month">/mesiac</string>
+    <string name="per_month_cancel_anytime">/mesiac · Kedykoľvek môžete zrušiť</string>
+    <string name="per_month_cancel_anytime_content_description">%1$s mesačne, kedykoľvek môžete zrušiť</string>
     <string name="built_in_authenticator">Zabudovaný autentifikátor</string>
     <string name="emergency_access">Núdzový prístup</string>
     <string name="secure_file_storage">Bezpečné ukladanie súborov</string>
     <string name="breach_monitoring">Sledovanie únikov</string>
-    <string name="upgrade_now">Upgradovať teraz</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">Budete presmerovaní na zabezpečenú platobnú stránku služby Stripe, kde dokončíte nákup.</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">Nákup dokončíte prostredníctvom zabezpečenej platobnej brány Stripe.</string>
     <string name="opening_checkout">Otvára sa pokladňa…</string>
     <string name="secure_checkout_didnt_load">Bezpečná platba sa nenačítala</string>
     <string name="trouble_opening_payment_page">Mali sme problémy s otvorením platobnej stránky, skúste to znova.</string>
@@ -1423,4 +1425,15 @@ Chcete prepnúť na tento účet?</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Vaša žiadosť bola prerušená, pretože aplikácia potrebuje prístup k miestnej sieti. Túto funkciu môžete povoliť v nastaveniach zariadenia.</string>
     <string name="continue_to_stripe">Pokračovať na Stripe?</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Budete presmerovaní na stránku Stripe, kde môžete zrušiť svoje predplatné.</string>
+    <string name="unlock_advanced_protection">Odomknúť pokročilú ochranu</string>
+    <string name="breeze_through_2fa_with_built_in_codes">Prihlásenie pomocou 2FA je hračka vďaka integrovaným kódom</string>
+    <string name="run_reports_to_find_risky_passwords">Spúšťajte reporty a nájdite rizikové heslá</string>
+    <string name="add_a_trusted_emergency_contact">Pridajte dôveryhodný núdzový kontakt</string>
+    <string name="identify_unsecure_websites">Identifikujte nezabezpečené webové stránky</string>
+    <string name="flag_accounts_with_inactive_2fa">Označte účty s neaktívnym 2FA</string>
+    <string name="keep_documents_safe_and_encrypted">Uchovávajte dokumenty v bezpečí a zašifrované</string>
+    <string name="share_files_securely_with_anyone_using_send">Zdieľajte súbory bezpečne s kýmkoľvek pomocou Sendu</string>
+    <string name="receive_24_7_priority_support">Získajte nonstop prioritnú podporu</string>
+    <string name="account_creation_restricted">Vytvorenie účtu je obmedzené</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s umožňuje vytvárať účty iba pozvaným používateľom.</string>
 </resources>

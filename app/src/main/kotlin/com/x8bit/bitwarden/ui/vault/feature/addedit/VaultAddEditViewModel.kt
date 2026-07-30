@@ -667,10 +667,7 @@ class VaultAddEditViewModel @Inject constructor(
         if (premiumStateManager.isInAppUpgradeAvailable()) {
             sendEvent(VaultAddEditEvent.NavigateToPlanModal)
         } else {
-            val baseUrl = environmentRepository
-                .environment
-                .environmentUrlData
-                .baseWebVaultUrlOrDefault
+            val baseUrl = environmentRepository.environment.baseWebVaultUrlOrDefault
             sendEvent(
                 VaultAddEditEvent.NavigateToPremium(
                     uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium",

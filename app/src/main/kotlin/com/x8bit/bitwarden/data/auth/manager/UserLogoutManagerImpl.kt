@@ -82,9 +82,10 @@ class UserLogoutManagerImpl(
         val vaultTimeoutAction = settingsDiskSource.getVaultTimeoutAction(userId = userId)
         val encryptedPin = authDiskSource.getEncryptedPin(userId = userId)
         val pinProtectedUserKey = authDiskSource.getPinProtectedUserKey(userId = userId)
-        val pinProtectedUserKeyEnvelope = authDiskSource.getPinProtectedUserKeyEnvelope(
-            userId = userId,
-        )
+        val ephemeralPinProtectedUserKeyEnvelope = authDiskSource
+            .getEphemeralPinProtectedUserKeyEnvelope(userId = userId)
+        val persistentPinProtectedUserKeyEnvelope = authDiskSource
+            .getPersistentPinProtectedUserKeyEnvelope(userId = userId)
 
         clearData(userId = userId)
         mutableLogoutEventFlow.tryEmit(LogoutEvent(loggedOutUserId = userId))
@@ -103,9 +104,13 @@ class UserLogoutManagerImpl(
         authDiskSource.apply {
             storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
             storePinProtectedUserKey(userId = userId, pinProtectedUserKey = pinProtectedUserKey)
-            storePinProtectedUserKeyEnvelope(
+            storeEphemeralPinProtectedUserKeyEnvelope(
                 userId = userId,
-                pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
+                pinProtectedUserKeyEnvelope = ephemeralPinProtectedUserKeyEnvelope,
+            )
+            storePersistentPinProtectedUserKeyEnvelope(
+                userId = userId,
+                pinProtectedUserKeyEnvelope = persistentPinProtectedUserKeyEnvelope,
             )
         }
     }

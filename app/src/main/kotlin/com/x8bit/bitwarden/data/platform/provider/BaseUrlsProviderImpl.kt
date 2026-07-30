@@ -17,19 +17,16 @@ class BaseUrlsProviderImpl(
     override fun getBaseApiUrl(): String = environmentDiskSource
         .preAuthEnvironmentUrlData
         .toEnvironmentUrlsOrDefault()
-        .environmentUrlData
         .baseApiUrl
 
     override fun getBaseIdentityUrl(): String = environmentDiskSource
         .preAuthEnvironmentUrlData
         .toEnvironmentUrlsOrDefault()
-        .environmentUrlData
         .baseIdentityUrl
 
     override fun getBaseEventsUrl(): String = environmentDiskSource
         .preAuthEnvironmentUrlData
         .toEnvironmentUrlsOrDefault()
-        .environmentUrlData
         .baseEventsUrl
 
     override fun getBaseFillAssistUrl(): String? = environmentDiskSource.fillAssistRulesUrl

@@ -169,11 +169,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
             }
 
             is LoginResult.EncryptionKeyMigrationRequired -> {
-                val vaultUrl =
-                    environmentRepository
-                        .environment
-                        .environmentUrlData
-                        .baseWebVaultUrlOrDefault
+                val vaultUrl = environmentRepository.environment.baseWebVaultUrlOrDefault
 
                 showError(
                     message = BitwardenString
@@ -386,8 +382,8 @@ class EnterpriseSignOnViewModel @Inject constructor(
     ) {
         val codeVerifier = generatorRepository.generateRandomString(RANDOM_STRING_LENGTH)
 
-        val environmentData = environmentRepository.environment.environmentUrlData
-        val authTabData = environmentData.ssoAuthTabData
+        val environment = environmentRepository.environment
+        val authTabData = environment.ssoAuthTabData
         // Save this for later so that we can validate the SSO callback response
         val generatedSsoState = generatorRepository
             .generateRandomString(RANDOM_STRING_LENGTH)
@@ -400,7 +396,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
             }
 
         val uri = generateUriForSso(
-            identityBaseUrl = environmentData.baseIdentityUrl,
+            identityBaseUrl = environment.baseIdentityUrl,
             redirectUrl = authTabData.callbackUrl,
             organizationIdentifier = organizationIdentifier,
             token = prevalidateSsoResult.token,

@@ -60,7 +60,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         } returns LoginResult.Success
     }
     private val environmentRepository: EnvironmentRepository = mockk {
-        every { environment } returns Environment.Us
+        every { environment } returns Environment.Prod.Us
     }
     private val resourceManager: ResourceManager = mockk()
 
@@ -503,8 +503,8 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             every { authRepository.twoFactorResponse } returns response
             every {
                 generateUriForWebAuth(
-                    baseUrl = Environment.Us.environmentUrlData.baseWebVaultUrlOrDefault,
-                    authTabData = Environment.Us.environmentUrlData.webAuthnAuthTabData,
+                    baseUrl = Environment.Prod.Us.baseWebVaultUrlOrDefault,
+                    authTabData = Environment.Prod.Us.webAuthnAuthTabData,
                     data = data,
                     headerText = headerText,
                     buttonText = buttonText,

@@ -774,6 +774,9 @@ data class SyncResponseJson(
         @SerialName("archivedDate")
         @Contextual
         val archivedDate: Instant?,
+
+        @SerialName("data")
+        val data: String?,
     ) {
         /**
          * Represents an attachment in the vault response.
@@ -1007,13 +1010,13 @@ data class SyncResponseJson(
         @Serializable
         data class SshKey(
             @SerialName("publicKey")
-            val publicKey: String,
+            val publicKey: String?,
 
             @SerialName("privateKey")
             val privateKey: String,
 
             @SerialName("keyFingerprint")
-            val keyFingerprint: String,
+            val keyFingerprint: String?,
         )
 
         /**

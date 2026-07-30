@@ -118,6 +118,14 @@ sealed class AutofillView {
         data class Username(
             override val data: Data,
         ) : Login()
+
+        /**
+         * The email [AutofillView] for the [Login] data partition. Filled only when the cipher's
+         * username is a valid email address.
+         */
+        data class Email(
+            override val data: Data,
+        ) : Login()
     }
 
     /**

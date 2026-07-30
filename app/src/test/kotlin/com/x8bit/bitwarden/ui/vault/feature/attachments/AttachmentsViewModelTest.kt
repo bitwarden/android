@@ -48,7 +48,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         every { userStateFlow } returns mutableUserStateFlow
     }
     private val environmentRepository: EnvironmentRepository = mockk {
-        every { environment } returns Environment.Us
+        every { environment } returns Environment.Prod.Us
     }
     private val mutableVaultItemStateFlow =
         MutableStateFlow<DataState<CipherView?>>(DataState.Loading)
@@ -834,7 +834,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     userId = "mockUserId-1",
     name = "Active User",
     email = "active@bitwarden.com",
-    environment = Environment.Us,
+    environment = Environment.Prod.Us,
     avatarColorHex = "#aa00aa",
     isPremium = true,
     isPremiumFromSelf = true,

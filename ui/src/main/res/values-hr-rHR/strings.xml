@@ -283,7 +283,7 @@
     <string name="vault_is_locked">Trezor je zaključan</string>
     <string name="go_to_my_vault">Uđi u moj trezor</string>
     <string name="collections">Zbirke</string>
-    <string name="no_items_collection">Nema stavki u ovoj zbirci.</string>
+    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="no_items_folder">Nema stavki u ovoj mapi.</string>
     <string name="no_items_trash">Nema stavki u smeću.</string>
     <string name="autofill_accessibility_summary">Pomoć pri ispunjavanju polja za korisničko ime i lozinku u drugim aplikacijama i na webu.</string>
@@ -342,9 +342,9 @@
     <string name="moved_item_to_org">%1$s premješteno u %2$s.</string>
     <string name="select_one_collection">Moraš odabrati barem jednu zbirku.</string>
     <string name="share">Podijeli</string>
-    <string name="move_to_organization">Premjesti u organizaciju</string>
-    <string name="no_orgs_to_list">Nema organizacija za prikaz.</string>
-    <string name="move_to_org_desc">Odaberi organizaciju u koju želiš premjestiti ovu stavku. Premještanje prenosi vlasništvo stavke na organizaciju. Nakon premještanja više nećeš biti izravni vlasnik ove stavke.</string>
+    <string name="move_to_vault">Move to vault</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Broj riječi</string>
     <string name="passphrase">Frazna lozinka</string>
     <string name="word_separator">Razdjelitelj riječi</string>
@@ -380,6 +380,8 @@
     <string name="pin_require_master_password_restart">Obavezno otključavanje glavnom lozinkom pri ponovnom pokretanju aplikacije?</string>
     <string name="ask_to_add_item">Upitaj za dodvanje stavke</string>
     <string name="ask_to_add_item_description">Upitaj za dodavanje, ako se stavka već ne nalazi u trezoru.</string>
+    <string name="turn_on_fill_assist">Turn on fill assist</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill assist improves autofill accuracy on supported sites by using site specific rules.</string>
     <string name="on_restart">Pri ponovnom pokretanju</string>
     <string name="capitalize">Prva slova velika</string>
     <string name="include_number">Uključi broj</string>
@@ -1285,13 +1287,13 @@ bilo kakav problem.</string>
     <string name="upgrade_pending">Nadogradnja čeka</string>
     <string name="upgrade_pending_message">Tvoja se nadogradnja obrađuje. Dok se ne dovrši, ostat ćeš na besplatnom paketu. Sinkroniziraj sada za provjeru ili nastavi i nadogradnja će se izvršiti automatski.</string>
     <string name="unlock_premium_features">Otključaj više naprednig mogućnosti s paketom Premium.</string>
-    <string name="per_month">/ mj.</string>
+    <string name="per_month_cancel_anytime">/ month · Cancel anytime</string>
+    <string name="per_month_cancel_anytime_content_description">%1$s per month, cancel anytime</string>
     <string name="built_in_authenticator">Ugrađeni autentifikator</string>
     <string name="emergency_access">Pristup u nuždi</string>
     <string name="secure_file_storage">Sigurna pohrana datoteka</string>
     <string name="breach_monitoring">Nadzor proboja</string>
-    <string name="upgrade_now">Nadogradi sada</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">You’ll complete the purchase with Stripe secure checkout.</string>
     <string name="opening_checkout">Otvaranje kupnje…</string>
     <string name="secure_checkout_didnt_load">Sigurna blagajna nije učitana</string>
     <string name="trouble_opening_payment_page">Nismo mogli otvoriti stranicu za plaćanje, pokušaj ponovno.</string>
@@ -1413,4 +1415,15 @@ bilo kakav problem.</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Your request was interrupted because the app needs local network access. You can enable this in your device settings.</string>
     <string name="continue_to_stripe">Continue to Stripe?</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">You’ll be taken to Stripe to manage your subscription cancellation.</string>
+    <string name="unlock_advanced_protection">Unlock advanced protection</string>
+    <string name="breeze_through_2fa_with_built_in_codes">Breeze through 2FA with built-in codes</string>
+    <string name="run_reports_to_find_risky_passwords">Run reports to find risky passwords</string>
+    <string name="add_a_trusted_emergency_contact">Add a trusted emergency contact</string>
+    <string name="identify_unsecure_websites">Identify unsecure websites</string>
+    <string name="flag_accounts_with_inactive_2fa">Flag accounts with inactive 2FA</string>
+    <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
+    <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
+    <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
+    <string name="account_creation_restricted">Account creation restricted</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
 </resources>

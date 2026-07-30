@@ -903,6 +903,30 @@
           }
         ]
       }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "com.opera.browser",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "5D:6A:FB:F8:7F:65:2A:F0:46:47:AD:A0:DF:63:4C:F2:23:70:90:0B:16:4B:09:D5:0B:D2:3A:A2:CB:52:85:B8"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "com.opera.browser.beta",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "5D:6A:FB:F8:7F:65:2A:F0:46:47:AD:A0:DF:63:4C:F2:23:70:90:0B:16:4B:09:D5:0B:D2:3A:A2:CB:52:85:B8"
+          }
+        ]
+      }
     }
   ]
 }

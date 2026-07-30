@@ -58,7 +58,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
     }
 
     private val environmentRepository: EnvironmentRepository = mockk {
-        every { environment } returns Environment.Us
+        every { environment } returns Environment.Prod.Us
         every { environmentStateFlow } returns mockk()
     }
 
@@ -674,7 +674,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
         viewState = viewState,
         vaultFilterType = vaultRepository.vaultFilterType,
         isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
-        baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
+        baseIconUrl = environmentRepository.environment.baseIconUrl,
         dialogState = dialogState,
         isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
         isRefreshing = false,

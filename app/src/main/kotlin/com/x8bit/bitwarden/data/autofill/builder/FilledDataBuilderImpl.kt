@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.builder
 
 import android.widget.inline.InlinePresentationSpec
+import com.bitwarden.ui.platform.base.util.isValidEmail
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
@@ -152,6 +153,13 @@ class FilledDataBuilderImpl(
                     buildUri(packageName.orEmpty(), "androidapp") == autofillCipher.website
                 ) {
                     val value = when (autofillView) {
+                        is AutofillView.Login.Email -> {
+                            if (!autofillCipher.username.isValidEmail()) {
+                                return@mapNotNull null
+                            }
+                            autofillCipher.username
+                        }
+
                         is AutofillView.Login.Username -> autofillCipher.username
                         is AutofillView.Login.Password -> autofillCipher.password
                     }

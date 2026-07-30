@@ -41,7 +41,7 @@ class PinProtectedUserKeyManagerTest {
     fun `deriveTemporaryPinProtectedUserKeyIfNecessary with encrypted key and existing pinProtectedUserKeyEnvelope does nothing`() =
         runTest {
             fakeAuthDiskSource.storeEncryptedPin(userId = USER_ID, encryptedPin = "encryptedPin")
-            fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
+            fakeAuthDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope",
             )
@@ -67,7 +67,7 @@ class PinProtectedUserKeyManagerTest {
                 userKeyEncryptedPin = userKeyEncryptedPin,
             )
             fakeAuthDiskSource.storeEncryptedPin(userId = USER_ID, encryptedPin = encryptedPin)
-            fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
+            fakeAuthDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = null,
             )
@@ -92,10 +92,9 @@ class PinProtectedUserKeyManagerTest {
                 userId = USER_ID,
                 encryptedPin = userKeyEncryptedPin,
             )
-            fakeAuthDiskSource.assertPinProtectedUserKeyEnvelope(
+            fakeAuthDiskSource.assertEphemeralPinProtectedUserKeyEnvelope(
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
-                inMemoryOnly = true,
             )
             fakeAuthDiskSource.assertPinProtectedUserKey(
                 userId = USER_ID,
@@ -106,12 +105,12 @@ class PinProtectedUserKeyManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `deriveTemporaryPinProtectedUserKeyIfNecessary with enrollment failure should clear all pin data`() =
+    fun `deriveTemporaryPinProtectedUserKeyIfNecessary with enrollment failure should clear ephemeral pin data`() =
         runTest {
             val encryptedPin = "encryptedPin"
             val error = Throwable("Fail!")
             fakeAuthDiskSource.storeEncryptedPin(userId = USER_ID, encryptedPin = encryptedPin)
-            fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
+            fakeAuthDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = null,
             )
@@ -136,10 +135,9 @@ class PinProtectedUserKeyManagerTest {
                 userId = USER_ID,
                 encryptedPin = null,
             )
-            fakeAuthDiskSource.assertPinProtectedUserKeyEnvelope(
+            fakeAuthDiskSource.assertEphemeralPinProtectedUserKeyEnvelope(
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = null,
-                inMemoryOnly = false,
             )
             fakeAuthDiskSource.assertPinProtectedUserKey(
                 userId = USER_ID,
@@ -162,10 +160,27 @@ class PinProtectedUserKeyManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `migratePinProtectedUserKeyIfNeeded with encrypted key and existing pinProtectedUserKeyEnvelope does nothing`() =
+    fun `migratePinProtectedUserKeyIfNeeded with encrypted key and existing PersistentPinProtectedUserKeyEnvelope does nothing`() =
         runTest {
             fakeAuthDiskSource.storeEncryptedPin(userId = USER_ID, encryptedPin = "encryptedPin")
-            fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
+            fakeAuthDiskSource.storePersistentPinProtectedUserKeyEnvelope(
+                userId = USER_ID,
+                pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope",
+            )
+
+            pinProtectedUserKeyManager.migratePinProtectedUserKeyIfNeeded(userId = USER_ID)
+
+            coVerify(exactly = 0) {
+                vaultSdkSource.enrollPinWithEncryptedPin(userId = any(), encryptedPin = any())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `migratePinProtectedUserKeyIfNeeded with encrypted key and existing ephemeralPinProtectedUserKeyEnvelope does nothing`() =
+        runTest {
+            fakeAuthDiskSource.storeEncryptedPin(userId = USER_ID, encryptedPin = "encryptedPin")
+            fakeAuthDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope",
             )
@@ -189,7 +204,7 @@ class PinProtectedUserKeyManagerTest {
                 userKeyEncryptedPin = userKeyEncryptedPin,
             )
             fakeAuthDiskSource.storeEncryptedPin(userId = USER_ID, encryptedPin = encryptedPin)
-            fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
+            fakeAuthDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = null,
             )
@@ -216,10 +231,9 @@ class PinProtectedUserKeyManagerTest {
                 userId = USER_ID,
                 encryptedPin = userKeyEncryptedPin,
             )
-            fakeAuthDiskSource.assertPinProtectedUserKeyEnvelope(
+            fakeAuthDiskSource.assertEphemeralPinProtectedUserKeyEnvelope(
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
-                inMemoryOnly = true,
             )
             fakeAuthDiskSource.assertPinProtectedUserKey(
                 userId = USER_ID,
@@ -236,7 +250,7 @@ class PinProtectedUserKeyManagerTest {
             val pinProtectedUserKey = "pinProtectedUserKey"
             val error = Throwable("Fail!")
             fakeAuthDiskSource.storeEncryptedPin(userId = USER_ID, encryptedPin = encryptedPin)
-            fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
+            fakeAuthDiskSource.storePersistentPinProtectedUserKeyEnvelope(
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = null,
             )
@@ -263,10 +277,9 @@ class PinProtectedUserKeyManagerTest {
                 userId = USER_ID,
                 encryptedPin = null,
             )
-            fakeAuthDiskSource.assertPinProtectedUserKeyEnvelope(
+            fakeAuthDiskSource.assertPersistentPinProtectedUserKeyEnvelope(
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = null,
-                inMemoryOnly = false,
             )
             fakeAuthDiskSource.assertPinProtectedUserKey(
                 userId = USER_ID,

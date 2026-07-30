@@ -49,7 +49,7 @@ class ViewSendViewModelTest : BaseViewModelTest() {
         every { getSendStateFlow(sendId = any()) } returns mutableSendStateFlow
     }
     private val environmentRepository = mockk<EnvironmentRepository> {
-        every { environment } returns Environment.Us
+        every { environment } returns Environment.Prod.Us
     }
     private val mutableSnackbarDataFlow: MutableSharedFlow<BitwardenSnackbarData> =
         bufferedMutableSharedFlow()

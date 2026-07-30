@@ -130,6 +130,12 @@ fun AutoFillScreen(
                 onNavigateToPrivilegedAppsList()
             }
 
+            AutoFillEvent.NavigateToFillAssistHelp -> {
+                intentManager.launchUri(
+                    "https://bitwarden.com/help/fill-assist/".toUri(),
+                )
+            }
+
             AutoFillEvent.NavigateToLearnMore -> {
                 intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
             }
@@ -301,6 +307,29 @@ private fun AutoFillScreenContent(
                 .standardHorizontalMargin()
                 .padding(horizontal = 16.dp),
         )
+        if (state.showFillAssistOption) {
+            Spacer(modifier = Modifier.height(8.dp))
+            BitwardenSwitch(
+                label = stringResource(id = BitwardenString.turn_on_fill_assist),
+                supportingText = stringResource(
+                    id = BitwardenString.fill_assist_improves_autofill_accuracy_on_supported_sites,
+                ),
+                isChecked = state.isFillAssistEnabled,
+                onCheckedChange = autoFillHandlers.onFillAssistToggleClick,
+                helpData = BitwardenHelpButtonData(
+                    onClick = autoFillHandlers.onFillAssistInfoClick,
+                    contentDescription = stringResource(
+                        id = BitwardenString.learn_more,
+                    ),
+                    isExternalLink = true,
+                ),
+                cardStyle = CardStyle.Full,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("FillAssistSwitch")
+                    .standardHorizontalMargin(),
+            )
+        }
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenSwitch(
             label = stringResource(id = BitwardenString.copy_totp_automatically),

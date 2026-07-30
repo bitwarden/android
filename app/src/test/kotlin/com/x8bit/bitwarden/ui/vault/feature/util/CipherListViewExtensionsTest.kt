@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.util
 
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.vault.BankAccountListView
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CopyableCipherFields
@@ -365,7 +366,12 @@ class CipherListViewExtensionsTest {
     fun `toOverflowActions should return all copy actions for a bank account cipher`() {
         val cipher = createMockCipherListView(
             number = 1,
-            type = CipherListViewType.BankAccount,
+            type = CipherListViewType.BankAccount(
+                v1 = BankAccountListView(
+                    accountNumber = null,
+                    accountType = null,
+                ),
+            ),
             id = id,
             copyableFields = listOf(
                 CopyableCipherFields.BANK_ACCOUNT_ACCOUNT_NUMBER,
@@ -408,7 +414,12 @@ class CipherListViewExtensionsTest {
     fun `toOverflowActions should return only available copy actions for a bank account cipher`() {
         val cipher = createMockCipherListView(
             number = 1,
-            type = CipherListViewType.BankAccount,
+            type = CipherListViewType.BankAccount(
+                v1 = BankAccountListView(
+                    accountNumber = null,
+                    accountType = null,
+                ),
+            ),
             id = id,
             copyableFields = listOf(
                 CopyableCipherFields.BANK_ACCOUNT_ACCOUNT_NUMBER,
@@ -449,7 +460,12 @@ class CipherListViewExtensionsTest {
             id = id,
             isDeleted = true,
             isArchived = true,
-            type = CipherListViewType.BankAccount,
+            type = CipherListViewType.BankAccount(
+                v1 = BankAccountListView(
+                    accountNumber = null,
+                    accountType = null,
+                ),
+            ),
         )
 
         val result = cipher.toOverflowActions(

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.welcome
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -153,14 +154,19 @@ private fun WelcomeScreenContent(
                 .height(44.dp),
         )
 
-        BitwardenFilledButton(
-            label = stringResource(id = BitwardenString.create_account),
-            onClick = onCreateAccountClick,
-            modifier = Modifier
-                .standardHorizontalMargin(medium = HORIZONTAL_MARGIN_MEDIUM)
-                .fillMaxWidth()
-                .testTag("ChooseAccountCreationButton"),
-        )
+        AnimatedVisibility(
+            visible = state.allowCreateAccount,
+            label = "CreateAccountAnimatedVisibility",
+        ) {
+            BitwardenFilledButton(
+                label = stringResource(id = BitwardenString.create_account),
+                onClick = onCreateAccountClick,
+                modifier = Modifier
+                    .standardHorizontalMargin(medium = HORIZONTAL_MARGIN_MEDIUM)
+                    .fillMaxWidth()
+                    .testTag("ChooseAccountCreationButton"),
+            )
+        }
 
         BitwardenOutlinedButton(
             label = stringResource(id = BitwardenString.log_in_verb),

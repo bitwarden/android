@@ -64,6 +64,14 @@ class FlagKeyTest {
             FlagKey.FedRamp.keyName,
             "fedramp-gov-region",
         )
+        assertEquals(
+            FlagKey.SendControls.keyName,
+            "pm-31885-send-controls",
+        )
+        assertEquals(
+            FlagKey.SendControlsExistingSends.keyName,
+            "pm-31885-send-controls-existing-sends",
+        )
     }
 
     @Test
@@ -84,6 +92,8 @@ class FlagKeyTest {
                 FlagKey.ManageDevices,
                 FlagKey.PoliciesInAcceptedState,
                 FlagKey.FedRamp,
+                FlagKey.SendControls,
+                FlagKey.SendControlsExistingSends,
             ).all {
                 !it.defaultValue
             },

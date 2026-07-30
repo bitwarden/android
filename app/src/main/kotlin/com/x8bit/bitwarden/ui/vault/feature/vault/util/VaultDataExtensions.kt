@@ -372,7 +372,7 @@ private fun CipherListView.toVaultItemOrNull(
             hasDecryptionError = hasDecryptionError,
         )
 
-        CipherListViewType.BankAccount -> VaultState.ViewState.VaultItem.BankAccount(
+        is CipherListViewType.BankAccount -> VaultState.ViewState.VaultItem.BankAccount(
             id = id,
             name = name.asText(),
             overflowOptions = toOverflowActions(

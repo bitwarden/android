@@ -23,11 +23,6 @@ data class CipherEntity(
     @ColumnInfo(name = "user_id")
     val userId: String,
 
-    // Default to true for initial migration.
-    // Subsequent syncs will populate with correct values for optimizations.
-    @ColumnInfo(name = "has_totp", defaultValue = "1")
-    val hasTotp: Boolean,
-
     @ColumnInfo(name = "cipher_type")
     val cipherType: String,
 

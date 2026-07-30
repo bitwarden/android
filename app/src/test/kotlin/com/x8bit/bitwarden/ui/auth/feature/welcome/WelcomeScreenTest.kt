@@ -98,6 +98,25 @@ class WelcomeScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `create account button should update according to state`() {
+        composeTestRule
+            .onNodeWithText("Create account")
+            .assertExists()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(disableCreateAccount = true) }
+        composeTestRule
+            .onNodeWithText("Create account")
+            .assertDoesNotExist()
+
+        mutableStateFlow.update { it.copy(disableCreateAccount = false) }
+        composeTestRule
+            .onNodeWithText("Create account")
+            .assertExists()
+            .assertIsDisplayed()
+    }
+
+    @Test
     fun `login button click should send LoginClick action`() {
         // Use an empty list of pages to guarantee that the login button
         // will be in view on the UI testing viewport.
@@ -121,4 +140,5 @@ private val DEFAULT_STATE = WelcomeState(
         WelcomeState.WelcomeCard.CardOne,
         WelcomeState.WelcomeCard.CardTwo,
     ),
+    disableCreateAccount = false,
 )

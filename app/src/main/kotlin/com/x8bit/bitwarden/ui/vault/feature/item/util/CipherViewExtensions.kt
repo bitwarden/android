@@ -34,7 +34,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import java.time.Clock
 import java.time.LocalDate
-import java.time.format.DateTimeParseException
 import java.time.format.FormatStyle
 import java.util.Locale
 
@@ -306,22 +305,11 @@ fun FieldView.toCustomField(
     }
 
 /**
- * Takes a string date that is formatted in the default ISO-8601 format (uuuu-MM-dd) and converts
- * it to appropriate human-readable format.
+ * Takes a [LocalDate] and converts it to appropriate human-readable format.
  */
-private fun String.toFormattedDate(
+private fun LocalDate.toFormattedDate(
     clock: Clock,
-): String? {
-    val localDate = try {
-        LocalDate.parse(this)
-    } catch (_: DateTimeParseException) {
-        null
-    }
-    return localDate?.toFormattedDateStyle(
-        dateStyle = FormatStyle.LONG,
-        clock = clock,
-    )
-}
+): String = this.toFormattedDateStyle(dateStyle = FormatStyle.LONG, clock = clock)
 
 private fun LoginUriView.toUriData() =
     VaultItemState.ViewState.Content.ItemType.Login.UriData(

@@ -92,7 +92,7 @@ class VaultItemViewModel @Inject constructor(
             cipherType = args.cipherType,
             viewState = VaultItemState.ViewState.Loading,
             dialog = null,
-            baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
+            baseIconUrl = environmentRepository.environment.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             hasPremium = authRepository.userStateFlow.value?.activeAccount?.isPremium == true,
         )
@@ -761,10 +761,7 @@ class VaultItemViewModel @Inject constructor(
         if (premiumStateManager.isInAppUpgradeAvailable()) {
             sendEvent(VaultItemEvent.NavigateToPlanModal)
         } else {
-            val baseUrl = environmentRepository
-                .environment
-                .environmentUrlData
-                .baseWebVaultUrlOrDefault
+            val baseUrl = environmentRepository.environment.baseWebVaultUrlOrDefault
             val uri = "$baseUrl/#/settings/subscription/premium?callToAction=upgradeToPremium"
             sendEvent(VaultItemEvent.NavigateToUri(uri = uri))
         }
@@ -1495,7 +1492,7 @@ class VaultItemViewModel @Inject constructor(
             canRestore = this.data?.canRestore == true,
             canAssignToCollections = this.data?.canAssociateToCollections == true,
             canEdit = this.data?.canEdit == true,
-            baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
+            baseIconUrl = environmentRepository.environment.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             relatedLocations = this.data?.relatedLocations.orEmpty().toImmutableList(),
             hasOrganizations = this.data?.hasOrganizations == true,

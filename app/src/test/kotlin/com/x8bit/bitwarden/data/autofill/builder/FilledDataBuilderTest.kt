@@ -137,6 +137,108 @@ class FilledDataBuilderTest {
         }
 
     @Test
+    fun `build should fill email field when cipher username is a valid email address`() =
+        runTest {
+            // Setup
+            val emailUsername = "user@example.com"
+            val autofillCipher = AutofillCipher.Login(
+                cipherId = null,
+                name = "Cipher One",
+                isTotpEnabled = false,
+                password = "Password",
+                username = emailUsername,
+                subtitle = "Subtitle",
+                website = URI,
+            )
+            val filledItemEmail: FilledItem = mockk()
+            val autofillViewEmail: AutofillView.Login.Email = mockk {
+                every { data } returns mockk { every { website } returns URI }
+                every { buildFilledItemOrNull(emailUsername) } returns filledItemEmail
+            }
+            val autofillPartition = AutofillPartition.Login(views = listOf(autofillViewEmail))
+            val ignoreAutofillIds: List<AutofillId> = mockk()
+            val autofillRequest = AutofillRequest.Fillable(
+                ignoreAutofillIds = ignoreAutofillIds,
+                inlinePresentationSpecs = emptyList(),
+                maxInlineSuggestionsCount = 0,
+                packageName = null,
+                partition = autofillPartition,
+                uri = URI,
+            )
+            val expected = FilledData(
+                filledPartitions = listOf(
+                    FilledPartition(
+                        autofillCipher = autofillCipher,
+                        filledItems = listOf(filledItemEmail),
+                        inlinePresentationSpec = null,
+                    ),
+                ),
+                ignoreAutofillIds = ignoreAutofillIds,
+                originalPartition = autofillPartition,
+                uri = URI,
+                vaultItemInlinePresentationSpec = null,
+                isVaultLocked = false,
+            )
+            coEvery {
+                autofillCipherProvider.getLoginAutofillCiphers(uri = URI)
+            } returns listOf(autofillCipher)
+
+            // Test
+            val actual = filledDataBuilder.build(autofillRequest = autofillRequest)
+
+            // Verify
+            assertEquals(expected, actual)
+            verify(exactly = 1) { autofillViewEmail.buildFilledItemOrNull(emailUsername) }
+        }
+
+    @Test
+    fun `build should not fill email field when cipher username is not a valid email address`() =
+        runTest {
+            // Setup
+            val nonEmailUsername = "johndoe"
+            val autofillCipher = AutofillCipher.Login(
+                cipherId = null,
+                name = "Cipher One",
+                isTotpEnabled = false,
+                password = "Password",
+                username = nonEmailUsername,
+                subtitle = "Subtitle",
+                website = URI,
+            )
+            val autofillViewEmail: AutofillView.Login.Email = mockk {
+                every { data } returns mockk { every { website } returns URI }
+            }
+            val autofillPartition = AutofillPartition.Login(views = listOf(autofillViewEmail))
+            val ignoreAutofillIds: List<AutofillId> = mockk()
+            val autofillRequest = AutofillRequest.Fillable(
+                ignoreAutofillIds = ignoreAutofillIds,
+                inlinePresentationSpecs = emptyList(),
+                maxInlineSuggestionsCount = 0,
+                packageName = null,
+                partition = autofillPartition,
+                uri = URI,
+            )
+
+            val expected = FilledData(
+                filledPartitions = emptyList(),
+                ignoreAutofillIds = ignoreAutofillIds,
+                originalPartition = autofillPartition,
+                uri = URI,
+                vaultItemInlinePresentationSpec = null,
+                isVaultLocked = false,
+            )
+            coEvery { autofillCipherProvider.getLoginAutofillCiphers(uri = URI)
+            } returns listOf(autofillCipher)
+
+            // Test
+            val actual = filledDataBuilder.build(autofillRequest = autofillRequest)
+
+            // Verify
+            assertEquals(expected, actual)
+            verify(exactly = 0) { autofillViewEmail.buildFilledItemOrNull(any()) }
+        }
+
+    @Test
     fun `build should return no partitions and ignored AutofillIds when Login and no URI`() =
         runTest {
             // Setup

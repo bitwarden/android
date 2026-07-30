@@ -3,17 +3,22 @@ package com.x8bit.bitwarden.data.autofill.parser
 import android.app.assist.AssistStructure
 import android.service.autofill.FillRequest
 import android.view.autofill.AutofillId
+import androidx.core.net.toUri
+import com.bitwarden.core.data.manager.model.FlagKey
+import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
 import com.x8bit.bitwarden.data.autofill.model.ViewNodeTraversalData
+import com.x8bit.bitwarden.data.autofill.util.buildFillAssistViews
 import com.x8bit.bitwarden.data.autofill.util.buildPackageNameOrNull
 import com.x8bit.bitwarden.data.autofill.util.buildUriOrNull
 import com.x8bit.bitwarden.data.autofill.util.getInlinePresentationSpecs
 import com.x8bit.bitwarden.data.autofill.util.getMaxInlineSuggestionsCount
 import com.x8bit.bitwarden.data.autofill.util.toAutofillView
 import com.x8bit.bitwarden.data.autofill.util.website
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import timber.log.Timber
 
@@ -51,11 +56,29 @@ private val URL_BARS: Map<String, String> = mapOf(
 )
 
 /**
+ * A list of categories from Fill Assist that are used for [AutofillView.Login]
+ */
+private val LOGIN_FILL_ASSIST_CATEGORIES: List<String> = listOf(
+    "account-login",
+    "account-creation",
+    "account-update",
+)
+
+/**
+ * A list of categories from Fill Assist that are used for [AutofillView.Card]
+ */
+private val CARD_FILL_ASSIST_CATEGORIES: List<String> = listOf(
+    "payment-card",
+)
+
+/**
  * The default [AutofillParser] implementation for the app. This is a tool for parsing autofill data
  * from the OS into domain models.
  */
 class AutofillParserImpl(
     private val settingsRepository: SettingsRepository,
+    private val fillAssistManager: FillAssistManager,
+    private val featureFlagManager: FeatureFlagManager,
 ) : AutofillParser {
     override fun parse(
         autofillAppInfo: AutofillAppInfo,
@@ -100,62 +123,73 @@ class AutofillParserImpl(
         val urlBarWebsite = traversalDataList
             .flatMap { it.urlBarWebsites }
             .firstOrNull()
+        // Heuristic views: the focused node's candidates with unfillable (Unused) fields removed,
+        // falling back to all fillable views when nothing has focus.
+        val autofillViews = traversalDataList
+            .selectCandidateAutofillViews(urlBarWebsite = urlBarWebsite) {
+                it !is AutofillView.Unused
+            }
 
-        // Take only the autofill views from the node that currently has focus.
-        // Then remove all the fields that cannot be filled with data.
-        // We fallback to taking all the fillable views if nothing has focus.
-        val autofillViewsList = traversalDataList.map { it.autofillViews }
-        val autofillViews = (autofillViewsList
-            .filter { views -> views.any { it.data.isFocused } }
-            .flatten()
-            .filter { it !is AutofillView.Unused }
-            .takeUnless { it.isEmpty() }
-            ?: autofillViewsList
-                .flatten()
-                .filter { it !is AutofillView.Unused })
-            .map { it.updateWebsiteIfNecessary(website = urlBarWebsite) }
+        val isFillAssistEnabled = featureFlagManager
+            .getFeatureFlag(FlagKey.FillAssistTargetingRules) &&
+            settingsRepository.isFillAssistEnabled
 
         // Find the focused view, or fallback to the first fillable item on the screen (so
-        // we at least have something to hook into)
-        val focusedView = autofillViews
-            .firstOrNull { it.data.isFocused }
-            ?: autofillViews.firstOrNull()
-
-        if (focusedView == null) {
-            // The view is unfillable if there are no focused views.
-            return AutofillRequest.Unfillable
-        }
+        // we at least have something to hook into). If heuristics found nothing at all, only
+        // give fill-assist a chance to rescue the page when it's actually enabled -- otherwise
+        // the view is unfillable since there are no focused views.
+        val focusedView = autofillViews.firstFocusedOrNull()
+            ?: if (isFillAssistEnabled) {
+                traversalDataList
+                    .selectCandidateAutofillViews(urlBarWebsite = urlBarWebsite)
+                    .firstFocusedOrNull()
+            } else {
+                null
+            }
+            ?: return AutofillRequest.Unfillable
 
         val packageName = traversalDataList.buildPackageNameOrNull(
             assistStructure = assistStructure,
         )
-        val uri = focusedView.buildUriOrNull(
-            packageName = packageName,
-        )
+        val uri = focusedView.buildUriOrNull(packageName = packageName)
 
-        val blockListedURIs = settingsRepository.blockedAutofillUris + BLOCK_LISTED_URIS
-        if (blockListedURIs.contains(uri)) {
-            // The view is unfillable if the URI is block listed.
+        // The view is unfillable if the URI is block listed.
+        if ((settingsRepository.blockedAutofillUris + BLOCK_LISTED_URIS).contains(uri)) {
             return AutofillRequest.Unfillable
         }
 
+        val effectiveViews = if (isFillAssistEnabled) {
+            autofillViews.toEffectiveViews(
+                assistStructure = assistStructure,
+                uri = uri,
+                focusedView = focusedView,
+                urlBarWebsite = urlBarWebsite,
+            )
+        } else {
+            autofillViews
+        }
+
+        val effectiveFocusedView = effectiveViews.firstFocusedOrNull()
+            ?: return AutofillRequest.Unfillable
+
         // Choose the first focused partition of data for fulfillment.
-        val partition = when (focusedView) {
+        val partition = when (effectiveFocusedView) {
             is AutofillView.Card -> {
                 AutofillPartition.Card(
-                    views = autofillViews.filterIsInstance<AutofillView.Card>(),
+                    views = effectiveViews.filterIsInstance<AutofillView.Card>(),
                 )
             }
 
             is AutofillView.Login -> {
                 AutofillPartition.Login(
-                    views = autofillViews.filterIsInstance<AutofillView.Login>(),
+                    views = effectiveViews.filterIsInstance<AutofillView.Login>(),
                 )
             }
 
             is AutofillView.Unused -> {
-                // The view is unfillable since the field is not meant to be used for autofill.
-                // This will never happen since we filter out all unused views above.
+                // This will never happen: the heuristic path filters out Unused views, and the
+                // fill-assist path never constructs one (toAutofillViewForFieldKey has no Unused
+                // case).
                 return AutofillRequest.Unfillable
             }
         }
@@ -185,6 +219,51 @@ class AutofillParserImpl(
             uri = uri,
         )
     }
+
+    /**
+     * Returns the effective [AutofillView] list for filling. Applies fill-assist targeting rules
+     * when the feature flag is enabled and the host rules cover the current partition type;
+     * otherwise returns the heuristic autofillViews [this].
+     */
+    private fun List<AutofillView>.toEffectiveViews(
+        assistStructure: AssistStructure,
+        uri: String?,
+        focusedView: AutofillView,
+        urlBarWebsite: String?,
+    ): List<AutofillView> {
+        val hostRules = uri
+            ?.takeUnless { it.startsWith("androidapp://") }
+            ?.toUri()
+            ?.host
+            ?.let { host ->
+                fillAssistManager.getFillAssistRules()?.hostRules?.get(host.removePrefix("www."))
+            }
+            ?: return this
+
+        val coversCurrentPartition = hostRules.any { rule ->
+            when (focusedView) {
+                is AutofillView.Card -> rule.category in CARD_FILL_ASSIST_CATEGORIES
+                is AutofillView.Login -> rule.category in LOGIN_FILL_ASSIST_CATEGORIES
+                is AutofillView.Unused -> {
+                    rule.category in LOGIN_FILL_ASSIST_CATEGORIES ||
+                        rule.category in CARD_FILL_ASSIST_CATEGORIES
+                }
+            }
+        }
+        if (!coversCurrentPartition) return this
+
+        val fillAssistViews = assistStructure.buildFillAssistViews(
+            hostRules = hostRules,
+            urlBarWebsite = urlBarWebsite,
+        )
+        // Fill-assist is authoritative for a partition its rules cover (guarded by
+        // coversCurrentPartition above), so its views are used even when empty: for Login/Card
+        // that discards the already heuristically-confirmed views, and for the Unused rescue path
+        // there were no heuristic views to fall back to. Reaching here means fill-assist has taken
+        // over this attempt (an empty result leaves the request Unfillable).
+        Timber.d("FillAssist invoked for this autofill attempt")
+        return fillAssistViews
+    }
 }
 
 /**
@@ -200,6 +279,33 @@ private fun AssistStructure.traverse(): List<ViewNodeTraversalData> =
                 ?.updateForMissingPasswordFields()
                 ?.updateForMissingUsernameFields()
         }
+
+/**
+ * Selects the autofill views from the node that currently has focus, or falls back to all
+ * fillable views if nothing has focus. The optional [predicate] filters the views *before* the
+ * emptiness/fallback check, so callers that only want fillable fields (e.g. excluding
+ * [AutofillView.Unused]) still get the multi-window fallback applied to the filtered set. By
+ * default no views are filtered out.
+ */
+private fun List<ViewNodeTraversalData>.selectCandidateAutofillViews(
+    urlBarWebsite: String?,
+    predicate: (AutofillView) -> Boolean = { true },
+): List<AutofillView> {
+    val viewsLists = map { it.autofillViews }
+    val candidates = viewsLists
+        .filter { views -> views.any { it.data.isFocused } }
+        .flatten()
+        .filter(predicate)
+        .takeUnless { it.isEmpty() }
+        ?: viewsLists.flatten().filter(predicate)
+    return candidates.map { it.updateWebsiteIfNecessary(website = urlBarWebsite) }
+}
+
+/**
+ * Returns the focused [AutofillView], or falls back to the first entry if none is focused.
+ */
+private fun List<AutofillView>.firstFocusedOrNull(): AutofillView? =
+    firstOrNull { it.data.isFocused } ?: firstOrNull()
 
 /**
  * This helper function updates the [ViewNodeTraversalData] if necessary for missing password
@@ -363,6 +469,7 @@ private fun AutofillView.updateWebsiteIfNecessary(website: String?): AutofillVie
         is AutofillView.Card.ExpirationYear -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Card.Number -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Card.SecurityCode -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Login.Email -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Login.Password -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Login.Username -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Unused -> this.copy(data = this.data.copy(website = site))

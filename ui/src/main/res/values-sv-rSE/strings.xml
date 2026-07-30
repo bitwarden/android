@@ -283,7 +283,7 @@ Skanningen sker automatiskt.</string>
     <string name="vault_is_locked">Valvet är låst</string>
     <string name="go_to_my_vault">Gå till mitt valv</string>
     <string name="collections">Samlingar</string>
-    <string name="no_items_collection">Det finns inga objekt i samlingen.</string>
+    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="no_items_folder">Det finns inga objekt i den här mappen.</string>
     <string name="no_items_trash">Det finns inga objekt i papperskorgen.</string>
     <string name="autofill_accessibility_summary">Hjälp med att fylla i fält för användarnamn och lösenord i andra appar och på webben.</string>
@@ -341,9 +341,9 @@ Skanningen sker automatiskt.</string>
     <string name="moved_item_to_org">%1$s flyttades till %2$s.</string>
     <string name="select_one_collection">Du måste markera minst en samling.</string>
     <string name="share">Dela</string>
-    <string name="move_to_organization">Flytta till organisation</string>
-    <string name="no_orgs_to_list">Inga organisationer att lista.</string>
-    <string name="move_to_org_desc">Välj en organisation som du vill flytta detta objektet till. Flytt till en organisation överför ägandet av objektet till den organisationen. Du kommer inte längre att vara direkt ägare till detta objekt när det har flyttats.</string>
+    <string name="move_to_vault">Move to vault</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Antal ord</string>
     <string name="passphrase">Lösenfras</string>
     <string name="word_separator">Ordavgränsare</string>
@@ -379,6 +379,8 @@ Skanningen sker automatiskt.</string>
     <string name="pin_require_master_password_restart">Vill du behöva låsa upp med ditt huvudlösenord när programmet startas om?</string>
     <string name="ask_to_add_item">Fråga om att lägga till objekt</string>
     <string name="ask_to_add_item_description">Fråga om att lägga till ett objekt om ett inte hittas i ditt valv.</string>
+    <string name="turn_on_fill_assist">Turn on fill assist</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill assist improves autofill accuracy on supported sites by using site specific rules.</string>
     <string name="on_restart">Vid omstart av appen</string>
     <string name="capitalize">Versalisera</string>
     <string name="include_number">Inkludera siffra</string>
@@ -1276,13 +1278,13 @@ Vill du byta till detta konto?</string>
     <string name="upgrade_pending">Upgrade pending</string>
     <string name="upgrade_pending_message">Your upgrade is being processed. You’ll remain on the free plan until it’s complete. Sync now to check, or continue and it will update automatically.</string>
     <string name="unlock_premium_features">Unlock more advanced features with a Premium plan.</string>
-    <string name="per_month">/ månad</string>
+    <string name="per_month_cancel_anytime">/ month · Cancel anytime</string>
+    <string name="per_month_cancel_anytime_content_description">%1$s per month, cancel anytime</string>
     <string name="built_in_authenticator">Inbyggd autenticator</string>
     <string name="emergency_access">Nödåtkomst</string>
     <string name="secure_file_storage">Säker fillagring</string>
     <string name="breach_monitoring">Intrångsmonitorering</string>
-    <string name="upgrade_now">Uppgradera nu</string>
-    <string name="youll_go_to_stripes_secure_checkout_to_complete_your_purchase">You’ll go to Stripe’s secure checkout to complete your purchase.</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">You’ll complete the purchase with Stripe secure checkout.</string>
     <string name="opening_checkout">Opening checkout…</string>
     <string name="secure_checkout_didnt_load">Secure checkout didn’t load</string>
     <string name="trouble_opening_payment_page">We had trouble opening the payment page, so try again.</string>
@@ -1403,4 +1405,15 @@ Vill du byta till detta konto?</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Your request was interrupted because the app needs local network access. You can enable this in your device settings.</string>
     <string name="continue_to_stripe">Continue to Stripe?</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">You’ll be taken to Stripe to manage your subscription cancellation.</string>
+    <string name="unlock_advanced_protection">Unlock advanced protection</string>
+    <string name="breeze_through_2fa_with_built_in_codes">Breeze through 2FA with built-in codes</string>
+    <string name="run_reports_to_find_risky_passwords">Run reports to find risky passwords</string>
+    <string name="add_a_trusted_emergency_contact">Add a trusted emergency contact</string>
+    <string name="identify_unsecure_websites">Identify unsecure websites</string>
+    <string name="flag_accounts_with_inactive_2fa">Flag accounts with inactive 2FA</string>
+    <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
+    <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
+    <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
+    <string name="account_creation_restricted">Account creation restricted</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
 </resources>

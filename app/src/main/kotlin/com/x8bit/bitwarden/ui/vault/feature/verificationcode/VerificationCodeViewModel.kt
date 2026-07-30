@@ -51,7 +51,7 @@ class VerificationCodeViewModel @Inject constructor(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
         VerificationCodeState(
-            baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
+            baseIconUrl = environmentRepository.environment.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
             vaultFilterType = vaultRepository.vaultFilterType,

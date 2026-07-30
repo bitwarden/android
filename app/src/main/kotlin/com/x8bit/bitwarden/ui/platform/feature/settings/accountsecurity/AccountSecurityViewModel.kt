@@ -81,10 +81,7 @@ class AccountSecurityViewModel @Inject constructor(
 ) {
     private val webSettingsUrl: String
         get() {
-            val baseUrl = environmentRepository
-                .environment
-                .environmentUrlData
-                .baseWebVaultUrlOrDefault
+            val baseUrl = environmentRepository.environment.baseWebVaultUrlOrDefault
             return "$baseUrl/#/settings"
         }
 

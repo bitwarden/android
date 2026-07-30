@@ -41,10 +41,7 @@ class CookieAcquisitionViewModel @Inject constructor(
 ) : BaseViewModel<CookieAcquisitionState, CookieAcquisitionEvent, CookieAcquisitionAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
-            val environmentUrl = environmentRepository
-                .environment
-                .environmentUrlData
-                .baseWebVaultUrlOrDefault
+            val environmentUrl = environmentRepository.environment.baseWebVaultUrlOrDefault
             val hostname = requireNotNull(
                 cookieAcquisitionRequestManager
                     .cookieAcquisitionRequestFlow

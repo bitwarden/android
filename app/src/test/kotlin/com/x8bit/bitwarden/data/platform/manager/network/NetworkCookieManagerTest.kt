@@ -293,6 +293,7 @@ private fun createServerConfig(
                 ),
             )
         },
+        settings = null,
     ),
 )
 

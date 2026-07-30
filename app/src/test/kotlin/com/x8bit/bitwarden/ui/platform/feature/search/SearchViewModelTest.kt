@@ -140,7 +140,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         every { userStateFlow } returns mutableUserStateFlow
     }
     private val environmentRepository: EnvironmentRepository = mockk {
-        every { environment } returns Environment.Us
+        every { environment } returns Environment.Prod.Us
     }
     private val mutableIsIconLoadingDisabledFlow = MutableStateFlow(false)
     private val settingsRepository: SettingsRepository = mockk {
@@ -2389,7 +2389,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     name = "Active User",
     email = "active@bitwarden.com",
     avatarColorHex = "#aa00aa",
-    environment = Environment.Us,
+    environment = Environment.Prod.Us,
     isPremium = true,
     isPremiumFromSelf = true,
     isLoggedIn = true,

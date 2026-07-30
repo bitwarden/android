@@ -20,6 +20,7 @@ import com.bitwarden.network.model.createMockPasswordHistory
 import com.bitwarden.network.model.createMockSecureNote
 import com.bitwarden.network.model.createMockSshKey
 import com.bitwarden.network.model.createMockUri
+import com.bitwarden.vault.BankAccountListView
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -536,7 +537,15 @@ class VaultSdkCipherExtensionsTest {
 
         val result = cipher.toFailureCipherListView()
 
-        assertEquals(CipherListViewType.BankAccount, result.type)
+        assertEquals(
+            CipherListViewType.BankAccount(
+                v1 = BankAccountListView(
+                    accountNumber = null,
+                    accountType = null,
+                ),
+            ),
+            result.type,
+        )
     }
 
     @Test

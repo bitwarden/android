@@ -152,10 +152,19 @@ class UserLogoutManagerTest {
             settingsDiskSource.getVaultTimeoutAction(userId = userId)
         } returns vaultTimeoutAction
         every {
-            authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId)
+            authDiskSource.getEphemeralPinProtectedUserKeyEnvelope(userId = userId)
         } returns pinProtectedUserKeyEnvelope
         every {
-            authDiskSource.storePinProtectedUserKeyEnvelope(
+            authDiskSource.getPersistentPinProtectedUserKeyEnvelope(userId = userId)
+        } returns pinProtectedUserKeyEnvelope
+        every {
+            authDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
+                userId = userId,
+                pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
+            )
+        } just runs
+        every {
+            authDiskSource.storePersistentPinProtectedUserKeyEnvelope(
                 userId = userId,
                 pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
             )
@@ -193,7 +202,11 @@ class UserLogoutManagerTest {
                 userId = userId,
                 vaultTimeoutAction = vaultTimeoutAction,
             )
-            authDiskSource.storePinProtectedUserKeyEnvelope(
+            authDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
+                userId = userId,
+                pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
+            )
+            authDiskSource.storePersistentPinProtectedUserKeyEnvelope(
                 userId = userId,
                 pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
             )
@@ -221,10 +234,19 @@ class UserLogoutManagerTest {
             settingsDiskSource.getVaultTimeoutAction(userId = userId)
         } returns vaultTimeoutAction
         every {
-            authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId)
+            authDiskSource.getEphemeralPinProtectedUserKeyEnvelope(userId = userId)
         } returns pinProtectedUserKeyEnvelope
         every {
-            authDiskSource.storePinProtectedUserKeyEnvelope(
+            authDiskSource.getPersistentPinProtectedUserKeyEnvelope(userId = userId)
+        } returns pinProtectedUserKeyEnvelope
+        every {
+            authDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
+                userId = userId,
+                pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
+            )
+        } just runs
+        every {
+            authDiskSource.storePersistentPinProtectedUserKeyEnvelope(
                 userId = userId,
                 pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
             )
@@ -252,7 +274,11 @@ class UserLogoutManagerTest {
                 userId = userId,
                 vaultTimeoutAction = vaultTimeoutAction,
             )
-            authDiskSource.storePinProtectedUserKeyEnvelope(
+            authDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
+                userId = userId,
+                pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
+            )
+            authDiskSource.storePersistentPinProtectedUserKeyEnvelope(
                 userId = userId,
                 pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
             )

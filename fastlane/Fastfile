@@ -448,6 +448,21 @@ platform :android do
     )
   end
 
+  desc "Assemble and sign release Test Harness APK"
+  lane :buildTestHarnessRelease do |options|
+    gradle(
+      task: "testharness:assemble",
+      build_type: "Release",
+      properties: {
+        "android.injected.signing.store.file" => options[:storeFile],
+        "android.injected.signing.store.password" => options[:storePassword],
+        "android.injected.signing.key.alias" => options[:keyAlias],
+        "android.injected.signing.key.password" => options[:keyPassword]
+      },
+      print_command: false,
+    )
+  end
+
   desc "Publish release AAB to Firebase"
   lane :distributeAuthenticatorReleaseBundleToFirebase do |options|
     release_notes = changelog_from_git_commits(

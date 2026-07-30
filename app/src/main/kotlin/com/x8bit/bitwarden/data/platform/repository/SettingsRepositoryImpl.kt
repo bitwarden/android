@@ -294,13 +294,15 @@ class SettingsRepositoryImpl(
     override val isUnlockWithPinEnabledFlow: Flow<Boolean>
         get() = activeUserId
             ?.let { userId ->
-                authDiskSource
-                    .getPinProtectedUserKeyFlow(userId)
-                    .combine(
-                        authDiskSource.getPinProtectedUserKeyEnvelopeFlow(userId),
-                    ) { pinProtectedUserKey, pinProtectedUserKeyEnvelope ->
-                        pinProtectedUserKey != null || pinProtectedUserKeyEnvelope != null
-                    }
+                combine(
+                    authDiskSource.getPinProtectedUserKeyFlow(userId = userId),
+                    authDiskSource.getEphemeralPinProtectedUserKeyEnvelopeFlow(userId = userId),
+                    authDiskSource.getPersistentPinProtectedUserKeyEnvelopeFlow(userId = userId),
+                ) { pinUserKey, ephemeralPinUserKeyEnvelope, persistentPinUserKeyEnvelope ->
+                    pinUserKey != null ||
+                        ephemeralPinUserKeyEnvelope != null ||
+                        persistentPinUserKeyEnvelope != null
+                }
             }
             ?: flowOf(false)
 
@@ -327,6 +329,15 @@ class SettingsRepositoryImpl(
                 isFillAssistEnabled = value,
             )
         }
+
+    override val isFillAssistEnabledFlow: Flow<Boolean>
+        get() = activeUserId
+            ?.let { userId ->
+                settingsDiskSource
+                    .getFillAssistEnabledFlow(userId = userId)
+                    .map { it ?: false }
+            }
+            ?: flowOf(false)
 
     override var isAutoCopyTotpDisabled: Boolean
         get() = activeUserId
@@ -618,17 +629,21 @@ class SettingsRepositoryImpl(
                                 userId = userId,
                                 encryptedPin = enrollPinResponse.userKeyEncryptedPin,
                             )
-                            storePinProtectedUserKeyEnvelope(
-                                userId = userId,
-                                pinProtectedUserKeyEnvelope =
-                                    enrollPinResponse.pinProtectedUserKeyEnvelope,
-                                inMemoryOnly = shouldRequireMasterPasswordOnRestart,
-                            )
+                            if (shouldRequireMasterPasswordOnRestart) {
+                                storeEphemeralPinProtectedUserKeyEnvelope(
+                                    userId = userId,
+                                    pinProtectedUserKeyEnvelope = enrollPinResponse
+                                        .pinProtectedUserKeyEnvelope,
+                                )
+                            } else {
+                                storePersistentPinProtectedUserKeyEnvelope(
+                                    userId = userId,
+                                    pinProtectedUserKeyEnvelope = enrollPinResponse
+                                        .pinProtectedUserKeyEnvelope,
+                                )
+                            }
                             // Remove any legacy pin protected user keys.
-                            storePinProtectedUserKey(
-                                userId = userId,
-                                pinProtectedUserKey = null,
-                            )
+                            storePinProtectedUserKey(userId = userId, pinProtectedUserKey = null)
                         }
                     },
                     onFailure = {
@@ -643,18 +658,16 @@ class SettingsRepositoryImpl(
     override fun clearUnlockPin() {
         val userId = activeUserId ?: return
         authDiskSource.apply {
-            storeEncryptedPin(
-                userId = userId,
-                encryptedPin = null,
-            )
-            authDiskSource.storePinProtectedUserKeyEnvelope(
+            storeEncryptedPin(userId = userId, encryptedPin = null)
+            storeEphemeralPinProtectedUserKeyEnvelope(
                 userId = userId,
                 pinProtectedUserKeyEnvelope = null,
             )
-            authDiskSource.storePinProtectedUserKey(
+            storePersistentPinProtectedUserKeyEnvelope(
                 userId = userId,
-                pinProtectedUserKey = null,
+                pinProtectedUserKeyEnvelope = null,
             )
+            storePinProtectedUserKey(userId = userId, pinProtectedUserKey = null)
         }
     }
 

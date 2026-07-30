@@ -129,7 +129,6 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-        composeTestRule
             .onNodeWithText(text = "Choose an organization that", substring = true)
             .assertIsNotDisplayed()
     }

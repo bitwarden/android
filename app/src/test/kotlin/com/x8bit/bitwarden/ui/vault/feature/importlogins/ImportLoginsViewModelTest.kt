@@ -44,13 +44,13 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
     }
 
     private val environmentRepository: EnvironmentRepository = mockk {
-        every { environment } returns Environment.Us
+        every { environment } returns Environment.Prod.Us
     }
 
     @BeforeEach
     fun setUp() {
         mockkStatic(Uri::parse)
-        every { Uri.parse(Environment.Us.environmentUrlData.base) } returns mockk {
+        every { Uri.parse(Environment.Prod.Us.environmentUrlData.base) } returns mockk {
             every { host } returns DEFAULT_VAULT_URL
         }
     }

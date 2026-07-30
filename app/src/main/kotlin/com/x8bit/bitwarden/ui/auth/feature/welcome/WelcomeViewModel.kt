@@ -1,10 +1,16 @@
 package com.x8bit.bitwarden.ui.auth.feature.welcome
 
 import android.os.Parcelable
+import androidx.lifecycle.viewModelScope
+import com.bitwarden.data.datasource.disk.model.ServerConfig
+import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
@@ -13,24 +19,47 @@ import javax.inject.Inject
  * Manages application state for the welcome screen.
  */
 @HiltViewModel
-class WelcomeViewModel @Inject constructor() :
-    BaseViewModel<WelcomeState, WelcomeEvent, WelcomeAction>(
-        initialState = WelcomeState(
-            index = 0,
-            pages = listOf(
-                WelcomeState.WelcomeCard.CardOne,
-                WelcomeState.WelcomeCard.CardTwo,
-                WelcomeState.WelcomeCard.CardThree,
-                WelcomeState.WelcomeCard.CardFour,
-            ),
+class WelcomeViewModel @Inject constructor(
+    serverConfigRepository: ServerConfigRepository,
+) : BaseViewModel<WelcomeState, WelcomeEvent, WelcomeAction>(
+    initialState = WelcomeState(
+        index = 0,
+        pages = listOf(
+            WelcomeState.WelcomeCard.CardOne,
+            WelcomeState.WelcomeCard.CardTwo,
+            WelcomeState.WelcomeCard.CardThree,
+            WelcomeState.WelcomeCard.CardFour,
         ),
-    ) {
+        disableCreateAccount = serverConfigRepository
+            .serverConfigStateFlow
+            .value
+            ?.serverData
+            ?.settings
+            ?.disableUserRegistration == true,
+    ),
+) {
+
+    init {
+        serverConfigRepository
+            .serverConfigStateFlow
+            .map { WelcomeAction.Internal.ServerConfigReceived(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+    }
+
     override fun handleAction(action: WelcomeAction) {
         when (action) {
             is WelcomeAction.PagerSwipe -> handlePagerSwipe(action)
             is WelcomeAction.DotClick -> handleDotClick(action)
             WelcomeAction.CreateAccountClick -> handleCreateAccountClick()
             WelcomeAction.LoginClick -> handleLoginClick()
+            is WelcomeAction.Internal -> handleInternalAction(action)
+        }
+    }
+
+    private fun handleInternalAction(action: WelcomeAction.Internal) {
+        when (action) {
+            is WelcomeAction.Internal.ServerConfigReceived -> handleServerConfigReceived(action)
         }
     }
 
@@ -50,6 +79,18 @@ class WelcomeViewModel @Inject constructor() :
     private fun handleLoginClick() {
         sendEvent(WelcomeEvent.NavigateToLogin)
     }
+
+    private fun handleServerConfigReceived(action: WelcomeAction.Internal.ServerConfigReceived) {
+        mutableStateFlow.update {
+            it.copy(
+                disableCreateAccount = action
+                    .serverConfig
+                    ?.serverData
+                    ?.settings
+                    ?.disableUserRegistration == true,
+            )
+        }
+    }
 }
 
 /**
@@ -59,7 +100,13 @@ class WelcomeViewModel @Inject constructor() :
 data class WelcomeState(
     val index: Int,
     val pages: List<WelcomeCard>,
+    val disableCreateAccount: Boolean,
 ) : Parcelable {
+    /**
+     * Determines if the user should be allowed to create a new account.
+     */
+    val allowCreateAccount: Boolean get() = !disableCreateAccount
+
     /**
      * A sealed class to represent the different cards the user can view on the welcome screen.
      */
@@ -159,4 +206,16 @@ sealed class WelcomeAction {
      * Click the login button.
      */
     data object LoginClick : WelcomeAction()
+
+    /**
+     * Actions for internal use by the ViewModel.
+     */
+    sealed class Internal : WelcomeAction() {
+        /**
+         * Indicates that an updated [serverConfig] has been received.
+         */
+        data class ServerConfigReceived(
+            val serverConfig: ServerConfig?,
+        ) : Internal()
+    }
 }

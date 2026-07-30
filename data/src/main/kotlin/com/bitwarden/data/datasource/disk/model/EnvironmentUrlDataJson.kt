@@ -1,6 +1,5 @@
 package com.bitwarden.data.datasource.disk.model
 
-import com.bitwarden.data.repository.model.EnvironmentRegion
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -43,21 +42,18 @@ data class EnvironmentUrlDataJson(
     val events: String? = null,
 ) {
     /**
-     * Returns the [EnvironmentRegion] based on the base domain for the US or EU environments.
+     * Indicates if this is a FedRamp environment.
      */
-    val environmentRegion: EnvironmentRegion
-        get() = when (base) {
-            DEFAULT_US.base -> EnvironmentRegion.UNITED_STATES
-            DEFAULT_EU.base -> EnvironmentRegion.EUROPEAN_UNION
-            DEFAULT_FED_RAMP.base -> EnvironmentRegion.FED_RAMP
-            else -> {
-                if (base.contains(BITWARDEN_INTERNAL_DOMAIN)) {
-                    EnvironmentRegion.INTERNAL
-                } else {
-                    EnvironmentRegion.SELF_HOSTED
-                }
-            }
-        }
+    val isFedRamp: Boolean
+        get() = base.contains(other = BITWARDEN_FED_RAMP_DEV_BASE_URL) ||
+            base.contains(other = GAME_WARDEN_FED_RAMP_DEV_BASE_URL) ||
+            base.contains(other = GAME_WARDEN_FED_RAMP_STAGING_BASE_URL) ||
+            base.contains(other = BITWARDEN_FED_RAMP_PROD_DOMAIN)
+
+    /**
+     * Indicates if this is an internal environment.
+     */
+    val isInternal: Boolean get() = base.contains(other = BITWARDEN_INTERNAL_DOMAIN)
 
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -65,6 +61,26 @@ data class EnvironmentUrlDataJson(
          * The domain used for internal Bitwarden environments.
          */
         private const val BITWARDEN_INTERNAL_DOMAIN: String = "bitwarden.pw"
+
+        /**
+         * The domain used for production Bitwarden FedRAMP Bitwarden environments.
+         */
+        private const val BITWARDEN_FED_RAMP_PROD_DOMAIN: String = "bitwarden-gov.com"
+
+        /**
+         * The base URL used for the Bitwarden FedRAMP development environments.
+         */
+        private const val BITWARDEN_FED_RAMP_DEV_BASE_URL: String = "fedramp.usdev.bitwarden.pw"
+
+        /**
+         * The base URL used for the Game Warden FedRAMP development environments.
+         */
+        private const val GAME_WARDEN_FED_RAMP_DEV_BASE_URL: String = "gw.dev.bitwarden.pw"
+
+        /**
+         * The base URL used for the Game Warden FedRAMP staging environments.
+         */
+        private const val GAME_WARDEN_FED_RAMP_STAGING_BASE_URL: String = "gw.stg.bitwarden.pw"
 
         /**
          * Default [EnvironmentUrlDataJson] for the US region.

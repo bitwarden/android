@@ -29,13 +29,13 @@ class RestrictionManagerImpl(
         environmentRepository.environment = when (baseEnvironmentUrl) {
             // If the baseEnvironmentUrl matches the predefined US environment, assume it is the
             // default US environment.
-            Environment.Us.environmentUrlData.base -> Environment.Us
+            Environment.Prod.Us.environmentUrlData.base -> Environment.Prod.Us
             // If the baseEnvironmentUrl matches the predefined EU environment, assume it is the
             // default EU environment.
-            Environment.Eu.environmentUrlData.base -> Environment.Eu
+            Environment.Prod.Eu.environmentUrlData.base -> Environment.Prod.Eu
             // If the baseEnvironmentUrl matches the predefined FedRAMP environment, assume it is
             // the default FedRAMP environment.
-            Environment.FedRamp.environmentUrlData.base -> Environment.FedRamp
+            Environment.Prod.FedRamp.environmentUrlData.base -> Environment.Prod.FedRamp
             // Otherwise make a custom self-host environment.
             else -> Environment.SelfHosted(EnvironmentUrlDataJson(baseEnvironmentUrl))
         }

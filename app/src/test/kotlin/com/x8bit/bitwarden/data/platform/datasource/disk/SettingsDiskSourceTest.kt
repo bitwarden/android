@@ -850,6 +850,30 @@ class SettingsDiskSourceTest {
             }
         }
 
+    @Test
+    fun `getFillAssistEnabled when values are absent should return null`() {
+        val mockUserId = "mockUserId"
+        assertNull(settingsDiskSource.getFillAssistEnabled(userId = mockUserId))
+    }
+
+    @Test
+    fun `getFillAssistEnabledFlow should react to changes in getFillAssistEnabled`() =
+        runTest {
+            val mockUserId = "mockUserId"
+            settingsDiskSource.getFillAssistEnabledFlow(userId = mockUserId).test {
+                // The initial values of the Flow and the property are in sync
+                assertNull(settingsDiskSource.getFillAssistEnabled(userId = mockUserId))
+                assertNull(awaitItem())
+
+                // Updating the disk source updates shared preferences
+                settingsDiskSource.storeFillAssistEnabled(
+                    userId = mockUserId,
+                    isFillAssistEnabled = true,
+                )
+                assertEquals(true, awaitItem())
+            }
+        }
+
     @Suppress("MaxLineLength")
     @Test
     fun `getIntroducingArchiveActionCardDismissed when values are present should pull from SharedPreferences`() {

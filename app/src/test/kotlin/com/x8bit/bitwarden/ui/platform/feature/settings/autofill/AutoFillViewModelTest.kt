@@ -5,11 +5,14 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutoFillData
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -55,6 +58,21 @@ class AutoFillViewModelTest : BaseViewModelTest() {
             every { browserThirdPartyAutofillStatus } returns DEFAULT_AUTOFILL_STATUS
         }
 
+    private val mutableFillAssistTargetingRulesFlagFlow = MutableStateFlow(false)
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every {
+            getFeatureFlag(FlagKey.FillAssistTargetingRules)
+        } answers {
+            mutableFillAssistTargetingRulesFlagFlow.value
+        }
+        every {
+            getFeatureFlagFlow(FlagKey.FillAssistTargetingRules)
+        } returns mutableFillAssistTargetingRulesFlagFlow
+    }
+
+    private val fillAssistManager: FillAssistManager = mockk(relaxed = true)
+
+    private val mutableIsFillAssistEnabledFlow = MutableStateFlow(false)
     private val settingsRepository: SettingsRepository = mockk {
         every { isInlineAutofillEnabled } returns true
         every { isInlineAutofillEnabled = any() } just runs
@@ -62,6 +80,11 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         every { isAutoCopyTotpDisabled = any() } just runs
         every { isAutofillSavePromptDisabled } returns true
         every { isAutofillSavePromptDisabled = any() } just runs
+        every { isFillAssistEnabled } answers { mutableIsFillAssistEnabledFlow.value }
+        every {
+            isFillAssistEnabled = any()
+        } answers { mutableIsFillAssistEnabledFlow.value = firstArg() }
+        every { isFillAssistEnabledFlow } returns mutableIsFillAssistEnabledFlow
         every { defaultUriMatchType } returns UriMatchType.DOMAIN
         every { defaultUriMatchType = any() } just runs
         every { isAccessibilityEnabledStateFlow } returns mutableIsAccessibilityEnabledStateFlow
@@ -512,6 +535,62 @@ class AutoFillViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    fun `FillAssistToggleClick with isEnabled true persists setting and triggers sync`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+            viewModel.trySendAction(AutoFillAction.FillAssistToggleClick(isEnabled = true))
+            assertEquals(DEFAULT_STATE.copy(isFillAssistEnabled = true), awaitItem())
+        }
+        verify { settingsRepository.isFillAssistEnabled = true }
+        verify { fillAssistManager.syncIfNecessary() }
+    }
+
+    @Test
+    fun `FillAssistToggleClick with isEnabled false persists setting and skips sync`() = runTest {
+        mutableIsFillAssistEnabledFlow.value = true
+        val enabledState = DEFAULT_STATE.copy(isFillAssistEnabled = true)
+        val viewModel = createViewModel(state = enabledState)
+        viewModel.stateFlow.test {
+            assertEquals(enabledState, awaitItem())
+            viewModel.trySendAction(AutoFillAction.FillAssistToggleClick(isEnabled = false))
+            assertEquals(enabledState.copy(isFillAssistEnabled = false), awaitItem())
+        }
+        verify { settingsRepository.isFillAssistEnabled = false }
+        verify(exactly = 0) { fillAssistManager.syncIfNecessary() }
+    }
+
+    @Test
+    fun `when isFillAssistEnabled updates in the repository, should update state`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+            mutableIsFillAssistEnabledFlow.value = true
+            assertEquals(DEFAULT_STATE.copy(isFillAssistEnabled = true), awaitItem())
+        }
+    }
+
+    @Test
+    fun `when FillAssistTargetingRules flag updates, should update showFillAssistOption state`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                mutableFillAssistTargetingRulesFlagFlow.value = true
+                assertEquals(DEFAULT_STATE.copy(showFillAssistOption = true), awaitItem())
+            }
+        }
+
+    @Test
+    fun `FillAssistInfoClick emits NavigateToFillAssistHelp event`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AutoFillAction.FillAssistInfoClick)
+            assertEquals(AutoFillEvent.NavigateToFillAssistHelp, awaitItem())
+        }
+    }
+
     private fun createViewModel(
         state: AutoFillState? = DEFAULT_STATE,
     ): AutoFillViewModel = AutoFillViewModel(
@@ -520,10 +599,14 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         authRepository = authRepository,
         firstTimeActionManager = firstTimeActionManager,
         browserThirdPartyAutofillEnabledManager = browserThirdPartyAutofillEnabledManager,
+        featureFlagManager = featureFlagManager,
+        fillAssistManager = fillAssistManager,
     )
 }
 
 private val DEFAULT_STATE: AutoFillState = AutoFillState(
+    showFillAssistOption = false,
+    isFillAssistEnabled = false,
     isAskToAddLoginEnabled = false,
     isAccessibilityAutofillEnabled = false,
     isAutoFillServicesEnabled = false,

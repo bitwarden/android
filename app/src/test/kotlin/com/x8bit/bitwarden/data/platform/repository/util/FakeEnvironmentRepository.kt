@@ -25,5 +25,5 @@ class FakeEnvironmentRepository : EnvironmentRepository {
 
     override fun loadEnvironmentForEmail(userEmail: String): Boolean = true
 
-    private val mutableEnvironmentStateFlow = MutableStateFlow<Environment>(Environment.Us)
+    private val mutableEnvironmentStateFlow = MutableStateFlow<Environment>(Environment.Prod.Us)
 }

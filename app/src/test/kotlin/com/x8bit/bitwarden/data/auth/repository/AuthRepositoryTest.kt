@@ -131,9 +131,9 @@ import com.x8bit.bitwarden.data.auth.repository.util.CookieCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
-import com.x8bit.bitwarden.data.auth.repository.util.toRemovedPasswordUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
+import com.x8bit.bitwarden.data.auth.repository.util.updateMasterPasswordUnlock
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
@@ -198,7 +198,7 @@ class AuthRepositoryTest {
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeSettingsDiskSource = FakeSettingsDiskSource()
     private val fakeEnvironmentRepository = FakeEnvironmentRepository().apply {
-        environment = Environment.Us
+        environment = Environment.Prod.Us
     }
     private val settingsRepository: SettingsRepository = mockk {
         every { setDefaultsIfNecessary(any()) } just runs
@@ -330,7 +330,7 @@ class AuthRepositoryTest {
     fun beforeEach() {
         mockkStatic(
             GetTokenResponseJson.Success::toUserState,
-            UserStateJson::toRemovedPasswordUserStateJson,
+            UserStateJson::updateMasterPasswordUnlock,
         )
         mockkConstructor(
             NoActiveUserException::class,
@@ -348,7 +348,7 @@ class AuthRepositoryTest {
     fun tearDown() {
         unmockkStatic(
             GetTokenResponseJson.Success::toUserState,
-            UserStateJson::toRemovedPasswordUserStateJson,
+            UserStateJson::updateMasterPasswordUnlock,
         )
         mockkConstructor(
             NoActiveUserException::class,
@@ -5036,7 +5036,10 @@ class AuthRepositoryTest {
                 )
             } returns MigrateExistingUserToKeyConnectorResult.Success.asSuccess()
             every {
-                SINGLE_USER_STATE_1.toRemovedPasswordUserStateJson(userId = USER_ID_1)
+                SINGLE_USER_STATE_1.updateMasterPasswordUnlock(
+                    userId = USER_ID_1,
+                    masterPasswordUnlock = null,
+                )
             } returns SINGLE_USER_STATE_1
             every { vaultRepository.sync() } just runs
             every { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) } just runs
@@ -5045,7 +5048,10 @@ class AuthRepositoryTest {
 
             assertEquals(RemovePasswordResult.Success, result)
             verify(exactly = 1) {
-                SINGLE_USER_STATE_1.toRemovedPasswordUserStateJson(userId = USER_ID_1)
+                SINGLE_USER_STATE_1.updateMasterPasswordUnlock(
+                    userId = USER_ID_1,
+                    masterPasswordUnlock = null,
+                )
                 vaultRepository.sync()
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
             }
@@ -6317,7 +6323,7 @@ class AuthRepositoryTest {
     fun `switchAccount when the given userId is the same as the current activeUserId should reset any pending account additions`() {
         val originalUserId = USER_ID_1
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        fakeEnvironmentRepository.environment = Environment.Eu
+        fakeEnvironmentRepository.environment = Environment.Prod.Eu
         repository.hasPendingAccountAddition = true
 
         assertEquals(
@@ -6325,7 +6331,7 @@ class AuthRepositoryTest {
             repository.switchAccount(userId = originalUserId),
         )
 
-        assertEquals(Environment.Us, fakeEnvironmentRepository.environment)
+        assertEquals(Environment.Prod.Us, fakeEnvironmentRepository.environment)
         verify(exactly = 1) {
             userStateManager.hasPendingAccountAddition = false
         }
@@ -6336,14 +6342,14 @@ class AuthRepositoryTest {
     fun `switchAccount when the given userId does not correspond to a saved account should do nothing`() {
         val invalidId = "invalidId"
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        fakeEnvironmentRepository.environment = Environment.Eu
+        fakeEnvironmentRepository.environment = Environment.Prod.Eu
 
         assertEquals(
             SwitchAccountResult.NoChange,
             repository.switchAccount(userId = invalidId),
         )
 
-        assertEquals(Environment.Us, fakeEnvironmentRepository.environment)
+        assertEquals(Environment.Prod.Us, fakeEnvironmentRepository.environment)
     }
 
     @Suppress("MaxLineLength")
@@ -6351,7 +6357,7 @@ class AuthRepositoryTest {
     fun `switchAccount when the userId is valid should update the current UserState and reset any pending account additions`() {
         val updatedUserId = USER_ID_2
         fakeAuthDiskSource.userState = MULTI_USER_STATE
-        fakeEnvironmentRepository.environment = Environment.Eu
+        fakeEnvironmentRepository.environment = Environment.Prod.Eu
         repository.hasPendingAccountAddition = true
 
         assertEquals(
@@ -6359,7 +6365,7 @@ class AuthRepositoryTest {
             repository.switchAccount(userId = updatedUserId),
         )
 
-        assertEquals(Environment.Eu, fakeEnvironmentRepository.environment)
+        assertEquals(Environment.Prod.Eu, fakeEnvironmentRepository.environment)
         verify(exactly = 1) {
             userStateManager.hasPendingAccountAddition = false
         }
@@ -6701,7 +6707,7 @@ class AuthRepositoryTest {
             val pinProtectedUserKey = "pinProtectedUserKey"
             val error = Throwable("Fail!")
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-            fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
+            fakeAuthDiskSource.storePersistentPinProtectedUserKeyEnvelope(
                 userId = SINGLE_USER_STATE_1.activeUserId,
                 pinProtectedUserKeyEnvelope = pinProtectedUserKey,
             )
@@ -6735,7 +6741,7 @@ class AuthRepositoryTest {
             val pin = "PIN"
             val pinProtectedUserKey = "pinProtectedUserKey"
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-            fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
+            fakeAuthDiskSource.storePersistentPinProtectedUserKeyEnvelope(
                 userId = SINGLE_USER_STATE_1.activeUserId,
                 pinProtectedUserKeyEnvelope = pinProtectedUserKey,
             )
@@ -6769,7 +6775,7 @@ class AuthRepositoryTest {
             val pin = "PIN"
             val pinProtectedUserKey = "pinProtectedUserKey"
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-            fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
+            fakeAuthDiskSource.storePersistentPinProtectedUserKeyEnvelope(
                 userId = SINGLE_USER_STATE_1.activeUserId,
                 pinProtectedUserKeyEnvelope = pinProtectedUserKey,
             )
@@ -7586,6 +7592,7 @@ class AuthRepositoryTest {
                 ),
                 featureStates = emptyMap(),
                 communication = null,
+                settings = null,
             ),
         )
 

@@ -522,6 +522,7 @@ private const val SYNC_SUCCESS_JSON = """
         "expirationDate": "mockExpirationDate-1",
       },
       "encryptedFor": "mockEncryptedFor-1",
+      "data": "mockData-1",
       "archivedDate": "2023-10-27T12:00:00.00Z"
     }
   ],

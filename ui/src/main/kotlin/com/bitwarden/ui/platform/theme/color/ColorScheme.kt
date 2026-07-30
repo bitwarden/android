@@ -210,7 +210,7 @@ val lightBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
  * Creates a [BitwardenColorScheme] based on dynamic Material You colors.
  */
 @Suppress("LongMethod")
-fun dynamicBitwardenColorScheme(
+internal fun dynamicBitwardenColorScheme(
     materialColorScheme: ColorScheme,
     isDarkTheme: Boolean,
 ): BitwardenColorScheme {
@@ -310,7 +310,7 @@ fun dynamicBitwardenColorScheme(
  * Derives a Material [ColorScheme] from the [BitwardenColorScheme] using the [defaultColorScheme]
  * as a baseline.
  */
-fun BitwardenColorScheme.toMaterialColorScheme(
+internal fun BitwardenColorScheme.toMaterialColorScheme(
     defaultColorScheme: ColorScheme,
 ): ColorScheme = defaultColorScheme.copy(
     primary = this.stroke.border,

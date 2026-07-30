@@ -363,6 +363,12 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     fun getFillAssistEnabled(userId: String): Boolean?
 
     /**
+     * Emits updates that track [getFillAssistEnabled] for the given [userId]. This will replay
+     * the last known value, if any.
+     */
+    fun getFillAssistEnabledFlow(userId: String): Flow<Boolean?>
+
+    /**
      * Stores the given [isFillAssistEnabled] value for the given [userId].
      */
     fun storeFillAssistEnabled(userId: String, isFillAssistEnabled: Boolean?)

@@ -67,7 +67,9 @@ val AutofillPartition.Login.passwordSaveValue: String?
  */
 val AutofillPartition.Login.usernameSaveValue: String?
     get() = this
-        .extractNonNullTextValueOrNull { it is AutofillView.Login.Username }
+        .extractNonNullTextValueOrNull {
+            it is AutofillView.Login.Username || it is AutofillView.Login.Email
+        }
 
 /**
  * Search [AutofillPartition.views] for an [AutofillView] that matches [condition] and has a

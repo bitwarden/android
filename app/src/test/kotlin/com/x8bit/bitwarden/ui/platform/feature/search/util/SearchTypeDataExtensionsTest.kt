@@ -7,6 +7,7 @@ import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
+import com.bitwarden.vault.BankAccountListView
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
@@ -404,13 +405,23 @@ class SearchTypeDataExtensionsTest {
     fun `CipherViews filterAndOrganize should return list with only bank account items`() {
         val match1 = createMockCipherListView(
             number = 1,
-            type = CipherListViewType.BankAccount,
+            type = CipherListViewType.BankAccount(
+                v1 = BankAccountListView(
+                    accountNumber = null,
+                    accountType = null,
+                ),
+            ),
             name = "match1",
         )
         val match2 = createMockCipherListView(number = 2, name = "match2")
         val match3 = createMockCipherListView(
             number = 3,
-            type = CipherListViewType.BankAccount,
+            type = CipherListViewType.BankAccount(
+                v1 = BankAccountListView(
+                    accountNumber = null,
+                    accountType = null,
+                ),
+            ),
             name = "match3",
         )
         val ciphers = listOf(match1, match2, match3)

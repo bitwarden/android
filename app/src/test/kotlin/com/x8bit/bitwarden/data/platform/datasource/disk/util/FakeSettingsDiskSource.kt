@@ -42,6 +42,9 @@ class FakeSettingsDiskSource(
     private val mutablePullToRefreshEnabledFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
+    private val mutableFillAssistEnabledFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
     private val mutableIsIconLoadingDisabled =
         bufferedMutableSharedFlow<Boolean?>()
 
@@ -435,8 +438,13 @@ class FakeSettingsDiskSource(
     override fun getFillAssistEnabled(userId: String): Boolean? =
         storedFillAssistEnabled[userId]
 
+    override fun getFillAssistEnabledFlow(userId: String): Flow<Boolean?> =
+        getMutableFillAssistEnabledFlow(userId = userId)
+            .onSubscription { emit(getFillAssistEnabled(userId = userId)) }
+
     override fun storeFillAssistEnabled(userId: String, isFillAssistEnabled: Boolean?) {
         storedFillAssistEnabled[userId] = isFillAssistEnabled
+        getMutableFillAssistEnabledFlow(userId = userId).tryEmit(isFillAssistEnabled)
     }
 
     override fun getBlockedAutofillUris(userId: String): List<String>? =
@@ -668,6 +676,13 @@ class FakeSettingsDiskSource(
         userId: String,
     ): MutableSharedFlow<Boolean?> =
         mutablePullToRefreshEnabledFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableFillAssistEnabledFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutableFillAssistEnabledFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 

@@ -54,7 +54,7 @@ class ViewSendViewModel @Inject constructor(
             sendId = args.sendId,
             viewState = ViewSendState.ViewState.Loading,
             dialogState = null,
-            baseWebSendUrl = environmentRepository.environment.environmentUrlData.baseWebSendUrl,
+            baseWebSendUrl = environmentRepository.environment.baseWebSendUrl,
         )
     },
 ) {

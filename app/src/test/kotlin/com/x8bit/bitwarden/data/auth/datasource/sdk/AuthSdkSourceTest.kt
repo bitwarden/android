@@ -237,6 +237,7 @@ class AuthSdkSourceTest {
                         acceptEmergencyAccessId = null,
                         providerInviteToken = null,
                         providerUserId = null,
+                        salesAssistedToken = null,
                     ),
                 )
             } returns expectedResult
@@ -265,6 +266,7 @@ class AuthSdkSourceTest {
                         acceptEmergencyAccessId = null,
                         providerInviteToken = null,
                         providerUserId = null,
+                        salesAssistedToken = null,
                     ),
                 )
             }

@@ -270,10 +270,7 @@ class SendViewModel @Inject constructor(
                         viewState = dataState
                             .data
                             ?.toViewState(
-                                baseWebSendUrl = environmentRepo
-                                    .environment
-                                    .environmentUrlData
-                                    .baseWebSendUrl,
+                                baseWebSendUrl = environmentRepo.environment.baseWebSendUrl,
                             )
                             ?: SendState.ViewState.Error(
                                 message = BitwardenString.generic_error_message.asText(),
@@ -291,10 +288,7 @@ class SendViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = data.toViewState(
-                            baseWebSendUrl = environmentRepo
-                                .environment
-                                .environmentUrlData
-                                .baseWebSendUrl,
+                            baseWebSendUrl = environmentRepo.environment.baseWebSendUrl,
                         ),
                         dialogState = null,
                         isRefreshing = false,
@@ -312,10 +306,7 @@ class SendViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = dataState.data.toViewState(
-                            baseWebSendUrl = environmentRepo
-                                .environment
-                                .environmentUrlData
-                                .baseWebSendUrl,
+                            baseWebSendUrl = environmentRepo.environment.baseWebSendUrl,
                         ),
                     )
                 }

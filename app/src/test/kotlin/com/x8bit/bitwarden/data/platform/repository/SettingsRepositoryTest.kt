@@ -210,7 +210,7 @@ class SettingsRepositoryTest {
 
         // Updating the Vault settings values and calling setDefaultsIfNecessary again has no
         // effect on the currently stored values since we have a way to unlock the vault.
-        fakeAuthDiskSource.storePinProtectedUserKeyEnvelope(
+        fakeAuthDiskSource.storePersistentPinProtectedUserKeyEnvelope(
             userId = USER_ID,
             pinProtectedUserKeyEnvelope = "pinProtectedKey",
         )
@@ -684,6 +684,36 @@ class SettingsRepositoryTest {
     }
 
     @Test
+    fun `isFillAssistEnabled should pull from and update SettingsDiskSource`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        assertFalse(settingsRepository.isFillAssistEnabled)
+
+        // Updates to the disk source change the repository value.
+        fakeSettingsDiskSource.storeFillAssistEnabled(
+            userId = USER_ID,
+            isFillAssistEnabled = true,
+        )
+        assertTrue(settingsRepository.isFillAssistEnabled)
+
+        // Updates to the repository change the disk source value
+        settingsRepository.isFillAssistEnabled = false
+        assertFalse(fakeSettingsDiskSource.getFillAssistEnabled(userId = USER_ID)!!)
+    }
+
+    @Test
+    fun `isFillAssistEnabledFlow should react to changes in SettingsDiskSource`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        settingsRepository.isFillAssistEnabledFlow.test {
+            assertFalse(awaitItem())
+            fakeSettingsDiskSource.storeFillAssistEnabled(
+                userId = USER_ID,
+                isFillAssistEnabled = true,
+            )
+            assertTrue(awaitItem())
+        }
+    }
+
+    @Test
     fun `isAutoCopyTotpDisabled should pull from and update SettingsDiskSource`() {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         assertFalse(settingsRepository.isAutoCopyTotpDisabled)
@@ -1020,10 +1050,9 @@ class SettingsRepositoryTest {
                 userId = USER_ID,
                 encryptedPin = userKeyEncryptedPin,
             )
-            assertPinProtectedUserKeyEnvelope(
+            assertEphemeralPinProtectedUserKeyEnvelope(
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
-                inMemoryOnly = true,
             )
         }
         coVerify {
@@ -1062,10 +1091,9 @@ class SettingsRepositoryTest {
                 userId = USER_ID,
                 encryptedPin = userKeyEncryptedPin,
             )
-            assertPinProtectedUserKeyEnvelope(
+            assertPersistentPinProtectedUserKeyEnvelope(
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
-                inMemoryOnly = false,
             )
         }
         coVerify {
@@ -1085,7 +1113,11 @@ class SettingsRepositoryTest {
                 userId = USER_ID,
                 encryptedPin = "encryptedPin",
             )
-            storePinProtectedUserKeyEnvelope(
+            storeEphemeralPinProtectedUserKeyEnvelope(
+                userId = USER_ID,
+                pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope",
+            )
+            storePersistentPinProtectedUserKeyEnvelope(
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope",
             )
@@ -1098,7 +1130,11 @@ class SettingsRepositoryTest {
                 userId = USER_ID,
                 encryptedPin = null,
             )
-            assertPinProtectedUserKeyEnvelope(
+            assertEphemeralPinProtectedUserKeyEnvelope(
+                userId = USER_ID,
+                pinProtectedUserKeyEnvelope = null,
+            )
+            assertPersistentPinProtectedUserKeyEnvelope(
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = null,
             )
