@@ -210,7 +210,7 @@ private fun List<CipherListView>.toDisplayItemList(
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isPremiumUser: Boolean,
-    isVfo1FoundationEnabled: Boolean = true,
+    isVfo1FoundationEnabled: Boolean = false,
 ): ImmutableList<SearchState.DisplayItem> =
     this
         .map {
@@ -233,7 +233,7 @@ private fun CipherListView.toDisplayItem(
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isPremiumUser: Boolean,
-    isVfo1FoundationEnabled: Boolean = true,
+    isVfo1FoundationEnabled: Boolean = false,
 ): SearchState.DisplayItem =
     SearchState.DisplayItem(
         id = id.orEmpty(),

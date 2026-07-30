@@ -459,7 +459,7 @@ private fun List<CipherListView>.toDisplayItemList(
     isAutofill: Boolean,
     isFido2Creation: Boolean,
     isPremiumUser: Boolean,
-    isVfo1FoundationEnabled: Boolean = true,
+    isVfo1FoundationEnabled: Boolean = false,
 ): List<VaultItemListingState.DisplayItem> =
     this.map {
         it.toDisplayItem(
@@ -492,7 +492,7 @@ private fun CipherListView.toDisplayItem(
     isAutofill: Boolean,
     isFido2Creation: Boolean,
     isPremiumUser: Boolean,
-    isVfo1FoundationEnabled: Boolean = true,
+    isVfo1FoundationEnabled: Boolean = false,
 ): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
@@ -534,14 +534,14 @@ private fun CipherListView.toDisplayItem(
 
 @Suppress("MaxLineLength")
 private fun List<CipherListView>.toDisplayItemListDecryptionError(
-    isVfo1FoundationEnabled: Boolean = true,
+    isVfo1FoundationEnabled: Boolean = false,
 ): List<VaultItemListingState.DisplayItem> =
     this.map {
         it.toDisplayItemDecryptionError(isVfo1FoundationEnabled = isVfo1FoundationEnabled)
     }
 
 private fun CipherListView.toDisplayItemDecryptionError(
-    isVfo1FoundationEnabled: Boolean = true,
+    isVfo1FoundationEnabled: Boolean = false,
 ): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
