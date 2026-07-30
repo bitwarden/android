@@ -179,7 +179,7 @@ fun List<CipherListView>.toViewState(
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isPremiumUser: Boolean,
-    isVfo1FoundationEnabled: Boolean = true,
+    isVfo1FoundationEnabled: Boolean = false,
 ): SearchState.ViewState =
     when {
         searchTerm.isEmpty() -> SearchState.ViewState.Empty(message = null)

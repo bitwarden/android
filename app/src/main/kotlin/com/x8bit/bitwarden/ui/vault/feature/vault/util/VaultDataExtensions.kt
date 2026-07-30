@@ -48,7 +48,7 @@ fun VaultData.toViewState(
     restrictItemTypesPolicyOrgIds: List<String>,
     validTotpIds: Set<String>,
     isNewItemTypesEnabled: Boolean,
-    isVfo1FoundationEnabled: Boolean = true,
+    isVfo1FoundationEnabled: Boolean = false,
 ): VaultState.ViewState {
     val allCipherViews =
         decryptCipherListResult
@@ -292,7 +292,7 @@ private fun CipherListView.toVaultItemOrNull(
     baseIconUrl: String,
     isPremiumUser: Boolean,
     hasDecryptionError: Boolean,
-    isVfo1FoundationEnabled: Boolean = true,
+    isVfo1FoundationEnabled: Boolean = false,
 ): VaultState.ViewState.VaultItem? {
     val id = this.id ?: return null
     return when (type) {

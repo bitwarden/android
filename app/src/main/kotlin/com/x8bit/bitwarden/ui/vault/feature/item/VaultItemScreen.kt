@@ -205,8 +205,8 @@ fun VaultItemScreen(
                             OverflowMenuItemData(
                                 text = stringResource(
                                     id = vfo1Foundation(
-                                        BitwardenString.move,
-                                        BitwardenString.move_to_organization,
+                                        new = BitwardenString.move,
+                                        old = BitwardenString.move_to_organization,
                                     ),
                                 ),
                                 onClick = {
@@ -222,8 +222,8 @@ fun VaultItemScreen(
                             OverflowMenuItemData(
                                 text = stringResource(
                                     id = vfo1Foundation(
-                                        BitwardenString.shared_folders,
-                                        BitwardenString.collections,
+                                        new = BitwardenString.shared_folders,
+                                        old = BitwardenString.collections,
                                     ),
                                 ),
                                 onClick = {

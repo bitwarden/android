@@ -44,8 +44,8 @@ fun VaultMoveToOrganizationContent(
                         id = vfo1Foundation(BitwardenString.vault, BitwardenString.organization),
                     ),
                     dialogTitle = vfo1Foundation(
-                        stringResource(id = BitwardenString.filter_by_vault),
-                        null,
+                        new = stringResource(id = BitwardenString.filter_by_vault),
+                        old = null,
                     ),
                     options = state
                         .organizations
@@ -61,8 +61,8 @@ fun VaultMoveToOrganizationContent(
                     },
                     supportingText = stringResource(
                         id = vfo1Foundation(
-                            BitwardenString.move_to_vault_desc,
-                            BitwardenString.move_to_org_desc,
+                            new = BitwardenString.move_to_vault_desc,
+                            old = BitwardenString.move_to_org_desc,
                         ),
                     ),
                     cardStyle = CardStyle.Full,

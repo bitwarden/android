@@ -143,7 +143,7 @@ fun CipherListView.toOverflowActions(
 /**
  * Checks if the list is empty and if not returns an icon in a list.
  */
-fun CipherListView.toLabelIcons(isVfo1FoundationEnabled: Boolean = true): ImmutableList<IconData> {
+fun CipherListView.toLabelIcons(isVfo1FoundationEnabled: Boolean = false): ImmutableList<IconData> {
     return listOfNotNull(
         (
             if (isVfo1FoundationEnabled) {

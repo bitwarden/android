@@ -137,8 +137,8 @@ fun VaultItemListingContent(
                 BitwardenListHeaderText(
                     label = stringResource(
                         id = vfo1Foundation(
-                            BitwardenString.shared_folders,
-                            BitwardenString.collections,
+                            new = BitwardenString.shared_folders,
+                            old = BitwardenString.collections,
                         ),
                     ),
                     supportingLabel = state.displayCollectionList.count().toString(),
@@ -158,8 +158,8 @@ fun VaultItemListingContent(
                 BitwardenGroupItem(
                     startIcon = IconData.Local(
                         iconRes = vfo1Foundation(
-                            BitwardenDrawable.ic_shared_folder,
-                            BitwardenDrawable.ic_collections,
+                            new = BitwardenDrawable.ic_shared_folder,
+                            old = BitwardenDrawable.ic_collections,
                         ),
                     ),
                     label = collection.name,

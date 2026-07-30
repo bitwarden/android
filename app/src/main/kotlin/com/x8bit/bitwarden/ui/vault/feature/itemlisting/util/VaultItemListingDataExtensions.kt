@@ -131,7 +131,7 @@ fun VaultData.toViewState(
     totpData: TotpData?,
     isPremiumUser: Boolean,
     restrictItemTypesPolicyOrgIds: List<String>,
-    isVfo1FoundationEnabled: Boolean = true,
+    isVfo1FoundationEnabled: Boolean = false,
 ): VaultItemListingState.ViewState {
     val filteredCipherViewList = decryptCipherListResult
         .successes

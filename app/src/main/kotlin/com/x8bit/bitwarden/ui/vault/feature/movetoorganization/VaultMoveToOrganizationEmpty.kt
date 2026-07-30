@@ -29,8 +29,8 @@ fun VaultMoveToOrganizationEmpty(modifier: Modifier = Modifier) {
         Text(
             text = stringResource(
                 id = vfo1Foundation(
-                    BitwardenString.no_vaults_to_list,
-                    BitwardenString.no_orgs_to_list,
+                    new = BitwardenString.no_vaults_to_list,
+                    old = BitwardenString.no_orgs_to_list,
                 ),
             ),
             style = BitwardenTheme.typography.bodyMedium,

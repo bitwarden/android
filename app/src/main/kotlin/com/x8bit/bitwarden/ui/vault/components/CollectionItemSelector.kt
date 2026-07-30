@@ -37,8 +37,8 @@ fun LazyListScope.collectionItemsSelector(
             BitwardenListHeaderText(
                 label = stringResource(
                     id = vfo1Foundation(
-                        BitwardenString.shared_folders,
-                        BitwardenString.collections,
+                        new = BitwardenString.shared_folders,
+                        old = BitwardenString.collections,
                     ),
                 ),
                 modifier = Modifier
@@ -85,8 +85,8 @@ fun LazyListScope.collectionItemsSelector(
                 Text(
                     text = stringResource(
                         id = vfo1Foundation(
-                            BitwardenString.there_are_no_shared_folders_to_list,
-                            BitwardenString.no_collections_to_list,
+                            new = BitwardenString.there_are_no_shared_folders_to_list,
+                            old = BitwardenString.no_collections_to_list,
                         ),
                     ),
                     style = BitwardenTheme.typography.bodyMedium,

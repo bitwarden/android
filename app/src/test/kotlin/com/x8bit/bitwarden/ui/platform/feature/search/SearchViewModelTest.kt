@@ -1758,6 +1758,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
+                isVfo1FoundationEnabled = true,
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(
@@ -1869,6 +1870,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
+                isVfo1FoundationEnabled = true,
             )
         } returns expectedViewState
         mutableVaultDataStateFlow.tryEmit(
@@ -1987,6 +1989,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
+                isVfo1FoundationEnabled = true,
             )
         } returns expectedViewState
         val dataState = DataState.Error(
@@ -2108,6 +2111,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
+                isVfo1FoundationEnabled = true,
             )
         } returns expectedViewState
         val dataState = DataState.NoNetwork(
@@ -2344,6 +2348,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = true,
                 hasMasterPassword = true,
                 isPremiumUser = true,
+                isVfo1FoundationEnabled = true,
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(
