@@ -3462,7 +3462,10 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(
                         VaultItemLocation.Organization("mockOrganizationName"),
-                        VaultItemLocation.Collection("mockName-1"),
+                        VaultItemLocation.Collection(
+                            name = "mockName-1",
+                            icon = BitwardenDrawable.ic_shared_folder,
+                        ),
                         VaultItemLocation.Folder("mockName-1"),
                     ),
                     hasOrganizations = true,
@@ -3524,7 +3527,10 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(
                         VaultItemLocation.Organization("mockOrganizationName"),
-                        VaultItemLocation.Collection("mockName-1"),
+                        VaultItemLocation.Collection(
+                            name = "mockName-1",
+                            icon = BitwardenDrawable.ic_shared_folder,
+                        ),
                         VaultItemLocation.Folder("mockName-1"),
                     ),
                     hasOrganizations = true,
@@ -3585,7 +3591,10 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(
                         VaultItemLocation.Organization("mockOrganizationName"),
-                        VaultItemLocation.Collection("mockName-1"),
+                        VaultItemLocation.Collection(
+                            name = "mockName-1",
+                            icon = BitwardenDrawable.ic_shared_folder,
+                        ),
                         VaultItemLocation.Folder("mockName-1"),
                     ),
                     hasOrganizations = true,
