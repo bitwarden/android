@@ -40,9 +40,12 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
 
     private val mutableFoldersStateFlow =
         MutableStateFlow<DataState<FolderView?>>(DataState.Loading)
+    private val mutableFoldersListStateFlow =
+        MutableStateFlow<DataState<List<FolderView>>>(DataState.Loaded(emptyList()))
 
     private val vaultRepository: VaultRepository = mockk {
         every { getVaultFolderStateFlow(DEFAULT_EDIT_ITEM_ID) } returns mutableFoldersStateFlow
+        every { foldersStateFlow } returns mutableFoldersListStateFlow
     }
     private val relayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
         every { sendSnackbarData(data = any(), relay = any()) } just runs
@@ -160,6 +163,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                     folderName = DEFAULT_FOLDER_NAME,
                 ),
                 parentFolderName = null,
+                hasLoadedExistingFolders = true,
             )
 
             val stateWithoutDialog = stateWithDialog.copy(
@@ -210,6 +214,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                     BitwardenString.generic_error_message.asText(),
                 ),
                 parentFolderName = null,
+                hasLoadedExistingFolders = true,
             )
 
             val viewModel = createViewModel(
@@ -239,6 +244,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                     folderName = DEFAULT_FOLDER_NAME,
                 ),
                 parentFolderName = null,
+                hasLoadedExistingFolders = true,
             )
 
             val stateWithoutDialog = stateWithDialog.copy(
@@ -285,6 +291,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                     folderName = DEFAULT_FOLDER_NAME,
                 ),
                 parentFolderName = null,
+                hasLoadedExistingFolders = true,
             )
 
             val viewModel = createViewModel(
@@ -332,6 +339,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                     folderName = "",
                 ),
                 parentFolderName = null,
+                hasLoadedExistingFolders = true,
             )
 
             val stateWithDialog = stateWithoutName.copy(
@@ -354,6 +362,91 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             assertEquals(stateWithDialog, viewModel.stateFlow.value)
         }
 
+    @Test
+    fun `SaveClick with duplicate folder name should show an error dialog`() = runTest {
+        mutableFoldersListStateFlow.value = DataState.Loaded(
+            listOf(
+                FolderView(
+                    id = "existing-id",
+                    name = DEFAULT_FOLDER_NAME,
+                    revisionDate = FIXED_CLOCK.instant(),
+                ),
+            ),
+        )
+        val stateWithoutDialog = FolderAddEditState(
+            folderAddEditType = FolderAddEditType.AddItem,
+            dialog = null,
+            viewState = FolderAddEditState.ViewState.Content(
+                folderName = DEFAULT_FOLDER_NAME,
+            ),
+            parentFolderName = null,
+            hasLoadedExistingFolders = true,
+        )
+        val viewModel = createViewModel(
+            createSavedStateHandleWithState(state = stateWithoutDialog),
+        )
+
+        viewModel.trySendAction(FolderAddEditAction.SaveClick)
+
+        assertEquals(
+            stateWithoutDialog.copy(
+                existingFolders = listOf(
+                    FolderAddEditState.ExistingFolder(
+                        id = "existing-id",
+                        name = DEFAULT_FOLDER_NAME,
+                    ),
+                ),
+                hasLoadedExistingFolders = true,
+                dialog = FolderAddEditState.DialogState.Error(
+                    message = BitwardenString.a_folder_with_this_name_already_exists.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        coVerify(exactly = 0) { vaultRepository.createFolder(any()) }
+    }
+
+    @Test
+    fun `SaveClick in edit mode with unchanged name should allow saving`() = runTest {
+        mutableFoldersListStateFlow.value = DataState.Loaded(
+            listOf(
+                FolderView(
+                    id = DEFAULT_EDIT_ITEM_ID,
+                    name = DEFAULT_FOLDER_NAME,
+                    revisionDate = FIXED_CLOCK.instant(),
+                ),
+            ),
+        )
+        val stateWithoutDialog = FolderAddEditState(
+            folderAddEditType = FolderAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+            dialog = null,
+            viewState = FolderAddEditState.ViewState.Content(
+                folderName = DEFAULT_FOLDER_NAME,
+            ),
+            parentFolderName = null,
+            hasLoadedExistingFolders = true,
+        )
+        val viewModel = createViewModel(
+            createSavedStateHandleWithState(state = stateWithoutDialog),
+        )
+        mutableFoldersStateFlow.value = DataState.Loaded(
+            FolderView(
+                id = DEFAULT_EDIT_ITEM_ID,
+                name = DEFAULT_FOLDER_NAME,
+                revisionDate = FIXED_CLOCK.instant(),
+            ),
+        )
+        coEvery {
+            vaultRepository.updateFolder(any(), any())
+        } returns UpdateFolderResult.Success(mockk())
+
+        viewModel.trySendAction(FolderAddEditAction.SaveClick)
+
+        coVerify(exactly = 1) {
+            vaultRepository.updateFolder(any(), any())
+        }
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `in add mode, SaveClick createFolder success should show dialog, and remove it once an item is saved`() =
@@ -367,6 +460,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                     folderName = DEFAULT_FOLDER_NAME,
                 ),
                 parentFolderName = null,
+                hasLoadedExistingFolders = true,
             )
 
             val stateWithoutDialog = stateWithDialog.copy(
@@ -411,6 +505,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                             ),
                             dialog = null,
                             parentFolderName = null,
+                            hasLoadedExistingFolders = true,
                         ),
                     ),
                 )
@@ -485,6 +580,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 folderName = DEFAULT_FOLDER_NAME,
             ),
             parentFolderName = null,
+            hasLoadedExistingFolders = true,
         )
 
         val viewModel = createViewModel(
@@ -523,6 +619,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                     folderName = DEFAULT_FOLDER_NAME,
                 ),
                 parentFolderName = null,
+                hasLoadedExistingFolders = true,
             )
 
             val viewModel = createViewModel(
@@ -564,6 +661,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                     folderName = DEFAULT_FOLDER_NAME,
                 ),
                 parentFolderName = null,
+                hasLoadedExistingFolders = true,
             )
 
             val stateWithoutDialog = stateWithDialog.copy(
@@ -616,6 +714,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 folderName = DEFAULT_FOLDER_NAME,
             ),
             parentFolderName = null,
+            hasLoadedExistingFolders = true,
         )
 
         val viewModel = createViewModel(
@@ -663,6 +762,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                     folderName = DEFAULT_FOLDER_NAME,
                 ),
                 parentFolderName = null,
+                hasLoadedExistingFolders = true,
             )
 
             val viewModel = createViewModel(
@@ -940,6 +1040,8 @@ private val DEFAULT_STATE = FolderAddEditState(
     dialog = FolderAddEditState.DialogState.Loading("Loading".asText()),
     folderAddEditType = FolderAddEditType.AddItem,
     parentFolderName = null,
+    existingFolders = emptyList(),
+    hasLoadedExistingFolders = true,
 )
 
 private val FIXED_CLOCK = Clock.fixed(

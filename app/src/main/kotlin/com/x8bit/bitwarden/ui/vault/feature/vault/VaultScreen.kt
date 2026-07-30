@@ -95,6 +95,7 @@ fun VaultScreen(
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
     onNavigateToImportLogins: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
+    onNavigateToEditFolderScreen: (folderId: String) -> Unit,
     onNavigateToAboutScreen: () -> Unit,
     onNavigateToAutofillScreen: () -> Unit,
     onNavigateToPlan: () -> Unit,
@@ -169,6 +170,10 @@ fun VaultScreen(
 
             VaultEvent.NavigateToAddFolder -> {
                 onNavigateToAddFolderScreen(null)
+            }
+
+            is VaultEvent.NavigateToEditFolder -> {
+                onNavigateToEditFolderScreen(event.folderId)
             }
 
             VaultEvent.NavigateToAbout -> onNavigateToAboutScreen()
@@ -397,6 +402,18 @@ private fun VaultDialogs(
                 confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
                 dismissButtonText = stringResource(id = BitwardenString.cancel),
                 onConfirmClick = vaultHandlers.upgradeToPremiumClick,
+                onDismissClick = vaultHandlers.dialogDismiss,
+                onDismissRequest = vaultHandlers.dialogDismiss,
+            )
+        }
+
+        is VaultState.DialogState.DeleteFolderConfirmation -> {
+            BitwardenTwoButtonDialog(
+                title = null,
+                message = stringResource(id = BitwardenString.do_you_really_want_to_delete),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
+                confirmButtonText = stringResource(id = BitwardenString.delete),
+                onConfirmClick = vaultHandlers.confirmDeleteFolderClick,
                 onDismissClick = vaultHandlers.dialogDismiss,
                 onDismissRequest = vaultHandlers.dialogDismiss,
             )

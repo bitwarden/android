@@ -144,6 +144,11 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                     parentFolderName = it,
                 )
             },
+            onNavigateToEditFolderScreen = {
+                navController.navigateToFolderAddEdit(
+                    folderAddEditType = FolderAddEditType.EditItem(folderId = it),
+                )
+            },
             onNavigateToFlightRecorder = {
                 navController.navigateToFlightRecorder(isPreAuth = false)
             },

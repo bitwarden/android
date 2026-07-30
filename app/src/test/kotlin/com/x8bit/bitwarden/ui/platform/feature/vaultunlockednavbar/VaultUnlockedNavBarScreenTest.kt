@@ -61,6 +61,7 @@ class VaultUnlockedNavBarScreenTest : BitwardenComposeTest() {
                 onNavigateToSetupUnlockScreen = {},
                 onNavigateToImportLogins = {},
                 onNavigateToAddFolderScreen = {},
+                onNavigateToEditFolderScreen = {},
                 onNavigateToFlightRecorder = {},
                 onNavigateToRecordedLogs = {},
                 onNavigateToAboutPrivilegedApps = {},

@@ -57,6 +57,11 @@ class FolderAddEditViewModel @Inject constructor(
         },
 ) {
     init {
+        vaultRepository
+            .foldersStateFlow
+            .onEach { sendAction(FolderAddEditAction.Internal.FoldersReceive(it)) }
+            .launchIn(viewModelScope)
+
         state
             .folderAddEditType
             .folderId
@@ -76,6 +81,7 @@ class FolderAddEditViewModel @Inject constructor(
             is FolderAddEditAction.NameTextChange -> handleNameTextChange(action)
             is FolderAddEditAction.SaveClick -> handleSaveClick()
             is FolderAddEditAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
+            is FolderAddEditAction.Internal.FoldersReceive -> handleFoldersReceive(action)
             is FolderAddEditAction.Internal.CreateFolderResultReceive ->
                 handleCreateFolderResultReceive(action)
 
@@ -92,7 +98,7 @@ class FolderAddEditViewModel @Inject constructor(
     }
 
     private fun handleSaveClick() = onContent { content ->
-        if (content.folderName.isEmpty()) {
+        if (content.folderName.isBlank()) {
             mutableStateFlow.update {
                 it.copy(
                     dialog = FolderAddEditState.DialogState.Error(
@@ -104,11 +110,46 @@ class FolderAddEditViewModel @Inject constructor(
             return@onContent
         }
 
+        val folderName = content.folderName.trim()
+        val resolvedFolderName = state
+            .parentFolderName
+            ?.let { "$it/" }
+            .orEmpty() + folderName
+
+        if (!state.hasLoadedExistingFolders) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = FolderAddEditState.DialogState.Loading(
+                        BitwardenString.saving.asText(),
+                    ),
+                    pendingSaveFolderName = resolvedFolderName,
+                )
+            }
+            return@onContent
+        }
+
+        if (isDuplicateFolderName(folderName = resolvedFolderName)) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = FolderAddEditState.DialogState.Error(
+                        message = BitwardenString.a_folder_with_this_name_already_exists.asText(),
+                    ),
+                    pendingSaveFolderName = null,
+                )
+            }
+            return@onContent
+        }
+
+        createOrUpdateFolder(resolvedFolderName = resolvedFolderName)
+    }
+
+    private fun createOrUpdateFolder(resolvedFolderName: String) = onContent { content ->
         mutableStateFlow.update {
             it.copy(
                 dialog = FolderAddEditState.DialogState.Loading(
                     BitwardenString.saving.asText(),
                 ),
+                pendingSaveFolderName = null,
             )
         }
 
@@ -117,13 +158,7 @@ class FolderAddEditViewModel @Inject constructor(
                 FolderAddEditType.AddItem -> {
                     val result = vaultRepository.createFolder(
                         FolderView(
-                            name = state
-                                .parentFolderName
-                                ?.let {
-                                    "$it/"
-                                }
-                                .orEmpty() +
-                                content.folderName,
+                            name = resolvedFolderName,
                             id = folderAddEditType.folderId,
                             revisionDate = clock.instant(),
                         ),
@@ -135,13 +170,58 @@ class FolderAddEditViewModel @Inject constructor(
                     val result = vaultRepository.updateFolder(
                         folderAddEditType.folderId,
                         FolderView(
-                            name = content.folderName,
+                            name = content.folderName.trim(),
                             id = folderAddEditType.folderId,
                             revisionDate = clock.instant(),
                         ),
                     )
                     sendAction(FolderAddEditAction.Internal.UpdateFolderResultReceive(result))
                 }
+            }
+        }
+    }
+
+    private fun isDuplicateFolderName(folderName: String): Boolean {
+        val currentFolderId = state.folderAddEditType.folderId
+        return state.existingFolders.any { folder ->
+            folder.id != currentFolderId &&
+                folder.name.equals(folderName, ignoreCase = true)
+        }
+    }
+
+    private fun handleFoldersReceive(action: FolderAddEditAction.Internal.FoldersReceive) {
+        val folders = action.foldersState.data
+            ?.map { folder ->
+                FolderAddEditState.ExistingFolder(
+                    id = folder.id,
+                    name = folder.name,
+                )
+            }
+            .orEmpty()
+        val hasLoaded = action.foldersState !is DataState.Loading
+        val pendingSaveFolderName = state.pendingSaveFolderName
+
+        mutableStateFlow.update {
+            it.copy(
+                existingFolders = folders,
+                hasLoadedExistingFolders = hasLoaded || folders.isNotEmpty(),
+            )
+        }
+
+        if (pendingSaveFolderName != null && (hasLoaded || folders.isNotEmpty())) {
+            if (isDuplicateFolderName(folderName = pendingSaveFolderName)) {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = FolderAddEditState.DialogState.Error(
+                            message = BitwardenString
+                                .a_folder_with_this_name_already_exists
+                                .asText(),
+                        ),
+                        pendingSaveFolderName = null,
+                    )
+                }
+            } else {
+                createOrUpdateFolder(resolvedFolderName = pendingSaveFolderName)
             }
         }
     }
@@ -361,7 +441,19 @@ data class FolderAddEditState(
     val viewState: ViewState,
     val dialog: DialogState?,
     val parentFolderName: String?,
+    val existingFolders: List<ExistingFolder> = emptyList(),
+    val hasLoadedExistingFolders: Boolean = false,
+    val pendingSaveFolderName: String? = null,
 ) : Parcelable {
+
+    /**
+     * A previously created folder used for duplicate-name validation.
+     */
+    @Parcelize
+    data class ExistingFolder(
+        val id: String?,
+        val name: String,
+    ) : Parcelable
 
     /**
      * Helper to determine whether we show the overflow menu.
@@ -498,6 +590,13 @@ sealed class FolderAddEditAction {
          */
         data class VaultDataReceive(
             val vaultDataState: DataState<FolderView?>,
+        ) : Internal()
+
+        /**
+         * Indicates that the list of existing folders has been received.
+         */
+        data class FoldersReceive(
+            val foldersState: DataState<List<FolderView>>,
         ) : Internal()
     }
 }
