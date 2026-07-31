@@ -23,6 +23,7 @@ data class AutofillSelectionData(
     enum class Type {
         CARD,
         LOGIN,
+        IDENTITY,
     }
 
     /**
