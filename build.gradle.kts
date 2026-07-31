@@ -11,7 +11,6 @@ plugins {
     alias(libs.plugins.kotlinx.kover) apply true
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.google.services) apply false
-    alias(libs.plugins.sonarqube) apply true
 }
 
 buildscript {
@@ -135,23 +134,7 @@ kover {
     }
 }
 
-sonar {
-    properties {
-        property("sonar.projectKey", "bitwarden_android")
-        property("sonar.organization", "bitwarden")
-        property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.sources", "*/src/")
-        property("sonar.tests", "*/src/")
-        property("sonar.test.inclusions", "*/src/test/")
-        property("sonar.exclusions", "*/src/test/")
-    }
-}
-
 tasks {
-    getByName("sonar") {
-        dependsOn("koverXmlReportMergedCoverage")
-    }
-
     withType<Detekt>().configureEach {
         jvmTarget = libs.versions.jvmTarget.get()
         // If run as a precommit hook, only run on staged files.
