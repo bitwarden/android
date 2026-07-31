@@ -21,6 +21,9 @@ fun SendView.toViewSendViewStateContent(
         sendType = when (this.type) {
             SendType.FILE -> requireNotNull(this.file).toFileType()
             SendType.TEXT -> requireNotNull(this.text).toTextType()
+            SendType.ITEM -> ViewSendState.ViewState.Content.SendType.ItemType(
+                data = ""
+            )
         },
         shareLink = this.toSendUrl(baseWebSendUrl = baseWebSendUrl),
         sendName = this.name,

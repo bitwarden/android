@@ -77,6 +77,12 @@ class SendManagerImpl(
                 when (send.type) {
                     SendType.TEXT -> sendsService.createTextSend(send.toEncryptedNetworkSend())
                     SendType.FILE -> createFileSend(uri = fileUri, userId = userId, send = send)
+                    SendType.ITEM -> Result.success(
+                        CreateSendJsonResponse.Invalid(
+                            message = "Item Sends are not yet available",
+                            validationErrors = null
+                        )
+                    )
                 }
             }
             .map { createSendResponse ->

@@ -21,6 +21,12 @@ enum class SendTypeJson {
      */
     @SerialName("1")
     FILE,
+
+    /**
+     * The send contains cipher item details
+     */
+    @SerialName("2")
+    ITEM,
 }
 
 @Keep

@@ -918,6 +918,10 @@ class VaultItemListingViewModel @Inject constructor(
                     SendItemType.TEXT -> {
                         sendEvent(VaultItemListingEvent.NavigateToAddSendItem(sendType))
                     }
+
+                    SendItemType.ITEM -> {
+                        sendEvent(VaultItemListingEvent.NavigateToAddSendItem(sendType))
+                    }
                 }
             }
         }

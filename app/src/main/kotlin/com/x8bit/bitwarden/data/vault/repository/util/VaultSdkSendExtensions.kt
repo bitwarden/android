@@ -65,6 +65,7 @@ private fun SendType.toNetworkSendType(): SendTypeJson =
     when (this) {
         SendType.TEXT -> SendTypeJson.TEXT
         SendType.FILE -> SendTypeJson.FILE
+        SendType.ITEM -> SendTypeJson.ITEM
     }
 
 /**
@@ -151,6 +152,7 @@ private fun SendTypeJson.toSdkSendType(): SendType =
     when (this) {
         SendTypeJson.TEXT -> SendType.TEXT
         SendTypeJson.FILE -> SendType.FILE
+        SendTypeJson.ITEM -> SendType.ITEM
     }
 
 /**

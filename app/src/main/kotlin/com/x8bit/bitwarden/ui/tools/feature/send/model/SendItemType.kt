@@ -9,4 +9,5 @@ import kotlinx.serialization.Serializable
 enum class SendItemType {
     FILE,
     TEXT,
+    ITEM,
 }

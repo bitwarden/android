@@ -628,6 +628,7 @@ private fun SendView.toDisplayItem(
             iconRes = when (type) {
                 SendType.TEXT -> BitwardenDrawable.ic_file_text
                 SendType.FILE -> BitwardenDrawable.ic_file
+                SendType.ITEM -> BitwardenDrawable.ic_file_text
             },
         ),
         iconTestTag = null,

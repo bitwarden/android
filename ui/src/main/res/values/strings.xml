@@ -1425,4 +1425,8 @@ Do you want to switch to this account?</string>
     <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
     <string name="account_creation_restricted">Account creation restricted</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
+    <string name="item">Item</string>
+    <string name="add_item_send">New item Send</string>
+    <string name="edit_item_send">Edit item Send</string>
+    <string name="view_item_send">View item Send</string>
 </resources>

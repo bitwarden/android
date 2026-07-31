@@ -57,6 +57,7 @@ private fun AddEditSendState.ViewState.Content.SendType.toSendType(): SendType =
     when (this) {
         is AddEditSendState.ViewState.Content.SendType.File -> SendType.FILE
         is AddEditSendState.ViewState.Content.SendType.Text -> SendType.TEXT
+        is AddEditSendState.ViewState.Content.SendType.Item -> SendType.ITEM
     }
 
 private fun AddEditSendState.ViewState.Content.toSendFileView(): SendFileView? =

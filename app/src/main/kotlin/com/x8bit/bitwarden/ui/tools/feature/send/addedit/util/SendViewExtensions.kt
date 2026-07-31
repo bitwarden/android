@@ -60,5 +60,11 @@ fun SendView.toViewState(
                     sizeBytes = null,
                 )
             }
+
+            SendType.ITEM -> {
+                AddEditSendState.ViewState.Content.SendType.Item(
+                    data = ""
+                )
+            }
         },
     )

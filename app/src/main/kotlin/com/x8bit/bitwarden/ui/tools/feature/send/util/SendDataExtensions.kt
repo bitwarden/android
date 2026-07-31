@@ -41,6 +41,7 @@ private fun List<SendView>.toSendContent(
                     type = when (sendView.type) {
                         SendType.TEXT -> SendState.ViewState.Content.SendItem.Type.TEXT
                         SendType.FILE -> SendState.ViewState.Content.SendItem.Type.FILE
+                        SendType.ITEM -> SendState.ViewState.Content.SendItem.Type.ITEM
                     },
                     iconList = sendView.toLabelIcons(),
                     shareUrl = sendView.toSendUrl(baseWebSendUrl),
