@@ -40,6 +40,23 @@ class AutofillSelectionDataExtensionsTest {
     }
 
     @Test
+    fun `toDefaultAddTypeContent for an Identity type should return the correct Content`() {
+        assertEquals(
+            VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                isIndividualVaultDisabled = false,
+                type = VaultAddEditState.ViewState.Content.ItemType.Identity(),
+            ),
+            AutofillSelectionData(
+                type = AutofillSelectionData.Type.IDENTITY,
+                framework = AutofillSelectionData.Framework.AUTOFILL,
+                uri = null,
+            )
+                .toDefaultAddTypeContent(isIndividualVaultDisabled = false),
+        )
+    }
+
+    @Test
     fun `toDefaultAddTypeContent for a Login type should return the correct Content`() {
         every { UUID.randomUUID().toString() } returns "uuid"
         assertEquals(

@@ -37,10 +37,7 @@ fun FilledData.buildVaultItemDataset(
         type = when (this.originalPartition) {
             is AutofillPartition.Card -> AutofillSelectionData.Type.CARD
             is AutofillPartition.Login -> AutofillSelectionData.Type.LOGIN
-            // AutofillSelectionData.Type has no IDENTITY value yet (deliberately deferred -- it
-            // cascades into the vault item listing/add-edit UI flows). This is a no-op placeholder
-            // today since nothing yet produces an Identity-only partition.
-            is AutofillPartition.Identity -> AutofillSelectionData.Type.LOGIN
+            is AutofillPartition.Identity -> AutofillSelectionData.Type.IDENTITY
         },
         uri = this.uri,
     )
