@@ -2908,6 +2908,76 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `vaultDataStateFlow Loaded with items and autofill filtering for Identity should update ViewState to Content with filtered data`() =
+        runTest {
+            setupMockUri()
+
+            val cipherView1 = createMockCipherListView(
+                number = 1,
+                type = CipherListViewType.Identity,
+            )
+            val cipherView2 = createMockCipherListView(
+                number = 2,
+                type = CipherListViewType.Login(
+                    createMockLoginListView(number = 2),
+                ),
+            )
+
+            val autofillSelectionData = AutofillSelectionData(
+                type = AutofillSelectionData.Type.IDENTITY,
+                framework = AutofillSelectionData.Framework.AUTOFILL,
+                uri = "https://www.test.com",
+            )
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.AutofillSelection(
+                    autofillSelectionData = autofillSelectionData,
+                    shouldFinishWhenComplete = true,
+                )
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = listOf(cipherView1, cipherView2),
+                    ),
+                    folderViewList = listOf(createMockFolderView(number = 1)),
+                    collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
+                ),
+            )
+
+            val viewModel = createVaultItemListingViewModel(
+                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                    vaultItemListingType = VaultItemListingType.Identity,
+                ),
+            )
+
+            mutableVaultDataStateFlow.value = dataState
+
+            assertEquals(
+                createVaultItemListingState(
+                    itemListingType = VaultItemListingState.ItemListingType.Vault.Identity,
+                    viewState = VaultItemListingState.ViewState.Content(
+                        displayCollectionList = emptyList(),
+                        displayItemList = listOf(
+                            createMockDisplayItemForCipher(
+                                number = 1,
+                                cipherType = CipherType.IDENTITY,
+                                subtitle = "mockSubtitle-1",
+                                secondSubtitleTestTag = "PasskeySite",
+                                subtitleTestTag = "PasswordName",
+                                isAutofill = true,
+                            ),
+                        ),
+                        displayFolderList = emptyList(),
+                    ),
+                )
+                    .copy(autofillSelectionData = autofillSelectionData),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `vaultDataStateFlow Loaded with items and totp data filtering should update ViewState to Content with filtered data`() =
         runTest {
             setupMockUri()
