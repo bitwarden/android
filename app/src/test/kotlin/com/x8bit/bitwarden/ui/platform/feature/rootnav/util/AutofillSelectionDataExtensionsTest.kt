@@ -11,6 +11,7 @@ class AutofillSelectionDataExtensionsTest {
         mapOf(
             AutofillSelectionData.Type.CARD to VaultItemListingType.Card,
             AutofillSelectionData.Type.LOGIN to VaultItemListingType.Login,
+            AutofillSelectionData.Type.IDENTITY to VaultItemListingType.Identity,
         )
             .forEach { (type, expected) ->
                 assertEquals(
