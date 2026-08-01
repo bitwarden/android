@@ -5,11 +5,14 @@ import com.bitwarden.network.interceptor.AuthTokenManager
 import com.bitwarden.network.interceptor.BaseUrlInterceptor
 import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.network.interceptor.CookieInterceptor
+import com.bitwarden.network.interceptor.CustomHeadersInterceptor
 import com.bitwarden.network.interceptor.HeadersInterceptor
 import com.bitwarden.network.interceptor.PermissionInterceptor
 import com.bitwarden.network.ssl.CertificateProvider
 import com.bitwarden.network.ssl.configureSsl
 import com.bitwarden.network.util.HEADER_KEY_AUTHORIZATION
+import com.bitwarden.network.util.HEADER_KEY_COOKIE
+import com.bitwarden.network.util.HEADER_KEY_SET_COOKIE
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -26,6 +29,7 @@ internal class RetrofitsImpl(
     authTokenManager: AuthTokenManager,
     baseUrlInterceptors: BaseUrlInterceptors,
     cookieInterceptor: CookieInterceptor,
+    customHeadersInterceptor: CustomHeadersInterceptor,
     headersInterceptor: HeadersInterceptor,
     json: Json,
     private val permissionInterceptor: PermissionInterceptor,
@@ -97,6 +101,8 @@ internal class RetrofitsImpl(
         HttpLoggingInterceptor { message -> Timber.tag("BitwardenNetworkClient").d(message) }
             .apply {
                 redactHeader(name = HEADER_KEY_AUTHORIZATION)
+                redactHeader(name = HEADER_KEY_COOKIE)
+                redactHeader(name = HEADER_KEY_SET_COOKIE)
                 setLevel(
                     level = HttpLoggingInterceptor.Level.BODY
                         .takeIf { logHttpBody }
@@ -108,14 +114,18 @@ internal class RetrofitsImpl(
     private val baseOkHttpClient: OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(headersInterceptor)
         .addNetworkInterceptor(cookieInterceptor)
+        .addNetworkInterceptor(customHeadersInterceptor)
         .configureSsl(certificateProvider = certificateProvider)
         .build()
 
     // For requests to external (non-Bitwarden) URLs. CookieInterceptor must be excluded because
     // it treats all 302s as Bitwarden load-balancer auth redirects, which is only correct for
-    // Bitwarden's own infrastructure.
+    // Bitwarden's own infrastructure. CustomHeadersInterceptor is included because the
+    // fill-assist URL may point at the user's self-hosted environment; its provider scopes the
+    // headers to the environment's hosts.
     private val externalOkHttpClient: OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(headersInterceptor)
+        .addNetworkInterceptor(customHeadersInterceptor)
         .configureSsl(certificateProvider = certificateProvider)
         .build()
 

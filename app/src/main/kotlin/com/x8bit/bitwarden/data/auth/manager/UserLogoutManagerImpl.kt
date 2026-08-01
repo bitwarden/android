@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
+import com.x8bit.bitwarden.data.platform.manager.CustomHeadersManager
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
@@ -28,6 +29,7 @@ import timber.log.Timber
 @Suppress("LongParameterList")
 class UserLogoutManagerImpl(
     private val authDiskSource: AuthDiskSource,
+    private val customHeadersManager: CustomHeadersManager,
     private val generatorDiskSource: GeneratorDiskSource,
     private val passwordHistoryDiskSource: PasswordHistoryDiskSource,
     private val pushDiskSource: PushDiskSource,
@@ -49,6 +51,11 @@ class UserLogoutManagerImpl(
     override fun logout(userId: String, reason: LogoutReason) {
         authDiskSource.userState ?: return
         Timber.d("logout reason=$reason")
+
+        // Clean up the account's stored custom headers while its environment data is still
+        // available. The removal is reference-counted, so headers still used by another account
+        // or the pre-auth environment remain.
+        customHeadersManager.removeCustomHeadersForUser(userId = userId)
         val isSecurityStamp = reason == LogoutReason.SecurityStamp
         if (isSecurityStamp) {
             showToast(message = BitwardenString.login_expired)

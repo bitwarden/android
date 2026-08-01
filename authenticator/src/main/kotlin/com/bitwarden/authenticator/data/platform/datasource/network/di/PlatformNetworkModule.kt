@@ -13,6 +13,7 @@ import com.bitwarden.network.model.AuthTokenData
 import com.bitwarden.network.model.BitwardenServiceClientConfig
 import com.bitwarden.network.model.NetworkCookie
 import com.bitwarden.network.provider.CookieProvider
+import com.bitwarden.network.provider.CustomHeadersProvider
 import com.bitwarden.network.provider.PermissionProvider
 import com.bitwarden.network.service.ConfigService
 import com.bitwarden.network.service.DownloadService
@@ -83,6 +84,9 @@ object PlatformNetworkModule {
                 override fun getCookies(hostname: String): List<NetworkCookie> = emptyList()
 
                 override fun acquireCookies(hostname: String): Unit = Unit
+            },
+            customHeadersProvider = object : CustomHeadersProvider {
+                override fun getCustomHeaders(url: String): Map<String, String> = emptyMap()
             },
             permissionProvider = object : PermissionProvider {
                 override val errorMessageString: String get() = "Error"
