@@ -927,6 +927,18 @@
           }
         ]
       }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "com.wsapp.browser",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "F5:21:95:30:FC:8F:87:99:3B:3C:F5:0E:83:8A:96:75:AB:3B:2D:C5:79:A2:A8:52:0D:99:87:2A:26:B1:5C:5F"
+          }
+        ]
+      }
     }
   ]
 }
