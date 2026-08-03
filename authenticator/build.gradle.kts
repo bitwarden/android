@@ -17,7 +17,6 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.google.protobuf)
     alias(libs.plugins.google.services)
-    alias(libs.plugins.sonarqube)
 }
 
 /**
