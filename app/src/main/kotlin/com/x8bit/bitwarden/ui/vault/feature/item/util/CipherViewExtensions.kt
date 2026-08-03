@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.item.util
 import androidx.annotation.DrawableRes
 import com.bitwarden.core.data.util.toFormattedDateStyle
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
+import com.bitwarden.ui.platform.base.util.nullIfAllEqual
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.bitwarden.ui.platform.base.util.orZeroWidthSpace
 import com.bitwarden.ui.platform.components.icon.model.IconData
@@ -16,9 +17,8 @@ import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Fido2Credential
 import com.bitwarden.vault.FieldType
 import com.bitwarden.vault.FieldView
+import com.bitwarden.vault.IdentityView
 import com.bitwarden.vault.LoginUriView
-import com.x8bit.bitwarden.data.platform.util.identityAddress
-import com.x8bit.bitwarden.data.platform.util.identityName
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.vault.feature.attachments.util.isLargeFile
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
@@ -35,6 +35,7 @@ import kotlinx.collections.immutable.toImmutableList
 import java.time.Clock
 import java.time.LocalDate
 import java.time.format.FormatStyle
+import java.util.Locale
 
 /**
  * Transforms [VaultData] into [VaultItemState.ViewState].
@@ -393,4 +394,37 @@ private val CardView.expiration: String?
         expYear,
     )
         .joinToString("/")
+        .orNullIfBlank()
+
+/**
+ * The full postal address for an [IdentityView], joining its address parts.
+ */
+private val IdentityView.identityAddress: String?
+    get() = listOfNotNull(
+        address1,
+        address2,
+        address3,
+        listOf(city ?: "-", state ?: "-", postalCode ?: "-")
+            .nullIfAllEqual("-")
+            ?.joinToString(", "),
+        country,
+    )
+        .joinToString("\n")
+        .orNullIfBlank()
+
+/**
+ * The full name for an [IdentityView], joining its name parts.
+ */
+private val IdentityView.identityName: String?
+    get() = listOfNotNull(
+        title
+            ?.lowercase()
+            ?.replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+            },
+        firstName,
+        middleName,
+        lastName,
+    )
+        .joinToString(" ")
         .orNullIfBlank()

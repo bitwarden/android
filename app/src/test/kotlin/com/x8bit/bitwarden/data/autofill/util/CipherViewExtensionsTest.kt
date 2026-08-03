@@ -139,9 +139,9 @@ class CipherViewExtensionsTest {
                         cipherId = "mockId-1",
                         name = "mockName-1",
                         subtitle = "mockFirstName-1 mockLastName-1",
-                        fullName = "Mocktitle-1 mockFirstName-1 mockMiddleName-1 mockLastName-1",
-                        fullAddress = "mockAddress1-1\nmockAddress2-1\nmockAddress3-1\n" +
-                            "mockCity-1, mockState-1, mockPostalCode-1\nmockCountry-1",
+                        fullName = "mockFirstName-1 mockMiddleName-1 mockLastName-1",
+                        fullAddress = "mockAddress1-1 mockAddress2-1 mockAddress3-1 " +
+                            "mockCity-1 mockState-1 mockPostalCode-1 mockCountry-1",
                         title = "mockTitle-1",
                         firstName = "mockFirstName-1",
                         middleName = "mockMiddleName-1",
