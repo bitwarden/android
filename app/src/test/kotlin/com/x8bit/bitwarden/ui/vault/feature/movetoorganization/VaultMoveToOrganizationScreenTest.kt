@@ -6,6 +6,7 @@ import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onLast
@@ -17,6 +18,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
+import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util.createMockOrganizationList
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import io.mockk.every
@@ -42,7 +44,9 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
 
     @Before
     fun setup() {
-        setContent {
+        setContent(
+            featureFlagsState = FeatureFlagsState(isVfo1FoundationEnabled = true),
+        ) {
             VaultMoveToOrganizationScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,
@@ -57,10 +61,40 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
+            .onNodeWithText(text = "Shared folders")
+            .assertIsNotDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Move")
+            .filterToOne(!hasClickAction())
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            currentState.copy(onlyShowCollections = true)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Move")
+            .assertIsNotDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Shared folders")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `the app bar title should display the old text when the flag is off`() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = VaultMoveToOrganizationState.ViewState.Loading,
+                isVfo1FoundationEnabled = false,
+            )
+        }
+
+        composeTestRule
             .onNodeWithText(text = "Collections")
             .assertIsNotDisplayed()
         composeTestRule
-            .onNodeWithText(text = "Move to Organization")
+            .onAllNodesWithText(text = "Move to Organization")
+            .filterToOne(!hasClickAction())
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -85,7 +119,8 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
             .onNodeWithText(text = "Save")
             .assertIsNotDisplayed()
         composeTestRule
-            .onNodeWithText(text = "Move")
+            .onAllNodesWithText(text = "Move")
+            .filterToOne(hasClickAction())
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -104,7 +139,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
     fun `the organization option field should update according to state`() {
         composeTestRule
             .onNodeWithContentDescription(
-                label = "mockOrganizationName-1. Organization",
+                label = "mockOrganizationName-1. Vault",
                 substring = true,
             )
             .assertIsDisplayed()
@@ -114,14 +149,14 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription(label = "mockOrganizationName-1. Organization")
+            .onNodeWithContentDescription(label = "mockOrganizationName-1. Vault")
             .assertIsNotDisplayed()
     }
 
     @Test
     fun `the organization option field description should update according to state`() {
         composeTestRule
-            .onNodeWithText(text = "Choose an organization that", substring = true)
+            .onNodeWithText(text = "Choose a vault that", substring = true)
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -129,7 +164,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Choose an organization that", substring = true)
+            .onNodeWithText(text = "Choose a vault that", substring = true)
             .assertIsNotDisplayed()
     }
 
@@ -155,7 +190,8 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
     @Test
     fun `clicking move button should send MoveClick action`() {
         composeTestRule
-            .onNodeWithText(text = "Move")
+            .onAllNodesWithText(text = "Move")
+            .filterToOne(hasClickAction())
             .performClick()
 
         verify {
@@ -168,7 +204,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
     @Test
     fun `selecting an organization should send OrganizationSelect action`() {
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-1. Organization")
+            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-1. Vault")
             .performClick()
         // Choose the option from the menu
         composeTestRule
@@ -200,7 +236,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
     @Test
     fun `the organization option field should display according to state`() {
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-1. Organization")
+            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-1. Vault")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -213,7 +249,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-2. Organization")
+            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-2. Vault")
             .assertIsDisplayed()
     }
 
@@ -320,4 +356,5 @@ private fun createVaultMoveToOrganizationState(): VaultMoveToOrganizationState =
         ),
         dialogState = null,
         onlyShowCollections = false,
+        isVfo1FoundationEnabled = true,
     )

@@ -97,6 +97,7 @@ import com.x8bit.bitwarden.ui.vault.util.detectCardBrand
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -190,6 +191,8 @@ class VaultAddEditViewModel @Inject constructor(
             VaultAddEditState(
                 isCardScannerEnabled = featureFlagManager
                     .getFeatureFlag(FlagKey.CardScanner) && !buildInfoManager.isFdroid,
+                isVfo1FoundationEnabled = featureFlagManager
+                    .getFeatureFlag(FlagKey.Vfo1Foundation),
                 vaultAddEditType = vaultAddEditType,
                 cipherType = vaultCipherType,
                 viewState = when (vaultAddEditType) {
@@ -288,6 +291,12 @@ class VaultAddEditViewModel @Inject constructor(
         featureFlagManager
             .getFeatureFlagFlow(FlagKey.CardScanner)
             .map { VaultAddEditAction.Internal.CardScannerFlagUpdateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.Vfo1Foundation)
+            .map { VaultAddEditAction.Internal.Vfo1FoundationFlagUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -514,7 +523,11 @@ class VaultAddEditViewModel @Inject constructor(
             content.common.selectedOwner?.collections?.all { !it.isSelected } == true
         ) {
             showGenericErrorDialog(
-                message = BitwardenString.select_one_collection.asText(),
+                message = if (state.isVfo1FoundationEnabled) {
+                    BitwardenString.you_must_select_at_least_one_shared_folder.asText()
+                } else {
+                    BitwardenString.select_one_collection.asText()
+                },
             )
             true
         } else if (
@@ -1888,6 +1901,10 @@ class VaultAddEditViewModel @Inject constructor(
                 handleCardScannerFlagUpdateReceive(action)
             }
 
+            is VaultAddEditAction.Internal.Vfo1FoundationFlagUpdateReceive -> {
+                handleVfo1FoundationFlagUpdateReceive(action)
+            }
+
             is VaultAddEditAction.Internal.CardScanResultReceive -> {
                 handleCardScanResultReceive(action)
             }
@@ -2111,6 +2128,25 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
+    private fun handleVfo1FoundationFlagUpdateReceive(
+        action: VaultAddEditAction.Internal.Vfo1FoundationFlagUpdateReceive,
+    ) {
+        if (action.isEnabled == state.isVfo1FoundationEnabled) return
+        mutableStateFlow.update { it.copy(isVfo1FoundationEnabled = action.isEnabled) }
+
+        val vaultData = vaultRepository.vaultDataStateFlow.value.data ?: return
+        viewModelScope.launch {
+            sendAction(
+                VaultAddEditAction.Internal.DetermineContentStateResultReceive(
+                    vaultAddEditState = state.determineContentState(
+                        vaultData = vaultData,
+                        userData = authRepository.userStateFlow.value,
+                    ),
+                ),
+            )
+        }
+    }
+
     private fun handleCardScanResultReceive(
         action: VaultAddEditAction.Internal.CardScanResultReceive,
     ) {
@@ -2302,6 +2338,7 @@ class VaultAddEditViewModel @Inject constructor(
                             activeAccount = currentAccount,
                             isIndividualVaultDisabled = isIndividualVaultDisabled,
                             resourceManager = resourceManager,
+                            isVfo1FoundationEnabled = state.isVfo1FoundationEnabled,
                         )
                 },
         )
@@ -2666,7 +2703,7 @@ class VaultAddEditViewModel @Inject constructor(
     private fun List<VaultAddEditState.Owner>.toUpdatedOwners(
         selectedOwnerId: String?,
         selectedCollectionId: String,
-    ): List<VaultAddEditState.Owner> =
+    ): ImmutableList<VaultAddEditState.Owner> =
         map { owner ->
             if (owner.id != selectedOwnerId) return@map owner
             owner.copy(
@@ -2675,6 +2712,7 @@ class VaultAddEditViewModel @Inject constructor(
                     .toUpdatedCollections(selectedCollectionId = selectedCollectionId),
             )
         }
+            .toImmutableList()
 
     private fun List<VaultCollection>.toUpdatedCollections(
         selectedCollectionId: String,
@@ -2734,6 +2772,7 @@ data class VaultAddEditState(
     val defaultUriMatchType: UriMatchType,
     private val shouldShowCoachMarkTour: Boolean,
     val isCardScannerEnabled: Boolean,
+    val isVfo1FoundationEnabled: Boolean,
 ) : Parcelable {
 
     /**
@@ -2926,7 +2965,7 @@ data class VaultAddEditState(
                 val selectedFolderId: String? = null,
                 val availableFolders: List<Folder> = emptyList(),
                 val selectedOwnerId: String? = null,
-                val availableOwners: List<Owner> = emptyList(),
+                val availableOwners: ImmutableList<Owner> = persistentListOf(),
                 val hasOrganizations: Boolean = false,
                 val canDelete: Boolean = true,
                 val canAssignToCollections: Boolean = true,
@@ -3312,7 +3351,7 @@ data class VaultAddEditState(
     @Parcelize
     data class Owner(
         val id: String?,
-        val name: String,
+        val name: Text,
         val collections: List<VaultCollection>,
     ) : Parcelable
 
@@ -4473,6 +4512,13 @@ sealed class VaultAddEditAction {
          * Indicates that the Card Scanner flag has been updated.
          */
         data class CardScannerFlagUpdateReceive(
+            val isEnabled: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that the VFO-1 foundation flag has been updated.
+         */
+        data class Vfo1FoundationFlagUpdateReceive(
             val isEnabled: Boolean,
         ) : Internal()
 
