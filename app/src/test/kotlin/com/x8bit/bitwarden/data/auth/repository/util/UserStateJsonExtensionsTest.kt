@@ -193,6 +193,141 @@ class UserStateJsonExtensionsTest {
     }
 
     @Test
+    fun `updateForcePasswordReset should do nothing for a non-matching account`() {
+        val originalUserState = UserStateJson(
+            activeUserId = "activeUserId",
+            accounts = mapOf("activeUserId" to mockk()),
+        )
+        assertEquals(
+            originalUserState,
+            originalUserState.updateForcePasswordReset(
+                userId = "nonActiveUserId",
+                reason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `updateForcePasswordReset should update the force password reset reason for a matching account`() {
+        val originalUserState = createUserStateWithDecryptionOptions(
+            userDecryptionOptions = null,
+        )
+
+        assertEquals(
+            createUserStateWithDecryptionOptions(
+                userDecryptionOptions = null,
+                forcePasswordResetReason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
+            ),
+            originalUserState.updateForcePasswordReset(
+                userId = "activeUserId",
+                reason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `updateForcePasswordReset should clear the force password reset reason when given a null reason`() {
+        val originalUserState = createUserStateWithDecryptionOptions(
+            userDecryptionOptions = null,
+            forcePasswordResetReason = ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN,
+        )
+
+        assertEquals(
+            createUserStateWithDecryptionOptions(
+                userDecryptionOptions = null,
+                forcePasswordResetReason = null,
+            ),
+            originalUserState.updateForcePasswordReset(
+                userId = "activeUserId",
+                reason = null,
+            ),
+        )
+    }
+
+    @Test
+    fun `updateForcePasswordReset should only update the specified account`() {
+        val activeProfile = AccountJson.Profile(
+            userId = "activeUserId",
+            email = "active@example.com",
+            isEmailVerified = true,
+            name = "Active User",
+            stamp = null,
+            organizationId = null,
+            avatarColorHex = null,
+            hasPremiumPersonally = true,
+            hasPremiumFromOrganization = null,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 600000,
+            kdfMemory = 16,
+            kdfParallelism = 4,
+            userDecryptionOptions = null,
+            isTwoFactorEnabled = false,
+            creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
+        )
+        val inactiveProfile = AccountJson.Profile(
+            userId = "inactiveUserId",
+            email = "inactive@example.com",
+            isEmailVerified = true,
+            name = "Inactive User",
+            stamp = null,
+            organizationId = null,
+            avatarColorHex = null,
+            hasPremiumPersonally = false,
+            hasPremiumFromOrganization = null,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 500000,
+            kdfMemory = 8,
+            kdfParallelism = 2,
+            userDecryptionOptions = null,
+            isTwoFactorEnabled = false,
+            creationDate = Instant.parse("2024-08-13T01:00:00.00Z"),
+        )
+        val activeAccount = AccountJson(
+            profile = activeProfile,
+            tokens = null,
+            settings = AccountJson.Settings(environmentUrlData = null),
+        )
+        val inactiveAccount = AccountJson(
+            profile = inactiveProfile,
+            tokens = null,
+            settings = AccountJson.Settings(environmentUrlData = null),
+        )
+        val originalUserState = UserStateJson(
+            activeUserId = "activeUserId",
+            accounts = mapOf(
+                "activeUserId" to activeAccount,
+                "inactiveUserId" to inactiveAccount,
+            ),
+        )
+
+        val result = originalUserState.updateForcePasswordReset(
+            userId = "inactiveUserId",
+            reason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
+        )
+
+        // Should remain unchanged
+        assertEquals(
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to activeAccount,
+                    "inactiveUserId" to inactiveAccount.copy(
+                        profile = inactiveProfile.copy(
+                            forcePasswordResetReason =
+                                ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
+                        ),
+                    ),
+                ),
+            ),
+            result,
+        )
+    }
+
+    @Test
     fun `toUpdatedUserStateJson should do nothing for a non-matching account`() {
         val originalUserState = UserStateJson(
             activeUserId = "activeUserId",
@@ -469,7 +604,6 @@ class UserStateJsonExtensionsTest {
                 accounts = mapOf(
                     "activeUserId" to originalAccount.copy(
                         profile = originalProfile.copy(
-                            forcePasswordResetReason = null,
                             userDecryptionOptions = UserDecryptionOptionsJson(
                                 hasMasterPassword = true,
                                 keyConnectorUserDecryptionOptions = null,
