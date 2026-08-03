@@ -104,6 +104,25 @@ private fun SyncResponseJson.Profile.getForcePasswordResetReason(
 }
 
 /**
+ * Updates the [UserStateJson] by setting the `forcePasswordResetReason` value for the given
+ * [userId]. If the user is not present in the `UserStateJson`, nothing is updated.
+ */
+fun UserStateJson.updateForcePasswordReset(
+    userId: String,
+    reason: ForcePasswordResetReason?,
+): UserStateJson {
+    val account = accounts[userId] ?: return this
+    val profile = account.profile
+    val updatedProfile = profile.copy(forcePasswordResetReason = reason)
+    val updatedAccount = account.copy(profile = updatedProfile)
+    return this.copy(
+        accounts = accounts
+            .toMutableMap()
+            .apply { replace(userId, updatedAccount) },
+    )
+}
+
+/**
  * Updates the [UserStateJson] by setting the `hasMasterPassword` and `masterPasswordUnlock` values
  * for the given [userId]. If the user is not present in the `UserStateJson`, nothing is updated.
  */
@@ -122,7 +141,6 @@ fun UserStateJson.updateMasterPasswordUnlock(
         )
     }
     val updatedProfile = profile.copy(
-        forcePasswordResetReason = null,
         userDecryptionOptions = userDecryptionOptions
             ?.copy(
                 hasMasterPassword = masterPasswordUnlockJson != null,
