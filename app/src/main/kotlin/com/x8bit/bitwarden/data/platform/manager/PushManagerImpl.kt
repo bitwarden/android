@@ -1,4 +1,4 @@
-// I'm testing stacked PRs. (1)
+// I'm testing stacked PRs. (1) (2)
 
 package com.x8bit.bitwarden.data.platform.manager
 
