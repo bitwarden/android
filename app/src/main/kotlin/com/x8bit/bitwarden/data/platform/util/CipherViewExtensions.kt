@@ -1,12 +1,10 @@
 package com.x8bit.bitwarden.data.platform.util
 
-import com.bitwarden.ui.platform.base.util.nullIfAllEqual
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.bitwarden.vault.CardView
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.IdentityView
-import java.util.Locale
 
 /**
  * If someone has multiple AMEX cards, they tend to have the same last 4 digits. So we provide a
@@ -86,34 +84,31 @@ private val String?.isAmEx: Boolean
     get() = this?.startsWith("34") == true || this?.startsWith("37") == true
 
 /**
- * The full postal address for an [IdentityView], joining its address parts.
+ * The full postal address for an [IdentityView] formatted for filling a combined full-address
+ * autofill field. Missing parts are omitted entirely rather than padded with a placeholder, and
+ * parts are joined with a single space -- unlike a display-oriented formatter, this string is
+ * filled verbatim into a form field, so it can't rely on visual affordances like line breaks,
+ * commas, or "-" placeholders that only read sensibly in a UI layout.
  */
-internal val IdentityView.identityAddress: String?
+internal val IdentityView.identityAutofillAddress: String?
     get() = listOfNotNull(
         address1,
         address2,
         address3,
-        listOf(city ?: "-", state ?: "-", postalCode ?: "-")
-            .nullIfAllEqual("-")
-            ?.joinToString(", "),
+        city,
+        state,
+        postalCode,
         country,
     )
-        .joinToString("\n")
+        .joinToString(" ")
         .orNullIfBlank()
 
 /**
- * The full name for an [IdentityView], joining its name parts.
+ * The full name for an [IdentityView] formatted for filling a combined full-name autofill field.
+ * Excludes [IdentityView.title] -- a title prefix (Mr/Mrs/Dr) is its own separate autofill field
+ * (`AutofillView.Identity.PersonNamePrefix`).
  */
-internal val IdentityView.identityName: String?
-    get() = listOfNotNull(
-        title
-            ?.lowercase()
-            ?.replaceFirstChar {
-                if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
-            },
-        firstName,
-        middleName,
-        lastName,
-    )
+internal val IdentityView.identityAutofillName: String?
+    get() = listOfNotNull(firstName, middleName, lastName)
         .joinToString(" ")
         .orNullIfBlank()

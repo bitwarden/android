@@ -255,7 +255,24 @@ private fun AssistStructure.ViewNode.buildAutofillView(
 
     // Identity hint detection/dispatch is wired up in a later phase; treating these as Unused for
     // now is a no-op since nothing yet produces an IDENTITY_* hint.
-    else -> {
+    AutofillHint.IDENTITY_PERSON_NAME_FULL,
+    AutofillHint.IDENTITY_PERSON_NAME_PREFIX,
+    AutofillHint.IDENTITY_PERSON_NAME_GIVEN,
+    AutofillHint.IDENTITY_PERSON_NAME_MIDDLE,
+    AutofillHint.IDENTITY_PERSON_NAME_FAMILY,
+    AutofillHint.IDENTITY_POSTAL_ADDRESS_FULL,
+    AutofillHint.IDENTITY_ADDRESS_STREET,
+    AutofillHint.IDENTITY_ADDRESS_LOCALITY,
+    AutofillHint.IDENTITY_ADDRESS_REGION,
+    AutofillHint.IDENTITY_ADDRESS_COUNTRY,
+    AutofillHint.IDENTITY_POSTAL_CODE,
+    AutofillHint.IDENTITY_PHONE_FULL,
+    AutofillHint.IDENTITY_COMPANY,
+    AutofillHint.IDENTITY_EMAIL,
+    AutofillHint.IDENTITY_SSN,
+    AutofillHint.IDENTITY_PASSPORT_NUMBER,
+    AutofillHint.IDENTITY_LICENSE_NUMBER,
+        -> {
         AutofillView.Unused(
             data = autofillViewData,
         )

@@ -10,8 +10,8 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.util.firstWithTimeoutOrNull
-import com.x8bit.bitwarden.data.platform.util.identityAddress
-import com.x8bit.bitwarden.data.platform.util.identityName
+import com.x8bit.bitwarden.data.platform.util.identityAutofillAddress
+import com.x8bit.bitwarden.data.platform.util.identityAutofillName
 import com.x8bit.bitwarden.data.platform.util.isActive
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
@@ -157,8 +157,8 @@ class AutofillCipherProviderImpl(
                                     cipherId = cipherView.id,
                                     name = cipherView.name,
                                     subtitle = cipherView.subtitle.orEmpty(),
-                                    fullName = identityView?.identityName.orEmpty(),
-                                    fullAddress = identityView?.identityAddress.orEmpty(),
+                                    fullName = identityView?.identityAutofillName.orEmpty(),
+                                    fullAddress = identityView?.identityAutofillAddress.orEmpty(),
                                     title = identityView?.title.orEmpty(),
                                     firstName = identityView?.firstName.orEmpty(),
                                     middleName = identityView?.middleName.orEmpty(),

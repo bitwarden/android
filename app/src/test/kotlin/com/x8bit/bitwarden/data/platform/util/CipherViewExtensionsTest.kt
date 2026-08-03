@@ -82,24 +82,12 @@ class CipherViewExtensionsTest {
     }
 
     @Test
-    fun `identityName should return null when all name parts are null`() {
-        assertNull(emptyIdentityView.identityName)
+    fun `identityAutofillName should return null when all name parts are null`() {
+        assertNull(emptyIdentityView.identityAutofillName)
     }
 
     @Test
-    fun `identityName should join all name parts with title case applied to title`() {
-        val identityView = emptyIdentityView.copy(
-            title = "MX",
-            firstName = null,
-            middleName = "middleName",
-            lastName = null,
-        )
-
-        assertEquals("Mx middleName", identityView.identityName)
-    }
-
-    @Test
-    fun `identityName should join all name parts when fully populated`() {
+    fun `identityAutofillName should exclude the title and join the remaining name parts`() {
         val identityView = emptyIdentityView.copy(
             title = "mr",
             firstName = "firstName",
@@ -108,18 +96,19 @@ class CipherViewExtensionsTest {
         )
 
         assertEquals(
-            "Mr firstName middleName lastName",
-            identityView.identityName,
+            "firstName middleName lastName",
+            identityView.identityAutofillName,
         )
     }
 
     @Test
-    fun `identityAddress should return null when all address parts are null`() {
-        assertNull(emptyIdentityView.identityAddress)
+    fun `identityAutofillAddress should return null when all address parts are null`() {
+        assertNull(emptyIdentityView.identityAutofillAddress)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `identityAddress should collapse the city, state, and postal code when all are null`() {
+    fun `identityAutofillAddress should omit missing parts entirely rather than using a placeholder`() {
         val identityView = emptyIdentityView.copy(
             address1 = null,
             address2 = null,
@@ -130,11 +119,12 @@ class CipherViewExtensionsTest {
             country = null,
         )
 
-        assertEquals("address3\n-, state, -", identityView.identityAddress)
+        assertEquals("address3 state", identityView.identityAutofillAddress)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `identityAddress should join all address parts when fully populated`() {
+    fun `identityAutofillAddress should join all address parts with a single space when fully populated`() {
         val identityView = emptyIdentityView.copy(
             address1 = "address1",
             address2 = "address2",
@@ -146,8 +136,8 @@ class CipherViewExtensionsTest {
         )
 
         assertEquals(
-            "address1\naddress2\naddress3\ncity, state, postalCode\ncountry",
-            identityView.identityAddress,
+            "address1 address2 address3 city state postalCode country",
+            identityView.identityAutofillAddress,
         )
     }
 }

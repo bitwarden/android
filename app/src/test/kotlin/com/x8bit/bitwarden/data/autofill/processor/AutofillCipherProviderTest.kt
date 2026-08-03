@@ -21,8 +21,8 @@ import com.x8bit.bitwarden.data.autofill.util.card
 import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
-import com.x8bit.bitwarden.data.platform.util.identityAddress
-import com.x8bit.bitwarden.data.platform.util.identityName
+import com.x8bit.bitwarden.data.platform.util.identityAutofillAddress
+import com.x8bit.bitwarden.data.platform.util.identityAutofillName
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
@@ -645,8 +645,8 @@ class AutofillCipherProviderTest {
                 ),
             )
             every { identityCipherView.subtitle } returns IDENTITY_SUBTITLE
-            every { identityView.identityName } returns IDENTITY_FULL_NAME
-            every { identityView.identityAddress } returns IDENTITY_FULL_ADDRESS
+            every { identityView.identityAutofillName } returns IDENTITY_FULL_NAME
+            every { identityView.identityAutofillAddress } returns IDENTITY_FULL_ADDRESS
             val expected = listOf(IDENTITY_AUTOFILL_CIPHER)
 
             // Test & Verify
