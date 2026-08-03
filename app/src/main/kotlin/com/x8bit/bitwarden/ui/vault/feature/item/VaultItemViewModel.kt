@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.combineDataStates
@@ -25,6 +26,7 @@ import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -36,6 +38,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.isActive
+import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
@@ -69,6 +72,18 @@ import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 private const val KEY_TEMP_ATTACHMENT = "tempAttachmentFile"
+
+/**
+ * A holder for the raw flow values combined in [VaultItemViewModel]'s `init` block, used to free
+ * up a slot for combining in the `vfo1-foundation` feature flag flow.
+ */
+private data class VaultItemCombinedFlowData(
+    val cipherViewState: DataState<CipherView?>,
+    val userState: UserState?,
+    val authCodeState: DataState<VerificationCodeItem?>,
+    val collectionsState: DataState<List<CollectionView>>,
+    val folderState: DataState<List<FolderView>>,
+)
 
 /**
  * ViewModel responsible for handling user interactions in the vault item screen
@@ -123,113 +138,129 @@ class VaultItemViewModel @Inject constructor(
             vaultRepository.collectionsStateFlow,
             vaultRepository.foldersStateFlow,
         ) { cipherViewState, userState, authCodeState, collectionsState, folderState ->
-            val totpCodeData = authCodeState.data?.let {
-                TotpCodeItemData(
-                    periodSeconds = it.periodSeconds,
-                    timeLeftSeconds = it.timeLeftSeconds,
-                    verificationCode = it.code,
-                )
-            }
-            VaultItemAction.Internal.VaultDataReceive(
+            VaultItemCombinedFlowData(
+                cipherViewState = cipherViewState,
                 userState = userState,
-                vaultDataState = combineDataStates(
-                    cipherViewState,
-                    authCodeState,
-                    collectionsState,
-                    folderState,
-                ) { _, _, _, _ ->
-                    // We are only combining the DataStates to know the overall state,
-                    // we map it to the appropriate value below.
+                authCodeState = authCodeState,
+                collectionsState = collectionsState,
+                folderState = folderState,
+            )
+        }
+            .combine(
+                featureFlagManager.getFeatureFlagFlow(FlagKey.Vfo1Foundation),
+            ) { combinedFlowData, isVfo1FoundationEnabled ->
+                val cipherViewState = combinedFlowData.cipherViewState
+                val userState = combinedFlowData.userState
+                val authCodeState = combinedFlowData.authCodeState
+                val collectionsState = combinedFlowData.collectionsState
+                val folderState = combinedFlowData.folderState
+                val totpCodeData = authCodeState.data?.let {
+                    TotpCodeItemData(
+                        periodSeconds = it.periodSeconds,
+                        timeLeftSeconds = it.timeLeftSeconds,
+                        verificationCode = it.code,
+                    )
                 }
-                    .mapNullable {
-                        val cipherView = cipherViewState.data
-                        val canDelete = if (cipherView?.permissions?.delete != null) {
-                            cipherView.permissions?.delete == true
-                        } else {
-                            val needsManagePermission = cipherView
+                VaultItemAction.Internal.VaultDataReceive(
+                    userState = userState,
+                    vaultDataState = combineDataStates(
+                        cipherViewState,
+                        authCodeState,
+                        collectionsState,
+                        folderState,
+                    ) { _, _, _, _ ->
+                        // We are only combining the DataStates to know the overall state,
+                        // we map it to the appropriate value below.
+                    }
+                        .mapNullable {
+                            val cipherView = cipherViewState.data
+                            val canDelete = if (cipherView?.permissions?.delete != null) {
+                                cipherView.permissions?.delete == true
+                            } else {
+                                val needsManagePermission = cipherView
+                                    ?.organizationId
+                                    ?.let { orgId ->
+                                        userState
+                                            ?.activeAccount
+                                            ?.organizations
+                                            ?.firstOrNull { it.id == orgId }
+                                            ?.limitItemDeletion
+                                    }
+                                collectionsState.data.hasDeletePermissionInAtLeastOneCollection(
+                                    collectionIds = cipherView?.collectionIds,
+                                    needsManagePermission = needsManagePermission == true,
+                                )
+                            }
+
+                            val canRestore = if (cipherView?.permissions?.restore != null) {
+                                cipherView.permissions?.restore == true &&
+                                    cipherView.deletedDate != null
+                            } else {
+                                canDelete && cipherView?.deletedDate != null
+                            }
+
+                            val canAssignToCollections = collectionsState.data
+                                .canAssignToCollections(cipherView?.collectionIds)
+
+                            val canEdit = cipherView?.edit == true
+                            val organizationName = cipherView
                                 ?.organizationId
                                 ?.let { orgId ->
                                     userState
                                         ?.activeAccount
                                         ?.organizations
                                         ?.firstOrNull { it.id == orgId }
-                                        ?.limitItemDeletion
+                                        ?.name
                                 }
-                            collectionsState.data.hasDeletePermissionInAtLeastOneCollection(
-                                collectionIds = cipherView?.collectionIds,
-                                needsManagePermission = needsManagePermission == true,
+                            val cipherCollections = cipherView
+                                ?.collectionIds
+                                .orEmpty()
+                            val collections = collectionsState.data
+                                ?.filter { cipherCollections.contains(it.id) }
+                                ?.map { it.name }
+                                .orEmpty()
+                            val folderName = cipherView
+                                ?.folderId
+                                ?.let { folderId ->
+                                    folderState.data?.firstOrNull { folder ->
+                                        folderId == folder.id
+                                    }
+                                }
+                                ?.name
+                            val collectionIcon = if (isVfo1FoundationEnabled) {
+                                BitwardenDrawable.ic_shared_folder
+                            } else {
+                                BitwardenDrawable.ic_collections
+                            }
+                            val relatedLocations = persistentListOfNotNull(
+                                organizationName?.let { VaultItemLocation.Organization(it) },
+                                *collections
+                                    .map {
+                                        VaultItemLocation.Collection(
+                                            name = it,
+                                            collectionIcon = collectionIcon,
+                                        )
+                                    }
+                                    .toTypedArray(),
+                                folderName?.let { VaultItemLocation.Folder(it) },
                             )
-                        }
 
-                        val canRestore = if (cipherView?.permissions?.restore != null) {
-                            cipherView.permissions?.restore == true &&
-                                cipherView.deletedDate != null
-                        } else {
-                            canDelete && cipherView?.deletedDate != null
-                        }
+                            val hasOrganizations =
+                                !userState?.activeAccount?.organizations.isNullOrEmpty()
 
-                        val canAssignToCollections = collectionsState.data
-                            .canAssignToCollections(cipherView?.collectionIds)
-
-                        val canEdit = cipherView?.edit == true
-                        val organizationName = cipherView
-                            ?.organizationId
-                            ?.let { orgId ->
-                                userState
-                                    ?.activeAccount
-                                    ?.organizations
-                                    ?.firstOrNull { it.id == orgId }
-                                    ?.name
-                            }
-                        val cipherCollections = cipherView
-                            ?.collectionIds
-                            .orEmpty()
-                        val collections = collectionsState.data
-                            ?.filter { cipherCollections.contains(it.id) }
-                            ?.map { it.name }
-                            .orEmpty()
-                        val folderName = cipherView
-                            ?.folderId
-                            ?.let { folderId ->
-                                folderState.data?.firstOrNull { folder -> folderId == folder.id }
-                            }
-                            ?.name
-                        val isVfo1FoundationEnabled = featureFlagManager
-                            .getFeatureFlag(FlagKey.Vfo1Foundation)
-                        val collectionIcon = if (isVfo1FoundationEnabled) {
-                            BitwardenDrawable.ic_shared_folder
-                        } else {
-                            BitwardenDrawable.ic_collections
-                        }
-                        val relatedLocations = persistentListOfNotNull(
-                            organizationName?.let { VaultItemLocation.Organization(it) },
-                            *collections
-                                .map {
-                                    VaultItemLocation.Collection(
-                                        name = it,
-                                        collectionIcon = collectionIcon,
-                                    )
-                                }
-                                .toTypedArray(),
-                            folderName?.let { VaultItemLocation.Folder(it) },
-                        )
-
-                        val hasOrganizations =
-                            !userState?.activeAccount?.organizations.isNullOrEmpty()
-
-                        VaultItemStateData(
-                            cipher = cipherView,
-                            totpCodeItemData = totpCodeData,
-                            canDelete = canDelete,
-                            canRestore = canRestore,
-                            canAssociateToCollections = canAssignToCollections,
-                            canEdit = canEdit,
-                            relatedLocations = relatedLocations,
-                            hasOrganizations = hasOrganizations,
-                        )
-                    },
-            )
-        }
+                            VaultItemStateData(
+                                cipher = cipherView,
+                                totpCodeItemData = totpCodeData,
+                                canDelete = canDelete,
+                                canRestore = canRestore,
+                                canAssociateToCollections = canAssignToCollections,
+                                canEdit = canEdit,
+                                relatedLocations = relatedLocations,
+                                hasOrganizations = hasOrganizations,
+                            )
+                        },
+                )
+            }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 

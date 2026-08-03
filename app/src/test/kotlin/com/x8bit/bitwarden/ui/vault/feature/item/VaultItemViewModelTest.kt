@@ -137,8 +137,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     private val premiumStateManager: PremiumStateManager = mockk {
         every { isInAppUpgradeAvailable() } returns false
     }
+    private val mutableVfo1FoundationFlagFlow = MutableStateFlow(true)
     private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(FlagKey.Vfo1Foundation) } returns true
+        every { getFeatureFlagFlow(FlagKey.Vfo1Foundation) } returns mutableVfo1FoundationFlagFlow
     }
 
     @BeforeEach
@@ -3500,6 +3501,100 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 DEFAULT_STATE.copy(viewState = viewState),
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        @Suppress("MaxLineLength")
+        fun `Vfo1FoundationFlagUpdateReceive should re-derive the ViewState using the latest vault data`() {
+            val viewStateOn = mockk<VaultItemState.ViewState> {
+                every { asContentOrNull() } returns null
+            }
+            val viewStateOff = mockk<VaultItemState.ViewState>()
+            every { mockCipherView.organizationId } returns "mockOrganizationId"
+            every { mockCipherView.collectionIds } returns listOf("mockId-1")
+            every { mockCipherView.folderId } returns "mockId-1"
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canRestore = false,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = Environment.Prod.Us.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(
+                        VaultItemLocation.Organization("mockOrganizationName"),
+                        VaultItemLocation.Collection(
+                            name = "mockName-1",
+                            collectionIcon = BitwardenDrawable.ic_shared_folder,
+                        ),
+                        VaultItemLocation.Folder("mockName-1"),
+                    ),
+                    hasOrganizations = true,
+                )
+            } returns viewStateOn
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canRestore = false,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = Environment.Prod.Us.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(
+                        VaultItemLocation.Organization("mockOrganizationName"),
+                        VaultItemLocation.Collection(
+                            name = "mockName-1",
+                            collectionIcon = BitwardenDrawable.ic_collections,
+                        ),
+                        VaultItemLocation.Folder("mockName-1"),
+                    ),
+                    hasOrganizations = true,
+                )
+            } returns viewStateOff
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(
+                    DEFAULT_USER_ACCOUNT.copy(
+                        organizations = listOf(
+                            createMockOrganization(
+                                number = 1,
+                                id = "mockOrganizationId",
+                                name = "mockOrganizationName",
+                                role = OrganizationType.OWNER,
+                                keyConnectorUrl = null,
+                                userIsClaimedByOrganization = true,
+                            ),
+                        ),
+                    ),
+                ),
+            )
+
+            val viewModel = createViewModel(state = null)
+
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableCollectionsStateFlow.value = DataState.Loaded(
+                listOf(createMockCollectionView(number = 1)),
+            )
+            mutableFoldersStateFlow.value = DataState.Loaded(
+                listOf(createMockFolderView(number = 1)),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(viewState = viewStateOn),
+                viewModel.stateFlow.value,
+            )
+
+            mutableVfo1FoundationFlagFlow.value = false
+
+            assertEquals(
+                DEFAULT_STATE.copy(viewState = viewStateOff),
                 viewModel.stateFlow.value,
             )
         }

@@ -169,8 +169,9 @@ class SearchViewModelTest : BaseViewModelTest() {
     private val premiumStateManager: PremiumStateManager = mockk {
         every { isInAppUpgradeAvailable() } returns false
     }
+    private val mutableVfo1FoundationFlagFlow = MutableStateFlow(true)
     private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(FlagKey.Vfo1Foundation) } returns true
+        every { getFeatureFlagFlow(FlagKey.Vfo1Foundation) } returns mutableVfo1FoundationFlagFlow
     }
 
     @BeforeEach
@@ -1789,6 +1790,76 @@ class SearchViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `Vfo1FoundationFlagUpdateReceive should re-derive the view state using the latest vault data`() =
+        runTest {
+            setupMockUri()
+            val ciphers = listOf(createMockCipherListView(number = 1))
+            val expectedViewStateOn = SearchState.ViewState.Content(
+                displayItems = persistentListOf(createMockDisplayItemForCipher(number = 1)),
+            )
+            val expectedViewStateOff = SearchState.ViewState.Content(
+                displayItems = persistentListOf(createMockDisplayItemForCipher(number = 2)),
+            )
+            every {
+                ciphers.filterAndOrganize(
+                    searchTypeData = SearchTypeData.Vault.All,
+                    searchTerm = "",
+                )
+            } returns ciphers
+            every {
+                ciphers.toFilteredList(vaultFilterType = VaultFilterType.AllVaults)
+            } returns ciphers
+            every {
+                ciphers.toViewState(
+                    searchTerm = "",
+                    baseIconUrl = "https://icons.bitwarden.net",
+                    isIconLoadingDisabled = false,
+                    isAutofill = false,
+                    hasMasterPassword = true,
+                    isPremiumUser = true,
+                    isVfo1FoundationEnabled = true,
+                )
+            } returns expectedViewStateOn
+            every {
+                ciphers.toViewState(
+                    searchTerm = "",
+                    baseIconUrl = "https://icons.bitwarden.net",
+                    isIconLoadingDisabled = false,
+                    isAutofill = false,
+                    hasMasterPassword = true,
+                    isPremiumUser = true,
+                    isVfo1FoundationEnabled = false,
+                )
+            } returns expectedViewStateOff
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = ciphers,
+                    ),
+                    folderViewList = listOf(createMockFolderView(number = 1)),
+                    collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
+                ),
+            )
+
+            val viewModel = createViewModel()
+
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+
+            mutableVfo1FoundationFlagFlow.value = false
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    isVfo1FoundationEnabled = false,
+                    viewState = expectedViewStateOff,
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
     fun `vaultDataStateFlow Loaded with empty items should update ViewState to Empty`() = runTest {
         val dataState = DataState.Loaded(
             data = VaultData(
@@ -2393,6 +2464,7 @@ private val DEFAULT_STATE: SearchState = SearchState(
     autofillSelectionData = null,
     isPremium = true,
     restrictItemTypesPolicyOrgIds = persistentListOf(),
+    isVfo1FoundationEnabled = true,
 )
 
 private val DEFAULT_ACCOUNT = UserState.Account(
