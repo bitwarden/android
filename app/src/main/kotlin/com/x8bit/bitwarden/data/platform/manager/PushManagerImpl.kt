@@ -1,3 +1,5 @@
+// I'm testing stacked PRs. (1)
+
 package com.x8bit.bitwarden.data.platform.manager
 
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
