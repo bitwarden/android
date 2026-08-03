@@ -145,16 +145,15 @@ fun CipherListView.toOverflowActions(
  */
 fun CipherListView.toLabelIcons(isVfo1FoundationEnabled: Boolean = false): ImmutableList<IconData> {
     return listOfNotNull(
-        (
-            if (isVfo1FoundationEnabled) {
-                VaultTrailingIcon.COLLECTION
-            } else {
-                VaultTrailingIcon.COLLECTION_LEGACY
-            }
-            )
-            .takeIf {
+        if (isVfo1FoundationEnabled) {
+            VaultTrailingIcon.COLLECTION.takeIf {
                 this.collectionIds.isNotEmpty() || this.organizationId?.isNotEmpty() == true
-            },
+            }
+        } else {
+            VaultTrailingIcon.COLLECTION_LEGACY.takeIf {
+                this.collectionIds.isNotEmpty() || this.organizationId?.isNotEmpty() == true
+            }
+        },
         VaultTrailingIcon.ATTACHMENT.takeIf { this.attachments > 0U },
     )
         .map {

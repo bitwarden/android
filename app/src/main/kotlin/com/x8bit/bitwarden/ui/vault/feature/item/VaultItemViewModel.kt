@@ -205,7 +205,10 @@ class VaultItemViewModel @Inject constructor(
                             organizationName?.let { VaultItemLocation.Organization(it) },
                             *collections
                                 .map {
-                                    VaultItemLocation.Collection(name = it, icon = collectionIcon)
+                                    VaultItemLocation.Collection(
+                                        name = it,
+                                        collectionIcon = collectionIcon,
+                                    )
                                 }
                                 .toTypedArray(),
                             folderName?.let { VaultItemLocation.Folder(it) },
