@@ -392,6 +392,42 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `Vfo1FoundationFlagUpdateReceive should re-derive the content state using the latest vault data`() =
+        runTest {
+            val vaultAddEditType = VaultAddEditType.AddItem
+            val vaultItemCipherType = VaultItemCipherType.LOGIN
+            mutableVaultDataFlow.value = DataState.Loaded(data = createVaultData())
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = null,
+                    vaultAddEditType = vaultAddEditType,
+                    vaultItemCipherType = vaultItemCipherType,
+                ),
+            )
+
+            assertEquals(
+                BitwardenString.my_vault.asText(),
+                (viewModel.stateFlow.value.viewState as VaultAddEditState.ViewState.Content)
+                    .common
+                    .availableOwners
+                    .first()
+                    .name,
+            )
+
+            mutableVfo1FoundationFlow.value = false
+
+            assertEquals(
+                "activeEmail".asText(),
+                (viewModel.stateFlow.value.viewState as VaultAddEditState.ViewState.Content)
+                    .common
+                    .availableOwners
+                    .first()
+                    .name,
+            )
+        }
+
+    @Test
     fun `initial add state should be correct when autofill selection`() = runTest {
         val autofillSelectionData = AutofillSelectionData(
             type = AutofillSelectionData.Type.LOGIN,

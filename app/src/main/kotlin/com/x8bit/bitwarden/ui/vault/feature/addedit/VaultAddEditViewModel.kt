@@ -2131,7 +2131,20 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleVfo1FoundationFlagUpdateReceive(
         action: VaultAddEditAction.Internal.Vfo1FoundationFlagUpdateReceive,
     ) {
+        if (action.isEnabled == state.isVfo1FoundationEnabled) return
         mutableStateFlow.update { it.copy(isVfo1FoundationEnabled = action.isEnabled) }
+
+        val vaultData = vaultRepository.vaultDataStateFlow.value.data ?: return
+        viewModelScope.launch {
+            sendAction(
+                VaultAddEditAction.Internal.DetermineContentStateResultReceive(
+                    vaultAddEditState = state.determineContentState(
+                        vaultData = vaultData,
+                        userData = authRepository.userStateFlow.value,
+                    ),
+                ),
+            )
+        }
     }
 
     private fun handleCardScanResultReceive(
