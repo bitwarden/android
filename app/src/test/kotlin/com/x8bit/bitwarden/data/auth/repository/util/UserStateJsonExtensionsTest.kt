@@ -2037,6 +2037,7 @@ class UserStateJsonExtensionsTest {
             ),
             userDecryption = UserDecryptionJson(
                 masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
+                v2UpgradeToken = null,
             ),
         )
 
@@ -2128,6 +2129,7 @@ class UserStateJsonExtensionsTest {
             ),
             userDecryption = UserDecryptionJson(
                 masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
+                v2UpgradeToken = null,
             ),
         )
 
@@ -2292,6 +2294,7 @@ class UserStateJsonExtensionsTest {
                     ),
                     masterKeyWrappedUserKey = "mockMasterKeyWrappedUserKey",
                 ),
+                v2UpgradeToken = null,
             ),
         )
 
@@ -2379,7 +2382,10 @@ class UserStateJsonExtensionsTest {
                         ),
                     ),
                 ),
-                userDecryption = UserDecryptionJson(masterPasswordUnlock = null),
+                userDecryption = UserDecryptionJson(
+                    masterPasswordUnlock = null,
+                    v2UpgradeToken = null,
+                ),
             ),
         )
 
@@ -2447,6 +2453,7 @@ class UserStateJsonExtensionsTest {
                 ),
                 userDecryption = UserDecryptionJson(
                     masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
+                    v2UpgradeToken = null,
                 ),
             ),
         )

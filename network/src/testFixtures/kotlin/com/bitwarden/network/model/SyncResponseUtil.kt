@@ -35,9 +35,24 @@ fun createMockUserDecryption(
     masterPasswordUnlock: MasterPasswordUnlockDataJson? = createMockMasterPasswordUnlock(
         number = number,
     ),
+    v2UpgradeToken: V2UpgradeTokenJson? = createMockV2UpgradeToken(number = number),
 ): UserDecryptionJson =
     UserDecryptionJson(
         masterPasswordUnlock = masterPasswordUnlock,
+        v2UpgradeToken = v2UpgradeToken,
+    )
+
+/**
+ * Create a mock [V2UpgradeTokenJson] with a given [number].
+ */
+fun createMockV2UpgradeToken(
+    number: Int,
+    wrappedUserKey1: String = "mockWrappedUserKey1-$number",
+    wrappedUserKey2: String = "mockWrappedUserKey2-$number",
+): V2UpgradeTokenJson =
+    V2UpgradeTokenJson(
+        wrappedUserKey1 = wrappedUserKey1,
+        wrappedUserKey2 = wrappedUserKey2,
     )
 
 /**

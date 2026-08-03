@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.manager.sdk
 import com.bitwarden.core.ClientManagedTokens
 import com.bitwarden.core.ClientSettings
 import com.bitwarden.core.DeviceType
+import com.bitwarden.core.StateBridgeForeignImpl
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.network.model.BitwardenServiceClientConfig
 import com.bitwarden.sdk.Repositories
@@ -13,6 +14,7 @@ import com.x8bit.bitwarden.data.platform.manager.sdk.repository.SdkCipherReposit
 import com.x8bit.bitwarden.data.platform.manager.sdk.repository.SdkLocalUserDataKeyStateRepository
 import com.x8bit.bitwarden.data.platform.manager.sdk.repository.SdkTokenRepository
 import com.x8bit.bitwarden.data.platform.manager.sdk.repository.ServerCommunicationConfigRepositoryImpl
+import com.x8bit.bitwarden.data.platform.manager.sdk.statebridge.SdkStateBridge
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 
 /**
@@ -25,6 +27,14 @@ class SdkRepositoryFactoryImpl(
     private val authDiskSource: AuthDiskSource,
     private val serviceClientConfig: BitwardenServiceClientConfig,
 ) : SdkRepositoryFactory {
+    override fun getStateBridge(
+        userId: String,
+    ): StateBridgeForeignImpl =
+        SdkStateBridge(
+            userId = userId,
+            authDiskSource = authDiskSource,
+        )
+
     override fun getRepositories(userId: String?): Repositories =
         Repositories(
             cipher = getSdkCipherRepository(userId = userId),
