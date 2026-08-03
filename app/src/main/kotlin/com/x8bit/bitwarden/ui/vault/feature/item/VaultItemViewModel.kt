@@ -238,7 +238,7 @@ class VaultItemViewModel @Inject constructor(
                                     .map {
                                         VaultItemLocation.Collection(
                                             name = it,
-                                            collectionIcon = collectionIcon,
+                                            icon = collectionIcon,
                                         )
                                     }
                                     .toTypedArray(),

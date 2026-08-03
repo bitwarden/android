@@ -3465,7 +3465,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         VaultItemLocation.Organization("mockOrganizationName"),
                         VaultItemLocation.Collection(
                             name = "mockName-1",
-                            collectionIcon = BitwardenDrawable.ic_shared_folder,
+                            icon = BitwardenDrawable.ic_shared_folder,
                         ),
                         VaultItemLocation.Folder("mockName-1"),
                     ),
@@ -3530,7 +3530,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         VaultItemLocation.Organization("mockOrganizationName"),
                         VaultItemLocation.Collection(
                             name = "mockName-1",
-                            collectionIcon = BitwardenDrawable.ic_shared_folder,
+                            icon = BitwardenDrawable.ic_shared_folder,
                         ),
                         VaultItemLocation.Folder("mockName-1"),
                     ),
@@ -3552,7 +3552,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         VaultItemLocation.Organization("mockOrganizationName"),
                         VaultItemLocation.Collection(
                             name = "mockName-1",
-                            collectionIcon = BitwardenDrawable.ic_collections,
+                            icon = BitwardenDrawable.ic_collections,
                         ),
                         VaultItemLocation.Folder("mockName-1"),
                     ),
@@ -3624,7 +3624,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         VaultItemLocation.Organization("mockOrganizationName"),
                         VaultItemLocation.Collection(
                             name = "mockName-1",
-                            collectionIcon = BitwardenDrawable.ic_shared_folder,
+                            icon = BitwardenDrawable.ic_shared_folder,
                         ),
                         VaultItemLocation.Folder("mockName-1"),
                     ),
@@ -3688,7 +3688,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         VaultItemLocation.Organization("mockOrganizationName"),
                         VaultItemLocation.Collection(
                             name = "mockName-1",
-                            collectionIcon = BitwardenDrawable.ic_shared_folder,
+                            icon = BitwardenDrawable.ic_shared_folder,
                         ),
                         VaultItemLocation.Folder("mockName-1"),
                     ),
