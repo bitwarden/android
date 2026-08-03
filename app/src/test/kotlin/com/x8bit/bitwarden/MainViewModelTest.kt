@@ -115,7 +115,9 @@ class MainViewModelTest : BaseViewModelTest() {
     private val mutableIsDynamicColorsEnabledFlow = MutableStateFlow(false)
     private val mutableIsVfo1FoundationEnabledFlow = MutableStateFlow(false)
     private val featureFlagManager = mockk<FeatureFlagManager> {
-        every { getFeatureFlag(FlagKey.Vfo1Foundation) } returns false
+        every {
+            getFeatureFlag(FlagKey.Vfo1Foundation)
+        } answers { mutableIsVfo1FoundationEnabledFlow.value }
         every {
             getFeatureFlagFlow(FlagKey.Vfo1Foundation)
         } returns mutableIsVfo1FoundationEnabledFlow
