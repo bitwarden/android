@@ -6,7 +6,12 @@ import kotlinx.parcelize.Parcelize
 
 /**
  * Models the UI centric feature flags.
+ *
+ * @property isVfo1FoundationEnabled Whether the VFO-1 naming (terminology rename) work is
+ * enabled.
  */
 @Immutable
 @Parcelize
-data object FeatureFlagsState : Parcelable
+data class FeatureFlagsState(
+    val isVfo1FoundationEnabled: Boolean = false,
+) : Parcelable

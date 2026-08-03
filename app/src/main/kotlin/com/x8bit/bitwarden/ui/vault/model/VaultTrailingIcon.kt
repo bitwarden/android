@@ -19,6 +19,17 @@ enum class VaultTrailingIcon(
         contentDescription = BitwardenString.shared_folders.asText(),
         testTag = "CipherInCollectionIcon",
     ),
+
+    /**
+     * Pre-VFO-1 variant of [COLLECTION], selected when the `vfo1-foundation` feature flag is
+     * disabled. This entry should be removed, along with all of its call sites, once the flag
+     * is fully rolled out.
+     */
+    COLLECTION_LEGACY(
+        iconRes = BitwardenDrawable.ic_collections,
+        contentDescription = BitwardenString.collections.asText(),
+        testTag = "CipherInCollectionIcon",
+    ),
     ATTACHMENT(
         iconRes = BitwardenDrawable.ic_paperclip,
         contentDescription = BitwardenString.attachments.asText(),

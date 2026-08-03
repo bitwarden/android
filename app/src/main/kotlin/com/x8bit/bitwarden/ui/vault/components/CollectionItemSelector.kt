@@ -20,11 +20,13 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.platform.composition.util.vfo1Foundation
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 
 /**
  * A set of switches that a user can select [Collection]s with.
  */
+@Suppress("LongMethod")
 fun LazyListScope.collectionItemsSelector(
     collectionList: List<VaultCollection>?,
     onCollectionSelect: (VaultCollection) -> Unit,
@@ -33,7 +35,12 @@ fun LazyListScope.collectionItemsSelector(
     if (isCollectionsTitleVisible) {
         item {
             BitwardenListHeaderText(
-                label = stringResource(id = BitwardenString.shared_folders),
+                label = stringResource(
+                    id = vfo1Foundation(
+                        new = BitwardenString.shared_folders,
+                        old = BitwardenString.collections,
+                    ),
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
@@ -76,7 +83,12 @@ fun LazyListScope.collectionItemsSelector(
                     .standardHorizontalMargin(),
             ) {
                 Text(
-                    text = stringResource(id = BitwardenString.there_are_no_shared_folders_to_list),
+                    text = stringResource(
+                        id = vfo1Foundation(
+                            new = BitwardenString.there_are_no_shared_folders_to_list,
+                            old = BitwardenString.no_collections_to_list,
+                        ),
+                    ),
                     style = BitwardenTheme.typography.bodyMedium,
                     color = BitwardenTheme.colorScheme.text.primary,
                 )

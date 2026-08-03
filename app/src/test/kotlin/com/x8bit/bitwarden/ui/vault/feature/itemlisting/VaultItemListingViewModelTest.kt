@@ -306,8 +306,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every { isInAppUpgradeAvailable() } returns false
     }
     private val mutableNewItemTypesFlow = MutableStateFlow(false)
+    private val mutableVfo1FoundationFlagFlow = MutableStateFlow(true)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlag(FlagKey.NewItemTypes) } answers { mutableNewItemTypesFlow.value }
+        every { getFeatureFlagFlow(FlagKey.Vfo1Foundation) } returns mutableVfo1FoundationFlagFlow
     }
 
     @BeforeEach
@@ -2725,6 +2727,67 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
     }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `Vfo1FoundationFlagUpdateReceive should re-derive the view state using the latest vault data`() =
+        runTest {
+            setupMockUri()
+
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = listOf(createMockCipherListView(number = 1, isDeleted = false)),
+                    ),
+                    folderViewList = listOf(createMockFolderView(number = 1)),
+                    collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
+                ),
+            )
+
+            val viewModel = createVaultItemListingViewModel()
+
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+
+            mutableVfo1FoundationFlagFlow.value = false
+
+            assertEquals(
+                createVaultItemListingState(
+                    isVfo1FoundationEnabled = false,
+                    viewState = VaultItemListingState.ViewState.Content(
+                        displayCollectionList = emptyList(),
+                        displayItemList = listOf(
+                            createMockDisplayItemForCipher(
+                                number = 1,
+                                secondSubtitleTestTag = "PasskeySite",
+                                subtitle = "mockSubtitle-1",
+                            )
+                                .copy(
+                                    extraIconList = persistentListOf(
+                                        IconData.Local(
+                                            iconRes = BitwardenDrawable.ic_collections,
+                                            contentDescription = BitwardenString
+                                                .collections
+                                                .asText(),
+                                            testTag = "CipherInCollectionIcon",
+                                        ),
+                                        IconData.Local(
+                                            iconRes = BitwardenDrawable.ic_paperclip,
+                                            contentDescription = BitwardenString
+                                                .attachments
+                                                .asText(),
+                                            testTag = "CipherWithAttachmentsIcon",
+                                        ),
+                                    ),
+                                ),
+                        ),
+                        displayFolderList = emptyList(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Suppress("MaxLineLength")
     @Test
@@ -6663,6 +6726,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         viewState: VaultItemListingState.ViewState = VaultItemListingState.ViewState.Loading,
         dialogState: VaultItemListingState.DialogState? = null,
         isPremium: Boolean = true,
+        isVfo1FoundationEnabled: Boolean = true,
     ): VaultItemListingState =
         VaultItemListingState(
             itemListingType = itemListingType,
@@ -6683,6 +6747,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             isPremium = isPremium,
             isRefreshing = false,
             restrictItemTypesPolicyOrgIds = persistentListOf(),
+            isVfo1FoundationEnabled = isVfo1FoundationEnabled,
         )
 }
 

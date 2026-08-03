@@ -40,6 +40,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.DebugDisableSelfHostPremiumCheck,
     FlagKey.PoliciesInAcceptedState,
     FlagKey.FedRamp,
+    FlagKey.Vfo1Foundation,
         -> {
         @Suppress("UNCHECKED_CAST")
         BooleanFlagItem(
@@ -104,4 +105,5 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     }
 
     FlagKey.FedRamp -> stringResource(BitwardenString.fed_ramp)
+    FlagKey.Vfo1Foundation -> stringResource(BitwardenString.vfo1_foundation)
 }

@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.collections.CollectionView
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.combineDataStates
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -16,6 +17,7 @@ import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
@@ -24,6 +26,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -41,6 +44,7 @@ private const val KEY_STATE = "state"
 class VaultMoveToOrganizationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     authRepository: AuthRepository,
+    featureFlagManager: FeatureFlagManager,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val vaultRepository: VaultRepository,
 ) : BaseViewModel<VaultMoveToOrganizationState, VaultMoveToOrganizationEvent, VaultMoveToOrganizationAction>(
@@ -52,11 +56,20 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
                 onlyShowCollections = args.showOnlyCollections,
                 viewState = VaultMoveToOrganizationState.ViewState.Loading,
                 dialogState = null,
+                isVfo1FoundationEnabled = featureFlagManager.getFeatureFlag(
+                    FlagKey.Vfo1Foundation,
+                ),
             )
         },
 ) {
 
     init {
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.Vfo1Foundation)
+            .map { VaultMoveToOrganizationAction.Internal.Vfo1FoundationFlagUpdateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         combine(
             vaultRepository.getVaultItemStateFlow(state.vaultItemId),
             vaultRepository.collectionsStateFlow,
@@ -94,7 +107,17 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
             is VaultMoveToOrganizationAction.Internal.ShareCipherResultReceive -> {
                 handleShareCipherResultReceive(action)
             }
+
+            is VaultMoveToOrganizationAction.Internal.Vfo1FoundationFlagUpdateReceive -> {
+                handleVfo1FoundationFlagUpdateReceive(action)
+            }
         }
+    }
+
+    private fun handleVfo1FoundationFlagUpdateReceive(
+        action: VaultMoveToOrganizationAction.Internal.Vfo1FoundationFlagUpdateReceive,
+    ) {
+        mutableStateFlow.update { it.copy(isVfo1FoundationEnabled = action.isEnabled) }
     }
 
     private fun handleBackClick() {
@@ -127,7 +150,12 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
                     mutableStateFlow.update {
                         it.copy(
                             dialogState = VaultMoveToOrganizationState.DialogState.Error(
-                                message = BitwardenString.you_must_select_at_least_one_shared_folder.asText(),
+                                message = if (state.isVfo1FoundationEnabled) {
+                                    BitwardenString.you_must_select_at_least_one_shared_folder
+                                        .asText()
+                                } else {
+                                    BitwardenString.select_one_collection.asText()
+                                },
                             ),
                         )
                     }
@@ -345,13 +373,20 @@ data class VaultMoveToOrganizationState(
     val onlyShowCollections: Boolean,
     val viewState: ViewState,
     val dialogState: DialogState?,
+    val isVfo1FoundationEnabled: Boolean,
 ) : Parcelable {
 
     val appBarText: Text
         get() = if (onlyShowCollections) {
-            BitwardenString.shared_folders.asText()
-        } else {
+            if (isVfo1FoundationEnabled) {
+                BitwardenString.shared_folders.asText()
+            } else {
+                BitwardenString.collections.asText()
+            }
+        } else if (isVfo1FoundationEnabled) {
             BitwardenString.move.asText()
+        } else {
+            BitwardenString.move_to_organization.asText()
         }
 
     val appBarButtonText: Text
@@ -533,6 +568,13 @@ sealed class VaultMoveToOrganizationAction {
         data class ShareCipherResultReceive(
             val shareCipherResult: ShareCipherResult,
             val message: Text,
+        ) : Internal()
+
+        /**
+         * Indicates that the VFO-1 foundation flag has been updated.
+         */
+        data class Vfo1FoundationFlagUpdateReceive(
+            val isEnabled: Boolean,
         ) : Internal()
     }
 }

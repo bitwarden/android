@@ -26,6 +26,7 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
+import com.x8bit.bitwarden.ui.platform.composition.util.vfo1Foundation
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 
@@ -376,7 +377,9 @@ fun VaultContent(
         if (state.folderItems.isNotEmpty()) {
             item(key = "folders_header") {
                 BitwardenListHeaderText(
-                    label = stringResource(id = BitwardenString.my_folders),
+                    label = stringResource(
+                        id = vfo1Foundation(BitwardenString.my_folders, BitwardenString.folders),
+                    ),
                     supportingLabel = state.folderItems.count().toString(),
                     modifier = Modifier
                         .animateItem()
@@ -471,7 +474,12 @@ fun VaultContent(
         if (state.collectionItems.isNotEmpty()) {
             item(key = "collection_header") {
                 BitwardenListHeaderText(
-                    label = stringResource(id = BitwardenString.shared_folders),
+                    label = stringResource(
+                        id = vfo1Foundation(
+                            new = BitwardenString.shared_folders,
+                            old = BitwardenString.collections,
+                        ),
+                    ),
                     supportingLabel = state.collectionItems.count().toString(),
                     modifier = Modifier
                         .animateItem()
@@ -487,7 +495,12 @@ fun VaultContent(
                 key = { _, collection -> "collection_${collection.id}" },
             ) { index, collection ->
                 BitwardenGroupItem(
-                    startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_shared_folder),
+                    startIcon = IconData.Local(
+                        iconRes = vfo1Foundation(
+                            new = BitwardenDrawable.ic_shared_folder,
+                            old = BitwardenDrawable.ic_collections,
+                        ),
+                    ),
                     label = collection.name,
                     supportingLabel = collection.itemCount.toString(),
                     onClick = { vaultHandlers.collectionClick(collection) },

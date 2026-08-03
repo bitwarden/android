@@ -178,12 +178,14 @@ fun CipherView.toViewState(
 /**
  * Adds Folder and Owner data to [VaultAddEditState.ViewState].
  */
+@Suppress("LongParameterList")
 fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
     folderViewList: List<FolderView>,
     collectionViewList: List<CollectionView>,
     activeAccount: UserState.Account,
     isIndividualVaultDisabled: Boolean,
     resourceManager: ResourceManager,
+    isVfo1FoundationEnabled: Boolean,
 ): VaultAddEditState.ViewState {
     return (this as? VaultAddEditState.ViewState.Content)?.let { currentContentState ->
         currentContentState.copy(
@@ -209,6 +211,7 @@ fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
                     collectionViewList = collectionViewList,
                     cipherView = currentContentState.common.originalCipher,
                     isIndividualVaultDisabled = isIndividualVaultDisabled,
+                    isVfo1FoundationEnabled = isVfo1FoundationEnabled,
                     selectedCollectionId = currentContentState.common.selectedCollectionId
                         ?: collectionViewList
                             .getDefaultCollectionViewOrNull(
@@ -296,12 +299,17 @@ private fun UserState.Account.toAvailableOwners(
     collectionViewList: List<CollectionView>,
     cipherView: CipherView?,
     isIndividualVaultDisabled: Boolean,
+    isVfo1FoundationEnabled: Boolean,
     selectedCollectionId: String? = null,
 ): ImmutableList<VaultAddEditState.Owner> =
     persistentListOfNotNull(
         VaultAddEditState
             .Owner(
-                name = BitwardenString.my_vault.asText(),
+                name = if (isVfo1FoundationEnabled) {
+                    BitwardenString.my_vault.asText()
+                } else {
+                    email.asText()
+                },
                 id = null,
                 collections = emptyList(),
             )
