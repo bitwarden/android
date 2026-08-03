@@ -47,6 +47,9 @@ sealed class FlagKey<out T : Any> {
                 PoliciesInAcceptedState,
                 FedRamp,
                 Vfo1Foundation,
+                SendControls,
+                SendControlsExistingSends,
+                IdentityAutofill,
             )
         }
     }
@@ -196,6 +199,32 @@ sealed class FlagKey<out T : Any> {
      */
     data object DebugDisableSelfHostPremiumCheck : FlagKey<Boolean>() {
         override val keyName: String = "debug-disable-self-host-premium-check"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the consolidated Send Controls policy.
+     */
+    data object SendControls : FlagKey<Boolean>() {
+        override val keyName: String = "pm-31885-send-controls"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for enforcing the Send Controls policy against
+     * Sends created before the policy existed.
+     */
+    data object SendControlsExistingSends : FlagKey<Boolean>() {
+        override val keyName: String = "pm-31885-send-controls-existing-sends"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for gating identity autofill (offering saved
+     * Identity items as autofill suggestions).
+     */
+    data object IdentityAutofill : FlagKey<Boolean>() {
+        override val keyName: String = "pm-38138-mobile-identity-autofill"
         override val defaultValue: Boolean = false
     }
 

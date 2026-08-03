@@ -93,6 +93,9 @@ data class CipherJsonRequest(
     @Contextual
     val archivedDate: Instant?,
 
+    @SerialName("data")
+    val data: String?,
+
     @SerialName("encryptedFor")
     val encryptedFor: String?,
 )

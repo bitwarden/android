@@ -58,6 +58,9 @@
     <string name="policies_in_accepted_state">Policies in accepted state</string>
     <string name="fed_ramp">FedRAMP</string>
     <string name="vfo1_foundation">VFO-1 foundation</string>
+    <string name="send_controls">Send Controls</string>
+    <string name="send_controls_existing_sends">Send Controls - Existing Sends</string>
+    <string name="identity_autofill">Identity Autofill</string>
 
     <!-- endregion Debug Menu -->
 </resources>

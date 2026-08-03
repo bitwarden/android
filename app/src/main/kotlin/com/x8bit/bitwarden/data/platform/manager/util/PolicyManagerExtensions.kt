@@ -34,6 +34,7 @@ inline fun <reified T : PolicyInformation> getPolicyType(): PolicyType =
         PolicyInformation.MasterPassword::class.java -> PolicyType.MASTER_PASSWORD
         PolicyInformation.PasswordGenerator::class.java -> PolicyType.PASSWORD_GENERATOR
         PolicyInformation.SendOptions::class.java -> PolicyType.SEND_OPTIONS
+        PolicyInformation.SendControls::class.java -> PolicyType.SEND_CONTROLS
         PolicyInformation.VaultTimeout::class.java -> PolicyType.MAXIMUM_VAULT_TIMEOUT
 
         else -> {

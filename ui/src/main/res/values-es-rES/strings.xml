@@ -278,12 +278,12 @@ El escaneo se realizará automáticamente.</string>
     <string name="expiration">Expiración</string>
     <string name="show_website_icons">Mostrar los iconos del sitio web</string>
     <string name="show_website_icons_help">Mostrar ayuda sobre los iconos del sitio web</string>
-    <string name="show_website_icons_description">Mostrar una imagen reconocible junto a cada inicio de sesión.</string>
+    <string name="show_website_icons_description">Mostrar una imagen reconocible junto a cada inicio de sesión</string>
     <string name="icons_url">URL del servidor de iconos</string>
     <string name="vault_is_locked">Caja fuerte bloqueada</string>
     <string name="go_to_my_vault">Volver a mi caja fuerte</string>
     <string name="collections">Colecciones</string>
-    <string name="no_items_collection">No hay elementos en esta colección.</string>
+    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="no_items_folder">No hay elementos en esta carpeta.</string>
     <string name="no_items_trash">No hay elementos en la papelera.</string>
     <string name="autofill_accessibility_summary">Ayuda a rellenar los campos de nombre de usuario y contraseña en otras aplicaciones y en la web.</string>
@@ -341,9 +341,9 @@ El escaneo se realizará automáticamente.</string>
     <string name="moved_item_to_org">%1$s se movió a %2$s.</string>
     <string name="select_one_collection">Debe seleccionar al menos una colección.</string>
     <string name="share">Compartir</string>
-    <string name="move_to_organization">Mover a la Organización</string>
-    <string name="no_orgs_to_list">No hay organizaciones que listar.</string>
-    <string name="move_to_org_desc">Elige una organización a la que deseas mover este objeto. Mover a una organización transfiere la propiedad del objeto a esa organización. Ya no serás el dueño directo de este objeto una vez que haya sido movido.</string>
+    <string name="move_to_vault">Move to vault</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Número de palabras</string>
     <string name="passphrase">Frase de contraseña</string>
     <string name="word_separator">Separador de palabras</string>
@@ -379,6 +379,8 @@ El escaneo se realizará automáticamente.</string>
     <string name="pin_require_master_password_restart">¿Quiere solicitar el desbloqueo con su contraseña maestra cuando se reinicie la aplicación?</string>
     <string name="ask_to_add_item">Solicitar añadir elemento</string>
     <string name="ask_to_add_item_description">Pedir que se añada un elemento si no se encuentra uno en tu caja fuerte.</string>
+    <string name="turn_on_fill_assist">Turn on fill assist</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill assist improves autofill accuracy on supported sites by using site specific rules.</string>
     <string name="on_restart">Al reiniciar la aplicación</string>
     <string name="capitalize">Mayúsculas iniciales</string>
     <string name="include_number">Incluir número</string>
@@ -613,9 +615,9 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="accessibility_service_disclosure">Revelación del servicio de accesibilidad</string>
     <string name="accessibility_disclosure_text">Bitwarden utiliza el Servicio de Accesibilidad para buscar campos de inicio de sesión en aplicaciones y sitios web, establecer los identificadores de campo apropiados para introducir un nombre de usuario y contraseña cuando se encuentre una coincidencia para la aplicación o el sitio. No almacenamos ninguna de las informaciones presentadas por el servicio, tampoco intentamos controlar ningún elemento en pantalla más allá de la introducción de credenciales de texto.</string>
     <string name="accessibility_disclosure_start_up_text_1">This notice is required before Bitwarden can offer accessibility-based autofill.</string>
-    <string name="accessibility_disclosure_start_up_text_2">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields. If you enable it, Bitwarden will identify the appropriate fields and fill in your credentials when a match is found.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden ofrece un método de autocompletar opcional que usa el servicio de accesibilidad de Android para detectar campos de inicio de sesión. Si lo activas, Bitwarden identificará los campos adecuados y completar tus credenciales cuando se encuentre una coincidencia.</string>
     <string name="accessibility_disclosure_start_up_text_3">We don’t store any information about what’s onscreen while you use the Accessibility Service, and we don’t control any onscreen elements beyond credential entry.</string>
-    <string name="i_understand">I understand</string>
+    <string name="i_understand">Entiendo</string>
     <string name="accept">Aceptar</string>
     <string name="decline">Rechazar</string>
     <string name="login_request_has_already_expired">La solicitud de acceso ya ha caducado.</string>
@@ -1415,4 +1417,6 @@ cualquier problema.</string>
     <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
     <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
     <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
+    <string name="account_creation_restricted">Account creation restricted</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
 </resources>

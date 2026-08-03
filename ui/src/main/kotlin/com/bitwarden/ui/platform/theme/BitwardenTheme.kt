@@ -1,5 +1,6 @@
 package com.bitwarden.ui.platform.theme
 
+import android.content.Context
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -13,6 +14,7 @@ import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.platform.LocalContext
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.components.field.interceptor.IncognitoInput
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.theme.color.BitwardenColorScheme
@@ -61,39 +63,44 @@ object BitwardenTheme {
  */
 @Composable
 fun BitwardenTheme(
+    context: Context = LocalContext.current,
     theme: AppTheme = AppTheme.DEFAULT,
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit,
 ) {
-    val darkTheme = theme.isDarkMode(isSystemDarkMode = isSystemInDarkTheme())
-    // Get the current scheme
-    val materialColorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) {
-                dynamicDarkColorScheme(context = context)
-            } else {
-                dynamicLightColorScheme(context = context)
-            }
-        }
-
-        darkTheme -> darkColorScheme()
-        else -> lightColorScheme()
+    val isDarkTheme = theme.isDarkMode(isSystemDarkMode = isSystemInDarkTheme())
+    val isDynamicEnabled = dynamicColor && isBuildVersionAtLeast(version = Build.VERSION_CODES.S)
+    // Get the material color schemes from the OS.
+    val darkMaterialColorScheme = if (isDynamicEnabled) {
+        dynamicDarkColorScheme(context = context)
+    } else {
+        darkColorScheme()
     }
+    val lightMaterialColorScheme = if (isDynamicEnabled) {
+        dynamicLightColorScheme(context = context)
+    } else {
+        lightColorScheme()
+    }
+    val materialColorScheme = if (isDarkTheme) darkMaterialColorScheme else lightMaterialColorScheme
+    // Convert the material color schemes to Bitwarden color schemes.
+    val lightDynamicColorScheme = dynamicBitwardenColorScheme(
+        materialColorScheme = lightMaterialColorScheme,
+        isDarkTheme = false,
+    )
+    val darkDynamicColorScheme = dynamicBitwardenColorScheme(
+        materialColorScheme = darkMaterialColorScheme,
+        isDarkTheme = true,
+    )
     val bitwardenColorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            dynamicBitwardenColorScheme(
-                materialColorScheme = materialColorScheme,
-                isDarkTheme = darkTheme,
-            )
-        }
-
-        darkTheme -> darkBitwardenColorScheme
+        isDynamicEnabled -> if (isDarkTheme) darkDynamicColorScheme else lightDynamicColorScheme
+        isDarkTheme -> darkBitwardenColorScheme
         else -> lightBitwardenColorScheme
     }
-
+    // Provide the selected color scheme as well as the dynamic ones for override support.
     CompositionLocalProvider(
         LocalBitwardenColorScheme provides bitwardenColorScheme,
+        LocalBitwardenDynamicLightColorScheme provides lightDynamicColorScheme,
+        LocalBitwardenDynamicDarkColorScheme provides darkDynamicColorScheme,
         LocalBitwardenShapes provides bitwardenShapes,
         LocalBitwardenTypography provides bitwardenTypography,
     ) {
@@ -111,6 +118,20 @@ fun BitwardenTheme(
  */
 val LocalBitwardenColorScheme: ProvidableCompositionLocal<BitwardenColorScheme> =
     compositionLocalOf { lightBitwardenColorScheme }
+
+/**
+ * Provides access to the Bitwarden dynamic light-mode colors throughout the app.
+ * This is only to be used for scenarios that require the UI to have its colors overridden.
+ */
+val LocalBitwardenDynamicLightColorScheme: ProvidableCompositionLocal<BitwardenColorScheme> =
+    compositionLocalOf { lightBitwardenColorScheme }
+
+/**
+ * Provides access to the Bitwarden default dark-mode colors throughout the app.
+ * This is only to be used for dynamic that require the UI to have its colors overridden.
+ */
+val LocalBitwardenDynamicDarkColorScheme: ProvidableCompositionLocal<BitwardenColorScheme> =
+    compositionLocalOf { darkBitwardenColorScheme }
 
 /**
  * Provides access to the Bitwarden shapes throughout the app.

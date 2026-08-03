@@ -283,7 +283,7 @@
     <string name="vault_is_locked">பெட்டகம் பூட்டப்பட்டுள்ளது</string>
     <string name="go_to_my_vault">என் பெட்டகத்திற்குச் செல்</string>
     <string name="collections">தொகுப்புகள்</string>
-    <string name="no_items_collection">இத்தொகுப்பில் உருப்படிகள் ஏதுமில்லை.</string>
+    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="no_items_folder">இக்கோப்புறையில் உருப்படிகள் ஏதுமில்லை.</string>
     <string name="no_items_trash">இக்குப்பையில் உருப்படிகள் ஏதுமில்லை.</string>
     <string name="autofill_accessibility_summary">பிற செயலிகளிலும் வலையிலும் பயனர்பெயர் மற்றும் கடவுச்சொல் புலங்களை நிரப்ப உதவு.</string>
@@ -341,9 +341,9 @@
     <string name="moved_item_to_org">%1$s %2$s-க்கு நகர்த்தப்பட்டது.</string>
     <string name="select_one_collection">நீங்கள் ஒரு தொகுப்பாவது தேர்ந்தெடுக்க வேண்டும்.</string>
     <string name="share">பகிர்</string>
-    <string name="move_to_organization">நிறுவனத்துக்கு நகர்த்து</string>
-    <string name="no_orgs_to_list">பட்டியலிட நிறுவனங்களில்லை.</string>
-    <string name="move_to_org_desc">இவ்வுருப்படியை நகர்த்த நிறுவனத்தைத் தேர்வுசெய். நிறுவனத்திற்கு நகர்த்தல் உருப்படியின் உரிமையை அந்நிறுவனத்திற்கு மாற்றும். நகர்த்தியபின் இவ்வுருப்படிக்கு நேரடி உரிமையாளராக இருக்கமாட்டீர்.</string>
+    <string name="move_to_vault">Move to vault</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">சொற்களின் எண்ணிக்கை</string>
     <string name="passphrase">கடவுச்சொற்றொடர்</string>
     <string name="word_separator">சொல் பிரிப்பான்</string>
@@ -379,6 +379,8 @@
     <string name="pin_require_master_password_restart">செயலி மறுதுவக்கத்தில் பூட்டவிழ்க்க உங்கள் பிரதான கடவுச்சொல்லை கோர வேண்டுமா?</string>
     <string name="ask_to_add_item">உருப்படியைச் சேர்க்கக் கேட்கவும்</string>
     <string name="ask_to_add_item_description">உங்கள் பெட்டகத்தில் ஒரு உருப்படி காணப்படவில்லை எனில், அதைச் சேர்க்கக் கேட்கவும்.</string>
+    <string name="turn_on_fill_assist">Turn on fill assist</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill assist improves autofill accuracy on supported sites by using site specific rules.</string>
     <string name="on_restart">செயலி மறுதொடக்கத்தில்</string>
     <string name="capitalize">பேரெழுத்தாக்கு</string>
     <string name="include_number">எண்ணை உள்ளடக்கு</string>
@@ -1412,4 +1414,6 @@
     <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
     <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
     <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
+    <string name="account_creation_restricted">Account creation restricted</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
 </resources>

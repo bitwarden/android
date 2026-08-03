@@ -68,6 +68,18 @@ class FlagKeyTest {
             FlagKey.Vfo1Foundation.keyName,
             "vfo1-foundation",
         )
+        assertEquals(
+            FlagKey.SendControls.keyName,
+            "pm-31885-send-controls",
+        )
+        assertEquals(
+            FlagKey.SendControlsExistingSends.keyName,
+            "pm-31885-send-controls-existing-sends",
+        )
+        assertEquals(
+            FlagKey.IdentityAutofill.keyName,
+            "pm-38138-mobile-identity-autofill",
+        )
     }
 
     @Test
@@ -89,6 +101,9 @@ class FlagKeyTest {
                 FlagKey.PoliciesInAcceptedState,
                 FlagKey.FedRamp,
                 FlagKey.Vfo1Foundation,
+                FlagKey.SendControls,
+                FlagKey.SendControlsExistingSends,
+                FlagKey.IdentityAutofill,
             ).all {
                 !it.defaultValue
             },
