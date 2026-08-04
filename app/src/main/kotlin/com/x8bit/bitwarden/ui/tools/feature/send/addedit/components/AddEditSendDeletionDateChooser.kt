@@ -78,6 +78,10 @@ private enum class DeletionOption(
         text = BitwardenString.seven_days.asText(),
         offsetMillis = 7.days.inWholeMilliseconds,
     ),
+    FOURTEEN_DAYS(
+        text = BitwardenString.fourteen_days.asText(),
+        offsetMillis = 14.days.inWholeMilliseconds,
+    ),
     THIRTY_DAYS(
         text = BitwardenString.thirty_days.asText(),
         offsetMillis = 30.days.inWholeMilliseconds,
