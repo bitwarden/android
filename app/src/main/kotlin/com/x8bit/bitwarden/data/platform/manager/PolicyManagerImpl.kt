@@ -8,7 +8,10 @@ import com.bitwarden.policies.PolicyType
 import com.bitwarden.policies.PolicyView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
+import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
+import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
+import com.x8bit.bitwarden.data.platform.manager.model.EffectiveSendPolicy
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkOrganizationPolicyContext
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkPolicyViews
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -46,6 +49,30 @@ class PolicyManagerImpl(
             ?.activeUserId
             ?.let { userId -> getUserPolicies(userId = userId, type = type) }
             .orEmpty()
+
+    override fun getEffectiveSendPolicy(): EffectiveSendPolicy =
+        resolveEffectiveSendPolicy(
+            disableSendPolicies = getActivePolicies(type = PolicyType.DISABLE_SEND),
+            isSendControlsEnabled = featureFlagManager.getFeatureFlag(key = FlagKey.SendControls),
+            sendControlsPolicies = getActivePolicies(type = PolicyType.SEND_CONTROLS),
+            sendOptionsPolicies = getActivePolicies(type = PolicyType.SEND_OPTIONS),
+        )
+
+    override fun getEffectiveSendPolicyFlow(): Flow<EffectiveSendPolicy> =
+        combine(
+            featureFlagManager.getFeatureFlagFlow(key = FlagKey.SendControls),
+            getActivePoliciesFlow(type = PolicyType.SEND_CONTROLS),
+            getActivePoliciesFlow(type = PolicyType.DISABLE_SEND),
+            getActivePoliciesFlow(type = PolicyType.SEND_OPTIONS),
+        ) { isSendControlsEnabled, sendControlsPolicies, disableSendPolicies, sendOptionsPolicies ->
+            resolveEffectiveSendPolicy(
+                disableSendPolicies = disableSendPolicies,
+                isSendControlsEnabled = isSendControlsEnabled,
+                sendControlsPolicies = sendControlsPolicies,
+                sendOptionsPolicies = sendOptionsPolicies,
+            )
+        }
+            .distinctUntilChanged()
 
     override fun getUserPolicies(
         userId: String,
@@ -170,6 +197,59 @@ class PolicyManagerImpl(
                     this.organizationShouldUsePolicies
             }
         }
+
+    /**
+     * Resolves the [EffectiveSendPolicy] from the raw, already-filtered active policies of each
+     * relevant type. When [isSendControlsEnabled] is `false`, this is equivalent to the legacy
+     * DisableSend/SendOptions logic. When `true`, an organization's active SendControls policy
+     * (if any) takes precedence over that same organization's legacy DisableSend/SendOptions
+     * policies, while other organizations' legacy policies remain in effect.
+     */
+    private fun resolveEffectiveSendPolicy(
+        disableSendPolicies: List<PolicyView>,
+        isSendControlsEnabled: Boolean,
+        sendControlsPolicies: List<PolicyView>,
+        sendOptionsPolicies: List<PolicyView>,
+    ): EffectiveSendPolicy {
+        if (!isSendControlsEnabled) {
+            return EffectiveSendPolicy(
+                allowedDomains = null,
+                allowedSendTypes = null,
+                deletionHours = null,
+                disableHideEmail = sendOptionsPolicies
+                    .mapNotNull { it.policyInformation as? PolicyInformation.SendOptions }
+                    .any { it.shouldDisableHideEmail ?: false },
+                disableSend = disableSendPolicies.any(),
+                whoCanAccess = null,
+            )
+        }
+
+        val decodedSendControls = sendControlsPolicies
+            .mapNotNull { policy ->
+                (policy.policyInformation as? PolicyInformation.SendControls)
+                    ?.let { policy.organizationId to it }
+            }
+        val organizationIdsWithSendControls = decodedSendControls.map { it.first }.toSet()
+
+        val remainingDisableSendPolicies = disableSendPolicies
+            .filterNot { organizationIdsWithSendControls.contains(it.organizationId) }
+        val remainingSendOptions = sendOptionsPolicies
+            .filterNot { organizationIdsWithSendControls.contains(it.organizationId) }
+            .mapNotNull { it.policyInformation as? PolicyInformation.SendOptions }
+
+        val firstSendControls = decodedSendControls.firstOrNull()?.second
+
+        return EffectiveSendPolicy(
+            allowedDomains = firstSendControls?.allowedDomains,
+            allowedSendTypes = firstSendControls?.allowedSendTypes,
+            deletionHours = firstSendControls?.deletionHours,
+            disableHideEmail = decodedSendControls.any { it.second.disableHideEmail == true } ||
+                remainingSendOptions.any { it.shouldDisableHideEmail ?: false },
+            disableSend = decodedSendControls.any { it.second.disableSend == true } ||
+                remainingDisableSendPolicies.any(),
+            whoCanAccess = firstSendControls?.whoCanAccess,
+        )
+    }
 }
 
 private data class OrganizationPolicyData(
