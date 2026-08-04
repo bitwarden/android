@@ -201,6 +201,19 @@ class NetworkCookieManagerTest {
     }
 
     @Test
+    fun `needsBootstrap should return false when hostname is outside the cookie domain`() {
+        fakeConfigDiskSource.serverConfig = createServerConfig(
+            bootstrapType = BOOTSTRAP_TYPE_SSO,
+            cookieDomain = COOKIE_DOMAIN,
+        )
+
+        val result = manager.needsBootstrap(OTHER_ENVIRONMENT_HOSTNAME)
+
+        assertFalse(result)
+        verify(exactly = 0) { mockCookieDiskSource.getCookieConfig(any()) }
+    }
+
+    @Test
     fun `storeCookies should store under cookieDomain when present`() {
         fakeConfigDiskSource.serverConfig = createServerConfig(
             bootstrapType = BOOTSTRAP_TYPE_SSO,
@@ -259,6 +272,7 @@ class NetworkCookieManagerTest {
 private const val HOSTNAME = "vault.bitwarden.com"
 private const val COOKIE_DOMAIN = "bitwarden.com"
 private const val SUBDOMAIN_HOSTNAME = "api.bitwarden.com"
+private const val OTHER_ENVIRONMENT_HOSTNAME = "vault.example.org"
 private const val BOOTSTRAP_TYPE_SSO = "ssoCookieVendor"
 
 private val DEFAULT_COOKIES = listOf(

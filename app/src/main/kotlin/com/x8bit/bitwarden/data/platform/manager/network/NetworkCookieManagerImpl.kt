@@ -42,27 +42,12 @@ class NetworkCookieManagerImpl(
         )
 
     override fun needsBootstrap(hostname: String): Boolean {
-        val result = configDiskSource
-            .serverConfig
-            ?.serverData
-            ?.communication
-            ?.bootstrap
-            ?.type
-            ?.let { bootstrapType ->
-                when (bootstrapType) {
-                    BOOTSTRAP_TYPE_SSO_COOKIE_VENDOR -> {
-                        val resolved = resolveHostname(hostname)
-                        cookieDiskSource
-                            .getCookieConfig(hostname = resolved)
-                            ?.cookies
-                            ?.none() != false
-                    }
-
-                    else -> false
-                }
-            }
-            ?: false
-        Timber.d("needsBootstrap($hostname): $result (cookieDomain=$cookieDomain)")
+        val result = isCookieBootstrapConfigured(hostname = hostname) &&
+            cookieDiskSource
+                .getCookieConfig(hostname = resolveHostname(hostname))
+                ?.cookies
+                ?.none() != false
+        Timber.d("needsBootstrap($hostname): $result")
         return result
     }
 
@@ -99,6 +84,30 @@ class NetworkCookieManagerImpl(
                 },
             ),
         )
+    }
+
+    private fun isCookieBootstrapConfigured(hostname: String): Boolean {
+        val isSsoCookieVendor = configDiskSource
+            .serverConfig
+            ?.serverData
+            ?.communication
+            ?.bootstrap
+            ?.type == BOOTSTRAP_TYPE_SSO_COOKIE_VENDOR
+        val result = isSsoCookieVendor && hostnameMatchesCookieDomain(hostname = hostname)
+        Timber.d("isCookieBootstrapConfigured($hostname): $result (cookieDomain=$cookieDomain)")
+        return result
+    }
+
+    /**
+     * Returns `true` when [hostname] is covered by the configured [cookieDomain] — i.e. it is the
+     * cookie domain itself or a subdomain of it.
+     *
+     * When no cookie domain is configured the request cannot be scoped to a specific environment,
+     * so this returns `true` to preserve the default bootstrap behavior.
+     */
+    private fun hostnameMatchesCookieDomain(hostname: String): Boolean {
+        val domain = cookieDomain ?: return true
+        return hostname == domain || hostname.endsWith(".$domain")
     }
 
     /**
