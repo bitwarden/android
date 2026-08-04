@@ -8,7 +8,8 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.takeUntilLoaded
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
-import com.bitwarden.policies.PolicyType
+import com.bitwarden.network.model.SendAccessTypeJson
+import com.bitwarden.network.model.SendTypeJson
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -21,13 +22,12 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.EffectiveSendPolicy
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
-import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
@@ -98,6 +98,7 @@ class AddEditSendViewModel @Inject constructor(
         val args = savedStateHandle.toAddEditSendArgs()
         val sendType = args.sendType
         val addEditSendType = args.addEditSendType
+        val effectiveSendPolicy = policyManager.getEffectiveSendPolicy()
 
         AddEditSendState(
             sendType = sendType,
@@ -114,9 +115,7 @@ class AddEditSendViewModel @Inject constructor(
                         noteInput = "",
                         isHideEmailChecked = false,
                         isDeactivateChecked = false,
-                        isHideEmailAddressEnabled = !policyManager
-                            .getActivePolicies<PolicyInformation.SendOptions>()
-                            .any { it.shouldDisableHideEmail ?: false },
+                        isHideEmailAddressEnabled = !effectiveSendPolicy.disableHideEmail,
                         deletionDate = clock
                             .instant()
                             .plus(@Suppress("MagicNumber") 7, ChronoUnit.DAYS),
@@ -148,9 +147,11 @@ class AddEditSendViewModel @Inject constructor(
             },
             dialogState = null,
             baseWebSendUrl = environmentRepo.environment.baseWebSendUrl,
-            policyDisablesSend = policyManager
-                .getActivePolicies(type = PolicyType.DISABLE_SEND)
-                .any(),
+            policyDisablesSend = effectiveSendPolicy.disableSend,
+            allowedDomains = effectiveSendPolicy.allowedDomains,
+            allowedSendTypes = effectiveSendPolicy.allowedSendTypes,
+            deletionHours = effectiveSendPolicy.deletionHours,
+            whoCanAccess = effectiveSendPolicy.whoCanAccess,
             isPremium = authRepo.userStateFlow.value?.activeAccount?.isPremium == true,
         )
     },
@@ -825,9 +826,7 @@ class AddEditSendViewModel @Inject constructor(
     }
 
     private val isHideEmailAddressEnabled: Boolean
-        get() = !policyManager
-            .getActivePolicies<PolicyInformation.SendOptions>()
-            .any { it.shouldDisableHideEmail ?: false }
+        get() = !policyManager.getEffectiveSendPolicy().disableHideEmail
 
     private inline fun onContent(
         crossinline block: (AddEditSendState.ViewState.Content) -> Unit,
@@ -886,6 +885,15 @@ class AddEditSendViewModel @Inject constructor(
 
 /**
  * Models state for the add/edit send screen.
+ *
+ * @property allowedDomains The allowed recipient email domains, sourced from
+ * [EffectiveSendPolicy.allowedDomains]. Currently unused by the UI.
+ * @property allowedSendTypes The types of Sends that are allowed to be created, sourced from
+ * [EffectiveSendPolicy.allowedSendTypes]. Currently unused by the UI.
+ * @property deletionHours The enforced Send deletion window in hours, sourced from
+ * [EffectiveSendPolicy.deletionHours]. Currently unused by the UI.
+ * @property whoCanAccess The access type Sends are restricted to, sourced from
+ * [EffectiveSendPolicy.whoCanAccess]. Currently unused by the UI.
  */
 @Parcelize
 data class AddEditSendState(
@@ -897,6 +905,10 @@ data class AddEditSendState(
     val isShared: Boolean,
     val baseWebSendUrl: String,
     val policyDisablesSend: Boolean,
+    val allowedDomains: String?,
+    val allowedSendTypes: List<SendTypeJson>?,
+    val deletionHours: Int?,
+    val whoCanAccess: SendAccessTypeJson?,
     val isPremium: Boolean,
 ) : Parcelable {
 
