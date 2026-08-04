@@ -6,6 +6,7 @@ import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.network.model.OrganizationStatusType
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.SendAccessTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.bitwarden.network.model.createMockPolicy
@@ -14,6 +15,7 @@ import com.bitwarden.policies.PolicyView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
+import com.x8bit.bitwarden.data.platform.manager.model.EffectiveSendPolicy
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import io.mockk.every
 import io.mockk.mockk
@@ -38,12 +40,19 @@ class PolicyManagerTest {
     }
     private val authSdkSource: AuthSdkSource = mockk()
     private val mutablePoliciesInAcceptedStateFlagFlow = MutableStateFlow(true)
+    private val mutableSendControlsFlagFlow = MutableStateFlow(false)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every {
             getFeatureFlagFlow(key = FlagKey.PoliciesInAcceptedState)
         } returns mutablePoliciesInAcceptedStateFlagFlow
         every { getFeatureFlag(key = FlagKey.PoliciesInAcceptedState) } answers {
             mutablePoliciesInAcceptedStateFlagFlow.value
+        }
+        every {
+            getFeatureFlagFlow(key = FlagKey.SendControls)
+        } returns mutableSendControlsFlagFlow
+        every { getFeatureFlag(key = FlagKey.SendControls) } answers {
+            mutableSendControlsFlagFlow.value
         }
     }
 
@@ -723,6 +732,309 @@ class PolicyManagerTest {
             expectedOrganizationId,
             policyManager.getPersonalOwnershipPolicyOrganizationId(),
         )
+    }
+
+    @Test
+    fun `getEffectiveSendPolicy should mirror legacy DisableSend policy when flag is off`() {
+        setUpSendPolicies(
+            disableSendPolicies = listOf(
+                createMockPolicyView(organizationId = "mockId-1", enabled = true),
+            ),
+        )
+
+        assertEquals(
+            EffectiveSendPolicy(
+                allowedDomains = null,
+                allowedSendTypes = null,
+                deletionHours = null,
+                disableHideEmail = false,
+                disableSend = true,
+                whoCanAccess = null,
+            ),
+            policyManager.getEffectiveSendPolicy(),
+        )
+    }
+
+    @Test
+    fun `getEffectiveSendPolicy should mirror legacy SendOptions policy when flag is off`() {
+        setUpSendPolicies(
+            sendOptionsPolicies = listOf(
+                createMockPolicyView(
+                    organizationId = "mockId-1",
+                    enabled = true,
+                    type = PolicyType.SEND_OPTIONS,
+                    data = """{"disableHideEmail":true}""",
+                ),
+            ),
+        )
+
+        assertEquals(
+            EffectiveSendPolicy(
+                allowedDomains = null,
+                allowedSendTypes = null,
+                deletionHours = null,
+                disableHideEmail = true,
+                disableSend = false,
+                whoCanAccess = null,
+            ),
+            policyManager.getEffectiveSendPolicy(),
+        )
+    }
+
+    @Test
+    fun `getEffectiveSendPolicy should ignore an active SendControls policy when flag is off`() {
+        setUpSendPolicies(
+            sendControlsPolicies = listOf(
+                createMockPolicyView(
+                    organizationId = "mockId-1",
+                    enabled = true,
+                    type = PolicyType.SEND_CONTROLS,
+                    data = """{"disableSend":false}""",
+                ),
+            ),
+            disableSendPolicies = listOf(
+                createMockPolicyView(organizationId = "mockId-1", enabled = true),
+            ),
+        )
+
+        assertEquals(
+            EffectiveSendPolicy(
+                allowedDomains = null,
+                allowedSendTypes = null,
+                deletionHours = null,
+                disableHideEmail = false,
+                disableSend = true,
+                whoCanAccess = null,
+            ),
+            policyManager.getEffectiveSendPolicy(),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getEffectiveSendPolicy should use SendControls for an org that has both policy types when flag is on`() {
+        mutableSendControlsFlagFlow.value = true
+        setUpSendPolicies(
+            sendControlsPolicies = listOf(
+                createMockPolicyView(
+                    organizationId = "mockId-1",
+                    enabled = true,
+                    type = PolicyType.SEND_CONTROLS,
+                    data = """{"disableSend":false}""",
+                ),
+            ),
+            disableSendPolicies = listOf(
+                createMockPolicyView(organizationId = "mockId-1", enabled = true),
+            ),
+        )
+
+        assertEquals(false, policyManager.getEffectiveSendPolicy().disableSend)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getEffectiveSendPolicy should still apply legacy DisableSend for an org without SendControls when flag is on`() {
+        mutableSendControlsFlagFlow.value = true
+        setUpSendPolicies(
+            sendControlsPolicies = listOf(
+                createMockPolicyView(
+                    organizationId = "mockId-1",
+                    enabled = true,
+                    type = PolicyType.SEND_CONTROLS,
+                    data = """{"disableSend":false}""",
+                ),
+            ),
+            disableSendPolicies = listOf(
+                // mockId-1 has SendControls (exclusion applies), mockId-2 does not.
+                createMockPolicyView(organizationId = "mockId-1", enabled = true),
+                createMockPolicyView(organizationId = "mockId-2", enabled = true),
+            ),
+        )
+
+        assertEquals(true, policyManager.getEffectiveSendPolicy().disableSend)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getEffectiveSendPolicy should OR disableHideEmail across SendControls and remaining legacy orgs`() {
+        mutableSendControlsFlagFlow.value = true
+        setUpSendPolicies(
+            sendControlsPolicies = listOf(
+                createMockPolicyView(
+                    organizationId = "mockId-1",
+                    enabled = true,
+                    type = PolicyType.SEND_CONTROLS,
+                    data = """{"disableHideEmail":false}""",
+                ),
+            ),
+            sendOptionsPolicies = listOf(
+                createMockPolicyView(
+                    organizationId = "mockId-2",
+                    enabled = true,
+                    type = PolicyType.SEND_OPTIONS,
+                    data = """{"disableHideEmail":true}""",
+                ),
+            ),
+        )
+
+        assertEquals(true, policyManager.getEffectiveSendPolicy().disableHideEmail)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getEffectiveSendPolicy should source new fields from the first active SendControls policy`() {
+        mutableSendControlsFlagFlow.value = true
+        setUpSendPolicies(
+            sendControlsPolicies = listOf(
+                createMockPolicyView(
+                    organizationId = "mockId-1",
+                    enabled = true,
+                    type = PolicyType.SEND_CONTROLS,
+                    data = """
+                        {
+                            "whoCanAccess":2,
+                            "allowedDomains":"bitwarden.com",
+                            "deletionHours":24
+                        }
+                    """.trimIndent(),
+                ),
+            ),
+        )
+
+        assertEquals(
+            EffectiveSendPolicy(
+                allowedDomains = "bitwarden.com",
+                allowedSendTypes = null,
+                deletionHours = 24,
+                disableHideEmail = false,
+                disableSend = false,
+                whoCanAccess = SendAccessTypeJson.SPECIFIC_PEOPLE,
+            ),
+            policyManager.getEffectiveSendPolicy(),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getEffectiveSendPolicy should return safe defaults when no org has any Send-related policy`() {
+        mutableSendControlsFlagFlow.value = true
+        setUpSendPolicies()
+
+        assertEquals(
+            EffectiveSendPolicy(
+                allowedDomains = null,
+                allowedSendTypes = null,
+                deletionHours = null,
+                disableHideEmail = false,
+                disableSend = false,
+                whoCanAccess = null,
+            ),
+            policyManager.getEffectiveSendPolicy(),
+        )
+    }
+
+    @Test
+    fun `getEffectiveSendPolicyFlow should re-emit when the feature flag changes`() = runTest {
+        val userStateJson = mockk<UserStateJson> {
+            every { activeUserId } returns USER_ID
+        }
+        val organizations = createMockOrganizationNetwork(
+            number = 1,
+            isEnabled = true,
+            shouldUsePolicies = true,
+        )
+        every {
+            authSdkSource.filterPolicies(
+                policies = any(),
+                organizations = any(),
+                policyType = PolicyType.SEND_CONTROLS,
+            )
+        } returns emptyList<PolicyView>().asSuccess()
+        every {
+            authSdkSource.filterPolicies(
+                policies = any(),
+                organizations = any(),
+                policyType = PolicyType.SEND_OPTIONS,
+            )
+        } returns emptyList<PolicyView>().asSuccess()
+        every {
+            authSdkSource.filterPolicies(
+                policies = any(),
+                organizations = any(),
+                policyType = PolicyType.DISABLE_SEND,
+            )
+        } returnsMany listOf(
+            emptyList<PolicyView>().asSuccess(),
+            listOf(createMockPolicyView(organizationId = organizations.id, enabled = true))
+                .asSuccess(),
+        )
+
+        mutableUserStateFlow.value = userStateJson
+        mutableOrganizationsFlow.value = listOf(organizations)
+        mutablePolicyFlow.value = listOf(
+            createMockPolicy(organizationId = organizations.id, isEnabled = true),
+        )
+
+        policyManager
+            .getEffectiveSendPolicyFlow()
+            .test {
+                assertEquals(false, awaitItem().disableSend)
+
+                mutablePolicyFlow.value = listOf(
+                    createMockPolicy(
+                        number = 2,
+                        organizationId = organizations.id,
+                        isEnabled = true,
+                    ),
+                )
+
+                assertEquals(true, awaitItem().disableSend)
+            }
+    }
+
+    /**
+     * Sets up the mocks required for [PolicyManagerImpl.getEffectiveSendPolicy] /
+     * [PolicyManagerImpl.getEffectiveSendPolicyFlow] to return, per policy type, the given lists
+     * of already-decoded [PolicyView]s.
+     */
+    private fun setUpSendPolicies(
+        disableSendPolicies: List<PolicyView> = emptyList(),
+        sendControlsPolicies: List<PolicyView> = emptyList(),
+        sendOptionsPolicies: List<PolicyView> = emptyList(),
+    ) {
+        val userState: UserStateJson = mockk {
+            every { activeUserId } returns USER_ID
+        }
+        every { authDiskSource.userState } returns userState
+        every {
+            authDiskSource.getOrganizations(USER_ID)
+        } returns listOf(
+            createMockOrganizationNetwork(number = 1, isEnabled = true, shouldUsePolicies = true),
+        )
+        every {
+            authDiskSource.getPolicies(USER_ID)
+        } returns listOf(createMockPolicy(organizationId = "mockId-1", isEnabled = true))
+        every {
+            authSdkSource.filterPolicies(
+                policies = any(),
+                organizations = any(),
+                policyType = PolicyType.SEND_CONTROLS,
+            )
+        } returns sendControlsPolicies.asSuccess()
+        every {
+            authSdkSource.filterPolicies(
+                policies = any(),
+                organizations = any(),
+                policyType = PolicyType.DISABLE_SEND,
+            )
+        } returns disableSendPolicies.asSuccess()
+        every {
+            authSdkSource.filterPolicies(
+                policies = any(),
+                organizations = any(),
+                policyType = PolicyType.SEND_OPTIONS,
+            )
+        } returns sendOptionsPolicies.asSuccess()
     }
 }
 
