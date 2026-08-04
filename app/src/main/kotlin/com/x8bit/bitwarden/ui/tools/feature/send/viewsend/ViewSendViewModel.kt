@@ -255,7 +255,6 @@ data class ViewSendState(
         get() = when (sendType) {
             SendItemType.FILE -> BitwardenString.view_file_send.asText()
             SendItemType.TEXT -> BitwardenString.view_text_send.asText()
-            SendItemType.ITEM -> BitwardenString.view_item_send.asText()
         }
 
     /**

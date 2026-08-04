@@ -12,5 +12,4 @@ val SendItemType.selectionText: Text
     get() = when (this) {
         SendItemType.FILE -> BitwardenString.file.asText()
         SendItemType.TEXT -> BitwardenString.text.asText()
-        SendItemType.ITEM -> BitwardenString.item.asText()
     }

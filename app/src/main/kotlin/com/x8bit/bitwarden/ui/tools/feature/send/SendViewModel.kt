@@ -405,7 +405,7 @@ class SendViewModel @Inject constructor(
                 sendType = when (action.sendItem.type) {
                     SendState.ViewState.Content.SendItem.Type.FILE -> SendItemType.FILE
                     SendState.ViewState.Content.SendItem.Type.TEXT -> SendItemType.TEXT
-                    SendState.ViewState.Content.SendItem.Type.ITEM -> SendItemType.ITEM
+                    SendState.ViewState.Content.SendItem.Type.ITEM -> SendItemType.TEXT
                 },
             ),
         )
@@ -418,7 +418,7 @@ class SendViewModel @Inject constructor(
                 sendType = when (action.sendItem.type) {
                     SendState.ViewState.Content.SendItem.Type.FILE -> SendItemType.FILE
                     SendState.ViewState.Content.SendItem.Type.TEXT -> SendItemType.TEXT
-                    SendState.ViewState.Content.SendItem.Type.ITEM -> SendItemType.ITEM
+                    SendState.ViewState.Content.SendItem.Type.ITEM -> SendItemType.TEXT
                 },
             ),
         )
@@ -431,7 +431,7 @@ class SendViewModel @Inject constructor(
                 sendType = when (action.sendItem.type) {
                     SendState.ViewState.Content.SendItem.Type.FILE -> SendItemType.FILE
                     SendState.ViewState.Content.SendItem.Type.TEXT -> SendItemType.TEXT
-                    SendState.ViewState.Content.SendItem.Type.ITEM -> SendItemType.ITEM
+                    SendState.ViewState.Content.SendItem.Type.ITEM -> SendItemType.TEXT
                 },
             ),
         )

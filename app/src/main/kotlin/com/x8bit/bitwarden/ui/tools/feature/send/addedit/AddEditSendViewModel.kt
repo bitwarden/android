@@ -142,11 +142,6 @@ class AddEditSendViewModel @Inject constructor(
                             )
                         }
 
-                        SendItemType.ITEM -> {
-                            AddEditSendState.ViewState.Content.SendType.Item(
-                                data = ""
-                            )
-                        }
                     },
                 )
 
@@ -914,13 +909,11 @@ data class AddEditSendState(
             AddEditSendType.AddItem -> when (sendType) {
                 SendItemType.FILE -> BitwardenString.add_file_send.asText()
                 SendItemType.TEXT -> BitwardenString.add_text_send.asText()
-                SendItemType.ITEM -> BitwardenString.add_item_send.asText()
             }
 
             is AddEditSendType.EditItem -> when (sendType) {
                 SendItemType.FILE -> BitwardenString.edit_file_send.asText()
                 SendItemType.TEXT -> BitwardenString.edit_text_send.asText()
-                SendItemType.ITEM -> BitwardenString.edit_item_send.asText()
             }
         }
 
