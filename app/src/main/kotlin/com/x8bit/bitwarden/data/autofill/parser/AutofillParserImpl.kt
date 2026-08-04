@@ -120,16 +120,27 @@ class AutofillParserImpl(
         fillRequest: FillRequest?,
     ): AutofillRequest {
         Timber.d("Parsing AssistStructure -- ${fillRequest?.id}")
+        // Identity classification/fulfillment ship together: until this flag is on, every node
+        // must classify exactly as it did before identity heuristics existed, so behaviors like
+        // updateForMissingUsernameFields's Unused-only promotion keep working unchanged.
+        val isIdentityAutofillEnabled = featureFlagManager.getFeatureFlag(FlagKey.IdentityAutofill)
         // Parse the `assistStructure` into internal models.
-        val traversalDataList = assistStructure.traverse()
+        val traversalDataList = assistStructure.traverse(
+            isIdentityAutofillEnabled = isIdentityAutofillEnabled,
+        )
         val urlBarWebsite = traversalDataList
             .flatMap { it.urlBarWebsites }
             .firstOrNull()
         // Heuristic views: the focused node's candidates with unfillable (Unused) fields removed,
-        // falling back to all fillable views when nothing has focus.
+        // falling back to all fillable views when nothing has focus. Identity is also excluded
+        // here for now -- Identity partition construction lands in Phase D, so until then a field
+        // classified as Identity must keep falling through exactly as it would have as Unused
+        // (e.g. resolving to a sibling Login/Card field on the same form, or its Unused-only
+        // promotion in updateForMissingUsernameFields), not become the focused view and force this
+        // request to Unfillable.
         val autofillViews = traversalDataList
             .selectCandidateAutofillViews(urlBarWebsite = urlBarWebsite) {
-                it !is AutofillView.Unused
+                it !is AutofillView.Unused && it !is AutofillView.Identity
             }
 
         val isFillAssistEnabled = featureFlagManager
@@ -279,13 +290,18 @@ class AutofillParserImpl(
 /**
  * Traverse the [AssistStructure] and convert it into a list of [ViewNodeTraversalData]s.
  */
-private fun AssistStructure.traverse(): List<ViewNodeTraversalData> =
+private fun AssistStructure.traverse(
+    isIdentityAutofillEnabled: Boolean,
+): List<ViewNodeTraversalData> =
     (0 until windowNodeCount)
         .map { getWindowNodeAt(it) }
         .mapNotNull { windowNode ->
             windowNode
                 .rootViewNode
-                ?.traverse(parentWebsite = null)
+                ?.traverse(
+                    parentWebsite = null,
+                    isIdentityAutofillEnabled = isIdentityAutofillEnabled,
+                )
                 ?.updateForMissingPasswordFields()
                 ?.updateForMissingUsernameFields()
         }
@@ -390,9 +406,10 @@ private fun ViewNodeTraversalData.copyAndMapAutofillViews(
  * Recursively traverse this [AssistStructure.ViewNode] and all of its descendants. Convert the
  * data into [ViewNodeTraversalData].
  */
-@Suppress("CyclomaticComplexMethod")
+@Suppress("CyclomaticComplexMethod", "LongMethod")
 private fun AssistStructure.ViewNode.traverse(
     parentWebsite: String?,
+    isIdentityAutofillEnabled: Boolean,
 ): ViewNodeTraversalData {
     // Set up mutable lists for collecting valid AutofillViews and ignorable view ids.
     val mutableAutofillViewList: MutableList<AutofillView> = mutableListOf()
@@ -412,26 +429,31 @@ private fun AssistStructure.ViewNode.traverse(
 
     // Try converting this `ViewNode` into an `AutofillView`. If a valid instance is returned, add
     // it to the list. Otherwise, ignore the `AutofillId` associated with this `ViewNode`.
-    toAutofillView(parentWebsite = parentWebsite)
+    toAutofillView(
+        parentWebsite = parentWebsite,
+        isIdentityAutofillEnabled = isIdentityAutofillEnabled,
+    )
         ?.also { view ->
             if (view !is AutofillView.Unused) {
                 claimedAutofillIds.add(view.data.autofillId)
             }
             mutableAutofillViewList.add(view)
 
-            // An email-hinted or email-heuristic field is offered as both a Login candidate
-            // (above) and an Identity candidate, since the two partitions aren't mutually
-            // exclusive for this field. Reuses the same (container-redirect-corrected) data as
-            // the primary view rather than re-deriving it.
-            if (view is AutofillView.Login.Username && this.isEmailField) {
-                mutableAutofillViewList.add(AutofillView.Identity.Email(data = view.data))
-            }
+            if (isIdentityAutofillEnabled) {
+                // An email-hinted or email-heuristic field is offered as both a Login candidate
+                // (above) and an Identity candidate, since the two partitions aren't mutually
+                // exclusive for this field. Reuses the same (container-redirect-corrected) data as
+                // the primary view rather than re-deriving it.
+                if (view is AutofillView.Login.Username && this.isEmailField) {
+                    mutableAutofillViewList.add(AutofillView.Identity.Email(data = view.data))
+                }
 
-            // Some phone hints (e.g. "mobilephone") also match the username heuristic's "phone"
-            // term and resolve to Login.Username above, so they need the same dual-classification
-            // as email.
-            if (view is AutofillView.Login.Username && this.isPhoneField) {
-                mutableAutofillViewList.add(AutofillView.Identity.PhoneFull(data = view.data))
+                // Some phone hints (e.g. "mobilephone") also match the username heuristic's
+                // "phone" term and resolve to Login.Username above, so they need the same
+                // dual-classification as email.
+                if (view is AutofillView.Login.Username && this.isPhoneField) {
+                    mutableAutofillViewList.add(AutofillView.Identity.PhoneFull(data = view.data))
+                }
             }
         }
         ?: autofillId?.run(mutableIgnoreAutofillIdList::add)
@@ -440,7 +462,10 @@ private fun AssistStructure.ViewNode.traverse(
     for (i in 0 until childCount) {
         // Extract the traversal data from each child view node and add it to the lists.
         getChildAt(i)
-            .traverse(parentWebsite = website)
+            .traverse(
+                parentWebsite = website,
+                isIdentityAutofillEnabled = isIdentityAutofillEnabled,
+            )
             .let { viewNodeTraversalData ->
                 viewNodeTraversalData.autofillViews
                     // filter out existing AutofillIds to avoid duplicates
