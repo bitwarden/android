@@ -78,6 +78,7 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.EffectiveSendPolicy
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -221,8 +222,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     private val mutableActivePoliciesFlow: MutableStateFlow<List<PolicyView>> =
         MutableStateFlow(emptyList())
     private val policyManager: PolicyManager = mockk {
-        every { getActivePolicies(type = PolicyType.DISABLE_SEND) } returns emptyList()
-        every { getActivePoliciesFlow(type = PolicyType.DISABLE_SEND) } returns emptyFlow()
+        every { getEffectiveSendPolicy() } returns DEFAULT_EFFECTIVE_SEND_POLICY
+        every { getEffectiveSendPolicyFlow() } returns emptyFlow()
         every {
             getActivePoliciesFlow(type = PolicyType.RESTRICTED_ITEM_TYPES)
         } returns mutableActivePoliciesFlow
@@ -6777,6 +6778,15 @@ private val DEFAULT_ACCOUNT = UserState.Account(
 private val DEFAULT_USER_STATE = UserState(
     activeUserId = "activeUserId",
     accounts = listOf(DEFAULT_ACCOUNT),
+)
+
+private val DEFAULT_EFFECTIVE_SEND_POLICY = EffectiveSendPolicy(
+    allowedDomains = null,
+    allowedSendTypes = null,
+    deletionHours = null,
+    disableHideEmail = false,
+    disableSend = false,
+    whoCanAccess = null,
 )
 
 private const val DEFAULT_RELYING_PARTY_ID = "www.bitwarden.com"
