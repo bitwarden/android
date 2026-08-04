@@ -136,7 +136,6 @@ fun AddEditSendContent(
             }
 
             is AddEditSendState.ViewState.Content.SendType.Item -> {
-
             }
         }
 

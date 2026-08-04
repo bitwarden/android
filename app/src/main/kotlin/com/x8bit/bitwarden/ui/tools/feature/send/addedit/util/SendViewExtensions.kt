@@ -63,7 +63,7 @@ fun SendView.toViewState(
 
             SendType.ITEM -> {
                 AddEditSendState.ViewState.Content.SendType.Item(
-                    data = ""
+                    data = "",
                 )
             }
         },

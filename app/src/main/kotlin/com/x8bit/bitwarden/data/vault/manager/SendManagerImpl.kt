@@ -80,8 +80,8 @@ class SendManagerImpl(
                     SendType.ITEM -> Result.success(
                         CreateSendJsonResponse.Invalid(
                             message = "Item Sends are not yet available",
-                            validationErrors = null
-                        )
+                            validationErrors = null,
+                        ),
                     )
                 }
             }

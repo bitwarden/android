@@ -141,7 +141,6 @@ class AddEditSendViewModel @Inject constructor(
                                 isHideByDefaultChecked = false,
                             )
                         }
-
                     },
                 )
 

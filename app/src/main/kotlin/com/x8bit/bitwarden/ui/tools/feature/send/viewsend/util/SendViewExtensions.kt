@@ -22,7 +22,7 @@ fun SendView.toViewSendViewStateContent(
             SendType.FILE -> requireNotNull(this.file).toFileType()
             SendType.TEXT -> requireNotNull(this.text).toTextType()
             SendType.ITEM -> ViewSendState.ViewState.Content.SendType.ItemType(
-                data = ""
+                data = "",
             )
         },
         shareLink = this.toSendUrl(baseWebSendUrl = baseWebSendUrl),
