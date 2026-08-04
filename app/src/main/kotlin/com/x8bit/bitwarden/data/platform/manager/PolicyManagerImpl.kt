@@ -225,6 +225,9 @@ class PolicyManagerImpl(
         }
 
         val decodedSendControls = sendControlsPolicies
+            // Sorted so that the passthrough fields below are sourced deterministically when
+            // multiple organizations have an active SendControls policy.
+            .sortedBy { it.revisionDate }
             .mapNotNull { policy ->
                 (policy.policyInformation as? PolicyInformation.SendControls)
                     ?.let { policy.organizationId to it }

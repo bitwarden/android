@@ -882,7 +882,7 @@ class PolicyManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `getEffectiveSendPolicy should source new fields from the first active SendControls policy`() {
+    fun `getEffectiveSendPolicy should source new fields from the earliest active SendControls policy`() {
         mutableSendControlsFlagFlow.value = true
         setUpSendPolicies(
             sendControlsPolicies = listOf(
@@ -916,6 +916,38 @@ class PolicyManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `getEffectiveSendPolicy should source new fields by revision date rather than list order`() {
+        mutableSendControlsFlagFlow.value = true
+        setUpSendPolicies(
+            sendControlsPolicies = listOf(
+                // Listed first, but revised later, so it should lose to the policy below.
+                createMockPolicyView(
+                    number = 2,
+                    organizationId = "mockId-2",
+                    enabled = true,
+                    type = PolicyType.SEND_CONTROLS,
+                    data = """{"allowedDomains":"later.example.com"}""",
+                    revisionDate = Instant.parse("2026-06-01T00:00:00Z"),
+                ),
+                createMockPolicyView(
+                    number = 1,
+                    organizationId = "mockId-1",
+                    enabled = true,
+                    type = PolicyType.SEND_CONTROLS,
+                    data = """{"allowedDomains":"earlier.example.com"}""",
+                    revisionDate = Instant.parse("2026-01-01T00:00:00Z"),
+                ),
+            ),
+        )
+
+        assertEquals(
+            "earlier.example.com",
+            policyManager.getEffectiveSendPolicy().allowedDomains,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `getEffectiveSendPolicy should return safe defaults when no org has any Send-related policy`() {
         mutableSendControlsFlagFlow.value = true
         setUpSendPolicies()
@@ -933,8 +965,9 @@ class PolicyManagerTest {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `getEffectiveSendPolicyFlow should re-emit when the feature flag changes`() = runTest {
+    fun `getEffectiveSendPolicyFlow should re-emit when the underlying policies change`() = runTest {
         val userStateJson = mockk<UserStateJson> {
             every { activeUserId } returns USER_ID
         }
@@ -991,6 +1024,70 @@ class PolicyManagerTest {
                 assertEquals(true, awaitItem().disableSend)
             }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getEffectiveSendPolicyFlow should re-emit when the SendControls feature flag changes`() =
+        runTest {
+            val userStateJson = mockk<UserStateJson> {
+                every { activeUserId } returns USER_ID
+            }
+            val organizations = createMockOrganizationNetwork(
+                number = 1,
+                isEnabled = true,
+                shouldUsePolicies = true,
+            )
+            every {
+                authSdkSource.filterPolicies(
+                    policies = any(),
+                    organizations = any(),
+                    policyType = PolicyType.SEND_CONTROLS,
+                )
+            } returns listOf(
+                createMockPolicyView(
+                    organizationId = organizations.id,
+                    enabled = true,
+                    type = PolicyType.SEND_CONTROLS,
+                    data = """{"disableSend":false}""",
+                ),
+            )
+                .asSuccess()
+            every {
+                authSdkSource.filterPolicies(
+                    policies = any(),
+                    organizations = any(),
+                    policyType = PolicyType.DISABLE_SEND,
+                )
+            } returns listOf(
+                createMockPolicyView(organizationId = organizations.id, enabled = true),
+            )
+                .asSuccess()
+            every {
+                authSdkSource.filterPolicies(
+                    policies = any(),
+                    organizations = any(),
+                    policyType = PolicyType.SEND_OPTIONS,
+                )
+            } returns emptyList<PolicyView>().asSuccess()
+
+            mutableUserStateFlow.value = userStateJson
+            mutableOrganizationsFlow.value = listOf(organizations)
+            mutablePolicyFlow.value = listOf(
+                createMockPolicy(organizationId = organizations.id, isEnabled = true),
+            )
+
+            policyManager
+                .getEffectiveSendPolicyFlow()
+                .test {
+                    // Flag off, so the organization's legacy DisableSend policy applies.
+                    assertEquals(true, awaitItem().disableSend)
+
+                    mutableSendControlsFlagFlow.value = true
+
+                    // Flag on, so the organization's SendControls policy supersedes its legacy one.
+                    assertEquals(false, awaitItem().disableSend)
+                }
+        }
 
     /**
      * Sets up the mocks required for [PolicyManagerImpl.getEffectiveSendPolicy] /

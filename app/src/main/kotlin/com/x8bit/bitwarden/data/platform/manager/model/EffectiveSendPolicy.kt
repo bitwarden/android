@@ -12,8 +12,9 @@ import com.bitwarden.network.model.SendTypeJson
  * DisableSend/SendOptions policies are ignored in favor of the SendControls values; other
  * organizations' legacy policies remain in effect.
  *
- * @property allowedDomains The allowed recipient email domains, sourced from the first
- * organization with an active SendControls policy, if any. Currently unused by the UI.
+ * @property allowedDomains The allowed recipient email domains, sourced from whichever
+ * organization's active SendControls policy has the earliest revision date, if any. Currently
+ * unused by the UI.
  * @property allowedSendTypes The types of Sends that are allowed to be created, sourced the same
  * way as [allowedDomains]. Currently unused by the UI.
  * @property deletionHours The enforced number of hours until a Send is deleted, sourced the same

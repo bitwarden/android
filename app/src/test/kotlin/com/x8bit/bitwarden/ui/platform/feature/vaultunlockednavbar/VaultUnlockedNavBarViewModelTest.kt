@@ -322,7 +322,7 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `effective send policy flow update with disabled policy should set areSendsDisabled to false`() =
+    fun `effective send policy flow update should set areSendsDisabled to match disableSend`() =
         runTest {
             val viewModel = createViewModel()
             viewModel.stateFlow.test {
