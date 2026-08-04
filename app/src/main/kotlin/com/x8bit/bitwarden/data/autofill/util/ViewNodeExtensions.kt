@@ -16,7 +16,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillView
 private const val DEFAULT_SCHEME: String = "https"
 
 /**
- * The supported autofill Android View hints.
+ * The supported autofill Android View hints that predate identity autofill.
  */
 private val SUPPORTED_VIEW_HINTS: List<String> = listOf(
     View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_MONTH,
@@ -27,6 +27,14 @@ private val SUPPORTED_VIEW_HINTS: List<String> = listOf(
     View.AUTOFILL_HINT_EMAIL_ADDRESS,
     View.AUTOFILL_HINT_PASSWORD,
     View.AUTOFILL_HINT_USERNAME,
+)
+
+/**
+ * The supported autofill Android View hints that are only meaningful for identity autofill.
+ * Consulted only when identity autofill is enabled --
+ * see [AssistStructure.ViewNode.toAutofillView].
+ */
+private val SUPPORTED_IDENTITY_VIEW_HINTS: List<String> = listOf(
     HintConstants.AUTOFILL_HINT_PERSON_NAME,
     HintConstants.AUTOFILL_HINT_PERSON_NAME_PREFIX,
     HintConstants.AUTOFILL_HINT_PERSON_NAME_GIVEN,
@@ -65,9 +73,10 @@ private val AssistStructure.ViewNode.isInputField: Boolean
  */
 fun AssistStructure.ViewNode.toAutofillView(
     parentWebsite: String?,
+    isIdentityAutofillEnabled: Boolean,
 ): AutofillView? {
     val nonNullAutofillId = this.autofillId ?: return null
-    val hint = this.supportedAutofillHint
+    val hint = this.supportedAutofillHint(isIdentityAutofillEnabled = isIdentityAutofillEnabled)
     val isInput = this.isInputField
     if (hint == null && !isInput) return null
 
@@ -137,47 +146,64 @@ internal fun AssistStructure.ViewNode.toAutofillViewData(
 )
 
 /**
- * The first supported autofill hint for this view node, or null if none are found.
+ * The first supported autofill hint for this view node, or null if none are found. Identity
+ * classification is gated on [isIdentityAutofillEnabled] so that, until identity fulfillment
+ * ships, a node classifies exactly as it did before identity heuristics existed -- e.g. falling
+ * through to [isUsernameField] rather than being claimed by an identity heuristic.
  */
-private val AssistStructure.ViewNode.supportedAutofillHint: AutofillHint?
-    get() = firstSupportedAutofillHintOrNull()
-        ?: when {
-            this.isUsernameField -> AutofillHint.USERNAME
-            this.isPasswordField -> AutofillHint.PASSWORD
-            this.isCardExpirationMonthField -> AutofillHint.CARD_EXPIRATION_MONTH
-            this.isCardExpirationYearField -> AutofillHint.CARD_EXPIRATION_YEAR
-            this.isCardExpirationDateField -> AutofillHint.CARD_EXPIRATION_DATE
-            this.isCardNumberField -> AutofillHint.CARD_NUMBER
-            this.isCardSecurityCodeField -> AutofillHint.CARD_SECURITY_CODE
-            this.isCardholderNameField -> AutofillHint.CARD_CARDHOLDER
-            this.isCardBrandField -> AutofillHint.CARD_BRAND
-            this.isPersonNameFullField -> AutofillHint.IDENTITY_PERSON_NAME_FULL
-            this.isPersonNamePrefixField -> AutofillHint.IDENTITY_PERSON_NAME_PREFIX
-            this.isPersonNameGivenField -> AutofillHint.IDENTITY_PERSON_NAME_GIVEN
-            this.isPersonNameMiddleField -> AutofillHint.IDENTITY_PERSON_NAME_MIDDLE
-            this.isPersonNameFamilyField -> AutofillHint.IDENTITY_PERSON_NAME_FAMILY
-            this.isPostalAddressFullField -> AutofillHint.IDENTITY_POSTAL_ADDRESS_FULL
-            this.isAddressStreetField -> AutofillHint.IDENTITY_ADDRESS_STREET
-            this.isAddressLocalityField -> AutofillHint.IDENTITY_ADDRESS_LOCALITY
-            this.isAddressRegionField -> AutofillHint.IDENTITY_ADDRESS_REGION
-            this.isAddressCountryField -> AutofillHint.IDENTITY_ADDRESS_COUNTRY
-            this.isPostalCodeField -> AutofillHint.IDENTITY_POSTAL_CODE
-            this.isPhoneField -> AutofillHint.IDENTITY_PHONE_FULL
-            this.isCompanyField -> AutofillHint.IDENTITY_COMPANY
-            this.isSsnField -> AutofillHint.IDENTITY_SSN
-            this.isPassportNumberField -> AutofillHint.IDENTITY_PASSPORT_NUMBER
-            this.isLicenseNumberField -> AutofillHint.IDENTITY_LICENSE_NUMBER
-            else -> null
-        }
+@Suppress("CyclomaticComplexMethod")
+private fun AssistStructure.ViewNode.supportedAutofillHint(
+    isIdentityAutofillEnabled: Boolean,
+): AutofillHint? = firstSupportedAutofillHintOrNull(
+    isIdentityAutofillEnabled = isIdentityAutofillEnabled,
+)
+    ?: when {
+        this.isUsernameField -> AutofillHint.USERNAME
+        this.isPasswordField -> AutofillHint.PASSWORD
+        this.isCardExpirationMonthField -> AutofillHint.CARD_EXPIRATION_MONTH
+        this.isCardExpirationYearField -> AutofillHint.CARD_EXPIRATION_YEAR
+        this.isCardExpirationDateField -> AutofillHint.CARD_EXPIRATION_DATE
+        this.isCardNumberField -> AutofillHint.CARD_NUMBER
+        this.isCardSecurityCodeField -> AutofillHint.CARD_SECURITY_CODE
+        this.isCardholderNameField -> AutofillHint.CARD_CARDHOLDER
+        this.isCardBrandField -> AutofillHint.CARD_BRAND
+        !isIdentityAutofillEnabled -> null
+        this.isPersonNameFullField -> AutofillHint.IDENTITY_PERSON_NAME_FULL
+        this.isPersonNamePrefixField -> AutofillHint.IDENTITY_PERSON_NAME_PREFIX
+        this.isPersonNameGivenField -> AutofillHint.IDENTITY_PERSON_NAME_GIVEN
+        this.isPersonNameMiddleField -> AutofillHint.IDENTITY_PERSON_NAME_MIDDLE
+        this.isPersonNameFamilyField -> AutofillHint.IDENTITY_PERSON_NAME_FAMILY
+        this.isPostalAddressFullField -> AutofillHint.IDENTITY_POSTAL_ADDRESS_FULL
+        this.isAddressStreetField -> AutofillHint.IDENTITY_ADDRESS_STREET
+        this.isAddressLocalityField -> AutofillHint.IDENTITY_ADDRESS_LOCALITY
+        this.isAddressRegionField -> AutofillHint.IDENTITY_ADDRESS_REGION
+        this.isAddressCountryField -> AutofillHint.IDENTITY_ADDRESS_COUNTRY
+        this.isPostalCodeField -> AutofillHint.IDENTITY_POSTAL_CODE
+        this.isPhoneField -> AutofillHint.IDENTITY_PHONE_FULL
+        this.isCompanyField -> AutofillHint.IDENTITY_COMPANY
+        this.isSsnField -> AutofillHint.IDENTITY_SSN
+        this.isPassportNumberField -> AutofillHint.IDENTITY_PASSPORT_NUMBER
+        this.isLicenseNumberField -> AutofillHint.IDENTITY_LICENSE_NUMBER
+        else -> null
+    }
 
 /**
  * Get the first supported autofill hint from the view node's autofillHints, or null if none are
- * found.
+ * found. [SUPPORTED_IDENTITY_VIEW_HINTS] is only consulted when [isIdentityAutofillEnabled] is
+ * true.
  */
-private fun AssistStructure.ViewNode.firstSupportedAutofillHintOrNull(): AutofillHint? =
-    autofillHints
-        ?.firstOrNull { SUPPORTED_VIEW_HINTS.contains(it) }
+private fun AssistStructure.ViewNode.firstSupportedAutofillHintOrNull(
+    isIdentityAutofillEnabled: Boolean,
+): AutofillHint? {
+    val supportedHints = if (isIdentityAutofillEnabled) {
+        SUPPORTED_VIEW_HINTS + SUPPORTED_IDENTITY_VIEW_HINTS
+    } else {
+        SUPPORTED_VIEW_HINTS
+    }
+    return autofillHints
+        ?.firstOrNull { supportedHints.contains(it) }
         ?.toBitwardenAutofillHintOrNull()
+}
 
 private fun String.toBitwardenAutofillHintOrNull(): AutofillHint? =
     when (this) {
