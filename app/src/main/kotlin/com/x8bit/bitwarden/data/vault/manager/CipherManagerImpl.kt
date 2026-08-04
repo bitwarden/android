@@ -7,7 +7,6 @@ import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.data.manager.file.FileManager
-import com.bitwarden.data.manager.model.DownloadResult
 import com.bitwarden.network.model.ArchiveCipherResponseJson
 import com.bitwarden.network.model.AttachmentJsonResponse
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
@@ -18,6 +17,7 @@ import com.bitwarden.network.model.UnarchiveCipherResponseJson
 import com.bitwarden.network.model.UpdateCipherCollectionsJsonRequest
 import com.bitwarden.network.model.UpdateCipherResponseJson
 import com.bitwarden.network.service.CiphersService
+import com.bitwarden.network.service.DownloadService
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.EncryptionContext
@@ -57,6 +57,7 @@ import java.time.Clock
  */
 @Suppress("TooManyFunctions", "LongParameterList", "LargeClass")
 class CipherManagerImpl(
+    private val downloadService: DownloadService,
     private val fileManager: FileManager,
     private val authDiskSource: AuthDiskSource,
     private val settingsDiskSource: SettingsDiskSource,
@@ -622,13 +623,12 @@ class CipherManagerImpl(
         val url = attachmentData.url
             ?: return IllegalStateException("Attachment does not have a url").asFailure()
 
-        val encryptedFile = when (val result = fileManager.downloadFileToCache(url)) {
-            is DownloadResult.Failure -> {
-                return IllegalStateException("Download failed", result.error).asFailure()
+        val encryptedFile = downloadService
+            .getDataStream(url = url)
+            .flatMap { fileManager.streamFileToCache(stream = it.byteStream()) }
+            .getOrElse {
+                return IllegalStateException("Download failed", it).asFailure()
             }
-
-            is DownloadResult.Success -> result.file
-        }
 
         val decryptedFile = File(encryptedFile.path + "_decrypted")
         return vaultSdkSource
