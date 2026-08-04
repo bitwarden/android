@@ -6,7 +6,6 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseWebSendUrl
-import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -19,6 +18,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.EffectiveSendPolicy
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -73,8 +73,8 @@ class SendViewModelTest : BaseViewModelTest() {
         every { sendDataStateFlow } returns mutableSendDataFlow
     }
     private val policyManager: PolicyManager = mockk {
-        every { getActivePolicies(type = PolicyType.DISABLE_SEND) } returns emptyList()
-        every { getActivePoliciesFlow(type = PolicyType.DISABLE_SEND) } returns emptyFlow()
+        every { getEffectiveSendPolicy() } returns DEFAULT_EFFECTIVE_SEND_POLICY
+        every { getEffectiveSendPolicyFlow() } returns emptyFlow()
     }
 
     private val networkConnectionManager: NetworkConnectionManager = mockk {
@@ -821,6 +821,15 @@ private val DEFAULT_STATE: SendState = SendState(
     policyDisablesSend = false,
     isRefreshing = false,
     isPremiumUser = false,
+)
+
+private val DEFAULT_EFFECTIVE_SEND_POLICY = EffectiveSendPolicy(
+    allowedDomains = null,
+    allowedSendTypes = null,
+    deletionHours = null,
+    disableHideEmail = false,
+    disableSend = false,
+    whoCanAccess = null,
 )
 
 private val DEFAULT_USER_ACCOUNT_STATE = UserState.Account(
