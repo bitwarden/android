@@ -1,6 +1,6 @@
 package com.bitwarden.core.data.serializer
 
-import com.bitwarden.core.data.util.decodeFromJsonElementOrNull
+import com.bitwarden.core.data.util.decodeFromJsonElementForResult
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -8,6 +8,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonDecoder
 import kotlinx.serialization.json.jsonArray
+import timber.log.Timber
 
 /**
  * A [KSerializer] for parsing lists of items and allows for the individual items in the array
@@ -30,6 +31,16 @@ class SafeListSerializer<T>(
     ): List<T> = with(decoder as JsonDecoder) {
         decodeJsonElement()
             .jsonArray
-            .mapNotNull { json.decodeFromJsonElementOrNull(innerSerializer, it) }
+            .mapNotNull { element ->
+                json
+                    .decodeFromJsonElementForResult(
+                        deserializer = innerSerializer,
+                        element = element,
+                    )
+                    .getOrElse {
+                        Timber.w(it, "Failed to deserialize element in list")
+                        null
+                    }
+            }
     }
 }
