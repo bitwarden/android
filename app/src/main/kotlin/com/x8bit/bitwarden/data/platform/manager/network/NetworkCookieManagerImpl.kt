@@ -87,27 +87,18 @@ class NetworkCookieManagerImpl(
     }
 
     private fun isCookieBootstrapConfigured(hostname: String): Boolean {
-        val isSsoCookieVendor = configDiskSource
+        val bootstrap = configDiskSource
             .serverConfig
             ?.serverData
             ?.communication
             ?.bootstrap
-            ?.type == BOOTSTRAP_TYPE_SSO_COOKIE_VENDOR
-        val result = isSsoCookieVendor && hostnameMatchesCookieDomain(hostname = hostname)
-        Timber.d("isCookieBootstrapConfigured($hostname): $result (cookieDomain=$cookieDomain)")
+            ?.takeIf { it.type == BOOTSTRAP_TYPE_SSO_COOKIE_VENDOR }
+            ?: return false
+        val domain = bootstrap.cookieDomain
+        // No cookie domain configured: cannot scope to an environment, preserve default behavior.
+        val result = domain == null || hostname == domain || hostname.endsWith(".$domain")
+        Timber.d("isCookieBootstrapConfigured($hostname): $result (cookieDomain=$domain)")
         return result
-    }
-
-    /**
-     * Returns `true` when [hostname] is covered by the configured [cookieDomain] — i.e. it is the
-     * cookie domain itself or a subdomain of it.
-     *
-     * When no cookie domain is configured the request cannot be scoped to a specific environment,
-     * so this returns `true` to preserve the default bootstrap behavior.
-     */
-    private fun hostnameMatchesCookieDomain(hostname: String): Boolean {
-        val domain = cookieDomain ?: return true
-        return hostname == domain || hostname.endsWith(".$domain")
     }
 
     /**
