@@ -53,6 +53,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -186,6 +187,20 @@ class AddEditSendViewModel @Inject constructor(
             }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        // The effective policy itself depends on the feature flag, so both are observed together
+        // to keep the derived state consistent whenever either one changes.
+        combine(
+            policyManager.getEffectiveSendPolicyFlow(),
+            featureFlagManager.getFeatureFlagFlow(key = FlagKey.SendControls),
+        ) { effectiveSendPolicy, isSendControlsEnabled ->
+            AddEditSendAction.Internal.EffectiveSendPolicyReceive(
+                effectiveSendPolicy = effectiveSendPolicy,
+                isSendControlsEnabled = isSendControlsEnabled,
+            )
+        }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: AddEditSendAction): Unit = when (action) {
@@ -235,6 +250,10 @@ class AddEditSendViewModel @Inject constructor(
 
         is AddEditSendAction.Internal.RemovePasswordResultReceive -> {
             handleRemovePasswordResultReceive(action)
+        }
+
+        is AddEditSendAction.Internal.EffectiveSendPolicyReceive -> {
+            handleEffectiveSendPolicyReceive(action)
         }
 
         is AddEditSendAction.Internal.SendDataReceive -> handleSendDataReceive(action)
@@ -385,6 +404,31 @@ class AddEditSendViewModel @Inject constructor(
             updateCommonContent {
                 it.copy(passwordInput = passwordData.password)
             }
+        }
+    }
+
+    private fun handleEffectiveSendPolicyReceive(
+        action: AddEditSendAction.Internal.EffectiveSendPolicyReceive,
+    ) {
+        val effectiveSendPolicy = action.effectiveSendPolicy
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                policyDisablesSend = effectiveSendPolicy.disableSend,
+                isSendControlsEnabled = action.isSendControlsEnabled,
+                allowedDomains = effectiveSendPolicy.allowedDomains,
+                allowedSendTypes = effectiveSendPolicy.allowedSendTypes,
+                deletionHours = effectiveSendPolicy.deletionHours,
+                whoCanAccess = effectiveSendPolicy.whoCanAccess,
+                viewState = (currentState.viewState as? AddEditSendState.ViewState.Content)
+                    ?.let { content ->
+                        content.copy(
+                            common = content.common.copy(
+                                isHideEmailAddressEnabled = !effectiveSendPolicy.disableHideEmail,
+                            ),
+                        )
+                    }
+                    ?: currentState.viewState,
+            )
         }
     }
 
@@ -1268,6 +1312,14 @@ sealed class AddEditSendAction {
          * Indicates a result for creating a send has been received.
          */
         data class CreateSendResultReceive(val result: CreateSendResult) : Internal()
+
+        /**
+         * Indicates an updated effective send policy has been received.
+         */
+        data class EffectiveSendPolicyReceive(
+            val effectiveSendPolicy: EffectiveSendPolicy,
+            val isSendControlsEnabled: Boolean,
+        ) : Internal()
 
         /**
          * Indicates that the vault totp code result has been received.

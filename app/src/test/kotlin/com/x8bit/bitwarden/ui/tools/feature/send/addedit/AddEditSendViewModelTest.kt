@@ -94,11 +94,17 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     private val vaultRepository: VaultRepository = mockk {
         every { getSendStateFlow(any()) } returns mutableSendDataStateFlow
     }
+    private val mutableEffectiveSendPolicyFlow = MutableStateFlow(DEFAULT_EFFECTIVE_SEND_POLICY)
+    private val mutableSendControlsFlagFlow = MutableStateFlow(false)
     private val policyManager: PolicyManager = mockk {
-        every { getEffectiveSendPolicy() } returns DEFAULT_EFFECTIVE_SEND_POLICY
+        every { getEffectiveSendPolicy() } answers { mutableEffectiveSendPolicyFlow.value }
+        every { getEffectiveSendPolicyFlow() } returns mutableEffectiveSendPolicyFlow
     }
     private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(key = FlagKey.SendControls) } returns false
+        every { getFeatureFlag(key = FlagKey.SendControls) } answers {
+            mutableSendControlsFlagFlow.value
+        }
+        every { getFeatureFlagFlow(key = FlagKey.SendControls) } returns mutableSendControlsFlagFlow
     }
     private val networkConnectionManager = mockk<NetworkConnectionManager> {
         every { isNetworkConnected } returns true
@@ -141,9 +147,8 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state should be correct when the effective policy disables hide email`() {
-        every {
-            policyManager.getEffectiveSendPolicy()
-        } returns DEFAULT_EFFECTIVE_SEND_POLICY.copy(disableHideEmail = true)
+        mutableEffectiveSendPolicyFlow.value =
+            DEFAULT_EFFECTIVE_SEND_POLICY.copy(disableHideEmail = true)
         val viewModel = createViewModel()
         val viewState = DEFAULT_VIEW_STATE.copy(
             common = DEFAULT_COMMON_STATE.copy(
@@ -155,7 +160,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state should be correct when the send controls feature flag is enabled`() {
-        every { featureFlagManager.getFeatureFlag(key = FlagKey.SendControls) } returns true
+        mutableSendControlsFlagFlow.value = true
         val viewModel = createViewModel()
         assertEquals(
             DEFAULT_STATE.copy(isSendControlsEnabled = true),
@@ -166,17 +171,56 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `shouldHideEmailAddressToggle should only be true when send controls is enabled and hide email is restricted`() {
-        every {
-            policyManager.getEffectiveSendPolicy()
-        } returns DEFAULT_EFFECTIVE_SEND_POLICY.copy(disableHideEmail = true)
+        mutableEffectiveSendPolicyFlow.value =
+            DEFAULT_EFFECTIVE_SEND_POLICY.copy(disableHideEmail = true)
 
         // Flag off retains the legacy behavior of only disabling the toggle.
         assertEquals(false, createViewModel().stateFlow.value.shouldHideEmailAddressToggle)
 
-        every { featureFlagManager.getFeatureFlag(key = FlagKey.SendControls) } returns true
+        mutableSendControlsFlagFlow.value = true
 
         assertEquals(true, createViewModel().stateFlow.value.shouldHideEmailAddressToggle)
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `state should update when the send controls feature flag changes while the screen is open`() =
+        runTest {
+            mutableEffectiveSendPolicyFlow.value =
+                DEFAULT_EFFECTIVE_SEND_POLICY.copy(disableHideEmail = true)
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                val initialState = awaitItem()
+                assertEquals(false, initialState.isSendControlsEnabled)
+                assertEquals(false, initialState.shouldHideEmailAddressToggle)
+
+                mutableSendControlsFlagFlow.value = true
+
+                val updatedState = awaitItem()
+                assertEquals(true, updatedState.isSendControlsEnabled)
+                assertEquals(true, updatedState.shouldHideEmailAddressToggle)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `state should update when the effective send policy changes while the screen is open`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(true, awaitItem().isHideEmailAddressEnabledOrNull())
+
+                mutableEffectiveSendPolicyFlow.value =
+                    DEFAULT_EFFECTIVE_SEND_POLICY.copy(disableHideEmail = true)
+
+                assertEquals(false, awaitItem().isHideEmailAddressEnabledOrNull())
+            }
+        }
+
+    private fun AddEditSendState.isHideEmailAddressEnabledOrNull(): Boolean? =
+        (viewState as? AddEditSendState.ViewState.Content)?.common?.isHideEmailAddressEnabled
 
     @Test
     fun `initial state should read from saved state when present`() {
