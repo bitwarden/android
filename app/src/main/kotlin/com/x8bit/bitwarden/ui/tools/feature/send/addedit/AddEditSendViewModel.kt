@@ -934,10 +934,13 @@ data class AddEditSendState(
         }
 
     /**
-     * Helper to determine if the policy notice should be displayed.
+     * Helper to determine if the policy notice should be displayed. The notice is only relevant to
+     * the legacy send options policy, which disables the affected controls rather than hiding them.
+     * The SendControls policy removes those controls entirely, so there is nothing to explain.
      */
     val shouldDisplayPolicyWarning: Boolean
         get() = !policyDisablesSend &&
+            !isSendControlsEnabled &&
             (viewState as? ViewState.Content)?.common?.isHideEmailAddressEnabled != true
 
     /**

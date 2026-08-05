@@ -1065,6 +1065,13 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(text)
             .assertIsDisplayed()
+
+        // The notice is not relevant once send controls removes the affected options entirely.
+        mutableStateFlow.update { it.copy(isSendControlsEnabled = true) }
+
+        composeTestRule
+            .onNodeWithText(text)
+            .assertIsNotDisplayed()
     }
 
     //region Authentication UI Tests
