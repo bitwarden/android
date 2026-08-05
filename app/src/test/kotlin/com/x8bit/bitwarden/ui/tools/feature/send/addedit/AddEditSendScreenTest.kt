@@ -790,7 +790,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `hide email toggle should be disabled according to state`() = runTest {
+    fun `hide email toggle should be displayed according to state`() = runTest {
         // Expand options section:
         composeTestRule
             .onNodeWithText("Additional options")
@@ -807,24 +807,22 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             )
         }
 
-        // Toggle should be disabled
+        // Toggle should be hidden entirely when the policy disables hiding the email address.
         composeTestRule
             .onNodeWithText("Hide my email address", substring = true)
-            .performScrollTo()
-            .assertIsDisplayed()
-            .assertIsNotEnabled()
+            .assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
-                        isHideEmailChecked = true,
+                        isHideEmailAddressEnabled = true,
                     ),
                 ),
             )
         }
 
-        // Toggle should be enabled
+        // Toggle should be displayed and interactive otherwise.
         composeTestRule
             .onNodeWithText("Hide my email address", substring = true)
             .performScrollTo()
