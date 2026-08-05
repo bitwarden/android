@@ -789,46 +789,93 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .assertIsOn()
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `hide email toggle should be displayed according to state`() = runTest {
-        // Expand options section:
-        composeTestRule
-            .onNodeWithText("Additional options")
-            .performScrollTo()
-            .performClick()
+    fun `hide email toggle should be disabled when restricted and send controls is disabled`() =
+        runTest {
+            // Expand options section:
+            composeTestRule
+                .onNodeWithText("Additional options")
+                .performScrollTo()
+                .performClick()
 
-        mutableStateFlow.update {
-            it.copy(
-                viewState = DEFAULT_VIEW_STATE.copy(
-                    common = DEFAULT_COMMON_STATE.copy(
-                        isHideEmailAddressEnabled = false,
+            mutableStateFlow.update {
+                it.copy(
+                    viewState = DEFAULT_VIEW_STATE.copy(
+                        common = DEFAULT_COMMON_STATE.copy(
+                            isHideEmailAddressEnabled = false,
+                        ),
                     ),
-                ),
-            )
+                    isSendControlsEnabled = false,
+                )
+            }
+
+            // Legacy behavior: the toggle remains visible but is not interactive.
+            composeTestRule
+                .onNodeWithText("Hide my email address", substring = true)
+                .performScrollTo()
+                .assertIsDisplayed()
+                .assertIsNotEnabled()
+
+            mutableStateFlow.update {
+                it.copy(
+                    viewState = DEFAULT_VIEW_STATE.copy(
+                        common = DEFAULT_COMMON_STATE.copy(
+                            isHideEmailAddressEnabled = true,
+                        ),
+                    ),
+                )
+            }
+
+            composeTestRule
+                .onNodeWithText("Hide my email address", substring = true)
+                .performScrollTo()
+                .assertIsDisplayed()
+                .assertIsEnabled()
         }
 
-        // Toggle should be hidden entirely when the policy disables hiding the email address.
-        composeTestRule
-            .onNodeWithText("Hide my email address", substring = true)
-            .assertDoesNotExist()
+    @Suppress("MaxLineLength")
+    @Test
+    fun `hide email toggle should be hidden when restricted and send controls is enabled`() =
+        runTest {
+            // Expand options section:
+            composeTestRule
+                .onNodeWithText("Additional options")
+                .performScrollTo()
+                .performClick()
 
-        mutableStateFlow.update {
-            it.copy(
-                viewState = DEFAULT_VIEW_STATE.copy(
-                    common = DEFAULT_COMMON_STATE.copy(
-                        isHideEmailAddressEnabled = true,
+            mutableStateFlow.update {
+                it.copy(
+                    viewState = DEFAULT_VIEW_STATE.copy(
+                        common = DEFAULT_COMMON_STATE.copy(
+                            isHideEmailAddressEnabled = false,
+                        ),
                     ),
-                ),
-            )
-        }
+                    isSendControlsEnabled = true,
+                )
+            }
 
-        // Toggle should be displayed and interactive otherwise.
-        composeTestRule
-            .onNodeWithText("Hide my email address", substring = true)
-            .performScrollTo()
-            .assertIsDisplayed()
-            .assertIsEnabled()
-    }
+            // The toggle is hidden entirely rather than simply disabled.
+            composeTestRule
+                .onNodeWithText("Hide my email address", substring = true)
+                .assertDoesNotExist()
+
+            mutableStateFlow.update {
+                it.copy(
+                    viewState = DEFAULT_VIEW_STATE.copy(
+                        common = DEFAULT_COMMON_STATE.copy(
+                            isHideEmailAddressEnabled = true,
+                        ),
+                    ),
+                )
+            }
+
+            composeTestRule
+                .onNodeWithText("Hide my email address", substring = true)
+                .performScrollTo()
+                .assertIsDisplayed()
+                .assertIsEnabled()
+        }
 
     @Test
     fun `progressbar should be displayed according to state`() {
@@ -1576,6 +1623,7 @@ private val DEFAULT_STATE = AddEditSendState(
     isShared = false,
     baseWebSendUrl = "https://vault.bitwarden.com/#/send/",
     policyDisablesSend = false,
+    isSendControlsEnabled = false,
     allowedDomains = null,
     allowedSendTypes = null,
     deletionHours = null,

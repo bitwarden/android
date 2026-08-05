@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addedit
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
@@ -18,6 +19,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -95,6 +97,9 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     private val policyManager: PolicyManager = mockk {
         every { getEffectiveSendPolicy() } returns DEFAULT_EFFECTIVE_SEND_POLICY
     }
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every { getFeatureFlag(key = FlagKey.SendControls) } returns false
+    }
     private val networkConnectionManager = mockk<NetworkConnectionManager> {
         every { isNetworkConnected } returns true
     }
@@ -146,6 +151,31 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             ),
         )
         assertEquals(DEFAULT_STATE.copy(viewState = viewState), viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `initial state should be correct when the send controls feature flag is enabled`() {
+        every { featureFlagManager.getFeatureFlag(key = FlagKey.SendControls) } returns true
+        val viewModel = createViewModel()
+        assertEquals(
+            DEFAULT_STATE.copy(isSendControlsEnabled = true),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `shouldHideEmailAddressToggle should only be true when send controls is enabled and hide email is restricted`() {
+        every {
+            policyManager.getEffectiveSendPolicy()
+        } returns DEFAULT_EFFECTIVE_SEND_POLICY.copy(disableHideEmail = true)
+
+        // Flag off retains the legacy behavior of only disabling the toggle.
+        assertEquals(false, createViewModel().stateFlow.value.shouldHideEmailAddressToggle)
+
+        every { featureFlagManager.getFeatureFlag(key = FlagKey.SendControls) } returns true
+
+        assertEquals(true, createViewModel().stateFlow.value.shouldHideEmailAddressToggle)
     }
 
     @Test
@@ -1458,6 +1488,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         },
         authRepo = authRepository,
         environmentRepo = environmentRepository,
+        featureFlagManager = featureFlagManager,
         specialCircumstanceManager = specialCircumstanceManager,
         clock = clock,
         clipboardManager = clipboardManager,
@@ -1506,6 +1537,7 @@ private val DEFAULT_STATE = AddEditSendState(
     isShared = false,
     baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
     policyDisablesSend = false,
+    isSendControlsEnabled = false,
     allowedDomains = null,
     allowedSendTypes = null,
     deletionHours = null,
