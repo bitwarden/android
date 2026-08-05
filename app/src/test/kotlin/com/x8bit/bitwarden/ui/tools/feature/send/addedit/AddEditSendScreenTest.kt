@@ -4,7 +4,6 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
-import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
@@ -1049,7 +1048,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithText(text)
-            .assertIsNotDisplayed()
+            .assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(
@@ -1071,7 +1070,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithText(text)
-            .assertIsNotDisplayed()
+            .assertDoesNotExist()
     }
 
     //region Authentication UI Tests
