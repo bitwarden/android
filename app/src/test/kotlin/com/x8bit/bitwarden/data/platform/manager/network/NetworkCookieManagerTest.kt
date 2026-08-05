@@ -200,6 +200,20 @@ class NetworkCookieManagerTest {
         assertTrue(result)
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `needsBootstrap should return true when hostname equals the cookie domain and no cookies`() {
+        fakeConfigDiskSource.serverConfig = createServerConfig(
+            bootstrapType = BOOTSTRAP_TYPE_SSO,
+            cookieDomain = COOKIE_DOMAIN,
+        )
+        every { mockCookieDiskSource.getCookieConfig(any()) } returns null
+
+        val result = manager.needsBootstrap(COOKIE_DOMAIN)
+
+        assertTrue(result)
+    }
+
     @Test
     fun `needsBootstrap should return false when hostname is outside the cookie domain`() {
         fakeConfigDiskSource.serverConfig = createServerConfig(
