@@ -405,7 +405,6 @@ class SendViewModel @Inject constructor(
                 sendType = when (action.sendItem.type) {
                     SendState.ViewState.Content.SendItem.Type.FILE -> SendItemType.FILE
                     SendState.ViewState.Content.SendItem.Type.TEXT -> SendItemType.TEXT
-                    SendState.ViewState.Content.SendItem.Type.ITEM -> SendItemType.TEXT
                 },
             ),
         )
@@ -418,7 +417,6 @@ class SendViewModel @Inject constructor(
                 sendType = when (action.sendItem.type) {
                     SendState.ViewState.Content.SendItem.Type.FILE -> SendItemType.FILE
                     SendState.ViewState.Content.SendItem.Type.TEXT -> SendItemType.TEXT
-                    SendState.ViewState.Content.SendItem.Type.ITEM -> SendItemType.TEXT
                 },
             ),
         )
@@ -431,7 +429,6 @@ class SendViewModel @Inject constructor(
                 sendType = when (action.sendItem.type) {
                     SendState.ViewState.Content.SendItem.Type.FILE -> SendItemType.FILE
                     SendState.ViewState.Content.SendItem.Type.TEXT -> SendItemType.TEXT
-                    SendState.ViewState.Content.SendItem.Type.ITEM -> SendItemType.TEXT
                 },
             ),
         )
@@ -566,7 +563,6 @@ data class SendState(
                 enum class Type(@field:DrawableRes val iconRes: Int) {
                     FILE(iconRes = BitwardenDrawable.ic_file),
                     TEXT(iconRes = BitwardenDrawable.ic_file_text),
-                    ITEM(iconRes = BitwardenDrawable.ic_file_text),
                 }
             }
         }

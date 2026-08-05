@@ -134,9 +134,6 @@ fun AddEditSendContent(
                     policyDisablesSend = policyDisablesSend,
                 )
             }
-
-            is AddEditSendState.ViewState.Content.SendType.Item -> {
-            }
         }
 
         Spacer(modifier = Modifier.height(height = 8.dp))

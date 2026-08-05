@@ -298,8 +298,6 @@ private fun ViewStateContent(
                         .standardHorizontalMargin(),
                 )
             }
-
-            is ViewSendState.ViewState.Content.SendType.ItemType -> {}
         }
         Spacer(modifier = Modifier.height(height = 8.dp))
 

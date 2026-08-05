@@ -61,10 +61,6 @@ fun SendView.toViewState(
                 )
             }
 
-            SendType.ITEM -> {
-                AddEditSendState.ViewState.Content.SendType.Item(
-                    data = "",
-                )
-            }
+            SendType.ITEM -> TODO("[PM-41095] Support Item SendType")
         },
     )

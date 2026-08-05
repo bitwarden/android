@@ -311,14 +311,6 @@ data class ViewSendState(
                 data class TextType(
                     val textToShare: String,
                 ) : SendType()
-
-                /**
-                 * Content data specific to an Item send type.
-                 */
-                @Parcelize
-                data class ItemType(
-                    val data: String,
-                ) : SendType()
             }
         }
     }

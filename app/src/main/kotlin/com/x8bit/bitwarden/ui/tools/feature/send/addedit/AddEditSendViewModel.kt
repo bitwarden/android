@@ -1004,14 +1004,6 @@ data class AddEditSendState(
                     val input: String,
                     val isHideByDefaultChecked: Boolean,
                 ) : SendType()
-
-                /**
-                 * Sending item.
-                 */
-                @Parcelize
-                data class Item(
-                    val data: String,
-                ) : SendType()
             }
         }
     }

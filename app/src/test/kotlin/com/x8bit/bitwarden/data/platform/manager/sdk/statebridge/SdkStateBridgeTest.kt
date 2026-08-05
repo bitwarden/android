@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.createMockWrappedAccountCryptographicState
+import com.x8bit.bitwarden.data.auth.repository.util.updateKdf
 import com.x8bit.bitwarden.data.auth.repository.util.updateMasterPasswordUnlock
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkMasterPasswordUnlock
 import io.mockk.mockk
@@ -306,6 +307,125 @@ class SdkStateBridgeTest {
 
             assertNull(stateBridge.getMasterpasswordUnlockData())
         }
+
+    @Test
+    fun `getKdfConfig should return null when there is no user state`() = runTest {
+        authDiskSource.userState = null
+
+        assertNull(stateBridge.getKdfConfig())
+    }
+
+    @Test
+    fun `getKdfConfig should return null when the user is not present in the user state`() =
+        runTest {
+            val otherUserId = "otherUserId"
+            authDiskSource.userState = UserStateJson(
+                activeUserId = otherUserId,
+                accounts = mapOf(otherUserId to ACCOUNT),
+            )
+
+            assertNull(stateBridge.getKdfConfig())
+        }
+
+    @Test
+    fun `getKdfConfig should return the stored PBKDF2 params as the sdk model`() = runTest {
+        authDiskSource.userState = USER_STATE
+
+        assertEquals(Kdf.Pbkdf2(iterations = 600_000u), stateBridge.getKdfConfig())
+    }
+
+    @Test
+    fun `getKdfConfig should return the stored ARGON2ID params as the sdk model`() = runTest {
+        authDiskSource.userState = USER_STATE.copy(
+            accounts = mapOf(
+                USER_ID to ACCOUNT.copy(
+                    profile = ACCOUNT.profile.copy(
+                        kdfType = KdfTypeJson.ARGON2_ID,
+                        kdfIterations = 3,
+                        kdfMemory = 64,
+                        kdfParallelism = 4,
+                    ),
+                ),
+            ),
+        )
+
+        assertEquals(
+            Kdf.Argon2id(iterations = 3u, memory = 64u, parallelism = 4u),
+            stateBridge.getKdfConfig(),
+        )
+    }
+
+    @Test
+    fun `setKdfConfig should update the user state with the PBKDF2 params`() = runTest {
+        authDiskSource.userState = USER_STATE
+
+        stateBridge.setKdfConfig(value = Kdf.Pbkdf2(iterations = 700_000u))
+
+        assertEquals(
+            USER_STATE.updateKdf(
+                userId = USER_ID,
+                kdf = KdfJson(
+                    kdfType = KdfTypeJson.PBKDF2_SHA256,
+                    iterations = 700_000,
+                    memory = null,
+                    parallelism = null,
+                ),
+            ),
+            authDiskSource.userState,
+        )
+    }
+
+    @Test
+    fun `setKdfConfig should update the user state with the ARGON2ID params`() = runTest {
+        authDiskSource.userState = USER_STATE
+
+        stateBridge.setKdfConfig(
+            value = Kdf.Argon2id(iterations = 3u, memory = 64u, parallelism = 4u),
+        )
+
+        assertEquals(
+            USER_STATE.updateKdf(
+                userId = USER_ID,
+                kdf = KdfJson(
+                    kdfType = KdfTypeJson.ARGON2_ID,
+                    iterations = 3,
+                    memory = 64,
+                    parallelism = 4,
+                ),
+            ),
+            authDiskSource.userState,
+        )
+    }
+
+    @Test
+    fun `setKdfConfig should do nothing when the user state is null`() = runTest {
+        authDiskSource.userState = null
+
+        stateBridge.setKdfConfig(value = Kdf.Pbkdf2(iterations = 700_000u))
+
+        assertNull(authDiskSource.userState)
+    }
+
+    @Test
+    fun `clearKdfConfig should clear the kdf params from the user state`() = runTest {
+        authDiskSource.userState = USER_STATE
+
+        stateBridge.clearKdfConfig()
+
+        assertEquals(
+            USER_STATE.updateKdf(userId = USER_ID, kdf = null),
+            authDiskSource.userState,
+        )
+    }
+
+    @Test
+    fun `clearKdfConfig should do nothing when the user state is null`() = runTest {
+        authDiskSource.userState = null
+
+        stateBridge.clearKdfConfig()
+
+        assertNull(authDiskSource.userState)
+    }
 }
 
 private const val USER_ID: String = "userId"
