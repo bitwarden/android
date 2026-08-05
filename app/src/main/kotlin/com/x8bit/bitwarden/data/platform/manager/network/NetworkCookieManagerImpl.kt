@@ -42,27 +42,12 @@ class NetworkCookieManagerImpl(
         )
 
     override fun needsBootstrap(hostname: String): Boolean {
-        val result = configDiskSource
-            .serverConfig
-            ?.serverData
-            ?.communication
-            ?.bootstrap
-            ?.type
-            ?.let { bootstrapType ->
-                when (bootstrapType) {
-                    BOOTSTRAP_TYPE_SSO_COOKIE_VENDOR -> {
-                        val resolved = resolveHostname(hostname)
-                        cookieDiskSource
-                            .getCookieConfig(hostname = resolved)
-                            ?.cookies
-                            ?.none() != false
-                    }
-
-                    else -> false
-                }
-            }
-            ?: false
-        Timber.d("needsBootstrap($hostname): $result (cookieDomain=$cookieDomain)")
+        val result = isCookieBootstrapConfigured(hostname = hostname) &&
+            cookieDiskSource
+                .getCookieConfig(hostname = resolveHostname(hostname))
+                ?.cookies
+                ?.none() != false
+        Timber.d("needsBootstrap($hostname): $result")
         return result
     }
 
@@ -99,6 +84,21 @@ class NetworkCookieManagerImpl(
                 },
             ),
         )
+    }
+
+    private fun isCookieBootstrapConfigured(hostname: String): Boolean {
+        val bootstrap = configDiskSource
+            .serverConfig
+            ?.serverData
+            ?.communication
+            ?.bootstrap
+            ?.takeIf { it.type == BOOTSTRAP_TYPE_SSO_COOKIE_VENDOR }
+            ?: return false
+        val domain = bootstrap.cookieDomain
+        // No cookie domain configured: cannot scope to an environment, preserve default behavior.
+        val result = domain == null || hostname == domain || hostname.endsWith(".$domain")
+        Timber.d("isCookieBootstrapConfigured($hostname): $result (cookieDomain=$domain)")
+        return result
     }
 
     /**
