@@ -98,7 +98,11 @@ module Supply
             "Use :version_code to filter to a specific release."
           )
         end
+
+        # Successfully found exactly one matching release
+        release = releases.first
       else
+        # Skipping verification - create synthetic release object
         UI.message("Skipping release verification as per configuration.")
         if version_code == ""
           UI.user_error!("Must provide a version code when release verification is skipped.")
@@ -112,8 +116,6 @@ module Supply
           status: Supply.config[:track_promote_release_status] || Supply::ReleaseStatus::COMPLETED
         )
       end
-
-      release = releases.first unless Supply.config[:skip_release_verification]
       track_to = client.tracks(Supply.config[:track_promote_to]).first || AndroidPublisher::Track.new(
         track: Supply.config[:track_promote_to],
         releases: []
