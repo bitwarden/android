@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.manager.sdk.statebridge
 
 import com.bitwarden.core.MasterPasswordUnlockData
 import com.bitwarden.core.V2UpgradeToken
+import com.bitwarden.core.WebAuthnPrfUnlockData
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.network.model.KdfJson
 import com.bitwarden.network.model.KdfTypeJson
@@ -426,6 +427,33 @@ class SdkStateBridgeTest {
 
         assertNull(authDiskSource.userState)
     }
+
+    @Test
+    fun `getWebauthnPrfUnlockData should return null since unlock is unsupported`() = runTest {
+        authDiskSource.userState = USER_STATE
+
+        assertNull(stateBridge.getWebauthnPrfUnlockData())
+    }
+
+    @Test
+    fun `setWebauthnPrfUnlockData should do nothing since unlock is unsupported`() = runTest {
+        authDiskSource.userState = USER_STATE
+
+        stateBridge.setWebauthnPrfUnlockData(value = WEBAUTHN_PRF_UNLOCK_DATA)
+
+        assertNull(stateBridge.getWebauthnPrfUnlockData())
+        assertEquals(USER_STATE, authDiskSource.userState)
+    }
+
+    @Test
+    fun `clearWebauthnPrfUnlockData should do nothing since unlock is unsupported`() = runTest {
+        authDiskSource.userState = USER_STATE
+
+        stateBridge.clearWebauthnPrfUnlockData()
+
+        assertNull(stateBridge.getWebauthnPrfUnlockData())
+        assertEquals(USER_STATE, authDiskSource.userState)
+    }
 }
 
 private const val USER_ID: String = "userId"
@@ -457,6 +485,10 @@ private val MASTER_PASSWORD_UNLOCK_DATA_JSON: MasterPasswordUnlockDataJson =
         masterKeyWrappedUserKey = "masterKeyWrappedUserKey",
         salt = "salt",
     )
+
+private val WEBAUTHN_PRF_UNLOCK_DATA: WebAuthnPrfUnlockData = WebAuthnPrfUnlockData(
+    options = emptyList(),
+)
 
 private val ACCOUNT: AccountJson = AccountJson(
     profile = AccountJson.Profile(
