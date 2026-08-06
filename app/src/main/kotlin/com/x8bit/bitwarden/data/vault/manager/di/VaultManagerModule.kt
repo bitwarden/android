@@ -7,6 +7,7 @@ import com.bitwarden.cxf.parser.CredentialExchangePayloadParser
 import com.bitwarden.data.manager.appstate.AppStateManager
 import com.bitwarden.data.manager.file.FileManager
 import com.bitwarden.network.service.CiphersService
+import com.bitwarden.network.service.DownloadService
 import com.bitwarden.network.service.FolderService
 import com.bitwarden.network.service.SendsService
 import com.bitwarden.network.service.SyncService
@@ -98,6 +99,7 @@ object VaultManagerModule {
     @Provides
     @Singleton
     fun provideCipherManager(
+        downloadService: DownloadService,
         ciphersService: CiphersService,
         settingsDiskSource: SettingsDiskSource,
         vaultDiskSource: VaultDiskSource,
@@ -109,6 +111,7 @@ object VaultManagerModule {
         dispatcherManager: DispatcherManager,
         pushManager: PushManager,
     ): CipherManager = CipherManagerImpl(
+        downloadService = downloadService,
         fileManager = fileManager,
         settingsDiskSource = settingsDiskSource,
         authDiskSource = authDiskSource,

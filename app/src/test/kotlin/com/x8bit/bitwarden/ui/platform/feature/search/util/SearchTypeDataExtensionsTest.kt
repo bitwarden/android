@@ -515,6 +515,7 @@ class SearchTypeDataExtensionsTest {
             isAutofill = false,
             hasMasterPassword = true,
             isPremiumUser = true,
+            isVfo1FoundationEnabled = true,
         )
 
         assertEquals(
@@ -557,6 +558,7 @@ class SearchTypeDataExtensionsTest {
             isAutofill = true,
             hasMasterPassword = true,
             isPremiumUser = true,
+            isVfo1FoundationEnabled = true,
         )
 
         assertEquals(
@@ -641,6 +643,7 @@ class SearchTypeDataExtensionsTest {
             hasMasterPassword = true,
             isAutofill = false,
             isPremiumUser = true,
+            isVfo1FoundationEnabled = true,
         )
 
         assertEquals(

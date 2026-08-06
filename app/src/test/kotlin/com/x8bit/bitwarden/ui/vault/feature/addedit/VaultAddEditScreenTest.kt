@@ -46,6 +46,7 @@ import com.bitwarden.core.data.util.advanceTimeByAndRunCurrent
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.manager.exit.ExitManager
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.assertScrollableNodeDoesNotExist
@@ -63,6 +64,7 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
+import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
@@ -80,6 +82,9 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
@@ -132,6 +137,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             intentManager = intentManager,
             credentialProviderCompletionManager = credentialProviderCompletionManager,
             biometricsManager = biometricsManager,
+            featureFlagsState = FeatureFlagsState(isVfo1FoundationEnabled = true),
         ) {
             VaultAddEditScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
@@ -3354,7 +3360,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         // Opens the menu
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "placeholder@email.com. Owner",
+                label = "My vault. Vault",
             )
             .performClick()
 
@@ -3372,7 +3378,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Owner")
+            .onNodeWithText("Select vault")
             .assertIsDisplayed()
     }
 
@@ -3383,7 +3389,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Owner")
+            .onNodeWithText("Select vault")
             .assertIsDisplayed()
 
         composeTestRule
@@ -3409,10 +3415,11 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                     availableOwners = listOf(
                         VaultAddEditState.Owner(
                             id = ownerId,
-                            name = ownerName,
+                            name = ownerName.asText(),
                             collections = DEFAULT_COLLECTIONS,
                         ),
-                    ),
+                    )
+                        .toImmutableList(),
                 )
             }
                 .copy(bottomSheetState = VaultAddEditState.BottomSheetState.OwnerSelection)
@@ -3438,7 +3445,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         updateStateWithOwners()
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "placeholder@email.com. Owner",
+                label = "My vault. Vault",
             )
             .assertIsDisplayed()
 
@@ -3447,7 +3454,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "mockOwnerName-2. Owner")
+            .onNodeWithContentDescriptionAfterScroll(label = "mockOwnerName-2. Vault")
             .assertIsDisplayed()
     }
 
@@ -3486,10 +3493,11 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             availableOwners = listOf(
                 VaultAddEditState.Owner(
                     id = null,
-                    name = "placeholder@email.com",
+                    name = BitwardenString.my_vault.asText(),
                     collections = DEFAULT_COLLECTIONS,
                 ),
-            ),
+            )
+                .toImmutableList(),
             hasOrganizations = false,
         )
 
@@ -3554,7 +3562,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "No Folder. Folder")
+            .onNodeWithContentDescriptionAfterScroll(label = "No Folder. My folder")
             .performClick()
 
         verify {
@@ -3569,7 +3577,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         updateStateWithFolders()
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "No Folder. Folder")
+            .onNodeWithContentDescriptionAfterScroll(label = "No Folder. My folder")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -3577,7 +3585,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "mockFolderName-1. Folder")
+            .onNodeWithContentDescriptionAfterScroll(label = "mockFolderName-1. My folder")
             .assertIsDisplayed()
     }
 
@@ -3588,7 +3596,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Folders")
+            .onNodeWithText("My folders")
             .assertIsDisplayed()
 
         composeTestRule
@@ -3603,7 +3611,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Folders")
+            .onNodeWithText("My folders")
             .assertIsDisplayed()
 
         composeTestRule
@@ -3627,7 +3635,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Folders")
+            .onNodeWithText("My folders")
             .assertIsDisplayed()
 
         composeTestRule
@@ -3650,7 +3658,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         val newFolderName = "newFolderName"
 
         composeTestRule
-            .onNodeWithText("Folders")
+            .onNodeWithText("My folders")
             .assertIsDisplayed()
 
         composeTestRule
@@ -3876,7 +3884,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "placeholder@email.com. Owner",
+                label = "My vault. Vault",
             )
             .assertIsDisplayed()
 
@@ -3886,7 +3894,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "mockOwnerName-2. Owner",
+                label = "mockOwnerName-2. Vault",
             )
             .assertIsDisplayed()
     }
@@ -4411,12 +4419,12 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Collections")
+            .onAllNodesWithText("Shared folders")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Move to Organization")
+            .onAllNodesWithText("Move")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertDoesNotExist()
 
@@ -4442,7 +4450,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
         // Confirm overflow is closed on initial load
         composeTestRule
-            .onAllNodesWithText("Collections")
+            .onAllNodesWithText("Shared folders")
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
 
@@ -4453,7 +4461,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         // Confirm Collections option is present
         composeTestRule
-            .onAllNodesWithText("Collections")
+            .onAllNodesWithText("Shared folders")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsDisplayed()
 
@@ -4472,7 +4480,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onAllNodesWithText("Collections")
+            .onAllNodesWithText("Shared folders")
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
     }
@@ -4504,12 +4512,12 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Move to Organization")
+            .onAllNodesWithText("Move")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Collections")
+            .onAllNodesWithText("Shared folders")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertDoesNotExist()
 
@@ -5130,7 +5138,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
     private fun updateStateWithOwners(
         selectedOwnerId: String? = null,
-        availableOwners: List<VaultAddEditState.Owner> = DEFAULT_OWNERS,
+        availableOwners: ImmutableList<VaultAddEditState.Owner> = DEFAULT_OWNERS,
         hasOrganizations: Boolean = true,
     ) {
         mutableStateFlow.update { currentState ->
@@ -5175,7 +5183,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         // Confirm dropdown version of item is absent
         composeTestRule
-            .onAllNodesWithText("Move to Organization")
+            .onAllNodesWithText("Move")
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
         // Open the overflow menu
@@ -5185,7 +5193,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         // Confirm it does not exist
         composeTestRule
-            .onAllNodesWithText("Move to Organization")
+            .onAllNodesWithText("Move")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsNotDisplayed()
     }
@@ -5210,7 +5218,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         // Confirm dropdown version of item is absent
         composeTestRule
-            .onAllNodesWithText("Move to Organization")
+            .onAllNodesWithText("Move")
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
 
@@ -5219,7 +5227,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Move to Organization")
+            .onAllNodesWithText("Move")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsDisplayed()
     }
@@ -5396,6 +5404,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddEditState(
@@ -5412,6 +5421,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_IDENTITY = VaultAddEditState(
@@ -5428,6 +5438,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_CARD = VaultAddEditState(
@@ -5444,6 +5455,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_BANK_ACCOUNT = VaultAddEditState(
@@ -5460,6 +5472,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_LICENSE = VaultAddEditState(
@@ -5476,6 +5489,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_PASSPORT = VaultAddEditState(
@@ -5492,6 +5506,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS = VaultAddEditState(
@@ -5518,6 +5533,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddEditState(
@@ -5534,6 +5550,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_SSH_KEYS = VaultAddEditState(
@@ -5550,6 +5567,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
         private val ALTERED_COLLECTIONS = listOf(
@@ -5561,20 +5579,20 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             ),
         )
 
-        private val ALTERED_OWNERS = listOf(
+        private val ALTERED_OWNERS = persistentListOf(
             VaultAddEditState.Owner(
                 id = null,
-                name = "placeholder@email.com",
+                name = BitwardenString.my_vault.asText(),
                 collections = emptyList(),
             ),
             VaultAddEditState.Owner(
                 id = "mockOwnerId-1",
-                name = "mockOwnerName-1",
+                name = "mockOwnerName-1".asText(),
                 collections = emptyList(),
             ),
             VaultAddEditState.Owner(
                 id = "mockOwnerId-2",
-                name = "mockOwnerName-2",
+                name = "mockOwnerName-2".asText(),
                 collections = ALTERED_COLLECTIONS,
             ),
         )
@@ -5588,20 +5606,20 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             ),
         )
 
-        private val DEFAULT_OWNERS = listOf(
+        private val DEFAULT_OWNERS = persistentListOf(
             VaultAddEditState.Owner(
                 id = null,
-                name = "placeholder@email.com",
+                name = BitwardenString.my_vault.asText(),
                 collections = emptyList(),
             ),
             VaultAddEditState.Owner(
                 id = "mockOwnerId-1",
-                name = "mockOwnerName-1",
+                name = "mockOwnerName-1".asText(),
                 collections = emptyList(),
             ),
             VaultAddEditState.Owner(
                 id = "mockOwnerId-2",
-                name = "mockOwnerName-2",
+                name = "mockOwnerName-2".asText(),
                 collections = DEFAULT_COLLECTIONS,
             ),
         )

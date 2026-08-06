@@ -51,6 +51,7 @@ import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.billing.model.PremiumCard
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
+import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
@@ -108,6 +109,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         setContent(
             intentManager = intentManager,
             appReviewManager = appReviewManager,
+            featureFlagsState = FeatureFlagsState(isVfo1FoundationEnabled = true),
         ) {
             VaultScreen(
                 viewModel = viewModel,
@@ -1855,7 +1857,7 @@ class VaultScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `collection data should update according to the state`() {
-        val collectionsHeader = "COLLECTIONS (1)"
+        val collectionsHeader = "SHARED FOLDERS (1)"
         val collectionName = "Test Collection"
         val collectionCount = 3
         val collectionItem = VaultState.ViewState.CollectionItem(

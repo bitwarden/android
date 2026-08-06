@@ -60,5 +60,7 @@ fun SendView.toViewState(
                     sizeBytes = null,
                 )
             }
+
+            SendType.ITEM -> TODO("[PM-41095] Support Item SendType")
         },
     )

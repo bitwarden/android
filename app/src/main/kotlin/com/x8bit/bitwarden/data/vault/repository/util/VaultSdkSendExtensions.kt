@@ -65,6 +65,7 @@ private fun SendType.toNetworkSendType(): SendTypeJson =
     when (this) {
         SendType.TEXT -> SendTypeJson.TEXT
         SendType.FILE -> SendTypeJson.FILE
+        SendType.ITEM -> TODO("[PM-41095] Support Item SendType")
     }
 
 /**

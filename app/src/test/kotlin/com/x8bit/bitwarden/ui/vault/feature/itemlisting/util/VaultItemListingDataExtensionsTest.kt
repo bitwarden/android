@@ -687,6 +687,7 @@ class VaultItemListingDataExtensionsTest {
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isVfo1FoundationEnabled = true,
         )
 
         assertEquals(
@@ -783,6 +784,7 @@ class VaultItemListingDataExtensionsTest {
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isVfo1FoundationEnabled = true,
         )
 
         assertEquals(
@@ -869,6 +871,7 @@ class VaultItemListingDataExtensionsTest {
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
+            isVfo1FoundationEnabled = true,
         )
 
         assertEquals(
@@ -1618,6 +1621,7 @@ class VaultItemListingDataExtensionsTest {
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),
+            isVfo1FoundationEnabled = true,
         )
 
         assertEquals(
