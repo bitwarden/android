@@ -531,7 +531,7 @@ platform :android do
       version_name: options[:versionName],
       track: options[:track],
       track_promote_to: options[:trackPromoteTo],
-      skip_release_verification: true,
+      skip_release_verification: false,
       skip_upload_apk: true,
       skip_upload_aab: true,
     }

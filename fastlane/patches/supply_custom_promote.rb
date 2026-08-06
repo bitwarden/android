@@ -2,8 +2,12 @@
 # Fixes issue where Fastlane 'Supply' doesn't recognize previous builds
 # when promoting to another track.
 #
-# Source: https://github.com/artsy/eigen/pull/10262
+# Enhanced to search by version name in addition to version code,
+# and provide better error messages showing available versions.
+#
+# Original Source: https://github.com/artsy/eigen/pull/10262
 # Author: Brian Beckerle (@brainbicycle)
+# Enhanced by: Bitwarden Engineering
 #
 
 module Supply
@@ -27,37 +31,83 @@ module Supply
 
       releases = track_from.releases
 
+      # Log how many releases are available
+      UI.message("Found #{releases.size} release(s) on track '#{Supply.config[:track]}'")
+
       version_code = Supply.config[:version_code].to_s
+      version_name = Supply.config[:version_name].to_s
+
       if !Supply.config[:skip_release_verification]
+        # Try to find the release by version code first
         if version_code != ""
-          releases = releases.select do |release|
+          matching_releases = releases.select do |release|
             release.version_codes.include?(version_code)
           end
+
+          if matching_releases.empty?
+            # Provide helpful error with available versions (show up to 50 most recent)
+            available_versions = releases.first(50).map do |r|
+              "#{r.name} (#{r.version_codes.join(', ')})"
+            end.join(", ")
+
+            UI.user_error!(
+              "Cannot find release with version code '#{version_code}' in track '#{Supply.config[:track]}'. " \
+              "Searched through #{[50, releases.size].min} most recent releases. " \
+              "Available versions: #{available_versions}"
+            )
+          end
+
+          releases = matching_releases
+        # If no version code but version name is provided, search by name
+        elsif version_name != ""
+          matching_releases = releases.select do |release|
+            release.name == version_name
+          end
+
+          if matching_releases.empty?
+            # Provide helpful error with available versions
+            available_versions = releases.first(50).map do |r|
+              "#{r.name} (#{r.version_codes.join(', ')})"
+            end.join(", ")
+
+            UI.user_error!(
+              "Cannot find release with version name '#{version_name}' in track '#{Supply.config[:track]}'. " \
+              "Searched through #{[50, releases.size].min} most recent releases. " \
+              "Available versions: #{available_versions}"
+            )
+          end
+
+          releases = matching_releases
         else
+          # No version specified, filter by status
           releases = releases.select do |release|
             release.status == Supply.config[:release_status]
           end
         end
 
         if releases.size == 0
-          if version_code != ""
-            UI.user_error!("Cannot find release with version code '#{version_code}' to promote in track '#{Supply.config[:track]}'")
+          if version_code != "" || version_name != ""
+            UI.user_error!("Cannot find release matching version code '#{version_code}' or version name '#{version_name}' in track '#{Supply.config[:track]}'")
           else
-            UI.user_error!("Track '#{Supply.config[:track]}' doesn't have any releases")
+            UI.user_error!("Track '#{Supply.config[:track]}' doesn't have any releases with status '#{Supply.config[:release_status]}'")
           end
         elsif releases.size > 1
-          UI.user_error!("Track '#{Supply.config[:track]}' has more than one release - use :version_code to filter the release to promote")
+          UI.user_error!(
+            "Track '#{Supply.config[:track]}' has more than one release matching the criteria. " \
+            "Found: #{releases.map { |r| "#{r.name} (#{r.version_codes.join(', ')})" }.join(', ')}. " \
+            "Use :version_code to filter to a specific release."
+          )
         end
       else
         UI.message("Skipping release verification as per configuration.")
         if version_code == ""
           UI.user_error!("Must provide a version code when release verification is skipped.")
         end
-        if Supply.config[:version_name].nil?
+        if version_name == ""
           UI.user_error!("To force promote a :version_code, it is mandatory to enter the :version_name")
         end
         release = AndroidPublisher::TrackRelease.new(
-          name: Supply.config[:version_name],
+          name: version_name,
           version_codes: [version_code],
           status: Supply.config[:track_promote_release_status] || Supply::ReleaseStatus::COMPLETED
         )
@@ -78,7 +128,7 @@ module Supply
         release.user_fraction = nil
       end
 
-      UI.message("Promoting release with version: #{release.name} (#{release.version_codes.first})")
+      UI.message("✅ Promoting release: #{release.name} (version code: #{release.version_codes.first}) from '#{Supply.config[:track]}' to '#{Supply.config[:track_promote_to]}'")
 
       if track_to
         # Its okay to set releases to an array containing the newest release
@@ -92,7 +142,7 @@ module Supply
       end
 
       client.update_track(Supply.config[:track_promote_to], track_to)
-      UI.message("confirmed that update_track was reached: #{Supply.config[:track_promote_to]} #{release}")
+      UI.message("✅ Successfully promoted to track: #{Supply.config[:track_promote_to]}")
     end
   end
 end
