@@ -45,15 +45,15 @@ module Supply
         end
 
         if matching_releases.empty?
-          # Provide helpful error with available versions (show up to 50 most recent)
+          # Provide helpful error with available versions (limit display to 50 for readability)
           available_versions = releases.first(50).map do |r|
             "#{r.name} (#{r.version_codes.join(', ')})"
           end.join(", ")
 
           UI.user_error!(
             "Cannot find release with version code '#{version_code}' in track '#{Supply.config[:track]}'. " \
-            "Searched through #{[50, releases.size].min} most recent releases. " \
-            "Available versions: #{available_versions}"
+            "Searched through #{releases.size} release(s). " \
+            "Showing first #{[50, releases.size].min}: #{available_versions}"
           )
         end
 
@@ -65,15 +65,15 @@ module Supply
         end
 
         if matching_releases.empty?
-          # Provide helpful error with available versions
+          # Provide helpful error with available versions (limit display to 50 for readability)
           available_versions = releases.first(50).map do |r|
             "#{r.name} (#{r.version_codes.join(', ')})"
           end.join(", ")
 
           UI.user_error!(
             "Cannot find release with version name '#{version_name}' in track '#{Supply.config[:track]}'. " \
-            "Searched through #{[50, releases.size].min} most recent releases. " \
-            "Available versions: #{available_versions}"
+            "Searched through #{releases.size} release(s). " \
+            "Showing first #{[50, releases.size].min}: #{available_versions}"
           )
         end
 

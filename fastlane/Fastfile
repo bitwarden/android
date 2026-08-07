@@ -537,9 +537,10 @@ platform :android do
       track_promote_to: options[:trackPromoteTo],
       # IMPORTANT: Must be true for supply_custom_promote.rb patch to run.
       # When false, the patch calls original_promote_track (unpatched Fastlane code).
-      # When true, the patch calls custom_promote_track (our enhanced search logic).
-      # DEBT: Flag name is misleading - it now controls which code path to use,
-      # not whether to skip verification. Our patched code does MORE verification.
+      # When true, the patch calls custom_promote_track (our enhanced search logic that
+      # searches by version name in addition to version code, and provides better errors).
+      # DEBT: Flag name is misleading - it controls which code path to use, not whether
+      # to skip verification. Our patched code actually does real verification.
       skip_release_verification: true,
       skip_upload_apk: true,
       skip_upload_aab: true,
