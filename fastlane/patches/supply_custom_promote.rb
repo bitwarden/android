@@ -5,6 +5,13 @@
 # Enhanced to search by version name in addition to version code,
 # and provide better error messages showing available versions.
 #
+# LIMITATION: Google's AndroidPublisher V3 API only returns the latest
+# release(s) per track, not all historical releases. This means promotions
+# of versions that are many releases back may fail if the API doesn't
+# include them in the response. This is a Google API limitation, not a
+# Fastlane or patch limitation.
+# See: https://github.com/fastlane/fastlane/issues/18497
+#
 # Original Source: https://github.com/artsy/eigen/pull/10262
 # Author: Brian Beckerle (@brainbicycle)
 # Enhanced by: Bitwarden Engineering
