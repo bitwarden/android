@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.autofill.model.FillAssistRules
 
 private const val FIELD_KEY_USERNAME = "username"
 private const val FIELD_KEY_EMAIL = "email"
+private const val FIELD_KEY_PHONE = "phone"
 private const val FIELD_KEY_PASSWORD = "password"
 private const val FIELD_KEY_NEW_PASSWORD = "newPassword"
 private const val FIELD_KEY_CARD_NUMBER = "cardNumber"
@@ -46,11 +47,16 @@ private fun AssistStructure.ViewNode.traverseForFillAssist(
             .takeIf { it.isNotEmpty() }
             ?.let { matchingEntries ->
                 val data = toAutofillViewData(autofillId = id, website = website)
-                matchingEntries.firstNotNullOfOrNull { (key, _) ->
-                    key.toAutofillViewForFieldKey(
-                        data = data,
-                    )
+                val candidateViews = matchingEntries.mapNotNull { (key, _) ->
+                    key.toAutofillViewForFieldKey(data = data)
                 }
+                // A single field can legitimately match both the "email" and "phone"/"username"
+                // keys (e.g. a combined phone-or-email login field). Login.Username has no format
+                // gate and fills any stored value, while Login.Email rejects non-email values via
+                // isValidEmail(). Preferring Username when both match avoids rejecting a phone
+                // number credential on a field that would have accepted it.
+                candidateViews.firstOrNull { it is AutofillView.Login.Username }
+                    ?: candidateViews.firstOrNull()
             }
     }
     val childViews = (0 until childCount)
@@ -64,7 +70,7 @@ private fun AssistStructure.ViewNode.traverseForFillAssist(
 }
 
 private fun String.toAutofillViewForFieldKey(data: AutofillView.Data): AutofillView? = when (this) {
-    FIELD_KEY_USERNAME -> AutofillView.Login.Username(data = data)
+    FIELD_KEY_USERNAME, FIELD_KEY_PHONE -> AutofillView.Login.Username(data = data)
     FIELD_KEY_EMAIL -> AutofillView.Login.Email(data = data)
     FIELD_KEY_PASSWORD, FIELD_KEY_NEW_PASSWORD -> AutofillView.Login.Password(data = data)
     FIELD_KEY_CARD_NUMBER -> AutofillView.Card.Number(data = data)
