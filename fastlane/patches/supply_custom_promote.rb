@@ -37,85 +37,64 @@ module Supply
       version_code = Supply.config[:version_code].to_s
       version_name = Supply.config[:version_name].to_s
 
-      if !Supply.config[:skip_release_verification]
-        # Try to find the release by version code first
-        if version_code != ""
-          matching_releases = releases.select do |release|
-            release.version_codes.include?(version_code)
-          end
-
-          if matching_releases.empty?
-            # Provide helpful error with available versions (show up to 50 most recent)
-            available_versions = releases.first(50).map do |r|
-              "#{r.name} (#{r.version_codes.join(', ')})"
-            end.join(", ")
-
-            UI.user_error!(
-              "Cannot find release with version code '#{version_code}' in track '#{Supply.config[:track]}'. " \
-              "Searched through #{[50, releases.size].min} most recent releases. " \
-              "Available versions: #{available_versions}"
-            )
-          end
-
-          releases = matching_releases
-        # If no version code but version name is provided, search by name
-        elsif version_name != ""
-          matching_releases = releases.select do |release|
-            release.name == version_name
-          end
-
-          if matching_releases.empty?
-            # Provide helpful error with available versions
-            available_versions = releases.first(50).map do |r|
-              "#{r.name} (#{r.version_codes.join(', ')})"
-            end.join(", ")
-
-            UI.user_error!(
-              "Cannot find release with version name '#{version_name}' in track '#{Supply.config[:track]}'. " \
-              "Searched through #{[50, releases.size].min} most recent releases. " \
-              "Available versions: #{available_versions}"
-            )
-          end
-
-          releases = matching_releases
-        else
-          # No version specified, filter by status
-          releases = releases.select do |release|
-            release.status == Supply.config[:release_status]
-          end
+      # Always search for the release - never create a synthetic one
+      # Try to find the release by version code first
+      if version_code != ""
+        matching_releases = releases.select do |release|
+          release.version_codes.include?(version_code)
         end
 
-        if releases.size == 0
-          if version_code != "" || version_name != ""
-            UI.user_error!("Cannot find release matching version code '#{version_code}' or version name '#{version_name}' in track '#{Supply.config[:track]}'")
-          else
-            UI.user_error!("Track '#{Supply.config[:track]}' doesn't have any releases with status '#{Supply.config[:release_status]}'")
-          end
-        elsif releases.size > 1
+        if matching_releases.empty?
+          # Provide helpful error with available versions (show up to 50 most recent)
+          available_versions = releases.first(50).map do |r|
+            "#{r.name} (#{r.version_codes.join(', ')})"
+          end.join(", ")
+
           UI.user_error!(
-            "Track '#{Supply.config[:track]}' has more than one release matching the criteria. " \
-            "Found: #{releases.map { |r| "#{r.name} (#{r.version_codes.join(', ')})" }.join(', ')}. " \
-            "Use :version_code to filter to a specific release."
+            "Cannot find release with version code '#{version_code}' in track '#{Supply.config[:track]}'. " \
+            "Searched through #{[50, releases.size].min} most recent releases. " \
+            "Available versions: #{available_versions}"
           )
         end
 
-        # Successfully found exactly one matching release
-        release = releases.first
+        releases = matching_releases
+      # If no version code but version name is provided, search by name
+      elsif version_name != ""
+        matching_releases = releases.select do |release|
+          release.name == version_name
+        end
+
+        if matching_releases.empty?
+          # Provide helpful error with available versions
+          available_versions = releases.first(50).map do |r|
+            "#{r.name} (#{r.version_codes.join(', ')})"
+          end.join(", ")
+
+          UI.user_error!(
+            "Cannot find release with version name '#{version_name}' in track '#{Supply.config[:track]}'. " \
+            "Searched through #{[50, releases.size].min} most recent releases. " \
+            "Available versions: #{available_versions}"
+          )
+        end
+
+        releases = matching_releases
       else
-        # Skipping verification - create synthetic release object
-        UI.message("Skipping release verification as per configuration.")
-        if version_code == ""
-          UI.user_error!("Must provide a version code when release verification is skipped.")
-        end
-        if version_name == ""
-          UI.user_error!("To force promote a :version_code, it is mandatory to enter the :version_name")
-        end
-        release = AndroidPublisher::TrackRelease.new(
-          name: version_name,
-          version_codes: [version_code],
-          status: Supply.config[:track_promote_release_status] || Supply::ReleaseStatus::COMPLETED
+        # No version specified - error out
+        UI.user_error!("Must provide either version_code or version_name to promote a release")
+      end
+
+      if releases.size == 0
+        UI.user_error!("Cannot find release matching version code '#{version_code}' or version name '#{version_name}' in track '#{Supply.config[:track]}'")
+      elsif releases.size > 1
+        UI.user_error!(
+          "Track '#{Supply.config[:track]}' has more than one release matching the criteria. " \
+          "Found: #{releases.map { |r| "#{r.name} (#{r.version_codes.join(', ')})" }.join(', ')}. " \
+          "Use :version_code to filter to a specific release."
         )
       end
+
+      # Successfully found exactly one matching release
+      release = releases.first
       track_to = client.tracks(Supply.config[:track_promote_to]).first || AndroidPublisher::Track.new(
         track: Supply.config[:track_promote_to],
         releases: []
