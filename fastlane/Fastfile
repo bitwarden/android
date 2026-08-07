@@ -347,15 +347,19 @@ platform :android do
     package_name = options[:package_name]
     track = options[:track]
 
-    # Determine credentials file based on package name
-    case package_name
-    when "com.x8bit.bitwarden", "com.x8bit.bitwarden.beta"
-      json_key = "secrets/play_creds.json"
-    when "com.bitwarden.authenticator"
-      json_key = "secrets/authenticator_play_store-creds.json"
+    # Determine credentials file - accept as parameter or use default based on package name
+    if options[:serviceCredentialsFile]
+      json_key = options[:serviceCredentialsFile]
     else
-      UI.important "Unexpected package name: #{package_name}, using default play store json key"
-      json_key = "secrets/play_creds.json"
+      case package_name
+      when "com.x8bit.bitwarden", "com.x8bit.bitwarden.beta"
+        json_key = "secrets/play_creds.json"
+      when "com.bitwarden.authenticator"
+        json_key = "secrets/authenticator_play_store-creds.json"
+      else
+        UI.important "Unexpected package name: #{package_name}, using default play store json key"
+        json_key = "secrets/play_creds.json"
+      end
     end
 
     # Use supply to get detailed release status
