@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.billing.manager.UPGRADED_TO_PREMIUM_LEARN_MORE_URL
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.EffectiveSendPolicy
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -30,6 +31,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
+import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -64,15 +66,18 @@ class SendViewModel @Inject constructor(
 ) : BaseViewModel<SendState, SendEvent, SendAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
-        ?: SendState(
-            viewState = SendState.ViewState.Loading,
-            dialogState = null,
-            isPullToRefreshSettingEnabled = settingsRepo.getPullToRefreshEnabledFlow().value,
-            policyDisablesSend = policyManager.getEffectiveSendPolicy().disableSend,
-            isRefreshing = false,
-            isPremiumUser = authRepo.userStateFlow.value?.activeAccount?.isPremium == true,
-            isUpgradedToPremiumCardEligible = false,
-        ),
+        ?: policyManager.getEffectiveSendPolicy().let { effectiveSendPolicy ->
+            SendState(
+                viewState = SendState.ViewState.Loading,
+                dialogState = null,
+                isPullToRefreshSettingEnabled = settingsRepo.getPullToRefreshEnabledFlow().value,
+                policyDisablesSend = effectiveSendPolicy.disableSend,
+                singleAllowedSendType = effectiveSendPolicy.singleAllowedSendType,
+                isRefreshing = false,
+                isPremiumUser = authRepo.userStateFlow.value?.activeAccount?.isPremium == true,
+                isUpgradedToPremiumCardEligible = false,
+            )
+        },
 ) {
 
     init {
@@ -83,7 +88,7 @@ class SendViewModel @Inject constructor(
             .launchIn(viewModelScope)
         policyManager
             .getEffectiveSendPolicyFlow()
-            .map { SendAction.Internal.PolicyUpdateReceive(it.disableSend) }
+            .map { SendAction.Internal.PolicyUpdateReceive(effectiveSendPolicy = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
         vaultRepo
@@ -314,7 +319,8 @@ class SendViewModel @Inject constructor(
     private fun handlePolicyUpdateReceive(action: SendAction.Internal.PolicyUpdateReceive) {
         mutableStateFlow.update {
             it.copy(
-                policyDisablesSend = action.policyDisablesSend,
+                policyDisablesSend = action.effectiveSendPolicy.disableSend,
+                singleAllowedSendType = action.effectiveSendPolicy.singleAllowedSendType,
             )
         }
     }
@@ -324,13 +330,22 @@ class SendViewModel @Inject constructor(
     }
 
     private fun handleAddSendClick() {
-        mutableStateFlow.update {
-            it.copy(dialogState = SendState.DialogState.SelectSendAddType)
-        }
+        state
+            .singleAllowedSendType
+            // Skip the type picker when the policy only allows a single type, while still applying
+            // the same restrictions the picker selection would.
+            ?.let { navigateToNewSendOrShowDialog(sendType = it) }
+            ?: mutableStateFlow.update {
+                it.copy(dialogState = SendState.DialogState.SelectSendAddType)
+            }
     }
 
     private fun handleAddSendSelected(action: SendAction.AddSendSelected) {
-        if (action.sendType == SendItemType.FILE) {
+        navigateToNewSendOrShowDialog(sendType = action.sendType)
+    }
+
+    private fun navigateToNewSendOrShowDialog(sendType: SendItemType) {
+        if (sendType == SendItemType.FILE) {
             if (state.policyDisablesSend) {
                 mutableStateFlow.update {
                     it.copy(
@@ -350,7 +365,7 @@ class SendViewModel @Inject constructor(
             }
         }
         mutableStateFlow.update { it.copy(dialogState = null) }
-        sendEvent(SendEvent.NavigateNewSend(sendType = action.sendType))
+        sendEvent(SendEvent.NavigateNewSend(sendType = sendType))
     }
 
     private fun handleLockClick() {
@@ -499,6 +514,7 @@ data class SendState(
     val dialogState: DialogState?,
     private val isPullToRefreshSettingEnabled: Boolean,
     val policyDisablesSend: Boolean,
+    val singleAllowedSendType: SendItemType?,
     val isRefreshing: Boolean,
     val isPremiumUser: Boolean,
     val isUpgradedToPremiumCardEligible: Boolean = false,
@@ -508,6 +524,13 @@ data class SendState(
      */
     val shouldShowSearchIcon: Boolean
         get() = viewState is ViewState.Content
+
+    /**
+     * Whether the types section should be shown. Filtering by type is meaningless when the policy
+     * only allows a single type.
+     */
+    val shouldShowTypesSection: Boolean
+        get() = singleAllowedSendType == null
 
     /**
      * Indicates that the pull-to-refresh should be enabled in the UI.
@@ -803,7 +826,7 @@ sealed class SendAction {
          * Indicates that a policy update has been received.
          */
         data class PolicyUpdateReceive(
-            val policyDisablesSend: Boolean,
+            val effectiveSendPolicy: EffectiveSendPolicy,
         ) : Internal()
 
         /**
@@ -905,3 +928,13 @@ sealed class SendEvent {
         )
     }
 }
+
+/**
+ * The only [SendItemType] the policy permits, or `null` when the user is not restricted to a single
+ * type. A `null` [EffectiveSendPolicy.allowedSendTypes] means no restriction is in effect, which is
+ * also the case whenever the send controls feature flag is disabled.
+ */
+private val EffectiveSendPolicy.singleAllowedSendType: SendItemType?
+    get() = allowedSendTypes
+        ?.singleOrNull()
+        ?.toSendItemType()

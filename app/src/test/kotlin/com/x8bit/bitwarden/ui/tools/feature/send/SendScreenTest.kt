@@ -16,6 +16,7 @@ import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -354,6 +355,28 @@ class SendScreenTest : BitwardenComposeTest() {
         verify {
             viewModel.trySendAction(SendAction.RefreshClick)
         }
+    }
+
+    @Test
+    fun `types section should be displayed according to state`() {
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE, singleAllowedSendType = null)
+        }
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText("Text"))
+        composeTestRule.onNodeWithTag("SendTextFilter").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("SendFileFilter").assertIsDisplayed()
+
+        // Filtering by type is meaningless when only one type is allowed, so the whole section
+        // is removed rather than partially rendered.
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE,
+                singleAllowedSendType = SendItemType.TEXT,
+            )
+        }
+        composeTestRule.onNodeWithTag("SendTextFilter").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("SendFileFilter").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Types").assertDoesNotExist()
     }
 
     @Test
@@ -1107,6 +1130,7 @@ private val DEFAULT_STATE: SendState = SendState(
     dialogState = null,
     isPullToRefreshSettingEnabled = false,
     policyDisablesSend = false,
+    singleAllowedSendType = null,
     isRefreshing = false,
     isPremiumUser = false,
 )

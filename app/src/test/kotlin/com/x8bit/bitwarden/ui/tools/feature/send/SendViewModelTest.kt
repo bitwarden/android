@@ -6,6 +6,7 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseWebSendUrl
+import com.bitwarden.network.model.SendTypeJson
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -41,11 +42,11 @@ import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.time.Duration.Companion.milliseconds
@@ -72,9 +73,10 @@ class SendViewModelTest : BaseViewModelTest() {
     private val vaultRepo: VaultRepository = mockk {
         every { sendDataStateFlow } returns mutableSendDataFlow
     }
+    private val mutableEffectiveSendPolicyFlow = MutableStateFlow(DEFAULT_EFFECTIVE_SEND_POLICY)
     private val policyManager: PolicyManager = mockk {
-        every { getEffectiveSendPolicy() } returns DEFAULT_EFFECTIVE_SEND_POLICY
-        every { getEffectiveSendPolicyFlow() } returns emptyFlow()
+        every { getEffectiveSendPolicy() } answers { mutableEffectiveSendPolicyFlow.value }
+        every { getEffectiveSendPolicyFlow() } returns mutableEffectiveSendPolicyFlow
     }
 
     private val networkConnectionManager: NetworkConnectionManager = mockk {
@@ -129,6 +131,110 @@ class SendViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `AddSendClick should still display SelectSendAddType dialog when both types are allowed`() {
+        mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY.copy(
+            allowedSendTypes = listOf(SendTypeJson.TEXT, SendTypeJson.FILE),
+        )
+        val viewModel = createViewModel()
+        viewModel.trySendAction(SendAction.AddSendClick)
+        assertEquals(
+            DEFAULT_STATE.copy(dialogState = SendState.DialogState.SelectSendAddType),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `AddSendClick should skip the type dialog when only text sends are allowed`() = runTest {
+        mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY.copy(
+            allowedSendTypes = listOf(SendTypeJson.TEXT),
+        )
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(SendAction.AddSendClick)
+            assertEquals(SendEvent.NavigateNewSend(sendType = SendItemType.TEXT), awaitItem())
+        }
+        assertNull(viewModel.stateFlow.value.dialogState)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `AddSendClick should require premium when only file sends are allowed and user is not premium`() {
+        mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY.copy(
+            allowedSendTypes = listOf(SendTypeJson.FILE),
+        )
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(DEFAULT_USER_ACCOUNT_STATE.copy(isPremium = false)),
+        )
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(SendAction.AddSendClick)
+
+        assertEquals(
+            SendState.DialogState.FileTypeRequiresPremium,
+            viewModel.stateFlow.value.dialogState,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `AddSendClick should display warning when only file sends are allowed and policy disables send`() {
+        mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY.copy(
+            allowedSendTypes = listOf(SendTypeJson.FILE),
+            disableSend = true,
+        )
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(SendAction.AddSendClick)
+
+        assertEquals(
+            SendState.DialogState.Error(
+                title = null,
+                message = BitwardenString.send_disabled_warning.asText(),
+            ),
+            viewModel.stateFlow.value.dialogState,
+        )
+    }
+
+    @Test
+    fun `policyDisablesSend should update when the effective send policy disables sends`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(false, awaitItem().policyDisablesSend)
+
+                // While the send controls flag is disabled this is driven by the legacy
+                // disable-send policy, which must continue to surface the policy warning.
+                mutableEffectiveSendPolicyFlow.value =
+                    DEFAULT_EFFECTIVE_SEND_POLICY.copy(disableSend = true)
+
+                assertEquals(true, awaitItem().policyDisablesSend)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `state should update when the allowed send types change while the screen is open`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                val initialState = awaitItem()
+                assertNull(initialState.singleAllowedSendType)
+                assertEquals(true, initialState.shouldShowTypesSection)
+
+                mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY.copy(
+                    allowedSendTypes = listOf(SendTypeJson.FILE),
+                )
+
+                val updatedState = awaitItem()
+                assertEquals(SendItemType.FILE, updatedState.singleAllowedSendType)
+                assertEquals(false, updatedState.shouldShowTypesSection)
+            }
+        }
+
     @Test
     fun `AddSendSelected with text type should emit NavigateNewSend`() = runTest {
         val viewModel = createViewModel()
@@ -141,6 +247,8 @@ class SendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `AddSendSelected with file type and disabled send policy should display warning dialog`() {
+        mutableEffectiveSendPolicyFlow.value =
+            DEFAULT_EFFECTIVE_SEND_POLICY.copy(disableSend = true)
         val state = DEFAULT_STATE.copy(policyDisablesSend = true)
         val viewModel = createViewModel(state = state)
         viewModel.trySendAction(SendAction.AddSendSelected(sendType = SendItemType.FILE))
@@ -819,6 +927,7 @@ private val DEFAULT_STATE: SendState = SendState(
     dialogState = null,
     isPullToRefreshSettingEnabled = false,
     policyDisablesSend = false,
+    singleAllowedSendType = null,
     isRefreshing = false,
     isPremiumUser = false,
 )
