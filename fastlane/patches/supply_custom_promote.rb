@@ -45,11 +45,7 @@ module Supply
       version_name = Supply.config[:version_name].to_s
 
       # Always search for the release - never create a synthetic one
-      # Try to find the release by version code first
-      # DEBT: The version_name-only search branch (line 69) is unreachable when
-      # called from promoteToProduction because version_code is always passed
-      # (even as 0). The elsif would only execute if called from another lane
-      # that doesn't provide version_code at all.
+      # Try to find the release by version code first, then by version name
       if version_code != ""
         matching_releases = releases.select do |release|
           release.version_codes.include?(version_code)

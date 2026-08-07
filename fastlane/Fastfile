@@ -531,8 +531,6 @@ platform :android do
   lane :promoteToProduction do |options|
     release_options = {
       package_name: options[:packageName],
-      version_code: options[:versionCode].to_i,
-      version_name: options[:versionName],
       track: options[:track],
       track_promote_to: options[:trackPromoteTo],
       # IMPORTANT: Must be true for supply_custom_promote.rb patch to run.
@@ -545,6 +543,16 @@ platform :android do
       skip_upload_apk: true,
       skip_upload_aab: true,
     }
+
+    # Only pass version_code if provided, to allow version_name-only search
+    if !options[:versionCode].nil? && !options[:versionCode].to_s.empty?
+      release_options[:version_code] = options[:versionCode].to_i
+    end
+
+    # Only pass version_name if provided
+    if !options[:versionName].nil? && !options[:versionName].to_s.empty?
+      release_options[:version_name] = options[:versionName]
+    end
 
     if options[:releaseNotes].nil? or options[:releaseNotes].to_s.empty?
       release_options[:skip_upload_metadata] = true
