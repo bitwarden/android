@@ -535,6 +535,9 @@ platform :android do
       version_name: options[:versionName],
       track: options[:track],
       track_promote_to: options[:trackPromoteTo],
+      # IMPORTANT: Must be true for supply_custom_promote.rb patch to run.
+      # When false, the patch calls original_promote_track (unpatched Fastlane code).
+      # When true, the patch calls custom_promote_track (our enhanced search logic).
       skip_release_verification: true,
       skip_upload_apk: true,
       skip_upload_aab: true,
