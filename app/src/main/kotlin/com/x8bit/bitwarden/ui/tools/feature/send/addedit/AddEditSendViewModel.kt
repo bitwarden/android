@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.takeUntilLoaded
 import com.bitwarden.data.repository.util.baseWebSendUrl
@@ -23,6 +24,7 @@ import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -51,6 +53,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -83,6 +86,7 @@ class AddEditSendViewModel @Inject constructor(
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
     private val environmentRepo: EnvironmentRepository,
+    private val featureFlagManager: FeatureFlagManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val vaultRepo: VaultRepository,
     private val policyManager: PolicyManager,
@@ -148,6 +152,7 @@ class AddEditSendViewModel @Inject constructor(
             dialogState = null,
             baseWebSendUrl = environmentRepo.environment.baseWebSendUrl,
             policyDisablesSend = effectiveSendPolicy.disableSend,
+            isSendControlsEnabled = featureFlagManager.getFeatureFlag(key = FlagKey.SendControls),
             allowedDomains = effectiveSendPolicy.allowedDomains,
             allowedSendTypes = effectiveSendPolicy.allowedSendTypes,
             deletionHours = effectiveSendPolicy.deletionHours,
@@ -180,6 +185,20 @@ class AddEditSendViewModel @Inject constructor(
                 }
                 AddEditSendAction.Internal.GeneratorResultReceive(generatorResult = result)
             }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        // The effective policy itself depends on the feature flag, so both are observed together
+        // to keep the derived state consistent whenever either one changes.
+        combine(
+            policyManager.getEffectiveSendPolicyFlow(),
+            featureFlagManager.getFeatureFlagFlow(key = FlagKey.SendControls),
+        ) { effectiveSendPolicy, isSendControlsEnabled ->
+            AddEditSendAction.Internal.EffectiveSendPolicyReceive(
+                effectiveSendPolicy = effectiveSendPolicy,
+                isSendControlsEnabled = isSendControlsEnabled,
+            )
+        }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -231,6 +250,10 @@ class AddEditSendViewModel @Inject constructor(
 
         is AddEditSendAction.Internal.RemovePasswordResultReceive -> {
             handleRemovePasswordResultReceive(action)
+        }
+
+        is AddEditSendAction.Internal.EffectiveSendPolicyReceive -> {
+            handleEffectiveSendPolicyReceive(action)
         }
 
         is AddEditSendAction.Internal.SendDataReceive -> handleSendDataReceive(action)
@@ -381,6 +404,31 @@ class AddEditSendViewModel @Inject constructor(
             updateCommonContent {
                 it.copy(passwordInput = passwordData.password)
             }
+        }
+    }
+
+    private fun handleEffectiveSendPolicyReceive(
+        action: AddEditSendAction.Internal.EffectiveSendPolicyReceive,
+    ) {
+        val effectiveSendPolicy = action.effectiveSendPolicy
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                policyDisablesSend = effectiveSendPolicy.disableSend,
+                isSendControlsEnabled = action.isSendControlsEnabled,
+                allowedDomains = effectiveSendPolicy.allowedDomains,
+                allowedSendTypes = effectiveSendPolicy.allowedSendTypes,
+                deletionHours = effectiveSendPolicy.deletionHours,
+                whoCanAccess = effectiveSendPolicy.whoCanAccess,
+                viewState = (currentState.viewState as? AddEditSendState.ViewState.Content)
+                    ?.let { content ->
+                        content.copy(
+                            common = content.common.copy(
+                                isHideEmailAddressEnabled = !effectiveSendPolicy.disableHideEmail,
+                            ),
+                        )
+                    }
+                    ?: currentState.viewState,
+            )
         }
     }
 
@@ -905,6 +953,7 @@ data class AddEditSendState(
     val isShared: Boolean,
     val baseWebSendUrl: String,
     val policyDisablesSend: Boolean,
+    val isSendControlsEnabled: Boolean,
     val allowedDomains: String?,
     val allowedSendTypes: List<SendTypeJson>?,
     val deletionHours: Int?,
@@ -929,11 +978,23 @@ data class AddEditSendState(
         }
 
     /**
-     * Helper to determine if the policy notice should be displayed.
+     * Helper to determine if the policy notice should be displayed. The notice is only relevant to
+     * the legacy send options policy, which disables the affected controls rather than hiding them.
+     * The SendControls policy removes those controls entirely, so there is nothing to explain.
      */
     val shouldDisplayPolicyWarning: Boolean
         get() = !policyDisablesSend &&
+            !isSendControlsEnabled &&
             (viewState as? ViewState.Content)?.common?.isHideEmailAddressEnabled != true
+
+    /**
+     * Helper to determine if the "hide my email" toggle should be hidden entirely rather than
+     * simply disabled. The SendControls policy hides the toggle, while the legacy send options
+     * policy continues to only disable it.
+     */
+    val shouldHideEmailAddressToggle: Boolean
+        get() = isSendControlsEnabled &&
+            (viewState as? ViewState.Content)?.common?.isHideEmailAddressEnabled == false
 
     /**
      * Helper to determine if the UI should display the content in add send mode.
@@ -1251,6 +1312,14 @@ sealed class AddEditSendAction {
          * Indicates a result for creating a send has been received.
          */
         data class CreateSendResultReceive(val result: CreateSendResult) : Internal()
+
+        /**
+         * Indicates an updated effective send policy has been received.
+         */
+        data class EffectiveSendPolicyReceive(
+            val effectiveSendPolicy: EffectiveSendPolicy,
+            val isSendControlsEnabled: Boolean,
+        ) : Internal()
 
         /**
          * Indicates that the vault totp code result has been received.

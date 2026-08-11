@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addedit
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
@@ -18,6 +19,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -92,8 +94,17 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     private val vaultRepository: VaultRepository = mockk {
         every { getSendStateFlow(any()) } returns mutableSendDataStateFlow
     }
+    private val mutableEffectiveSendPolicyFlow = MutableStateFlow(DEFAULT_EFFECTIVE_SEND_POLICY)
+    private val mutableSendControlsFlagFlow = MutableStateFlow(false)
     private val policyManager: PolicyManager = mockk {
-        every { getEffectiveSendPolicy() } returns DEFAULT_EFFECTIVE_SEND_POLICY
+        every { getEffectiveSendPolicy() } answers { mutableEffectiveSendPolicyFlow.value }
+        every { getEffectiveSendPolicyFlow() } returns mutableEffectiveSendPolicyFlow
+    }
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every { getFeatureFlag(key = FlagKey.SendControls) } answers {
+            mutableSendControlsFlagFlow.value
+        }
+        every { getFeatureFlagFlow(key = FlagKey.SendControls) } returns mutableSendControlsFlagFlow
     }
     private val networkConnectionManager = mockk<NetworkConnectionManager> {
         every { isNetworkConnected } returns true
@@ -136,9 +147,8 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state should be correct when the effective policy disables hide email`() {
-        every {
-            policyManager.getEffectiveSendPolicy()
-        } returns DEFAULT_EFFECTIVE_SEND_POLICY.copy(disableHideEmail = true)
+        mutableEffectiveSendPolicyFlow.value =
+            DEFAULT_EFFECTIVE_SEND_POLICY.copy(disableHideEmail = true)
         val viewModel = createViewModel()
         val viewState = DEFAULT_VIEW_STATE.copy(
             common = DEFAULT_COMMON_STATE.copy(
@@ -147,6 +157,70 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         )
         assertEquals(DEFAULT_STATE.copy(viewState = viewState), viewModel.stateFlow.value)
     }
+
+    @Test
+    fun `initial state should be correct when the send controls feature flag is enabled`() {
+        mutableSendControlsFlagFlow.value = true
+        val viewModel = createViewModel()
+        assertEquals(
+            DEFAULT_STATE.copy(isSendControlsEnabled = true),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `shouldHideEmailAddressToggle should only be true when send controls is enabled and hide email is restricted`() {
+        mutableEffectiveSendPolicyFlow.value =
+            DEFAULT_EFFECTIVE_SEND_POLICY.copy(disableHideEmail = true)
+
+        // Flag off retains the legacy behavior of only disabling the toggle.
+        assertEquals(false, createViewModel().stateFlow.value.shouldHideEmailAddressToggle)
+
+        mutableSendControlsFlagFlow.value = true
+
+        assertEquals(true, createViewModel().stateFlow.value.shouldHideEmailAddressToggle)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `state should update when the send controls feature flag changes while the screen is open`() =
+        runTest {
+            mutableEffectiveSendPolicyFlow.value =
+                DEFAULT_EFFECTIVE_SEND_POLICY.copy(disableHideEmail = true)
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                val initialState = awaitItem()
+                assertEquals(false, initialState.isSendControlsEnabled)
+                assertEquals(false, initialState.shouldHideEmailAddressToggle)
+
+                mutableSendControlsFlagFlow.value = true
+
+                val updatedState = awaitItem()
+                assertEquals(true, updatedState.isSendControlsEnabled)
+                assertEquals(true, updatedState.shouldHideEmailAddressToggle)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `state should update when the effective send policy changes while the screen is open`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(true, awaitItem().isHideEmailAddressEnabledOrNull())
+
+                mutableEffectiveSendPolicyFlow.value =
+                    DEFAULT_EFFECTIVE_SEND_POLICY.copy(disableHideEmail = true)
+
+                assertEquals(false, awaitItem().isHideEmailAddressEnabledOrNull())
+            }
+        }
+
+    private fun AddEditSendState.isHideEmailAddressEnabledOrNull(): Boolean? =
+        (viewState as? AddEditSendState.ViewState.Content)?.common?.isHideEmailAddressEnabled
 
     @Test
     fun `initial state should read from saved state when present`() {
@@ -1458,6 +1532,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         },
         authRepo = authRepository,
         environmentRepo = environmentRepository,
+        featureFlagManager = featureFlagManager,
         specialCircumstanceManager = specialCircumstanceManager,
         clock = clock,
         clipboardManager = clipboardManager,
@@ -1506,6 +1581,7 @@ private val DEFAULT_STATE = AddEditSendState(
     isShared = false,
     baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
     policyDisablesSend = false,
+    isSendControlsEnabled = false,
     allowedDomains = null,
     allowedSendTypes = null,
     deletionHours = null,
