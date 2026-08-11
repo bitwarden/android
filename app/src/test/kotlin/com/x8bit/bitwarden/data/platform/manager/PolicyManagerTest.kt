@@ -828,7 +828,17 @@ class PolicyManagerTest {
             ),
         )
 
-        assertEquals(false, policyManager.getEffectiveSendPolicy().disableSend)
+        assertEquals(
+            EffectiveSendPolicy(
+                allowedDomains = null,
+                allowedSendTypes = null,
+                deletionHours = null,
+                disableHideEmail = false,
+                disableSend = false,
+                whoCanAccess = null,
+            ),
+            policyManager.getEffectiveSendPolicy(),
+        )
     }
 
     @Suppress("MaxLineLength")
@@ -851,7 +861,17 @@ class PolicyManagerTest {
             ),
         )
 
-        assertEquals(true, policyManager.getEffectiveSendPolicy().disableSend)
+        assertEquals(
+            EffectiveSendPolicy(
+                allowedDomains = null,
+                allowedSendTypes = null,
+                deletionHours = null,
+                disableHideEmail = false,
+                disableSend = true,
+                whoCanAccess = null,
+            ),
+            policyManager.getEffectiveSendPolicy(),
+        )
     }
 
     @Suppress("MaxLineLength")
@@ -877,7 +897,17 @@ class PolicyManagerTest {
             ),
         )
 
-        assertEquals(true, policyManager.getEffectiveSendPolicy().disableHideEmail)
+        assertEquals(
+            EffectiveSendPolicy(
+                allowedDomains = null,
+                allowedSendTypes = null,
+                deletionHours = null,
+                disableHideEmail = true,
+                disableSend = false,
+                whoCanAccess = null,
+            ),
+            policyManager.getEffectiveSendPolicy(),
+        )
     }
 
     @Suppress("MaxLineLength")
@@ -1008,10 +1038,19 @@ class PolicyManagerTest {
             createMockPolicy(organizationId = organizations.id, isEnabled = true),
         )
 
+        val expectedPolicy = EffectiveSendPolicy(
+            allowedDomains = null,
+            allowedSendTypes = null,
+            deletionHours = null,
+            disableHideEmail = false,
+            disableSend = false,
+            whoCanAccess = null,
+        )
+
         policyManager
             .getEffectiveSendPolicyFlow()
             .test {
-                assertEquals(false, awaitItem().disableSend)
+                assertEquals(expectedPolicy, awaitItem())
 
                 mutablePolicyFlow.value = listOf(
                     createMockPolicy(
@@ -1021,7 +1060,7 @@ class PolicyManagerTest {
                     ),
                 )
 
-                assertEquals(true, awaitItem().disableSend)
+                assertEquals(expectedPolicy.copy(disableSend = true), awaitItem())
             }
     }
 
@@ -1076,16 +1115,25 @@ class PolicyManagerTest {
                 createMockPolicy(organizationId = organizations.id, isEnabled = true),
             )
 
+            val expectedPolicy = EffectiveSendPolicy(
+                allowedDomains = null,
+                allowedSendTypes = null,
+                deletionHours = null,
+                disableHideEmail = false,
+                disableSend = true,
+                whoCanAccess = null,
+            )
+
             policyManager
                 .getEffectiveSendPolicyFlow()
                 .test {
                     // Flag off, so the organization's legacy DisableSend policy applies.
-                    assertEquals(true, awaitItem().disableSend)
+                    assertEquals(expectedPolicy, awaitItem())
 
                     mutableSendControlsFlagFlow.value = true
 
                     // Flag on, so the organization's SendControls policy supersedes its legacy one.
-                    assertEquals(false, awaitItem().disableSend)
+                    assertEquals(expectedPolicy.copy(disableSend = false), awaitItem())
                 }
         }
 
