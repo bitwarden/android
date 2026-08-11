@@ -26,7 +26,7 @@ You are the **team lead** for an end-to-end Android development pipeline. Use th
    - `.claude/outputs/reviews/{slug}-REVIEW-ARCHITECTURE.md`
    - `.claude/outputs/reviews/{slug}-REVIEW-SECURITY.md`
    - `.claude/outputs/reviews/{slug}-REVIEW-CODE.md`
-   - `.claude/outputs/reviews/{slug}-REVIEW-SUMMARY.md`
+   - `.claude/outputs/reviews/{slug}-REVIEW-SUMMARY.md` (append the phase number if multiple phases, e.g. `{slug}-REVIEW-SUMMARY-P{N}.md`, or use as-is for single-phase runs)
 
 ## Pipeline Structure
 
@@ -59,6 +59,7 @@ The following marketplace plugins are required for the full pipeline. If a plugi
 | `bitwarden-tech-lead` | `bitwarden-marketplace` | Architecture planning + architecture review |
 | `bitwarden-software-engineer` | `bitwarden-marketplace` | Implementation, testing, building, and committing |
 | `bitwarden-atlassian-tools` | `bitwarden-marketplace` | Optional — Jira/Confluence fetching |
+| `bitwarden-delivery-tools` | `bitwarden-marketplace` | Architecture planning (`architecting-solutions`, used by `bitwarden-tech-lead`), commit/preflight during implementation, and PR creation (Step 7) |
 
 The `bitwarden-tech-lead` agent is provided by the `bitwarden-tech-lead` marketplace plugin.
 
@@ -185,7 +186,7 @@ As team lead, your role during execution is to monitor and coordinate:
 After all 4 review tasks for a phase are complete, **you (the team lead) consolidate** the findings:
 
 1. Read all 4 review output files.
-2. Write a consolidated review summary to `.claude/outputs/reviews/{slug}-REVIEW-SUMMARY.md`:
+2. Write a consolidated review summary to `.claude/outputs/reviews/{slug}-REVIEW-SUMMARY.md` (append the phase number if multiple phases, e.g. `{slug}-REVIEW-SUMMARY-P{N}.md`, or overwrite for single-phase reviews — same convention as Step 3b's reviewer output files):
 
 ```markdown
 # Review Summary: {feature name}
