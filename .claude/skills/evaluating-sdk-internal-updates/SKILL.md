@@ -1,7 +1,7 @@
 ---
 name: evaluating-sdk-internal-updates
 description: Evaluates a bitwarden/android "Update SDK to" PR against the sdk-internal commit range for compile-time and runtime breaking changes, maps affected symbols to Android call sites, and applies clear in-scope fixes. Use when reviewing an SDK bump PR, a bitwardenSdk version change, or triaging sdk-internal breaking changes.
-allowed-tools: Bash(gh pr diff:*), Bash(git -C *:*), Bash(grep:*), Bash(./gradlew*compileKotlin*:*), Read, Grep, Glob, Skill(plan-android-work), Skill(work-on-android)
+allowed-tools: Bash(gh pr diff:*), Bash(git -C *:*), Bash(grep:*), Bash(./gradlew*:*), Read, Grep, Glob, Skill(plan-android-work), Skill(work-on-android)
 ---
 
 # Evaluating sdk-internal Updates
@@ -28,4 +28,4 @@ Resolve the findings from Step 7 by deciding on a fix, invoking `/plan-android-w
 
 8. Decide the fix for anything found, compile-time or runtime, whenever the correct behavior is clear and within scope. For a new required method, grep for the underlying concept, not the new method/type name (it won't exist yet) — no existing consumer means stub it: a `// no-op` comment or a null/default return that satisfies the compiler, not a behavioral decision. Never `TODO()` — it throws at runtime, which is a crash, not a stub. A sibling's structure (naming, placement, style) is a template; its behavior (storage, defaulting, error handling, side effects) is not evidence for yours. If unsure, report it instead of guessing, along with anything needing a product decision.
 9. Implement every fix from step 8 by `/plan-android-work` (pass it the step 7 findings) followed by `/work-on-android` (pass it the resulting plan) — never edit the fix in yourself, not even a one-line stub.
-10. Verify with the affected module's `compileKotlin` task.
+10. Verify with the same compile task used in step 3.
