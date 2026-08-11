@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
+import androidx.core.content.edit
 import com.bitwarden.core.di.CoreModule
 import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.CookieConfigurationData
@@ -10,14 +11,57 @@ import org.junit.jupiter.api.Test
 
 class CookieDiskSourceTest {
     private val fakeEncryptedSharedPreferences = FakeSharedPreferences()
+    private val fakeKeystoreEncryptedPreferences = FakeSharedPreferences()
     private val fakeSharedPreferences = FakeSharedPreferences()
     private val json = CoreModule.providesJson(buildInfoManager = mockk(relaxed = true))
 
     private val cookieDiskSource: CookieDiskSource = CookieDiskSourceImpl(
         sharedPreferences = fakeSharedPreferences,
+        keystoreEncryptedPreferences = fakeKeystoreEncryptedPreferences,
         encryptedSharedPreferences = fakeEncryptedSharedPreferences,
         json = json,
     )
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `initialization should migrate legacy encrypted values to the keystore encrypted preferences`() {
+        val hostname = "vault.bitwarden.com"
+        val config = CookieConfigurationData(
+            hostname = hostname,
+            cookies = listOf(
+                CookieConfigurationData.Cookie(
+                    name = "BW_SESSION",
+                    value = "encrypted_cookie_value",
+                ),
+            ),
+        )
+        val legacyKey = "bwSecureStorage:elb_cookie_config_$hostname"
+        fakeEncryptedSharedPreferences.edit {
+            putString(legacyKey, json.encodeToString(config))
+        }
+
+        val diskSource = CookieDiskSourceImpl(
+            sharedPreferences = fakeSharedPreferences,
+            keystoreEncryptedPreferences = fakeKeystoreEncryptedPreferences,
+            encryptedSharedPreferences = fakeEncryptedSharedPreferences,
+            json = json,
+        )
+
+        // The value is moved to the keystore encrypted preferences without the legacy prefix.
+        assertNull(fakeEncryptedSharedPreferences.getString(legacyKey, null))
+        assertEquals(
+            json.parseToJsonElement(json.encodeToString(config)),
+            json.parseToJsonElement(
+                requireNotNull(
+                    fakeKeystoreEncryptedPreferences.getString(
+                        "elb_cookie_config_$hostname",
+                        null,
+                    ),
+                ),
+            ),
+        )
+        assertEquals(config, diskSource.getCookieConfig(hostname))
+    }
 
     @Test
     fun `getCookieConfig should return null when no config exists`() {

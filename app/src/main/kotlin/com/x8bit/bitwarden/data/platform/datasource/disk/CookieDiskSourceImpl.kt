@@ -6,9 +6,9 @@ import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.bitwarden.data.datasource.disk.BaseEncryptedDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.CookieConfigurationData
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 
 private const val CONFIG_PREFIX = "elb_cookie_config"
-private const val ENCRYPTED_PREFIX = "bwSecureStorage:$CONFIG_PREFIX"
 
 /**
  * Implementation of [CookieDiskSource] using encrypted SharedPreferences.
@@ -17,13 +17,20 @@ private const val ENCRYPTED_PREFIX = "bwSecureStorage:$CONFIG_PREFIX"
  */
 class CookieDiskSourceImpl(
     sharedPreferences: SharedPreferences,
-    private val encryptedSharedPreferences: SharedPreferences,
+    private val keystoreEncryptedPreferences: SharedPreferences,
+    encryptedSharedPreferences: SharedPreferences,
     private val json: Json,
 ) : CookieDiskSource,
     BaseEncryptedDiskSource(
         sharedPreferences = sharedPreferences,
+        keystoreEncryptedPreferences = keystoreEncryptedPreferences,
         encryptedSharedPreferences = encryptedSharedPreferences,
     ) {
+
+    init {
+        // Migrate to the Keystore Encrypted SharedPreferences.
+        migrateToKeystoreEncryption()
+    }
 
     override fun getCookieConfig(hostname: String): CookieConfigurationData? {
         val key = CONFIG_PREFIX.appendIdentifier(hostname)
@@ -37,12 +44,20 @@ class CookieDiskSourceImpl(
     }
 
     override fun clearCookies() {
-        val keysToRemove = encryptedSharedPreferences
+        val keysToRemove = keystoreEncryptedPreferences
             .all
             .keys
-            .filter { it.startsWith(ENCRYPTED_PREFIX) }
-        encryptedSharedPreferences.edit {
+            .filter { it.startsWith(CONFIG_PREFIX) }
+        keystoreEncryptedPreferences.edit {
             keysToRemove.forEach { key -> remove(key) }
+        }
+    }
+
+    private fun migrateToKeystoreEncryption() {
+        var isMigrated = false
+        isMigrated = migrateKeyByPrefix(keyPrefix = CONFIG_PREFIX) || isMigrated
+        if (isMigrated) {
+            Timber.d("CookieDiskSource has been migrated to keystore encrypted shared preferences")
         }
     }
 }

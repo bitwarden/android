@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import java.time.Instant
 import java.util.UUID
 
@@ -33,6 +34,7 @@ private const val BIOMETRICS_UNLOCK_KEY = "userKeyBiometricUnlock"
 private const val USER_AUTO_UNLOCK_KEY_KEY = "userKeyAutoUnlock"
 private const val DEVICE_KEY_KEY = "deviceKey"
 private const val PENDING_ADMIN_AUTH_REQUEST_KEY = "pendingAdminAuthRequest"
+private const val ACCOUNT_CRYPTOGRAPHIC_STATE_KEY = "accountCryptographicState"
 
 // These keys should not be encrypted
 private const val UNIQUE_APP_ID_KEY = "appId"
@@ -58,7 +60,6 @@ private const val ONBOARDING_STATUS_KEY = "onboardingStatus"
 private const val SHOW_IMPORT_LOGINS_KEY = "showImportLogins"
 private const val LAST_LOCK_TIMESTAMP = "lastLockTimestamp"
 private const val PROFILE_ACCOUNT_KEYS_KEY = "profileAccountKeys"
-private const val ACCOUNT_CRYPTOGRAPHIC_STATE_KEY = "accountCryptographicState"
 private const val V2_UPGRADE_TOKEN = "v2UpgradeToken"
 
 /**
@@ -67,11 +68,13 @@ private const val V2_UPGRADE_TOKEN = "v2UpgradeToken"
 @Suppress("TooManyFunctions")
 class AuthDiskSourceImpl(
     encryptedSharedPreferences: SharedPreferences,
+    keystoreEncryptedPreferences: SharedPreferences,
     sharedPreferences: SharedPreferences,
     legacySecureStorageMigrator: LegacySecureStorageMigrator,
     private val json: Json,
 ) : BaseEncryptedDiskSource(
     encryptedSharedPreferences = encryptedSharedPreferences,
+    keystoreEncryptedPreferences = keystoreEncryptedPreferences,
     sharedPreferences = sharedPreferences,
 ),
     AuthDiskSource {
@@ -132,6 +135,9 @@ class AuthDiskSourceImpl(
         // We must migrate the Private Key and Account Keys to use the Account Cryptographic state
         // from now on.
         migrateAccountKeys()
+
+        // Migrate to the Keystore Encrypted SharedPreferences.
+        migrateToKeystoreEncryption()
     }
 
     override var authenticatorSyncSymmetricKey: ByteArray?
@@ -285,10 +291,7 @@ class AuthDiskSourceImpl(
     }
 
     override fun getUserAutoUnlockKey(userId: String): String? =
-        getEncryptedString(
-            key = USER_AUTO_UNLOCK_KEY_KEY.appendIdentifier(userId),
-            default = null,
-        )
+        getEncryptedString(key = USER_AUTO_UNLOCK_KEY_KEY.appendIdentifier(userId))
 
     override fun storeUserAutoUnlockKey(
         userId: String,
@@ -739,5 +742,21 @@ class AuthDiskSourceImpl(
                     putString(key = privateKeyKey, value = null)
                 }
             }
+    }
+
+    private fun migrateToKeystoreEncryption() {
+        var isMigrated = false
+        isMigrated = migrateKeyByPrefix(keyPrefix = AUTHENTICATOR_SYNC_SYMMETRIC_KEY) || isMigrated
+        isMigrated = migrateKeyByPrefix(keyPrefix = AUTHENTICATOR_SYNC_UNLOCK_KEY) || isMigrated
+        isMigrated = migrateKeyByPrefix(keyPrefix = ACCOUNT_CRYPTOGRAPHIC_STATE_KEY) || isMigrated
+        isMigrated = migrateKeyByPrefix(keyPrefix = USER_AUTO_UNLOCK_KEY_KEY) || isMigrated
+        isMigrated = migrateKeyByPrefix(keyPrefix = DEVICE_KEY_KEY) || isMigrated
+        isMigrated = migrateKeyByPrefix(keyPrefix = PENDING_ADMIN_AUTH_REQUEST_KEY) || isMigrated
+        isMigrated = migrateKeyByPrefix(keyPrefix = BIOMETRICS_INIT_VECTOR_KEY) || isMigrated
+        isMigrated = migrateKeyByPrefix(keyPrefix = BIOMETRICS_UNLOCK_KEY) || isMigrated
+        isMigrated = migrateKeyByPrefix(keyPrefix = ACCOUNT_TOKENS_KEY) || isMigrated
+        if (isMigrated) {
+            Timber.d("AuthDiskSource has been migrated to keystore encrypted shared preferences")
+        }
     }
 }
