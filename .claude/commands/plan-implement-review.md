@@ -7,7 +7,7 @@ argument-hint: <task description, Jira ticket, or Confluence URL> [--confirm]
 
 You are the **team lead** for an end-to-end Android development pipeline. Use the **Claude Agent Teams** feature (requires `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`) to spawn teammates, define tasks with dependencies, and let teammates self-organize around the task list. The task dependency chain drives execution order — teammates claim unblocked tasks, complete them, and check for newly available work.
 
-**Runtime note (Claude Code v2.1.178+)**: The team forms **implicitly** when you spawn the first teammate via the `Agent` tool — there is no `TeamCreate` step. Likewise, team cleanup is **automatic** when the session exits, and there is no `TeamDelete` tool. The pre-v2.1.178 `TeamCreate`/`TeamDelete` tools have been removed; do not call them.
+The team forms **implicitly** when you spawn the first teammate via the `Agent` tool — there is no team-creation step. Team cleanup is **automatic** when the session exits.
 
 **Input**: $ARGUMENTS
 
@@ -49,7 +49,7 @@ After the planning phase produces a work breakdown with multiple phases, the tea
 
 ## Prerequisites
 
-The following marketplace plugins are required for the full pipeline. If a plugin is not installed, inform the user and offer to **skip that teammate** rather than blocking the entire pipeline.
+The following marketplace plugins are **required** for the full pipeline, except `bitwarden-atlassian-tools` which is optional (noted in the table below). If a required plugin is not installed, **stop** — do not spawn any teammates — and tell the user which plugin(s) to install before re-running this command.
 
 | Plugin | Source | Required For |
 |--------|--------|-------------|
@@ -64,6 +64,11 @@ The following marketplace plugins are required for the full pipeline. If a plugi
 The `bitwarden-tech-lead` agent is provided by the `bitwarden-tech-lead` marketplace plugin.
 
 ## Step 1: Initialize
+
+**Verify the prerequisites first**:
+
+1. Confirm `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` is set to `1` (e.g., check via Bash: `echo $CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`). If it is not set, **stop here** — do not spawn any teammates. Tell the user this pipeline requires Agent Teams, and instruct them to set `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` in their shell environment and restart Claude Code, then re-run this command.
+2. Confirm each required plugin from the Prerequisites table above is installed (`bitwarden-atlassian-tools` is the only optional one). If any required plugin is missing, **stop here** — do not spawn any teammates. Tell the user which plugin(s) to install, then re-run this command.
 
 There is no explicit team-creation step. The team forms implicitly when you spawn the first teammate (Step 2) via the `Agent` tool. Use a consistent slug-derived prefix for teammate names so the team is easy to track (e.g., name teammates `product-analyst`, `architect`, `implementer`, etc., as listed below).
 
@@ -179,7 +184,7 @@ As team lead, your role during execution is to monitor and coordinate:
    - Review: "Phase {N} reviews complete — {summary}."
 3. **Handle `--confirm` mode**: If gated mode is active, present phase output summary and wait for user approval before proceeding to the next phase. In autonomous mode, the loop continues automatically.
 4. **Handle failures**: If a teammate reports a failure, surface details to the user and offer: retry, skip, or abort.
-5. **Handle missing plugins**: If an Agent tool call fails because a plugin is not installed, inform the user which plugin to install and offer to skip that teammate's task.
+5. **Handle missing plugins**: If an Agent tool call fails because a required plugin is not installed, **stop the pipeline** — tell the user which plugin to install, then wait for them to re-run the command.
 
 ## Step 5: Consolidate Reviews
 
@@ -277,7 +282,7 @@ Review-Fix Cycle: Phase {P}, Round {N}/3
 After all implementation phases are complete (or user decides to stop):
 
 1. **Shut down all remaining teammates** via `SendMessage` with `shutdown_request` to each by name.
-2. **Team cleanup is automatic** — the implicit team is torn down when the session exits. There is no `TeamDelete` tool to call.
+2. **Team cleanup is automatic** — the implicit team is torn down when the session exits.
 3. **Present the final summary** listing:
    - All planning artifact paths (requirements, plan, WBD, QA handoff)
    - All review file paths (final round per phase)
@@ -298,7 +303,7 @@ After all implementation phases are complete (or user decides to stop):
 - **Standing teammates persist**: The implementer and 4 reviewers stay active across all phases. Only planning teammates are shut down after the plan phase.
 - **Minimal prompts**: Provide teammates only their team name, task number, and output file path. Their AGENT.md definitions handle workflow details.
 - **Status messages**: Print a brief status message when each task completes so the user can track progress.
-- **Missing plugins**: If a marketplace plugin is not installed, tell the user which to install and offer to skip that teammate. Never block the entire pipeline.
+- **Missing plugins**: All plugins in the Prerequisites table are required except `bitwarden-atlassian-tools`. If a required one is not installed, stop the pipeline and tell the user which to install before re-running.
 - **Agent failures**: Surface details to the user and offer retry, skip, or abort.
 - **Gated mode (`--confirm`)**: Present phase output summary and wait for user approval before allowing the next phase to proceed.
 - **Autonomous mode (default)**: The loop continues automatically between phases. Only intervene on failures.
