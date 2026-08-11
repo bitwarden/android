@@ -65,6 +65,7 @@ jobs:
         uses: anthropics/claude-code-action@be7b93b1907a4abad570368f3c74b6fe3807510b # v1.0.183
         with:
           anthropic_api_key: ${{ steps.get-kv-secrets.outputs.ANTHROPIC-RESPONSE-API-KEY }}
+          allowed_bots: "bw-ghapp"
           track_progress: true
           use_sticky_comment: true
           plugin_marketplaces: "https://github.com/bitwarden/ai-plugins.git"
