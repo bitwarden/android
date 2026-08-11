@@ -76,7 +76,8 @@ jobs:
             resolve anything within scope that needs resolving, per the skill's own Resolve
             steps. `bitwarden/sdk-internal` is already cloned as a sibling directory at
             `${{ github.workspace }}/../sdk-internal`, satisfying step 1's prerequisite — use it
-            directly. Commit any fix on the current branch (already checked out) — do not push;
+            directly. Commit any fix on the current branch (already checked out) using
+            `Skill(bitwarden-delivery-tools:committing-changes)` for the message — do not push;
             the workflow pushes separately.
 
             When done, update the sticky PR comment with the step 7 report, structured as:
