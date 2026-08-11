@@ -5,11 +5,12 @@ package com.bitwarden.data.manager.file
 import android.content.Context
 import android.net.Uri
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.data.manager.UuidManager
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.util.asFailure
+import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.sdkAgnosticTransferTo
-import com.bitwarden.data.manager.model.DownloadResult
 import com.bitwarden.data.manager.model.ZipFileResult
-import com.bitwarden.network.service.DownloadService
 import kotlinx.coroutines.withContext
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
@@ -18,7 +19,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
-import java.util.UUID
+import java.io.InputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
@@ -32,7 +33,7 @@ private const val BUFFER_SIZE: Int = 1024
  */
 internal class FileManagerImpl(
     private val context: Context,
-    private val downloadService: DownloadService,
+    private val uuidManager: UuidManager,
     private val dispatcherManager: DispatcherManager,
 ) : FileManager {
 
@@ -48,20 +49,10 @@ internal class FileManagerImpl(
         }
     }
 
-    @Suppress("NestedBlockDepth")
-    override suspend fun downloadFileToCache(url: String): DownloadResult {
-        val response = downloadService
-            .getDataStream(url)
-            .fold(
-                onSuccess = { it },
-                onFailure = { return DownloadResult.Failure(error = it) },
-            )
-
+    override suspend fun streamFileToCache(stream: InputStream): Result<File> {
         // Create a temporary file in cache to write to
-        val file = File(context.cacheDir, UUID.randomUUID().toString())
-
-        withContext(dispatcherManager.io) {
-            val stream = response.byteStream()
+        val file = File(context.cacheDir, uuidManager.generateUuid())
+        return withContext(dispatcherManager.io) {
             stream.use {
                 val buffer = ByteArray(BUFFER_SIZE)
                 var progress = 0
@@ -76,13 +67,12 @@ internal class FileManagerImpl(
                         }
                         fos.flush()
                     } catch (e: RuntimeException) {
-                        return@withContext DownloadResult.Failure(error = e)
+                        return@withContext e.asFailure()
                     }
                 }
             }
+            file.asSuccess()
         }
-
-        return DownloadResult.Success(file)
     }
 
     @Suppress("NestedBlockDepth")

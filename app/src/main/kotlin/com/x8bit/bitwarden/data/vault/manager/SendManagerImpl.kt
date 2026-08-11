@@ -77,6 +77,9 @@ class SendManagerImpl(
                 when (send.type) {
                     SendType.TEXT -> sendsService.createTextSend(send.toEncryptedNetworkSend())
                     SendType.FILE -> createFileSend(uri = fileUri, userId = userId, send = send)
+                    SendType.ITEM -> {
+                        NotImplementedError("[PM-41095] Support Item SendType").asFailure()
+                    }
                 }
             }
             .map { createSendResponse ->
