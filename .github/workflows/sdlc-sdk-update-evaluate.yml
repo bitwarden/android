@@ -1,0 +1,140 @@
+name: SDLC / SDK Update Evaluation
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  evaluate:
+    name: Evaluate SDK Update
+    runs-on: ubuntu-24.04
+    if: ${{ github.event.pull_request.head.ref == 'sdlc/sdk-update' }}
+    permissions:
+      id-token: write
+      actions: read
+      contents: write
+      packages: read
+      pull-requests: write
+
+    steps:
+      - name: Skip if this bump was already evaluated
+        id: gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          LATEST_SUBJECT=$(gh pr view "$PR_NUMBER" -R "$REPO" --json commits --jq '.commits[-1].messageHeadline')
+          if [[ "$LATEST_SUBJECT" != "SDK Update - "* ]]; then
+            echo "Branch tip is not a fresh SDK version bump ('$LATEST_SUBJECT') — already evaluated, skipping."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Log in to Azure
+        if: steps.gate.outputs.skip == 'false'
+        uses: bitwarden/gh-actions/azure-login@main
+        with:
+          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          client_id: ${{ secrets.AZURE_CLIENT_ID }}
+
+      - name: Get Azure Key Vault secrets
+        id: get-kv-secrets
+        if: steps.gate.outputs.skip == 'false'
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: gh-org-bitwarden
+          secrets: "ANTHROPIC-RESPONSE-API-KEY,BW-GHAPP-ID,BW-GHAPP-KEY"
+
+      - name: Log out from Azure
+        if: steps.gate.outputs.skip == 'false'
+        uses: bitwarden/gh-actions/azure-logout@main
+
+      - name: Generate GH App token
+        if: steps.gate.outputs.skip == 'false'
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        id: app-token
+        with:
+          client-id: ${{ steps.get-kv-secrets.outputs.BW-GHAPP-ID }}
+          private-key: ${{ steps.get-kv-secrets.outputs.BW-GHAPP-KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Check out repo
+        if: steps.gate.outputs.skip == 'false'
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Clone sdk-internal
+        if: steps.gate.outputs.skip == 'false'
+        run: git clone --quiet https://github.com/bitwarden/sdk-internal "${{ github.workspace }}/../sdk-internal"
+
+      - name: Setup Android Build
+        if: steps.gate.outputs.skip == 'false'
+        uses: ./.github/actions/setup-android-build
+
+      - name: Run Claude Code
+        id: claude
+        if: steps.gate.outputs.skip == 'false'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # settings.gradle.kts resolves the SDK from GitHub Packages
+        uses: anthropics/claude-code-action@be7b93b1907a4abad570368f3c74b6fe3807510b # v1.0.183
+        with:
+          anthropic_api_key: ${{ steps.get-kv-secrets.outputs.ANTHROPIC-RESPONSE-API-KEY }}
+          allowed_bots: "bw-ghapp"
+          bot_id: "178206702"
+          bot_name: "bw-ghapp[bot]"
+          track_progress: true
+          use_sticky_comment: true
+          plugin_marketplaces: "https://github.com/bitwarden/ai-plugins.git"
+          plugins: |
+            bitwarden-delivery-tools@bitwarden-marketplace
+          prompt: |
+            PR #${{ github.event.pull_request.number }} in ${{ github.repository }} bumps the
+            Bitwarden SDK. Evaluate it using the `evaluating-sdk-internal-updates` skill and
+            resolve anything within scope that needs resolving, per the skill's own Resolve
+            steps. `bitwarden/sdk-internal` is already cloned as a sibling directory at
+            `${{ github.workspace }}/../sdk-internal`, satisfying step 1's prerequisite — use it
+            directly. Commit any fix on the current branch (already checked out) using
+            `Skill(bitwarden-delivery-tools:committing-changes)` for the message — do not push;
+            the workflow pushes separately.
+
+            When done, update the sticky PR comment with the step 7 report, structured as:
+            "## SDK bump evaluated" (old → new version, commit count), "## Compile-time breaks"
+            (found-and-fixed, or "none found"), "## Runtime considerations" (any behavioral notes
+            worth flagging, or omit the section if there are none), "## Everything else in range
+            — confirmed safe" (brief, one line per commit or group), and "## Commit" (the SHA, or
+            "no commit — nothing needed fixing"). Always post this, even when the conclusion is
+            that nothing needs fixing — the comment is the audit trail that the check ran.
+          claude_args: |
+            --model opus
+            --allowedTools "Bash(gh pr diff:*),Bash(git -C *:*),Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(grep:*),Bash(./gradlew*:*),Read,Grep,Glob,Edit,Write,Skill,mcp__github_comment__update_claude_comment"
+
+      - name: Push any resolved fix
+        if: steps.gate.outputs.skip == 'false'
+        env:
+          _BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::Claude left uncommitted changes; nothing was pushed."
+            git status --porcelain
+            exit 1
+          fi
+
+          if git diff --quiet "origin/$_BRANCH_NAME" HEAD; then
+            echo "No new commits to push."
+          else
+            git push origin "HEAD:$_BRANCH_NAME"
+          fi
