@@ -11,6 +11,7 @@ fun SendType.toSendItemType(): SendItemType =
     when (this) {
         SendType.FILE -> SendItemType.FILE
         SendType.TEXT -> SendItemType.TEXT
+        SendType.ITEM -> TODO("[PM-41095] Support Item SendType")
     }
 
 /**

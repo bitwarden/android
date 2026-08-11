@@ -452,4 +452,50 @@ fun createMockDisplayItemForSend(
                 itemType = SearchState.DisplayItem.ItemType.Sends(type = sendType),
             )
         }
+
+        SendType.ITEM -> {
+            SearchState.DisplayItem(
+                id = "mockId-$number",
+                title = "mockName-$number",
+                titleTestTag = "SendNameLabel",
+                subtitle = "Oct 27, 2023, 12:00 PM",
+                subtitleTestTag = "SendDateLabel",
+                iconData = IconData.Local(BitwardenDrawable.ic_file_text),
+                extraIconList = persistentListOf(
+                    IconData.Local(
+                        iconRes = BitwardenDrawable.ic_key,
+                        contentDescription = BitwardenString.password.asText(),
+                        testTag = "PasswordProtectedSendIcon",
+                    ),
+                    IconData.Local(
+                        iconRes = BitwardenDrawable.ic_send_max_access_count_reached,
+                        contentDescription = BitwardenString.maximum_access_count_reached.asText(),
+                        testTag = "MaxAccessSendIcon",
+                    ),
+                ),
+                overflowOptions = persistentListOf(
+                    ListingItemOverflowAction.SendAction.CopyUrlClick(
+                        sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
+                    ),
+                    ListingItemOverflowAction.SendAction.ShareUrlClick(
+                        sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
+                    ),
+                    ListingItemOverflowAction.SendAction.ViewClick(
+                        sendId = "mockId-$number",
+                        sendType = sendType,
+                    ),
+                    ListingItemOverflowAction.SendAction.EditClick(
+                        sendId = "mockId-$number",
+                        sendType = sendType,
+                    ),
+                    ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-$number"),
+                    ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
+                ),
+                overflowTestTag = "SendOptionsButton",
+                totpCode = null,
+                autofillSelectionOptions = persistentListOf(),
+                shouldDisplayMasterPasswordReprompt = false,
+                itemType = SearchState.DisplayItem.ItemType.Sends(type = sendType),
+            )
+        }
     }

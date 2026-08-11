@@ -403,6 +403,7 @@ private fun SendView.toDisplayItem(
             iconRes = when (type) {
                 SendType.TEXT -> BitwardenDrawable.ic_file_text
                 SendType.FILE -> BitwardenDrawable.ic_file
+                SendType.ITEM -> TODO("[PM-41095] Support Item SendType")
             },
         ),
         extraIconList = toLabelIcons(clock = clock),

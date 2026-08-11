@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.bitwarden.core.MasterPasswordUnlockData
 import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
+import com.bitwarden.network.model.KdfJson
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.MasterPasswordUnlockDataJson
 import com.bitwarden.network.model.OrganizationType
@@ -162,28 +163,42 @@ fun UserStateJson.updateMasterPasswordUnlock(
 }
 
 /**
+ * Updates the [UserStateJson] by setting the KDF values for the given [userId]. If the user is
+ * not present in the `UserStateJson`, nothing is updated.
+ */
+fun UserStateJson.updateKdf(
+    userId: String,
+    kdf: KdfJson?,
+): UserStateJson {
+    val account = accounts[userId] ?: return this
+    val profile = account.profile
+    val updatedProfile = profile.copy(
+        kdfType = kdf?.kdfType,
+        kdfIterations = kdf?.iterations,
+        kdfMemory = kdf?.memory,
+        kdfParallelism = kdf?.parallelism,
+    )
+    val updatedAccount = account.copy(profile = updatedProfile)
+    return this.copy(
+        accounts = accounts
+            .toMutableMap()
+            .apply { replace(userId, updatedAccount) },
+    )
+}
+
+/**
  * Updates the [UserStateJson] KDF settings to minimum requirements.
  */
-fun UserStateJson.toUserStateJsonKdfUpdatedMinimums(): UserStateJson {
-    val account = this.activeAccount
-    val profile = account.profile
-    val updatedProfile = profile
-        .copy(
+fun UserStateJson.toUserStateJsonKdfUpdatedMinimums(): UserStateJson =
+    this.updateKdf(
+        userId = this.activeUserId,
+        kdf = KdfJson(
             kdfType = KdfTypeJson.PBKDF2_SHA256,
-            kdfIterations = DEFAULT_PBKDF2_ITERATIONS,
-            kdfMemory = null,
-            kdfParallelism = null,
-        )
-    val updatedAccount = account.copy(profile = updatedProfile)
-    return this
-        .copy(
-            accounts = accounts
-                .toMutableMap()
-                .apply {
-                    replace(activeUserId, updatedAccount)
-                },
-        )
-}
+            iterations = DEFAULT_PBKDF2_ITERATIONS,
+            memory = null,
+            parallelism = null,
+        ),
+    )
 
 /**
  * Converts the given [UserStateJson] to a [UserState] using the given [vaultState].

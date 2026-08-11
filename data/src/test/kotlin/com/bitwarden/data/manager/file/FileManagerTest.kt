@@ -3,23 +3,27 @@ package com.bitwarden.data.manager.file
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import com.bitwarden.core.data.manager.UuidManager
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.util.asSuccess
-import com.bitwarden.network.service.DownloadService
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertArrayEquals
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertInstanceOf
+import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import java.nio.file.Files
 
 /**
  * Test class for [FileManagerImpl].
@@ -28,17 +32,24 @@ class FileManagerTest {
 
     private val fakeDispatcherManager = FakeDispatcherManager()
     private val mockContentResolver = mockk<ContentResolver>()
-    private val downloadService = mockk<DownloadService>()
+    private val cacheDirectory: File = Files.createTempDirectory("cache").toFile()
     private val mockContext = mockk<Context> {
         every { contentResolver } returns mockContentResolver
+        every { cacheDir } returns cacheDirectory
     }
+    private val uuidManager: UuidManager = mockk()
     private val mockUri = mockk<Uri>()
 
     private val fileManager = FileManagerImpl(
         context = mockContext,
+        uuidManager = uuidManager,
         dispatcherManager = fakeDispatcherManager,
-        downloadService = downloadService,
     )
+
+    @AfterEach
+    fun tearDown() {
+        cacheDirectory.deleteRecursively()
+    }
 
     //region stringToUri Tests
 
@@ -254,6 +265,62 @@ class FileManagerTest {
 
         assertArrayEquals(testData, result.getOrThrow())
         assertTrue(readCallCount > testData.size / 5) // Multiple small reads
+    }
+
+    //endregion
+
+    //region streamFileToCache Tests
+
+    @Test
+    fun `streamFileToCache with valid stream should return Success with the cached file`() =
+        runTest {
+            val testData = "Test content".toByteArray()
+            val mockInputStream = createMockInputStream(testData)
+            every { uuidManager.generateUuid() } returns "mockUuid"
+
+            val result = fileManager.streamFileToCache(stream = mockInputStream)
+
+            val file = result.getOrThrow()
+            assertEquals(File(cacheDirectory, "mockUuid"), file)
+            assertArrayEquals(testData, file.readBytes())
+            verify(exactly = 1) { mockInputStream.close() }
+        }
+
+    @Test
+    fun `streamFileToCache with empty stream should return Success with an empty file`() = runTest {
+        val mockInputStream = createMockInputStream(testData = ByteArray(0))
+        every { uuidManager.generateUuid() } returns "mockUuid"
+
+        val result = fileManager.streamFileToCache(stream = mockInputStream)
+
+        val file = result.getOrThrow()
+        assertEquals(0, file.length())
+    }
+
+    @Test
+    fun `streamFileToCache with large stream should write the stream completely`() = runTest {
+        val testData = "L".repeat(5000).toByteArray()
+        val mockInputStream = createMockInputStream(testData)
+        every { uuidManager.generateUuid() } returns "mockUuid"
+
+        val result = fileManager.streamFileToCache(stream = mockInputStream)
+
+        assertArrayEquals(testData, result.getOrThrow().readBytes())
+    }
+
+    @Test
+    fun `streamFileToCache with read failure should return Failure`() = runTest {
+        val error = RuntimeException("Read failed")
+        val mockInputStream = mockk<InputStream> {
+            every { read(any<ByteArray>()) } throws error
+            every { close() } just runs
+        }
+        every { uuidManager.generateUuid() } returns "mockUuid"
+
+        val result = fileManager.streamFileToCache(stream = mockInputStream)
+
+        assertEquals(error, result.exceptionOrNull())
+        verify(exactly = 1) { mockInputStream.close() }
     }
 
     //endregion
