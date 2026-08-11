@@ -127,7 +127,7 @@ jobs:
         env:
           _BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
         run: |
-          if ! git diff --quiet; then
+          if [ -n "$(git status --porcelain)" ]; then
             echo "::error::Claude left uncommitted changes; nothing was pushed."
             git status --porcelain
             exit 1
