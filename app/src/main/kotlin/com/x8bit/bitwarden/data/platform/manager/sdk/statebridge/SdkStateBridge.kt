@@ -3,11 +3,16 @@ package com.x8bit.bitwarden.data.platform.manager.sdk.statebridge
 import com.bitwarden.core.MasterPasswordUnlockData
 import com.bitwarden.core.StateBridgeForeignImpl
 import com.bitwarden.core.V2UpgradeToken
+import com.bitwarden.core.WebAuthnPrfUnlockData
 import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.crypto.EncString
+import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.PasswordProtectedKeyEnvelope
 import com.bitwarden.crypto.SymmetricCryptoKey
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfRequestModel
+import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
+import com.x8bit.bitwarden.data.auth.repository.util.updateKdf
 import com.x8bit.bitwarden.data.auth.repository.util.updateMasterPasswordUnlock
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkMasterPasswordUnlock
 import com.x8bit.bitwarden.data.vault.repository.util.toV2UpgradeToken
@@ -133,5 +138,35 @@ internal class SdkStateBridge(
             userId = userId,
             masterPasswordUnlock = null,
         )
+    }
+
+    override suspend fun getKdfConfig(): Kdf? =
+        authDiskSource.userState?.accounts[userId]?.profile?.toSdkParams()
+
+    override suspend fun setKdfConfig(value: Kdf) {
+        authDiskSource.userState = authDiskSource.userState?.updateKdf(
+            userId = userId,
+            kdf = value.toKdfRequestModel(),
+        )
+    }
+
+    override suspend fun clearKdfConfig() {
+        authDiskSource.userState = authDiskSource.userState?.updateKdf(
+            userId = userId,
+            kdf = null,
+        )
+    }
+
+    override suspend fun getWebauthnPrfUnlockData(): WebAuthnPrfUnlockData? {
+        // We do not support unlock with WebAuthn, so we can just return null
+        return null
+    }
+
+    override suspend fun setWebauthnPrfUnlockData(value: WebAuthnPrfUnlockData) {
+        // We do not support unlock with WebAuthn, so this is a no-op
+    }
+
+    override suspend fun clearWebauthnPrfUnlockData() {
+        // We do not support unlock with WebAuthn, so this is a no-op
     }
 }

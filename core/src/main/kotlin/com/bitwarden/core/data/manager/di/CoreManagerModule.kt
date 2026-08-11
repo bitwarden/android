@@ -1,6 +1,8 @@
 package com.bitwarden.core.data.manager.di
 
 import com.bitwarden.core.data.manager.BuildInfoManager
+import com.bitwarden.core.data.manager.UuidManager
+import com.bitwarden.core.data.manager.UuidManagerImpl
 import com.bitwarden.core.data.manager.encryption.EncryptionManager
 import com.bitwarden.core.data.manager.encryption.EncryptionManagerImpl
 import com.bitwarden.core.data.manager.encryption.KeystoreManager
@@ -33,4 +35,8 @@ object CoreManagerModule {
     ): KeystoreManager = KeystoreManagerImpl(
         buildInfoManager = buildInfoManager,
     )
+
+    @Provides
+    @Singleton
+    fun provideUuidManager(): UuidManager = UuidManagerImpl()
 }

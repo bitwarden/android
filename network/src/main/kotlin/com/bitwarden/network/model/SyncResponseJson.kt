@@ -26,9 +26,11 @@ private const val DEFAULT_FIDO_2_KEY_CURVE = "P-256"
 @OptIn(ExperimentalSerializationApi::class)
 @Serializable
 data class SyncResponseJson(
+    @Contextual
     @SerialName("folders")
     val folders: List<Folder>?,
 
+    @Contextual
     @SerialName("collections")
     val collections: List<Collection>?,
 
@@ -52,6 +54,7 @@ data class SyncResponseJson(
     @JsonNames("Domains")
     val domains: Domains?,
 
+    @Contextual
     @SerialName("sends")
     val sends: List<Send>?,
 

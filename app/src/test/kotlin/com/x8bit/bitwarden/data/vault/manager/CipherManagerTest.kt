@@ -7,7 +7,6 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.data.manager.file.FileManager
-import com.bitwarden.data.manager.model.DownloadResult
 import com.bitwarden.network.exception.CookieRedirectException
 import com.bitwarden.network.model.ArchiveCipherResponseJson
 import com.bitwarden.network.model.AttachmentJsonRequest
@@ -27,6 +26,7 @@ import com.bitwarden.network.model.createMockCipherJsonRequest
 import com.bitwarden.network.model.createMockCollection
 import com.bitwarden.network.model.createMockLogin
 import com.bitwarden.network.service.CiphersService
+import com.bitwarden.network.service.DownloadService
 import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
@@ -77,12 +77,14 @@ import io.mockk.unmockkConstructor
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import okhttp3.ResponseBody
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.io.File
+import java.io.InputStream
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
@@ -112,8 +114,10 @@ class CipherManagerTest {
         every { syncCipherDeleteFlow } returns mutableSyncCipherDeleteFlow
         every { syncCipherUpsertFlow } returns mutableSyncCipherUpsertFlow
     }
+    private val downloadService: DownloadService = mockk()
 
     private val cipherManager: CipherManager = CipherManagerImpl(
+        downloadService = downloadService,
         ciphersService = ciphersService,
         settingsDiskSource = fakeSettingsDiskSource,
         vaultDiskSource = vaultDiskSource,
@@ -1303,9 +1307,16 @@ class CipherManagerTest {
             coEvery {
                 ciphersService.getCipherAttachment(cipherId = "mockId-1", attachmentId = "mockId-1")
             } returns attachment.asSuccess()
+            val mockInputStream = mockk<InputStream>()
+            val mockResponseBody = mockk<ResponseBody> {
+                every { byteStream() } returns mockInputStream
+            }
             coEvery {
-                fileManager.downloadFileToCache(url = "mockUrl-1")
-            } returns DownloadResult.Success(file = encryptedFile)
+                downloadService.getDataStream(url = "mockUrl-1")
+            } returns mockResponseBody.asSuccess()
+            coEvery {
+                fileManager.streamFileToCache(stream = mockInputStream)
+            } returns encryptedFile.asSuccess()
             coEvery {
                 vaultSdkSource.decryptFile(
                     userId = userId,
@@ -2311,7 +2322,7 @@ class CipherManagerTest {
     }
 
     @Test
-    fun `downloadAttachment with failed download should return Failure`() = runTest {
+    fun `downloadAttachment with failed data stream request should return Failure`() = runTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
         val attachmentId = "mockId-1"
@@ -2343,8 +2354,8 @@ class CipherManagerTest {
             ciphersService.getCipherAttachment(cipherId = any(), attachmentId = any())
         } returns response.asSuccess()
         coEvery {
-            fileManager.downloadFileToCache(url = any())
-        } returns DownloadResult.Failure(error = Throwable("Fail!"))
+            downloadService.getDataStream(url = any())
+        } returns Throwable("Fail!").asFailure()
 
         assertEquals(
             DownloadAttachmentResult.Failure(IllegalStateException()),
@@ -2363,7 +2374,75 @@ class CipherManagerTest {
                 cipherId = requireNotNull(cipherView.id),
                 attachmentId = attachmentId,
             )
-            fileManager.downloadFileToCache("https://bitwarden.com")
+            downloadService.getDataStream(url = "https://bitwarden.com")
+        }
+        coVerify(exactly = 0) {
+            fileManager.streamFileToCache(stream = any())
+        }
+    }
+
+    @Test
+    fun `downloadAttachment with failed stream to cache should return Failure`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        val attachmentId = "mockId-1"
+        val attachment = mockk<Attachment> {
+            every { id } returns attachmentId
+        }
+        val mockCipher = mockk<Cipher> {
+            every { key } returns "key"
+            every { attachments } returns listOf(attachment)
+            every { id } returns "mockId-1"
+        }
+        val mockEncryptionContext = mockk<EncryptionContext> {
+            every { encryptedFor } returns "mockEncryptedFor-1"
+            every { cipher } returns mockCipher
+        }
+
+        val cipherView = createMockCipherView(number = 1)
+        coEvery {
+            vaultSdkSource.encryptCipher(
+                userId = MOCK_USER_STATE.activeUserId,
+                cipherView = cipherView,
+            )
+        } returns mockEncryptionContext.asSuccess()
+
+        val response = mockk<SyncResponseJson.Cipher.Attachment> {
+            every { url } returns "https://bitwarden.com"
+        }
+        coEvery {
+            ciphersService.getCipherAttachment(cipherId = any(), attachmentId = any())
+        } returns response.asSuccess()
+        val mockInputStream = mockk<InputStream>()
+        val mockResponseBody = mockk<ResponseBody> {
+            every { byteStream() } returns mockInputStream
+        }
+        coEvery {
+            downloadService.getDataStream(url = any())
+        } returns mockResponseBody.asSuccess()
+        coEvery {
+            fileManager.streamFileToCache(stream = mockInputStream)
+        } returns Throwable("Fail!").asFailure()
+
+        assertEquals(
+            DownloadAttachmentResult.Failure(IllegalStateException()),
+            cipherManager.downloadAttachment(
+                cipherView = cipherView,
+                attachmentId = attachmentId,
+            ),
+        )
+
+        coVerify(exactly = 1) {
+            vaultSdkSource.encryptCipher(
+                userId = MOCK_USER_STATE.activeUserId,
+                cipherView = cipherView,
+            )
+            ciphersService.getCipherAttachment(
+                cipherId = requireNotNull(cipherView.id),
+                attachmentId = attachmentId,
+            )
+            downloadService.getDataStream(url = "https://bitwarden.com")
+            fileManager.streamFileToCache(stream = mockInputStream)
         }
     }
 
@@ -2405,9 +2484,16 @@ class CipherManagerTest {
                 every { path } returns "path/to/encrypted/file"
             }
             coEvery { fileManager.delete(file) } just runs
+            val mockInputStream = mockk<InputStream>()
+            val mockResponseBody = mockk<ResponseBody> {
+                every { byteStream() } returns mockInputStream
+            }
             coEvery {
-                fileManager.downloadFileToCache(url = any())
-            } returns DownloadResult.Success(file)
+                downloadService.getDataStream(url = any())
+            } returns mockResponseBody.asSuccess()
+            coEvery {
+                fileManager.streamFileToCache(stream = mockInputStream)
+            } returns file.asSuccess()
             val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.decryptFile(
@@ -2436,7 +2522,8 @@ class CipherManagerTest {
                     cipherId = requireNotNull(cipherView.id),
                     attachmentId = attachmentId,
                 )
-                fileManager.downloadFileToCache("https://bitwarden.com")
+                downloadService.getDataStream(url = "https://bitwarden.com")
+                fileManager.streamFileToCache(stream = mockInputStream)
                 vaultSdkSource.decryptFile(
                     userId = MOCK_USER_STATE.activeUserId,
                     cipher = mockCipher,
@@ -2488,9 +2575,16 @@ class CipherManagerTest {
                 every { path } returns "path/to/encrypted/file"
             }
             coEvery { fileManager.delete(file) } just runs
+            val mockInputStream = mockk<InputStream>()
+            val mockResponseBody = mockk<ResponseBody> {
+                every { byteStream() } returns mockInputStream
+            }
             coEvery {
-                fileManager.downloadFileToCache(any())
-            } returns DownloadResult.Success(file)
+                downloadService.getDataStream(url = any())
+            } returns mockResponseBody.asSuccess()
+            coEvery {
+                fileManager.streamFileToCache(stream = mockInputStream)
+            } returns file.asSuccess()
 
             coEvery {
                 vaultSdkSource.decryptFile(
@@ -2521,7 +2615,8 @@ class CipherManagerTest {
                     cipherId = requireNotNull(cipherView.id),
                     attachmentId = attachmentId,
                 )
-                fileManager.downloadFileToCache(url = "https://bitwarden.com")
+                downloadService.getDataStream(url = "https://bitwarden.com")
+                fileManager.streamFileToCache(stream = mockInputStream)
                 vaultSdkSource.decryptFile(
                     userId = MOCK_USER_STATE.activeUserId,
                     cipher = mockCipher,

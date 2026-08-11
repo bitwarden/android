@@ -55,6 +55,8 @@ fun AddEditSendCustomDateChooser(
         CustomDeletionOption.TwoDays to CustomDeletionOption.TwoDays.getText(clock = clock)(),
         CustomDeletionOption.ThreeDays to CustomDeletionOption.ThreeDays.getText(clock = clock)(),
         CustomDeletionOption.SevenDays to CustomDeletionOption.SevenDays.getText(clock = clock)(),
+        CustomDeletionOption.FourteenDays to
+            CustomDeletionOption.FourteenDays.getText(clock = clock)(),
         CustomDeletionOption.ThirtyDays to CustomDeletionOption.ThirtyDays.getText(clock = clock)(),
     )
     var currentSelectionOption: CustomDeletionOption by rememberSaveable(originalSelectionOption) {
@@ -132,6 +134,12 @@ private sealed class CustomDeletionOption : Parcelable {
     data object SevenDays : CustomDeletionOption() {
         override val offsetMillis: Long get() = 7.days.inWholeMilliseconds
         override fun getText(clock: Clock): Text = BitwardenString.seven_days.asText()
+    }
+
+    @Parcelize
+    data object FourteenDays : CustomDeletionOption() {
+        override val offsetMillis: Long get() = 14.days.inWholeMilliseconds
+        override fun getText(clock: Clock): Text = BitwardenString.fourteen_days.asText()
     }
 
     @Parcelize
