@@ -184,9 +184,7 @@ class VaultItemListingViewModel @Inject constructor(
                 ?.let {
                     VaultItemListingState.DialogState.Loading(BitwardenString.loading.asText())
                 },
-            policyDisablesSend = policyManager
-                .getActivePolicies(type = PolicyType.DISABLE_SEND)
-                .any(),
+            policyDisablesSend = policyManager.getEffectiveSendPolicy().disableSend,
             restrictItemTypesPolicyOrgIds = persistentListOf(),
             autofillSelectionData = specialCircumstance?.toAutofillSelectionDataOrNull(),
             hasMasterPassword = userState.activeAccount.hasMasterPassword,
@@ -214,8 +212,8 @@ class VaultItemListingViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         policyManager
-            .getActivePoliciesFlow(type = PolicyType.DISABLE_SEND)
-            .map { VaultItemListingsAction.Internal.PolicyUpdateReceive(it.any()) }
+            .getEffectiveSendPolicyFlow()
+            .map { VaultItemListingsAction.Internal.PolicyUpdateReceive(it.disableSend) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 

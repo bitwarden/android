@@ -1578,6 +1578,10 @@ private val DEFAULT_STATE = AddEditSendState(
     isShared = false,
     baseWebSendUrl = "https://vault.bitwarden.com/#/send/",
     policyDisablesSend = false,
+    allowedDomains = null,
+    allowedSendTypes = null,
+    deletionHours = null,
+    whoCanAccess = null,
     sendType = SendItemType.TEXT,
     isPremium = true,
 )
