@@ -465,6 +465,117 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `deletion date chooser should not open its options when enforced by policy`() {
+        mutableStateFlow.update {
+            it.copy(isSendControlsEnabled = true, deletionHours = 168)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Deletion date")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "1 hour")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(text = "This date is enforced by your organization")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `deletion date chooser should display the enforced option when the policy maps to one`() {
+        mutableStateFlow.update {
+            it.copy(isSendControlsEnabled = true, deletionHours = 24)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "1 day")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `custom deletion date chooser should not open its options when enforced by policy`() {
+        mutableStateFlow.update {
+            it.copy(
+                addEditSendType = AddEditSendType.EditItem(sendItemId = "sendId"),
+                isSendControlsEnabled = true,
+                deletionHours = 168,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Deletion date")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "1 hour")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(text = "This date is enforced by your organization")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `deletion date chooser should open its options when send controls is disabled`() {
+        mutableStateFlow.update {
+            it.copy(isSendControlsEnabled = false, deletionHours = 168)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "This date is enforced by your organization")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(
+                text = "The Send will be permanently deleted on the specified date and time.",
+            )
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(text = "Deletion date")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "1 hour")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `custom deletion date chooser should open its options when send controls is disabled`() {
+        mutableStateFlow.update {
+            it.copy(
+                addEditSendType = AddEditSendType.EditItem(sendItemId = "sendId"),
+                isSendControlsEnabled = false,
+                deletionHours = 168,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "This date is enforced by your organization")
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText(text = "Deletion date")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "1 hour")
+            .assertIsDisplayed()
+    }
+
     @Test
     fun `on name input change should send NameChange`() {
         composeTestRule
