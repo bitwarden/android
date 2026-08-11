@@ -72,6 +72,8 @@ jobs:
         with:
           anthropic_api_key: ${{ steps.get-kv-secrets.outputs.ANTHROPIC-RESPONSE-API-KEY }}
           allowed_bots: "bw-ghapp"
+          bot_id: "178206702"
+          bot_name: "bw-ghapp[bot]"
           track_progress: true
           use_sticky_comment: true
           plugin_marketplaces: "https://github.com/bitwarden/ai-plugins.git"
@@ -102,6 +104,12 @@ jobs:
         env:
           _BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
         run: |
+          if ! git diff --quiet; then
+            echo "::error::Claude left uncommitted changes; nothing was pushed."
+            git status --porcelain
+            exit 1
+          fi
+
           if git diff --quiet "origin/$_BRANCH_NAME" HEAD; then
             echo "No new commits to push."
           else
