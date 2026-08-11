@@ -465,6 +465,7 @@ Scanning will happen automatically.</string>
     <string name="deletion_date">Deletion date</string>
     <string name="deletion_time">Deletion time</string>
     <string name="deletion_date_info">The Send will be permanently deleted on the specified date and time.</string>
+    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Who can view</string>
     <string name="anyone_with_the_link">Anyone with the link</string>
     <string name="anyone_with_link_can_view_send">Anyone with this link can view this Send</string>
