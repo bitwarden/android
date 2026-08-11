@@ -33,15 +33,21 @@ jobs:
         id: pr
         env:
           GH_TOKEN: ${{ github.token }}
+          EVENT_NAME: ${{ github.event_name }}
+          PR_NUMBER_INPUT: ${{ inputs.pr-number }}
+          REPO: ${{ github.repository }}
+          EVENT_PR_NUMBER: ${{ github.event.pull_request.number }}
+          EVENT_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          EVENT_PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            NUMBER="${{ inputs.pr-number }}"
-            HEAD_SHA=$(gh pr view "$NUMBER" -R "${{ github.repository }}" --json headRefOid --jq .headRefOid)
-            HEAD_REF=$(gh pr view "$NUMBER" -R "${{ github.repository }}" --json headRefName --jq .headRefName)
+          if [ "$EVENT_NAME" == "workflow_dispatch" ]; then
+            NUMBER="$PR_NUMBER_INPUT"
+            HEAD_SHA=$(gh pr view "$NUMBER" -R "$REPO" --json headRefOid --jq .headRefOid)
+            HEAD_REF=$(gh pr view "$NUMBER" -R "$REPO" --json headRefName --jq .headRefName)
           else
-            NUMBER="${{ github.event.pull_request.number }}"
-            HEAD_SHA="${{ github.event.pull_request.head.sha }}"
-            HEAD_REF="${{ github.event.pull_request.head.ref }}"
+            NUMBER="$EVENT_PR_NUMBER"
+            HEAD_SHA="$EVENT_PR_HEAD_SHA"
+            HEAD_REF="$EVENT_PR_HEAD_REF"
           fi
           echo "number=$NUMBER" >> "$GITHUB_OUTPUT"
           echo "head-sha=$HEAD_SHA" >> "$GITHUB_OUTPUT"
