@@ -1,7 +1,7 @@
 ---
 name: evaluating-sdk-internal-updates
 description: Evaluates a bitwarden/android "Update SDK to" PR against the sdk-internal commit range for compile-time and runtime breaking changes, maps affected symbols to Android call sites, and applies clear in-scope fixes. Use when reviewing an SDK bump PR, a bitwardenSdk version change, or triaging sdk-internal breaking changes.
-allowed-tools: Bash(gh pr diff:*), Bash(gh api repos/bitwarden/sdk-internal/*:*), Bash(git clone:*), Bash(git -C *:*), Bash(grep:*), Bash(./gradlew*compileKotlin*:*), Read, Grep, Glob, Skill(plan-android-work), Skill(work-on-android), Skill(bitwarden-delivery-tools:committing-changes)
+allowed-tools: Bash(gh pr diff:*), Bash(git -C *:*), Bash(grep:*), Bash(./gradlew*compileKotlin*:*), Read, Grep, Glob, Skill(plan-android-work), Skill(work-on-android), Skill(bitwarden-delivery-tools:committing-changes)
 ---
 
 # Evaluating sdk-internal Updates
@@ -14,11 +14,11 @@ Binding surface facts specific to this SDK: `#[uniffi::export]` / `derive(uniffi
 
 A hunk that only touches a macro invocation (e.g. `state_bridge! { ... }`) doesn't show the binding surface — the expansion lives in the macro's definition, often in a different crate (e.g. `bitwarden-state-bridge-macro`). `#[uniffi::export(with_foreign)]` marks a callback interface: a trait Kotlin must implement, where adding a field/method is never additive-safe for the implementor.
 
-1. Check whether `bitwarden/sdk-internal` is already cloned locally. If not, ask the user: clone it now, or continue using `gh api` calls against the remote instead — cloning is optional, not required.
+1. Locate the local `bitwarden/sdk-internal` clone (check sibling directories to this repo). If none exists, stop and tell the user it's a required prerequisite for this skill — do not clone it yourself.
 2. `gh pr diff <PR> -R bitwarden/android | grep bitwardenSdk` → old/new `bitwardenSdk` string. Trailing segment of each is the SHA.
 3. Attempt `./gradlew <module>:compileStandardDebugKotlin` at the current checkout before crawling sdk-internal. A failure confirms a compile-time break directly, with a more precise location than any git search — note it and continue to steps 4-7 for the full commit range; do not fix it yet. A clean build only rules out compile-time breaks, not runtime ones.
-4. Find candidate binding-surface commits in OLD..NEW. With a local clone: `git log --oneline OLD..NEW -G'uniffi::export|derive\(uniffi|#\[uniffi' -- '*.rs'`. Without one: `gh api repos/bitwarden/sdk-internal/compare/OLD...NEW --jq '.commits[].sha'` for the range, then per commit `gh api repos/bitwarden/sdk-internal/commits/<sha> --jq '.files[] | select(.filename | endswith(".rs")) | .patch'` and grep locally for the same pattern.
-5. Classify per hunk, not per commit — a commit with one additive headline change can still have a second, unrelated breaking hunk. If a hunk only touches a macro invocation, read the macro's definition before classifying. With a local clone: `git show <sha> -- '*.rs'`. Without one: reuse the patch already fetched in step 4.
+4. `git -C <sdk-internal-path> log --oneline OLD..NEW -G'uniffi::export|derive\(uniffi|#\[uniffi' -- '*.rs'` → candidate binding-surface commits.
+5. Classify per hunk, not per commit — a commit with one additive headline change can still have a second, unrelated breaking hunk. If a hunk only touches a macro invocation, read the macro's definition before classifying. `git -C <sdk-internal-path> show <sha> -- '*.rs'`.
 6. For every distinct symbol/type touched (every hunk, not just the commit's headline change), grep `app`, `core`, `network`, `ui` for the symbol name and `import com.bitwarden.sdk.<Symbol>` to find Android call sites.
 7. Report: compile-time breaks, runtime breaks, safe/no-call-site — each with commit, symbol, and call sites.
 

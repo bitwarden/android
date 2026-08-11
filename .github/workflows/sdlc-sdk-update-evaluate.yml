@@ -57,6 +57,9 @@ jobs:
           fetch-depth: 0
           persist-credentials: true
 
+      - name: Clone sdk-internal
+        run: git clone --quiet https://github.com/bitwarden/sdk-internal "${{ github.workspace }}/../sdk-internal"
+
       - name: Run Claude Code
         id: claude
         uses: anthropics/claude-code-action@be7b93b1907a4abad570368f3c74b6fe3807510b # v1.0.183
@@ -68,7 +71,9 @@ jobs:
             PR #${{ github.event.pull_request.number }} in ${{ github.repository }} bumps the
             Bitwarden SDK. Evaluate it using the `evaluating-sdk-internal-updates` skill and
             resolve anything within scope that needs resolving, per the skill's own Resolve
-            steps. Commit any fix on the current branch (already checked out) — do not push;
+            steps. `bitwarden/sdk-internal` is already cloned as a sibling directory at
+            `${{ github.workspace }}/../sdk-internal`, satisfying step 1's prerequisite — use it
+            directly. Commit any fix on the current branch (already checked out) — do not push;
             the workflow pushes separately.
 
             When done, update the sticky PR comment with the step 7 report, structured as:
@@ -80,7 +85,7 @@ jobs:
             that nothing needs fixing — the comment is the audit trail that the check ran.
           claude_args: |
             --model opus
-            --allowedTools "Bash(gh pr diff:*),Bash(gh api repos/bitwarden/sdk-internal/*:*),Bash(git clone:*),Bash(git -C *:*),Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(grep:*),Bash(./gradlew*:*),Read,Grep,Glob,Edit,Write,Skill,mcp__github_comment__update_claude_comment"
+            --allowedTools "Bash(gh pr diff:*),Bash(git -C *:*),Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(grep:*),Bash(./gradlew*:*),Read,Grep,Glob,Edit,Write,Skill,mcp__github_comment__update_claude_comment"
 
       - name: Push any resolved fix
         env:
