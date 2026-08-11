@@ -3,9 +3,15 @@ name: SDLC / SDK Update Evaluation
 on:
   pull_request:
     types: [opened, synchronize]
+  workflow_dispatch:
+    inputs:
+      pr-number:
+        description: "PR number to evaluate"
+        required: true
+        type: number
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || inputs.pr-number }}
   cancel-in-progress: true
 
 permissions: {}
@@ -14,7 +20,7 @@ jobs:
   evaluate:
     name: Evaluate SDK Update
     runs-on: ubuntu-24.04
-    if: ${{ github.event.pull_request.head.ref == 'sdlc/sdk-update' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.pull_request.head.ref == 'sdlc/sdk-update' }}
     timeout-minutes: 20
     permissions:
       id-token: write
@@ -23,6 +29,24 @@ jobs:
       pull-requests: write
 
     steps:
+      - name: Resolve PR context
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            NUMBER="${{ inputs.pr-number }}"
+            HEAD_SHA=$(gh pr view "$NUMBER" -R "${{ github.repository }}" --json headRefOid --jq .headRefOid)
+            HEAD_REF=$(gh pr view "$NUMBER" -R "${{ github.repository }}" --json headRefName --jq .headRefName)
+          else
+            NUMBER="${{ github.event.pull_request.number }}"
+            HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+            HEAD_REF="${{ github.event.pull_request.head.ref }}"
+          fi
+          echo "number=$NUMBER" >> "$GITHUB_OUTPUT"
+          echo "head-sha=$HEAD_SHA" >> "$GITHUB_OUTPUT"
+          echo "head-ref=$HEAD_REF" >> "$GITHUB_OUTPUT"
+
       - name: Log in to Azure
         uses: bitwarden/gh-actions/azure-login@main
         with:
@@ -53,7 +77,7 @@ jobs:
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           token: ${{ steps.app-token.outputs.token }}
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ steps.pr.outputs.head-sha }}
           fetch-depth: 0
           persist-credentials: true
 
@@ -71,7 +95,7 @@ jobs:
           plugins: |
             bitwarden-delivery-tools@bitwarden-marketplace
           prompt: |
-            PR #${{ github.event.pull_request.number }} in ${{ github.repository }} bumps the
+            PR #${{ steps.pr.outputs.number }} in ${{ github.repository }} bumps the
             Bitwarden SDK. Evaluate it using the `evaluating-sdk-internal-updates` skill and
             resolve anything within scope that needs resolving, per the skill's own Resolve
             steps. `bitwarden/sdk-internal` is already cloned as a sibling directory at
@@ -93,7 +117,7 @@ jobs:
 
       - name: Push any resolved fix
         env:
-          _BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
+          _BRANCH_NAME: ${{ steps.pr.outputs.head-ref }}
         run: |
           if git diff --quiet "origin/$_BRANCH_NAME" HEAD; then
             echo "No new commits to push."
