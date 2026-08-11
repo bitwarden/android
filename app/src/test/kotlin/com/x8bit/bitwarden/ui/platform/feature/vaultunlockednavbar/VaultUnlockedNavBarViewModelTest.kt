@@ -320,7 +320,6 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `effective send policy flow update should set areSendsDisabled to match disableSend`() =
         runTest {

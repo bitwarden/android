@@ -13,6 +13,7 @@ import com.bitwarden.data.manager.model.FlightRecorderDuration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -42,6 +43,9 @@ internal class FlightRecorderManagerImpl(
     private var cancellationJob: Job = Job().apply { complete() }
     private val expirationJobMap: MutableMap<String, Job> = concurrentMapOf()
     private val flightRecorderTree = FlightRecorderTree()
+    private val mutableIsLoggingReadyFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
+
+    override val isLoggingReadyFlow: StateFlow<Boolean> get() = mutableIsLoggingReadyFlow
 
     override val flightRecorderData: FlightRecorderDataSet
         get() = flightRecorderDiskSource
@@ -71,6 +75,7 @@ internal class FlightRecorderManagerImpl(
             ScreenStateBroadcastReceiver(),
             IntentFilter(Intent.ACTION_SCREEN_ON),
         )
+        mutableIsLoggingReadyFlow.value = true
     }
 
     override fun dismissFlightRecorderBanner() {
