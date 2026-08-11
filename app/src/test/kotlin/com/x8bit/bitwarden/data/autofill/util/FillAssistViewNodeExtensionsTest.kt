@@ -105,6 +105,34 @@ class FillAssistViewNodeExtensionsTest {
         assertEquals(listOf(AutofillView.Login.Email(data = data)), actual)
     }
 
+    @Test
+    fun `buildFillAssistViews should return Login Username when htmlInfo matches phone clause`() {
+        val htmlInfo = createHtmlInfo()
+        val viewNode = createViewNode(htmlInfo = htmlInfo)
+        val assistStructure = createAssistStructure(viewNode)
+        val data = autofillData()
+        every {
+            viewNode.toAutofillViewData(
+                autofillId = autofillId,
+                website = null,
+            )
+        } returns data
+
+        val hostRule = FillAssistRules.HostRule(
+            category = "account-login",
+            fields = mapOf(
+                "phone" to listOf(selectorClause(tag = "input", id = "phone")),
+            ),
+        )
+
+        val actual = assistStructure.buildFillAssistViews(
+            hostRules = listOf(hostRule),
+            urlBarWebsite = null,
+        )
+
+        assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `buildFillAssistViews should return Login Password when htmlInfo matches password clause`() {
@@ -226,10 +254,11 @@ class FillAssistViewNodeExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `buildFillAssistViews should pick first mapped key when multiple keys match the same node`() {
-        // Two field keys ("email" and "username") both match the same node. The implementation
-        // iterates in insertion order and selects the first key whose mapping is non-null.
-        // Since "email" is listed first, it wins and produces a Login.Email view.
+    fun `buildFillAssistViews should prefer Login Username over Login Email when both keys match the same node`() {
+        // Two field keys ("email" and "username") both match the same node, e.g. a combined
+        // phone-or-email login field. Login.Username has no format gate and fills any stored
+        // value, while Login.Email rejects non-email values, so Username is preferred even
+        // though "email" is listed first.
         val htmlInfo = createHtmlInfo()
         val viewNode = createViewNode(htmlInfo = htmlInfo)
         val assistStructure = createAssistStructure(viewNode)
@@ -249,7 +278,34 @@ class FillAssistViewNodeExtensionsTest {
             urlBarWebsite = null,
         )
 
-        assertEquals(listOf(AutofillView.Login.Email(data = data)), actual)
+        assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `buildFillAssistViews should prefer Login Username over Login Email when phone and email keys match the same node`() {
+        // Mirrors a real fill-assist rule where a single combined phone-or-email field is
+        // declared under both the "email" and "phone" keys.
+        val htmlInfo = createHtmlInfo()
+        val viewNode = createViewNode(htmlInfo = htmlInfo)
+        val assistStructure = createAssistStructure(viewNode)
+        val data = autofillData()
+        every { viewNode.toAutofillViewData(autofillId = autofillId, website = null) } returns data
+
+        val hostRule = FillAssistRules.HostRule(
+            category = "account-login",
+            fields = linkedMapOf(
+                "email" to listOf(selectorClause(tag = "input", id = "shared")),
+                "phone" to listOf(selectorClause(tag = "input", id = "shared")),
+            ),
+        )
+
+        val actual = assistStructure.buildFillAssistViews(
+            hostRules = listOf(hostRule),
+            urlBarWebsite = null,
+        )
+
+        assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
     }
 
     @Test

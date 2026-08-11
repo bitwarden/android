@@ -154,7 +154,7 @@ class FilledDataBuilderImpl(
                 ) {
                     val value = when (autofillView) {
                         is AutofillView.Login.Email -> {
-                            if (!autofillCipher.username.isValidEmail()) {
+                            if (!autofillCipher.username.trim().isValidEmail()) {
                                 return@mapNotNull null
                             }
                             autofillCipher.username

@@ -5,6 +5,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.datasource.disk.BaseEncryptedDiskSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onSubscription
+import timber.log.Timber
 import java.util.UUID
 
 private const val AUTHENTICATOR_SYNC_SYMMETRIC_KEY = "authenticatorSyncSymmetricKey"
@@ -18,13 +19,20 @@ private const val UNIQUE_APP_ID_KEY = "appId"
  */
 class AuthDiskSourceImpl(
     encryptedSharedPreferences: SharedPreferences,
+    keystoreEncryptedPreferences: SharedPreferences,
     sharedPreferences: SharedPreferences,
 ) : BaseEncryptedDiskSource(
     encryptedSharedPreferences = encryptedSharedPreferences,
+    keystoreEncryptedPreferences = keystoreEncryptedPreferences,
     sharedPreferences = sharedPreferences,
 ),
     AuthDiskSource {
     private val mutableUserBiometricUnlockKeyFlow = bufferedMutableSharedFlow<String?>(replay = 1)
+
+    init {
+        // Migrate to the Keystore Encrypted SharedPreferences.
+        migrateToKeystoreEncryption()
+    }
 
     override val uniqueAppId: String
         get() = getString(key = UNIQUE_APP_ID_KEY) ?: generateAndStoreUniqueAppId()
@@ -86,4 +94,14 @@ class AuthDiskSourceImpl(
             .also {
                 putString(key = UNIQUE_APP_ID_KEY, value = it)
             }
+
+    private fun migrateToKeystoreEncryption() {
+        var isMigrated = false
+        isMigrated = migrateKeyByPrefix(keyPrefix = BIOMETRICS_UNLOCK_KEY) || isMigrated
+        isMigrated = migrateKeyByPrefix(keyPrefix = BIOMETRICS_INIT_VECTOR_KEY) || isMigrated
+        isMigrated = migrateKeyByPrefix(keyPrefix = AUTHENTICATOR_SYNC_SYMMETRIC_KEY) || isMigrated
+        if (isMigrated) {
+            Timber.d("AuthDiskSource has been migrated to keystore encrypted shared preferences")
+        }
+    }
 }
