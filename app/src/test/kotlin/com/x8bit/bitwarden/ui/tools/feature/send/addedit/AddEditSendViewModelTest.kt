@@ -58,6 +58,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -219,8 +220,162 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             }
         }
 
+    private fun AddEditSendState.deletionDateOrNull(): Instant? =
+        (viewState as? AddEditSendState.ViewState.Content)?.common?.deletionDate
+
     private fun AddEditSendState.isHideEmailAddressEnabledOrNull(): Boolean? =
         (viewState as? AddEditSendState.ViewState.Content)?.common?.isHideEmailAddressEnabled
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `initial state should use the enforced deletion window when send controls is enabled`() {
+        mutableSendControlsFlagFlow.value = true
+        mutableEffectiveSendPolicyFlow.value =
+            DEFAULT_EFFECTIVE_SEND_POLICY.copy(deletionHours = ENFORCED_DELETION_HOURS)
+
+        val state = createViewModel().stateFlow.value
+
+        assertEquals(ENFORCED_DELETION_HOURS, state.enforcedDeletionHours)
+        assertEquals(ENFORCED_DELETION_DATE, state.deletionDateOrNull())
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `initial state should use the default deletion window when send controls is disabled`() {
+        mutableEffectiveSendPolicyFlow.value =
+            DEFAULT_EFFECTIVE_SEND_POLICY.copy(deletionHours = ENFORCED_DELETION_HOURS)
+
+        val state = createViewModel().stateFlow.value
+
+        assertNull(state.enforcedDeletionHours)
+        assertEquals(DEFAULT_COMMON_STATE.deletionDate, state.deletionDateOrNull())
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `deletion date should update when the enforced deletion window changes in add mode`() =
+        runTest {
+            mutableSendControlsFlagFlow.value = true
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_COMMON_STATE.deletionDate, awaitItem().deletionDateOrNull())
+
+                mutableEffectiveSendPolicyFlow.value =
+                    DEFAULT_EFFECTIVE_SEND_POLICY.copy(deletionHours = ENFORCED_DELETION_HOURS)
+
+                assertEquals(ENFORCED_DELETION_DATE, awaitItem().deletionDateOrNull())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `deletion date should not change when the enforced deletion window changes in edit mode`() =
+        runTest {
+            mutableSendControlsFlagFlow.value = true
+            val sendId = "sendId-1"
+            val mockSendView = createMockSendView(number = 1)
+            every {
+                mockSendView.toViewState(
+                    baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
+                    isHideEmailAddressEnabled = true,
+                )
+            } returns DEFAULT_VIEW_STATE
+            mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
+            val initialState = DEFAULT_STATE.copy(
+                addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
+                isSendControlsEnabled = true,
+            )
+            val viewModel = createViewModel(
+                state = initialState,
+                addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_COMMON_STATE.deletionDate, awaitItem().deletionDateOrNull())
+
+                mutableEffectiveSendPolicyFlow.value =
+                    DEFAULT_EFFECTIVE_SEND_POLICY.copy(deletionHours = ENFORCED_DELETION_HOURS)
+
+                val updatedState = awaitItem()
+                assertEquals(ENFORCED_DELETION_HOURS, updatedState.enforcedDeletionHours)
+                assertEquals(DEFAULT_COMMON_STATE.deletionDate, updatedState.deletionDateOrNull())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `enforcedDeletionHours should only be populated when send controls is enabled`() {
+        mutableEffectiveSendPolicyFlow.value =
+            DEFAULT_EFFECTIVE_SEND_POLICY.copy(deletionHours = ENFORCED_DELETION_HOURS)
+
+        assertNull(createViewModel().stateFlow.value.enforcedDeletionHours)
+
+        mutableSendControlsFlagFlow.value = true
+
+        assertEquals(
+            ENFORCED_DELETION_HOURS,
+            createViewModel().stateFlow.value.enforcedDeletionHours,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `deletion date should not change when the policy changes while send controls is disabled`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_COMMON_STATE.deletionDate, awaitItem().deletionDateOrNull())
+
+                mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY.copy(
+                    deletionHours = ENFORCED_DELETION_HOURS,
+                    disableHideEmail = true,
+                )
+
+                val updatedState = awaitItem()
+                assertNull(updatedState.enforcedDeletionHours)
+                assertEquals(DEFAULT_COMMON_STATE.deletionDate, updatedState.deletionDateOrNull())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `deletion date should revert to the default window when send controls is turned off`() =
+        runTest {
+            mutableSendControlsFlagFlow.value = true
+            mutableEffectiveSendPolicyFlow.value =
+                DEFAULT_EFFECTIVE_SEND_POLICY.copy(deletionHours = ENFORCED_DELETION_HOURS)
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(ENFORCED_DELETION_DATE, awaitItem().deletionDateOrNull())
+
+                mutableSendControlsFlagFlow.value = false
+
+                val updatedState = awaitItem()
+                assertNull(updatedState.enforcedDeletionHours)
+                assertEquals(DEFAULT_COMMON_STATE.deletionDate, updatedState.deletionDateOrNull())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `deletion date should revert to the default window when the enforcement is lifted`() =
+        runTest {
+            mutableSendControlsFlagFlow.value = true
+            mutableEffectiveSendPolicyFlow.value =
+                DEFAULT_EFFECTIVE_SEND_POLICY.copy(deletionHours = ENFORCED_DELETION_HOURS)
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(ENFORCED_DELETION_DATE, awaitItem().deletionDateOrNull())
+
+                mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY
+
+                assertEquals(DEFAULT_COMMON_STATE.deletionDate, awaitItem().deletionDateOrNull())
+            }
+        }
 
     @Test
     fun `initial state should read from saved state when present`() {
@@ -1589,6 +1744,10 @@ private val DEFAULT_STATE = AddEditSendState(
     sendType = SendItemType.TEXT,
     isPremium = true,
 )
+
+private val ENFORCED_DELETION_DATE: Instant = Instant.parse("2023-10-28T12:00:00Z")
+
+private const val ENFORCED_DELETION_HOURS: Int = 24
 
 private val DEFAULT_EFFECTIVE_SEND_POLICY = EffectiveSendPolicy(
     allowedDomains = null,
