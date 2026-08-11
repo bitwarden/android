@@ -59,7 +59,7 @@ The following marketplace plugins are **required** for the full pipeline, except
 | `bitwarden-tech-lead` | `bitwarden-marketplace` | Architecture planning + architecture review |
 | `bitwarden-software-engineer` | `bitwarden-marketplace` | Implementation, testing, building, and committing |
 | `bitwarden-atlassian-tools` | `bitwarden-marketplace` | Optional — Jira/Confluence fetching |
-| `bitwarden-delivery-tools` | `bitwarden-marketplace` | Architecture planning (`architecting-solutions`, used by `bitwarden-tech-lead`), commit/preflight during implementation, and PR creation (Step 7) |
+| `bitwarden-delivery-tools` | `bitwarden-marketplace` | Committing (`committing-changes`), labeling (`labeling-changes`), preflight, and PR creation (`creating-pull-request`, Step 7) for the implementer; architecture planning (`architecting-solutions`) for `bitwarden-tech-lead` |
 
 The `bitwarden-tech-lead` agent is provided by the `bitwarden-tech-lead` marketplace plugin.
 
