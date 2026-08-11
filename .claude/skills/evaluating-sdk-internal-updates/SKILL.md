@@ -10,7 +10,7 @@ allowed-tools: Bash(gh pr diff:*), Bash(git -C *:*), Bash(grep:*), Bash(./gradle
 
 ## Identify
 
-Binding surface facts specific to this SDK: `#[uniffi::export]` / `derive(uniffi::...)` annotations are scattered across many crates, not just `crates/bitwarden-uniffi`; `crates/bitwarden-ffi` is unrelated ("do not use"). No `.udl` files. Kotlin symbols surface as `com.bitwarden.sdk.*`.
+Binding surface facts specific to this SDK: `#[uniffi::export]` / `derive(uniffi::...)` annotations are scattered across many crates, not just `crates/bitwarden-uniffi`; `crates/bitwarden-ffi` is unrelated ("do not use"). No `.udl` files. UniFFI emits one Kotlin package per crate (`com.bitwarden.core`, `com.bitwarden.vault`, `com.bitwarden.crypto`, etc.) — only the top-level `Client`/`AuthClient`/`GeneratorClients` actually live under `com.bitwarden.sdk`. Both `app` and `authenticator` depend on the SDK; neither is optional to search.
 
 A hunk that only touches a macro invocation (e.g. `state_bridge! { ... }`) doesn't show the binding surface — the expansion lives in the macro's definition, often in a different crate (e.g. `bitwarden-state-bridge-macro`). `#[uniffi::export(with_foreign)]` marks a callback interface: a trait Kotlin must implement, where adding a field/method is never additive-safe for the implementor.
 
@@ -19,7 +19,7 @@ A hunk that only touches a macro invocation (e.g. `state_bridge! { ... }`) doesn
 3. Attempt `./gradlew <module>:compileStandardDebugKotlin` at the current checkout before crawling sdk-internal. A failure confirms a compile-time break directly, with a more precise location than any git search — note it and continue to steps 4-7 for the full commit range; do not fix it yet. A clean build only rules out compile-time breaks, not runtime ones.
 4. `git -C <sdk-internal-path> log --oneline OLD..NEW -G'uniffi::export|derive\(uniffi|#\[uniffi' -- '*.rs'` → candidate binding-surface commits.
 5. Classify per hunk, not per commit — a commit with one additive headline change can still have a second, unrelated breaking hunk. If a hunk only touches a macro invocation, read the macro's definition before classifying. `git -C <sdk-internal-path> show <sha> -- '*.rs'`.
-6. For every distinct symbol/type touched (every hunk, not just the commit's headline change), grep `app`, `core`, `network`, `ui` for the symbol name and `import com.bitwarden.sdk.<Symbol>` to find Android call sites.
+6. For every distinct symbol/type touched (every hunk, not just the commit's headline change), grep the whole repo for the bare symbol name to find Android call sites — a fixed module list or a `com.bitwarden.sdk.<Symbol>` import-prefix check both miss real consumers.
 7. Report: compile-time breaks, runtime breaks, safe/no-call-site — each with commit, symbol, and call sites.
 
 ## Resolve
