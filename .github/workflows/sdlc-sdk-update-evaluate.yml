@@ -24,7 +24,23 @@ jobs:
       pull-requests: write
 
     steps:
+      - name: Skip if this bump was already evaluated
+        id: gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          LATEST_SUBJECT=$(gh pr view "$PR_NUMBER" -R "$REPO" --json commits --jq '.commits[-1].messageHeadline')
+          if [[ "$LATEST_SUBJECT" != "SDK Update - "* ]]; then
+            echo "Branch tip is not a fresh SDK version bump ('$LATEST_SUBJECT') — already evaluated, skipping."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Log in to Azure
+        if: steps.gate.outputs.skip == 'false'
         uses: bitwarden/gh-actions/azure-login@main
         with:
           subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
@@ -33,15 +49,18 @@ jobs:
 
       - name: Get Azure Key Vault secrets
         id: get-kv-secrets
+        if: steps.gate.outputs.skip == 'false'
         uses: bitwarden/gh-actions/get-keyvault-secrets@main
         with:
           keyvault: gh-org-bitwarden
           secrets: "ANTHROPIC-RESPONSE-API-KEY,BW-GHAPP-ID,BW-GHAPP-KEY"
 
       - name: Log out from Azure
+        if: steps.gate.outputs.skip == 'false'
         uses: bitwarden/gh-actions/azure-logout@main
 
       - name: Generate GH App token
+        if: steps.gate.outputs.skip == 'false'
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         id: app-token
         with:
@@ -51,6 +70,7 @@ jobs:
           permission-pull-requests: write
 
       - name: Check out repo
+        if: steps.gate.outputs.skip == 'false'
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           token: ${{ steps.app-token.outputs.token }}
@@ -59,13 +79,16 @@ jobs:
           persist-credentials: true
 
       - name: Clone sdk-internal
+        if: steps.gate.outputs.skip == 'false'
         run: git clone --quiet https://github.com/bitwarden/sdk-internal "${{ github.workspace }}/../sdk-internal"
 
       - name: Setup Android Build
+        if: steps.gate.outputs.skip == 'false'
         uses: ./.github/actions/setup-android-build
 
       - name: Run Claude Code
         id: claude
+        if: steps.gate.outputs.skip == 'false'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # settings.gradle.kts resolves the SDK from GitHub Packages
         uses: anthropics/claude-code-action@be7b93b1907a4abad570368f3c74b6fe3807510b # v1.0.183
@@ -101,6 +124,7 @@ jobs:
             --allowedTools "Bash(gh pr diff:*),Bash(git -C *:*),Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(grep:*),Bash(./gradlew*:*),Read,Grep,Glob,Edit,Write,Skill,mcp__github_comment__update_claude_comment"
 
       - name: Push any resolved fix
+        if: steps.gate.outputs.skip == 'false'
         env:
           _BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
         run: |
