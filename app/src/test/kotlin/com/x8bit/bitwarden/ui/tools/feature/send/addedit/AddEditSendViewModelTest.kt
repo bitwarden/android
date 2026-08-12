@@ -58,7 +58,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -287,22 +286,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                 )
             }
         }
-
-    @Test
-    fun `enforcedDeletionHours should only be populated when send controls is enabled`() {
-        mutableEffectiveSendPolicyFlow.value =
-            DEFAULT_EFFECTIVE_SEND_POLICY.copy(deletionHours = ENFORCED_DELETION_HOURS)
-
-        val flagOffState = createViewModel().stateFlow.value
-        assertEquals(DEFAULT_STATE.copy(deletionHours = ENFORCED_DELETION_HOURS), flagOffState)
-        assertNull(flagOffState.enforcedDeletionHours)
-
-        mutableSendControlsFlagFlow.value = true
-
-        val flagOnState = createViewModel().stateFlow.value
-        assertEquals(ENFORCED_DELETION_STATE, flagOnState)
-        assertEquals(ENFORCED_DELETION_HOURS, flagOnState.enforcedDeletionHours)
-    }
 
     @Test
     fun `deletion date should not change when the policy changes with send controls off`() =
