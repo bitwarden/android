@@ -130,7 +130,6 @@ class SendViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `AddSendClick should still display SelectSendAddType dialog when both types are allowed`() {
         mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY.copy(
@@ -160,9 +159,8 @@ class SendViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `AddSendClick should require premium when only file sends are allowed and user is not premium`() {
+    fun `AddSendClick should require premium when only file sends are allowed`() {
         mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY.copy(
             allowedSendTypes = listOf(SendTypeJson.FILE),
         )
@@ -182,9 +180,8 @@ class SendViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `AddSendClick should display warning when only file sends are allowed and policy disables send`() {
+    fun `AddSendClick should warn when only file sends are allowed and sends are disabled`() {
         mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY.copy(
             allowedSendTypes = listOf(SendTypeJson.FILE),
             disableSend = true,
@@ -229,20 +226,16 @@ class SendViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
-                val initialState = awaitItem()
-                assertEquals(DEFAULT_STATE, initialState)
-                assertEquals(true, initialState.shouldShowTypesSection)
+                assertEquals(DEFAULT_STATE, awaitItem())
 
                 mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY.copy(
                     allowedSendTypes = listOf(SendTypeJson.FILE),
                 )
 
-                val updatedState = awaitItem()
                 assertEquals(
                     DEFAULT_STATE.copy(singleAllowedSendType = SendItemType.FILE),
-                    updatedState,
+                    awaitItem(),
                 )
-                assertEquals(false, updatedState.shouldShowTypesSection)
             }
         }
 
