@@ -46,7 +46,6 @@ import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.time.Duration.Companion.milliseconds
@@ -155,7 +154,10 @@ class SendViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(SendAction.AddSendClick)
             assertEquals(SendEvent.NavigateNewSend(sendType = SendItemType.TEXT), awaitItem())
         }
-        assertNull(viewModel.stateFlow.value.dialogState)
+        assertEquals(
+            DEFAULT_STATE.copy(singleAllowedSendType = SendItemType.TEXT),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Suppress("MaxLineLength")
@@ -172,8 +174,11 @@ class SendViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(SendAction.AddSendClick)
 
         assertEquals(
-            SendState.DialogState.FileTypeRequiresPremium,
-            viewModel.stateFlow.value.dialogState,
+            DEFAULT_STATE.copy(
+                dialogState = SendState.DialogState.FileTypeRequiresPremium,
+                singleAllowedSendType = SendItemType.FILE,
+            ),
+            viewModel.stateFlow.value,
         )
     }
 
@@ -189,11 +194,15 @@ class SendViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(SendAction.AddSendClick)
 
         assertEquals(
-            SendState.DialogState.Error(
-                title = null,
-                message = BitwardenString.send_disabled_warning.asText(),
+            DEFAULT_STATE.copy(
+                dialogState = SendState.DialogState.Error(
+                    title = null,
+                    message = BitwardenString.send_disabled_warning.asText(),
+                ),
+                policyDisablesSend = true,
+                singleAllowedSendType = SendItemType.FILE,
             ),
-            viewModel.stateFlow.value.dialogState,
+            viewModel.stateFlow.value,
         )
     }
 
@@ -203,18 +212,17 @@ class SendViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
-                assertEquals(false, awaitItem().policyDisablesSend)
+                assertEquals(DEFAULT_STATE, awaitItem())
 
                 // While the send controls flag is disabled this is driven by the legacy
                 // disable-send policy, which must continue to surface the policy warning.
                 mutableEffectiveSendPolicyFlow.value =
                     DEFAULT_EFFECTIVE_SEND_POLICY.copy(disableSend = true)
 
-                assertEquals(true, awaitItem().policyDisablesSend)
+                assertEquals(DEFAULT_STATE.copy(policyDisablesSend = true), awaitItem())
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `state should update when the allowed send types change while the screen is open`() =
         runTest {
@@ -222,7 +230,7 @@ class SendViewModelTest : BaseViewModelTest() {
 
             viewModel.stateFlow.test {
                 val initialState = awaitItem()
-                assertNull(initialState.singleAllowedSendType)
+                assertEquals(DEFAULT_STATE, initialState)
                 assertEquals(true, initialState.shouldShowTypesSection)
 
                 mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY.copy(
@@ -230,7 +238,10 @@ class SendViewModelTest : BaseViewModelTest() {
                 )
 
                 val updatedState = awaitItem()
-                assertEquals(SendItemType.FILE, updatedState.singleAllowedSendType)
+                assertEquals(
+                    DEFAULT_STATE.copy(singleAllowedSendType = SendItemType.FILE),
+                    updatedState,
+                )
                 assertEquals(false, updatedState.shouldShowTypesSection)
             }
         }
