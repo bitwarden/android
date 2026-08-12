@@ -174,13 +174,22 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     fun `shouldHideEmailAddressToggle should only be true when send controls is enabled and hide email is restricted`() {
         mutableEffectiveSendPolicyFlow.value =
             DEFAULT_EFFECTIVE_SEND_POLICY.copy(disableHideEmail = true)
+        val expectedState = DEFAULT_STATE.copy(
+            viewState = DEFAULT_VIEW_STATE.copy(
+                common = DEFAULT_COMMON_STATE.copy(isHideEmailAddressEnabled = false),
+            ),
+        )
 
         // Flag off retains the legacy behavior of only disabling the toggle.
-        assertEquals(false, createViewModel().stateFlow.value.shouldHideEmailAddressToggle)
+        val legacyState = createViewModel().stateFlow.value
+        assertEquals(expectedState, legacyState)
+        assertEquals(false, legacyState.shouldHideEmailAddressToggle)
 
         mutableSendControlsFlagFlow.value = true
 
-        assertEquals(true, createViewModel().stateFlow.value.shouldHideEmailAddressToggle)
+        val sendControlsState = createViewModel().stateFlow.value
+        assertEquals(expectedState.copy(isSendControlsEnabled = true), sendControlsState)
+        assertEquals(true, sendControlsState.shouldHideEmailAddressToggle)
     }
 
     @Suppress("MaxLineLength")
@@ -189,17 +198,22 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         runTest {
             mutableEffectiveSendPolicyFlow.value =
                 DEFAULT_EFFECTIVE_SEND_POLICY.copy(disableHideEmail = true)
+            val expectedState = DEFAULT_STATE.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(isHideEmailAddressEnabled = false),
+                ),
+            )
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
                 val initialState = awaitItem()
-                assertEquals(false, initialState.isSendControlsEnabled)
+                assertEquals(expectedState, initialState)
                 assertEquals(false, initialState.shouldHideEmailAddressToggle)
 
                 mutableSendControlsFlagFlow.value = true
 
                 val updatedState = awaitItem()
-                assertEquals(true, updatedState.isSendControlsEnabled)
+                assertEquals(expectedState.copy(isSendControlsEnabled = true), updatedState)
                 assertEquals(true, updatedState.shouldHideEmailAddressToggle)
             }
         }
@@ -211,20 +225,26 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
-                assertEquals(true, awaitItem().isHideEmailAddressEnabledOrNull())
+                assertEquals(DEFAULT_STATE, awaitItem())
 
                 mutableEffectiveSendPolicyFlow.value =
                     DEFAULT_EFFECTIVE_SEND_POLICY.copy(disableHideEmail = true)
 
-                assertEquals(false, awaitItem().isHideEmailAddressEnabledOrNull())
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        viewState = DEFAULT_VIEW_STATE.copy(
+                            common = DEFAULT_COMMON_STATE.copy(
+                                isHideEmailAddressEnabled = false,
+                            ),
+                        ),
+                    ),
+                    awaitItem(),
+                )
             }
         }
 
     private fun AddEditSendState.deletionDateOrNull(): Instant? =
         (viewState as? AddEditSendState.ViewState.Content)?.common?.deletionDate
-
-    private fun AddEditSendState.isHideEmailAddressEnabledOrNull(): Boolean? =
-        (viewState as? AddEditSendState.ViewState.Content)?.common?.isHideEmailAddressEnabled
 
     @Suppress("MaxLineLength")
     @Test

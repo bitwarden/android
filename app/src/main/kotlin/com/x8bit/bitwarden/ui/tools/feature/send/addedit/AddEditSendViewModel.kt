@@ -425,6 +425,11 @@ class AddEditSendViewModel @Inject constructor(
         val enforcedDeletionHours = effectiveSendPolicy
             .deletionHours
             ?.takeIf { action.isSendControlsEnabled }
+        // Captured before the state is updated below, since detecting a dropped enforcement
+        // requires the previous value of `enforcedDeletionHours`.
+        val newDeletionDate = state.newDeletionDateOrNull(
+            enforcedDeletionHours = enforcedDeletionHours,
+        )
         mutableStateFlow.update { currentState ->
             currentState.copy(
                 policyDisablesSend = effectiveSendPolicy.disableSend,
@@ -433,19 +438,12 @@ class AddEditSendViewModel @Inject constructor(
                 allowedSendTypes = effectiveSendPolicy.allowedSendTypes,
                 deletionHours = effectiveSendPolicy.deletionHours,
                 whoCanAccess = effectiveSendPolicy.whoCanAccess,
-                viewState = (currentState.viewState as? AddEditSendState.ViewState.Content)
-                    ?.let { content ->
-                        content.copy(
-                            common = content.common.copy(
-                                isHideEmailAddressEnabled = !effectiveSendPolicy.disableHideEmail,
-                                deletionDate = currentState.newDeletionDateOrNull(
-                                    enforcedDeletionHours = enforcedDeletionHours,
-                                )
-                                    ?: content.common.deletionDate,
-                            ),
-                        )
-                    }
-                    ?: currentState.viewState,
+            )
+        }
+        updateCommonContent {
+            it.copy(
+                deletionDate = newDeletionDate ?: it.deletionDate,
+                isHideEmailAddressEnabled = !effectiveSendPolicy.disableHideEmail,
             )
         }
     }
