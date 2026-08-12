@@ -62,6 +62,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.handlers.AddEditSendHan
 @Composable
 fun AddEditSendContent(
     state: AddEditSendState.ViewState.Content,
+    enforcedDeletionHours: Int?,
     policyDisablesSend: Boolean,
     policySendOptionsInEffect: Boolean,
     shouldHideEmailAddressToggle: Boolean,
@@ -141,6 +142,7 @@ fun AddEditSendContent(
 
         if (isAddMode) {
             AddEditSendDeletionDateChooser(
+                enforcedDeletionHours = enforcedDeletionHours,
                 onDateSelect = addSendHandlers.onDeletionDateChange,
                 isEnabled = !policyDisablesSend,
                 modifier = Modifier
@@ -151,8 +153,9 @@ fun AddEditSendContent(
         } else {
             AddEditSendCustomDateChooser(
                 originalSelection = state.common.deletionDate,
-                isEnabled = !policyDisablesSend,
                 onDateSelect = addSendHandlers.onDeletionDateChange,
+                isDeletionDateEnforced = enforcedDeletionHours != null,
+                isEnabled = !policyDisablesSend,
                 modifier = Modifier
                     .testTag("SendCustomDeletionDatePicker")
                     .fillMaxWidth()

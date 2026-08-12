@@ -216,6 +216,142 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         }
 
     @Test
+    fun `initial state should use the enforced deletion window when send controls is enabled`() {
+        mutableSendControlsFlagFlow.value = true
+        mutableEffectiveSendPolicyFlow.value =
+            DEFAULT_EFFECTIVE_SEND_POLICY.copy(deletionHours = ENFORCED_DELETION_HOURS)
+
+        assertEquals(ENFORCED_DELETION_STATE, createViewModel().stateFlow.value)
+    }
+
+    @Test
+    fun `initial state should use the default deletion window when send controls is disabled`() {
+        mutableEffectiveSendPolicyFlow.value =
+            DEFAULT_EFFECTIVE_SEND_POLICY.copy(deletionHours = ENFORCED_DELETION_HOURS)
+
+        assertEquals(
+            DEFAULT_STATE.copy(deletionHours = ENFORCED_DELETION_HOURS),
+            createViewModel().stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `deletion date should update when the enforced deletion window changes in add mode`() =
+        runTest {
+            mutableSendControlsFlagFlow.value = true
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE.copy(isSendControlsEnabled = true), awaitItem())
+
+                mutableEffectiveSendPolicyFlow.value =
+                    DEFAULT_EFFECTIVE_SEND_POLICY.copy(deletionHours = ENFORCED_DELETION_HOURS)
+
+                assertEquals(ENFORCED_DELETION_STATE, awaitItem())
+            }
+        }
+
+    @Test
+    fun `deletion date should not change when the enforced deletion window changes in edit mode`() =
+        runTest {
+            mutableSendControlsFlagFlow.value = true
+            val sendId = "sendId-1"
+            val mockSendView = createMockSendView(number = 1)
+            every {
+                mockSendView.toViewState(
+                    baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
+                    isHideEmailAddressEnabled = true,
+                )
+            } returns DEFAULT_VIEW_STATE
+            mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
+            val initialState = DEFAULT_STATE.copy(
+                addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
+                isSendControlsEnabled = true,
+            )
+            val viewModel = createViewModel(
+                state = initialState,
+                addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(initialState, awaitItem())
+
+                mutableEffectiveSendPolicyFlow.value =
+                    DEFAULT_EFFECTIVE_SEND_POLICY.copy(deletionHours = ENFORCED_DELETION_HOURS)
+
+                // The existing Send keeps its own deletion date even though it is now enforced.
+                assertEquals(
+                    initialState.copy(deletionHours = ENFORCED_DELETION_HOURS),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `deletion date should not change when the policy changes with send controls off`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+
+                mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY.copy(
+                    deletionHours = ENFORCED_DELETION_HOURS,
+                    disableHideEmail = true,
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        deletionHours = ENFORCED_DELETION_HOURS,
+                        viewState = DEFAULT_VIEW_STATE.copy(
+                            common = DEFAULT_COMMON_STATE.copy(
+                                isHideEmailAddressEnabled = false,
+                            ),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `deletion date should revert to the default window when send controls is turned off`() =
+        runTest {
+            mutableSendControlsFlagFlow.value = true
+            mutableEffectiveSendPolicyFlow.value =
+                DEFAULT_EFFECTIVE_SEND_POLICY.copy(deletionHours = ENFORCED_DELETION_HOURS)
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(ENFORCED_DELETION_STATE, awaitItem())
+
+                mutableSendControlsFlagFlow.value = false
+
+                assertEquals(
+                    DEFAULT_STATE.copy(deletionHours = ENFORCED_DELETION_HOURS),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `deletion date should revert to the default window when the enforcement is lifted`() =
+        runTest {
+            mutableSendControlsFlagFlow.value = true
+            mutableEffectiveSendPolicyFlow.value =
+                DEFAULT_EFFECTIVE_SEND_POLICY.copy(deletionHours = ENFORCED_DELETION_HOURS)
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(ENFORCED_DELETION_STATE, awaitItem())
+
+                mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY
+
+                assertEquals(DEFAULT_STATE.copy(isSendControlsEnabled = true), awaitItem())
+            }
+        }
+
+    @Test
     fun `initial state should read from saved state when present`() {
         val savedState = DEFAULT_STATE.copy(
             dialogState = AddEditSendState.DialogState.Loading("Loading".asText()),
@@ -1581,6 +1717,18 @@ private val DEFAULT_STATE = AddEditSendState(
     whoCanAccess = null,
     sendType = SendItemType.TEXT,
     isPremium = true,
+)
+
+private val ENFORCED_DELETION_DATE: Instant = Instant.parse("2023-10-28T12:00:00Z")
+
+private const val ENFORCED_DELETION_HOURS: Int = 24
+
+private val ENFORCED_DELETION_STATE = DEFAULT_STATE.copy(
+    isSendControlsEnabled = true,
+    deletionHours = ENFORCED_DELETION_HOURS,
+    viewState = DEFAULT_VIEW_STATE.copy(
+        common = DEFAULT_COMMON_STATE.copy(deletionDate = ENFORCED_DELETION_DATE),
+    ),
 )
 
 private val DEFAULT_EFFECTIVE_SEND_POLICY = EffectiveSendPolicy(

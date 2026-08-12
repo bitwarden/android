@@ -67,6 +67,11 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
+/**
+ * The deletion window applied to a new Send when no deletion date is enforced by policy (7 days).
+ */
+private const val DEFAULT_DELETION_HOURS: Long = 7 * 24L
+
 private const val KEY_STATE = "state"
 
 /**
@@ -103,6 +108,7 @@ class AddEditSendViewModel @Inject constructor(
         val sendType = args.sendType
         val addEditSendType = args.addEditSendType
         val effectiveSendPolicy = policyManager.getEffectiveSendPolicy()
+        val isSendControlsEnabled = featureFlagManager.getFeatureFlag(key = FlagKey.SendControls)
 
         AddEditSendState(
             sendType = sendType,
@@ -120,9 +126,14 @@ class AddEditSendViewModel @Inject constructor(
                         isHideEmailChecked = false,
                         isDeactivateChecked = false,
                         isHideEmailAddressEnabled = !effectiveSendPolicy.disableHideEmail,
-                        deletionDate = clock
-                            .instant()
-                            .plus(@Suppress("MagicNumber") 7, ChronoUnit.DAYS),
+                        deletionDate = clock.instant().plus(
+                            effectiveSendPolicy
+                                .deletionHours
+                                ?.takeIf { isSendControlsEnabled }
+                                ?.toLong()
+                                ?: DEFAULT_DELETION_HOURS,
+                            ChronoUnit.HOURS,
+                        ),
                         expirationDate = null,
                         sendUrl = null,
                         hasPassword = false,
@@ -152,7 +163,7 @@ class AddEditSendViewModel @Inject constructor(
             dialogState = null,
             baseWebSendUrl = environmentRepo.environment.baseWebSendUrl,
             policyDisablesSend = effectiveSendPolicy.disableSend,
-            isSendControlsEnabled = featureFlagManager.getFeatureFlag(key = FlagKey.SendControls),
+            isSendControlsEnabled = isSendControlsEnabled,
             allowedDomains = effectiveSendPolicy.allowedDomains,
             allowedSendTypes = effectiveSendPolicy.allowedSendTypes,
             deletionHours = effectiveSendPolicy.deletionHours,
@@ -411,6 +422,14 @@ class AddEditSendViewModel @Inject constructor(
         action: AddEditSendAction.Internal.EffectiveSendPolicyReceive,
     ) {
         val effectiveSendPolicy = action.effectiveSendPolicy
+        val newEnforcedDeletionHours = effectiveSendPolicy
+            .deletionHours
+            ?.takeIf { action.isSendControlsEnabled }
+        // Captured before the state is updated below, since detecting a dropped enforcement
+        // requires the previous value of `enforcedDeletionHours`.
+        val newDeletionDate = state.newDeletionDateOrNull(
+            newEnforcedDeletionHours = newEnforcedDeletionHours,
+        )
         mutableStateFlow.update { currentState ->
             currentState.copy(
                 policyDisablesSend = effectiveSendPolicy.disableSend,
@@ -422,8 +441,31 @@ class AddEditSendViewModel @Inject constructor(
             )
         }
         updateCommonContent {
-            it.copy(isHideEmailAddressEnabled = !effectiveSendPolicy.disableHideEmail)
+            it.copy(
+                deletionDate = newDeletionDate ?: it.deletionDate,
+                isHideEmailAddressEnabled = !effectiveSendPolicy.disableHideEmail,
+            )
         }
+    }
+
+    /**
+     * Returns the deletion date a new Send should adopt in response to a policy change, or `null`
+     * when the current date should be left alone.
+     *
+     * Only a new Send is affected — an existing Send keeps the deletion date it was created with.
+     * Dropping the enforcement (the policy is lifted or the SendControls flag is turned off)
+     * restores the default window, so the chooser and the state cannot disagree once the chooser
+     * unlocks.
+     */
+    private fun AddEditSendState.newDeletionDateOrNull(newEnforcedDeletionHours: Int?): Instant? {
+        if (!isAddMode) return null
+        val hours = when {
+            newEnforcedDeletionHours != null -> newEnforcedDeletionHours.toLong()
+            // The enforcement was just dropped, so the default window is restored.
+            enforcedDeletionHours != null -> DEFAULT_DELETION_HOURS
+            else -> return null
+        }
+        return clock.instant().plus(hours, ChronoUnit.HOURS)
     }
 
     @Suppress("LongMethod")
@@ -954,6 +996,13 @@ data class AddEditSendState(
     val whoCanAccess: SendAccessTypeJson?,
     val isPremium: Boolean,
 ) : Parcelable {
+
+    /**
+     * Helper to determine the Send deletion window enforced by the SendControls policy, or `null`
+     * when the deletion date is left to the user. The legacy send options policy has no equivalent
+     * enforcement, so this is only in effect alongside the SendControls feature flag.
+     */
+    val enforcedDeletionHours: Int? get() = deletionHours.takeIf { isSendControlsEnabled }
 
     /**
      * Helper to determine the screen display name.

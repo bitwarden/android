@@ -33,6 +33,8 @@ import kotlin.time.Duration.Companion.hours
  * @param originalSelection The originally selected time value, this cannot be changed after being
  * set.
  * @param onDateSelect The callback for being notified of updates to the selected date and time.
+ * @param isDeletionDateEnforced Whether the SendControls policy enforces the deletion date. When
+ * enforced, the button is locked and continues to display the [originalSelection].
  * @param isEnabled Whether the button is enabled.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
  * @param clock The clock used for formatting and timezone purposes.
@@ -41,6 +43,7 @@ import kotlin.time.Duration.Companion.hours
 fun AddEditSendCustomDateChooser(
     originalSelection: Instant,
     onDateSelect: (Instant) -> Unit,
+    isDeletionDateEnforced: Boolean,
     isEnabled: Boolean,
     modifier: Modifier = Modifier,
     clock: Clock = LocalClock.current,
@@ -64,7 +67,7 @@ fun AddEditSendCustomDateChooser(
     }
     BitwardenMultiSelectButton(
         label = stringResource(id = BitwardenString.deletion_date),
-        isEnabled = isEnabled,
+        isEnabled = isEnabled && !isDeletionDateEnforced,
         options = options.values.toImmutableList(),
         selectedOption = currentSelectionOption.getText(clock = clock).invoke(),
         onOptionSelected = { selected ->
@@ -77,7 +80,13 @@ fun AddEditSendCustomDateChooser(
                         .plus(currentSelectionOption.offsetMillis, ChronoUnit.MILLIS),
             )
         },
-        supportingText = stringResource(id = BitwardenString.deletion_date_info),
+        supportingText = stringResource(
+            id = if (isDeletionDateEnforced) {
+                BitwardenString.this_date_is_enforced_by_your_organization
+            } else {
+                BitwardenString.deletion_date_info
+            },
+        ),
         insets = PaddingValues(top = 6.dp, bottom = 4.dp),
         cardStyle = CardStyle.Full,
         modifier = modifier,
