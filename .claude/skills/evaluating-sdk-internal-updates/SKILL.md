@@ -1,7 +1,21 @@
 ---
 name: evaluating-sdk-internal-updates
 description: Evaluates a bitwarden/android "Update SDK to" PR against the sdk-internal commit range for compile-time and runtime breaking changes, maps affected symbols to Android call sites, and applies clear in-scope fixes. Use when reviewing an SDK bump PR, a bitwardenSdk version change, or triaging sdk-internal breaking changes.
-allowed-tools: Bash(gh pr diff:*), Bash(git -C * log *), Bash(git -C * show *), Bash(git add:*), Bash(git commit:*), Bash(grep:*), Bash(./gradlew *), Read, Grep, Glob, Edit, Write, Skill(implementing-android-code), Skill(bitwarden-delivery-tools:committing-changes)
+allowed-tools:
+  - Bash(gh pr diff:*)
+  - Bash(git -C * log *)
+  - Bash(git -C * show *)
+  - Bash(git add:*)
+  - Bash(git commit:*)
+  - Bash(grep:*)
+  - Bash(./gradlew *)
+  - Read
+  - Grep
+  - Glob
+  - Edit
+  - Write
+  - Skill(implementing-android-code)
+  - Skill(bitwarden-delivery-tools:committing-changes)
 ---
 
 # Evaluating sdk-internal Updates
