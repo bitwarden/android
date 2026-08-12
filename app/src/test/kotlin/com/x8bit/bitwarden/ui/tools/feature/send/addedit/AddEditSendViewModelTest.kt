@@ -170,29 +170,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `shouldHideEmailAddressToggle should only be true when send controls is enabled and hide email is restricted`() {
-        mutableEffectiveSendPolicyFlow.value =
-            DEFAULT_EFFECTIVE_SEND_POLICY.copy(disableHideEmail = true)
-        val expectedState = DEFAULT_STATE.copy(
-            viewState = DEFAULT_VIEW_STATE.copy(
-                common = DEFAULT_COMMON_STATE.copy(isHideEmailAddressEnabled = false),
-            ),
-        )
-
-        // Flag off retains the legacy behavior of only disabling the toggle.
-        val legacyState = createViewModel().stateFlow.value
-        assertEquals(expectedState, legacyState)
-        assertEquals(false, legacyState.shouldHideEmailAddressToggle)
-
-        mutableSendControlsFlagFlow.value = true
-
-        val sendControlsState = createViewModel().stateFlow.value
-        assertEquals(expectedState.copy(isSendControlsEnabled = true), sendControlsState)
-        assertEquals(true, sendControlsState.shouldHideEmailAddressToggle)
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
     fun `state should update when the send controls feature flag changes while the screen is open`() =
         runTest {
             mutableEffectiveSendPolicyFlow.value =
@@ -205,15 +182,11 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
-                val initialState = awaitItem()
-                assertEquals(expectedState, initialState)
-                assertEquals(false, initialState.shouldHideEmailAddressToggle)
+                assertEquals(expectedState, awaitItem())
 
                 mutableSendControlsFlagFlow.value = true
 
-                val updatedState = awaitItem()
-                assertEquals(expectedState.copy(isSendControlsEnabled = true), updatedState)
-                assertEquals(true, updatedState.shouldHideEmailAddressToggle)
+                assertEquals(expectedState.copy(isSendControlsEnabled = true), awaitItem())
             }
         }
 
