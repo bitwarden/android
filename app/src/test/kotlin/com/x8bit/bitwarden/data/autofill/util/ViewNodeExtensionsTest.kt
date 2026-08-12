@@ -1637,6 +1637,59 @@ class ViewNodeExtensionsTest {
 
     //endregion Identity: official autofillHints dispatch (toAutofillView)
 
+    //region Identity: flag-off gate (isIdentityAutofillEnabled = false)
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Unused when autofillHints contain an identity hint and IdentityAutofill is disabled`() {
+        setupUnsupportedInputFieldViewNode()
+        every {
+            viewNode.autofillHints
+        } returns arrayOf(HintConstants.AUTOFILL_HINT_PERSON_NAME_GIVEN)
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = false,
+        )
+
+        assertEquals(AutofillView.Unused(data = autofillViewData), actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Unused when hint is First name and IdentityAutofill is disabled`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.hint } returns "First name"
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = false,
+        )
+
+        assertEquals(AutofillView.Unused(data = autofillViewData), actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Unused when hint is Mobile number and IdentityAutofill is disabled`() {
+        // "Mobile number" only matches the phone identity heuristic (SUPPORTED_RAW_PHONE_HINTS),
+        // not isUsernameField's raw hint list, so with the flag off this must fall through to
+        // Unused -- not become the focused view via Identity.PhoneFull -- so
+        // updateForMissingUsernameFields can still promote it, per the regression this gate
+        // guards against.
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.hint } returns "Mobile number"
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = false,
+        )
+
+        assertEquals(AutofillView.Unused(data = autofillViewData), actual)
+    }
+
+    //endregion Identity: flag-off gate (isIdentityAutofillEnabled = false)
+
     //region Identity: heuristic idEntry fallback + all-null guard (isXxxField)
 
     @Test
