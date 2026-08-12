@@ -422,13 +422,13 @@ class AddEditSendViewModel @Inject constructor(
         action: AddEditSendAction.Internal.EffectiveSendPolicyReceive,
     ) {
         val effectiveSendPolicy = action.effectiveSendPolicy
-        val enforcedDeletionHours = effectiveSendPolicy
+        val newEnforcedDeletionHours = effectiveSendPolicy
             .deletionHours
             ?.takeIf { action.isSendControlsEnabled }
         // Captured before the state is updated below, since detecting a dropped enforcement
         // requires the previous value of `enforcedDeletionHours`.
         val newDeletionDate = state.newDeletionDateOrNull(
-            enforcedDeletionHours = enforcedDeletionHours,
+            newEnforcedDeletionHours = newEnforcedDeletionHours,
         )
         mutableStateFlow.update { currentState ->
             currentState.copy(
@@ -457,11 +457,12 @@ class AddEditSendViewModel @Inject constructor(
      * restores the default window, so the chooser and the state cannot disagree once the chooser
      * unlocks.
      */
-    private fun AddEditSendState.newDeletionDateOrNull(enforcedDeletionHours: Int?): Instant? {
+    private fun AddEditSendState.newDeletionDateOrNull(newEnforcedDeletionHours: Int?): Instant? {
         if (!isAddMode) return null
         val hours = when {
-            enforcedDeletionHours != null -> enforcedDeletionHours.toLong()
-            this.enforcedDeletionHours != null -> DEFAULT_DELETION_HOURS
+            newEnforcedDeletionHours != null -> newEnforcedDeletionHours.toLong()
+            // The enforcement was just dropped, so the default window is restored.
+            enforcedDeletionHours != null -> DEFAULT_DELETION_HOURS
             else -> return null
         }
         return clock.instant().plus(hours, ChronoUnit.HOURS)
