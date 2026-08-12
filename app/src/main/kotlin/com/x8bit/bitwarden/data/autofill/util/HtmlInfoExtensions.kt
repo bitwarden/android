@@ -262,9 +262,9 @@ private fun List<String>.containsAnyTerms(terms: List<String>): Boolean =
  * The supported attribute keys whose value can represent an autofill hint.
  *
  * `autocomplete` is the standards-based signal both Chrome and Firefox populate directly with
- * tokens like `given-name`/`street-address`/`tel` (see the WHATWG HTML spec) — more reliable than
- * guessing from `name`/`id`/`label` text, and browser-agnostic since it isn't tied to any single
- * browser's naming conventions.
+ * tokens like `given-name`/`street-address`/`email` (see the WHATWG HTML spec) — more reliable
+ * than guessing from `name`/`id`/`label` text, and browser-agnostic since it isn't tied to any
+ * single browser's naming conventions.
  */
 private val SUPPORTED_HTML_ATTRIBUTE_HINTS: List<String> = listOf(
     "name",
