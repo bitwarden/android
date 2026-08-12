@@ -212,14 +212,14 @@ class SendViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
-                assertEquals(false, awaitItem().policyDisablesSend)
+                assertEquals(DEFAULT_STATE, awaitItem())
 
                 // While the send controls flag is disabled this is driven by the legacy
                 // disable-send policy, which must continue to surface the policy warning.
                 mutableEffectiveSendPolicyFlow.value =
                     DEFAULT_EFFECTIVE_SEND_POLICY.copy(disableSend = true)
 
-                assertEquals(true, awaitItem().policyDisablesSend)
+                assertEquals(DEFAULT_STATE.copy(policyDisablesSend = true), awaitItem())
             }
         }
 
