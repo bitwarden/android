@@ -175,6 +175,7 @@ fun AddEditSendScreen(
                 state = viewState,
                 policyDisablesSend = state.policyDisablesSend,
                 policySendOptionsInEffect = state.shouldDisplayPolicyWarning,
+                shouldHideEmailAddressToggle = state.shouldHideEmailAddressToggle,
                 isAddMode = state.isAddMode,
                 isShared = state.isShared,
                 addSendHandlers = addSendHandlers,

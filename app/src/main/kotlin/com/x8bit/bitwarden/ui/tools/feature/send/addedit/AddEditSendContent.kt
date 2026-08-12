@@ -64,6 +64,7 @@ fun AddEditSendContent(
     state: AddEditSendState.ViewState.Content,
     policyDisablesSend: Boolean,
     policySendOptionsInEffect: Boolean,
+    shouldHideEmailAddressToggle: Boolean,
     isAddMode: Boolean,
     isShared: Boolean,
     addSendHandlers: AddEditSendHandlers,
@@ -181,6 +182,7 @@ fun AddEditSendContent(
         AddEditSendOptions(
             state = state,
             isSendsRestrictedByPolicy = policyDisablesSend,
+            shouldHideEmailAddressToggle = shouldHideEmailAddressToggle,
             isAddMode = isAddMode,
             addSendHandlers = addSendHandlers,
         )
@@ -383,6 +385,7 @@ private fun ColumnScope.FileTypeContent(
 private fun AddEditSendOptions(
     state: AddEditSendState.ViewState.Content,
     isSendsRestrictedByPolicy: Boolean,
+    shouldHideEmailAddressToggle: Boolean,
     isAddMode: Boolean,
     addSendHandlers: AddEditSendHandlers,
 ) {
@@ -466,19 +469,22 @@ private fun AddEditSendOptions(
                     },
                 )
             }
-            Spacer(modifier = Modifier.height(height = 8.dp))
-            BitwardenSwitch(
-                modifier = Modifier
-                    .testTag("SendHideEmailSwitch")
-                    .fillMaxWidth()
-                    .standardHorizontalMargin(),
-                label = stringResource(id = BitwardenString.hide_email),
-                isChecked = state.common.isHideEmailChecked,
-                onCheckedChange = addSendHandlers.onHideEmailToggle,
-                readOnly = isSendsRestrictedByPolicy,
-                enabled = state.common.isHideEmailChecked || state.common.isHideEmailAddressEnabled,
-                cardStyle = CardStyle.Full,
-            )
+            if (!shouldHideEmailAddressToggle) {
+                Spacer(modifier = Modifier.height(height = 8.dp))
+                BitwardenSwitch(
+                    modifier = Modifier
+                        .testTag("SendHideEmailSwitch")
+                        .fillMaxWidth()
+                        .standardHorizontalMargin(),
+                    label = stringResource(id = BitwardenString.hide_email),
+                    isChecked = state.common.isHideEmailChecked,
+                    onCheckedChange = addSendHandlers.onHideEmailToggle,
+                    readOnly = isSendsRestrictedByPolicy,
+                    enabled = state.common.isHideEmailChecked ||
+                        state.common.isHideEmailAddressEnabled,
+                    cardStyle = CardStyle.Full,
+                )
+            }
             Spacer(modifier = Modifier.height(8.dp))
             BitwardenTextField(
                 label = stringResource(id = BitwardenString.private_notes),
