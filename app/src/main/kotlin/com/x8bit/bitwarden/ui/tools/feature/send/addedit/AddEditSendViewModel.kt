@@ -419,16 +419,10 @@ class AddEditSendViewModel @Inject constructor(
                 allowedSendTypes = effectiveSendPolicy.allowedSendTypes,
                 deletionHours = effectiveSendPolicy.deletionHours,
                 whoCanAccess = effectiveSendPolicy.whoCanAccess,
-                viewState = (currentState.viewState as? AddEditSendState.ViewState.Content)
-                    ?.let { content ->
-                        content.copy(
-                            common = content.common.copy(
-                                isHideEmailAddressEnabled = !effectiveSendPolicy.disableHideEmail,
-                            ),
-                        )
-                    }
-                    ?: currentState.viewState,
             )
+        }
+        updateCommonContent {
+            it.copy(isHideEmailAddressEnabled = !effectiveSendPolicy.disableHideEmail)
         }
     }
 
