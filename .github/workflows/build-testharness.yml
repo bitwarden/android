@@ -94,7 +94,7 @@ jobs:
           mkdir -p ${{ github.workspace }}/secrets
 
           az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
-          --name app_play_prod_firebase-creds.json --file ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json --output none
+          --name testharness_firebase-creds.json --file ${{ github.workspace }}/secrets/testharness_firebase-creds.json --output none
 
       - name: AZ Logout
         uses: bitwarden/gh-actions/azure-logout@main
@@ -145,8 +145,8 @@ jobs:
       - name: Distribute to Firebase - testharness.apk
         if: ${{ env.DISTRIBUTE_TO_FIREBASE }}
         env:
-          APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json
+          FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/testharness_firebase-creds.json
         run: |
           bundle exec fastlane distributeTestHarnessReleaseToFirebase \
           actionUrl:$GITHUB_ACTION_RUN_URL \
-          service_credentials_file:$APP_PLAY_FIREBASE_CREDS_PATH
+          service_credentials_file:$FIREBASE_CREDS_PATH
