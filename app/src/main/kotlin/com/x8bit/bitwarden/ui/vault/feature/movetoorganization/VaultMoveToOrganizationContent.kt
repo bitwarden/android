@@ -43,10 +43,6 @@ fun VaultMoveToOrganizationContent(
                     label = stringResource(
                         id = vfo1Foundation(BitwardenString.vault, BitwardenString.organization),
                     ),
-                    dialogTitle = vfo1Foundation(
-                        new = stringResource(id = BitwardenString.filter_by_vault),
-                        old = null,
-                    ),
                     options = state
                         .organizations
                         .map { it.name }
