@@ -59,6 +59,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -384,18 +385,44 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `initial state should use the enforced access type for an any policy`() {
+    fun `initial state should leave the access type alone for an any policy`() {
         mutableSendControlsFlagFlow.value = true
         mutableEffectiveSendPolicyFlow.value =
             DEFAULT_EFFECTIVE_SEND_POLICY.copy(whoCanAccess = SendAccessTypeJson.ANY)
 
+        // Every option stays available, so nothing is enforced and the chooser stays interactive.
+        val state = createViewModel().stateFlow.value
         assertEquals(
-            enforcedAccessState(
+            DEFAULT_STATE.copy(
+                isSendControlsEnabled = true,
                 whoCanAccess = SendAccessTypeJson.ANY,
-                sendAuth = SendAuth.None,
             ),
-            createViewModel().stateFlow.value,
+            state,
         )
+        assertNull(state.enforcedWhoCanAccess)
+    }
+
+    @Test
+    fun `access type should stay put when an any policy arrives`() = runTest {
+        mutableSendControlsFlagFlow.value = true
+        val initialState = DEFAULT_STATE.copy(
+            isSendControlsEnabled = true,
+            viewState = DEFAULT_VIEW_STATE.copy(
+                common = DEFAULT_COMMON_STATE.copy(sendAuth = SendAuth.Password),
+            ),
+        )
+        val viewModel = createViewModel(state = initialState)
+
+        viewModel.stateFlow.test {
+            assertEquals(initialState, awaitItem())
+
+            mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY
+                .copy(whoCanAccess = SendAccessTypeJson.ANY)
+
+            val state = initialState.copy(whoCanAccess = SendAccessTypeJson.ANY)
+            assertEquals(state, awaitItem())
+            assertNull(state.enforcedWhoCanAccess)
+        }
     }
 
     @Test

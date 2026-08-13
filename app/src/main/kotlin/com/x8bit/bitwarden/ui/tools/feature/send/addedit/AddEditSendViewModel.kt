@@ -80,11 +80,19 @@ private const val KEY_STATE = "state"
 private const val MAX_FILE_SIZE_BYTES: Long = 100 * 1024 * 1024
 
 /**
- * Returns the [SendAuth] this access type enforces, preserving [current] when it already matches
- * the enforced type so that any emails already entered are kept.
+ * Whether this access type restricts a Send to a single option. [SendAccessTypeJson.ANY] leaves
+ * every option available, so it restricts nothing.
  */
-private fun SendAccessTypeJson.toSendAuth(current: SendAuth): SendAuth = when (this) {
-    SendAccessTypeJson.ANY -> SendAuth.None
+private val SendAccessTypeJson.restrictsAccess: Boolean
+    get() = this != SendAccessTypeJson.ANY
+
+/**
+ * Returns the [SendAuth] this access type restricts a Send to, preserving [current] when it already
+ * matches the restricted type so that any emails already entered are kept.
+ */
+private fun SendAccessTypeJson.toEnforcedSendAuth(current: SendAuth): SendAuth = when (this) {
+    // Every option stays available, so the current selection is left alone.
+    SendAccessTypeJson.ANY -> current
     SendAccessTypeJson.PASSWORD_PROTECTED -> SendAuth.Password
     SendAccessTypeJson.SPECIFIC_PEOPLE -> current as? SendAuth.Email ?: SendAuth.Email()
 }
@@ -150,7 +158,7 @@ class AddEditSendViewModel @Inject constructor(
                         sendAuth = effectiveSendPolicy
                             .whoCanAccess
                             ?.takeIf { isSendControlsEnabled }
-                            ?.toSendAuth(current = SendAuth.None)
+                            ?.toEnforcedSendAuth(current = SendAuth.None)
                             ?: SendAuth.None,
                     ),
                     selectedType = shareSendType ?: when (sendType) {
@@ -467,7 +475,7 @@ class AddEditSendViewModel @Inject constructor(
                 // chooser reads it straight from state, so unlocking cannot desync the two, and
                 // anything already entered survives.
                 sendAuth = newEnforcedWhoCanAccess
-                    ?.toSendAuth(current = it.sendAuth)
+                    ?.toEnforcedSendAuth(current = it.sendAuth)
                     ?: it.sendAuth,
             )
         }
@@ -1031,11 +1039,12 @@ data class AddEditSendState(
 
     /**
      * Helper to determine the access type Sends are restricted to by the SendControls policy, or
-     * `null` when the access type is left to the user. The legacy send options policy has no
-     * equivalent enforcement, so this is only in effect alongside the SendControls feature flag.
+     * `null` when the access type is left to the user. [SendAccessTypeJson.ANY] leaves every option
+     * available, so it is not a restriction. The legacy send options policy has no equivalent
+     * enforcement, so this is only in effect alongside the SendControls feature flag.
      */
     val enforcedWhoCanAccess: SendAccessTypeJson?
-        get() = whoCanAccess.takeIf { isSendControlsEnabled }
+        get() = whoCanAccess?.takeIf { isSendControlsEnabled && it.restrictsAccess }
 
     /**
      * Helper to determine the screen display name.

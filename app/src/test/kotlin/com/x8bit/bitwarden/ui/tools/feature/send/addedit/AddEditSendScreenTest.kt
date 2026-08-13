@@ -1776,6 +1776,32 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `who can view chooser should open its options when the policy allows any access type`() {
+        mutableStateFlow.update {
+            it.copy(
+                isSendControlsEnabled = true,
+                whoCanAccess = SendAccessTypeJson.ANY,
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(sendAuth = SendAuth.None),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag("SendAuthTypeChooser")
+            .performScrollTo()
+            .performClick()
+
+        // ANY leaves every option available, so nothing is locked.
+        composeTestRule
+            .onNodeWithText("Specific people")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Anyone with a password set by you")
+            .assertIsDisplayed()
+    }
+
+    @Test
     fun `who can view chooser should open its options when the policy leaves it unset`() {
         mutableStateFlow.update {
             it.copy(
