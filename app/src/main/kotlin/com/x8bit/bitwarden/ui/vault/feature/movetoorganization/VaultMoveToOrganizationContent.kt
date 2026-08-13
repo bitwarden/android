@@ -22,7 +22,6 @@ import kotlinx.collections.immutable.toImmutableList
 /**
  * Content view for the [VaultMoveToOrganizationScreen].
  */
-@Suppress("LongMethod")
 @Composable
 fun VaultMoveToOrganizationContent(
     state: VaultMoveToOrganizationState.ViewState.Content,
