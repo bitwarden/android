@@ -419,8 +419,8 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY
                 .copy(whoCanAccess = SendAccessTypeJson.ANY)
 
-            val state = initialState.copy(whoCanAccess = SendAccessTypeJson.ANY)
-            assertEquals(state, awaitItem())
+            val state = awaitItem()
+            assertEquals(initialState.copy(whoCanAccess = SendAccessTypeJson.ANY), state)
             assertNull(state.enforcedWhoCanAccess)
         }
     }
