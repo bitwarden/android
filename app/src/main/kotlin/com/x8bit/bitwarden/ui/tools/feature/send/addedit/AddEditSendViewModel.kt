@@ -80,6 +80,16 @@ private const val KEY_STATE = "state"
 private const val MAX_FILE_SIZE_BYTES: Long = 100 * 1024 * 1024
 
 /**
+ * Returns the [SendAuth] this access type enforces, preserving [current] when it already matches
+ * the enforced type so that any emails already entered are kept.
+ */
+private fun SendAccessTypeJson.toSendAuth(current: SendAuth): SendAuth = when (this) {
+    SendAccessTypeJson.ANY -> SendAuth.None
+    SendAccessTypeJson.PASSWORD_PROTECTED -> SendAuth.Password
+    SendAccessTypeJson.SPECIFIC_PEOPLE -> current as? SendAuth.Email ?: SendAuth.Email()
+}
+
+/**
  * View model for the add/edit send screen.
  */
 @Suppress("TooManyFunctions", "LongParameterList", "LargeClass")
@@ -137,7 +147,11 @@ class AddEditSendViewModel @Inject constructor(
                         expirationDate = null,
                         sendUrl = null,
                         hasPassword = false,
-                        sendAuth = SendAuth.None,
+                        sendAuth = effectiveSendPolicy
+                            .whoCanAccess
+                            ?.takeIf { isSendControlsEnabled }
+                            ?.toSendAuth(current = SendAuth.None)
+                            ?: SendAuth.None,
                     ),
                     selectedType = shareSendType ?: when (sendType) {
                         SendItemType.FILE -> {
@@ -430,6 +444,11 @@ class AddEditSendViewModel @Inject constructor(
         val newDeletionDate = state.newDeletionDateOrNull(
             newEnforcedDeletionHours = newEnforcedDeletionHours,
         )
+        // Only a new Send adopts the enforced access type — an existing Send keeps the one it was
+        // created with.
+        val newEnforcedWhoCanAccess = effectiveSendPolicy
+            .whoCanAccess
+            ?.takeIf { action.isSendControlsEnabled && state.isAddMode }
         mutableStateFlow.update { currentState ->
             currentState.copy(
                 policyDisablesSend = effectiveSendPolicy.disableSend,
@@ -444,6 +463,12 @@ class AddEditSendViewModel @Inject constructor(
             it.copy(
                 deletionDate = newDeletionDate ?: it.deletionDate,
                 isHideEmailAddressEnabled = !effectiveSendPolicy.disableHideEmail,
+                // Dropping the enforcement deliberately leaves the current selection alone: the
+                // chooser reads it straight from state, so unlocking cannot desync the two, and
+                // anything already entered survives.
+                sendAuth = newEnforcedWhoCanAccess
+                    ?.toSendAuth(current = it.sendAuth)
+                    ?: it.sendAuth,
             )
         }
     }
@@ -977,7 +1002,7 @@ class AddEditSendViewModel @Inject constructor(
  * @property deletionHours The enforced Send deletion window in hours, sourced from
  * [EffectiveSendPolicy.deletionHours]. Currently unused by the UI.
  * @property whoCanAccess The access type Sends are restricted to, sourced from
- * [EffectiveSendPolicy.whoCanAccess]. Currently unused by the UI.
+ * [EffectiveSendPolicy.whoCanAccess].
  */
 @Parcelize
 data class AddEditSendState(
@@ -1003,6 +1028,14 @@ data class AddEditSendState(
      * enforcement, so this is only in effect alongside the SendControls feature flag.
      */
     val enforcedDeletionHours: Int? get() = deletionHours.takeIf { isSendControlsEnabled }
+
+    /**
+     * Helper to determine the access type Sends are restricted to by the SendControls policy, or
+     * `null` when the access type is left to the user. The legacy send options policy has no
+     * equivalent enforcement, so this is only in effect alongside the SendControls feature flag.
+     */
+    val enforcedWhoCanAccess: SendAccessTypeJson?
+        get() = whoCanAccess.takeIf { isSendControlsEnabled }
 
     /**
      * Helper to determine the screen display name.
