@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.bitwarden.network.model.SendAccessTypeJson
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -47,6 +48,9 @@ import kotlinx.collections.immutable.toPersistentList
  * @param onPasswordCopyClick Callback invoked when the Copy button is clicked
  * @param isEnabled Whether the chooser is enabled.
  * @param isSendsRestrictedByPolicy if sends are restricted by a policy.
+ * @param enforcedWhoCanAccess The access type enforced by the SendControls policy, or `null` when
+ * the access type is left to the user. When enforced, the chooser is locked to the value already
+ * applied to [sendAuth].
  * @param modifier Modifier for the composable.
  */
 @Suppress("LongMethod")
@@ -63,6 +67,7 @@ fun AddEditSendAuthTypeChooser(
     password: String,
     isEnabled: Boolean,
     isSendsRestrictedByPolicy: Boolean,
+    enforcedWhoCanAccess: SendAccessTypeJson?,
     modifier: Modifier = Modifier,
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
@@ -80,7 +85,7 @@ fun AddEditSendAuthTypeChooser(
     Column(modifier = modifier) {
         BitwardenMultiSelectButton(
             label = stringResource(id = BitwardenString.who_can_view),
-            isEnabled = isEnabled,
+            isEnabled = isEnabled && enforcedWhoCanAccess == null,
             options = options.toPersistentList(),
             selectedOption = sendAuth.text(),
             onOptionSelected = { selected ->
