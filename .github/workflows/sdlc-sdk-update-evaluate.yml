@@ -120,7 +120,7 @@ jobs:
             that nothing needs fixing — the comment is the audit trail that the check ran.
           claude_args: |
             --model opus
-            --allowedTools "Bash(gh pr diff:*),Bash(git -C *:*),Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(grep:*),Bash(./gradlew*:*),Read,Grep,Glob,Edit,Write,Skill,mcp__github_comment__update_claude_comment"
+            --allowedTools "Bash(gh pr diff:*),Bash(git -C * log *),Bash(git -C * show *),Bash(git add:*),Bash(git commit:*),Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(grep:*),Bash(./gradlew *),Read,Grep,Glob,Edit,Write,Skill,mcp__github_comment__update_claude_comment"
 
       - name: Push any resolved fix
         if: steps.gate.outputs.skip == 'false'
