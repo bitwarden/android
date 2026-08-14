@@ -452,7 +452,7 @@ class AddEditSendViewModel @Inject constructor(
         val newDeletionDate = state.newDeletionDateOrNull(
             newEnforcedDeletionHours = newEnforcedDeletionHours,
         )
-        // Only a new Send adopts the enforced access type — an existing Send keeps the one it was
+        // Only a new Send adopts the enforced access type. An existing Send keeps the one it was
         // created with.
         val newEnforcedWhoCanAccess = effectiveSendPolicy
             .whoCanAccess
