@@ -1718,6 +1718,11 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
+            .onNodeWithTag("SendVisibilityChooser")
+            .performScrollTo()
+            .assertIsNotEnabled()
+
+        composeTestRule
             .onNodeWithTag("SendAuthTypeChooser")
             .performScrollTo()
             .performClick()
