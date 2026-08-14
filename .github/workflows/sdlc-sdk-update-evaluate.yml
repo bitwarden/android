@@ -85,13 +85,39 @@ jobs:
         if: steps.gate.outputs.skip == 'false'
         uses: ./.github/actions/setup-android-build
 
-      - name: Expose GitHub Packages credential
+      - name: Pre-fetch the SDK artifact
         if: steps.gate.outputs.skip == 'false'
-        # claude-code-action's composite step shadows caller env, so GITHUB_TOKEN has to
-        # reach the Claude CLI subprocess through $GITHUB_ENV for settings.gradle.kts.
+        # claude-code-action replaces GITHUB_TOKEN in the environment it hands Claude's Bash
+        # tool, so Gradle cannot authenticate to GitHub Packages from there. Resolving the
+        # dependency here populates ~/.gradle/caches, letting Claude's own compile read the
+        # fixed SDK version straight from cache. continue-on-error keeps a genuine compile
+        # break reaching Claude, which is the evaluation this workflow exists to perform.
+        continue-on-error: true
         env:
-          GH_PACKAGES_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: echo "GITHUB_TOKEN=$GH_PACKAGES_TOKEN" >> "$GITHUB_ENV"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew app:compileStandardDebugKotlin authenticator:compileDebugKotlin
+
+      - name: Verify the SDK artifact reached the Gradle cache
+        if: steps.gate.outputs.skip == 'false'
+        # A cold cache reaches Claude as a dependency-resolution error it could mistake for a
+        # break the SDK bump caused, so fail here where the cause is unambiguous. Metadata
+        # alone does not let the compile run, hence the check for the .aar rather than the dir.
+        run: |
+          version=$(sed -n 's/^bitwardenSdk = "\([^"]*\)"/\1/p' gradle/libs.versions.toml)
+          if [ -z "$version" ]; then
+            echo "::error::Could not read bitwardenSdk from gradle/libs.versions.toml."
+            exit 1
+          fi
+
+          cache_root="${GRADLE_USER_HOME:-$HOME/.gradle}/caches/modules-2/files-2.1"
+          artifact=$(find "$cache_root/com.bitwarden/sdk-android/$version" \
+            -name '*.aar' -print -quit 2>/dev/null || true)
+          if [ -z "$artifact" ]; then
+            echo "::error::sdk-android $version is absent from the Gradle cache; the pre-fetch did not resolve it."
+            exit 1
+          fi
+
+          echo "Cached sdk-android $version at $artifact"
 
       - name: Run Claude Code
         id: claude
