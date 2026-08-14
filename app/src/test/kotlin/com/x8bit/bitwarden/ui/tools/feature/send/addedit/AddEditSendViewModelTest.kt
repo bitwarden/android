@@ -55,6 +55,7 @@ import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -926,6 +927,178 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
+    }
+
+    @Test
+    fun `SaveClick with a recipient outside the allowed domains should show error dialog`() {
+        val viewState = emailViewState(emails = listOf("recipient@example.com"))
+        val viewModel = createViewModelWithDomainPolicy(
+            viewState = viewState,
+            allowedDomains = "bitwarden.com",
+        )
+
+        viewModel.trySendAction(AddEditSendAction.SaveClick)
+
+        assertEquals(
+            domainPolicyState(viewState = viewState, allowedDomains = "bitwarden.com").copy(
+                dialogState = AddEditSendState.DialogState.Error(
+                    title = BitwardenString.invalid_email_addresses.asText(),
+                    message = BitwardenString
+                        .only_include_the_following_domains_x_please_review_and_try_again
+                        .asText("bitwarden.com"),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `SaveClick outside the allowed domains should list every allowed domain`() {
+        val viewState = emailViewState(emails = listOf("recipient@example.com"))
+        val domains = "bitwarden.com,bitwarden.eu"
+        val viewModel = createViewModelWithDomainPolicy(
+            viewState = viewState,
+            allowedDomains = domains,
+        )
+
+        viewModel.trySendAction(AddEditSendAction.SaveClick)
+
+        assertEquals(
+            domainPolicyState(viewState = viewState, allowedDomains = domains).copy(
+                dialogState = AddEditSendState.DialogState.Error(
+                    title = BitwardenString.invalid_email_addresses.asText(),
+                    message = BitwardenString
+                        .only_include_the_following_domains_x_please_review_and_try_again
+                        .asText("bitwarden.com, bitwarden.eu"),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `SaveClick outside the allowed domains should normalize the policy value`() {
+        val viewState = emailViewState(emails = listOf("recipient@example.com"))
+        val domains = " bitwarden.com , , bitwarden.eu "
+        val viewModel = createViewModelWithDomainPolicy(
+            viewState = viewState,
+            allowedDomains = domains,
+        )
+
+        viewModel.trySendAction(AddEditSendAction.SaveClick)
+
+        // Padding and the empty entry are dropped for both matching and display.
+        assertEquals(
+            domainPolicyState(viewState = viewState, allowedDomains = domains).copy(
+                dialogState = AddEditSendState.DialogState.Error(
+                    title = BitwardenString.invalid_email_addresses.asText(),
+                    message = BitwardenString
+                        .only_include_the_following_domains_x_please_review_and_try_again
+                        .asText("bitwarden.com, bitwarden.eu"),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `SaveClick with every recipient inside the allowed domains should save`() {
+        val viewState = emailViewState(
+            emails = listOf("one@bitwarden.com", "two@BITWARDEN.EU"),
+        )
+        val mockSendView = stubCreateSend(viewState = viewState)
+        val viewModel = createViewModelWithDomainPolicy(
+            viewState = viewState,
+            allowedDomains = "bitwarden.com, bitwarden.eu",
+        )
+
+        viewModel.trySendAction(AddEditSendAction.SaveClick)
+
+        // Matching is case-insensitive, so the save proceeds to the repository.
+        coVerify(exactly = 1) {
+            vaultRepository.createSend(sendView = mockSendView, fileUri = null)
+        }
+    }
+
+    @Test
+    fun `SaveClick should skip domain validation when send controls is disabled`() {
+        val viewState = emailViewState(emails = listOf("recipient@example.com"))
+        val mockSendView = stubCreateSend(viewState = viewState)
+        val viewModel = createViewModelWithDomainPolicy(
+            viewState = viewState,
+            allowedDomains = "bitwarden.com",
+            isSendControlsEnabled = false,
+        )
+
+        viewModel.trySendAction(AddEditSendAction.SaveClick)
+
+        coVerify(exactly = 1) {
+            vaultRepository.createSend(sendView = mockSendView, fileUri = null)
+        }
+    }
+
+    @Test
+    fun `SaveClick should skip domain validation when the policy sets no domains`() {
+        val viewState = emailViewState(emails = listOf("recipient@example.com"))
+        val mockSendView = stubCreateSend(viewState = viewState)
+        val viewModel = createViewModelWithDomainPolicy(
+            viewState = viewState,
+            allowedDomains = null,
+        )
+
+        viewModel.trySendAction(AddEditSendAction.SaveClick)
+
+        coVerify(exactly = 1) {
+            vaultRepository.createSend(sendView = mockSendView, fileUri = null)
+        }
+    }
+
+    @Test
+    fun `SaveClick should skip domain validation for other access types`() {
+        val viewState = DEFAULT_VIEW_STATE.copy(
+            common = DEFAULT_COMMON_STATE.copy(name = "test", sendAuth = SendAuth.Password),
+        )
+        val mockSendView = stubCreateSend(viewState = viewState)
+        val viewModel = createViewModelWithDomainPolicy(
+            viewState = viewState,
+            allowedDomains = "bitwarden.com",
+        )
+
+        viewModel.trySendAction(AddEditSendAction.SaveClick)
+
+        coVerify(exactly = 1) {
+            vaultRepository.createSend(sendView = mockSendView, fileUri = null)
+        }
+    }
+
+    /**
+     * Stubs out a successful conversion and creation of the Send backing [viewState], returning the
+     * [SendView] the repository is expected to be called with.
+     */
+    private fun stubCreateSend(viewState: AddEditSendState.ViewState.Content): SendView {
+        val mockSendView = mockk<SendView>()
+        every { viewState.toSendView(clock) } returns mockSendView
+        coEvery {
+            vaultRepository.createSend(sendView = mockSendView, fileUri = null)
+        } returns CreateSendResult.Error(message = null, error = null)
+        return mockSendView
+    }
+
+    /**
+     * Creates a view model whose SendControls policy restricts recipients to [allowedDomains].
+     *
+     * The policy is applied through the flows rather than the initial state, since the view model
+     * overwrites its own policy fields as soon as it subscribes to them.
+     */
+    private fun createViewModelWithDomainPolicy(
+        viewState: AddEditSendState.ViewState.Content,
+        allowedDomains: String?,
+        isSendControlsEnabled: Boolean = true,
+    ): AddEditSendViewModel {
+        mutableSendControlsFlagFlow.value = isSendControlsEnabled
+        mutableEffectiveSendPolicyFlow.value =
+            DEFAULT_EFFECTIVE_SEND_POLICY.copy(allowedDomains = allowedDomains)
+        return createViewModel(DEFAULT_STATE.copy(viewState = viewState))
     }
 
     @Test
@@ -1989,6 +2162,32 @@ private val DEFAULT_STATE = AddEditSendState(
     sendType = SendItemType.TEXT,
     isPremium = true,
 )
+
+/**
+ * Builds the state expected once the SendControls policy restricting recipients to
+ * [allowedDomains] has been applied on top of [viewState].
+ */
+private fun domainPolicyState(
+    viewState: AddEditSendState.ViewState.Content,
+    allowedDomains: String?,
+): AddEditSendState = DEFAULT_STATE.copy(
+    viewState = viewState,
+    isSendControlsEnabled = true,
+    allowedDomains = allowedDomains,
+)
+
+/**
+ * Builds a named content view state whose recipients are [emails].
+ */
+private fun emailViewState(emails: List<String>): AddEditSendState.ViewState.Content =
+    DEFAULT_VIEW_STATE.copy(
+        common = DEFAULT_COMMON_STATE.copy(
+            name = "test",
+            sendAuth = SendAuth.Email(
+                emails = emails.map { AuthEmail(value = it) }.toImmutableList(),
+            ),
+        ),
+    )
 
 /**
  * Builds the state expected when [whoCanAccess] is enforced and has forced [sendAuth].
