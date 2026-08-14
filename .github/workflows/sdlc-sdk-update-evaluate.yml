@@ -85,11 +85,17 @@ jobs:
         if: steps.gate.outputs.skip == 'false'
         uses: ./.github/actions/setup-android-build
 
+      - name: Expose GitHub Packages credential
+        if: steps.gate.outputs.skip == 'false'
+        # claude-code-action's composite step shadows caller env, so GITHUB_TOKEN has to
+        # reach the Claude CLI subprocess through $GITHUB_ENV for settings.gradle.kts.
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: echo "GITHUB_TOKEN=$GH_PACKAGES_TOKEN" >> "$GITHUB_ENV"
+
       - name: Run Claude Code
         id: claude
         if: steps.gate.outputs.skip == 'false'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # settings.gradle.kts resolves the SDK from GitHub Packages
         uses: anthropics/claude-code-action@be7b93b1907a4abad570368f3c74b6fe3807510b # v1.0.183
         with:
           anthropic_api_key: ${{ steps.get-kv-secrets.outputs.ANTHROPIC-RESPONSE-API-KEY }}
