@@ -24,8 +24,8 @@
     <string name="folder_created">Đã tạo thư mục mới.</string>
     <string name="folder_deleted">Đã xóa thư mục.</string>
     <string name="folder_none">Chưa phân loại</string>
-    <string name="folders">Thư mục</string>
     <string name="folder_updated">Đã lưu thư mục</string>
+    <string name="folders">Thư mục</string>
     <string name="hide">Ẩn</string>
     <string name="internet_connection_required_message">Hãy kết nối mạng trước khi tiếp tục.</string>
     <string name="internet_connection_required_title">Cần có kết nối mạng</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Mật khẩu chính (bắt buộc)</string>
     <string name="new_master_password_required">Mật khẩu chính mới (bắt buộc)</string>
     <string name="more_options">Thêm tuỳ chọn</string>
+    <string name="my_folder">Thư mục của tôi</string>
+    <string name="my_folders">Thư mục của tôi</string>
     <string name="my_vault">Kho lưu trữ</string>
     <string name="name">Tên</string>
     <string name="item_name_required">Tên mục (bắt buộc)</string>
@@ -283,7 +285,9 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="vault_is_locked">Kho đã khóa</string>
     <string name="go_to_my_vault">Đến kho của tôi</string>
     <string name="collections">Các bộ sưu tập</string>
+    <string name="shared_folders">Thư mục chia sẻ</string>
     <string name="no_items_collection">Không có mục nào trong bộ sưu tập này.</string>
+    <string name="there_are_no_items_in_this_shared_folder">Không có mục nào trong thư mục chia sẻ này.</string>
     <string name="no_items_folder">Không có mục nào trong thư mục này.</string>
     <string name="no_items_trash">Không có gì trong thùng rác.</string>
     <string name="autofill_accessibility_summary">Hỗ trợ điền tên đăng nhập và mật khẩu vào các trường tương ứng trong các ứng dụng khác và trên trang web.</string>
@@ -337,10 +341,14 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="move_up">Chuyển lên</string>
     <string name="owner">Chủ sở hữu</string>
     <string name="no_collections_to_list">Không có bộ sưu tập nào.</string>
+    <string name="there_are_no_shared_folders_to_list">Không có thư mục chia sẻ nào để hiển thị.</string>
     <string name="moved_item_to_org">%1$s đã di chuyển tới %2$s.</string>
     <string name="select_one_collection">Bạn phải chọn ít nhất một bộ sưu tập.</string>
+    <string name="you_must_select_at_least_one_shared_folder">Bạn phải chọn ít nhất một thư mục chia sẻ.</string>
     <string name="share">Chia sẻ</string>
-    <string name="move_to_vault">Chuyển vào kho lưu trữ</string>
+    <string name="move_to_organization">Chuyển tới Tổ chức</string>
+    <string name="no_orgs_to_list">Không có tổ chức.</string>
+    <string name="move_to_org_desc">Chọn một tổ chức mà bạn muốn chuyển mục này tới. Việc di chuyển đến một tổ chức sẽ chuyển quyền sở hữu của mục sang tổ chức mà bạn chọn. Bạn sẽ không còn là chủ sở hữu trực tiếp của mục này một khi nó đã được chuyển.</string>
     <string name="no_vaults_to_list">Không có kho lưu trữ nào để liệt kê.</string>
     <string name="move_to_vault_desc">Chọn một kho lưu trữ mà bạn muốn chuyển mục này đến. Việc chuyển sang kho lưu trữ khác sẽ chuyển quyền sở hữu mục này cho tổ chức đó. Bạn sẽ không còn là chủ sở hữu trực tiếp của mục này sau khi nó được di chuyển.</string>
     <string name="number_of_words">Số lượng từ</string>
@@ -456,6 +464,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="deletion_date">Ngày xóa</string>
     <string name="deletion_time">Thời gian xóa</string>
     <string name="deletion_date_info">Send sẽ được xóa vĩnh viễn vào ngày và giờ chỉ định.</string>
+    <string name="this_date_is_enforced_by_your_organization">Ngày này do tổ chức của bạn quy định</string>
     <string name="who_can_view">Ai có thể xem</string>
     <string name="anyone_with_the_link">Bất kỳ ai có liên kết</string>
     <string name="anyone_with_link_can_view_send">Bất kỳ ai có liên kết đều có thể xem Send này</string>
@@ -493,6 +502,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="two_days">2 ngày</string>
     <string name="three_days">3 ngày</string>
     <string name="seven_days">7 ngày</string>
+    <string name="fourteen_days">14 ngày</string>
     <string name="thirty_days">30 ngày</string>
     <string name="custom">Tùy chỉnh</string>
     <string name="custom_timeout">Thời gian chờ tùy chỉnh</string>
@@ -684,6 +694,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="logging_in_on">Đang đăng nhập vào</string>
     <string name="logging_in_on_with_colon">Đang đăng nhập vào:</string>
     <string name="vault">Kho lưu trữ</string>
+    <string name="select_vault">Chọn kho lưu trữ</string>
     <string name="appearance">Giao diện</string>
     <string name="account_security">Bảo mật tài khoản</string>
     <string name="bitwarden_help_center">Trung tâm hỗ trợ Bitwarden</string>

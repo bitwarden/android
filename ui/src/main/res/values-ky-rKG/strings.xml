@@ -24,8 +24,8 @@
     <string name="folder_created">Жаңы папка түзүлдү.</string>
     <string name="folder_deleted">Папка өчүрүлдү.</string>
     <string name="folder_none">Папка жок</string>
-    <string name="folders">Папкалар</string>
     <string name="folder_updated">Папка сакталды</string>
+    <string name="folders">Папкалар</string>
     <string name="hide">Жашыруу</string>
     <string name="internet_connection_required_message">Улантуудан мурун интернетке туташыңыз.</string>
     <string name="internet_connection_required_title">Интернет байланышы талап кылынат</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Башкы сырсөз (талап кылынат)</string>
     <string name="new_master_password_required">Жаңы башкы сырсөз (талап кылынат)</string>
     <string name="more_options">Көбүрөөк параметрлер</string>
+    <string name="my_folder">My folder</string>
+    <string name="my_folders">My folders</string>
     <string name="my_vault">Менин купчулдарым</string>
     <string name="name">Аты</string>
     <string name="item_name_required">Элементтин аты (талап кылынат)</string>
@@ -283,7 +285,9 @@
     <string name="vault_is_locked">Купчул кулпуланган</string>
     <string name="go_to_my_vault">Менин купчулума өтүү</string>
     <string name="collections">Жыйындылар</string>
+    <string name="shared_folders">Shared folders</string>
     <string name="no_items_collection">Бул жыйындыда эч кандай элементтер жок.</string>
+    <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Бул папкада эч кандай элементтер жок.</string>
     <string name="no_items_trash">Себетте эч кандай элементтер жок.</string>
     <string name="autofill_accessibility_summary">Башка колдонмолордо жана вебде колдонуучу аты жана сырсөз талааларын толтурууга жардам берүү.</string>
@@ -338,12 +342,16 @@
     <string name="move_up">Өйдө жылдыруу</string>
     <string name="owner">Ээси</string>
     <string name="no_collections_to_list">Тизмеге алынуучу жыйындылар жок.</string>
+    <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s %2$s өткөрүлдү.</string>
     <string name="select_one_collection">Кеминде бир жыйындыны тандооңуз керек.</string>
+    <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Бөлүшүү</string>
-    <string name="move_to_vault">Купчулга жылдыруу</string>
-    <string name="no_vaults_to_list">Тизмеге алынуучу купчулдар жок.</string>
-    <string name="move_to_vault_desc">Бул элементти жылдыргыңыз келген купчулду тандаңыз. Башка купчулга жылдыруу элементтин ээлик укугун ошол уюмга берет. Элемент жылдырылгандан кийин сиз анын түз ээси болбой каласыз.</string>
+    <string name="move_to_organization">Уюмга өткөрүү</string>
+    <string name="no_orgs_to_list">Тизмеге алынуучу уюмдар жок.</string>
+    <string name="move_to_org_desc">Бул элементти өткөргүңүз келген уюмду тандаңыз. Уюмга өткөрүү элементтин ээлик укугун ошол уюмга берет. Элемент өткөрүлгөндөн кийин сиз анын түз ээси болбой каласыз.</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Сөздөрдүн саны</string>
     <string name="passphrase">Шифрфраза</string>
     <string name="word_separator">Сөз бөлгүч</string>
@@ -457,6 +465,7 @@
     <string name="deletion_date">Өчүрүү датасы</string>
     <string name="deletion_time">Өчүрүү убактысы</string>
     <string name="deletion_date_info">Send көрсөтүлгөн күнү жана убактысында түбөлүккө өчүрүлөт.</string>
+    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Ким көрө алат</string>
     <string name="anyone_with_the_link">Шилтемеси бар ар бир адам</string>
     <string name="anyone_with_link_can_view_send">Бул шилтемеси бар ар бир адам бул Sendди көрө алат</string>
@@ -494,6 +503,7 @@
     <string name="two_days">2 күн</string>
     <string name="three_days">3 күн</string>
     <string name="seven_days">7 күн</string>
+    <string name="fourteen_days">14 days</string>
     <string name="thirty_days">30 күн</string>
     <string name="custom">Ыңгайлаштырылган</string>
     <string name="custom_timeout">Ыңгайлаштырылган убакыт</string>
@@ -687,6 +697,7 @@
     <string name="logging_in_on">Кирүүдө</string>
     <string name="logging_in_on_with_colon">Кирүүдө:</string>
     <string name="vault">Купчул</string>
+    <string name="select_vault">Select vault</string>
     <string name="appearance">Көрүнүшү</string>
     <string name="account_security">Аккаунт коопсуздугу</string>
     <string name="bitwarden_help_center">Bitwarden жардам борбору</string>

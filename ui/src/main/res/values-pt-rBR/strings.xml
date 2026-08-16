@@ -24,8 +24,8 @@
     <string name="folder_created">Nova pasta criada.</string>
     <string name="folder_deleted">Pasta apagada.</string>
     <string name="folder_none">Sem pasta</string>
-    <string name="folders">Pastas</string>
     <string name="folder_updated">Pasta salva</string>
+    <string name="folders">Pastas</string>
     <string name="hide">Ocultar</string>
     <string name="internet_connection_required_message">Conecte-se à internet antes de continuar.</string>
     <string name="internet_connection_required_title">É necessária uma conexão com a internet</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Senha principal (obrigatória)</string>
     <string name="new_master_password_required">Nova senha principal (obrigatória)</string>
     <string name="more_options">Mais opções</string>
+    <string name="my_folder">Minha pasta</string>
+    <string name="my_folders">Minhas pastas</string>
     <string name="my_vault">Meu cofre</string>
     <string name="name">Nome</string>
     <string name="item_name_required">Nome do item (obrigatório)</string>
@@ -282,7 +284,9 @@
     <string name="vault_is_locked">O cofre está bloqueado</string>
     <string name="go_to_my_vault">Ir ao meu cofre</string>
     <string name="collections">Conjuntos</string>
-    <string name="no_items_collection">There are no items in this collection.</string>
+    <string name="shared_folders">Pastas compartilhadas</string>
+    <string name="no_items_collection">Não há itens nessa coleção.</string>
+    <string name="there_are_no_items_in_this_shared_folder">Não há itens nesta pasta compartilhada.</string>
     <string name="no_items_folder">Não há itens nesta pasta.</string>
     <string name="no_items_trash">Não há itens na lixeira.</string>
     <string name="autofill_accessibility_summary">Ajude a preencher campos de nomes de usuário e senhas em outros aplicativos e na web.</string>
@@ -337,12 +341,16 @@
     <string name="move_up">Mover para cima</string>
     <string name="owner">Proprietário</string>
     <string name="no_collections_to_list">Não há conjuntos para listar.</string>
+    <string name="there_are_no_shared_folders_to_list">Não há pastas para listar.</string>
     <string name="moved_item_to_org">%1$s movido para %2$s.</string>
     <string name="select_one_collection">Você deve selecionar pelo menos um conjunto.</string>
+    <string name="you_must_select_at_least_one_shared_folder">Você deve selecionar pelo menos uma pasta compartilhada.</string>
     <string name="share">Compartilhar</string>
-    <string name="move_to_vault">Move to vault</string>
-    <string name="no_vaults_to_list">No vaults to list.</string>
-    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
+    <string name="move_to_organization">Mover para organização</string>
+    <string name="no_orgs_to_list">Nenhuma organização para listar.</string>
+    <string name="move_to_org_desc">Escolha uma organização para a qual deseja mover este item. Mover para uma organização transfere a propriedade do item para essa organização. Você não será mais o proprietário direto deste item depois que ele for movido.</string>
+    <string name="no_vaults_to_list">Nenhum cofre para listar.</string>
+    <string name="move_to_vault_desc">Escolha um cofre para o qual você deseja mover este item. Mover para outro cofre transfere a propriedade do item para aquela organização. Você não será mais o proprietário direto deste item depois que ele for movido.</string>
     <string name="number_of_words">Número de palavras</string>
     <string name="passphrase">Frase secreta</string>
     <string name="word_separator">Separador das palavras</string>
@@ -378,8 +386,8 @@
     <string name="pin_require_master_password_restart">Você quer exigir o desbloqueio com a sua senha principal quando o aplicativo for reiniciado?</string>
     <string name="ask_to_add_item">Pedir para adicionar item</string>
     <string name="ask_to_add_item_description">Pedir para adicionar um item se um não for encontrado no seu cofre.</string>
-    <string name="turn_on_fill_assist">Turn on fill assist</string>
-    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill assist improves autofill accuracy on supported sites by using site specific rules.</string>
+    <string name="turn_on_fill_assist">Ativar assistência de preenchimento</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">O recurso de preenchimento assistido melhora a precisão do preenchimento automático em sites compatíveis, utilizando regras específicas para cada site.</string>
     <string name="on_restart">No reinício do aplicativo</string>
     <string name="capitalize">Iniciais maiúsculas</string>
     <string name="include_number">Incluir número</string>
@@ -456,6 +464,7 @@
     <string name="deletion_date">Data de apagamento</string>
     <string name="deletion_time">Horário de apagamento</string>
     <string name="deletion_date_info">O Send será apagado permanentemente no horário especificado.</string>
+    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Quem pode visualizar</string>
     <string name="anyone_with_the_link">Qualquer pessoa com o link</string>
     <string name="anyone_with_link_can_view_send">Qualquer um com este link pode ver este Send</string>
@@ -493,6 +502,7 @@
     <string name="two_days">2 dias</string>
     <string name="three_days">3 dias</string>
     <string name="seven_days">7 dias</string>
+    <string name="fourteen_days">14 dias</string>
     <string name="thirty_days">30 dias</string>
     <string name="custom">Personalizado</string>
     <string name="custom_timeout">Limite de tempo personalizado</string>
@@ -686,6 +696,7 @@ Deseja trocar para esta conta?</string>
     <string name="logging_in_on">Acessando</string>
     <string name="logging_in_on_with_colon">Conectando-se a:</string>
     <string name="vault">Cofre</string>
+    <string name="select_vault">Selecionar cofre</string>
     <string name="appearance">Aparência</string>
     <string name="account_security">Segurança da conta</string>
     <string name="bitwarden_help_center">Central de ajuda do Bitwarden</string>
@@ -1413,6 +1424,6 @@ Deseja trocar para esta conta?</string>
     <string name="keep_documents_safe_and_encrypted">Mantenha documentos seguros e criptografados</string>
     <string name="share_files_securely_with_anyone_using_send">Compartilhe arquivos com segurança com qualquer um usando o Send</string>
     <string name="receive_24_7_priority_support">Receba suporte 24h com prioridade</string>
-    <string name="account_creation_restricted">Account creation restricted</string>
-    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
+    <string name="account_creation_restricted">Criação de conta restrita</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s permite apenas que usuários convidados criem contas.</string>
 </resources>

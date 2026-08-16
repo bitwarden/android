@@ -24,8 +24,8 @@
     <string name="folder_created">پوشه جدید ساخته شد.</string>
     <string name="folder_deleted">پوشه حذف شد.</string>
     <string name="folder_none">بدون پوشه</string>
-    <string name="folders">پوشه‌ها</string>
     <string name="folder_updated">پوشه ذخیره شد</string>
+    <string name="folders">پوشه‌ها</string>
     <string name="hide">پنهان‌سازی</string>
     <string name="internet_connection_required_message">لطفاً قبل از ادامه به اینترنت متصل شوید.</string>
     <string name="internet_connection_required_title">اتصال به اینترنت لازم است</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">کلمه عبور اصلی (الزامی)</string>
     <string name="new_master_password_required">کلمه عبور اصلی جدید (الزامی)</string>
     <string name="more_options">گزینه‌های بیشتر</string>
+    <string name="my_folder">پوشه من</string>
+    <string name="my_folders">پوشه‌های من</string>
     <string name="my_vault">گاوصندوق من</string>
     <string name="name">نام</string>
     <string name="item_name_required">نام مورد (الزامی)</string>
@@ -153,7 +155,7 @@
     <string name="syncing_complete">همگام‌سازی کامل شد.</string>
     <string name="two_step_login">ورود دو مرحله‌ای</string>
     <string name="unlock_with_biometrics">باز کردن قفل با بیومتریک</string>
-    <string name="unlock_with_pin">باز کردن با کد پین</string>
+    <string name="unlock_with_pin">باز کردن قفل با کد پین</string>
     <string name="verification_code">کد تأیید</string>
     <string name="view_login">مشاهده ورود</string>
     <string name="view_card">مشاهده کارت</string>
@@ -199,9 +201,9 @@
     <string name="copy_totp">کپی TOTP</string>
     <string name="copy_totp_automatically_description">اگر یک ورود دارای یک کلید احراز هویت باشد، هنگام پر کردن خودکار ورود، کد تأیید TOTP را در حافظه موقت خود کپی کن.</string>
     <string name="copy_totp_automatically">TOTP را به صورت خودکار کپی کن</string>
-    <string name="premium_required">برای استفاده از این ویژگی عضویت پرمیوم لازم است.</string>
+    <string name="premium_required">برای استفاده از این ویژگی عضویت ویژه لازم است.</string>
     <string name="attachment_deleted">پیوست حذف شد</string>
-    <string name="attachments_are_a_premium_feature">پیوست‌ها یک ویژگی پریمیوم هستند. طرح فعلی شما شامل دسترسی به این قابلیت نیست.</string>
+    <string name="attachments_are_a_premium_feature">پیوست‌ها یک ویژگی ویژه هستند. طرح فعلی شما شامل دسترسی به این قابلیت نیست.</string>
     <string name="choose_file">انتخاب پرونده</string>
     <string name="file">پرونده</string>
     <string name="no_file_chosen">هیچ پرونده‌ای انتخاب نشده</string>
@@ -283,7 +285,9 @@
     <string name="vault_is_locked">گاوصندوق قفل شد</string>
     <string name="go_to_my_vault">برو به گاوصندوق من</string>
     <string name="collections">مجموعه‌ها</string>
-    <string name="no_items_collection">There are no items in this collection.</string>
+    <string name="shared_folders">پوشه‌های مشترک</string>
+    <string name="no_items_collection">در این مجموعه موردی برای نمایش نیست.</string>
+    <string name="there_are_no_items_in_this_shared_folder">در این پوشه‌ی اشتراک گذاری شده موردی برای نمایش نیست.</string>
     <string name="no_items_folder">در این پوشه موردی برای نمایش نیست.</string>
     <string name="no_items_trash">هیچ موردی در سطل زباله وجود ندارد.</string>
     <string name="autofill_accessibility_summary">در پر کردن فیلدهای نام کاربری و کلمه عبور در برنامه‌های دیگر و در وب کمک می‌کند.</string>
@@ -319,13 +323,12 @@
     <string name="secure_notes">یادداشت‌های امن</string>
     <string name="personal_details">جزئیات شخصی</string>
     <string name="contact_info">اطلاعات تماس</string>
-    <string name="check_password_for_data_breaches">بررسی کلمه عبور برای افشا داده</string>
+    <string name="check_password_for_data_breaches">بررسی کلمه عبور برای نشت اطلاعات</string>
     <plurals name="password_exposed">
-        <item quantity="one">این کلمه عبور %d بار در نقض‌های داده افشا شده است. بهتر است آن را تغییر دهید.</item>
-        <item quantity="other">این کلمه عبور %d بار در نقض‌های داده افشا شده است. بهتر است آن را تغییر دهید.
-</item>
+        <item quantity="one">این کلمه عبور در نشت‌های اطلاعاتی %d بار افشا شده است. بهتر است آن را تغییر دهید.</item>
+        <item quantity="other">این کلمه عبور در نشت‌های اطلاعاتی %d بار افشا شده است. بهتر است آن را تغییر دهید.</item>
     </plurals>
-    <string name="password_safe">این کلمه عبور در هیچ یک از نقض‌های داده شناخته شده یافت نشد. استفاده از آن باید ایمن باشد.</string>
+    <string name="password_safe">این کلمه عبور در هیچ یک از نشت‌های اطلاعاتی شناخته شده پیدا نشده است. استفاده از آن باید امن باشد.</string>
     <string name="identity_name">نام هویت</string>
     <string name="value">مقدار</string>
     <string name="password_history">تاریخچه کلمه عبور</string>
@@ -339,12 +342,16 @@
     <string name="move_up">انتقال به بالا</string>
     <string name="owner">مالک</string>
     <string name="no_collections_to_list">هیچ مجموعه‌ای برای لیست کردن وجود ندارد.</string>
+    <string name="there_are_no_shared_folders_to_list">هیچ موردی اشتراک گذاری شده برای نمایش وجود ندارد.</string>
     <string name="moved_item_to_org">%1$s منتقل شد به %2$s.</string>
     <string name="select_one_collection">شما باید حداقل یک مجموعه را انتخاب کنید.</string>
+    <string name="you_must_select_at_least_one_shared_folder">شما باید حداقل یک پوشه اشتراک گذاری شده را انتخاب کنید.</string>
     <string name="share">اشتراک گذاری</string>
-    <string name="move_to_vault">Move to vault</string>
-    <string name="no_vaults_to_list">No vaults to list.</string>
-    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
+    <string name="move_to_organization">انتقال به سازمان</string>
+    <string name="no_orgs_to_list">هیچ سازمانی برای نمایش وجود ندارد.</string>
+    <string name="move_to_org_desc">سازمانی را انتخاب کنید که می‌خواهید این مورد را به آن منتقل کنید. انتقال به یک سازمان، مالکیت مورد را به آن سازمان منتقل می‌کند. پس از انتقال این مورد، دیگر مالک مستقیم آن نخواهید بود.</string>
+    <string name="no_vaults_to_list">هیچ گاوصندوقی برای فهرست کردن وجود ندارد.</string>
+    <string name="move_to_vault_desc">گاوصندوقی را انتخاب کنید که می‌خواهید این مورد را به آن منتقل کنید. انتقال به گاوصندوق دیگر، مالکیت مورد را به آن سازمان منتقل می‌کند. پس از انتقال این مورد، دیگر مالک مستقیم آن نخواهید بود.</string>
     <string name="number_of_words">تعداد کلمات</string>
     <string name="passphrase">عبارت عبور</string>
     <string name="word_separator">جداکننده کلمات</string>
@@ -380,8 +387,8 @@
     <string name="pin_require_master_password_restart">آیا می‌خواهید هنگام راه‌اندازی مجدد برنامه، نیاز به باز کردن قفل با کلمه عبور اصلی خود داشته باشید؟</string>
     <string name="ask_to_add_item">درخواست افزودن مورد</string>
     <string name="ask_to_add_item_description">در صورتی که موردی در گاوصندوق شما پیدا نشد، درخواست اضافه کردن آن را بدهید.</string>
-    <string name="turn_on_fill_assist">Turn on fill assist</string>
-    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill assist improves autofill accuracy on supported sites by using site specific rules.</string>
+    <string name="turn_on_fill_assist">دستیار پر کردن را روشن کن</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">دستیار پر کردن با استفاده از قوانین خاص سایت، دقت پر کردن خودکار را در سایت‌های پشتیبانی‌شده بهبود می‌بخشد.</string>
     <string name="on_restart">در راه‌اندازی مجدد برنامه</string>
     <string name="capitalize">بزرگ نوشتن حرف اول</string>
     <string name="include_number">شامل عدد</string>
@@ -458,6 +465,7 @@
     <string name="deletion_date">تاریخ حذف</string>
     <string name="deletion_time">زمان حذف</string>
     <string name="deletion_date_info">ارسال در تاریخ و ساعت مشخص شده برای همیشه حذف خواهد شد.</string>
+    <string name="this_date_is_enforced_by_your_organization">این تاریخ توسط سازمان شما اعمال شده است</string>
     <string name="who_can_view">چه کسی می‌تواند ببیند</string>
     <string name="anyone_with_the_link">هر کسی که لینک را داشته باشد</string>
     <string name="anyone_with_link_can_view_send">هر کسی با این لینک می‌تواند این ارسال را مشاهده کند</string>
@@ -495,6 +503,7 @@
     <string name="two_days">۲ روز</string>
     <string name="three_days">۳ روز</string>
     <string name="seven_days">۷ روز</string>
+    <string name="fourteen_days">۱۴ روز</string>
     <string name="thirty_days">۳۰ روز</string>
     <string name="custom">سفارشی</string>
     <string name="custom_timeout">زمان‌بندی سفارشی</string>
@@ -503,8 +512,8 @@
     <string name="about_send">درباره ارسال</string>
     <string name="hide_email">نشانی ایمیلم را از گیرندگان مخفی کن</string>
     <string name="send_options_policy_in_effect">یک یا چند سیاست سازمان بر گزینه‌های ارسال شما تأثیر می‌گذارد.</string>
-    <string name="send_file_premium_required">حساب‌های کاربری رایگان فقط می‌توانند متن را به اشتراک بگذارند. برای استفاده از قابلیت ارسال پرونده‌ها، به عضویت پریمیوم نیاز دارید.</string>
-    <string name="sharing_with_specific_people_is_a_premium_feature">اشتراک‌گذاری با افراد خاص یک ویژگی پرمیوم است. طرح فعلی شما شامل دسترسی به این ویژگی نمی‌شود.</string>
+    <string name="send_file_premium_required">حساب‌های کاربری رایگان فقط می‌توانند متن را به اشتراک بگذارند. برای استفاده از قابلیت ارسال پرونده‌ها، به عضویت ویژه نیاز دارید.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">اشتراک‌گذاری با افراد خاص یک ویژگی ویژه است. طرح فعلی شما شامل دسترسی به این ویژگی نمی‌شود.</string>
     <string name="password_prompt">درخواست مجدد کلمه عبور اصلی</string>
     <string name="password_confirmation">تأیید کلمه عبور اصلی</string>
     <string name="password_confirmation_desc">این عمل محافظت می‌شود. برای ادامه، لطفاً کلمه عبور اصلی خود را دوباره وارد کنید تا هویت‌تان را تأیید کنید.</string>
@@ -565,7 +574,7 @@
     <string name="all">همه</string>
     <string name="totp">TOTP</string>
     <string name="verification_codes">کدهای تأیید</string>
-    <string name="premium_subscription_required">اشتراک پرمیوم نیاز است</string>
+    <string name="premium_subscription_required">اشتراک ویژه نیاز است</string>
     <string name="cannot_add_authenticator_key_scan_qr_code">نمی‌توانید کلید احراز هویت را اضافه کنید؟ <annotation link="scanQrCode">اسکن کد QR</annotation></string>
     <string name="scan_qr_code"><annotation link="scanQrCode">اسکن کد QR</annotation></string>
     <string name="cannot_scan_qr_code_enter_key_manually">نمی‌توانید کد QR را اسکن کنید؟ <annotation link="enterKeyManually">کلید را به صورت دستی وارد کنید</annotation></string>
@@ -648,11 +657,11 @@
     <string name="weak">ضعیف</string>
     <string name="good">خوب</string>
     <string name="strong">قوی</string>
-    <string name="check_known_data_breaches_for_this_password">بررسی نقض‌های داده شناخته شده برای این کلمه عبور</string>
+    <string name="check_known_data_breaches_for_this_password">بررسی نشت‌های اطلاعاتی شناخته شده برای این کلمه عبور</string>
     <string name="exposed_master_password">کلمه عبور اصلی افشا شده است</string>
-    <string name="password_found_in_a_data_breach_alert_description">کلمه عبور در افشای داده پیدا شد. از یک کلمه عبور منحصربه‌فرد برای محافظت از حساب کاربری خود استفاده کنید. آیا مطمئنید که می‌خواهید از یک کلمه عبور افشا شده استفاده کنید؟</string>
+    <string name="password_found_in_a_data_breach_alert_description">کلمه عبور در یک نشت اطلاعاتی پیدا شده است. برای محافظت از حساب خود، از یک کلمه عبور منحصربه‌فرد استفاده کنید. آیا مطمئن هستید که می‌خواهید از یک کلمه عبور افشا شده استفاده کنید؟</string>
     <string name="weak_and_exposed_master_password">کلمه عبور اصلی ضعیف و افشا شده</string>
-    <string name="weak_password_identified_and_found_in_a_data_breach_alert_description">کلمه عبور ضعیف شناسایی و در یک افشای داده پیدا شد. از یک کلمه عبور قوی و منحصربه‌فرد برای محافظت از حساب کاربری خود استفاده کنید. آیا مطمئنید که می‌خواهید از این کلمه عبور استفاده کنید؟</string>
+    <string name="weak_password_identified_and_found_in_a_data_breach_alert_description">کلمه عبور ضعیف شناسایی و در یک نشت اطلاعاتی نیز پیدا شده است. برای محافظت از حساب خود، از یک کلمه عبور قوی و منحصربه‌فرد استفاده کنید. آیا مطمئن هستید که می‌خواهید از این کلمه عبور استفاده کنید؟</string>
     <string name="there_are_no_items_that_match_the_search">هیچ موردی وجود ندارد که با جستجو مطابقت داشته باشد</string>
     <string name="self_hosted">خود میزبان</string>
     <string name="region">منطقه</string>
@@ -688,6 +697,7 @@
     <string name="logging_in_on">ورود در</string>
     <string name="logging_in_on_with_colon">ورود در:</string>
     <string name="vault">گاوصندوق</string>
+    <string name="select_vault">انتخاب گاوصندوق</string>
     <string name="appearance">ظاهر</string>
     <string name="account_security">امنیت حساب کاربری</string>
     <string name="bitwarden_help_center">مرکز راهنمایی Bitwarden</string>
@@ -755,7 +765,7 @@
     <string name="level_up_your_logins">ورودهای خود را ارتقا دهید</string>
     <string name="welcome_message_3">از تولید کننده برای ایجاد و ذخیره کلمه‌های عبور قوی و منحصر به فرد برای تمام حساب‌های کاربری خود استفاده کنید.</string>
     <string name="your_data_when_and_where_you_need_it">داده‌های شما، زمانی که نیاز دارید و در جایی که نیاز دارید</string>
-    <string name="welcome_message_4">کلمه‌های عبور نامحدود را در دستگاه‌های نامحدود با برنامه‌های موبایل، مرورگر و دسکتاپ Bitwarden ذخیره کنید.</string>
+    <string name="welcome_message_4">کلمه‌های عبور نامحدود را در دستگاه‌های نامحدود با برنامه‌های موبایل، مرورگر و رایانه رومیزی Bitwarden ذخیره کنید.</string>
     <string name="remove_passkey">حذف کلید عبور</string>
     <string name="passkey_removed">کلید عبور حذف شد</string>
     <string name="what_makes_a_password_strong">چه چیزی کلمه عبور را قوی می‌کند؟</string>
@@ -828,7 +838,7 @@
     <string name="import_logins_later">ورودها را بعداً درون ریزی کنید</string>
     <string name="import_logins_later_dialog_title">ورودها را بعداً درون ریزی می‌کنید؟</string>
     <string name="do_you_have_a_computer_available">آیا به یک رایانه دسترسی دارید؟</string>
-    <string name="the_following_instructions_will_guide_you_through_importing_logins">دستورالعمل‌های زیر شما را در درون ریزی ورودها از رایانه دسکتاپ یا لپ‌تاپ راهنمایی می‌کنند</string>
+    <string name="the_following_instructions_will_guide_you_through_importing_logins">دستورالعمل‌های زیر شما را در درون ریزی ورودها از رایانه رومیزی یا لپ‌تاپ راهنمایی می‌کنند</string>
     <string name="import_logins">درون ریزی ورودها</string>
     <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">از طریق رایانه خود، این دستورالعمل‌ها را دنبال کنید تا کلمات عبور ذخیره‌شده را از مرورگر یا مدیر کلمه عبور دیگری برون ریزی کنید. سپس آن‌ها را به‌صورت ایمن به Bitwarden درون ریزی نمایید.</string>
     <string name="give_your_vault_a_head_start">به گاوصندوق خود یک شروع قدرتمند بدهید</string>
@@ -861,7 +871,7 @@
     <string name="autofill_passwords">پر کردن خودکار کلمات عبور</string>
     <string name="set_up_autofill_on_all_your_devices">تنظیمات پر کردن خودکار را روی همه دستگاه‌های خود فعال کنید تا بتوانید تنها با یک ضربه در هر جایی وارد شوید.</string>
     <string name="import_successful">درون ریزی با موفقیت انجام شد!</string>
-    <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">ورودهای خود را از هر کجا با ابزارهای Bitwarden برای وب و دسکتاپ مدیریت کنید.</string>
+    <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">ورودهای خود را از هر کجا با ابزارهای Bitwarden برای وب و رایانه رومیزی مدیریت کنید.</string>
     <string name="bitwarden_tools">ابزارهای Bitwarden</string>
     <string name="got_it">فهمیدم</string>
     <string name="no_logins_were_imported">هیچ ورودی درون ریزی نشده است</string>
@@ -1217,24 +1227,24 @@
     <string name="unarchiving">در حال لغو بایگانی</string>
     <string name="item_moved_to_archived">مورد به بایگانی منتقل شد</string>
     <string name="item_moved_to_vault">مورد به گاوصندوق منتقل شد</string>
-    <string name="archiving_items_is_a_premium_feature">بایگانی کردن موارد یک ویژگی پریمیوم هست. طرح فعلی شما شامل دسترسی به این قابلیت نیست.</string>
-    <string name="totp_is_a_premium_feature">کلید تولیدکننده رمز دوعاملی (TOTP) یک ویژگی پریمیوم هست. طرح فعلی شما شامل دسترسی به این قابلیت نیست.</string>
-    <string name="upgrade_to_premium">ارتقا به پرمیوم</string>
+    <string name="archiving_items_is_a_premium_feature">بایگانی کردن موارد یک ویژگی ویژه هست. طرح فعلی شما شامل دسترسی به این قابلیت نیست.</string>
+    <string name="totp_is_a_premium_feature">کلید تولیدکننده رمز دوعاملی (TOTP) یک ویژگی ویژه هست. طرح فعلی شما شامل دسترسی به این قابلیت نیست.</string>
+    <string name="upgrade_to_premium">ارتقا به ویژه</string>
     <string name="plan">طرح</string>
-    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">برای مدیریت اشتراک پریمیوم خود، باید از طریق رایانه به گاوصندوق وب خود وارد شوید.</string>
+    <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">برای مدیریت اشتراک ویژه خود، باید از طریق رایانه به گاوصندوق وب خود وارد شوید.</string>
     <string name="unlock_advanced_security_features">ویژگی‌های امنیتی پیشرفته را باز کنید</string>
     <string name="your_subscription_needs_attention">اشتراک شما نیاز به توجه دارد</string>
     <string name="check_your_plan_for_details">برای جزئیات بیشتر، طرح خود را بررسی کنید.</string>
     <string name="view_plan">مشاهده طرح</string>
-    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">یک طرح پرمیوم، ابزارهای بیشتری را برای ایمن ماندن و کنترل در اختیار شما قرار می‌دهد.</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">یک طرح ویژه، ابزارهای بیشتری را برای ایمن ماندن و کنترل در اختیار شما قرار می‌دهد.</string>
     <string name="this_item_is_archived">این مورد بایگانی شد.</string>
     <string name="introducing_archive">معرفی بایگانی</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">وسایلی را که در حال حاضر به آنها نیاز ندارید، در جای امنی اما دور از دید قرار دهید.</string>
     <string name="go_to_archive">برو به بایگانی</string>
     <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">این مورد بایگانی شده است. ذخیره تغییرات، آن را به گاوصندوق شما بازمی‌گرداند.</string>
-    <string name="your_premium_subscription_ended">اشتراک پرمیوم شما به پایان رسید</string>
-    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">برای دسترسی مجدد به بایگانی خود، اشتراک پرمیوم خود را مجدداً راه‌اندازی کنید. اگر قبل از راه‌اندازی مجدد، جزئیات یک مورد بایگانی شده را ویرایش کنید، آن مورد به گاوصندوق شما بازگردانده می‌شود.</string>
-    <string name="restart_premium">راه‌اندازی مجدد پریمیوم</string>
+    <string name="your_premium_subscription_ended">اشتراک ویژه شما به پایان رسید</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">برای دسترسی مجدد به بایگانی خود، اشتراک ویژه خود را مجدداً راه‌اندازی کنید. اگر قبل از راه‌اندازی مجدد، جزئیات یک مورد بایگانی شده را ویرایش کنید، آن مورد به گاوصندوق شما بازگردانده می‌شود.</string>
+    <string name="restart_premium">راه‌اندازی مجدد ویژه</string>
     <string name="items_transferred">موارد منتقل شد</string>
     <string name="updated_master_password">کلمه عبور اصلی به‌روزرسانی شد</string>
     <string name="invalid_email_addresses">آدرس‌های ایمیل نامعتبر است</string>
@@ -1251,8 +1261,8 @@
     <string name="mobile_platform">موبایل - %1$s</string>
     <string name="extension_platform">افزونه - %1$s</string>
     <string name="web_platform">وب - %1$s</string>
-    <string name="desktop_platform">دسکتاپ - %1$s</string>
-    <string name="cli_platform">CLI - %1$s</string>
+    <string name="desktop_platform">رایانه رومیزی - %1$s</string>
+    <string name="cli_platform">رابط خط فرمان - %1$s</string>
     <string name="sdk">SDK</string>
     <string name="server">سرور</string>
     <string name="unknown_device">دستگاه ناشناس</string>
@@ -1272,19 +1282,19 @@
     <string name="preview_unavailable_for_this_file">پیش‌نمایش این پرونده در دسترس نیست. شما همچنان می‌توانید آن را دانلود کرده و در دستگاه خود مشاهده کنید.</string>
     <string name="preview_unavailable">پیش‌نمایش در دسترس نیست</string>
     <string name="download_attachment">دانلود پیوست</string>
-    <string name="upgraded_to_premium">ارتقا به پرمیوم</string>
+    <string name="upgraded_to_premium">ارتقا به ویژه</string>
     <string name="you_now_have_access_to_all_advanced_security_features">اکنون به تمام ویژگی‌های امنیتی پیشرفته دسترسی دارید.</string>
-    <string name="you_now_have_access_to_advanced_security_features_learn_more_about_premium">اکنون به ویژگی‌های امنیتی پیشرفته دسترسی دارید. درباره آنچه در نسخه پریمیوم گنجانده شده است، بیشتر بدانید.</string>
+    <string name="you_now_have_access_to_advanced_security_features_learn_more_about_premium">اکنون به ویژگی‌های امنیتی پیشرفته دسترسی دارید. درباره آنچه در نسخه ویژه گنجانده شده است، بیشتر بدانید.</string>
     <string name="confirming_your_upgrade">در حال تأیید ارتقاء شما…</string>
     <string name="upgrade_pending">ارتقا در انتظار انجام</string>
     <string name="upgrade_pending_message">ارتقاء شما در حال پردازش است. تا زمان تکمیل، در طرح رایگان باقی خواهید ماند. اکنون برای بررسی همگام‌سازی کنید، یا ادامه دهید تا به‌طور خودکار به‌روزرسانی شود.</string>
-    <string name="unlock_premium_features">با طرح پریمیوم، ویژگی‌های پیشرفته‌تری را باز کنید.</string>
+    <string name="unlock_premium_features">با طرح ویژه، ویژگی‌های پیشرفته‌تری را باز کنید.</string>
     <string name="per_month_cancel_anytime">/ ماه · لغو در هر زمان</string>
-    <string name="per_month_cancel_anytime_content_description">%1$s per month, cancel anytime</string>
+    <string name="per_month_cancel_anytime_content_description">%1$s در ماه، هر زمان که خواستید لغو کنید</string>
     <string name="built_in_authenticator">تولیدکننده رمز دوعاملی داخلی</string>
     <string name="emergency_access">دسترسی اضطراری</string>
     <string name="secure_file_storage">ذخیره‌سازی امن پرونده</string>
-    <string name="breach_monitoring">پایش نشت اطلاعات</string>
+    <string name="breach_monitoring">نظارت بر نشت اطلاعات</string>
     <string name="youll_complete_the_purchase_with_stripe_secure_checkout">شما خرید را با پرداخت امن Stripe تکمیل خواهید کرد.</string>
     <string name="opening_checkout">افتتاح حساب…</string>
     <string name="secure_checkout_didnt_load">پرداخت امن بارگیری نشد</string>
@@ -1301,7 +1311,7 @@
     <string name="once_archived_this_item_will_be_excluded">پس از بایگانی، این مورد از نتایج جستجو و پیشنهادات پر کردن خودکار حذف خواهد شد.</string>
     <string name="pricing_unavailable">قیمت گذاری در دسترس نیست</string>
     <string name="current_plan">طرح فعلی</string>
-    <string name="premium_plan_name">پرمیوم</string>
+    <string name="premium_plan_name">ویژه</string>
     <string name="billing_amount">مبلغ صورتحساب</string>
     <string name="storage_cost">هزینه ذخیره‌سازی</string>
     <string name="discount">تخفیف</string>
@@ -1311,7 +1321,7 @@
     <string name="billing_rate_per_month">%1$s / ماه</string>
     <string name="manage_plan">مدیریت طرح</string>
     <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">طرح اشتراک خود را در برنامه وب Bitwarden مدیریت کنید.</string>
-    <string name="cancel_premium">لغو پریمیوم</string>
+    <string name="cancel_premium">لغو ویژه</string>
     <string name="subscription_status_active">فعال</string>
     <string name="subscription_status_canceled">لغو شد</string>
     <string name="subscription_status_expired">منقضی شده</string>
@@ -1322,15 +1332,15 @@
     <string name="subscription_status_pending_cancellation">در انتظار لغو</string>
     <string name="subscription_pending_cancellation_description">اشتراک شما قرار است در تاریخ <annotation accent="bold"><annotation arg="0">%1$s</annotation></annotation> لغو شود. می‌توانید قبل از آن، هر زمان که خواستید اشتراک خود را دوباره برقرار کنید.</string>
     <string name="premium_next_charge_summary">هزینه بعدی شما مربوط به <annotation stress="bold"><annotation arg="0">%1$s</annotation></annotation> دلار آمریکا بابت <annotation stress="bold"><annotation arg="1">%2$s</annotation></annotation> است.</string>
-    <string name="subscription_canceled_description">اشتراک شما در تاریخ <annotation accent="bold"><annotation arg="0">%1$s</annotation></annotation> لغو شد. برای ادامه استفاده از ویژگی‌های پرمیوم، دوباره مشترک شوید.</string>
+    <string name="subscription_canceled_description">اشتراک شما در تاریخ <annotation accent="bold"><annotation arg="0">%1$s</annotation></annotation> لغو شد. برای ادامه استفاده از ویژگی‌های ویژه، دوباره مشترک شوید.</string>
     <string name="subscription_unpaid_description">اشتراک شما در تاریخ <annotation accent="bold"><annotation arg="0">%1$s</annotation></annotation> به حالت تعلیق درآمده است. برای فعال‌سازی مجدد، لطفاً صورتحساب‌های معوقه خود را پرداخت کنید.</string>
     <string name="subscription_update_payment_description">ما نتوانستیم پرداخت شما را پردازش کنیم. قبل از پایان اشتراک خود در <annotation accent="bold"><annotation arg="0">%1$s</annotation></annotation>، روش پرداخت خود را به‌روزرسانی کنید.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">شما به مدت <annotation arg="0">%1$d</annotation> روز از تاریخ انقضای اشتراک خود مهلت دارید. لطفاً صورتحساب‌های معوقه را تا <annotation stress="bold"><annotation arg="1">%2$s</annotation></annotation> پرداخت کنید.</item>
         <item quantity="other">شما به مدت <annotation arg="0">%1$d</annotation> روز از تاریخ انقضای اشتراک خود مهلت دارید. لطفاً صورتحساب‌های معوقه را تا <annotation stress="bold"><annotation arg="1">%2$s</annotation></annotation> پرداخت کنید.</item>
     </plurals>
-    <string name="subscription_paused_description">اشتراک شما متوقف شده است. برای ادامه استفاده از ویژگی‌های پرمیوم، اشتراک خود را از سر بگیرید.</string>
-    <string name="subscription_expired_description">اشتراک شما در تاریخ <annotation accent="bold"><annotation arg="0">%1$s</annotation></annotation> منقضی شد. برای ادامه استفاده از ویژگی‌های پرمیوم، دوباره مشترک شوید.</string>
+    <string name="subscription_paused_description">اشتراک شما متوقف شده است. برای ادامه استفاده از ویژگی‌های ویژه، اشتراک خود را از سر بگیرید.</string>
+    <string name="subscription_expired_description">اشتراک شما در تاریخ <annotation accent="bold"><annotation arg="0">%1$s</annotation></annotation> منقضی شد. برای ادامه استفاده از ویژگی‌های ویژه، دوباره مشترک شوید.</string>
     <string name="loading_subscription">در حال بارگذاری اشتراک…</string>
     <string name="loading_portal">در حال بارگذاری پورتال…</string>
     <string name="portal_error">اوه! مشکلی پیش آمده</string>
@@ -1415,6 +1425,6 @@
     <string name="keep_documents_safe_and_encrypted">اسناد را ایمن و رمزگذاری شده نگه دارید</string>
     <string name="share_files_securely_with_anyone_using_send">پرونده‌ها را با استفاده از ارسال به صورت ایمن با هر کسی به اشتراک بگذارید</string>
     <string name="receive_24_7_priority_support">پشتیبانی اولویت‌دار ۲۴ ساعته و ۷ روز هفته دریافت کنید</string>
-    <string name="account_creation_restricted">Account creation restricted</string>
-    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
+    <string name="account_creation_restricted">ایجاد حساب کاربری محدود شد</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s فقط به کاربران دعوت شده اجازه ایجاد حساب کاربری می‌دهد.</string>
 </resources>

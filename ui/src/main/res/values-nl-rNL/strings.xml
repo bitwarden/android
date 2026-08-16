@@ -24,8 +24,8 @@
     <string name="folder_created">Nieuwe map is aangemaakt.</string>
     <string name="folder_deleted">Map is verwijderd.</string>
     <string name="folder_none">Geen map</string>
-    <string name="folders">Mappen</string>
     <string name="folder_updated">Map opgeslagen</string>
+    <string name="folders">Mappen</string>
     <string name="hide">Verbergen</string>
     <string name="internet_connection_required_message">Maak verbinding met internet voordat u doorgaat.</string>
     <string name="internet_connection_required_title">Internetverbinding is vereist</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Hoofdwachtwoord (vereist)</string>
     <string name="new_master_password_required">Nieuw hoofdwachtwoord (vereist)</string>
     <string name="more_options">Meer opties</string>
+    <string name="my_folder">Mijn map</string>
+    <string name="my_folders">Mijn mappen</string>
     <string name="my_vault">Mijn kluis</string>
     <string name="name">Naam</string>
     <string name="item_name_required">Itemnaam (verplicht)</string>
@@ -283,7 +285,9 @@ Het scannen gebeurt automatisch.</string>
     <string name="vault_is_locked">Kluis is vergrendeld</string>
     <string name="go_to_my_vault">Ga naar mijn kluis</string>
     <string name="collections">Verzamelingen</string>
+    <string name="shared_folders">Gedeelde mappen</string>
     <string name="no_items_collection">Er zijn geen items in deze verzameling.</string>
+    <string name="there_are_no_items_in_this_shared_folder">Er zijn geen items in deze gedeelde map.</string>
     <string name="no_items_folder">Er zijn geen items in deze map.</string>
     <string name="no_items_trash">Er zijn geen items in de prullenbak.</string>
     <string name="autofill_accessibility_summary">Help met het invullen van velden voor gebruikersnaam en wachtwoord in andere apps en op het web.</string>
@@ -338,10 +342,14 @@ Het scannen gebeurt automatisch.</string>
     <string name="move_up">Omhoog</string>
     <string name="owner">Eigenaar</string>
     <string name="no_collections_to_list">Er zijn geen verzamelingen om weer te geven.</string>
+    <string name="there_are_no_shared_folders_to_list">Er zijn geen gedeelde mappen om weer te geven.</string>
     <string name="moved_item_to_org">%1$s is verplaatst naar %2$s.</string>
     <string name="select_one_collection">Je moet tenminste één verzameling selecteren.</string>
+    <string name="you_must_select_at_least_one_shared_folder">Je moet tenminste één gedeelde map selecteren.</string>
     <string name="share">Delen</string>
-    <string name="move_to_vault">Naar kluis verplaatsen</string>
+    <string name="move_to_organization">Naar organisatie verplaatsen</string>
+    <string name="no_orgs_to_list">Geen organisaties om weer te geven.</string>
+    <string name="move_to_org_desc">Kies een organisatie waarnaar je dit item wilt verplaatsen. Door het verplaatsen krijgt de organisatie de eigendomsrechten van het item. Je bent niet langer de directe eigenaar meer van het item als het is verplaatst.</string>
     <string name="no_vaults_to_list">Geen kluizen om weer te geven.</string>
     <string name="move_to_vault_desc">Kies een kluis waarnaar je dit item wilt verplaatsen. Door het verplaatsen krijgt de organisatie de eigendomsrechten van het item. Je bent niet langer de directe eigenaar meer van het item als het is verplaatst.</string>
     <string name="number_of_words">Aantal woorden</string>
@@ -457,6 +465,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="deletion_date">Verwijderingsdatum</string>
     <string name="deletion_time">Verwijderingstijd</string>
     <string name="deletion_date_info">Deze Send wordt op de aangegeven datum en tijd definitief verwijderd.</string>
+    <string name="this_date_is_enforced_by_your_organization">Deze datum is opgelegd door je organisatie</string>
     <string name="who_can_view">Wie kan weergeven</string>
     <string name="anyone_with_the_link">Iedereen met de link</string>
     <string name="anyone_with_link_can_view_send">Iedereen met deze link kan deze Send bekijken</string>
@@ -494,6 +503,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="two_days">2 dagen</string>
     <string name="three_days">3 dagen</string>
     <string name="seven_days">7 dagen</string>
+    <string name="fourteen_days">14 dagen</string>
     <string name="thirty_days">30 dagen</string>
     <string name="custom">Aangepast</string>
     <string name="custom_timeout">Aangepaste time-out</string>
@@ -687,6 +697,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="logging_in_on">Inloggen op</string>
     <string name="logging_in_on_with_colon">Inloggen op:</string>
     <string name="vault">Kluis</string>
+    <string name="select_vault">Kluis selecteren</string>
     <string name="appearance">Weergave</string>
     <string name="account_security">Accountbeveiliging</string>
     <string name="bitwarden_help_center">Bitwarden Hulpcentrum</string>

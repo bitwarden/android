@@ -24,8 +24,8 @@
     <string name="folder_created">Yeni klasör oluşturuldu.</string>
     <string name="folder_deleted">Klasör silindi.</string>
     <string name="folder_none">Klasör yok</string>
-    <string name="folders">Klasörler</string>
     <string name="folder_updated">Klasör kaydedildi</string>
+    <string name="folders">Klasörler</string>
     <string name="hide">Gizle</string>
     <string name="internet_connection_required_message">Devam etmeden önce lütfen internete bağlanın.</string>
     <string name="internet_connection_required_title">İnternet bağlantısı gerekli</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Ana parola (gerekli)</string>
     <string name="new_master_password_required">Yeni ana parola (gerekli)</string>
     <string name="more_options">Diğer seçenekler</string>
+    <string name="my_folder">Klasörüm</string>
+    <string name="my_folders">Klasörlerim</string>
     <string name="my_vault">Kasam</string>
     <string name="name">Ad</string>
     <string name="item_name_required">Hesap adı (gerekli)</string>
@@ -283,7 +285,9 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="vault_is_locked">Kasa kilitli</string>
     <string name="go_to_my_vault">Kasama git</string>
     <string name="collections">Koleksiyonlar</string>
+    <string name="shared_folders">Paylaşılan klasörler</string>
     <string name="no_items_collection">Bu koleksiyonda hiç kayıt yok.</string>
+    <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Bu klasörde hiç kayıt yok.</string>
     <string name="no_items_trash">Çöp kutusunda hiç kayıt yok.</string>
     <string name="autofill_accessibility_summary">Diğer uygulamalarda ve web\'de kullanıcı adlarını ve parolaları doldurmaya yardımcı ol.</string>
@@ -338,11 +342,15 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="move_up">Yukarı taşı</string>
     <string name="owner">Sahibi</string>
     <string name="no_collections_to_list">Listelenecek koleksiyon yok.</string>
+    <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s, %2$s kuruluşuna taşındı.</string>
     <string name="select_one_collection">En az bir koleksiyon seçmelisiniz.</string>
+    <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Paylaş</string>
-    <string name="move_to_vault">Kasaya taşı</string>
-    <string name="no_vaults_to_list">Listelenecek kasa yok.</string>
+    <string name="move_to_organization">Kuruluşa taşı</string>
+    <string name="no_orgs_to_list">Listelenecek kuruluş yok.</string>
+    <string name="move_to_org_desc">Bu kaydı taşımak istediğiniz kuruluşu seçin. Taşıdığınız kaydın sahipliği seçtiğiniz kuruluşa aktarılacak. Artık bu kaydın doğrudan sahibi olmayacaksınız.</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Kelime sayısı</string>
     <string name="passphrase">Parola cümlesi</string>
@@ -457,6 +465,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="deletion_date">Silinme tarihi</string>
     <string name="deletion_time">Silinme saati</string>
     <string name="deletion_date_info">Bu Send belirtilen tarih ve saatte kalıcı olacak silinecek.</string>
+    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Kim görebilir</string>
     <string name="anyone_with_the_link">Bağlantıya sahip olan herkes</string>
     <string name="anyone_with_link_can_view_send">Bu bağlantıya sahip olan herkes bu Send\'i görebilir</string>
@@ -494,6 +503,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="two_days">2 gün</string>
     <string name="three_days">3 gün</string>
     <string name="seven_days">7 gün</string>
+    <string name="fourteen_days">14 gün</string>
     <string name="thirty_days">30 gün</string>
     <string name="custom">Özel</string>
     <string name="custom_timeout">Özel zaman aşımı</string>
@@ -686,6 +696,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="logging_in_on">Giriş yapılan konum</string>
     <string name="logging_in_on_with_colon">Giriş yapılan konum:</string>
     <string name="vault">Kasa</string>
+    <string name="select_vault">Kasa seç</string>
     <string name="appearance">Görünüm</string>
     <string name="account_security">Hesap güvenliği</string>
     <string name="bitwarden_help_center">Bitwarden yardım merkezi</string>

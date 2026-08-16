@@ -24,8 +24,8 @@
     <string name="folder_created">Neuer Ordner wurde erstellt.</string>
     <string name="folder_deleted">Ordner wurde gelöscht.</string>
     <string name="folder_none">Kein Ordner</string>
-    <string name="folders">Ordner</string>
     <string name="folder_updated">Ordner gespeichert</string>
+    <string name="folders">Ordner</string>
     <string name="hide">Verstecken</string>
     <string name="internet_connection_required_message">Bitte verbinde dich mit dem Internet um fortzufahren.</string>
     <string name="internet_connection_required_title">Internetverbindung erforderlich</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Master-Passwort (erforderlich)</string>
     <string name="new_master_password_required">Neues Master-Passwort (erforderlich)</string>
     <string name="more_options">Weitere Optionen</string>
+    <string name="my_folder">Mein Ordner</string>
+    <string name="my_folders">Meine Ordner</string>
     <string name="my_vault">Mein Tresor</string>
     <string name="name">Name</string>
     <string name="item_name_required">Eintragsname (erforderlich)</string>
@@ -283,7 +285,9 @@ Das Scannen erfolgt automatisch.</string>
     <string name="vault_is_locked">Tresor ist gesperrt</string>
     <string name="go_to_my_vault">Zum Tresor gehen</string>
     <string name="collections">Sammlungen</string>
-    <string name="no_items_collection">Es sind keine Objekte in dieser Sammlung.</string>
+    <string name="shared_folders">Geteilte Ordner</string>
+    <string name="no_items_collection">Diese Sammlung enthält keine Einträge.</string>
+    <string name="there_are_no_items_in_this_shared_folder">Es gibt keine Einträge in diesem geteiltem Ordner.</string>
     <string name="no_items_folder">Es sind keine Objekte in diesem Ordner.</string>
     <string name="no_items_trash">Es sind keine Einträge im Papierkorb.</string>
     <string name="autofill_accessibility_summary">Unterstützung beim Ausfüllen von Benutzernamen und Passwort in anderen Apps und im Web.</string>
@@ -338,12 +342,16 @@ Das Scannen erfolgt automatisch.</string>
     <string name="move_up">Nach oben bewegen</string>
     <string name="owner">Besitzer</string>
     <string name="no_collections_to_list">Keine Sammlungen vorhanden.</string>
+    <string name="there_are_no_shared_folders_to_list">Es gibt keine geteilten Ordner zum Anzeigen.</string>
     <string name="moved_item_to_org">%1$s verschoben nach %2$s.</string>
     <string name="select_one_collection">Es muss mindestens eine Sammlung ausgewählt sein.</string>
+    <string name="you_must_select_at_least_one_shared_folder">Du musst mindestens einen geteilten Ordner auswählen.</string>
     <string name="share">Teilen</string>
-    <string name="move_to_vault">In Tresor verschieben</string>
+    <string name="move_to_organization">In Organisation verschieben</string>
+    <string name="no_orgs_to_list">Keine Organisationen vorhanden.</string>
+    <string name="move_to_org_desc">Wähle eine Organisation aus, in die du diesen Eintrag verschieben möchtest. Das Verschieben in eine Organisation überträgt das Eigentum an diese Organisation. Du bist nicht mehr der direkte Eigentümer dieses Eintrags, sobald er verschoben wurde.</string>
     <string name="no_vaults_to_list">Keine Tresore zum Anzeigen.</string>
-    <string name="move_to_vault_desc">Wähle einen Tresor aus, in den du diesen Eintrag verschieben möchtest. Das Verschieben in einen anderen Tresor übertragt das Eigentum an die Organisation. Du bist nicht länger der Eigentümer dieses Eintrags, sobald er verschoben wurde.</string>
+    <string name="move_to_vault_desc">Wähle einen Tresor aus, in den du diesen Eintrag verschieben möchtest. Das Verschieben in einen anderen Tresor übertragt das Eigentum an diese Organisation. Du bist nicht länger der Eigentümer dieses Eintrags, sobald er verschoben wurde.</string>
     <string name="number_of_words">Anzahl der Wörter</string>
     <string name="passphrase">Passphrase</string>
     <string name="word_separator">Worttrennzeichen</string>
@@ -457,6 +465,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="deletion_date">Löschdatum</string>
     <string name="deletion_time">Löschzeitpunkt</string>
     <string name="deletion_date_info">Das Send wird am angegebenen Datum zur angegebenen Uhrzeit dauerhaft gelöscht.</string>
+    <string name="this_date_is_enforced_by_your_organization">Dieses Datum wird von deiner Organisation vorgeschrieben</string>
     <string name="who_can_view">Wer kann das sehen</string>
     <string name="anyone_with_the_link">Alle mit dem Link</string>
     <string name="anyone_with_link_can_view_send">Alle mit diesem Link können dieses Send anzeigen</string>
@@ -494,6 +503,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="two_days">2 Tage</string>
     <string name="three_days">3 Tage</string>
     <string name="seven_days">7 Tage</string>
+    <string name="fourteen_days">14 Tage</string>
     <string name="thirty_days">30 Tage</string>
     <string name="custom">Benutzerdefiniert</string>
     <string name="custom_timeout">Benutzerdefinierter Timeout</string>
@@ -686,6 +696,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="logging_in_on">Anmelden bei</string>
     <string name="logging_in_on_with_colon">Anmelden bei:</string>
     <string name="vault">Tresor</string>
+    <string name="select_vault">Tresor auswählen</string>
     <string name="appearance">Aussehen</string>
     <string name="account_security">Kontosicherheit</string>
     <string name="bitwarden_help_center">Bitwarden Hilfezentrum</string>
@@ -1414,5 +1425,5 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="share_files_securely_with_anyone_using_send">Teile Dateien mit Send sicher mit jedem</string>
     <string name="receive_24_7_priority_support">Erhalte 24/7 vorrangigen Support</string>
     <string name="account_creation_restricted">Kontoerstellung eingeschränkt</string>
-    <string name="only_allows_invited_users_to_create_accounts">%1$s erlaubt es nur eingeladenen Nutzern ein Konto zu erstellen.</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s erlaubt es nur eingeladenen Benutzern Konten zu erstellen.</string>
 </resources>

@@ -24,8 +24,8 @@
     <string name="folder_created">Karpeta berria sortua.</string>
     <string name="folder_deleted">Karpeta ezabatu da.</string>
     <string name="folder_none">Karpetarik ez</string>
-    <string name="folders">Karpetak</string>
     <string name="folder_updated">Karpeta eguneratua.</string>
+    <string name="folders">Karpetak</string>
     <string name="hide">Ezkutatu</string>
     <string name="internet_connection_required_message">Mesedez, konektatu internetera jarraitu aurretik.</string>
     <string name="internet_connection_required_title">Internet konexioa beharrezkoa da</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Pasahitz nagusia (beharrezkoa)</string>
     <string name="new_master_password_required">Pasahitz nagusi berria (beharrezkoa)</string>
     <string name="more_options">Aukera gehiago</string>
+    <string name="my_folder">My folder</string>
+    <string name="my_folders">My folders</string>
     <string name="my_vault">Kutxa Gotorra</string>
     <string name="name">Izena</string>
     <string name="item_name_required">Elementuaren izena (beharrezkoa)</string>
@@ -282,7 +284,9 @@
     <string name="vault_is_locked">Kutxa gotorra blokeatuta dago</string>
     <string name="go_to_my_vault">Joan kutxa gotorrera</string>
     <string name="collections">Bildumak</string>
+    <string name="shared_folders">Shared folders</string>
     <string name="no_items_collection">Ez dago elementurik bilduma honetan.</string>
+    <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Karpeta honetan ez dago elementurik.</string>
     <string name="no_items_trash">Zakarrontzian ez dago elementurik.</string>
     <string name="autofill_accessibility_summary">Lagundu erabiltzaile-izen eta pasahitz eremuak betetzen beste aplikazioetan eta webgunean.</string>
@@ -337,12 +341,16 @@
     <string name="move_up">Mugitu gora</string>
     <string name="owner">Jabea</string>
     <string name="no_collections_to_list">Ez dago erakusteko bildumarik.</string>
+    <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s %2$s-era mugitu da.</string>
     <string name="select_one_collection">Gutxienez bilduma bat aukeratu behar duzu.</string>
+    <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Partekatu</string>
-    <string name="move_to_vault">Mugitu kutxara</string>
-    <string name="no_vaults_to_list">Ez dago zerrendatzeko kuxarik.</string>
-    <string name="move_to_vault_desc">Aukeratu elementu hau mugitu nahi duzun kutxa bat. Beste kutxa batera mugitzeak elementuaren jabetza erakunde horri transferitzen dio. Elementua mugitu ondoren, ez zara jabe zuzena izango.</string>
+    <string name="move_to_organization">Mugitu erakundera</string>
+    <string name="no_orgs_to_list">Ez dago erakunderik erakusteko.</string>
+    <string name="move_to_org_desc">Aukeratu elementu hau zein erakundetara eraman nahi duzun. Erakunde batera pasatzeak elementuaren jabetza erakunde horretara transferitzen du. Zu ez zara elementu honen jabe zuzena izango mugitzen duzunean.</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Hitz kopurua</string>
     <string name="passphrase">Pasaesaldia</string>
     <string name="word_separator">Hitz banatzailea</string>
@@ -456,6 +464,7 @@
     <string name="deletion_date">Ezabatze data</string>
     <string name="deletion_time">Ezabatutako unea</string>
     <string name="deletion_date_info">Send-a betiko ezabatuko da zehaztutako datan eta orduan.</string>
+    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Norak ikus dezakete</string>
     <string name="anyone_with_the_link">Esteka duen edonor</string>
     <string name="anyone_with_link_can_view_send">Esteka hau duen edonork ikus dezake bidalketa hau</string>
@@ -493,6 +502,7 @@
     <string name="two_days">2 egun</string>
     <string name="three_days">3 egun</string>
     <string name="seven_days">7 egun</string>
+    <string name="fourteen_days">14 days</string>
     <string name="thirty_days">30 egun</string>
     <string name="custom">Pertsonalizatua</string>
     <string name="custom_timeout">Denbora-muga pertsonalizatua</string>
@@ -685,6 +695,7 @@ Kontu honetara aldatu nahi duzu?</string>
     <string name="logging_in_on">Saioa hasten</string>
     <string name="logging_in_on_with_colon">Saioa hasten:</string>
     <string name="vault">Kutxa</string>
+    <string name="select_vault">Select vault</string>
     <string name="appearance">Itxura</string>
     <string name="account_security">Kontuaren segurtasuna</string>
     <string name="bitwarden_help_center">Bitwarden Help Center</string>

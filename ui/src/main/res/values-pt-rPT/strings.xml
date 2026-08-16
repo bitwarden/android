@@ -24,8 +24,8 @@
     <string name="folder_created">Nova pasta criada.</string>
     <string name="folder_deleted">Pasta eliminada.</string>
     <string name="folder_none">Sem pasta</string>
-    <string name="folders">Pastas</string>
     <string name="folder_updated">Pasta guardada</string>
+    <string name="folders">Pastas</string>
     <string name="hide">Ocultar</string>
     <string name="internet_connection_required_message">Por favor, ligue-se à Internet antes de continuar.</string>
     <string name="internet_connection_required_title">Ligação à Internet necessária</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Palavra-passe mestra (obrigatório)</string>
     <string name="new_master_password_required">Nova palavra-passe mestra (obrigatório)</string>
     <string name="more_options">Mais opções</string>
+    <string name="my_folder">A minha pasta</string>
+    <string name="my_folders">As minhas pastas</string>
     <string name="my_vault">O meu cofre</string>
     <string name="name">Nome</string>
     <string name="item_name_required">Nome do item (obrigatório)</string>
@@ -283,7 +285,9 @@ A leitura será efetuada automaticamente.</string>
     <string name="vault_is_locked">O cofre está bloqueado</string>
     <string name="go_to_my_vault">Ir para o meu cofre</string>
     <string name="collections">Coleções</string>
+    <string name="shared_folders">Pastas partilhadas</string>
     <string name="no_items_collection">Não existem itens nesta coleção.</string>
+    <string name="there_are_no_items_in_this_shared_folder">Não existem itens nesta pasta partilhada.</string>
     <string name="no_items_folder">Não existem itens nesta pasta.</string>
     <string name="no_items_trash">Não existem itens no lixo.</string>
     <string name="autofill_accessibility_summary">Ajuda a preencher os campos de nome de utilizador e palavra-passe noutras aplicações e na web.</string>
@@ -338,10 +342,14 @@ A leitura será efetuada automaticamente.</string>
     <string name="move_up">Mover para cima</string>
     <string name="owner">Proprietário</string>
     <string name="no_collections_to_list">Não existem coleções para apresentar.</string>
+    <string name="there_are_no_shared_folders_to_list">Não existem pastas partilhadas para apresentar.</string>
     <string name="moved_item_to_org">%1$s movido para %2$s.</string>
     <string name="select_one_collection">Deve selecionar pelo menos uma coleção.</string>
+    <string name="you_must_select_at_least_one_shared_folder">Tem de selecionar pelo menos uma pasta partilhada.</string>
     <string name="share">Partilhar</string>
-    <string name="move_to_vault">Mover para o cofre</string>
+    <string name="move_to_organization">Mover para organização</string>
+    <string name="no_orgs_to_list">Não existem organizações para apresentar.</string>
+    <string name="move_to_org_desc">Escolha a organização para a qual pretende mover este item. Ao movê-lo para uma organização, a propriedade do item será transferida para essa organização. Deixará de ser o proprietário direto deste item após a transferência.</string>
     <string name="no_vaults_to_list">Não existem cofres para apresentar.</string>
     <string name="move_to_vault_desc">Escolha o cofre para o qual pretende mover este item. Ao movê-lo para outro cofre, a propriedade do item será transferida para essa organização. Deixará de ser o proprietário direto deste item após a transferência.</string>
     <string name="number_of_words">Número de palavras</string>
@@ -457,6 +465,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="deletion_date">Data de eliminação</string>
     <string name="deletion_time">Hora de eliminação</string>
     <string name="deletion_date_info">O Send será permanentemente eliminado na data e hora especificadas.</string>
+    <string name="this_date_is_enforced_by_your_organization">Esta data é imposta pela sua organização</string>
     <string name="who_can_view">Quem pode ver</string>
     <string name="anyone_with_the_link">Qualquer pessoa com o link</string>
     <string name="anyone_with_link_can_view_send">Qualquer pessoa com este link pode ver este Send</string>
@@ -494,6 +503,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="two_days">2 dias</string>
     <string name="three_days">3 dias</string>
     <string name="seven_days">7 dias</string>
+    <string name="fourteen_days">14 dias</string>
     <string name="thirty_days">30 dias</string>
     <string name="custom">Personalizado</string>
     <string name="custom_timeout">Tempo limite personalizado</string>
@@ -686,6 +696,7 @@ Pretende mudar para esta conta?</string>
     <string name="logging_in_on">A iniciar sessão em</string>
     <string name="logging_in_on_with_colon">A iniciar sessão em:</string>
     <string name="vault">Cofre</string>
+    <string name="select_vault">Selecionar cofre</string>
     <string name="appearance">Aspeto</string>
     <string name="account_security">Segurança da conta</string>
     <string name="bitwarden_help_center">Centro de ajuda do Bitwarden</string>

@@ -24,8 +24,8 @@
     <string name="folder_created">নতুন ফোল্ডার তৈরি হয়েছে।</string>
     <string name="folder_deleted">ফোল্ডারটি মুছে ফেলা হয়েছে।</string>
     <string name="folder_none">কোন ফোল্ডার নেই</string>
-    <string name="folders">ফোল্ডারসমূহ</string>
     <string name="folder_updated">ফোল্ডার হালনাগাদকৃত।</string>
+    <string name="folders">ফোল্ডারসমূহ</string>
     <string name="hide">লুকান</string>
     <string name="internet_connection_required_message">চালিয়ে যাওয়ার আগে দয়া করে ইন্টারনেটে সংযোগ করুন।</string>
     <string name="internet_connection_required_title">ইন্টারনেট সংযোগ প্রয়োজন</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">মাস্টার পাসওয়ার্ড (আবশ্যক)</string>
     <string name="new_master_password_required">নতুন মাস্টার পাসওয়ার্ড (আবশ্যক)</string>
     <string name="more_options">আরও বিকল্প</string>
+    <string name="my_folder">My folder</string>
+    <string name="my_folders">My folders</string>
     <string name="my_vault">আমার ভল্ট</string>
     <string name="name">নাম</string>
     <string name="item_name_required">আইটেমের নাম (প্রয়োজনীয়)</string>
@@ -283,7 +285,9 @@
     <string name="vault_is_locked">ভল্ট লক করা আছে</string>
     <string name="go_to_my_vault">আমার ভল্টে যান</string>
     <string name="collections">সংগ্রহ</string>
+    <string name="shared_folders">Shared folders</string>
     <string name="no_items_collection">এই সংগ্রহে কোনও আইটেম নেই।</string>
+    <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">এই ফোল্ডারে কোনও আইটেম নেই।</string>
     <string name="no_items_trash">ট্র্যাশে কোনও আইটেম নেই।</string>
     <string name="autofill_accessibility_summary">অন্যান্য অ্যাপ এবং ওয়েবে ব্যবহারকারীর নাম এবং পাসওয়ার্ড ফিল্ড পূরণ করতে সহায়তা করুন।</string>
@@ -338,12 +342,16 @@
     <string name="move_up">উপরে উঠান</string>
     <string name="owner">মালিক</string>
     <string name="no_collections_to_list">তালিকার জন্য কোনও সংগ্রহ নেই।</string>
+    <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s কে %2$s-এ সরানো হয়েছে।</string>
     <string name="select_one_collection">আপনাকে কমপক্ষে একটি সংগ্রহ নির্বাচন করতে হবে।</string>
+    <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">শেয়ার করুন</string>
-    <string name="move_to_vault">ভল্টে সরান</string>
-    <string name="no_vaults_to_list">তালিকাভুক্ত করার মতো কোনও ভল্ট নেই।</string>
-    <string name="move_to_vault_desc">আপনি এই আইটেমটি যে ভল্টে সরাতে চান তা নির্বাচন করুন। অন্য ভল্টে সরানো আইটেমটির মালিকানা সেই সংগঠনে স্থানান্তর করে। একবার সরানোর পরে আপনি আর এই আইটেমটির প্রত্যক্ষ মালিক থাকবেন না।</string>
+    <string name="move_to_organization">সংগঠনে সরান</string>
+    <string name="no_orgs_to_list">তালিকাভুক্ত করার মতো কোনও সংগঠন নেই।</string>
+    <string name="move_to_org_desc">আপনি এই আইটেমটি যে সংগঠনে সরাতে চান তা নির্বাচন করুন। একটি সংগঠনে সরানো আইটেমটির মালিকানা সেই সংগঠনে স্থানান্তর করে। একবার সরানোর পরে আপনি আর এই আইটেমটির প্রত্যক্ষ মালিক থাকবেন না।</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">শব্দসংখ্যা</string>
     <string name="passphrase">গুপ্ত-বাক্যাংশ</string>
     <string name="word_separator">শব্দ বিভাজক</string>
@@ -457,6 +465,7 @@
     <string name="deletion_date">মুছে ফেলার তারিখ</string>
     <string name="deletion_time">মোছার সময়</string>
     <string name="deletion_date_info">নির্দিষ্ট তারিখ এবং সময়ে সেন্ডটি স্থায়ীভাবে মুছে ফেলা হবে।</string>
+    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">কে দেখতে পারেন</string>
     <string name="anyone_with_the_link">লিঙ্ক সহ যে কেউ</string>
     <string name="anyone_with_link_can_view_send">এই লিঙ্ক সহ যে কেউ এই সেন্ড দেখতে পারেন</string>
@@ -494,6 +503,7 @@
     <string name="two_days">২ দিন</string>
     <string name="three_days">৩ দিন</string>
     <string name="seven_days">৭ দিন</string>
+    <string name="fourteen_days">14 days</string>
     <string name="thirty_days">৩০ দিন</string>
     <string name="custom">পছন্দসই</string>
     <string name="custom_timeout">কাস্টম টাইমআউট</string>
@@ -687,6 +697,7 @@
     <string name="logging_in_on">এতে লগ ইন করা হচ্ছে</string>
     <string name="logging_in_on_with_colon">এতে লগ ইন করা হচ্ছে:</string>
     <string name="vault">ভল্ট</string>
+    <string name="select_vault">Select vault</string>
     <string name="appearance">অবয়ব</string>
     <string name="account_security">অ্যাকাউন্টের নিরাপত্তা</string>
     <string name="bitwarden_help_center">Bitwarden Help Center</string>

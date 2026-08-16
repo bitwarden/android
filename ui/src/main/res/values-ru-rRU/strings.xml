@@ -24,8 +24,8 @@
     <string name="folder_created">Новая папка создана.</string>
     <string name="folder_deleted">Папка удалена.</string>
     <string name="folder_none">Без папки</string>
-    <string name="folders">Папки</string>
     <string name="folder_updated">Папка сохранена</string>
+    <string name="folders">Папки</string>
     <string name="hide">Скрыть</string>
     <string name="internet_connection_required_message">Подключитесь к интернету чтобы продолжить.</string>
     <string name="internet_connection_required_title">Требуется подключение к интернету</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Мастер-пароль (требуется)</string>
     <string name="new_master_password_required">Новый мастер-пароль (обязательно)</string>
     <string name="more_options">Больше опций</string>
+    <string name="my_folder">Моя папка</string>
+    <string name="my_folders">Мои папки</string>
     <string name="my_vault">Хранилище</string>
     <string name="name">Название</string>
     <string name="item_name_required">Название элемента (обязательно)</string>
@@ -285,7 +287,9 @@
     <string name="vault_is_locked">Хранилище заблокировано</string>
     <string name="go_to_my_vault">Перейти в мое хранилище</string>
     <string name="collections">Коллекции</string>
+    <string name="shared_folders">Общие папки</string>
     <string name="no_items_collection">В этой коллекции нет элементов.</string>
+    <string name="there_are_no_items_in_this_shared_folder">В этой общей папке нет элементов.</string>
     <string name="no_items_folder">В этой папке нет элементов.</string>
     <string name="no_items_trash">В корзине нет элементов.</string>
     <string name="autofill_accessibility_summary">Помощь в заполнении имени пользователя и пароля в других приложениях и в интернете.</string>
@@ -342,10 +346,14 @@
     <string name="move_up">Переместить выше</string>
     <string name="owner">Владелец</string>
     <string name="no_collections_to_list">Нет коллекций для отображения.</string>
+    <string name="there_are_no_shared_folders_to_list">Нет общих папок для отображения.</string>
     <string name="moved_item_to_org">%1$s перемещено в %2$s.</string>
     <string name="select_one_collection">Необходимо выбрать хотя бы одну коллекцию.</string>
+    <string name="you_must_select_at_least_one_shared_folder">Необходимо выбрать хотя бы одну общую папку.</string>
     <string name="share">Поделиться</string>
-    <string name="move_to_vault">Переместить в хранилище</string>
+    <string name="move_to_organization">Переместить в организацию</string>
+    <string name="no_orgs_to_list">Нет организаций для отображения.</string>
+    <string name="move_to_org_desc">Выберите организацию, в которую вы хотите переместить этот элемент. При перемещении в организацию право собственности на элемент переходит к этой организации. Вы больше не будете прямым владельцем этого элемента после его перемещения.</string>
     <string name="no_vaults_to_list">Нет хранилища для отображения.</string>
     <string name="move_to_vault_desc">Выберите хранилище, в которое вы хотите переместить этот элемент. Перемещение в хранилище передает права на элемент этой организации. Вы больше не будете непосредственным владельцем этого элемента после его перемещения.</string>
     <string name="number_of_words">Количество слов</string>
@@ -461,6 +469,7 @@
     <string name="deletion_date">Дата удаления</string>
     <string name="deletion_time">Время удаления</string>
     <string name="deletion_date_info">Эта Send будет окончательно удалена в указанные дату и время.</string>
+    <string name="this_date_is_enforced_by_your_organization">Эта дата устанавливается вашей организацией</string>
     <string name="who_can_view">Кто может просматривать</string>
     <string name="anyone_with_the_link">Любой, у кого есть ссылка</string>
     <string name="anyone_with_link_can_view_send">Любой, у кого есть эта ссылка, сможет просмотреть эту Send</string>
@@ -498,6 +507,7 @@
     <string name="two_days">2 дня</string>
     <string name="three_days">3 дня</string>
     <string name="seven_days">7 дней</string>
+    <string name="fourteen_days">14 дней</string>
     <string name="thirty_days">30 дней</string>
     <string name="custom">Пользовательский</string>
     <string name="custom_timeout">Пользовательский тайм-аут</string>
@@ -695,6 +705,7 @@
     <string name="logging_in_on">Войти на</string>
     <string name="logging_in_on_with_colon">Войти на:</string>
     <string name="vault">Хранилище</string>
+    <string name="select_vault">Выберите хранилище</string>
     <string name="appearance">Внешний вид</string>
     <string name="account_security">Безопасность аккаунта</string>
     <string name="bitwarden_help_center">Справочный центр Bitwarden</string>
